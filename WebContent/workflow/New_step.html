@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>新增步骤界面</title>
+	<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+	<link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css" />
+	<link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+	<script type="text/javascript" src="../scripts/lib-main.js"></script>
+	<script type="text/javascript" src="../scripts/common/pms.js"></script>
+	<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<style>
+		html {
+			overflow: auto;
+			height: 100%;
+		}
+		
+		body {
+			overflow: auto;
+			background: #E6E6E6 url(images/right.jpg) repeat-y right top;
+			height: 100%;
+			margin: 0px;
+			pading: 0px;
+			padding-right: 5px;
+		}
+	</style>
+	<script type="text/javascript">
+	var FlowId = getUrlParamByKey("FlowId");
+	$(function() {
+		$validator = new PMSValidator($("#FK")[0], {
+			bNormalDisplay : false,
+			iDisplayLength : 4
+		});
+		$("#flowId").val(FlowId);
+	});
+	function doSubmit() {
+		var obj = {
+			flowId : $("#flowId").val(),
+			stepNo : $("#stepNo").val(),
+			stepType : $("input[name='stepType']:checked").val(),
+			stepName : $("#stepName").val(),
+			isSameOrg : $("input[name='isSameOrg']:checked").val(),
+			isReturn : $("input[name='isReturn']:checked").val(),
+			isFinish : $("input[name='isFinish']:checked").val(),
+			isChoiseNext : $("input[name='isChoiseNext']:checked").val(),
+			isChoisePrev : $("input[name='isChoisePrev']:checked").val(),
+			isAutoSave : $("input[name='isAutoSave']:checked").val(),
+			isAllowEdit : $("input[name='isAllowEdit']:checked").val(),
+			isAutoPass : $("input[name='isAutoPass']:checked").val(),
+			isPrompt : $("input[name='isPrompt']:checked").val(),
+			promptDays : $("#promptDays").val(),
+			autoPassDays : $("#autoPassDays").val(),
+			remoteJava : $("#remoteJava").val(),
+			remoteArgs : $("#remoteArgs").val(),
+			isNeedESign: $("input[name='isNeedESign']:checked").val()
+			}
+			$validator.clean();
+		      var cvalidator = $validator.clientValidate();
+		      if (!cvalidator) {
+		        alert("请输入数字!");
+		        return;
+		      }
+			doManager("WFFlowStepManager", "addStep", obj, function(data, textStatus,
+					XMLHttpRequest) {
+				if(data.result){
+					//var d1 = data.data;
+					//alert(d1);
+					var jsdata = $.fromJSON(data.data);
+					var id = jsdata.id;
+					alert(id);
+					if(id>""){
+					//跳转到修改页面去
+					window.location.href = 'Edit_step.html?FlowId=' + FlowId+"&Id="+id
+					}else{
+						alert("返回数据错误");
+					}
+				}else{
+					alert(data.message);
+				}
+				//window.location.href = 'Edit_workflow.html?FlowId=' + FlowId;
+				//跳转到修改页面去
+				
+			});
+		}
+		function doReturn() {
+			window.location.href = 'Edit_workflow.html?FlowId=' + FlowId;
+		}
+	</script>
+	<style type="text/css">
+		table {
+			border: 0px solid #000;
+		}
+		
+		td {
+			border: 0px solid #000;
+		}
+	</style>
+	</head>
+<body style="margin-left: 3px; text-align: center;" background="images/leftbg.png">
+	<div class="rightcont body_bg clear" style="width: 300px; margin: 0px auto; padding: 0px auto;">
+		<div class="box">
+			<div class="containerbody">
+				<form id="FK" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+					<table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+						<tr>
+							<td align="left" nowrap="true">流程Id：</td>
+							<td><input type="text" id="flowId" name="flowId" disabled />
+							</td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">序号：</td>
+							<td><input type="text" id="stepNo" name="stepNo" validate="number:true"/></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">步骤类型：</td>
+							<td><input class="pmsRadio" id="stepType" name="stepType"
+								data="[['0','开始','checked'],['1','执行'],['2','结束']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">步骤名称：</td>
+							<td><input type="text" id="stepName" name="stepName" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否本部门：</td>
+							<td><input class="pmsRadio" id="isSameOrg" name="isSameOrg" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否可退回：</td>
+							<td><input class="pmsRadio" id="isReturn" name="isReturn" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否可终止：</td>
+							<td><input class="pmsRadio" id="isFinish" name="isFinish" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否可选择后续：</td>
+							<td><input class="pmsRadio" id="isChoiseNext" name="isChoiseNext" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否可选择前面：</td>
+							<td><input class="pmsRadio" id="isChoisePrev"
+								name="isChoisePrev" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">表单是否要留痕：</td>
+							<td><input class="pmsRadio" id="isAutoSave" name="isAutoSave" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">表单是否可编辑：</td>
+							<td><input class="pmsRadio" id="isAllowEdit" name="isAllowEdit" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否催办：</td>
+							<td><input class="pmsRadio" id="isPrompt" name="isPrompt" data="[['1','是'],['0','否','checked']]" /></td>
+
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否自动提交：</td>
+							<td><input class="pmsRadio" id="isAutoPass" name="isAutoPass" data="[['1','是'],['0','否','checked']]" /></td>
+
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">自动提交等待天数：</td>
+							<td><input type="text" id="autoPassDays" name="autoPassDays" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">催办天数设置：</td>
+							<td><input type="text" id="promptDays" name="promptDays" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">外部Java类：</td>
+							<td><input type="text" id="remoteJava" name="remoteJava" />
+							</td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">调用参数设置：</td>
+							<td><input type="text" id="remoteArgs" name="remoteArgs" />
+							</td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否电子签名：</td>
+							<td><input class="pmsRadio" id="isNeedESign" name="isNeedESign" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true" colspan="4">
+								<button class="buttonu" value="提交" onclick="doSubmit()">&nbsp;
+									提交
+								</button>
+								<button class="buttonu" value="返回" onclick="doReturn()">&nbsp;
+									返回
+								</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

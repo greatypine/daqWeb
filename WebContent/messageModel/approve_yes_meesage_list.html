@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>审批消息列表</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+   
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <!-- 引入css和js即可 -->
+    <link rel="stylesheet" href="../scripts/css/cityselect.css">
+    <script type="text/javascript" src="../scripts/cityselect.js"></script>
+    <style type="text/css">
+        .display {
+            width: 100%
+        }
+
+        .display tr td {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+	
+	var current_user;
+	$(function () {
+		var model=1;
+	    doManager('messageTemplateManager','getMessageTemplateByModel',[model],function(data){
+	        if(data.result){
+	        	
+	            var result = JSON.parse(data.data);
+	            var templates = result.templatelist;
+	            var template="<option value='' selected>全部</option>";
+	            for(var i=0;i<templates.length;i++){
+	            	template = template+"<option value='"+templates[i].code+"'>"+templates[i].name+"</option>"
+	            }
+	            $("#templateCode").empty();
+	            $("#templateCode").append(template);
+	            searchList();
+	            
+	        }else{
+	            $$.showMessage('提示',data.message);
+	        }
+	    });
+	
+	});
+
+    //记载页面时请求数据列表默认的方法
+    function searchList() {
+        $$.executeSearch('approveMessageInfoQuery', 'conditionsDiv');
+    }
+
+    
+    function doClean() {
+        document.service_qa.reset();
+        searchList();
+    }
+    function addMessage() {
+        window.location.href = 'approve_yes_message_send.html';
+    }
+
+   
+    var detailObj = {
+        html: '<a href="#"  class="blue">详情</a>',
+        resourceId: "",
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+        	
+        		 var code = allColumnsDataMap.messageCode;
+        		 var message = {
+     		           messageCode:code
+     		        }
+                 doManager('messageNewManager','getApproveMessageDetailInfo',[message],function(data){
+                    if(data.result){
+                       var result = JSON.parse(data.data);
+                       var detailInfo = result.detaiList;
+                       var info="";
+                       for(var i=0;i<detailInfo.length;i++){
+                    	    var status = detailInfo[0].approveStatus;
+                    	    var statusStr="未知";
+                    	   	if(null==status){
+                    	   		statusStr="等待审批";
+                    	   	}else if("1"==status){
+                    	   		statusStr="通过";
+                    	   	}else if("2"==status){
+                    	   		statusStr="未通过";
+                    	   	}
+                    	    info = info+"<span>"+detailInfo[i].employeeName+"</span><span>"+statusStr+"</span></br>"
+                       }
+                       $("#approveStatus").empty();
+                       $("#approveStatus").append(info);
+                       
+                       $('#messageDetail_div').dialog({
+                           bgiframe : true,
+                           title : "提示",
+                           width : 400,
+                           height : 423,
+                           modal : true
+                       });
+	                }else{
+                        $$.showMessage('提示',data.message);
+                    }
+                 }); 
+           
+        }
+    };
+
+    $pmspage.opArr = [detailObj];
+	
+    var COLUMNS = {
+            "approveStatus": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                if(value == 1){
+                    value = "通过";
+                }else if(value == 2){
+                	value = "未通过";
+                }
+                return value;
+            }
+        }
+
+
+
+</script>
+<body style="height: 100%">
+<div class="panel panel-primary">
+    <div class="panel-heading">消息模板查询</div>
+    <div class="panel-body">
+        <div id="conditionsDiv" style="margin-top: 10px">
+            <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                <table id="searchTable" cellpadding="0" cellspacing="0"  style="min-width: 100%; width: auto;">
+                    <tr>
+                        <td style="width:10%">
+           	模板名称:
+                        </td>
+                        <td>
+                            <select style="width:50%" class="form-control" id="templateCode">
+                            	
+                            </select>
+                        </td>
+                         <td style="width:10%">
+           	消息标题:
+                        </td>
+                        <td>
+                            <input id="title" name="title" type="text" style="width:20%" class="form-control"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="panel-footer" style="text-align: right">
+        <button class="btn btn-primary" onclick="addMessage()">添加</button>
+        <button class="btn btn-primary" onclick="searchList()">查询</button>
+        <button class="btn btn-primary" onclick="doClean();">重置</button>
+    </div>
+</div>
+<div id="centerQueryGridContainer" class="panel panel-primary" queryid="approveMessageInfoQuery" operators="$pmspage.opArr"
+     titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
+     showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+     showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
+
+</body>
+</html>
+
+ <div id="messageDetail_div" style="display:none;height:360px">
+    <div>
+       	<table cellpadding="0" cellspacing="0" id="new_address" style="min-width: 100%;width: auto;">
+       		<tr>
+       			<td width="8px"><span>标题：</span></td>
+       			<td>
+        			<span id="title"></span>
+       			</td>
+       		</tr> 
+       		<tr>
+       			<td width="8px"><span>内容：</span></td>
+        		<td>
+        			<span id="content"></span>
+        		</td>
+        	</tr>
+       		<tr>
+       			<td><span>审批状态：</span></td>
+       			<td id="approveStatus">
+       				
+       			</td>
+       		</tr>
+       	 </table>
+      </div>	
+</div> 

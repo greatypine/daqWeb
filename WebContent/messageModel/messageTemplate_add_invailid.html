@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>消息模板创建</title>
+    <script type="text/javascript" src="../startbootstrap/js/jquery.1.10.2.min.js"></script>
+    <script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <!-- 引入css和js即可 -->
+    <script type="text/javascript" src="../bizbase/js/common-validation-bizbase.js"></script>
+    <style type="text/css">
+        .display {
+            width: 100%
+        }
+
+        .display tr td {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        fieldset{
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<script type="text/javascript">
+	
+   
+    var store_id = getUrlParamByKey("store");
+    var id = getUrlParamByKey("id");
+    var actionType = getUrlParamByKey("actionType");
+  
+
+    $(document).ready(function(){
+    	  $("input[name='model']").click(function(){
+    		  if($(this).val()==1){//审批
+    			  $("#approvers_list").show();
+    		  	  $("#about_approver").show();
+    		  }else if($(this).val()==2){//非审批
+    			  $("#approvers_list").hide();
+    			  $("#about_approver").hide();
+    		  }
+    	  })
+    });
+
+   
+
+    function addRow(areaInfo,flag){
+        var $tbody = $('.table-striped').find('tbody');
+        $tbody.append('<tr>' +
+            '<td><span name="approver_name" class="form-control" ></span></td>' +
+            '<td><span name="approver_role" class="form-control" ></span></td>' +
+            '<td style="text-align: center"><img src="../images/minus_16px.png" onclick="imgClickDelete(this)"></td></tr>');
+    }
+
+    var checkWin = function(fun){
+        this.win = $("<div style='overflow-y: hidden'></div>");
+        var _this = this;
+        var initWin = function(){
+            _this.win.html('<iframe name="select_win" frameborder="0" width="100%" height="100%" src="approver_list.html" scrolling="yes"></iframe>');
+            _this.win.dialog({
+                bgiframe: true,
+                title:"选择用户",
+                autoOpen:false,
+                width:_this.width,
+                height:_this.height,
+                buttons : {
+                    "确定": function(){
+                        window.frames["select_win"].doSubmit();
+                        _this.win.remove();
+                    },
+                    "取消":function(){
+                        _this.hide();
+                        _this.win.remove();
+                    }
+                },
+                modal:true
+            });
+        };
+        this.width = 900;
+        this.height = 730;
+        this.callBack = function(json){
+            if (fun && typeof(fun) == 'function') {
+            	
+                fun(json);
+            }
+        }; 
+
+        this.show = function(){
+            _this.win.dialog("open");
+        };
+
+        this.hide = function(){
+            if(_this.onSubmitHandler){
+                _this.onSubmitHandler();
+            }
+            _this.win.dialog("close");
+        };
+        initWin();
+    }
+	
+   
+    
+    function doSave(){
+    	var mt_name = $('#mt_name').val();
+    	
+		var mt_model = $("input[type='radio']:checked").val();
+		
+    	var isRepeat="N";//是否重复
+       
+        if(mt_name == '' || mt_name == null){
+            $$.showMessage('提示','请输入模板名');
+            return;
+        }
+        var childs = [];
+        var isContinue=true;
+        if(mt_model==1){//需审批
+        	$('.table-striped tbody tr').each(function(index,tr){
+            	var approverId=$(tr).find('input[id="hidden_employee_id"]').val();//审批人编号
+            	var approverName = $(tr).find('span[name="approver_name"]').text();
+            	if(approverId==null||approverId==""){
+            		 $$.showMessage('提示',approverName+" 的员工号无效!");
+            		 isContinue=false;
+            		 return ;
+            	}
+               
+                var user = {
+                		employeeId:approverId
+                };
+                
+                childs.push(user);
+                
+            });
+        }
+        
+       
+		if(isContinue){
+			var messageTemplate = {
+		            name:mt_name,
+		            model:mt_model,
+		            approveres:childs
+		        }
+					
+				
+				//检测片区名
+			        doManager('messageTemplateManager','checkNameIsExist',[messageTemplate],function(data){//检查模板名
+			            if(data.data=="true"){
+			            	$$.showMessage('提示',"模板名称已经存在!");
+			            	return false;
+			            }else{
+			            	
+
+			    	        //检测数据库中是否有已存在的areainfo
+			    			doManager('messageTemplateManager','saveMessageTemplate',[messageTemplate],function(data){
+			    	            if(data.result){
+			    	            	
+			    	            	 $$.showMessage('提示','保存成功',function(){
+	    		       	                    doBack();
+	    		       	                });
+			    	            	
+			    	            }else{
+			    	                $$.showMessage('提示',data.message);
+			    	            }
+			    	        }); 	
+			    			
+			            	
+			            }
+			        }); 	
+		}	
+        
+		
+	}
+       
+	
+    function doBack(){
+        history.go(-1);
+    }
+	
+    //点击"+"添加审批人
+    function imgAddClick(fun){
+    	  win = new checkWin(fun);
+          win.show();
+    	
+    }
+    
+    function imgClickDelete(_this){
+        $(_this).parent().parent().remove()
+    }
+
+    function doBack(){
+        history.go(-1);
+    }
+    
+    function siwtchStore(event){
+    	
+    }
+    
+    function getApprover(data){
+    	 var $tbody = $('.table-striped').find('tbody');
+         $tbody.append('<tr>' +
+             '<td><input style="display:none" id="hidden_employee_id" value="'+data[0].employeeId+'"></input><span name="approver_name" class="form-control" >'+data[0].name+'</span></td>' +
+             '<td><span name="approver_role" class="form-control" >'+data[0].zw+'</span></td>' +
+             '<td style="text-align: center"><img src="../images/minus_16px.png" onclick="imgClickDelete(this)"></td></tr>');
+    	
+    }
+</script>
+<body style="height: 100%">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">模板信息</div>
+                <div class="panel-body">
+                    <div style="margin-top: 10px">
+                        <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                              displaynumber="7">
+                            <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                                <tr>
+                                    
+                                    <td style="width:10%">  
+                                    	模板类型<span style="color: red">*</span>:
+                                    </td>
+                                    <td>
+                                        <input id="model_a" name="model" type="radio" style="width:30px" value="1" checked ><label for="model_a">审批</label></input>
+                                   		<input id="model_b" name="model" type="radio" style="width:30px" value="2" ><label for="model_b">非审批</label></input>
+                                    </td>
+                                    <td style="width:10%">
+                                                                                                     模板名称<span style="color: red">*</span>:
+                                    </td>
+                                    <td align="left">    
+                                        <input id="mt_name" name="mt_name" type="text" style="width:40%" class="form-control" validate="required:true" maxlength="30"></input>
+                                    </td>
+                                </tr>
+                               
+                            </table>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-primary" style="margin-bottom:0px" id="approvers_list">
+                <div class="panel-heading">审批人</div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th width="30%">名称</th>
+                                <th width="30%">职务</th>
+                                <th width="10%" style="text-align: center"><img src="../images/badge_plus_16px.png" onclick="imgAddClick(getApprover)"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="approveres">
+								
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div id="about_approver"><span style="color:gray">注：按审批人添加顺序从上到下逐级审批</span></div>
+        </div>
+        
+        <div class="panel-footer" style="text-align: right">
+            <button class="btn btn-primary" onclick="doSave()">保存</button>
+            <button class="btn btn-primary" onclick="doBack()">返回</button>
+        </div>
+    </div>
+</body>
+
+
+</html>

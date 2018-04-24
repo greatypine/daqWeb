@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>事业部(服务专员)交易额</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    
+    
+    .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+ 
+ 	#process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+		#process_div_pic{
+			position:fixed;
+			top:50%;
+			left:50%; 
+			z-index:100000000; 
+			margin:-16px 0 0 -50px; 
+			width:100px; 
+			height:32px;
+			color: #fff;
+		}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+
+        <div class="pull-left">
+          <nav class="navbar navbar-static-top no-margin">
+            <!-- Sidebar toggle button-->
+
+            <div class="logo-lg clearfix">
+              <div class="logo-lg clearfix">
+	            <ul>
+	              <li><a href="javascript:parent.location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
+	              <li class="nav-mark"><a href="javascript:parent.location.reload();">事业部(服务专员)交易额</a> </li>
+	              <li><!-- <a href="user.html#user">片区信息</a> --> </li>
+	              <li></li>
+	            </ul>
+	          </div>
+            </div>
+
+          </nav>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue" id="ff"><strong>事业部(服务专员)交易额</strong>
+          <small class="text-red" style="padding-left: 10px;">注意：1.本页GMV数据为去除畅卡统计口径。</small>
+          </div>
+          <div class="box-body">
+            <div class="form-group col-lg-4">
+              <label>查询时间</label>
+              <select class="form-control select2" id="be_date1">
+               	<option value="prev_month" >上月</option>
+                <option value="cur_month" selected>本月（截止到昨日24点）</option>
+              </select>
+              <!-- /.input group -->
+            </div>
+             <div class="form-group col-lg-4" id="city_ff">
+              <label>城市</label>
+             <input id="city_id_ff" name="city_id_ff" type="hidden" bidTableFlag="true" value=""/>
+             <input id="city_name_ff" name="city_name_ff" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="city_name-search_ff" style="display: inherit;width: 90%"/>
+             <datalist id="city_name-search_ff">
+<!--                                     <option value="1"> -->
+<!--                                     <option value="2"> -->
+             </datalist>
+              <!-- /.input group -->
+            </div>
+            <div class="form-group col-lg-4" id="store_ff">
+              <label>门店</label>
+             <input id="store_id_ff" name="store_id_ff" type="hidden" bidTableFlag="true" value=""/>
+             <input id="store_name_ff" name="store_name_ff" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="store_name-search_ff" style="display: inherit;width: 90%"/>
+             <datalist id="store_name-search_ff">
+<!--                                     <option value="1"> -->
+<!--                                     <option value="2"> -->
+             </datalist>
+              <!-- /.input group -->
+            </div>
+             <div class="form-group col-lg-8" style="margin-top: 20px; padding: 0 25px;">
+            </div>
+            <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+              <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_ff(1)">查询</button>
+            </div>
+            <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+              <button type="button" onclick="export_ff()" class="btn btn-block btn-warning">导出</button>
+            </div>
+
+          </div>
+          <div class="box-body">
+            <div class="nav-tabs-custom">
+              <div class="tab-content">
+                <div>
+                  <table class="table table-striped">
+                    <tbody id="ff_tbody">
+	                    <tr>
+	                      <th width="10%">门店</th>
+	                      <th width="10%">事业部</th>
+	                      <th width="11%">服务专员</th>
+	                      <th width="10%">员工编号</th>  
+	                      <th width="11%">交易额</th>
+	                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              
+              <!-- /.tab-content -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+
+<!-- ./wrapper -->
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript">
+
+	layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+
+
+	var cityId = decode64(getUrlParamByKey("c"));//城市ID
+	var initCity=cityId;//城市ID
+	var cityName = decode64(getUrlParamByKey("cn"));//城市Name
+	var employeeId = decode64(getUrlParamByKey("e"));//员工编号
+	var storeId = decode64(getUrlParamByKey("s"));//门店编号
+	var target = decode64(getUrlParamByKey("t"));
+	var storeName=decode64(getUrlParamByKey("sn"));
+
+	$(function () {
+	    if(target==0){//总部
+			
+		}else if(target==1){//城市
+			$("#city_name_ff").val(cityName);
+			$("#city_name_ff").attr("readonly",true);
+		}else if(target==2){//店长
+			$("#city_name_ff").val(cityName);
+			$("#city_name_ff").attr("readonly",true);
+			$("#store_name_ff").val(storeName);
+			$("#store_name_ff").attr("readonly",true);
+			
+		}
+		
+	    $(".logo-lg > ul > li").hover(function(){
+	      $(this).children(".nav_dropdown").toggle('1000');
+	    });
+
+    //Date range picker
+   /*  $('#be_date1').daterangepicker();
+	$('#be_date2').daterangepicker(); */
+	
+  });
+
+	
+	   /**-----------------------------------搜索城市------------------------------------------------------**/
+	  var lst_select_city=null;
+	  $('#city_name_ff').keyup(function(event){
+		   $("#store_id_ff").val("");
+		   $("#store_name_ff").val("");
+	       $('#store_name-search_ff').children().remove();
+	        var str_name = $(this).val();
+	        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+	        	$("#city_id_ff").val("");
+	            $('#city_name-search_ff').children().remove();
+	            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+	                return;
+	            }
+	           
+	            doManager('dynamicManager','selectAllCity',null,function(data){
+	                if(data.result){
+	                	
+	                	lst_select_city = JSON.parse(data.data);
+	                    $(lst_select_city).each(function(index,element){
+	                        $('#city_name-search_ff').append('<option value="'+element.cityname+'">');
+	                    });
+	                }else{
+	                	
+	                }
+	            });
+	        }
+	    });
+
+	     $('#city_name_ff').change(function(){
+	    	
+	         $(lst_select_city).each(function(index,element){
+	            if(element.cityname == $('#city_name_ff').val()){
+	            	
+	                $('#city_id_ff').val(element.id);
+	                return;
+	            }
+	         });
+	    }); 
+  
+  /**-----------------------------------搜索门店------------------------------------------------------**/
+  var lst_select_store=null;
+  $('#store_name_ff').keyup(function(event){
+		
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        	$("#store_id_ff").val("");
+            $('#store_name-search_ff').children().remove();
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id=null;
+            var employee_id=null;
+            if(target==0){//总部
+            	city_id = ($("#city_id_ff").val())==""?null:($("#city_id_ff").val());
+            	var city_name = $("#city_name_ff").val();
+            	if(city_id==null&&city_name!=""){
+            		city_id=-10000;
+            	}
+            }else if(target==1){//城市
+            	city_id = initCity;
+            	employee_id=employeeId;
+            }
+            doManager('dynamicManager','getStoreByCity',[target,employee_id,city_id,str_name],function(data){
+                if(data.result){
+                	
+                	lst_select_store = JSON.parse(data.data).storelist;
+                    $(lst_select_store).each(function(index,element){
+                        $('#store_name-search_ff').append('<option value="'+element.name+'">');
+                    });
+                }else{
+                    
+                }
+            });
+        }
+    });
+
+     $('#store_name_ff').change(function(){
+    	
+         $(lst_select_store).each(function(index,element){
+            if(element.name == $('#store_name_ff').val()){
+            	
+                $('#store_id_ff').val(element.store_id);
+                return;
+            }
+         });
+    }); 
+     
+     
+     
+ 
+    <!-------------------------------------------------------点击查询----------------------------------------------------------------->  
+    function searchInfo_ff(begin_end_date){
+    	var begin_end_date = $("#be_date1").val();
+    	$("#process_div").show();
+	 	$("#process_div_pic").show();
+		var dynamicDto = null;
+	    
+	    var number_str = $("#store_id_ff").val();   
+	    var storeName = $("#store_name_ff").val();
+	    
+ 	    if(number_str==""&&storeName!=""){
+ 	    	number_str=-10000;
+ 	    }
+ 	   
+ 	   if(target==0){
+ 	       var cityId = $("#city_id_ff").val();
+ 	       var cityName = $("#city_name_ff").val();
+ 	       if(cityId==""&&cityName!=""){
+ 	    	  cityId=-10000;
+ 	       }
+ 		   dynamicDto = {
+  				beginDate:begin_end_date,
+  				storeNumer:number_str,
+  				cityId:cityId,
+  		  		employeeId:employeeId,
+  		  		target:target,
+  		  		storeId:number_str
+ 		   }
+  		}else if(target==1){
+ 	    	 dynamicDto = {
+ 	   				beginDate:begin_end_date,
+	 	   			cityId:initCity,
+	  		  		employeeId:employeeId,
+ 	   		  		storeId:number_str,
+ 	   		  		target:target,
+ 	   		}
+ 	    }else if(target==2){
+ 	    	dynamicDto = {
+ 	   				beginDate:begin_end_date,
+ 	   		  		storeId:storeId,
+ 	   		  		target:target
+ 	   		}
+ 	    }else if(target==3){
+ 	    	dynamicDto = {
+ 	   				beginDate:begin_end_date,
+ 	   		  		storeId:storeId,
+ 	   		  		target:target
+ 	   		}
+ 	    }
+	   
+ 	   
+		
+	   
+	    doManager('dynamicManager','queryStoreTradeOfDept',[dynamicDto],function(data){
+           if(data.result){
+        	   var result = JSON.parse(data.data);
+        	   if(result.status=='success'){
+	        	   $("#ff_tbody").find("tr:gt(0)").remove();   
+	        	   var jData = result.data;
+	        	   if(jData==null){
+	        		   
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	
+	        	  
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+	        		   infoStr= "<tr>"
+	        			       +"<td>"+jData[i].storename+"</td>"
+		                       +"<td>"+jData[i].career_group+"</td>"
+		                       +"<td>"+jData[i].name+"</td>"
+		                       +"<td>"+jData[i].employee_no+"</td>"
+		                       +"<td>"+jData[i].gmv+"</td>"
+		                       +"</tr>";
+		                    
+		                  $("#ff_tbody").append(infoStr);     
+	        	   }
+	           }else if(result.status=='fail'){
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }else if(result.status=="storefail"){
+	        	   $("#ff_tbody").find("tr:gt(0)").remove();   
+                   crm_alert(5,JSON.parse(result.data).message);
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }
+           }else{
+        	   crm_alert(5,"请稍后重新请求！");
+           }
+           $("#process_div").hide();
+      	   $("#process_div_pic").hide();
+       }); 
+    }
+    
+    
+    function export_ff(){
+    	
+    	var begin_end_date = $("#be_date1").val();
+    	
+    	//crm_alert(0,"由于是实时数据，导出结果和当前展示数据有差异，请注意！");
+    	$("#process_div").show();
+  	 	$("#process_div_pic").show();
+   		
+	    var number_str = $("#store_id_ff").val(); 
+	    var storeName = $("#store_name_ff").val();
+ 	    if(number_str==""&&storeName!=""){
+ 	    	number_str=-10000;
+ 	    }
+ 	  var dynamicDto=null;
+ 	  if(target==0){
+	       var cityId = $("#city_id_ff").val();
+	       var cityName = $("#city_name_ff").val();
+ 	       if(cityId==""&&cityName!=""){
+ 	    	  cityId=-10000;
+ 	       }
+		   dynamicDto = {
+				beginDate:begin_end_date,
+				storeNumer:number_str,
+				cityId:cityId,
+		  		employeeId:employeeId,
+		  		target:target,
+		  		storeId:number_str
+		   }
+		}else if(target==1){
+	    	 dynamicDto = {
+	   			beginDate:begin_end_date,
+ 	   			cityId:initCity,
+  		  		employeeId:employeeId,
+	   		  	storeId:number_str,
+	   		  	target:target,
+	   		}
+	    }else if(target==2){
+	    	dynamicDto = {
+	   				beginDate:begin_end_date,
+	   		  		storeId:storeId,
+	   		  		target:target
+	   		}
+	    }else if(target==3){
+ 	    	dynamicDto = {
+ 	   				beginDate:begin_end_date,
+ 	   		  		storeId:storeId,
+ 	   		  		target:target
+ 	   		}
+ 	    }
+	  
+	    doManager('dynamicManager','exportStoreTradeOfDept',[dynamicDto],function(data){
+          if(data.result){
+          	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   window.location.href=result.data;
+	           }else{
+	        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }
+          
+          }else{
+       	   crm_alert(5,"请稍后重新请求！");
+          }
+         $("#process_div").hide();
+    	 $("#process_div_pic").hide();
+      }); 
+    }
+    
+</script>
+
+</body>
+</html>

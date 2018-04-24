@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>基础数据模型</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../crm/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../crm/dist/css/tTurnover-head-scoll.css">
+  <!--map style-->
+  <link rel="stylesheet" href="../crm/dist/css/map-style.css">
+  <link rel="stylesheet" href="../crm/dist/css/onoffset.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    /* .logo-lg i{margin-right: 5px;}
+    .logo-lg > ul > li:hover{border-bottom: 3px solid #46A3FF;-webkit-transition: all .2s ease-in-out;-o-transition: all .2s ease-in-out;transition: all .2s ease-in-out;}
+    .logo-lg > ul > li:hover > a{color: #66B3FF; font-weight: bold;}
+    .logo-lg > ul > li:hover i{color: #66B3FF;} */
+
+    .col-lg-5 h5{margin-top: 20px;}
+    .crumbs a{padding: 5px 10px; background-color: #3c8dbc; color: #fff; margin-right: 10px; border-radius: 5px;}
+    .crumbs span{ cursor: pointer;}
+    /* #mapContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+     } */
+     #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	
+	.marker-route {
+          position: absolute;
+          padding: 5px 10px;
+          color: #e90000;
+          background:#4598e0;
+          cursor: pointer;
+          white-space:nowrap;
+          position: relative;
+          color: #fff;
+          border-radius: 3px;
+          font-size:14px;
+        }
+     .marker-route:after {
+       	content:'';
+        position: absolute;
+       	width: 0;
+	    height: 0;
+	    border-left: 5px solid transparent;
+	    border-right: 5px solid transparent;
+	    border-top: 6px solid #4598e0;
+      	bottom: -6px;
+       	left:50%;
+       	margin-left:-5px;
+      }
+      .table{border:1px solid #f4f4f4}
+      .table tr td:nth-child(5),.table tr th:nth-child(5){border-left:1px solid #357ca5;}
+	  /* .table td{line-height:40px;height:40px;} */
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="../crm/dist/img/logo.png" height="30">
+						<img src="../crm/dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>基础数据模型</em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+
+
+
+
+
+
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+   <!--  <div class="container"> -->
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="col-lg-5" style="background-color: #fff;" id="divheight">
+          <h4 class="text-light-blue"><strong>社区基础信息</strong></h4>
+          <div><span class="text-muted" style="padding-bottom:10px;font-size:16px;">范围:</span><span id="showCoverage" class="text-yellow" style="padding-bottom:10px;font-size:16px;">--</span></div>
+          <table class="table table-striped no-margin" >
+                <tbody id="manual_tbody">
+                <tr>
+                  <th></th>
+                  <th>总数量</th>
+                  <th>国安社区已覆盖数量</th>
+                  <th class="text-aqua">服务覆盖率%</th>
+                  <th>居民总户数</th>
+                  <th>
+                  <font id="showattention" style="top:7px;right:75px;color:#ffcc00;font-size:16px;font-weight:normal;">!</font>
+                  	居民数
+                  	<font id="attention" style="font-size: 12px;white-space: nowrap;position: absolute;top:-3px;z-index: 1000;display:none;left:12px">（户数*3）</font></th>
+                  <th>国安社区已消费居民数</th>
+                  <th class="text-aqua">居民覆盖率%</th>
+                </tr>
+                <tr id="province">
+                  <td>省</td>
+                  <td id="provinceCount">--</td>
+                  <td id="conProvinceCount">--</td>
+                  <td id="serviceCoverage">--</td>
+                  <td id="residentsHouseCount">--</td>
+                  <td id="residentsCount">--</td>
+                  <td id="customerCount">--</td>
+                  <td id="residentsCoverage">--</td>
+                </tr>
+                <tr id="city">
+                  <td>市</th>
+                  <td id="cityCount">--</td>
+                  <td id="conCityCount">--</td>
+                  <td id="cityserviceCoverage">--</td>
+                  <td id="cityResidentsHouseCount">--</td>
+                  <td id="cityResidentsCount">--</td>
+                  <td id="cityCustomerCount">--</td>
+                  <td id="cityResidentsCoverage">--</td>
+                </tr>
+                <tr id="county">
+                  <td>区</td>
+                  <td id="countyCount">--</td>
+                  <td id="conCountyCount">--</td>
+                  <td id="countyServiceCoverage">--</td>
+                  <td id="countyResidentsHouseCount">--</td>
+                  <td id="countyResidentsCount">--</td>
+                  <td id="countyCustomerCount">--</td>
+                  <td id="countyResidentsCoverage">--</td>
+                </tr>
+                <tr id="town">
+                  <td>街道</th>
+                  <td id="townCount">--</td>
+                  <td id="conTownCount">--</td>
+                  <td id="townServiceCoverage">--</td>
+                  <td id="townResidentsHouseCount">--</td>
+                  <td id="townResidentsCount">--</td>
+                  <td id="townCustomerCount">--</td>
+                  <td id="townResidentsCoverage">--</td>
+                </tr>
+                <tr id="community">
+                  <td>社区</td>
+                  <td id="villageCount">--</td>
+                  <td id="conVillageCount">--</td>
+                  <td id="villageServiceCoverage">--</td>
+                  <td id="villageResidentsHouseCount">--</td>
+                  <td id="villageResidentsCount">--</td>
+                  <td id="villageCustomerCount">--</td>
+                  <td id="villageResidentsCoverage">--</td>
+                </tr>
+                <tr id="village">
+                  <td>小区</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>
+                <tr id="building">
+                  <td>楼房</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>
+                <tr id="house">
+                  <td>房间数</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>
+                </tbody>
+              </table>
+          <!-- <p class="clearfix">总数量<span style="float:right;text-muted" id="provinceCount">...</span></p>
+          <p class="clearfix">国安社区已覆盖数量<span style="float:right;text-muted" id="conProvinceCount">...</span></p>
+          <p class="clearfix">服务覆盖率%<span style="float:right;text-muted" id="serviceCoverage">...</span></p>
+          <p class="clearfix">居民总户数<span style="float:right;text-muted" id="residentsHouseCount">...</span></p>
+          <p class="clearfix">居民数（户数X3）<span style="float:right;text-muted" id="residentsCount">...</span></p>
+          <p class="clearfix">国安社区已消费居民数<span style="float:right;text-muted" id="customerCount">...</span></p>
+          <p class="clearfix">居民覆盖率%<span style="float:right;text-muted" id="residentsCoverage">...</span></p> -->
+           
+          <!-- <h5 class="text-aqua"><strong>用户量统计</strong></h5>
+          <p class="clearfix"><span class="col-sm-6 no-padding">用户总量</span><span class="col-sm-6">拉新用户量</span></p>
+          <p class="clearfix"><span class="col-sm-6 no-padding">复购用户量</span><span class="col-sm-6">当月用户量</span></p>
+          <h5 class="text-aqua"><strong>开店情况统计</strong></h5>
+          <p class="clearfix"><span class="col-sm-6 no-padding">已开门店</span><span class="col-sm-6">建设中门店</span></p> -->
+        </div>
+        <div class="col-lg-7" >
+        <div id="process_div" ></div>
+  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+	      <div class="clearfix">
+	     	<div class="crumbs pull-left" style="margin-bottom:10px;"></div>
+	      </div>
+          <div id="mainchina" style="width: 100%;height:auto;">
+          </div>
+          <div id="mapHeight" style="width: 100%;height:auto;display:none" >
+           <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
+          </div>
+        </div>
+      </section>
+
+    <!-- </div> -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../crm/bootstrap/js/raphael-min.js"></script>
+<script src="../crm/plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- page script -->
+<script src="../crm/dist/js/jquery.dataStatistics.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+
+<script type="text/javascript">
+  autodivheight();
+  function autodivheight(){ //函数：获取尺寸
+    //获取浏览器窗口高度
+    var winHeight=0;
+    if (window.innerHeight)
+      winHeight = window.innerHeight;
+    else if ((document.body) && (document.body.clientHeight))
+      winHeight = document.body.clientHeight;
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    if (document.documentElement && document.documentElement.clientHeight)
+      winHeight = document.documentElement.clientHeight;
+    //DIV高度为浏览器窗口的高度
+    document.getElementById("mainchina").style.height= winHeight - 100 +"px";
+    document.getElementById("mapHeight").style.height= winHeight - 129 +"px";
+    document.getElementById("divheight").style.height= winHeight - 100 +"px";
+  }
+  window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+</script>
+<!-- 引入 ECharts 文件 -->
+<script src="../crm/dist/js/echarts.common.min.js"></script>
+<script src="../crm/dist/js/china.js"></script>
+<script>
+var myChartChina;
+var pageStatusInfo = {};
+$(document).ready(function(){
+	console.log('myhchartchina init');
+	// 获取请求参数
+    var requestParameters = getReauestParameters();
+	//初始化页面地图元素
+	initPageElements();
+	//加载当前登陆人
+	initcurruser();
+	//设置页面状态信息
+	pageStatusInfo = initPageStatusInfo(requestParameters);
+	//显示页面统计数据
+	showPageContent(pageStatusInfo);
+	//地图事件绑定
+	bindMapEvents();
+	$("#showattention").on("mouseover",function(event){
+  		$("#attention").show();
+  	});
+  	$("#showattention").on("mouseout",function(event){
+  		$("#attention").hide();
+  	});
+	
+	
+});
+
+const SHOW_LEVEL_CHINA = 'china';
+const SHOW_LEVEL_PROVINCE = 'province';
+const SHOW_LEVEL_CITY = 'city';
+
+//获取请求参数
+var getReauestParameters = function () {
+    // 城市ID
+    var cityId = (decode64(getUrlParamByKey("c")) == 'null'||decode64(getUrlParamByKey("c")) == null) ? '' : decode64(getUrlParamByKey("c"));
+    // 省份ID
+    var provinceId = (decode64(getUrlParamByKey("p"))=='null'||decode64(getUrlParamByKey("p"))==null) ? '' : decode64(getUrlParamByKey("p")).trim();
+ 	// 省份名
+    var provinceName = (decode64(getUrlParamByKey("pn"))=='null'||decode64(getUrlParamByKey("pn"))==null) ? '' : decode64(getUrlParamByKey("pn")).trim();
+    // 城市名称
+    var cityName = (decode64(getUrlParamByKey("cn")) == 'null'||decode64(getUrlParamByKey("cn")) == null) ? '' : decode64(getUrlParamByKey("cn"));
+    // 缩放级别
+    //var zoomLevel = (decode64(getUrlParamByKey("zm")) == 'null'||decode64(getUrlParamByKey("zm")) == null) ? '' : decode64(getUrlParamByKey("zm"));
+    //选择跳入级别
+    //从城市 界面 跳过来 
+    var iscity = (decode64(getUrlParamByKey("iscity")) == 'null'||decode64(getUrlParamByKey("iscity")) == null) ? '' : decode64(getUrlParamByKey("iscity"));
+    var rtnData = {
+        "cityId": cityId,
+        "provinceId": provinceId,
+        "cityName": cityName,
+        "provinceName": provinceName,
+        "iscity":iscity
+    };
+    return rtnData;
+};
+
+//初始化页面地图元素
+var initPageElements =  function (){
+	myChartChina = echarts.init(document.getElementById('mainchina'));
+}
+
+//设置地图处理事件
+var  bindMapEvents = function(){
+	// 事件绑定处理
+    myChartChina.on('click',function(params){
+    	if(params.data['selected']){
+    		//解除加载中图标
+        	setLoadMark(true);
+            setMapData(pageStatusInfo, params);
+    	}
+    	
+    });
+}
+
+//设置地图显示
+var setMapData = function (pageStatusInfo, params) {
+    if (params) {
+        if (pageStatusInfo['showLevel'] == SHOW_LEVEL_CHINA) {
+            if (isMunicipality(params.name)) {
+                pageStatusInfo['showLevel'] = SHOW_LEVEL_CITY;
+                pageStatusInfo['cityId'] = params.data['province_id'];
+                pageStatusInfo['cityName'] = params.name;
+            } else {
+                pageStatusInfo['showLevel'] = SHOW_LEVEL_PROVINCE;
+                pageStatusInfo['provinceName'] = params.name;
+                pageStatusInfo['provinceId'] = params.data['province_id'];
+            }
+        } else if (pageStatusInfo['showLevel'] == SHOW_LEVEL_PROVINCE){
+            pageStatusInfo['showLevel'] = SHOW_LEVEL_CITY;
+            pageStatusInfo['cityId'] = params.data['cityId'];
+            pageStatusInfo['cityName'] = params.name;
+        }
+    }
+
+    // 重置页面显示
+    showPageContent(pageStatusInfo);
+
+};
+
+//是否直辖市
+var isMunicipality = function (cityName) {
+    const municipalityIds = ['北京', '天津', '上海', '重庆', '北京市', '天津市', '上海市', '重庆市'];
+    if ($.inArray(cityName, municipalityIds) != -1) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+//设置页面初始状态信息
+var initPageStatusInfo = function (reqData) {
+    // 复制请求参数
+    pageStatusInfo = jQuery.extend(true, {}, reqData);
+    // 判定页面显示级别&设置导航路径
+    if (!reqData.cityId && !reqData.provinceId) {
+        pageStatusInfo['showLevel'] = SHOW_LEVEL_CHINA;
+    } else if (reqData.cityId) {
+        pageStatusInfo['showLevel'] = SHOW_LEVEL_CITY;
+    } else if (reqData.provinceId) {
+        pageStatusInfo['showLevel'] = SHOW_LEVEL_PROVINCE;
+    }
+    // 设置系统时间
+    /*setCurrentDate(pageStatusInfo);
+    $.fn.extend(pageStatusInfo, {
+        getCacheKey : function () {
+            if (this.showLevel == SHOW_LEVEL_CHINA) {
+                return SHOW_LEVEL_CHINA;
+            } else if (this.showLevel == SHOW_LEVEL_PROVINCE) {
+                return 'province_' + pageStatusInfo.provinceId;
+            } else  if (this.showLevel == SHOW_LEVEL_CITY) {
+                return 'city_' + pageStatusInfo.cityId;
+            }
+        }
+    });*/
+    return pageStatusInfo;
+}
+
+//显示页面统计数据
+var showPageContent = function(pageStatusInfo){
+	//获得地图数据
+	showData(pageStatusInfo);
+	// 显示地图
+    showMap(pageStatusInfo);
+	//设置导航样式
+	if(pageStatusInfo.iscity!="city"){
+		showCrumbs();
+	}else{
+		 var crumbsMenu = $('.crumbs');
+		 crumbsMenu.empty();
+		 var cityItem = $('<a>');
+		 cityItem.html(pageStatusInfo.cityName);
+	     cityItem.css('background','none');
+		 cityItem.css('color','#2d3e50');
+		 crumbsMenu.append(cityItem);
+		 $("#showCoverage").html(pageStatusInfo.cityName);
+	}
+    //解除加载中图标
+	setLoadMark(false);
+}
+var i = 1;
+function showData(pageStatusInfo){
+	if (pageStatusInfo['showLevel'] == SHOW_LEVEL_CHINA) {
+		showChinaData();
+    } else if (pageStatusInfo['showLevel'] == SHOW_LEVEL_PROVINCE){
+    	showProvinceData(pageStatusInfo);
+    } else if(pageStatusInfo['showLevel'] == SHOW_LEVEL_CITY){
+    	showCityData(pageStatusInfo);
+    }
+	
+}
+
+
+var showChinaData =  function (){
+	$("#province").show();
+	$("#city").show();
+	$("#county").hide();
+	$("#town").hide();
+	$("#community").hide();
+	$("#village").hide();
+	$("#building").hide();
+	$("#house").hide();
+	doManager("MapBasicDataManager", "getChinaBasicData", null, function (data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var jsonData = JSON.parse(data.data);
+            if (jsonData.code == 200) {
+            	var provinceCount = jsonData.provinceCount;
+            	var conProvinceCount = jsonData.conProvinceCount;
+            	var residentsHouseCount = jsonData.residentsHouseCount;
+            	var customerCount = jsonData.customerCount;
+            	var cityCount = jsonData.cityCount;
+            	var conCityCount = jsonData.conCityCount;
+            	//省信息
+            	$("#provinceCount").html(provinceCount);
+            	$("#conProvinceCount").html(conProvinceCount);
+            	var serviceCount = (conProvinceCount/provinceCount)*100;
+            	var serviceCoverage = serviceCount.toFixed(2);
+            	$("#serviceCoverage").html(serviceCoverage+"%");
+            	$("#serviceCoverage").addClass("text-aqua");
+            	//市信息
+            	$("#cityCount").html(cityCount);
+            	$("#conCityCount").html(conCityCount);
+            	var cityserviceCount = (conCityCount/cityCount)*100;
+            	var cityserviceCoverage = cityserviceCount.toFixed(2);
+            	$("#cityserviceCoverage").html(cityserviceCoverage+"%");
+            	$("#cityserviceCoverage").addClass("text-aqua");
+            	//用户信息
+            	$("#cityResidentsHouseCount").html(residentsHouseCount);
+            	var residentsCount = residentsHouseCount*3;
+            	$("#cityResidentsCount").html(residentsCount);
+            	$("#cityCustomerCount").html(customerCount);
+            	var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
+            	var residentsCoverage = peopleCount.toFixed(2);
+            	$("#cityResidentsCoverage").html(residentsCoverage+"%");
+            	$("#cityResidentsCoverage").addClass("text-aqua");
+            }
+        }
+    }, false);
+}
+
+var showProvinceData = function (pageStatusInfo){
+	$("#province").show();
+	$("#city").show();
+	$("#county").hide();
+	$("#town").hide();
+	$("#community").hide();
+	$("#village").hide();
+	$("#building").hide();
+	$("#house").hide();
+	doManager("MapBasicDataManager", "getProvinceBasicData", pageStatusInfo.provinceId+"", function (data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var jsonData = JSON.parse(data.data);
+            if (jsonData.code == 200) {
+            	
+            	var cityCount = jsonData.cityCount;
+            	var conCityCount = jsonData.conCityCount;
+            	var residentsHouseCount = jsonData.residentsHouseCount;
+            	var customerCount = jsonData.customerCount;
+            	//省信息
+            	$("#provinceCount").html(1);
+            	$("#conProvinceCount").html(1);
+            	$("#serviceCoverage").html("100.00%");
+            	$("#serviceCoverage").addClass("text-aqua");
+            	//市信息
+            	$("#cityCount").html(cityCount);
+            	$("#conCityCount").html(conCityCount);
+            	var serviceCount = cityCount == 0 ? 0:(conCityCount/cityCount)*100;
+            	var serviceCoverage = serviceCount.toFixed(2);
+            	$("#cityserviceCoverage").html(serviceCoverage+"%");
+            	$("#cityserviceCoverage").addClass("text-aqua");
+            	$("#cityResidentsHouseCount").html(residentsHouseCount);
+            	var residentsCount = residentsHouseCount*3;
+               	$("#cityResidentsCount").html(residentsCount);
+            	$("#cityCustomerCount").html(customerCount);
+            	var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
+            	var residentsCoverage = peopleCount.toFixed(2);
+            	$("#cityResidentsCoverage").html(residentsCoverage+"%");
+            	$("#cityResidentsCoverage").addClass("text-aqua");
+            }
+        }
+    }, false);
+}
+
+var showCityData = function (pageStatusInfo){
+	$("#province").show();
+	$("#city").show();
+	$("#county").show();
+	$("#town").show();
+	$("#community").show();
+	$("#village").hide();
+	$("#building").hide();
+	$("#house").hide();
+	doManager("MapBasicDataManager", "getCityBasicData", pageStatusInfo.cityId+"", function (data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var jsonData = JSON.parse(data.data);
+            if (jsonData.code == 200) {
+            	var countyCount = jsonData.countyCount;
+            	var conCountyCount = jsonData.conCountyCount;
+            	var townCount = jsonData.townCount;
+            	var conTownCount = jsonData.conTownCount;
+            	var villageCount = jsonData.villageCount;
+            	var conVillageCount = jsonData.conVillageCount;
+            	var residentsHouseCount = jsonData.residentsHouseCount;
+            	var customerCount = jsonData.customerCount;
+            	//省信息
+            	$("#provinceCount").html(1);
+            	$("#conProvinceCount").html(1);
+            	$("#serviceCoverage").html("100.00%");
+            	$("#serviceCoverage").addClass("text-aqua");
+            	//市信息
+            	$("#cityCount").html(1);
+            	$("#conCityCount").html(1);
+            	$("#cityserviceCoverage").html("100.00%");
+            	$("#cityserviceCoverage").addClass("text-aqua");
+            	$("#cityResidentsHouseCount").html("--");
+               	$("#cityResidentsCount").html("--");
+            	$("#cityCustomerCount").html("--");
+            	$("#cityResidentsCoverage").html("--");
+            	$("#cityResidentsCoverage").removeClass("text-aqua");
+            	//区信息
+            	$("#countyCount").html(countyCount);
+            	$("#conCountyCount").html(conCountyCount);
+            	var serviceCount = countyCount == 0 ? 0 : (conCountyCount/countyCount)*100;
+            	var serviceCoverage = serviceCount.toFixed(2);
+            	$("#countyServiceCoverage").html(serviceCoverage+"%");
+            	$("#countyServiceCoverage").addClass("text-aqua");
+            	//街道信息
+            	$("#townCount").html(townCount);
+            	$("#conTownCount").html(conTownCount);
+            	var townServiceCount = townCount == 0 ? 0 : (conTownCount/townCount)*100;
+            	var townServiceCoverage = townServiceCount.toFixed(2);
+            	$("#townServiceCoverage").html(townServiceCoverage+"%");
+            	$("#townServiceCoverage").addClass("text-aqua");
+            	//社区信息
+            	$("#villageCount").html(villageCount);
+            	$("#conVillageCount").html(conVillageCount);
+            	var villageServiceCount = villageCount == 0 ? 0 : (conVillageCount/villageCount)*100;
+            	var villageServiceCoverage = villageServiceCount.toFixed(2);
+            	$("#villageServiceCoverage").html(villageServiceCoverage+"%");
+            	$("#villageServiceCoverage").addClass("text-aqua");
+            	//居民消费信息
+            	$("#villageResidentsHouseCount").html(residentsHouseCount);
+            	var residentsCount = residentsHouseCount*3;
+               	$("#villageResidentsCount").html(residentsCount);
+            	$("#villageCustomerCount").html(customerCount);
+            	var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
+            	var residentsCoverage = peopleCount.toFixed(2);
+            	$("#villageResidentsCoverage").html(residentsCoverage+"%");
+            	$("#villageResidentsCoverage").addClass("text-aqua");
+            }
+        }
+    }, false);
+}
+
+
+
+
+//画高德城市地图
+var drawGaodeMap = function(pageStatusInfo){
+	//初始化地图对象，加载地图
+	var amap = new AMap.Map("mapContainer", {
+	    resizeEnable: true,
+	    zoom:10,
+	    zooms:[10,18],
+	    doubleClickZoom : false
+	});
+    // 设置地图中心
+    amap.setCity(pageStatusInfo.cityName);
+    // 获取地图显示数据
+    var storeServiceRange = getGaodeMapData(pageStatusInfo);
+    var cityId = pageStatusInfo.cityId;
+    var cityName = pageStatusInfo.cityName;
+    $.each(storeServiceRange, function (idx, val) {
+        var serviceCoordinates = val.vertex;
+        var position = val.position;
+        var storeId = val.store_id;
+        var storeNo = val.storeNo;
+        var storeName = val.storeName;
+        //服务范围多边形
+        var servicePolygon = new AMap.Polygon({
+            map: amap,
+            strokeColor: "#5c69cc", //线颜色
+            strokeOpacity: 0.9, //线透明度
+            strokeWeight: 2,    //线宽
+            fillColor: "#046ad3", //填充色
+            fillOpacity: 0.1,//填充透明度
+            path: serviceCoordinates
+        });
+        if(position != null && position.length>0){
+			storeMarker = new AMap.Marker({ //添加自定义点标记
+		        map: amap,
+		        position: position, //基点位置
+		        icon:"dist/img/splogo.png",
+		        offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
+		        //extData:{"storeName":storeName,"storeService":servicePolygon}
+		       // draggable: true,  //是否可拖动
+		        //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
+		    }); 
+			storeMarker.setExtData({"storeName": storeName, "storeId": storeId, "storeService":servicePolygon});
+			storeMarker.on("mouseover",function(e){
+				var storeService = e.target.getExtData().storeService;
+				storeService.setOptions({"strokeColor":"#f00","strokeWeight": 3});
+				var storeName = e.target.getExtData().storeName;
+				e.target.setTitle(storeName);
+				
+			});
+			storeMarker.on("mouseout",function(e){
+				var storeService = e.target.getExtData().storeService;
+				storeService.setOptions({"strokeColor":"#5c69cc","strokeWeight": 2});
+				
+				var storeName = e.target.getExtData().storeName;
+				e.target.setTitle(storeName);
+				
+			});
+			storeMarker.on("click",function(e){
+				var storeId = e.target.getExtData().storeId;
+	            var id = pageStatusInfo.provinceId;
+	            var iscity = pageStatusInfo.iscity;
+	            var provinceId = typeof(pageStatusInfo.provinceId) == "undefined"?null:pageStatusInfo.provinceId;
+	            var provinceName = typeof(pageStatusInfo.provinceName) == "undefined"?null:pageStatusInfo.provinceName;
+	            var url = "store_dataview.html?p=" + encode64(provinceId) + "&c=" + encode64(cityId) + "&s=" + encode64(storeId) + "&cn=" + encode64(cityName) + "&pn=" + encode64(provinceName)+"&iscity=" + encode64(iscity);
+	            window.open(url,"iframe");
+			});
+		}
+
+        /* var storeMarker = new AMap.Marker({ //添加自定义点标记
+            visible: false,
+            map: amap,
+            position: position, //基点位置
+            content: '<div class="marker-route marker-marker-bus-from">' + storeName + '</div>'
+        });
+        servicePolygon.setExtData({"storeName": storeName, "marker": storeMarker, "storeId": storeId});
+        servicePolygon.on("mouseover", function (e) {
+                e.target.getExtData().marker.show();
+        });
+        servicePolygon.on("mouseout", function (e) {
+            e.target.getExtData().marker.hide();
+        });
+        // 点击事件
+        servicePolygon.on("click", function (e) {
+            var storeId = e.target.getExtData().storeId;
+            var id = pageStatusInfo.provinceId;
+            var iscity = pageStatusInfo.iscity;
+            var provinceId = typeof(pageStatusInfo.provinceId) == "undefined"?null:pageStatusInfo.provinceId;
+            var provinceName = typeof(pageStatusInfo.provinceName) == "undefined"?null:pageStatusInfo.provinceName;
+            var url = "store_dataview.html?p=" + encode64(provinceId) + "&c=" + encode64(cityId) + "&s=" + encode64(storeId) + "&cn=" + encode64(cityName) + "&pn=" + encode64(provinceName)+"&iscity=" + encode64(iscity);
+            window.open(url,"iframe");
+        }); */
+    });
+    /* // 设置缩放级别
+    if (pageStatusInfo.zoomLevel) {
+        amap.setZoom(pageStatusInfo.zoomLevel);
+    } */
+}
+
+//获取高德地图数据
+var getGaodeMapData = function (pageStatusInfo) {
+	var storeServiceRange;
+	/*注释内容为在缓存中获得门店数据*/
+    //var cacheKey = CACHE_HEADER_STORE_SERVICE_RANGE + pageStatusInfo.getCacheKey();
+    // 从缓存获取数据
+    //var storeServiceRange = JsCache.get(cacheKey);
+    //if (storeServiceRange) {
+        //console.log('show store service range base on js cache.')
+    //} else {
+        var cityId = pageStatusInfo.cityId;
+        doManager("mongoDBManager", "getAllStoreServiceAreaOfContry", [cityId], function (data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var jsonData = JSON.parse(data.data);
+                if (jsonData.code == 200) {
+                    //JsCache.set(cacheKey, jsonData.data);
+                    storeServiceRange = jsonData.data;
+                }
+            }
+        }, false);
+    //}
+    return storeServiceRange;
+};
+
+
+//设置加载中图标
+var setLoadMark = function(isShow){
+	if(isShow){
+		$("#process_div").show();
+        $("#process_div_pic").show();
+	}else{
+		$("#process_div").hide();
+        $("#process_div_pic").hide();
+	}
+}
+
+var curr_user;
+function initcurruser(){
+	//取得当前登录人的门店
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			 curr_user = JSON.parse(data.data);
+			 var zw = curr_user.zw==null?"":curr_user.zw;
+			 if(curr_user.employeeId==null||curr_user.employeeId=="null"){
+				 employeeID = "";
+			 }else{
+				 employeeID = curr_user.employeeId;
+			 } 
+		}
+	},false);
+}
+
+//设置系统时间
+var setCurrentDate = function (pageStatusInfo) {
+    var date = new Date();
+    var curYear = date.getFullYear(); //当前年
+    var curMonth = date.getMonth() + 1;//当前月
+    var curDay = date.getDate();//当前日
+    pageStatusInfo['currentYear'] = curYear;
+    pageStatusInfo['currentMonth'] = curMonth;
+    pageStatusInfo['currentDay'] = curDay;
+};
+
+var showCrumbs = function () {
+    var crumbsMenu = $('.crumbs');
+    crumbsMenu.empty();
+    var chinaItem = $('<a>');
+    var provinceItem = $('<a>');
+    var cityItem = $('<a>');
+    chinaItem.html('全国')
+    crumbsMenu.append(chinaItem);
+    if (pageStatusInfo.showLevel == SHOW_LEVEL_CHINA) {
+        chinaItem.css('background','none');
+        chinaItem.css('color','#2d3e50');
+		 $("#showCoverage").html("全国");
+
+    }
+    if (pageStatusInfo.showLevel == SHOW_LEVEL_PROVINCE) {
+        // 设置全国样式和事件
+        chinaItem.css('cursor', 'pointer');
+        chinaItem.on('click', function () {
+            pageStatusInfo.cityId = '';
+            pageStatusInfo.cityName = '';
+            pageStatusInfo.provinceId = '';
+            pageStatusInfo.provinceName = '';
+            pageStatusInfo.showLevel = SHOW_LEVEL_CHINA;
+            showPageContent(pageStatusInfo);
+        });
+        // 设置省菜单
+        if (pageStatusInfo.provinceName) {
+            provinceItem.html(pageStatusInfo.provinceName);
+            provinceItem.css('background','none');
+            provinceItem.css('color','#2d3e50');
+            var lineItem = $('<span>');
+            lineItem.attr("id","line");
+            crumbsMenu.append(lineItem);
+            crumbsMenu.append(provinceItem);
+   		 	$("#showCoverage").html(pageStatusInfo.provinceName);  
+        }
+    }
+    if (pageStatusInfo.showLevel == SHOW_LEVEL_CITY) {
+        // 设置全国样式和事件
+        chinaItem.css('cursor', 'pointer');
+        chinaItem.on('click', function () {
+            pageStatusInfo.cityId = '';
+            pageStatusInfo.cityName = '';
+            pageStatusInfo.provinceId = '';
+            pageStatusInfo.provinceName = '';
+            pageStatusInfo.showLevel = SHOW_LEVEL_CHINA;
+            showPageContent(pageStatusInfo);
+        });
+        // 非直辖市
+        if (isMunicipality(pageStatusInfo.cityName) == false) {
+            if (pageStatusInfo.provinceName) {
+            	var lineItem = $('<span>');
+		        lineItem.attr("id","line");
+				crumbsMenu.append(lineItem);
+                provinceItem.html(pageStatusInfo.provinceName)
+                provinceItem.css('cursor', 'pointer');
+                provinceItem.on('click', function () {
+                    pageStatusInfo.cityId = '';
+                    pageStatusInfo.cityName = '';
+                    pageStatusInfo.showLevel = SHOW_LEVEL_PROVINCE;
+                    showPageContent(pageStatusInfo);
+                });
+                crumbsMenu.append(provinceItem);
+            }
+        }
+        // 设置城市菜单
+        cityItem.html(pageStatusInfo.cityName);
+        cityItem.css('background','none');
+        cityItem.css('color','#2d3e50');
+        var lineItem = $('<span>');//设置大于号图标
+        lineItem.attr("id","line_");
+		crumbsMenu.append(lineItem);
+        crumbsMenu.append(cityItem);
+		$("#showCoverage").html(pageStatusInfo.cityName);  
+    }
+    $("#line").html('&nbsp;>&nbsp;');
+	$("#line").attr("style","color:#2d3e50")
+	$("#line_").html('&nbsp;>&nbsp;');
+	$("#line_").attr("style","color#2d3e50")
+};
+
+
+var showMap = function(pageStatusInfo){
+	var province = [];
+	doManager("dynamicManager", "getAllOpenProvinces",[],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var resultJson= JSON.parse(data.data);
+                    $.each(eval(resultJson['province']), function (idx, val) {
+	    				var object = new Object();
+	    				object['province_id'] = val['province_id'];
+	    				object['name'] = val['name'].replace("市","").replace("省","").replace("自治区","");
+	    				//object['type'] = val['type'];
+	    				if(val['selected']=='true'){
+	    					object['selected'] = true;
+	    					var object2 = new Object();
+	    					object2['areaColor'] = '#fcdc30';
+	    					var object3 = new Object();
+	    					object3['emphasis'] = object2;
+	    					object['itemStyle'] = object3;
+	    				}
+	    				province.push(object);
+	     			});
+                }
+            },false);
+    var openedProvinceMunicipality = province;
+	/* var openedProvinceMunicipality = [
+	  {
+	      name: '广东', province_id: "19", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+	      name: '北京', province_id: "1", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+	      name: '天津', province_id: "3", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+	      name: '上海', province_id: "2", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+	      name: '辽宁', province_id: "6", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+	      name: '贵州', province_id: "24", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+	      name: '云南', province_id: "25", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+	      name: '内蒙古', province_id: "5", selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  },
+	  {
+          name: '湖南', province_id: "18", selected: true, itemStyle: {
+              emphasis: {
+                  areaColor: '#fcdc30',
+              }
+          }
+      },
+	]; */
+	var citylist = [];
+	doManager("dynamicManager", "selectAllCity",[],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var resultJson= JSON.parse(data.data);
+                    $.each(eval(resultJson), function (idx, val) {
+                    	if(isMunicipality(val['cityname']) == false){
+		    				var object = new Object();
+		    				object['cityId'] = val['id'];
+		    				if(String(val['cityname']).indexOf("自治州")<0){
+		    					object['name'] = String(val['cityname'])+"市";
+		    				}else{
+		    					object['name'] = val['cityname'];
+		    				}
+		    				//object['type'] = val['type'];
+	    					object['selected'] = true;
+	    					var object2 = new Object();
+	    					object2['areaColor'] = '#fcdc30';
+	    					var object3 = new Object();
+	    					object3['emphasis'] = object2;
+	    					object['itemStyle'] = object3;
+		    				citylist.push(object);
+                    	}
+	     			});
+                }
+            },false);
+    var openedCity = citylist;
+	/* var openedCity = [
+	      {
+	          name: '重庆市'
+	  }, {name: '北京市', cityId: 1}, {
+	      name: '天津市', selected: true, cityId: 3, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {
+	      name: '上海市', selected: true, cityId: 2, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '香港'}, {name: '澳门'}, {name: '巴音郭楞蒙古自治州'}, {name: '和田地区'}, {name: '哈密地区'}, {name: '阿克苏地区'}, {name: '阿勒泰地区'}, {name: '喀什地区'}, {
+	      name: '塔城地区'
+	  }, {name: '昌吉回族自治州'}, {name: '克孜勒苏柯尔克孜自治州'}, {name: '吐鲁番地区'}, {name: '伊犁哈萨克自治州'}, {name: '博尔塔拉蒙古自治州'}, {name: '乌鲁木齐市'}, {name: '克拉玛依市'}, {name: '阿拉尔市'}, {name: '图木舒克市'}, {name: '五家渠市'}, {name: '石河子市'}, {name: '那曲地区'}, {name: '阿里地区'}, {name: '日喀则地区'}, {name: '林芝地区'}, {
+	      name: '昌都地区'
+	  }, {name: '山南地区'}, {name: '拉萨市'}, {name: '呼伦贝尔市'}, {name: '阿拉善盟'}, {name: '锡林郭勒盟'}, {name: '鄂尔多斯市'}, {name: '赤峰市'}, {name: '巴彦淖尔市'}, {name: '通辽市'}, {
+	      name: '乌兰察布市', cityId: 9, selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '兴安盟'}, {
+	      name: '包头市'
+	  }, {name: '呼和浩特市'}, {name: '乌海市'}, {name: '海西蒙古族藏族自治州'}, {name: '玉树藏族自治州'}, {name: '果洛藏族自治州'}, {name: '海南藏族自治州'}, {name: '海北藏族自治州'}, {name: '黄南藏族自治州'}, {name: '海东地区'}, {name: '西宁市'}, {name: '甘孜藏族自治州'}, {name: '阿坝藏族羌族自治州'}, {name: '凉山彝族自治州'}, {name: '绵阳市'}, {name: '达州市'}, {
+	      name: '广元市'
+	  }, {name: '雅安市'}, {name: '宜宾市'}, {name: '乐山市'}, {name: '南充市'}, {name: '巴中市'}, {name: '泸州市'}, {name: '成都市'}, {name: '资阳市'}, {name: '攀枝花市'}, {name: '眉山市'}, {name: '广安市'}, {
+	      name: '德阳市'
+	  }, {name: '内江市'}, {name: '遂宁市'}, {name: '自贡市'}, {name: '黑河市'}, {name: '大兴安岭地区'}, {name: '哈尔滨市'}, {name: '齐齐哈尔市'}, {name: '牡丹江市'}, {name: '绥化市'}, {name: '伊春市'}, {name: '佳木斯市'}, {
+	      name: '鸡西市'
+	  }, {name: '双鸭山市'}, {name: '大庆市'}, {name: '鹤岗市'}, {name: '七台河市'}, {name: '酒泉市'}, {name: '张掖市'}, {name: '甘南藏族自治州'}, {name: '武威市'}, {name: '陇南市'}, {name: '庆阳市'}, {name: '白银市'}, {
+	      name: '定西市'
+	  }, {name: '天水市'}, {name: '兰州市'}, {name: '平凉市'}, {name: '临夏回族自治州'}, {name: '金昌市'}, {name: '嘉峪关市'}, {name: '普洱市'}, {name: '红河哈尼族彝族自治州'}, {name: '文山壮族苗族自治州'}, {name: '曲靖市'}, {name: '楚雄彝族自治州'}, {name: '大理白族自治州'}, {name: '临沧市'}, {name: '迪庆藏族自治州'}, {name: '昭通市'}, {
+	      name: '昆明市', selected: true, cityId: 6, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '丽江市'}, {name: '西双版纳傣族自治州'}, {name: '保山市'}, {name: '玉溪市'}, {name: '怒江傈僳族自治州'}, {name: '德宏傣族景颇族自治州'}, {name: '百色市'}, {name: '河池市'}, {name: '桂林市'}, {name: '南宁市'}, {name: '柳州市'}, {
+	      name: '崇左市'
+	  }, {name: '来宾市'}, {name: '玉林市'}, {name: '梧州市'}, {name: '贺州市'}, {name: '钦州市'}, {name: '贵港市'}, {name: '防城港市'}, {name: '北海市'}, {name: '怀化市'}, {name: '永州市'}, {name: '邵阳市'}, {
+	      name: '郴州市'
+	  }, {name: '常德市'}, {name: '湘西土家族苗族自治州'}, {name: '衡阳市'}, {name: '岳阳市'}, {name: '益阳市'}, {
+		  name: '长沙市', selected: true, cityId: 11, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '株洲市'}, {name: '张家界市'}, {name: '娄底市'}, {name: '湘潭市'}, {name: '榆林市'}, {
+	      name: '延安市'
+	  }, {name: '汉中市'}, {name: '安康市'}, {name: '商洛市'}, {name: '宝鸡市'}, {name: '渭南市'}, {name: '咸阳市'}, {name: '西安市'}, {name: '铜川市'}, {name: '清远市'}, {name: '韶关市'}, {name: '湛江市'}, {
+	      name: '梅州市'
+	  }, {name: '河源市'}, {name: '肇庆市'}, {name: '惠州市'}, {name: '茂名市'}, {name: '江门市'}, {name: '阳江市'}, {name: '云浮市'}, {
+	      name: '广州市', selected: true, cityId: 8, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '汕尾市'}, {name: '揭阳市'}, {name: '珠海市'}, {
+	      name: '佛山市'
+	  }, {name: '潮州市'}, {name: '汕头市'}, {
+	      name: '深圳市', cityId: 7, selected: true, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '东莞市'}, {name: '中山市'}, {name: '延边朝鲜族自治州'}, {name: '吉林市'}, {name: '白城市'}, {name: '松原市'}, {name: '长春市'}, {name: '白山市'}, {
+	      name: '通化市'
+	  }, {name: '四平市'}, {name: '辽源市'}, {name: '承德市'}, {name: '张家口市'}, {name: '保定市'}, {name: '唐山市'}, {name: '沧州市'}, {name: '石家庄市'}, {name: '邢台市'}, {name: '邯郸市'}, {name: '秦皇岛市'}, {
+	      name: '衡水市'
+	  }, {name: '廊坊市'}, {name: '恩施土家族苗族自治州'}, {name: '十堰市'}, {name: '宜昌市'}, {name: '襄樊市'}, {name: '黄冈市'}, {name: '荆州市'}, {name: '荆门市'}, {name: '咸宁市'}, {name: '随州市'}, {name: '孝感市'}, {
+	      name: '武汉市'
+	  }, {name: '黄石市'}, {name: '神农架林区'}, {name: '天门市'}, {name: '仙桃市'}, {name: '潜江市'}, {name: '鄂州市'}, {name: '遵义市'}, {
+	      name: '黔东南苗族侗族自治州', selected: true, cityId: 10, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '毕节地区'}, {name: '黔南布依族苗族自治州'}, {name: '铜仁地区'}, {name: '黔西南布依族苗族自治州'}, {name: '六盘水市'}, {name: '安顺市'}, {
+	      name: '贵阳市', selected: true, cityId: 5, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {
+	      name: '烟台市'
+	  }, {name: '临沂市'}, {name: '潍坊市'}, {name: '青岛市'}, {name: '菏泽市'}, {name: '济宁市'}, {name: '德州市'}, {name: '滨州市'}, {name: '聊城市'}, {name: '东营市'}, {name: '济南市'}, {name: '泰安市'}, {
+	      name: '威海市'
+	  }, {name: '日照市'}, {name: '淄博市'}, {name: '枣庄市'}, {name: '莱芜市'}, {name: '赣州市'}, {name: '吉安市'}, {name: '上饶市'}, {name: '九江市'}, {name: '抚州市'}, {name: '宜春市'}, {name: '南昌市'}, {
+	      name: '景德镇市'
+	  }, {name: '萍乡市'}, {name: '鹰潭市'}, {name: '新余市'}, {name: '南阳市'}, {name: '信阳市'}, {name: '洛阳市'}, {name: '驻马店市'}, {name: '周口市'}, {name: '商丘市'}, {name: '三门峡市'}, {name: '新乡市'}, {
+	      name: '平顶山市'
+	  }, {name: '郑州市'}, {name: '安阳市'}, {name: '开封市'}, {name: '焦作市'}, {name: '许昌市'}, {name: '濮阳市'}, {name: '漯河市'}, {name: '鹤壁市'}, {name: '大连市'}, {name: '朝阳市'}, {name: '丹东市'}, {
+	      name: '铁岭市'
+	  }, {
+	      name: '沈阳市', selected: true, cityId: 4, itemStyle: {
+	          emphasis: {
+	              areaColor: '#fcdc30',
+	          }
+	      }
+	  }, {name: '抚顺市'}, {name: '葫芦岛市'}, {name: '阜新市'}, {name: '锦州市'}, {name: '鞍山市'}, {name: '本溪市'}, {name: '营口市'}, {name: '辽阳市'}, {name: '盘锦市'}, {name: '忻州市'}, {
+	      name: '吕梁市'
+	  }, {name: '临汾市'}, {name: '晋中市'}, {name: '运城市'}, {name: '大同市'}, {name: '长治市'}, {name: '朔州市'}, {name: '晋城市'}, {name: '太原市'}, {name: '阳泉市'}, {name: '六安市'}, {name: '安庆市'}, {
+	      name: '滁州市'
+	  }, {name: '宣城市'}, {name: '阜阳市'}, {name: '宿州市'}, {name: '黄山市'}, {name: '巢湖市'}, {name: '亳州市'}, {name: '池州市'}, {name: '合肥市'}, {name: '蚌埠市'}, {name: '芜湖市'}, {name: '淮北市'}, {
+	      name: '淮南市'
+	  }, {name: '马鞍山市'}, {name: '铜陵市'}, {name: '南平市'}, {name: '三明市'}, {name: '龙岩市'}, {name: '宁德市'}, {name: '福州市'}, {name: '漳州市'}, {name: '泉州市'}, {name: '莆田市'}, {name: '厦门市'}, {
+	      name: '丽水市'
+	  }, {name: '杭州市'}, {name: '温州市'}, {name: '宁波市'}, {name: '舟山市'}, {name: '台州市'}, {name: '金华市'}, {name: '衢州市'}, {name: '绍兴市'}, {name: '嘉兴市'}, {name: '湖州市'}, {name: '盐城市'}, {
+	      name: '徐州市'
+	  }, {name: '南通市'}, {name: '淮安市'}, {name: '苏州市'}, {name: '宿迁市'}, {name: '连云港市'}, {name: '扬州市'}, {name: '南京市'}, {name: '泰州市'}, {name: '无锡市'}, {name: '常州市'}, {name: '镇江市'}, {
+	      name: '吴忠市'
+	  }, {name: '中卫市'}, {name: '固原市'}, {name: '银川市'}, {name: '石嘴山市'}, {name: '儋州市'}, {name: '文昌市'}, {name: '乐东黎族自治县'}, {name: '三亚市'}, {name: '琼中黎族苗族自治县'}, {name: '东方市'}, {name: '海口市'}, {
+	      name: '万宁市'
+	  }, {name: '澄迈县'}, {name: '白沙黎族自治县'}, {name: '琼海市'}, {name: '昌江黎族自治县'}, {name: '临高县'}, {name: '陵水黎族自治县'}, {name: '屯昌县'}, {name: '定安县'}, {name: '保亭黎族苗族自治县'}, {name: '五指山市'}
+	]; */
+      // 各省地图数据
+      var provinces = {
+        '上海': '../crm/dist/geometryCouties/data-1482909900836-H1BC_1WHg.json',
+        '河北': '../crm/dist/geometryCouties/data-1482909799572-Hkgu_yWSg.json',
+        '湖北': '../crm/dist/geometryCouties/data-1482909799572-Hksa_hubei.json',
+        // '山西': '/asset/get/s/data-1482909909703-SyCA_JbSg.json',
+        '内蒙古': '../crm/dist/geometryCouties/data-1482909841923-rkqqdyZSe.json',
+        '辽宁': '../crm/dist/geometryCouties/data-1482909836074-rJV9O1-Hg.json',
+        // '吉林': '/asset/get/s/data-1482909832739-rJ-cdy-Hx.json',
+        // '黑龙江': '/asset/get/s/data-1482909803892-Hy4__J-Sx.json',
+        '江苏': '../crm/dist/geometryCouties/data-1482909823260-HkDtOJZBx.json',
+        // '浙江': '/asset/get/s/data-1482909960637-rkZMYkZBx.json',
+        // '安徽': '/asset/get/s/data-1482909768458-HJlU_yWBe.json',
+        // '福建': '/asset/get/s/data-1478782908884-B1H6yezWe.json',
+        // '江西': '/asset/get/s/data-1482909827542-r12YOJWHe.json',
+        '山东': '../crm/dist/geometryCouties/data-1482909892121-BJ3auk-Se.json',
+        // '河南': '/asset/get/s/data-1482909807135-SJPudkWre.json',
+        // '湖北': '/asset/get/s/data-1482909813213-Hy6u_kbrl.json',
+        // '湖南': '/asset/get/s/data-1482909818685-H17FOkZSl.json',
+        '广东': '../crm/dist/geometryCouties/data-1482909784051-BJgwuy-Sl.json',
+        '广西': '../crm/dist/geometryCouties/data-1482909787648-SyEPuJbSg.json',
+        // '海南': '/asset/get/s/data-1482909796480-H12P_J-Bg.json',
+        '四川': '../crm/dist/geometryCouties/data-1482909931094-H17eKk-rg.json',
+        '贵州': '../crm/dist/geometryCouties/data-1482909791334-Bkwvd1bBe.json',
+        '云南': '../crm/dist/geometryCouties/data-1482909957601-HkA-FyWSx.json',
+        // '西藏': '/asset/get/s/data-1482927407942-SkOV6Qbrl.json',
+        // '陕西': '/asset/get/s/data-1508990012125-SyVBnCCab.json',
+        // '甘肃': '/asset/get/s/data-1482909780863-r1aIdyWHl.json',
+        // '青海': '/asset/get/s/data-1482909853618-B1IiOyZSl.json',
+        // '宁夏': '/asset/get/s/data-1482909848690-HJWiuy-Bg.json',
+        // '新疆': '/asset/get/s/data-1482909952731-B1YZKkbBx.json',
+        '北京': '../crm/dist/geometryCouties/data-1482818963027-Hko9SKJrg.json',
+        '天津': '../crm/dist/geometryCouties/data-1482909944620-r1-WKyWHg.json',
+        '湖南':'../crm/dist/geometryCouties/data-1482946957601-HkA-HN.json',
+        // '重庆': '/asset/get/s/data-1482909775470-HJDIdk-Se.json',
+        // '香港': '/asset/get/s/data-1461584707906-r1hSmtsx.json',
+        // '澳门': '/asset/get/s/data-1482909771696-ByVIdJWBx.json'
+    };
+
+      // 地图显示属性设置
+      var mapOption = {
+    	  /* backgroundColor: '#000', */
+          tooltip: {
+              trigger: 'item',
+              formatter: "{b}"
+          },
+          series:
+              [
+                  {
+                      type: 'map',
+                      label: {
+                          normal: {
+                              show: false
+                          },
+                          emphasis: {
+                              show: false
+                          }
+                      },
+                      itemStyle: {
+                          normal: {
+                              areaColor: '#bfbfbf'
+                          },
+                          emphasis: {
+                              areaColor: '#bfbfbf'
+                          }
+                      },
+                      animation: false
+                  },
+
+              ]
+      };
+
+	  if (pageStatusInfo['showLevel'] == SHOW_LEVEL_CHINA) {
+	      mapOption.series[0].mapType = SHOW_LEVEL_CHINA;
+	      mapOption.series[0].data = openedProvinceMunicipality;
+	      myChartChina.setOption(mapOption);
+	      $("#mapHeight").hide();
+	      $("#mainchina").show();
+	  } else if (pageStatusInfo['showLevel'] == SHOW_LEVEL_PROVINCE) {
+	      var mapType = pageStatusInfo['provinceName'];
+	      mapOption.series[0].mapType = mapType;
+	      mapOption.series[0].data = openedCity;
+	      $.get(provinces[mapType], function(geoJson) {
+	          echarts.registerMap(mapType, geoJson);
+	          myChartChina.setOption(mapOption);
+	      });
+	      $("#mapHeight").hide();
+	      $("#mainchina").show();
+	  } else if(pageStatusInfo['showLevel'] == SHOW_LEVEL_CITY) {
+	      // 切换高德专用显示容器
+	      drawGaodeMap(pageStatusInfo);
+	      $("#mainchina").hide();
+	      $("#mapHeight").show();
+	  }
+}
+
+</script>
+
+</body>
+</html>

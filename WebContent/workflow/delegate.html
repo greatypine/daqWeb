@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>个人委托待办</title>
+		<script type="text/javascript" src="../scripts/lib-main.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+		<script type="text/javascript">
+			$(function(){
+				doManager("WFDelegateManager", "getUser","" , function(data, textStatus, XMLHttpRequest){
+						if (data.result) {
+							var jsdata = $.fromJSON(data.data);
+							if(jsdata!=""){
+									$("#owner").val(jsdata.id);
+									$$.executeSearch("delegateQueryInfo");
+								}
+						}
+					});
+			})
+			function convertDataToObj(data, allColumns){
+	            var json = "{";
+	            for (var i = 0; i < data.length; i++) {
+	                json += "'" + allColumns[i].key + "'";
+	                json += ":"
+	                json += "'" + data[i] + "',";
+	            }
+	            json = json.substr(0, json.length - 1) + "}";
+	            var jsonObj = $.fromJSON(json);
+	            return jsonObj;
+				}
+			var editObj = {
+		        html: '<a href="#">修改</a>',
+		        func: function(queryid, data, nTr, allColumns){
+		            var json = convertDataToObj(data, allColumns);
+		            var id = json.id;
+		          	window.location.href = 'editDelegate.html?Id='+id;
+					
+		        }
+		    }
+			var delObj = {
+		        html: '<a href="#">删除</a>',
+		        func: function(queryid, data, nTr, allColumns){
+		            var json = convertDataToObj(data, allColumns);
+		            var id = json.id;
+		          	doManager("WFDelegateManager", "deleteWFDelegate",id+'' , function(data, textStatus, XMLHttpRequest){
+						if (data.result) {
+							window.location.href = 'delegate.html';
+						}
+					});
+					
+		        }
+		    }
+			var opArr = [editObj,delObj];
+			function addDelegete(){
+					window.location.href = 'newDelegate.html';
+			}
+		</script>
+	</head>
+<body>
+		<div id="conditionsDiv" style="padding:10px;">
+    		<form class="pmsForm" id="pmsForm" style="text-align:center;">
+    			<input type="hidden" name="owner" id="owner" style="display:none;" validate="minlength:1, maxlength:3" />
+				<input type="hidden" value="查询" id="searchButton" class="buttonu"/>
+				<input type="button" value="新增委托" id="toNew" class="buttonu" onclick="addDelegete()" />
+    		</form>
+			<script type="text/javascript">
+				$("#searchButton").button().click(function() {
+					$$.executeSearch("delegateQueryInfo");
+				});
+			</script>
+    	</div>
+        <div id="testQuery" showcheckbox="false" searchDiv="conditionsDiv" showsearch="false" showdisplay="false" showprint="false"  
+		queryid="delegateQueryInfo" operators="opArr" autosearch="false"></div>
+</body>
+</html>

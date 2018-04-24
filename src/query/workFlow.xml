@@ -1,0 +1,235 @@
+<pmsquery>
+	<query id="workFlowQuery" header="${query.workFlowQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlow" order="id asc">
+		<column key="id" header="${db.wfFlow.id}" type="java.lang.Long"  allowSearch="true" operator="eq" width="10%" ></column>
+		<column key="baseFlowId" header="${db.wfFlow.baseFlowId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="10%" />
+		<column key="moduleId" header="${db.wfFlow.moduleId}" type="java.lang.Long" allowSearch="true" operator="eq" width="10%" />
+		<column key="flowName" header="${db.wfFlow.flowName}" type="String" allowSearch="true" operator="like"  width="10%" />
+		<column key="flowVersion" header="${db.wfFlow.flowVersion}" type="java.lang.Long" allowSearch="true" operator="eq"  width="10%" />
+		<column key="creator" header="${db.wfFlow.creator}" type="java.lang.Long" allowSearch="true" operator="eq"  width="10%" />
+		<column key="createTime" header="${db.wfFlow.createTime}" allowSearch="true" operator="eq" type="java.util.Date" format="yyyy-MM-dd" width="10%" />
+		<column key="memo" header="${db.wfFlow.memo}" type="String" allowSearch="true" operator="eq"  width="10%" />
+		<column key="state" header="${db.wfFlow.state}" type="java.lang.Long" allowSearch="true" operator="eq"  width="10%" />
+	</query>
+	<query id="wfStepQuery" header="${query.wfStepQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowStep" order="stepNo  asc">
+		<column key="id" header="${db.wfStep.id}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true"></column>
+		<column key="flowId" header="${db.wfStep.flowId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="stepNo" header="${db.wfStep.stepNo}"  type="java.lang.Long" allowSearch="true" operator="eq" allowSort="true" />
+		<column key="stepType" header="${db.wfStep.stepType}" type="java.lang.Long" allowSearch="true" allowSort="true" operator="eq"  />
+		<column key="stepName" header="${db.wfStep.stepName}" type="String" allowSearch="true" allowSort="true" operator="eq"  />
+		<column key="isReturn" header="${db.wfStep.isReturn}" type="java.lang.Long" display="false" dict="WF_YESNO" allowSort="true" allowSearch="true" operator="eq"  />
+		<column key="isSameOrg" header="${db.wfStep.isSameOrg}" type="java.lang.Long" dict="WF_YESNO" allowSort="true" allowSearch="true" operator="eq"  />
+		<column key="isFinish" header="${db.wfStep.isFinish}" type="java.lang.Long" dict="WF_YESNO" allowSort="true" allowSearch="true" operator="eq"  />
+		<column key="isChoiseNext" header="${db.wfStep.isChoiseNext}" type="java.lang.Long" display="false" allowSort="true" dict="WF_YESNO" allowSearch="true" operator="eq"  />
+		<column key="isChoisePrev" header="${db.wfStep.isChoisePrev}" type="java.lang.Long" display="false" allowSort="true" dict="WF_YESNO" allowSearch="true" operator="eq"  />
+		<column key="isAutoSave" header="${db.wfStep.isAutoSave}" type="java.lang.Long" display="false" allowSort="true" dict="WF_YESNO" allowSearch="true" operator="eq"  />
+		<column key="isAllowEdit" header="${db.wfStep.isAllowEdit}" type="java.lang.Long" allowSort="true" dict="WF_YESNO" allowSearch="true" operator="eq"  />
+		<column key="isAutoPass" header="${db.wfStep.isAutoCommit}" type="java.lang.Long" allowSort="true" dict="WF_YESNO" allowSearch="true" operator="eq"  />
+		<column key="autoPassDays" header="${db.wfStep.delayDays}" type="java.lang.Long" allowSort="true" allowSearch="true" operator="eq"  />
+		<column key="isPrompt" header="${db.wfStep.isPrompt}" type="java.lang.Long" display="false" allowSort="true" dict="WF_YESNO" allowSearch="true" operator="eq"  />
+		<column key="promptDays" header="${db.wfStep.promptDays}" type="java.lang.Long" display="false" allowSort="true" allowSearch="true" operator="eq"  />
+		<column key="remoteJava" header="${db.wfStep.remoteJava}" type="String" display="false" allowSort="true" allowSearch="true" operator="eq"  />
+		<column key="remoteArgs" header="${db.wfStep.remoteArgs}" type="String" display="false" allowSort="true" allowSearch="true" operator="eq"  />
+		<column key="isNeedESign" header="${db.wfStep.isNeedESign}" type="java.lang.Long" display="false" allowSort="true" dict="WF_YESNO" allowSearch="true" operator="eq"  />
+	</query>
+	<query id="wfArgsQuery" header="${query.wfArgsQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowVariable" order="id asc">
+		<column key="id" header="${db.wfArgs.id}" type="java.lang.Long"  allowSearch="true" operator="eq"  allowSort="true" width="20%"></column>
+		<column key="flowId" header="${db.wfArgs.flowId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="20%" />
+		<column key="variableCode" header="${db.wfArgs.variableCode}" type="String" allowSearch="true" operator="eq"   width="20%" />
+		<column key="variableName" header="${db.wfArgs.variableName}" type="String" allowSearch="true" operator="eq"   width="20%" />
+		<column key="variableType" header="${db.wfArgs.variableType}" type="String" allowSearch="true" operator="eq"   width="20%" />
+	</query>
+	<query id="wfTransQuery" header="${query.wfTransQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowTransition" order="transitionNo asc">
+		<column key="id" header="${db.wfTransition.id}" type="java.lang.Long"  allowSearch="true" operator="eq"  allowSort="true" width="10%"></column>
+		<column key="flowId" header="${db.wfTransition.flowId}" type="java.lang.Long" allowSearch="true" operator="eq"   width="10" />
+		<column key="beginId" header="${db.wfTransition.beginId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="10%" />
+		<column key="endId" header="${db.wfTransition.endId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="10%" />
+		<column key="transitionNo" header="${db.wfTransition.transitionNo}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="10%" />
+		<column key="beginName" header="${db.wfTransition.beginName}" type="String" allowSearch="true" operator="eq"  allowSort="true" width="15%" />
+		<column key="endName" header="${db.wfTransition.endName}" type="String" allowSearch="true" operator="eq"  allowSort="true" width="15%" />
+		<column key="isDefault" header="${db.wfTransition.isDefault}" type="java.lang.Long" allowSearch="true" operator="eq"   width="5%" />
+		<column key="condition" header="${db.wfTransition.condition}" type="String" allowSearch="true" operator="eq"   width="5%" />
+	</query>
+	<query id="wfOrgQuery" header="${query.wfOrgQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowOrg" order="id asc">
+		<column key="id" header="${db.wfArg.id}" type="java.lang.Long"  allowSearch="true" operator="eq"  allowSort="true" width="25%"></column>
+		<column key="flowId" header="${db.wfArg.flowId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="25%" />
+		<column key="orgId" header="${db.wfArg.orgId}" type="java.lang.Long" allowSearch="true" operator="eq"   width="25%" />
+		<column key="orgName" header="${db.wfArg.orgName}" type="String" allowSearch="true" operator="eq"   width="25%" />
+	</query>
+	<!-- 
+	<query id="positionQuery" header="${query.positionQuery.header}" baseclass="com.cnpc.pms.bizbase.rbac.position.entity.CnpcPosition" order="id asc">
+        <column key="id" header="${db.position.id}"  operator="eq" type="java.lang.Long"  width="33%">
+        </column>
+        <column key="name" header="${db.position.name}" type="String" allowSearch="true" operator="like" allowSort="true" width="30%"/>
+        <column key="code" header="${db.position.code}" type="String" allowSearch="true" operator="like"  width="30%"/>
+        <column key="note" header="${db.position.note}" type="String" allowSearch="true"  width="30%"/>
+		
+    </query> -->
+	<query id="stepToPosQuery" header="${query.stepToPosQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowStepToPos" order="id asc">
+        <column key="id" header="${db.stepToPos.id}"  operator="eq" type="java.lang.Long"  width="25%">
+        </column>
+        <column key="stepId" header="${db.stepToPos.stepId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
+        <column key="posId" header="${db.stepToPos.posId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
+        <column key="posName" header="${db.stepToPos.posName}" type="String" allowSearch="true"  width="25%" />
+		
+    </query>
+
+	<query id="wfCopyToposition" header="${query.wfCopyToposition.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowStepPositionCopy" order="id asc">
+        <column key="id" header="${query.wfCopyToposition.id}"  operator="eq" type="java.lang.Long"  width="25%">
+        </column>
+        <column key="flowStepsId" header="${query.wfCopyToposition.flowStepsId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
+        <column key="positionId" header="${query.wfCopyToposition.positionId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
+        <column key="positionName" header="${query.wfCopyToposition.positionId}" type="java.lang.String" allowSearch="false"  width="25%" />
+        <column key="isSameOrg" header="${query.wfCopyToposition.isSameOrg}" type="java.lang.Long" allowSearch="true" operator="eq" width="25%" />
+	</query>
+	<query id="wfCopyToperson" header="${query.wfCopyToperson.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowStepPersonCopy" order="id asc">
+        <column key="id" header="${query.wfCopyToperson.id}"  operator="eq" type="java.lang.Long"  width="25%">
+        </column>
+        <column key="flowStepsId" header="${query.wfCopyToperson.flowStepsId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
+        <column key="personId" header="${query.wfCopyToperson.personId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
+        <column key="personName" header="${query.wfCopyToperson.personId}" type="java.lang.String" allowSearch="false"   width="25%" />
+        <column key="isSameOrg" header="${query.wfCopyToperson.isSameOrg}" type="java.lang.Long" allowSearch="true" operator="eq" width="25%" />
+	</query>
+		
+	<!-- Begin of ToDo Query -->	
+	<!-- ToDo.1 Query Begin Query1-->	
+	<query id="wfToDoByModule" header="待办事项" 
+	    baseclass="com.cnpc.pms.workflow.dto.ToDoByModuleDTO" 
+	    order="dotime desc, id desc">
+		<column key="id" header="id" type="java.lang.String" display="false" />
+		<column key="orgId" header="orgId" type="java.lang.String" display="false" allowSearch="true" operator="eq" />
+		<column key="moduleId" header="模块id" type="java.lang.Long" display="false" />
+		<column key="userId" header="用户id" type="java.lang.Long" display="false" allowSearch="true" operator="eq"/>
+		<column key="moduleName" header="业务模块" allowSort="true" type="java.lang.String" width="350px" />
+        <column key="moduleType" header="业务类型" allowSort="true" type="java.lang.String" width="50%" />
+		<column key="moduleUrl" header="路径" type="java.lang.String" display="false"/>
+        <column key="dotime" header="最近处理时间" allowSort="true" type="java.util.Date" align="center" format="yyyy-MM-dd" width="250px" />
+		<column key="docount" header="待办条数" type="java.lang.Integer" allowSort="true" align="center" width="150px" />
+	</query>
+	
+	<!-- Begin of Done Query -->
+	<query id="wfDoneByModule" header="已办事项" baseclass="com.cnpc.pms.workflow.dto.ToDoByModuleDTO" order="dotime desc">
+		<column key="id" header="id" type="java.lang.String" display="false" />
+		<column key="orgId" header="orgId" type="java.lang.String" display="false" allowSearch="true" operator="eq" />	
+		<column key="moduleId" header="模块id" type="java.lang.Long" display="false" />
+		<column key="userId" header="用户id" type="java.lang.Long" display="false" allowSearch="true" operator="eq"/>
+		<column key="moduleName" header="业务模块" allowSort="true" type="java.lang.String" width="350px" />
+        <column key="moduleType" header="业务类型" allowSort="true" type="java.lang.String" width="50%" />
+		<column key="moduleUrl" header="路径" type="java.lang.String" display="false"/>
+        <column key="dotime" header="最近处理时间" allowSort="true" type="java.util.Date" align="center" format="yyyy-MM-dd" width="250px" />
+		<column key="docount" header="已办条数" type="java.lang.Integer" allowSort="true" align="center" width="150px" />
+	</query>
+	
+	<!--finished QUERY-->
+	<query id="wfFinishedByModule" header="办结事项" baseclass="com.cnpc.pms.workflow.dto.ToDoByModuleDTO" order="dotime desc">
+		<column key="id" header="id" type="java.lang.String" display="false" />
+		<column key="orgId" header="orgId" type="java.lang.String" display="false" allowSearch="true" operator="eq" />	
+		<column key="moduleId" header="模块id" type="java.lang.Long" display="false" />
+		<column key="userId" header="用户id" type="java.lang.Long" display="false" allowSearch="true" operator="eq"/>
+		<column key="moduleName" header="业务模块" allowSort="true" type="java.lang.String" width="350px" />
+        <column key="moduleType" header="业务类型" allowSort="true" type="java.lang.String" width="50%" />
+		<column key="moduleUrl" header="路径" type="java.lang.String" display="false"/>
+        <column key="dotime" header="最近处理时间" allowSort="true" type="java.util.Date" align="center" format="yyyy-MM-dd" width="250px" />
+		<column key="docount" header="办结条数" type="java.lang.Integer" allowSort="true" align="center" width="150px" />
+	</query>
+	<!--ToDo.2 ToDo List  Query2 -->
+	<query id="wflistQuery" 
+		header="${query.WFToDoView.header}" 
+		baseclass="com.cnpc.pms.workflow.entity.WFToDoView"
+		order="lastStepDate desc" >
+		<column key="sheetId" 	header="${db.WFToDoView.sheetID}" 	type="java.lang.Integer"	display="true" 	width="15%"/>
+		<column key="sheetName" header="${db.WFToDoView.sheetName}" type="String" 	display="true"  width="40%"  />		
+		<column key="orgName" header="${db.WFToDoView.orgName}"   	type="String"	display="true"  width="15%"/>
+		<column key="userName" header="${db.WFToDoView.userName}" 	type="String"	display="false"	/>	
+		<column key="personName" header="${db.WFToDoView.personName}" type="String"	display="true"	width="15%"/>			
+		<column key="owner" header="${db.WFToDoView.owener}" type="String"    allowSearch="true" operator="eq" display="true" width="15%"/>
+
+		<column key="isBack" header="${db.WFToDoView.isBack}" type="String" display="false" />
+		<column key="moduleUrl" header="url" type="String" display="false" />
+		<column key="id" header="${db.WFToDoView.id}" type="java.lang.Long" allowSearch="true" operator="eq" display="false" />
+		<column key="userId" header="${db.WFToDoView.userId}" type="java.lang.Long" allowSearch="true" operator="eq"  display="false"/>
+		<column key="ownerId" header="${db.WFToDoView.owenerId}" type="java.lang.Long" allowSearch="true" operator="eq"  display="false"/>
+		<column key="posName" header="${db.WFToDoView.posName}" type="String" display="false" />	
+		<column key="flowInstanceId" header="${db.WFToDoView.flowInstanceId}" type="String" display="false" />	
+		<column key="currentStepName" header="${db.WFToDoView.currentStepName}" type="java.lang.String" display="false"/>
+		<column key="lastStepDate" header="${db.WFToDoView.lastStepDate}" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" display="false" />
+		<column key="moduleId" header="${db.WFToDoView.moduleId}" type="java.lang.Long" allowSearch="true" display="false" operator="eq"   />
+		<column key="toDoTypeName" header="${db.WFToDoView.toDoTypeName}" type="String" dict="WF_TODO_TYPE" display="true"/>
+		<column key="toDoType" header="toDoType" type="java.lang.Long" display="false"/>		
+	</query>
+	<!-- End of ToDo Query -->	
+
+	<!-- Begin of Module Part -->
+
+	<!-- Module.3 WF_Module -->
+	<query id="wfQueryModule" header="${query.wfQueryModule.header}" baseclass="com.cnpc.pms.workflow.entity.WFModule" order="moduleType asc,id asc">
+        <column key="id" header="${query.wfQueryModule.id}" allowSearch="true" operator="eq" type="java.lang.Long"  width="10%" align="center"/>
+		<column key="moduleType" header="${query.wfQueryModule.moduleType}" allowSearch="true" dict="WF_MODULE_TYPE"  type="java.lang.String" operator="eq" width="10%" align="center"/>
+        <column key="name" header="${query.wfQueryModule.name}"  type="java.lang.String" allowSearch="true" operator="like"  width="10%" align="center"/>
+		<column key="moduleCode" header="${query.wfQueryModule.moduleCode}" type="java.lang.String" allowSearch="true" operator="like" width="10%" align="center"/>
+		<column key="urlStr" header="${query.wfQueryModule.urlStr}" type="java.lang.String" allowSearch="false"  width="50%" />
+		<column key="urlStr2" header="${query.wfQueryModule.urlStr2}" type="java.lang.String" allowSearch="false"  width="50%" />
+		<column key="isWF" header="${query.wfQueryModule.isWF}" type="java.lang.Long" dict="WF_YESNO"  width="10%" align="center" />
+	</query>
+	<!--End of Module Part -->
+
+	<query id = "submitStepQuery" header="${query.submitStepQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFViewWFRecordAndStep2" order="id asc" >
+		<column key="id" header="${query.submitStepQuery.id}" display="false" align="center" width="10%"/>	
+		<column key="stepName" header="${query.submitStepQuery.stepName}" type="String" align="center" width="10%"/>	
+		<column key="posName2" header="${query.submitStepQuery.posName}" type="String" align="center" width="10%"/>	
+		<column key="result" header="${query.submitStepQuery.result}" type="String" align="center" dict="WF_SUBMITRESULT_TYPE" width="5%"/>	
+		<column key="advice" header="${query.submitStepQuery.advice}" type="String"  align="center"  />	
+		<column key="time" header="${query.submitStepQuery.time}" align="center" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" width="15%" />
+		<column key="flowInstanceId" header="${query.submitStepQuery.flowInstanceId}" align="center" type="java.lang.Long" allowSearch="true" operator="eq" display="false"/>
+	</query>
+	
+	<!-- Begin of Delegate Function -->
+	<!-- Deleget.1 This is delegate view-->
+	<query id = "delegateQueryInfo" header="${query.delegateQueryInfo.header}"  baseclass="com.cnpc.pms.workflow.entity.WFViewWFDelegate"  >
+		<column key="id" header="${query.delegateQueryInfo.id}"  allowSearch="true" operator="like"   width="20%"/>	
+		<column key="owner" header="${query.delegateQueryInfo.owner}" type="java.lang.Long" allowSearch="true" operator="eq"   width="20%" display="false" />	
+		<column key="owenername" header="${query.delegateQueryInfo.ownername}" type="String" allowSearch="true" operator="eq"   width="20%"/>	
+		<column key="agent" header="${query.delegateQueryInfo.agent}" type="java.lang.Long" allowSearch="true" operator="eq"    width="20%" display="false" />	
+		<column key="agentname" header="${query.delegateQueryInfo.agentname}" type="String" allowSearch="true" operator="eq"    width="20%"/>	
+		<column key="begindate" header="${query.delegateQueryInfo.begindate}"  type="java.util.Date" format="yyyy-MM-dd"   width="20%"/>	
+		<column key="enddate" header="${query.delegateQueryInfo.enddate}"    type="java.util.Date" format="yyyy-MM-dd"  width="20%"/>	
+		<column key="isstop" header="${query.delegateQueryInfo.isstop}" type="java.lang.Long"   dict="WF_DELEGATE_ISSTOP" width="20%" />	
+	</query>
+	<!-- Delegate.2 This is delegateModule view -->
+	<!-- change it from view to entity with ManyToOne relationship -->
+	<query id = "delegateModuleInfo" header="${query.delegateModuleInfo.header}"  baseclass="com.cnpc.pms.workflow.entity.WFDelegateModule"  >
+		<column key="id" header="${query.delegateModuleInfo.id}"  allowSearch="true" operator="like"   width="20%"/>	
+		<column key="delegateId" header="${query.delegateModuleInfo.delegateId}" type="java.lang.Long" allowSearch="true" operator="eq"  display="false"  />	
+		<column key="module.id" header="${query.delegateModuleInfo.moduleId}"  allowSearch="true" operator="like"   width="30%"/>	
+		<column key="module.name" header="${query.delegateModuleInfo.moduleName}" type="String" allowSearch="true" operator="like"    width="30%"/>	
+		<column key="module.moduleCode" header="${query.delegateModuleInfo.modulecode}" type="String" allowSearch="true" operator="like"    width="30%"/>	
+		<column key="module.level1Name" header="${query.delegateModuleInfo.moduleonename}" type="String" allowSearch="true" operator="like"    width="30%"/>	
+		<column key="module.level2Name" header="${query.delegateModuleInfo.moduletwoname}" type="String" allowSearch="true" operator="like"    width="30%"/>	
+	</query>
+	<!-- Delegate.3 This is the module view for select in delegate-->
+	<query id="ModuleListQuery" header="${query.ModuleListQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFModule" order="id asc">
+        <column key="id" header="${query.ModuleListQuery.id}" allowSearch="true" operator="eq" type="java.lang.Long"  width="30%"></column>
+        <column key="name" header="${query.ModuleListQuery.modulename}" type="String" allowSearch="true" operator="like"  width="30%" />
+        <column key="moduleCode" header="${query.ModuleListQuery.modulecode}" type="String"  allowSearch="true" operator="like"  width="30%" />
+        <column key="level1Name" header="${query.ModuleListQuery.moduleonename}" type="String" allowSearch="true" operator="like"  width="30%" />
+        <column key="level2Name" header="${query.ModuleListQuery.moduletwoname}" type="String" allowSearch="true" operator="like"  width="30%" />
+	</query>
+	<!--  Endo of Delegate Function -->
+	
+	<query id="WF1FlowMappingQuery" header="一期流程对应查询" baseclass="com.cnpc.pms.workflow.entity.WF1FlowMapping" order="id asc">
+        <column key="id" header="Id" allowSearch="true" operator="eq" type="java.lang.Long" allowSort="true" width="14%"></column>
+        <column key="rTableName" header="rTableName" type="String" allowSearch="true" operator="like" allowSort="true" width="14%" />
+        <column key="rId" header="rId" type="Long"  allowSearch="true" operator="eq" allowSort="true"  width="14%" />
+        <column key="moduleId" header="模块Id" type="Long" allowSearch="true" operator="eq" allowSort="true" width="14%" />
+        <column key="sheetId" header="sheetId" type="Long" allowSearch="true" operator="eq" allowSort="true"  width="14%" />
+        <column key="sheetName" header="sheetName" type="String" allowSearch="true" operator="like" allowSort="true" width="14%" />
+        <column key="flowInstanceId" header="flowInstanceId" type="Long" allowSearch="true" operator="eq" allowSort="true" width="14%" />
+	</query>
+	<query id="wftodosendQuery" header="待办发送信息提示" baseclass="com.cnpc.pms.workflow.entity.WFViewToDoSend" order="id asc">
+        <column key="id" header="Id" allowSearch="true" operator="eq" type="java.lang.Long" allowSort="true" width="14%" display="false"></column>
+        <column key="username" header="用户名称" type="String" allowSearch="true" operator="like" allowSort="true" width="14%" />
+        <column key="phone" header="联系电话" type="String"  allowSearch="true" operator="eq" allowSort="true"  width="14%" />
+        <column key="email" header="邮箱" type="String" allowSearch="true" operator="eq" allowSort="true" width="14%" />
+        <column key="todocounts" header="待办条数" type="BigDecimal" allowSearch="true" operator="eq" allowSort="true"  width="14%" />
+        <column key="issend" header="是否发送" type="String" allowSearch="true" operator="like" allowSort="true" width="14%" />
+	</query>
+</pmsquery>	      

@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>日誌查询</title>
+    <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+    <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css"/>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/dataTablesLib.js"></script>
+    <script type="text/javascript" src="../scripts/common/pms.js"></script>
+    <script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script type="text/javascript" src="../forecast/js/createProject.js"></script>
+    <script type="text/javascript">
+    	var psuoId;
+		var userId = getUrlParamByKey("userId");
+        $(function () {
+			
+			
+			//获取人员所在所
+				doManager("workLogManager", "getUserOrg", "", function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							psuoId=returnObj;
+						}
+					});
+			
+			//工作日志/出差休假字典
+			var workLogTypeDicts = $dict.getDictList("WORKLOG_WORK_NEWTYPE");
+			$(workLogTypeDicts).each(function (i, element) {
+                var option = new Option(element.dictText, element.dictCode);
+                $("#workLogType")[0].add(option);
+            });
+			//与工作日志/出差休假字典联动选择工作类型、休假类型
+			$("#workLogType").change(function(){
+				var self=$(this);
+				document.getElementById("holidayType").options.length=0;
+				var option1 = new Option("","");
+				$("#holidayType")[0].add(option1);
+				if(self.val()=="0"){
+					var workTypeDicts = $dict.getDictList("WORKLOG_WORK_TYPE");
+	            	$(workTypeDicts).each(function (i, element) {
+						var option = new Option(element.dictText, element.dictCode);
+	                	$("#holidayType")[0].add(option);
+           			 });
+				}else if(self.val()=="1"){
+					var workTypeDicts = $dict.getDictList("WORKLOG_LEAVE_TYPE");
+            		$(workTypeDicts).each(function (i, element) {
+	               		var option = new Option(element.dictText, element.dictCode);
+	                	$("#holidayType")[0].add(option);
+					});
+				}else{
+					
+				}
+			});
+            $validator = $("#searchForm").data("PMSValidator");
+            var s1 = $("#s1")[0];
+            var s2 = $("#s2")[0];
+            $validator.addDateCompareRule(
+                {
+                    dateFrom: s1,
+                    dateTo: s2,
+                    msg: "开始时间应小于截止时间"
+                });
+
+            // 初始化本月日期
+            $("#s1").val(getMonthStartDate());
+            $("#s2").val(getMonthEndDate());
+            $("input:radio[name='daySel']").bind("change", function() {
+                var daySelVal = $("input:radio[name='daySel']:checked").val();
+                // 当日
+                if (daySelVal == "0") {
+                    // 初始化本日日期
+                    $("#s1").val(formatDate(new Date()));
+                    $("#s2").val(formatDate(new Date()));
+                // 当周
+                } else if (daySelVal == "1") {
+                    // 初始化本周日期
+                    $("#s1").val(getWeekStartDate());
+                    $("#s2").val(getWeekEndDate());
+                // 当月
+                } else if (daySelVal == "2") {
+                    // 初始化本月日期
+                    $("#s1").val(getMonthStartDate());
+                    $("#s2").val(getMonthEndDate());
+                }
+            });
+			if(userId!=""&&userId!=null){
+				$("#userId").val(userId);
+			}else{
+				//获取到本人的Id
+			doManager("workLogManager", "getUser", "", function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							psId=returnObj;
+							$("#userId").val(psId.id);
+							onSearch();
+						}
+					});
+			}
+			
+        });
+
+        var now = new Date(); //当前日期
+        var nowDayOfWeek = now.getDay(); //今天本周的第几天
+        var nowDay = now.getDate(); //当前日
+        var nowMonth = now.getMonth(); //当前月
+        var nowYear = now.getFullYear(); //当前年
+		
+        //获得某月的天数
+        function getMonthDays(myMonth){
+            var monthStartDate = new Date(nowYear, myMonth, 1);
+            var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+            var   days   =   (monthEndDate   -   monthStartDate)/(1000   *   60   *   60   *   24);
+            return   days;
+        }
+
+        //格局化日期：yyyy-MM-dd
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth + "-" + myweekday);
+        }
+		//格局化日期：MM/dd/yyyy
+        function formatDateTOparse(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (mymonth + "/" + myweekday+"/"+myyear);
+        }
+		//格局化日期：MM/dd/yyyy,传入的日期字符串格式为"YYYY-MM-DD"
+			 function formatDateTOparseByStr(datestr) {
+	            mymonth=datestr.substr(5,2);
+				myweekday=datestr.substr(8,2);
+				myyear=datestr.substr(0,4);
+	            return (mymonth + "/" + myweekday+"/"+myyear);
+	        }
+        //获得本周的开端日期
+        function getWeekStartDate() {
+            var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1);
+            return formatDate(weekStartDate);
+        }
+
+        //获得本周的停止日期
+        function getWeekEndDate() {
+            var weekEndDate = new Date(nowYear, nowMonth, nowDay + (7 - nowDayOfWeek));
+            return formatDate(weekEndDate);
+        }
+
+        //获得本月的开端日期
+        function getMonthStartDate(){
+            var monthStartDate = new Date(nowYear, nowMonth, 1);
+            return formatDate(monthStartDate);
+        }
+
+        //获得本月的停止日期
+        function getMonthEndDate(){
+            var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth));
+            return formatDate(monthEndDate);
+        }
+
+        function clearCondition() {
+            $("#s1").val("");
+            $("#s2").val("");
+            $("#workLogType").val("");
+            $("#workProject").val("");
+            $("#workContent").val("");
+            $("#isDuty").val("");
+        }
+		//比较两个时间之差,传入的日期的格式为yyyy-MM-dd,date1为开始日期，date2为结束日期
+		function comepareDate(date1,date2){
+			var days;
+			if(Date.parse(date2)>=Date.parse(date1)){
+				var days=(Date.parse(date2)-Date.parse(date1))/(24 * 60 * 60 * 1000);
+				return days;
+			}
+		}
+		//选择所在所的项目
+			
+			function chooseSuo(){
+				 showpurchaseForecastCheckWin(psuoId, "3", "0", function(jsonStr){
+                    var selResult = $.fromJSON(jsonStr);
+                    $("#workProjectId").val(selResult.projectId);
+                    $("#workProject").val(selResult.projectName);
+                });
+			}
+    </script>
+</head>
+<body style="height:100%">
+<div class="box">
+    <div class="title clear">
+        <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();"></div>
+        <div class="ico2"></div>
+        <div class="ico1"></div>
+        <a href="#">日誌管理 :</a>&nbsp;<a href="#">我的工作日誌</a>
+    </div>
+    <div class="containerbody padding4px">
+        <div class="containerheader">
+            <a href="#" onclick="toggleDiv('conditionsDiv','pic2');">
+                <img src="../scripts/images/22.png" align="absmiddle" id="pic2"/>
+            </a>我的工作日志查询
+        </div>
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true">
+               		 <input type="hidden" id="enableStatus" name="enableStatus" value="1" />
+                <table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+                    <tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                             日期选择：
+                        </td>
+                        <td class="baseform">
+                            <input class="pmsRadio" name="daySel" id="daySel" data="[['0','当日'],['1','当周'],['2','当月','checked']]" />
+                        </td>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                             日志日期：
+                        </td>
+                        <td class="baseform">
+                            <input id="s1" revalidate="true" type="text" name="logDate" likeOption="false" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:70px;margin-right: 5px;"/>至
+                            <input id="s2" revalidate="true" type="text" name="logDate" likeOption="false" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:70px;margin-left: 5px;margin-right:5px"/>
+                        </td>
+                    </tr>
+                   <tr>
+                   		<td class="basetext" style="width: 8%; text-align: right">
+                            工作日志/出差休假：
+                        </td>
+                        <td class="baseform">
+							 <select name="workLogType" id="workLogType" class="inputselect">
+                                <option value="" selected="selected"></option>
+                            </select>
+                        </td>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            工作/出差休假类型：
+                        </td>
+                        <td class="baseform">
+                            <select name="holidayType" id="holidayType" class="inputselect">
+                                <option value="" selected="selected"></option>
+                            </select>
+                        </td>
+						
+					</tr>
+                    <tr><td align="right">工作项目：</td>
+                            	<td align="left">
+                            		<input type="hidden" id="userId" name="userId" value="" class="inputtext">
+                            		<input type="hidden" id="workProjectId" name="workProjectId" value="" class="inputtext">
+									<input type="text" id="workProject" name="workProject" likeOption="false" value="" class="inputtext">
+									<button class="buttonu" onclick="chooseSuo();" >选择</button>
+
+                            	</td>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            工作内容：
+                        </td>
+                        <td class="baseform">
+                            <input type="text" id="workContent" name="workContent" likeOption="false" value="" />
+                        </td>
+						
+                    </tr>
+                    <tr class="Colorbar3">
+                        <td colspan="4" style="width:100%">
+                            <input type="button" class="buttonu" value="新建日志" onclick="newSubmit();"/>&nbsp;&nbsp;|
+                            <input type="button" class="buttonu" value="新建休假" onclick="newLeaveSubmit();"/>&nbsp;&nbsp;|
+                            <input type="button" class="buttonu" value="查询" onclick="onSearch();"/>&nbsp;|
+                            <input type="button" class="buttonu" value="重置" onclick="clearCondition();"/>&nbsp;
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </form>
+        <div id="workLogSearchContainer" showcheckbox="false" showRidaoButton="true"
+             searchDiv="conditionsDiv" usecache="true" queryid="workLogQuery"
+             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+             showprint="false" showpaging="true" showcheckbox="true" operators=$pmspage.opArr>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+
+    function onSearch() {
+        $$.executeSearch('workLogQuery', 'conditionsDiv');
+    }
+    function newSubmit() {
+        window.location.href = './workLogNewAdd.html';
+    }
+    function newLeaveSubmit() {
+        window.location.href = './leaveEdit.html';
+    }
+    var viewObj = {
+        html: '<a href="#" class="blue">查看</a>',
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var val = allColumnsDataMap.id;
+			var worktype=allColumnsDataMap.workLogType;
+			var leaveId=allColumnsDataMap.leaveId;
+			var logDate =allColumnsDataMap.logDate;
+			if(worktype=="工作日誌"){ 
+				 	 window.location = "workLogView.html?id=" + val+"&from=workLogList.html";
+			}else if(worktype=="出差休假"){
+					 window.location = "leaveView.html?id=" + leaveId+"&from=workLogList.html";
+			}
+        }
+    }
+    var editObj =
+    {
+        html: '<a href="#" class="blue">编辑</a>',
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var val = allColumnsDataMap.id;
+			var worktype=allColumnsDataMap.workLogType;
+			var leaveId=allColumnsDataMap.leaveId;
+			var logDate =allColumnsDataMap.logDate;
+			var inputDate =allColumnsDataMap.inputDate;
+			if(worktype=="工作日誌"){
+				var tdate =new Date();
+				 if(comepareDate(formatDateTOparseByStr(inputDate),formatDateTOparse(tdate))>3){
+				 	$$.showMessage("系统提示", "该日志填写日期为三天前，不可编辑");
+				 }else{
+				 	 window.location = "workLogAdd.html?id=" + val;
+				 }; 
+				
+			}else if(worktype=="出差休假"){
+				var tdate =new Date();
+				 if(comepareDate(formatDateTOparseByStr(logDate),formatDateTOparse(tdate))>3){
+				 	$$.showMessage("系统提示", "至今为止该日志已超过3天，不可编辑");
+				 }else{
+				 	window.location = "leaveView.html?id=" + leaveId+"&from=workLogList.html";
+				 }; 
+			}
+            
+        }
+    }
+	 function convertDataToObj(data, allColumns){
+            var json = "{";
+            for (var i = 0; i < data.length; i++) {
+                json += "'" + allColumns[i].key + "'";
+                json += ":"
+                json += "'" + data[i] + "',";
+            }
+            json = json.substr(0, json.length - 1) + "}";
+            var jsonObj = $.fromJSON(json);
+            return jsonObj;
+        }
+    var delObj = {
+        html: '<a href="#" class="blue">删除</a>',
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var id = allColumnsDataMap.id;
+			var worktype=allColumnsDataMap.workLogType;
+			var logDate =allColumnsDataMap.logDate;
+			var inputDate =allColumnsDataMap.inputDate;
+			if(worktype=="工作日誌"){ 
+				var tdate =new Date();
+				 if(comepareDate(formatDateTOparseByStr(inputDate),formatDateTOparse(tdate))>3){
+				 	$$.showMessage("系统提示", "该日志填写日期为三天前，不可删除");
+				 }else{
+				 	 $$.showPromptDialog("系统提示", "确认删除？", false, 320, function () {
+	               	 doManager("workLogManager", "deleteWorkLogReal", id, function (datas, textStatus, XMLHttpRequest) {
+	                   	 //var returnObj = $.fromJSON(data.data);
+	                    	if (datas.result) {
+	                      	  onSearch();
+	                    	}
+	               		 }, true, {showWaiting: true});
+	          		});
+				 }; 
+				
+			}else if(worktype=="出差休假"){
+				$$.showMessage("系统提示", "出差休假信息不可删除");
+			}
+           
+        }
+    }
+    $pmspage.opArr = [viewObj, editObj, delObj];
+</script>

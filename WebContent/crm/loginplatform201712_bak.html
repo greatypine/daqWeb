@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" href="plugins/iCheck/square/green.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .login-page{background: url("dist/img/timg.jpg") no-repeat center center;}
+    .pull-left{width: 50%; margin-top: 10%;}
+    .login-box-body button{font-size: 18px;}
+    
+    .logout{margin-top: 10px;text-align: right;margin-right: 30px;}
+     .logo_choose{position: absolute; bottom: 10px; right: 0; width: 250px; height: 40px; line-height: 20px; background: rgba(0,0,0,0.5); color: #fff; text-align: center; border-top-left-radius: 5px; border-bottom-left-radius: 5px;}
+  </style>
+</head>
+<body class="hold-transition login-page">
+<div class ="logout"><font color='white'>用户：<label id="employee_no">加载中..</label><font> | <font color='white'><label id="username">加载中..</label><font> | <a href="javascript:doLogout()"><font color='white'>退出<font></a></div>
+<div class="clearfix">
+  <div class="pull-left">
+    <!-- <a href="#"> -->
+    <div class="login-box">
+      <div class="login-box-body">
+        <p class="login-box-msg"><img src="dist/img/logo.png"></p>
+        <p class="login-logo">国安社区动态系统</p>
+        <p><button type="button" class="btn bg-green btn-block btn-flat" onclick="javascript:toCrm();">进入</button></p>
+     	<!-- <div class="checkbox icheck">
+          <label>
+            <input type="radio" id="redio1" name="optionsRadios" value="0" class="input1" checked="checked"> 记住选择，下次默认进入
+          </label>
+        </div> -->
+      </div>
+      <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+    <!-- </a> -->
+  </div>
+  <div class="pull-left">
+   <!--  <a href="#"> -->
+    <div class="login-box">
+      <div class="login-box-body">
+        <p class="login-box-msg"><img src="dist/img/logo_manage.png"></p>
+        <p class="login-logo">国安数据管理系统</p>
+        <p><button type="button" class="btn btn-primary btn-block btn-flat" onclick="javascript:todaqWeb();">进入</button></p>
+      	<!-- <div class="checkbox icheck">
+          <label>
+            <input type="radio" id="redio2" name="optionsRadios" value="1" class="input2"> 记住选择，下次默认进入
+          </label>
+        </div> -->
+      </div>
+      <!-- /.login-box-body -->
+    </div>
+    <!-- /.login-box -->
+  <!--   </a> -->
+  </div>
+</div>
+<div class="logo_choose">
+  <div class="checkbox icheck">
+    <label>
+      <input type="checkbox" id="default_check" name="optionsRadios" class="input2"> 记住本次选择，下次默认进入
+    </label>
+  </div>
+</div>
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript" src="plugins/iCheck/icheck.min.js"></script>
+<script type="text/javascript">
+	layer.config({
+	
+	  extend: 'skin/otherskin/style.css' //加载新皮肤
+	  
+	});
+
+	$(function(){
+		initcurruser();
+		$('.input1').iCheck({
+		      checkboxClass: 'icheckbox_square-green',
+		      radioClass: 'iradio_square-green',
+		      increaseArea: '20%' // optional
+		    });
+	    $('.input2').iCheck({
+	      checkboxClass: 'icheckbox_square-blue',
+	      radioClass: 'iradio_square-blue',
+	      increaseArea: '20%' // optional
+	    });
+	    
+		isLogincrm();
+	});
+	var iscrmgax=false;
+	var iscrmdz = false;
+	var iscrmcszj=false;//城市总监
+	var iscrmqyjl=false;//区域经理
+	function isLogincrm(){
+		doManager("AreaManager", "queryAreaByCurrEmployeeNo",null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var curr_user = JSON.parse(data.data);
+						if(curr_user.name!=null&&curr_user.employee_a_name!=null){
+							iscrmgax = true;
+						}
+					}
+		},false);
+	}
+	function todaqWeb(){
+		var default_system_val = $("#default_check")[0].checked;
+		
+		 if(default_system_val){
+			var defaultConfig ={
+					default_system:1,
+					employee_no:currentUser.employeeId,
+					employee_name:currentUser.name
+			}
+			doManager("DefaultConfigManager", "saveOrUpdateDefaultConfig",[defaultConfig],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							window.parent.location = getRootPath()+"/bizbase/indexMain.html";
+						}
+			},false);
+		}else{
+			var defaultConfig ={
+					default_system:-1,
+					employee_no:currentUser.employeeId,
+					employee_name:currentUser.name
+			}
+			doManager("DefaultConfigManager", "saveOrUpdateDefaultConfig",[defaultConfig],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							window.parent.location = getRootPath()+"/bizbase/indexMain.html";
+						}
+			},false);
+			window.parent.location = getRootPath()+"/bizbase/indexMain.html";
+		} 
+		
+		
+	}
+	
+	function toCrm(){
+		var default_system_val = $("#default_check")[0].checked;
+		
+		if(default_system_val){
+			var defaultConfig ={
+					default_system:0,
+					employee_no:currentUser.employeeId,
+					employee_name:currentUser.name
+			}
+			doManager("DefaultConfigManager", "saveOrUpdateDefaultConfig",[defaultConfig],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							toCrm_role();
+						}
+			},false);
+		}else{
+			var defaultConfig ={
+					default_system:-1,
+					employee_no:currentUser.employeeId,
+					employee_name:currentUser.name
+			}
+			doManager("DefaultConfigManager", "saveOrUpdateDefaultConfig",[defaultConfig],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							toCrm_role();
+						}
+			},false);
+			toCrm_role();
+		}
+	}
+
+	//根据不同角色进入crm
+	function toCrm_role(){
+		var myDate = new Date();
+		var c_year = myDate.getFullYear(); //当前年
+		var c_month = myDate.getMonth()+1;//当前月
+		var q_month=myDate.getMonth()+1;
+		var q_date = c_year+"-"+c_month;
+		if(c_month>1){
+			q_date = c_year+"-"+(c_month-1);
+			q_month = c_month-1;
+		}
+		if(iscrmgax){
+			window.parent.location=getRootPath() + "/crm/index.html";
+		}else if(iscrmdz){
+			window.parent.location=getRootPath() + "/crm/shopkeeper.html";
+		}else if(iscrmcszj){
+			
+			window.parent.location=getRootPath() + "/crm/dynamicData_city.html?d="+encode64(q_month);
+		}else if(iscrmqyjl){
+			window.parent.location=getRootPath() + "/crm/manager_QYJL.html?q_date="+encode64(q_date);
+		}else{
+			//window.parent.location=getRootPath() + "/crm/index.html";
+			var URL="?"+"employee_no="+encode64($("#employee_no").html());
+			window.parent.location=getRootPath() + "/crm/user.html"+URL;
+			/* layer.alert("暂无权限访问！ ",
+					{
+					
+					id:'auth_crm',
+				  	icon:4,
+				  	closeBtn:0,
+				  	skin: 'layer-ext-otherskin',
+					move:false, 
+				    title:'提示',
+				    shadeClose:true,
+				    offset:['100px','550px']
+					}
+			); */
+		}
+	}
+	
+	var currentUser;
+	function initcurruser(){
+  		//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,
+    				function(data, textStatus, XMLHttpRequest) {
+    					if (data.result) {
+    						var curr_user = JSON.parse(data.data);
+    						currentUser = curr_user;
+    						//alert(curr_user.employeeId+""+curr_user.store_name+""+curr_user.name);
+    						$('#username').html(curr_user.name);
+    						$("#employee_no").html(curr_user.employeeId);
+    						
+    						 doManager("DefaultConfigManager", "getDefaultConfig",[curr_user.employeeId,curr_user.name],
+    									function(data, textStatus, XMLHttpRequest) {
+    										if (data.result) {
+    											var defaultInfo = $.fromJSON(data.data);
+    											if(defaultInfo!=null){
+    												if(defaultInfo.default_system==0){//crm
+    													/* $("#redio2").removeAttr("checked");
+    													$("#redio1").attr("checked","checked"); */
+    													//$("#default_check").attr("checked","checked");
+    												}else if(defaultInfo.default_system==1){
+    													/* $("#redio1").removeAttr("checked");
+    													$("#redio2").attr("checked","checked"); */
+    													//$("#default_check").attr("checked","checked");
+    												}
+    												
+    												
+    											}
+    										}
+    								},false);
+    						
+    						
+    						if(curr_user.usergroup.code=="DZ"){
+    							iscrmdz = true;
+    						}
+    						
+    						 if(curr_user.usergroup.code=="CSZJJSZ"||curr_user.usergroup.code=="CSZHGLZ"||curr_user.usergroup.code=="CSPTYYZ"||curr_user.usergroup.code=="CSMDGLZ"){
+    							iscrmcszj =true;
+    						} 
+    						
+    						/* if(curr_user.usergroup.code=="QYJL"){
+    							iscrmqyjl=true;
+    						} */
+    					}
+    	},false);
+  	}
+	
+	
+	function doLogout() {
+		layer.confirm('确定退出？', {
+			  	title:'提示',
+			  	shadeClose:true,
+			  	closeBtn:0,
+			  	skin: 'layer-ext-otherskin',
+			  	offset:['100px','550px'],
+			  	move:false,
+				btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+			});
+	}
+	
+</script>
+
+</body>
+</html>

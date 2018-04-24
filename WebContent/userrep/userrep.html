@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="Cache-Control" Content="no-cache">
+	<meta http-equiv="Pragma" Content="no-cache">
+	<meta http-equiv="Expires" Content="0">
+	<link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+	<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+	<link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+<script type="text/javascript">
+	$(function() {
+		doClean();
+		searchList();
+	});
+
+	//格局化日期：MM/dd/yyyy,传入的日期字符串格式为"YYYY-MM-DD"
+	function formatDateTOparseByStr(datestr) {
+		mymonth = datestr.substr(5, 2);
+		myweekday = datestr.substr(8, 2);
+		myyear = datestr.substr(0, 4);
+		return (mymonth + "/" + myweekday + "/" + myyear);
+	}
+
+	function comepareDate(date1, date2) {
+		date1 = formatDateTOparseByStr(date1);
+		date2 = formatDateTOparseByStr(date2);
+		var days;
+		var days = (Date.parse(date2) - Date.parse(date1))
+				/ (24 * 60 * 60 * 1000);
+		return days;
+	}
+
+	/**添加活动**/
+	function addProjectPlan() {
+		window.location.href = 'HealthLifeAdAdd.html';
+	}
+
+	function searchList() {
+		/* if (comepareDate($("#s1").val(), $("#s2").val()) < 0) {
+			$$.showMessage("系统信息", "开始时间不能大于结束时间!");
+			return false;
+		} */
+		/* if (comepareDate($("#e1").val(), $("#e2").val()) < 0) {
+			$$.showMessage("系统信息", "开始时间不能大于结束时间!");
+			return false;
+		} */
+		$$.executeSearch('maintenanceQuery', 'conditionsDiv');
+	}
+
+	function formatDate(date) {
+		var myyear = date.getFullYear();
+		var mymonth = date.getMonth() + 1;
+		var myweekday = date.getDate();
+
+		if (mymonth < 10) {
+			mymonth = "0" + mymonth;
+		}
+		if (myweekday < 10) {
+			myweekday = "0" + myweekday;
+		}
+		return (myyear + "-" + mymonth + "-" + myweekday);
+	}
+
+	 var editObj = {
+		html : '<a href="#" class="blue">编辑</a>',
+		resourceId: "ads_adList_edit",
+		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+			var id = allColumnsDataMap.id;
+			var name = allColumnsDataMap.name;
+			window.location.href = "HealthLifeAdEdit.html?id=" + id + "&type=edit" ;
+		}
+	} 
+
+	  var deleteObj = {
+		html : '<a href="#">删除</a>',
+		resourceId: "ads_adList_delete",
+		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+			var id = allColumnsDataMap.id;
+			$$.showPromptDialog("系统提示", "确认删除？", false, 320, function() {
+
+				doManager("HealthLifeAdManager", "delete", id + '', function(
+						data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						window.location.href = 'HealthLifeAdList.html';
+					} else {
+						$$.showMessage("系统信息", "删除失败!");
+					}
+				});
+			});
+		}
+	}  
+
+	 var publishObj = {
+		html : '<a href="#" class="blue">发布</a>',
+		resourceId: "ads_adList_publish",
+		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+			var id = allColumnsDataMap.id;
+			var status = allColumnsDataMap.adStatus;
+			if ("已发布" == status) {
+				$$.showMessage("系统信息", "该广告信息已经发布!");
+				return;
+			}
+			$$.showPromptDialog("系统提示","确认发布广告？",false,320,function() {
+								doManager("HealthLifeAdManager","updatePublishStatus",id + '',
+										function(data, textStatus,
+												XMLHttpRequest) {
+											if (data.result) {
+												$$.showMessage("系统信息","发布广告成功!");
+												window.location.href = 'HealthLifeAdList.html';
+											} else {
+												$$.showMessage("系统信息","发布广告失败!");
+											}
+										});
+							});
+		}
+	}
+
+	//查看
+	var viewPage = {
+		/* html : '<a href="#" class="blue">查看</a>',
+		resourceId: "ads_adList_view",
+		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+			var id = allColumnsDataMap.id;
+			//var name = allColumnsDataMap.name;
+			window.location.href = "HealthLifeAdEdit.html?id=" + id + "&type=view" ;
+		} */
+		html : '<a href="#">导出检测报告</a>',
+		resourceId: "ads_adList_delete",
+		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+			var id = allColumnsDataMap.id;
+			//var status = "3";
+			var status = allColumnsDataMap.mainte_status;
+			if(status!="3"){
+				alert("检测未完成！！！！");
+				return false;
+			}
+			 $$.showPromptDialog("系统提示", "确认导出？", false, 320, function() { 
+				 var path = getRootPath();
+				 window.location.href=path+"/downLoadTemplate.action?id="+id;
+			 }); 
+		}
+	}
+	 //批量导出方法  
+	function batchExport(){
+		var ids = "";
+		var objs = $$.getSelectedObj("maintenanceQuery");
+		if(objs.length == 0 ){
+			$$.showMessage("系统信息", "请选择用户后进行添加!");
+			return false; 
+		}
+        $.each(objs,function(i){
+            ids += objs[i][0] + ",";
+        })
+        ids = ids.substring(0,ids.length-1);
+		$$.showPromptDialog("系统提示", "确认导出？", false, 320, function() { 
+			 var path = getRootPath();
+			 window.location.href=path+"/downLoadTemplate.action?ids="+ids;
+		 }); 
+		
+	 } 
+	
+	//操作栏中的编辑和删除操作
+	$pmspage.opArr = [viewPage/*  , editObj, publishObj  , deleteObj */];
+
+	/**重置搜索查询条件*/
+	function doClean() {
+		document.orgAdd.reset();
+	}
+
+	/**导出excel文件*/
+	function onExport() {
+		exportDataTable("centerQueryGridContainer");
+	}
+	
+	function goToBack(){
+		window.location.href = "../indexs/szIndex_yadea.html";
+	}
+	
+	var COLUMNS = {
+		"adName" : function(aData, iColumn, sColumnName, map) {
+			var value = map[sColumnName];
+	           var recordId = map.id;
+	           var name = map.name;
+	           return "<a href='#' onclick='doEditView(" + recordId + ",\"" + value + "\")'>" + value + "</a>";
+		}
+	}
+	
+	function doEditView(recordId, name) {
+		window.location.href = 'HealthLifeAdEdit.html?id=' + recordId
+				+ "&type=view";
+	}
+	
+</script>
+	<style type="text/css">
+		td{
+			padding-top: 10px;
+		}
+	</style>
+</head>
+<!-- Body -->
+<body style="height: 100%">
+	<div class="rightcont clear">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4 class="panel-title">
+					检测报告管理 :检测报告查询
+				</h4>
+			</div>
+		</div>
+		<div class="panel panel-primary">
+			<div class="panel-heading">客户检测报告查询</div>
+			<div class="panel-body" id="conditionsDiv">
+				<form id="orgAdd" name="orgAdd" class="pmsForm" validate="true"
+					clientvalidate="true" displaynumber="7">
+					<table id="searchTable" cellpadding="0" cellspacing="0"
+						style="min-width: 100%; width: auto">
+						<tr>
+							<td align="right">客户手机号:</td>
+							<td class="basetext">
+								<input name="mobilephone" type="text" class="form-control" id="mobilephone" style="width: 60%;" />
+							</td>
+							<td align="right">客户姓名:</td>
+							<td class="basetext">
+								<input name="name" type="text" class="form-control" id="name" style="width: 60%;" />
+							</td>
+						</tr>
+						<tr>
+						  <td align="right">起始日期:</td>
+						  <td class="basetext">
+							  <input id="s1" revalidate="true"
+														type="text" likeOption="false" name="createDate"
+														validate="formatDate:true" class="pmsDateField form-control"
+														yearRange="-100:+10" style="width: 27%;display: inline;"
+														readonly />
+						    至
+						    <input id="s2" revalidate="true"
+														likeOption="false" type="text" name="createDate"
+														validate="formatDate:true" class="pmsDateField form-control"
+														yearRange="-100:+10" style="width: 27%; display: inline;"
+														readonly /></td>
+						  <td align="right">结束日期:</td>
+						  <td class="basetext"><input id="s3" revalidate="true"
+														type="text" likeOption="false" name="lastModifyDate"
+														validate="formatDate:true" class="pmsDateField form-control"
+														yearRange="-100:+10" style="width: 27%; display: inline;"
+														readonly />
+						    至
+						    <input id="s4" revalidate="true"
+														likeOption="false" type="text" name="lastModifyDate"
+														validate="formatDate:true" class="pmsDateField form-control"
+														yearRange="-100:+10" style="width: 27%; display: inline;"
+														readonly /></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div class="panel-footer" align="right">
+				<button class="btn btn-primary" onclick="searchList()"
+					resourceId="ads_adList_query">查询</button>
+				<!-- <button class="buttonu" onclick="addProjectPlan();"
+                    resourceId="ads_adList_add">新建</button>
+                <button class="buttonu" onclick="onExport();"
+                    resourceId="ads_adList_export">导出Excel</button> -->
+				<button class="btn btn-primary" onclick="doClean();">重置</button>
+				<button class="btn btn-primary" onclick="batchExport();">批量导出</button>
+			</div>
+		</div>
+		<div id="centerQueryGridContainer" queryid="maintenanceQuery" class="panel panel-primary"
+			 operators="$pmspage.opArr" titleAlign="center" contentAlign = "center"
+			 fnRender="renderColumns" searchDiv="conditionsDiv" showNo="false" 
+			 showsearch="false" showpaging="true" showdisplay="false"
+			 showprint="false" autoload="false" showcheckbox="true"
+			 showRidaoButton="true" usecache="true" showsearch="false"
+			 showtitle="true"></div>
+	</div>
+</body>
+</html>

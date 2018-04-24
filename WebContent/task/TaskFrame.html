@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"/>
+	<title>任务框架</title>
+	<link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css"/>
+	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+	<script type="text/javascript" src="../scripts/common/pms.js"></script>
+	<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script type="text/javascript">
+		var cHisLen=window.history.length;
+		$(function() {
+			var projectId = getUrlParamByKey("projectId");
+			initProjectHref(projectId);
+			window.leftTaskFrame.location = "Task.html?projectId=" + projectId;
+			switchArrow();
+		});
+		function initProjectHref(fid){
+			doManager("projectForecastManager","excuteProjectForecast",fid,function(data, textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var forecastInfo= $.fromJSON(data.data);
+				$("#projectName").html(forecastInfo.projectName);
+			} else {
+				$$.showMessage("${system.info}", "取得项目计划信息出错。");
+			}
+		}, false);
+		}
+		
+	    /*
+	    * @methodName    : toggleNavi
+	    * @author        : ruanqingfeng
+	    * @desc          : 隐藏或显示右边菜单树
+	    */
+	    function toggleNaviTask(){
+	        var obj = top.frames['i2ui_shell_content'];//得到左侧导航栏的frameset对象
+	        var colNum = parseInt(obj.cols.split(",")[0]);//得到左侧导航栏的frameset对象的col值的第一个属性
+	        if (colNum > 1) {
+	            top.frames['i2ui_shell_content'].cols = '1,*';
+	            top.frames['i2ui_main'].rows = "1,*,12";
+	        } else {
+	            top.frames['i2ui_shell_content'].cols = '172,*'
+	            top.frames['i2ui_main'].rows = "46,*,12";
+	        }
+	    	switchArrow();
+	    }
+		function backButton(){
+			var obj = top.frames['i2ui_shell_content'];//得到左侧导航栏的frameset对象
+	        var colNum = parseInt(obj.cols.split(",")[0]);//得到左侧导航栏的frameset对象的col值的第一个属性
+	        if (colNum <= 1) {
+				top.frames['i2ui_shell_content'].cols = '172,*'
+				top.frames['i2ui_main'].rows = "46,*,12";
+			}
+			var goIndex=cHisLen-(window.history.length+1);
+	        history.go(goIndex);
+			//top.appFrame.location="../forecast/projectForecastList.html";
+		}
+	</script>
+</head>
+<!-- <frameset id="mainFramest" rows="*" cols="210,*" framespacing="0" frameborder="no" border="0">
+    <frame src="" id="leftTaskFrame" name="leftTaskFrame" scrolling="auto" title="leftTaskFrame" marginHeight="0" marginWidth="0" /> 
+    <frame src="" id="rightTaskFrame" name="rightTaskFrame"  title="rightTaskFrame" scrolling="auto"   />
+</frameset> -->
+    <body style="height:100%" scroll="no">
+    	<div class="box">
+		    <div class="title clear">
+		    	<!--
+		        <div class="arrowleft" style="cursor:hand;" onclick="toggleNaviTask();">
+		        </div>
+		        <div class="ico2">
+		        </div>
+		        <div class="ico1">
+		        </div>
+				-->
+				<input type="button" class="buttonu" value="返回" onclick="backButton();"/>
+		        <a id="projectName" href="#">任务树</a>
+		    </div>
+		   </div>
+		    <div class="containerbody" style="height:95%; width:100%; ">
+		    	<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+		    		<tr>
+		    			<td width="210" height="100%">
+		    				<iframe src="" width="210" height="100%" frameborder="0" id="leftTaskFrame" name="leftTaskFrame" scrolling="auto" title="leftTaskFrame" marginHeight="0" marginWidth="0" ></iframe>
+		    			</td>
+		    			<td width="100%" height="100%">
+		    				<iframe src=""  height="100%" width="100%" frameborder="0" id="rightTaskFrame" name="rightTaskFrame" scrolling="auto"  title="rightTaskFrame" ></iframe>
+		    			</td>
+		    		</tr>
+		    	</table>
+		    </div>
+	    
+    </body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>日誌统计</title>
+	<script type="text/javascript" src="../scripts/lib-main.js"></script>
+	<script type="text/javascript" src="../scripts/common/pms.js"></script>
+	<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script type="text/javascript" src="../bizbase/js/refDialog.js"></script>
+	<script type="text/javascript" src="../scripts/common/common-simpletable.js"></script>
+	<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+	<link rel="stylesheet" href="../bizbase/script/tree/jquery.treeview.css" />
+	<link rel="StyleSheet" type="text/css" href="../scripts/css/common-simpletable.css">
+    <script type="text/javascript">
+    	var beginDate = getUrlParamByKey("beginDate");
+		var endDate = getUrlParamByKey("endDate");
+		var orgName = getUrlParamByKey("orgName");
+		var orgId = getUrlParamByKey("orgId");
+		$(function () {
+				//
+            $validator = $("#searchForm").data("PMSValidator");
+            var s1 = $("#s1")[0];
+            var s2 = $("#s2")[0];
+			if(orgName!=null&&orgId!=null){
+				$("#orgName").val(orgName);
+				$("#orgId").val(orgId);
+			}else{
+				$("#orgName").val("计算机应用技术研究所");
+				$("#orgId").val("3304");
+			}
+			
+            $validator.addDateCompareRule(
+                {
+                    dateFrom: s1,
+                    dateTo: s2,
+                    msg: "开始时间应小于截止时间"
+                });
+
+            // 初始化本周日期
+			if(beginDate!=null&&endDate!=null){
+				$("#s1").val(beginDate);
+				$("#s2").val(endDate);
+			}else{
+				$("#s1").val(getMonthStartDate);
+            	$("#s2").val(formatDate(new Date()));
+			}
+            
+			
+			$("#searchType").val("Inter");
+		/*		//初始化表格2
+			editTab1 = new SimpleTable("toDoTab1", {
+					param : 'conditionsDiv',
+					checkMode : 'single',
+					scrollX : true,
+					columns : {
+						nums:{
+							header : '序号',
+							width : '5%'
+						},
+						
+						userName:{
+							header : '姓名',
+							width : '10%'
+						},
+						orgName : {
+							header : '单位/部门名称',
+							width : '20%'
+						},
+						posName : {
+							header : '职务/职称',
+							width : '10%'
+						},
+						realReport : {
+							header : '实报份数',
+							width : '5%'
+						},
+						shouldReport : {
+							header : '应报份数',
+							width : '5%'
+						},
+						scoreA : {
+							header : 'A',
+							width : '5%'
+						},
+						scoreB : {
+							header : 'B',
+							width : '5%'
+						},
+						scoreC : {
+							header : 'C',
+							width : '5%'
+						},
+						scoreD : {
+							header : 'D',
+							width : '5%'
+						},
+						scoreF : {
+							header : 'F',
+							width : '5%'
+						}
+					},
+					formatters : {
+						userName: function(v, obj) {
+							
+								return "<a href='workLogAssessScoring.html?beginDate="+$("#s1").val()+"&endDate="+$("#s2").val()+"&personid="+obj.userId+"&orgName="+obj.orgName+"&orgId="+$("#orgId").val()+"&userName="+obj.userName+"&posName="+obj.posName+"'>" + obj.userName + "</a>";
+							
+						}
+					}
+				})*/
+			
+			 $$.executeSearch('workLogAssessSelectAndQuery', 'conditionsDiv');
+		})
+		//给列加链接
+			 var COLUMNS = {
+			 	"userName": function(aData, iColumn, sColumnName, map){
+			 		var value = map[sColumnName];
+			 		return "<a href='workLogAssessScoringByQuery.html?beginDate=" + $("#s1").val() + "&endDate=" + $("#s2").val() + "&personid=" + map.userId + "&orgName=" + map.orgName + "&orgId=" + $("#orgId").val() + "&userName=" + value + "&posName=" + map.posName + "'>" + value + "</a>";
+			 	}
+			 }
+        var now = new Date(); //当前日期
+        var nowDayOfWeek = now.getDay(); //今天本周的第几天
+        var nowDay = now.getDate(); //当前日
+        var nowMonth = now.getMonth(); //当前月
+        var nowYear = now.getFullYear(); //当前年
+
+        //获得某月的天数
+        function getMonthDays(myMonth){
+            var monthStartDate = new Date(nowYear, myMonth, 1);
+            var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+            var   days   =   (monthEndDate   -   monthStartDate)/(1000   *   60   *   60   *   24);
+            return   days;
+        }
+
+        //格局化日期：yyyy-MM-dd
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth + "-" + myweekday);
+        }
+		//格局化日期：MM/dd/yyyy
+        function formatDateTOparse(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (mymonth + "/" + myweekday+"/"+myyear);
+        }
+		//格局化日期：MM/dd/yyyy,传入的日期字符串格式为"YYYY-MM-DD"
+			 function formatDateTOparseByStr(datestr) {
+	            mymonth=datestr.substr(5,2);
+				myweekday=datestr.substr(8,2);
+				myyear=datestr.substr(0,4);
+	            return (mymonth + "/" + myweekday+"/"+myyear);
+	        }
+        //获得本周的开端日期
+        function getWeekStartDate() {
+            var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1);
+            return formatDate(weekStartDate);
+        }
+
+        //获得本周的停止日期
+        function getWeekEndDate() {
+            var weekEndDate = new Date(nowYear, nowMonth, nowDay + (7 - nowDayOfWeek));
+            return formatDate(weekEndDate);
+        }
+
+        //获得本月的开端日期
+        function getMonthStartDate(){
+            var monthStartDate = new Date(nowYear, nowMonth, 1);
+            return formatDate(monthStartDate);
+        }
+
+        //获得本月的停止日期
+        function getMonthEndDate(){
+            var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth));
+            return formatDate(monthEndDate);
+        }
+
+        function clearCondition() {
+            $("#s1").val("");
+            $("#s2").val("");
+            $("#workLogType").val("");
+            $("#workProject").val("");
+            $("#workContent").val("");
+            $("#isDuty").val("");
+        }
+		//比较两个时间之差,传入的日期的格式为"MM/DD/YYYY",date1为开始日期，date2为结束日期
+			function comepareDate(date1,date2){
+				var days;
+				if(Date.parse(date2)>=Date.parse(date1)){
+					var days=(Date.parse(date2)-Date.parse(date1))/(24 * 60 * 60 * 1000);
+					return days;
+				}else{
+					return "date2小于date1";
+				}
+			}
+		//选择单位
+		function chooseTOPositions(){
+			myOpenOrgSelDialog(selCallBackMul,"check","2","");
+		}
+		var selCallBackMul = function(resultStr){
+			var selResult=$.fromJSON(resultStr);
+			var  orgId="";
+			var orgName="";
+			for(i=0;i<selResult.length;i++){
+				if(i+1==selResult.length){
+					orgId=orgId+selResult[i].id;
+					orgName=orgName+selResult[i].name;
+				}else{
+					orgId=orgId+selResult[i].id+","
+					orgName=orgName+selResult[i].name+","
+				}	
+			}
+			$("#orgId").val(orgId);
+			$("#orgName").val(orgName);
+		}	
+		function onRandomSelect(){
+			var date1=formatDateTOparseByStr($("#s2").val());
+			var date2=formatDateTOparse(new Date);
+			$("#searchType").val("Inter");
+			if(comepareDate(date1,date2)>=0){
+				obj={
+				beginDate:$("#s1").val(),
+				endDate:$("#s2").val(),
+				depts:$("#orgId").val()
+				}
+				doManager("workLogAssessManager", "addWorkLogAssess", obj, function(data,textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						$$.showMessage("系统提示", "抽取完成");
+						window.setTimeout(function(){
+								 $$.executeSearch('workLogAssessSelectAndQuery', 'conditionsDiv');
+							}, "2000");
+						
+					}
+				});
+				
+				
+				
+			}else{
+				$$.showMessage("系统提示", "不能随机抽取当日之后的日志");
+			}
+			
+		}
+		function onSearch(){
+			
+			$("#searchType").val("Inter");
+			var date1=formatDateTOparseByStr($("#s2").val());
+			var date2=formatDateTOparse(new Date);
+			if(comepareDate(date1,date2)>=0){
+				 $$.executeSearch('workLogAssessSelectAndQuery', 'conditionsDiv');
+			}else{
+				$$.showMessage("系统提示", "不能查询当日之后日志");
+			}
+		}
+    </script>
+</head>
+<body style="height:100%">
+<div class="box">
+    <div class="title clear">
+        <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();"></div>
+        <div class="ico2"></div>
+        <div class="ico1"></div>
+        <a href="#">日誌管理 :</a>&nbsp;<a href="#">日誌抽取</a>
+    </div>
+    <div class="containerbody padding4px">
+        <div class="containerheader">
+            <a href="#" onclick="toggleDiv('conditionsDiv','pic2');">
+                <img src="../scripts/images/22.png" align="absmiddle" id="pic2"/>
+            </a>搜索条件
+        </div>
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true">
+                <table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+                   <tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+               评分单位：	
+                        </td>
+                        <td class="baseform">
+                        <input type="hidden" id="searchType" name="searchType">
+                        <input type="hidden" id="orgId" name="orgId">
+                        <input type="text" id="orgName" name="orgName" likeOption="false" class="inputtext" disabled>
+                        <input type="button" value="选择" onclick="chooseTOPositions()" class="buttonu" />
+                        </td>
+						               <td class="basetext" style="width: 8%; text-align: right">
+                             开始日期：
+                        </td>
+                        <td class="baseform">
+                            <input id="s1" revalidate="true" type="text" likeOption="false" name="beginDate" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:160px;margin-right: 5px;"/>
+						</td>
+						<td class="basetext" style="width: 8%; text-align: right">
+                             结束日期：
+                        </td>
+						<td>
+                            <input id="s2" revalidate="true" type="text" name="endDate" likeOption="false" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:160px;margin-left: 5px;margin-right:5px"/>
+                        </td>
+         			</tr>
+                    <tr class="Colorbar3">
+                        <td colspan="6" style="width:100%">
+                            <input type="button" class="buttonu" value="随机抽样" onclick="onRandomSelect();"/>
+                            <input type="button" class="buttonu" value="查询" onclick="onSearch();"/>
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </form>
+        
+		<!--<div id="toDoWorkLogListQuery1" showcheckbox="false" >
+        	<table id="toDoTab1" queryid="workLogAssessSelectAndQuery" showcheckbox="false"  style="width: 100%;margin:0px;padding:0px;">
+			</table>
+		</div>-->
+		<div id="workLogSearchContainer" titleAlign= "center" fnRender="renderColumns" showcheckbox="false" showRidaoButton="true"
+             searchDiv="conditionsDiv" usecache="true" queryid="workLogAssessSelectAndQuery" showNo="false"
+             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+             showprint="false"  showcheckbox="true" >
+        </div>
+    </div>
+</div>
+</body>
+</html>

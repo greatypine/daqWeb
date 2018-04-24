@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+    	<meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Cache-Control" Content="no-cache">
+        <meta http-equiv="Pragma" Content="no-cache">
+        <meta http-equiv="Expires" Content="0">
+        <title>重要科技活动</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+    </head>
+    <script>
+        $(function(){
+               onSearchSup();
+        });
+
+        /*
+         * 查看
+         */
+        var viewObj = {
+            html: '<a href="#">查看</a>',
+            func: function(queryid, data, nTr, allColumns){
+                var json = convertDataToObj(data, allColumns);
+				var monday = new Date(parseInt(json.monday)).format("yyyy-MM-dd");
+                window.location.href = 'generalEventPublisFindView.html?monday='+monday+"&title="+json.eventTime;
+                
+            }
+        }
+        $pmspage.opArr = [viewObj];
+        
+        /**
+         * 列表中将data数组数据转换成json对象
+         * @param {Object} data
+         * @param {Object} allColumns
+         */
+        function convertDataToObj(data, allColumns){
+            var json = "{";
+            for (var i = 0; i < data.length; i++) {
+                json += "'" + allColumns[i].key + "'";
+                json += ":"
+                json += "'" + data[i] + "',";
+            }
+            json = json.substr(0, json.length - 1) + "}";
+            var jsonObj = $.fromJSON(json);
+            return jsonObj;
+        }
+        
+        /**
+         * 查询列表
+         */
+        function onSearchSup(){
+            $$.executeSearch('indexGeneralEventQuery', 'bidSearchDiv'); //queryid, the params div id.
+	    }
+        
+    </script>
+    <body>
+        <div class="rightcont clear">
+            <div style="background:url(../bizbase/images/i2/i2shellbackground.gif)">
+                <div cellpadding="0" cellspacing="0" style="background-image:url(../bizbase/images/i2/masthead.gif);background-repeat:no-repeat;height:40px;">
+                </div>
+            </div>
+            <table class="bigteble">
+                <tr>
+                    <td>
+                        <table class="Querytable">
+                            <tr class="Colorbar1">
+                                <td>
+                                    <strong>&nbsp;重要科技活动</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#FFFFFF">
+						<div id="BidGridContainer" titleAlign= "center" showcheckbox="false" showRidaoButton="true" searchDiv="bidSearchDiv" usecache="true" queryid="indexGeneralEventQuery" showsearch="false" showdisplay="false" showtitle="false" autoload="false" showprint="false" showpaging="true" showcheckbox="true" operators="$pmspage.opArr">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

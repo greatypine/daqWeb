@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>我的待办列表</title>
+        <script type="text/javascript" src="../scripts/lib-main.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pms.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pmsCommon.js">
+        </script>
+        <link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+        <script type="text/javascript">
+        	var moudleid = getUrlParamByKey("moduleId");
+			//alert(moudleid);
+			if( moudleid == undefined){
+				moudleid='30950'; //默认取工作流Demo的待办
+				//现在这个页面只为工作流Demo的待办来使用了
+			}
+			$(function(){
+				doManager("userManager", "getCurrentUserDTO", null,function(data){
+					  if(data.result) {
+			        		var nowUserDTO = $.fromJSON(data.data);
+			        		$("#userId").val(nowUserDTO.id);
+							$("#moduleId").val(moudleid);
+			        		$$.executeSearch('wflistQuery', 'conditionsDiv'); 
+			        	}
+				});
+			});
+		   function convertDataToObj(data, allColumns) {
+				var json = "{";
+				for ( var i = 0; i < data.length; i++) {
+					json += "'" + allColumns[i].key + "'";
+					json += ":"
+					json += "'" + data[i] + "',";
+				}
+				json = json.substr(0, json.length - 1) + "}";
+				var jsonObj = $.fromJSON(json);
+				return jsonObj;
+			}
+	                   
+	        var viewObj = {
+				html : '<a href="#">审批/查看</a>',
+				func : function(queryid, data, nTr, allColumns) {
+					var json = convertDataToObj(data, allColumns);
+					var moduleId = json.moduleId;
+					var sheetId = json.sheetId;
+					var flowInstanceId = json.flowInstanceId;
+					var toDoType=json.toDoType;
+					var isBack = json.isBack;
+					var moduleUrl = json.moduleUrl;
+					var ownerId=json.ownerId;
+					var copyId = json.id;
+					
+
+					/*
+					 *此处当todotype==3的时候 flowinstanceid实际是sendinfo的id 
+					 */
+					window.location.href = ".."+moduleUrl+"?flowInstanceId="+flowInstanceId+"&sheetId="+sheetId+"&toDoType="+toDoType+"&isBack="+isBack+"&toOperId="+ownerId+"&from=WF"+"&copyId="+copyId+"&moduleId="+moduleId;
+				}
+			}
+		  	var delObj = {
+				html : '<a href="#" style="margin-left:5px;">删除</a>',
+				func : function(queryid, data, nTr, allColumns) {
+					var json = convertDataToObj(data, allColumns);
+					var moduleId = json.moduleId;
+					var sheetID = json.sheetId;
+					var flowInstanceId = json.flowInstanceId;
+					var toDoType=json.toDoType;
+					var id=json.id;
+					if(toDoType=="0"){
+						alert("个人待办，不能再此删除");
+					}else if(toDoType=="1"){
+						doManager("WFCopyInfoManager", "deleteWFCopyInfo", id+'',function(data){
+		            		  if(data.result) {
+				            		window.location.href='planList.html?moduleLevel2Id='+moudleid;
+				              }
+						});
+					}
+					
+				}
+			}
+			var opArr = [ viewObj];      
+        </script>
+    </head>
+    <body>
+        <div id="conditionsDiv" style="display:hidden">
+            <form> 
+                <input id="userId" name="userId" type="hidden" value="" />
+				<input id="moduleId" name="moduleId" type="hidden" value="" />
+            </form>
+        </div>
+        <div id="toDoListQuery" searchDiv="conditionsDiv" showsearch="false" showpaging="false" showdisplay="false" showprint="false"  queryid="wflistQuery" operators="opArr" autoload="false">
+        </div>
+    </body>
+</html>

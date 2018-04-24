@@ -1,0 +1,20 @@
+.calendar{width:210px;height:152px;border:1px solid #888;background:#fff;}
+.calendarTitle{height:16px;background:#BEC5E7;color:#fff;font:bold 12px "Arial"}
+.calendarClose{float:left;width:16px;height:16px;background:url(images/icon16_close.gif) no-repeat center center;}
+.calendarHead{height:16px;text-align:center;}
+/*年月前进后退*/
+.calendarLastMonth{float:left;width:16px;height:16px;background: url("img.gif") no-repeat scroll -16px 0 transparent;float:left;cursor: pointer;}
+.calendarNextMonth{float:left;width:16px;height:16px;background: url("img.gif") no-repeat scroll -32px 0 transparent;float:left;cursor: pointer;}
+.calendarLastYear{float:left;width:16px;height:16px;background: url("img.gif") no-repeat scroll 0 0 transparent;float:left;cursor: pointer;}
+.calendarNextYear{float:left;width:16px;height:16px;background: url("img.gif") no-repeat scroll -48px 0 transparent;float:left;cursor: pointer;}
+/*当前年月*/
+.calendarYearMonth{float:left;width:140px;text-align:center;font:bold 12px "Arial";color:#91b14d;}
+
+.calendarWeekday{float:left;width:29px;background:#eee;color:#91b14d;border-right:1px dotted #C1D9F4;text-align:center;}
+.calendarWeekend{float:left;width:29px;background:#eee;color:#91b14d;border-right:1px dotted #C1D9F4;text-align:center;}
+.calendarDay{float:left;width:29px;height:20px;background:#fafafa;border-right:1px dotted #C1D9F4;border-bottom:1px dotted #C1D9F4; text-align:center;}
+
+.calendarWeekendDay{float:left;width:29px;height:20px;background:#fafafa;border-right:1px dotted #C1D9F4;border-bottom:1px dotted #C1D9F4;text-align:center;}
+.calendarToday{float:left;width:28px;height:18px;cursor:pointer;border:1px solid red;text-align:center;}
+.calendarOver{float:left;width:29px;height:20px;background:#99FFCC;border-right:1px dotted #C1D9F4;border-bottom:1px dotted #C1D9F4;cursor:pointer;text-align:center;}
+.button_calendar{width:20px;height:20px;background:url(images/icon20_calendar.gif) no-repeat center center;border:none;}

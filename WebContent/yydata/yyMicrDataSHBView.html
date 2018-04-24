@@ -1,0 +1,526 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Cache-Control" Content="no-cache">
+<meta http-equiv="Pragma" Content="no-cache">
+<meta http-equiv="Expires" Content="0">
+<link
+	href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css"
+	rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+
+<title>生活宝修改</title>
+<style type="text/css">
+body {
+	background-color: #e7e7e7;
+}
+
+h4 span {
+	float: right;
+}
+
+.tb_inputtable {
+	margin-top: 10px;
+	font-size: 14px;
+	background-color: #FFF;
+}
+
+.tb_inputtable,th,td {
+	border: 1px solid #ccc;
+}
+
+.tb_inputtable th,.tb_inputtable,td {
+	height: 35px;
+	line-height: 35px;
+}
+
+.tb_inputtable input {
+	height: 35px;
+	line-height: 35px;
+	width: 100%;
+	border: 0;
+	text-align: center;
+	color: #F00;
+	outline: none;
+}
+
+.but {
+	margin-top: 30px;
+	text-align: center;
+}
+</style>
+
+<script type="text/javascript">
+function dataCheck(){
+	   var obj = document.getElementsByName("numberInput");
+	   for(i=0;i<obj.length;i++){
+		   if(obj[i].value!=null&&obj[i].value!=""){
+			   if(!/^\d+(?=\.{0,1}\d+$|$)/.test(obj[i].value)){  
+			        alert("请输入数字!"); 
+			        return false;
+			    }    
+		   }
+	   }
+	   return true;
+	}
+	
+		Date.prototype.format=function(fmt) {        
+		    var o = {        
+		    "M+" : this.getMonth()+1, //月份        
+		    "d+" : this.getDate(), //日        
+		    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+		    "H+" : this.getHours(), //小时        
+		    "m+" : this.getMinutes(), //分        
+		    "s+" : this.getSeconds(), //秒        
+		    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+		    "S" : this.getMilliseconds() //毫秒        
+		    };        
+		    var week = {        
+		    "0" : "\u65e5",        
+		    "1" : "\u4e00",        
+		    "2" : "\u4e8c",        
+		    "3" : "\u4e09",        
+		    "4" : "\u56db",        
+		    "5" : "\u4e94",        
+		    "6" : "\u516d"       
+		    };        
+		    if(/(y+)/.test(fmt)){        
+		        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+		    }        
+		    if(/(E+)/.test(fmt)){        
+		        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+		    }        
+		    for(var k in o){        
+		        if(new RegExp("("+ k +")").test(fmt)){        
+		            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+		        }        
+		    }        
+		    return fmt;        
+		} 
+
+
+		var date = getUrlParamByKey("date");
+		$(function(){
+			 doManager("yyMicrDataManager", "queryMicrDataShbByDate", date, function(data, textStatus, XMLHttpRequest){
+	                if (data.result) {
+	                    var jsonData = $.fromJSON(data.data);
+	                    var d=	new Date();
+	                    d.setTime(date);
+	                    var s=d.format('yyyy-MM-dd HH:mm:ss');
+	                    $("#s1").val(s);
+	                    var inputs = $("table input");
+	                    $.each(jsonData,function(n,value) {   
+	                        if(value.name.indexOf("B2B")>=0&&value.micr_type.indexOf("GMV")>=0){
+	                        	inputs.eq(3)[0].value=value.name;
+	                      		inputs.eq(0)[0].value=value.micr_type;
+	                      		inputs.eq(4)[0].value=value.week;
+	                      		inputs.eq(5)[0].value=value.month;
+	                      	    inputs.eq(6)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2B")>=0&&value.micr_type.indexOf("新增用户数")>=0){
+	                        	inputs.eq(3)[0].value=value.name;
+	                      		inputs.eq(1)[0].value=value.micr_type;
+	                      		inputs.eq(7)[0].value=value.week;
+	                      		inputs.eq(8)[0].value=value.month;
+	                      	    inputs.eq(9)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2B")>=0&&value.micr_type.indexOf("订单数")>=0){
+	                        	inputs.eq(3)[0].value=value.name;
+	                      		inputs.eq(2)[0].value=value.micr_type;
+	                      		inputs.eq(10)[0].value=value.week;
+	                      		inputs.eq(11)[0].value=value.month;
+	                      	    inputs.eq(12)[0].value=value.total;
+	                        }
+	                        
+	                        ///////////////////////////////////////////////////////////
+	                        
+	                        if(value.name.indexOf("B2C")>=0&&value.micr_type.indexOf("GMV")>=0){
+	                        	inputs.eq(13)[0].value=value.name;
+	                      		inputs.eq(0)[0].value=value.micr_type;
+	                      		inputs.eq(14)[0].value=value.week;
+	                      		inputs.eq(15)[0].value=value.month;
+	                      	    inputs.eq(16)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2C")>=0&&value.micr_type.indexOf("新增用户数")>=0){
+	                        	inputs.eq(13)[0].value=value.name;
+	                      		inputs.eq(1)[0].value=value.micr_type;
+	                      		inputs.eq(17)[0].value=value.week;
+	                      		inputs.eq(18)[0].value=value.month;
+	                      	    inputs.eq(19)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2C")>=0&&value.micr_type.indexOf("订单数")>=0){
+	                        	inputs.eq(13)[0].value=value.name;
+	                      		inputs.eq(2)[0].value=value.micr_type;
+	                      		inputs.eq(20)[0].value=value.week;
+	                      		inputs.eq(21)[0].value=value.month;
+	                      	    inputs.eq(22)[0].value=value.total;
+	                        }
+	                        
+							///////////////////////////////////////////////////////////
+	                        
+	                        if(value.name.indexOf("B2B")>=0&&value.micr_type.indexOf("下单ID数")>=0){
+	                        	inputs.eq(26)[0].value=value.name;
+	                      		inputs.eq(23)[0].value=value.micr_type;
+	                      		inputs.eq(27)[0].value=value.week;
+	                      		inputs.eq(28)[0].value=value.month;
+	                      	    inputs.eq(29)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2B")>=0&&value.micr_type.indexOf("新增上线E店")>=0){
+	                        	inputs.eq(26)[0].value=value.name;
+	                      		inputs.eq(24)[0].value=value.micr_type;
+	                      		inputs.eq(30)[0].value=value.week;
+	                      		inputs.eq(31)[0].value=value.month;
+	                      	    inputs.eq(32)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2B")>=0&&value.micr_type.indexOf("新增SKU数")>=0){
+	                        	inputs.eq(26)[0].value=value.name;
+	                      		inputs.eq(25)[0].value=value.micr_type;
+	                      		inputs.eq(33)[0].value=value.week;
+	                      		inputs.eq(34)[0].value=value.month;
+	                      	    inputs.eq(35)[0].value=value.total;
+	                        }
+	                        
+	                        
+							///////////////////////////////////////////////////////////
+	                        
+	                        if(value.name.indexOf("B2C")>=0&&value.micr_type.indexOf("下单ID数")>=0){
+	                        	inputs.eq(36)[0].value=value.name;
+	                      		inputs.eq(23)[0].value=value.micr_type;
+	                      		inputs.eq(37)[0].value=value.week;
+	                      		inputs.eq(38)[0].value=value.month;
+	                      	    inputs.eq(39)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2C")>=0&&value.micr_type.indexOf("新增上线E店")>=0){
+	                        	inputs.eq(36)[0].value=value.name;
+	                      		inputs.eq(24)[0].value=value.micr_type;
+	                      		inputs.eq(40)[0].value=value.week;
+	                      		inputs.eq(41)[0].value=value.month;
+	                      	    inputs.eq(42)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.name.indexOf("B2C")>=0&&value.micr_type.indexOf("新增SKU数")>=0){
+	                        	inputs.eq(36)[0].value=value.name;
+	                      		inputs.eq(25)[0].value=value.micr_type;
+	                      		inputs.eq(43)[0].value=value.week;
+	                      		inputs.eq(44)[0].value=value.month;
+	                      	    inputs.eq(45)[0].value=value.total;
+	                        }
+	                        
+	                    });  
+	                }
+	            });
+		});
+		
+		function doSave(){
+			if(!dataCheck()){
+				return;
+			}
+        	var shbList=new Array();
+        	var inputs = $("table input");
+      		var obj1 = new Object();
+      		var oDate = new Date();
+      		var dtime=$('#s1').val();
+      		
+      		/**
+      		obj1.name=inputs.eq(3)[0].value;
+      		obj1.micr_type=inputs.eq(0)[0].value;
+      		obj1.week=inputs.eq(4)[0].value;
+      		obj1.month=inputs.eq(5)[0].value;
+      	    obj1.total=inputs.eq(6)[0].value;
+      	    obj1.date=dtime;
+      	    
+      	 	var obj2 = new Object();
+    		obj2.name=inputs.eq(3)[0].value;
+    		obj2.micr_type=inputs.eq(1)[0].value;
+    		obj2.week=inputs.eq(7)[0].value;
+    		obj2.month=inputs.eq(8)[0].value;
+    	    obj2.total=inputs.eq(9)[0].value;
+    	    obj2.date=dtime;
+      	    
+    	    var obj3 = new Object();
+    		obj3.name=inputs.eq(3)[0].value;
+    		obj3.micr_type=inputs.eq(2)[0].value;
+    		obj3.week=inputs.eq(10)[0].value;
+    		obj3.month=inputs.eq(11)[0].value;
+    	    obj3.total=inputs.eq(12)[0].value;
+    	    obj3.date=dtime;
+    	    
+    	    //////////////////////////////////////////////////////
+    	    
+    	    var obj4 = new Object();
+    		obj4.name=inputs.eq(13)[0].value;
+    		obj4.micr_type=inputs.eq(0)[0].value;
+    		obj4.week=inputs.eq(14)[0].value;
+    		obj4.month=inputs.eq(15)[0].value;
+    	    obj4.total=inputs.eq(16)[0].value;
+    	    obj4.date=dtime;
+    	    
+    	    var obj5 = new Object();
+    		obj5.name=inputs.eq(13)[0].value;
+    		obj5.micr_type=inputs.eq(1)[0].value;
+    		obj5.week=inputs.eq(17)[0].value;
+    		obj5.month=inputs.eq(18)[0].value;
+    	    obj5.total=inputs.eq(19)[0].value;
+    	    obj5.date=dtime;
+    	    
+    	    var obj6 = new Object();
+    	    obj6.name=inputs.eq(13)[0].value;
+    	    obj6.micr_type=inputs.eq(2)[0].value;
+    	    obj6.week=inputs.eq(20)[0].value;
+    	    obj6.month=inputs.eq(21)[0].value;
+    	    obj6.total=inputs.eq(22)[0].value;
+    	    obj6.date=dtime;
+    	    
+    	    ////////////////////////////////////////////////////
+    	    
+    	    var obj7 = new Object();
+    	    obj7.name=inputs.eq(26)[0].value;
+    	    obj7.micr_type=inputs.eq(23)[0].value;
+    	    obj7.week=inputs.eq(27)[0].value;
+    	    obj7.month=inputs.eq(28)[0].value;
+    	    obj7.total=inputs.eq(29)[0].value;
+    	    obj7.date=dtime;
+    	    
+    	    var obj8 = new Object();
+    	    obj8.name=inputs.eq(26)[0].value;
+    	    obj8.micr_type=inputs.eq(24)[0].value;
+    	    obj8.week=inputs.eq(30)[0].value;
+    	    obj8.month=inputs.eq(31)[0].value;
+    	    obj8.total=inputs.eq(32)[0].value;
+    	    obj8.date=dtime;
+    	    
+    	    var obj9 = new Object();
+    	    obj9.name=inputs.eq(26)[0].value;
+    	    obj9.micr_type=inputs.eq(25)[0].value;
+    	    obj9.week=inputs.eq(33)[0].value;
+    	    obj9.month=inputs.eq(34)[0].value;
+    	    obj9.total=inputs.eq(35)[0].value;
+    	    obj9.date=dtime;
+    	    
+    	    
+			////////////////////////////////////////////////////
+
+
+    	    var obj10 = new Object();
+    	    obj10.name=inputs.eq(36)[0].value;
+    	    obj10.micr_type=inputs.eq(23)[0].value;
+    	    obj10.week=inputs.eq(37)[0].value;
+    	    obj10.month=inputs.eq(38)[0].value;
+    	    obj10.total=inputs.eq(39)[0].value;
+    	    obj10.date=dtime;
+    	    
+    	    var obj11 = new Object();
+    	    obj11.name=inputs.eq(36)[0].value;
+    	    obj11.micr_type=inputs.eq(24)[0].value;
+    	    obj11.week=inputs.eq(40)[0].value;
+    	    obj11.month=inputs.eq(41)[0].value;
+    	    obj11.total=inputs.eq(42)[0].value;
+    	    obj11.date=dtime;
+    	    
+    	    var obj12 = new Object();
+    	    obj12.name=inputs.eq(36)[0].value;
+    	    obj12.micr_type=inputs.eq(25)[0].value;
+    	    obj12.week=inputs.eq(43)[0].value;
+    	    obj12.month=inputs.eq(44)[0].value;
+    	    obj12.total=inputs.eq(45)[0].value;
+    	    obj12.date=dtime;
+    	    
+    	    shbList.push(obj1,obj2,obj3,obj4,obj5,obj6,obj7,obj8,obj9,obj10,obj11,obj12);
+    	    **/
+    	    
+    	    
+    	    for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(3)[0].value;
+				obj.micr_type=inputs.eq(n)[0].value;
+				var a=(n+1)*3+1;
+				var b=(n+1)*3+2;
+				var c=(n+1)*3+3;
+				obj.week=inputs.eq(a)[0].value;
+				obj.month=inputs.eq(b)[0].value;
+				obj.total=inputs.eq(c)[0].value;
+				obj.date=dtime;
+				shbList.push(obj);
+      		}
+    	    //////////////////////////////////////////////////////
+    	    for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(13)[0].value;
+				obj.micr_type=inputs.eq(n)[0].value;
+				var a=11+(n+1)*3;
+				var b=12+(n+1)*3;
+				var c=13+(n+1)*3;
+				obj.week=inputs.eq(a)[0].value;
+	    		obj.month=inputs.eq(b)[0].value;
+	    	    obj.total=inputs.eq(c)[0].value;
+	    	    obj.date=dtime;
+				shbList.push(obj);
+    	    }
+    	    ////////////////////////////////////////////////////
+    	    for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(26)[0].value;
+				obj.micr_type=inputs.eq(n+23)[0].value;
+				var a=24+(n+1)*3;
+				var b=25+(n+1)*3;
+				var c=26+(n+1)*3;
+				obj.week=inputs.eq(a)[0].value;
+	    	    obj.month=inputs.eq(b)[0].value;
+	    	    obj.total=inputs.eq(c)[0].value;
+	    	    obj.date=dtime;
+				shbList.push(obj);
+    	    }
+			////////////////////////////////////////////////////
+			for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(36)[0].value;
+				obj.micr_type=inputs.eq(23+n)[0].value;
+				var a=34+(n+1)*3;
+				var b=35+(n+1)*3;
+				var c=36+(n+1)*3;
+				obj.week=inputs.eq(a)[0].value;
+	    	    obj.month=inputs.eq(b)[0].value;
+	    	    obj.total=inputs.eq(c)[0].value;
+	    	    obj.date=dtime;
+				shbList.push(obj);
+			}
+			
+    	    doManager("yyMicrDataManager", "saveMicrDataShb", [shbList], function(data, textStatus, XMLHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    //var id = jsonData.id;
+                    alert("修改成功!");
+                    window.location.href = 'yyMicrDataSHBList.html';
+                }else{
+					$$.showMessage("系统信息", "修改失败!");
+				}
+            });
+        }
+       
+</script>
+</head>
+
+<body>
+	<div class="panel panel-primary">
+			<div class="panel-heading">运营数据管理 :生活宝数据填报</div>
+			<div class="panel-body" id="conditionsDiv">
+				<form id="orgAdd" name="orgAdd" class="pmsForm" validate="true"
+					clientvalidate="true" >
+							<input id="s1" revalidate="true"
+								type="text" likeOption="false" name="date" 
+								readonly />
+				</form>
+			</div>
+		</div>
+	<table class="tb_inputtable" width="100%" border="1" cellspacing="0" cellpadding="0" >
+		<tr>
+			<th rowspan="4" scope="col" width="11%">产品经营分析</th>
+			<th rowspan="2" scope="col" width="11%">&nbsp;</th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="GMV（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="新增用户数（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="订单数（2016）" style="color: black;"/></th>
+		</tr>
+		<tr>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2B）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text" value="" name="numberInput"/></td>
+			<td><input type="text" value="" name="numberInput"/></td>
+			<td><input type="text" value="" name="numberInput"/></td>
+			
+			<td><input type="text" value="" name="numberInput"/></td>
+			<td><input type="text" value="" name="numberInput"/></td>
+			<td><input type="text" value="" name="numberInput"/></td>
+			
+			<td><input type="text" value="" name="numberInput"/></td>
+			<td><input type="text" value="" name="numberInput"/></td>
+			<td><input type="text" value="" name="numberInput"/></td>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2C）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+		</tr>
+	</table>
+
+	<table class="tb_inputtable" width="100%" border="1" cellspacing="0" cellpadding="0">
+		<tr>
+			<th rowspan="4" scope="col" width="11%">产品经营分析</th>
+			<th rowspan="2" scope="col" width="11%">&nbsp;</th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="下单ID数（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="新增上线E店（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="新增SKU数（2016）" style="color: black;"/></th>
+		</tr>
+		<tr>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2B）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2C）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+		</tr>
+	</table>
+	<div class="but">
+		<input name="" type="submit" onclick="doSave();"/>
+	</div>
+</body>
+</html>

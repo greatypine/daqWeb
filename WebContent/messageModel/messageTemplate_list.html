@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>消息模板列表</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <!-- 引入css和js即可 -->
+    <link rel="stylesheet" href="../scripts/css/cityselect.css">
+    <script type="text/javascript" src="../scripts/cityselect.js"></script>
+    <style type="text/css">
+        .display {
+            width: 100%
+        }
+
+        .display tr td {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+
+    var current_user;
+    $(function () {
+        doManager('UserManager','getCurrentUserDTO',null,function(data){
+            if(data.result){
+            	
+                current_user = JSON.parse(data.data);
+               
+                searchList();
+                
+            }else{
+                $$.showMessage('提示',data.message);
+            }
+        });
+
+    });
+
+    //记载页面时请求数据列表默认的方法
+    function searchList() {
+        $$.executeSearch('aboutMessageTemplateQuery', 'conditionsDiv');
+    }
+
+    
+
+    function doClean() {
+        document.service_qa.reset();
+        searchList();
+    }
+    function addMessageTemplate() {
+        window.location.href = 'messageTemplate_add.html';
+    }
+
+    var editObj = {
+            html: '<a href="#"  class="blue">编辑</a>',
+            resourceId: "",
+            func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+                var id = allColumnsDataMap.id;
+                var code = allColumnsDataMap.code;
+                window.location.href = "messageTemplate_edit.html?id=" + id+"&code="+code;
+            }
+        };
+    
+    var deleteObj = {
+        html: '<a href="#"  class="blue">删除</a>',
+        resourceId: "",
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+        	 $$.showConfirm("提示","数据是否删除？",function () {
+        		 var code = allColumnsDataMap.code;
+        		 var messageTemplate = {
+     		            code:code
+     		        }
+                 doManager('messageTemplateManager','deleteMessageTemplate',[messageTemplate],function(data){
+                    if(data.result){
+                       var result = JSON.parse(data.data);
+                       
+                       if(result.exist){
+                    	   $$.showMessage('提示',"当前模板正在使用，不能删除!");
+                       }else{
+                    	   $$.showMessage('提示',"删除成功");
+                    	   searchList();
+                       }
+                    }else{
+                        $$.showMessage('提示',data.message);
+                    }
+                 });
+             });
+        }
+    };
+
+    $pmspage.opArr = [editObj,deleteObj];
+	
+    var COLUMNS = {
+            "model": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                if(value == "KQSQ"){
+                    value = "考勤申请";
+                }else if(value =="MMXG"){
+                	value = "密码修改";
+                }else if(value=="DTHXXG"){
+                	value="单体画像修改";
+                }else if(value="QT"){
+                	value="其他";
+                }
+                
+                return value;
+            }
+        }
+
+
+</script>
+<body style="height: 100%">
+<div class="panel panel-primary">
+    <div class="panel-heading">消息模板查询</div>
+    <div class="panel-body">
+        <div id="conditionsDiv" style="margin-top: 10px">
+            <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                <table id="searchTable" cellpadding="0" cellspacing="0"  style="min-width: 100%; width: auto;">
+                    <tr>
+                        <td style="width:10%">
+           	名称:
+                        </td>
+                        <td>
+                            <input id="name" name="name" type="text" style="width:20%" class="form-control"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="panel-footer" style="text-align: right">
+        <button class="btn btn-primary" onclick="addMessageTemplate()">添加</button>
+        <button class="btn btn-primary" onclick="searchList()">查询</button>
+        <button class="btn btn-primary" onclick="doClean();">重置</button>
+    </div>
+</div>
+<div id="centerQueryGridContainer" class="panel panel-primary" queryid="aboutMessageTemplateQuery" operators="$pmspage.opArr"
+     titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
+     showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+     showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
+
+</body>
+</html>

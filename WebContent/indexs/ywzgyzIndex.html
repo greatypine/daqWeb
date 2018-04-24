@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Cache-Control" Content="no-cache"/>
+        <meta http-equiv="Pragma" Content="no-cache"/>
+        <title>Untitled Document</title>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/modelDiv.css" />
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        <script type="text/javascript" src="../scripts/modelDiv.js">
+        </script>
+        <script type="text/javascript" src="../FusionChart/FusionCharts.js">
+        </script>
+        <script>
+            function wopn(url){
+                window.open(url);
+            }
+            
+            
+            $(function(){
+                /**
+                 * 待办事项
+                 */
+                var taskContentArr = new Array();
+                var taskUrlArr = new Array();
+                var jsonData = getToDoModleByUserId();
+                $.each(jsonData, function(index, item){
+                    var moduleName = item.moduleName;
+                    var moduleType = item.moduleType;
+                    var dotime = new Date(parseInt(item.dotime)).format("yyyy-MM-dd");
+                    var docount = item.docount;
+                    var moduleUrl = item.moduleUrl;
+                    var cntStr = "[" + moduleName + "]---" + moduleType + "---" + dotime + "---" + "[" + docount + "]" + "条";
+                    taskContentArr.push(cntStr);
+                    taskUrlArr.push(getRootPath() + moduleUrl);
+                });
+                /**
+                 * 已办事项
+                 */
+                var taskDoneContentArr = new Array();
+                var taskDoneUrlArr = new Array();
+                var jsonData = getDoneModleByUserId();
+                $.each(jsonData, function(index, item){
+                    var moduleName = item.moduleName;
+                    var moduleType = item.moduleType;
+                    var dotime = new Date(parseInt(item.dotime)).format("yyyy-MM-dd");
+                    var docount = item.docount;
+                    var moduleUrl = item.moduleUrl;
+                    var cntStr = "[" + moduleName + "]---" + moduleType + "---" + dotime + "---" + "[" + docount + "]" + "条";
+                    taskDoneContentArr.push(cntStr);
+                    taskDoneUrlArr.push(getRootPath() + moduleUrl);
+                });
+				/**
+                 * 办结事项
+                 */
+                var taskFnContentArr = new Array();
+                var taskFnUrlArr = new Array();
+                var jsonData = getFinishedModleByUserId();
+                $.each(jsonData, function(index, item){
+                    var moduleName = item.moduleName;
+                    var moduleType = item.moduleType;
+                    var dotime = new Date(parseInt(item.dotime)).format("yyyy-MM-dd");
+                    var docount = item.docount;
+                    var moduleUrl = item.finishedUrl;
+                    var cntStr = "[" + moduleName + "]---" + moduleType + "---" + dotime + "---" + "[" + docount + "]" + "条";
+                    taskFnContentArr.push(cntStr);
+                    taskFnUrlArr.push(getRootPath() + moduleUrl);
+                });
+                
+                var taskModelObj = new modelDiv("taskDiv");
+                taskModelObj.modelTab = true;
+                taskModelObj.modelContentStyle = 0;
+                taskModelObj.modelTitleName = ["待办事项", "已办事项","办结事项"];
+                taskModelObj.modelTabContent = [taskContentArr, taskDoneContentArr,taskFnContentArr];
+                taskModelObj.modelContentUrl = [taskUrlArr, taskDoneUrlArr,taskFnUrlArr];
+                taskModelObj.modelMoreName = ["更多>>>"];
+                taskModelObj.modelMoreAddress = [getRootPath() + "/workflow/toDoList.html"];
+                taskModelObj.init();
+                /**
+                 * 我关注的项目
+                 */
+                var taskContentProjectArr = new Array();
+                var taskProjectUrlArr = new Array();
+                var jsonData = getCurrentUserAttentions();
+                $.each(jsonData, function(index, item){
+                    var projectName = item[15];
+                    taskContentProjectArr.push(projectName);
+                    taskProjectUrlArr.push(getRootPath() + "/general/projectDetailMessage.html?forecastId=" + item[0]);
+                });
+                
+                var taskModelObj = new modelDiv("taskAttention");
+                taskModelObj.modelTab = false;
+                taskModelObj.modelContentStyle = 0;
+                taskModelObj.modelTitleName = ["我关注的项目"];
+                taskModelObj.modelTabContent = [taskContentProjectArr];
+                taskModelObj.modelContentUrl = [taskProjectUrlArr];
+                taskModelObj.modelMoreName = ["更多>>>"];
+                taskModelObj.modelMoreAddress = [getRootPath() + "/general/projectSearchList.html"];
+                taskModelObj.init();
+                /**
+                 * 通知公告
+                 */
+                var taskNoticeContent = new Array();
+                var taskNoticeContentUrlArr = new Array();
+                var jsonData = getGeneralPortalContentDtos();
+                $.each(jsonData, function(index, item){
+                    var title = item.title;
+                    taskNoticeContent.push(title);
+                    var publishDate = new Date(parseInt(item.publishDate)).format("yyyy-MM-dd");
+                    taskNoticeContentUrlArr.push("javascript:wopn('" + getRootPath() + "/indexs/generalPortalContentView.html?id=" + item.id + "&publishDate=" + publishDate + "')");
+                });
+                var taskModelConObj = new modelDiv("noticeBar");
+                var modelMoreAddressUrl = new Array();
+                taskModelConObj.modelTab = false;
+                taskModelConObj.modelContentStyle = 0;
+                taskModelConObj.modelTitleName = ["通知公告"];
+                taskModelConObj.modelTabContent = [taskNoticeContent];
+                taskModelConObj.modelContentUrl = [taskNoticeContentUrlArr];
+                taskModelConObj.modelMoreName = ["更多>>>"];
+                modelMoreAddressUrl.push("javascript:wopn('" + getRootPath() + "/indexs/generalPortalContentMore.html')");
+                taskModelConObj.modelMoreAddress = [modelMoreAddressUrl];
+                taskModelConObj.init();
+                
+                
+                /**
+                 * 重要科技活动
+                 */
+                var taskGeneralEventContent = new Array();
+                var taskGeneralEventUrlArr = new Array();
+                var jsonData = getGeneralEventLists();
+                $.each(jsonData, function(index, item){
+                    var monday = item.MONDAY;
+                    var title = item.eventTime;
+                    taskGeneralEventContent.push(title);
+                    taskGeneralEventUrlArr.push("javascript:wopn('" + getRootPath() + "/indexs/generalEventPublisFindView.html?monday=" + monday + "&title=" + title + "')");
+                });
+                
+                var taskGeneralEventModelObj = new modelDiv("generalEvent");
+                var generalModelMoreAddressUrl = new Array();
+                taskGeneralEventModelObj.modelTab = false;
+                taskGeneralEventModelObj.modelContentStyle = 0;
+                taskGeneralEventModelObj.modelTitleName = ["重要科技活动"];
+                taskGeneralEventModelObj.modelTabContent = [taskGeneralEventContent];
+                taskGeneralEventModelObj.modelContentUrl = [taskGeneralEventUrlArr];
+                taskGeneralEventModelObj.modelMoreName = ["更多>>>"];
+                generalModelMoreAddressUrl.push("javascript:wopn('" + getRootPath() + "/indexs/generalEventContentMore.html')");
+                taskGeneralEventModelObj.modelMoreAddress = [generalModelMoreAddressUrl];
+                taskGeneralEventModelObj.init();
+                getProjectStatics();
+				getBudgetChartByYear();
+                sourceChart();
+            });
+            /**
+             * 项目类型统计
+             */
+            function getProjectStatics(){
+                var amodelObj1 = new modelDiv("statistics");
+                var apicContent = new Array();
+                apicContent.push("<div id=\"chartContainer\">Chart shows here.</div>");
+                
+                amodelObj1.modelTab = false;
+                amodelObj1.modelContentStyle = 2;
+                amodelObj1.modelTitleName = ["项目类型统计"];
+                amodelObj1.modelTabContent = [apicContent];
+                amodelObj1.init();
+                doManager("projectForecastManager", "getProjectStatics", null, function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        var resultObj = data.data;
+                        var jsonObj = '{' +
+                        '"chart":' +
+                        '{' +
+                        '"caption" : "各业务类型项目数量" ,' +
+                        '"xAxisName" : "业务类型",' +
+                        '"yAxisName" : "项目数量（个）"' +
+                        '},' +
+                        '"data" : ' +
+                        resultObj +
+                        '}';
+                        
+                        var myChart = new FusionCharts("Column2D", "myChartId", "500", "270");
+                        myChart.setJSONData(jsonObj);
+                        myChart.render("chartContainer");
+                    }
+                });
+            }
+            
+            /**
+             * 项目资金落实及支出情况
+             */
+            function getBudgetChartByYear(){
+                var amodelBudgetChart = new modelDiv("budgetChart");
+                var apicBudgetChartContent = new Array();
+                apicBudgetChartContent.push("<div id=\"chartContainers\">Chart shows here.</div>");
+                
+                amodelBudgetChart.modelTab = false;
+                amodelBudgetChart.modelContentStyle = 2;
+                amodelBudgetChart.modelTitleName = ["项目资金落实及支出情况"];
+                amodelBudgetChart.modelTabContent = [apicBudgetChartContent];
+                amodelBudgetChart.init();
+                var year = new Date().getFullYear();
+                //绘图
+                doManager("budgetProjectManager", "getBudgetChartByYear", "" + year, function(data, textStatus, XMLHttpRequest){
+                    if (data.result) {
+                        var myChart = new FusionCharts("MSColumn3DLineDY", "myChart" + new Date().getTime(), "500", "270");
+                        myChart.setXMLData(data.data.substring(1, data.data.length - 1));
+                        myChart.render("chartContainers");
+                    }
+                    else {
+                        $$.showMessage("${system.info}", "获取填报信息出错！");
+                    }
+                });
+            }
+            
+            /**
+             * 项目来源统计
+             */
+            function sourceChart(){
+                var amodelBudgetChart = new modelDiv("projectNumBySource");
+                var apicBudgetChartContent = new Array();
+                apicBudgetChartContent.push("<div id=\"fromChartContainer\">sourceChart.</div>");
+                
+                amodelBudgetChart.modelTab = false;
+                amodelBudgetChart.modelContentStyle = 2;
+                amodelBudgetChart.modelTitleName = ["项目来源统计"];
+                amodelBudgetChart.modelTabContent = [apicBudgetChartContent];
+                amodelBudgetChart.init();
+                
+                doManager("generalStaticsManager", "showProjectNumBySource", null, function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        var resultObj = data.data; //获取结果（JSON对象）
+                        var jsonString = '{' +
+                        '"chart":' +
+                        '{' +
+                        '"caption" : "项目来源统计" ' +
+                        '},' +
+                        '"data" : ' +
+                        resultObj +
+                        '}';
+                        
+                        //显示图表
+                        var myCharts = new FusionCharts("Doughnut3D", "myChartIds", "500", "270");
+                        myCharts.setJSONData(jsonString);
+                        myCharts.render("fromChartContainer");
+                    }
+                });
+            }
+            /**
+             * 待办事项
+             */
+            function getToDoModleByUserId(){
+                var todoModle;
+                doManager("toDoByModuleManager", "getToDoByModuleByUserId", "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        if (data.data != null) {
+                            var returnObj = $.fromJSON(data.data);
+                            todoModle = returnObj;
+                        }
+                    }
+                    else {
+                        $$.showMessage("系统提示", "取得信息出错!" + data.message);
+                    }
+                }, false);
+                return todoModle;
+            }
+            /**
+             * 已办事项
+             */
+            function getDoneModleByUserId(){
+                var todoModle;
+                doManager("DoneByModuleManager", "getDoneByModuleByUserId", "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        if (data.data != null) {
+                            var returnObj = $.fromJSON(data.data);
+                            todoModle = returnObj;
+                        }
+                    }
+                    else {
+                        $$.showMessage("系统提示", "取得信息出错!" + data.message);
+                    }
+                }, false);
+                return todoModle;
+            }
+			/**
+             * 办结事项
+             */
+            function getFinishedModleByUserId(){
+                var FnModle;
+                doManager("finishedByModuleManager", "getFinishedByModuleByUserId", "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        if (data.data != null) {
+                            var returnObj = $.fromJSON(data.data);
+                            FnModle = returnObj;
+                        }
+                    }
+                    else {
+                        $$.showMessage("系统提示", "取得信息出错!" + data.message);
+                    }
+                }, false);
+                return FnModle;
+            }
+            /**
+             * 我关注的项目
+             */
+            function getCurrentUserAttentions(){
+                var projectForecastAttentions;
+                doManager("projectForecastAttentionManager", "getCurrentUserAttentions", "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        if (data.data != null) {
+                            var returnObj = $.fromJSON(data.data);
+                            projectForecastAttentions = returnObj;
+                        }
+                    }
+                    else {
+                        $$.showMessage("系统提示", "取得信息出错!" + data.message);
+                    }
+                }, false);
+                return projectForecastAttentions;
+            }
+            /**
+             * 通知公告
+             */
+            function getGeneralPortalContentDtos(){
+                var generalPortalContentDtos;
+                doManager("generalPortalContentManager", "getGeneralPortalContentDTOList", "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        if (data.data != null) {
+                            var returnObj = $.fromJSON(data.data);
+                            generalPortalContentDtos = returnObj;
+                        }
+                    }
+                    else {
+                        $$.showMessage("系统提示", "取得信息出错!" + data.message);
+                    }
+                }, false);
+                return generalPortalContentDtos;
+            }
+            /**
+             * 重要科技活动
+             */
+            function getGeneralEventLists(){
+                var getGeneralEventList;
+                doManager("generalEventManager", "getGeneralEventList", "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        if (data.data != null) {
+                            var returnObj = $.fromJSON(data.data);
+                            getGeneralEventList = returnObj;
+                        }
+                    }
+                    else {
+                        $$.showMessage("系统提示", "取得信息出错!" + data.message);
+                    }
+                }, false);
+                return getGeneralEventList;
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            <ul>
+                <li>
+                    <div id="taskDiv" class="model_main">
+                    </div>
+                </li>
+                <li>
+                    <div id="taskAttention" class="model_main">
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div id="noticeBar" class="model_main">
+                    </div>
+                </li>
+                <li>
+                    <div id="generalEvent" class="model_main">
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div id="statistics" class="model_main">
+                    </div>
+                </li>
+                <li>
+                    <div id="budgetChart" class="model_main">
+                    </div>
+                </li>
+            </ul>
+            <ul>
+                <li>
+                    <div id="projectNumBySource" class="model_main">
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>表单列表</title>
+		<script type="text/javascript" src="../scripts/bidLib.js"></script>
+		<script type="text/javascript" src="../scripts/common/common-simpletable.js"></script>
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/common-simpletable.css">
+    <script src="../bizbase/js/orgDialog.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			function doneClick(url){
+        var selOrgId=$("#orgId").val();
+        var selOrgCode=$("#orgCode").val();
+        var selOrgName=encodeURIComponent($("#orgName").val());
+        if (selOrgId!="") {
+          if (url.indexOf("?")>-1) {
+            url+="&flowOrgId="+selOrgId+"&flowOrgCode="+selOrgCode+"&flowOrgName="+selOrgName;
+          } else {
+            url+="?flowOrgId="+selOrgId+"&flowOrgCode="+selOrgCode+"&flowOrgName="+selOrgName;
+          }
+        }
+        top.appFrame.location=".."+url;
+			}
+
+			$(function() {
+				$("#userId").val(getCurrentUserId());
+				$$.executeSearch('wfFinishedByModule', 'conditionsDiv');
+			})
+
+			function getCurrentUserId(){
+                var userid = "";
+                doManager("userManager", "getCurrentUserDTO", "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result == true) {
+                        if (data.data != "null") {
+                            var returnObj = $.fromJSON(data.data);
+                            userid = returnObj.id;
+                        }
+                    }
+                    else {
+                        $$.showMessage("${system.info}", "取得登录人信息出错!");
+                    }
+                }, false);
+                return userid;
+            }
+			var COLUMNS = {
+            	"moduleType": function(aData, iColumn, sColumnName, map){
+                	return "<a href='javascript:void(0)' onclick='doneClick(\"" + map.moduleUrl + "\")'>" + map.moduleType + "</a>";
+				}
+			}
+
+      //选择承担单位
+      function selProjectOrg(){
+        orgDialog(selProjectOrgCallBack,"radio","other","null","2","");
+      }
+
+      //选择承担单位的回调函数
+      function selProjectOrgCallBack(resultStr){
+        var selResult = $.fromJSON(resultStr);
+        var orgId = selResult[0].id;
+        var orgName=selResult[0].name;
+        var orgCode=selResult[0].code;
+
+        $("#orgId").val(orgId);
+        $("#orgIds").val(orgId);
+        $("#orgName").val(orgName);
+        $("#orgCode").val(orgCode);
+
+        doManager("purStruOrgManager", "getOrgFlag", orgId, function(data, textStatus, XMLHttpRequest){
+          if (data.result == true) {
+            if (data.data != "null") {
+              var returnObj = $.fromJSON(data.data);
+              if (returnObj[0] != "2") {
+                doManager("purStruOrgManager", "getChildsIdByParentId", orgId + "", function(data, textStatus, XMLHttpRequest){
+                  if (data.result == true) {
+                    if (data.data != "null") {
+                      var ids = $.fromJSON(data.data);
+                      $("#orgIds").val(ids);
+                    }
+                  } else {
+                    $$.showMessage("${system.info}", "取得" + orgName + "下级单位出错!");
+                  }
+                }, false);
+              }
+            }
+          } else {
+            $$.showMessage("${system.info}", "取得单位属性出错!");
+          }
+        });
+      }
+
+      function stateReset(){
+        $("#orgId").val("");
+        $("#orgIds").val("");
+        $("#orgName").val("");
+        $("#orgCode").val("");
+      }
+
+      function onSearch(){
+        $$.executeSearch('wfFinishedByModule', 'conditionsDiv');
+      }
+		</script>
+	</head>
+	<body>
+		<form id="form00" class="pmsForm">
+      <div id="conditionsDiv" class="containerbody" >
+        <table style="width:100%" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="right" width="120px">组织机构：</td>
+            <td class="basetext" align="left">
+              <input style="width:280px" id="orgName" name="orgName" type="text" class="inputtext_dis" likeOption="false" readonly/>
+              <input type="button" class="buttonu" value="选择" onclick="selProjectOrg()" />
+              <input type="hidden" id="userId" name="userId" class="inputtext" value=""/>
+              <input type="hidden" id="orgId" name="orgId"  value=""/>
+              <input type="hidden" id="orgIds" name="orgIds"  value=""/>
+              <input type="hidden" id="orgCode" name="orgCode"  value=""/>
+            </td>
+          </tr>
+          <tr class="Colorbar3">
+            <td colspan="2" style="width:100%">
+              <input type="button" class="buttonu" value="查询" onclick="onSearch();"/>&nbsp;|&nbsp;
+              <input type="button" class="buttonu" value="重置" onclick="stateReset()"/>&nbsp;
+            </td>
+          </tr>
+        </table>
+      </div>
+    </form>
+		<div id="doneListQuerygridContainer" managername="toDoByModuleManager" methodname="getFinishedTasks" showRidaoButton="true" fnRender="renderColumns" titleAlign="center" configbutton="false" searchDiv="conditionsDiv"
+			usecache="true" queryid="wfFinishedByModule" showsearch="false" showdisplay="false" showtitle="true" autoload="false" showprint="false" showpaging="true" showcheckbox="false">
+        </div>
+	</body>
+</html>

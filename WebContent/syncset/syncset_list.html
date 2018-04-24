@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>数据同步设置</title>
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+<link
+	href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css"
+	rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+</head>
+<script>
+function sleep(numberMillis) { 
+	   var now = new Date();
+	   var exitTime = now.getTime() + numberMillis;  
+	   while (true) { 
+	       now = new Date(); 
+	       if (now.getTime() > exitTime)   {
+	       	  return;
+	       }
+	 }
+}
+	//同步数据【线下库】daqWeb >>> gasqDW_OFF
+	function doSyncGasqDWOff(){
+		$("#msg").html("同步中...请耐心等待!");
+		alert($("#msg").html());
+		sleep(1000);
+		//同步方法 
+		doManager("SyncDataManager", "syncDatagasqDWOFFSet", null, function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				var codeval = jsonData.code;
+				if(codeval==0){
+					$("#msg").html("同步完成！ ");	
+				}else{
+					$("#msg").html("同步失败！  异常："+jsonData.message);	
+				}
+			}
+		},false);
+	}
+	
+	
+	function doBackUpDB(){
+		$("#msgdb").html("备份中...请耐心等待!");
+		alert($("#msgdb").html());
+		sleep(1000);
+		//同步方法 
+		doManager("SyncDataManager", "syncBackUpDaqWeb", null, function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				var codeval = jsonData.code;
+				if(codeval==0){
+					$("#msgdb").html("备份完成！ ");	
+				}else{
+					$("#msgdb").html("备份失败！  异常："+jsonData.message);	
+				}
+			}
+		},false);
+	}
+</script>
+<body style="height: 100%">
+	<div class="rightcont clear">
+		<div class="panel panel-primary">
+			<div class="panel-heading">数据同步设置</div>
+			<div class="panel-body">
+			<div class="panel-footer" style="text-align: left;">
+				<button class="btn btn-primary" onclick="doBackUpDB();">数据库备份</button>
+				<label id="msgdb" style="color: red;"></label>
+			</div>
+			
+			<div class="panel-footer" style="text-align: left;">
+				<button class="btn btn-primary" onclick="doSyncGasqDWOff();">同步数据【线下库gasqDW_OFF】</button>
+				<label id="msg" style="color: red;"></label>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

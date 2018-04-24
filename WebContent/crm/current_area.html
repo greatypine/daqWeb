@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>片区首页</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="dist/css/tTurnover-head-scoll.css">
+  <!--map style-->
+  <link rel="stylesheet" href="dist/css/map-style.css">
+  <!-- gooey-menu -->
+  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min.css">
+  <link rel="stylesheet" href="dist/css/onoffset.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+   
+    .dl-horizontal dt{width: 100px;}
+    .dl-horizontal dd{margin-left: 120px;}
+    .box{width: 100%;margin-bottom:0; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6); cursor: pointer; background: none; color: #fff; height: 140px; overflow: hidden; position: absolute; z-index: 100}
+    .box-header{color: #fff;}
+    .box:hover{box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);}
+    .info_head .box:hover{height: auto; background-color: #11214e;}
+    .navbar-custom-menu{margin-right: 20px;}
+	.logo-lg img:nth-child(1){width: auto; height: 30px;}
+	.logo-lg img:nth-child(2){width: auto; height: 20px; margin-top: 5px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+
+    #main10 div,#city_name{display: none;}
+    .crumbs a{padding: 5px 10px; background-color: #3c8dbc; color: #fff; margin-right: 10px; border-radius: 5px;}
+    .crumbs .store_dis{padding: 5px 10px;background: none; color: #fff; margin-right: 10px; border-radius: 5px;curosr: pointer}
+    .control-sidebar-bg{width: 100%; min-height: 100vh; background-color: rgba(0,0,0,0.5); background-size: cover; padding: 0; margin: 0; top: 0; left: 0; z-index: 2000; display: none;}
+	#mapContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+     } 
+     
+     .marker-route {
+          position: absolute;
+          padding: 5px 10px;
+          color: #e90000;
+          background:#4598e0;
+          cursor: pointer;
+          white-space:nowrap;
+          position: relative;
+          color: #fff;
+          border-radius: 3px;
+          font-size:14px;
+        }
+        
+     .marker-route:after {
+       	content:'';
+        position: absolute;
+       	width: 0;
+	    height: 0;
+	    border-left: 5px solid transparent;
+	    border-right: 5px solid transparent;
+	    border-top: 6px solid #4598e0;
+      	bottom: -6px;
+       	left:50%;
+       	margin-left:-5px;
+      }
+     
+    #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	 /*全屏样式*/
+    #mask{width:100%; height:100%; position:fixed; top:0; left:0; display: none; z-index:9999999; background-color: rgba(0,0,0,0.7);}
+    #mask-body{ position: absolute; top: 50px; left: 50px; height: 600px; opacity: 1; z-index: 99; }
+    #mask-header{ position: absolute; top: 50px; left: 0px; height: 50px; opacity: 1; z-index: 999; }
+    #mask-header>button{ padding: 3px 5px;  position: absolute; left: 15px; top: -45px; cursor: pointer; }
+	
+      /*黑色背景*/
+    body{background: url("dist/img/home-bg.jpg") no-repeat center;background-size: cover;}
+    .content-wrapper,.skin-blue .wrapper{background: none;}
+    .skin-blue .main-header .navbar{background-color: #11214e;}
+    .nav_dropdown{background-color: #11214e;}
+    .nav_dropm,.nav_mark_bg{background-color: #0f1937;}
+    .nav-mark > a,.nav-mark > i,.sidebar_active > a,.sidebar_active > a >i{color: #46a3ff!important;}
+    .skin-blue .main-header li.user-header{background-color: #11214e;}
+
+    /*翻页效果*/
+    .dataStatistics{cursor: pointer; color: #fff; font-family: futura_mdcn_btmedium; text-align: center; font-size: 70px; position: relative;}
+    .data_new{position: relative; float: left; left: 50%;}
+    .digit_set{border: 1px solid #078dff; border-radius: 4px; perspective: 200px; height: 90px!important; margin: 0 5px!important; width: 57px!important; right: 50%;}
+    .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #11214e; border-radius: 4px;}
+    .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #11214e; border-radius: 4px; text-align: center;}
+    .dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}
+    .dataStatistics .digit > div.digit_bottom .digit_wrap, .dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -80%;}
+    /*逗号*/
+    .douhao{width: 16px; height: 21px; background: url("dist/img/douhao.png") no-repeat; float: left; position: relative; right: 50%;bottom: -70px;}
+    
+    .menu{position: absolute; bottom: 10px;  right: 6px;min-width:150px; background-color: #fff;border-radius:4px}
+	.legend{font-size: 14px; padding: 15px 0 0 15px;}
+	.menu_list{ width: 150px; padding-top: 0px; box-shadow: 1px 2px 1px rgba(0,0,0,.15);-webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out;}
+
+	.menu_list li{
+/* 	line-height: 22px;  */
+	font-size: 6px; 
+	padding-right:0;
+/* 	padding-bottom: 10px; */
+	}
+	.menu_list li:nth-last-child(1){border: none;}
+	/*.menu_list li span{color: #0a67f2; font-weight: bold; font-size: 16px; padding-right: 5px;}*/
+	.menu_list li p:nth-child(1){padding-bottom: 2px; color: #333;}
+	p{margin: 0;}
+	.menu_list li a{color: #999; display: inline-block; width: 100%; text-decoration: none; padding-top: 5px;}
+
+	.no-padding{padding: 0;}
+	.menu_list .col-sm-3{ height: 10px; margin: 5px 0 0 0; background-color: #00a7d0;}
+	.menu_list .col-sm-9 b{padding-left: 10px;}
+	
+	
+	.menu_list::-webkit-scrollbar{width: 8px; background-color: #fff;}
+    .menu_list::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 5px;}
+    .menu_list::-webkit-scrollbar-track{background-color: #fff;}
+    
+    #more_areaDiv select{ 
+      height: 30px;
+      margin: 10px 10px 10px 20px;
+      width: 210px;
+      border-radius: 6px;
+    }
+      
+      .gengduo{position:absolute;right:20px;top:5px;}
+	  .gengduo a {color: #747474;font-size: 12px;}
+	  .gengduo:hover{cursor:pointer}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" ></div>
+<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+
+<!-- Site wrapper -->
+<div class="wrapper">
+ <div id="mask" style="width: 100%;height:100%;z-index:120px">
+    <div id="mask-header"><button class="btn btn-primary">退出</button></div>
+    <div id="mask-body"></div>
+
+  </div>
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+     <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      
+
+        <div class="pull-left">
+ 		<section class="sidebar logo-lg clearfix no-padding">
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+              <li id="countryFirstPage_img" style="display:none"><a href="javascript:goCountry();" class="h2"> <img src="dist/img/logo1.png"> <img src="dist/img/title.png"></a></li>
+              <li id="storeFirstPage_img" ><a href="javascript:location.reload();" class="h2"> <img src="dist/img/logo1.png"> <img src="dist/img/title.png"></a></li>
+		      <li class="nav-mark" id="countryFirstPage_a" style="display:none"><a href="javascript:goCountry();"></a> </li>
+		      <li class="nav-mark" id="storeFirstPage_a"><a href="javascript:location.reload();"></a> </li>
+              <li class="treeview">
+                <a href="#">
+                  <span onclick="goStatistics()">数据统计</span>
+<!--                   <i class="fa fa-angle-down"></i> -->
+                </a>
+<!--                 <ul class="treeview-menu nav_dropdown"> -->
+<!--                 <li> -->
+<!--                     <a href="#">交易额统计<i class="fa fa-angle-right pull-right"></i></a> -->
+<!--                     <ul class="treeview-menu nav_dropm"> -->
+<!--                       <li><a href="javascript:goToStoretrade()">按门店</a></li> -->
+<!--                       <li><a href="javascript:goToAreaGMVToSend()">按片区</a></li> -->
+<!--                     </ul> -->
+<!--                   </li> -->
+<!--                    <li> -->
+<!-- 	                    <a href="#">用户量统计<i class="fa fa-angle-right pull-right"></i></a> -->
+<!-- 	                    <ul class="treeview-menu nav_dropm"> -->
+<!-- 	                      <li><a href="javascript:goToNewaddcus()">按门店</a></li> -->
+<!-- 	                      <li><a href="javascript:goToNewAddCustomerGMVToSend()">按片区</a></li> -->
+<!-- 	                    </ul> -->
+<!-- 	                  </li> -->
+<!-- 	                  <li> -->
+<!-- 	                    <a href="#">重点产品GMV统计<i class="fa fa-angle-right pull-right"></i></a> -->
+<!-- 	                    <ul class="treeview-menu nav_dropm"> -->
+<!-- 	                      <li><a href="javascript:goToGMVInfo()">按门店</a></li> -->
+<!-- 	                      <li><a href="javascript:goToEmphasesProductsGMVToSend()">按片区</a></li> -->
+<!-- 	                    </ul> -->
+<!-- 	                  </li> -->
+		              
+<!-- 	                  <li><a href="javascript:goToStoreTradeOfDept()">事业部(服务专员)交易额</a> </li> -->
+<!-- 	                    <li><a href="javascript:goToSendorders()">国安侠送单量</a> </li> -->
+<!-- 	                    <li><a href="javascript:goToRewardtimes()">国安侠好评次数</a> </li> -->
+<!--                            <li><a href="javascript:goToRelation()">拜访记录统计</a> </li> -->
+<!--                            <li><a href="javascript:goToCustomer()">用户画像统计</a> </li> -->
+<!--                            <li><a href="javascript:goToExpressToSend()">快递代送统计</a> </li> -->
+<!-- 	                    <li><a href="javascript:goToOfficeInfo()">写字楼统计</a> </li> -->
+<!-- 	                    <li><a href="javascript:goToBusinessInfo()">商业信息统计</a> </li> -->
+<!-- 	                    <li><a href="javascript:goToAbnormalOrderResult()">虚假交易结果统计</a></li> -->
+	                    
+<!--                 </ul> -->
+              </li>
+              
+              <li class="treeview">
+                <a href="#">
+                  <span>数据模型</span>
+<!--                   <img alt="" src="dist/img/new.gif" style="position:absolute;width:27px;height:24px;margin-top:10px;margin-left:5px;">
+ -->                  <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="treeview-menu nav_dropdown">
+                 	 <li><a href="#"><span>订单模型</span>&nbsp;<i class="fa fa-angle-right pull-right"></i></a>
+		                <ul class="treeview-menu nav_dropm">
+		                <li><a href="javascript:goToAbnormalOrder()">异常订单</a> </li>
+		                <li><a href="javascript:goToPublicOrder()">公海订单</a> </li>
+		                </ul>
+		              </li>
+		              <li><a href="#"><span>地图模型</span>&nbsp;<i class="fa fa-angle-right pull-right"></i></a>
+		                <ul class="treeview-menu nav_dropm">
+			                <li><a href="javascript:goToTinyArea()">混片区域分布</a> </li>
+		                </ul>
+		              </li>
+                </ul>
+                </li>
+              <li><a href="#"><span>数据档案</span>&nbsp;<i class="fa fa-angle-down"></i></a>
+                <ul class="treeview-menu nav_dropdown">
+                  <li><a href="javascript:searchData()">订单档案</a> </li>
+<!--                   <li><a href="javascript:searchArea()">片区档案</a> </li> -->
+                </ul>
+              </li>
+<!--               <li><a href="javascript:useData()"><span>数据下载</span>&nbsp;<i class="fa fa-angle-down"></i></a> -->
+<!--                 <ul class="treeview-menu nav_dropdown"> -->
+<!--                   <li><a href="javascript:aboutCustomerInfo()">用户信息</a> </li> -->
+<!--                   <li><a href="javascript:aboutOrderInfo()">订单信息</a> </li> -->
+<!--                 </ul> -->
+<!--               </li> -->
+               
+              
+
+            </ul>
+
+          </section>
+           
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <li ><a href="../crm/loginplatform.html">数据平台首页</a> </li>
+            <li class="dropdown user user-menu" id="login_logout" style="display:block">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+
+                  <p><strong ><span id="card_name">载入中...</span></strong></p>
+                  <p><span id="card_no">载入中...</span></p>
+                  <p ><span id="store_name">载入中...</span></p> 
+                </li>
+                <!-- Menu Body -->
+                <li class="user-header">
+                 <!--  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">划片区域</a>
+                    </div>
+                  </div> -->
+                  <!-- /.row -->
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      
+    </nav>
+  </header>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper" >
+    <!-- Main content -->
+    <section class="content-header clearfix">
+       <div class="info_head with-border col-lg-3 col-sm-3 col-xs-12">
+        <div class="box no-border">
+          <div class="box-header h4 text-yellow"><strong id="area_name_left_top">--</strong></div>
+          <div class="box-body no-padding" id="mdxx">
+            <dl class="dl-horizontal">
+                  <dt >片&nbsp;区&nbsp;编&nbsp;号&nbsp;</dt>
+                  <dd id="area_no_left"></dd>
+                  <dt>国安侠（A）</dt>
+                  <dd id="gax_a_left"></dd>
+                  <dt>国安侠（B）</dt>
+                  <dd id="gax_b_left"></dd>
+                  <dt>小区</dt>
+                  <dd id="tinyVillage_num_left"></dd>
+                  <dt>住户</dt>
+                  <dd id="house_num_left"></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <!--实时数据-->
+      <div class="text-muted col-lg-6 col-sm-6 col-xs-12">
+        <h3 class="text-center">当日累计营业额(元)</h3>
+        <div class="dataStatistics">
+        <div class="data_new">
+          <div class="digit_set" ></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+           <div class="douhao" id="dou1"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+           <div class="douhao" id="dou2"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set set_last"></div>
+          </div>
+        </div>
+        <div align="right" style="margin-top: 10px;margin-right:40px;">动态滚动<input id="onoffset" class="mui-switch mui-switch-anim" type="checkbox" style="zoom:50%;vertical-align:-5px;" /><select style="width: 100px;color: black;background-color: #D3D3D3;width:60px;height:20px;" id="setTime"><option value="5">5分</option><option value="30">30分</option><option value="60">1小时</option><option value="240">4小时</option><option value="525600">一年</option></select></div>
+      </div>
+      <!--历史数据-->
+      <div class="info_bottom col-lg-3 col-sm-3 col-xs-12" style="z-index:90;">
+			<nav id="data_card">
+				  <input type="checkbox" class="menu-open" name="menu-open1" id="menu-open1"/>
+				  <label class="open-button" for="menu-open1">
+				    <span class="burger burger-1"></span>
+				    <span class="burger burger-2"></span>
+				    <span class="burger burger-3"></span>
+				  </label>
+<!-- 				  <a href="javascript:goToNewaddcus()" id="a_newaddcus" class="gooey-menu-item" style="line-height:24px"><p id="n_newaddcus">付费用户</p><p style="display:none" id="v_newaddcus">--</p></a> -->
+<!-- 				  <a href="javascript:goToRebuycus()" id="a_rebuycus" class="gooey-menu-item" style="line-height:24px"><p id="n_rebuycus">复购客户</p><p style="display:none" id="v_rebuycus">--</p></a> -->
+<!-- 				  <a href="javascript:goToStoretrade()" id="a_storetrade" class="gooey-menu-item" style="line-height:24px"><p id="n_storetrade">营业额</p><p style="display:none" id="v_storetrade">--</p></a> -->
+<!-- 				  <a href="javascript:goToSendorders()" id="a_sendorders" class="gooey-menu-item" style="line-height:24px"><p id="n_sendorders">订单量</p><p style="display:none" id="v_sendorders">--</p></a> -->
+<!-- 				  <a href="javascript:goToRewardtimes()" id="a_rewardtimes" class="gooey-menu-item" style="line-height:24px"><p id="n_rewardtimes">好评次数</p><p style="display:none" id="v_rewardtimes">--</p></a> -->
+			 </nav>
+      </div>
+       
+    </section>
+
+    <section class="content-header clearfix" style="margin-top: 30px;">
+      <div class="col-sm-4">
+        <div id="main1" style="width: 100%;height:400px;"></div>
+        <div class="gengduo" ><a href="javascript:more_area_gmv()">更多</a></div>
+      </div>
+      <div class="col-sm-4 no-padding">
+		  <div class="crumbs" style="display:none"><a href="javascript:goCountry()">全国</a><span style="color:#f6f6f6">&nbsp;>&nbsp;</span><a href="javascript:gopro()" id="pro_country">--</a><span style="color:#f6f6f6">&nbsp;>&nbsp;</span><a href="javascript:void()" class="store_dis" style="cursor:default" id="pro_country_store">--</a> 
+          </div>
+          <span class="pull-right" onclick="fullscreen()" style="z-index:200px"><img src="dist/img/fullscreen.png"> </span>
+          <input id="fscreen" hidden="hidden">
+          <div class="box-body" style="position:relative;top:22px;height:350px;" id="mapHeight">
+          <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);border-radius:20px;z-index:120"></div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div id="main2" style="width: 100%;height:400px;"></div>
+      </div>
+    </section>
+
+    <section class="content-header clearfix" style="margin-top: 30px;">
+      <div class="col-sm-3 no-padding">
+        <div id="main3" style="width: 100%;height:300px;"></div>
+        <div class="gengduo" ><a href="javascript:more_gax_gmv()">更多</a></div>
+        <div id="main7" style="width: 100%;height:350px;"></div>
+        <div class="gengduo" style="top:310px" ><a href="javascript:more_gax_order()">更多</a></div>
+      </div>
+      <div class="col-sm-6 no-padding">
+        <div class="pull-left" style="width: 50%">
+          <div id="main5" style="width: 100%;height:600px;"></div>
+          <div class="gengduo" style="right:470px"><a href="javascript:more_estore_gmv()">更多</a></div>
+        </div>
+        <div class="pull-left" style="width: 50%">
+          <div id="main6" style="width: 100%;height:600px;"></div>
+        </div>
+      </div>
+      <div class="col-sm-3 no-padding">
+        <div id="main4" style="width: 100%;height:300px;"></div>
+        <div class="gengduo" ><a href="javascript:more_channel_gmv()">更多</a></div>
+        <div id="main8" style="width: 100%;height:350px;"></div>
+        <div class="gengduo" style="top:310px" ><a href="javascript:more_channel_order()">更多</a></div>
+      </div>
+    </section>
+
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- page script -->
+<script src="dist/js/jquery.dataStatistics.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script type="text/javascript" src="dist/js/echarts.common.min.js"></script>
+<script type="text/javascript" src="dist/js/china.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+<!-- gooey-menu -->
+<script type="text/javascript" src="plugins/gooey_menu/gooey.min.js"></script>
+<!-- 页面缓存 script -->
+<script src="dist/js/headquarters/cache.js"></script>
+<!-- 片区首页 script -->
+<script src="dist/js/area/current_area.js"></script>
+<script type="text/javascript">
+	
+	
+	<!-----------------------------设置高德地图全屏div参数	开始--------------->
+	Date.prototype.format=function(fmt) {        
+	  var o = {        
+	  "M+" : this.getMonth()+1, //月份        
+	  "d+" : this.getDate(), //日        
+	  "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+	  "H+" : this.getHours(), //小时        
+	  "m+" : this.getMinutes(), //分        
+	  "s+" : this.getSeconds(), //秒        
+	  "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+	  "S" : this.getMilliseconds() //毫秒        
+	  };        
+	  var week = {        
+	  "0" : "\u65e5",        
+	  "1" : "\u4e00",        
+	  "2" : "\u4e8c",        
+	  "3" : "\u4e09",        
+	  "4" : "\u56db",        
+	  "5" : "\u4e94",        
+	  "6" : "\u516d"       
+	  };        
+	  if(/(y+)/.test(fmt)){        
+	      fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+	  }        
+	  if(/(E+)/.test(fmt)){        
+	      fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+	  }        
+	  for(var k in o){        
+	      if(new RegExp("("+ k +")").test(fmt)){        
+	          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+	      }        
+	  }        
+	  return fmt;        
+	} 
+  
+	
+  //阻止右上角弹窗关闭冒泡到父窗口
+  function siwtchStore(evt){
+	  evt = evt ? evt : (window.event ? window.event :null);  
+	  evt.stopPropagation(); 
+  }
+ 
+  //切换门店
+  function updatestoreid(selectobj){
+		 
+		var store_id=selectobj.value;
+		STORE_ID = store_id;
+		//更改店长用户的 store_id
+		var url = "../dispatcher.action";
+		var data = new PMSRequestObject("userManager", "updateUserStoreId",[store_id,EMPLOYEE_NO]);
+		$$.ajax(url, "requestString=" + data.toJsonString(), function(datas,
+				textStatus, XMLHttpRequest) {
+			if (datas.result) {
+				refreshView();
+			}else{
+				$$.showMessage("系统信息", "切换失败!");
+			}
+		});
+	}
+   
+  
+   
+   //根据STORE_ID查询门店信息
+   var currentStore;
+   function initStore(){
+ 		doManager("StoreManager", "findStore",[STORE_ID],
+ 			function(data, textStatus, XMLHttpRequest) {
+ 				if (data.result) {
+ 					var store = JSON.parse(data.data);
+ 					$("#store_no").html(store.storeno);
+ 					$("#store_name_left_top").html(store.name);
+ 					$("#pro_country_store").html(store.name);
+ 					currentStore = store;
+ 				}
+ 		},false);
+ 	}
+   
+
+//门店营业额
+function initStoreGMV(){
+	//取得当前登录人的门店
+	doManager("dynamicManager", "selectGMVOfStore",[STORE_ID],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						
+						 var gmv = JSON.parse(data.data).gmv;
+						 if(gmv!=null&&gmv.length>0){
+							 $("#cur_month_gmv").html("本月累计营业额："+gmv[0].pesgmv);
+						 }else{
+							 $("#cur_month_gmv").html("本月累计营业额：0");
+						 }
+						
+					}
+			},false);
+}
+
+//门店历史营业额
+function initStoreHistoryGMV(){
+	//取得当前登录人的门店
+	doManager("dynamicManager", "selectHistoryGmvOfStore",[STORE_ID],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						
+						 var gmv = JSON.parse(data.data).gmv;
+						 if(gmv!=null&&gmv.length>0){
+							 $("#history_gmv").html("历史累计营业额："+gmv[0].order_amount);
+						 }else{
+							 $("#history_gmv").html("历史累计营业额：0");
+						 }
+						
+					}
+			},false);
+}
+
+	
+	//事业部gmv排名
+	function  initDeptRanking_gmv(){
+			//取得当前登录人的门店
+			doManager("dynamicManager", "selectDeptRankingOfStore",[STORE_ID],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var deptGmv = JSON.parse(data.data).gmv;
+							var deptName = new Array();
+							var deptNV = new Array();
+							
+							if(deptGmv!=null){
+								for(var i=0;i<deptGmv.length;i++){
+									var v = deptGmv[i].gmv;
+									var n = deptGmv[i].career_group;
+									var vnMap = {};
+									vnMap["value"] = v;
+									vnMap["name"] = n;
+									deptName.push(n);
+									deptNV.push(vnMap);
+									
+								}
+								option2.legend.data = deptName;
+								option2.series[0].data = deptNV;
+								myChart2.setOption(option2);  
+							}
+						}
+				});
+	}
+	
+	//频道gmv排名
+	function  initChannelRanking_gmv(){
+			//取得当前登录人的门店
+			var pageInfo = new Object();
+	 	    pageInfo.currentPage = 1;
+	 	    pageInfo.recordsPerPage = 5;
+			doManager("dynamicManager", "selectChannelRankingOfStore",[STORE_ID,pageInfo],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var channelGmv = JSON.parse(data.data).gmv;
+// 							var channelName = new Array();
+// 							var channelValue = new Array();
+							var channelName = new Array();
+ 							var channelValue = new Array();
+							if(channelGmv!=null){
+								for(var i=0;i<channelGmv.length;i++){
+									var v = channelGmv[i].amount;
+									var n = channelGmv[i].name;
+									channelName[i]=n;
+									channelValue[i]=v;
+								}
+								
+								option4.xAxis[0].data = channelName;
+								option4.series[0].data = channelValue;
+								myChart4.setOption(option4);  
+							}
+							
+						}
+				});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	//小区gmv排名
+	function  initAreaRanking_gmv(){
+			//取得当前登录人的门店
+			var pageInfo = new Object();
+	 	    pageInfo.currentPage = 1;
+	 	    pageInfo.recordsPerPage = 5;
+			
+	 	    doManager("dynamicManager", "selectAreaRankingOfStore",[STORE_ID,pageInfo],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var areaGmv = JSON.parse(data.data).gmv;
+							var areaName = new Array();
+							var areaValue = new Array();
+							
+							if(areaGmv!=null){
+								for(var i=0;i<areaGmv.length;i++){
+									var v = areaGmv[i].amount;
+									var n = areaGmv[i].name;
+									areaName[i] = n;
+									areaValue[i] = v;
+								}
+								option1.xAxis[0].data = areaName;
+								option1.series[0].data = areaValue;
+								myChart1.setOption(option1);  
+							}
+							
+							
+						}
+				},false);
+	}
+	
+	//服务专员gmv
+	function  initDeptServerRanking_gmv(){
+		//取得当前登录人的门店
+		doManager("dynamicManager", "selectDeptServerRanking",[STORE_ID],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var deptGmv = JSON.parse(data.data).gmv;
+// 						var deptName = new Array();
+// 						var deptNV = new Array();
+						var deptName = new Array();
+						var deptNV = new Array();
+						if(deptGmv!=null){
+							for(var i=0;i<deptGmv.length;i++){
+								var v = deptGmv[i].gmv;
+								var n = deptGmv[i].name;
+								var vnMap = {};
+								vnMap["value"] = v;
+								vnMap["name"] = n;
+								deptName[i]=n;
+								deptNV[i] = v;
+								
+							}
+							option6.yAxis[0].data = deptName.reverse();
+							option6.series[0].data = deptNV.reverse();
+							myChart6.setOption(option6);  
+						}
+					}
+			},false);
+	}
+	
+	//国安侠gmv排名
+	var option3_employee;
+	function  initEmployeeRanking_gmv(){
+			//取得当前登录人的门店
+			var pageInfo = new Object();
+	 	    pageInfo.currentPage = 1;
+	 	    pageInfo.recordsPerPage = 5;
+			doManager("dynamicManager", "selectEmployeeRankingOfStore",[STORE_ID,pageInfo],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var empGmv = JSON.parse(data.data).gmv;
+// 							var empName = new Array();
+// 							var empValue = new Array();
+							var empName = new Array();
+							var empValue = new Array();
+							option3_employee = new Array();
+							if(empGmv!=null){
+								for(var i=0;i<empGmv.length;i++){
+									var v = empGmv[i].amount;
+									var n = empGmv[i].name;
+									empName[i]=n;
+									empValue[i]=v;
+									option3_employee[i] = empGmv[i].employee_a_no;
+								}
+								option3.xAxis[0].data = empName;
+								option3.series[0].data = empValue;
+								myChart3.setOption(option3);  
+							}
+							
+							
+						}
+				},false);
+	}
+	
+	//国安侠片区订单排名
+	var option7_employee;
+	function  initEmployeeRanking_order(){
+			//取得当前登录人的门店
+			var pageInfo = new Object();
+	 	    pageInfo.currentPage = 1;
+	 	    pageInfo.recordsPerPage = 5;
+			doManager("dynamicManager", "selectAreaOrderRanking",[STORE_ID,pageInfo],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var empOrder = JSON.parse(data.data).gmv;
+// 							var empName = new Array();
+// 							var empValue = new Array();
+							var empName = new Array();
+							var empValue = new Array();
+							option7_employee = new Array();
+							if(empOrder!=null){
+								for(var i=0;i<empOrder.length;i++){
+									var v = empOrder[i].amount;
+									var n = empOrder[i].name;
+									empName[i]=n;
+									empValue[i]=v;
+									option7_employee[i] = empOrder[i].employee_a_no;
+								}
+								option7.xAxis[0].data = empName;
+								option7.series[0].data = empValue;
+								myChart7.setOption(option7);  
+							}
+							
+							
+						}
+				},false);
+	}
+	
+	
+	//E店gmv排名
+	function  initEStoreRanking_gmv(){
+			//取得当前登录人的门店
+			var pageInfo = new Object();
+	 	    pageInfo.currentPage = 1;
+	 	    pageInfo.recordsPerPage = 5;
+			doManager("dynamicManager", "selectEStoreRankingOfStore",[STORE_ID,pageInfo],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var estoreGmv = JSON.parse(data.data).gmv;
+// 							var estoreName = new Array();
+// 							var estoreValue = new Array();
+							var estoreName = new Array();
+							var estoreValue = new Array();
+							if(estoreGmv!=null){
+								for(var i=0;i<estoreGmv.length;i++){
+									var v = estoreGmv[i].amount;
+									var n = estoreGmv[i].name==null?"":estoreGmv[i].name;
+									estoreName[i]=n;
+									estoreValue[i]=v;
+								}
+								option5.yAxis[0].data = estoreName.reverse();
+								option5.series[0].data = estoreValue.reverse();
+								myChart5.setOption(option5);  
+							}
+							
+							
+						}
+				},false);
+	}
+	
+	
+	function initChannelRanking_order(){
+		//取得当前登录人的门店
+		var pageInfo = new Object();
+ 	    pageInfo.currentPage = 1;
+ 	    pageInfo.recordsPerPage = 5;
+		doManager("dynamicManager", "selectChannelOrderRanking",[STORE_ID,pageInfo],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var channelOrder = JSON.parse(data.data).gmv;
+// 						var channelName = new Array();
+// 						var channelValue = new Array();
+						var channelName = new Array();
+						var channelValue = new Array();
+						if(channelOrder!=null){
+							for(var i=0;i<channelOrder.length;i++){
+								var v = channelOrder[i].amount;
+								var n = channelOrder[i].name;
+								channelName[i]=n;
+								channelValue[i]=v;
+							}
+							option8.xAxis[0].data = channelName;
+							option8.series[0].data = channelValue;
+							myChart8.setOption(option8);  
+						}
+						
+					}
+			},false);
+	}
+	
+	//付费用户
+	function goToNewaddcus(){
+		 
+		  var url = "dynamicData_newaddcus_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#ff";
+		  window.open(url,"dynamicData_newaddcus_analysis");
+	}
+	//复购用户
+	function goToRebuycus(){
+		  var url = "dynamicData_newaddcus_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+		  window.open(url,"dynamicData_newaddcus_analysis");
+	}
+	//交易额  
+	function goToStoretrade(){
+		  var url = "dynamicData_storetrade_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+		  window.open(url,"dynamicData_storetrade_analysis");
+	}
+	//送单量
+	function goToSendorders(){
+		  var url = "dynamicData_sendorders_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#ff";
+		  window.open(url,"dynamicData_sendorders_analysis");
+	}
+	
+	//好评次数
+	function goToRewardtimes(){
+		  var url = "dynamicData_rewardtimes_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+		  window.open(url,"dynamicData_rewardtimes_analysis");
+	}
+	
+	 //异常订单
+	function goToAbnormalOrder(){
+		  //t:职务 s:门店ID c:城市ID
+		  var url = "abnormal_order.html?t="+encode64(2)+"&c=&s=&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
+		  window.open(url,"abnormal_order"); 
+	}
+	 
+	//跳转公海 订单界面 
+	function goToPublicOrder(){
+		  //t:职务 s:门店ID c:城市ID
+		  var url = "public_order.html?t="+encode64(2)+"&c=&s=&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
+		  window.open(url,"public_order"); 
+	}
+	
+	
+	//拜访记录
+	function goToRelation(){
+		 
+		  var url = "dynamicData_relation_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+		  window.open(url,"dynamicData_relation_analysis"); 
+	}
+	
+	/**
+	 * 客户画像
+	 **/
+	function goToCustomer(){
+		  var url = "dynamicData_customer_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+		  window.open(url,"dynamicData_customer_analysis");
+	}
+
+  /**
+   * 快递派送
+   */
+  function goToExpressToSend() {
+    var url = "dynamicData_express_send.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+    window.open(url,"dynamicData_express_analysis");
+  }
+
+
+  /**
+   * 片区内GMV
+   */
+  function goToAreaGMVToSend() {
+   
+      var url = "dynamicData_area_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+      window.open(url,"dynamicData_area_GMV");
+  }
+
+  /**
+   * 片区内拉新GMV
+   */
+  function goToNewAddCustomerGMVToSend() {
+   	
+      var url = "dynamicData_newAddCustomer_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+      window.open(url,"dynamicData_newAddCustomer_GMV");
+  }
+
+
+  /**
+   * 片区内重点产品GMV
+   */
+  function goToEmphasesProductsGMVToSend() {
+   	
+      var url = "dynamicData_emphasesProducts_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+      window.open(url,"dynamicData_emphasesProducts_GMV");
+  }
+
+	//写字楼
+	function goToBusinessInfo(){
+		  crm_alert(0,"尚未开放！");
+		  //var url = "dynamicData_business_analysis.html?t="+encode64(2)+"&c=&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&#fg";
+		  //window.open(url,"dynamicData_business_analysis");
+	}
+	
+	//商业信息
+	function goToOfficeInfo(){
+		  crm_alert(0,"尚未开放！");
+		  //var url = "dynamicData_office_analysis.html?t="+encode64(2)+"&c=&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&#fg";
+		  //window.open(url,"dynamicData_office_analysis");
+	}
+	
+	
+	//异常订单
+	function goToAbnormalOrderResult(){
+		  //t:职务 s:门店ID c:城市ID
+		 
+		  var url = "abnormal_order_result.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s=&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
+		  window.open(url,"abnormal_order_result"); 
+	}
+	
+	function goToStoreTradeOfDept(){
+		  var url = "dynamicData_dept_gmv.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name);
+		  window.open(url,"dynamicData_dept_gmv");
+	}
+	
+	function searchData(){
+		  var url = "searchData_view.html?t="+encode64('2')+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName);
+		  window.open(url,"searchData_view");
+	}
+	
+	function useData(){
+		  crm_alert(0,"尚未开放！");
+	}
+	
+	function aboutCustomerInfo(){
+		  crm_alert(0,"尚未开放！");
+	}
+	
+	function aboutOrderInfo(){
+		  crm_alert(0,"尚未开放！");
+	}
+	
+	function goToGMVInfo(){
+		  var url = "dynamicData_gmv_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+		  window.open(url,"dynamicData_gmv_analysis"); 
+	}
+	
+	
+	function goToTinyArea(){
+		  var url = "tinyArea_view.html?t="+encode64(2)+"&s="+encode64(STORE_ID)+"&sn="+encode64(currentStore.name)+"&c=&e="+encode64(EMPLOYEE_ID)+"&r=&cn=";
+		  window.open(url,"tinyArea_view"); 
+	}
+	
+	
+	//退出
+	function doLogout() { 
+			
+			layer.confirm('确定退出？', {
+				  	title:['提示','color:#fff'],
+				  	offset:['100px','550px'],
+				  	move:false,
+				  	closeBtn:0,
+				  	skin:'layer-ext-crmskin',
+					btn: ['确定','取消'], //按钮
+				}, function(){
+					urlStr = "../logout.do";
+					window.location.href = urlStr;
+				}, function(){
+				  
+				});
+		}
+
+
+
+
+  // 基于准备好的dom，初始化echarts实例
+  var myChart1 = echarts.init(document.getElementById('main1'));//小区排名（本月GMV）
+  var myChart2 = echarts.init(document.getElementById('main2'));//事业群排名（本月GMV）
+  var myChart3 = echarts.init(document.getElementById('main3'));//国安侠排名（本月GMV）
+  var myChart4 = echarts.init(document.getElementById('main4'));//频道排名（本月GMV）
+  var myChart5 = echarts.init(document.getElementById('main5'));//E店排名（本月GMV）
+  var myChart6 = echarts.init(document.getElementById('main6'));//服务专员排名（本月GMV）
+  var myChart7 = echarts.init(document.getElementById('main7'));//国安侠排名（订单）
+  var myChart8 = echarts.init(document.getElementById('main8'));//频道排名（订单）
+ 
+  var option1 = {
+		    title:[
+		      {text:"片区排名（本月GMV）",x: '2%', y: '2%',textStyle:{color:"#fff",fontSize:"16"}},
+		    ],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+		        "type": "shadow" // 默认为直线，可选为："line" | "shadow"
+		      }
+		    },
+		    calculable : true,
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      top: '20%',
+		      height: 250, //设置grid高度
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        max:12,
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		          show: true,
+		          rotate:45,//倾斜度 -90 至 90 默认为0
+		          //interval: 1,
+		          textStyle: {color: '#fff'},
+		          formatter: function(value){
+		        	   if (value!=null&&value.length > 7) {
+	   		               return value.substring(0, 7) + "...";
+	   		           } else {
+	   		               return value;
+	   		           }
+		            }
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value',
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		          "show": true,
+		          rotate:45,//倾斜度 -90 至 90 默认为0
+		        }
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'GMV',
+		        type:'bar',
+		        data:[],
+		        barWidth : 20,//柱图宽度
+		        barMaxWidth:20,//最大宽度
+		        barGap: 13,
+		        barCategoryGap: 13,
+		        itemStyle: {
+		          normal: {
+		            color: function(params) {
+		              // build a color map as your need.
+		              var colorList = [
+		            	  //'#E87C25','#27727B',
+		            	  '#C1232B','#B5C334','#FCCE10',
+		                  '#0399d9','#00a7de','#00c3e7','#00ddf0','#13d4b2',
+		                  '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+		              ];
+		              return colorList[params.dataIndex]
+		            },
+		            borderWidth: 0,
+		            barBorderRadius: [10, 10, 10, 10],
+		            label: {
+		              show: true,
+		              position: 'top',
+		              formatter: '{c}'
+		            }
+		          }
+		        }
+		      }
+		    ]
+		  };
+     
+     
+     function more_area_gmv(){
+    	 var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("areaRanking_gmv");
+   	  	 window.open(URL,"areaRanking_gmv");
+     }
+      
+      myChart1.on("click",function(obj){
+	     doManager("AreaManager", "queryAreaByAreaName",[obj.name,STORE_ID],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var info = JSON.parse(data.data);
+						var areaId = info.id;
+						var URL="?"+"area_name="+encode64(obj.name)+"&&store_id="+encode64(STORE_ID)+"&&area_id="+encode64(areaId);
+						window.open("area_detail.html"+URL);
+					}else{
+						crm_alert(0,"此片区信息暂时不可查看！");
+					}
+		},false);
+      });
+      
+    
+  //国安侠gmv排名
+  var option3 = {
+		    title:[
+		      {text:"国安侠排名TOP5（本月GMV）",x: '2%', y: '0%',textStyle:{color:"#fff",fontSize:"16"}},
+		    ],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+		        "type": "shadow" // 默认为直线，可选为："line" | "shadow"
+		      }
+		    },
+		    calculable : true,
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      top: '20%',
+		      height: 250, //设置grid高度
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        max:12,
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		        	 show: true,
+			         rotate:45,//倾斜度 -90 至 90 默认为0
+			          //interval: 1,
+			         textStyle: {color: '#fff'},
+			         
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        inverse: false,
+		        type : 'value',
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		          /*textStyle:{
+		           color:'#f00'
+		           }*/
+		          "show": false
+		        }
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'GMV',
+		        type:'bar',
+		        data:[],
+		        barWidth : 20,//柱图宽度
+		        barMaxWidth:20,//最大宽度
+		        barGap: 13,
+		        barCategoryGap: 13,
+		        itemStyle: {
+		          normal: {
+		            color: function(params3) {
+		              // build a color map as your need.
+		              var colorList3 = [
+		                '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+		              ];
+		              return colorList3[params3.dataIndex]
+		            },
+		            borderWidth: 0,
+		            barBorderRadius: [10, 10, 10, 10],
+		            label: {
+		              show: true,
+		              position: 'top',
+		              formatter: '{c}'
+		            }
+		          }
+		        }
+
+		      }
+		    ]
+		  };
+  
+  function more_gax_gmv(){
+	  var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("employeeRanking_gmv");
+	  window.open(URL,"employeeRanking_gmv");
+  }
+  
+  myChart3.on('click', function (params){
+
+	  var index = params.dataIndex;
+	  var employeeNo = option3_employee[index];
+	  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
+	  window.open(URL,"employeeInfo");
+	 
+	 
+  })
+  
+//   myChart5.on('click', function (params){
+// 	  var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("eStoreRanking_gmv");
+// 	  window.open(URL,"eStoreRanking_gmv");
+//   })
+   function more_estore_gmv(){
+	  var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("eStoreRanking_gmv");
+ 	  window.open(URL,"eStoreRanking_gmv");
+  }
+
+	function more_channel_gmv(){
+	  var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("channelRanking_gmv");
+	  window.open(URL,"channelRanking_gmv");
+  	}
+//   myChart4.on('click', function (params){
+
+//   })
+  // 频道排名
+ var option4 = {
+    title:[
+      {text:"频道排名TOP5（本月GMV）",x: '2%', y: '0%',textStyle:{color:"#fff",fontSize:"16"}},
+    ],
+    tooltip : {
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        "type": "shadow" // 默认为直线，可选为："line" | "shadow"
+      }
+    },
+    calculable : true,
+    grid: {
+      left: '3%',
+      right: '4%',
+      top: '20%',
+      height: 220, //设置grid高度
+      containLabel: true
+    },
+    xAxis : [
+    {
+      type : 'category',
+      data : [],
+      max:4,
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        show: false
+      },
+      axisTick:{
+        show: false
+      },
+      axisLabel:{
+    	  show: true,
+          rotate:45,//倾斜度 -90 至 90 默认为0
+          //interval: 1,
+          textStyle: {color: '#fff'},
+          formatter: function(value) {
+             if (value!=null&&value.length > 4) {
+               return value.substring(0, 4) + "...";
+             } else {
+               return value;
+             }
+           }
+      }
+    }
+  ],
+    yAxis : [
+    {
+      inverse: true,
+      type : 'value',
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        show: false
+      },
+      axisTick:{
+        show: false
+      },
+      axisLabel:{
+        /*textStyle:{
+         color:'#f00'
+         }*/
+        "show": false
+      }
+    }
+  ],
+    series : [
+    {
+      name:'GMV',
+      type:'bar',
+      cursor: 'default',
+      data:[],
+      barWidth : 30,//柱图宽度
+      barMaxWidth:30,//最大宽度
+      barGap: 13,
+      barCategoryGap: 13,
+      itemStyle: {
+        normal: {
+          color: function(params1) {
+            // build a color map as your need.
+            var colorList1 = [
+              //'#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+              '#0399d9','#00a7de','#00c3e7','#00ddf0','#13d4b2',
+             // '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+            ];
+            return colorList1[params1.dataIndex]
+          },
+          borderWidth: 0,
+          barBorderRadius: [10, 10, 10, 10],
+          label: {
+            show: true,
+            position: 'top',
+            formatter: '{c}'
+          }
+        }
+      }
+    }
+  ]
+  };
+
+  // 事业群排名
+  var option2 = {
+    title : {
+      text: '事业群排名（本月GMV）',
+      x: '2%',
+      y: '2%',
+      textStyle:{color:"#fff",fontSize:"16"}
+    },
+    tooltip : {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+      x : 'right',
+      y : '80%',
+      //orient: 'vertical',
+      data:[],
+      textStyle:{color:"#fff"}
+    },
+    series : [
+      {
+        name:'gmv',
+        type:'pie',
+        radius : [20, 110],
+        center : ['50%', '45%'],
+        roseType : 'radius',
+        cursor: 'default',
+        color: ['#f3b822', '#49dff0', '#034079', '#6f81da', '#13de86','#D7504B','#C6E579',],
+        label: {
+          normal: {
+            show: false
+          },
+          emphasis: {
+            show: false
+          }
+        },
+        lableLine: {
+          normal: {
+            show: false
+          },
+          emphasis: {
+            show: true
+          }
+        },
+        data:[
+          
+        ]
+      }
+    ]
+  };
+
+//   myChart2.on('click', function (param){
+// 	  var depname=encode64(param.name);
+// 	  window.open("index_BU.html?depname="+depname);
+// 	});
+
+
+  // E店排名
+ 
+  var option5 = {
+    title:[
+      {text:"E店排名TOP5（本月GMV）",x: '2%', y: '1%',textStyle:{color:"#fff",fontSize:"16"}},
+    ],
+    grid: [
+      {x: '20%', y: '10%',},
+    ],
+    tooltip: {
+      formatter: '{b} ({c})',
+      show: "true",
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    xAxis: [
+      {
+    	
+    	axisTick: {show:false},
+        axisLabel: {show:false},
+        splitLine: {show:false},
+        axisLine: {show:false }
+        
+      },
+    ],
+    yAxis: [
+      {
+        gridIndex: 0,
+        interval:1,
+        data:[],
+        inverse: false,
+        axisTick: {show:false},
+        axisLabel: {
+            show: true,
+            margin:65,
+            textStyle:{
+              color:'#fff',
+              align:'left',
+              baseline:'middle'
+            },
+            formatter: function(value){
+            	if (value!=null&&value.length > 4) {
+  		               return value.substring(0, 4) + "...";
+		        } else {
+		               return value;
+		        }
+            }
+          },
+        splitLine: {show:false},
+        axisLine: {
+          show:false,
+          lineStyle:{color:"#fff"}
+        }
+      }
+    ],
+    series: [
+
+      {
+        name: 'GMV',
+        type: 'bar',xAxisIndex: 0,yAxisIndex: 0,
+        cursor: 'default',
+        barWidth : 30,//柱图宽度
+        barMaxWidth:30,//最大宽度
+        itemStyle:{
+          normal:{
+            barBorderRadius: 50,
+            borderWidth: 0,
+            color: function(params2) {
+              // build a color map as your need.
+              var colorList2 = [
+                //'#ff6600','#ca702d','#418ba1','#129bd3','#a0b6a4',
+               // '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                '#ffad43','#ffa940','#ffa13a','#ff8222','#ff6600',
+                //'#ff6e0a','#ff720e','#ff720e','#ff9430','#ff6600',
+              ];
+              return colorList2[params2.dataIndex]
+            },
+          },
+        },
+        label:{normal:{show:true, position:"right",textStyle:{color:"#9EA7C4"}}},
+        data:[]
+      }
+
+    ]
+  };
+
+  
+  var option7 = {
+		    title:[
+		      {text:"国安侠排名TOP5（本月订单量）",x: '2%', y: '3%',textStyle:{color:"#fff",fontSize:"16"}},
+		    ],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+		        "type": "shadow" // 默认为直线，可选为："line" | "shadow"
+		      }
+		    },
+		    calculable : true,
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      top: '20%',
+		      height: 250, //设置grid高度
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        inverse: false,
+		        type : 'category',
+		        data : [],
+		        max:12,
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		        	 show: true,
+			         rotate:45,//倾斜度 -90 至 90 默认为0
+			          //interval: 1,
+			         textStyle: {color: '#fff'}
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value',
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		          /*textStyle:{
+		           color:'#f00'
+		           }*/
+		          "show": false
+		        }
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'订单量',
+		        type:'bar',
+		        data:[],
+		        barWidth : 20,//柱图宽度
+		        barMaxWidth:20,//最大宽度
+		        barGap: 13,
+		        barCategoryGap: 13,
+		        itemStyle: {
+		          normal: {
+		            color: function(params3) {
+		              // build a color map as your need.
+		              var colorList3 = [
+		                '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+		              ];
+		              return colorList3[params3.dataIndex]
+		            },
+		            borderWidth: 0,
+		            barBorderRadius: [10, 10, 10, 10],
+		            label: {
+		              show: true,
+		              position: 'top',
+		              formatter: '{c}'
+		            }
+		          }
+		        }
+		      }
+		    ]
+		  };
+  
+  function more_gax_order(){
+	  var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("employeeRanking_order");
+	  window.open(URL,"employeeRanking_order");
+  }
+  
+  myChart7.on('click', function (params){
+
+	  var index = params.dataIndex;
+	  var employeeNo = option7_employee[index];
+	  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
+	  window.open(URL,"employeeInfo");
+	 
+	 
+  })
+  
+  function more_channel_order(){
+	  var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("channelRanking_order");
+	  window.open(URL,"channelRanking_order");
+  }
+//  myChart8.on('click', function (params){
+
+//   })
+  
+  // 事业部服务专员排名
+  var option6 = {
+    title:[
+      {text:"服务专员排名（本月GMV）",x: '2%', y: '1%',textStyle:{color:"#fff",fontSize:"16"}},
+    ],
+    grid: [
+      {x: '20%', y: '10%',},
+    ],
+    tooltip: {
+      formatter: '{b} ({c})',
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    xAxis: [
+      {
+        gridIndex: 0,
+        axisTick: {show:false},
+        axisLabel: {show:false},
+        splitLine: {show:false},
+        axisLine: {show:false }
+      },
+    ],
+    yAxis: [
+      {
+        gridIndex: 0,
+        interval:0,
+        data:[],
+        axisTick: {show:false},
+        axisLabel: {show:true},
+        splitLine: {show:false},
+        axisLine: {
+          show:false,
+          lineStyle:{color:"#fff"}
+        },
+      }
+    ],
+    series: [
+
+      {
+        name: 'GMV',
+        type: 'bar',
+        cursor: 'default',
+        xAxisIndex: 0,yAxisIndex: 0,
+        barWidth : 30,//柱图宽度
+        barMaxWidth:30,//最大宽度
+        
+        itemStyle:{
+          normal:{
+            barBorderRadius: 50,
+            borderWidth: 0,
+            color: function(params2) {
+              // build a color map as your need.
+              var colorList2 = [
+                '#ffad43','#ffa940','#ffa13a','#ff8222','#ff6600',
+                //'#ff6e0a','#ff720e','#ff720e','#ff9430','#ff6600',
+              ];
+              return colorList2[params2.dataIndex]
+            },
+          },
+        },
+        label:{normal:{show:true, position:"right",textStyle:{color:"#9EA7C4"}}},
+        data:[]
+      },
+
+    ]
+  };
+  
+
+  var option8 = {
+		    title:[
+		      {text:"频道排名TOP5（本月订单量）",x: '2%', y: '2%',textStyle:{color:"#fff",fontSize:"16"}},
+		    ],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+		        "type": "shadow" // 默认为直线，可选为："line" | "shadow"
+		      }
+		    },
+		    calculable : true,
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      top: '20%',
+		      height: 250, //设置grid高度
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        max:4,
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		        	 show: true,
+			         rotate:45,//倾斜度 -90 至 90 默认为0
+			          //interval: 1,
+			         textStyle: {color: '#fff'},
+		        	 formatter: function(value) {
+	      	             if (value!=null&&value.length > 4) {
+	      	               return value.substring(0, 4) + "...";
+	      	             } else {
+	      	               return value;
+	      	             }
+	      	           }
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value',
+		        splitLine: {
+		          show: false
+		        },
+		        axisLine: {
+		          show: false
+		        },
+		        axisTick:{
+		          show: false
+		        },
+		        axisLabel:{
+		          /*textStyle:{
+		           color:'#f00'
+		           }*/
+		          "show": false
+		        }
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'订单量',
+		        type:'bar',
+		        cursor: 'default',
+		        data:[],
+		        barWidth : 30,//柱图宽度
+		        barMaxWidth:30,//最大宽度
+		        barGap:5,
+		        barCategoryGap:5,
+		        itemStyle: {
+		          normal: {
+		            color: function(params1) {
+		              // build a color map as your need.
+		              var colorList1 = [
+		                //'#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+		                '#0399d9','#00a7de','#00c3e7','#00ddf0','#13d4b2',
+		                // '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'
+		              ];
+		              return colorList1[params1.dataIndex]
+		            },
+		            borderWidth: 0,
+		            barBorderRadius: [10, 10, 10, 10],
+		            label: {
+		              show: true,
+		              position: 'top',
+		              formatter: '{c}'
+		            }
+		          }
+		        }
+		      }
+		    ]
+		  };
+
+  
+  var loadIndex;
+  //初始化国安侠员工
+  function initGaxInfo(){
+	 
+	  var user={
+			  store_id:STORE_ID,
+			  zw:'国安侠'
+	  }
+	  var infoStr="";
+	  doManager("UserManager", "getEmployeeByStore",user,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var result = JSON.parse(data.data);
+						var dataArr = new Array();
+						
+						for(var i=0;i<result.length;i++){
+							var employee_name = result[i].name;
+							var employee_no = result[i].employee_no;
+							var employee_sex = result[i].sex;
+							var employee_authorizedtype = result[i].authorizedtype;
+							var employee_topostdate = result[i].topostdate;
+							infoStr = infoStr+"<tr style='cursor:pointer'  id='tr_"+employee_no+"' onclick='newEmployeeInfoHtml(this)'><td>"+parseInt(i+1)+"</td><td>"+employee_name+"</td><td>"+employee_sex+"</td><td>"+employee_topostdate+"</td><td>"+employee_authorizedtype+"</td></tr>"
+						}
+						$("#employee_detail_title").nextAll().remove();
+						$("#employee_detail_title").after(infoStr);
+						$("#employee_detail_title").nextAll("tr:even").css("background-color","aliceblue");
+						$("#employee_detail_title").nextAll("tr:odd").css("background-color","mintcream");
+						showEmployeeInfo();
+					}
+		},false);
+  }
+  //初始化综合管理员工
+  function initZhglInfo(){
+	
+	  var user={
+			  store_id:STORE_ID,
+			  zw:'事务管理'
+	  }
+	  var infoStr="";
+	  doManager("UserManager", "getEmployeeByStore",user,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var result = JSON.parse(data.data);
+						var dataArr = new Array();
+						
+						for(var i=0;i<result.length;i++){
+							
+							var employee_name = result[i].name;
+							var employee_no = result[i].employee_no;
+							var employee_sex = result[i].sex;
+							var employee_authorizedtype = result[i].authorizedtype;
+							var employee_topostdate = result[i].topostdate;
+							infoStr = infoStr+"<tr style='cursor:pointer' id='tr_"+employee_no+"' onclick='newEmployeeInfoHtml(this)'><td>"+parseInt(i+1)+"</td><td>"+employee_name+"</td><td>"+employee_sex+"</td><td>"+employee_topostdate+"</td><td>"+employee_authorizedtype+"</td></tr>"
+
+						}
+						$("#employee_detail_title").nextAll().remove();
+						$("#employee_detail_title").after(infoStr);
+						$("#employee_detail_title").nextAll("tr:even").css("background-color","aliceblue");
+						$("#employee_detail_title").nextAll("tr:odd").css("background-color","mintcream");
+						showEmployeeInfo();
+					}
+		},false);
+  }
+  
+  
+  
+  var windowIndex;
+  //展示员工（国安侠、综合管理）
+  function showEmployeeInfo(){
+	  layer.close(windowIndex);
+	  windowIndex= layer.open({
+		  type: 1,
+   		  title:  ['员工信息','color:#fff'],
+   		  shadeClose: true,
+   		  shade:[0.1, '#393D49'],
+   		  moveOut:false,
+   		  zIndex:1000000000,
+   		  closeBtn:1,
+   		  skin: 'layer-ext-crmskin',
+   		  area: ['700px','290px'],
+   		  offset: ['100px','466px'],
+   		  content:$("#employee_detail_div"),
+   		  success:function(layer,index){
+   			 
+   		  },
+   		  cancel: function(index, layero){ 
+   			 layer.close(index);
+   			}  
+   		});  
+  }
+  
+  
+  function initFWZYInfo(){
+	
+	  var user={
+			  store_id:STORE_ID,
+			  zw:'服务专员'
+	  }
+	  var infoStr="";
+	  doManager("UserManager", "getEmployeeByStore",user,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var result = JSON.parse(data.data);
+						var dataArr = new Array();
+						
+						for(var i=0;i<result.length;i++){
+							
+							var employee_name = result[i].name;
+							var employee_no = result[i].employee_no;
+							var employee_sex = result[i].sex;
+							var employee_authorizedtype = result[i].authorizedtype;
+							var employee_topostdate = result[i].topostdate;
+							infoStr = infoStr+"<tr style='cursor:pointer' id='tr_"+employee_no+"' onclick='newEmployeeInfoHtml(this)'><td>"+parseInt(i+1)+"</td><td>"+employee_name+"</td><td>"+employee_sex+"</td><td>"+employee_topostdate+"</td><td>"+employee_authorizedtype+"</td></tr>"
+
+						}
+						$("#employee_detail_title").nextAll().remove();
+						$("#employee_detail_title").after(infoStr);
+						$("#employee_detail_title").nextAll("tr:even").css("background-color","aliceblue");
+						$("#employee_detail_title").nextAll("tr:odd").css("background-color","mintcream");
+						showEmployeeInfo();
+					}
+		},false);
+  }
+  
+  //跳转到emoloyeeInfo.html
+  function newEmployeeInfoHtml(t){
+	  var employeeNo =   $(t).attr("id").split("_")[1];
+	  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
+	  window.open(URL); 
+  }
+  
+  function lightPloygon(area_no){
+		
+		
+		for(var i=0;i<polygonArray.length;i++){//片区管辖小区坐标高亮显示
+			var areaNo = polygonArray[i].area_no;
+			if(areaNo==area_no){
+				polygonArray[i].tinyVillagePolygon.show();
+			}else{
+				polygonArray[i].tinyVillagePolygon.hide();
+			}
+		}
+  }
+  
+	//鼠标离开展示所有小区区域
+  function showAllTinyArea(){
+	   for(var m=0;m<polygonArrayCopy.length;m++){//所有小区坐标区域重置颜色
+			
+			polygonArrayCopy[m].tinyVillagePolygon.show();
+		} 
+	   
+	    for(var j=0;j<tinyAreaArray.length;j++){//片区管辖小区坐标显示小区名称
+			tinyAreaArray[j].tinyAreaMarker.hide();
+		}
+ } 
+	
+	
+
+  
+  //返回省市
+  function gopro(){
+	  window.location.href="index_headquarters.html?p="+proId_ecode+"&c="+cityId_ecode+"&cn="+encode64(cityName_ecode)+"&zm="+zm+"&f="+from_store;
+  }
+  
+  //返回全国
+  function goCountry(){
+	  window.location.href="index_headquarters.html";
+  }
+  
+  
+ 
+  
+  function goStatistics(){
+	  
+	  crm_alert(0,"根据2018年新派单和新绩效规则，数据统计页面将于（1月18日至1月26日）整体进行调整。<br> 如需查询新规则派单结果，请临时移步至  【数据档案】--【订单档案】页面。");
+  }
+  
+  
+
+</script>
+</body>
+
+<div id="employee_detail_div" style="height:247px;display:none">
+  	<table id="employee_detail_table" style="width:100%;text-align:center;border-collapse:separate;border-spacing:2px" border="0" cellspacing="3" cellpadding="2"  >
+  	<tr style="height:25px;background-color:#00c0ef;color:white" id="employee_detail_title">
+  		<td width="30px">序号</td>
+  		<td>姓名</td>
+  		<td>性别</td>
+  		<td>入职日期</td>
+  		<td>职务性质</td>
+  	</tr>
+  	</table>
+</div>
+
+<div id="more_AreaDiv" style="width:90px;height:50px;display:none">
+  	
+</div>
+</html>

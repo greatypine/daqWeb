@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" href="../scripts/lib/jquery/ztree/zTreeStyle/zTreeStyle.css" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        <script type="text/javascript" src="./js/createProject.js">
+        </script>
+        <script src="../healthArchives/referenceDialog.js" type="text/javascript">
+        </script>
+        <title>无标题文档</title>
+        <script type="text/javascript">
+        $(function(){
+        	initDic();
+        });
+        function setDic(dicname,resourceName){
+         	 var resourceId = $(resourceName)[0];
+              var resource = $dict.getDictList(dicname);
+              var option = new Option('', '');
+              resourceId.add(option);
+              $(resource).each(function(i, element){
+                  var option = new Option(element.dictText, element.dictCode);
+                  resourceId.add(option);
+              });
+         }
+        function initDic(){
+    	    setDic('processing_state_resource',"#status");
+			$validator = new PMSValidator($("#projectForm")[0], {
+                bNormalDisplay: false,
+                iDisplayLength: 5
+            });
+            $('#commitDate').val(new Date().format('yyyy-MM-dd'));
+        }
+        function doSave(){
+            if (!dataCheck()) {
+                return;
+            }
+            var obj = {
+            		personId: $("#id").val(),
+            		name: $("#personal_name").val(),
+            		phoneNo: $("#phoneNo").val(),
+            		title: $("#title").val(),
+            		content: $("#content").val(),
+            		processResult: $("#processResult").val(),
+            		processIllustrate: $("#processIllustrate").val(),
+            		processDate: $("#processDate").val(),
+            		commitDate: $("#commitDate").val(),
+//             		processPersonId: $("#processPersonId").val(),
+            		status: $("#status").val(),
+            }
+            doManager("personalSuggesManager", "savePersonalSugges", obj, function(data, textStatus, XMLHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    var id = jsonData.id;
+                    window.location.href = 'PersonalSuggesList.html?ApplId=' + id;
+                }else{
+					$$.showMessage("系统信息", "添加失败!");
+				}
+            });
+        }
+        function dataCheck(){
+        	 $validator = new PMSValidator($("#projectForm")[0], {
+                 bNormalDisplay: false,
+                 iDisplayLength: 5
+             });
+            //基础校验-------------------------------
+            $validator.clean();
+            var cvalidator = $validator.clientValidate();
+            if (!cvalidator) {
+                $$.showMessage("系统信息", "数据校验不通过，请检查各项输入是否正确。");
+                return false;
+            }
+          //校验日期的输入
+    		if (comepareDate($("#commitDate").val(), $("#processDate").val()) < 0) {
+                        $$.showMessage("系统信息", "跟进时间不能大于提交时间!");
+                        return false;
+                    }
+            return true;
+        }
+      //格局化日期：MM/dd/yyyy,传入的日期字符串格式为"YYYY-MM-DD"
+    	function formatDateTOparseByStr(datestr) {
+    		mymonth = datestr.substr(5, 2);
+    		myweekday = datestr.substr(8, 2);
+    		myyear = datestr.substr(0, 4);
+    		return (mymonth + "/" + myweekday + "/" + myyear);
+    	}
+
+    	function comepareDate(date1, date2) {
+    		date1 = formatDateTOparseByStr(date1);
+    		date2 = formatDateTOparseByStr(date2);
+    		var days;
+    		var days = (Date.parse(date2) - Date.parse(date1))
+    				/ (24 * 60 * 60 * 1000);
+    		return days;
+    	}
+        function formatDate(date){
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth() + 1;
+            var myweekday = date.getDate();
+            
+            if (mymonth < 10) {
+                mymonth = "0" + mymonth;
+            }
+            if (myweekday < 10) {
+                myweekday = "0" + myweekday;
+            }
+            return (myyear + "-" + mymonth + "-" + myweekday);
+        }
+    	function pmsGoBack(){
+			window.location.href="PersonalSuggesList.html";
+		}
+    	function doSelect(json){
+		    var userInfo = $.fromJSON(json);
+		    $("#id").val(userInfo.id);
+		    $("#persionId").val(userInfo.id);
+		    $("#personal_name").val(userInfo.name);
+		    $("#phoneNo").val(userInfo.phoneNo);
+		}
+		function selectPerson(callback){
+			var id = $("#persionId").val();
+			var name = $("#personal_name").val();
+			var phoneNo = $("#phoneNo").val();
+			checkUser(callback,id,name,phoneNo);
+			
+		}
+        </script>
+    </head>
+    <body>
+ <div id="pageheardiv" class="title clear">
+            <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();">
+            </div>
+            <div class="ico2">
+            </div>
+            <div class="ico1">
+            </div>
+            <a href="#">意见反馈</a>
+            <a href="#">意见反馈查询</a>
+        </div>
+        <div class="containerheader">
+            新增意见反馈
+        </div>
+        <div class="containerbody">
+           <form class="pmsForm" id="projectForm" name="projectForm">
+                <div id="nav_cont">
+                    <h1>
+                        <div class="displayblock" id="_un_container_0_0_1">
+                            <table cellpadding="0" cellspacing="0" class="layout" width="90%">
+                            <input type="hidden" name="id" id="id" />
+                                <tr>
+                                    <td width="15%">
+                                    </td>
+                                    <td width="30%">
+                                    </td>
+                                    <td width="15%">
+                                    </td>
+                                    <td width="40%">
+                                    </td>
+                                </tr>
+                       <tr>
+                            <td align="right">
+                                	姓名：<span class="red">*</span>
+                            </td>
+                            <td align="left">
+                                <input id="persionId" name="persionId" type="hidden" class="inputtext" validate="required:true, maxlength:10"/>
+                                <input id="personal_name" name="personal_name" type="text" disabled="disabled" validate="required:true, maxlength:10" style="width:22%"/>
+                                <button class="buttonu" id="selectUser" onclick="selectPerson(doSelect);" style="width:14%">选择</button>
+                            </td>
+                              <td align="right">
+                                  	手机号：<span class="red">*</span>
+                            </td>
+                            <td align="left">
+                                <input id="phoneNo" name="phoneNo" type="text"  disabled="disabled" class="inputtext_dis" validate="required:true,  maxlength:80" style="width:90px"/>
+                            </td>  
+                        </tr>
+                             <tr>
+                                        <td class="basetext" style="width: 8%; text-align: right">
+                                            标题：<span class="red">*</span>
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <input type="text" id ="title" class="inputtext"name = "title" style="width:582px;" validate="required:true, maxlength:400"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="basetext" style="width: 8%; text-align: right">
+                                          内容：<span class="red">*</span>
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <textarea id= "content" name="content" style="width:582px;" rows="4" validate="required:true, maxlength:400"></textarea>
+                                        </td>
+                                  
+                                    <tr>
+                                        <td class="basetext" style="width: 8%; text-align: right">
+                                         情况说明：<span class="red"> </span>
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <textarea id= "processIllustrate" name="processIllustrate" validate="required:false, maxlength:500"  style="width:582px;" rows="4"></textarea>
+                                        </td>
+                                    </tr>
+                                
+                              <tr>
+								<td class="basetext" style="width: 8%; text-align: right">
+									意见提交日期<span class="red"></span>:
+								</td>
+								<td class="basetext"><input id="commitDate" revalidate="true" type="text" likeOption="true" name="commitDate" validate="formatDate:true,required:false" class="pmsDateField inputtext_dis" yearRange="-100:+10" style="width:80px; margin-right: 5px;" readonly /></td>
+								<td class="basetext" style="width: 8%; text-align: right">
+									 跟进日期<span class="red"></span>:
+								</td>
+								<td class="basetext"><input id="processDate" revalidate="true" type="text" likeOption="true" name="processDate" validate="formatDate:true,required:false" class="pmsDateField inputtext_dis" yearRange="-100:+10" style="width: 80px; margin-right: 5px;" readonly /></td>
+                                </tr>
+                                       <tr>
+<!--                                     <td class="basetext" style="width:1%; text-align: right"> -->
+<!--                                   健康专员：<span class="red">*</span> -->
+<!--                                     </td> -->
+<!--                                     <td> -->
+<!--                                      <input type="text" id ="processPersonId" class="inputtext"name = "processPersonId" style="width:80px;" validate="required:true, maxlength:80"/> -->
+<!--                                     </td> -->
+                                    <td class="basetext" style="width:1%; text-align: right">
+                                    状态：<span class="red">*</span>
+                                    </td>
+                                    <td>
+                                     <select id="status" name="status"  class="inputselect" style="width:80px" validate="required:true, maxlength:80">
+		                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="right">
+                                        <button class="buttonu" onclick="doSave();">
+                                            保存
+                                        </button>
+                                    </td>
+                                    <td colspan="2" align="left">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </h1>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

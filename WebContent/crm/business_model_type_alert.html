@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>企业商业模式类型</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    a{color: #444;}
+    .user-header span{margin-left:10px;}
+    .box span{margin-left:10px;}
+    .box .col-lg-2 img{width: 100px;}
+    .box .col-lg-10{line-height: 40px;}
+    .table img{max-height: 150px;}
+    .lh128{line-height: 128px!important;}
+    .pd20{padding:20px!important;}
+    .text-left{text-align: left!important;}
+    .text-right{text-align: right!important;}
+    
+    .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+		
+	#process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header text-light-blue"><strong>E店商业模式</strong></div>
+          
+          <form id="can_appeal_form">
+          <table style="position:relative;left:60px;width:100%;border-collapse:separate;border-spacing:6px" border="0" cellspacing="3" cellpadding="2" >
+          	<tr>
+	          	<td><span style="font-weight:700">业务模式</span>：<select class="form-control select2"  id="eshopModel_auto">
+	               <option value="" >全部</option>
+	              </select></td>
+				<td><span style="font-weight:700">E店ID</span>：&nbsp; <input type="text" class="form-control" placeholder="E店ID" id="eshopId_auto"/></td>
+	            <td><span style="font-weight:600">E店编号</span>：&nbsp; <input type="text" class="form-control"  placeholder="E店编号" id="eshopCode_auto"/></td>
+	            <td><span style="font-weight:800">E店名</span>：&nbsp; <input type="text" class="form-control"  style="width:64%" placeholder="E店名" id="eshopName_auto"/></td>
+             </tr>
+          </table>
+           </form> 
+          <div class="form-group col-lg-6" style="padding-top: 25px;">
+          </div>
+          <div class="col-lg-2" style="padding-top: 25px;">
+          </div>
+          <div class="form-group col-lg-2" style="padding-top: 25px;">
+            <button type="button" onclick="initEshopBusinessModel(1)" class="btn btn-block btn-primary">查询</button>
+          </div>
+           <div class="form-group col-lg-2" style="padding-top: 25px;">
+            <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+          </div>
+              
+          <div class="box-body no-padding">
+            <table class="table">
+              <tbody id="auto_tbody"><tr>
+                <th width="4%"></th>
+                <th width="30%">E店ID</th>
+                <th width="20%">E店编号</th>
+                <th width="30%">E店名</th>
+                <th width="16%">业务模式</th>
+              </tr>
+              </tbody></table>
+              <table class="table table-striped no-margin" id="all_pass_button_can_appeal" style="display:block">
+              <tbody>
+              <tr style="background: #fff;display:block" id="all_pass_cannot_appeal">
+                  <td style="text-align: left; padding-left: 20px;"><input type="checkbox"  id="all_select_cannot_appeal">全选</td>
+                  <td colspan="9"><button type="button" onclick="saveEshopPurchase(1)" class="btn btn-primary pull-right">添加</button></td>
+                </tr>
+                </tbody>
+              </tbody>
+              </table>
+            <!-- /.item -->
+          </div>
+			<div class="tcdPageCode" id="page_auto"></div>
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript">
+//var order_sn = decode64(getUrlParamByKey("order_sn"));
+$(function(){
+	initEshopBusinessModel(1);
+	queryBusinessModelType();
+});
+
+
+function initcurruser(){
+		//取得当前登录人的门店
+	doManager("UserManager", "getCurrentUserDTO",null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var curr_user = JSON.parse(data.data);
+						//alert(curr_user.employeeId+""+curr_user.store_name+""+curr_user.name);
+						$('span[class="hidden-xs"]').html(curr_user.name);
+						$("#store_name").html(curr_user.store_name);
+						$("#employee_no").html(curr_user.employeeId);
+						
+						$("#card_name").html(curr_user.name);
+						$("#card_no").html(curr_user.employeeId);
+						var urlStr = "user.html?employee_no="+encode64(curr_user.employeeId);
+						$("#person_center").attr("href",urlStr);
+						$("#person_state").attr("href",urlStr);
+						$("#person_state_area").attr("href",urlStr+"&#user");
+					}
+	},false);
+}
+
+function queryBusinessModelType(t){
+	  doManager('eshopPurchaseManager','queryBusinessModelBaseType',null,function(data){
+        if(data.result){
+        	
+        	  var lst_select_abnormaltype = JSON.parse(data.data);
+            $(lst_select_abnormaltype).each(function(index,element){
+            	$('#eshopModel_auto').append('<option value="'+element.eshop_model+'">'+element.eshop_model+'</option>');
+            });
+        }else{
+        	
+        }
+    });
+}
+
+var isCreatePage=false;
+var currentPage_auto= 1;
+var totalPage_auto = 1;
+function initEshopBusinessModel(cur_page){
+	$("#all_select_auto").attr("checked",false);
+    var eshopId = $("#eshopId_auto").val();
+    var eshopName = $("#eshopName_auto").val();
+    var eshopCode = $("#eshopCode_auto").val();
+	var eshopModel = $("#eshopModel_auto").val();
+    var eshopPurchaseDto=null;
+  
+    	eshopPurchaseDto = {
+			eshopId:eshopId,
+			eshopCode:eshopCode,
+	  		eshopName:eshopName,
+	  		eshopModel:eshopModel
+		}
+	var pageInfo = new Object();
+    pageInfo.currentPage = cur_page;
+	doManager("eshopPurchaseManager", "queryEshopModelBaseInfo",[eshopPurchaseDto,pageInfo],
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var result= JSON.parse(data.data);
+			           if(result.status=='success'){
+			        	   $("#auto_tbody").find("tr:gt(0)").remove(); 
+			        	   var jData = result.data;
+			        	   if(jData==null||jData.length==0){
+			        		   crm_alert(5,"系统查无此条件的数据");
+			        		   $("#page_auto").createPage({
+			        	 	  	    pageCount:0,
+			        	 	  	    current:0,
+			        	 	  	    backFn:function(p){
+			        	 	  	    	
+			        	 	  	    }
+			        	 	  	});
+			        		   $("#process_div").hide();
+			        	       $("#process_div_pic").hide();
+			        		   return;
+			        	   }
+			        	   totalPage_auto = result.total_pages;
+			        	   if(!isCreatePage){
+			        		   $("#page_auto").createPage({
+			        	 	  	    pageCount:totalPage_auto,
+			        	 	  	    current:1,
+			        	 	  	    backFn:function(p){
+			        	 	  	    	search_auto_eshopPurchase1(p);
+			        	 	  	    }
+			        	 	  	});
+			        		   isCreatePage=true;
+			        	   }
+			        	  
+			        	   var infoStr="";
+			        	   for(var i=0;i<jData.length;i++){
+			        		    infoStr= "<tr>";
+			        		    infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"cannot_appeal_checkbox_"+jData[i].eshop_id+"_"+jData[i].eshop_code+"_"+jData[i].eshop_name+"_"+jData[i].eshop_model+"\" onclick=\"selectCheckbox(this,1)\" type=\"checkbox\"></td>";
+			        		   
+			       			    infoStr = infoStr
+			       			       +"<td>"+jData[i].eshop_id+"</td>"
+			                       +"<td>"+jData[i].eshop_code+"</td>"
+			                       +"<td>"+(jData[i].eshop_name==null?'':jData[i].eshop_name)+"</td>"
+			                       +"<td>"+(jData[i].eshop_model==null?'':jData[i].eshop_model)+"</td>"
+			                       infoStr = infoStr+"</tr>";
+				                       
+				                 $("#auto_tbody").append(infoStr);     
+			        	   }
+			           }else{
+			        	   crm_alert(5,"请稍后重新请求！");
+			        	   return;
+			           }
+			           $("#process_div").hide();
+			      	   $("#process_div_pic").hide();
+				}
+	},false);
+}
+
+function  search_auto_eshopPurchase1(cur_page){
+	  	$("#all_select_auto").attr("checked",false);
+	    var eshopId = $("#eshopId_auto").val();
+	    var eshopName = $("#eshopName_auto").val();
+	    var eshopCode = $("#eshopCode_auto").val();
+		var eshopModel = $("#eshopModel_auto").val();
+	    var eshopPurchaseDto=null;
+	  
+	    	eshopPurchaseDto = {
+				eshopId:eshopId,
+				eshopCode:eshopCode,
+		  		eshopName:eshopName,
+		  		eshopModel:eshopModel
+			}
+	    var pageInfo = new Object();
+	    pageInfo.currentPage = cur_page;
+	    
+	    doManager('eshopPurchaseManager','queryEshopModelBaseInfo',[eshopPurchaseDto,pageInfo],function(data){
+       if(data.result){
+       	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   $("#auto_tbody").find("tr:gt(0)").remove(); 
+	        	   var jData = result.data;
+	        	   if(jData==null||jData.length==0){
+	        		   crm_alert(5,"系统查无此条件的数据");
+	        		   $("#page_auto").createPage({
+	        	 	  	    pageCount:0,
+	        	 	  	    current:0,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	
+	        	 	  	    }
+	        	 	  	});
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	   totalPage_auto = result.total_pages;
+	        	   if(!isCreatePage){
+	        		   $("#page_auto").createPage({
+	        	 	  	    pageCount:totalPage_auto,
+	        	 	  	    current:1,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	search_auto_eshopPurchase1(p);
+	        	 	  	    }
+	        	 	  	});
+	        		   isCreatePage=true;
+	        	   }
+	        	  
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+	        		   infoStr= "<tr>";
+	        		    infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"cannot_appeal_checkbox_"+jData[i].eshop_id+"_"+jData[i].eshop_code+"_"+jData[i].eshop_name+"_"+jData[i].eshop_model+"\" onclick=\"selectCheckbox(this,1)\" type=\"checkbox\"></td>";
+	        		   
+	       			    infoStr = infoStr
+	       			       +"<td>"+jData[i].eshop_id+"</td>"
+	                       +"<td>"+jData[i].eshop_code+"</td>"
+	                       +"<td>"+(jData[i].eshop_name==null?'':jData[i].eshop_name)+"</td>"
+	                       +"<td>"+(jData[i].eshop_model==null?'':jData[i].eshop_model)+"</td>"
+	                       infoStr = infoStr+"</tr>";
+		                       
+		                 $("#auto_tbody").append(infoStr);         
+	        	   }
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   return;
+	           }
+       
+       }else{
+    	   crm_alert(5,"请稍后重新请求！");
+       }
+      $("#process_div").hide();
+ 	    $("#process_div_pic").hide();
+   }); 
+	   
+}
+
+$("#all_select_can_appeal").on("click",function(t,tt){
+	if($("#all_select_can_appeal").is(":checked")){
+		$("input[id^='can_appeal_checkbox_']:not(:disabled)").each(function(i,t){
+			$(t)[0].checked=true;
+		})
+	}else{
+		$("input[id^='can_appeal_checkbox_']").each(function(i,t){
+			$(t)[0].checked=false;
+		})
+	}
+})
+
+$("#all_select_cannot_appeal").on("click",function(t,tt){
+	if($("#all_select_cannot_appeal").is(":checked")){
+		$("input[id^='cannot_appeal_checkbox_']:not(:disabled)").each(function(i,t){
+			$(t)[0].checked=true;
+		})
+	}else{
+		$("input[id^='cannot_appeal_checkbox_']").each(function(i,t){
+			$(t)[0].checked=false;
+		})
+	}
+})
+
+function selectCheckbox(t,t1){
+	if($(t).is(":checked")){
+		
+		var validc = $("input[id^='can_appeal_checkbox_']:not(:disabled)").length;
+		var checkedc = $("input[id^='can_appeal_checkbox_']:checked").length;
+		
+		if(validc==checkedc){
+			
+			$("#all_select_can_appeal")[0].checked=true;
+		}else{
+			
+			$("#all_select_can_appeal")[0].checked=false;
+		}
+	}else{
+		
+		$("#all_select_can_appeal")[0].checked=false;
+	}
+	
+}
+
+//保存
+function saveEshopPurchase(t){
+	
+	layer.confirm('确定添加？', {
+	  	title:'提示',
+	  	offset:['100px','550px'],
+	  	move:false,
+	  	closeBtn:0,
+	  	skin:'layer-ext-crmskin',
+		btn: ['确定','取消'], //按钮
+	}, function(){
+		layer.closeAll();
+		var eshopIDs = [];
+		$("input[id^='cannot_appeal_checkbox_']").each(function(i,t){
+			var eshopId = $(t)[0].id.split("_")[3];
+			var eshopCode = $(t)[0].id.split("_")[4];
+			var eshopName = $(t)[0].id.split("_")[5];
+			var eshopModel = $(t)[0].id.split("_")[6];
+			if($(t).is(":checked")){
+				eshopIDs.push(eshopId+"_"+eshopCode+"_"+eshopName+"_"+eshopModel);
+			}
+			
+		})
+		
+		if(eshopIDs.length==0){
+			crm_alert(0,"请选择要添加的店铺！");
+			return;
+		}
+		
+		  doManager('eshopPurchaseManager','saveEshopPurchase',[eshopIDs.join()],function(data){
+	          if(data.result){
+	          	
+	          	 var result = JSON.parse(data.data);
+	          	
+	             if(result.status=="success"){
+	            	 //initEshopBusinessModel(1);
+	            	 //crm_alert(0,"店铺成功保存！");
+					window.parent.search_auto_eshopPurchase(1);
+					var index=parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+	             }else{
+	            	 crm_alert(0,"网络异常，请稍候再试！");
+	             }
+	          }else{
+	        	  crm_alert(0,"网络异常，请稍候再试！");
+	          }
+	      });
+	});
+	
+}
+
+function doLogout() { 
+		
+		layer.confirm('确定退出？', {
+			  	title:'提示',
+			  	offset:['100px','550px'],
+			  	move:false,
+			  	closeBtn:0,
+			  	skin:'layer-ext-crmskin',
+				btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+			});
+}
+
+function resetSerachParam(t){
+	  document.getElementById("can_appeal_form").reset(); 
+}
+
+</script>
+
+</body>
+</html>

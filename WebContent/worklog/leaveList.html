@@ -1,0 +1,409 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>休假查询</title>
+    <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+    <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css"/>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/dataTablesLib.js"></script>
+    <script type="text/javascript" src="../scripts/common/pms.js"></script>
+    <script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script type="text/javascript" src="../bizbase/js/userDialog.js" ></script>
+    <script type="text/javascript">
+    	var zjId;//记录登录人的Id
+        $(function () {
+            // 休假类型字典
+            var leaveTypeDicts = $dict.getDictList("WORKLOG_LEAVE_TYPE");
+            $(leaveTypeDicts).each(function (i, element) {
+                var option = new Option(element.dictText, element.dictCode);
+                $("#leaveType")[0].add(option);
+            });
+
+            // 销假状态
+            var leaveStateDicts = $dict.getDictList("WORKLOG_LEAVE_STATE");
+            $(leaveStateDicts).each(function (i, element) {
+                var option = new Option(element.dictText, element.dictCode);
+                $("#leaveState")[0].add(option);
+            });
+
+            $validator = $("#searchForm").data("PMSValidator");
+            var s1 = $("#s1")[0];
+            var s2 = $("#s2")[0];
+            $validator.addDateCompareRule(
+                {
+                    dateFrom: s1,
+                    dateTo: s2,
+                    msg: "开始时间应小于截止时间"
+                });
+
+            // 初始化本周日期
+            $("#s1").val(getWeekStartDate());
+            $("#s2").val(getWeekEndDate());
+			$("#s3").val(getWeekStartDate());
+            $("#s4").val(getWeekEndDate());
+
+            $("input:radio[name='daySel']").bind("change", function() {
+                var daySelVal = $("input:radio[name='daySel']:checked").val();
+                // 当日
+                if (daySelVal == "0") {
+                    // 初始化本日日期
+                    $("#s1").val(formatDate(new Date()));
+                    $("#s2").val(formatDate(new Date()));
+					$("#s3").val(formatDate(new Date()));
+                    $("#s4").val(formatDate(new Date()));
+                // 当周
+                } else if (daySelVal == "1") {
+                    // 初始化本周日期
+                    $("#s1").val(getWeekStartDate());
+                    $("#s2").val(getWeekEndDate());
+					$("#s3").val(getWeekStartDate());
+                    $("#s4").val(getWeekEndDate());
+                // 当月
+                } else if (daySelVal == "2") {
+                    // 初始化本月日期
+                    $("#s1").val(getMonthStartDate());
+                    $("#s2").val(getMonthEndDate());
+					$("#s3").val(getMonthStartDate());
+                    $("#s4").val(getMonthEndDate());
+                }
+            });
+				//获取到本人的名称
+			doManager("workLogManager", "getUser", "", function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							psId=returnObj;
+							zjId=returnObj.id;
+							$("#leaveUser").val(psId.name);
+							onSearch();
+						}
+					});
+        });
+
+        var now = new Date(); //当前日期
+        var nowDayOfWeek = now.getDay(); //今天本周的第几天
+        var nowDay = now.getDate(); //当前日
+        var nowMonth = now.getMonth(); //当前月
+        var nowYear = now.getFullYear(); //当前年
+
+        //获得某月的天数
+        function getMonthDays(myMonth){
+            var monthStartDate = new Date(nowYear, myMonth, 1);
+            var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+            var   days   =   (monthEndDate   -   monthStartDate)/(1000   *   60   *   60   *   24);
+            return   days;
+        }
+
+        //格局化日期：yyyy-MM-dd
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth + "-" + myweekday);
+        }
+		//格局化日期：MM/dd/yyyy
+	        function formatDateTOparse(date) {
+	            var myyear = date.getFullYear();
+	            var mymonth = date.getMonth()+1;
+	            var myweekday = date.getDate();
+	
+	            if(mymonth < 10){
+	                mymonth = "0" + mymonth;
+	            }
+	            if(myweekday < 10){
+	                myweekday = "0" + myweekday;
+	            }
+	            return (mymonth + "/" + myweekday+"/"+myyear);
+	        }
+			//格局化日期：MM/dd/yyyy,传入的日期字符串格式为"YYYY-MM-DD"
+			 function formatDateTOparseByStr(datestr) {
+	            mymonth=datestr.substr(5,2);
+				myweekday=datestr.substr(8,2);
+				myyear=datestr.substr(0,4);
+	            return (mymonth + "/" + myweekday+"/"+myyear);
+	        }
+			//比较两个时间之差,传入的日期的格式为yyyy-MM-dd,date1为开始日期，date2为结束日期
+			function comepareDate(date1,date2){
+				var days;
+				if(Date.parse(date2)>=Date.parse(date1)){
+					var days=(Date.parse(date2)-Date.parse(date1))/(24 * 60 * 60 * 1000);
+					return days;
+				}else{
+					return "date2小于date1";
+				}
+			}
+        //获得本周的开端日期
+        function getWeekStartDate() {
+            var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1);
+            return formatDate(weekStartDate);
+        }
+
+        //获得本周的停止日期
+        function getWeekEndDate() {
+            var weekEndDate = new Date(nowYear, nowMonth, nowDay + (7 - nowDayOfWeek));
+            return formatDate(weekEndDate);
+        }
+
+        //获得本月的开端日期
+        function getMonthStartDate(){
+            var monthStartDate = new Date(nowYear, nowMonth, 1);
+            return formatDate(monthStartDate);
+        }
+
+        //获得本月的停止日期
+        function getMonthEndDate(){
+            var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth));
+            return formatDate(monthEndDate);
+        }
+
+        function clearCondition() {
+            $("#s1").val("");
+            $("#s2").val("");
+            $("#leaveType").val("");
+            $("#leaveState").val("");
+            $("#leaveRecord").val("");
+			$("#s1").val(getWeekStartDate());
+            $("#s2").val(getWeekEndDate());
+				//获取到本人的名称
+			doManager("workLogManager", "getUser", "", function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							psId=returnObj;
+							$("#leaveUser").val(psId.name);
+						}
+					});
+        }
+		function chooseLeaveUser(){
+			checkUser(0,selUserlBack)
+		}
+
+			function selUserlBack(jsonStr) {
+				var userInfo= $.fromJSON(jsonStr);
+			    $("#leaveUser").val(userInfo.userName);
+			}
+		
+		function chooseRecordUser(){
+			checkUser(0,selUserlBack1)
+		}
+		
+			function selUserlBack1(jsonStr) {
+				var userInfo= $.fromJSON(jsonStr);
+			    $("#recordUser").val(userInfo.userName);
+			}
+		
+    </script>
+</head>
+<body style="height:100%">
+<div class="box">
+    <div class="title clear">
+        <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();"></div>
+        <div class="ico2"></div>
+        <div class="ico1"></div>
+        <a href="#">日誌管理 :</a>&nbsp;<a href="#">休假或出差查询</a>
+    </div>
+    <div class="containerbody padding4px">
+        <div class="containerheader">
+            <a href="#" onclick="toggleDiv('conditionsDiv','pic2');">
+                <img src="../scripts/images/22.png" align="absmiddle" id="pic2"/>
+            </a>搜索条件
+        </div>
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true">
+                	<input type="hidden" id="enableStatus" name="enableStatus" value="1" />
+                <table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+                    <tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                             日期选择：
+                        </td>
+                        <td class="baseform">
+                            <input class="pmsRadio" name="daySel" id="daySel" data="[['0','当日'],['1','当周','checked'],['2','当月']]" />
+                        </td>
+                      <td class="basetext" style="width: 8%; text-align: right">
+                             休假日期：
+                        </td>
+                        <td class="baseform">
+                            <input id="s1" revalidate="true" type="text" name="beginDate" likeOption="false" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:70px;margin-right: 5px;"/>至
+                            <input id="s2" revalidate="true" type="text" name="beginDate" likeOption="false" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:70px;margin-left: 5px;margin-right:5px"/>
+							<input id="s3" revalidate="true" type="hidden" name="endDate" likeOption="false" validate="formatDate:true" />
+                            <input id="s4" revalidate="true" type="hidden" name="endDate" likeOption="false" validate="formatDate:true" />
+                        </td>
+                    </tr>
+                   <tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            休假类型：
+                        </td>
+                        <td class="baseform">
+                            <select name="leaveType" id="leaveType" class="inputselect">
+                                <option value="" selected="selected"></option>
+                            </select>
+                        </td>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            休假人：
+                        </td>
+                        <td class="baseform">
+                        	<input type="text" name="leaveUser.name" id="leaveUser" likeOption="false" value="" disalbed>
+							<input type="button" class="buttonu" value="选择" onclick="chooseLeaveUser()"/>&nbsp;
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            记录人：
+                        </td>
+                        <td class="baseform">
+                            <input type="text" id="recordUser" name="recordUser.name" likeOption="false" value="" disalbed/>
+							<input type="button" class="buttonu" value="选择" onclick="chooseRecordUser()"/>&nbsp;
+
+                        </td>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            销假状态：
+                        </td>
+                        <td class="baseform">
+                            <select id="leaveState" name="leaveState" class="inputselect">
+                                <option value="" selected></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="Colorbar3">
+                        <td colspan="4" style="width:100%">
+                            <input type="button" class="buttonu" value="新建休假" onclick="newSubmit();"/>&nbsp;&nbsp;|
+                            <input type="button" class="buttonu" value="查询" onclick="onSearch();"/>&nbsp;|
+                            <input type="button" class="buttonu" value="重置" onclick="clearCondition();"/>&nbsp;
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </form>
+        <div id="leaveSearchContainer" titleAlign= "center" showcheckbox="false" showRidaoButton="true"
+             searchDiv="conditionsDiv" usecache="true" queryid="leaveQuery"
+             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+             showprint="false" showpaging="true" showcheckbox="true" operators=$pmspage.opArr>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    function onSearch() {
+		$("#s3").val($("#s1").val());
+		$("#s4").val($("#s2").val());
+        $$.executeSearch('leaveQuery', 'conditionsDiv');
+    }
+    function newSubmit() {
+        window.location.href = './leaveEdit.html';
+    }
+    var viewObj = {
+        html: '<a href="#" class="blue">查看</a>',
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var val = allColumnsDataMap.id;
+            window.location = "leaveView.html?id=" + val+"&from=leaveList.html";
+        }
+    }
+    var editObj =
+    {
+        html: '<a href="#" class="blue">编辑</a>',
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var val = allColumnsDataMap.id;
+            window.location = "leaveView.html?id=" + val+"&from=leaveList.html";
+        }
+    }
+    var delObj = {
+        html: '<a href="#" class="blue">删除</a>',
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var id = allColumnsDataMap.id;
+            $$.showPromptDialog("系统提示", "确认删除？", false, 320, function () {
+                doManager("workLogLeaveManager", "deleteLeaveById", id, function (datas, textStatus, XMLHttpRequest) {
+                    //var returnObj = $.fromJSON(data.data);
+                    if (datas.result) {
+                        onSearch();
+                    } else {
+                    	$$.showMessage("系统提示", datas.message);
+                    }
+                }, true, {showWaiting: true});
+            });
+        }
+    }
+    var leaveObj = {
+        html: '<a href="#" class="blue">销假</a>',
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var id = allColumnsDataMap.id;
+            var leaveState = allColumnsDataMap.leaveState;
+            if (leaveState == "已销假") {
+            	$$.showMessage("系统提示", "已销假，无需再销假！");
+            } else {
+            	//window.location = "leaveXiaojia.html?id=" + id;
+					doManager("workLogLeaveManager", "getLeaveById", id, function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							var begindate=formatDate(new Date(returnObj.beginDate));
+							if(zjId!=returnObj.leaveUserId){
+								 $$.showMessage("系统提示", "不是休假人本人，不允许销假");
+								return;
+							}
+							if(comepareDate(formatDateTOparseByStr(begindate),formatDateTOparseByStr(formatDate(new Date)))>=0){
+
+								var leaveObj = 
+									{
+										id: id,
+				                        leaveUserId: returnObj.leaveUserId,
+										beginDate: begindate,
+										endDate: formatDate(new Date),
+										inputDate: formatDate(new Date),
+										leaveType: returnObj.leaveType,
+										meeting: returnObj.meeting,
+				                        remark: returnObj.remark,
+				                        leaveState: "1",
+				                        enableStatus: "1"
+									};
+								$$.showPromptDialog("系统提示", "确认销假？", false, 320, function () {
+				                    doManager("workLogLeaveManager", "changeSickLeaveByObj", leaveObj, function (datas, textStatus, XMLHttpRequest) {
+				                        //var returnObj = $.fromJSON(data.data);
+				                        if (datas.result) {
+				                            $$.showMessage("系统提示", "销假成功！");
+											window.setTimeout(function(){
+												window.location = "leaveList.html";
+
+											}, "3000");
+				                        } else {
+				                        	$$.showMessage("系统提示", datas.message);
+				                        }
+				                    }, true, {showWaiting: true});
+				                });
+								}else{//销假时，如果休假的开始日期大于当前日期，直接删除
+									 //$$.showMessage("系统提示", "结束日期不能小于开始日期！");
+									 doManager("workLogLeaveManager", "deleteLeaveByIdReal", id+"", function (datas, textStatus, XMLHttpRequest) {
+				                        //var returnObj = $.fromJSON(data.data);
+				                        if (datas.result) {
+				                            $$.showMessage("系统提示", "休假的开始日期大于当前日期，直接删除！");
+											window.setTimeout(function(){
+												window.location.href='leaveList.html';
+
+											}, "3000");
+				                        } else {
+				                        	$$.showMessage("系统提示", datas.message);
+				                        }
+				                    }, true, {showWaiting: true});
+								}
+						}
+					});
+					
+					
+				
+            }
+        }
+    }
+
+    $pmspage.opArr = [viewObj,leaveObj];
+</script>

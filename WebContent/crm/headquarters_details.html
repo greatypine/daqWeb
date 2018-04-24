@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="dist/css/tTurnover-head-scoll.css">
+    <!--map style-->
+    <link rel="stylesheet" href="dist/css/map-style.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="IE 9/html5shiv.min.js"></script>
+    <script src="IE 9/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .logo-lg img:nth-child(1){width: 50px; height: 50px;}
+        .box.box-navy{border-top-color: #001F3F;}
+        .badge{font-size: 14px;}
+        .progress-bar-default{background-color: #b5bbc8;}
+        .table tr td:nth-child(1){font-style: oblique; font-size: 14px;}
+        .table td:nth-child(4){text-align: left;}
+        .table th:nth-child(4){text-align: left;}
+        .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+		.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+		.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+		.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+		.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+		  #process_div{ 
+				background-color:#292a2b; 
+				display:none; 
+				z-index:100000;  
+				left:0px; 
+				opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+				filter:Alpha(Opacity=30); 
+				opacity: 0.3; 
+			} 
+	
+		  #process_div_pic{
+				position:fixed;
+				display:none; 
+				top:50%;
+				left:50%; 
+				z-index:100000000; 
+				margin:-16px 0 0 -50px; 
+				width:100px; 
+				height:32px;
+				color: #fff;
+			}
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" ></div> 
+ <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em id="title_sum"></em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+  
+
+
+<!--     <header class="main-header">
+        <nav class="navbar navbar-static-top">
+      <div class="container">
+        <div class="pull-left">
+          <nav class="navbar navbar-static-top no-margin">
+            <div class="logo-lg clearfix">
+              <div class="logo-lg clearfix">
+	            <ul>
+	              <li><a href="javascript:parent.location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
+	              <li class="nav-mark"><a href="#" id="title_sum"></a> </li>
+	              <li></li>
+	            </ul>
+	          </div>
+            </div>
+
+          </nav>
+        </div>
+      </div>
+    </nav>
+    </header> -->
+    
+    
+    
+    
+    
+    
+    
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div class="container">
+            <section class="content-header clearfix">
+                <div class="box box-navy">
+                     <div class="box-header"> 
+                        <h3 class="box-title"><strong id="typeRankName"></strong></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="form-group col-lg-10" style="margin-top: 20px; padding: 0 25px;">
+            		</div>
+                    <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+		             <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_data()" class="btn btn-block btn-warning">导出</button>
+		            </div>
+                    <div class="box-body no-padding">
+                        <table id="rank_table" class="table table-striped">
+                        </table>
+                    </div>
+                    <!-- /.box-body -->
+                    <div style="position:absolute;bottom:5px;left:27px;width:35%"> 显示 <select id="pageRecords_auto" onchange="chnagePageRecords(1)" name="pageRecords_auto"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条  &nbsp;&nbsp; 共  <span id="totalRecord_can"></span> 条&nbsp;</div>
+					<div class="tcdPageCode" id="page_auto"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../crm/dist/js/headquarters/headquarters_details.js"></script>
+<script type="text/javascript" src="../crm/dist/js/headquarters/conversion_utils.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+</body>
+</html>

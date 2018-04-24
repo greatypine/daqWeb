@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)http://download.guoanshequ.com/download/index.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,maximum-scale=1">
+  <title>国安数据</title>
+  
+  <style>
+    body {
+      background: url(img/download_bg.jpg) no-repeat center top;
+    }
+
+    .GATxt {
+      text-align: center;
+      font-family: "微软雅黑"; 
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .GATxt2 {
+      text-align: center;
+      font-family: "微软雅黑";
+      font-size: 16px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    .IPhone,
+    .Android {
+      display: inline-block;
+      width: 290px;
+      height: 70px;
+    }
+
+    .IPhone {
+      background: url(img/iphone.png) no-repeat;
+    }
+
+    .Android {
+      background: url(img/android.png) no-repeat;
+    }
+
+		.download{position:absolute; top:60%;left:30%;width:40%;
+		}
+
+
+    .zhezhao {
+      position: fixed;
+      z-index: 98;
+      top: 0;
+      left: 0;
+      display: none;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .65);
+    }
+
+    .zhezhao img {
+      float: right;
+      max-width: 90%;
+      margin-right: 1%;
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <div style="text-align:center; margin-top:40px;"><img style="width:100px" src="./img/icon.png">
+  </div>
+  <div style="margin-top:20px;">
+    <p class="GATxt">欢迎使用国安数据</p>
+  </div>
+  <div>
+    <p class="GATxt2">请点击下方按钮手动下载</p>
+    <div style="text-align:center;">
+      <a href="javascript:openIosAppLink();"  class="btn btn-succsee IPhone"></a>
+      <p>
+      <a href="javascript:openAndroidAppLink();"  class="btn btn-succsee Android"></a>
+
+      </p>
+      <P> <label id="label_message" style="font-size: 12px;color: #00b3ee;display: none">正在安装，请按Home键在桌面查看</label></P>
+    </div>
+  </div>
+
+
+  <!-- <div class="zhezhao" id="tip_pop" onclick="document.getElementById('tip_pop').style.display='none';">
+    <img id="tippic" src="./img/open-browser-tips.png" alt="请点击右上角按钮，使用浏览器打开">
+  </div> -->
+  
+  
+<script language="javascript" src="../scripts/lib/jquery/jquery-1.5.js"></script>
+<script language="javascript" src="../scripts/common/common-tool.js"></script>
+<script language="javascript" src="../scripts/common/common-core.js"></script>
+<script language="javascript" src="../scripts/lib/jquery/validate/jquery.validate.js"></script>
+<script language="javascript" src="../scripts/lib/jquery/validate/lib/jquery.metadata.js"></script>
+<script language="javascript" src="../scripts/common/common-validation.js"></script>
+<script language="javascript" src="../scripts/lib/jquery/ui/jquery-ui-1.8.9.custom.min.js"></script>
+<script language="javascript" src="../forecast/js/scripts/bidCommon.js"></script>
+<script src="js/Bid.js" type="text/javascript"></script>
+<!-- <script src="js/lib.js" type="text/javascript"></script> -->
+
+  
+  <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+  <!-- <script type="text/javascript" src="../scripts/lib/jquery/jquery-1.5.js"></script> -->
+  <link href="css/msgbox.css" rel="stylesheet">
+  <script type="text/javascript" src="js/msgshow.js"></script>
+  
+
+  <script type="text/javascript">
+    var UA = window.navigator.userAgent;
+    // 终端
+    var os = {
+        'android': UA.match(/(Android);?[\s\/]+([\d.]+)?/),
+        'ios': UA.match(/(iPad|iPhone|iPod).*OS\s([\d_]+)/),
+        //            'ipad': UA.match(/(iPad).*OS\s([\d_]+)/)
+      }
+      // 客户端
+    var client ={
+        'weixin': UA.match(/.*?(MicroMessenger\/([0-9.]+))\s*/),
+        'QQ':UA.indexOf("MQQBrowser") == -1 && UA.indexOf("QQ") > -1
+      }
+      //根据不同系统平台 显示下载按钮
+
+    //打开APP链接地址
+    function openIosAppLink() {
+      if (client.weixin){
+    	showMsg('请点击微信右上角按钮，在浏览器中打开安装');
+        return;
+      }
+      if (client.QQ){
+          showMsg('请点击QQ右上角按钮，在浏览器中打开安装');
+          return;
+      }
+      if (os.ios) {
+    	  saveDownLoadLog("IOS");
+          $('.loading').show();
+          setTimeout(function(){
+              $('.loading').hide();
+              $('#label_message').show();
+          },4000);
+        window.location.href = 'itms-services://?action=download-manifest&url=https://imagedata.guoanshequ.com/file_manager/H546CAEF8_1216025449.plist';
+      }else{
+    	//$$.showMessage("系统信息", "所下载文件与当前设备不匹配！");
+    	//alert("所下载文件与当前设备不匹配！ ");
+    	showMsg('所下载文件与当前设备不匹配！');
+      }
+    }
+    function openAndroidAppLink(){
+    	if (client.weixin){
+    		showMsg('请点击微信右上角按钮，在浏览器中打开安装');
+            return;
+          }
+    	 if (os.android) {
+    		saveDownLoadLog("Android");
+    		window.location.href = 'https://imagedata.guoanshequ.com/file_manager/H546CAEF8_0822145822V.apk';
+    	}else{
+    		showMsg('所下载文件与当前设备不匹配！');
+    		//alert("所下载文件与当前设备不匹配！ ");
+    	} 
+    }
+    
+    function showMsg(msg){
+    	$.myalert({
+    		   content:msg,
+    		   confirm_btn_click: function (e){ //确认按钮点击事件
+    		    $.myalert("getDialog").mydialog("hide");
+    		   }
+    	});
+    }
+    
+    
+    
+    function saveDownLoadLog(type){
+    	var cname=returnCitySN.cname;
+		var ip=returnCitySN.cip;
+    	if($$.PMSDispatchActionUrl=="/dispatcher.action"){
+    		$$.PMSDispatchActionUrl="/daqWeb"+$$.PMSDispatchActionUrl;
+    	}
+    	doManager("InterManager","saveDownloadLog", [ type,ip,cname ] , function(data, textStatus, XMLHttpRequest){
+ 			if (data.result == true) {
+ 			}
+ 		},false);
+    }
+    
+  </script>
+</body></html>

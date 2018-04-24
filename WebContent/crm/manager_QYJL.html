@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据社区动态</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="dist/css/top_style.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .logo-lg li{float: left;}
+    .box .col-lg-12{margin-top: 20px;}
+	tr[id^='tr_']:hover{color:#3c8dbc}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" style="position:relative;">
+<div id="moquu_wshare" class="moquu_wshare"><a href="javascript:void(0)"><div class="moquu_wshareh"></div></a></div>
+<div id="process_div" style="position: absolute;z-index:100000;width: 100%;height: 100%;background-color:rgba(0,0,0,0.3);">
+	<div style="position:absolute; top:15%; left:50%; z-index:100000000; margin:-16px 0 0 -50px; width:100px; height:32px;color: #fff"><img style="width:40px;height: 40px;" src="dist/img/376884043677306248.png">加载中...</div>
+</div>
+
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+
+        <div class="pull-left">
+          <div class="logo-lg clearfix">
+            <ul>
+              <li><a href="javascript:location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
+              <li class="nav-mark"><a href="javascript:location.reload();">区域动态</a> </li>
+              <li><a href="../crm/loginplatform.html">国安数据首页</a> <!-- <a href="user.html">个人动态</a>  --></li>
+              <li><!-- <a href="user.html#user">片区信息</a> --> </li>
+              <li></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+
+                  <p><strong ><span id="card_name">载入中...</span></strong></p>
+                  <p><span id="card_no">载入中...</span></p>
+                  <!-- <p ><span id="store_name">载入中...</span></p> -->
+                </li>
+                <!-- Menu Body -->
+                <li class="user-body">
+                 <!--  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">划片区域</a>
+                    </div>
+                  </div> -->
+                  <!-- /.row -->
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">国安数据管理</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+     	<section class="content-header">
+	        <div class="box clearfix">
+	     	   <div class="info_head with-border col-lg-6">
+	              <div class="col-lg-1"></div>
+	              <h2 class="col-lg-11 text-yellow">载入中...</h2>
+	              <div class="box-body">
+	                <dl class="dl-horizontal">
+	                  <dt>门店:</dt>
+	                  <dd id="store_total">载入中...</dd>
+	                  <dt>店长:</dt>
+	                  <dd id="storekeeper_total">载入中...</dd>
+	                  <dt>员工:</dt>
+	                  <dd id="gax_total">载入中...</dd>
+	                </dl>
+	              </div>
+	            </div>
+	        </div>    
+        </section>    
+            
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box clearfix">
+            <div class="info_head with-border col-lg-6">
+               <h3 class="text-center">员工动态统计</h3>
+              <!--<div class="text-right">订单记录（单）<span class="bg-green"></span>拜访记录（次）<span class="bg-red"></span></div>-->
+              <div id="main12" style="width: 100%;height:250px;"></div>
+            </div>
+            <!-- /.box-header -->
+            <div class="info_bottom col-lg-6">
+              <h5 class="text-center">区域动态统计</h5>
+              <!--<div class="text-right">订单记录（单）<span class="bg-green"></span>拜访记录（次）<span class="bg-red"></span></div>-->
+              <div id="main1" style="width: 100%;height:250px;"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+       <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>门店动态</strong></div>
+          <div style="position:absolute;right:10px;top:10px">
+              <select class="form-control" id="crm_date" onchange="reloadByDate()">
+                
+              </select>
+            </div>
+          <div class="box-body no-padding">
+            <div class="col-lg-6">
+              <h3 class="text-center">订单数量（前十名）</h3>
+              <div id="main2" style="width: 100%;height:350px;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">订单数量（后十名）</h3>
+              <div id="main2_1" style="width: 100%;height:350px;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">订单金额（前十名）</h3>
+              <div id="main3" style="width: 100%;height:350px;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">订单金额（后十名）</h3>
+              <div id="main3_1" style="width: 100%;height:350px;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">拜访记录（前十名）</h3>
+              <div id="main4" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">拜访记录（后十名）</h3>
+              <div id="main4_1" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">用户画像（前十名）</h3>
+              <div id="main5" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">用户画像（后十名）</h3>
+              <div id="main5_1" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">快递代送（前十名）</h3>
+              <div id="main6" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">快递代送（后十名）</h3>
+              <div id="main6_1" style="height:350px;width: 100%;"></div>
+            </div>
+          </div>
+        </div>
+        
+      </section>
+
+       <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>店长动态（前10名）</strong></div>
+          <div class="box-body no-padding">
+          	<div class="col-lg-6">
+              <h3 class="text-center">订单数量（前十名）</h3>
+              <div id="main7" style="width: 100%;height:400px;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">订单数量（后十名）</h3>
+              <div id="main7_1" style="width: 100%;height:400px;"></div>
+            </div>
+             <div class="col-lg-6" id="kepper_customer">
+              <h3 class="text-center">订单金额（前十名）</h3>
+              <div id="main8" style="width: 100%;height:400px;"></div>
+            </div>
+            <div class="col-lg-6" id="kepper_customer">
+              <h3 class="text-center">订单金额（后十名）</h3>
+              <div id="main8_1" style="width: 100%;height:400px;"></div>
+            </div>
+             <div class="col-lg-6">
+              <h3 class="text-center">拜访记录（前十名）</h3>
+              <div id="main9" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">拜访记录（后十名）</h3>
+              <div id="main9_1" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6" >
+              <h3 class="text-center">用户画像（前十名）</h3>
+              <div id="main10" style="height:350px;width: 100%;"></div>
+            </div>
+             <div class="col-lg-6" >
+              <h3 class="text-center">用户画像（后十名）</h3>
+              <div id="main10_1" style="height:350px;width: 100%;"></div>
+            </div>
+            <div class="col-lg-6">
+              <h3 class="text-center">快递代送（前十名）</h3>
+              <div id="main11" style="height:350px;width: 100%;"></div>
+            </div> 
+             <div class="col-lg-6">
+              <h3 class="text-center">快递代送（前十名）</h3>
+              <div id="main11_1" style="height:350px;width: 100%;"></div>
+            </div> 
+          </div>
+        </div>
+      </section> 
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+ <!--  <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- page script -->
+<!-- statistics -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript" src="dist/js/top_style.js"></script>
+<script type="text/javascript">
+
+	layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+  // 基于准备好的dom，初始化echarts实例
+ var myChart1 = echarts.init(document.getElementById('main1'));
+  var myChart2 = echarts.init(document.getElementById('main2'));
+  var myChart2_1 = echarts.init(document.getElementById('main2_1'));
+  var myChart3 = echarts.init(document.getElementById('main3'));
+  var myChart3_1 = echarts.init(document.getElementById('main3_1'));
+  var myChart4 = echarts.init(document.getElementById('main4'));
+  var myChart4_1 = echarts.init(document.getElementById('main4_1'));
+  var myChart5 = echarts.init(document.getElementById('main5'));
+  var myChart5_1 = echarts.init(document.getElementById('main5_1'));
+  var myChart6 = echarts.init(document.getElementById('main6'));
+  var myChart6_1 = echarts.init(document.getElementById('main6_1'));
+  var myChart7 = echarts.init(document.getElementById('main7'));
+  var myChart7_1 = echarts.init(document.getElementById('main7_1'));
+  var myChart8 = echarts.init(document.getElementById('main8'));
+  var myChart8_1 = echarts.init(document.getElementById('main8_1'));
+  var myChart9 = echarts.init(document.getElementById('main9'));
+  var myChart9_1 = echarts.init(document.getElementById('main9_1'));
+  var myChart10 = echarts.init(document.getElementById('main10'));
+  var myChart10_1 = echarts.init(document.getElementById('main10_1'));
+  var myChart11 = echarts.init(document.getElementById('main11'));  
+  var myChart11_1 = echarts.init(document.getElementById('main11_1'));  
+  var myChart12 = echarts.init(document.getElementById('main12'));
+  
+  var init_month =  getUrlParamByKey("q_date");
+  var employee_no = "";
+  $(function(){
+	  initDate();
+	  initcurruser();
+	  $("#process_div").remove();
+  });
+  
+  function doLogout() { 
+  		
+ 		layer.confirm('确定退出？', {
+ 			  	title:'提示',
+ 			  	offset:['100px','550px'],
+ 			  	move:false,
+ 			  	closeBtn:0,
+ 			  	skin:'layer-ext-crmskin',
+ 				btn: ['确定','取消'], //按钮
+ 			}, function(){
+ 				urlStr = "../logout.do";
+ 				window.location.href = urlStr;
+ 			}, function(){
+ 			  
+ 			});
+	}
+  
+  
+  var curMonth = "";//当月
+  var curYear="";
+  var curDate = "";
+  function initDate(){
+	  var myDate = new Date();
+	  var c_year = myDate.getFullYear(); //当前年
+	  var c_month = myDate.getMonth()+1;//当前月
+	  curMonth = c_month;
+	  curYear = c_year;
+	  curDate =  c_year+"-"+c_month;//当前日期
+	  var date_option = "";
+	  for(var i=1;i<=c_month;i++){
+		  var year_month = c_year+"-"+i;
+		  var y_m =c_year+"年"+i+"月";
+		  if(i==(c_month-1)){//上一个月
+			  date_option=date_option+"<option value='"+year_month+"' selected>"+y_m+"</option>";
+			 
+		  }else if(c_month==1){//当前月是一月
+			  date_option=date_option+"<option value='"+year_month+"' selected>"+y_m+"</option>";
+			 
+		  }else{
+			  date_option=date_option+"<option value='"+year_month+"' >"+y_m+"</option>";
+		  }
+	  }
+	  $("#crm_date").append(date_option);
+	  if(init_month!=null){
+		  $("#crm_date").val(decode64(init_month));
+	  }
+  }
+  
+  function reloadByDate(){
+	  var s_date = $("#crm_date").val();
+	  var myDate = new Date();
+	  var c_year = myDate.getFullYear(); //当前年
+	  var c_month = myDate.getMonth()+1;//当前月
+	  var year_month = c_year+"-"+c_month;
+	  if(s_date==year_month){
+		  layer.confirm('查询当月数据非常耗时，是否继续？', {
+			  	title:'提示',
+			  	offset:['100px','550px'],
+			  	move:false,
+			  	closeBtn:0,
+			  	skin:'layer-ext-crmskin',
+				btn: ['继续','取消'], //按钮
+			}, function(){
+				layer.closeAll();
+				window.parent.location=getRootPath() + "/crm/manager_QYJL.html?q_date="+encode64(year_month);
+			});
+	  }else{
+		  window.parent.location=getRootPath() + "/crm/manager_QYJL.html?q_date="+encode64(s_date);
+	  }
+	  
+  }
+  
+  
+  
+  var curr_user;
+  var targetMonth="prev";
+  function initcurruser(){
+  		//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,
+    				function(data, textStatus, XMLHttpRequest) {
+    					if (data.result) {
+    						 curr_user = JSON.parse(data.data);
+    						 //$("#store_name").html(curr_user.store_name);
+    						 $("#employee_no").html(curr_user.employeeId);
+    						 $('span[class="hidden-xs"]').html(curr_user.name);
+    						 $("#card_name").html(curr_user.name);
+    						 $("#card_no").html(curr_user.zw+" "+curr_user.employeeId);
+    						 
+   							 getAreaName();//获取区域名称
+   							
+   							 getTotalOfArea();//获取区域下的门店总数和店长总数
+		   							
+		   					 if(curMonth==1||decode64(init_month)==curDate){//当前月是一月（或者查询当前月）默认查询当前月
+		   						 targetMonth="current";
+	   						 }else{//查询非当前月
+	   							 targetMonth="prev";
+	   						 }
+  							 
+		   				  	  showEmployeeChart();//（入职、离职人员）
+							  showRunChart();//（城市动态统计）
+							  showBarChart_relation_customer();//拜访记录和用户画像柱状图（各个门店）
+							  showPieChart_express();//快递代送（各个门店）
+							  showPieChart_StoreOrder();//订单 
+    					}
+    			},false);
+  	}
+  
+  //获取区域经理的区域名称
+  
+  function getAreaName(){
+		 doManager("StoreKeeperManager", "findStoreKeeperByEmployeeId",[curr_user.employeeId],
+ 				function(data, textStatus, XMLHttpRequest) {
+ 					if (data.result) {
+ 						var storeKeeper= JSON.parse(data.data);
+ 						$(".text-yellow").html(storeKeeper.remark);
+ 					}
+ 			},false);
+	     
+  }
+  //获取区域中的门店总数和店长总数、国安侠总数
+  function getTotalOfArea(){
+	  doManager("StoreManager", "getAllTotalOfArea",[curr_user.id,curr_user.id],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var resultJson= JSON.parse(data.data);
+						$("#store_total").html("<a href='javascript:showStoreInfo()'>"+resultJson.storeTotal+"</a> 家");
+						$("#storekeeper_total").html("<a href='javascript:showStoreKeeperInfo()'>"+resultJson.storeKeeperTotal+"</a> 人");
+						$("#gax_total").html("<a href='javascript:showGaxInfo()'>"+resultJson.gaxTotal+"</a> 人");
+						var storelist = resultJson.store;
+						var storekeeperlist = resultJson.storeKeeper;
+						var gaxList = resultJson.gax;
+						var gaxInfo="";
+						var storeInfo="";
+						var storeKeeperInfo="";
+						for(var i=0;i<storelist.length;i++){
+							var store_name = storelist[i].name;
+							var keeperName = storelist[i].keeperName;
+							var employeeId = storelist[i].employeeId;
+							var store_id = storelist[i].store_id;
+							
+							storeInfo = storeInfo+"<tr style='cursor:pointer'  id='tr_"+store_id+"' onclick='newStoreInfoHtml(this)'><td>"+parseInt(i+1)+"</td><td>"+store_name+"</td><td>"+keeperName+"</td></tr>"
+						}
+						$("#store_detail_title").nextAll().empty();
+						$("#store_detail_title").after(storeInfo);
+						$("#store_detail_title").nextAll("tr:even").css("background-color","aliceblue");
+						$("#store_detail_title").nextAll("tr:odd").css("background-color","mintcream");
+						
+						
+						
+						
+						for(var i=0;i<storekeeperlist.length;i++){
+							var employeeName = storekeeperlist[i].name;
+							var employee_phone = storekeeperlist[i].mobilephone==null?"":storekeeperlist[i].mobilephone;
+							var employeeId = storekeeperlist[i].employeeId;
+							
+							
+							storeKeeperInfo = storeKeeperInfo+"<tr style='cursor:pointer'  id='tr_"+employeeId+"' onclick='newStoreKeeperInfoHtml(this)'><td>"+parseInt(i+1)+"</td><td>"+employeeName+"</td><td>"+employee_phone+"</td></tr>"
+						}
+						$("#storeKeeper_detail_title").nextAll().empty();
+						$("#storeKeeper_detail_title").after(storeKeeperInfo);
+						$("#storeKeeper_detail_title").nextAll("tr:even").css("background-color","aliceblue");
+						$("#storeKeeper_detail_title").nextAll("tr:odd").css("background-color","mintcream");
+						
+						for(var i=0;i<gaxList.length;i++){
+							var employeeName = gaxList[i].name;
+							var employee_sex = gaxList[i].sex;
+							var employeeNo = gaxList[i].employee_no;
+							var employee_authorizedtype = gaxList[i].authorizedtype;
+							var employee_topostdate = gaxList[i].topostdate;
+							gaxInfo = gaxInfo+"<tr style='cursor:pointer'  id='tr_"+employee_no+"' onclick='newEmployeeInfoHtml(this)'><td>"+parseInt(i+1)+"</td><td>"+employeeName+"</td><td>"+employee_sex+"</td><td>"+employee_topostdate+"</td><td>"+employee_authorizedtype+"</td></tr>"
+						}
+						$("#gax_detail_title").nextAll().empty();
+						$("#gax_detail_title").after(gaxInfo);
+						$("#gax_detail_title").nextAll("tr:even").css("background-color","aliceblue");
+						$("#gax_detail_title").nextAll("tr:odd").css("background-color","mintcream");
+					}
+			},false);
+	    
+  }
+  //展示门店列表
+  function showStoreInfo(){
+	  layer.open({
+		  type: 1,
+   		  title:  ['门店信息','color:#fff'],
+   		  shadeClose: true,
+   		  shade:[0.1, '#393D49'],
+   		  moveOut:false,
+   		  skin: 'layer-ext-crmskin',
+   		  area: ['600px','290px'],
+   		  offset: ['100px','400px'],
+   		  content:$("#store_detail_div"),
+   		  success:function(layer,index){
+   			
+   		  },
+   		  cancel: function(index, layero){ 
+   			 layer.close(index);
+   			}  
+   		});  
+  }
+  //展示门店店长列表
+  function showStoreKeeperInfo(){
+	  layer.open({
+		  type: 1,
+   		  title:  ['门店信息','color:#fff'],
+   		  shadeClose: true,
+   		  shade:[0.1, '#393D49'],
+   		  moveOut:false,
+   		  skin: 'layer-ext-crmskin',
+   		  area: ['600px','290px'],
+   		  offset: ['100px','400px'],
+   		  content:$("#storeKeeper_detail_div"),
+   		  success:function(layer,index){
+   			
+   		  },
+   		  cancel: function(index, layero){ 
+   			 layer.close(index);
+   			}  
+   		}); 
+  }
+  
+  
+  //展示国安侠列表
+  function showGaxInfo(){
+	  layer.open({
+		  type: 1,
+   		  title:  ['国安侠信息','color:#fff'],
+   		  shadeClose: true,
+   		  shade:[0.1, '#393D49'],
+   		  moveOut:false,
+   		  skin: 'layer-ext-crmskin',
+   		  area: ['600px','290px'],
+   		  offset: ['100px','400px'],
+   		  content:$("#gax_detail_div"),
+   		  success:function(layer,index){
+   			resetSearch();
+   		  },
+   		  cancel: function(index, layero){ 
+   			 layer.close(index);
+   			}  
+   		}); 
+  }
+  
+  //跳转到manageToStore.html
+  function newStoreInfoHtml(t){
+	  var storeId =   $(t).attr("id").split("_")[1];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  }
+  
+  //跳转到manageToStoreKeeper.html
+  function newStoreKeeperInfohtml(){
+	  var employee =   $(t).attr("id").split("_")[1];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  }
+  
+  
+  //跳转到国安侠
+  function newEmployeeInfoHtml(t){
+	  var employeeNo =   $(t).attr("id").split("_")[1];
+	  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
+	  window.open(URL); 
+  }
+  
+  //走势图（拜访记录、用户画像）
+  function getRelationAndCustomer(){
+	  var method = "queryRelationAndCustomerOfYear_CSZJ_QYJL";
+	  if("prev"==targetMonth){
+		  method ="queryRelationAndCustomerOfYear_CSZJ_QYJL_before";
+	  }
+	  doManager("customerManager",method ,[curr_user.employeeId,null,'QYJL'],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var result = JSON.parse(data.data);
+						var months = new Array();
+						var relations = new Array();
+						var customers = new Array();
+						for(var i=0;i<result.relation.length;i++){
+							months[i]=result.relation[i].date;
+							relations[i]=result.relation[i].total;
+							customers[i]=result.customer[i].total;
+						}
+						
+						option1.xAxis.data=months;
+						option1.series[2].data=relations;
+						option1.series[3].data=customers;
+					}
+		},false);
+  }
+  
+  //员工入职、离职统计
+  function showEmployeeChart(){
+	 
+	  doManager("userManager", "getEntryOrLeaveEmployeeOfStore",[null,curr_user.employeeId,'QYJL'],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var result = JSON.parse(data.data);
+						var months = new Array();
+						var entryList = new Array();
+						var leaveList = new Array();
+						for(var i=0;i<result.entryEmployee.length;i++){
+							months[i]=result.entryEmployee[i].date;
+							entryList[i]=result.entryEmployee[i].total;
+							leaveList[i]=result.leaveEmployee[i].total;
+						}
+						
+						option12.xAxis.data=months;
+						option12.series[0].data=entryList;
+						option12.series[1].data=leaveList;
+						myChart12.setOption(option12);//数据初始化后展示
+					}
+		},false);
+	 
+  }
+  
+  
+  //城市动态统计
+  function showRunChart(){
+	  getRelationAndCustomer();  
+	  showChart_ordermonth();
+	  myChart1.setOption(option1);//数据初始化后展示
+  }
+  
+  //用户画像和拜访记录的柱状图
+  var storeIdArray1 = new Array();
+  var storeIdArray1_h = new Array();
+  var storeIdArray2 = new Array();
+  var storeIdArray2_h = new Array();
+  function showBarChart_relation_customer(){
+	  var query_date="one_month";
+	  var method="queryRelationAndCustomerOfStore_CSZJ_QYJL";
+	  if("prev"==targetMonth){
+		  method="queryRelationAndCustomerOfStore_CSZJ_QYJL_before";
+	  }
+	  doManager("customerManager", method,[curr_user.employeeId,null,'QYJL',decode64(init_month)],
+				function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var result = JSON.parse(data.data);
+					var stores1 = new Array();
+					var stores1_h = new Array();
+					var stores2 = new Array();
+					var stores2_h = new Array();
+					var stores1_storekeeper = new Array();
+					var stores1_storekeeper_h = new Array();
+					var stores2_storekeeper = new Array();
+					var stores2_storekeeper_h = new Array();
+					var relations = new Array();
+					var relations_h = new Array();
+					var customers = new Array();
+					var customers_h = new Array();
+					var relations_storekeeper = new Array();
+					var relations_storekeeper_h = new Array();
+					var customers_storekeeper = new Array();
+					var customers_storekeeper_h = new Array();
+					var relationLen = result.relation.length;
+					for(var i=0;i<result.relation.length;i++){
+						
+						if(i<10){
+							
+							stores1[i]=result.relation[i].name;
+							storeIdArray1[i] = result.relation[i].store_id;
+							relations[i]=result.relation[i].total;
+							
+							stores1_storekeeper[i]=result.relation[i].employeeName+"("+result.relation[i].name+")";
+							relations_storekeeper[i]=result.relation[i].total;
+						}else if(i>9){
+							break;
+						}
+						
+						if(relationLen>10&&relationLen<20&&(relationLen-1-i)>9){
+							stores1_h[i]=result.relation[relationLen-1-i].name;
+							storeIdArray1_h[i] = result.relation[relationLen-1-i].store_id;
+							relations_h[i]=result.relation[relationLen-1-i].total;
+							
+							stores1_storekeeper_h[i]=result.relation[relationLen-1-i].employeeName+"("+result.relation[i].name+")";
+							relations_storekeeper_h[i]=result.relation[relationLen-1-i].total;
+							
+						}
+						
+						if(relationLen>=20){
+							stores1_h[i]=result.relation[relationLen-1-i].name;
+							storeIdArray1_h[i] = result.relation[relationLen-1-i].store_id;
+							relations_h[i]=result.relation[relationLen-1-i].total;
+							
+							stores1_storekeeper_h[i]=result.relation[relationLen-1-i].employeeName+"("+result.relation[i].name+")";
+							relations_storekeeper_h[i]=result.relation[relationLen-1-i].total;
+						}
+						
+					}
+					var customerLen = result.customer.length;
+					for(var i=0;i<result.customer.length;i++){
+						
+						if(i<10){
+							stores2[i]=result.customer[i].name;
+							storeIdArray2[i] = result.customer[i].store_id;
+							customers[i]=result.customer[i].total;
+							
+							stores2_storekeeper[i]=result.customer[i].employeeName+"("+result.relation[i].name+")";
+							customers_storekeeper[i]=result.customer[i].total;
+						}else if(i>9){
+							break;
+						}
+						
+						
+						if(customerLen>10&&customerLen<20&&(customerLen-i-1)>9){
+							stores2_h[i]=result.customer[customerLen-i-1].name;
+							storeIdArray2_h[i] = result.customer[customerLen-i-1].store_id;
+							customers_h[i]=result.customer[customerLen-i-1].total;
+							
+							stores2_storekeeper_h[i]=result.customer[customerLen-i-1].employeeName+"("+result.relation[customerLen-i-1].name+")";
+							customers_storekeeper_h[i]=result.customer[customerLen-i-1].total;
+						}
+						
+						
+						if(customerLen>=20){
+							stores2_h[i]=result.customer[customerLen-i-1].name;
+							storeIdArray2_h[i] = result.customer[customerLen-i-1].store_id;
+							customers_h[i]=result.customer[customerLen-i-1].total;
+							
+							stores2_storekeeper_h[i]=result.customer[customerLen-i-1].employeeName+"("+result.relation[customerLen-i-1].name+")";
+							customers_storekeeper_h[i]=result.customer[customerLen-i-1].total;
+						}
+					}
+					
+					option4.xAxis[0].data=stores1;
+					option4.series[0].data=relations;
+					myChart4.setOption(option4);
+					
+					option4_1.xAxis[0].data=stores1_h;
+					option4_1.series[0].data=relations_h;
+					myChart4_1.setOption(option4_1);
+					
+					option5.xAxis[0].data=stores2;
+					option5.series[0].data=customers;
+					myChart5.setOption(option5);
+					
+					option5_1.xAxis[0].data=stores2_h;
+					option5_1.series[0].data=customers_h;
+					myChart5_1.setOption(option5_1);
+					
+					
+					option9.xAxis[0].data=stores1_storekeeper;
+					option9.series[0].data=relations_storekeeper;
+					myChart9.setOption(option9);
+					
+					option9_1.xAxis[0].data=stores1_storekeeper_h;
+					option9_1.series[0].data=relations_storekeeper_h;
+					myChart9_1.setOption(option9_1);
+					
+					option10.xAxis[0].data=stores2_storekeeper;
+					option10.series[0].data=customers_storekeeper;
+					myChart10.setOption(option10);
+					
+					
+					
+					option10_1.xAxis[0].data=stores2_storekeeper_h;
+					option10_1.series[0].data=customers_storekeeper_h;
+					myChart10_1.setOption(option10_1);
+				}
+		},false);
+  }
+  
+  
+  
+  /*****************快递代送排序饼图开始*******************/
+  var storeIdArr = new Array();
+  var storeIdArr_1 = new Array();
+  function showPieChart_express(){
+	  var method="queryExpressList_CSZJ_QYJL";
+	  if("prev"==targetMonth){
+		  method="queryExpressList_CSZJ_QYJL_before";
+	  }
+	  doManager("ExpressManager", method,[null,curr_user.employeeId,'QYJL',decode64(init_month)],
+				function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var result = JSON.parse(data.data);
+					var dataArr = new Array();
+					var dataArr_1 = new Array();
+					var storeArr = new Array();
+					var storeArr_1 = new Array();
+					var dataArr_storekeeper = new Array();
+					var dataArr_storekeeper_1 = new Array();
+					var storeArr_storekeeper = new Array();
+					var storeArr_storekeeper_1 = new Array();
+					var expressLen = result.express.length;
+					if(result.express!=null&&expressLen>0){
+						for(var i=0;i<result.express.length;i++){
+					    	var storeName = result.express[i].name;
+					    	var count = result.express[i].total;
+					    	var storeId = result.express[i].store_id;
+							
+							
+							
+							if(i<10){
+								dataArr[i]=count;
+								storeIdArr[i] = storeId;
+								storeArr[i] = storeName;
+								
+								dataArr_storekeeper[i]=count;
+								storeArr_storekeeper[i]=result.express[i].employeeName+"("+storeName+")";
+							}else if(i>9){
+								break;
+							}
+							
+							if(expressLen>10&&expressLen<20&&(expressLen-1-i)>9){
+								dataArr_1[i]=result.express[expressLen-1-i].total;
+								storeIdArr_1[i] = result.express[expressLen-1-i].store_id;
+								storeArr_1[i] = result.express[expressLen-1-i].name;
+								
+								dataArr_storekeeper_1[i]=result.express[expressLen-1-i].total;
+								storeArr_storekeeper_1[i]=result.express[expressLen-1-i].employeeName+"("+result.express[expressLen-1-i].name+")";
+							}
+							
+							
+							if(expressLen>=20){
+								dataArr_1[i]=result.express[expressLen-1-i].total;
+								storeIdArr_1[i] = result.express[expressLen-1-i].store_id;
+								storeArr_1[i] = result.express[expressLen-1-i].name;
+								
+								dataArr_storekeeper_1[i]=result.express[expressLen-1-i].total;
+								storeArr_storekeeper_1[i]=result.express[expressLen-1-i].employeeName+"("+result.express[expressLen-1-i].name+")";
+							}
+							
+						}
+					    option6.xAxis[0].data=storeArr;
+						option6.series[0].data=dataArr;
+						myChart6.setOption(option6);
+						
+						
+						option6_1.xAxis[0].data=storeArr_1;
+						option6_1.series[0].data=dataArr_1;
+						myChart6_1.setOption(option6_1);
+						
+						option11.xAxis[0].data=storeArr_storekeeper;
+						option11.series[0].data=dataArr_storekeeper;
+						myChart11.setOption(option11);
+						
+						option11_1.xAxis[0].data=storeArr_storekeeper_1;
+						option11_1.series[0].data=dataArr_storekeeper_1;
+						myChart11_1.setOption(option11_1);
+					}
+				    
+				}
+		},false);
+  }
+  /*****************快递代送排序饼图结束*******************/
+  
+  
+  /*****************第一张图  区域经理当年订单汇总 开始*******************/
+  function showChart_ordermonth(){
+	  var method="queryOrderCountOfMonth_CSZJ_QYJL";
+	  if("prev"==targetMonth){
+		  method="queryOrderCountOfMonth_CSZJ_QYJL_before";
+	  }
+	  doManager("OrderManager", method,[null,curr_user.employeeId,'QYJL'],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var result = JSON.parse(data.data);
+						
+						var months = new Array();
+						var totalcounts = new Array();
+						var totalprices = new Array();
+						for(var i=0;i<result.ordermonth.length;i++){
+							months[i]=result.ordermonth[i].month;
+							totalcounts[i]=result.ordermonth[i].total_count;
+							totalprices[i]=result.ordermonth[i].total_price;
+						}
+						option1.series[0].data=totalcounts;
+						option1.series[1].data=totalprices;
+					}
+		},false);
+  }
+  /*****************第一张区域经理当年订单  结束*******************/
+  
+  
+  
+   /*****************送单量排序开始*******************/
+  function showPieChart_Order(){
+	  doManager("OrderManager", "queryOrderCountByStoreId",[curr_user.store_id],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var result = JSON.parse(data.data);
+						var employees = new Array();
+						var orders = new Array();
+					     for(var i=0;i<result.orders.length;i++){
+							//var dataMap = {value:result.orders[i].count,name:result.orders[i].employee_name};
+							//dataArr[i]=dataMap;
+							var nameArr = result.orders[i].employee_name.split('+');
+							
+							var name_num = "";
+							if(nameArr.length==2&&nameArr[1]!=''){
+								var name = nameArr[0];
+								var num = nameArr[1];
+								name_num = name+"-"+num;
+							}else{
+								name_num = nameArr[0];
+							}
+							
+					    	 employees[i]=name_num;
+							 orders[i]=result.orders[i].count;
+						}
+					     
+					    option5.xAxis[0].data=employees;
+						option5.series[0].data=orders;
+						myChart5.setOption(option5);  
+					}
+		},false);
+  }
+  /*****************送单量排序结束*******************/
+  
+  
+  /*****************订单数量（按门店排序）柱状图 开始*******************/
+  var storeID_Array1 = new Array();
+  var storeID_Array1_1 = new Array();
+  var storeID_Array2 = new Array();
+  var storeID_Array2_1 = new Array();
+  function showPieChart_StoreOrder(){
+	  var method="queryOrderTotalOfStore_CSZJ_QYJL";
+	  if("prev"==targetMonth){
+		  method="queryOrderTotalOfStore_CSZJ_QYJL_before";
+	  }
+	  doManager("OrderManager", method,[null,curr_user.id,'QYJL',decode64(init_month)],
+				function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var result = JSON.parse(data.data);
+					var storenames1 = new Array();//前10
+					var storenames1_1 = new Array();//后10
+					var storenames2 = new Array();//前10
+					var storenames2_1 = new Array();//后10
+					var storenames1_storekeeper = new Array();
+					var storenames1_storekeeper_1 = new Array();//后10
+					var storenames2_storekeeper = new Array();//前10
+					var storenames2_storekeeper_1 = new Array();//后10
+					var ordercounts = new Array();//前10
+					var ordercounts_1 = new Array();//后10
+					var pricetotals = new Array();//前10
+					var pricetotals_1 = new Array();//后10
+					var ordercounts_storekeeper = new Array();//前10
+					var ordercounts_storekeeper_1 = new Array();//后10
+					var pricetotals_storekeeper = new Array();//前10
+					var pricetotals_storekeeper_1 = new Array();//后10
+					var orderLen = result.ordercount.length;
+					
+				    for(var i=0;i<orderLen;i++){
+				    	 
+				    	 if(i<10){//前十名
+				    		
+				    		 storenames1[i]=result.ordercount[i].name;
+					    	 ordercounts[i]=result.ordercount[i].ordercount;
+					    	 storeID_Array1[i] = result.ordercount[i].store_id;
+				    		 
+				    		 storenames1_storekeeper[i] = result.ordercount[i].employeeName+"("+result.ordercount[i].name+")";
+				    		 ordercounts_storekeeper[i] = result.ordercount[i].ordercount;
+				    	 }else if(i>9){
+				    		 break;
+				    	 }
+				    	 
+				    	 if(orderLen>10&&orderLen<20&&(orderLen-1-i)>9){//后十名
+				    		 storenames1_1[i]=result.ordercount[orderLen-1-i].name;
+					    	 ordercounts_1[i]=result.ordercount[orderLen-1-i].ordercount;
+					    	 storeID_Array1_1[i] = result.ordercount[orderLen-1-i].store_id;
+				    		 
+				    		 storenames1_storekeeper_1[i] = result.ordercount[orderLen-1-i].employeeName+"("+result.ordercount[i].name+")";
+				    		 ordercounts_storekeeper_1[i] = result.ordercount[orderLen-1-i].ordercount;
+				    	 }
+				    	 
+				    	 if(orderLen>=20){//后十名
+				    		 
+				    		 storenames1_1[i]=result.ordercount[orderLen-1-i].name;
+					    	 ordercounts_1[i]=result.ordercount[orderLen-1-i].ordercount;
+					    	 storeID_Array1_1[i] = result.ordercount[orderLen-1-i].store_id;
+				    		 
+				    		 storenames1_storekeeper_1[i] = result.ordercount[orderLen-1-i].employeeName+"("+result.ordercount[orderLen-1-i].name+")";
+				    		 ordercounts_storekeeper_1[i] = result.ordercount[orderLen-1-i].ordercount;
+				    		
+				    	 }
+				    	 
+				    	
+					}
+				    var orderpriceLen = result.orderprice.length;
+				    for(var i=0;i<result.orderprice.length;i++){
+				    	 
+				    	 if(i<10){
+				    		 storenames2[i]=result.orderprice[i].name;
+					    	 pricetotals[i]=result.orderprice[i].total_price;
+					    	 storeID_Array2[i] = result.orderprice[i].store_id;
+					    	 
+				    		 storenames2_storekeeper[i] = result.orderprice[i].employeeName+"("+result.orderprice[i].name+")";
+				    		 pricetotals_storekeeper[i] = result.orderprice[i].total_price;
+				    	 }else if(i>9){
+				    		 break;
+				    	 }
+				    	 
+				    	 if(orderpriceLen>10&&orderpriceLen<20&&(orderpriceLen-1-i)>9){
+				    		 storenames2_1[i]=result.orderprice[orderpriceLen-1-i].name;
+				    		 pricetotals_1[i]=result.orderprice[orderpriceLen-1-i].total_price;
+					    	 storeID_Array2_1[i] = result.orderprice[orderpriceLen-1-i].store_id;
+				    		 
+					    	 storenames2_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].employeeName+"("+result.orderprice[i].name+")";
+				    		 pricetotals_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].total_price;
+				    	 }
+				    	 
+				    	 if(orderpriceLen>=20){
+				    		 
+				    		 storenames2_1[i]=result.orderprice[orderpriceLen-1-i].name;
+				    		 pricetotals_1[i]=result.orderprice[orderpriceLen-1-i].total_price;
+					    	 storeID_Array2_1[i] = result.orderprice[orderpriceLen-1-i].store_id;
+				    		 
+					    	 storenames2_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].employeeName+"("+result.orderprice[i].name+")";
+				    		 pricetotals_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].total_price;
+				    		
+				    	 }
+					}
+				     
+				    option2.xAxis[0].data=storenames1;
+					option2.series[0].data=ordercounts;
+					myChart2.setOption(option2);  
+					
+					option2_1.xAxis[0].data=storenames1_1;
+					option2_1.series[0].data=ordercounts_1;
+					myChart2_1.setOption(option2_1);
+					
+					option3.xAxis[0].data=storenames2;
+					option3.series[0].data=pricetotals;
+					myChart3.setOption(option3); 
+					
+					option3_1.xAxis[0].data=storenames2_1;
+					option3_1.series[0].data=pricetotals_1;
+					myChart3_1.setOption(option3_1); 
+					
+					option7.xAxis[0].data=storenames1_storekeeper;
+					option7.series[0].data=ordercounts_storekeeper;
+					myChart7.setOption(option7); 
+					
+					option7_1.xAxis[0].data=storenames1_storekeeper_1;
+					option7_1.series[0].data=ordercounts_storekeeper_1;
+					myChart7_1.setOption(option7_1); 
+					
+					option8.xAxis[0].data=storenames2_storekeeper;
+					option8.series[0].data=pricetotals_storekeeper;
+					myChart8.setOption(option8);  
+					
+					option8_1.xAxis[0].data=storenames2_storekeeper_1;
+					option8_1.series[0].data=pricetotals_storekeeper_1;
+					myChart8_1.setOption(option8_1);
+					
+				}
+		},false);
+  }
+  /*****************订单数量（按片区排序）柱状图  结束*******************/
+  
+  
+  
+  
+  
+  
+  // 指定图表的配置项和数据
+  var option1 = {
+  	color: ['#3398DB','#c9de1d','#cc6457','#7d79d4'],  
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+    	 x: '80px', // 'center' | 'left' | {number},
+         y: 'top',
+    	selected: {
+            '订单金额':false,
+            '拜访记录':false,
+            '用户画像':false
+      },
+      data:['订单量','订单金额','拜访记录','用户画像']
+    },
+    toolbox: {
+        x:'450px',
+        y:'top',
+    	show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show:true,title:'列表视图',readOnly:true,lang:['列表视图', '关闭']}
+    	}
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '15%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: []
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name:'订单量',
+        type:'line',
+        stack: '总量',
+        data:[]
+      },
+      {
+        name:'订单金额',
+        type:'line',
+        stack: '总量',
+        data:[]
+      },
+      {
+        name:'拜访记录',
+        type:'line',
+        stack: '总量',
+        data:[]
+      },
+      {
+        name:'用户画像',
+        type:'line',
+        stack: '总量',
+        data:[]
+      }
+    ]
+  };
+
+//指定图表的配置项和数据
+  var option12 = {
+	color: ['#4ff30c','#ec0e19'],  
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+    	 x: '80px', // 'center' | 'left' | {number},
+         y: 'top',
+	     data:['入职人数','离职人数']
+    },
+    toolbox: {
+        x:'450px',
+        y:'top',
+    	show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show:true,title:'列表视图',readOnly:true,lang:['列表视图', '关闭']}
+    	}
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '15%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: []
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        name:'入职人数',
+        type:'line',
+        stack: '总量',
+        data:[]
+      },
+      {
+        name:'离职人数',
+        type:'line',
+        stack: '总量',
+        data:[]
+      }
+    ]
+  };
+  
+  
+  
+//--------------------------------------------------门店维度开始---------------------------------------------------------
+  var option2 = {
+    color: ['#3398DB'],
+    tooltip : {
+      trigger: 'axis',
+      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '5%',
+      containLabel: true
+    },
+    xAxis : [
+      {
+        type : 'category',
+        data : [],
+        axisTick: {
+          alignWithLabel: true
+        }
+      }
+    ],
+    yAxis : [
+      {
+        type : 'value'
+      }
+    ],
+    series : [
+      {
+        name:'订单数量',
+        type:'bar',
+        barWidth: '60%',
+        data:[],
+        label: {
+          normal: {
+            show: true,
+            position: 'top' //值显示
+          }
+        }
+      }
+    ]
+  };
+  
+  
+  var option2_1 = {
+		    color: ['#3398DB'],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      top: '5%',
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        axisTick: {
+		          alignWithLabel: true
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value'
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'订单数量',
+		        type:'bar',
+		        barWidth: '60%',
+		        data:[],
+		        label: {
+		          normal: {
+		            show: true,
+		            position: 'top' //值显示
+		          }
+		        }
+		      }
+		    ]
+		  };
+  
+  
+  var option3 = {
+		    color: ['#c9de1d'],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      top: '5%',
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        axisTick: {
+		          alignWithLabel: true
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value'
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'订单金额',
+		        type:'bar',
+		        barWidth: '60%',
+		        data:[],
+		        label: {
+		          normal: {
+		            show: true,
+		            position: 'top' //值显示
+		          }
+		        }
+		      }
+		    ]
+		  };
+
+  var option3_1 = {
+		    color: ['#c9de1d'],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      top: '5%',
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        axisTick: {
+		          alignWithLabel: true
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value'
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'订单金额',
+		        type:'bar',
+		        barWidth: '60%',
+		        data:[],
+		        label: {
+		          normal: {
+		            show: true,
+		            position: 'top' //值显示
+		          }
+		        }
+		      }
+		    ]
+		  };
+  
+  
+  
+  var option4 = {
+	  color: ['#cc6457'],
+	  tooltip: {
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [{
+      type: 'category',
+      data : []
+    }],
+    yAxis: [{
+      type: 'value',
+      axisLabel: {
+        formatter: '{value}'
+      }
+    }],
+    series: [{
+      name: '拜访记录',
+      type: 'bar',
+      data: [],
+      label: {
+        normal: {
+          show: true,
+          position: 'top' //值显示
+        }
+      }
+    }]
+  };
+  
+  
+  
+  var option4_1 = {
+		  color: ['#cc6457'],
+		  tooltip: {
+	      trigger: 'axis',
+	      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+	        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+	      }
+	    },
+	    grid: {
+	      left: '3%',
+	      right: '4%',
+	      bottom: '3%',
+	      containLabel: true
+	    },
+	    xAxis: [{
+	      type: 'category',
+	      data : []
+	    }],
+	    yAxis: [{
+	      type: 'value',
+	      axisLabel: {
+	        formatter: '{value}'
+	      }
+	    }],
+	    series: [{
+	      name: '拜访记录',
+	      type: 'bar',
+	      data: [],
+	      label: {
+	        normal: {
+	          show: true,
+	          position: 'top' //值显示
+	        }
+	      }
+	    }]
+	  };
+  
+  
+  var option5 = {
+		  color: ['#7d79d4'],  
+		  tooltip: {
+		      trigger: 'axis',
+		      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+		        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      containLabel: true
+		    },
+		    xAxis: [{
+		      type: 'category',
+		      data : []
+		    }],
+		    yAxis: [{
+		      type: 'value',
+		      axisLabel: {
+		        formatter: '{value}'
+		      }
+		    }],
+		    series: [{
+		      name: '用户画像',
+		      type: 'bar',
+		      data: [],
+		      label: {
+		        normal: {
+		          show: true,
+		          position: 'top' //值显示
+		        }
+		      }
+		    }]
+		  };
+  
+  
+  
+  
+  var option5_1 = {
+		  color: ['#7d79d4'],  
+		  tooltip: {
+		      trigger: 'axis',
+		      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+		        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      containLabel: true
+		    },
+		    xAxis: [{
+		      type: 'category',
+		      data : []
+		    }],
+		    yAxis: [{
+		      type: 'value',
+		      axisLabel: {
+		        formatter: '{value}'
+		      }
+		    }],
+		    series: [{
+		      name: '用户画像',
+		      type: 'bar',
+		      data: [],
+		      label: {
+		        normal: {
+		          show: true,
+		          position: 'top' //值显示
+		        }
+		      }
+		    }]
+		  };
+
+  var option6 = {
+		  color: ['#ffa07a'],
+		  tooltip: {
+	      trigger: 'axis',
+	      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+	        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+	      }
+	    },
+	    grid: {
+	      left: '3%',
+	      right: '4%',
+	      bottom: '3%',
+	      containLabel: true
+	    },
+	    xAxis: [{
+	      type: 'category',
+	      data : []
+	    }],
+	    yAxis: [{
+	      type: 'value',
+	      axisLabel: {
+	        formatter: '{value}'
+	      }
+	    }],
+	    series: [{
+	      name: '快递代送',
+	      type: 'bar',
+	      data: [],
+	      label: {
+	        normal: {
+	          show: true,
+	          position: 'top' //值显示
+	        }
+	      }
+	    }]
+	  };
+  
+  
+  
+  option6_1 = {
+		  color: ['#ffa07a'],
+		  tooltip: {
+	      trigger: 'axis',
+	      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+	        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+	      }
+	    },
+	    grid: {
+	      left: '3%',
+	      right: '4%',
+	      bottom: '3%',
+	      containLabel: true
+	    },
+	    xAxis: [{
+	      type: 'category',
+	      data : []
+	    }],
+	    yAxis: [{
+	      type: 'value',
+	      axisLabel: {
+	        formatter: '{value}'
+	      }
+	    }],
+	    series: [{
+	      name: '快递代送',
+	      type: 'bar',
+	      data: [],
+	      label: {
+	        normal: {
+	          show: true,
+	          position: 'top' //值显示
+	        }
+	      }
+	    }]
+	  };
+//--------------------------------------------------门店维度结束---------------------------------------------------------
+
+
+//--------------------------------------------------店长维度开始---------------------------------------------------------
+
+  var option7 = {
+		    color: ['#3398DB'],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      top: '5%',
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        axisTick: {
+		          alignWithLabel: true
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value'
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'订单数量',
+		        type:'bar',
+		        barWidth: '60%',
+		        data:[],
+		        label: {
+		          normal: {
+		            show: true,
+		            position: 'top' //值显示
+		          }
+		        }
+		      }
+		    ]
+		  };
+
+
+
+  var option7_1 = {
+		    color: ['#3398DB'],
+		    tooltip : {
+		      trigger: 'axis',
+		      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+		        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      top: '5%',
+		      containLabel: true
+		    },
+		    xAxis : [
+		      {
+		        type : 'category',
+		        data : [],
+		        axisTick: {
+		          alignWithLabel: true
+		        }
+		      }
+		    ],
+		    yAxis : [
+		      {
+		        type : 'value'
+		      }
+		    ],
+		    series : [
+		      {
+		        name:'订单数量',
+		        type:'bar',
+		        barWidth: '60%',
+		        data:[],
+		        label: {
+		          normal: {
+		            show: true,
+		            position: 'top' //值显示
+		          }
+		        }
+		      }
+		    ]
+		  };
+
+
+
+		  var option8 = {
+				    color: ['#c9de1d'],
+				    tooltip : {
+				      trigger: 'axis',
+				      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+				        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+				      }
+				    },
+
+				    grid: {
+				      left: '3%',
+				      right: '4%',
+				      bottom: '3%',
+				      top: '5%',
+				      containLabel: true
+				    },
+				    xAxis : [
+				      {
+				        type : 'category',
+				        data : [],
+				        axisTick: {
+				          alignWithLabel: true
+				        }
+				      }
+				    ],
+				    yAxis : [
+				      {
+				        type : 'value'
+				      }
+				    ],
+				    series : [
+				      {
+				        name:'订单金额',
+				        type:'bar',
+				        barWidth: '60%',
+				        data:[],
+				        label: {
+				          normal: {
+				            show: true,
+				            position: 'top' //值显示
+				          }
+				        }
+				      }
+				    ]
+				  };
+
+		  
+		  
+		  var option8_1 = {
+				    color: ['#c9de1d'],
+				    tooltip : {
+				      trigger: 'axis',
+				      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+				        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+				      }
+				    },
+
+				    grid: {
+				      left: '3%',
+				      right: '4%',
+				      bottom: '3%',
+				      top: '5%',
+				      containLabel: true
+				    },
+				    xAxis : [
+				      {
+				        type : 'category',
+				        data : [],
+				        axisTick: {
+				          alignWithLabel: true
+				        }
+				      }
+				    ],
+				    yAxis : [
+				      {
+				        type : 'value'
+				      }
+				    ],
+				    series : [
+				      {
+				        name:'订单金额',
+				        type:'bar',
+				        barWidth: '60%',
+				        data:[],
+				        label: {
+				          normal: {
+				            show: true,
+				            position: 'top' //值显示
+				          }
+				        }
+				      }
+				    ]
+				  };		  
+		  
+		  
+		  
+		  var option9 = {
+			  color: ['#cc6457'],
+			  tooltip: {
+		      trigger: 'axis',
+		      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+		        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+		      }
+		    },
+		    grid: {
+		      left: '3%',
+		      right: '4%',
+		      bottom: '3%',
+		      containLabel: true
+		    },
+		    xAxis: [{
+		      type: 'category',
+		      data : []
+		    }],
+		    yAxis: [{
+		      type: 'value',
+		      axisLabel: {
+		        formatter: '{value}'
+		      }
+		    }],
+		    series: [{
+		      name: '拜访记录',
+		      type: 'bar',
+		      data: [],
+		      label: {
+		        normal: {
+		          show: true,
+		          position: 'top' //值显示
+		        }
+		      }
+		    }]
+		  };
+		  
+		  
+		  var option9_1 = {
+				  color: ['#cc6457'],
+				  tooltip: {
+			      trigger: 'axis',
+			      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+			        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+			      }
+			    },
+			    grid: {
+			      left: '3%',
+			      right: '4%',
+			      bottom: '3%',
+			      containLabel: true
+			    },
+			    xAxis: [{
+			      type: 'category',
+			      data : []
+			    }],
+			    yAxis: [{
+			      type: 'value',
+			      axisLabel: {
+			        formatter: '{value}'
+			      }
+			    }],
+			    series: [{
+			      name: '拜访记录',
+			      type: 'bar',
+			      data: [],
+			      label: {
+			        normal: {
+			          show: true,
+			          position: 'top' //值显示
+			        }
+			      }
+			    }]
+			  };
+		  
+		  
+		  var option10 = {
+				  color: ['#7d79d4'],  
+				  tooltip: {
+				      trigger: 'axis',
+				      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+				        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+				      }
+				    },
+				    grid: {
+				      left: '3%',
+				      right: '4%',
+				      bottom: '3%',
+				      containLabel: true
+				    },
+				    xAxis: [{
+				      type: 'category',
+				      data : []
+				    }],
+				    yAxis: [{
+				      type: 'value',
+				      axisLabel: {
+				        formatter: '{value}'
+				      }
+				    }],
+				    series: [{
+				      name: '用户画像',
+				      type: 'bar',
+				      data: [],
+				      label: {
+				        normal: {
+				          show: true,
+				          position: 'top' //值显示
+				        }
+				      }
+				    }]
+				  };
+		  
+		  
+		  var option10_1 = {
+				  color: ['#7d79d4'],  
+				  tooltip: {
+				      trigger: 'axis',
+				      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+				        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+				      }
+				    },
+				    grid: {
+				      left: '3%',
+				      right: '4%',
+				      bottom: '3%',
+				      containLabel: true
+				    },
+				    xAxis: [{
+				      type: 'category',
+				      data : []
+				    }],
+				    yAxis: [{
+				      type: 'value',
+				      axisLabel: {
+				        formatter: '{value}'
+				      }
+				    }],
+				    series: [{
+				      name: '用户画像',
+				      type: 'bar',
+				      data: [],
+				      label: {
+				        normal: {
+				          show: true,
+				          position: 'top' //值显示
+				        }
+				      }
+				    }]
+				  };
+		  
+		  
+		  
+
+		  var option11 = {
+				  color: ['#ffa07a'],
+				  tooltip: {
+			      trigger: 'axis',
+			      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+			        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+			      }
+			    },
+			    grid: {
+			      left: '3%',
+			      right: '4%',
+			      bottom: '3%',
+			      containLabel: true
+			    },
+			    xAxis: [{
+			      type: 'category',
+			      data : []
+			    }],
+			    yAxis: [{
+			      type: 'value',
+			      axisLabel: {
+			        formatter: '{value}'
+			      }
+			    }],
+			    series: [{
+			      name: '快递代送',
+			      type: 'bar',
+			      data: [],
+			      label: {
+			        normal: {
+			          show: true,
+			          position: 'top' //值显示
+			        }
+			      }
+			    }]
+			  };
+	
+		  
+		  var option11_1 = {
+				  color: ['#ffa07a'],
+				  tooltip: {
+			      trigger: 'axis',
+			      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+			        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+			      }
+			    },
+			    grid: {
+			      left: '3%',
+			      right: '4%',
+			      bottom: '3%',
+			      containLabel: true
+			    },
+			    xAxis: [{
+			      type: 'category',
+			      data : []
+			    }],
+			    yAxis: [{
+			      type: 'value',
+			      axisLabel: {
+			        formatter: '{value}'
+			      }
+			    }],
+			    series: [{
+			      name: '快递代送',
+			      type: 'bar',
+			      data: [],
+			      label: {
+			        normal: {
+			          show: true,
+			          position: 'top' //值显示
+			        }
+			      }
+			    }]
+			  };	  
+		  
+		  
+//--------------------------------------------------店长维度结束---------------------------------------------------------
+  
+  function updatestoreid(selectobj){
+	 
+		var store_id=selectobj.value;
+		//更改店长用户的 store_id
+		var url = "../dispatcher.action";
+		var data = new PMSRequestObject("userManager", "updateUserStoreId",[store_id,employee_no]);
+		$$.ajax(url, "requestString=" + data.toJsonString(), function(datas,
+				textStatus, XMLHttpRequest) {
+			if (datas.result) {
+				refreshView();
+			}else{
+				$$.showMessage("系统信息", "切换失败!");
+			}
+		});
+	}
+  function refreshView(){
+		window.location.href="shopkeeper.html";
+	}
+  
+  //阻止弹窗关闭
+  function siwtchStore(evt){
+	  evt = evt ? evt : (window.event ? window.event :null);  
+	  evt.stopPropagation(); 
+  }
+  
+  myChart2.on("click",function(obj){
+	  var storeId =storeID_Array1[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  
+  myChart2_1.on("click",function(obj){
+	  var storeId =storeID_Array1[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  
+  myChart3.on("click",function(obj){
+	  var storeId =storeID_Array2[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  
+  myChart3_1.on("click",function(obj){
+	  var storeId =storeID_Array2[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  
+//拜访记录
+  myChart4.on("click",function(obj){
+	  var storeId =storeIdArray1[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  
+  myChart4_1.on("click",function(obj){
+	  var storeId =storeIdArray1[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  
+  //单体画像
+  myChart5.on("click",function(obj){
+	  var storeId =storeIdArray2[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  
+  myChart5_1.on("click",function(obj){
+	  var storeId =storeIdArray2[obj.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL); 
+  });
+  //送单绑定事件	
+  myChart6.on('click', function (params){
+	  
+	  var storeId =storeIdArr[params.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL);
+  })
+  
+  
+   myChart6_1.on('click', function (params){
+	  
+	  var storeId =storeIdArr[params.dataIndex];
+	  var URL="managerToStore.html?"+"store="+encode64(storeId);
+	  window.open(URL);
+  })
+   /* myChart7.on('click', function (params){
+	   //layer.msg('无');
+  })
+   myChart8.on('click', function (params){
+	   //layer.msg('无');
+  }) */
+  
+  //弹窗-搜索
+  function searchEmployee(){
+	  var sex = $("#gax_search_sex").val();
+	  var name = $("#gax_search_name").val();
+	  var entry = $("#gax_search_entry").val();
+	  var zw = $("#gax_search_zw").val();
+	  $("#store_detail_title").nextAll().show();
+	  $("#gax_detail_title").nextAll().each(function(i,t){
+	 		 var c_name =  $(t).children("td:eq(1)").text();
+	 		 if(c_name.indexOf(name)<0){
+	 			 $(t).hide();
+	 		 }else{
+	 			 $(t).show();
+	 		 }
+	  })
+	  
+	  if(sex==""){
+		  //不做任何操作
+	  }else{
+		  $("#gax_detail_title").nextAll("tr:visible").each(function(i,t){
+	    		 var c_sex =  $(t).children("td:eq(2)").text();
+	    		 if(sex==c_sex){
+	    			 $(t).show();
+	    		 }else{
+	    			 $(t).hide();
+	    		 }
+	    	  })
+	  }
+	  
+	
+ 	  
+ 	  $("#gax_detail_title").nextAll("tr:visible").each(function(i,t){
+ 		 var c_entry =  $(t).children("td:eq(3)").text();
+ 		 if(c_entry.indexOf(entry)<0){
+ 			 $(t).hide();
+ 		 }else{
+ 			 $(t).show();
+ 		 }
+ 	  })
+ 	  
+	    $("#gax_detail_title").nextAll("tr:visible").each(function(i,t){
+ 		 var c_zw =  $(t).children("td:eq(4)").text();
+ 		 if(c_zw.indexOf(zw)<0){
+ 			 $(t).hide();
+ 		 }else{
+ 			 $(t).show();
+ 		 }
+ 	  })
+	  
+ 	  
+ 	   $("#gax_detail_title").nextAll("tr:visible").each(function(i,t){
+	    	$(t).children("td:eq(0)").html(i+1);
+	   })
+  }
+  //弹窗-搜索重置
+  function resetSearch(){
+	   $("#gax_search_sex").val("");
+	   $("#gax_search_name").val("");
+	   $("#gax_search_entry").val("");
+	   $("#gax_search_zw").val("");
+	  
+	   
+	   $("#store_detail_title").nextAll().each(function(i,t){
+	    	$(t).children("td:eq(0)").html(i+1);
+	   })
+	   $("#gax_detail_title").nextAll().show();
+  }
+  
+  
+  
+//弹窗-搜索
+  function searchEmployee_storeKeeper(){
+	  var name = $("#storeKeeper_search_name").val();
+	  
+	  $("#storeKeeper_detail_title").nextAll().show();
+	  $("#storeKeeper_detail_title").nextAll().each(function(i,t){
+	 		 var c_name =  $(t).children("td:eq(1)").text();
+	 		 if(c_name.indexOf(name)<0){
+	 			 $(t).hide();
+	 		 }else{
+	 			 $(t).show();
+	 		 }
+	  })
+	  
+ 	   $("#storeKeeper_detail_title").nextAll("tr:visible").each(function(i,t){
+	    	$(t).children("td:eq(0)").html(i+1);
+	   })
+  }
+  //弹窗-搜索重置
+  function resetSearch_storeKeeper(){
+	   $("#storeKeeper_search_name").val("");
+	   $("#storeKeeper_detail_title").nextAll().each(function(i,t){
+	    	$(t).children("td:eq(0)").html(i+1);
+	   })
+	   $("#storeKeeper_detail_title").nextAll().show();
+	   
+  }
+  
+  
+  
+//弹窗-搜索
+  function searchEmployee_store(){
+	  var name = $("#store_search_name").val();
+	  
+	  $("#store_detail_title").nextAll().show();
+	  $("#store_detail_title").nextAll().each(function(i,t){
+	 		 var c_name =  $(t).children("td:eq(1)").text();
+	 		 if(c_name.indexOf(name)<0){
+	 			 $(t).hide();
+	 		 }else{
+	 			 $(t).show();
+	 		 }
+	  })
+	  
+ 	   $("#store_detail_title").nextAll("tr:visible").each(function(i,t){
+	    	$(t).children("td:eq(0)").html(i+1);
+	   })
+  }
+  //弹窗-搜索重置
+  function resetSearch_store(){
+	   $("#store_search_name").val("");
+	   $("#store_detail_title").nextAll().each(function(i,t){
+	    	$(t).children("td:eq(0)").html(i+1);
+	   })
+	   $("#store_detail_title").nextAll().show();
+	   
+  }
+ 
+</script>
+
+</body>
+<div id="store_detail_div" style="height:247px;display:none">
+   	<div style="width:100%;height:30px;background-color:#fffafa;line-height:30px;vertical-align:baseline;padding-left:10px">店名： <input id="store_search_name" type="text" style="width:100px;height:20px;border: 1px solid #aec1ca;border-radius: 2px;" />
+   		<button  onclick="searchEmployee_store()" style="width:40px;height:24px;line-height:19px;vertical-align:middle ;text-align:center;font-size:12px" >搜索</button> 
+  		<button  onclick="resetSearch_store()" style="width:40px;height:24px;line-height:19px;vertical-align:middle ;text-align:center;font-size:12px" >重置</button>
+   	</div>
+  	<table id="store_detail_table" style="width:100%;text-align:center;border-collapse:inherit;border-spacing:2px" border="0"  >
+  	<tr style="height:25px;background-color:#75d8bd;color:white" id="store_detail_title">
+  		<td width="30px">序号</td>
+  		<td>店名</td>
+  		<td>店长</td>
+  	</tr>
+  	</table>
+</div>
+<div id="storeKeeper_detail_div" style="height:247px;display:none">
+    <div style="width:100%;height:30px;background-color:#fffafa;line-height:30px;vertical-align:baseline;padding-left:10px">姓名： <input id="storeKeeper_search_name" type="text" style="width:100px;height:20px;border: 1px solid #aec1ca;border-radius: 2px;" />
+    	<button  onclick="searchEmployee_storeKeeper()" style="width:40px;height:24px;line-height:19px;vertical-align:middle ;text-align:center;font-size:12px" >搜索</button> 
+  		<button  onclick="resetSearch_storeKeeper()" style="width:40px;height:24px;line-height:19px;vertical-align:middle ;text-align:center;font-size:12px" >重置</button>
+    </div>
+  	<table id="storeKeeper_detail_table" style="width:100%;text-align:center;border-collapse:inherit;border-spacing:2px" border="0"  >
+  	<tr style="height:25px;background-color:#75d8bd;color:white" id="storeKeeper_detail_title">
+  		<td width="30px">序号</td>
+  		<td>名称</td>
+  		<td>电话</td>
+  	</tr>
+  	</table>
+</div>
+
+<div id="gax_detail_div" style="height:247px;display:none">
+  	<div style="width:100%;height:30px;background-color:#fffafa;line-height:30px;vertical-align:baseline;padding-left:10px">
+  		姓名: <input id="gax_search_name" type="text" style="width:70px;height:20px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		性别:<select style="width:60px;height:20px;border: 1px solid #aec1ca;border-radius: 2px;" id="gax_search_sex"><option value="">全部</option><option value="男">男</option><option value='女'>女</option></select>
+  		入职日期: <input id="gax_search_entry" type="text" style="width:70px;height:20px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		职务性质: <input id="gax_search_zw" type="text" style="width:70px;height:20px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		<button type="button" onclick="searchEmployee()" style="width:40px;height:24px;line-height:19px;vertical-align:middle ;text-align:center;font-size:12px" >搜索</button> 
+  		<button type="button" onclick="resetSearch()" style="width:40px;height:24px;line-height:19px;vertical-align:middle ;text-align:center;font-size:12px" >重置</button>
+  	</div>
+  	<table id="gax_detail_table" style="width:100%;text-align:center;border-collapse:separate;border-spacing:2px" border="0" cellspacing="3" cellpadding="2"  >
+  	<tr style="height:25px;background-color:#75d8bd;color:white" id="gax_detail_title">
+  		<td width="30px">序号</td>
+  		<td>姓名</td>
+  		<td>性别</td>
+  		<td>入职日期</td>
+  		<td>职务性质</td>
+  	</tr>
+  	</table>
+</div>
+</html>

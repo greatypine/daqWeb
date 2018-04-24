@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>模块修改页面</title>
+        <script type="text/javascript" src="../scripts/lib-main.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pms.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pmsCommon.js">
+        </script>
+        <script type="text/javascript">
+            var MId = getUrlParamByKey("MId");
+            var ML2 = null;
+            $(function(){
+                var resourceId = $("#moduleType")[0];
+                var resource = $dict.getDictList('wf_module_type');
+                var option = new Option('', '');
+                resourceId.add(option);
+                $(resource).each(function(i, element){
+                    var option = new Option(element.dictText, element.dictCode);
+                    resourceId.add(option);
+                });
+                
+                
+                doManager("WFModuleManager", "queryTBModule", MId + '', function(data, textStatus, XMLHttpRequest){
+                    if (data.result) {
+                        var jsonDataT = $.fromJSON(data.data);
+                        $("#moduleName").val(jsonDataT.name);
+                        $("#moduleCode").val(jsonDataT.moduleCode);
+                        $("#moduleType").val(jsonDataT.moduleType);
+                        $("input[name='isWF'][value=" + jsonDataT.isWF + "]").attr("checked", true);
+                        $("#urlStr").val(jsonDataT.urlStr);
+                        $("#urlStr2").val(jsonDataT.urlStr2);
+						$("#finishedUrl").val(jsonDataT.finishedUrl);
+                                                
+                    }
+                });
+             });
+            
+            function doSubmit(){
+                var obj = {
+                    id: MId,
+                    name: $("#moduleName").val(),
+                    moduleCode: $("#moduleCode").val(),
+                    moduleType: $("#moduleType").val(),
+                    urlStr: $("#urlStr").val(),
+					urlStr2: $("#urlStr2").val(),
+					finishedUrl:$("#finishedUrl").val(),
+                    isWF: $("input[name='isWF']:checked").val()
+                
+                }
+                if (obj.name && obj.moduleCode && obj.urlStr ) {
+                    doManager("WFModuleManager", "saveTBModule", obj, function(data, textStatus, XMLHttpRequest){
+                        if (data.result) {
+                            alert("修改成功！");
+                            window.location.href = 'tbmodule.html';
+                        }
+                    });
+                }
+                else {
+                    alert("业务模块编号、链接、模块分类不可为空");
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div class="box">
+            <!-- 这是第一部分的收缩框 -->
+            <div class="title clear">
+                <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();">
+                </div>
+                <div class="ico2">
+                </div>
+                <div class="ico1">
+                </div>
+                <a href="#">审批管理 :</a>&nbsp;<a href="#">模块维护</a>
+            </div>
+            <div class="containerbody">
+                <form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                    <table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="30%">
+                                业务模块名称(*)
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="70%">
+                                <input type="text" id="moduleName" name="name" class="inputtext" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="40%">
+                                业务模块编码(不可重复)(*)
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <input type="text" id="moduleCode" name="name" class="inputtext" />
+                            </td>
+                        </tr>
+                       
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="40%">
+                                对应模块分类:
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <select id="moduleType" name="moduleType" style="width:172px;" inputType="select">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="40%">
+                                待办 链接(*)
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <input type="text" id="urlStr" name="urlStr" class="inputtext" style="width:60%" />
+                            </td>
+                        </tr>
+                        <tr>
+                        	
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="40%">
+                               已办 链接(*)
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <input type="text" id="urlStr2" name="urlStr2" class="inputtext" style="width:60%" />
+                            </td>
+                        </tr>
+						<tr>
+                        	
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="40%">
+                               办结 链接(*)
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <input type="text" id="finishedUrl" name="finishedUrl" class="inputtext" style="width:60%" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="40%">
+                                是否流程模块:
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <input class="pmsRadio" id="isWF" name="isWF" data="[['0','否'],['1','是','checked']]" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" nowrap="true" colspan="4">
+                                <button class="buttonu" value="修改" onclick="doSubmit()">
+                                    &nbsp;
+                                    修改
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

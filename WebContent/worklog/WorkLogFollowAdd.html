@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+      	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<script type="text/javascript" src="../forecast/js/createProject.js"></script>
+		<script type="text/javascript" src="../bizbase/js/userDialog.js" ></script>
+		<script language="JavaScript" type="text/javascript">
+			
+			$(function() {
+				//校验
+				 $validator = new PMSValidator($("#workLogFollowForm")[0], {
+               		 bNormalDisplay: false,
+                		iDisplayLength: 5
+           		 });
+				 
+			});
+			 function dataCheck(){
+           		//基础校验-------------------------------
+		            $validator.clean();
+		            var cvalidator = $validator.clientValidate();
+		            if (!cvalidator) {
+		                $$.showMessage("${system.info}", "数据校验不通过，请检查各项输入是否正确。");
+		                return false;
+		            }
+		            return true;
+        		}
+				// 人员回掉函数
+			function selUserlBack(jsonStr) {
+				var userInfo= $.fromJSON(jsonStr);
+				alert(userInfo.userId);
+			    $("#followId").val(userInfo.userId);
+			    $("#followName").val(userInfo.userName);
+			}
+			//提交
+			function onSubmit(){
+				if(!dataCheck()){
+            				return;
+            	}else{
+					var obj={
+						followId:$("#followId").val(),
+						followName:$("#followName").val()
+					}
+					doManager("workLogFollowManager", "saveWorkLogFollow", obj, function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							if(returnObj!=null){
+								$$.showMessage("${system.info}", "保存成功");
+
+							}else{
+								$$.showMessage("${system.info}", "该用户不存在");
+							}
+						}
+					});
+				}
+				
+			}
+		</script>
+	</head>
+	<body>
+		<div class="rightcont body_bg clear">
+			<div class="box">
+				<div class="title clear">
+					<div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();" ></div>
+					<div class="ico2" ></div>
+					<div class="ico1" ></div>
+					<a href="#">工作日誌 :</a>&nbsp;<a href="#">新增我的关注</a>
+				</div>		
+				<div class="containerheader">
+					 <a href="#" onClick="toggleDiv('temp1','plusMinus1')"><img id="plusMinus1" src="../scripts/images/22.png"/></a>
+					新增我的关注&nbsp;&nbsp;&nbsp;&nbsp;
+				<span id="info"></span>
+				</div>
+				<div class="containerbody" id="temp1">
+					<form id="workLogFollowForm" name="workLogFollowForm" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+						<table style=" border:#000 solid 0px;" class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+							
+							<tr>
+								<td align="right">关注人员：</td>
+								<td align="left" colspan="3">
+									<input type="text" name="followName" id="followName" style="width:30%;"  validate="required:true"/>
+									<input type="hidden" name="followId" id="followId" style="width:30%;"  />
+									<input type="button" value="选择" class="buttonu" onclick="checkUser(1,selUserlBack)" />
+								</td>
+							</tr>
+							
+						</table>
+					</form>
+				</div>
+				<div class="containerheader" align="right" style="padding:2px 5px 2px 0px">
+					<button class="buttonu" onclick="onSubmit();" style="height:20px; width:60px">保存</button>&nbsp;&nbsp;
+			 		<button class="buttonu" onclick="returnPage();" style="height:20px; width:60px">返回</button>
+				</div>
+			 </div>
+		 </div>
+	</body>
+	<script language="JavaScript">
+		function returnPage() {
+			window.location.href='WorkLogFollowList.html';
+		}
+	</script>
+</html>

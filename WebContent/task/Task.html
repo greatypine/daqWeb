@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible"content="IE=8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Cache-Control" Content="no-cache"/>
+<meta http-equiv="Pragma" Content="no-cache"/>
+<title>任务树测试</title>
+	<link type="text/css" rel="stylesheet" href="../scripts/css/common.css" />
+	<link type="text/css" rel="stylesheet" href="js/zTree/zTreeStyle/zTreeStyle.css" />
+	<link type="text/css" rel="stylesheet" href="js/zTree/zTreeStyle/zTreeStyle1.css" />
+    <link type="text/css" rel="stylesheet" href="../scripts/lib/jquery/thickbox/thickbox.css" />
+    <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+	<script type="text/javascript" src="../scripts/common/pms.js"></script>
+	<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script language ="javascript" src ="js/zTree/js/jquery-ztree-2.4-Beta.js" ></script>
+	<script type="text/javascript">
+		var zTreeObj;
+		var setting;
+		var zNodes = [];
+		var taskId = null;
+		// 初始化树
+		function initTree() {
+			/*
+			 * 任务树配置参数
+			 */
+	 		var projectId = getUrlParamByKey("projectId");
+			var myData = $.toJSON(
+			{
+				"managerName": "taskRelationManager",
+				"methodName": "queryTasksRelationByProjectId",
+				"parameters": [projectId]
+			});
+			setting = {
+				treeNodeKey : "id",
+				treeNodeParentKey : "pId",
+				checkable: false,
+		        async: true,
+		        asyncParam: ["id", "name"], //获取节点数据时，必须的数据名称，例如：id、name
+		        asyncParamOther: ["requestString", myData],//其它参数 ( key, value 键值对格式)
+				view: {
+					selectedMulti: false
+				},
+				fontCss: setFontCss,
+				callback: {
+					beforeClick: zTreeBeforeClick,
+					click: zTreeClick,
+					asyncSuccess: zTreeOnAsyncSuccess
+				},
+				data: {
+	                simpleData: {
+	                      enable: true
+	                }
+	            }
+			};
+			var url = $$.PMSDispatchActionUrl;
+		    setting.asyncUrl = url;
+		    zTreeObj = $("#treeDemo").zTree(setting, zNodes);
+		}
+		
+		// 在点击某个节点之前
+		function zTreeBeforeClick(treeId, treeNode, clickFlag) {
+		    return (treeNode.status !== "0002");
+		};
+		
+		// 点击某个节点
+		function zTreeClick(event, treeId, treeNode) {
+			if (treeNode != null && treeNode != "") {
+				if (treeNode.taskUrl != null && treeNode.taskUrl != "") {
+					parent.rightTaskFrame.location = treeNode.taskUrl + treeNode.projectId + "&taskId=" + treeNode.id + "&taskStatus=" + treeNode.status;
+				}				
+			}
+		}
+		
+		// 树异步加载成功后
+		function zTreeOnAsyncSuccess(event, treeId, treeNode, msg) {
+			if ((taskId != null && taskId != "") || taskId == false) {
+				// 如果在刷新任务树时设置taskId为false时，则不自动刷新当前页面
+				if (taskId != false || taskId != "false") {
+					var node = zTreeObj.getNodeByParam("id", taskId);
+					zTreeObj.selectNode(node);
+		    		zTreeClick(event, treeId, node);
+				}
+			} else {
+				var nodes = zTreeObj.getNodes();
+			    if (nodes.length > 0) {
+			    	var node = nodes[0].nodes;
+			    	if (node != null && node.length > 0) {
+			    		zTreeObj.selectNode(node[0]);
+			    		zTreeClick(event, treeId, node[0]);
+			    	}
+			    }
+			}
+		}
+	
+		// 设置节点文字的样式
+		function setFontCss(treeId, treeNode) {
+			return treeNode.status == "0002" || treeNode.status == null ? {"text-decoration":"none", "cursor": "default", "color": "#000000"} : {"color": "#0000FF"};
+		};
+		
+		// 刷新树
+		function refreshTaskTree(param) {
+			taskId = param;
+			zTreeObj = $("#treeDemo").zTree(setting, zNodes);
+		}
+		
+		$(document).ready(function(){
+			initTree();
+		});
+	</script>
+</head>
+<body scroll="yes">
+	<div >
+		<ul id="treeDemo" class="tree"></ul>
+	</div>
+</body>
+</html>

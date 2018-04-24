@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>混片区域分布</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="../crm/plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../crm/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../crm/plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="../crm/plugins/select2/select2.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+
+    .form-group{line-height: 34px;}
+    .form-group label{font-size: 16px;}
+    .daterangepicker {left:50%!important;margin-left:-530px}
+
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+        <div class="pull-left">
+ 		<section class="sidebar logo-lg clearfix no-padding">
+            <ul class="sidebar-menu">
+              <li><a href="javascript:location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </nav>
+  </header>
+  
+  
+  
+  
+  
+  
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container" style="padding-top: 100px;">
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 no-padding">
+          <div class="box-header h2"><strong style="position:relative;left:22px">请选择您要查询的区域</strong></div>
+          <div class="box-body">
+
+            <!-- <div class="form-group col-lg-6 no-padding">
+              <label class="col-sm-2 control-label no-padding text-right">省份</label>
+
+              <div class="col-sm-10">
+                <select class="form-control select2">
+                  <option>北京</option>
+                </select>
+              </div>
+            </div> -->
+             <div class="clearfix">
+            <div class="form-group col-lg-8 no-padding" id="city_div" style="display:inline">
+              <label class="col-sm-2 control-label no-padding text-right">城市</label>
+              <div class="col-sm-10">
+                <select class="form-control select2" id="cityName" onchange="manageCity()">
+                  <!-- <option>北京</option> -->
+                </select>
+              </div>
+            </div>
+            </div>
+            <div class="clearfix">
+              <div class="form-group col-lg-8 no-padding">
+                <label class="col-sm-2 control-label no-padding text-right">门店</label>
+
+                <div class="col-sm-10">
+                  <select class="form-control select2" id="storeId_select" onchange="switchCity()">
+                    <!-- <option>北京</option> -->
+                  </select>
+                  <span style="position:absolute;top:1px;right:-50px;color:#a9a9a9" id="areaCount">--个片区</span>
+                </div>
+                
+              </div>
+            </div>
+            <div class="clearfix">
+              <div class="form-group col-lg-6 no-padding">
+                <div class="col-sm-4 no-padding"></div>
+                <div class="col-sm-6"><button type="button" class="btn btn-block btn-primary" onclick="showAreaDistribute()">查看地图</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3"></div>
+      </section>
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../crm/bootstrap/js/raphael-min.js"></script>
+<!-- FastClick -->
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- bootstrap datepicker -->
+<script src="../crm/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script src="../crm/plugins/daterangepicker/daterangepicker.js"></script>
+
+
+<script>
+layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+var cityId = decode64(getUrlParamByKey("c"));//城市ID
+var cityName = decode64(getUrlParamByKey("cn"));//城市name
+var initCity = cityId;
+var employeeId = decode64(getUrlParamByKey("e"));//员工编号
+var storeId = decode64(getUrlParamByKey("s"));//门店编号
+var target = decode64(getUrlParamByKey("t"));
+var storeName=decode64(getUrlParamByKey("sn"));
+
+$(function(){
+	  initcityAndStore();
+});
+var target;
+var curr_user;
+var store_city = {};
+function initcityAndStore(){
+	if(target==0){
+		doManager('dynamicManager','selectAllCity',null,function(data){
+            if(data.result){
+            	
+            	cityList = JSON.parse(data.data);
+            	if(cityList!=null&&cityList.length>0){
+					var more_city="";
+					for(var i=0;i<cityList.length;i++){
+						more_city=more_city+"<option value='"+cityList[i].id+"'>"+cityList[i].cityname+"</option>"
+					}
+					$("#cityName").append(more_city);
+					doManager("areaManager", "getStoreOfByCSZJ_QYJL",[employeeId,cityList[0].id,"ZB"],
+			   				function(data, textStatus, XMLHttpRequest) {
+			   					if (data.result) {
+			   						var storelist= JSON.parse(data.data);
+			   						
+			   						if(storelist==null||storelist.length==0){
+			   							crm_alert(0,"当前城市没有门店！");
+			   							return;
+			   						
+			   						}else{
+			   							if(storelist!=null&&storelist.length>0){
+			   								var more_store="";
+			      							for(var i=0;i<storelist.length;i++){
+			      								more_store=more_store+"<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>"
+			      							}
+			      							$("#storeId_select").append(more_store);
+			      						}
+			   							
+			   							showAreaCount(storelist[0].store_id);//展示片区数量
+			   							
+			   						}
+			   					}
+			   			},false); 
+				}
+               
+            }else{
+            	crm_alert(0,"该账号未分配城市！");
+				return;
+            }
+        });
+	}else if(target==1){//城市
+		
+     	doManager("StoreManager", "getCityNameOfCSZJ",[employeeId,null],
+   				function(data, textStatus, XMLHttpRequest) {
+   					if (data.result) {
+   						var cityinfo= JSON.parse(data.data);
+   						var cityList = cityinfo.citylist;
+   						if(cityList==null){
+   						 	crm_alert(0,"该账号未分配城市！");
+   							return;
+   						}else{
+   							if(cityList!=null&&cityList.length>0){
+       							var more_city="";
+       							
+      							for(var i=0;i<cityList.length;i++){
+      								more_city=more_city+"<option value='"+cityList[i].ctid+"'>"+cityList[i].name+"</option>"
+      							}
+      							$("#cityName").append(more_city);
+      							$("#cityName").val(cityId);
+      						}
+   							
+   						}
+   					}
+   			},false); 
+     	
+     	
+     	doManager("areaManager", "getStoreOfByCSZJ_QYJL",[employeeId,$("#cityName").val(),"CSZJ"],
+   				function(data, textStatus, XMLHttpRequest) {
+   					if (data.result) {
+   						var storelist= JSON.parse(data.data);
+   						
+   						if(storelist==null||storelist.length==0){
+   							crm_alert(0,"当前城市没有门店！");
+   							return;
+   						
+   						}else{
+   							if(storelist!=null&&storelist.length>0){
+   								var more_store="";
+      							for(var i=0;i<storelist.length;i++){
+      								more_store=more_store+"<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>"
+      							}
+      							$("#storeId_select").append(more_store);
+      						}
+   							
+   							showAreaCount(storelist[0].store_id);//展示片区数量
+   							
+   						}
+   					}
+   			},false); 
+	}else if(target==2){//店长
+		doManager("StoreManager", "findStoreByskid",[employeeId],
+   				function(data, textStatus, XMLHttpRequest) {
+   					if (data.result) {
+   						var storelist= JSON.parse(data.data);
+   						
+   						if(storelist==null||storelist.length==0){
+   							crm_alert(0,"当前账号没有门店！");
+   							return;
+   						
+   						}else{
+   							if(storelist!=null&&storelist.length>0){
+   								var more_store="";
+      							for(var i=0;i<storelist.length;i++){
+      								more_store=more_store+"<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>"
+      								store_city[storelist[i].store_id] = storelist[i].cityName;
+      							}
+      							$("#storeId_select").append(more_store);
+      							$("#cityName").append("<option value='"+storelist[0].cityName+"'>"+storelist[0].cityName+"</option>");
+      							$("#cityName").attr("disabled","disabled");
+      							
+      						}
+   							
+   							showAreaCount(storelist[0].store_id);
+   						}
+   					}
+   			},false); 
+	}
+
+}
+
+
+function showAreaCount(storeId){
+	
+	doManager("areaManager", "getAreaCountOfStore",[storeId],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var count= JSON.parse(data.data);
+						$("#areaCount").html(count+"个片区");
+					}
+			},false); 
+	
+}
+//切换城市
+function manageCity(){
+	$("#storeId_select").empty();
+	doManager("areaManager", "getStoreOfByCSZJ_QYJL",[employeeId,$("#cityName").val(),"CSZJ"],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var storelist= JSON.parse(data.data);
+						
+						if(storelist==null||storelist.length==0){
+							crm_alert(0,"当前城市没有门店！");
+   							return;
+						}else{
+							if(storelist!=null&&storelist.length>0){
+								var more_store="";
+	 							for(var i=0;i<storelist.length;i++){
+	 								more_store=more_store+"<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>"
+	 							}
+	 							$("#storeId_select").append(more_store);
+ 							}
+						}
+					}
+			},false); 
+}
+
+var servicePositionIsExist = false;
+var servicePosition = "";
+function showAreaDistribute(){
+	var storeId = $("#storeId_select").val();
+	doManager("areaManager", "getStoreServiceAreaAndPosition",[storeId], function(
+			data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var resultJson = JSON.parse(data.data);
+			if(resultJson.code == 200){
+				var serviceArea = resultJson.serviceArea;
+				var positions = resultJson.position;
+				var x= positions[0];
+				var y= positions[1];
+				servicePosition = x+","+y;
+				servicePositionIsExist = true;
+				window.open("../slice/area_map_set.html?c="+servicePosition+"&sid="+storeId,"_self");
+				
+			}else{
+				servicePositionIsExist = false;
+				crm_alert(0,"当前门店服务范围不存在！");
+			}
+		}else{
+			 crm_alert(5,"请稍后重新请求！");
+		}
+	});
+}
+
+/**
+ * 点击门店其切换城市
+ */
+function switchCity(){
+	 var storeId = $("#storeId_select").val();
+	 showAreaCount(storeId);
+	 if(target==2){
+		 $("#cityName").empty();
+		 $("#cityName").append("<option value='"+store_city[storeId]+"'>"+store_city[storeId]+"</option>");
+	 }
+	
+}
+</script>
+
+</body>
+</html>

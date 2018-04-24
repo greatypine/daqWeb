@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <title>用户查询</title>
+        <meta name="author" content="Wang Shicheng">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <script type="text/javascript" src="../scripts/bidLib.js"></script>
+        <script type="text/javascript" src="../scripts/common/pms.js"></script>
+        <script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+        <script src="../bizbase/js/orgDialog.js" type="text/javascript"></script>
+        <script type="text/javascript" charset="utf-8">
+            
+            $(document).ready(function(){
+            	//var persional_id = getUrlParamByKey("personal_id");
+            	var persional_name = decodeURI(getUrlParamByKey("personal_name"));
+            	
+            	if(persional_name != null && persional_name != ''){
+            		$("#name").val(persional_name)
+            	}
+                doSearch();
+            });
+            
+            function doClean(){
+               	$("#phoneNo").val("");
+                $("#idCard").val("");
+                $("#name").val("");
+            }
+            
+            function doSearch(){
+                $$.executeSearch('personalInfoAttionQuery', 'userSearchConditionsDiv');
+        	}
+        
+	        function doSubmit(){
+	            var json;
+	            var objs = $$.getSelectedObj("personalInfoAttionQuery");
+	            if (objs.length != 0) {
+	                    json = '{"id":"' + objs[0][0] + '","name":"' + objs[0][2] + '","phoneNo":"' + objs[0][3] + '","idCard":"'+objs[0][6]+'","appPhoneNo":"' + objs[0][9] + '","age":"'+objs[0][6]+'","gender":"'+objs[0][5]+'"}';
+	            }
+	            parent.win.callBack(json);
+	            parent.win.hide();
+	        }
+        </script>
+    </head>
+    <!-- Body -->
+    <body>
+        <div>
+            <table class="bigteble">
+                <tr>
+                    <td style="padding:5px;" bgcolor="#FFFFFF">
+                        <div id="containerbody">
+                            <table class="Querytable">
+                                <tr class="Colorbar1">
+                                    <td width="20" align="center">
+                                        <a href="#" onClick="toggleBiz('conditionsDiv','plusMinus1')"><img id="plusMinus1" src="../scripts/images/22.png"/></a>
+                                    </td>
+                                    <td>
+                                        <strong>搜索条件</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div id="userSearchConditionsDiv">
+                            	<form id="searchForm" name="searchForm" class="pmsForm" validate="true" clienvalidate="true">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                      <tr>
+                                         <td>
+                                            <table class="bigteble">
+				                               <tr>
+				                                <td align="right" align="left" width="8%">
+				                                     用户名称：
+				                                </td>
+				                                <td class="basetext">
+				                                    <input name="name" type="text" class="inputtext" id="name" style="width:100px;"/>
+				                                </td>
+				                                   <td align="right" align="left" width="8%">
+				                                     手机号:
+				                                </td>
+				                                <td class="basetext">
+				                                    <input name="phoneNo" type="text" class="inputtext" id="phoneNo" style="width:100px;"/>
+				                                </td> 
+				                                    <td align="right" align="left" width="8%">
+				                                    身份证号:
+				                                </td>
+				                                <td class="basetext">
+				                                    <input name="idCard" type="text" class="inputtext" id="idCard" style="width:100px;"/>
+				                                </td> 
+				                            </tr>
+                                         <tr>
+                                            </table>
+                                         </td>
+                                      </tr>
+                                        <tr>
+                                            <td>
+                                                <table class="bigteble">
+                                                    <tr class="Colorbar3">
+                                                        <td align="right">
+                                                            <input class="buttonu" type="button" value="查询" onclick="doSearch();"/>
+                                                            <input class="buttonu" type="button" value="重置" onclick="doClean();"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                            <div id="userContainer" showNo="false" configbutton="false" titleAlign= "center" fnRender="renderColumns" queryid="personalInfoAttionQuery" queryformat="simple" showsearch="false" autoload="false" searchDiv="userSearchConditionsDiv" showdisplay="false" showtitle="true" showprint="false" showpaging="true" showcheckbox="true"  checkmode="single"  showRadioButton="true">
+                            </div>
+                            
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

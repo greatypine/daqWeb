@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Cache-Control" Content="no-cache">
+<meta http-equiv="Pragma" Content="no-cache">
+<meta http-equiv="Expires" Content="0">
+<link
+	href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css"
+	rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+
+<title>微超数据填报</title>
+<style type="text/css">
+body {
+	background-color: #e7e7e7;
+}
+
+h4 span {
+	float: right;
+}
+
+table {
+	margin-top: 30px;
+	font-size: 14px;
+	background-color: #FFF;
+}
+
+table,th,td {
+	border: 1px solid #ccc;
+}
+
+table th,table,td {
+	height: 35px;
+	line-height: 35px;
+}
+
+table input {
+	height: 35px;
+	line-height: 35px;
+	width: 100%;
+	border: 0;
+	text-align: center;
+	color: #F00;
+	outline: none;
+}
+
+.but {
+	margin-top: 30px;
+	text-align: center;
+}
+</style>
+
+<script type="text/javascript">
+function dataCheck(){
+	   var obj = document.getElementsByName("numberInput");
+	   for(i=0;i<obj.length;i++){
+		   if(obj[i].value!=null&&obj[i].value!=""){
+			   if(!/^\d+(?=\.{0,1}\d+$|$)/.test(obj[i].value)){  
+			        alert("请输入数字!"); 
+			        return false;
+			    }    
+		   }
+	   }
+	   return true;
+	}
+	
+		Date.prototype.format=function(fmt) {        
+		    var o = {        
+		    "M+" : this.getMonth()+1, //月份        
+		    "d+" : this.getDate(), //日        
+		    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+		    "H+" : this.getHours(), //小时        
+		    "m+" : this.getMinutes(), //分        
+		    "s+" : this.getSeconds(), //秒        
+		    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+		    "S" : this.getMilliseconds() //毫秒        
+		    };        
+		    var week = {        
+		    "0" : "\u65e5",        
+		    "1" : "\u4e00",        
+		    "2" : "\u4e8c",        
+		    "3" : "\u4e09",        
+		    "4" : "\u56db",        
+		    "5" : "\u4e94",        
+		    "6" : "\u516d"       
+		    };        
+		    if(/(y+)/.test(fmt)){        
+		        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+		    }        
+		    if(/(E+)/.test(fmt)){        
+		        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+		    }        
+		    for(var k in o){        
+		        if(new RegExp("("+ k +")").test(fmt)){        
+		            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+		        }        
+		    }        
+		    return fmt;        
+		} 
+		
+		
+		var date = getUrlParamByKey("date");
+
+		$(function(){
+			 doManager("yyMicrDataManager", "queryMicrDataWcByDate", date, function(data, textStatus, XMLHttpRequest){
+	                if (data.result) {
+	                    var jsonData = $.fromJSON(data.data);
+	                    var d=	new Date();
+	                    d.setTime(date);
+	                    var s=d.format('yyyy-MM-dd HH:mm:ss');
+	                    $("#s1").val(s);
+	                    var inputs = $("table input");
+	                    $.each(jsonData,function(n,value) {   
+	                        if(value.micr_type.indexOf("新增微超数量")>=0){
+	                      		inputs.eq(0)[0].value=value.micr_type;
+	                      		inputs.eq(4)[0].value=value.week;
+	                      		inputs.eq(5)[0].value=value.month;
+	                      	    inputs.eq(6)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.micr_type.indexOf("新增微超营业总面积")>=0){
+	                      		inputs.eq(1)[0].value=value.micr_type;
+	                      		inputs.eq(7)[0].value=value.week;
+	                      		inputs.eq(8)[0].value=value.month;
+	                      	    inputs.eq(9)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.micr_type.indexOf("GMV")>=0){
+	                      		inputs.eq(2)[0].value=value.micr_type;
+	                      		inputs.eq(10)[0].value=value.week;
+	                      		inputs.eq(11)[0].value=value.month;
+	                      	    inputs.eq(12)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.micr_type.indexOf("客流量")>=0){
+	                      		inputs.eq(3)[0].value=value.micr_type;
+	                      		inputs.eq(13)[0].value=value.week;
+	                      		inputs.eq(14)[0].value=value.month;
+	                      	    inputs.eq(15)[0].value=value.total;
+	                        }
+	                        
+	                        ////////////////////////////////////////////////////
+	                        
+	                        if(value.micr_type.indexOf("下单购买顾客数")>=0){
+	                      		inputs.eq(16)[0].value=value.micr_type;
+	                      		inputs.eq(21)[0].value=value.week;
+	                      		inputs.eq(22)[0].value=value.month;
+	                      	    inputs.eq(23)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.micr_type.indexOf("订单数")>=0){
+	                      		inputs.eq(17)[0].value=value.micr_type;
+	                      		inputs.eq(24)[0].value=value.week;
+	                      		inputs.eq(25)[0].value=value.month;
+	                      	    inputs.eq(26)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.micr_type.indexOf("订单商品数")>=0){
+	                      		inputs.eq(18)[0].value=value.micr_type;
+	                      		inputs.eq(27)[0].value=value.week;
+	                      		inputs.eq(28)[0].value=value.month;
+	                      	    inputs.eq(29)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.micr_type.indexOf("新增客户数")>=0){
+	                      		inputs.eq(19)[0].value=value.micr_type;
+	                      		inputs.eq(30)[0].value=value.week;
+	                      		inputs.eq(31)[0].value=value.month;
+	                      	    inputs.eq(32)[0].value=value.total;
+	                        }
+	                        
+	                        if(value.micr_type.indexOf("新增SKU数")>=0){
+	                      		inputs.eq(20)[0].value=value.micr_type;
+	                      		inputs.eq(33)[0].value=value.week;
+	                      		inputs.eq(34)[0].value=value.month;
+	                      	    inputs.eq(35)[0].value=value.total;
+	                        }
+	                    });  
+	                }
+	            });
+		});
+
+
+        function doSave(){
+        	if(!dataCheck()){
+				return;
+			}
+        	if($('#s1').val()==""||$('#s1').val()==null){
+        		alert("请选择日期！");
+        		return ;
+        	}
+        	var wcList=new Array();
+        	var inputs = $("table input");
+      		var oDate = new Date();
+      		var dtime=$('#s1').val()+" "+oDate.getHours()+":"+oDate.getMinutes()+":"+oDate.getSeconds();
+      		
+      		for(n=0;n<4;n++){
+      			var obj=new Object();
+				var b=(n+1)*3+1;
+				var c=(n+1)*3+2;
+				var d=(n+1)*3+3;
+				obj.name="微超";
+				obj.micr_type=inputs.eq(n)[0].value;
+				obj.week=inputs.eq(b)[0].value;
+	      		obj.month=inputs.eq(c)[0].value;
+	      	    obj.total=inputs.eq(d)[0].value;
+	      	    obj.date=dtime;
+	      	    wcList.push(obj);
+      		}
+      		for(n=0;n<5;n++){
+      			var obj=new Object();
+      			var a=16+n;
+				var b=21+(n*3);
+				var c=22+(n*3);
+				var d=23+(n*3);
+				obj.name="微超";
+				obj.micr_type=inputs.eq(a)[0].value;
+				obj.week=inputs.eq(b)[0].value;
+	    		obj.month=inputs.eq(c)[0].value;
+	    	    obj.total=inputs.eq(d)[0].value;
+	    	    obj.date=dtime;
+	    	    wcList.push(obj);
+			}
+    	    doManager("yyMicrDataManager", "saveMicrDataShb", [wcList], function(data, textStatus, XMLHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    //var id = jsonData.id;
+                    alert("修改成功!");
+                    window.location.href = 'yyMicrDataWCList.html';
+                }else{
+					$$.showMessage("系统信息", "修改失败!");
+				}
+            });
+    	    
+        }
+</script>
+
+
+</head>
+
+<body>
+	<div class="panel panel-primary">
+		<div class="panel-heading">运营数据管理 :微超数据填报</div>
+		<div class="panel-body" id="conditionsDiv">
+			<form id="orgAdd" name="orgAdd" class="pmsForm" validate="true"
+				clientvalidate="true">
+				<input id="s1" revalidate="true" type="text" readonly />
+			</form>
+		</div>
+	</div>
+	<table width="100%" border="1" cellspacing="0" cellpadding="0">
+		<tr>
+			<th width="4%" rowspan="2">&nbsp;</th>
+			<th width="24%" colspan="3"><input type="text" value="新增微超数量（家）" style="color: black;" readonly="readonly"/></th>
+			<th width="24%" colspan="3"><input type="text" value="新增微超营业总面积（平方米）" style="color: black;" readonly="readonly" /></th>
+			<th width="24%" colspan="3"><input type="text" value="GMV（自营为销售额，万）" style="color: black;" readonly="readonly" /></th>
+			<th width="24%" colspan="3"><input type="text" value="客流量（进店客户人次）" style="color: black;" readonly="readonly" /></th>
+		</tr>
+		<tr>
+			<th width="8%">周</th>
+			<th width="8%">月</th>
+			<th width="8%">累计</th>
+			<th width="8%">周</th>
+			<th width="8%">月</th>
+			<th width="8%">累计</th>
+			<th width="8%">周</th>
+			<th width="8%">月</th>
+			<th width="8%">累计</th>
+			<th width="8%">周</th>
+			<th width="8%">月</th>
+			<th width="8%">累计</th>
+		</tr>
+		<tr>
+			<th>数值</th>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+		</tr>
+	</table>
+
+	<table width="100%" border="1" cellspacing="0" cellpadding="0">
+		<tr>
+			<th width="4%" rowspan="2">&nbsp;</th>
+			<th width="19.2%" colspan="3"><input type="text" value="下单购买顾客数" style="color: black;" readonly="readonly" /></th>
+			<th width="19.2%" colspan="3"><input type="text" value="订单数（个）" style="color: black;" readonly="readonly" /></th>
+			<th width="19.2%" colspan="3"><input type="text" value="订单商品数（个）" style="color: black;" readonly="readonly" /></th>
+			<th width="19.2%" colspan="3"><input type="text" value="新增客户数（新增会员数）" style="color: black;" readonly="readonly" /></th>
+			<th width="19.2%" colspan="3"><input type="text" value="新增SKU数" style="color: black;" readonly="readonly" /></th>
+		</tr>
+		<tr>
+			<th width="6.4%">周</th>
+			<th width="6.4%">月</th>
+			<th width="6.4%">累计</th>
+			<th width="6.4%">周</th>
+			<th width="6.4%">月</th>
+			<th width="6.4%">累计</th>
+			<th width="6.4%">周</th>
+			<th width="6.4%">月</th>
+			<th width="6.4%">累计</th>
+			<th width="6.4%">周</th>
+			<th width="6.4%">月</th>
+			<th width="6.4%">累计</th>
+			<th width="6.4%">周</th>
+			<th width="6.4%">月</th>
+			<th width="6.4%">累计</th>
+		</tr>
+		<tr>
+			<th>数值</th>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+			<td><input type="text" name="numberInput"/>
+			</td>
+		</tr>
+	</table>
+	<div class="but">
+		<input name="" type="submit" onclick="doSave();" />
+	</div>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+    	<meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="" content="">
+        <title>APP功能</title>
+        <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+        <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+        <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <script src="../scripts/bidLib.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+                $(":text").attr("readonly", "true");
+                $(":radio").attr("disabled", "true");
+                $("#NewAdd").show();
+                $("#editData").show();
+				$("#Return").hide();
+                $("#Save").hide();
+            });
+
+            var id = getUrlParamByKey('id');
+			var onlyforedit = getUrlParamByKey('onlyforedit');
+            $(function(){
+				if(onlyforedit=='true'){
+				    $("#onlyforedit").hide();
+				}
+				     
+                if (id || "" == id) {
+                    doManager("appFunctionManager", "getFunctionById", [id], function(datas, textStatus, XMLHttpRequest){
+                        if(datas.result){
+                            var str = datas.data;
+                            var func = $.fromJSON(str);
+                            $("#activityCode").val(func.activityCode);
+                            $("#activityName").val(func.activityName);
+                            $("#parentCode").val(func.parentCode);
+                            $("#functionId").val(func.id);
+                            $("#url").val(func.url);
+                            $("#icon").val(func.icon);
+                            $("#version").val(func.version);
+                            $("#orderNo").val(func.orderNo);
+                            $("#remark").val(func.remark);
+
+                        }
+
+                    });
+                }
+            });
+            
+			
+            function add(){
+                window.parent.appFrame.location = "app_function_add.html?parentId=" + $("#functionId").val();
+            }
+            
+            function save1(){
+                var $validator = new PMSValidator($("#funcModify")[0], {
+                    bNormalDisplay: false,
+                    iDisplayLength: 999
+                });
+                var flag = $validator.clientValidate();
+                if (!flag) {
+                    return false;
+                }
+                var orgUnit = {
+                    id:$("#functionId").val(),
+                    activityCode:$("#activityCode").val(),
+                    activityName: $("#activityName").val(),
+                    parentCode:$("#parentCode").val(),
+					orderNo:$("#orderNo").val(),
+                    url:$("#url").val(),
+                    icon:$("#icon").val(),
+					remark:$("#remark").val()
+                };
+                transportInformation(orgUnit);
+            }
+            
+            function transportInformation(orgUnit){
+                doManager("appFunctionManager", "modify", orgUnit, function(data, textStatus, XMLHttpRequest){
+                    if (data.result) {
+                        var orgData = $.fromJSON(data.data);
+							$$.showMessage("${system.info}", "修改功能成功!");
+							window.setTimeout(function() {
+								window.parent.appFrame.location = "app_function_modify.html?id=" + orgData.id;
+							}, "1000");
+                    }else{
+						$$.showMessage("${system.info}", data.message);
+						return false;
+					}
+                }, true, {
+		            showWaiting: true
+		        });
+            }
+            
+            function editData(){
+                $("#activityName").removeAttr("readonly");
+				$("#url").removeAttr("readonly");
+				$("#orderNo").removeAttr("readonly");
+				$("#activityCode").removeAttr("readonly");
+				$("#remark").removeAttr("readonly");
+                $("#icon").removeAttr("readonly");
+
+                $("#Return").show();
+                $("#Save").show();
+                $("#NewAdd").hide();
+                $("#editData").hide();
+				$(":radio").removeAttr("disabled");
+            }
+			
+            function backPage(){
+                window.location.reload();
+            }
+        </script>
+
+        <style type="text/css">
+            td{
+                padding-top: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="padding: 5px 10px 0 10px">
+            <div class="panel panel-default" >
+                <div class="panel-heading" align="left" id="onlyforedit">
+                    <button class="btn btn-primary" id="NewAdd" onclick="add()">
+						新增下级功能
+                    </button>&nbsp;
+                    <button class="btn btn-primary" id="editData" onclick="editData();">
+                    	 编辑
+                    </button>&nbsp;
+                </div>
+                <div class="panel-body">
+                    <div id="info">
+                    </div>
+                    <form id="funcModify" class="pmsForm" validate="true" clientvalidate="true">
+                        <table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+                            <tr>
+                                <td align="left" nowrap="true" colspan="4">
+                                    <strong>基本信息:</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                            	 <td align="left">
+                                	上级编码:
+									<font color="red">
+                                        *
+                                    </font>
+                                </td>
+                                <td>
+                                    <input type="text" id="parentCode" name="parentCode" class="form-control" style="width: 60%" readonly/>
+                                </td>
+                                <td align="left">
+                                	功能编码:
+                                    <label style="color: red">
+                                        *
+                                    </label>
+                                </td>
+                                <td>
+                                    <input type="text" id="activityCode" name="activityCode" class="form-control" style="width: 60%" readonly/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+									功能名称:
+                                    <label style="color: red">
+                                        *
+                                    </label>
+                                </td>
+								 <td align="left" nowrap="true">
+									<input type="text" id="activityName" name="activityName" class="form-control" style="width: 60%" />
+                                </td>
+								<td align="left" nowrap="true">
+									跳转路径:
+                                    <label style="color: red">
+                                        *
+                                    </label>
+                                </td>
+								 <td align="left" nowrap="true">
+									<input type="text" id="url" name="url" class="form-control" style="width: 60%" />
+                                </td>
+                            </tr>
+
+							<tr>
+								<td align="left" nowrap="true">
+									排序:
+                                    <font color="red">
+                                        *
+                                    </font>
+                                </td>
+								 <td width="42%">
+                                	<input type="text" id="orderNo" name="orderNo" class="form-control" style="width: 60%"/>
+                                </td>
+                                <td align="left">
+                                    图标:
+                                </td>
+                                <td width="42%">
+                                    <input type="text" id="icon" name="icon" class="form-control" style="width: 60%"/>
+                                </td>
+                                </td>
+							</tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    备注:
+                                </td>
+                                <td align="left" nowrap="true">
+                                    <input type="text" id="remark" name="remark" class="form-control" style="width: 60%" />
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+  					<input type="hidden" id="functionId">
+                </div>
+                <div class="panel-footer" align="right">
+                    <button class="btn btn-primary" id="Save" onclick="save1();">
+                        保存
+                    </button>&nbsp;
+                    <button class="btn btn-primary" id="Return" onclick="backPage();">
+                        返回
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <meta http-equiv="Cache-Control" Content="no-cache"/>
+        <meta http-equiv="Pragma" Content="no-cache"/>
+        <meta http-equiv="Expires" Content="0"/>
+        <title>编辑关注信息</title>
+        <link rel="stylesheet" href="../scripts/lib/jquery/ztree/zTreeStyle/zTreeStyle.css" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        <script type="text/javascript" src="./js/createProject.js">
+        </script>
+        <script src="./referenceDialog.js" type="text/javascript">
+        </script>
+        <script>
+            importJs("../bizbase/js/common-validation-bizbase.js");
+		</script>
+        <script>
+        var id = getUrlParamByKey("id");
+        var jsonTemp = null;
+        $(function(){
+        	initDic();
+			doManager("PersonalAttentionManager", "queryPersonalAttentionById", id + '', function(data, textStatus, XMLHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    jsonTemp = jsonData;
+                    $("#id").val(jsonData.beAttentionPersonId);
+					$("#personal_name").val(jsonData.beAttentionName);
+					$("#appPhoneNo").val(jsonData.appPhoneNo);
+                    $("#userName").val(jsonData.userName);
+                    $("#phoneNo").val(jsonData.phoneNo);
+                    $("#beAttentionPersonIdCard").val(jsonData.beAttentionPersonIdCard);
+                    $("#contactsRelationship").val(jsonData.contactsRelationship);
+                }
+            }, false);
+        })
+        function setDic(dicname,resourceName){
+         	 var resourceId = $(resourceName)[0];
+              var resource = $dict.getDictList(dicname);
+              var option = new Option('', '');
+              resourceId.add(option);
+              $(resource).each(function(i, element){
+                  var option = new Option(element.dictText, element.dictCode);
+                  resourceId.add(option);
+              });
+         }
+        function initDic(){
+    	    setDic('personal_relationship_resource',"#contactsRelationship");
+			$validator = new PMSValidator($("#projectForm")[0], {
+                bNormalDisplay: false,
+                iDisplayLength: 5
+            });
+        }
+            function dialogSubmit(){
+                var div = $("<div></div>");
+                div.html("确定提交？");
+                div.dialog({
+                    bgiframe: true,
+                    title: "提示",
+                    width: 320,
+                    buttons: {
+                        "确定": function(){
+                            submitForm();
+                            $(this).dialog("close");
+                        },
+                        "取消": function(){
+                            $(this).dialog("close");
+                        }
+                    },
+                    modal: true
+                });
+            }
+            //基础校验-------------------------------
+            function dataCheck(){
+                $validator.clean();
+                var cvalidator = $validator.clientValidate();
+                if (!cvalidator) {
+                    $$.showMessage("系统提示","数据校验不通过，请检查各项输入是否正确。");
+                    return false;
+                }
+                return true;
+            }
+            
+          function submitForm(){
+        	if (!dataCheck()) {
+                return;
+            }
+        	beAttentionPersonId: $("#id").val(),
+			jsonTemp.beAttentionName = $("#personal_name").val();
+			jsonTemp.appPhoneNo = $("#appPhoneNo").val();
+			jsonTemp.userName = $("#userName").val();
+        	jsonTemp.phoneNo = $("#phoneNo").val(); 
+        	jsonTemp.beAttentionPersonIdCard = $("#beAttentionPersonIdCard").val(); 
+        	jsonTemp.contactsRelationship = $("#contactsRelationship").val(); 
+	        doManager("PersonalAttentionManager", "updatePersonalAttention", jsonTemp, function(data, textStatus, XMLHttpRequest){
+	            if (data.result) {
+	                var jsonData = $.fromJSON(data.data);
+	                var id = jsonData.id;
+	            	$$.showMessage("系统信息", "修改成功!");
+	                window.location.href = 'MyAttentionPersonList.html?id=' + id;
+	            }else{
+					$$.showMessage("系统信息", "修改失败!");
+				}
+	        });
+        }
+			function toggleBiz(targetid, imgId){
+                var target = $("#" + targetid);
+                if (target.is(":visible")) {
+                    target.hide();
+                    $("#" + imgId).attr("src", "../scripts/images/33.png");//变成加号
+                }
+                else {
+                    target.show();
+                    $("#" + imgId).attr("src", "../scripts/images/22.png");//变成减号
+                }
+            }
+			
+			function doSelect(json){
+			    var userInfo = $.fromJSON(json);
+			    $("#id").val(userInfo.id);
+			    $("#persionId").val(userInfo.id);
+			    $("#personal_name").val(userInfo.name);
+			    $("#beAttentionPersonPhoneNo").val(userInfo.phoneNo);
+			    $("#beAttentionPersonIdCard").val(userInfo.idCard);
+			    $("#appPhoneNo").val(userInfo.appPhoneNo);
+			    
+			}
+			function selectPerson(callback){
+				var id = $("#persionId").val();
+				var name = $("#personal_name").val();
+				var phoneNo = $("#beAttentionPersonPhoneNo").val();
+				var idCard = $("#beAttentionPersonIdCard").val();
+				var  appPhoneNo = $("#appPhoneNo").val();
+				checkUser(callback,id,name,phoneNo,idCard,appPhoneNo);
+				
+			}
+        </script>
+    </head>
+    <body style="margin: 0px;padding: 0px">
+        <div class="box">
+            <div id="pageheardiv" class="title clear">
+                <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();">
+                </div>
+                <div class="ico2">
+                </div>
+                <div class="ico1">
+                </div>
+                <a href="#">用户管理</a>
+                <a href="#">关注信息查询</a>
+            </div>
+            <div class="containerheader">
+                 <a href="#" onclick="toggleBiz('containerbody2','pic2');"><img src="../scripts/images/22.png" align="absmiddle" id="pic2" /></a>关注信息
+            </div>
+            <div class="containerbody" id="containerbody2">
+                <form class="pmsForm" id="projectForm" name="projectForm">
+                    <table cellpadding="0" cellspacing="0" class="layout" width="90%">
+                       <input type="hidden" name="id" id="id" />
+					    <tr>
+                            <td width="15%">
+                            	<input id="tb_harchives_inspect_info_id" name="tb_harchives_inspect_info_id" type="hidden" class="inputtext" style="width:37%"/>
+                            </td>
+                            <td width="30%">
+                            </td>
+                            <td width="15%">
+                            </td>
+                            <td width="40%">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right">
+                                	老人姓名：<span class="red">*</span>
+                            </td>
+                            <td align="left">
+                                <input id="persionId" name="persionId" type="hidden" class="inputtext" validate="required:false, maxlength:10"/>
+                                <input id="personal_name" name="personal_name" type="text" disabled="disabled" validate="required:false, maxlength:10" style="width:22%"/>
+                                <button class="buttonu" id="selectUser" onclick="selectPerson(doSelect);" style="width:14%">选择</button>
+                            </td>
+                              <td align="right">
+                                	老人身份证号：<span class="red">*</span>
+                            </td>
+                            <td align="left">
+                                <input id="beAttentionPersonIdCard" name="beAttentionPersonIdCard" disabled="disabled" type="text"  class="inputtext_dis" validate="isCardNo:true, maxlength:18" style="width:160px"/>
+                            </td> 
+                        </tr>
+                         
+                        <tr>
+                            <td align="right">
+                                 	关注人姓名：<span class="red">*</span>
+                            </td>
+                            <td align="left">
+                                <input id="userName" name="userName" type="text"  class="inputtext" validate="required:true,  maxlength:80" style="width:160px"/>
+                            </td>
+						   <td align="right">
+                                	关注人手机号：<span class="red">*</span>
+                            </td>
+                            <td align="left">
+                                <input id="phoneNo" name="phoneNo" type="text"  class="inputtext" validate="required:true,  isMobile:true" style="width:160px"/>
+                            </td>  
+                        </tr>
+                        <tr>
+	                          <td align="right">
+	                                	与关注人关系：
+	                            </td>
+	                            <td class="basetext">
+			                              <select id="contactsRelationship" name="contactsRelationship" class="inputselect" style="width:165px" validate="required:false, maxlength:80">
+		                                  </select>
+			                    </td>     
+                            <td align="right">
+                                  	第一关注人手机号：<span class="red">*</span>
+                            </td>
+                            <td align="left">
+                                <input id="appPhoneNo" name="appPhoneNo" type="text"  disabled="disabled" class="inputtext_dis" validate="required:true,  maxlength:80" style="width:160px"/>
+                            </td>  
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="4" align="right">
+                                <button class="buttonu"   id="SaveSub" onclick="dialogSubmit()">提交</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

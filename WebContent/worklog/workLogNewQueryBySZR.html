@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+      	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<script type="text/javascript" src="../forecast/js/createProject.js"></script>
+		<script src="../bizbase/js/userDialog.js" type="text/javascript"></script>
+		<script src="../scripts/userCheck.js" type="text/javascript"></script>
+		<script type="text/javascript"  src="js/calendar.js"></script>
+		<link type="text/css" rel="Stylesheet" href="js/style.css" />
+		<script language="JavaScript" type="text/javascript">
+			var psId;
+			var logDates = getUrlParamByKey("val");
+			var userId = getUrlParamByKey("userId");
+			var id = getUrlParamByKey("id");
+			var typeValue = getUrlParamByKey("typeValue");
+			$(function() {
+				 //初始化日历控件
+				 
+				if(logDates!=null&&logDates!=""){
+				 	 $("#s1").val(logDates);
+					  $("#dqxzrq").text(logDates);
+					 var ymd=logDates;
+				 }else{
+				 	$("#s1").val(formatDate(new Date()));
+					$("#dqxzrq").text(formatDate(new Date()));
+
+				 }
+				 createCalendar("selectcalendar",function(txt){
+					//window.location.href='workLogNewQueryBySZR.html?val='+txt;
+					clearClendar();
+					$("#calendardiv" + txt).css("background-color", "#FDC951");
+					 var tempType=$("input[name='type']:checked").val();
+						$("input[name='type'][value='"+tempType+"']").attr("checked","true");
+						$("#s1").val(txt);
+						$("#dqxzrq").text(txt);
+						init();
+				},ymd,function(d){
+					//获取已提交的日志
+				/*if(userId!=null&&userId!=""){
+					
+					doManager("workLogManager", "getLogdatesListByUID", uId+"", function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   for(var i=0;i<returnObj.length;i++){
+								$("#calendardiv"+returnObj[i]).css("background-color","#66ff33");
+							   }
+	                        }
+	                    }, true, {showWaiting: true});
+				}else{
+					doManager("workLogManager", "getLogdatesList", "", function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   for(var i=0;i<returnObj.length;i++){
+								$("#calendardiv"+returnObj[i]).css("background-color","#66ff33");
+							   }
+	                        }
+	                    }, true, {showWaiting: true});
+				}*/
+				});
+				if(logDates!=null&&logDates!=""){
+				 	
+					 $("#calendardiv"+ymd).css("background-color","#FDC951");
+				}
+				init();
+			});
+			function init(){
+				 if(userId!=null&&userId!=""){
+					doManager("workLogManager", "getLogdatesListByUID", userId+"", function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   for(var i=0;i<returnObj.length;i++){
+								$("#calendardiv"+returnObj[i]).css("background-color","#66ff33");
+							   }
+	                        }
+	                    }, true, {showWaiting: true});
+				}
+				if(typeValue!=null&&typeValue!=""){
+					$("input:radio[value='"+typeValue+"']").attr(
+						'checked', 'true');
+				}
+				$("input:radio").click(function(){
+					onSearch();
+				})
+				onSearch();
+			}
+		//格局化日期：yyyy-MM-dd
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth + "-" + myweekday);
+        }
+			 //给列加链接
+			 
+			 var COLUMNS = {
+			 		"userName": function(aData, iColumn, sColumnName, map){
+                       var value = map[sColumnName];
+                       var userId = map.userId;
+					   //var url="workLogNewAddView.html?val="+$("#s1").val()+"&userId="+userId+"&fromwhere=workLogNewQueryBySZR.html"+"&userName="+value;
+						return "<a href='#' onclick='addLogToCalendar("+userId+")'>" + value + "</a>";
+					   //return "<a href='" + url + "'>" + value + "</a>"; 
+                   },
+                   "isFollowName": function(aData, iColumn, sColumnName, map){
+                       var value = map[sColumnName];
+                       var userId = map.userId;
+					   var userName=map.userName;
+					   if(value=="是"){
+					   	 return "<input type='checkbox' name='sfgz' checked onclick='quxiaogz("+userId+")'></a>";
+
+					   }else if(value=="否"){
+					   	 return "<input type='checkbox'  onclick='guanzhu("+userId+")'></a>";
+
+					   }
+                   }
+               }
+			   function guanzhu(userId){
+					var obj={
+						followId:userId,
+						followName:""
+					};
+					doManager("workLogFollowManager", "saveWorkLogFollow", obj, function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   if($("#orgId").val()!=null&&$("#orgId").val()!=""){
+							   		//window.location.href='workLogNewQueryBySZR.html?orgId='+$("#orgId").val()+'&orgName='+$("#orgName").val();
+							        //$$.executeSearch('workLogQueryBySZR', 'conditionsDiv');
+
+							   }else{
+							   		//window.location.href='workLogNewQueryBySZR.html';
+							        //$$.executeSearch('workLogQueryBySZR', 'conditionsDiv');
+
+							   }
+	                        }
+	                    }, true, {showWaiting: true});
+			   }
+			   function quxiaogz(userId){
+					doManager("workLogFollowManager", "deleteWorkLogFollowByFollowId", userId+"", function (datas, textStatus, XMLHttpRequest) {
+			                        if (datas.result) {
+			                           var returnObj = $.fromJSON(datas.data);
+									   		if($("#orgId").val()!=null&&$("#orgId").val()!=""){
+									   			//window.location.href='workLogNewQueryBySZR.html?orgId='+$("#orgId").val()+'&orgName='+$("#orgName").val();
+											        //$$.executeSearch('workLogQueryBySZR', 'conditionsDiv');
+
+										   }else{
+										   		//window.location.href='workLogNewQueryBySZR.html';
+											        //$$.executeSearch('workLogQueryBySZR', 'conditionsDiv');
+
+										   }
+									 }
+			                    }, true, {showWaiting: true});
+			   }
+			  function addLogToCalendar(userId){
+			  	//先清除他人日志修改的背景色
+				/*clearClendar();
+			  	 //获取已提交的日志
+				 doManager("workLogManager", "getLogdatesListByUID", userId+"", function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   for(var i=0;i<returnObj.length;i++){
+								$("#calendardiv"+returnObj[i]).css("background-color","#66ff33");
+							   }
+	                        }
+	                    }, true, {showWaiting: true});*/
+				//先通过userId去获取到该人的name
+				 doManager("userManager", "getUserDTO", userId+"", function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							  window.location.href='workLogNewAddView.html?val='+$("#s1").val()+'&userId='+userId+"&fromwhere=workLogNewQueryBySZR.html"+"&userName="+returnObj.name+"&parentType=0";
+	                        }
+	                    }, true, {showWaiting: true});
+				
+			  }
+		//查看
+				var viewObj = {
+		        html: '<a href="#" class="blue">查看</a>',
+		        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+		            var userId=allColumnsDataMap.userId;
+					var userName=allColumnsDataMap.userName;
+					window.location.href='workLogNewAddView.html?val='+$("#s1").val()+'&userId='+userId+"&userName="+userName;
+				}
+		    }
+			//关注
+			var gzObj = {
+		        html: '<a href="#" class="blue">关注</a>',
+		        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+		            var userId=allColumnsDataMap.userId;
+					var userName=allColumnsDataMap.userName;
+					var obj={
+						followId:userId,
+						followName:userName
+					};
+					doManager("workLogFollowManager", "saveWorkLogFollow", obj, function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   
+							   		window.location.href='workLogNewQueryBySZR.html?val='+$("#s1").val()+'&typeValue='+$("input[name='type']:checked").val();
+
+							   
+	                        }
+	                    }, true, {showWaiting: true});
+		        }
+				
+		    }
+			//取消关注
+			var qxgzObj = {
+		        html: '<a href="#" class="blue">取消关注</a>',
+		        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+		            var userId=allColumnsDataMap.userId;
+					var userName=allColumnsDataMap.userName;
+					var isFollowName=allColumnsDataMap.isFollowName;
+					if(isFollowName=="否"){
+							   		$$.showMessage("${system.info}", "没有关注过该人，所以不需要取消关注");
+					}else{
+							   		
+									doManager("workLogFollowManager", "deleteWorkLogFollowByFollowId", userId, function (datas, textStatus, XMLHttpRequest) {
+			                        if (datas.result) {
+			                           var returnObj = $.fromJSON(datas.data);
+									   
+							   			window.location.href='workLogNewQueryBySZR.html?val='+$("#s1").val()+'&typeValue='+$("input[name='type']:checked").val();
+									}
+			                    }, true, {showWaiting: true});
+					}
+					
+				}
+		    }
+			//$pmspage.opArr = [viewObj];
+		</script>
+	</head>
+	<body>
+		<div class="rightcont body_bg clear">
+			<div class="box">
+				<div class="title clear">
+					<div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();" ></div>
+					<div class="ico2" ></div>
+					<div class="ico1" ></div>
+					<a href="#">工作日誌 :</a>&nbsp;<a href="#">日誌查询</a>
+				</div>		
+				<div class="containerheader">
+					 <a href="#" onClick="toggleDiv('temp1','plusMinus1')"><img id="plusMinus1" src="../scripts/images/22.png"/></a>
+					日誌查询&nbsp;&nbsp;&nbsp;&nbsp;
+				<span id="info"></span>
+				</div>
+				
+        
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true" >
+                	 <table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+					 <tr style="padding:0px;margin:0px;">
+					 	<td style="width:5%;height:150px;">
+							<div id="selectcalendar"></div>
+					 	</td>
+						<td style="width:95%;height:150px;padding:0px;margin:0px;">
+							<table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+									<tr>
+											<td  width="30%" height="40px" align="right" style="padding-right:20px;">
+												
+											</td>
+
+											<td  align="left" width="70%" >
+												<input type="radio" name="type" value="bsAndsXmxg" checked/>本室&项目相关
+												<input type="radio" name="type" value="gz" />关注
+											</td>
+									</tr>
+										<tr>
+							              	<td  width="30%" height="40px" align="right" style="padding-right:20px;">人员姓名：</td>
+											<td  >
+												<input type="hidden" id="s1" revalidate="true" type="text" name="logDate" likeOption="false" validate="formatDate:true"  readonly yearRange="-100:+0" style="width:160px;margin-right: 5px;"/>
+												<input type="text" id="userName" name="userName" likeOption="false" value="" />
+												<input type="button" class="buttonu" value="查询" onclick="onSearch()" />
+											</td>
+							             </tr>
+										 <tr>
+							              	<td  width="30%" height="40px" align="right" style="padding-right:20px;"></td>
+											<td  >
+												当前选中日期：
+												<span id="dqxzrq"></span>
+											</td>
+							             </tr>
+			                 </table>
+					 	</td>
+					 </tr>
+					 </table>
+                
+                </form>
+            </div>
+         <div id="workLogSearchContainer" titleAlign= "center" fnRender="renderColumns" showcheckbox="false" showRidaoButton="true"
+             searchDiv="conditionsDiv" usecache="true" queryid="workLogQueryBySZR" showNo="false"
+             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+             showprint="false" showpaging="true" showcheckbox="true" operators=$pmspage.opArr>
+        </div>
+    </div>
+
+		 </div>
+	</body>
+</html>
+<script type="text/javascript">
+    function onSearch() {
+        $$.executeSearch('workLogQueryBySZR', 'conditionsDiv');
+    }
+</script>

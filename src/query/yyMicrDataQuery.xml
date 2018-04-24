@@ -1,0 +1,17 @@
+<pmsquery>
+	<query id="yymicrdtoQuery" header="上传列表"  dtoclass="com.cnpc.pms.personal.dto.YyMicrDataDTO" method="yyMicrDataManager.getWCMicrDataList">
+        <column key="id" 			header="序号" 		display="false" 	type="java.lang.Long" 	allowSearch="true"	allowSort="true" align="center"/>
+        <column key="name" 	        header="名称" 	    display="true" 		type="String"			allowSearch="true" 	allowSort="true" operator="like" 	width="20%" align="center"/>
+        <column key="date" 			header="日期" 		display="false" 		type="java.util.Date" operator="between" allowSearch="true" 	allowSort="true" width="15%" align="center"  format="yyyy-MM-dd"/>
+        <column key="date_str" 			header="日期" 		display="true" 		type="String" 	allowSearch="true" 	allowSort="true" width="15%" align="center" />
+        <column key="createuser" 	header="上传人" 		display="true" 		type="String" 			allowSearch="true" 	allowSort="true" width="15%" align="center"/>
+    </query>
+    
+    <query id="yyshbdtoQuery" header="上传列表"  dtoclass="com.cnpc.pms.personal.dto.YyMicrDataDTO" method="yyMicrDataManager.getSHBMicrDataList">
+        <column key="id" 			header="序号" 		display="false" 	type="java.lang.Long" 	allowSearch="true"	allowSort="true" align="center"/>
+        <column key="name" 	        header="名称" 	    display="true" 		type="String"			allowSearch="true" 	allowSort="true" operator="like" 	width="20%" align="center"/>
+        <column key="date" 			header="日期" 		display="false" 		type="java.util.Date" operator="between" allowSearch="true" 	allowSort="true" width="15%" align="center"  format="yyyy-MM-dd"/>
+        <column key="date_str" 			header="日期" 		display="true" 		type="String" 	allowSearch="true" 	allowSort="true" width="15%" align="center" />
+        <column key="createuser" 	header="上传人" 		display="true" 		type="String" 			allowSearch="true" 	allowSort="true" width="15%" align="center"/>
+    </query>
+</pmsquery> 

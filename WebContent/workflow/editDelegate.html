@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>修改委托待办</title>
+		<script type="text/javascript" src="../scripts/lib-main.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<script type="text/javascript" src="../bizbase/js/userDialog.js"></script>
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+		<script type="text/javascript">
+			var ID = getUrlParamByKey("Id")
+			$(function(){
+				$("#delegateId").val(ID);
+				$$.executeSearch("delegateModuleInfo");
+				doManager("WFDelegateManager", "queryWFDelegate",ID+"", function(data, textStatus, XMLHttpRequest){
+						if (data.result) {
+							var jsdata = $.fromJSON(data.data);
+							var startDate= new Date(jsdata.beginDate);
+							var startMonth;
+							var startdate;
+							if((startDate.getMonth()+1)<10){
+								startMonth = "0"+(startDate.getMonth()+1);
+							}else{
+								startMonth = startDate.getMonth()+1
+							}
+							if(startDate.getDate()<10){
+								startdate = "0"+startDate.getDate();
+							}else{
+								startdate = startDate.getDate();
+							}
+							var startD=startDate.getFullYear()+"-"+startMonth+"-"+startdate;
+							var endDate= new Date(jsdata.endDate);
+							var endMonth;
+							var enddate;
+							if((endDate.getMonth()+1)<10){
+								endMonth = "0"+(endDate.getMonth()+1);
+							}else{
+								endMonth = endDate.getMonth()+1;
+							}
+							if(endDate.getDate()<10){
+								enddate = "0"+endDate.getDate();
+							}else{
+								enddate = endDate.getDate();
+							}
+							var endD=endDate.getFullYear()+"-"+endMonth+"-"+enddate;
+							$("#owner").val(jsdata.owner);
+							doManager("userManager", "getUserEntity",jsdata.owner+"", function(data, textStatus, XMLHttpRequest){
+								if (data.result) {
+									var jsdata = $.fromJSON(data.data);
+									if(jsdata!=""){
+											$("#ownername").val(jsdata.name);
+										}
+								}
+							});
+							$("#agent").val(jsdata.agent);
+							doManager("userManager", "getUserEntity",jsdata.agent+"", function(data, textStatus, XMLHttpRequest){
+								if (data.result) {
+									var jsdata = $.fromJSON(data.data);
+									if(jsdata!=""){
+											$("#agentname").val(jsdata.name);
+										}
+								}
+							});
+							$("#beginDate").val(startD);
+							$("#endDate").val(endD);
+							$("input[name='isStop'][value=" + jsdata.isStop + "]").attr("checked", true);
+						}
+					});
+					
+				$("#save").click(function(){
+					var obj={
+						id:ID,
+						owner:$("#owner").val(),
+						agent:$("#agent").val(),
+						beginDate:$("#beginDate").val(),
+						endDate:$("#endDate").val(),
+						isStop:$("input[name='isStop']:checked").val()
+					}
+					alert("in");
+					doManager("WFDelegateManager", "saveWFDelegate",obj, function(data, textStatus, XMLHttpRequest){
+						if (data.result) {
+							alert("ok");
+							window.location.href = 'delegate.html';
+						}
+					});
+				})
+			})
+			function addDelegete(){
+				window.location.href = 'addModuleList.html?delegateId='+ID;
+			}
+			function chooseTOPerson(){
+				checkUser(0,choosePs);
+			}
+			function choosePs(resultStr){
+		
+			
+            	var selResult=$.fromJSON(resultStr);
+				var userId=selResult.userId;
+				var userName=selResult.userName;
+				$("#agent").val(userId);
+				$("#agentname").val(userName);
+            }
+			function convertDataToObj(data, allColumns){
+	            var json = "{";
+	            for (var i = 0; i < data.length; i++) {
+	                json += "'" + allColumns[i].key + "'";
+	                json += ":"
+	                json += "'" + data[i] + "',";
+	            }
+	            json = json.substr(0, json.length - 1) + "}";
+	            var jsonObj = $.fromJSON(json);
+	            return jsonObj;
+				}
+			var delObj = {
+		        html: '<a href="#">删除</a>',
+		        func: function(queryid, data, nTr, allColumns){
+		            var json = convertDataToObj(data, allColumns);
+		            var id = json.id;
+					alert(id);
+		          	doManager("WFDelegateModuleManager", "deleteWFDelegateModule", id + "", function(data, textStatus, XMLHttpRequest){
+						if (data.result) {
+							window.location.href = 'editDelegate.html?Id=' + ID;
+						}
+					});
+		        }
+		    }
+			var opArr = [delObj];
+		</script>
+	</head>
+<body>
+	<div class="rightcont body_bg clear" style="width: 300px; margin: 0px auto; padding: 0px auto;">
+		<div class="box">
+			<div class="containerbody">
+				<form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+					<table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+						<tr>
+							<td align="left" nowrap="true" colspan="4"><strong>修改委托待办:</strong></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">委托人:</td>
+							<td><input type="hidden" id="owner" name="owner" class="inputtext" ><input type="text" id="ownername" name="ownername" class="inputtext" disabled></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">代理人:</td>
+							<td><input type="hidden" id="agent" name="agent" class="inputtext" ><input type="text" id="agentname" name="agentname" class="inputtext" ></td>
+							<td align="left" nowrap="true" style="text-align:left;">
+								<button class="buttonu" value="选择代理人"  onclick="chooseTOPerson()">&nbsp; 选择代理人</button>
+							</td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">代理开始日期:</td>
+							<td><input class="pmsDateField" id="beginDate" name="beginDate" disabled/></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">代理结束日期:</td>
+							<td><input class="pmsDateField" id="endDate" name="endDate" disabled/></td>
+						</tr>
+						<tr>
+						<td width="15%" align="left" nowrap="true">委托状态:</td>
+						<td><input class="pmsRadio" id="isStop" name="isStop" data="[[0,'无效'],[1,'有效','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true" colspan="4">
+								<button class="buttonu" value="提交" id="save" >&nbsp; 提交</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div id="conditionsDiv" style="padding:10px;">
+    		<form class="pmsForm" id="pmsForm" style="text-align:center;">
+    			<input name="delegateId" id="delegateId" style="display:none;" validate="minlength:1, maxlength:3" />
+				<input type="hidden" value="查询" id="searchButton" class="buttonu"/>
+				<input type="button" value="新增委托模块" id="toNew" class="buttonu" onclick="addDelegete()" />
+    		</form>
+			<script type="text/javascript">
+				$("#searchButton").button().click(function() {
+					$$.executeSearch("delegateModuleInfo");
+				});
+			</script>
+    	</div>
+        <div id="testQuery" showcheckbox="false" searchDiv="conditionsDiv" showsearch="false" showdisplay="false" showprint="false" 
+			 queryid="delegateModuleInfo" operators="opArr" autoload="false"></div>
+</body>
+</html>

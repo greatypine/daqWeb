@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>选择用户</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <script>
+    	var store = getUrlParamByKey("store");
+    	var zw = getUrlParamByKey_decode("zw");
+    	var employeeId = getUrlParamByKey_decode("employeeId");
+    	var city =  getUrlParamByKey_decode("city");
+    	var arr =new Array();
+        $(function () {
+        	
+        	$("#storeId").val(store);
+        	if(store==""){
+        		$("#city").val(city);
+        		if(city==""){
+        			$("#employeeId").val(employeeId);
+        		}
+        	}
+        	$("#zw").val(zw);
+            //页面加载成功后需要获取数据
+            searchList();
+        });
+        
+        
+        
+        //记载页面时请求数据列表默认的方法
+        function searchList() {
+            $$.executeSearch('queryReceiveEmployee', 'conditionsDiv');
+        }
+
+        function doSubmit(){
+            var jsons=new Array();
+            var objs = $$.getSelectedObj("queryReceiveEmployee");
+            if (objs.length != 0) {
+            	for(var i=0;i<objs.length;i++){
+            		json = {storeId:objs[i][0],name:objs[i][2],employeeId:objs[i][1]};
+            		jsons.push(json);
+            	}
+            } 
+           
+            parent.win.callBack(jsons);
+            parent.win.hide();
+        }
+      
+         
+    </script>
+    <style type="text/css">
+        html,body{
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="bodyDiv">
+        <div id="userGroupInfo" class="panel panel-primary">
+            <div class="panel-heading">
+                <a href="#" onclick="toggleBizBiz('conditionsDiv','pic');"><img src="../scripts/images/22.png" align="absmiddle" id="pic"/></a>&nbsp;搜索条件
+            </div>
+            <div id="conditionsDiv" class="panel-body">
+                    <table class="bigteble">
+                        <tr>
+                            <td align="left" width="4%" class="basetext">
+                                用户名称:				
+                            </td>
+                            <td class="baseform" align="left" width="25%">
+                                <input type="text" name="name" id="name" class="form-control" style="width: 20%" onkeyup="value=this.value.replace(/\s+/g,'')"/>
+                            </td>
+                            <input name="store" type="hidden" id="storeId"/>
+                            <input name="zw" type="hidden" id="zw"/>
+                            <input name="employeeId" type="hidden" id="employeeId"/>
+                            <input name="city" type="hidden" id="city"/>
+                            <!-- <td align="left" width="10%" class="basetext">
+                                用户电话:				
+                            </td>
+                            <td class="baseform" align="left" width="40%">
+                                <input type="text" name="mobilephone" id="mobilephone" maxlength="11"  onkeyup="value=this.value.replace(/\D+/g,'')" class="form-control" style="width: 70%"/>
+                            </td> -->
+                        </tr>
+                    </table>
+                </div>
+                <div class="panel-footer"  align="right">
+                    <input class="btn btn-primary" onClick="searchList()" value="查询" type="button"/>
+                </div>
+            </div>
+            <div id="gridContainer" searchDiv="conditionsDiv" queryid="queryReceiveEmployee" class="panel panel-primary"
+                 operators="$pmspage.opArr" titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="false"
+                 showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="true"
+                 checkmode="multiple" autoload="false" showno="false">
+            </div>
+        </div>
+    </body>
+    
+   
+</html>

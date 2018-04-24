@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script type="text/javascript" src="../scripts/lib-main.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pms.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pmsCommon.js">
+        </script>
+        <link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+        <style>
+            html {
+                overflow: auto;
+                height: 100%;
+            }
+            
+            body {
+                overflow: auto;
+                background: #E6E6E6 url(images/right.jpg) repeat-y right top;
+                height: 100%;
+                margin: 0px;
+                pading: 0px;
+                padding-right: 5px;
+            }
+        </style>
+        <script>
+            $(function(){
+                var selectObj = $("#moduleId")[0];
+                var optionTemp = new Option("", "");
+                selectObj.add(optionTemp);
+                doManager("WFModuleManager", "getWFModuleList", null, function(data, textStatus, XMLHttpRequest){
+                    if (data.result) {
+                        var jsonData = $.fromJSON(data.data);
+                        for (i = 0; i < jsonData.length; i++) {
+                            var option = new Option(jsonData[i].id+"-"+jsonData[i].name, jsonData[i].id);
+                            selectObj.add(option);
+                        }
+                    }
+                }, false);
+            });
+            function doSubmit(){
+                var obj = {
+                    baseFlowId: $("#baseFlowId").val(),
+                    moduleId: $("#moduleId").val(),
+                    flowName: $("#flowName").val(),
+                    flowVersion: $("#flowVersion").val(),
+                    creator: $("#creator").val(),
+                    createTime: $("#createTime").val(),
+                    memo: $("#memo").val(),
+                    state: $("input[name='state']:checked").val()
+                }
+                doManager("WFFlowManager", "addFlow", obj, function(data, textStatus, XMLHttpRequest){
+                    alert("ok");
+                });
+            }
+            
+            function toWorkFlow(){
+                window.location.href = 'List_workflow.html';
+            }
+        </script>
+        <style type="text/css">
+            table {
+                border: 0px solid #000;
+            }
+            
+            td {
+                border: 0px solid #000;
+            }
+        </style>
+    </head>
+    <body style="margin-left:3px;text-align:center;" background="images/leftbg.png">
+        <div class="rightcont body_bg clear" style="width:300px;margin:0px auto;padding:0px auto;">
+            <div class="box">
+                <div class="containerbody">
+                    <form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                        <table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+                            <tr>
+                                <td align="left" nowrap="true" colspan="4">
+                                    <strong>新增流程模板:</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    对应最初版本流程Id:
+                                </td>
+                                <td>
+                                    <input type="text" id="baseFlowId" name="baseFlowId" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    对应业务模块名称:
+                                </td>
+                                <td>
+                                	<select id="moduleId" name="moduleId" inputType="inputSelect" style="width:250px;">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    流程名称:
+                                </td>
+                                <td>
+                                    <input type="text" id="flowName" name="flowName" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    流程版本号:
+                                </td>
+                                <td>
+                                    <input type="text" id="flowVersion" name="flowVersion" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    创建人ID:
+                                </td>
+                                <td>
+                                    <input type="text" id="creator" name="creator" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    创建日期:
+                                </td>
+                                <td>
+                                    <input type="text" id="createTime" name="createTime" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    版本说明:
+                                </td>
+                                <td>
+                                    <input type="text" id="memo" name="memo" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    状态:
+                                </td>
+                                <td>
+                                    <input class="pmsRadio" id="state" name="state" data="[['0','不可用'],['1','可用','checked']]" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true" colspan="4">
+                                    <button class="buttonu" value="提交" onclick="doSubmit()">
+                                        &nbsp;
+                                        提交
+                                    </button>
+                                    <button class="buttonu" value="去往工作流模板信息页面" onclick="toWorkFlow()">
+                                        去往工作流模板信息页面
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

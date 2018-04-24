@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Untitled Document</title>
+        <script type="text/javascript" src="../scripts/lib-main.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pms.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pmsCommon.js">
+        </script>
+        <script type="text/javascript" src="../bizbase/js/refDialog.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/common-simpletable.js">
+        </script>
+        <link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+        <link rel="stylesheet" href="../bizbase/script/tree/jquery.treeview.css" />
+        <link rel="StyleSheet" type="text/css" href="../scripts/css/common-simpletable.css">
+        <script type="text/javascript">
+            var FlowId = getUrlParamByKey("FlowId");//对应流程ID
+            var Id = getUrlParamByKey("&Id");//对应各记录自己的id
+            $(function(){
+                var selectObj = $("#moduleId")[0];
+                var optionTemp = new Option("", "");
+                selectObj.add(optionTemp);
+                doManager("WFModuleManager", "getWFModuleList", null, function(data, textStatus, XMLHttpRequest){
+                    if (data.result) {
+                        var jsonData = $.fromJSON(data.data);
+                        for (i = 0; i < jsonData.length; i++) {
+                            var option = new Option(jsonData[i].id + "-" + jsonData[i].name, jsonData[i].id);
+                            selectObj.add(option);
+                        }
+                    }
+                }, false);
+                $("#stepFlowId").val(FlowId);//进入页面时接收流程ID以此来展示各查询列表
+                $("#transFlowId").val(FlowId);
+                $("#argsFlowId").val(FlowId);
+                $("#orgFlowId").val(FlowId);
+                $$.executeSearch("wfStepQuery");
+                $$.executeSearch("wfArgsQuery");
+                $$.executeSearch("wfTransQuery");
+                $$.executeSearch("wfOrgQuery");
+                if (FlowId != null) {
+                    doManager("WFFlowManager", "queryFlow", FlowId + "", function(data, textStatus, XMLHttpRequest){
+                        if (data.result) {
+                            var jsonData = $.fromJSON(data.data);
+                            $("#id").val(jsonData.id);
+                            $("#baseFlowId").val(jsonData.baseFlowId);
+                            $("#moduleId").val(jsonData.moduleId);
+                            $("#flowName").val(jsonData.flowName);
+                            $("#flowVersion").val(jsonData.flowVersion);
+                            $("#creator").val(jsonData.creator);
+                            $("#createTime").val(jsonData.createTime);
+                            $("#memo").val(jsonData.memo);
+                            $("input:radio[value='" + jsonData.state + "']").attr('checked', 'true');
+                        }
+                    });
+                }
+                $("#newArgs").click(function(){
+                    window.location.href = 'New_arg.html?FlowId=' + FlowId;
+                })
+                $("#newStep").click(function(){
+                    window.location.href = 'New_step.html?FlowId=' + FlowId;
+                })
+                $("#newTransition").click(function(){
+                    window.location.href = 'New_transition.html?FlowId=' + FlowId;
+                })
+                $("#newOrg").click(function(){
+                    doSubmit();
+                })
+            })
+            function doSubmit(){
+                openOrgSelDialog(selCallBackMul, "check", true);
+            }
+            
+            function doBack(){
+                window.location.href = 'List_workflow.html'
+            }
+            
+            function doSub(){
+                var obj = {
+                    id: $("#id").val(),
+                    baseFlowId: $("#baseFlowId").val(),
+                    moduleId: $("#moduleId").val(),
+                    flowName: $("#flowName").val(),
+                    flowVersion: $("#flowVersion").val(),
+                    creator: $("#creator").val(),
+                    createTime: $("#createTime").val(),
+                    memo: $("#memo").val(),
+                    state: $("input[name='state']:checked").val()
+                }
+                doManager("WFFlowManager", "saveFlow", obj, function(data, textStatus, XMLHttpRequest){
+                    if (data.result) {
+                        var jsonData = $.fromJSON(data.data);
+                        window.location.href = 'Edit_workflow.html?FlowId=' + jsonData.id;
+                    }
+                });
+            }
+            
+            var selCallBackMul = function(resultStr){
+                var jsonData = null;
+                var jsonNum = 0;
+                var i = 0;
+                var j = 0;
+                doManager("WFFlowManager", "getWFFlowOrgListById", FlowId + "", function(data, textStatus, XMLHttpRequest){
+                    jsonData = $.fromJSON(data.data);
+                    var selResult = $.fromJSON(resultStr);
+                    $.each(selResult, function(i, selOne){
+                        j = 0;
+                        for (i = 0; i < jsonData.length; i++) {
+                            if ((selOne.id == jsonData[i].orgId) &&
+                            (FlowId == jsonData[i].flowId)) {
+                                j = 1;
+                            }
+                        }
+                        if (j == 0) {
+                            var obj = {
+                                flowId: FlowId,
+                                orgId: selOne.id,
+                                orgName: selOne.name
+                            }
+                            doManager("WFFlowOrgManager", "addFlowOrg", obj, function(data, textStatus, XMLHttpRequest){
+                            });
+                        }
+                        else {
+                            alert(selOne.name + " 该部门已存在");
+                        }
+                    });
+                    window.location.href = 'Edit_workflow.html?FlowId=' + FlowId;
+                });
+            }
+            function convertDataToObj(data, allColumns){
+                var json = "{";
+                for (var i = 0; i < data.length; i++) {
+                    json += "'" + allColumns[i].key + "'";
+                    json += ":"
+                    json += "'" + data[i] + "',";
+                }
+                json = json.substr(0, json.length - 1) + "}";
+                var jsonObj = $.fromJSON(json);
+                return jsonObj;
+            }
+            
+            //流程参数信息列表去往修改页面,
+            //Id是传到其他页面用的
+            var viewObj = {
+                html: '<a href="#">修改</a>',
+                func: function(queryid, data, nTr, allColumns){
+                    var json = convertDataToObj(data, allColumns);
+                    var FlowId = json.flowId;
+                    var id = json.id;
+                    window.location.href = 'Edit_arg.html?FlowId=' + FlowId + '&Id=' + id;
+                }
+            }
+            var delObj = {
+                html: '<a href="#">删除</a>',
+                func: function(queryid, data, nTr, allColumns){
+                    var json = convertDataToObj(data, allColumns);
+                    var FlowId = json.flowId;
+                    var id = json.id;
+                    $$.showPromptDialog("系统提示", "确认删除流程参数？此操作不可恢复！", false, 320, function(){
+                    
+                        doManager("WFFlowVariableManager", "deleteArgs", id + "", function(data, textStatus, XMLHttpRequest){
+                            if (data.result) {
+                                window.location.href = 'Edit_workflow.html?FlowId=' +
+                                FlowId;
+                            }
+                        });
+                    });
+                }
+            }
+            var opArr = [viewObj, delObj];
+            
+            //流程转换信息列表去往修改查看页面
+            var viewObj2 = {
+                html: '<a href="#">修改</a>',
+                func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                    //var json = convertDataToObj(data, allColumns);
+                    var FlowId = allColumnsDataMap.flowId;
+                    var id = allColumnsDataMap.id;
+                    window.location.href = 'Edit_transition.html?FlowId=' + FlowId +
+                    '&Id=' +
+                    id;
+                }
+            }
+            //流程转换信息列表删除操作
+            var delObj2 = {
+                html: '<a href="#">删除</a>',
+                func: function(queryid, data, nTr, allColumns){
+                    var json = convertDataToObj(data, allColumns);
+                    var FlowId = json.flowId;
+                    var id = json.id;
+                    $$.showPromptDialog("系统提示", "确认删除流程转换条件？此操作不可恢复！", false, 320, function(){
+                        doManager("WFFlowTransitionManager", "deleteTransitions", id + "", function(data, textStatus, XMLHttpRequest){
+                            if (data.result) {
+                                window.location.href = 'Edit_workflow.html?FlowId=' +
+                                FlowId;
+                            }
+                        });
+                    });
+                }
+            }
+            var opArr2 = [viewObj2, delObj2];
+            
+            //流程可用部门列表去往配置页面
+            var viewObj3 = {
+                html: '<a href="#">修改</a>',
+                func: function(queryid, data, nTr, allColumns){
+                    var json = convertDataToObj(data, allColumns);
+                    var FlowId = json.flowId;
+                    var id = json.id;
+                    window.location.href = 'New_floworglist.html?FlowId=' + FlowId + '&Id=' + id;
+                }
+            }
+            //流程可用部门列表删除操作
+            var delObj3 = {
+                html: '<a href="#">删除</a>',
+                func: function(queryid, data, nTr, allColumns){
+                    var json = convertDataToObj(data, allColumns);
+                    var FlowId = json.flowId;
+                    var id = json.id;
+                    $$.showPromptDialog("系统提示", "确认删除流程可用部门？此操作不可恢复！", false, 320, function(){
+                        doManager("WFFlowOrgManager", "deleteFlowOrgs", id + "", function(data, textStatus, XMLHttpRequest){
+                            if (data.result) {
+                                window.location.href = 'Edit_workflow.html?FlowId=' + FlowId
+                            }
+                        });
+                    });
+                }
+            }
+            var opArr3 = [delObj3];
+            var viewObjStep = {
+                html: '<a href="#">修改</a>',
+                func: function(queryid, data, nTr, allColumns){
+                    var json = convertDataToObj(data, allColumns);
+                    var FlowId = json.flowId;
+                    var id = json.id;
+                    window.location.href = 'Edit_step.html?FlowId=' + FlowId + '&Id=' + id;
+                }
+            }
+            var delObjStep = {
+                html: '<a href="#">删除</a>',
+                func: function(queryid, data, nTr, allColumns){
+                    var json = convertDataToObj(data, allColumns);
+                    var FlowId = json.flowId;
+                    var id = json.id;
+                    $$.showPromptDialog("系统提示", "确认删除流程步骤？此操作不可恢复！", false, 320, function(){
+                        doManager("WFFlowStepManager", "deleteSteps", id + "", function(data, textStatus, XMLHttpRequest){
+                            if (data.result) {
+                                window.location.href = 'Edit_workflow.html?FlowId=' + FlowId;
+                            }
+                        });
+                    });
+                }
+            }
+            var opArrStep = [viewObjStep, delObjStep];
+        </script>
+    </head>
+    <body>
+        <div class="rightcont body_bg clear" style="width: 300px; margin: 0px auto; padding: 0px auto;">
+            <div class="box">
+                <div class="containerbody">
+                    <form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                        <table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+                            <tr>
+                                <td align="left" nowrap="true" colspan="4">
+                                    <strong>流程模板基本信息:</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    Id:
+                                </td>
+                                <td>
+                                    <input type="text" id="id" name="id" class="inputtext" disabled style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    对应最初版本流程Id:
+                                </td>
+                                <td>
+                                    <input type="text" id="baseFlowId" name="baseFlowId" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    对应业务模块名称:
+                                </td>
+                                <td>
+                                    <select id="moduleId" name="moduleId" inputType="inputSelect" style="width:250px;">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    流程名称:
+                                </td>
+                                <td>
+                                    <input type="text" id="flowName" name="flowName" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    流程版本号:
+                                </td>
+                                <td>
+                                    <input type="text" id="flowVersion" name="flowVersion" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    创建人ID:
+                                </td>
+                                <td>
+                                    <input type="text" id="creator" name="creator" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    创建日期:
+                                </td>
+                                <td>
+                                    <input type="text" id="createTime" name="createTime" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%" align="left" nowrap="true">
+                                    版本说明:
+                                </td>
+                                <td>
+                                    <input type="text" id="memo" name="memo" class="inputtext" style="width:250px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    状态:
+                                </td>
+                                <td>
+                                    <input class="pmsRadio" id="state" name="state" data="[['1','可用'],['0','不可用','checked']]" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true" colspan="4">
+                                    <button class="buttonu" value="提交" onclick="doSub()">
+                                        &nbsp; 提交
+                                    </button>
+                                    <button class="buttonu" value="返回" onclick="doBack()">
+                                        &nbsp;返回
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--流程参数查询-->
+        <div id="conditionsDiv" style="padding: 10px;">
+            <form class="pmsForm" style="text-align: right;">
+                <input name="flowId" id="argsFlowId" type="hidden"validate="minlength:1, maxlength:3" style="display: none;"/><input type="hidden" value="查询" id="searchButton" /><input type="button" value="新增流程参数" id="newArgs" class="buttonu" />
+            </form>
+            <script type="text/javascript">
+                $("#searchButton").button().click(function(){
+                    $$.executeSearch("wfArgsQuery");
+                });
+            </script>
+        </div>
+        <div id="testQuery" showcheckbox="false" searchDiv="conditionsDiv" showsearch="false" showdisplay="false" showprint="false" queryid="wfArgsQuery" operators="opArr" autoload="false">
+        </div>
+        <!--可用部门查询-->
+        <div id="conditionsDiv3" style="padding: 10px;">
+            <form class="pmsForm3" style="text-align: right;">
+                <input name="flowId" id="orgFlowId" type="hidden"validate="minlength:1, maxlength:3" style="display: none;"/><input type="hidden" value="查询" id="searchButton3" /><input type="button" value="新增可用部门" id="newOrg" class="buttonu" />
+            </form>
+            <script type="text/javascript">
+                $("#searchButton3").button().click(function(){
+                    $$.executeSearch("wfOrgQuery");
+                });
+            </script>
+        </div>
+        <div id="testQuery3" showcheckbox="false" searchDiv="conditionsDiv3" showsearch="false" showdisplay="false" showprint="false" queryid="wfOrgQuery" operators="opArr3" autoload="false" showNo = "false">
+        </div>
+        <!--流程步骤查询-->
+        <div id="conditionsDiv1" style="padding: 10px;">
+            <form class="pmsForm1" style="text-align: right;">
+                <input name="flowId" id="stepFlowId"type="hidden" validate="minlength:1, maxlength:3" style="display: none;"/><input type="hidden" value="查询" id="searchButton1" /><input type="button" value="新增流程步骤" id="newStep" class="buttonu" />
+            </form>
+            <script type="text/javascript">
+                $("#searchButton1").button().click(function(){
+                    $$.executeSearch("wfStepQuery");
+                });
+            </script>
+        </div>
+        <div id="StepDiv" showcheckbox="false" searchDiv="conditionsDiv1" showsearch="false" showdisplay="false" showprint="false" queryid="wfStepQuery" operators="opArrStep" autoload="false" showNo = "false">
+        </div>
+        <!--流程转换查询-->
+        <div id="conditionsDiv2" style="padding: 10px;">
+            <form class="pmsForm2" style="text-align: right;">
+                <input name="flowId" id="transFlowId" type="hidden"validate="minlength:1, maxlength:3" style="display: none;"/><input type="hidden" value="查询" id="searchButton2" /><input type="button" value="新增流程转换" id="newTransition" class="buttonu" />
+            </form>
+            <script type="text/javascript">
+                $("#searchButton2").button().click(function(){
+                    $$.executeSearch("wfTransQuery");
+                });
+            </script>
+        </div>
+        <div id="testQuery2" showcheckbox="false" searchDiv="conditionsDiv2" showsearch="false" showdisplay="false" showprint="false" queryid="wfTransQuery" operators="opArr2" autoload="false" showNo = "false">
+        </div>
+    </body>
+</html>

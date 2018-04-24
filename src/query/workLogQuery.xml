@@ -1,0 +1,316 @@
+<pmsquery>
+	<query id="workLogQuery" 
+	       header="我的工作日誌" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLog"
+		   order="logDate desc">
+		<column key="id" header="id" type="java.lang.Long" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="leaveId" header="休假Id" type="java.lang.Long" allowSearch="true" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="userId" header="人员Id" type="java.lang.Long" allowSearch="true" operator="eq" align="left" allowSort="true" display="false"/>
+		<column key="logDate" header="日期" type="java.util.Date" align="center" allowSearch="true"  operator="between"  format="yyyy-MM-dd" allowSort="true" display="false"  />
+		<column key="inputDate" header="填报日期" type="java.util.Date" align="center" allowSearch="true" operator="eq" format="yyyy-MM-dd" allowSort="true" display="false" />
+		<column key="workLogType" header="类型" type="java.lang.String" align="center" allowSearch="true" operator="eq" dict="WORKLOG_WORK_NEWTYPE" allowSort="true" display="false"  />
+		<column key="holidayType" header="工作类型" type="java.lang.String" align="center" allowSearch="true" operator="like" dict="WORKLOG_WORKANDLEAVE_TYPE" allowSort="true" display="true"   width="60px" />
+		<column key="workContent" header="主要工作内容" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"     width="100px" />
+		<column key="workResult" header="主要工作成果" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"    width="450px" />
+		<column key="other" header="需要其他学科支持的问题" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"     width="9%" />
+		<column key="support" header="对院其他所得支持和建议" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"     width="9%" />
+		<column key="workProject" header="工作项目" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="20%" />
+		<column key="hours" header="小时数" type="java.lang.Double" align="right" allowSearch="true" operator="eq" allowSort="true" display="true"  width="50px"/>
+		<column key="enableStatus" type="java.lang.Integer" operator="eq"  allowSort="true" allowSearch="true" display="false"/>
+
+	</query>
+	<query id="workLogQuery1" 
+	       header="我的工作日誌" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLog"
+		   order="logDate desc">
+		<column key="id" header="id" type="java.lang.Long" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="leaveId" header="休假Id" type="java.lang.Long" allowSearch="true" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="userId" header="人员Id" type="java.lang.Long" allowSearch="true" operator="eq" align="left" allowSort="true" display="false"/>
+		<column key="logDate" header="日期" type="java.util.Date" align="center" allowSearch="true"  operator="between"  format="yyyy-MM-dd" allowSort="true" display="true"  />
+		<column key="inputDate" header="填报日期" type="java.util.Date" align="center" allowSearch="true" operator="eq" format="yyyy-MM-dd" allowSort="true" display="false" />
+		<column key="workLogType" header="类型" type="java.lang.String" align="center" allowSearch="true" operator="eq" dict="WORKLOG_WORK_NEWTYPE" allowSort="true" display="false"  />
+		<column key="holidayType" header="工作类型" type="java.lang.String" align="center" allowSearch="true" operator="like" dict="WORKLOG_WORKANDLEAVE_TYPE" allowSort="true" display="true"   width="60px" />
+		<column key="workContent" header="主要工作内容" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"     width="100px" />
+		<column key="workResult" header="主要工作成果" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"    width="450px" />
+		<column key="other" header="需要其他学科支持的问题" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"     width="9%" />
+		<column key="support" header="对院其他所得支持和建议" type="java.lang.String" align="left" allowSearch="true" operator="like"  allowSort="true"     width="9%" />
+		<column key="workProject" header="工作项目" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="20%" />
+		<column key="hours" header="小时数" type="java.lang.Double" align="right" allowSearch="true" operator="eq" allowSort="true" display="true"  width="50px"/>
+		<column key="enableStatus" type="java.lang.Integer" operator="eq"  allowSort="true" allowSearch="true" display="false"/>
+
+	</query>
+	<query id="leaveQuery" 
+	       header="休假查询" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLogLeave"
+		   order="id desc"  businessId="(@forecast_orgCode# or @createuserid#)">
+		<column key="id" header="id" type="java.lang.Long" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="orgCode" header="orgCode" type="java.lang.String" operator="eq" align="left" allowSort="true" display="false"/>
+		<column key="leaveUserId" header="休假人Id" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px" />
+		<column key="leaveUserName" header="休假人" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="recordUserName" header="填写人" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="beginDate" header="开始日期" type="java.util.Date" align="center" allowSearch="true" operator="between"  format="yyyy-MM-dd" allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="endDate" header="结束日期" type="java.util.Date" align="center" allowSearch="true" operator="between" format="yyyy-MM-dd" allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="historyDate" header="历史日期" type="java.util.Date" align="center"  operator="eq" format="yyyy-MM-dd" allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="leaveType" header="休假类型" type="java.lang.String" align="center" allowSearch="true" operator="eq" dict="WORKLOG_LEAVE_TYPE" allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="leaveState" header="销假状态" type="java.lang.Integer" align="center" allowSearch="true" operator="eq" dict="WORKLOG_LEAVE_STATE" allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="enableStatus" type="java.lang.Integer"  allowSort="true" allowSearch="true" display="false"/>
+	</query>
+	<query id="workLogCalendarQuery" 
+	       header="节假日查询" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLogCalendar"
+		   order="workday asc">
+		<column key="id" header="id" type="java.lang.Long" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="workday" header="日期" type="java.util.Date" align="center" allowSearch="true" operator="between"  allowSort="true" format="yyyy-MM-dd" display="true"  width="25%" />
+		<column key="days" header="星期" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="true" dict="WORKLOG_WORKHOLIDAY_DAYS" display="true"   width="25%" />
+		<column key="type" header="类型" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="true" display="true" width="25%" />
+		<column key="memo" header="备注" type="java.lang.String" align="center" allowSearch="true"   allowSort="true" display="true" tips="true"  width="200px" />
+		<column key="isworkday" header="是否工作日" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" dict="WORKLOG_HOLIDAY_ISHOLIDAY" display="false" tips="true"  width="200px" />
+	</query>
+	<query id="workLogToDo" header="日誌统计" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatisticsDTO" method="workLogManager.getWorkLogStatistics">
+		<column key="nums" header="序号"  align="center" allowSort="true"/>
+		<column key="orgId" header="机构/单位Id"  align="center" allowSort="true"/>
+		<column key="orgName" header="机构/单位名称"   align="left" allowSort="true"/>
+        <column key="realReport" header="实报份数"   align="center"/>
+        <column key="delayReport" header="补报份数"   align="center"/>
+        <column key="shouldReport" header="应报份数"  align="center"/>
+        <column key="percentage" header="上报率"  align="center"/>
+        <column key="ontime" header="及时率"  align="center"/>
+        <column key="totalHours" header="累计工作时间(小时)" align="right"/>
+        <column key="beginDate" header="开始时间" align="center"/>
+        <column key="endDate" header="结束时间" align="center"/>
+	</query>
+	<query id="workLogToDoByFenYuan" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsByFenYuan">
+		
+		<column key="id" header="组织机构Id"  align="center" display="false"/>
+		<column key="name" header="组织机构"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right"/>
+		<column key="outtimeState" header="补报份数"   align="right"/>
+        <column key="workdayState" header="应报份数"   align="right"/>
+        <column key="commitPercenter" header="上报率"  align="right" />
+        <column key="onTimePercenter" header="及时率"  align="right"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right"/>
+	</query>
+	<query id="workLogToDoByFenYuanNew" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsByFenYuanNew">
+		
+		<column key="id" header="组织机构Id"  align="center" display="false"/>
+		<column key="name" header="组织机构"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right" allowSort="true"/>
+		<column key="outtimeState" header="补报份数"   align="right" allowSort="true"/>
+        <column key="workdayState" header="应报份数"   align="right" allowSort="true"/>
+        <column key="commitPercenter" header="上报率"  align="right" allowSort="true"/>
+        <column key="onTimePercenter" header="及时率"  align="right" allowSort="true"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right" allowSort="true"/>
+	</query>
+	<query id="workLogToDoBySuo1" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsBySuo1">
+		<column key="id" header="组织机构Id"  align="center" display="false"/>
+		<column key="name" header="组织机构"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right"/>
+		<column key="outtimeState" header="补报份数"   align="right"/>
+        <column key="workdayState" header="应报份数"   align="right"/>
+        <column key="commitPercenter" header="上报率"  align="right" />
+        <column key="onTimePercenter" header="及时率"  align="right"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right"/>
+	</query>
+	<query id="workLogToDoBySuo1New" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsBySuo1New">
+		<column key="id" header="组织机构Id"  align="center" display="false"/>
+		<column key="name" header="组织机构"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right" allowSort="true"/>
+		<column key="outtimeState" header="补报份数"   align="right" allowSort="true"/>
+        <column key="workdayState" header="应报份数"   align="right" allowSort="true"/>
+        <column key="commitPercenter" header="上报率"  align="right" allowSort="true"/>
+        <column key="onTimePercenter" header="及时率"  align="right" allowSort="true"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right" allowSort="true"/>
+	</query>
+	<query id="workLogToDoBySuo2" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsBySuo2">
+		<column key="id" header="人员Id"  align="center" display="false"/>
+		<column key="name" header="人员姓名"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right"/>
+		<column key="outtimeState" header="补报份数"  align="right" />
+        <column key="workdayState" header="应报份数"   align="right"/>
+        <column key="commitPercenter" header="上报率"   align="right"/>
+        <column key="onTimePercenter" header="及时率"  align="right"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right"/>
+	</query>
+	<query id="workLogToDoBySuo2New" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsBySuo2New">
+		<column key="id" header="人员Id"  align="center" display="false"/>
+		<column key="name" header="人员姓名"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right" allowSort="true"/>
+		<column key="outtimeState" header="补报份数"  align="right" allowSort="true"/>
+        <column key="workdayState" header="应报份数"   align="right" allowSort="true"/>
+        <column key="commitPercenter" header="上报率"   align="right" allowSort="true"/>
+        <column key="onTimePercenter" header="及时率"  align="right" allowSort="true"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right" allowSort="true"/>
+	</query>
+	<query id="workLogToDoBySZR" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsBySZR">
+		<column key="id" header="人员Id"  align="center" display="false"/>
+		<column key="name" header="人员姓名"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right"/>
+		<column key="outtimeState" header="补报份数"  align="right" />
+        <column key="workdayState" header="应报份数"   align="right"/>
+        <column key="commitPercenter" header="上报率"   align="right"/>
+        <column key="onTimePercenter" header="及时率"  align="right"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right"/>
+	</query>
+	<query id="workLogToDoBySZRNew" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatByBranchOrgDTO" method="workLogManager.getWorkLogStatisticsBySZRNew">
+		<column key="id" header="人员Id"  align="center" display="false"/>
+		<column key="name" header="人员姓名"  align="left" allowSort="true"/>
+		<column key="recordState" header="实报份数"  align="right" allowSort="true"/>
+		<column key="outtimeState" header="补报份数"  align="right" allowSort="true"/>
+        <column key="workdayState" header="应报份数"   align="right" allowSort="true"/>
+        <column key="commitPercenter" header="上报率"   align="right" allowSort="true"/>
+        <column key="onTimePercenter" header="及时率"  align="right" allowSort="true"/>
+        <column key="hours" header="累计工作时间(小时)"  align="right" allowSort="true"/>
+	</query>
+	<query id="workLogNewToDo" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatisticsDTO" method="workLogManager.getWorkLogStatisticsByYuan">
+		<column key="orgName" header="组织机构"   align="left" allowSort="true"/>
+        <column key="realReport" header="实报份数"   align="center"/>
+        <column key="delayReport" header="补报份数"   align="center"/>
+        <column key="shouldReport" header="应报份数"  align="center"/>
+        <column key="percentage" header="上报率"  align="center"/>
+        <column key="ontime" header="及时率"  align="center"/>
+        <column key="totalHours" header="累计工作时间(小时)" align="right"/>
+	</query>
+	<query id="workLogNewToDoByPerson" header="研究院员工科研工作日誌上报情况统计表" dtoclass="com.cnpc.pms.worklog.dto.WorkLogStatisticsDTO" method="workLogManager.getWorkLogStatistics">
+		<column key="orgName" header="人员"   align="left" allowSort="true"/>
+        <column key="realReport" header="实报份数"   align="center"/>
+        <column key="delayReport" header="补报份数"   align="center"/>
+        <column key="shouldReport" header="应报份数"  align="center"/>
+        <column key="percentage" header="上报率"  align="center"/>
+        <column key="ontime" header="及时率"  align="center"/>
+        <column key="totalHours" header="累计工作时间(小时)" align="right"/>
+	</query>
+	<query id="workLogAssess" 
+	       header="日誌评分随机抽取" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLogViewAssess"
+		   order="id ASC">
+		<column key="id" header="id" type="java.lang.Long" operator="eq" align="left" allowSort="true" display="false"/>
+		<column key="personid" header="personid" type="java.lang.Long" operator="eq" align="left" allowSort="true" display="false"/>
+		<column key="userName" header="姓名" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="orgName" header="单位" type="java.lang.String" align="left" allowSearch="true" operator="in"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="posName" header="职位" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="realReport" header="实报份数" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="shouldReport" header="应报份数" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="scoreA" header="A" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="scoreB" header="B" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="scoreC" header="C" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="scoreD" header="D" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+		<column key="scoreF" header="F" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="isCompleted" header="是否完成" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"  tips="true"  width="200px"/>
+	</query>
+	<query id="workLogAssessScoring" 
+	       header="日誌打分" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLogViewAsseseScoring"
+		   order="id ASC">
+		<column key="id" header="id" type="java.lang.Long" operator="eq" align="left" allowSort="true" display="false" />
+		<column key="personid" header="人员Id" type="java.lang.Long" align="left" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px"/>
+		<column key="logdate" header="日期" type="java.util.Date" align="center" allowSearch="true" operator="between"  allowSort="true" format="yyyy-MM-dd" display="true" tips="true"  width="200px"/>
+		<column key="days" header="星期" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="score" header="评分等级" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="hours" header="小时数" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="worktype" header="工作类型" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="workcontent" header="主要工作内容" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="workresult" header="主要工作成果" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="other" header="需要其他学科支持的问题" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="support" header="对院其他所得支持和建议" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+	</query>
+	<query id="workLogAssessStatistic" header="平分统计" dtoclass="com.cnpc.pms.worklog.dto.WorkLogAssessStisticDTO" method="workLogAssessManager.getWorkLogAssessStatistics">
+		<column key="nums" header="序号"  align="center"/>
+		<column key="userId" header="人员Id"  align="left" display="false"/>
+		<column key="userName" header="姓名"  align="left" allowSort="true"/>
+		<column key="orgName" header="单位"   align="left" width="20%"/>
+        <column key="posName" header="职务"  align="center"/>
+        <column key="shouldReport" header="抽中天数"  align="right" width="150px"/>
+        <column key="scoreA" header="A"  align="right" width="150px"/>
+        <column key="scoreB" header="B" align="right" width="150px"/>
+        <column key="scoreC" header="C" align="right" width="150px"/>
+        <column key="scoreD" header="D" align="right" width="150px"/>
+        <column key="scoreF" header="F" align="right" width="150px"/>
+	</query>
+	<query id="workLogQueryByKYGLC" header="日誌查询" dtoclass="com.cnpc.pms.worklog.dto.WorkLogQueryUserDTO" method="workLogManager.getWorkLogQueryByKYGLC">
+		<column key="orgName" header="组织机构" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="300px"/>
+		<column key="userName" header="人员姓名"  type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userZw"  header="职务" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="userZc"  header="职称" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="recordStateName"  header="是否上报日誌" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="isFollowName"  header="是否关注" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userId"  header="人员Id" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px"/>
+	</query>
+	<query id="workLogQueryBySLD" header="日誌查询" dtoclass="com.cnpc.pms.worklog.dto.WorkLogQueryUserDTO" method="workLogManager.getWorkLogQueryBySLD">
+		<column key="orgName" header="组织机构" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="300px"/>
+		<column key="userName" header="人员姓名"  type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userZw"  header="职务" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="userZc"  header="职称" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="recordStateName"  header="是否上报日誌" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="isFollowName"  header="是否关注" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userId"  header="人员Id" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px"/>
+	</query>
+	<query id="workLogQueryBySZR" header="日誌查询" dtoclass="com.cnpc.pms.worklog.dto.WorkLogQueryUserDTO" method="workLogManager.getWorkLogQueryBySZR">
+		<column key="orgName" header="组织机构" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="300px"/>
+		<column key="userName" header="人员姓名"  type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userZw"  header="职务" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="userZc"  header="职称" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="recordStateName"  header="是否上报日誌" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="isFollowName"  header="是否关注" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userId"  header="人员Id" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px"/>
+	</query>
+	<query id="workLogQueryByXMJL" header="日誌查询" dtoclass="com.cnpc.pms.worklog.dto.WorkLogQueryUserDTO" method="workLogManager.getWorkLogQueryByXMXG">
+		<column key="orgName" header="组织机构" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="300px"/>
+		<column key="userName" header="人员姓名"  type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userZw"  header="职务" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="userZc"  header="职称" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="250px"/>
+		<column key="recordStateName"  header="是否上报日誌" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="isFollowName"  header="是否关注" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"  width="15%"/>
+		<column key="userId"  header="人员Id" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px"/>
+	</query>
+	<query id="workLogAssessSelectAndQuery" header="抽取查询" dtoclass="com.cnpc.pms.worklog.dto.WorkLogAssessStisticDTO" method="workLogAssessManager.getWorkLogAssessSelectAndQuery">
+		<column key="nums" header="序号"  type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="userId" header="人员Id"  type="java.lang.Long" align="left" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px"/>
+		<column key="userName" header="姓名"  type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="orgName" header="单位"   type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+        <column key="posName" header="职务"  type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px" />
+        <column key="shouldReport" header="抽中天数"  type="java.lang.Long" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+        <column key="scoreA" header="A"  type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="150px"/>
+        <column key="scoreB" header="B" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="150px"/>
+        <column key="scoreC" header="C" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="150px"/>
+        <column key="scoreD" header="D" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="150px"/>
+        <column key="scoreF" header="F" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="150px"/>
+	</query>
+	<query id="workLogAssessPersongStatistic" 
+	       header="日誌个人评分查询" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLogViewAssessPersonStatis"
+		   order="id ASC">
+		<column key="id" header="序Id" type="java.lang.Long" operator="eq" align="center" allowSort="true" display="false" />
+		<column key="personid" header="人员Id" type="java.lang.Long" align="left" allowSearch="true" operator="eq"  allowSort="true" display="false" tips="true"  width="200px"/>
+		<column key="logdate" header="日期" type="java.util.Date" align="center" allowSearch="true" operator="between"  allowSort="true" format="yyyy-MM-dd" display="true" tips="true"  width="200px"/>
+		<column key="score" header="评分等级" type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="hours" header="小时数" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="worktype" header="工作类型" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="workcontent" header="主要工作内容" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="workresult" header="主要工作成果" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="other" header="需要其他学科支持的问题" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+		<column key="support" header="对院其他所得支持和建议" type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true" tips="true"  width="200px"/>
+	</query>
+	<query id="workLogAssessStatisticByWd" header="维度评分统计by维度" dtoclass="com.cnpc.pms.worklog.dto.WorkLogAssessStisticDTO" method="workLogAssessManager.getWorkLogAssessStatisticsByWd">
+		<column key="nums" header="序号"  type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="150px"/>
+		<column key="orgId" header="单位Id"  type="java.lang.Long" align="center" allowSearch="true" operator="eq"  allowSort="true" display="false"   width="15%"/>
+		<column key="orgName" header="单位"   type="java.lang.String" align="left" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="15%"/>
+        <column key="shouldReport" header="抽中天数"  type="java.lang.Long" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="15%"/>
+        <column key="scoreA" header="A"  type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="150px"/>
+        <column key="scoreB" header="B" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="150px"/>
+        <column key="scoreC" header="C" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="150px"/>
+        <column key="scoreD" header="D" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="150px"/>
+        <column key="scoreF" header="F" type="java.lang.String" align="right" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="150px"/>
+	</query>
+	<query id="workLogFollowQuery" 
+	       header="我的关注" 
+		   baseclass="com.cnpc.pms.worklog.entity.WorkLogFollow"
+		   order="id asc">
+		<column key="id" header="id" type="java.lang.Long" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="userId" header="人员Id" type="java.lang.Long" allowSearch="true" operator="eq"  align="left" allowSort="true" display="false"/>
+		<column key="followId" header="关注人Id" type="java.lang.Long" allowSearch="true" operator="in" align="left" allowSort="true" display="false"/>
+		<column key="followName" header="关注人名称" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="25%" />
+		<column key="posName" header="关注人职位" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="25%" />
+		<column key="orgName" header="关注人所在科室" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="25%" />
+		<column key="suoName" header="关注人所在所" type="java.lang.String" align="center" allowSearch="true" operator="eq"  allowSort="true" display="true"   width="25%" />
+	</query>
+</pmsquery>

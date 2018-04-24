@@ -1,0 +1,16 @@
+.calendar{position:absolute;width:212px;border:1px solid #888;background:#fff;}
+ .calendarTitle{height:16px;background:#91b14d;color:#fff;font:bold 12px "Arial"}
+  .calendarClose{float:left;width:16px;height:16px;background:url(images/icon16_close.gif) no-repeat center center;}
+ .calendarHead{height:16px;text-align:center;}
+  .calendarLastMonth{float:left;width:13%;height:12px;background:url(images/icon12_back.gif) no-repeat center center;float:left;}
+  .calendarNextMonth{float:left;width:13%;height:12px;background:url(images/icon12_forward.gif) no-repeat center center;float:left;}
+  .calendarLastYear{float:left;width:13%;height:12px;background:url(images/icon12_rewind.gif) no-repeat center center;float:left;}
+  .calendarNextyear{float:left;width:13%;height:12px;background:url(images/icon12_fast.gif) no-repeat center center;float:left;}
+  .calendarYearMonth{float:left;width:48%;font:bold 12px "Arial";color:#91b14d;}
+ .calendarWeekday{float:left;width:14%;background:#eee;color:#91b14d;text-align:center;}
+ .calendarWeekend{float:left;width:14%;background:#eee;color:#91b14d;text-align:center;}
+ .calendarDay{float:left;width:14%;height:28px;background:#fafafa;cursor:pointer;text-align:center;}
+ .calendarWeekendDay{float:left;width:14%;height:28px;background:#fafafa;cursor:pointer;text-align:center;}
+ .calendarToday{float:left;width:14%;height:28px;cursor:pointer;background:#91b14d;font:bold 12px "Arial";color:#fff;text-align:center;}
+ .calendarOver{float:left;width:14%;height:28px;background:#d0dbba;cursor:pointer;text-align:center;}
+ .button_calendar{width:20px;height:20px;background:url(images/icon20_calendar.gif) no-repeat center center;border:none;}

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据社区动态</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 35px 35px 35px; float:left; width: 70%;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 35px 35px 35px; float:left; width: 30%;}
+
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .table td{position: relative;}
+    .nav-tabs-custom{border: none; box-shadow: none;}
+    .nav > li > a{padding: 5px 10px;}
+    
+    .table_click_order tr:hover td{background: #f39c12;  cursor: pointer;}
+    .table_click_relation tr:hover td{background: #f39c12;  cursor: pointer;}
+    
+    #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	
+	
+	.navbar-nav > li > a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" style="position:relative;">
+<div id="process_div" ></div>
+<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  
+  
+   <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>个人动态</em></li>
+							</ul>
+						</div>
+					</div>
+					
+					
+				<div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+
+                    <li ><a href="../crm/loginplatform.html">数据平台首页</a> </li>
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+                  <p><strong><span id="cur_card_name">载入中...</span></strong></p>
+                  <p><span id="cur_card_no">载入中...</span></p>
+                  <p><span id="cur_store_name">载入中...</span></p>
+                </li>
+                <li class="user-header">
+                </li>
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+                  
+                  
+                </ul>
+            </div>
+            
+      </div>
+    </nav>
+  </header>
+  
+  
+  
+  
+  
+  <!-- <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+         <div class="pull-left">
+          <div class="logo-lg clearfix">
+            <ul>
+              <li><a href="index.html" class="h2"> <img src="dist/img/logo.png"> </a></li>
+              <li><a href="index.html">片区动态</a> </li>
+              <li class="nav-mark"><a href="#" id="person_state">个人动态</a> </li>
+              <li><a href="../crm/loginplatform.html">数据平台首页</a> </li>
+            </ul>
+          </div>
+        </div>
+         <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li class="user-header">
+                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+                  <p><strong><span id="cur_card_name">载入中...</span></strong></p>
+                  <p><span id="cur_card_no">载入中...</span></p>
+                  <p><span id="cur_store_name">载入中...</span></p>
+                </li>
+                <li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a id="person_center" href="#">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="index.html">片区动态</a>
+                    </div>
+                  </div>
+                </li>
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header> -->
+  
+  
+  
+  
+  
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box clearfix">
+            <div class="info_head with-border">
+              <div class="col-lg-4 text-center"><img src="dist/img/376884043677306248.png" alt="User Image"></div>
+              <div class="col-lg-8">
+
+                <h2 class="text-yellow">载入中...</h2>
+                <p>员工工号：<span id="employee_no">载入中...</span></p>
+                <p>在职时间：<span id="remark">载入中...</span></p>
+                <p>电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：<span id="phone">载入中...</span></p>
+                <p>所属门店：<span id="storename">载入中...</span></p>
+
+              </div>
+            </div>
+            <!-- /.box-header -->
+           <!--  <div class="info_bottom">
+              <h5 class="text-light-blue">个人成绩</h5>
+              <div>
+                <p>订单派送总量：<span id="ordercount"></span></p>
+                <p>快递代送总量：<span id="expresscount"></span></p>
+                <p>单体画像总量：<span id="customercount"></span></p>
+                <p id="relation_total" >拜访记录总量：<span id="relationcount">--</span></p>
+              </div>
+            </div> -->
+            <!--  <div class="info_bottom">
+
+              <div class="nav-tabs-custom no-padding no-margin">
+                Tabs within a box
+                <ul class="nav nav-tabs pull-right">
+                  <li><a href="#revenue-chart" data-toggle="tab" onclick="getCurrentMonthData()">本月</a></li>
+                  <li class="active"><a href="#sales-chart" data-toggle="tab" onclick="getCurrentDayData()">当日</a></li>
+                </ul>
+                <div class="tab-content no-padding">
+                  Morris chart - Sales
+                  <div class="chart tab-pane active" id="revenue-chart" style="position: relative;" >
+                    <h5 class="text-light-blue" >当日个人成绩</h5>
+                    <div>
+                      <p id="ordercount_d">订单派送总量：载入中...</p>
+                      <p id="relationcount_d">拜访记录总量：载入中...</p>
+                      <p id="customercount_d">单体画像总量：载入中...</p>
+                    </div>
+                  </div>
+                  <div class="chart tab-pane" id="sales-chart" style="position: relative;" >
+                    <h5 class="text-light-blue" >本月个人成绩</h5>
+                    <div>
+                      <p id="ordercount_m">订单派送总量：载入中...</p>
+                      <p id="relationcount_m">拜访记录总量：载入中...</p>
+                      <p id="customercount_m">单体画像总量：载入中...</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div> -->
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>最新动态</strong></div>
+          <div class="box-body">
+            <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs">
+                <li class="active" onclick="switchTab(1)"><a href="#tab_1" data-toggle="tab" aria-expanded="false">送单记录</a></li>
+                <li class="" onclick="switchTab(2)"><a href="#tab_2" data-toggle="tab" aria-expanded="false">拜访记录</a></li>
+
+              </ul>
+              <div class="tab-content checkbox">
+                <div class="tab-pane active" id="tab_1">
+                  <table class="table table-striped table_click_order">
+                    <tbody class="order_content"><tr>
+                      <th width="7%">序号</th>
+                      <th width="10%">姓名</th>
+                      <th width="23%">购买时间</th>
+                      <th width="40%">商品类型</th>
+                      <th width="20%">订单编号</th>
+                    </tr>
+                    <!-- <tr>
+                      <td>1.</td>
+                      <td>3340466716059187</td>
+                      <td>王大爷<div class="pop"><a href="portrait.html"><p>王大爷</p><p>12345678901</p></a></div></td>
+                      <td>02-11 10:00</td>
+                      <td>洗衣</td>
+                    </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td>3340466716059187</td>
+                      <td>李雪</td>
+                      <td>2017-02-10</td>
+                      <td>快递</td>
+                    </tr>
+                    <tr>
+                      <td>3.</td>
+                      <td>3340466716059187</td>
+                      <td>王大爷</td>
+                      <td>2017-02-11</td>
+                      <td>洗衣</td>
+                    </tr>
+                    <tr>
+                      <td>4.</td>
+                      <td>3340466716059187</td>
+                      <td>李雪</td>
+                      <td>2017-02-10</td>
+                      <td>快递</td>
+                    </tr>
+                    <tr>
+                      <td>5.</td>
+                      <td>3340466716059187</td>
+                      <td>王大爷</td>
+                      <td>2017-02-11</td>
+                      <td>洗衣</td>
+                    </tr>
+                    <tr>
+                      <td>6.</td>
+                      <td>3340466716059187</td>
+                      <td>李雪</td>
+                      <td>2017-02-10</td>
+                      <td>快递</td>
+                    </tr> -->
+                    </tbody></table>
+                    
+                    <div class="clearfix box-footer">
+		              <ul class="pagination pagination-sm no-margin pull-right order_class">
+		              <div class="tcdPageCode" id="tcdPageCode_order"></div>
+		                <!-- <li><a href="#">«</a></li>
+		                <li><a href="#">1</a></li>
+		                <li><a href="#">2</a></li>
+		                <li><a href="#">3</a></li>
+		                <li><a href="#">»</a></li> -->
+		              </ul>
+		            </div>
+		            
+                </div>
+                <!-- /.tab-pane -->
+                 <div class="tab-pane" id="tab_2">
+                  <table class="table table-striped table_click_relation">
+                    <tbody><tr>
+                      <th width="7%">序号</th>
+                      <th width="22%">姓名</th>
+                      <th width="25%">拜访时间</th>
+                      <th width="23%">拜访类型</th>
+                      <th width="23%">拜访方式</th>
+                    </tr>
+                    </tbody></table>
+                    
+                    <div class="clearfix box-footer" id="relationPage">
+		              <ul id="relationShowPage" class="pagination pagination-sm no-margin pull-right">
+		               <div id="tcdPageCode_relation" class="tcdPageCode"></div>
+		              </ul>
+	            </div>
+                </div>
+               	
+                <!-- /.tab-pane -->
+
+              </div>
+              <!-- /.tab-content -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="content-header">
+        <div class="box box-default"><a name="user"></a>
+          <div class="box-header with-border text-light-blue"><strong>划片区域</strong></div>
+          <div class="box-body"  id="area_info">
+            <!-- <p><span class="col-md-4">金台里社区</span><span class="col-md-4">金台里10号楼</span><span class="col-md-4">1</span></p>
+            <p><span class="col-md-4">金台里社区</span><span class="col-md-4">金台西里21号楼</span><span class="col-md-4">全部</span></p>
+           --></div>
+
+
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+ <!--  <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+<style>
+*{ margin:0; padding:0; list-style:none;}
+a{ text-decoration:none;}
+a:hover{ text-decoration:none;}
+.tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+</style>
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
+<script type="text/javascript">	
+	layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+var employee_no = decode64(getUrlParamByKey("employee_no"));
+var area_id = decode64(getUrlParamByKey("area_id"));
+$(function(){
+	
+	if(employee_no!=null&&employee_no!="null"){
+		initareainfo(employee_no);
+		
+		initemployeeinfo(employee_no);
+		
+		initcurruser();
+		
+		initorderlist();
+		//initrelationlist(1);
+		//getCurrentDayOfData();//当日成绩
+		
+		
+		$("#tcdPageCode_order").createPage({
+	  	    pageCount:order_max_no,
+	  	    current:1,
+	  	    backFn:function(p){
+	  	    	initorderlist(p);
+	  	    }
+	  	});
+		
+		
+	}else{
+		initcurruser();
+	}
+	
+	
+	
+	 var hf =  window.location.href;
+	 if(hf.indexOf('#user')!=-1){
+		 $(".nav-mark").removeClass('nav-mark');
+		 $("#person_state_area").parent().addClass('nav-mark');
+	 }
+	 
+	 $("#process_div").hide();
+	 $("#process_div_pic").hide();
+});
+
+var curr_user = null;
+function initcurruser(){
+		//取得当前登录人的门店
+	doManager("UserManager", "getCurrentUserDTO",null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						curr_user = JSON.parse(data.data);
+						//alert(curr_user.employeeId+""+curr_user.store_name+""+curr_user.name);
+						$('span[class="hidden-xs"]').html(curr_user.name);
+						if(curr_user.employeeId!=null){
+							
+							//$("#cur_store_name").html(curr_user.store_name);
+							$("#cur_employee_no").html(curr_user.employeeId);
+							$("#cur_card_name").html(curr_user.name);
+							$("#cur_card_no").html(curr_user.zw+" "+curr_user.employeeId);
+							initStore();
+						}else{
+							$("#cur_card_name").html(curr_user.name);
+							$("#cur_store_name").html("");
+							$("#cur_employee_no").html("");
+							$("#cur_card_no").parent().html("");
+							$(".text-yellow").html(curr_user.name);
+							$("#employee_no").html("");
+							$("#remark").html("");
+							$("#phone").html(curr_user.phone);
+							$("#storename").html("");
+						}
+						
+					}
+	},false);
+}
+
+function initStore(){
+	doManager("StoreManager", "findStore",[curr_user.store_id],
+		function(data, textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var store = JSON.parse(data.data);
+				$("#cur_store_name").html(store.name+" "+store.storeno);
+			}
+	},false);
+}
+
+/******************快递查询片区管理员及所管所有小区 开始***********************/
+	function initareainfo(employee_no){
+		//取得当前登录人的门店
+		doManager("AreaManager", "queryAreaByEmployeeNo",[employee_no,area_id],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var curr_area = JSON.parse(data.data);
+							//$(".text-yellow").html(curr_area.area.name);
+							//子集 
+							var objList = curr_area.areaInfo;
+							$("#area_info").empty();
+							if(objList!=null){
+								$.each(objList, function(i,obj) {
+									 var vill = obj['villname'];
+									 var tiny = obj['tinyname']==null?"全部":obj['tinyname'];
+									 var buil = obj['buildingname']==null?"全部":obj['buildingname'];
+									 var html = "<p><span class=\"col-md-4\">"+vill+"</span><span class=\"col-md-4\">"+tiny+"</span><span class=\"col-md-4\">"+buil+"</span></p>";
+									 $("#area_info").append(html);
+								});
+							}
+							
+						}
+		},false);
+	}
+/******************快递查询片区管理员及所管所有小区结束  ***********************/
+	
+	
+	
+	function initemployeeinfo(employee_no){
+		//取得当前登录人的门店
+		doManager("HumanresourcesManager", "queryEmployeeInfoByNo",employee_no,
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var human_info = JSON.parse(data.data);
+							var ename = human_info.human.name==null?"":human_info.human.name;
+							var ezw = human_info.human.zw==null?"":human_info.human.zw;
+							var empname = ename+"<span class=\"h4\">"+ezw+"</span>";
+							$(".text-yellow").html(empname);
+							$("#employee_no").html(human_info.human.employee_no);
+							$("#remark").html(human_info.human.remark);
+							$("#phone").html(human_info.human.phone);
+							$("#storename").html(human_info.human.storename);
+							
+							//var ordercount = human_info.ordercount;
+							var expresscount = human_info.expresscount;
+							//var relationcount = human_info.relationcount;
+							var cutomercount = human_info.customercount;
+							//$("#ordercount").html(ordercount);
+							//$("#expresscount").html(expresscount);
+							//$("#relationcount").html(relationcount);
+							//$("#customercount").html(cutomercount);
+						}
+		},false);
+	}
+	
+	//获取当天的数据（页面右上）
+	function getCurrentDayData(){
+		$("#process_div").show();
+		$("#process_div_pic").show();
+		getCurrentDayOfData();
+		
+	}
+	
+
+	function  getCurrentDayOfData(){
+		 var dynamicDto = {
+		  		  employeeNo:curr_user.employeeId,
+		  		  employeeName:curr_user.name, 
+		  		  target:3
+		  }
+		  doManager("dynamicManager", "getDataCardInfoOfCurDay",[dynamicDto],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							 var resultJson= JSON.parse(data.data);
+							 $("#ordercount_d").html("订单派送总量:"+resultJson.sendorders);
+							 $("#relationcount_d").html("拜访记录总量:"+resultJson.relation);
+							 $("#customercount_d").html("单体画像总量:"+resultJson.customer);
+							 $("#process_div").hide();
+							 $("#process_div_pic").hide();
+						}
+				},false);
+		  
+		  
+	  }
+	//获取当月数据（右上）
+	  function  getCurrentMonthData(){
+		  $("#process_div").show();
+		  $("#process_div_pic").show();
+		  var dynamicDto = {
+		  		  employeeNo:curr_user.employeeId,
+		  		  employeeName:curr_user.name, 
+		  		  target:3
+		  }
+		  doManager("dynamicManager", "getDataCardInfoOfCurMonth",[dynamicDto],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							 var resultJson= JSON.parse(data.data);
+							 $("#ordercount_m").html("订单派送总量:"+resultJson.sendorders);
+							 $("#relationcount_m").html("拜访记录总量:"+resultJson.relation);
+							 $("#customercount_m").html("单体画像总量:"+resultJson.customer);
+							 $("#process_div").hide();
+							 $("#process_div_pic").hide();
+						}
+				},false);
+		  
+		  
+	  }
+	
+	
+	/*******************订单分分页开始**********************/
+  	var order_cur_no = 1;
+  	var order_max_no = 1;
+  	
+  	function initorderlist(curno){
+  		var pageinfo = new Object();
+  		if(curno==null||curno==''){
+  			curno=1;
+  		}
+  		order_cur_no = curno;
+  		pageinfo.currentPage=curno;
+  		doManager("OrderManager", "queryOrderListByEmployeeNo",[employee_no,pageinfo,null],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var orderList = JSON.parse(data.data);
+						var pagenum = orderList.pagenum;
+						order_max_no = pagenum;
+						$("#ordercount").html(orderList.totalpage);
+						
+						$(".order_content").find('.orderdata').empty();
+						$.each(orderList.data, function(i,obj) {
+							 var id = obj['id'];
+							 var order_sn = obj['order_sn'];
+							 var customer_id = obj['customer_id'];
+							 var store_id = obj['store_id'];
+							 var employee_name = obj['employee_name'];
+							 var order_date = obj['order_date'];
+							 var mobilephone = obj['mobilephone'];
+							 var customer_name = obj['customer_name']==null?"":obj['customer_name'];
+							 var eshop_pro_name = obj['eshop_pro_name'];
+							 
+							 
+							 
+							employee_name = employee_name.split("+")[0];
+							order_date = new Date(order_date).format('yyyy-MM-dd');
+							var temp_html="";  
+							if(mobilephone==null){
+		                    	temp_html =  "  <td>"+customer_name+"<div class=\"pop\" style=\"width:170px;\"  onclick='getnullfunc(event)'><p>姓名:"+(customer_name==null?"暂无":customer_name)+"</p><p>电话:"+(mobilephone==null?"暂无":mobilephone)+"</p></div></td>";
+		                    }else{
+		                    	temp_html =  "<td>"+customer_name+"<div class=\"pop\" style=\"width:170px;\" onclick='getCutomerInfoByPhone(event,"+mobilephone+",1)'><a href=\"#\"><p>姓名:"+(customer_name==null?"暂无":customer_name)+"</p><p>电话:"+(mobilephone==null?"暂无":mobilephone)+"</p></a></div></td>";
+
+		                    }
+							var index=(curno-1)*10+(i+1);
+							var html ="<tr class='orderdata' onclick='queryOrder(\""+order_sn+"\")'>"+
+		                    "  <td>"+index+".</td>"+temp_html+
+		                    "  <td>"+order_date+"</td>"+
+		                    "  <td>"+eshop_pro_name+"</td>"+
+		                    "  <td>"+order_sn+"</td>"+
+		                    "</tr>";
+		                    $(".order_content").append(html);
+							 
+						});
+						
+					}
+		},false);
+  		
+  	}
+  	
+  	function queryOrder(order_sn){
+  		/*  var url = "order_detail.html?order_sn="+encode64(order_sn);
+		 window.location.href=url; */
+		 
+  		 var url = "order_detail_alert.html?order_sn="+encode64(order_sn);
+		 //window.location.href=url;
+		 layer.open({
+   		  type: 2,
+      		  title:  ['订单信息', 'color:#fff'],
+      		  shadeClose: true,
+      		  shade:[0.1, '#393D49'],
+      		  moveOut:false,
+      		  move:false, 
+      		  skin: 'layer-ext-crmskin',
+      		  area: ['90%', '88%'],
+      		  offset: ['2px','65px'],
+      		  content: url,
+      		  success:function(layer,index){
+      			 
+      		  },
+      		  cancel: function(index, layero){ 
+      			 layer.close(index);
+      			}  
+      		});  
+	 }
+  	
+  	function getnullfunc(evt){
+  		evt = evt ? evt : (window.event ? window.event :null);  
+  		evt.stopPropagation(); 
+  	}
+  	
+  	function getCutomerInfoByPhone(evt,phone,flag){
+  		 evt = evt ? evt : (window.event ? window.event :null);  
+  		 evt.stopPropagation(); 
+  		
+  		 doManager('CustomerManager',"checkCustomerByPhone",[phone],function (data, textStatus, XMLHttpRequest){
+	            if(data.result){
+	            	 var jsonStr = JSON.parse(data.data);
+	            	if(jsonStr.count>0){
+	            		var URL="portrait.html?phone="+encode64(phone)+'&&flag='+encode64(flag);
+	            		 layer.open({
+	            		  type: 2,
+	               		  title: ['用户画像','color:#fff'],
+	               		  shadeClose: true,
+	               		  shade:[0.1, '#393D49'],
+	               		  moveOut:false,
+	               		  move:false, 
+	               		  skin: 'layer-ext-crmskin',
+	               		  area: ['90%', '88%'],
+	               		  offset: ['2px','65px'],
+	               		  content: URL,
+	               		  success:function(layer,index){
+	               			 
+	               		  },
+	               		  cancel: function(index, layero){ 
+	               			 layer.close(index);
+	               			}  
+	               		});  
+	            		//var URL="portrait.html?phone="+encode64(phone)+'&&flag='+encode64(flag);
+		    	  		//window.location.href=URL;
+	            	}else{
+	            		crm_alert(0,"该客户的用户画像不存在");
+	            	}
+	            }
+	        });
+  		
+  	}
+  	/*******************订单分页结束**********************/
+	
+  
+  	
+	/*******************拜访记录分分页开始**********************/
+ 	var relation_cur_no = 1;
+ 	var relation_max_no = 1;
+ 	
+ 	function initrelationlist(curno){
+ 		var pageinfo = new Object();
+ 		if(curno==null||curno==''){
+ 			curno=1;
+ 		}
+ 		relation_cur_no = curno;
+ 		
+ 		doManager('RelationManager','findRelation_employee_crm',[employee_no,10,curno],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var relations = JSON.parse(data.data);
+						var pagenum = relations.total_pages;
+						
+						$("#relationcount").html(relations.total);
+						relation_max_no = pagenum;
+			           	$("#tab_2 table tr:gt(0)").remove();
+			            $(relations.data).each(function(x,t){
+			            	 var index=(curno-1)*10+(x+1);
+			            	 var strHtml = '<tr  onclick="queryRelation('+t.id+","+t.relation_id+","+t.house_id+')">'+
+			            	 				 '<td>'+index+'.</td>'+
+			            	 				'<td><div class="pop" style="width:170px;" onclick="getCutomerInfo(event,'+t.id+","+t.house_id+',2)"><a href="#"><p>姓名:'+t.name+'</p><p>电话:'+t.mobilephone+'</p></a></div>'+t.name+'</td>'+
+			            	 				'<td>'+t.createtime+'</td><td>'+t.customer_type+'</td>'+
+			            	 				'<td>'+t.relation_type+'</td>'+
+			            	 				'</tr>';
+			            	 				
+			              	$("#tab_2 table").append(strHtml);
+			             })
+						
+					}
+		},false);
+ 	} 
+ 	
+ 	
+ 	
+	function getCutomerInfo(evt,customer_id,house_id,flag){
+		evt = evt ? evt : (window.event ? window.event :null);  
+  		evt.stopPropagation(); 
+  		var URL="portrait.html?customer_id="+encode64(customer_id)+'&&house_id='+encode64(house_id)+'&&flag='+encode64(flag);
+  		
+  		 layer.open({
+   		  type: 2,
+   		  title:['用户画像','color:#fff'],
+   		  shadeClose: true,
+   		  shade:[0.1, '#393D49'],
+   		  moveOut:false,
+   		  move:false, 
+   		  skin: 'layer-ext-crmskin',
+   		  area: ['90%', '88%'],
+   		  offset: ['2px','65px'],
+   		  content: URL,
+   		  success:function(layer,index){
+   			 
+   		  },
+   		  cancel: function(index, layero){ 
+   			 layer.close(index);
+   			}  
+   		});  
+  	}
+ 	/*******************拜访记录分页结束**********************/
+
+ 	
+ 	function getUserInfo(employeeNo){
+  		
+		var URL="user.html?"+encodeURIComponent("employee_no="+employeeNo);
+  		
+  		window.location.href=URL;
+  	}
+ 	
+ 	function queryRelation(customer_id,relation_id,house_id){
+ 		
+ 		/* var URL="visit.html?customer_id="+encode64(customer_id)+'&&relation_id='+encode64(relation_id)+'&&house_id='+encode64(house_id);
+		window.location.href=URL; */
+		
+ 		var URL="customer_relation.html?customer_id="+encode64(customer_id)+'&&relation_id='+encode64(relation_id)+'&&house_id='+encode64(house_id);
+		
+		 layer.open({
+	   		  type: 2,
+	   		  title:['拜访记录','color:#fff'],
+	   		  shadeClose: true,
+	   		  shade:[0.1, '#393D49'],
+	   		  moveOut:false,
+	   		  move:false, 
+	   		  skin: 'layer-ext-crmskin',
+	   		  area: ['90%', '88%'],
+	   		  offset: ['2px','65px'],
+	   		  content: URL,
+	   		  success:function(layer,index){
+	   			 
+	   		  },
+	   		  cancel: function(index, layero){ 
+	   			 layer.close(index);
+	   			}  
+	   		});
+ 	}
+ 	
+ 	
+ 	
+ 	function doLogout() {
+		
+		
+		layer.confirm('确定退出？', {
+		  	title:'提示',
+		  	offset:['100px','550px'],
+		  	move:false,
+		  	skin:'layer-ext-crmskin',
+			btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+		});
+		
+	}
+ 	
+ 	
+ 	  //切换tab
+ 	  var cur_tab = 1;//初始tab
+ 	  var tab1_load=true;
+ 	  var tab2_load=false;
+ 	 
+ 	  function switchTab(t){
+ 		  var index_tab = layer.load(0, {
+ 			  shade: [0.1,'#393D49'] //0.1透明度的黑色背景
+ 			});
+ 		  if(t==2&&!tab2_load){
+ 			  
+ 			 initrelationlist();
+ 			 tab2_load=true;
+ 			$("#tcdPageCode_relation").createPage({
+ 		        pageCount:relation_max_no,
+ 		        current:1,
+ 		        backFn:function(p){
+ 		        	
+ 		        	initrelationlist(p);
+ 		        }
+ 		    }); 
+ 		  }
+ 		  
+ 		  layer.close(index_tab);
+ 	  }
+</script>
+</body>
+</html>

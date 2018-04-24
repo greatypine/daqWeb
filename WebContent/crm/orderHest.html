@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>订单热力图</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    
+    <link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+    <link rel="stylesheet" href="../data_access/dist/css/skins/_all-skins.min.css">
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            font-size: 12px;;
+        }
+
+        #mapContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+     </style>  
+</head>
+<body class="skin-blue">
+<div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
+<!-- <div class="button-group">
+    <input type="button" class="button" value="显示热力图" onclick="heatmap.show()"/>
+    <input type="button" class="button" value="关闭热力图" onclick="heatmap.hide()"/>
+</div> -->
+
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript">
+var cityId = decode64(getUrlParamByKey("c"));     /**城市ID*/
+var cityName = decode64(getUrlParamByKey("cn")); /**城市名称*/
+var employeeId = decode64(getUrlParamByKey("e")); /**员工编号*/
+var target = decode64(getUrlParamByKey("t"));   /**1.城市；2.门店**/
+var storeIdNo = decode64(getUrlParamByKey("si"));    /**门店编号*/
+if(storeIdNo !="null"){
+	var storeId = storeIdNo.split(",")[0];
+	var storeNo = storeIdNo.split(",")[1];
+}
+var beginDate = decode64(getUrlParamByKey("be"));
+var endDate = decode64(getUrlParamByKey("en"));
+var servicePolygon;
+if(target==1){
+	if(storeIdNo.trim() == "null"){
+		OrderHeatDto = {//城市
+		        city_id:cityId,
+		        employee_id:employeeId,
+		        target:target,
+		        beginDate:beginDate,
+		        endDate:endDate
+		}
+	}else{
+		OrderHeatDto = {//城市
+		        city_id:cityId,
+		        employee_id:employeeId,
+		        target:target,
+		        store_id:storeId,
+		        beginDate:beginDate,
+		        endDate:endDate
+		}
+	}
+}else if(target==2){//门店
+	OrderHeatDto = {
+        employee_id:employeeId,
+        store_id:storeId,
+        target:target,
+        beginDate:beginDate,
+        endDate:endDate
+    }
+}
+
+
+//初始化地图对象，加载地图
+var map = new AMap.Map("mapContainer", {
+    resizeEnable : true,
+    doubleClickZoom : false
+});
+//map.setCity(cityName);
+
+map.plugin(["AMap.ToolBar"],function(){
+    //加载工具条
+    var toolBaropt = {
+        offset :new AMap.Pixel(30,100),//相对于地图容器左上角的偏移量，正数代表向右下偏移。默认为AMap.Pixel(10,10)
+        position : 'RT',//工具放置位置RT:右上角;
+        ruler : true,//标尺键盘是否可见，默认为true
+        noIpLocate : false,//定位失败后，是否开启IP定位，默认为false
+        locate : true,//是否显示定位按钮，默认为false
+        liteStyle : false,//是否使用精简模式，默认为false
+        direction : true,//方向键盘是否可见，默认为true
+        autoPosition : false,//是否自动定位，即地图初始化加载完成后，是否自动定位的用户所在地，在支持HTML5的浏览器中有效，默认为false
+        useNative : false
+    }
+    var tool = new AMap.ToolBar(toolBaropt);
+    map.addControl(tool);
+});
+
+//判断浏览区是否支持canvas
+function isSupportCanvas() {
+    var elem = document.createElement('canvas');
+    return !!(elem.getContext && elem.getContext('2d'));
+}
+
+var jsonData;
+$(function(){
+     doManager("OrderHeatManager", "getLagLatByOrder",[OrderHeatDto], function(data, textStatus,XMLHttpRequest) {
+        if(data.result){
+        	jsonData = JSON.parse(data.data);
+        	if(target == 1){//城市
+        		if(storeId == null){
+        			var serviceArea = jsonData.serviceArea;
+            		var heatData = jsonData.orderHeat;
+            		if(serviceArea.code == 200){
+                    	//服务范围数组
+                    	serviceArray = serviceArea.data;
+                    	if(serviceArray!=null && serviceArray.length>0){
+                        	for(var i=0;i<serviceArray.length;i++){
+                        		var polygonArray = serviceArray[i];
+                        		var serviceCoordinates=polygonArray.vertex;
+                        		var position = polygonArray.position;
+                        		var storeName = polygonArray.storeName;
+                        		//画服务范围多边形
+                        		if(polygonArray.storeNo != "0021Y0020"){
+                        			servicePolygon = new AMap.Polygon({
+                         			   path:serviceCoordinates,
+                         		       strokeColor: "#5c69cc", //线颜色
+                         		       strokeOpacity: 0.9, //线透明度
+                         		       strokeWeight: 2,    //线宽
+                         		       fillColor: "#046ad3", //填充色
+                         		       fillOpacity: 0//填充透明度
+                         		 });
+                         		servicePolygon.setMap(map);
+                        		}
+                        	}
+                    	}
+                    }
+            		map.setCity(cityName);
+            		heatShowByCity(heatData,map);
+        		}else{
+        			storeHeat(jsonData);
+        		}
+        	}else{//门店
+        		storeHeat(jsonData);
+        	}
+        }else{
+        	crm_alert(0,"数据加载异常！");
+        }},false); 
+}); 
+
+var storeHeat = function(jsonDate){
+	var serviceArea = jsonData.serviceArea;
+	var heatData = jsonData.orderHeat;
+	var tinyVillageCoord = jsonData.tinyVillageCoord;
+	var storePosition = jsonData.storePosition;
+	if(serviceArea.code == 200){
+		 if(serviceArea.data.length>0){
+			servicePolygon = new AMap.Polygon({
+				path : serviceArea.data,
+			        strokeColor: "#5c69cc", //线颜色
+			        strokeOpacity: 0.9, //线透明度
+			        strokeWeight: 2,    //线宽
+			        fillColor: "#046ad3", //填充色
+			        fillOpacity: 0//填充透明度
+		 		});
+				servicePolygon.setMap(map);
+				map.setCenter(servicePolygon.getBounds().getCenter());
+				map.setZoom(16);
+		 }
+	}else if(serviceArea.code == 9000003){
+		crm_alert(0,"门店服务范围不存在！");
+		if(storePosition.code == 200){
+			if(storePosition.data.length>0){
+				map.setCenter(storePosition.data);
+				map.setZoom(16);
+			}else{
+				//crm_alert(0,"门店中心点不存在！");
+			}
+		} 
+	}
+	var storeMarker;
+	/* if(storePosition.code == 200 && storePosition.data.length>0){
+		storeMarker = new AMap.Marker({ //添加自定义点标记
+	        map: map,
+	        position: storePosition.data, //基点位置
+	        offset: new AMap.Pixel(0, 0), //相对于基点的偏移位置
+	        content: '<img src="../crm/dist/img/galogo.png" />'   //自定义点标记覆盖物内容
+	    }); 
+	} */
+	/* if(storePosition.code == 200){
+		if(storePosition.data.length>0){
+			map.setCenter(storePosition.data);
+			map.setZoom(16);
+		}else{
+			$$.showMessage("系统信息", "该门店中心点不存在！");
+		}
+	} */
+	if(tinyVillageCoord.code == 200 &&　tinyVillageCoord.data.length>0){
+		var tinyVillageCoords = tinyVillageCoord.data;
+		var vallagePolygon;
+		for(var i = 0; i<tinyVillageCoords.length; i++){
+			var coordinates = tinyVillageCoords[i];
+			if(coordinates.storeNo == storeNo){
+				vallagePolygon = new AMap.Polygon({
+	     			path : coordinates.data,
+	  		        strokeColor: "#f99200", //线颜色
+	  		        strokeOpacity: 0.9, //线透明度
+	  		        strokeWeight: 2,    //线宽
+	  		        fillColor: "#046ad3", //填充色
+	  		        fillOpacity: 0//填充透明度
+		 		});
+				vallagePolygon.setMap(map);
+			}
+		}
+	}
+	heatShowByStore(heatData,map);
+}
+
+var heatShowByStore = function(jsonDataCoordinate,map){
+	if (!isSupportCanvas()) {
+	    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+	}
+	var heatmap;
+	map.plugin(["AMap.Heatmap"], function() {
+	    //初始化heatmap对象
+	    heatmap = new AMap.Heatmap(map, {
+	        radius: 20, //给定半径
+	        opacity: [0, 0.8]
+	    });
+	    //设置数据集：该数据为北京部分“公园”数据
+	    heatmap.setDataSet({
+	        data: jsonDataCoordinate
+	    });
+	});
+	heatmap.setMap(map);
+	heatmap.show();
+}
+
+var heatShowByCity = function(jsonDataCoordinate,map){
+	if (!isSupportCanvas()) {
+	    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+	}
+	var heatmap;
+	map.plugin(["AMap.Heatmap"], function() {
+	    //初始化heatmap对象
+	    heatmap = new AMap.Heatmap(map, {
+	        radius: 12, //给定半径
+	        opacity: [0, 0.5]
+	        ,gradient:{
+	         0.5: 'blue',
+	         0.65: 'rgb(117,211,248)',
+	         0.7: 'rgb(0, 255, 0)',
+	         0.9: '#ffea00',
+	         1.0: 'red'
+	         }
+	    });
+	    //设置数据集：该数据为北京部分“公园”数据
+	    heatmap.setDataSet({
+	        data: jsonDataCoordinate
+	    });
+	});
+	heatmap.setMap(map);
+	heatmap.show();
+}
+
+
+
+</script>
+</body>
+</html>

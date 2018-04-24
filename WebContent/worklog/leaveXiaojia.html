@@ -1,0 +1,254 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+      	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<script type="text/javascript" src="../bizbase/js/userDialog.js" ></script>
+		<script language="JavaScript" type="text/javascript">
+			$(function() {
+				// 休假类型字典
+				var leaveTypeDicts = $dict.getDictList("WORKLOG_LEAVE_TYPE");
+				$(leaveTypeDicts).each(function(i, element) {
+					var option = new Option(element.dictText, element.dictCode);
+					$("#leaveType")[0].add(option);
+				});
+				
+				var id = getUrlParamByKey("id");
+				// 修改界面，自动载入填充form数据
+				if (id != null && id != "") {
+					doManager("workLogLeaveManager", "getLeaveById", id, function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							setFormSimpleData(returnObj, "leaveForm");
+						}
+					});
+				}
+			});
+		
+			function Ysubmit() {
+				$validator = new PMSValidator($("#yonghuzuadd")[0], 
+					{
+						bNormalDisplay: false,
+						iDisplayLength: 999
+					});
+				//$validator.clean();
+				var passed = $validator.clientValidate();
+				if (!passed) {
+					return false;
+				}
+				else {
+					save();
+				}
+			}
+			
+			// 日志提交
+			function workLogSubmit() {
+				save();
+			}
+			
+			// 保存
+			function save() {
+				if(comepareDate(formatDateTOparseByStr($("#beginDate").val()),formatDateTOparseByStr($("#endDate").val()))>=0){
+					var leaveObj = 
+					{
+						id: $("#id").val(),
+                        leaveUserId: $("#leaveUserId").val(),
+						beginDate: $("#beginDate").val(),
+						endDate: $("#endDate").val(),
+						inputDate: formatDate(new Date),
+						leaveType: $("#leaveType").val(),
+						meeting: $("#meeting").val(),
+                        remark: $("#remark").val(),
+                        leaveState: "1",
+                        enableStatus: "1"
+					};
+					$$.showPromptDialog("系统提示", "确认销假？", false, 320, function () {
+	                    doManager("workLogLeaveManager", "changeSickLeaveByObj", leaveObj, function (datas, textStatus, XMLHttpRequest) {
+	                        //var returnObj = $.fromJSON(data.data);
+	                        if (datas.result) {
+	                            $$.showMessage("系统提示", "销假成功！");
+								window.location = "leaveList.html";
+	                        } else {
+	                        	$$.showMessage("系统提示", datas.message);
+	                        }
+	                    }, true, {showWaiting: true});
+	                });
+				}else{
+					 $$.showMessage("系统提示", "结束日期不能小于开始日期！");
+				}
+				
+			}
+			
+			
+			/**
+			 * 检测角色组名是否已存在
+			 */
+			function checkUserGroupName() {
+				var nowUserGroupName = $("#userGroupName").val();
+				if (validateExists("com.cnpc.pms.bizbase.rbac.usermanage.entity.UserGroup", "name", nowUserGroupName)) {
+					return true;
+				}
+				return false;
+			}
+			
+			/**
+			 * 验证角色组编码是否重复
+			 * @param {Object} value
+			 * @param {Object} element
+			 */
+			/* $.validator.addMethod("userGroupCodeValid", function(value, element) {
+				var flag;
+				if (checkUserGroupCode()) {
+					flag = false;
+				}
+				else {
+					flag = true;
+				}
+				return flag;
+			}, "角色组编码已存在"); */
+			
+			// 人员回掉函数
+			function selUserlBack(jsonStr) {
+				var userInfo= $.fromJSON(jsonStr);
+			    $("#leaveUserId").val(userInfo.userId);
+			    $("#leaveUserName").val(userInfo.userName);
+			}
+			  function formatDate(date) {
+	            var myyear = date.getFullYear();
+	            var mymonth = date.getMonth()+1;
+	            var myweekday = date.getDate();
+	
+	            if(mymonth < 10){
+	                mymonth = "0" + mymonth;
+	            }
+	            if(myweekday < 10){
+	                myweekday = "0" + myweekday;
+	            }
+	            return (myyear+"-"+mymonth + "-" + myweekday);
+	        }
+			//格局化日期：MM/dd/yyyy
+	        function formatDateTOparse(date) {
+	            var myyear = date.getFullYear();
+	            var mymonth = date.getMonth()+1;
+	            var myweekday = date.getDate();
+	
+	            if(mymonth < 10){
+	                mymonth = "0" + mymonth;
+	            }
+	            if(myweekday < 10){
+	                myweekday = "0" + myweekday;
+	            }
+	            return (mymonth + "/" + myweekday+"/"+myyear);
+	        }
+			//格局化日期：MM/dd/yyyy,传入的日期字符串格式为"YYYY-MM-DD"
+			 function formatDateTOparseByStr(datestr) {
+	            mymonth=datestr.substr(5,2);
+				myweekday=datestr.substr(8,2);
+				myyear=datestr.substr(0,4);
+	            return (mymonth + "/" + myweekday+"/"+myyear);
+	        }
+			//比较两个时间之差,传入的日期的格式为yyyy-MM-dd,date1为开始日期，date2为结束日期
+			function comepareDate(date1,date2){
+				var days;
+				if(Date.parse(date2)>=Date.parse(date1)){
+					var days=(Date.parse(date2)-Date.parse(date1))/(24 * 60 * 60 * 1000);
+					return days;
+				}else{
+					return "date2小于date1";
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div class="rightcont body_bg clear">
+			<div class="box">
+				<div class="title clear">
+					<div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();" ></div>
+					<div class="ico2" ></div>
+					<div class="ico1" ></div>
+					<a href="#">日誌管理 :</a>&nbsp;<a href="#">销假</a>
+				</div>		
+				<div class="containerheader">
+					 <a href="#" onClick="toggleDiv('temp1','plusMinus1')"><img id="plusMinus1" src="../scripts/images/22.png"/></a>
+					休假或出差编辑&nbsp;&nbsp;&nbsp;&nbsp;
+				<span id="info"></span>
+				</div>
+				<div class="containerbody" id="temp1">
+					<form id="leaveForm" name="leaveForm" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+						<input type="hidden" name="id" id="id" value="" />
+ 						<table style=" border:#000 solid 0px;" class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+							<tr>
+								<td align="right">
+									休假人：
+									<span class="red">*</span>
+								</td>
+								<td align="left" colspan="3">
+									<input type="text" name="leaveUserName" id="leaveUserName" value="" disabled/>
+									<input type="hidden" name="leaveUserId" id="leaveUserId" value="" />
+								</td>
+							</tr>
+							<tr>
+								<td align="right">
+									开始日期：
+									<span class="red">*</span>
+								</td>
+								<td align="left">
+									<input id="beginDate" name="beginDate" type="text" bidFormat="dateYMD" readonly validate="required:true"  disabled/>
+								</td>
+								<td align="right">
+									结束日期：
+									<span class="red">*</span>
+								</td>
+								<td align="left">
+									<input id="endDate" name="endDate" type="text" bidFormat="dateYMD" readonly validate="required:true" class="pmsDateField inputtext_dis"/>
+								</td>
+							</tr>
+							<tr>
+								<td align="right">
+                                   	休假类型：
+                                </td>
+                                <td align="left">
+                                   <select id="leaveType" name="leaveType" class="inputselect" disabled>
+                                   		<option value="0">---请选择---</option>
+                                   </select>
+                                </td>
+                                <td align="right">
+                                	会议名称：
+                                </td>
+                                <td align="left">
+                                	<input type="text" id="meeting" name="meeting" disabled/>
+                                </td>
+                            </tr>
+                            <tr>
+                            	<td align="right" valign="middle">
+                            		备注：
+                            	</td>
+                            	<td align="left" colspan="3">
+                            		<textarea rows="5" cols="10" style="width:90%" id="remark" name="remark"></textarea>
+                            	</td>
+                            </tr>
+						</table>
+					</form>
+				</div>
+				<div class="containerheader" align="right" style="padding:2px 5px 2px 0px">
+					<button class="buttonu" onclick="workLogSubmit();" style="height:20px; width:60px">
+					销假
+					</button>&nbsp;&nbsp;
+			 		<button class="buttonu" onclick="returnPage();" style="height:20px; width:60px">
+					返回
+					</button>
+				</div>
+			 </div>
+		 </div>
+	</body>
+	<script language="JavaScript">
+		function returnPage() {
+			window.location.href = "leaveList.html";
+		}
+	</script>
+</html>

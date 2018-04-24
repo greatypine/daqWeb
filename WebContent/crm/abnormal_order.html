@@ -1,0 +1,1993 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>异常订单</title>
+   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+          <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    .table button{padding: 3px 20px; margin: 0 5px;}
+	
+	.tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+	.audit_process{ overflow-y: auto;  background: #f9f9f9; border-radius: 5px; padding:15px 0 20px 0;}
+    .audit_process .clearfix{ padding:10px 30px;}
+    .audit_margin{margin-right: 15px;}
+	 #process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+		#process_div_pic{
+			position:fixed;
+			top:50%;
+			left:50%; 
+			z-index:100000000; 
+			margin:-16px 0 0 -50px; 
+			width:100px; 
+			height:32px;
+			color: #fff;
+		}
+		.form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>异常订单</em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+  
+
+
+<!--   <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container" >
+        <div class="pull-left">
+           <nav class="navbar navbar-static-top no-margin">
+            <div class="logo-lg clearfix">
+              <div class="logo-lg clearfix pull-left">
+	            <ul>
+	              <li><a href="javascript:parent.location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
+	              <li class="nav-mark"><a href="#">异常订单</a> </li>
+	              <li></li>
+	            </ul>
+	          </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </nav>
+  </header> -->
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div >
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>可申诉异常订单列表</strong>
+         	<small class="text-red" style="padding-left: 10px;">注意：1.未申诉成功的异常订单将不会被计入GMV统计结果。</small></br>
+         	<small class="text-red" style="padding-left: 218px;">
+            2.申诉时间截止至次月2号18点。
+            </small>
+          </div>
+          <div class="box-body">
+            <form id="can_appeal_form" class="clearfix">
+            <div class="form-group col-lg-3"><span style="font-weight:700">查询时间</span>：
+<!-- 	          		<select class="form-control select2" id="auto_date" > -->
+<!-- 		                <option value="prev_month">上月</option> -->
+<!-- 		                <option value="cur_month" selected="selected">本月（截止到昨日24点）</option> -->
+<!-- 	              	</select> -->
+			
+                <input type="text" class="form-control pull-right" id="auto_date"  placeholder="点击选择日期" readonly="readonly" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
+
+            </div>
+              <div class="form-group col-lg-3"><span style="font-weight:700">类型</span>：<select class="form-control select2"  id="abnormalType_auto" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
+	               <option value="" >全部</option>
+	              </select>
+              </div>
+              <div class="form-group col-lg-3"><span style="font-weight:700">订单号</span>：&nbsp; <input type="text" class="form-control"  placeholder="订单号" id="orderSn_auto" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+              </div>
+             
+<!-- 	            <td><span style="font-weight:700">产品名</span>：&nbsp; <input type="text" class="form-control"   id="product_auto"/></td> -->
+              <div class="form-group col-lg-3">
+                  <span style="font-weight:700">订单金额</span>：
+                  <div style="display:block">
+                      <input type="text" class="form-control"  placeholder="最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
+                      <input type="text" class="form-control"  placeholder="最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+                  </div>
+              </div>
+               
+              <div class="form-group col-lg-3" id="autocity" style="display:none"><span style="font-weight:700">城市</span>：
+<!--                    <input id="city_id_autoOrder" name="city_id_autoOrder" type="hidden" bidTableFlag="true" value=""/> -->
+<!-- 	             	<input id="city_name_autoOrder" name="city_name_autoOrder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="city_name-search_autoOrder" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/> -->
+<!-- 	             	<datalist id="city_name-search_autoOrder"> -->
+<!-- 	             	</datalist> -->
+ 							<input id="city_id_autoOrder" name="city_id_autoOrder" type="hidden" value=""/>
+							  <input type="text" class="form-control"  placeholder="城市" id="city_name_autoOrder" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+				              <div class="auto hidden" id="auto_city_autoOrder" style="width:82%;z-index: 99999;">
+				              <!-- /.input group -->
+				              </div>
+              </div>
+              <div class="form-group col-lg-3"><span style="font-weight:700">门店</span>：
+<!--                     <input id="store_id_autoOrder" name="store_id_autoOrder" type="hidden" bidTableFlag="true" value=""/> -->
+<!-- 	             	<input id="store_name_autoOrder" name="store_name_autoOrder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="store_name-search_autoOrder" style="border-radius: 6px;box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/> -->
+<!-- 	             	<datalist id="store_name-search_autoOrder"> -->
+	
+<!-- 	             	</datalist> -->
+					  <input id="store_id_autoOrder" name="store_id_autoOrder" type="hidden" value=""/>
+					  <input type="text" class="form-control"  placeholder="门店" id="store_name_autoOrder" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
+		              <div class="auto hidden" id="auto_store_autoOrder" style="width:82%;z-index: 99999;">
+		              </div>
+              </div>
+              <div class="form-group col-lg-3"><span style="font-weight:700">事业部</span>：&nbsp; <input type="text" class="form-control"   id="dept_auto" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+              </div>
+              <div class="form-group col-lg-3"><span style="font-weight:700">频道</span>：&nbsp; <input type="text" class="form-control" id="channel_auto" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+              </div>
+              <div class="form-group col-lg-3"><span style="font-weight:700">状态</span>：<select class="form-control select2"  id="auto_status" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
+	                <option value="" selected="selected">全部</option>
+	                <option value="0">未申诉</option>
+	                <option value="1" >申诉中</option>
+	                <option value="2" >已驳回</option>
+	                <option value="3" >已通过</option>
+	              </select>
+              </div>
+           </form>
+            <div class="clearfix">
+              <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+                <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+              </div>
+              <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+                <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
+              </div>
+              
+              <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+                <button type="button" style="display:none" id="export_auto_abnormalOrder_button" onclick="export_auto_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
+              </div>
+				<div class=" col-lg-2 pull-right" style="padding-top: 25px;">
+                <button type="button" style="display:none" id="uploadButton_auto" onclick="showUploadWindow(1)" class="btn btn-block btn-danger">导入</button>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="box-body">
+            <div class="tab-content">
+              <table class="table table-striped no-margin">
+                <tbody id="auto_tbody">
+                <tr id="auto_title">
+                  <th width="4%"></th>
+                  <th width="8%">状态</th>
+                  <th width="7%">城市</th>
+                  <th width="8%">门店名称</th>
+                  <th width="8%">E店名称</th>
+                  <th width="8%">事业部</th>
+                  <th width="8%">频道</th>
+                  <th width="7%">订单号</th>
+                  <th width="6%">订单金额</th>
+                  <th width="6%">应付金额</th>
+                  <th width="6%">有效金额</th>
+                  <th width="8%">异常类型</th>
+                  <th width="8%">签收时间</th>
+                  <th width="24%">操作</th>
+                </tr>
+               
+                </tbody>
+              </table>
+              <table class="table table-striped no-margin" id="all_pass_button_can_appeal" style="display:none">
+              <tbody>
+              <tr style="background: #fff;display:none" id="all_pass_can_appeal">
+                  <td style="text-align: left; padding-left: 20px;"><input type="checkbox"  id="all_select_can_appeal">全选</td>
+                  <td colspan="9"><button type="button" onclick="orderApprovePass(1)" class="btn btn-primary pull-right">通过</button></td>
+                </tr>
+                </tbody>
+              </tbody>
+              </table>
+            <!-- /.tab-pane -->
+            </div>
+           
+            <div style="position:absolute;bottom:5px;left:27px;width:25%"> 显示 <select id="pageRecords_auto" onchange="chnagePageRecords(1)" name="pageRecords_auto"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条  &nbsp;&nbsp; 共  <span id="totalRecord_can"></span> 条</div>
+            
+            <div class="tcdPageCode" id="page_auto">
+            </div>
+            
+          </div>
+          </div>
+
+       
+        
+      </section>
+
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>不可申诉异常订单列表</strong><small class="text-red" style="padding-left: 10px;">注意：1.异常订单将不会被计入GMV统计结果。（有问题请发至申诉邮箱hanbg@gakj.citic.com,抄送yuanbo@gakj.citic.com）
+          </small></br>
+          <small class="text-red" style="padding-left: 232px;">
+            2.申诉时间截止至次月2号18点。
+            </small>
+           <div class="clearfix"> 
+	         <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+	          	<button type="button" style="display:none" id="downOrdersButton" onclick="downAbnormalOrders()" class="btn btn-default pull-right">下载手动异常订单基础数据</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	         </div>
+	         <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+	          	<button type="button" style="display:none;padding-left: 25px;padding-right: 25px;" id="eshopPurchaseButton" onclick="eshopPurchaseManage()" class="btn btn-default pull-right">企业购E店维护</button>
+	         </div>
+         </div>
+          </div>
+          <div class="box-body">
+            <form id="cannot_appeal_form" class="clearfix">
+                <div class="form-group col-lg-3"><span style="font-weight:700">查询时间</span>：
+<!-- 	          	  <select class="form-control select2" id="manual_date" > -->
+<!-- 	                <option value="prev_month">上月</option> -->
+<!-- 	                <option value="cur_month" selected="selected">本月（截止到昨日24点）</option> -->
+<!-- 	              </select> -->
+						<input type="text" class="form-control pull-right" id="manual_date"  placeholder="点击选择日期" readonly="readonly" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
+                </div>
+                <div class="form-group col-lg-3"><span style="font-weight:700">类型</span>：<select class="form-control select2"  id="abnormalType_manual" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
+	               <option value="" >全部</option>
+	              </select>
+	            </div>
+	           
+<!-- 	            <td><span style="font-weight:700">产品名</span>：&nbsp; <input type="text" class="form-control"  placeholder="产品名" id="product_manual"/></td> -->
+                <div class="form-group col-lg-3"><span style="font-weight:700">订单号</span>：&nbsp; <input type="text" class="form-control"  placeholder="订单号" id="orderSn_manual" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/></div>
+                <div class="form-group col-lg-3">
+                    <span style="font-weight:700">订单金额</span>：
+                    <div style="display:block">
+                        <input type="text" class="form-control"  placeholder="最小金额"  id="min_money_manual" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>&nbsp;--
+	                    <input type="text" class="form-control"  placeholder="最大金额"  id="max_money_manual" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+                    </div>
+                </div>
+                <div class="form-group col-lg-3" id="manualcity" style="display:none">
+                    <span style="font-weight:700">城市</span>：
+<!--                     <input id="city_id_manualOrder" name="city_id_manualOrder" type="hidden" bidTableFlag="true" value=""/> -->
+<!--                     <input id="city_name_manualOrder" name="city_name_manualOrder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="city_name-search_manualOrder" style="display: inherit;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/> -->
+<!--                     <datalist id="city_name-search_manualOrder"> -->
+<!--                     </datalist> -->
+						<input id="city_id_manualOrder" name="city_id_manualOrder" type="hidden" value=""/>
+					  <input type="text" class="form-control"  placeholder="城市" id="city_name_manualOrder" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+		              <div class="auto hidden" id="auto_city_manualOrder" style="width:82%;z-index: 99999;">
+		              <!-- /.input group -->
+		              </div>
+                </div>
+                <div class="form-group col-lg-3">
+                    <span style="font-weight:700">门店</span>：
+<!--                     <input id="store_id_handOrder" name="store_id_handOrder" type="hidden" bidTableFlag="true" value=""/> -->
+<!--              	    <input id="store_name_handOrder" name="store_name_handOrder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="store_name-search_handOrder" style="display: inherit;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/> -->
+<!--                     <datalist id="store_name-search_handOrder"> -->
+<!--                     </datalist> -->
+ 					  <input id="store_id_handOrder" name="store_id_handOrder" type="hidden" value=""/>
+					  <input type="text" class="form-control"  placeholder="门店" id="store_name_handOrder" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
+		              <div class="auto hidden" id="auto_store_handOrder" style="width:82%;z-index: 99999;">
+		              </div>
+                </div>
+                <div class="form-group col-lg-3"><span style="font-weight:700">事业部</span>：&nbsp; <input type="text" class="form-control" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"  id="dept_manual"/></div>
+                <div class="form-group col-lg-3"><span style="font-weight:700">频道</span>：&nbsp; <input type="text" class="form-control" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"  id="channel_manual"/></div>
+           		<div class="form-group col-lg-3"><span style="font-weight:700">状态</span>：<select class="form-control select2" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"  id="status_manual">
+	                <option value="" selected="selected">全部</option>
+	                <option value="0">未通过</option>
+	                <option value="3" >已通过</option>
+	              </select>
+              </div>
+            </form>
+            <div class="clearfix">
+              <!--<div class="col-lg-4" id="tianchong" style="padding-top: 25px;">
+              </div>-->
+                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+                    <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
+                </div>
+                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+                    <button type="button" onclick="search_manual_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
+                </div>
+                
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+                    <button type="button" style="display:none" id="export_manual_abnormalOrder_button" onclick="export_manual_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
+                </div>
+				<div class=" col-lg-2 pull-right" style="padding-top: 25px;">
+                    <button type="button" style="display:none" id="uploadButton_manual" onclick="showUploadWindow(2)" class="btn btn-block btn-danger">导入</button>
+                </div>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="tab-content">
+              <table class="table table-striped no-margin">
+                <tbody id="manual_tbody">
+                <tr id="manual_title">
+                  <th width="8%"></th>
+                  <th width="7%">状态</th>
+                  <th width="7%">城市</th>
+                  <th width="9%">门店名称</th>
+                  <th width="9%">E店名称</th>
+                  <th width="9%">事业部</th>
+                  <th width="9%">频道</th>
+                  <th width="9%">订单号</th>
+                  <th width="6%">订单金额</th>
+                  <th width="6%">应付金额</th>
+                  <th width="6%">有效金额</th>
+                  <th width="8%">异常类型</th>
+                  <th width="9%">签收时间</th>
+                  <th width="10%">操作</th>
+                </tr>
+                </tbody>
+              </table>
+              <table class="table table-striped no-margin" id="all_pass_button_cannot_appeal" style="display:none">
+              <tbody>
+              <tr style="background: #fff;display:none" id="all_pass_cannot_appeal">
+                  <td style="text-align: left; padding-left: 20px;"><input type="checkbox"  id="all_select_cannot_appeal">全选</td>
+                  <td colspan="9"><button type="button" onclick="orderApprovePass(2)" class="btn btn-primary pull-right">通过</button></td>
+                </tr>
+                </tbody>
+              </tbody>
+              </table>
+            
+              <!-- /.tab-pane -->
+            </div>
+            <div style="position:absolute;bottom:6px;left:27px;width:25%">显示 <select id="pageRecords_manual" name="pageRecords_manual" onchange="chnagePageRecords(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_cannot"></span> 条</div>
+            <div class="tcdPageCode" id="page_manual"></div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+<script tyle="text/javascript">
+<!--target(数据查询层级) 0：总部  1:城市级别 2：门店 3:业务事业群-->
+Date.prototype.format=function(fmt) {        
+    var o = {        
+    "M+" : this.getMonth()+1, //月份        
+    "d+" : this.getDate(), //日        
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+    "H+" : this.getHours(), //小时        
+    "m+" : this.getMinutes(), //分        
+    "s+" : this.getSeconds(), //秒        
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+    "S" : this.getMilliseconds() //毫秒        
+    };        
+    var week = {        
+    "0" : "\u65e5",        
+    "1" : "\u4e00",        
+    "2" : "\u4e8c",        
+    "3" : "\u4e09",        
+    "4" : "\u56db",        
+    "5" : "\u4e94",        
+    "6" : "\u516d"       
+    };        
+    if(/(y+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+    }        
+    if(/(E+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+    }        
+    for(var k in o){        
+        if(new RegExp("("+ k +")").test(fmt)){        
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+        }        
+    }        
+    return fmt;        
+} 
+
+
+ layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+ 
+ 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
+ 	var initCity = cityId;
+	var employeeId = decode64(getUrlParamByKey("e"));//员工ID
+	var storeId = decode64(getUrlParamByKey("s"));//门店ID
+	var target = decode64(getUrlParamByKey("t"));//执行人级别 
+	var storeName=decode64(getUrlParamByKey("sn"));//门店名称
+	var storeno = decode64(getUrlParamByKey("so"));//门店编号
+	var role = decode64(getUrlParamByKey("r"));//角色 code
+	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
+	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
+	
+	
+	
+  $(function () {
+    $(".logo-lg > ul > li").mouseenter(function(){
+      $(this).children(".nav_dropdown").show();
+    });
+    $(".logo-lg > ul > li").mouseleave(function(){
+      $(this).children(".nav_dropdown").hide();
+    });
+    $('#auto_date').daterangepicker();
+    $('#manual_date').daterangepicker();
+    
+    var firstDate = new Date();
+    firstDate.setDate(1); //第一天
+    var curDate = new Date();
+    var bdate = firstDate.format('yyyy/MM/dd');
+    var cDate = curDate.format('yyyy/MM/dd');
+    $("#auto_date").val(bdate+"-"+cDate);
+    $("#manual_date").val(bdate+"-"+cDate);
+    
+    
+    queryAbnormalOrderType();
+    var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
+    if(target==0){//总部
+    	$("#manualcity").show();
+    	$("#autocity").show();
+    	$("#export_auto_abnormalOrder_button").show();
+    	$("#export_manual_abnormalOrder_button").show();
+    	if(role=="PTYYZXYCDDZ"){//异常订单角色组
+    		$("#all_pass_can_appeal").show();
+    		$("#all_pass_cannot_appeal").show();
+        	$("#uploadButton_auto").show();
+        	$("#uploadButton_manual").show();
+        	
+        	$("#downOrdersButton").show();
+        	$("#eshopPurchaseButton").show();
+    		$("#export_auto_abnormalOrder_button").show();
+        	$("#export_manual_abnormalOrder_button").show();
+        	$("#all_pass_button_can_appeal").show();
+        	$("#all_pass_button_cannot_appeal").show();
+    	}
+    }else  if(target==1){//城市级别
+    	
+    	$("#manualcity").show();
+    	$("#autocity").show();
+    	$("#export_auto_abnormalOrder_button").show();
+    	$("#export_manual_abnormalOrder_button").show();
+    	
+    	if(role=="PTYYZXYCDDZ"){//异常订单角色组
+    		$("#all_pass_can_appeal").show();
+    		$("#all_pass_cannot_appeal").show();
+        	$("#uploadButton_auto").show();
+        	$("#uploadButton_manual").show();
+        	
+        	$("#downOrdersButton").show();
+        	$("#eshopPurchaseButton").show();
+    		$("#export_auto_abnormalOrder_button").show();
+        	$("#export_manual_abnormalOrder_button").show();
+        	$("#all_pass_button_can_appeal").show();
+        	$("#all_pass_button_cannot_appeal").show();
+    	}else{
+    		$("#city_id_manualOrder").val(cityId);
+           	$("#city_name_manualOrder").val(cityname);
+           	$("#city_name_manualOrder").attr("readonly",true);
+           	
+           	$("#city_id_autoOrder").val(cityId);
+           	$("#city_name_autoOrder").val(cityname);
+           	$("#city_name_autoOrder").attr("readonly",true);
+    	}
+       
+        
+    }else if(target==2){//店长
+    	
+		$("#store_name_autoOrder").val(storeName);
+		$("#store_name_autoOrder").attr("readonly",true);
+		
+		$("#store_name_handOrder").val(storeName);
+		$("#store_name_handOrder").attr("readonly",true);
+		
+		
+		$("#city_id_manualOrder").val("");
+    	$("#city_name_manualOrder").val("");
+    	$("#city_id_autoOrder").val("");
+    	$("#city_name_autoOrder").val("");
+    	
+    }else if(target==3){//事业群级别
+    	$("#manualcity").show();
+    	$("#autocity").show();
+    	$("#export_auto_abnormalOrder_button").show();
+    	$("#export_manual_abnormalOrder_button").show();
+    	$("#dept_auto").val(deptname);
+    	$("#dept_manual").val(deptname);
+    	$("#dept_auto").attr("readonly",true);
+    	$("#dept_manual").attr("readonly",true);
+    }
+    
+    
+  });
+	
+	
+	$("#all_select_can_appeal").on("click",function(t,tt){
+		if($("#all_select_can_appeal").is(":checked")){
+			$("input[id^='can_appeal_checkbox_']:not(:disabled)").each(function(i,t){
+				$(t)[0].checked=true;
+			})
+		}else{
+			$("input[id^='can_appeal_checkbox_']").each(function(i,t){
+				$(t)[0].checked=false;
+			})
+		}
+	})
+	
+	$("#all_select_cannot_appeal").on("click",function(t,tt){
+		if($("#all_select_cannot_appeal").is(":checked")){
+			$("input[id^='cannot_appeal_checkbox_']:not(:disabled)").each(function(i,t){
+				$(t)[0].checked=true;
+			})
+		}else{
+			$("input[id^='cannot_appeal_checkbox_']").each(function(i,t){
+				$(t)[0].checked=false;
+			})
+		}
+	})
+	
+	function selectCheckbox(t,t1){
+		if(t1==1){
+			
+			if($(t).is(":checked")){
+				
+				var validc = $("input[id^='can_appeal_checkbox_']:not(:disabled)").length;
+				var checkedc = $("input[id^='can_appeal_checkbox_']:checked").length;
+				
+				if(validc==checkedc){
+					
+					$("#all_select_can_appeal")[0].checked=true;
+				}else{
+					
+					$("#all_select_can_appeal")[0].checked=false;
+				}
+			}else{
+				
+				$("#all_select_can_appeal")[0].checked=false;
+			}
+		}else if(t1==2){
+			if($(t).is(":checked")){
+				
+				var validc = $("input[id^='cannot_appeal_checkbox_']:not(:disabled)").length;
+				var checkedc = $("input[id^='cannot_appeal_checkbox_']:checked").length;
+				
+				if(validc==checkedc){
+					
+					$("#all_select_cannot_appeal")[0].checked=true;
+				}else{
+					
+					$("#all_select_cannot_appeal")[0].checked=false;
+				}
+			}else{
+				
+				$("#all_select_cannot_appeal")[0].checked=false;
+			}
+			
+		}
+		
+		
+	}
+	
+	
+	//通过
+	function orderApprovePass(t){
+		
+		layer.confirm('是否继续通过？', {
+		  	title:'提示',
+		  	offset:['100px','550px'],
+		  	move:false,
+		  	closeBtn:0,
+		  	skin:'layer-ext-crmskin',
+			btn: ['继续','取消'], //按钮
+		}, function(){
+			layer.closeAll();
+			var orderIDs = [];
+			if(t==1){//可申诉
+				$("input[id^='can_appeal_checkbox_']").each(function(i,t){
+					var orderId = $(t)[0].id.split("_")[4];
+					var status = $(t)[0].id.split("_")[3];
+					if((status=="0"||status=="2")&&$(t).is(":checked")){
+						
+						orderIDs.push(orderId);
+					}
+					
+				})
+			}else if(t==2){//不可申诉
+				$("input[id^='cannot_appeal_checkbox_']").each(function(i,t){
+					var orderId = $(t)[0].id.split("_")[4];
+					var status = $(t)[0].id.split("_")[3];
+					if(status=="0"&&$(t).is(":checked")){
+						
+						orderIDs.push(orderId);
+					}
+					
+				})
+			}
+			
+			
+		
+			if(orderIDs.length==0){
+				crm_alert(0,"请选择未申诉订单！");
+				return;
+			}
+			
+			  doManager('dsAbnormalOrderManager','updateDsAbnormalTypeBySN',[orderIDs.join()],function(data){
+		          if(data.result){
+		          	
+		          	 var result = JSON.parse(data.data);
+		          	
+		             if(result.status=="success"){
+		            	 if(t==1){
+		            		 search_auto_abnormalOrder(1);
+		            	 }else if(t==2){
+		            		 $("#orderSn_manual").val("");
+		            		 search_manual_abnormalOrder(1)
+		            	 }
+		            	
+		             }else{
+		            	 crm_alert(0,"订单未成功通过！");
+		             }
+		          }else{
+		        	  crm_alert(0,"订单未成功通过！");
+		          }
+		      });
+		});
+		
+		
+		  
+	}
+	
+  function queryAbnormalOrderType(t){
+	  doManager('dynamicManager','queryAbnormalOrderType',null,function(data){
+          if(data.result){
+          	
+          	  var lst_select_abnormaltype = JSON.parse(data.data);
+              $(lst_select_abnormaltype).each(function(index,element){
+            	  if(element.datatype=='manual'){
+                      $('#abnormalType_auto').append('<option value="'+element.description+'">'+element.description+'</option>');
+            	  }
+                  $('#abnormalType_manual').append('<option value="'+element.description+'">'+element.description+'</option>');
+
+            	  
+              });
+          }else{
+          	
+          }
+      });
+  }
+  
+  
+  /**--------------------------------自动搜索城市---------------------------------------------------------------**/
+  var lst_select_city1=null;
+  var cityNameArray1=new Array();
+  var cityIdMap1 = {};
+  $('#city_name_autoOrder').keyup(function(event){
+	  cityNameArray1=new Array();
+	  $('#auto_city_autoOrder').empty();
+	  $('#auto_store_autoOrder').empty();
+	  $("#store_id_autoOrder").val("");
+	  $("#store_name_autoOrder").val("");
+      //$('#store_name-search_autoOrder').children().remove();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        	$("#city_id_autoOrder").val("");
+            //$('#city_name-search_autoOrder').children().remove();
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+          
+            doManager('dynamicManager','getCityByUser',[target,employeeId,str_name],function(data){
+                if(data.result){
+                	
+                	lst_select_city1 = JSON.parse(data.data);
+                	
+//                     $(lst_select_city1).each(function(index,element){
+                    	
+//                         $('#city_name-search_autoOrder').append('<option value="'+element.name+'">');
+//                     });
+                	for(i=0;i<lst_select_city1.length;i++){
+              		 	 cityNameArray1.push(lst_select_city1[i].name);
+                   	     cityIdMap1[lst_select_city1[i].name] = lst_select_city1[i].ctid;
+     			  	 }
+     			  	var autoComplete = new AutoComplete("city_name_autoOrder","auto_city_autoOrder",cityNameArray1);
+     			    autoComplete.start(event);
+                }else{
+                	
+                }
+            });
+        }
+    });
+  
+  $('#auto_city_autoOrder').on("click",function(){
+	  var temp_city = document.getElementById("city_name_autoOrder").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+	  $("#city_id_autoOrder").val(cityIdMap1[temp_city]);
+  }); 
+
+//      $('#city_name_autoOrder').change(function(){
+    	
+//          $(lst_select_city1).each(function(index,element){
+//             if(element.name == $('#city_name_autoOrder').val()){
+            	
+//                 $('#city_id_autoOrder').val(element.ctid);
+//                 return;
+//             }
+//          });
+//     }); 
+     
+     
+     
+     /**--------------------------------手动搜索城市---------------------------------------------------------------**/
+     var lst_select_city2=null;
+     var cityNameArray2=new Array();
+     var cityIdMap2 = {};
+     $('#city_name_manualOrder').keyup(function(event){
+    	 cityNameArray2=new Array();
+    	   $('#auto_store_handOrder').empty();
+    	   $("#store_id_handOrder").val("");
+    	   $("#store_name_handOrder").val("");
+           $('#store_name-search_handOrder').children().remove();
+           var str_name = $(this).val();
+           if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+           	   $("#city_id_manualOrder").val("");
+               $('#city_name-search_manualOrder').children().remove();
+               if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                   return;
+               }
+             
+               doManager('dynamicManager','getCityByUser',[target,employeeId,str_name],function(data){
+                   if(data.result){
+                   	
+                	   lst_select_city2 = JSON.parse(data.data);
+//                        $(lst_select_city2).each(function(index,element){
+//                            $('#city_name-search_manualOrder').append('<option value="'+element.name+'">');
+//                        });
+                	   for(i=0;i<lst_select_city2.length;i++){
+                		 	 cityNameArray2.push(lst_select_city2[i].name);
+                     	     cityIdMap2[lst_select_city2[i].name] = lst_select_city2[i].ctid;
+       			  	 }
+       			  	var autoComplete = new AutoComplete("city_name_manualOrder","auto_city_manualOrder",cityNameArray2);
+       			    autoComplete.start(event);
+                   }else{
+                   	
+                   }
+               });
+           }
+       });
+     $('#auto_city_manualOrder').on("click",function(){
+   	  var temp_city = document.getElementById("city_name_manualOrder").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+   	  $("#city_id_manualOrder").val(cityIdMap2[temp_city]);
+     });
+//         $('#city_name_manualOrder').change(function(){
+       	
+//             $(lst_select_city2).each(function(index,element){
+//                if(element.name == $('#city_name_manualOrder').val()){
+//                    $('#city_id_manualOrder').val(element.ctid);
+//                    return;
+//                }
+//             });
+//        }); 
+     
+     
+     
+  
+  
+  /**-----------------------------------自动异常订单搜索门店------------------------------------------------------**/
+  var lst_select_store1=null;
+  var storeNameArray1=new Array();
+  var storeIdMap1 = {};
+  $('#store_name_autoOrder').keyup(function(event){
+	  storeNameArray1=new Array();
+	    $('#auto_store_autoOrder').empty();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        	$("#store_id_autoOrder").val("");
+            //$('#store_name-search_autoOrder').children().remove();
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+           console.log($("#city_id_autoOrder").val());
+            var employee_id=null;
+           	var city_id = null;
+            if(target==0||target==3){//总部//事业群
+            	city_id = ($("#city_id_autoOrder").val())==""?null:($("#city_id_autoOrder").val());
+           		employee_id = employeeId;
+           		var city_name = $("#city_name_autoOrder").val();
+                if(city_id==null&&city_name!=""){
+                	city_id=-10000;
+                }
+            }else if(target==1){//城市
+            	if(role=="PTYYZXYCDDZ"){
+         		   city_id = ($("#city_id_autoOrder").val())==""?null:($("#city_id_autoOrder").val());
+              	   employee_id = employeeId;
+         	   }else{
+         		   employee_id = employeeId;
+               	   city_id = initCity;
+         	   }
+            }console.log(city_id);
+            doManager('dynamicManager','getStoreByCity',[target,employee_id,city_id,str_name],function(data){
+                if(data.result){
+                	
+                	lst_select_store1 = JSON.parse(data.data).storelist;
+//                     $(lst_select_store1).each(function(index,element){
+                    	
+//                         $('#store_name-search_autoOrder').append('<option value="'+element.name+'">');
+//                     });
+                	for(i=0;i<lst_select_store1.length;i++){
+                    	storeNameArray1.push(lst_select_store1[i].name);
+                    	storeIdMap1[lst_select_store1[i].name] = lst_select_store1[i].storeno;
+      			  	}
+                	
+      			  	var autoComplete = new AutoComplete("store_name_autoOrder","auto_store_autoOrder",storeNameArray1);
+      			    autoComplete.start(event);
+                }else{
+                	
+                }
+            });
+        }
+    });
+   $('#auto_store_autoOrder').on("click",function(){
+  	  var temp_store = document.getElementById("store_name_autoOrder").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+		  $("#store_id_autoOrder").val(storeIdMap1[temp_store]);
+   });
+
+//      $('#store_name_autoOrder').change(function(){
+    	
+//          $(lst_select_store1).each(function(index,element){
+//             if(element.name == $('#store_name_autoOrder').val()){
+            	
+//                 $('#store_id_autoOrder').val(element.storeno);
+//                 return;
+//             }
+//          });
+//     }); 
+     
+     
+     /**----------------------------------手动异常订单搜索门店------------------------------------------------------**/
+     var lst_select_store2=null;
+     var storeNameArray2=new Array();
+     var storeIdMap2 = {};
+     $('#store_name_handOrder').keyup(function(event){
+    	 $('#auto_store_handOrder').empty();
+    	 storeNameArray2=new Array();
+           var str_name = $(this).val();
+           if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+           	   $("#store_id_handOrder").val("");
+               //$('#store_name-search_handOrder').children().remove();
+               if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                   return;
+               }
+               var employee_id=null;
+               var city_id = null;
+               if(target==0||target==3){//总部、事业群
+               	    city_id = ($("#city_id_manualOrder").val())==""?null:($("#city_id_manualOrder").val());
+              		employee_id = employeeId;
+              		var city_name = $("#city_name_manualOrder").val();
+                    if(city_id==null&&city_name!=""){
+                    	city_id=-10000;
+                    }
+               }else if(target==1){//城市
+            	   if(role=="PTYYZXYCDDZ"){
+            		   city_id = ($("#city_id_manualOrder").val())==""?null:($("#city_id_manualOrder").val());
+                 	   employee_id = employeeId;
+            	   }else{
+            		   employee_id = employeeId;
+                  	   city_id = initCity;
+            	   }
+            	    
+               }
+               doManager('dynamicManager','getStoreByCity',[target,employee_id,city_id,str_name],function(data){
+                   if(data.result){
+                   	
+                   	lst_select_store2 = JSON.parse(data.data).storelist;
+//                        $(lst_select_store2).each(function(index,element){
+//                            $('#store_name-search_handOrder').append('<option value="'+element.name+'">');
+//                        });
+                   	for(i=0;i<lst_select_store2.length;i++){
+                    	storeNameArray2.push(lst_select_store2[i].name);
+                    	storeIdMap2[lst_select_store2[i].name] = lst_select_store2[i].storeno;
+      			  	}
+      			  	var autoComplete = new AutoComplete("store_name_handOrder","auto_store_handOrder",storeNameArray2);
+      			    autoComplete.start(event);
+                   }else{
+                   	
+                   }
+               });
+           }
+       });
+
+     $('#auto_store_handOrder').on("click",function(){
+     	  var temp_store = document.getElementById("store_name_handOrder").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+   		  $("#store_id_handOrder").val(storeIdMap2[temp_store]);
+      });
+//         $('#store_name_handOrder').change(function(){
+       	
+//             $(lst_select_store2).each(function(index,element){
+//                if(element.name == $('#store_name_handOrder').val()){
+               	
+//                    $('#store_id_handOrder').val(element.storeno);
+//                    return;
+//                }
+//             });
+//        }); 
+     
+     
+  
+  //导出自动异常订单
+  function export_auto_abnormalOrder(){
+	  var sdate = $("#auto_date").val();
+	  var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		 begin_end_date = sdate.split("-");
+	   	}
+	  	
+	    $("#process_div").show();
+	 	$("#process_div_pic").show();
+	 	var number_str = $("#store_id_autoOrder").val(); 
+  	    var storeName = $("#store_name_autoOrder").val();
+  	   
+  	    var city=$("#city_id_autoOrder").val();
+	    var city_name=$("#city_name_autoOrder").val();
+	    if(number_str==""&&storeName!=""){
+	    	number_str=-10000;
+	    }
+	    
+	    if(city==""&&city_name!=""){
+	    	city="-10000";
+	    }
+	    var status = $("#auto_status").val(); 
+	    var type = $("#abnormalType_auto").val();
+	    var ordersn = $("#orderSn_auto").val();
+	    var productName = null;
+	    var dept = $("#dept_auto").val();
+	    var channel = $("#channel_auto").val();
+	    var min_money_auto = $("#min_money_auto").val();
+	    var max_money_auto = $("#max_money_auto").val();
+	    var abnormalOrderDto=null;
+	    if(target==0){
+			   abnormalOrderDto = {
+				    beginDate:begin_end_date[0].trim(),
+				    endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:type,
+					status:status,
+			  		target:target,
+			  		datatype:"can_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_auto,
+			  		maxPrice:max_money_auto
+				}
+		   }else if(target==1){
+		   abnormalOrderDto = {
+			    beginDate:begin_end_date[0].trim(),
+			    endDate:begin_end_date[1].trim(),
+				ordersn:ordersn,
+				abnortype:type,
+				status:status,
+		  		target:target,
+		  		datatype:"can_appeal",
+		  		storeno:number_str,
+		  		cityname:city_name,
+		  		dept:dept,
+		  		channel:channel,
+		  		product:productName,
+		  		minPrice:min_money_auto,
+		  		maxPrice:max_money_auto
+			}
+	    }else if(target==2){
+	    	 abnormalOrderDto = {
+	    			beginDate:begin_end_date[0].trim(),
+	 			    endDate:begin_end_date[1].trim(),
+	 				ordersn:ordersn,
+	 				abnortype:type,
+	 				status:status,
+	 		  		target:target,
+	 		  		storeno:storeno,
+	 		  		datatype:"can_appeal",
+	 		  		cityname:"",
+	 		  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_auto,
+			  		maxPrice:max_money_auto
+	 			}
+	    }else if(target==3){
+	    	abnormalOrderDto = {
+				    beginDate:begin_end_date[0].trim(),
+				    endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:type,
+					status:status,
+			  		target:target,
+			  		datatype:"can_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_auto,
+			  		maxPrice:max_money_auto
+				}
+	    }
+	   
+	  
+	    doManager('dynamicManager','exportAbnormalOrder',[abnormalOrderDto],function(data){
+	          if(data.result){
+	          	   var result= JSON.parse(data.data);
+		           if(result.status=='success'){
+		        	   window.location.href=result.data;
+		           }else{
+		        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+		        	   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+		        	   return;
+		           }
+	          
+	          }else{
+	       	   crm_alert(5,"请稍后重新请求！");
+	          }
+	         $("#process_div").hide();
+	    	 $("#process_div_pic").hide();
+	     });
+  }
+  
+  
+   var isCreatePage=false;
+   function search_auto_abnormalOrder(cur_page){
+	  
+  		isCreatePage=false;
+  		search_auto_abnormalOrder1(cur_page);
+  		$("#all_select_can_appeal")[0].checked=false;
+  		
+   }
+  
+  //查询上
+  var currentPage_auto= 1;
+  var totalPage_auto = 1;
+  function   search_auto_abnormalOrder1(cur_page){
+	  $("#all_select_auto").attr("checked",false);
+	    var sdate = $("#auto_date").val();
+	   
+	    var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		 begin_end_date = sdate.split("-");
+	   	}
+	  	
+  	    $("#process_div").show();
+ 	 	$("#process_div_pic").show();
+  	
+ 	 	
+ 	 	var number_str = $("#store_id_autoOrder").val(); 
+  	    var storeName = $("#store_name_autoOrder").val();
+  	  
+  	    var city=$("#city_id_autoOrder").val();
+  	    var city_name=$("#city_name_autoOrder").val();
+  	 
+  	    if(number_str==""&&storeName!=""){
+  	    	number_str=-10000;
+  	    }
+  	    
+  	    if(city==""&&city_name!=""){
+  	    	city="-10000";
+  	    }
+  	   
+	    var status = $("#auto_status").val(); 
+	    var type = $("#abnormalType_auto").val();
+	    var ordersn = $("#orderSn_auto").val();
+	    var productName = null;
+	    var dept = $("#dept_auto").val();
+	    var channel = $("#channel_auto").val();
+	    var min_money_auto = $("#min_money_auto").val();
+	    var max_money_auto = $("#max_money_auto").val();
+	    var abnormalOrderDto=null;
+	    if(target==0){
+			   abnormalOrderDto = {
+					beginDate:begin_end_date[0].trim(),
+				    endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:type,
+					status:status,
+			  		target:target,
+			  		datatype:"can_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_auto,
+			  		maxPrice:max_money_auto
+			  		
+				}
+		   }else if(target==1){
+		   abnormalOrderDto = {
+				beginDate:begin_end_date[0].trim(),
+			    endDate:begin_end_date[1].trim(),
+				ordersn:ordersn,
+				abnortype:type,
+				status:status,
+		  		target:target,
+		  		datatype:"can_appeal",
+		  		storeno:number_str,
+		  		cityname:city_name,
+		  		dept:dept,
+		  		channel:channel,
+		  		product:productName,
+		  		minPrice:min_money_auto,
+		  		maxPrice:max_money_auto
+		  		
+			}
+	    }else if(target==2){
+	    	 abnormalOrderDto = {
+	    			beginDate:begin_end_date[0].trim(),
+	 			    endDate:begin_end_date[1].trim(),
+	 				ordersn:ordersn,
+	 				abnortype:type,
+	 				status:status,
+	 		  		target:target,
+	 		  		storeno:storeno,
+	 		  		datatype:"can_appeal",
+	 		  		cityname:"",
+	 		  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_auto,
+			  		maxPrice:max_money_auto
+	 			}
+	    }else if(target==3){
+	    	abnormalOrderDto = {
+					beginDate:begin_end_date[0].trim(),
+				    endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:type,
+					status:status,
+			  		target:target,
+			  		datatype:"can_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_auto,
+			  		maxPrice:max_money_auto
+			  		
+				}
+	    }
+	   
+	    var pageInfo = new Object();
+	    pageInfo.currentPage = cur_page;
+	    pageInfo.recordsPerPage = autoPageRecordes;
+	    $("#totalRecord_can").html("0");
+	    doManager('dynamicManager','queryAbnormalOrder',[abnormalOrderDto,pageInfo],function(data){
+         if(data.result){
+         	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   $("#auto_tbody").find("tr:gt(0)").remove(); 
+	        	   var jData = result.data;
+	        	   if(jData==null||jData.length==0){
+	        		   crm_alert(5,"系统查无此条件的数据");
+	        		   $("#page_auto").createPage({
+	        	 	  	    pageCount:0,
+	        	 	  	    current:0,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	
+	        	 	  	    }
+	        	 	  	});
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	   totalPage_auto = result.total_pages;
+	        	   
+	        	   $("#totalRecord_can").html(result.pageinfo.totalRecords);
+	        	   if(!isCreatePage){
+	        		   $("#page_auto").createPage({
+	        	 	  	    pageCount:totalPage_auto,
+	        	 	  	    current:1,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	search_auto_abnormalOrder1(p);
+	        	 	  	    }
+	        	 	  	});
+	        		   isCreatePage=true;
+	        	   }
+	        	  
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+	        		   var statusStr = "<a style=\"color:#dd4b39;\" >未申诉</a>";
+	        		   if(jData[i].status==1){
+	        			   statusStr = "<a href=\"#\" style=\"color:#3c8dbc;cursor:pointer;text-decoration:underline;\" onclick=\"showTaskDetail('"+jData[i].ordersn+"')\">申诉中</a>";
+	        		   }else if(jData[i].status==2){
+	        			   statusStr = "<a href=\"#\" style=\"color:#f39c12;cursor:pointer;text-decoration:underline;\" onclick=\"showTaskDetail('"+jData[i].ordersn+"')\">已驳回</a>";
+	        		   }if(jData[i].status==3){
+	        			   statusStr = "<a href=\"#\" style=\"color:#00a65a;cursor:pointer;text-decoration:underline;\" onclick=\"showTaskDetail('"+jData[i].ordersn+"')\">已通过</a>";
+	        		   }
+	        		   infoStr= "<tr>";
+	        			    if(role=="PTYYZXYCDDZ"){//异常订单管理者
+	        			    	if(jData[i].status==0||jData[i].status==2){
+		        			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"can_appeal_checkbox_"+jData[i].status+"_"+jData[i].id+"\" onclick=\"selectCheckbox(this,1)\" type=\"checkbox\"></td>";
+	        			    	}else{
+		        			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"can_appeal_checkbox_"+jData[i].status+"_"+jData[i].id+"\" disabled=\"disabled\" type=\"checkbox\"></td>";
+	        			    	}
+	        		   		}else{
+	        			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"></td>";
+	        		   		}
+	        		   		
+        			       var s="";
+        			       if(jData[i].signedtime!=null){
+        			    		var d=	new Date();
+        			     		d.setTime(jData[i].signedtime);
+        			   		 	s=d.format('yyyy-MM-dd HH:mm:ss')
+        			       }
+	        			    infoStr = infoStr+"<td>"+statusStr+"</td>"
+	        			       +"<td>"+jData[i].cityname+"</td>"
+		                       +"<td>"+jData[i].storename+"</td>"
+		                       +"<td>"+(jData[i].eshopname==null?'':jData[i].eshopname)+"</td>"
+		                       +"<td>"+jData[i].deptname+"</td>"
+		                       +"<td>"+jData[i].channelname+"</td>"
+		                       +"<td>"+jData[i].ordersn+"</td>"
+		                       +"<td>"+jData[i].tradingprice+"</td>"
+		                       +"<td>"+(jData[i].payableprice==null?'':jData[i].payableprice)+"</td>"
+		                       +"<td>"+jData[i].gmv_price+"</td>"
+		                       +"<td>"+jData[i].description+"</td>"
+		                       +"<td>"+s+"</td>"
+		                       +"<td><button type=\"button\" onclick=\"showorderdetail('"+jData[i].ordersn+"')\" style=\"padding:3px 4px;margin:0 5px\" class=\"btn btn-default\">订单详情</button>";
+		                       
+		                       if(target==2){//角色是店长
+		                    	  if(jData[i].status==0||jData[i].status==2){
+			                    	   infoStr = infoStr+"<button type=\"button\" onclick=\"gotoAppeal('"+jData[i].ordersn+"',"+jData[i].status+",'"+jData[i].datatype+"')\" style=\"padding:3px 4px;margin:0 5px\" class=\"btn  btn-danger\">申诉</button></td>"
+		                    	  }else{
+		                    		  infoStr = infoStr+"<button type=\"button\" disabled=\"disabled\" style=\"padding:3px 4px;margin:0 5px\"  class=\"btn btn-danger\">申诉</button></td>";
+		                    	  }
+		                       }
+		                       
+		                       infoStr = infoStr+"</tr>";
+		                       
+		                  $("#auto_tbody").append(infoStr);     
+	        	   }
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   return;
+	           }
+         
+         }else{
+      	   crm_alert(5,"请稍后重新请求！");
+         }
+        $("#process_div").hide();
+   	    $("#process_div_pic").hide();
+     }); 
+  	   
+  }
+  
+  
+  
+  
+  
+  
+ 
+  
+  //导出手动异常订单
+  function export_manual_abnormalOrder(){
+	    var sdate = $("#manual_date").val();
+	    var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		 begin_end_date = sdate.split("-");
+	   	}
+	  	
+	    $("#process_div").show();
+	 	$("#process_div_pic").show();
+	 	var number_str = $("#store_id_handOrder").val(); 
+  	    var storeName = $("#store_name_handOrder").val();
+  	    var city = $("#city_id_manualOrder").val();
+  	    var city_name = $("#city_name_manualOrder").val();
+  	    if(number_str==""&&storeName!=""){
+  	    	number_str=-10000;
+  	    }
+  	   
+  	    if(city==""&&city_name!=""){
+  	    	city="-1000";
+  	    }
+	    var type = $("#abnormalType_manual").val();
+	    var ordersn = $("#orderSn_manual").val();
+	    var productName = null;
+	    var dept = $("#dept_manual").val();
+	    var channel = $("#channel_manual").val();
+	    var min_money_manual = $("#min_money_manual").val();
+	    var max_money_manual = $("#max_money_manual").val();
+	    var status = $("#status_manual").val();
+	    var abnormalOrderDto=null;
+	    if(target==0){
+			   abnormalOrderDto = {
+					beginDate:begin_end_date[0].trim(),
+		 			endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:"",
+					status:status,
+			  		target:target,
+			  		datatype:"cannot_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_manual,
+			  		maxPrice:max_money_manual
+				}
+		   }else if(target==1){
+		   abnormalOrderDto = {
+				beginDate:begin_end_date[0].trim(),
+	 			endDate:begin_end_date[1].trim(),
+				ordersn:ordersn,
+				abnortype:"",
+				status:status,
+		  		target:target,
+		  		datatype:"cannot_appeal",
+		  		storeno:number_str,
+		  		cityname:city_name,
+		  		dept:dept,
+		  		channel:channel,
+		  		product:productName,
+		  		minPrice:min_money_manual,
+		  		maxPrice:max_money_manual
+			}
+	    }else if(target==2){
+	    	 abnormalOrderDto = {
+	    			beginDate:begin_end_date[0].trim(),
+		 			endDate:begin_end_date[1].trim(),
+	 				ordersn:ordersn,
+	 				abnortype:"",
+	 				status:status,
+	 		  		target:target,
+	 		  		storeno:storeno,
+	 		  		datatype:"cannot_appeal",
+	 		  		cityname:"",
+	 		  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_manual,
+			  		maxPrice:max_money_manual
+	 			}
+	    }else if(target==3){
+	    	abnormalOrderDto = {
+					beginDate:begin_end_date[0].trim(),
+		 			endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:"",
+					status:status,
+			  		target:target,
+			  		datatype:"cannot_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_manual,
+			  		maxPrice:max_money_manual
+				}
+	    }
+	   
+	  
+	    doManager('dynamicManager','exportAbnormalOrder',[abnormalOrderDto],function(data){
+	          if(data.result){
+	          	   var result= JSON.parse(data.data);
+		           if(result.status=='success'){
+		        	   window.location.href=result.data;
+		           }else{
+		        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+		        	   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+		        	   return;
+		           }
+	          
+	          }else{
+	       	   crm_alert(5,"请稍后重新请求！");
+	          }
+	         $("#process_div").hide();
+	    	 $("#process_div_pic").hide();
+	     });
+  }
+  
+  
+   var isCreatePage=false;
+   function search_manual_abnormalOrder(cur_page){
+  		isCreatePage=false;
+  		search_manual_abnormalOrder1(cur_page);
+  		$("#all_select_cannot_appeal")[0].checked=false;
+   }
+  
+  //查询上
+  var currentPage_manual= 1;
+  var totalPage_manual = 1;
+  function   search_manual_abnormalOrder1(cur_page){
+	  	
+	    var sdate = $("#manual_date").val();
+	    var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		 begin_end_date = sdate.split("-");
+	   	}
+	  	
+  	    $("#process_div").show();
+ 	 	$("#process_div_pic").show();
+ 	 	var number_str = $("#store_id_handOrder").val(); 
+  	    var storeName = $("#store_name_handOrder").val();
+  	    var city = $("#city_id_manualOrder").val();
+  	    var city_name = $("#city_name_manualOrder").val();
+  	    if(number_str==""&&storeName!=""){
+  	    	number_str=-10000;
+  	    }
+  	   
+  	    if(city==""&&city_name!=""){
+  	    	city = "-1000";
+  	    }
+  	    
+	    var type = $("#abnormalType_manual").val();
+	    var ordersn = $("#orderSn_manual").val();
+	    var productName = null;
+	    var dept = $("#dept_manual").val();
+	    var channel = $("#channel_manual").val();
+	    var min_money_manual = $("#min_money_manual").val();
+	    var max_money_manual = $("#max_money_manual").val();
+	    var status = $("#status_manual").val();
+	    var abnormalOrderDto=null;
+	    if(target==0){
+			   abnormalOrderDto = {
+					beginDate:begin_end_date[0].trim(),
+		 			endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:type,
+					status:status,
+			  		target:target,
+			  		datatype:"cannot_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_manual,
+			  		maxPrice:max_money_manual
+				}
+		   }else if(target==1){
+		   abnormalOrderDto = {
+				beginDate:begin_end_date[0].trim(),
+	 			endDate:begin_end_date[1].trim(),
+				ordersn:ordersn,
+				abnortype:type,
+				status:status,
+		  		target:target,
+		  		datatype:"cannot_appeal",
+		  		storeno:number_str,
+		  		cityname:city_name,
+		  		dept:dept,
+		  		channel:channel,
+		  		product:productName,
+		  		minPrice:min_money_manual,
+		  		maxPrice:max_money_manual
+			}
+	    }else if(target==2){
+	    	 abnormalOrderDto = {
+	    			beginDate:begin_end_date[0].trim(),
+		 			endDate:begin_end_date[1].trim(),
+	 				ordersn:ordersn,
+	 				abnortype:type,
+	 				status:status,
+	 		  		target:target,
+	 		  		storeno:storeno,
+	 		  		datatype:"cannot_appeal",
+	 		  		cityname:"",
+	 		  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_manual,
+			  		maxPrice:max_money_manual
+	 			}
+	    }else if(target==3){
+	    	abnormalOrderDto = {
+					beginDate:begin_end_date[0].trim(),
+		 			endDate:begin_end_date[1].trim(),
+					ordersn:ordersn,
+					abnortype:"",
+					status:status,
+			  		target:target,
+			  		datatype:"cannot_appeal",
+			  		storeno:number_str,
+			  		cityname:city_name,
+			  		dept:dept,
+			  		channel:channel,
+			  		product:productName,
+			  		minPrice:min_money_manual,
+			  		maxPrice:max_money_manual
+				}
+	    }
+	   
+	    var pageInfo = new Object();
+	    pageInfo.currentPage = cur_page;
+	    pageInfo.recordsPerPage = manualPageRecordes;
+	    $("#totalRecord_cannot").html("0");
+	    doManager('dynamicManager','queryAbnormalOrder',[abnormalOrderDto,pageInfo],function(data){
+         if(data.result){
+         	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   $("#manual_tbody").find("tr:gt(0)").remove(); 
+	        	   var jData = result.data;
+	        	   if(jData==null||jData.length==0){
+	        		   crm_alert(5,"系统查无此条件的数据");
+	        		   $("#page_manual").createPage({
+	        	 	  	    pageCount:0,
+	        	 	  	    current:0,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	
+	        	 	  	    }
+	        	 	  	});
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	   totalPage_manual = result.total_pages;
+	        	   $("#totalRecord_cannot").html(result.pageinfo.totalRecords);
+	        	   if(!isCreatePage){
+	        		   
+	        		   $("#page_manual").createPage({
+	        	 	  	    pageCount:totalPage_manual,
+	        	 	  	    current:1,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	
+	        	 	  	    	search_manual_abnormalOrder1(p);
+	        	 	  	    }
+	        	 	  	});
+	        		   isCreatePage=true;
+	        	   }
+	        	  
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+	        		   infoStr= "<tr>";
+       			    if(role=="PTYYZXYCDDZ"){//异常订单管理者
+       			    	if(jData[i].status==0||jData[i].status==2){
+	        			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"cannot_appeal_checkbox_"+jData[i].status+"_"+jData[i].id+"\" onclick=\"selectCheckbox(this,2)\" type=\"checkbox\"></td>";
+       			    	}else{
+	        			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"cannot_appeal_checkbox_"+jData[i].status+"_"+jData[i].id+"\" disabled=\"disabled\" type=\"checkbox\"></td>";
+       			    	}
+       		   		}else{
+       			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"></td>";
+       		   		}
+       			       var s="";
+       			       if(jData[i].signedtime!=null){
+       			    		var d=	new Date();
+       			     		d.setTime(jData[i].signedtime);
+       			   		 	s=d.format('yyyy-MM-dd HH:mm:ss')
+       			       }
+       			       var statusStr="";
+       			       if(jData[i].status=='0'){
+       			    	statusStr="<span style='color:red'>未通过</span>";
+       			       }else if(jData[i].status=='3'){
+       			    	statusStr="<span style='color:green'>已通过</span>";
+       			       }
+	        		   infoStr= infoStr
+	        		           +"<td>"+statusStr+"</td>"
+	        			       +"<td>"+jData[i].cityname+"</td>"
+	        			   	   +"<td>"+jData[i].storename+"</td>"
+	        			   	   +"<td>"+(jData[i].eshopname==null?'':jData[i].eshopname)+"</td>"
+	                       	   +"<td>"+jData[i].deptname+"</td>"
+	                       	   +"<td>"+jData[i].channelname+"</td>"
+		                       +"<td>"+jData[i].ordersn+"</td>"
+		                       +"<td>"+jData[i].tradingprice+"</td>"
+		                       +"<td>"+(jData[i].payableprice==null?'':jData[i].payableprice)+"</td>"
+		                       +"<td>"+jData[i].gmv_price+"</td>"
+		                       +"<td>"+jData[i].description+"</td>"
+		                       +"<td>"+s+"</td>"
+		                       +"<td><button type=\"button\" onclick=\"showorderdetail('"+jData[i].ordersn+"')\" style=\"padding:3px 4px;margin:0 5px\" class=\"btn btn-default\">订单详情</button></td>"
+		                       +"</tr>";
+		                       
+		                  $("#manual_title").after(infoStr);     
+	        	   }
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   return;
+	           }
+         
+         }else{
+      	   crm_alert(5,"请稍后重新请求！");
+         }
+        $("#process_div").hide();
+   	    $("#process_div_pic").hide();
+     }); 
+  	   
+  }
+  
+  var source_upload_type="manual_can_appeal";
+  function showUploadWindow(t){
+	  if(t==1){
+		  source_upload_type="manual_can_appeal"
+	  }else if(t==2){
+		  source_upload_type="manual_cannot_appeal"
+	  }
+	  
+	  layer.open({
+		  type: 1,
+   		  title:  ["导入异常订单", 'color:#fff'],
+   		  shadeClose: true,
+   		  shade:[0.1, '#393D49'],
+   		  moveOut:false,
+   		  skin: 'layer-ext-crmskin',
+   		  area: ['400px','100px'],
+   		  offset: ['200px','530px'],
+   		  content:$("#abnormalOrderDiv"),
+   		  success:function(layer,index){
+   			 $("#layui-layer-iframe1").attr("style","width:50px");
+   		  },
+   		  cancel: function(index, layero){ 
+   			 layer.close(index);
+   			}  
+   		});  
+  }
+  
+  function isnull(str) {
+      return str == null || str == "null" || str == "" || str == "undefined" || typeof(str) == "undefined";
+  }
+  
+  function uploadAbnormalOrderExcel(){
+		$('button[name="uploadAbnormalOrder"]').attr("disabled",true);
+        var content = $('input[name="fileorder"]').val();
+       
+        //文件不能为空
+        if (isnull(content)) {
+        	crm_alert(0,"请选择文件");
+            $('button[name="uploadAbnormalOrder"]').attr("disabled",false);
+            return false;
+        }
+        //后缀必须为xls,不支持2007
+        var suffix = content.match(/^(.*)(\.)(.{1,8})$/)[3];
+        if ("xls" != suffix ) {
+        	crm_alert(0,"请上传xls文件");
+            $('button[name="uploadAbnormalOrder"]').attr("disabled",false);
+            return false;
+        }
+        layer.closeAll();
+        var path = getRootPath();
+        var $form_upload = $("#uploadOrderForm");
+        $form_upload.attr("action", path + "/uploadOrderExcel.action?dataType="+source_upload_type);
+        $form_upload.submit();
+        $('button[name="uploadAbnormalOrder"]').attr("disabled",false);
+        $('input[name="fileorder"]').val('');
+        
+        $("#process_div").show();
+	    $("#process_div_pic").show();
+  }
+  
+ 
+  
+  function showUploadResult(info){
+	  $("#process_div").hide();
+      $("#process_div_pic").hide();
+	  $('input[name="fileorder"]').val('');
+	  layer.closeAll();
+	  if(info=="sucess"){
+		  crm_alert(6,"上传成功");
+	  }else{
+		  var errorOrder = "<div style='width:100px'>"+info+"</div>"
+		  crm_alert(5,info);
+// 		  $(".layui-layer-title").attr("move","ok");
+// 		  $(".layui-layer-title").attr("style","cursor:move");
+// 		  $("#errorOrder_detail_div").append(info);
+// 		  layer.open({
+// 			  type: 1,
+// 	   		  title:  ['提示','color:#fff'],
+// 	   		  shadeClose: true,
+// 	   		  shade:[0.1, '#393D49'],
+// 	   		  moveOut:false,
+// 	   		  skin: 'layer-ext-crmskin',
+// 	   		  area: ['730px','290px'],
+// 	   		  offset: ['100px','400px'],
+// 	   		  content:$("#errorOrder_detail_div"),
+// 	   		  success:function(layer,index){
+	   			
+// 	   		  },
+// 	   		  cancel: function(index, layero){ 
+// 	   			 layer.close(index);
+// 	   			}  
+// 	   		}); 
+	  }
+	  
+  }
+  
+  
+  function showorderdetail (order_sn){
+// 	  doManager('dynamicManager','checkOrderExist',[order_sn],function(data){
+//           if(data.result){
+//           	   var result= JSON.parse(data.data);
+//           	   alert(result)
+// 	           if(result=='Y'){
+	        	 
+// 	           }else{
+// 	        	   crm_alert(0,"该订单号不存在!");
+// 	           }
+//           }
+//      });
+	  
+	  $("#process_div").show();
+  	  $("#process_div_pic").show();
+	  var url = "order_detail_alert.html?order_sn="+encode64(order_sn);
+		 //window.location.href=url;
+		 layer.open({
+		  type: 2,
+  		  title:  ['订单信息', 'color:#fff'],
+  		  shadeClose: true,
+  		  shade:[0.1, '#393D49'],
+  		  moveOut:false,
+  		  move:false, 
+  		  skin: 'layer-ext-crmskin',
+  		  area: ['90%', '88%'],
+  		  offset: ['2px','65px'],
+  		  content: url,
+  		  success:function(layer,index){
+  			  $("#process_div").hide();
+  		      $("#process_div_pic").hide();
+  			 //$("#layui-layer-iframe1").attr("style","height:200px");
+  		  },
+  		  cancel: function(index, layero){ 
+  			 layer.close(index);
+  			}  
+  		});  
+	    
+  }
+  
+  
+  
+  function showTaskDetail(sn){
+	  $("#process_div").show();
+  	  $("#process_div_pic").show();
+	  doManager('FlowDetailManager','queryAllFlowDetailByOrderSN',[sn],function(data){
+		   if(data.result){
+			   $("#taskDetailDiv").empty();
+		   	  var result= JSON.parse(data.data);
+		   	  var flowStr="";
+		   	  if(result!=null){
+		   	   	  for(var i=0;i<result.length;i++){
+				   		flowStr = "<div class=\"clearfix\">"+
+				        	"<div class=\"pull-left audit_margin\"><strong>"+result[i].create_user+"</strong></div>"+
+				        	"<div class=\"pull-left\"><span class=\"margin-r-5\">"+result[i].update_user+"</span>"+result[i].approv_ret+"</div>"+
+				        	"<div class=\"col-lg-12 no-padding\">"+result[i].approv_content+"</div>"+
+				      		"</div>";
+				   		  $("#taskDetailDiv").append(flowStr);
+				   	  }
+				   	  
+				   	layer.open({
+						  type: 1,
+				  		  title:  ['审批过程', 'color:#fff'],
+				  		  shadeClose: true,
+				  		  shade:[0.1, '#393D49'],
+				  		  moveOut:false,
+				  		  move:false, 
+				  		  skin: 'layer-ext-crmskin',
+				  		  area: ['45%', '69%'],
+				  		  offset: ['10%','30%'],
+				  		  content: $("#taskDetailDiv"),
+				  		  success:function(layer,index){
+				  			  $("#process_div").hide();
+				  		  	  $("#process_div_pic").hide();
+				  			  $("#layui-layer-iframe1").attr("style","height:200px");
+				  		  },
+				  		  cancel: function(index, layero){ 
+				  			 layer.close(index);
+				  			}  
+				  		}); 
+		   	  }else{
+		   		 
+		   		 $("#process_div").hide();
+	  		  	 $("#process_div_pic").hide();
+	  		  	 crm_alert(5,"没有审批过程！");
+		   	  }
+		
+		   }
+	  });
+  }
+  
+  function  gotoAppeal(ordersn,status,datatype){
+	  
+	  if(datatype=="auto"){
+		  crm_alert(0,"该订单不可申诉！");
+	  }else{
+		  var url = "appeal_detail.html?order_sn="+ encode64(ordersn)+"&storeno="+encode64(storeno)+"&status="+encode64(status)+"&storename="+encode64(storeName);
+		  window.open(url,"order_"+ordersn);
+	  }
+	  
+		  
+  }
+  //从订单库下载异常订单
+  function downAbnormalOrders(){
+	  var url = "abnormalOrderBaseInfo.html?e="+encode64(employeeId);
+	  window.open(url,"baseAbnormalOrder");
+  }
+ //门店维护
+  function eshopPurchaseManage(){
+	  var url = "eshopPurchaseBaseInfo.html?e="+encode64(employeeId);
+	  window.open(url,"eshopPurchase");
+  }
+  
+  
+  function resetSerachParam(t){
+	  if(t==1){//可申诉
+		  document.getElementById("can_appeal_form").reset(); 
+	  	  if(target==0){//总部
+	  		$("#store_id_autoOrder").val("");
+	  		$("#store_name_autoOrder").empty();
+	    	$("#store_name-search_autoOrder").empty();
+    		
+	    	$("#city_id_autoOrder").val("");
+    		$("#city_name-search_autoOrder").empty();
+    		$("#city_name_autoOrder").val("");
+	    	
+	  	  }else if(target==1){//城市级别
+	    	
+	  		$("#store_id_autoOrder").val("");
+	    	$("#store_name-search_autoOrder").empty();
+	    	if(role=="PTYYZXYCDDZ"){
+	    		$("#city_id_autoOrder").val("");
+	    		$("#city_name-search_autoOrder").empty();
+	    	}else{
+	    		$("#city_name_autoOrder").val(cityname);
+	    	}
+	  		  
+	  	  }else if(target==2){//店长
+	  			$("#store_name_autoOrder").val(storeName);
+	  	  }else if(target==3){
+	  		  $("#dept_auto").val(deptname);
+	  	  }
+	  	  
+	  }else if(t==2){//不可申诉
+		  document.getElementById("cannot_appeal_form").reset(); 
+	  	  if(target==0){
+	  		$("#store_id_handOrder").val("");
+	  		$("#store_name_handOrder").val("");
+	  	    $("#store_name-search_handOrder").empty();
+	    	
+    		$("#city_id_manualOrder").val("");
+    		$("#city_name-search_manualOrder").empty();
+    		$("#city_name_manualOrder").val("");
+	    
+	  	  }else if(target==1){//城市级别
+	    	
+
+		    	$("#store_id_handOrder").val("");
+		  	    $("#store_name-search_handOrder").empty();
+		    	if(role=="PTYYZXYCDDZ"){
+		    		$("#city_id_manualOrder").val("");
+		    		$("#city_name-search_manualOrder").empty();
+		    	}else{
+		    		$("#city_name_manualOrder").val(cityname);
+		    	}
+	  		  
+	  	  }else if(target==2){//店长
+	  			$("#store_name_handOrder").val(storeName);
+	  	  }else if(target==3){
+	  		  $("#dept_manual").val(deptname);
+	  	  }
+		
+	  }
+  }
+  
+  var autoPageRecordes=10;
+  var manualPageRecordes=10;
+  //切换每页显示的数据量
+ function chnagePageRecords(t){
+	 
+	 if(t==1){
+		
+		 autoPageRecordes  = $("#pageRecords_auto").val();
+		 search_auto_abnormalOrder(1);
+	 }else if(t==2){
+		 $("#page_manual").empty();
+		 manualPageRecordes  = $("#pageRecords_manual").val();
+		 search_manual_abnormalOrder(1);
+	 }
+ }
+</script>
+</body>
+<div id="abnormalOrderDiv" style="width:320px;height:40px;display:none">
+ <form action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadOrderForm" target="t_f_a_o" style="width:110%; float:left;">
+	<table style="margin:10px 10px 10px 60px">
+		<tr>
+			<td>
+			<input type="file" isuploadtable="true" name="fileorder" class="form-control" style="height:35px;">
+		   </td>
+		   <td>
+		    <span class="input-group-btn" style="width:10%; display:inline-block;">
+		         <button type="button" class="btn btn-default" onclick="uploadAbnormalOrderExcel();" name="uploadAbnormalOrder">
+		             <img src="../scripts/images/upload_to_cloud.png" alt="" style="height: 20px"/>
+		         </button>
+		     </span>
+			</td>
+		</tr>
+	</table>
+	 <iframe name="t_f_a_o" id="t_f_a_o" style="display: none"></iframe>
+  	</form>
+</div>
+
+ <div class="audit_process" id="taskDetailDiv" style="display:none">
+ </div>
+ 
+ 
+ <div id="errorOrder_detail_div" style="height:247px;display:none">
+  
+</div>
+</html>

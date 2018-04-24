@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ferry push</title>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../scripts/css/datatables.css" rel="stylesheet">
+<script type="text/javascript" src="../scripts/bidLibjs.js"></script>
+<script type="text/javascript">
+//根据用户获取门店的id
+var loginstore_id="";
+var nowObj="";
+var flage=true;
+var days;
+var str_month=getUrlParamByKey("str_month");
+//定义图标数据
+//获取当前日期前六个月
+function getDateList(nowObj) {
+	var list = [];
+	var currDate = new Date();
+	var currYear = currDate.getFullYear();
+	var currMonth = currDate.getMonth()+1;
+	var preYear = currYear-1;
+	var index=0;
+	if( currMonth-3 < 1 ) {
+			for(var i=currMonth-6; i<=0; i++) {
+				var _month = 12+i;
+				list[index++]=preYear+"-"+(_month>=10?_month:"0"+_month);
+			}
+			for( i=1; i<=currMonth; i++ ){
+				list[index++]=currYear+"-"+(i>=10?i:"0"+i);
+			}
+	} else {
+			for( i=currMonth-3; i<=currMonth; i++ ) {
+				list[index++]=currYear+"-"+(i>=10?i:"0"+i);
+			}
+	}
+	for(var i=0;i<list.length;i++){
+			$("#str_month").append("<option value='"+list[i]+"'>"+list[i]+"</option>");
+	}
+	return list;
+}
+
+	$(function(){
+		//nowObj="2017-01";
+		 var date = new Date();
+		 var year=date.getFullYear();
+		 var month = date.getMonth()+1;
+		 var yearmonth="";
+		  if(month==0){
+			  nowObj=date.getFullYear()-1+"-"+12;
+			  yearmonth=date.getFullYear()-1+"年"+12+"月";
+		  }else{
+			  if (month >= 1 && month <= 9) {
+			        month = "0" + month;
+			    }
+			  nowObj=date.getFullYear() + "-" + month;
+			  yearmonth=date.getFullYear()+"年"+month+"月";
+		  }
+		  $("#yearmonth").text(yearmonth);
+			getDateList(nowObj);
+		//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var current_uesr = JSON.parse(data.data);
+							loginstore_id=current_uesr.store_id;
+						}
+		},false);
+		//获取门店名称
+		  doManager("StoreManager", "findStore",[loginstore_id],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var store = JSON.parse(data.data);
+							$("#store_name").text(store.name);
+						}
+			},false); 
+		if(str_month!=null){
+			nowObj=str_month;
+			setDate(nowObj);
+		}else{
+			setDate(nowObj);
+		}
+		//根据门店id和当前填报的月份去获取是否提交本月的摆渡车数据
+		doManager("ApprovalManager", "findApproval",[loginstore_id,1,nowObj],
+				function(data, textStatus, XMLHttpRequest){
+			if (data.result){
+				if(data.data!="null"){
+					var jsonApp = $.fromJSON(data.data);
+					getData();
+					if(jsonApp.stateType==1){
+						$("#stadus").text("状态：已通过");
+					}else if(jsonApp.stateType==0){
+						$("#stadus").text("状态：待审批");
+					}else if(jsonApp.stateType==3){
+						$("#stadus").text("状态：保存"); 
+					}
+					if(jsonApp.stateType==2){
+						$("#stadus").text("状态：被驳回");
+						$('input[type="number"]').attr("readonly",false);
+						$('.addferry').find('td:eq(4)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(6)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(8)').find('input').attr("readonly",true);
+						$$.showMessage("系统信息", "审核未通过!"+jsonApp.remark);
+					}else if(jsonApp.stateType==1||jsonApp.stateType==0){
+						$(":button").hide();
+					}else if(jsonApp.stateType==3){
+						$('input[type="number"]').attr("readonly",false);
+						$('.addferry').find('td:eq(4)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(6)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(8)').find('input').attr("readonly",true);
+					}
+				}else{ 
+					getUserData();
+				}
+			}
+		},false);
+		
+	})
+
+	//获取提交的数据
+	function getData(){
+	doManager("FerryPushManager", "getFerryPushList",[loginstore_id,nowObj],
+			function(data, textStatus, XMLHttpRequest){
+		var jsonData = $.fromJSON(data.data);
+		var content="";
+		for(var key in jsonData){
+			var obj=jsonData[key];
+			content+="<tr class=\"addferry\">"+
+        	"<td><input type=\"text\" readonly=\"readonly\" name=\"employee_no\" value='"+obj.employeeNo+"'/></td>"+
+            "<td><input type=\"text\" readonly=\"readonly\" name=\"user_name\" value='"+obj.userName+"'/></td>"+
+            "<td><input type=\"number\" readonly=\"readonly\" onkeyup=\"checkTotalShift(this)\" name=\"morning_shift\" value='"+obj.morningShift+"'/></td>"+
+            "<td><input type=\"number\" readonly=\"readonly\" onkeyup=\"checkTotalShift1(this)\" name=\"night_shift\" value='"+obj.nightShift+"'/></td>"+
+            "<td><input type=\"number\" readonly=\"readonly\" style=\"background:#E8E8E8;\" name=\"total_shift\" value='"+obj.totalShift+"'/></td>"+
+            "<td><input type=\"number\" readonly=\"readonly\" onkeyup=\"checkferryHouse(this)\" name=\"ferry_house\" value='"+obj.ferryHouse+"'/></td>"+
+            "<td><input type=\"number\" readonly=\"readonly\" style=\"background:#E8E8E8;\" name=\"total_house\" value='"+obj.totalHouse+"'/></td>"+
+            "<td><input type=\"number\" readonly=\"readonly\" onkeyup=\"checkhourly_order_number(this)\" name=\"hourly_order_number\" value='"+obj.hourlyOrderNumber+"'/></td>"+
+            "<td><input type=\"number\" readonly=\"readonly\" style=\"background:#E8E8E8;\" name=\"total_singular\" value='"+obj.totalSingular+"'/></td>"+
+        "</tr>";
+		}
+		$("#titalTh").after(content);
+	},false)
+}
+	
+	//设置当前时间
+	function setDate(kk){
+		 $("#str_month option").each(function(){
+         	var val=$(this).val();
+         	if(val==kk){
+        		$(this).attr('selected', 'selected');
+         	}
+		 })
+	}
+	
+	
+	
+//如果没有数据调用此方法
+function getUserData(){
+	//根据当前的店长获取所有的国安侠
+	 doManager("UserManager", "getUserlistBystore_id",[loginstore_id],
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					if(data.data=="null"){
+						//$$.showMessage("系统信息", "请发起摆渡车!");
+					}else{
+						var jsonData = $.fromJSON(data.data);
+						var content="";
+						for(var key in jsonData){
+							var obj=jsonData[key];
+							content+="<tr class=\"addferry\">"+
+				        	"<td><input type=\"text\" readonly=\"readonly\" name=\"employee_no\" value='"+obj.employeeId+"'/></td>"+
+				            "<td><input type=\"text\" readonly=\"readonly\" name=\"user_name\" value='"+obj.name+"'/></td>"+
+				            "<td><input type=\"number\"  onkeyup=\"checkTotalShift(this)\" name=\"morning_shift\"></td>"+
+				            "<td><input type=\"number\"  onkeyup=\"checkTotalShift1(this)\" name=\"night_shift\"></td>"+
+				            "<td><input type=\"text\"  readonly=\"readonly\" style=\"background:#E8E8E8;\" name=\"total_shift\"></td>"+
+				            "<td><input type=\"number\" value=\"3\" onkeyup=\"checkferryHouse(this)\" name=\"ferry_house\"></td>"+
+				            "<td><input type=\"text\" readonly=\"readonly\" style=\"background:#E8E8E8;\" name=\"total_house\"></td>"+
+				            "<td><input type=\"number\" value=\"5\" onkeyup=\"checkhourly_order_number(this)\" name=\"hourly_order_number\"></td>"+
+				            "<td><input type=\"text\" readonly=\"readonly\" style=\"background:#E8E8E8;\" name=\"total_singular\"></td>"+
+				        "</tr>";
+						}
+						$("#titalTh").after(content);
+					}
+				}
+},false);
+}
+	//保存数据
+	function doSave(status_type){
+	var arr = Array(); //存所有数据
+	$(".addferry").each(function(){
+		var obj = {};
+		$("input",this).each(function(i,value){ //便利行内的input select的值
+			if($(this).attr('alt')!=""){
+				obj[$(this).attr('name')] = $(this).attr('alt');
+			}else{
+				obj[$(this).attr('name')] = $(this).val();
+			}
+			
+        });
+		arr.push(obj); 
+	})
+	
+	doManager("FerryPushManager", "saveFerryPushList",[arr,nowObj,loginstore_id,status_type],
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					if(status_type==3){
+						alert("保存成功!");
+					}else{
+						alert("提交成功!");
+					}
+					
+					window.location.href="ferry_push.html?store_id="+loginstore_id+"&str_month="+nowObj;
+				}else{
+					$$.showMessage("系统信息", "保存失败!");
+				}
+	},false);
+	}
+	
+	function commit(status_type){
+		$$.showConfirm('提示','提交后不可修改，确认提交到摆渡车管理员？',function(){
+			datecheck(status_type);
+        });
+	}
+	
+	function commitup(status_type){
+			datecheck(status_type);
+       
+	}
+	
+	function datecheck(status_type){
+		getDays(nowObj);
+		flage=true;
+		flagemode=false;
+		var arr = Array(); //存所有数据
+		$(".addferry").each(function(){
+			var obj = {};
+			$("input",this).each(function(i,value){ //便利行内的input select的值
+				if($(this).attr('alt')!=""){
+					obj[$(this).attr('name')] = $(this).attr('alt');
+				}else{
+					obj[$(this).attr('name')] = $(this).val();
+				}
+	        });
+			arr.push(obj); 
+		})
+		for(var i in arr){
+			var obj=arr[i];
+			verifyData(obj);
+			if(!flage){
+				break;
+			}
+		}
+		if(!flagemode){
+			if(flage){
+				flage=false;
+				alert("请填报工时!");
+				return;
+			}
+			
+		}
+		if(flage){
+			doSave(status_type);
+		}
+	}
+	function verifyData(obj){
+		if(obj.morning_shift==""&&obj.night_shift==""){
+			 if(obj.total_singular!=""){
+				alert("请完善数据!");
+				flage=false;
+				return ;
+			}
+		}else{
+			var c=parseInt(verData(obj.morning_shift))+parseInt(verData(obj.night_shift));
+			if(c!=obj.total_shift){
+				alert("请核对数据!");
+				flage=false;
+				return;
+			}
+			if(obj.total_shift>days){
+				alert("共计班次不能大于当月的天数!");
+				flage=false;
+				return;
+			}
+			if(obj.ferry_house>24){
+				alert("摆渡车小时数不能大于24小时!");
+				flage=false;
+				return;
+			}
+			var b=verData(obj.total_shift)*verData(obj.ferry_house);
+			if(b!=obj.total_house){
+				alert("请核对数据!");
+				flage=false;
+				return;
+			}
+			var c=verData(obj.total_house)*verData(obj.hourly_order_number);
+			if(c!=obj.total_singular){
+				alert("请核对数据!");
+				flage=false;
+				return;
+			}
+			if(obj.total_singular!=""){
+				flagemode=true;
+			}
+			
+			
+		}	
+	}
+	
+	function verData(bb){
+		if(bb==null||bb==""){
+			return 0;
+		}
+		return bb;
+	}
+	//计算总班次
+	function checkTotalShift(v){
+		v.value=v.value.replace(/\D/g,'').substring(0,3);
+		var vv=$(v).parent().next().find('input');//晚班
+		var objtotal = $(vv).parent().next().find('input');//共计班次
+		objtotal.val(parseInt(verData(v.value))+parseInt(verData(vv.val())));
+		var cc=$(v).parent().parent().find('input').eq(5);//摆渡车小时数
+		var tothouse=$(v).parent().parent().find('input').eq(6);//共计小时
+		tothouse.val((parseInt(verData(v.value))+parseInt(verData(vv.val())))*parseInt(verData(cc.val())));
+		var ee=$(v).parent().parent().find('input').eq(7);//单量每小时单量
+		var totalord=$(v).parent().parent().find('input').eq(8);//共计单量
+		totalord.val((parseInt(verData(v.value))+parseInt(verData(vv.val())))*parseInt(verData(cc.val()))*parseInt(verData(ee.val())));
+		if(v.value==""&&vv.val()==""){
+			objtotal.val("");
+			tothouse.val("");
+			totalord.val("");
+		}
+	}
+	//当晚班发生改变调用此方法
+	function checkTotalShift1(v){
+		v.value=v.value.replace(/\D/g,'').substring(0,3);
+		var vv=$(v).parent().parent().find('input').eq(2);//早班
+		var objtotal = $(v).parent().next().find('input');//共计班次
+		objtotal.val(parseInt(verData(v.value))+parseInt(verData(vv.val())));
+		var cc=$(v).parent().parent().find('input').eq(5);//摆渡车小时数
+		var tothouse=$(v).parent().parent().find('input').eq(6);//共计小时
+		tothouse.val((parseInt(verData(v.value))+parseInt(verData(vv.val())))*parseInt(verData(cc.val())));
+		var ee=$(v).parent().parent().find('input').eq(7);//单量每小时单量
+		var totalord=$(v).parent().parent().find('input').eq(8);//共计单量
+		totalord.val((parseInt(verData(v.value))+parseInt(verData(vv.val())))*parseInt(verData(cc.val()))*parseInt(verData(ee.val())));
+		if(v.value==""&&vv.val()==""){
+			objtotal.val("");
+			tothouse.val("");
+			totalord.val("");
+		}
+	}
+	//当百度车小时数发生改变调用此方法
+	function checkferryHouse(v){
+		v.value=v.value.replace(/\D/g,'').substring(0,3);
+		var vv=$(v).parent().parent().find('input').eq(4);//共计班次
+		var objtotal = $(v).parent().next().find('input');//共计小时
+		objtotal.val(parseInt(verData(v.value))*parseInt(verData(vv.val())));
+		var ee=$(v).parent().parent().find('input').eq(7);//单量每小时单量
+		var totalord=$(v).parent().parent().find('input').eq(8);//共计单量
+		totalord.val(parseInt(verData(v.value))*parseInt(verData(vv.val()))*parseInt(verData(ee.val())));
+	}
+	
+	//当百度车单量每小时单量改变调用此方法
+	function checkhourly_order_number(v){
+		v.value=v.value.replace(/\D/g,'').substring(0,3);
+		var vv=$(v).parent().parent().find('input').eq(6);
+		var objtotal = $(v).parent().next().find('input');
+		objtotal.val(parseInt(verData(v.value))*parseInt(verData(vv.val())));
+	}
+	//获取每个月有多少天
+	function getDays(month){
+		var mm=month.split("-");
+		var year=mm[0];
+		var mouth=mm[1];
+		if(mouth.substring(0,1)==0){
+			mouth=mouth.substring(1,mouth.length);
+		}else{
+			mouth=mouth;
+		}
+		
+		
+		if(mouth == 2){
+	        days= year % 4 == 0 ? 29 : 28;
+	    }
+	    else if(mouth == 1 || mouth == 3 || mouth == 5 || mouth == 7 || mouth == 8 || mouth == 10 || mouth == 12){
+	        //月份为：1,3,5,7,8,10,12 时，为大月.则天数为31；
+	        days= 31;
+	    }
+	    else{
+	        //其他月份，天数为：30.
+	        days= 30;
+	    }
+		}
+	function onchange1(){
+		var gg=$('#str_month option:selected').val();
+		$(".addferry").remove();
+		$(":button").show();
+		nowObj=gg;
+		//根据门店id和当前填报的月份去获取是否提交本月的摆渡车数据
+		doManager("ApprovalManager", "findApproval",[loginstore_id,1,nowObj],
+				function(data, textStatus, XMLHttpRequest){
+			if (data.result){
+				$("#stadus").text("");
+				if(data.data!="null"){
+					var jsonApp = $.fromJSON(data.data);
+					getData();
+					if(jsonApp.stateType==1){
+						$("#stadus").text("状态：已通过");
+					}else if(jsonApp.stateType==0){
+						$("#stadus").text("状态：审核中");
+					}else if(jsonApp.stateType==3){
+						$("#stadus").text("状态：未提交");
+					}
+					if(jsonApp.stateType==2){
+						$("#stadus").text("状态：被驳回");
+						$('input[type="number"]').attr("readonly",false);
+						$('.addferry').find('td:eq(4)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(6)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(8)').find('input').attr("readonly",true);
+						$$.showMessage("系统信息", "审核未通过!"+jsonApp.remark);
+					}else if(jsonApp.stateType==1||jsonApp.stateType==0){
+						$(":button").hide();
+					}else if(jsonApp.stateType==3){
+						$('input[type="number"]').attr("readonly",false);
+						$('.addferry').find('td:eq(4)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(6)').find('input').attr("readonly",true);
+						$('.addferry').find('td:eq(8)').find('input').attr("readonly",true);
+					}
+				}else{ 
+					getUserData();
+				}
+			}
+		},false);
+	}
+	
+	
+	
+	
+</script>
+    <style>
+        *{margin:0; padding:0;}
+        table{border-collapse:collapse; font-size:12px; text-align:center;margin:10px 1px 0 1px;}
+        table td{height:30px; min-height:30px;}
+        table th{height:40px; min-height:40px;}
+        tbody td,tbody th{border:1px solid #000; width:10%;}
+        table input{width:100%; border:0; height:30px; text-align:center; outline:none; position:relative;}
+        table input::-webkit-outer-spin-button,table input::-webkit-inner-spin-button{-webkit-appearance: none !important;  margin: 0; }
+        table input[type="number"]{-moz-appearance:textfield;}
+        th{text-align: center;}
+        .but {
+        float: right;
+        text-align: center;
+		}
+		.but input {
+		background-color: transparent;
+		border: 1px solid #fff;
+		border-radius: 3px;
+		padding: 0 13px;
+		margin-right: 30px;}
+     </style>
+</head>
+<body>
+<div class="panel panel-primary">
+		<div class="panel-heading">摆渡车跟车人员工时统计表<label id="pro_status"></label>
+        	<span class="but">
+        		<input id="btnComm" name="" type="button" onclick="commitup(3);" value="保存"/>
+                <input id="btnSave" name="" type="button" onclick="commit(0);" value="提交"/>
+            </span>
+        </div>
+        <div class="panel-body" style="padding: 0 10px 0 10px;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <thead>
+    <tr style="font-size:16px;">
+        <th colspan="6" style="text-align: left;" align="left">填报单位:<span id="store_name"></span></th>
+        <th><span id="stadus"  style="color:#8600ff;font-size: 14px;"></span></th>
+        <th colspan="2" style="clear: both; font-size: 14px; text-align: right; ">月份:     <select  name="str_month" id="str_month" onchange="onchange1()"></select></th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr id="titalTh">
+        	<th>工号</th>
+            <th>姓名</th>
+            <th>早班</th>
+            <th>晚班</th>
+            <th>共计班次</th>
+            <th>摆渡车小时数</th>
+            <th>共计小时</th>
+            <th>摆渡车单量<br/>每小时单量</th>
+            <th>共计单数</th>
+        </tr>
+    </tbody>
+</table>
+        </div>
+        <div class="panel-footer">
+            <div class="prompt">
+                <h4>填报要求:</h4>
+		<p>1.共计班次=早班+晚班;共计班次不能超过每个月的总天数。</p>
+		<p>2.共计小时=共计班次*摆渡车小时数。</p>
+		<p>3.共计单数=共计小时*摆渡车单量每小时单量。</p>
+            </div>
+        </div>
+	</div>
+</body>
+</html>

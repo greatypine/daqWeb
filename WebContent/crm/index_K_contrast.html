@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>营业额对比</title>
+   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+	   folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+  html,body,.skin-blue .wrapper{background-color: #f1f1f1; min-height: 100%;}
+  p{margin: 0;}
+  .content-wrapper{background-color: #fff;}
+  /*tab切换*/
+  .nav-tabs{background-color: #f55a44; padding: 10px 0 0 20px;}
+  .nav-tabs > li{ margin: 0; background-color: rgba(0,0,0,0.5); width: 60px; height: 26px; line-height: 26px; text-align: center; margin-right: 5px; border-radius: 5px; cursor: pointer;}
+  .nav-tabs > li.active{background-color: #fff;}
+  .nav-tabs > li > a{color: rgba(255,255,255,1); padding: 0; display: block; width: 100%; height: 100%;line-height: 26px;}
+  .nav-tabs > li > a:hover{border-color: transparent; color: #fff;}
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{ background-color: transparent; border: 0; color: #f55a44;}
+  /*tab切换 end*/
+  .zbsearch{font-size: 12px;}
+  .skin-blue .sidebar-form{margin: 0 0 10px 0;}
+  .select2-results__options::-webkit-scrollbar{width: 8px; background-color: #fff;}
+  .select2-results__options::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+  .select2-results__options::-webkit-scrollbar-track{background-color: #fff;}
+  .has-error .select2-selection--single{border-color: #dd4b39; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
+  .has-error button{background-color: #dd4b39; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
+  .has-warning .select2-selection--single{border-color: #f39c12; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
+  .has-warning button{background-color: #f39c12; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
+  .sidebar{padding-top: 20px;}
+  .sidebar p{line-height: 50px; color: #666;}
+  .sidebar p span{border: 1px dashed #2b2b2b; position: relative; padding: 5px 15px;}
+  .sidebar p i{margin-top: 8px; position: absolute; top:-15px; right: -5px; color: #2b2b2b;}
+  #process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+  .auto{max-height:200px; overflow-y:scroll;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+		<div class="logo_img pull-left">
+			<img src="dist/img/logo.png" height="30">
+			<img src="dist/img/title.png" height="20">
+		</div>
+		<div class="pull-left">
+			<div class="logo-lg">
+				<ul class="no-margin">
+					<li class="current"><em>营业额对比</em></li>
+				</ul>
+			</div>
+		</div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	  <!-- Main content -->
+	  <section style="margin-top: 10px;">
+	  <div class="clearfix">
+        <div class="col-sm-2 col-xs-12">
+          <div class="zbsearch clearfix">
+              <form name="lineandstation" class="clearfix">
+                <div class="col-sm-6 col-xs-6 has-error form-group" style="padding: 0 5px 0 0;">
+                  <select class="form-control" id="deptSelect">
+                  </select>
+                </div>
+                <div class="col-sm-6 col-xs-6 has-error no-padding form-group" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
+                  <select class="form-control" id="channelSelect">
+                  </select>
+                </div>
+                <div class="col-sm-6 col-xs-6 has-warning form-group" style="padding: 0 5px 0 0;">
+                  <select class="form-control" id="citySelect">
+                  </select>
+                </div>
+                <div class="col-sm-6 col-xs-6 has-warning no-padding form-group no-margin" style="box-shadow: 0 0 2px
+                rgba(0,0,0,0.4);">
+                  <input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+                  <input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" />
+                  <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+                  </div>
+                </div>
+                <div class="col-sm-12 col-xs-12 text-center no-padding has-error">
+		          <button type="button" class="btn btn-block btn-error btn-sm" id="search-btn-contrast" style="margin: 10px auto 0 auto; font-size: 14px;">加入对比</button>
+		        </div>
+		        <div class="col-sm-3 col-xs-3 no-padding" style="margin: 10px auto 0 auto;">
+		        	<input type="text" style="display:block;background-color: #fff;" class="form-control" placeholder="条件1" readonly="readonly"/>
+		        	<input type="text" style="display:block;background-color: #2aff00;" class="form-control" placeholder="条件2" readonly="readonly"/>
+		        	<input type="text" style="display:block;background-color: #00eaff;" class="form-control" placeholder="条件3" readonly="readonly"/>
+	            </div>
+                <div class="col-sm-9 col-xs-9 no-padding form-group" style="margin: 10px auto 0 auto;">
+                  <input type="text" style="display:block;background-color: #fff;" class="form-control" placeholder="条件标签1" readonly="readonly" id="label_manual_first"/>
+                  <input type="text" style="display:block;background-color: #2aff00;" class="form-control" placeholder="条件标签2" readonly="readonly" id="label_manual_second"/>
+                  <input type="text" style="display:block;background-color: #00eaff;" class="form-control" placeholder="条件标签3" readonly="readonly" id="label_manual_third"/>
+	            </div>
+	            <div class="col-sm-12 col-xs-12 no-padding form-group" style="margin: 10px auto 0 auto;">
+<!-- 	              <p><span>某某事业群  某某频道<i class="fa fa-remove"></i></span></p> -->
+				  <button type="button" class="btn btn-block btn-warning btn-sm pull-left" id="reset" style="width: 80px; margin: 10px auto 0 auto; font-size: 14px;">清除条件</button>
+	              <button type="button" class="btn btn-block btn-warning btn-sm pull-right" id="contrast" style="width: 80px; margin: 10px auto 0 auto; font-size: 14px;">开始对比</button>
+	            </div>
+              </form>
+            </div>
+        </div>
+        <div class="col-sm-10 col-xs-12">
+          <div class="nav_l" id="nav_l">
+            <!-- Tabs within a box -->
+            <ul class="nav nav-tabs no-border">
+<!--               <li class="active"><a href="#revenue-chart" data-toggle="tab">实时</a></li> -->
+              <li class="active"><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">分时</a></li>
+              <li><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
+              <li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li>
+              <li><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li>
+            </ul>
+            <div class="tab-content no-padding" id="tab-content">
+              <!-- Morris chart - Sales -->
+<!--               <div class="chart tab-pane active" id="revenue-chart"> -->
+<!--                 <div id="main1" style="height: 300px;"></div> -->
+<!--               </div> -->
+              <div class="chart tab-pane active" id="sales-chart">
+                <div id="main4" style="width: 100%; height: 300px;"></div>
+              </div>
+              <div class="chart tab-pane" id="day-chart">
+                <div id="main5" style="width: 100%; height: 300px;"></div>
+              </div>
+              <div class="chart tab-pane" id="week-chart">
+                <div id="main7" style="width: 100%; height: 300px;"></div>
+              </div>
+              <div class="chart tab-pane" id="month-chart">
+                <div id="main6" style="width: 100%; height: 300px;"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        </div>
+	  </section>
+  </div>
+  <!-- /.content-wrapper -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<!-- 总部首页 script -->
+<!-- <script src="dist/js/headquarters/index_K.js"></script> -->
+<script type="text/javascript">
+  $(function(){
+	//Initialize Select2 Elements
+	$(".select2").select2();
+  });
+
+  autodivheight();
+  function autodivheight(){ //函数：获取尺寸
+	//获取浏览器窗口高度
+	var winHeight=0;
+	if (window.innerHeight)
+	  winHeight = window.innerHeight;
+	else if ((document.body) && (document.body.clientHeight))
+	  winHeight = document.body.clientHeight;
+	//通过深入Document内部对body进行检测，获取浏览器窗口高度
+	if (document.documentElement && document.documentElement.clientHeight)
+	  winHeight = document.documentElement.clientHeight;
+    if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+      //DIV高度为浏览器窗口的高度
+//       document.getElementById("main1").style.height= 300  +"px";
+      document.getElementById("main4").style.height= 300  +"px";
+      document.getElementById("main5").style.height= 300  +"px";
+      document.getElementById("main6").style.height= 300  +"px";
+      document.getElementById("main7").style.height= 300  +"px";
+    } else {
+      //DIV高度为浏览器窗口的高度
+//       document.getElementById("main1").style.height= winHeight - 130  +"px";
+      document.getElementById("main4").style.height= winHeight - 130  +"px";
+      document.getElementById("main5").style.height= winHeight - 130  +"px";
+      document.getElementById("main6").style.height= winHeight - 130  +"px";
+      document.getElementById("main7").style.height= winHeight - 130  +"px";
+    }
+  }
+  window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+</script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script>
+var storeNo = decode64(getUrlParamByKey("so"));//门店no
+var target = decode64(getUrlParamByKey("t"));//执行人级别 
+var storeName=decode64(getUrlParamByKey("sn"));//门店名称
+var cityname = decode64(getUrlParamByKey("cn"));//城市名称
+var nameStr1=decode64(getUrlParamByKey("nameStr1"));
+var nameStr2=decode64(getUrlParamByKey("nameStr2"));
+var nameStr3=decode64(getUrlParamByKey("nameStr3"));
+
+//   var myChart1 = echarts.init(document.getElementById('main4'));
+
+  // K线图
+  function randomData() {
+      now = new Date(+now + 3000);
+      value = value + Math.random() * 21 - 10;
+      return {
+          name: now.toString(),
+          value: [
+              now,
+              Math.round(value)
+          ]
+      }
+  }
+
+  var data = [];
+  var now = new Date();
+  var value = Math.random() * 1000;//生成一个随机的数值
+  for (var i = 0; i < 40; i++) {
+      data.push(randomData());//循环执行randomData,并将结果放入data数组
+  }
+  var option1 = {
+      backgroundColor: '#f55a44',
+
+      tooltip: {
+          trigger: 'axis',
+          formatter: function (params) {
+              params = params[0];
+              var date = new Date(params.name);
+              return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() + ' : ' + params.value[1];
+          },
+          axisPointer: {
+              animation: false
+          }
+      },
+      legend: {
+          y: '10%',
+          data: ['GMV', ]
+      },
+      grid: {
+          left: '2%',
+          right: '4%',
+          bottom: '5%',
+          top: '15%',
+          containLabel: true
+      },
+      xAxis: {
+          type: 'time',
+          splitLine: {
+              show: false
+          },
+          axisLine: {
+              lineStyle: {color: '#fff'}
+          },
+      },
+      yAxis: [{
+          name: 'GMV',
+          type: 'value',
+          boundaryGap: [0, '100%'],
+          axisLine: {
+              lineStyle: {color: '#fff'}
+          },
+          splitLine: {
+              show: false
+          },
+          axisLabel: {
+              color: '#fff'
+          },
+          axisTick: {
+              show: false
+          },
+      },
+      ],
+      series: [{
+          name: '模拟数据',
+          type: 'line',
+          showSymbol: false,
+          hoverAnimation: false,
+          data: data,
+          lineStyle: {
+              normal: {
+                  color: '#fff'
+              }
+          },
+      }]
+  };
+
+//   myChart1.setOption(option1);
+
+</script>
+<script>
+var chart4;
+var chart4_option;
+  function chartresize1(){
+	//console.log("chartresize");
+	var temp1 = new initchart1();
+	temp1.resize();
+  }
+  var initchart1 = function(){
+	chart4 = echarts.init(document.getElementById('main4'));
+    //K线图--分时
+    var xData = function() {
+      var data = [];
+      for (var i = 0; i < 24; i++) {
+        data.push(i + "时");
+      }
+      return data;
+    }();
+
+    chart4_option = {
+      backgroundColor: "#f55a44",
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          textStyle: {
+            color: '#fff'
+          }
+
+        },
+      },
+      legend: {
+        data:['条件1','条件2','条件3'],
+        x: 'right'
+      },
+      grid: {
+        borderWidth: '0',
+        left: '5%',
+        right: '5%',
+        bottom: '15%',
+        top: '10%',
+
+      },
+      calculable: true,
+      xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        axisTick: {
+          show: true
+        },
+        splitArea: {
+          show: false
+        },
+        axisLabel: {
+          interval: 0,
+
+        },
+        data: xData,
+      }],
+      yAxis: [{
+        type: 'value',
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          interval: 1,
+
+        },
+        splitArea: {
+          show: false
+        },
+
+      }],
+      dataZoom: [{
+        show: true,
+        height: '30',
+        xAxisIndex: [0],
+        bottom: '30',
+        start: '0',
+        end: '100',
+        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+        handleSize: '110%',
+        handleStyle:{
+          color:"#d3dee5",
+        },
+        textStyle:{color:'#fff'},
+        borderColor:"#90979c",
+        //backgroundColor:'#fff'
+      }],
+      color:['#fff','#2aff00','#00eaff','#ffea00','#004eff'],
+      series: [{
+        name: "条件1",
+        type: "line",
+        //stack: "总量",
+		    smooth: true,//控制曲线属性
+		    showAllSymbol: true,
+		    symbol: 'circle',
+		    symbolSize: 15,
+        itemStyle: {
+          normal: {
+            //color: color,
+            barBorderRadius: 0,
+            label: {
+              show: true,
+              position: 'top',
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+        },
+        data:hourData
+      },{
+        name: "条件2",
+        type: "line",
+        //stack: "总量",
+        smooth: true,
+        showAllSymbol: true,
+        symbol: 'circle',
+        symbolSize: 15,
+        itemStyle: {
+          normal: {
+            //color: color,
+            barBorderRadius: 0,
+            label: {
+              show: true,
+              position: 'top',
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+        },
+        data:hourData2
+      },{
+          name: "条件3",
+          type: "line",
+          //stack: "总量",
+          smooth: true,
+          showAllSymbol: true,
+          symbol: 'circle',
+          symbolSize: 15,
+          itemStyle: {
+            normal: {
+              //color: color,
+              barBorderRadius: 0,
+              label: {
+                show: true,
+                position: 'top',
+                formatter: function(p) {
+                  return p.value > 0 ? (p.value) : '';
+                }
+              }
+            }
+          },
+          data:hourData3
+        }
+      ]
+    }
+    chart4.setOption(chart4_option);
+	$(function(){
+	  window.onresize = function(){
+		chart4.resize();
+	  }
+	})
+	this.resize = function size(){
+	  var chart4div=document.getElementById('main4');
+	  var tabcontent = document.getElementById('tab-content');
+	  width=tabcontent.offsetWidth;
+	  chart4div.style.width=width+'px';
+	  chart4.resize(width);
+	}
+  }
+  
+</script>
+<script>
+  var xData = [];
+  var yData = [];
+  var xData2 = [];
+  var yData2 = [];
+  var xData3 = [];
+  var yData3 = [];
+  var chart5;
+  var chart5_option;
+  function chartresize2(){
+    //console.log("chartresize");
+    var temp2 = new initchart2();
+    temp2.resize();
+  }
+  var initchart2 = function(){
+    chart5 = echarts.init(document.getElementById('main5'));
+
+    //K线图--日
+    chart5_option = {
+      backgroundColor: "#f55a44",
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          textStyle: {
+            color: '#fff'
+          }
+
+        },
+      },
+      legend: {
+        data:['条件1','条件2','条件3'],
+        x: 'right'
+      },
+      grid: {
+        borderWidth: '0',
+        left: '5%',
+        right: '5%',
+        bottom: '15%',
+        top: '10%',
+      },
+      calculable: true,
+      xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        axisTick: {
+          show: true
+        },
+        splitArea: {
+          show: false
+        },
+//         axisLabel: {
+//           interval: 0,
+//         },
+        data: xData,
+      }],
+      yAxis: [{
+        type: 'value',
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          interval: 0,
+
+        },
+        splitArea: {
+          show: false
+        },
+
+      }],
+      dataZoom: [{
+        show: true,
+        height: '30',
+        xAxisIndex: [0],
+        bottom: '30',
+        start: '50',
+        end: '100',
+        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+        handleSize: '110%',
+        handleStyle:{
+          color:"#d3dee5",
+        },
+        textStyle:{color:'#fff'},
+        borderColor:"#90979c",
+        //backgroundColor:'#fff'
+      }],
+      color:['#fff','#2aff00','#00eaff','#ffea00','#004eff'],
+      series: [{
+        name: "条件1",
+        type: "line",
+        //stack: "总量",
+        smooth: true,
+        symbolSize:10,
+        symbol:'circle',
+        itemStyle: {
+          normal: {
+            //color: '#fff',
+            barBorderRadius: 0,
+            label: {
+              show: true,
+              position: 'top',
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+        },
+        data:yData
+      },{
+    	  name: "条件2",
+          type: "line",
+          //stack: "总量",
+          smooth: true,
+          symbolSize:10,
+          symbol:'circle',
+          itemStyle: {
+            normal: {
+              //color: '#fff',
+              barBorderRadius: 0,
+              label: {
+                show: true,
+                position: 'top',
+                formatter: function(p) {
+                  return p.value > 0 ? (p.value) : '';
+                }
+              }
+            }
+          },
+          data:yData2
+      },{
+    	  name: "条件3",
+          type: "line",
+          //stack: "总量",
+          smooth: true,
+          symbolSize:10,
+          symbol:'circle',
+          itemStyle: {
+            normal: {
+              //color: '#fff',
+              barBorderRadius: 0,
+              label: {
+                show: true,
+                position: 'top',
+                formatter: function(p) {
+                  return p.value > 0 ? (p.value) : '';
+                }
+              }
+            }
+          },
+          data:yData3
+        }
+      ]
+    }
+
+    chart5.setOption(chart5_option);
+    $(function(){
+      window.onresize = function(){
+        chart5.resize();
+      }
+    })
+    this.resize = function size(){
+      var chart5div=document.getElementById('main5');
+      var tabcontent = document.getElementById('tab-content');
+      width=tabcontent.offsetWidth;
+      //height=tabcontent.offsetHeight;
+      chart5div.style.width=width+'px';
+      chart5.resize(width);
+    }
+  }
+</script>
+<script>
+	var chart7 ;
+	var chart7_option;
+	var xData_week=[];
+	var xData_week2=[];
+	var xData_week3=[];
+	function chartresize4(){
+		//console.log("chartresize");
+		var temp4 = new initchart4();
+		temp4.resize();
+	}
+	var initchart4 = function(){
+		chart7 = echarts.init(document.getElementById('main7'));
+
+		//K线图--周
+		chart7_option = {
+			backgroundColor: "#f55a44",
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					textStyle: {
+						color: '#fff'
+					}
+
+				},
+			},
+      legend: {
+        data:['条件1','条件2','条件3'],
+        x: 'right'
+      },
+			grid: {
+				borderWidth: '0',
+				left: '5%',
+				right: '5%',
+				bottom: '30%',
+				top: '10%',
+
+			},
+			calculable: true,
+			xAxis: [{
+				type: 'category',
+				boundaryGap: false,
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				splitLine: {
+					show: false
+				},
+				axisTick: {
+					show: true
+				},
+				splitArea: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				data: xData_week,
+			}],
+			yAxis: [{
+				type: 'value',
+				splitLine: {
+					show: false
+				},
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				splitArea: {
+					show: false
+				},
+
+			}],
+			dataZoom: [{
+			 show: true,
+			 height: '30',
+			 xAxisIndex: [0],
+			 bottom: '30',
+			 start: '10',
+			 end: '100',
+			 handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+			 handleSize: '110%',
+			 handleStyle:{
+			 color:"#d3dee5",
+			 },
+			 textStyle:{color:'#fff'},
+			 borderColor:"#90979c",
+			 //backgroundColor:'#fff'
+			 }],
+      		color:['#fff','#2aff00','#00eaff','#ffea00','#004eff'],
+			series: [{
+				name: "条件1",
+				type: "line",
+				//stack: "总量",
+				smooth: true,
+				symbolSize:10,
+				symbol:'circle',
+				itemStyle: {
+					normal: {
+						//color: '#fff',
+						barBorderRadius: 0,
+						label: {
+							show: true,
+							position: 'top',
+							formatter: function(p) {
+								return p.value > 0 ? (p.value) : '';
+							}
+						}
+					}
+				},
+				data: weekData
+			},{
+		        name: "条件2",
+		        type: "line",
+		        //stack: "总量",
+		        smooth: true,
+		        showAllSymbol: true,
+		        symbol: 'circle',
+		        symbolSize: 15,
+		        itemStyle: {
+		          normal: {
+		            //color: '#00eaff',
+		            barBorderRadius: 0,
+		            label: {
+		              show: true,
+		              position: 'top',
+		              formatter: function(p) {
+		                return p.value > 0 ? (p.value) : '';
+		              }
+		            }
+		          }
+		        },
+		        data: weekData2
+		      },{
+		        name: "条件3",
+		        type: "line",
+		        //stack: "总量",
+		        smooth: true,
+		        showAllSymbol: true,
+		        symbol: 'circle',
+		        symbolSize: 15,
+		        itemStyle: {
+		          normal: {
+		            //color: '#00eaff',
+		            barBorderRadius: 0,
+		            label: {
+		              show: true,
+		              position: 'top',
+		              formatter: function(p) {
+		                return p.value > 0 ? (p.value) : '';
+		              }
+		            }
+		          }
+		        },
+		        data: weekData3
+		      }
+			]
+		}
+
+		chart7.setOption(chart7_option);
+		$(function(){
+			window.onresize = function(){
+				chart7.resize();
+			}
+		})
+		this.resize = function size(){
+			var chart7div=document.getElementById('main7');
+			var tabcontent = document.getElementById('tab-content');
+			width=tabcontent.offsetWidth;
+			//height=tabcontent.offsetHeight;
+			chart7div.style.width=width+'px';
+			chart7.resize(width);
+		}
+	}
+</script>
+<script>
+	var xData_month = [];
+	var yData_month = [];
+	var xData_month2 = [];
+	var yData_month2 = [];
+	var xData_month3 = [];
+	var yData_month3 = [];
+	var chart6;
+	var chart6_option;
+	function chartresize3(){
+		//console.log("chartresize");
+		var temp3 = new initchart3();
+		temp3.resize();
+	}
+	var initchart3 = function(){
+		chart6 = echarts.init(document.getElementById('main6'));
+
+		//K线图--月
+		chart6_option = {
+			backgroundColor: "#f55a44",
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					textStyle: {
+						color: '#fff'
+					}
+
+				},
+			},
+      legend: {
+        data:['条件1','条件2','条件3'],
+        x: 'right'
+      },
+			grid: {
+				borderWidth: '0',
+				left: '5%',
+				right: '5%',
+				bottom: '30%',
+				top: '10%',
+
+			},
+			calculable: true,
+			xAxis: [{
+				type: 'category',
+				boundaryGap: false,
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				splitLine: {
+					show: false
+				},
+				axisTick: {
+					show: true
+				},
+				splitArea: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				data: xData_month,
+			}],
+			yAxis: [{
+				type: 'value',
+				splitLine: {
+					show: false
+				},
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				splitArea: {
+					show: false
+				},
+
+			}],
+			dataZoom: [{
+				show: true,
+				height: '30',
+				xAxisIndex: [0],
+				bottom: '30',
+				start: '10',
+				end: '100',
+				handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+				handleSize: '110%',
+				handleStyle:{
+					color:"#d3dee5",
+				},
+				textStyle:{color:'#fff'},
+				borderColor:"#90979c",
+				//backgroundColor:'#fff'
+			}],
+      		color:['#fff','#2aff00','#00eaff','#ffea00','#004eff'],
+			series: [{
+				name: "条件1",
+				type: "line",
+				//stack: "总量",
+				smooth: true,
+				symbolSize:10,
+				symbol:'circle',
+				itemStyle: {
+					normal: {
+						//color: '#fff',
+						barBorderRadius: 0,
+						label: {
+							show: true,
+							position: 'top',
+							formatter: function(p) {
+								return p.value > 0 ? (p.value) : '';
+							}
+						}
+					}
+				},
+				data:yData_month
+			},{
+	        name: "条件2",
+	        type: "line",
+	        //stack: "总量",
+	        smooth: true,
+	        showAllSymbol: true,
+	        symbol: 'circle',
+	        symbolSize: 15,
+	        itemStyle: {
+	          normal: {
+	            //color: '#00eaff',
+	            barBorderRadius: 0,
+	            label: {
+	              show: true,
+	              position: 'top',
+	              formatter: function(p) {
+	                return p.value > 0 ? (p.value) : '';
+	              }
+	            }
+	          }
+	        },
+	        data:yData_month2
+	      },{
+	        name: "条件3",
+	        type: "line",
+	        //stack: "总量",
+	        smooth: true,
+	        showAllSymbol: true,
+	        symbol: 'circle',
+	        symbolSize: 15,
+	        itemStyle: {
+	          normal: {
+	            //color: '#00eaff',
+	            barBorderRadius: 0,
+	            label: {
+	              show: true,
+	              position: 'top',
+	              formatter: function(p) {
+	                return p.value > 0 ? (p.value) : '';
+	              }
+	            }
+	          }
+	        },
+	        data:yData_month3
+	      }
+		]
+		}
+
+		chart6.setOption(chart6_option);
+		$(function(){
+			window.onresize = function(){
+				chart6.resize();
+			}
+		})
+		this.resize = function size(){
+			var chart6div=document.getElementById('main6');
+			var tabcontent = document.getElementById('tab-content');
+			width=tabcontent.offsetWidth;
+			//height=tabcontent.offsetHeight;
+			chart6div.style.width=width+'px';
+			chart6.resize(width);
+		}
+	}
+	
+  var shareChartStatDto=null; //全局参数变量	 
+  var shareChartStatDto1=null;
+  var shareChartStatDto2=null;
+  var shareChartStatDto3=null;
+  $(function(){
+	  initalldept();
+	  initallchannel();
+	  if(target==0){//总部
+	  	initallcity(); 
+	  	initallstore();
+	  }else if(target==1){//城市
+	  	initcurcity();
+	  	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+	  	initStoreSelectcomplate();
+	  }else if(target==2) {//门店
+	  	initcurcity();
+	  	$("#citySelect").prop("disabled", true);
+		$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+	  	initStoreSelectcomplate();
+	  	$("#store_id_manual").val(storeNo);
+	  	$("#store_name_manual").val(storeName);
+		$("#store_name_manual").attr("readonly",true);
+	  }
+	  
+	    var autoComplete = new AutoComplete("store_name_manual","auto",array);
+	  	document.getElementById("store_name_manual").onkeyup = function(event){
+	  		autoComplete.start(event);
+	  		if($("#store_name_manual").val().trim() == ""){
+				$("#store_id_manual").val("");
+			}
+	  		for(var key in storeJson){
+	  			if(document.getElementById("store_name_manual").value==key){
+	  				document.getElementById("store_id_manual").value=storeJson[key];
+	  			}
+	  		}
+	  	}
+	  	$("#auto").on("click",function(event){
+			for(var key in storeJson){
+				if(document.getElementById("store_name_manual").value==key){
+					document.getElementById("store_id_manual").value=storeJson[key];
+				}
+			}
+		});
+	  	
+	var nameStrArr1;
+	if(nameStr1!='' && nameStr1!=null){
+		nameStrArr1 = nameStr1.split(" ");
+		shareChartStatDto1 = {
+	 		storeno:nameStrArr1[4],
+			cityname:nameStrArr1[2],
+			deptname:nameStrArr1[0],
+			channelname:nameStrArr1[1]		
+	  	}
+	}
+  	$("#label_manual_first").val(nameStr1);
+  	
+  	var nameStrArr2;
+  	if(nameStr2!='' && nameStr2!=null){
+		nameStrArr2 = nameStr2.split(" ");
+		shareChartStatDto2 = {
+	 		storeno:nameStrArr2[4],
+			cityname:nameStrArr2[2],
+			deptname:nameStrArr2[0],
+			channelname:nameStrArr2[1]		
+	  	}
+	}
+  	$("#label_manual_second").val(nameStr2);
+  	
+  	var nameStrArr3;
+  	if(nameStr3!='' && nameStr3!=null){
+		nameStrArr3 = nameStr3.split(" ");
+		shareChartStatDto3 = {
+	 		storeno:nameStrArr3[4],
+			cityname:nameStrArr3[2],
+			deptname:nameStrArr3[0],
+			channelname:nameStrArr3[1]	
+	  	}
+	}
+  	$("#label_manual_third").val(nameStr3);
+	  
+	  chartresize1();
+	  chartresize2();
+	  chartresize3();
+	  chartresize4();
+  	  search_manual_k();
+  	
+	  $("#search-btn-contrast").click(function(){
+		  selectionExcute();
+	 });
+	  $("#contrast").click(function(){
+		  if(shareChartStatDto1==null && shareChartStatDto2==null && shareChartStatDto3==null){
+			  crm_alert(0,"请选择要对比的条件！");
+			  return;
+		  }
+		  chartresize1();
+		  chartresize2();
+		  chartresize3();
+		  chartresize4();
+		  search_manual_k();
+	 }); 
+	  $("#reset").click(function(){
+		  hourData = [];
+		  hourData2 = [];
+		  hourData3 = [];
+		  chart4_option.series[0].data=hourData;
+		  chart4_option.series[1].data=hourData2;
+		  chart4_option.series[2].data=hourData3;
+		  chart4.setOption(chart4_option);
+		  
+		  xData = [];
+ 		  yData = [];
+ 		  xData2 = [];
+		  yData2 = [];
+		  xData3 = [];
+ 		  yData3 = [];
+ 		  chart5_option.xAxis[0].data=xData;
+		  chart5_option.series[0].data=yData;
+// 		  chart5_option.xAxis[0].data=xData2;
+		  chart5_option.series[1].data=yData2;
+// 		  chart5_option.xAxis[0].data=xData3;
+		  chart5_option.series[2].data=yData3;
+		  chart5.setOption(chart5_option);
+ 		  
+ 		  weekData = [];
+		  weekData2 = [];
+		  weekData3 = [];
+		  chart7_option.series[0].data=weekData;
+		  chart7_option.series[1].data=weekData2;
+		  chart7_option.series[2].data=weekData3;
+		  chart7.setOption(chart7_option); 
+		  
+		  xData_month = [];
+		  yData_month = [];
+		  xData_month2 = [];
+		  yData_month2 = [];
+		  xData_month3 = [];
+		  yData_month3 = [];
+		  chart6_option.xAxis[0].data=xData_month;
+		  chart6_option.series[0].data=yData_month;
+// 		  chart6_option.xAxis[1].data=xData_month2;
+		  chart6_option.series[1].data=yData_month2;
+// 		  chart6_option.xAxis[2].data=xData_month3;
+		  chart6_option.series[2].data=yData_month3;
+		  chart6.setOption(chart6_option);
+		  
+		  shareChartStatDto1=null;
+		  shareChartStatDto2=null;
+		  shareChartStatDto3=null;
+		  
+		  var d = document.getElementById("deptSelect");
+	  	  d.options[0].selected = true;
+	  	  $("#channelSelect").empty();
+	  	  initallchannel();
+	  	  $("#channel_name_manual").val("");
+		  if(target==0){//总部
+	  		var a = document.getElementById("citySelect");
+	  	  	a.options[0].selected = true;
+	  	  	$("#store_name_manual").val("");
+	  	  }else if(target==1){
+	  		$("#store_name_manual").val("");
+	  	  }
+		  $("#label_manual_first").val("");
+		  $("#label_manual_second").val("");
+		  $("#label_manual_third").val("");
+	 }); 
+  })
+	
+  function initalldept(){
+	  doManager("chartStatManager","queryAllDept",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$("#deptSelect").append("<option value=''>全部事业群</option>");
+					$(jsonData).each(function(index,element){
+						$("#deptSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+	                });
+				}
+		});
+  }
+  
+  var array_channel=new Array();
+	//初始化所有频道
+	function initallchannel() {
+		doManager("chartStatManager", "queryAllChannel", null,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					array_channel = new Array();
+					var storeString = "";
+					for(i=0;i<jsonData.length;i++){
+						array_channel.push(jsonData[i].name);
+						if(i == 0){
+							storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
+						}else if(i == jsonData.length-1){
+							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+"}";
+						}else{
+							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
+						}
+					}
+					storeJson=$.fromJSON(storeString);
+					$("#channelSelect").append("<option value=''>全部频道</option>");
+					$(jsonData).each(function(index,element){
+						$("#channelSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+	                });
+				}
+			}, false);
+	}
+	
+	$("#deptSelect").change(function(){
+		initChannelSelectcomplate();
+	});
+	
+	var storeJsonChannel;
+	function initChannelSelectcomplate(){
+		var deptSelect = $("#deptSelect  option:selected").val();
+		$("#channelSelect").empty();
+		if(deptSelect==""){
+			initallchannel();
+		}else{
+			//根据事业群查询频道信息
+			var deptId = "'"+deptSelect+"'";
+			doManager("chartStatManager","findChannelByDept",[deptId],
+			    function(data,textStatus,XmlHttpRequest){
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						array_channel=new Array();
+						var storeString = "";
+						$(jsonData).each(function(index,element){
+							var channelName = element.name;
+							var id = element.id;
+							array_channel.push(channelName);
+							if(index == 0){
+	 							storeString = "{'"+channelName+"'"+":"+"'"+id+"'"+",";
+	 						}else if(index == jsonData.length-1){
+	 							storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+"}";
+	 						}else{
+	 							storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+",";
+	 						}
+						});
+						storeJsonChannel=$.fromJSON(storeString);
+						$("#channelSelect").append("<option value=''>全部频道</option>");
+						$(jsonData).each(function(index,element){
+							$("#channelSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+		                });
+					}
+			});
+		}
+		
+	} 
+ 
+	function initallcity(){
+		doManager("DistCityCodeManager","queryAllDistCityList",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$("#citySelect").append("<option value=''>全部城市</option>");
+					$(jsonData).each(function(index,element){
+						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+                   });
+				}
+		});
+	} 
+   
+  var array=new Array();
+	//初始化所有门店 
+	function initallstore() {
+		doManager("StoreManager", "findStoreAll", null,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					array = new Array();
+					var storeString = "";
+					for(i=0;i<jsonData.length;i++){
+						array.push(jsonData[i].name);
+						if(i == 0){
+							storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
+						}else if(i == jsonData.length-1){
+							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+"}";
+						}else{
+							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
+						}
+					}
+					storeJson=$.fromJSON(storeString);
+					var autoComplete = new AutoComplete("store_name_manual","auto",array);
+					document.getElementById("store_name_manual").onkeyup = function(event){
+						autoComplete.start(event);
+						if($("#store_name_manual").val().trim() == ""){
+							$("#store_id_manual").val("");
+						}
+						document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+					}
+				}
+			}, false);
+	}
+	
+   function initcurcity(){
+		doManager("userManager","getCurrentUserCity",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+                   });
+					
+				}
+		},false);
+	}
+  
+   $("#citySelect").change(function(){
+		$("#store_id_manual").val("");
+		$("#store_name_manual").val("");
+		initStoreSelectcomplate();
+	});
+   
+   var storeJson;
+	function initStoreSelectcomplate(){
+		var citySelect = $("#citySelect  option:selected").val();
+		$("#auto").val("");
+		if(citySelect==""){
+			initallstore();
+		}else{
+			//根据城市查询门店 信息
+			var cityname = "'"+citySelect+"'";
+			doManager("StoreManager","findStoreByCityData",[cityname],
+			    function(data,textStatus,XmlHttpRequest){
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						array=new Array();
+						var storeString = "";
+						$(jsonData).each(function(index,element){
+							var storeName = element.name;
+							var storeid = element.storeno;
+							array.push(storeName);
+							if(index == 0){
+	 							storeString = "{'"+storeName+"'"+":"+"'"+storeid+"'"+",";
+	 						}else if(index == jsonData.length-1){
+	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+"}";
+	 						}else{
+	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+",";
+	 						}
+						});
+						storeJson=$.fromJSON(storeString);
+						var autoCompleteName = new AutoComplete("store_name_manual","auto",array);
+						document.getElementById("store_name_manual").onkeyup = function(event){
+							autoCompleteName.start(event);
+							if($("#store_name_manual").val().trim() == ""){
+								$("#store_id_manual").val("");
+							}
+							document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+						}
+					}
+			});
+		}
+		
+	}
+   
+	function getShareParam(){
+		  var storeno = $("#store_id_manual").val()==""?null:$("#store_id_manual").val();
+		  var cityName = $("#citySelect  option:selected").val();
+		  if(cityName!="" && cityName!=undefined){
+		    if(cityName=="黔东南苗族侗族自治州"){
+		    	cityName="黔东南州";
+		  	}else{
+		    	cityName=cityName+"市";
+		    	}
+		  }else{
+		    cityName = null;
+		  }
+	      var deptname = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
+	      if(deptname!="" && deptname=="全部事业群"){
+	    	  deptname = null;
+	      }
+	      var channelname = $("#channelSelect option:selected").html()==""?null:$("#channelSelect option:selected").html();
+	      if(channelname!="" && channelname=="全部频道"){
+	    	  channelname = null;
+	      }
+		  
+		  return shareChartStatDto = {
+				storeno:storeno,
+				cityname:cityName,
+				deptname:deptname,
+				channelname:channelname	
+			}
+	}
+	
+	function selectionExcute(){
+		var storename = $("#store_name_manual").val()==null?'':$("#store_name_manual").val();
+		var labelName1 = $("#label_manual_first").val();
+		var labelName2 = $("#label_manual_second").val();
+		var labelName3 = $("#label_manual_third").val();		
+		var nameStrTemp = "";
+		var shareChartStatDtoTemp = getShareParam();
+		var deptName = shareChartStatDtoTemp.deptname==null?'全部事业群':shareChartStatDtoTemp.deptname;
+    	var channelName = shareChartStatDtoTemp.channelname==null?'全部频道':shareChartStatDtoTemp.channelname;
+    	var cityName = shareChartStatDtoTemp.cityname==null?'全部城市':shareChartStatDtoTemp.cityname;
+    	nameStrTemp = deptName+" "+channelName+" "+cityName+" "+storename;
+    	if($.trim(nameStrTemp)==$.trim(labelName1) || $.trim(nameStrTemp)==$.trim(labelName2) || $.trim(nameStrTemp)==$.trim(labelName3)){//对比条件重复过滤
+    		return;
+    	}
+	    if(labelName1.length==0){
+	    	shareChartStatDto1 = shareChartStatDtoTemp;
+	    	$("#label_manual_first").val(nameStrTemp);
+	    }else if(labelName2.length==0){
+	    	shareChartStatDto2 = shareChartStatDtoTemp;
+	    	$("#label_manual_second").val(nameStrTemp);
+	    }else if(labelName3.length==0){
+	    	shareChartStatDto3 = shareChartStatDtoTemp;
+	    	$("#label_manual_third").val(nameStrTemp);
+	    }
+	}
+	
+  //对比
+  function search_manual_k(){
+		
+		 $("#process_div").show();
+	 	 $("#process_div_pic").show();
+	 	  
+// 	 	  shareChartStatDto = getShareParam();
+		  //分时GMV
+		  hourData = [];
+		  hourData2 = [];
+		  hourData3 = [];
+		  initHourData();
+		  //日GMV
+		  xData = [];
+ 		  yData = [];
+ 		  xData2 = [];
+		  yData2 = [];
+		  xData3 = [];
+ 		  yData3 = [];
+		  initDayData();
+		  //周GMV
+		  weekData = [];
+		  weekData2 = [];
+		  weekData3 = [];
+		  initWeekData();
+		  //月GMV
+		  xData_month = [];
+		  yData_month = [];
+		  xData_month2 = [];
+		  yData_month2 = [];
+		  xData_month3 = [];
+		  yData_month3 = [];
+		  initMonthData();
+  }
+ 
+  var hourData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+  var hourData2 = [];
+  var hourData3 = [];
+  function initHourData(){
+  		var nowHour = now.getHours();
+  		if(shareChartStatDto1!=null && shareChartStatDto1.cityname=="全部城市"){
+  			shareChartStatDto1.cityname = '';
+  		}
+  		if(shareChartStatDto1!=null && shareChartStatDto1.channelname=="全部频道"){
+  			shareChartStatDto1.channelname = '';
+  		}
+  		if(shareChartStatDto1!=null && shareChartStatDto1.deptname=="全部事业群"){
+  			shareChartStatDto1.deptname = '';
+  		}
+ 		doManager("chartStatManager","queryTurnoverByHour",[shareChartStatDto1],
+ 			function(data,textStatus,XmlHttpRequest){
+ 				if (data.result) {
+ 					hourData=new Array(nowHour+1).join(0).split('');
+ 					var jsonData = $.fromJSON(data.data);
+ 					$(jsonData).each(function(index,element){
+ 						hourData[parseInt(element.time)]=element.turnover;
+                     });
+					chart4_option.series[0].data=hourData;
+					chart4.setOption(chart4_option);
+ 				}
+ 		});
+ 		
+ 		if(shareChartStatDto2!=null && shareChartStatDto2.cityname=="全部城市"){
+  			shareChartStatDto2.cityname = '';
+  		}
+ 		if(shareChartStatDto2!=null && shareChartStatDto2.channelname=="全部频道"){
+  			shareChartStatDto2.channelname = '';
+  		}
+ 		if(shareChartStatDto2!=null && shareChartStatDto2.deptname=="全部事业群"){
+  			shareChartStatDto2.deptname = '';
+  		}
+ 		doManager("chartStatManager","queryTurnoverByHour",[shareChartStatDto2],
+ 			function(data,textStatus,XmlHttpRequest){
+ 				if (data.result) {
+ 					hourData2=new Array(nowHour+1).join(0).split('');
+ 					var jsonData = $.fromJSON(data.data);
+ 					$(jsonData).each(function(index,element){
+ 						hourData2[parseInt(element.time)]=element.turnover;
+                     });
+					chart4_option.series[1].data=hourData2;
+					chart4.setOption(chart4_option);
+ 				}
+ 		});
+ 		
+ 		if(shareChartStatDto3!=null && shareChartStatDto3.cityname=="全部城市"){
+  			shareChartStatDto3.cityname = '';
+  		}
+ 		if(shareChartStatDto3!=null && shareChartStatDto3.channelname=="全部频道"){
+  			shareChartStatDto3.channelname = '';
+  		}
+ 		if(shareChartStatDto3!=null && shareChartStatDto3.deptname=="全部事业群"){
+  			shareChartStatDto3.deptname = '';
+  		}
+ 		doManager("chartStatManager","queryTurnoverByHour",[shareChartStatDto3],
+ 			function(data,textStatus,XmlHttpRequest){
+ 				if (data.result) {
+ 					var jsonData = $.fromJSON(data.data);
+ 					hourData3=new Array(nowHour+1).join(0).split('');
+ 					$(jsonData).each(function(index,element){
+ 						hourData3[parseInt(element.time)]=element.turnover;
+                     });
+					chart4_option.series[2].data=hourData3;
+					chart4.setOption(chart4_option);
+ 				}
+ 		});
+ 	} 
+  
+  function initDayData(){
+	  var curDay = getCurDay();
+	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto1],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					yData=new Array(curDay+1).join(0).split('');
+					$(jsonData).each(function(index,element){
+						xData[index]=element.day_time;
+						yData[index]=element.turnover;
+	                });
+					chart5_option.xAxis[0].data=xData;
+					chart5_option.series[0].data=yData;
+					chart5.setOption(chart5_option);
+				}
+		});
+	  
+	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto2],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					yData2=new Array(curDay+1).join(0).split('');
+					$(jsonData).each(function(index,element){
+						xData2[index]=element.day_time;
+						yData2[index]=element.turnover;
+	                });
+					chart5_option.xAxis[0].data=xData2;
+					chart5_option.series[1].data=yData2;
+					chart5.setOption(chart5_option);
+				}
+		});
+	  
+	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto3],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					yData3=new Array(curDay+1).join(0).split('');
+					$(jsonData).each(function(index,element){
+						xData3[index]=element.day_time;
+						yData3[index]=element.turnover;
+	                });
+					chart5_option.xAxis[0].data=xData3;
+					chart5_option.series[2].data=yData3;
+					chart5.setOption(chart5_option);
+				}
+		});
+  }
+  
+  var weekData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+  var weekData2 = [];
+  var weekData3 = [];
+  function initWeekData(){
+		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto1],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						weekData[index]=element.week_amount;
+						xData_week[index]=new Date(element.week_time).toLocaleString();
+                    });
+					chart7_option.series[0].data=weekData;
+					chart7.setOption(chart7_option);
+				}
+		},false);
+		
+		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto2],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						weekData2[index]=element.week_amount;
+						xData_week2[index]=new Date(element.week_time).toLocaleString();
+                    });
+					chart7_option.series[1].data=weekData2;
+					chart7.setOption(chart7_option);
+				}
+		});
+		
+		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto3],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						weekData3[index]=element.week_amount;
+						xData_week3[index]=new Date(element.week_time).toLocaleString();
+                    });
+					chart7_option.series[2].data=weekData3;
+					chart7.setOption(chart7_option);
+				}
+		});
+		$("#process_div").hide();
+		$("#process_div_pic").hide();
+	} 
+  
+  function initMonthData(){
+	    var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
+	    var months = getYearAndMonth('2017-7-1',curMonth);
+		doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto1],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					xData_month = months;
+					yData_month = new Array(months.length+1).join(0).split('');
+					$(jsonData).each(function(index,element){
+						var indexTemp = jQuery.inArray(element.month_time,months);
+						yData_month[indexTemp]=element.month_amount;
+               	});
+					chart6_option.xAxis[0].data=xData_month;
+					chart6_option.series[0].data=yData_month;
+					chart6.setOption(chart6_option);
+				}
+		});
+		
+		doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto2],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					xData_month2 = months;
+					yData_month2 = new Array(months.length+1).join(0).split('');
+					$(jsonData).each(function(index,element){
+						var indexTemp = jQuery.inArray(element.month_time,months);
+						yData_month2[indexTemp]=element.month_amount;
+               		});
+					chart6_option.xAxis[0].data=xData_month2;
+					chart6_option.series[1].data=yData_month2;
+					chart6.setOption(chart6_option);
+				}
+		});
+		
+		doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto3],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					xData_month3 = months;
+					yData_month3 = new Array(months.length+1).join(0).split('');
+					$(jsonData).each(function(index,element){
+						var indexTemp = jQuery.inArray(element.month_time,months);
+						yData_month3[indexTemp]=element.month_amount;
+               		});
+					chart6_option.xAxis[0].data=xData_month3;
+					chart6_option.series[2].data=yData_month3;
+					chart6.setOption(chart6_option);
+				}
+		});
+	} 
+  
+  Date.prototype.toLocaleString = function() {
+      return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
+  }; 
+  
+  //获取当前日期为今年的第几天
+  function getCurDay(){
+	  var dateArr = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);  
+	  var date = new Date();  
+	  var day = date.getDate();  
+	  var month = date.getMonth(); //getMonth()是从0开始  
+	  var year = date.getFullYear();  
+	  var result = 0;  
+	  for ( var i = 0; i < month; i++) {  
+	      result += dateArr[i];  
+	  }  
+	  result += day;  
+	  //判断是否闰年  
+	  if (month > 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {  
+	      result += 1;  
+	  }  
+// 	  alert("今天是" + year + "年" + (month + 1) + "月" + day + "日,是今年的第" + result+ "天"); 
+	  return result;
+  }
+  
+//获取两个时间段内的月份数据
+  function getYearAndMonth(start, end) {
+	    var result = [];
+	    var starts = start.split('-');
+	    var ends = end.split('-');
+	    var staYear = parseInt(starts[0]);
+	    var staMon = parseInt(starts[1]);
+	    var endYear = parseInt(ends[0]);
+	    var endMon = parseInt(ends[1]);
+	    while (staYear <= endYear) {
+	        if (staYear === endYear) {
+	            while (staMon < endMon) {
+	                staMon++;
+	                result.push(staYear+"-"+staMon);
+	            }
+	            staYear++;
+	        } else {
+	            staMon++;
+	            if (staMon > 12) {
+	                staMon = 1;
+	                staYear++;
+	            }
+	            result.push(staYear+"-"+staMon);
+	        }
+	    }
+	    return result;
+	}
+  
+</script>
+
+</body>
+</html>

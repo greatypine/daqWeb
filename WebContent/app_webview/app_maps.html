@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <title>地图坐标录入</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <script src="https://webapi.amap.com/maps?v=1.4.1&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
+    <!-- <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script> -->
+    <style>
+    html,
+    body,
+    #container {
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        font-size: 0.6rem;
+    }
+    /* 定义 my-red 主题 */
+    
+    .amap-ui-control-theme-my-red .amap-ui-control-layer {
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+        background: red;
+    }
+    
+    .amap-ui-control-theme-my-red .amap-ui-control-layer-expanded {
+        color: #fff;
+        background: red;
+    }
+    
+    .amap-ui-control-theme-my-red .amap-ui-control-layer-toggle {
+        color: #fff;
+    }
+.button-group {
+	position: fixed;
+	top: 0.4rem;
+	font-size: 0.4rem; 
+	width: 100%;
+	height: 2rem; 
+}
+.butt{
+	 width: 27%;
+	 height:2rem;
+	 color:white;
+	 background-color: green;
+}
+.select_{
+    width: 14%;
+    height: 2rem;
+
+}
+.select_ option{
+width:100%;
+text-align: center;
+} 
+
+.amap-ui-control-zoom {
+    margin-bottom: 5rem;
+}
+.amap-ui-control-zoom-num{
+display:none!important;}
+    </style>
+</head>
+
+<body>
+    <div class="container" id="container"></div>
+    <div class="button-group">
+	<!-- 	<button id="order_but" class="butt" style="margin-left:0.6rem">订单</button>
+		<button id="customer_but" class="butt">用户画像</button>
+		<button id="relation_but" class="butt">拜访记录</button> -->
+		<!-- <select class="select_">
+			<option value="year">年</option>
+			<option value="month">月</option>
+			<option value="day">日</option>
+		</select> -->
+	<div>
+    <div id="tip" style="color:#f00;margin-left: 6px;margin-top: 6px"><strong>本月订单热力图！</strong><br><span id="info"></span></div>
+
+   </div>
+		
+	</div>
+	
+	
+
+	<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+    <!-- 热力图假数据JS -->
+  <!--   <script type="text/javascript" src="http://a.amap.com/jsapi_demos/static/resource/heatmapData.js"></script> -->
+    <style>
+
+    </style>
+    <script type="text/javascript">
+    var e=GetQueryString("e"); 
+    var s=GetQueryString("s");
+    var zw=GetQueryString("zw");
+    var lat=GetQueryString("lat");
+    var lon=GetQueryString("lon");
+    
+   
+  //门店服务区域
+    var polygonArea = [];
+    var tinyArea=[];
+    var heat =[];
+  //初始化地图
+    var map = new AMap.Map("container", {
+        resizeEnable : true,
+        /*  center : [116.40, 39.91],//创建中心点坐标 
+         zoom : 15,  */
+        doubleClickZoom : false
+    });
+   
+    
+    $(function(){
+    	if(s!="null"&&e!="null"){
+    		doManager("InterManager", "selecTinyVillageCoordByEmployeeNo",[e,s], function(data,textStatus, XMLHttpRequest) {
+	            if(data.result){
+	            	var jsonData = JSON.parse(data.data);
+	            	if(jsonData !=null){
+	            		
+	            		 if(zw=="GAX"){
+	            			if(jsonData.storearea!=null){
+	            				if(jsonData.storearea.code=="200"){
+	            					polygonArea=jsonData.storearea.data;
+	            					if(polygonArea!=null){
+	            						initArea(polygonArea);
+				            			
+				            			if(jsonData.tinyarea!=null){
+					            			tinyArea=jsonData.tinyarea.data;
+					            			initTinyArea(tinyArea);
+					            		}
+				            			if(jsonData.storeorderheat!=null){
+					            			getdata(jsonData.storeorderheat); 
+					            		}
+	            					}else{
+	            						alert("该门店服务范围不存在！");
+	            					}
+			            			
+	            				}else{
+	            					alert("该门店服务范围不存在！");
+	            				}
+		            		}
+	            			
+	            		}else{
+	            			if(jsonData.storearea!=null){
+	            				if(jsonData.storearea.code=="200"){
+	            					polygonArea=jsonData.storearea.data;
+	            					if(polygonArea!=null){
+	            						initArea(polygonArea);
+				            			if(jsonData.storeorderheat!=null){
+					            			heatShowByStore(jsonData.storeorderheat); 
+					            		}
+	            						
+	            					}else{
+	            						alert("该门店服务范围不存在！");
+	            					}
+			            			
+	            				}else{
+	            					alert("该门店服务范围不存在！");
+	            				}
+		            		}
+	            			
+	            		}
+	            		
+	            		
+	            	}
+	                
+	            }else{
+	            }
+          },false);
+    		
+    	}else{
+    		$("#tip").css("display","none");
+    		if(lon!=null&&lat!=null){
+    			 map.setCenter([lon,lat]); 
+    		}else{
+    			 map.setCenter([116.397428, 39.90923]); 
+    		}
+    		 map.setZoom(15); 
+    	}
+        
+    }); 
+   
+/* 
+    AMapUI.loadUI(['control/BasicControl'], function(BasicControl) {
+
+        //动态加载css
+        AMapUI.loadCss('./zoom-green.css', function() {
+
+            var zoomCtrl = new BasicControl.Zoom({
+                //见zoom-green.css
+                theme: 'my-green',
+                position: 'br',
+                showZoomNum: true
+            });
+
+            map.addControl(zoomCtrl);
+        });
+       
+    }); */
+
+    //判断浏览区是否支持canvas
+    function isSupportCanvas() {
+        var elem = document.createElement('canvas');
+        return !!(elem.getContext && elem.getContext('2d'));
+    }
+    
+ /*  ['order_but', 'customer_but', 'relation_but'].forEach(function(btn) {
+	      var button = document.getElementById(btn);
+	      AMap.event.addDomListener(button,'click',clickListener)
+	    });
+
+	function clickListener() {
+	        alert(this.id);
+	} */
+  
+   function GetQueryString(name){  
+   	   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");  
+   	   var r = window.location.search.substr(1).match(reg);  
+   	   if(r!=null)return  unescape(r[2]); 
+   	return null;
+   }
+ //门店服务区域
+   var  serviceRange;
+   function initArea(polygonArea) {
+       //服务区域多边形
+       serviceRange = new AMap.Polygon({
+           path: polygonArea,//设置多边形边界路径
+           strokeColor: "#F00", //线颜色
+           strokeOpacity: 0.9, //线透明度
+           strokeWeight: 2,    //线宽
+           fillColor: "#e8e8e8", //填充色
+           fillOpacity: 0,
+           zInde:11//填充透明度
+       });
+       serviceRange.setMap(map);
+       map.setCenter(serviceRange.getBounds().getCenter());
+	   map.setZoom(15);
+      
+   }
+   
+   //国安侠服务区域
+   
+   function initTinyArea(tingarea) {
+       for(var i=0;i<tingarea.length;i++){
+    	   var tinyareaarray=tingarea[i];
+    	   var	areaTinyVillage = new AMap.Polygon({
+    		    path:tingarea[i].data,//设置多边形边界路径
+    	        strokeColor: "#01bc24", //线颜色
+    	        strokeOpacity: 0.9, //线透明度
+    	        strokeWeight: 2,    //线宽
+    	        fillColor: "#00DD00", //填充色
+    	        fillOpacity: 0 //填充透明度
+    	       
+    	    });
+
+    	    areaTinyVillage.setMap(map);
+    	    tinyareaarray["polygon"]=areaTinyVillage;
+       }
+
+   }
+   
+   function heatShowByStore(jsonDataCoordinate){
+	   if (!isSupportCanvas()) {
+		    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+		}
+		var heatmap;
+		map.plugin(["AMap.Heatmap"], function() {
+		    //初始化heatmap对象
+		    heatmap = new AMap.Heatmap(map, {
+		        radius: 16, //给定半径
+		        opacity: [0, 0.8],
+		        
+		    });
+		    //设置数据集：该数据为北京部分“公园”数据
+		    heatmap.setDataSet({
+		        data: jsonDataCoordinate
+		        
+		    });
+		});
+		heatmap.setMap(map);
+		heatmap.show();
+	   
+   }
+   function getdata(heat){
+	   var lngdata=[];
+	   var heatdata=[];
+	   for(var i=0;i<heat.length;i++){
+		   var heatcoordinate=heat[i];
+		   lngdata=[heatcoordinate.lng,heatcoordinate.lat];
+		   for(var j=0;j<tinyArea.length;j++){
+			   
+			   if(tinyArea[j].polygon.contains(lngdata)){
+				   heatdata.push(heatcoordinate);
+			   }
+			   
+		   }
+		   
+		   
+	   }
+	   heatShowByStore(heatdata);
+	   
+   }
+    </script>
+</body>
+
+</html>

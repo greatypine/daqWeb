@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>节假日设置</title>
+    <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+    <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css"/>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/dataTablesLib.js"></script>
+    <script type="text/javascript" src="../scripts/common/pms.js"></script>
+    <script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+    <script type="text/javascript">
+    	 $(function () {
+       		 
+			  var date = new Date();
+			  var year=date.getFullYear();
+			  var yearBegin=year+"-01-01";
+			  var yearEnd=year+"-12-31";
+			  $("#s1").val(yearBegin);
+			  $("#s2").val(yearEnd);
+			  onSearch();
+		   });
+		    function onSearch() {
+		        $$.executeSearch('workLogCalendarQuery', 'conditionsDiv');
+		    }
+		    function newSubmit() {
+		        window.location.href = './workLogAdd.html';
+		    }
+		    function newLeaveSubmit() {
+		        window.location.href = './leaveEdit.html';
+		    }
+		    var editObj =
+		    {
+		        html: '<a href="#" class="blue">编辑</a>',
+		        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+		            var val = allColumnsDataMap.id;
+					var days = allColumnsDataMap.days;
+					var memo = allColumnsDataMap.memo;
+					var daysId;
+					switch(days){
+						case "星期一":daysId=2;
+									break;
+						case "星期二":daysId=3;
+									break;	
+						case "星期三":daysId=4;
+									break;
+						case "星期四":daysId=5;
+									break;
+						case "星期五":daysId=6;
+									break;
+						case "星期六":daysId=7;
+									break;
+						case "星期天":daysId=1;
+									break;
+						default:daysId=2;
+									break;
+					}
+					window.location.href='WorkLogCalendarEdit.html?id='+val+'&days='+daysId+'&type=edit';
+		        }
+		    }
+		    $pmspage.opArr = [editObj];
+    	function formatThisYear(){
+			doManager("workLogManager", "updateInitAllUserCanlendar", formatDate(new Date()), function(datas, textStatus, XMLHttpRequest) {
+						if(datas.result){
+							var info = $.fromJSON(datas.data);
+						}
+					});
+		}
+    	function formatNextYear(){
+			doManager("workLogCalendarManager", "formatNextWorkLogCalendar","", function(datas, textStatus, XMLHttpRequest) {
+						if(datas.result){
+							var info = $.fromJSON(datas.data);
+							if (info == true) {
+							
+								//$$.showMessage("系统提示", "已经初始化过，无需再次初始化");
+								$$.showPromptDialog("系统提示", "已经初始化过，无需再次初始化。是否刷新本页？", false, 320, function () {
+										window.location.href='WorkLogCalendarList.html';
+	               					 }, true, {showWaiting: true});
+	          		
+							}else {
+								//$$.showMessage("系统提示", "初始化成功");
+								$$.showPromptDialog("系统提示", "初始化成功,刷新本页？", false, 320, function () {
+										window.location.href='WorkLogCalendarList.html';
+	               					 }, true, {showWaiting: true});
+							}
+							
+						}
+					});
+		}
+		//格局化日期：yyyy-MM-dd
+	        function formatDate(date) {
+	            var myyear = date.getFullYear();
+	            var mymonth = date.getMonth()+1;
+	            var myweekday = date.getDate();
+	
+	            if(mymonth < 10){
+	                mymonth = "0" + mymonth;
+	            }
+	            if(myweekday < 10){
+	                myweekday = "0" + myweekday;
+	            }
+	            return (myyear+"-"+mymonth + "-" + myweekday);
+	        }
+		function addholiday(){
+			window.location.href='WorkLogCalendarEdit.html?type=add';
+		}
+    </script>
+</head>
+<body style="height:100%">
+<div class="box">
+    <div class="title clear">
+        <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();"></div>
+        <div class="ico2"></div>
+        <div class="ico1"></div>
+        <a href="#">日誌管理 :</a>&nbsp;<a href="#">法定节假日设置</a>
+    </div>
+    <div class="containerbody padding4px">
+        <div class="containerheader">
+            <a href="#" onclick="toggleDiv('conditionsDiv','pic2');">
+                <img src="../scripts/images/22.png" align="absmiddle" id="pic2"/>
+            </a>搜索条件
+        </div>
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true" >
+               		<input type="hidden" name="isworkday" id="isworkday"  value="0"/> 
+				<table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto;margin-top:20px;">
+                   
+                 	<tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            	开始日期：
+                        </td>
+                        <td class="baseform">
+                      	 <input id="s1" revalidate="true" type="text" name="workday" likeOption="false" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:150px;margin-right: 5px;"/>
+						</td>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            	结束日期：
+                        </td>
+                        <td class="baseform">
+                         <input id="s2" revalidate="true" type="text" name="workday" likeOption="false" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:150px;margin-right: 5px;"/>
+						</td>
+                    </tr>
+                    <tr class="Colorbar3">
+                        <td colspan="4" style="width:100%">
+                            <input type="button" class="buttonu" value="查询" onclick="onSearch();"/>&nbsp;|
+                            <input type="button" class="buttonu" value="初始化今年用户日历(测试用)" onclick="formatThisYear();"/>&nbsp;|
+                            <input type="button" class="buttonu" value="添加" onclick="addholiday();"/>&nbsp;
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </form>
+        <div id="workLogSearchContainer" showcheckbox="false" showRidaoButton="true"
+             searchDiv="conditionsDiv" usecache="true" queryid="workLogCalendarQuery"
+             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+             showprint="false" showpaging="true" showcheckbox="true" operators=$pmspage.opArr>
+        </div>
+    </div>
+</div>
+</body>
+</html>

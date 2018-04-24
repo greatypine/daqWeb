@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>删除工作流实例</title>
+		<script type="text/javascript" src="../scripts/lib-main.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+		<script type="text/javascript">
+			$(function(){
+				doManager("WFSystemManager", "getCurrentLogin", "", function(data, textStatus, XMLHttpRequest){
+						var jsonData = $.fromJSON(data.data);
+						if (jsonData =="adminxpwh") {
+							alert("此功能可以使用！");
+						}
+						else {
+							alert("此功能仅对系统管理员开放!"+jsonData);
+							$("#deletebutton").hide();
+						}
+					});
+			});
+			
+			
+			function  doSubmit(){
+				  var obj=$("#flowinstanceid").val();
+					doManager("WFSystemManager", "deleteFlowInstanceById", obj, function(data, textStatus, XMLHttpRequest){
+						var jsonData = $.fromJSON(data.data);
+						if (jsonData ==0) {
+							alert("删除成功！");
+						}
+						else {
+							alert("删除失败！"+jsonData);
+						}
+					});
+			}
+	
+		</script>
+	</head>
+	<body>
+		<div class="box">
+			<!-- 这是第一部分的收缩框 -->
+            <div class="title clear">
+                <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();">
+                </div>
+                <div class="ico2">
+                </div>
+                <div class="ico1">
+                </div>
+                <a href="#">审批管理 :</a>&nbsp;<a href="#">流程实例删除</a>
+            </div>
+			<div class="containerbody">
+				<form id="orgAdd" class="pmsForm" validate="true"
+					clientvalidate="true" displaynumber="7">
+					<table class="layout" cellpadding="0" cellspacing="0" border="0"
+						bordercolor="red">
+						<tr>
+							<td align="right" nowrap="true" id="superIdTxt" colspan="1.5" width="40%">
+								请输入要删除的流程实例Id:
+							</td>
+							<td align="left" nowrap="true" colspan="1" width="60%">
+								<input type="text" id="flowinstanceid" name="flowinstanceid" class="inputtext" />
+							</td>
+						</tr>
+					
+						<tr>
+							<td align="center" nowrap="true" colspan="4">
+								<button class="buttonu" value="删除" id="deletebutton" onclick="doSubmit()">&nbsp;
+									删除
+								</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

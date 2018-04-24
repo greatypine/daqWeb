@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>流程映射列表</title>
+        <!--
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        -->
+        <script type="text/javascript" src="../scripts/lib-main.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pms.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pmsCommon.js">
+        </script>
+        <link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+        <script type="text/javascript">
+            //编辑按钮的定义
+            var editObj = {
+                html: '<a href="#">编辑</a>',
+                func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                    var id = allColumnsDataMap.id;
+                    window.location.href = 'WF1_flowmappingEdit.html?MId=' + id + '';
+                }
+            }
+            //删除按钮的定义
+            var deleteObj = {
+                html: '<a href="#">删除</a>',
+                func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                    var id = allColumnsDataMap.id;
+                    $$.showPromptDialog("系统提示", "确认删除?", false, 320, function(){
+                        //开始执行删除处理
+                        doManager("WF1FlowMappingManager", "deleteWF1FlowMapping", " " + id, function(data, textStatus, XMLHttpRequest){
+                            if (data.data) {
+                                alert("删除成功！");
+                                window.location.href = 'WF1_flowmapping.html';
+                            }
+                            else {
+                                alert(data.message);
+                            }
+                        });
+                    });
+                }
+            }
+            //流程复制按钮的定义
+            var createObj = {
+                html: '<a href="#">流程拷贝</a>',
+                func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                    $("#test1").val(allColumnsDataMap.rTableName);
+                    $("#test2").val(allColumnsDataMap.rId);
+                    var obj = {
+                        rTableName: $("#test1").val(),
+                        rId: $("#test2").val()
+                    };
+                    doManager("WF1FlowInfoManager", "createInstance", obj, function(data, textStatus, XMLHttpRequest){
+                        if (data.data) {
+                            alert("流程实例复制成功！请去相应表单查看。");
+                        }
+                        else {
+                            alert("复制流程失败！" + data.message);
+                        }
+                    });
+                    
+                }
+            }
+            //流程删除按钮的定义
+            var deleteFlowObj = {
+                html: '<a href="#">流程删除</a>',
+                func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                    $("#test1").val(allColumnsDataMap.rTableName);
+                    $("#test2").val(allColumnsDataMap.rId);
+                    var obj = {
+                        rTableName: $("#test1").val(),
+                        rId: $("#test2").val()
+                    };
+                    doManager("WF1FlowInfoManager", "removeInstance", obj, function(data, textStatus, XMLHttpRequest){
+                        if (data.data) {
+                            alert("流程实例删除成功！请去相应表单查看");
+                        }
+                        else {
+                            alert("删除失败！" + data.message);
+                        }
+                    });
+                    
+                }
+            }
+            var opArr = [editObj, deleteObj, createObj, deleteFlowObj];
+            
+            $(function(){
+                //初始化模块类型的下拉列表         
+                var resourceId = $("#rTableName")[0];
+                var resource = $dict.getDictList('wf_rtablename'); //获取rtablename的列表
+                var option = new Option('', '');
+                resourceId.add(option);
+                $(resource).each(function(i, element){
+                    var option = new Option(element.dictText, element.dictCode);
+                    resourceId.add(option);
+                });
+                
+            });
+            function rowDeleteData(row_id){
+                doManager("WFModuleManager", "deleteTBModule", row_id + "", function(data, textStatus, XMLHttpRequest){
+                    if (data.data == 1) {
+                        alert("删除成功！");
+                        window.location.href = 'tbmodule.html';
+                    }
+                    else {
+                        alert("该模块有流程绑定或其他原因不能删除!");
+                    }
+                });
+            }
+            
+            //增加
+            function doSubmit(){
+                window.location.href = 'WF1_flowmappingEdit.html';
+            }
+            
+            //多个对应关系生成
+            function createMulti(){
+                var objs = $$.getSelectedObj("WF1FlowMappingQuery");
+                for (var i = 0; i < objs.length; i++) {
+                    var obj = {
+                        rTableName: objs[i][1],
+                        rId: objs[i][2]
+                    };
+                    //循环调用生成对应关系
+                    doManager("WF1FlowInfoManager", "createInstance", obj, function(data, textStatus, XMLHttpRequest){
+                        if (data.data) {
+                            //alert("流程实例复制成功！请去相应表单查看。");
+                        }
+                        else {
+                            alert("复制流程失败！" + data.message);
+                        }
+                    },false);
+                }
+				alert("流程实例复制成功！请去相应表单查看。");
+            }
+            
+            //多个对应关系流程删除
+            function removeMulti(){
+                var objs = $$.getSelectedObj("WF1FlowMappingQuery");
+                for (var i = 0; i < objs.length; i++) {
+                    var obj = {
+                        rTableName: objs[i][1],
+                        rId: objs[i][2]
+                    };
+                    //循环调用生成对应关系
+                    doManager("WF1FlowInfoManager", "removeInstance", obj, function(data, textStatus, XMLHttpRequest){
+                        if (data.data) {
+                            //alert("流程实例删除成功！请去相应表单查看");
+                        }
+                        else {
+                            alert("删除失败！" + data.message);
+                        }
+                    },false);
+                }
+				alert("流程实例删除成功！请去相应表单查看");
+            }
+        </script>
+    </head>
+    <body>
+        <div class="box">
+            <!-- 这是第一部分的收缩框 -->
+            <div class="title clear">
+                <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();">
+                </div>
+                <div class="ico2">
+                </div>
+                <div class="ico1">
+                </div>
+                <a href="#">审批管理 :</a>&nbsp;<a href="#">一期流程映射管理</a>
+            </div>
+            <div class="containerheader">
+                <a href="#" onclick="toggleDiv('conditionDiv','pic2');"><img src="../scripts/images/22.png" align="absmiddle" id="pic2"/></a>搜索条件
+            </div>
+            <div class="containerbody" id = "conditionDiv" name = "conditionDiv">
+                <input type="text" id="test1" name="test1"/><input type="text" id="test2" name="test2"/>
+                <form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                    <table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                rTableName
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="20%">
+                                <select id="rTableName" name="rTableName" style="width:172px;" inputType="select">
+                                </select>
+                            </td>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                rId
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="20%">
+                                <input type="text" id="rId" name="rId" class="inputtext" likeOption="false"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                查询模块编号
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="20%">
+                                <input type="text" id="moduleId" name="moduleId" class="inputtext" likeOption="false"/>
+                            </td>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                sheetId
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <input type="text" id="sheetId" name="sheetId" class="inputtext" likeOption="false"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" nowrap="true" colspan="4">
+                                <input type="button" class="buttonu" type="button" value="查询" id="searchButton"/>&nbsp;<input type="reset" class="buttonu" type="reset" value="重置" id="resetButton"/>&nbsp;
+                                <td align="right" nowrap="true" colspan="1">
+                                    <button class="buttonu" value="增加" onclick="doSubmit()">
+                                        &nbsp;
+                                        增加对应数据
+                                    </button>
+									 <button class="buttonu" value="全部生成流程" onclick="createMulti()">
+                                        &nbsp;
+                                        批量生成流程
+                                    </button>
+									 <button class="buttonu" value="全部删除流程" onclick="removeMulti()">
+                                        &nbsp;
+                                        批量删除流程
+                                    </button>
+                                </td>
+                            </td>
+                        </tr>
+                        <tr>
+                        </tr>
+                    </table>
+                </form>
+                <script type="text/javascript">
+                    $("#searchButton").click(function(){
+                        $$.executeSearch("WF1FlowMappingQuery", "conditionDiv");
+                    });
+                </script>
+            </div>
+        </div>
+        <div id="moduleInfo" style="width:100%;margin:0px;padding:0px;">
+            <div id="testQuery" showcheckbox="true" searchDiv="conditionDiv" showsearch="false" showdisplay="false" showprint="false" queryid="WF1FlowMappingQuery" operators="opArr" autosearch="false">
+            </div>
+        </div>
+    </body>
+</html>

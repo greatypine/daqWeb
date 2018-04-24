@@ -1,0 +1,375 @@
+<!doctype html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>附近门店</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.3&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <style type="text/css">
+#mapContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+info {
+            border: solid 1px silver;
+        }
+        div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 12px;
+            padding: 6px;
+            line-height: 20px;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+<div id="mapContainer"></div>
+ <div id="local"  style="position: absolute;top:530px;left: 30px;z-index:100000;"  onclick="goLocal();">
+ 	<img src="../app_webview/dingwei.png" style="width:40px;background-color: #fff;padding: 4px;box-shadow: 0 0 3px rgba(0,0,0,0.5);"/>
+ </div> 
+<script type="text/javascript">
+	var centerPosition=getUrlParamByKey("centerPosition");//当前位置坐标
+	var target=getUrlParamByKey("target");//判断当前是否为周边门店还是国安侠1：周围门店,2.周围国安侠
+	var city_code;
+	var geocoder;
+	var lnglat1;
+	var flags=true;
+	var map = new AMap.Map("mapContainer", {
+		resizeEnable : true,
+		doubleClickZoom : false,
+		zooms:[10,15]
+	});
+	map.setZoom(15);
+	//根据坐标获查询详细地址
+	AMap.service('AMap.Geocoder',function(){//回调函数
+	    //实例化Geocoder
+	    geocoder = new AMap.Geocoder({
+	        city: "010"//城市，默认：“全国”
+	    });
+	    //TODO: 使用geocoder 对象完成相关功能
+	})
+	$(function(){
+		if(centerPosition!=null&&centerPosition!=undefined&&centerPosition!=''&&centerPosition!='null,null'){
+			var ccstr=centerPosition.split(",");
+			var mm=[ccstr[0],ccstr[1]];
+			map.setCenter(mm);
+			   var marker =new AMap.Marker({
+				map:map,
+				position:mm,
+				zIndex:10000,
+				content:'<div style="width:20px"><img style="width:50%" src="../app_webview/local_img.png"></div>'
+				
+			});
+			  // 设置点标记的动画效果，此处为弹跳效果
+			   //marker.setAnimation('AMAP_ANIMATION_BOUNCE'); 
+			  lnglat1 = new AMap.LngLat(ccstr[0],ccstr[1]);
+		}else{
+			centerPosition="116.397726,39.903767";
+			map.setCenter([116.397726,39.903767]);
+			lnglat1 = new AMap.LngLat(116.397726,39.903767);
+		}
+		map.setStatus({dragEnable:true});　　//允许拖拽 
+		var obj=new Object;
+		if(target==1){
+			doManager('storeManager','findStoreData',null,function(data){
+	            if(data.result){
+	            	var jsonData = JSON.parse(data.data);
+	            	if(jsonData.length>0){
+	            		for(var i = 0;i<jsonData.length;i++){
+	            			var storeInfo = jsonData[i];
+	            			var position = storeInfo.location;
+	            			if(i==0){
+	            				obj.path=100000;
+	            				obj.position=position;
+	            				obj.name=storeInfo.name;
+	            				obj.phone=storeInfo.phone;
+	            			}
+	            			var marker =new AMap.Marker({
+	            				map:map,
+	            				position:position,
+	            				icon:"../aboutMap/dist/img/splogo.png",
+	            				bubble:false,
+	            				extData:{"name":storeInfo.name,"phone":storeInfo.phone}
+	            			});
+	            			
+	            			 if(centerPosition!=null&&centerPosition!=undefined&&centerPosition!=''&&centerPosition!='null,null'){
+	            				var lnglat2 =  new AMap.LngLat(position[0],position[1]);
+	            				if(Math.round(lnglat1.distance(lnglat2))<obj.path){
+	            					obj.path=Math.round(lnglat1.distance(lnglat2));
+		            				obj.position=position;
+		            				obj.name=storeInfo.name;
+		            				obj.phone=storeInfo.phone;
+	            					
+	            				}
+	            			} 
+	            			
+	            			marker.on('click',function(e){
+	            				var name = e.target.getExtData().name;
+	            				var phone = e.target.getExtData().phone;
+	            				//实例化信息窗体
+	            			    var title = '门店信息',
+	            			        content = [];
+	            			    content.push("门店名称："+name);
+	            			    content.push("电话："+(phone==null?"无":phone));
+	            			    var infoWindow = new AMap.InfoWindow({
+	            			        isCustom: true,  //使用自定义窗体
+	            			        content: createInfoWindow(title, content.join("<br/>")),
+	            			        offset: new AMap.Pixel(16, -45)
+	            			    });
+
+	            		         infoWindow.open(map, e.target.getPosition()); 
+	            			})
+	            		}
+	            		if(centerPosition!=null&&centerPosition!=undefined&&centerPosition!=''&&centerPosition!='null,null'){
+	            			/* var info = [];
+            				info.push("<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#00c0ef;padding:5px 18px 5px 10px;color:#fff\"><span>门店信息</span></div> ");
+            		        info.push("<div style=\"padding:0px 18px 0px 14px;line-height:24px;\"><b>门店名称："+obj.name+"</b>");
+            		        info.push("<b>门店电话："+(obj.phone==null?"无":obj.phone)+"</b></div></div>");
+            		       var  infoWindow2 = new AMap.InfoWindow({
+            		        	 offset:new AMap.Pixel(0,-20),  
+            		             content: info.join("<br/>")  //使用默认信息窗体框样式，显示信息内容
+            		         });
+            		         infoWindow2.open(map, obj.position);  */
+            		       //实例化信息窗体
+	            			    var title = '门店信息',
+	            			        content = [];
+	            			    content.push("门店名称："+obj.name);
+	            			    content.push("电话："+(obj.phone==null?"无":obj.phone));
+	            			    var infoWindow = new AMap.InfoWindow({
+	            			        isCustom: true,  //使用自定义窗体
+	            			        content: createInfoWindow(title, content.join("<br/>")),
+	            			        offset: new AMap.Pixel(16, -45)
+	            			    });
+	            		         infoWindow.open(map, obj.position); 
+	            		}
+	            	}
+	            }
+	        },false);
+		}else if(target==2){
+			document.title="附近国安侠";
+			//判断是否存在坐标
+			if(centerPosition!=null&&centerPosition!=undefined&&centerPosition!=''&&centerPosition!='null,null'){
+				var ccstr=centerPosition.split(",");
+				var mm=[ccstr[0],ccstr[1]];
+				geocoder.getAddress(mm, function(status, result) {
+				    if (status == 'complete' && result.info == 'OK') {
+				    	city_code=result.regeocode.addressComponent.citycode;
+				    }else{
+				    	city_code='010';
+				    }
+				    getEmpll();
+				}); 
+			}
+			timeout= window.setInterval(getEmpll,60000);
+		}
+		
+	})
+	
+	
+	function getEmpll(){
+		if(city_code!=null&&city_code!=''&&city_code!='undefined'&&typeof(city_code)!='undefined'){
+			console.log(city_code);
+			var obj2=new Object();
+			doManager('PlatformStoreManager','findroundEmployeeByCitycode',city_code,function(data){
+	            if(data.result){
+	            	var jsonData = JSON.parse(data.data);
+	            	if(jsonData.code==200){
+	            		
+	            		for(var i = 0;i<jsonData.data.length;i++){
+	            			var position = jsonData.data[i].locations;
+	            			if(i==0){
+	            				obj2.path=100000;
+	            				obj2.position=position;
+	            				obj2.name=jsonData.data[i].employeeName;
+	            				obj2.phone=jsonData.data[i].phone;
+	            			}
+
+	            			var marker =new AMap.Marker({
+	            				map:map,
+	            				position:position,
+	            				icon:"../aboutMap/dist/img/gaxlogo.png",
+	            				extData:{"name":jsonData.data[i].employeeName,"phone":jsonData.data[i].phone}
+	            			});
+	            			if(centerPosition!=null&&centerPosition!=undefined&&undefined!=''){
+	            				var lnglat2 =  new AMap.LngLat(position[0],position[1]);
+	            				if(Math.round(lnglat1.distance(lnglat2))<obj2.path){
+	            					obj2.path=Math.round(lnglat1.distance(lnglat2));
+		            				obj2.position=position;
+		            				obj2.name=jsonData.data[i].employeeName;
+		            				obj2.phone=jsonData.data[i].phone;
+	            					
+	            				}
+	            			} 
+	            			
+	            			marker.on('click',function(e){
+	            				var name = e.target.getExtData().name;
+	            				var phone = e.target.getExtData().phone;
+	            				/* var info = [];
+	            				info.push("<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#00c0ef;padding:5px 18px 5px 10px;color:#fff\"><span>国安侠信息</span></div> ");
+	            		        info.push("<div style=\"padding:0px 18px 0px 14px;line-height:24px;\"><b>国安侠："+name+"</b>");
+	            		        info.push("<b>国安侠电话："+(phone==null?"无":phone)+"</b></div></div>");
+	            		      var   infoWindow1 = new AMap.InfoWindow({
+	            		        	 offset:new AMap.Pixel(0,-20),  
+	            		             content: info.join("<br/>")  //使用默认信息窗体框样式，显示信息内容
+	            		         });
+	            		         infoWindow1.open(map, e.target.getPosition());  */
+	            				  //实例化信息窗体
+	            			    var title = '国安侠信息',
+	            			        content = [];
+	            			    content.push("国安侠："+name.split("+")[0]);
+	            			    content.push("电话："+(phone==null?'无':phone));
+	            			    var infoWindow = new AMap.InfoWindow({
+	            			        isCustom: true,  //使用自定义窗体
+	            			        content: createInfoWindow(title, content.join("<br/>")),
+	            			        offset: new AMap.Pixel(16, -45)
+	            			    });
+	            			    infoWindow.open(map, e.target.getPosition()); 
+	            		         
+	            			})
+	            		}
+	            		
+	            		 if(centerPosition!=null&&centerPosition!=undefined&&centerPosition!=''&&centerPosition!='null,null'){
+	            			/* var info = [];
+	        				info.push("<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#00c0ef;padding:5px 18px 5px 10px;color:#fff\"><span>国安侠信息</span></div> ");
+	        		        info.push("<div style=\"padding:0px 18px 0px 14px;line-height:24px;\"><b>国安侠："+obj2.name+"</b>");
+	        		        info.push("<b>国安侠电话："+(obj2.phone==null?"无":obj2.phone)+"</b></div></div>");
+	        		      var   infoWindow3 = new AMap.InfoWindow({
+	        		        	 offset:new AMap.Pixel(0,-20),  
+	        		             content: info.join("<br/>")  //使用默认信息窗体框样式，显示信息内容
+	        		         });
+	        		         infoWindow3.open(map, obj2.position);  */
+	            			 var title = '国安侠信息',
+	     			        content = [];
+	     			    content.push("国安侠："+obj2.name.split("+")[0]);
+	     			    content.push("电话："+(obj2.phone==null?'无':obj2.phone));
+	     			    var infoWindow = new AMap.InfoWindow({
+	     			        isCustom: true,  //使用自定义窗体
+	     			        content: createInfoWindow(title, content.join("<br/>")),
+	     			        offset: new AMap.Pixel(16, -45)
+	     			    });
+	     			    if(flags){
+	     			    	infoWindow.open(map, obj2.position);
+	     			    	flags=false;
+	     			    }else{
+	     			    	map.clearInfoWindow();
+	     			    }
+	     			     
+	            		} 
+	            		
+	            	}
+	            }
+	        },false);
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//构建自定义信息窗体
+    function createInfoWindow(title, content) {
+        var info = document.createElement("div");
+        info.className = "info";
+
+        //可以通过下面的方式修改自定义窗体的宽高
+       info.style.width = "150px";
+        // 定义顶部标题
+        var top = document.createElement("div");
+        var titleD = document.createElement("div");
+        var closeX = document.createElement("img");
+        top.className = "info-top";
+        titleD.innerHTML = title;
+        closeX.src = "https://webapi.amap.com/images/close2.gif";
+        closeX.onclick = closeInfoWindow;
+
+        top.appendChild(titleD);
+        top.appendChild(closeX);
+        info.appendChild(top);
+
+        // 定义中部内容
+        var middle = document.createElement("div");
+        middle.className = "info-middle";
+        middle.style.backgroundColor = 'white';
+        middle.innerHTML = content;
+        info.appendChild(middle);
+
+        // 定义底部内容
+        var bottom = document.createElement("div");
+        bottom.className = "info-bottom";
+        bottom.style.position = 'relative';
+        bottom.style.top = '0px';
+        bottom.style.margin = '0 auto';
+        var sharp = document.createElement("img");
+        sharp.src = "https://webapi.amap.com/images/sharp.png";
+        bottom.appendChild(sharp);
+        info.appendChild(bottom);
+        return info;
+    }
+  //关闭信息窗体
+    function closeInfoWindow() {
+        map.clearInfoWindow();
+    }
+  function goLocal(){
+	  if(centerPosition!=null&&centerPosition!=undefined&&centerPosition!=''&&centerPosition!='null,null'){
+		var ccstr=centerPosition.split(",");
+		var mm=[ccstr[0],ccstr[1]];
+	 	map.setCenter(mm);
+	  }else{
+		map.setCenter([116.397726,39.903767]);
+	  }
+  }
+</script>
+</body>
+</html>

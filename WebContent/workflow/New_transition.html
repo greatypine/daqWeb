@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+		
+		<script type="text/javascript" src="../scripts/lib-main.js"></script>
+  		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+  		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<style>
+			html {
+			    overflow: auto;
+			    height: 100%;
+			}
+			
+			body {
+			    overflow: auto;
+			    background: #E6E6E6 url(images/right.jpg) repeat-y right top;
+			    height: 100%;
+				margin:0px;
+				pading:0px;
+			    padding-right: 5px;
+			}
+		</style>
+		<script>
+			var FlowId = getUrlParamByKey("FlowId");//对应流程ID
+            $(function(){
+                $("#flowId").val(FlowId);
+				if (FlowId != null) {
+					var selectObj = $("#beginId")[0];
+					var selectObj1 = $("#endId")[0];
+					doManager("WFFlowStepManager", "querySteps", FlowId + "", function(data, textStatus, XMLHttpRequest){
+						if (data.result) {
+							var jsonData = $.fromJSON(data.data);
+							for(i=0;i<jsonData.length;i++){
+								var option = new Option(jsonData[i].id+"--"+jsonData[i].stepName, jsonData[i].id);
+								var option1 = new Option(jsonData[i].id+"--"+jsonData[i].stepName, jsonData[i].id);
+								selectObj.add(option);
+								selectObj1.add(option1);
+							}
+						}
+					});
+				}
+            });
+            function doSubmit(){
+				var obj = {
+					flowId:$("#flowId").val(),
+            		beginId:$("#beginId").val(),
+            		transitionNo:$("#transitionNo").val(),
+            		endId:$("#endId").val(),
+            		isDefault:$("input[name='isDefault']:checked").val(),
+            		condition:$("#condition").val()
+            	}
+            	doManager("WFFlowTransitionManager", "addTransition", obj, function(data, textStatus, XMLHttpRequest){
+					if(data.result){
+						alert("OK");
+					}
+				});
+            }
+			function toLastPage(){
+				 window.location.href = 'Edit_workflow.html?FlowId=' + FlowId;
+			}
+		</script>
+		<style type="text/css">
+			table {
+				border: 0px solid #000;
+				
+			}
+			td {
+				border: 0px solid #000;
+			}
+		</style>
+	</head>
+	<body style="margin-left:3px;text-align:center;" background="images/leftbg.png">
+		<div class="rightcont body_bg clear" style="width:300px;margin:0px auto;padding:0px auto;">
+			<div class="box">
+				<div class="containerbody">
+					<form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+						<table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+							<tr>
+								<td align="left" nowrap="true" colspan="4">
+									<strong>流程转换基本信息:</strong>
+								</td>
+							</tr>
+							
+							
+							<tr>
+								<td align="left" nowrap="true">
+									对应流程Id:
+								</td>
+								<td>
+									<input type="text" id="flowId" name="flowId" class="inputtext" disabled>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" nowrap="true" id="beginIdTxt">
+									开始节点:
+								</td>
+								<td>
+									 <select id="beginId" name="beginId"  style="width:175px;" inputType="select">
+                                	</select>
+								</td>
+							</tr>
+							<tr>
+								<td width="15%" align="left" nowrap="true" >
+									转换序号:
+								</td>
+								<td>
+									<input type="text" id="transitionNo" name="transitionNo" class="inputtext" >
+								</td>
+							</tr>
+							<tr>
+								<td width="15%" align="left" nowrap="true" id="endIdTxt">
+									结束节点:
+								</td>
+								<td>
+									<select id="endId" name="endId"  style="width:175px;" inputType="select">
+                                	</select>
+								</td>
+							</tr>
+							<tr>
+								<td align="left" nowrap="true">
+									是否默认转换:
+								</td>
+								<td>
+									<input class="pmsRadio" id="isDefault" name="isDefault" data="[['0','否'],['1','是','checked']]" />
+								</td>
+							</tr>
+							
+							<tr>
+								<td align="left" nowrap="true" >
+									节点转换条件
+								</td>
+								<td colspan="2">
+									<input type="text" id="condition" name="condition" class="inputtext" style="width:100%">
+								</td>
+							</tr>
+							<tr>
+								<td align="left" nowrap="true" colspan="4">
+									<button class="buttonu" value="提交" onclick="doSubmit()">&nbsp;
+										提交
+									</button>
+									<button class="buttonu" id="Return" onclick="toLastPage()">
+										返回
+									</button>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+        </div>
+	</body>
+</html>

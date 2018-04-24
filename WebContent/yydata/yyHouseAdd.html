@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Cache-Control" Content="no-cache">
+<meta http-equiv="Pragma" Content="no-cache">
+<meta http-equiv="Expires" Content="0">
+<link
+	href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css"
+	rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+<title>物业事业部数据填报</title>
+<style type="text/css">
+table {
+	margin-top: 10px;
+	font-size: 14px;background-color:#fff;
+}
+
+table,th,td {
+	border: 1px solid #ccc;
+}
+
+table th,table,td {
+	height: 35px;
+	line-height: 35px;
+}
+
+table input {
+	height: 35px;
+	line-height: 35px;
+	width: 100%;
+	border: 0;
+	text-align: center;
+	color: #F00;
+	outline: none;
+	overflow-x: auto;
+}
+
+table textarea {
+	width: 99.5%;
+	border: 0;
+	line-height: 20px;
+	outline: none;
+	padding-top: 10px;
+}
+.but {
+	margin-top: 30px;
+	text-align: center;
+}
+</style>
+<script type="text/javascript">
+
+function dataCheck(){
+   var obj = document.getElementsByName("numberInput");
+   for(i=0;i<obj.length;i++){
+	    if(!/^[0-9]*$/.test(obj[i].value)){  
+	        alert("请输入数字!"); 
+	        return false;
+	    }  
+   }
+   return true;
+}
+
+		function doSave(){
+			if(!dataCheck()){
+				return;
+			}
+			if($('#s1').val()==""||$('#s1').val()==null){
+				alert("请选择日期！");
+				return ;
+			}
+			var storeList=new Array();
+			var inputs = $("table input");
+			var oDate = new Date();
+			var dtime=$('#s1').val()+" "+oDate.getHours()+":"+oDate.getMinutes()+":"+oDate.getSeconds();
+			var row = inputs.length/4;
+			for(n=0;n<row;n++){
+				var obj=new Object();
+				var a=n*4+0;
+				var b=n*4+1;
+				var c=n*4+2;
+				var d=n*4+3;
+				obj.name=inputs.eq(a)[0].value;
+				obj.num=inputs.eq(b)[0].value;
+				obj.address=inputs.eq(c)[0].value;
+				obj.date=dtime;
+				obj.remark=inputs.eq(d)[0].value;
+				storeList.push(obj);
+			}
+		    doManager("yyStoreManager", "saveYyStore", [storeList], function(data, textStatus, XMLHttpRequest){
+		        if (data.result) {
+		            var jsonData = $.fromJSON(data.data);
+		            alert("添加成功!");
+		            window.location.href = 'yyHouseList.html';
+		        }else{
+					$$.showMessage("系统信息", "添加失败!");
+				}
+		    });
+		}
+</script>
+</head>
+
+<body>
+<div class="panel panel-primary">
+			<div class="panel-heading">运营数据管理 :物业事业部数据填报</div>
+			<div class="panel-body" id="conditionsDiv">
+				<form id="orgAdd" name="orgAdd" class="pmsForm" validate="true"
+					clientvalidate="true" >
+							<input id="s1" revalidate="true"
+								type="text" likeOption="false" name="date"
+								validate="formatDate:true" class="pmsDateField form-control"
+								yearRange="-100:+10" style="width: 27%; display: inline;"
+								readonly />
+				</form>
+			</div>
+		</div>
+		
+	<table width="100%" border="1" cellspacing="0" cellpadding="0">
+		<tr>
+			<th width="5%" rowspan="20" scope="row">开店<BR>布点</th>
+			<th width="15%"><input type="text" value="签约月店数" style="color: black;" readonly="readonly"/></th>
+			<td width="5%" align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td width="5%" align="center"><input type="text" value="地点：" style="color: black;" readonly="readonly"/></td>
+			<td width="67%"><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="签约星店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="地点：" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="累计签约月店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="累计签约星店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="外埠城市本周签约月店" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="地点：" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="外埠城市本周签约星店" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="地点：" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="外埠累计城市签约月店" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="外埠累计城市签约星店" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="新开月店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="地点：" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="新开星店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="地点：" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="已运营月店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="已运营星店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="装修中月店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="装修中星店数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="线下培训人数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="累计线下培训人数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="线上培训人数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="累计线上培训人数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="培训上岗人数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+		<tr>
+			<th><input type="text" value="累计培训上岗人数" style="color: black;" readonly="readonly"/></th>
+			<td align="center"><input type="text" name="numberInput"/>
+			</td>
+			<td align="center"><input type="text" value="" style="color: black;" readonly="readonly"/></td>
+			<td><input type="text" value="" style="color: black;" />
+			</td>
+		</tr>
+	</table>
+	<div class="but">
+		<input name="" type="submit" onclick="doSave();"/>
+	</div>
+</body>
+</html>

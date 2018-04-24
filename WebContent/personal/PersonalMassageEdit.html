@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+       <link rel="stylesheet" href="../scripts/lib/jquery/ztree/zTreeStyle/zTreeStyle.css" type="text/css">
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        <script type="text/javascript" src="./js/createProject.js">
+        </script>
+        <title>无标题文档</title>
+        <script type="text/javascript">
+        var id = getUrlParamByKey("id");
+        var jsonTemp = null;
+        $(function(){
+            $validator = new PMSValidator($("#projectForm")[0], {
+                bNormalDisplay: false,
+                iDisplayLength: 5
+            });
+			doManager("personalMessageManager", "queryPersonalMessageId", id + '', function(data, textStatus, XMLHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    jsonTemp = jsonData;
+                    $("#id").val(jsonData.id);
+                    $("#messageTitle").val(jsonData.messageTitle);
+                    $("#messageContent").val(jsonData.messageContent);
+                }
+            }, false);
+        })
+ 
+        function dataCheck(){
+        	 $validator = new PMSValidator($("#projectForm")[0], {
+                 bNormalDisplay: false,
+                 iDisplayLength: 5
+             });
+            //基础校验-------------------------------
+            $validator.clean();
+            var cvalidator = $validator.clientValidate();
+            if (!cvalidator) {
+                $$.showMessage("系统信息", "数据校验不通过，请检查各项输入是否正确。");
+                return false;
+            }
+            return true;
+        }
+        function formatDate(date){
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth() + 1;
+            var myweekday = date.getDate();
+            
+            if (mymonth < 10) {
+                mymonth = "0" + mymonth;
+            }
+            if (myweekday < 10) {
+                myweekday = "0" + myweekday;
+            }
+            return (myyear + "-" + mymonth + "-" + myweekday);
+        }
+    	
+		//修改
+		function doSave(){
+			if (!dataCheck()) {
+                return;
+            }
+			 var obj = { 
+					 id:$("#id").val(),
+					 messageTitle:$("#messageTitle").val(),
+					 messageContent:$("#messageContent").val(),
+	            }
+	            doManager("personalMessageManager", "updatePersonalMessager", obj, function(data, textStatus, XMLHttpRequest){
+	                if (data.result) {
+	                    var jsonData = $.fromJSON(data.data);
+	                    var id = jsonData.id;
+	                    window.location.href = 'PersonalMassageList.html?ApplId=' + id;
+	                }else{
+						$$.showMessage("系统信息", "编辑失败!");
+					}
+	            });
+	}
+		
+        </script>
+    </head>
+    <body>
+     <div id="pageheardiv" class="title clear">
+            <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();">
+            </div>
+            <div class="ico2">
+            </div>
+            <div class="ico1">
+            </div>
+            <a href="#">个人管理</a>
+            <a href="#">消息发送</a>
+        </div>
+        <div class="containerheader">
+          发布消息
+        </div>
+        <div class="containerbody">
+           <form class="pmsForm" id="projectForm" name="projectForm">
+                <div id="nav_cont">
+                    <h1>
+                        <div class="displayblock" id="_un_container_0_0_1">
+                            <input type="hidden" name="id" id="id" />
+                            <table cellpadding="0" cellspacing="0" class="layout" width="90%">
+                                <tr>
+                                    <td width="15%">
+                                    </td>
+                                    <td width="30%">
+                                    </td>
+                                    <td width="15%">
+                                    </td>
+                                    <td width="40%">
+                                    </td>
+                                </tr>
+                             <tr>
+                                    
+                                        <td class="basetext" style="width: 8%; text-align: right">
+                                        消息标题：<span class="red">*</span>
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <input type="text" id ="messageTitle"   class="inputtext" name = "messageTitle" style="width:582px;" validate="required:true, maxlength:400"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="basetext" style="width: 8%; text-align: right">
+                                         消息内容：<span class="red">*</span>
+                                        </td>
+                                        <td align="left" colspan="3">
+                                            <textarea id= "messageContent"   class="inputtext" name="messageContent" style="width:582px;" rows="4" validate="required:true, maxlength:400"></textarea>
+                                        </td>
+                                    </tr>
+                                <tr>
+                                    <td colspan="2" align="right">
+                                        <button class="buttonu" onclick="doSave();">
+                                          保存
+                                        </button>
+                                    </td>
+                                    <td colspan="2" align="left">
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </h1>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

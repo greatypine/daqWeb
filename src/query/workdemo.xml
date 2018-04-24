@@ -1,0 +1,100 @@
+<pmsquery>
+	<query id="wfInstanceArgsQuery" header="流程实例参数列表" baseclass="com.cnpc.pms.workflow.entity.WFInstanceVariable" order="id asc">
+		<column key="id" header="id" type="java.lang.Long"  allowSearch="true" operator="eq" width="25%" ></column>
+		<column key="flowInstanceId" header="流程实例Id"  allowSearch="true" operator="eq"  allowSort="true" width="25%" />
+		<column key="variableCode" header="参数代码"  allowSearch="true"  width="25%" />
+		<column key="variableName" header="参数名称" allowSearch="true"   width="25%" />
+		<column key="variableType" header="参数数据类型" allowSearch="true"   width="25%" />
+		<column key="defaultValue" header="默认值" allowSearch="true"   width="25%" />
+		<column key="value" header="设置值" allowSearch="true"   width="25%" />
+	</query>
+	<query id="wfInstanceTransQuery" header="流程实例转换列表" baseclass="com.cnpc.pms.workflow.entity.WFInstanceTransition" order="id asc">
+		<column key="id" header="id" type="java.lang.Long"  allowSearch="true" operator="eq" width="25%" ></column>
+		<column key="flowInstanceId" header="流程实例Id" type="java.lang.Long"  allowSearch="true" operator="eq" width="25%" ></column>
+		<column key="beginId" header="开始节点"  allowSearch="true" operator="eq"  allowSort="true" width="25%" />
+		<column key="transitionNo" header="流程实例转换序号"  allowSearch="true"  width="25%" />
+		<column key="endId" header="结束节点" allowSearch="true"   width="25%" />
+		<column key="isDefault" header="是否默认转换" allowSearch="true"   width="25%" />
+		<column key="condition" header="转换条件" allowSearch="true"   width="25%" />
+	</query>
+	<query id="wfInstanceStepQuery" header="流程实例步骤列表" baseclass="com.cnpc.pms.workflow.entity.WFStepInstance" order="id asc">
+		<column key="id" header="id" type="java.lang.Long"  allowSearch="true" operator="eq"  ></column>
+		<column key="flowInstanceId" header="流程实例Id"  allowSearch="true" operator="eq"  allowSort="true"  />
+		<column key="stepNo" header="流程序号"  allowSearch="true"   />
+		<column key="stepType" header="步骤类型" allowSearch="true"    />
+		<column key="stepName" header="步骤名称" allowSearch="true"    />
+		<column key="isSameOrg" header="是否本部门" allowSearch="true"    />
+		<column key="isReturn" header="是否可退回" allowSearch="true"    />
+		<column key="isFinish" header="是否可终止" allowSearch="true"    />
+		<column key="isChoiseNext" header="是否可选择后续" allowSearch="true"    />
+		<column key="isChoisePrev" header="是否可选择前面" allowSearch="true"    />
+		<column key="isAutoSave" header="表单是否要留痕" allowSearch="true"    />
+		<column key="isAllowEdit" header="表单是否可编辑" allowSearch="true"    />
+		<column key="isPrompt" header="表单是否催办" allowSearch="true"    />
+		<column key="promptDays" header="催办天数" allowSearch="true"    />
+		<column key="remoteJava" header="外部java类" allowSearch="true"    />
+		<column key="remoteArgs" header="调用参数设置" allowSearch="true"    />
+		
+	</query>
+	<query id="wfRecordQuery" 
+		header="流程实例执行记录" 
+		baseclass="com.cnpc.pms.workflow.entity.WFInstanceRecord" 
+		order="id  asc" >
+		<column key="id" header="ID" type="java.lang.Long"  allowSearch="true" operator="eq"  allowSort="true"></column>
+		<column key="flowInstanceId" header="流程实例ID" type="java.lang.Long"  allowSearch="true" operator="eq"  allowSort="true"></column>
+		<column key="operType" header="操作类型"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="moduleId" header="模块ID"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="sheetId" header="表单ID"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="operNo" header="操作序号"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="operTime" header="操作时间"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="toOperId" header="待操作人"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="toOperName" header="带操作名称"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="operId" header="实际操作人"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="operName" header="操作人名"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="operMemo" header="操作描述"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="stepId" header="操作步骤"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="nextStepId" header="下一操作步骤"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="isPassed" header="通过与否"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="passType" header="通过类型"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="returnType" header="不通过类型"  allowSearch="true" operator="eq"  allowSort="true" />
+		<column key="memo" header="审批意见"  allowSearch="true" operator="eq"  allowSort="true" />
+	</query>
+	<query id="sheetlistQuery" 
+		header="表单列表" 
+		baseclass="com.cnpc.pms.workflowdemo.entity.WFPlanDemo"
+		order="id  asc">
+		<column key="id" header="表单Id" allowSearch="true" />
+		<column key="informant" header="填报人"    allowSort="true" />	
+		<column key="projectName" header="项目名称" allowSearch="true"/>			
+		<column key="projectSource" header="项目来源"  allowSort="true"/>	
+		<column key="projectType" header="项目类型"  allowSort="true"/>	
+		<column key="totalfunding" header="总经费"    allowSort="true" />	
+		<column key="partiUnits" header="参加单位"    allowSort="true" />	
+		<column key="startDate" header="开始时间"    allowSort="true" type="java.util.Date" format="yyyy-MM-dd "/>	
+		<column key="endDate" header="结束时间"    allowSort="true" type="java.util.Date" format="yyyy-MM-dd "/>	
+		<column key="orgName" header="填报单位名称"    allowSort="true" />	
+		<column key="deptId" header="隶属部门Id"    allowSort="true" />	
+		<column key="remark" header="备注"    allowSort="true" />	
+	</query>
+
+	<query id = "sendinfoQuery" header="下达信息列表"  baseclass="com.cnpc.pms.workflow.entity.WFSendInfo" order="id  asc" >
+		<column key="id" header="ID"    allowSort="true" width="22%" allowSearch="true"/>	
+		<column key="moduleId" header="模块ID"    allowSort="true" width="22%" allowSearch="true"/>
+		<column key="sheetId" header="表单ID"    allowSort="true" width="22%" allowSearch="true"/>
+		<column key="sheetName" header="表单名称"    allowSort="true" width="22%" allowSearch="true"/>
+		<column key="sendId" header="下达人"    allowSort="true" width="22%" allowSearch="true"/>
+		<column key="receiveId" header="待处理人"    allowSort="true" width="22%" allowSearch="true"/>
+		<column key="state" header="信息状态"    allowSort="true" width="22%" allowSearch="true" dict = "sendinfostate"/>
+		<column key="sendTime" header="下达时间"    allowSort="true" width="22%" allowSearch="true" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss"/>
+		<column key="resolvedTime" header="处理时间"    allowSort="true" width="22%" allowSearch="true" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss"/>		
+		<column key="remarks" header="备注"    allowSort="true" width="22%" allowSearch="true"/>		
+	</query>
+	
+	
+	<query id = "sendinfoSheetQuery" header="信息表单列表"  baseclass="com.cnpc.pms.workflowdemo.entity.WFSendInfoDemo" order="id  asc" >
+		<column key="id" header="ID"    allowSort="true" width="22%" allowSearch="true"/>	
+		<column key="name" header="表单名称"    allowSort="true" width="22%" allowSearch="true"/>
+		<column key="infoMessage" header="表单信息"    allowSort="true" width="22%" allowSearch="true"/>
+		<column key="moduleCode" header="模块编号"    allowSort="true" width="22%" allowSearch="true"/>
+	</query>
+</pmsquery>	      

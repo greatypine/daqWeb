@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 2 | Blank Page</title>
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 35px 35px 35px; float:left; width: 70%;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 35px 35px 35px; float:left; width: 30%;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .pop p{margin:0;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+        <div class="pull-left">
+          <h2 class="logo-lg"><a href="index.html" class="h2"> 划片动态</a></h2>
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- Messages: style can be found in dropdown.less-->
+            <li class="dropdown messages-menu">
+              <a class="dropdown-toggle" data-toggle="dropdown">
+                时间： <span id="cur_timeSpan">载入中...</span>
+              </a>
+            </li>
+            <!-- Notifications: style can be found in dropdown.less -->
+            <li class="dropdown notifications-menu">
+              <a class="dropdown-toggle" data-toggle="dropdown">
+                <span id="cur_store_name">载入中...</span>
+              </a>
+            </li>
+            <!-- Tasks: style can be found in dropdown.less -->
+            <li class="dropdown tasks-menu">
+              <a class="dropdown-toggle" data-toggle="dropdown">
+                <span id="cur_employee_no">载入中...</span>
+              </a>
+            </li>
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                  <p><strong><span id="cur_card_name">载入中...</span></strong></p>
+                  <p>国安侠<span id="cur_card_no">载入中...</span></p>
+                </li>
+                <!-- Menu Body -->
+                <li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="index.html">划片区域</a>
+                    </div>
+                  </div>
+                  <!-- /.row -->
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="https://data.guoanshequ.com/daqWeb/bizbase/indexMain.html" class="btn btn-default btn-flat">国安数据管理</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="#" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container" style="width: 1000px;">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box clearfix">
+            <div class="info_head with-border">
+              <div class="col-lg-4 text-center"><img src="dist/img/376884043677306248.png" alt="User Image"></div>
+              <div class="col-lg-8">
+
+                <h2 class="text-yellow">载入中...</h2>
+                <p>员工工号：<span id="employee_no">载入中...</span></p>
+                <p>在职时间：<span id="remark">载入中...</span></p>
+                <p>电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：<span id="phone">载入中...</span></p>
+                <p>所属门店：<span id="storename">载入中...</span></p>
+
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="info_bottom">
+              <h5 class="text-light-blue">个人成绩</h5>
+              <div>
+                <p>订单派送总量：<span id="ordercount"></span></p>
+                <p>快递派送总量：<span id="expresscount"></span></p>
+                <p>拜访记录总量：<span id="relationcount"></span></p>
+                <p>单体画像总量：1098</p>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>最新动态</strong></div>
+          <div class="box-body">
+            <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false">订单派送</a></li>
+                <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">拜访记录</a></li>
+
+              </ul>
+              <div class="tab-content checkbox">
+                <div class="tab-pane active" id="tab_1">
+                  <table class="table table-striped">
+                    <tbody class="order_content"><tr>
+                      <th width="7%">#</th>
+                      <th width="20%">订单编号</th>
+                      <th width="10%">姓名</th>
+                      <th width="23%">购买时间</th>
+                      <th width="40%">商品类型</th>
+                    </tr>
+                    <!-- <tr>
+                      <td>1.</td>
+                      <td>3340466716059187</td>
+                      <td>王大爷</td>
+                      <td>02-11 10:00</td>
+                      <td>洗衣</td>
+                    </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td>3340466716059187</td>
+                      <td>李雪</td>
+                      <td>2017-02-10</td>
+                      <td>快递</td>
+                    </tr>
+                    <tr>
+                      <td>3.</td>
+                      <td>3340466716059187</td>
+                      <td>王大爷</td>
+                      <td>2017-02-11</td>
+                      <td>洗衣</td>
+                    </tr>
+                    <tr>
+                      <td>4.</td>
+                      <td>3340466716059187</td>
+                      <td>李雪</td>
+                      <td>2017-02-10</td>
+                      <td>快递</td>
+                    </tr>
+                    <tr>
+                      <td>5.</td>
+                      <td>3340466716059187</td>
+                      <td>王大爷</td>
+                      <td>2017-02-11</td>
+                      <td>洗衣</td>
+                    </tr>
+                    <tr>
+                      <td>6.</td>
+                      <td>3340466716059187</td>
+                      <td>李雪</td>
+                      <td>2017-02-10</td>
+                      <td>快递</td>
+                    </tr> -->
+                    </tbody></table>
+                    
+                     <div class="clearfix box-footer">
+		              <ul class="pagination pagination-sm no-margin pull-right order_class">
+		                <!-- <li><a href="#">«</a></li>
+		                <li><a href="#">1</a></li>
+		                <li><a href="#">2</a></li>
+		                <li><a href="#">3</a></li>
+		                <li><a href="#">»</a></li> -->
+		              </ul>
+		            </div>
+		            
+                </div>
+                <!-- /.tab-pane -->
+                <div class="tab-pane" id="tab_2">
+                  <table class="table table-striped">
+                    <tbody><tr>
+                      <th width="7%">#</th>
+                      <th width="22%">姓名</th>
+                      <th width="25%">拜访时间</th>
+                      <th width="23%">拜访类型</th>
+                      <th width="23%">拜访方式</th>
+                    </tr>
+                    <tr>
+                      <td>1.</td>
+                      <td>李雪</td>
+                      <td>2017-02-11</td>
+                      <td>个人拜访</td>
+                      <td>电话</td>
+                    </tr>
+                    <tr>
+                      <td>2.</td>
+                      <td>王大爷</td>
+                      <td>2017-02-10</td>
+                      <td>商户拜访</td>
+                      <td>上门</td>
+                    </tr>
+                    <tr>
+                      <td>3.</td>
+                      <td>李雪</td>
+                      <td>2017-02-11</td>
+                      <td>个人拜访</td>
+                      <td>电话</td>
+                    </tr>
+                    <tr>
+                      <td>4.</td>
+                      <td>王大爷</td>
+                      <td>2017-02-10</td>
+                      <td>商户拜访</td>
+                      <td>上门</td>
+                    </tr>
+                    <tr>
+                      <td>5.</td>
+                      <td>李雪</td>
+                      <td>2017-02-11</td>
+                      <td>个人拜访</td>
+                      <td>电话</td>
+                    </tr>
+                    <tr>
+                      <td>6.</td>
+                      <td>王大爷</td>
+                      <td>2017-02-10</td>
+                      <td>商户拜访</td>
+                      <td>上门</td>
+                    </tr>
+                    </tbody></table>
+                </div>
+                <!-- /.tab-pane -->
+
+              </div>
+              <!-- /.tab-content -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header with-border text-light-blue"><strong>划片区域</strong></div>
+          <div class="box-body" id="area_info">
+            <!-- <p><span class="col-md-4">金台里社区</span><span class="col-md-4">金台里10号楼</span><span class="col-md-4">1</span></p>
+            <p><span class="col-md-4">金台里社区</span><span class="col-md-4">金台西里21号楼</span><span class="col-md-4">全部</span></p>
+            --></div>
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript">	
+$(function(){
+	var employee_no = "A000024";
+	
+	initareainfo(employee_no);
+	
+	initemployeeinfo(employee_no);
+	
+	initcurruser();
+	
+	initdate();
+	
+	initorderlist();
+});
+
+//初始化日期 
+function initdate(){
+		setInterval(function() {
+			var localTime = new Date();
+			document.getElementById('cur_timeSpan').innerHTML = time2String(localTime);
+		}, 1000)
+		function time2String(t) {
+			with (t)
+				return [ getFullYear(), '-', ('0' + (getMonth() + 1)).slice(-2),
+						'-', ('0' + getDate()).slice(-2), ' ',
+						('0' + getHours()).slice(-2), ': ',
+						('0' + getMinutes()).slice(-2), ': ',
+						('0' + getSeconds()).slice(-2) ].join('')
+		}
+	}
+
+
+
+function initcurruser(){
+		//取得当前登录人的门店
+	doManager("UserManager", "getCurrentUserDTO",null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var curr_user = JSON.parse(data.data);
+						//alert(curr_user.employeeId+""+curr_user.store_name+""+curr_user.name);
+						$('span[class="hidden-xs"]').html(curr_user.name);
+						$("#cur_store_name").html(curr_user.store_name);
+						$("#cur_employee_no").html(curr_user.employeeId);
+						
+						$("#cur_card_name").html(curr_user.name);
+						$("#cur_card_no").html(curr_user.employeeId);
+						
+					}
+	},false);
+	}
+
+
+
+/******************快递查询片区管理员及所管所有小区 开始***********************/
+	function initareainfo(employee_no){
+		//取得当前登录人的门店
+		doManager("AreaManager", "queryAreaByEmployeeNo",employee_no,
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var curr_area = JSON.parse(data.data);
+							//$(".text-yellow").html(curr_area.area.name);
+							//子集 
+							var objList = curr_area.areaInfo;
+							$("#area_info").empty();
+							$.each(objList, function(i,obj) {
+								 var vill = obj['villname'];
+								 var tiny = obj['tinyname']==null?"全部":obj['tinyname'];
+								 var buil = obj['buildingname']==null?"全部":obj['buildingname'];
+								 var html = "<p><span class=\"col-md-4\">"+vill+"</span><span class=\"col-md-4\">"+tiny+"</span><span class=\"col-md-4\">"+buil+"</span></p>";
+								 $("#area_info").append(html);
+							});
+						}
+		},false);
+	}
+/******************快递查询片区管理员及所管所有小区结束  ***********************/
+	
+	
+	
+	function initemployeeinfo(employee_no){
+		//取得当前登录人的门店
+		doManager("HumanresourcesManager", "queryEmployeeInfoByNo",employee_no,
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var human_info = JSON.parse(data.data);
+							var empname = human_info.human.name+"<span class=\"h4\">"+human_info.human.zw+"</span>";
+							$(".text-yellow").html(empname);
+							$("#employee_no").html(human_info.human.employee_no);
+							$("#remark").html(human_info.human.remark);
+							$("#phone").html(human_info.human.phone);
+							$("#storename").html(human_info.human.storename);
+							
+							var ordercount = human_info.ordercount;
+							var expresscount = human_info.expresscount;
+							var relationcount = human_info.relationcount;
+							$("#ordercount").html(ordercount);
+							$("#expresscount").html(expresscount);
+							$("#relationcount").html(relationcount);
+							
+						}
+		},false);
+	}
+	
+	
+	
+	
+	
+	
+	/*******************订单分分页开始**********************/
+  	var order_cur_no = 1;
+  	var order_max_no = 1;
+  	
+  	function orderprepage(){
+  		if(order_cur_no==1){
+  			alert("已经首页！ ");
+  			return ;
+  		}
+  		order_cur_no = order_cur_no -1;
+  		initorderlist(order_cur_no);
+  		//alert(order_cur_no);
+  	}
+  	function ordernextpage(){
+  		if(order_cur_no==order_max_no){
+  			alert("已经末页！ ");
+  			return ;
+  		}
+  		order_cur_no=order_cur_no+1;
+  		initorderlist(order_cur_no);
+  		//alert(order_cur_no);
+  	}
+  	
+  	function initorderlist(curno){
+  		var pageinfo = new Object();
+  		if(curno==null||curno==''){
+  			curno=1;
+  		}
+  		order_cur_no = curno;
+  		pageinfo.currentPage=curno;
+  		doManager("OrderManager", "queryOrderListByEmployeeNo",["000000000000021","A00025",pageinfo],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var orderList = JSON.parse(data.data);
+						
+						var pagenum = orderList.pagenum;
+						order_max_no = pagenum;
+						if(pagenum<3){
+							 $(".order_class").empty();
+							 var stcon ="<li><a href=\"javascript:orderprepage()\">«</a></li>";
+							 var con = "";
+							 for(i=1;i<=pagenum;i++){
+								 con+="<li><a href=\"javascript:initorderlist("+i+")\">"+i+"</a></li>";
+							 }
+				             var endcon = "<li><a href=\"javascript:ordernextpage()\">»</a>"+
+				             "</li>";
+				             $(".order_class").append(stcon+con+endcon); 
+						}else{
+							 $(".order_class").empty();
+							 var tmp_order_cur_no=order_cur_no;
+							 var stcon ="<li><a href=\"javascript:orderprepage()\">«</a></li>";
+							 var endcon = "<li><a href=\"javascript:ordernextpage()\">»</a>"+"</li>";
+				             if(order_cur_no==order_max_no){	tmp_order_cur_no=order_cur_no-2;  }
+				             if(order_max_no-order_cur_no==1){	tmp_order_cur_no=order_cur_no-1;  }
+				             var con1="<li><a href=\"javascript:initorderlist("+(tmp_order_cur_no)+")\">"+(tmp_order_cur_no)+"</a></li>";
+							 var con2="<li><a href=\"javascript:initorderlist("+(tmp_order_cur_no+1)+")\">"+(tmp_order_cur_no+1)+"</a></li>";
+							 var con3="<li><a href=\"javascript:initorderlist("+(tmp_order_cur_no+2)+")\">"+(tmp_order_cur_no+2)+"</a></li>";
+							 $(".order_class").append(stcon+con1+con2+con3+endcon); 
+						}
+						
+						
+						$(".order_content").find('.orderdata').empty();
+						$.each(orderList.data, function(i,obj) {
+							 var id = obj['id'];
+							 var order_sn = obj['order_sn'];
+							 var customer_id = obj['customer_id'];
+							 var store_id = obj['store_id'];
+							 var employee_name = obj['employee_name'];
+							 var order_date = obj['order_date'];
+							 var mobilephone = obj['mobilephone'];
+							 var customer_name = obj['customer_name']==null?"":obj['customer_name'];
+							 var eshop_pro_name = obj['eshop_pro_name'];
+							 
+							 
+							 
+							 employee_name = employee_name.split("+")[0];
+							 order_date = new Date(order_date).format('yyyy-MM-dd');
+							var html ="<tr class='orderdata'>"+
+		                    "  <td>"+(i+1)+".</td>"+
+		                    "  <td>"+order_sn+"</td>"+
+		                    "  <td>"+customer_name+"<div class=\"pop\"><a href=\"portrait.html\"><p>姓名:"+(customer_name==null?"暂无":customer_name)+"</p><p>电话:"+(mobilephone==null?"暂无":mobilephone)+"</p></a></div></td>"+
+		                    "  <td>"+order_date+"</td>"+
+		                    "  <td>"+eshop_pro_name+"</td>"+
+		                    "</tr>";
+		                    $(".order_content").append(html);
+							 
+						});
+						
+					}
+		},false);
+  	}
+  	/*******************订单分页结束**********************/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</script>
+
+
+
+
+
+
+
+
+</body>
+</html>

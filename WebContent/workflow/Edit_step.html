@@ -1,0 +1,557 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Untitled Document</title>
+		<script type="text/javascript" src="../scripts/lib-main.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<script type="text/javascript" src="../bizbase/js/userDialog.js"></script>
+		<script type="text/javascript" src="../bizbase/js/refDialog.js"></script>
+		<script  src="../bizbase/js/userDialog.js" type="text/javascript"></script>
+		<script type="text/javascript" src="../scripts/common/common-simpletable.js"></script>
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+		<link rel="stylesheet" href="../bizbase/script/tree/jquery.treeview.css" />
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/common-simpletable.css">
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+		<script type="text/javascript">
+			var StepId = getUrlParamByKey("&Id");
+			var FlowId = getUrlParamByKey("FlowId");
+			$(function(){
+				$("#stepId").val(StepId);
+				$("#flowStepsId").val(StepId);
+				$("#CopyToperson").val(StepId);
+				$$.executeSearch("stepToPosQuery");
+				$$.executeSearch("wfCopyToposition");
+				$$.executeSearch("wfCopyToperson");
+				doManager("WFFlowStepManager", "queryStep", StepId + "", function(data,textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsdata = $.fromJSON(data.data);
+						$("#id").val(jsdata.id);
+						$("#flowId").val(jsdata.flowId);
+						$("#stepNo").val(jsdata.stepNo);
+						$("input[name='stepType'][value=" + jsdata.stepType + "]").attr("checked", true);
+						$("#stepName").val(jsdata.stepName);
+						$("input[name='isSameOrg'][value=" + jsdata.isSameOrg + "]").attr("checked", true);
+						$("input[name='isReturn'][value=" + jsdata.isReturn + "]").attr("checked", true);
+						$("input[name='isFinish'][value=" + jsdata.isFinish + "]").attr("checked", true);
+						$("input[name='isChoiseNext'][value=" + jsdata.isChoiseNext + "]").attr("checked", true);
+						$("input[name='isChoisePrev'][value=" + jsdata.isChoisePrev + "]").attr("checked", true);
+						$("input[name='isAutoSave'][value=" + jsdata.isAutoSave + "]").attr("checked", true);
+						$("input[name='isAllowEdit'][value=" + jsdata.isAllowEdit + "]").attr("checked", true);
+						$("input[name='isPrompt'][value=" + jsdata.isPrompt + "]").attr("checked", true);
+						$("input[name='isAutoPass'][value=" + jsdata.isAutoPass + "]").attr("checked", true);
+						$("#promptDays").val(jsdata.promptDays);
+						$("#autoPassDays").val(jsdata.autoPassDays);
+						$("#remoteJava").val(jsdata.remoteJava);
+						$("#remoteArgs").val(jsdata.remoteArgs);
+						$("input[name='isNeedESign'][value=" + jsdata.isNeedESign + "]").attr("checked", true);
+					}
+
+				});
+				//要抄送的岗位列表
+				editTab = new SimpleTable("StepTab", {
+					//pageSize : 5,
+					param : 'conditionsDiv1',
+					checkMode : 'single',
+					scrollX : true,
+					showpaging : 'false',
+					showprint : 'false',
+					columns : {
+						id : {
+							header : 'Id',
+							width: '15%'
+							
+						},
+						flowStepsId : {
+							header : '流程步骤ID',
+							width: '15%'
+							
+						},
+						positionId : {
+							header : '岗位Id',
+							width: '15%'
+							
+						},
+						positionName : {
+							header : '岗位名称',
+							width: '15%'
+							
+						},
+						isSameOrg : {
+							header : '是否限定本所',
+							width: '20%'
+							
+						},
+						ops : {
+							header : '操作',
+							width: '20%'
+							
+						}
+					},
+					formatters : {
+						
+						isSameOrg : function(v, obj) {
+							
+								//return "<input id='isSameOrg' value='"+obj.isSameOrg+"'></input>";
+								if(obj.isSameOrg==1){
+									return "<select name='isSameOrg'id='isSameOrg' ><option value='1' selected>限制本所</option><option value='0'>不限制本所</option><select>"
+								}else if(obj.isSameOrg==0){
+									return "<select name='isSameOrg' id='isSameOrg'><option value='1' >限制本所</option><option value='0' selected>不限制本所</option><select>"
+
+								}
+						},
+						
+						ops : function(v, obj) {
+							return "<a href='javascript:rowRepairData(" + obj.id+","+obj.positionId
+									+ ")'>修改</a> <a href='javascript:rowDeleteData("
+									+ obj.id + ")'>删除</a>";
+						}
+					},
+					info : {
+						pagingInfo : '目前显示{0}-{1}条记录，共计：{2}'
+					}
+				})
+				//要抄送的人员列表
+				editTab2 = new SimpleTable("StepTab2", {
+					//pageSize : 5,
+					param : 'conditionsDiv1',
+					checkMode : 'single',
+					scrollX : true,
+					showpaging : 'false',
+					showprint : 'false',
+					columns : {
+						id : {
+							header : 'Id',
+							width: '15%'
+							
+						},
+						flowStepsId : {
+							header : '流程步骤ID',
+							width: '15%'
+							
+						},
+						personId : {
+							header : '人员Id',
+							width: '15%'
+							
+						},
+						personName : {
+							header : '人员姓名',
+							width: '15%'
+							
+						},
+						isSameOrg : {
+							header : '是否限定本所',
+							width: '20%'
+							
+						},
+						ops : {
+							header : '操作',
+							width: '20%'
+							
+						}
+					},
+					formatters : {
+						
+						isSameOrg : function(v, obj) {
+							
+								//return "<input id='isSameOrg' value='"+obj.isSameOrg+"'></input>";
+								if(obj.isSameOrg==1){
+									return "<select name='isSameOrg2' id='isSameOrg2' ><option value='1' selected>限制本所</option><option value='0'>不限制本所</option><select>"
+								}else if(obj.isSameOrg==0){
+									return "<select name='isSameOrg2' id='isSameOrg2'><option value='1' >限制本所</option><option value='0' selected>不限制本所</option><select>"
+
+								}
+						},
+						
+						ops : function(v, obj) {
+							return "<a href='javascript:rowRepairData2(" + obj.id+","+obj.personId
+									+ ")'>修改</a> <a href='javascript:rowDeleteData2("
+									+ obj.id + ")'>删除</a>";
+						}
+					},
+					info : {
+						pagingInfo : '目前显示{0}-{1}条记录，共计：{2}'
+					}
+				})
+			})
+			//修改和删除抄送岗位
+			function rowRepairData(row_id,row_positionId){
+				var obj={
+					id:row_id,
+					positionId:row_positionId,
+					flowStepsId:StepId,
+					isSameOrg:$("#isSameOrg").val()
+				}
+				doManager("WFFlowStepPositionCopyManager", "saveWFPosCopyInfo", obj, function(data,textStatus, XMLHttpRequest) {
+					if (data.result) {
+						window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+					}
+					});
+			}
+			
+			function rowDeleteData(row_id){
+				doManager("WFFlowStepPositionCopyManager", "deleteWFPosCopyInfo", row_id + "", function(data,textStatus, XMLHttpRequest) {
+					if (data.result) {
+						window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+					}
+					});
+			}
+			//修改和删除抄送人员
+			function rowDeleteData2(row_id){
+				doManager("WFFlowStepPersonCopyManager", "deleteWFPsInfo", row_id + "", function(data,textStatus, XMLHttpRequest) {
+					if (data.result) {
+						window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+					}
+					});
+			}
+			function rowRepairData2(row_id,row_personId){
+				var obj={
+					id:row_id,
+					personId:row_personId,
+					flowStepsId:StepId,
+					isSameOrg:$("#isSameOrg2").val()
+				}
+				doManager("WFFlowStepPersonCopyManager", "saveWFPsInfo", obj, function(data,textStatus, XMLHttpRequest) {
+					if (data.result) {
+						window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+					}
+					});
+			}
+		function doSubmit() {
+			//alert("11");
+			var obj = {
+				id : $("#id").val(),
+				flowId : $("#flowId").val(),
+				stepNo : $("#stepNo").val(),
+				stepType : $("input[name='stepType']:checked").val(),
+				stepName : $("#stepName").val(),
+				isSameOrg : $("input[name='isSameOrg']:checked").val(),
+				isReturn : $("input[name='isReturn']:checked").val(),
+				isFinish : $("input[name='isFinish']:checked").val(),
+				isChoiseNext : $("input[name='isChoiseNext']:checked").val(),
+				isChoisePrev : $("input[name='isChoisePrev']:checked").val(),
+				isAutoSave : $("input[name='isAutoSave']:checked").val(),
+				isAllowEdit : $("input[name='isAllowEdit']:checked").val(),
+				isPrompt : $("input[name='isPrompt']:checked").val(),
+				autoPassDays : $("#autoPassDays").val(),
+				isAutoPass : $("input[name='isAutoPass']:checked").val(),
+				promptDays : $("#promptDays").val(),
+				remoteJava : $("#remoteJava").val(),
+				remoteArgs : $("#remoteArgs").val(),
+				isNeedESign: $("input[name='isNeedESign']:checked").val()
+			}
+			doManager("WFFlowStepManager", "saveStep", obj, function(data, textStatus,
+					XMLHttpRequest) {
+				alert("ok");
+			});
+	}
+	function doReturn() {
+		window.location.href = 'Edit_workflow.html?FlowId=' + FlowId;
+	}
+	//下面是选岗位相应的JS
+		function convertDataToObj(data, allColumns){
+	            var json = "{";
+	            for (var i = 0; i < data.length; i++) {
+	                json += "'" + allColumns[i].key + "'";
+	                json += ":"
+	                json += "'" + data[i] + "',";
+	            }
+	            json = json.substr(0, json.length - 1) + "}";
+	            var jsonObj = $.fromJSON(json);
+	            return jsonObj;
+				}
+			var delObj = {
+		        html: '<a href="#">删除</a>',
+		        func: function(queryid, data, nTr, allColumns){
+		            var json = convertDataToObj(data, allColumns);
+		            var id = json.id;
+					alert(id);
+		          	doManager("WFFlowStepToPosManager", "removeStepPos", id + "", function(data, textStatus, XMLHttpRequest){
+						if (data.result) {
+							window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+						}
+					});
+		        }
+		    }
+			var opArr = [delObj];
+			function toNew(){
+				openPostDialog(selPosition);
+			}
+			var selPosition= function (resultStr) {
+            	var jsonData = null;
+            	var jsonNum = 0;
+            	var i=0;
+            	var j=0;
+				doManager("WFFlowStepToPosManager", "getWFStepPosList", StepId+"", function(data, textStatus, XMLHttpRequest){
+            		jsonData=$.fromJSON(data.data);
+            		var selResult=$.fromJSON(resultStr);
+            		$.each(selResult,function(i,selOne) {
+            	    	j=0;
+            	    	for(i=0;i<jsonData.length;i++){
+                    		if((selOne.id==jsonData[i].posId)&&(StepId==jsonData[i].stepId)){
+                    			j=1;
+                    		}
+                    	}
+            	    	if(j==0){
+							var obj = {
+                				stepId:StepId,
+                				posId:selOne.id,
+                				posName:selOne.name
+                				}
+                				doManager("WFFlowStepToPosManager", "addStepPos", obj, function(data, textStatus, XMLHttpRequest){
+								if(data.result){
+									alert("OK");
+								}
+                				});
+            	    	}else{
+            	    		alert(selOne.name+" 该岗位已存在");
+            	    	}
+            	    });
+					window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+				});
+            	}
+			  function toBack(){
+			  	window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+			  }
+			  //抄送至岗位时先选择岗位，得到其岗位Id.
+			  function chooseTOPositions(){
+			  	openPostDialog(selPosition1);
+			  }
+			  var selPosition1= function (resultStr) {
+			  	var jsonData = null;
+				var jsonNum = 0;
+				var i = 0;
+				var j = 0;
+            	doManager("WFFlowStepPositionCopyManager", "getListByStepId",StepId+"", function(data, textStatus, XMLHttpRequest){
+            		jsonData=$.fromJSON(data.data);
+            		var selResult=$.fromJSON(resultStr);
+            		$.each(selResult,function(i,selOne) {
+            	    	j=0;
+            	    	for(i=0;i<jsonData.length;i++){
+                    		if((selOne.id==jsonData[i].positionId)&&(StepId==jsonData[i].flowStepsId)){
+                    			j=1;
+                    		}
+                    	}
+            	    	if(j==0){
+            	    		var obj = {
+                				flowStepsId:StepId,
+                				positionId:selOne.id,
+            					isSameOrg:1
+                				}
+                				doManager("WFFlowStepPositionCopyManager", "addWFPosCopyInfo", obj, function(data, textStatus, XMLHttpRequest){
+									if(data.result){
+										alert("OK");
+									}
+                				});
+            	    	}else{
+            	    		alert(selOne.id+" 该岗位已存在");
+            	    	}
+            	    });
+					window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+				});
+            	}
+			//抄送至人时先选择人员，得到其人员Id.
+			function chooseTOPerson(){
+				checkUser(1,choosePs);
+			}
+			function choosePs(resultStr){
+				var jsonData = null;
+				var jsonNum = 0;
+				var i = 0;
+				var j = 0;
+				
+				doManager("WFFlowStepPersonCopyManager", "getListByStepId",StepId+"", function(data, textStatus, XMLHttpRequest){
+            		jsonData=$.fromJSON(data.data);
+            		var selResult=$.fromJSON(resultStr);
+					var userIdArray=selResult.userId.split(",");
+					var userNameArray=selResult.userName.split(",");
+            		for(i=0;i<userIdArray.length;i++){
+						 for(k=0;j<jsonData.length;k++){
+						 	if(jsonData[k].personId==userIdArray[i]){
+								j=1;
+								break;
+							}
+						 }
+						 if(j==0){
+							 	var obj={
+									flowStepsId:StepId,
+									personId:userIdArray[i],
+									isSameOrg:1
+								}
+								doManager("WFFlowStepPersonCopyManager", "addWFPsInfo", obj, function(data, textStatus, XMLHttpRequest){
+									if(data.result){
+										alert("OK");
+									}
+                				});
+						 }else{
+						 	alert(userIdArray[i]+" 该人员已存在");
+						 }
+					}
+					window.location.href = 'Edit_step.html?FlowId=' + FlowId +'&Id='+StepId;
+				});
+				
+			}
+		</script>
+	</head>
+<body>
+	<div class="rightcont body_bg clear"
+		style="width: 300px; margin: 0px auto; padding: 0px auto;">
+		<div class="box">
+			<div class="containerbody">
+				<form id="orgAdd" class="pmsForm" validate="true"
+					clientvalidate="true" displaynumber="7">
+					<table class="layout" cellpadding="0" cellspacing="0" border="0"
+						bordercolor="red">
+						<tr>
+							<td align="left" nowrap="true" colspan="4">
+								<strong>流程步骤信息:</strong>
+							</td>
+						</tr>
+
+						<tr>
+							<td align="left" nowrap="true">Id：</td>
+							<td><input type="text" id="id" name="id" class="inputtext" disabled></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">流程Id:</td>
+							<td><input type="text" id="flowId" name="flowId" class="inputtext" disabled></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">序号：</td>
+							<td><input type="text" id="stepNo" name="stepNo" class="inputtext"></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">步骤类型:</td>
+							<td><input class="pmsRadio" id="stepType" name="stepType"
+								data="[['0','开始','checked'],['1','执行'],['2','结束']]" /></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">步骤名称:</td>
+							<td><input type="text" id="stepName" name="stepName" class="inputtext"></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">是否本部门:</td>
+							<td><input class="pmsRadio" id="isSameOrg" name="isSameOrg" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">是否可退回:</td>
+							<td><input class="pmsRadio" id="isReturn" name="isReturn" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">是否可终止:</td>
+							<td><input class="pmsRadio" id="isFinish" name="isFinish" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否可选择后续:</td>
+							<td><input class="pmsRadio" id="isChoiseNext" name="isChoiseNext" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否可选择前面:</td>
+							<td><input class="pmsRadio" id="isChoisePrev" name="isChoisePrev" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">表单是否要留痕:</td>
+							<td><input class="pmsRadio" id="isAutoSave" name="isAutoSave" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">表单是否可编辑:</td>
+							<td><input class="pmsRadio" id="isAllowEdit" name="isAllowEdit" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否催办:</td>
+							<td><input class="pmsRadio" id="isPrompt" name="isPrompt" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否自动提交：</td>
+							<td><input class="pmsRadio" id="isAutoPass" name="isAutoPass" data="[['1','是'],['0','否','checked']]" /></td>
+
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">自动提交等待天数：</td>
+							<td><input type="text" id="autoPassDays" name="autoPassDays" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">催办天数设置：</td>
+							<td><input type="text" id="promptDays" name="promptDays" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">外部Java类:</td>
+							<td><input type="text" id="remoteJava" name="remoteJava" class="inputtext" ></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">调用参数设置:</td>
+							<td><input type="text" id="remoteArgs" name="remoteArgs" class="inputtext" ></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">是否电子签名：</td>
+							<td><input class="pmsRadio" id="isNeedESign" name="isNeedESign" data="[['1','是'],['0','否','checked']]" /></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true" colspan="4">
+								<button class="buttonu" value="提交" onclick="doSubmit()">&nbsp;
+									提交
+								</button>
+								<button class="buttonu" value="返回" onclick="doReturn()">&nbsp;
+									返回
+								</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div id="conditionsDiv2" style="padding: 10px;">
+		<form class="pmsForm1" style="text-align:center;">
+			<input name="flowStepsId" id="CopyToperson" validate="minlength:1, maxlength:3" style="display: none;" /> 
+			<input type="hidden" value="查询" id="searchButton2" /> 
+			<input type="button" value="选择抄送人员" onclick="chooseTOPerson()" class="buttonu" />
+		</form>
+		<script type="text/javascript">
+			$("#searchButton2").button().click(function() {
+				$$.executeSearch("wfCopyToperson");
+			});
+		</script>
+	</div>
+	<div id="copyTopsitionInfo2" showcheckbox="false" showprint="false" showpaging="false" style="width: 100%;margin:0px;padding:0px;">
+		<table id="StepTab2" queryid="wfCopyToperson" showcheckbox="false" showprint="false" showpaging="false" 
+			style="width:100%;margin:0px;padding:0px;" autosearch="false">
+		</table>
+	</div>
+	
+	<div id="conditionsDiv1" style="padding: 10px;">
+		<form class="pmsForm1" style="text-align:center;">
+			<input name="flowStepsId" id="flowStepsId" validate="minlength:1, maxlength:3" style="display: none;" /> 
+			<input type="hidden" value="查询" id="searchButton1" /> 
+			<input type="button" value="选择抄送岗位" onclick="chooseTOPositions()" class="buttonu" />
+		</form>
+		<script type="text/javascript">
+			$("#searchButton1").button().click(function() {
+				$$.executeSearch("wfCopyToposition");
+			});
+		</script>
+	</div>
+	<div id="copyTopsitionInfo" showcheckbox="false" showprint="false" showpaging="false" style="width: 100%;margin:0px;padding:0px;">
+		<table id="StepTab" queryid="wfCopyToposition" showcheckbox="false" showprint="false" showpaging="false"
+			 style="width:100%;margin:0px;padding:0px;" autosearch="false">
+		</table>
+	</div>
+	<div id="conditionsDiv" style="padding:10px;">
+    		<form class="pmsForm" id="pmsForm" style="text-align:center;">
+    			<input type="hidden" name="stepId" id="stepId"  validate="minlength:1, maxlength:3" />
+				<input type="hidden" value="查询" id="searchButton" />
+				<input type="button" value="新增岗位"  class="buttonu" onclick="toNew()">
+	    		</form>
+			<script type="text/javascript">
+				$("#searchButton").button().click(function() {
+				$$.executeSearch("stepToPosQuery");
+				});
+			</script>
+    </div>
+	<div id="stepToPosQuery"  showcheckbox="false" searchDiv="conditionsDiv" showsearch="false" showdisplay="false" showprint="false" 
+		showpaging="false" queryid="stepToPosQuery" operators="opArr" autosearch="false"></div>
+</body>
+</html>

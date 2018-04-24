@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>待办发送提示</title>
+    <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+    <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css"/>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/dataTablesLib.js"></script>
+    <script type="text/javascript" src="../scripts/common/pms.js"></script>
+    <script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script type="text/javascript" src="../forecast/js/createProject.js"></script>
+    <script type="text/javascript">
+    	
+        $(function () {
+			  onSearch();
+						 
+			});
+    </script>
+</head>
+<body style="height:100%">
+<div class="box">
+    <div class="title clear">
+        <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();"></div>
+        <div class="ico2"></div>
+        <div class="ico1"></div>
+        <a href="#">待办发送提示:</a>&nbsp;
+    </div>
+    <div class="containerbody padding4px">
+        <div class="containerheader">
+            <a href="#" onclick="toggleDiv('conditionsDiv','pic2');">
+                <img src="../scripts/images/22.png" align="absmiddle" id="pic2"/>
+            </a>
+        </div>
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true">
+                </form>
+            </div>
+        </form>
+        <div id="wftodosendSearchContainer" showcheckbox="false" showRidaoButton="true"
+             searchDiv="conditionsDiv" usecache="true" queryid="wftodosendQuery"
+             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+             showprint="ture" showpaging="true" showcheckbox="true" >
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+
+    function onSearch() {
+        $$.executeSearch('wftodosendQuery', 'conditionsDiv');
+    }
+</script>

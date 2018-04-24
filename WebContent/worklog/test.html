@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>日誌查询</title>
+    <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+    <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css"/>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/dataTablesLib.js"></script>
+    <script type="text/javascript" src="../scripts/common/pms.js"></script>
+    <script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script type="text/javascript" src="../forecast/js/createProject.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				
+			})
+			function subByYear(){
+				if(checkNums()!=4){
+					return;
+				}
+				doManager("workLogStatReportManager", "insertStatReportByYear", $("#years").val()+"", function(datas, textStatus, XMLHttpRequest) {
+									if (datas.result) {
+											alert("ok");
+										}
+								});
+			}
+			function subByMonth(){
+				if(checkNums()!=4){
+					return;
+				}
+				doManager("workLogStatReportManager", "insertStatReportByMonth", $("#years").val()+"", function(datas, textStatus, XMLHttpRequest) {
+									if (datas.result) {
+											alert("ok");
+										}
+								});
+			}
+			function subByWeek(){
+				if(checkNums()!=4){
+					return;
+				}
+				doManager("workLogStatReportManager", "insertStatReportByWeek", $("#years").val()+"", function(datas, textStatus, XMLHttpRequest) {
+									if (datas.result) {
+											alert("ok");
+										}
+								});
+			}
+			function del(){
+				if(checkNums()!=4){
+					return;
+				}
+				doManager("workLogStatReportManager", "deleteStatReportByYear", $("#years").val()+"", function(datas, textStatus, XMLHttpRequest) {
+									if (datas.result) {
+											alert("ok");
+										}
+								});
+			}
+			function checkNums(){
+				var dateStr=$("#years").val();
+				if(dateStr.length!=4){
+					alert("请输入一个四位数的年份");
+				}
+				return dateStr.length;
+				
+			}
+			</script>
+	</head>
+	<body>
+		请输入四位数的年份：<input type="text" id="years"  />
+		<input type="button" value="添加BY年" onclick="subByYear()" />
+		<input type="button" value="添加BY月" onclick="subByMonth()" />
+		<input type="button" value="添加BY周" onclick="subByWeek()" />
+		<input type="button" value="删除" onclick="del()" />
+	</body>
+</html>

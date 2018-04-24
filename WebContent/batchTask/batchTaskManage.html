@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit">
+    <title>批处理</title>
+    <script type="text/javascript" src="../startbootstrap/js/jquery.1.10.2.min.js"></script>
+    <script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
+    
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../scripts/css/auto.css" rel="stylesheet">
+    <link href="../custom_css/arrow.css" rel="stylesheet">
+    <script type="text/javascript" src="./select_view/select_option.js"></script>
+    <script type="text/javascript" src="../scripts/auto.js"></script>
+    <script type="text/javascript" src="../scripts/city.data.js"></script>
+    
+
+</head>
+<style type="text/css">
+    .header_img{
+        width: 100%;
+        height: 100%;
+        float: right;
+        border-radius:50%
+    }
+    #base_form td{
+        padding-bottom: 15px;
+    }
+    
+    #new_address td{
+    	padding-bottom: 6px;
+    }
+    .but {
+        float: right;
+        text-align: center;
+    }
+    .but input{background-color:transparent; border:1px solid #fff; border-radius:3px; padding:0 13px; margin-right:30px;}
+    .increase{width:240px; height:160px; background-color:#fff; border:2px dashed #cecece; position:relative; margin:0 auto;}
+    .inc1{border:4px solid #c1bfc0; height:0; width:126px; border-radius:10px; position:absolute; top:50%; left:50%; margin:-4px 0 0 -63px;}
+    .inc2{border:4px solid #c1bfc0; height:126px; width:0; border-radius:10px; position:absolute; top:50%; left:50%; margin:-63px 0 0 -4px;}
+    .img_plus{margin-left: 5px;width: 14px;height: 14px;cursor: pointer}
+    .img_minus{margin-left: 5px;width: 14px;height: 14px;cursor: pointer}
+    #moreInfo_open img:hover{
+    	 -moz-transform:scale(1.5,1.5); 
+  		 -webkit-transform:scale(1.5,1.5);  
+  	     -o-transform:scale(1.5,1.5);  
+    }
+    #moreInfo_close:hover{
+    	 -moz-transform:scale(1.5,1.5); 
+  		 -webkit-transform:scale(1.5,1.5);  
+  	     -o-transform:scale(1.5,1.5);  
+    }
+    
+    .tag{
+	    	border-radius:3px;
+	    	cursor:pointer;
+	   	    width: 110px;
+		    height: 22px;
+		    color:#f4f4f4;
+		    background-color:#5ea6bb;
+		    text-align: center;
+		    vertical-align: middle;
+		    line-height: 22px;
+		    float:left;
+		    margin-left:5px;
+    	}
+</style>
+<script type="text/javascript">
+
+
+Date.prototype.format=function(fmt) {        
+    var o = {        
+    "M+" : this.getMonth()+1, //月份        
+    "d+" : this.getDate(), //日        
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+    "H+" : this.getHours(), //小时        
+    "m+" : this.getMinutes(), //分        
+    "s+" : this.getSeconds(), //秒        
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+    "S" : this.getMilliseconds() //毫秒        
+    };        
+    var week = {        
+    "0" : "\u65e5",        
+    "1" : "\u4e00",        
+    "2" : "\u4e8c",        
+    "3" : "\u4e09",        
+    "4" : "\u56db",        
+    "5" : "\u4e94",        
+    "6" : "\u516d"       
+    };        
+    if(/(y+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+    }        
+    if(/(E+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+    }        
+    for(var k in o){        
+        if(new RegExp("("+ k +")").test(fmt)){        
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+        }        
+    }        
+    return fmt;        
+} 
+
+//发起批处理
+function goStart(){
+	
+	 var code = $("#first_p").val();
+	 doManager('BatchManager','startBatchTask',[code],function(data){
+	        if(data.result){
+	            var result = JSON.parse(data.data);
+	            if (result.status == "error") {
+	                $$.showMessage('错误',result.message);
+                } else {
+                    $$.showMessage('提示',result.message);
+                }
+	        }else{
+	            $$.showMessage('提示',data.message);
+	        }
+	    }); 
+}
+
+function startBatch(){
+    $$.showConfirm("提示","是否继续执行批处理，请谨慎操作",function () {
+    	goStart();
+     });
+}
+
+function queryResult(){
+	
+	var year = $("#second_year").val();
+	var month = $("#second_month").val();
+	doManager('BatchManager','queryBatchResult',[year,month],function(data){
+        if(data.result){
+        	$("#batch_table").find("tr:gt(0)").remove();
+            var result = JSON.parse(data.data);
+            if(result.status=="success"){
+            	if(result.list.length>0){
+            		var info = "";
+                	for(var i=0;i<result.list.length;i++){
+                		var datet = "----";
+                		if(result.list[i].maxtime!=null){
+                			 datet = new Date(parseInt(result.list[i].maxtime)).format("yyyy-MM-dd HH:mm:ss");
+                		}
+                		
+                		info = info+"<tr><td>"+result.list[i].taskname+"</td><td style='color:red'>"+result.list[i].datanum+"</td><td>"+datet+"</td></tr>";
+                	}
+                	$("#batch_tr").after(info);
+                	$('#new_div').dialog({
+                          bgiframe : true,
+                          title : "批处理结果",
+                          width : 600,
+                          height : 430,
+                          buttons : {
+                             
+                              "确定" : function() {
+                                  $(this).dialog("close");
+                              }
+                          },
+                          modal : true
+                      });
+                	
+            	}
+            	
+            }else{
+            	$$.showMessage('提示',result.message);
+            }
+            
+        }else{
+            $$.showMessage('提示',data.message);
+        }
+    }); 
+}
+</script>
+<body style="height: 100%">
+    <div class="rightcont clear">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                	基本信息
+            </div>
+            
+            <div class="panel-body" style="height: 90%;padding:10px">
+                    <table id="tiny_village_table" cellpadding="0" cellspacing="0" style="position:relative;margin: 10px; width:100%;border-collapse:separate; border-spacing:10px;">
+                        <tr>
+                            <td style="width:15%">任&nbsp;&nbsp;务&nbsp;&nbsp;调&nbsp;&nbsp; 度<span style="color:red">*</span></td>
+                            <td>
+                            	<select class="form-control" id="first_p" style="width:94%">
+                            		<optgroup label="订单数据任务调度">
+	                                    <option value="0">手动调度订单补丁</option>
+	                                    <option value="1">异常订单自动</option>
+	                                    <option value="2">异常订单基础数据</option>
+	                                    <option value="3">退货打标签</option>
+	                                    <option value="4">异常打标签</option>
+	                                    <option value="5">拉新打标签</option>
+	                                    <option value="6">门店退货表</option>
+                                    </optgroup>
+                                    <optgroup label="绩效数据任务调度">
+	                                    <option value="7">门店交易额（按类型）</option>
+	                                    <option value="8">门店交易额（按频道）</option>
+	                                    <option value="9">国安侠GMV</option>
+	                                    <option value="10">国安侠好评次数</option>
+	                                    <option value="11">国安侠送单量(按频道)</option>
+	                                    <option value="12">调度上月门店GMV与国安侠GMV</option>
+	                                    <option value="23">事业群GMV</option>
+	                                    <option value="24">事业群消费用户数</option>
+	                                </optgroup>
+	                                <optgroup label="运营数据任务调度">
+	                                	<option value="13">门店历史营业额手动调度</option>
+	                                    <option value="14">商品按城市排名</option>
+	                                </optgroup>
+	                                <optgroup label="其他月次数据任务调度">
+	                                	<option value="15">员工与店长信息</option>
+	                                    <option value="16">客户画像</option>
+	                                    <option value="17">客户画像按门店</option>
+	                                    <option value="18">拜访记录数据</option>
+	                                    <option value="19">拜访记录按门店数据</option>
+	                                </optgroup>
+              						<optgroup label="用户数据任务调度">
+	                                	<option value="20">用户档案</option>
+	                                    <option value="21">用户打小B端标签</option>
+	                                    <option value="22">订单打小B端标签</option>
+	                                </optgroup>
+                            	</select>
+                            </td>
+                            <td>
+                            	<button class="btn btn-primary" onclick="startBatch()">开始批处理</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>结&nbsp;&nbsp;果&nbsp;&nbsp;查&nbsp;&nbsp; 看<span style="color:red">*</span></td>
+                            <td>
+                            	年：<select  style="height:34px;width:40%;border-radius:3px" id="second_year">
+                            		<option value="2016">2016</option>
+                            		<option value="2017">2017</option>
+                            		<option value="2018">2018</option>
+                            		<option value="2019">2019</option>
+                            		<option value="2015">2020</option>
+                            	</select>
+                            	月：<select   style="height:34px;width:40%;border-radius:3px"  id="second_month">
+                            		<option value="1">1月</option>
+                            		<option value="2">2月</option>
+                            		<option value="3">3月</option>
+                            		<option value="4">4月</option>
+                            		<option value="5">5月</option>
+                            		<option value="6">6月</option>
+                            		<option value="7">7月</option>
+                            		<option value="8">8月</option>
+                            		<option value="9">9月</option>
+                            		<option value="10">10月</option>
+                            		<option value="11">11月</option>
+                            		<option value="12">12月</option>
+                            	</select>
+                            </td>
+                            <td>
+                              <button class="btn btn-primary" onclick="queryResult()">查询结果</button>
+                            </td>
+                        </tr>
+                        
+		           </table>
+            </div>
+         </div>
+        
+		 
+	  </div> 
+   </div>
+</body>
+</html>
+
+<div id="new_div" style="display:none;height:360px">
+       <div>
+          	<table style="text-align:center;border-collapse:separate;border-spacing:2px;width:100%" id="batch_table">
+          	<tr style="color:#337ab7" id="batch_tr"><td>数据类型</td><td>数量</td><td>更新时间</td></tr>
+          	</table>
+       </div>	
+</div>

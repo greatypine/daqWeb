@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>门店运营</title>
+   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    .table button{padding: 3px 20px; margin: 0 5px;}
+	
+	.tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+	.audit_process{ overflow-y: auto;  background: #f9f9f9; border-radius: 5px; padding:15px 0 20px 0;}
+    .audit_process .clearfix{ padding:10px 30px;}
+    .audit_margin{margin-right: 15px;}
+    
+    .box-header{margin-bottom: -15px;}
+	 #process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+		#process_div_pic{
+			position:fixed;
+			top:50%;
+			left:50%; 
+			z-index:100000000; 
+			margin:-16px 0 0 -50px; 
+			width:100px; 
+			height:32px;
+			color: #fff;
+		}
+		
+		.auto{max-height:200px; overflow-y:scroll;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>门店运营</em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+   <!--  <div class="container"> -->
+   <div>
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="">
+        
+        
+        
+        
+        
+        
+        <div class="nav-tabs-custom">
+		            <ul class="nav nav-tabs">
+		              <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="true">按人视角</a></li>
+		              <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">按门店视角</a></li>
+<!-- 		              <li class=""><a href="#tab_6" data-toggle="tab" aria-expanded="false">1人500户（全部数据）</a></li> -->
+		            </ul>
+		            <div class="tab-content">
+		              	<div class="tab-pane active" id="tab_1">
+		              	<div class="box-body">
+				          	<div class="clearfix search-criteria">
+				            	<div class="selectorLine clearfix no-border">
+				            	<div class="search-con" style="overflow:visible;">
+				            	<div class="sl-v-list">
+				            	<div class="clearfix">
+					                <div class="form-group col-lg-3"><span style="font-weight:700">城市</span>：
+						 	          		<select class="form-control select2" id="citySelect" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"> 
+						 	              	</select> 
+						            </div>
+						              <div class="form-group col-lg-3"><span style="font-weight:700">门店</span>：&nbsp;  
+						              <input type="text" class="form-control"  placeholder="门店" id="storename" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+						              <div class="auto hidden" id="auto" style="width: 245px;z-index: 99999;">
+						              </div>
+						              </div>
+				                </div>
+			              		</div>
+			             		</div>
+			            		</div>
+			            	</div>
+			            	<div class="clearfix">
+				              <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
+				                <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+				              </div>
+				              
+				              <div class="col-lg-2 pull-right" style="padding-top: 0px;">
+				                <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human()" class="btn btn-block btn-warning">导出</button>
+				              </div>
+				              <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
+				                <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
+				              </div>
+				            </div>
+				            <div class="box-body">
+					            <div class="tab-content">
+					               <table class="table table-striped no-margin">
+						                <tbody id="auto_tbody">
+						                <tr id="auto_title">
+						                  <th width="10%">门店名称</th>
+						                  <th width="5%">国安侠</th>
+						                  <th width="7%">综合管理</th>
+						                  <th width="7%">事务管理</th>
+						                  <th width="7%">服务专员</th>
+						                  <th width="7%">综合专员</th>
+						                  <th width="7%">副店长</th>
+						                  <th width="7%">星店店长</th>
+						                  <th width="7%">订单处理员</th>
+						                  <th width="7%">配送员</th>
+						                  <th width="7%">库房管理员</th>
+						                  <th width="7%">仓库主管</th>
+						                  <th width="7%">配送主管</th>
+						                  <th width="9%">在职/离职</th>
+						                </tr>
+						                </tbody>
+						              </table>
+					              <!-- /.tab-pane -->
+					            </div>
+					            <div style="position:absolute;bottom:5px;left:27px;width:35%"> 显示 <select id="pageRecords_auto" onchange="chnagePageRecords(1)" name="pageRecords_auto"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条  &nbsp;&nbsp; 共  <span id="totalRecord_can"></span> 条&nbsp;</div>
+					            <div class="tcdPageCode" id="page_auto"></div>
+					       	</div>
+		             	</div>
+		             </div>
+		              <!-- /.tab-pane -->
+		              <div class="tab-pane" id="tab_2">
+		              		<div class="box-body">
+				          	<div class="clearfix search-criteria">
+				            	<div class="selectorLine clearfix no-border">
+				            	<div class="search-con" style="overflow:visible;">
+				            	<div class="sl-v-list">
+				            	<div class="clearfix">
+				            		<div class="form-group col-lg-3"><span style="font-weight:700">城市</span>：
+						 	          		<select class="form-control select2" id="citySelect2" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"> 
+						 	              	</select> 
+						            </div>
+						            
+					                <div class="form-group col-lg-3"><span style="font-weight:700">开店日期</span>：
+						                <select class="form-control select2" id="selectDate"> 
+						                	<option>全部</option>
+							                <option value="week">本周</option>
+							                <option value="month">本月</option>
+						 	            </select> 
+					                </div>
+				                </div>
+			              		</div>
+			             		</div>
+			            		</div>
+			            	</div>
+			            	<div class="clearfix">
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="resetStoreSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
+				                </div>
+				                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" id="export_manual_pay_button" onclick="export_manual_store()" class="btn btn-block btn-warning">导出</button>
+				                </div>
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="search_manual_store(1)" class="btn btn-block btn-primary">查询</button>
+				                </div>
+				            </div>
+				            <div class="box-body">
+					            <div class="tab-content">
+					              <table class="table table-striped no-margin">
+					                <tbody id="manual_tbody_store">
+					                <tr id="manual_title">
+					                  <th width="20%">门店</th>
+					                  <th width="20%">门店类型</th>
+					                  <th width="20%">门店编号</th>
+					                  <th width="20%">门店状态</th>
+					                  <th width="20%">开店日期</th>
+					                </tr>
+					                </tbody>
+					              </table>
+					            
+					              <!-- /.tab-pane -->
+					            </div>
+					            <div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_manual_store" name="pageRecords_manual_pay" onchange="chnagePayPageRecords(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_sto"></span> 条</div>
+					            <div class="tcdPageCode" id="page_manual_content"></div>
+					       	</div>
+		             	</div>
+		              </div>
+		              
+		            </div>
+	          	</div>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          <!-- <div class="box-header h4 text-light-blue">
+          <div class="pull-left "><strong>门店数据查询</strong></div>
+          </div>
+          <div class="box-body">
+           <div class="clearfix">
+           	 <div class="form-group col-lg-3"><span style="font-weight:700">城市</span>：
+ 	          		<select class="form-control select2" id="citySelect" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"> 
+ 	              	</select> 
+            </div>
+              <div class="form-group col-lg-3"><span style="font-weight:700">门店</span>：&nbsp;  
+              <input type="text" class="form-control"  placeholder="门店" id="storename" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+              <div class="auto hidden" id="auto" style="width: 245px;z-index: 99999;">
+              </div>
+              </div>
+           </div>
+              
+              
+            <div class="clearfix">
+              <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
+                <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+              </div>
+              
+              <div class="col-lg-2 pull-right" style="padding-top: 0px;">
+                <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human()" class="btn btn-block btn-warning">导出</button>
+              </div>
+              <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
+                <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
+              </div>
+              
+            </div>
+            
+          </div>
+
+          <div class="box-body">
+            <div class="tab-content">
+              <table class="table table-striped no-margin">
+                <tbody id="auto_tbody">
+                <tr id="auto_title">
+                  <th width="10%">门店名称</th>
+                  <th width="5%">国安侠</th>
+                  <th width="7%">综合管理</th>
+                  <th width="7%">事务管理</th>
+                  <th width="7%">服务专员</th>
+                  <th width="7%">综合专员</th>
+                  <th width="7%">副店长</th>
+                  <th width="7%">星店店长</th>
+                  <th width="7%">订单处理员</th>
+                  <th width="7%">配送员</th>
+                  <th width="7%">库房管理员</th>
+                  <th width="7%">仓库主管</th>
+                  <th width="7%">配送主管</th>
+                  <th width="9%">在职/离职</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+           
+            <div style="position:absolute;bottom:5px;left:27px;width:35%"> 显示 <select id="pageRecords_auto" onchange="chnagePageRecords(1)" name="pageRecords_auto"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条  &nbsp;&nbsp; 共  <span id="totalRecord_can"></span> 条&nbsp;</div>
+            
+            <div class="tcdPageCode" id="page_auto">
+            </div>
+            
+          </div> -->
+          </div>
+
+       
+        
+      </section>
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+
+<script tyle="text/javascript">
+Date.prototype.format=function(fmt) {        
+    var o = {        
+    "M+" : this.getMonth()+1, //月份        
+    "d+" : this.getDate(), //日        
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+    "H+" : this.getHours(), //小时        
+    "m+" : this.getMinutes(), //分        
+    "s+" : this.getSeconds(), //秒        
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+    "S" : this.getMilliseconds() //毫秒        
+    };        
+    var week = {        
+    "0" : "\u65e5",        
+    "1" : "\u4e00",        
+    "2" : "\u4e8c",        
+    "3" : "\u4e09",        
+    "4" : "\u56db",        
+    "5" : "\u4e94",        
+    "6" : "\u516d"       
+    };        
+    if(/(y+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+    }        
+    if(/(E+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+    }        
+    for(var k in o){        
+        if(new RegExp("("+ k +")").test(fmt)){        
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+        }        
+    }        
+    return fmt;        
+} 
+
+
+ layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+ 
+ 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
+	var employeeId = decode64(getUrlParamByKey("e"));//员工ID
+	var storeId = decode64(getUrlParamByKey("s"));//门店ID
+	var target = decode64(getUrlParamByKey("t"));//执行人级别 
+	var storeName=decode64(getUrlParamByKey("sn"));//门店名称
+	var storeno = decode64(getUrlParamByKey("so"));//门店编号
+	var role = decode64(getUrlParamByKey("r"));//角色 code
+	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
+	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
+	var employeeName = decode64(getUrlParamByKey("en"));//员工姓名
+	var employeePhone = decode64(getUrlParamByKey("ep"));//员工手机号
+	
+	$('#sign_time').datepicker({
+		  autoclose: true
+		});
+	
+  $(function () {
+	  
+	  if(target==0){//总部 
+		  initallcity(); 
+		  initallstore();
+	  }else{
+		  initcurcity(); 
+		  initStoreSelectcomplate();
+	  }
+	  
+	  
+    $(".logo-lg > ul > li").mouseenter(function(){
+      $(this).children(".nav_dropdown").show();
+    });
+    $(".logo-lg > ul > li").mouseleave(function(){
+      $(this).children(".nav_dropdown").hide();
+    });
+    
+    var firstDate = new Date();
+    firstDate.setDate(1); //第一天
+    var curDate = new Date();
+    var bdate = firstDate.format('yyyy/MM/dd');
+    var cDate = curDate.format('yyyy/MM/dd');
+    
+    //初始化门店国安侠 
+    //initStoreEmployeeList();
+    
+    //queryAbnormalOrderType();
+    if(target==0){//总部
+    	$("#updateButton_auto").hide();
+    }else if(target==1){//城市级别
+    	$("#updateButton_auto").hide();
+        $("#city_div").show();
+        $("#city_select").val(cityname);
+        $("#city_select").attr("readonly",true);
+    }else if(target==2){//店长
+    	$("#updateButton_auto").show();
+    	$("#store_name_autoOrder").val(storeName);
+		$("#store_name_autoOrder").attr("readonly",true);
+    }else if(target==3){//事业群级别
+    	$("#updateButton_auto").hide();
+    	$("#city_div").show();
+    	$("#city_select").val(cityname);
+        $("#city_select").attr("readonly",true);
+    }
+    
+    
+    
+    $("#ordertype").change(function(){
+    	var ordertypeval = $("#ordertype  option:selected").val();
+    	if(ordertypeval=="1"){
+    		$("#auto_status").empty();
+    		var option = $("<option value=\"\" selected=\"selected\">全部</option>"); 
+    		$("#auto_status").append(option); 
+    		$("#auto_status").attr("disabled",true);
+    		
+    	}else{
+    		$("#auto_status").empty();
+    		var option = $("<option value=\"\" selected=\"selected\">全部</option><option value=\"0\">未分配</option><option value=\"1\" >已分配</option>"); 
+    		$("#auto_status").append(option); 
+    		$("#auto_status").attr("disabled",false);
+    	}
+    });
+    
+    
+    $("#name").val(employeeName);
+    $("#phone").val(employeePhone);
+    search_auto_abnormalOrder(1);
+    
+    search_manual_store(1);
+  });
+	
+  
+  
+   var isCreatePage=false;
+   function search_auto_abnormalOrder(cur_page){
+	   $("#auto").empty();
+	    /* if(array.length==0){
+	    	crm_alert(0,"该账号暂未分配城市权限! ");
+	    	return false;
+	    } */
+  		isCreatePage=false;
+  		search_auto_abnormalOrder1(cur_page);
+  		
+   }
+
+   //tab2页签
+   function search_manual_store(cur_page){
+	   isCreatePage2=false;
+	   search_auto_store2(cur_page);
+   }
+   
+   
+   
+   function showtips(obj){
+	   var msg = obj.split("@")[0];
+	   var id = obj.split("@")[1];
+	   layer.tips(msg, '#'+id, {
+		   tips: [1, '#0FA6D8'], //还可配置颜色
+		   time:5000
+		 });
+   }
+   
+   function showtipqk(obj){
+	   var msg = obj.split("@")[0];
+	   var id = obj.split("@")[1];
+	   layer.tips(msg, '#'+id, {
+		   tips: [4, '#0FA6D8'], //还可配置颜色
+		   time:5000
+		 });
+   }
+   
+   
+   
+   
+  //查询上
+  var currentPage_auto= 1;
+  var totalPage_auto = 1;
+  function   search_auto_abnormalOrder1(cur_page){
+	  layer.closeAll();
+	    $("#selectmoney").html("0");
+	    $("#all_select_auto").attr("checked",false);
+	  	
+  	    $("#process_div").show();
+ 	 	$("#process_div_pic").show();
+  	
+ 	 	var citySelect = $("#citySelect  option:selected").val();
+ 	 	var storename = $("#storename").val();
+ 	 	var name = $("#name").val();
+ 	 	var zw = $("#zw").val();
+ 	 	var career_group = $("#career_group").val();
+ 	 	
+ 	 	var employee_no = $("#employee_no").val();
+ 	 	var phone = $("#phone").val();
+ 	 	
+	    var human=null;
+	   if(target==1){
+		   if(storename!=""&&!isCityStore(storename)){
+		  		crm_alert(0,"城市与门店不匹配! ");
+		  		$("#process_div").hide();
+   	       		$("#process_div_pic").hide();
+		  		return false;
+		  	}
+		  
+		   human = {
+				cityName:citySelect,
+				name:storename 
+			}
+	    }else if(target==2){
+	    	human = {
+	    			cityName:citySelect,
+					name:storename 
+	 			}
+	    }else if(target==3){
+	    	human = {
+	    			cityName:citySelect,
+					name:storename 
+				}
+	    }else if(target==0){
+	    	
+	    	if(citySelect!=""){
+	    		if(storename!=""&&!isCityStore(storename)){
+			  		crm_alert(0,"城市与门店不匹配! ");
+			  		$("#process_div").hide();
+	   	       		$("#process_div_pic").hide();
+			  		return false;
+			  	}
+	    	}
+	    	
+	    	human = {
+	    			cityName:citySelect,
+					name:storename 
+				}
+	    }
+	 
+	    var pageInfo = new Object();
+	    pageInfo.currentPage = cur_page;
+	    pageInfo.recordsPerPage = autoPageRecordes;
+	    $("#totalRecord_can").html("0");
+	    doManager('HumanresourcesManager','queryStoreOperationList',[human,pageInfo],function(data){
+         if(data.result){
+         	   var result= JSON.parse(data.data);
+	        	   $("#auto_tbody").find("tr:gt(0)").remove(); 
+	        	   var jData = result.data;
+	        	   if(jData==null||jData.length==0){
+	        		   crm_alert(5,"系统查无此条件的数据");
+	        		   $("#page_auto").createPage({
+	        	 	  	    pageCount:0,
+	        	 	  	    current:0,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	
+	        	 	  	    }
+	        	 	  	});
+	        		   $("#totalRecord_price").html("0");
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	   totalPage_auto = result.total_pages;
+	        	   $("#totalRecord_price").html(result.totalprice);
+	        	   
+	        	   $("#totalRecord_can").html(result.pageinfo.totalRecords);
+	        	   if(!isCreatePage){
+	        		   $("#page_auto").createPage({
+	        	 	  	    pageCount:totalPage_auto,
+	        	 	  	    current:1,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	search_auto_abnormalOrder1(p);
+	        	 	  	    }
+	        	 	  	});
+	        		   isCreatePage=true;
+	        	   }
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+    			       var storename=jData[i].storename==null?"":jData[i].storename;
+    			       var gax=jData[i].gax==null?0:jData[i].gax;
+    			       var zhgl=jData[i].zhgl==null?0:jData[i].zhgl;
+    			       var swgl=jData[i].swgl==null?0:jData[i].swgl;
+    			       var fwzy=jData[i].fwzy==null?0:jData[i].fwzy;
+    			       var zhzy=jData[i].zhzy==null?0:jData[i].zhzy;
+    			       var fdz=jData[i].fdz==null?0:jData[i].fdz;
+    			       var xddz=jData[i].xddz==null?0:jData[i].xddz;
+    			       var ddcly=jData[i].ddcly==null?0:jData[i].ddcly;
+    			       var psy=jData[i].psy==null?0:jData[i].psy;
+    			       var kfgly=jData[i].kfgly==null?0:jData[i].kfgly;
+    			       var ckzg=jData[i].ckzg==null?0:jData[i].ckzg;
+    			       var pszg=jData[i].pszg==null?0:jData[i].pszg;
+    			       var total=gax+zhgl+swgl+fwzy+zhzy+fdz+xddz+ddcly+psy+kfgly+ckzg+pszg;
+	        		   var infoStr= "<tr>";
+	        		   		
+	        		   var leavetotal="0";
+	        		   for(var j=0;j<result.leaveData.data.length;j++){
+	        			   var leavestorename = result.leaveData.data[j][0];
+	        			   if(storename==leavestorename){
+	        				   leavetotal=result.leaveData.data[j][1];
+	        				   break;
+	        			   }
+	        		   }
+        			       var s="";
+	        			    infoStr = infoStr
+	        			       +"<td>"+storename+"</td>"
+	        			       +"<td>"+gax+"</td>"
+	        			       +"<td>"+zhgl+"</td>"
+	        			       +"<td>"+swgl+"</td>"
+	        			       +"<td>"+fwzy+"</td>"
+	        			       +"<td>"+zhzy+"</td>"
+	        			       +"<td>"+fdz+"</td>"
+	        			       +"<td>"+xddz+"</td>"
+	        			       +"<td>"+ddcly+"</td>"
+	        			       +"<td>"+psy+"</td>"
+	        			       +"<td>"+kfgly+"</td>"
+	        			       +"<td>"+ckzg+"</td>"
+	        			       +"<td>"+pszg+"</td>"
+	        			       +"<td>"+total+"/"+leavetotal+"</td>";
+		                       
+		                       infoStr = infoStr+"</tr>";
+		                       
+		                  $("#auto_tbody").append(infoStr);     
+	        	   } 
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   return;
+	           }
+         
+        $("#process_div").hide();
+   	    $("#process_div_pic").hide();
+     }); 
+  	   
+  }
+  
+  
+  
+  
+   var isCreatePage=false;
+   var isCreatePage2=false;
+  
+  //查询上
+  var currentPage_manual= 1;
+  var totalPage_manual = 1;
+  
+  var source_upload_type="manual_can_appeal";
+  
+  function search_auto_store2(cur_page){
+	    layer.closeAll();
+	  	
+	    $("#process_div").show();
+	 	$("#process_div_pic").show();
+	
+	 	var citySelect2 = $("#citySelect2  option:selected").val();
+	 	var selectDate = $("#selectDate option:selected").val();
+	 	
+	   var human=null;
+	   //用name临时 存时间汉字  去后台处理 
+	   if(target==1){
+		   human = {
+				cityName:citySelect2,
+				name:selectDate
+			}
+	    }else if(target==2){
+	    	human = {
+	    			cityName:citySelect2,
+					name:selectDate
+	 			}
+	    }else if(target==3){
+	    	human = {
+	    			cityName:citySelect2,
+					name:selectDate 
+				}
+	    }else if(target==0){
+	    	human = {
+	    			cityName:citySelect2,
+					name:selectDate
+				}
+	    }
+	 
+	    var pageInfo = new Object();
+	    pageInfo.currentPage = cur_page;
+	    pageInfo.recordsPerPage = manualPageRecordes;
+	    $("#totalRecord_sto").html("0");
+	    doManager('storeManager','queryStoreStatusList',[human,pageInfo],function(data){
+        if(data.result){
+       	   var result= JSON.parse(data.data);
+	        	   $("#manual_tbody_store").find("tr:gt(0)").remove(); 
+	        	   var jData = result.data;
+	        	   if(jData==null||jData.length==0){
+	        		   crm_alert(5,"系统查无此条件的数据");
+	        		   $("#page_manual_content").createPage({
+	        	 	  	    pageCount:0,
+	        	 	  	    current:0,
+	        	 	  	    backFn:function(p){
+	        	 	  	    }
+	        	 	  	});
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	   totalPage_manual = result.total_pages;
+	        	   
+	        	   $("#totalRecord_sto").html(result.pageinfo.totalRecords);
+	        	   if(!isCreatePage2){
+	        		   $("#page_manual_content").createPage({
+	        	 	  	    pageCount:totalPage_manual,
+	        	 	  	    current:cur_page,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	search_manual_store(p);
+	        	 	  	    }
+	        	 	  	});
+	        		   isCreatePage2=true;
+	        	   }
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+	        		   var city_name = jData[i].city_name==null?"":jData[i].city_name;
+	        		   var storename=jData[i].name==null?"":jData[i].name;
+	        		   var storetypename=jData[i].storetypename==null?"":jData[i].storetypename;
+	        		   var ordnumber=jData[i].ordnumber==null?"":jData[i].ordnumber;
+	        		   var estate=jData[i].estate==null?"":jData[i].estate;
+	        		   var create_time=jData[i].open_shop_time==null?"":jData[i].open_shop_time;
+	        		   
+	        		   if(create_time!=""){
+	        			   create_time=new Date(create_time).format("yyyy-MM-dd");
+	        		   }
+	        		   
+	        		   var infoStr= "<tr>";
+	        			    infoStr = infoStr
+	        			       +"<td>"+storename+"</td>"
+	        			       +"<td>"+storetypename+"</td>"
+	        			       +"<td>"+city_name+" 第"+ordnumber+"家门店 </td>"
+	        			       +"<td>"+estate+"</td>"
+	        			       +"<td>"+create_time+"</td>";
+		                       infoStr = infoStr+"</tr>";
+		                  $("#manual_tbody_store").append(infoStr);     
+	        	   } 
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   return;
+	           }
+       
+        $("#process_div").hide();
+ 	    $("#process_div_pic").hide();
+   }); 
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  function isnull(str) {
+      return str == null || str == "null" || str == "" || str == "undefined" || typeof(str) == "undefined";
+  }
+  
+  function resetStoreSerachParam(t){
+	  var a = document.getElementById("citySelect2");
+ 	  a.options[0].selected = true; 
+ 	  var a = document.getElementById("selectDate");
+	  a.options[0].selected = true; 
+  }
+  function resetSerachParam(t){
+	  var a = document.getElementById("citySelect");
+ 	  a.options[0].selected = true;
+	  //initallcity();
+	  $("#storename").val("");
+	 /*  if(t==1){//可申诉
+		  document.getElementById("can_appeal_form").reset(); 
+	  	  if(target==1){//订单异常角色组或城市级别
+	    	
+	    	$("#store_id_autoOrder").val("");
+	    	$("#store_name-search_autoOrder").empty();
+	    	if(role=="PTYYZXYCDDZ"){
+	    		$("#city_id_autoOrder").val("");
+	    		$("#city_name-search_autoOrder").empty();
+	    	}else{
+	    		$("#city_name_autoOrder").val(cityname);
+	    	}
+	  		  
+	  	  }else if(target==2){//店长
+	  			$("#store_name_autoOrder").val(storeName);
+	  	  }else if(target==3){
+	  		  $("#dept_auto").val(deptname);
+	  	  }
+	  	  
+	  }else if(t==2){//不可申诉
+		  document.getElementById("cannot_appeal_form").reset(); 
+	  	  if(target==1){//订单异常角色组或城市级别
+	    	
+	    	$("#store_id_handOrder").val("");
+	  	    $("#store_name-search_handOrder").empty();
+	    	if(role=="PTYYZXYCDDZ"){
+	    		$("#city_id_manualOrder").val("");
+	    		$("#city_name-search_manualOrder").empty();
+	    	}else{
+	    		$("#city_name_manualOrder").val(cityname);
+	    	}
+	  		  
+	  	  }else if(target==2){//店长
+	  			$("#store_name_handOrder").val(storeName);
+	  	  }else if(target==3){
+	  		  $("#dept_manual").val(deptname);
+	  	  }
+		
+	  } */
+  }
+  
+  var autoPageRecordes=10;
+  var manualPageRecordes=10;
+  //切换每页显示的数据量
+ function chnagePageRecords(t){
+	 if(t==1){
+		 autoPageRecordes  = $("#pageRecords_auto").val();
+		 search_auto_abnormalOrder(1);
+	 }else if(t==2){
+		 $("#page_manual").empty();
+		 manualPageRecordes  = $("#pageRecords_manual").val();
+		 
+	 }
+ }
+  
+function chnagePayPageRecords(){
+	manualPageRecordes  = $("#pageRecords_manual_store").val();
+	search_manual_store(1);
+}
+  
+  
+  
+  //初始化门店员工 
+  function initStoreEmployeeList(){
+	  doManager('HumanresourcesManager','queryHumanGAXListByStoreId',[storeno],function(data){
+          if(data.result){
+          	var empObj = JSON.parse(data.data);
+          
+          	var employee_info = "";
+          	//添加到select中 
+          	var select_obj = $("#employee_list_select");
+          	select_obj.append("<option value=\"\" selected=\"selected\"></option>");
+          	$(empObj).each(function(i,o){
+          		select_obj.append("<option value='"+o.employee_no+"'>"+o.name+"</option>");
+			});
+          	
+              
+          }
+      });
+	  
+  }
+  //关闭 弹出
+  function close_employee_div(){
+	  
+  }
+  
+  //提交更改的方法 
+  function commit_employee_div(){
+	  var a_employee_no = $("#a_employee_no").val();
+	  var a_employee_name = $("#a_employee_name").val();
+	  var a_area_names = $("#h4_area_name").html();
+	  var a_area_ids = $("#a_area_ids").val();
+	  var order_ids = $("#order_ids").val();
+	  
+	  if(a_employee_no==null||a_employee_no==""){
+		  crm_alert(1,"请选择国安侠！");
+		  return false;
+	  }
+	  
+	  var publicObjs = Array();
+	  var pList = order_ids.split(",");
+	  $(pList).each(function(i,o){
+		  if(o!=null&&o.length>0){
+			  var publicObj = {
+					  employeeno:a_employee_no,
+					  employeename:a_employee_name,
+					  area_nos:a_area_ids,
+					  area_names:a_area_names,
+					  df_order_id:o
+			  }
+			  publicObjs.push(publicObj);
+		  }
+	  });
+	   //调用方法  更改状态  
+	   doManager('PublicOrderManager','updatePublicOrderByIds',[publicObjs],function(data){
+	          if(data.result){
+	          	var empObj = JSON.parse(data.data);
+	          	if(empObj.msg!=null&&empObj.msg.length>0){
+	          		crm_alert("0",empObj.msg);
+	          	}else{
+	          		search_auto_abnormalOrder(1);
+		          	layer.closeAll();
+	          	}
+	          	
+	          }
+	   });
+	   
+  }
+  
+  
+  function export_auto_human(){
+	 /*  if(array.length==0){
+	    	crm_alert(0,"该账号暂未分配城市权限! ");
+	    	return false;
+	    } */
+	    $("#process_div").show();
+	 	$("#process_div_pic").show();
+	 	
+	 	var citySelect = $("#citySelect  option:selected").val();
+ 	 	var storename = $("#storename").val();
+ 	 	var name = $("#name").val();
+ 	 	var zw = $("#zw").val();
+ 	 	var career_group = $("#career_group").val();
+ 	 	
+ 	 	var employee_no = $("#employee_no").val();
+ 	 	var phone = $("#phone").val();
+ 	 	
+ 	 	var human=null;
+ 	   if(target==1){
+ 		   if(storename!=""&&!isCityStore(storename)){
+ 		  		crm_alert(0,"城市与门店不匹配! ");
+ 		  		$("#process_div").hide();
+    	       		$("#process_div_pic").hide();
+ 		  		return false;
+ 		  	}
+ 		  
+ 		   human = {
+ 				cityName:citySelect,
+ 				name:storename 
+ 			}
+ 	    }else if(target==2){
+ 	    	human = {
+ 	    			cityName:citySelect,
+ 					name:storename 
+ 	 			}
+ 	    }else if(target==3){
+ 	    	human = {
+ 	    			cityName:citySelect,
+ 					name:storename 
+ 				}
+ 	    }else if(target==0){
+ 	    	
+ 	    	if(citySelect!=""){
+ 	    		if(storename!=""&&!isCityStore(storename)){
+ 			  		crm_alert(0,"城市与门店不匹配! ");
+ 			  		$("#process_div").hide();
+ 	   	       		$("#process_div_pic").hide();
+ 			  		return false;
+ 			  	}
+ 	    	}
+ 	    	
+ 	    	human = {
+ 	    			cityName:citySelect,
+ 					name:storename 
+ 				}
+ 	    }
+	    
+	    doManager('HumanresourcesManager','exportStoreOperationHuman',[human],function(data){
+	          if(data.result){
+	          	   var result= JSON.parse(data.data);
+		           if(result.status=='success'){
+		        	   window.location.href=result.data;
+		           }else{
+		        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+		        	   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+		        	   return;
+		           }
+	          
+	          }else{
+	       	   crm_alert(5,"请稍后重新请求！");
+	          }
+	         $("#process_div").hide();
+	    	 $("#process_div_pic").hide();
+	     });
+  }
+  
+  
+  
+  //导出按门店视角  
+  function export_manual_store(){
+	  layer.closeAll();
+	  	
+	    $("#process_div").show();
+	 	$("#process_div_pic").show();
+	
+	 	var citySelect2 = $("#citySelect2  option:selected").val();
+	 	var selectDate = $("#selectDate option:selected").val();
+	 	
+	   var human=null;
+	   //用name临时 存时间汉字  去后台处理 
+	   if(target==1){
+		   human = {
+				cityName:citySelect2,
+				name:selectDate
+			}
+	    }else if(target==2){
+	    	human = {
+	    			cityName:citySelect2,
+					name:selectDate
+	 			}
+	    }else if(target==3){
+	    	human = {
+	    			cityName:citySelect2,
+					name:selectDate 
+				}
+	    }else if(target==0){
+	    	human = {
+	    			cityName:citySelect2,
+					name:selectDate
+				}
+	    }
+	   
+	   
+	   doManager('HumanresourcesManager','exportStoreOperationStore',[human],function(data){
+	          if(data.result){
+	          	   var result= JSON.parse(data.data);
+		           if(result.status=='success'){
+		        	   window.location.href=result.data;
+		           }else{
+		        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+		        	   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+		        	   return;
+		           }
+	          
+	          }else{
+	       	   crm_alert(5,"请稍后重新请求！");
+	          }
+	         $("#process_div").hide();
+	    	 $("#process_div_pic").hide();
+	     });
+	   
+  }
+  
+  
+  
+
+  
+  
+  
+  
+  var array=new Array();
+	//初始化所有门店 
+	function initallstore() {
+		doManager("StoreManager", "findStoreAll", null,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					array = new Array();
+					for(i=0;i<jsonData.length;i++){
+						array.push(jsonData[i].name);
+					}
+					var autoComplete = new AutoComplete("storename","auto",array);
+					document.getElementById("storename").onkeyup = function(event){
+						autoComplete.start(event);
+						document.getElementById("storename").value=document.getElementById("storename").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+					}
+				}
+			}, false);
+	}
+	
+	
+	function initallcity(){
+		$("#citySelect").empty();
+		$("#citySelect2").empty();
+		doManager("DistCityCodeManager","queryAllDistCityList",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$("#citySelect").append("<option value=''>全部城市</option>");
+					$(jsonData).each(function(index,element){
+						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+                    });
+					
+					$("#citySelect2").append("<option value=''>全部城市</option>");
+					$(jsonData).each(function(index,element){
+						$("#citySelect2").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+                    });
+				}
+		});
+	}
+	
+	function initcurcity(){
+		doManager("userManager","getCurrentUserCity",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+						$("#citySelect2").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+                    });
+					
+				}
+		},false);
+	}
+	
+	
+	$("#citySelect").change(function(){
+		$("#storename").val("");
+		initStoreSelectcomplate();
+	});
+	
+	function initStoreSelectcomplate(){
+		var citySelect = $("#citySelect  option:selected").val();
+		if(citySelect==""){
+			initallstore();
+		}else{
+			//根据城市查询门店 信息
+			var cityname = "'"+citySelect+"'";
+			doManager("StoreManager","findStoreByCityData",[cityname],
+			    function(data,textStatus,XmlHttpRequest){
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						array=new Array();
+						$(jsonData).each(function(index,element){
+							var storename = element.name;
+							array.push(storename);
+						});
+						var autoComplete = new AutoComplete("storename","auto",array);
+						document.getElementById("storename").onkeyup = function(event){
+							autoComplete.start(event);
+							document.getElementById("storename").value=document.getElementById("storename").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+						}
+					}
+			});
+		}
+		
+	}
+	 
+	
+	
+	function isCityStore(sname){
+		var cityStore = false;
+		$(array).each(function(index,element){
+			if(element==sname){
+				cityStore=true;
+			}
+		});
+		return cityStore;
+	}
+  
+</script>
+</body>
+
+ <div class="audit_process" id="taskDetailDiv" style="display:none">
+ </div>
+ 
+ 
+ <div id="errorOrder_detail_div" style="height:247px;display:none">
+  
+</div>
+</html>

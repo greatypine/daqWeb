@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据社区动态</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+ <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">  
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <style>
+   .user-header span{margin-left:10px;}
+    .box span{margin-left:10px;}
+    .box-body p{line-height: 30px;}
+    .img-circle{box-shadow: 0 2px 5px rgba(0,0,0,0.4);}
+    .item{padding-top: 20px;}
+    .item img{width:100%; border-radius: 50%;}
+    .item .col-lg-11{border-bottom: 1px solid #f1f1f1;}
+    .item .col-lg-11:nth-last-child(1){border: 0;}
+    .des_con1 dt{width:70px; font-weight: normal;}
+    .des_con1 dd{margin-left: 85px;}
+    .des_con2 dt{width:280px; font-weight: normal;}
+    .des_con2 dd{margin-left: 295px;}
+    .des_con2 dd strong{width: 80px; display: inline-block;}
+    
+    /**分页样式**/
+    *{ margin:0; padding:0; list-style:none;}
+	a{ text-decoration:none;}
+	a:hover{ text-decoration:none;}
+	.tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+	  .relation_c{
+	  	background-color:#f39c12
+	  }
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+     <div class="container">
+
+         <div class="pull-left">
+          <div class="logo-lg clearfix">
+            <ul>
+              <li><a href="index.html" class="h2"> <img src="dist/img/logo.png"> </a></li>
+              <li ><a href="index.html">片区动态</a> </li>
+              <li><a href="#" id="person_state">个人动态</a> </li>
+              <li><a href="#" id="person_state_area">片区信息</a> </li>
+              <li><a href="../crm/loginplatform.html">国安数据首页</a> </li>
+            </ul>
+          </div>
+        </div>
+ 
+         <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                  <p><strong><span id="cur_card_name">载入中...</span></strong></p>
+                  <p>国安侠<span id="cur_card_no">载入中...</span></p>
+                  <p><span id="cur_store_name">载入中...</span></p>
+                </li>
+                <!-- Menu Body -->
+                <li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a id="person_center" href="#">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="index.html">片区动态</a>
+                    </div>
+                  </div>
+                  <!-- /.row -->
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">国安数据首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+          <div class="box box-default">
+            <div class="box-header with-border text-light-blue">用户画像</div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="col-lg-3 text-center"><img id="c_pic" style="width:140px;height:140px" src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"></div>
+              <div class="col-lg-9">
+
+                <h3><span class="text-yellow" id='c_name'></span><span class="h4" id="c_phone"></span></h3>
+                <p class="col-md-4" id="c_sex">性别：</p>
+                <p class="col-md-4" id="c_age">年龄：岁</p>
+                <p class="col-md-4" id="c_relationTotal">拜访次数：次</p>
+                <p class="col-md-12" id="c_address">家庭住址：</p>
+
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header with-border text-light-blue"><strong>拜访记录</strong></div>
+          <div class="box-body" id="relation_list">
+          
+            <!-- /.item -->
+          </div>
+           <div class="clearfix box-footer">
+              <ul class="pagination pagination-sm no-margin pull-right ">
+            	<div id="tcdPageCode_relation" class="tcdPageCode"></div>
+              </ul>
+		   </div>
+          <!-- /.box-body -->
+        </div>
+      </section>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript">
+
+	layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+  var customer_id = decode64(getUrlParamByKey("customer_id"));
+  var house_id = decode64(getUrlParamByKey("house_id"));
+  var relation_id_res = decode64(getUrlParamByKey("relation_id"));
+  $(function(){
+	  
+	  
+	  initData();
+	  
+	 
+	  
+  })
+  
+  function doLogout() {
+		
+		layer.confirm('确定退出？', {
+			  	title:'提示',
+			  	offset:['100px','550px'],
+			  	move:false,
+			  	skin:'layer-ext-crmskin',
+				btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+		});
+		
+		
+	}
+  function initData(){
+	  //登录用户信息
+	   doManager('UserManager','getCurrentUserDTO',null,function(data){
+	        if(data.result){
+	        	
+	        	var currentUser = JSON.parse(data.data);
+	        	$('span[class="hidden-xs"]').html(currentUser.name);
+				$("#cur_store_name").html(currentUser.store_name);
+				$("#cur_employee_no").html(currentUser.employeeId);
+				
+				$("#cur_card_name").html(currentUser.name);
+				$("#cur_card_no").html(currentUser.employeeId);
+				var urlStr = "user.html?employee_no="+encode64(currentUser.employeeId);
+				$("#person_center").attr("href",urlStr);
+				$("#person_state").attr("href",urlStr);
+				$("#person_state_area").attr("href",urlStr+"&#user");
+	        }else{
+	            $$.showMessage('提示',data.message);
+	        }
+	    });
+	  
+	   house_id = (house_id==null||house_id=='null')?null:house_id;
+	   //客户信息
+       doManager('CustomerManager','findCustomerByCustomerIdAndHouseId_crm',[customer_id,house_id,null],function (data, textStatus, XMLHttpRequest){
+           if(data.result){
+               var customer = JSON.parse(data.data);
+                initCustomer(customer);
+                initrelationlist(1);
+                $("#tcdPageCode_relation").createPage({
+        	        pageCount:relation_max_no,
+        	        current:relation_cur_no,
+        	        backFn:function(p){
+        	        	
+        	        	initrelationlist(p);
+        	        }
+        	    });
+           }else{
+               $$.showMessage("提示",data.message);
+           }
+       });
+  } 
+  
+
+  
+  
+ 
+
+  
+  
+  function initCustomer(customer){
+      
+      $("#c_pic").attr("src",customer.cus_pic==null?"dist/img/user2-160x160.jpg":customer.cus_pic);
+      $("#c_name").html(customer.name);
+      $("#c_age").html("年龄："+(customer.age==null?"":customer.age)+"岁");
+      $("#c_sex").html("性别："+(customer.sex==0?"男":"女"));
+      $("#c_address").html("家庭住址："+(customer.address==null?"":customer.address));
+  }
+
+  
+	/*******************拜访记录分分页开始**********************/
+	 var relation_cur_no = 1;
+	var relation_max_no = 1;
+	
+	
+	function initrelationlist(curno){
+		var pageinfo = new Object();
+		if(curno==null||curno==''){
+			curno=1;
+		}
+		relation_cur_no = curno;
+		
+		doManager('RelationManager','findRelation_customer_crm',[customer_id,10,curno],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var relations = JSON.parse(data.data);
+						
+						relation_max_no = relations.total_pages;
+						$("#c_relationTotal").html("拜访次数："+relations.pageinfo.totalRecords+"次");
+						
+			           	 $("#relation_list").empty();
+			             $(relations.data).each(function(x,t){
+			            	 var customer_type=t.customer_type;
+			            	 var employee_name = t.employee_name;
+			            	 var relation_type = t.relation_type;
+			            	 var relationtime = t.relationtime;
+			            	 var relationId = t.id;
+			            	 var relationHtml="";
+			            	 if(relationId==parseInt(relation_id_res)){
+		            			 relationHtml = ' <div class="item clearfix relation_c">';
+		            		 }else{
+		            			 relationHtml = ' <div class="item clearfix">';
+		            		 }
+			            	 if(customer_type=="1"){
+			            		 
+			            		 relationHtml=relationHtml+'<a href="#" class="col-lg-1"><img src="dist/img/user8-128x128.jpg" style="width:60px;height:60px" alt="User Image"></a>'+
+			                     '<div class="col-lg-11">'+
+			                       '<h5>'+employee_name+'<span>'+relation_type+'拜访</span><span class="pull-right text-muted">拜访时间：'+relationtime+'</span></h5>'+
+			                       '<dl class="dl-horizontal des_con2">'+
+			                         '<dt class="text-muted">拜访事由：</dt>'+
+			                         '<dd>'+t.relation_reason+'</dd>'+
+			                         '<dt class="text-muted">反馈：</dt>'+
+			                         '<dd>'+t.relation_rcv+'</dd>'+
+			                       '</dl>'+
+			                     '</div>'+
+			                   '</div>';
+			            	 }else{
+			            		 relationHtml =relationHtml+'<a href="#" class="col-lg-1"><img src="dist/img/avatar5.png" style="width:60px;height:60px" alt="User Image"></a>'+
+			                         '<div class="col-lg-11">'+
+			                         '<h5>'+employee_name+'<span>'+relation_type+'拜访</span><span class="pull-right text-muted">拜访时间：'+relationtime+'</span></h5>'+
+			                           '<dl class="dl-horizontal des_con2">';
+			                           var contentinfo = t.relation_content;
+			                           for(var i=0;i<contentinfo.length;i++){
+			                        	   relationHtml =relationHtml+ '<dt class="text-muted">'+contentinfo[i].resourcetext+'：</dt>'+
+				                           				   '<dd><strong>'+contentinfo[i].optiontext+'</strong>'+contentinfo[i].content+'</dd>';
+			                           }
+			                             
+			                           relationHtml=relationHtml+'</dl>'+
+			                         '</div>'+
+			                       '</div>';
+			            	 }
+			            	 $("#relation_list").append(relationHtml);
+			             }) 
+						
+					}
+		},false);
+	} 
+	/*******************拜访记录分页结束**********************/
+  
+  
+</script>
+</body>
+</html>

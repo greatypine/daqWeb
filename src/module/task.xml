@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xsi:schemaLocation="http://www.cnpc.com/2010/pmsconfig pmsconfig.xsd"
+	xmlns="http://www.cnpc.com/2010/pmsconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <module id="taskInfo">
+        <package id="taskInfo" >
+            <daopackage interfacePackage="com.cnpc.pms.task.dao" implementPackage="com.cnpc.pms.task.dao.impl"/>
+            <managerpackage  interfacePackage="com.cnpc.pms.task.manager" implementPackage="com.cnpc.pms.task.manager.impl"/>
+        </package>
+    </module>
+</application> 

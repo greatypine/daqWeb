@@ -1,0 +1,1000 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<script type="text/javascript" src="../bizbase/script/jquery-1.4.4.js">
+	
+</script>
+<script type="text/javascript" src="../bizbase/script/ie6minwidth.js">
+	
+</script>
+<script type="text/javascript" src="../scripts/lib-main.js">
+	
+</script>
+<script type="text/javascript" src="../scripts/common/pms.js">
+	
+</script>
+<script type="text/javascript" src="../scripts/common/pmsCommon.js">
+	
+</script>
+<script type="text/javascript" src="../bizbase/script/menulist.js">
+	
+</script>
+<script type="text/javascript" src="../bizbase/script/dialog/dialog.js">
+	
+</script>
+<script type="text/javascript" src="../bizbase/script/tab.js">
+	
+</script>
+<script type="text/javascript" src="../workflow/js/workflow.js">
+	
+</script>
+<script type="text/javascript" src="../workflow/js/toDoDiv.js">
+	
+</script>
+<script src="../bizbase/js/orgDialog.js" type="text/javascript">
+	
+</script>
+<script src="./referenceDialog.js" type="text/javascript">
+</script>
+<script src="../scripts/lib/jquery/ui/jquery.ui.datepicker-zh-CN.js" type="text/javascript">
+</script>
+<script src="../scripts/common/common-validation.js" type="text/javascript">
+</script>
+<link type="text/css" rel="stylesheet" href="../scripts/css/validation.css" />
+<script src="./city.js" type="text/javascript"></script>
+<script src="./citySelect.js" type="text/javascript"></script>
+
+<script src="../scripts/lib/jquery/ui/jquery.ui.datepicker-zh-CN.js" type="text/javascript">
+</script>
+<script src="../scripts/common/common-validation.js" type="text/javascript">
+</script>
+<link type="text/css" rel="stylesheet" href="../scripts/css/validation.css" />
+<script src="./city.js" 			type="text/javascript"></script>
+<script src="./citySelect.js" 		type="text/javascript"></script>
+<script src="../forecast/js/scripts/jquery.validateExtend.js" type="text/javascript">
+</script>
+<script src="../forecast/js/scripts/common-validation-bid.js" type="text/javascript">
+</script>
+<script>
+            importJs("../bizbase/js/common-validation-bizbase.js");
+		</script>
+</head>
+<script>
+	/*校验 */
+	var $validator1;
+	$(function() {
+		//前端js验证对象
+		$validator = new PMSValidator($("#projectForm")[0], {
+			bNormalDisplay : false,
+			iDisplayLength : 5
+		});
+		
+		$validator1 = new PMSValidator($("#projectForm1")[0], {
+			bNormalDisplay : false,
+			iDisplayLength : 5
+		});
+	});
+	var id = getUrlParamByKey("id");
+	/** 下拉框调用的 公共方法 **/
+	function setDic(dicname, resourceName) {
+		var resourceId = $(resourceName)[0];
+		var resource = $dict.getDictList(dicname);
+		var option = new Option('', '');
+		resourceId.add(option);
+		$(resource).each(function(i, element) {
+			var option = new Option(element.dictText, element.dictCode);
+			resourceId.add(option);
+		});
+	}
+	/**查询信息 回显 展示 **/
+	$(function() {
+		initDic();
+		doManager("personalInfoManager", "queryPersonalInfo", id + '',
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						initData(data);
+						initData2(data);
+						initData3(data);
+						var type = getUrlParamByKey("type");
+						$('#SaveSub2').attr('disabled', "true");
+						qiyong(type);
+						towone();
+						$$.executeSearch('personalAddressQuery', 'conditionsDiv');
+					}
+				}, false);
+		var x = getUrlParamByKey("x");
+		nav_set(this, '_un_container_0_0_'+x);
+		nameChange();
+		$("#isDefault").get(0).selectedIndex = 2;
+	});
+	/**控制 按钮 **/
+	function qiyong(type) {
+
+		var divArray = [ "_un_container_0_0_1", "_un_container_0_0_5"];
+		//var divid = divArray[index];
+		$.each(divArray, function(i, divid) {
+			var arr = $('#' + divid + " input[name]");
+			var sarr = $('#' + divid + " select[name]");
+			var vrr = $('#' + divid + " textarea[name]");
+			if ("edit" == type) {
+				$.each(arr, function(i, obj) {
+					$(obj).removeAttr("readonly");
+					$(obj).attr("class", "inputtext");
+				});
+
+				$.each(sarr, function(i, obj) {
+					$(obj).removeAttr("readonly");
+					$(obj).attr("class", "inputtext");
+				});
+				$("select").each(function(){
+					$(this).removeAttr("disabled");
+				});
+				$.each(vrr, function(i, obj) {
+					$(obj).removeAttr("readonly");
+					$(obj).attr("class", "inputtext");
+				});
+				//如果是编辑状态，将编辑按钮去掉
+				$("#SaveSub").removeAttr("disabled");//
+				$('#btnEdit').attr('disabled', "true");
+				$("#SaveSub1").removeAttr("disabled");//
+				$('#btnEdit1').attr('disabled', "true");
+				$("#SaveSub2").removeAttr("disabled");//
+			} else {
+				$.each(arr, function(i, obj) {
+					$(obj).attr("readonly", "readonly")
+					$(obj).attr("class", "inputtext_dis");
+				});
+				$.each(sarr, function(i, obj) {
+					$(obj).attr("readonly", "readonly")
+					$(obj).attr("class", "inputtext_dis");
+				});
+				$.each(vrr, function(i, obj) {
+					$(obj).attr("disabled", "disabled")
+					$(obj).attr("class", "inputtext_dis");
+				});
+				//如果是查看状态，将编辑按钮去掉
+				$('#SaveSub').attr('disabled', "true");
+				$("#btnEdit").removeAttr("disabled");//
+				$('#SaveSub1').attr('disabled', "true");
+				$("#btnEdit1").removeAttr("disabled");//
+				$('#SaveSub2').attr('disabled', "true");
+			}
+		});
+	}
+	/**地址的按钮控制 **/
+	function addAddress() {
+			var arr = $('#_un_container_0_0_6'+" input[name]");
+			var sarr = $('#_un_container_0_0_6'+" select[name]");
+				//如果是编辑状态，将编辑按钮去掉		
+				$('#btnAdd').attr('disabled', "true");//添加 按钮不显示
+				$("#SaveSub2").removeAttr("disabled");//保存按钮 显示 
+	}
+ 
+	function towone() {
+		var arr = $('#_un_container_0_0_2'+" input[name]");
+			$('#SaveSub2').attr('disabled', "true");
+			$("#btnAdd").removeAttr("disabled");//
+			
+	}
+	/**查询总条数 **/
+	function queryCount(){
+		var idCard= $("#idCard").val();
+		var result = true;
+		doManager("PersonalAddressManager", "queryCountNum", idCard + '',
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData==false || jsonData=='false'){
+							$$.showMessage("系统提示", "最多添加五条地址!");
+							result = false;
+						}
+					}
+				}, false);
+		return result;
+	}
+	/**添加地址 **/
+	function addAddressSave(){
+		if(!queryCount()){
+			return;
+		}
+		if (!dataCheck1()) {
+    			return;
+    		}
+		if (!validateSelect()) {
+			$$.showMessage("验证失败", "请检查地址信息是否选择正确!");
+			return;
+		}
+		var streetName = $("#street option:selected").attr('data-name');
+		if(streetName == '请选择'){
+			streetName = '';
+		}
+		//TODO 数据校验
+		var obj = {
+			personId:$("#id").val(),
+			personName: $("#personName").val(),
+			defaultAddress : $("#defaultAddress").val(),
+			province : $("#province option:selected").attr('data-name'),
+			city : $("#city option:selected").attr('data-name'),
+			area : $("#area option:selected").attr('data-name'),
+			street : streetName,
+			isDefault : $("#isDefault").val(),
+		}
+		doManager("PersonalAddressManager", "addPersonalAddress", obj, function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				  $("#personId").val(jsonData.personId);
+				  $("#btnAdd").attr({"disabled":"disabled"});
+    			  $("#SaveSub2").attr({"disabled":"disabled"});
+				  $$.executeSearch('personalAddressQuery', 'conditionsDiv');
+					$$.showMessage("系统信息", "添加成功!");
+					var value = $("#personName").val();
+					var valueTwo = $("#isDefault").val();
+					$('#projectForm1')[0].reset();  
+					$("#personName").val(value);
+					$("#isDefault").val(valueTwo);
+					
+			} else {
+				$$.showMessage("系统信息", "添加失败!");
+			}
+		});
+	}
+	//省市区街道的验证,区不一定存在，不用验证，后台处理即可
+	function validateSelect(){
+		var province = $("#province option:selected").val();
+		var city = $("#city option:selected").val();
+		var area = $("#area option:selected").val();
+		if("-1"==province || "-1"==city || "-1"==area){
+			return false;
+		}
+		return true;
+	}
+	/***初始化 数据字典 **/
+	function initDic() {
+		setDic('if_volunteers_resource',"#volunteersStatus");
+	    setDic('personal_relationship_resource',"#contactsRelationship");
+		setDic('personal_isDefault_resource', "#isDefault");
+		setDic('personal_gender_resource', "#gender");
+		setDic('personal_maritalStatus_resource', "#maritalStatus");
+		setDic('personal_residentType_resource', "#residentType");
+		setDic('personal_nation_resource', "#nation");
+		setDic('personal_bloodType_resource', "#bloodType");
+		setDic('personal_degreeOfEducation_resource', "#degreeOfEducation");
+		setDic('personal_sourceOfFinance_resource', "#sourceOfFinance");
+		setDic('personal_monthlySalary_resource', "#monthlySalary");
+		setDic('personal_medicalPayment_resource', "#medicalPayment");
+		setDic('personal_livingWithWho_resource', "#livingWithWho");
+		setDic('personal_self_careAbility_resource', "#self_careAbility");
+		setDic('personal_familyHistory_resource', "#familyHistory");
+		setDic('personal_drugAllergy_resource', "#drugAllergyHistory");
+		setDic('personal_serviceType_resource', "#serviceType");
+	}
+	/**给form值 **/
+	function initData(data) {
+		setFormSimpleData(data.data, "projectForm");
+	}
+	function initData2(data) {
+		var jsonData = $.fromJSON(data.data);
+		jsonTemp = jsonData;
+		$("#systemUserId").val(jsonData.systemUserId);
+		$("#politicalStatus").val(jsonData.politicalStatus);
+		$("#nation").val(jsonData.nation);
+		$("#oldCardNo").val(jsonData.oldCardNo);
+		$("#workUnit").val(jsonData.workUnit);
+		$("#contactsRelationship").val(jsonData.contactsRelationship);
+		$("#residentType").val(jsonData.residentType);
+		$("#occupation").val(jsonData.occupation);
+		$("#bloodType").val(jsonData.bloodType);
+		$("#familyHistory").val(jsonData.familyHistory);
+		$("#sourceOfFinance").val(jsonData.sourceOfFinance);
+		$("#monthlySalary").val(jsonData.monthlySalary);
+		$("#medicalPayment").val(jsonData.medicalPayment);
+		$("#maritalStatus").val(jsonData.maritalStatus);
+		$("#livingWithWho").val(jsonData.livingWithWho);
+		$("#degreeOfEducation").val(jsonData.degreeOfEducation);
+		$("#anamnesis").val(jsonData.anamnesis);
+		$("#self_careAbility").val(jsonData.self_careAbility);
+		$("#drugAllergyHistory").val(jsonData.drugAllergyHistory);
+		$("#occupationDiseaseRisk").val(jsonData.occupationDiseaseRisk);
+		$("#serviceType").val(jsonData.serviceType);
+	}
+	function initData3(data) {
+		var jsonData = $.fromJSON(data.data);
+		jsonTemp = jsonData;
+		$("#personId").val(jsonData.id);
+	}
+	function formatDate(date) {
+		var myyear = date.getFullYear();
+		var mymonth = date.getMonth() + 1;
+		var myweekday = date.getDate();
+
+		if (mymonth < 10) {
+			mymonth = "0" + mymonth;
+		}
+		if (myweekday < 10) {
+			myweekday = "0" + myweekday;
+		}
+		return (myyear + "-" + mymonth + "-" + myweekday);
+	}
+
+	function dialogSubmit() {
+		if (!dataCheck()) {
+			return;
+		}
+		var div = $("<div></div>");
+		div.html("确定提交？");
+		div.dialog({
+			bgiframe : true,
+			title : "提示",
+			width : 320,
+			buttons : {
+				"确定" : function() {
+					submitForm();
+					$(this).dialog("close");
+				},
+				"取消" : function() {
+					$(this).dialog("close");
+				}
+			},
+			modal : true
+		});
+	}
+
+	function submitForm() {
+
+		if (!dataCheck()) {
+			return;
+		}
+		var obj = {
+			id : $("#id").val(),
+			appPhoneNo : $("#appPhoneNo").val(),
+			associatorNo : $("#associatorNo").val(),
+			systemUserId : $("#systemUserId").val(),
+			name : $("#name").val(),
+			gender : $("#gender").val(),
+			age : $("#age").val(),
+			politicalStatus : $("#politicalStatus").val(),
+			nation : $("#nation").val(),
+			idCard : $("#idCard").val(),
+			storeNo : $("#storeNo").val(),
+			storeName : $("#storeName").val(),
+			filingUser : $("#filingUser").val(),
+			oldCardNo : $("#oldCardNo").val(),
+			workUnit : $("#workUnit").val(),
+			phoneNo : $("#phoneNo").val(),
+			contacts : $("#contacts").val(),
+			contactsRelationship : $("#contactsRelationship").val(),
+			contactsPhoneNo : $("#contactsPhoneNo").val(),
+			residentType : $("#residentType").val(),
+			occupation : $("#occupation").val(),
+			bloodType : $("#bloodType").val(),
+			familyHistory : $("#familyHistory").val(),
+			sourceOfFinance : $("#sourceOfFinance").val(),
+			monthlySalary : $("#monthlySalary").val(),
+			medicalPayment : $("#medicalPayment").val(),
+			maritalStatus : $("#maritalStatus").val(),
+			livingWithWho : $("#livingWithWho").val(),
+			degreeOfEducation : $("#degreeOfEducation").val(),
+			anamnesis : $("#anamnesis").val(),
+			self_careAbility : $("#self_careAbility").val(),
+			drugAllergyHistory : $("#drugAllergyHistory").val(),
+			occupationDiseaseRisk : $("#occupationDiseaseRisk").val(),
+			serviceType : $("#serviceType").val(),
+		};
+		doManager("personalInfoManager", "updatePersonalAddInfo", obj,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						$$.showMessage("系统信息", "修改成功 !");
+					} else {
+						$$.showMessage("系统信息", "修改失败!");
+					}
+				});
+	};
+	function doSave() {
+		if (!dataCheck1()) {
+			return;
+		}
+		if (!validateSelect()) {
+			$$.showMessage("验证失败", "请检查地址信息是否选择正确!");
+			return;
+		}
+		//TODO 数据校验
+		var streetName = $("#street option:selected").attr('data-name');
+		if (streetName == '请选择') {
+			streetName = '';
+		}
+		var obj = {
+			id : $("#addressId").val(),				 
+			personId : $("#id").val(),
+			personName : $("#personName").val(),
+			isDefault : $("#isDefault").val(),
+			province : $("#province option:selected").attr('data-name'),
+			city : $("#city option:selected").attr('data-name'),
+			area : $("#area option:selected").attr('data-name'),
+			street : streetName,
+			defaultAddress : $("#defaultAddress").val(),
+			commitDate : $("#commitDate").val(),
+		}
+		//ajax请求    更新健康屋信息
+		doManager("PersonalAddressManager", "updatePersonalAddress", obj,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						var id = jsonData.id;
+						towone();
+						$$.executeSearch('personalAddressQuery', 'conditionsDiv');
+						$$.showMessage("系统信息", "修改成功 !");
+						var value = $("#personName").val();
+						var valueTwo = $("#isDefault").val();
+						$('#projectForm1')[0].reset();  
+						$("#personName").val(value);
+						$("#isDefault").val(valueTwo);
+					} else {
+						$$.showMessage("系统信息", "修改失败!");
+					}
+				});
+	}
+	
+    /**编辑 地址   */
+	var editObj = {
+			 html: '<a href="#" class="blue">编辑</a>',
+			 resourceId: "personal_address_edit",
+			 func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+		            var addressId = allColumnsDataMap.id;
+		           // var name = allColumnsDataMap.name;
+		        	doManager("PersonalAddressManager", "queryById", addressId + '', function(data,
+		    				textStatus, XMLHttpRequest) {
+		    			if (data.result) {
+		    				var jsonData = $.fromJSON(data.data);
+		    				jsonTemp = jsonData;
+		    				$("#addressId").val(jsonData.id);
+		    				$("#personName").val(jsonData.personName);
+		    				$("#isDefault").val(jsonData.isDefault);
+		    				//设置选中的选项  同时更改data-code属性
+		    				$('#province option:[data-name='+jsonData.province+']').attr('selected','selected');
+		    				
+		    				var provinceObj = $('#province option:[data-name='+jsonData.province+']');
+		    				$('#province').attr('data-code',provinceObj.val());
+		    				selectVa2._cityFunc();//调用切换城市的方法
+		    				
+		    				$('#city option:[data-name='+jsonData.city+']').attr('selected','selected');
+		    				var cityObj = $('#city option:[data-name='+jsonData.city+']');
+		    				$('#city').attr('data-code',cityObj.val());
+		    				selectVa2._areaFunc();//调用切换地区的方法
+		    				
+		    				$('#area option:[data-name='+jsonData.area+']').attr('selected','selected');
+		    				var areaObj = $('#area option:[data-name='+jsonData.area+']');
+		    				$('#areaObj').attr('data-code',areaObj.val());
+		    				selectVa2._streetFunc();//调用切换街道的方法
+		    				
+		    				//if(jsonData.street)
+		    				$('#street option:[data-name='+jsonData.street+']').attr('selected','selected');
+		    				var streetObj = $('#street option:[data-name='+jsonData.street+']');
+		    				$('#street').attr('data-code',streetObj.val());
+		    				$("#defaultAddress").val(jsonData.defaultAddress);
+		    				$("#commitDate").val(formatDate(new Date(jsonData.commitDate)));
+		    				addAddress();
+		    			}
+		    		}, false);
+	    }
+	}
+	 
+	 var deleteObj = {
+            html: '<a href="#" class="blue">删除</a>',
+            resourceId: "personal_address_delete",
+            func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                var id = allColumnsDataMap.id;
+                $$.showPromptDialog("系统提示", "确认删除？", false, 320, function(){
+                  doManager("PersonalAddressManager", "deletePersonalAddress", id + '', function(data, textStatus, XMLHttpRequest){
+                      if (data.result) {
+                          var jsonData = $.fromJSON(data.data);
+                          $$.showMessage("系统信息", "删除成功!");
+                          $$.executeSearch('personalAddressQuery', 'conditionsDiv');
+                      }
+                      else {
+                          $$.showMessage("系统信息", "删除失败!");
+                      }
+                  });
+              });
+            }
+        }
+
+	$pmspage.opArr = [ editObj, deleteObj ];
+	//基础校验-------------------------------
+	function dataCheck() {
+		$validator.clean();
+		var cvalidator = $validator.clientValidate();
+		if (!cvalidator) {
+			$$.showMessage("系统提示", "数据校验不通过，请检查各项输入是否正确。");
+			return false;
+		}
+		return true;
+	}
+	function dataCheck1() {
+		//基础校验-------------------------------
+		$validator1.clean();
+		var cvalidator = $validator1.clientValidate();
+		if (!cvalidator) {
+			$$.showMessage("系统信息", "数据校验不通过，请检查各项输入是否正确。");
+			return false;
+		}
+		return true;
+	}
+	function select_store(callback) {
+		var id = $("#storeNo").val();
+		var name = $("#storeName").val();
+		checkStore(callback, id, name);
+	}
+	function doStoreSelect(json) {
+		var storeInfo = $.fromJSON(json);
+		$("#storeNo").val(storeInfo.id);
+		$("#storeName").val(storeInfo.name);
+	}
+	function goToBack() {
+		window.location.href = "PersonalInfoList.html";
+	}
+    function goToBackOne(){
+	 	window.location.href = 'PersonalInfoEditView.html?id=' + id + "&type=edit&x=1";
+    }
+	function goToBackTwo() {
+	 	window.location.href = 'PersonalInfoEditView.html?id=' + id + "&type=edit&x=1";
+	}
+	/**名字联动 **/
+		 function nameChange(){
+		var value = $('#name').val();
+		$('#nameTwo').val(value);
+		$('#personName').val(value);
+	}
+</script>
+<style>
+html {
+	overflow: hidden;
+	height: 100%;
+}
+
+body {
+	overflow: auto;
+	_overflow: hidden;
+	background: #E6E6E6 url(../scripts/images/right.jpg) repeat-y right top;
+	height: 100%;
+	padding-right: 5px;
+}
+</style>
+<!-- Body -->
+<body>
+	<div class="rightcont clear">
+		<div class="containerheader">编辑信息</div>
+		<div id="tabdocument" class="mainNavg clear">
+			<ul>
+				<li id="baseinfoNavg" class="select"
+					onclick="nav_set(this,'_un_container_0_0_1')"><a> <font
+						id="baseinfo" style="color: black"> 基本信息 </font>
+				</a></li>
+				<li id="MDMInfoNavg" onclick="nav_set(this,'_un_container_0_0_5')">
+					<a> <font id="MDMInfo"> 详细信息 </font>
+				</a>
+				</li>
+				<li id="addressInfo" onclick="nav_set(this,'_un_container_0_0_6')">
+					<a> <font id="addressInfo"> 地址信息 </font>
+				</a>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<div id="nav_cont">
+				<form class="pmsForm" id="projectForm" name="projectForm">
+				<h1>
+					<div class="displayblock" id="_un_container_0_0_1">
+						
+							<input type="hidden" id="id" name="id">
+							<table cellpadding="0" cellspacing="0" class="layout">
+								<tr>
+									<td width="100px"></td>
+									<td width="100px"></td>
+									<td width="100px"></td>
+									<td width="100px"></td>
+									<td width="100px"></td>
+								</tr>
+								<tr>
+									<td align="right">姓名：<span class="red">*</span>
+									</td>
+									<td align="left"><input id="name" name="name" type="text"
+										class="inputtext" validate="required:true,  maxlength:80"  onchange="nameChange();"
+										style="width: 150px" /></td>
+									<td align="right">手机号码：<span class="red">*</span>
+									</td>
+
+									<td align="left"><input id="phoneNo" name="phoneNo"
+										type="text" class="inputselect"
+										validate="required:true, isMobile:true" style="width: 160px" />
+									</td>
+								</tr>
+								<tr>
+									<td align="right">性别：<span class="red">*</span>
+									</td>
+									<td class="basetext"><select id="gender" name="gender"
+										class="inputselect" disabled style="width: 155px"
+										validate="required:true, maxlength:80">
+									</select></td>
+									<td align="right">年龄： 
+									</td>
+									<td align="left"><input id="age" name="age" type="text"
+										class="inputselect" validate="digits:true,required:false, maxlength:3"
+										style="width: 160px" /></td>
+								</tr>
+
+								<tr>
+									<td align="right">身份证号：
+									</td>
+									<td align="left"><input id="idCard" name="idCard"
+										type="text" class="inputselect"
+										validate="isCardNo:true, maxlength:18" style="width: 150px" />
+									</td>
+									<td align="right">联系人姓名：<span class="red"></span>
+									</td>
+									<td align="left"><input id="contacts" name="contacts"
+										type="text" class="inputselect"
+										validate="required:false,  maxlength:80" style="width: 160px" />
+									</td>
+								</tr>
+								<tr>
+									<td align="right">联系人电话：<span class="red"></span>
+									</td>
+									<td align="left"><input id="contactsPhoneNo"
+										name="contactsPhoneNo" type="text" class="inputselect"
+										validate="digits:true,required:false, maxlength:11" style="width: 150px" />
+									</td>
+									<td align="right">与联系人关系：<span class="red"></span>
+									</td>
+									  <td class="basetext">
+		                              <select id="contactsRelationship" name="contactsRelationship"  disabled  class="inputselect_dis" style="width:165px" validate="required:false, maxlength:80">
+	                                        </select>
+		                            </td> 
+								</tr>
+								<tr>
+									<td align="right">建档门店：<span class="red"></span>
+									</td>
+									<td align="left"><input id="storeNo" name="storeNo"
+										type="hidden" class="inputtext"
+										validate="required:false,  maxlength:10" /> <input
+										id="storeName" name="storeName" type="text"
+										disabled="disabled" validate="required:false,   maxlength:10"
+										style="width: 71%" />
+										<button class="buttonu" id="selectStore"
+											onclick="select_store(doStoreSelect);" style="width: 24%">选择</button>
+									</td>
+									<td align="right">建档人：<span class="red"></span>
+									</td>
+									<td align="left"><input id="filingUser" name="filingUser"
+										type="text" class="inputselect"
+										validate="required:false,  maxlength:10" style="width: 160px" />
+									</td>
+								</tr>
+								<tr>
+									<td align="right"><span class="red">★★</span>APP登录手机号码：
+									</td>
+
+									<td align="left"><input id="appPhoneNo" name="appPhoneNo"
+										type="text" class="inputselect"
+										validate="required:false, appMobile:true" style="width: 150px" />
+										 </br><font id="temperatureResult"></font><font style="color: blue">该号码为第一关注人手机号</font>
+									</td>
+								    <td align="right">
+		                              	是否是志愿者： 
+		                            </td>
+		                              <td class="basetext">
+		                                         <select id="volunteersStatus" name="volunteersStatus"  disabled  class="inputselect_dis" style="width:165px" validate="required:false, maxlength:80">
+		                                        </select>
+		                            </td>
+								</tr>
+								<tr>
+									 <td align="right">
+		                              	<span class="red"  type="hidden">★★</span>会员卡卡号：<span class="red"></span>
+		                            </td>
+		                            
+		                            <td align="left">
+		                                <input id="associatorNo" name="associatorNo" type="text"  class="inputselect" validate="digits:true, maxlength:11" style="width:150px"/>
+		                            </td>
+								</tr>
+								<tr>
+									<td colspan="4" align="right">
+
+										<button class="buttonu" id="SaveSub" onclick="dialogSubmit()">提交</button>
+										<button class="buttonu" id=btnEdit
+											onclick="javascript:qiyong('edit')">编辑</button>
+										<button id="backbt" class="buttonu" onclick="goToBack()">返回</button>
+									</td>
+								</tr>
+							</table>
+							
+					</div>
+				</h1>
+				<h1>
+					<div class="displayblock" id="_un_container_0_0_5">
+						<table cellpadding="0" cellspacing="0" class="layout" width="90%">
+							<tr>
+								<td width="15%"></td>
+								<td width="30%"></td>
+								<td width="15%"></td>
+								<td width="40%"></td>
+							</tr>
+
+							<tr>
+								<td align="right">姓名：<span class="red"></span>
+									</td>
+									<td align="left"><input id="nameTwo" name="nameTwo"
+										type="text" class="inputtext_dis" disabled
+										validate="required:false,  maxlength:100" style="width: 160px" />
+									</td>
+								<td align="right">服务需求：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="serviceType" disabled
+									name="serviceType" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+							</tr>
+
+							<tr>
+
+								<td align="right">民族：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="nation" name="nation"
+									class="inputselect" style="width: 167px" disabled
+									validate="required:false, maxlength:80">
+								</select></td>
+								<td align="right">老年证号：<span class="red"></span>
+								</td>
+								<td align="left"><input id="oldCardNo" name="oldCardNo"
+									type="text" class="inputselect"
+									validate="digits:true, maxlength:11" style="width: 160px" />
+								</td>
+							</tr>
+
+							<tr>
+
+								<td align="right">工作单位：<span class="red"></span>
+								</td>
+								<td align="left"><input id="workUnit" name="workUnit"
+									type="text" class="inputselect"
+									validate="required:false, maxlength:10" style="width: 160px" />
+								</td>
+								<td align="right">常住类型：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="residentType" disabled
+									name="residentType" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+							</tr>
+
+							<tr>
+
+								<td align="right">职业：<span class="red"></span>
+								</td>
+								<td align="left"><input id="occupation" name="occupation"
+									type="text" class="inputselect" 
+									validate="required:false,maxlength:10" style="width: 160px" />
+								</td>
+								<td align="right">血型：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="bloodType" disabled
+									name="bloodType" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+							</tr>
+
+							<tr>
+
+								<td align="right">家族病史：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="familyHistory" disabled
+									name="familyHistory" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+								<td align="right">经济来源：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="sourceOfFinance" disabled
+									name="degreeOfEducation" class="inputselect"
+									style="width: 167px" validate="required:false, maxlength:80">
+								</select></td>
+							</tr>
+
+							<tr>
+
+								<td align="right">月均收入 ：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="monthlySalary" disabled
+									name="monthlySalary" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+								<td align="right">医疗费用支付方式：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="medicalPayment" disabled
+									name="medicalPayment" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+							</tr>
+
+							<tr>
+								<td align="right">婚姻状况：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="maritalStatus" disabled
+									name="maritalStatus" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+								<td align="right">居住情况：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="livingWithWho" disabled
+									name="livingWithWho" class="inputselect" style="width: 167px"
+									validate="required:false, maxlength:80">
+								</select></td>
+							</tr>
+
+							<tr>
+								<td align="right">文化程度：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="degreeOfEducation"
+									name="degreeOfEducation" class="inputselect" disabled
+									style="width: 167px" validate="required:false, maxlength:80">
+								</select></td>
+								<td align="right" style="vertical-align: middle">特长爱好：<span
+									class="red"></span>
+								</td>
+								<td align="left"><input id="occupationDiseaseRisk"
+									name="occupationDiseaseRisk" type="text" class="inputselect"
+									validate="required:false, maxlength:10" style="width: 160px" />
+								</td>
+							</tr>
+
+							<tr>
+								<td align="right">自理能力：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="self_careAbility"
+									name="self_careAbility" class="inputselect" disabled
+									style="width: 167px" validate="required:false, maxlength:80">
+								</select></td>
+								<td align="right">药物过敏史：<span class="red"></span>
+								</td>
+								<td class="basetext"><select id="drugAllergyHistory"
+									name="drugAllergyHistory" class="inputselect" disabled
+									style="width: 167px" validate="required:false, maxlength:80">
+								</select></td>
+							</tr>
+							<tr>
+								<td align="right">政治面貌：<span class="red"></span>
+									</td>
+									<td align="left"><input id="politicalStatus"
+										name="politicalStatus" type="text" class="inputselect"
+										validate="required:false, maxlength:10" style="width: 160px" />
+									</td>
+								</tr>
+							<tr>
+								<td align="right" style="vertical-align: middle">既往病史：<span
+									class="red"></span>
+								</td>
+								<td>
+									 <input id="anamnesis" name="anamnesis" class="inputselect"   cols="10" rows="2" style="width:660px;" validate="required:false,maxlength:250"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" align="right">
+									<button class="buttonu" id="SaveSub1" onclick="dialogSubmit()">提交</button>
+									<button class="buttonu" id="btnEdit1"
+										onclick="javascript:qiyong('edit')">编辑</button>
+									<button id="backbt" class="buttonu" onclick="goToBackTwo()">返回</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</h1>
+				</form>
+				<h1>
+
+					<div class="displayblock" id="_un_container_0_0_6">
+						<form class="pmsForm" id="projectForm1" name="projectForm1">
+						<input type="hidden" id="addressId" name="addressId">
+							<div id="conditionsDiv" style="display: hidden">
+								<table id="searchTable" cellpadding="0" cellspacing="0"
+									style="display: none;">
+									<tr>
+										<td class="basetext"><input name="personId" type="hidden"
+											class="inputtext" id="personId" style="width: 152px;" /></td>
+									</tr>
+								</table>
+							</div>
+							<table cellpadding="0" cellspacing="0" class="layout" width="90%">
+								<tr>
+									<td width="15%"></td>
+									<td width="30%"></td>
+									<td width="15%"></td>
+									<td width="40%"></td>
+								</tr>
+								<tr>
+									<td align="right">姓名：<span class="red"></span>
+									</td>
+									<td align="left"><input id="personName" name="name"
+										type="text" class="inputtext" disabled
+										validate="required:false,  maxlength:100" style="width: 160px" />
+									</td>
+									<td class="basetext" style="width: 8%; text-align: right">
+										是否默认地址：<span class="red"></span>
+									</td>
+									<td align="left"><select id="isDefault" name="isDefault"
+										class="inputselect" style="width: 160px"
+										validate="required:false, maxlength:100">
+									</select></td>
+								</tr>
+								<tr>
+									<td align="right">省：<span class="red">*</span>
+									</td>
+									<td class="basetext"><select id="province" name="province"
+										class="inputselect" style="width: 167px"
+										validate="required:true, maxlength:80">
+									</select></td>
+									<td align="right">市：<span class="red">*</span>
+									</td>
+									<td class="basetext"><select id="city" name="city"
+										class="inputselect" style="width: 167px"
+										validate="required:true, maxlength:80">
+									</select></td>
+								<tr>
+								</tr>
+								<tr>
+									<td align="right">区：<span class="red">*</span>
+									</td>
+									<td class="basetext"><select id="area" name="area"
+										class="inputselect" style="width: 167px"
+										validate="required:true, maxlength:80">
+									</select></td>
+									<td class="basetext" style="width: 8%; text-align: right">
+										街道: 
+									</td>
+									<td class="basetext"><select id="street" name="street"
+										class="inputselect" style="width: 167px"
+										validate="required:true, maxlength:80">
+									</select></td>
+								</tr>
+								<tr>
+									<td align="right">地址： 
+									</td>
+									<td align="left"><input id="defaultAddress"
+										name="defaultAddress" type="text" class="inputtext"
+										validate="required:false,  maxlength:80" style="width: 160px" />
+								</tr>
+	
+								<tr>
+									<td colspan="2" align="right">
+									 <button id="SaveSub2" name="btnAddAddress" class="buttonu" onclick="doSave();">保存</button>
+									 <button class="buttonu" id="btnAdd" onclick="addAddressSave();">添加</button> 
+									 <button id="backbt" class="buttonu" onclick="goToBackOne()">返回</button>
+									</td>
+									<td colspan="2" align="left">&nbsp;</td>
+								</tr>
+							</table>
+						     <div id="meterialList" searchDiv="conditionsDiv"
+								showsearch="false" titleAlign="center" showpaging="true"
+								showdisplay="false" showprint="false" operators="$pmspage.opArr"
+								queryid="personalAddressQuery" autoload="false"></div>
+						</form>
+					</div>
+				</h1>
+			</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		/**渲染下拉框中的省市区*/
+		var selectVa2 = new CitySelect({
+			data : data,
+			provId : '#province',
+			cityId : '#city',
+			areaId : '#area',
+			streetId : '#street',
+			isSelect : false
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>异常订单申诉</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    a{color: #444;}
+    .user-header span{margin-left:10px;}
+    .box span{margin-left:10px;}
+    .box .col-lg-2 img{width: 100px;}
+    .box .col-lg-10{line-height: 40px;}
+    .table img{max-height: 150px;}
+    .lh128{line-height: 128px!important;}
+    .pd20{padding:20px!important;}
+    .text-left{text-align: left!important;}
+    .text-right{text-align: right!important;}
+  </style>
+</head>
+
+
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+ <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+
+        <div class="pull-left">
+           <nav class="navbar navbar-static-top no-margin">
+            <!-- Sidebar toggle button-->
+
+            <div class="logo-lg clearfix">
+              <div class="logo-lg clearfix">
+	            <ul>
+	              <li><a href="javascript:parent.location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
+	              <li class="nav-mark"><a href="#">订单申诉</a> </li>
+	              <li><!-- <a href="user.html#user">片区信息</a> --> </li>
+	              <li></li>
+	            </ul>
+	          </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+          <div class="box box-default">
+            <div class="box-header with-border text-light-blue"><b>订单详情</b></div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="col-lg-6">
+                <p>订单编号：<label id="order_sn">加载中..</label></p>
+                <p>订单金额：<label id="trading_price">加载中..</label></p>
+              </div>
+              <div class="col-lg-6">
+                <p>服务国安侠：<label id="service_emp">加载中..</label></p>
+                <p>联系电话：<label id="service_emp_phone">加载中..</label></p>
+              </div>
+              <div class="col-lg-2 pull-right"><button type="button" class="btn btn-default" id="btn_order_detail">订单详情</button></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header text-light-blue"><strong>异常原因</strong></div>
+          <div class="box-body">
+            <p>异常类型：<label id="description"></label></p>
+           <!--  <p>异常说明：<label id="detail"></label></p> -->
+            <!-- /.item -->
+          </div>
+
+        </div>
+      </section>
+      <!-- /.content -->
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header with-border text-light-blue"> <b>申诉理由</b></div>
+          <!-- /.box-header -->
+          <div class="box-body">
+              <textarea class="textarea" id="app_reason" maxlength="254" placeholder="申诉理由" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+             
+             
+              <div id="uploadDiv" style="border-bottom: 1px solid #eee">
+                <form name="file1" action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadFrom"
+                      target="hframe">
+                        <!-- <input id="upfile" type="file" isuploadtable="true" name="file" class="form-control" multiple="" onchange="upload_file_mult()"> -->
+                        <input id="upfile" type="file" isuploadtable="true" name="file" onchange="pre_upload_file_mult()">
+                        <span class="users-list-date">当附件为多个，建议转换成压缩包ZIP格式上传</span>
+                        <iframe name="hframe" id="hframe" style=" display: none"></iframe>
+                </form>
+                <label id="ret"></label>
+            </div>
+              
+              <!-- <button type="button" class="btn btn-default">附件上传</button> -->
+              
+              <div class="col-lg-12">
+                <button type="button" class="btn btn-primary pull-right" style=" padding:6px 35px;" onclick="doupload_file_mult()">提交申诉</button>
+              </div>
+
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+      </section>
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 2.0
+    </div>
+
+  </footer>
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script>
+layer.config({
+  extend: 'skin/crmskin/style.css' //加载新皮肤
+});
+
+var order_sn = decode64(getUrlParamByKey("order_sn"));
+var storeno = decode64(getUrlParamByKey("storeno"));
+var status = decode64(getUrlParamByKey("status"));
+var storename = decode64(getUrlParamByKey("storename"));
+
+$(function(){
+	//根据订单order_sn查询订单 
+	initOrderDetail(order_sn);
+	//初始化异常类型 
+	initExceptionType(order_sn);
+	
+	$("#btn_order_detail").click(function(){
+		queryOrder(order_sn);
+	});
+	
+});
+
+
+function initOrderDetail(order_sn){
+	doManager("OrderManager", "queryOrderInfoBySN",order_sn,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var order_obj = JSON.parse(data.data);
+					$("#service_emp").html(order_obj.employee_name);
+					$("#service_emp_phone").html(order_obj.employee_phone);
+					$("#order_sn").html(order_obj.order_sn);
+					//var start_date_str=new Date(order_obj.create_time).format('yyyy-MM-dd HH:mm:ss');
+					//$("#start_time").html(start_date_str);
+					//总价 
+					$("#trading_price").html(order_obj.trading_price+" 元");
+					//$("#payable_price").html(order_obj.payable_price);
+				}
+	},false);
+}
+
+
+function initExceptionType(order_sn){
+	doManager("DsAbnormalOrderManager", "queryDsAbnormalTypeBySN",order_sn,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var order_obj = JSON.parse(data.data);
+					$("#description").html(order_obj.description);
+					//$("#detail").html(order_obj.detail);
+				}
+	},false);
+}
+
+
+
+//弹订单详情 
+//弹出层 订单明细 
+function queryOrder(order_sn){
+			 var url = "order_detail_alert.html?order_sn="+encode64(order_sn);
+			 layer.open({
+       		  type: 2,
+          		  title:  ['订单信息', 'color:#fff'],
+          		  shadeClose: true,
+          		  shade:[0.1, '#393D49'],
+          		  moveOut:false,
+          		  move:false, 
+          		  skin: 'layer-ext-crmskin',
+          		  area: ['90%', '88%'],
+          		  offset: ['2px','65px'],
+          		  content: url,
+          		  success:function(layer,index){
+          			 
+          		  },
+          		  cancel: function(index, layero){ 
+          			 layer.close(index);
+          			}  
+          		});  
+}
+
+//验证是不是空
+function isnull(str) {
+    return str == null || str == "null" || str === "" || str == "undefined" || typeof(str) == "undefined";
+}
+
+
+function pre_upload_file_mult(){
+	 var content = $('#upfile')[0].files;
+     var fileList= new Array();
+     for( var i=0; i<content.length; i++ ) {
+         var _name = content[i].name;
+         //后缀必须为xls,不支持2007
+        /*  var suffix = _name.match(/^(.*)(\.)(.{1,8})$/)[3];
+         if ("xls" != suffix && "xlsx" != suffix) {
+             $$.showMessage("${system.info}", "请上传xls文件或者xlsx文件!");
+             return false;
+         } */
+         fileList.push(_name);
+     }
+     $("#ret").html(fileList.toString());
+}
+
+
+function doupload_file_mult(){
+	var app_reason = $("#app_reason").val();
+	if(app_reason==null||app_reason==''||app_reason.trim()==''){
+		layer.msg('申诉理由不能为空！  ');
+    	return false;
+	}
+	
+	layer.confirm('是否继续提交？', {
+	  	title:'提示',
+	  	offset:['100px','550px'],
+	  	move:false,
+	  	closeBtn:0,
+	  	skin:'layer-ext-crmskin',
+		btn: ['继续','取消'], //按钮
+	}, function(){
+		var content = $('#upfile')[0].files;
+	    //判断是否提交 过该订单的申诉 。
+	    var isExist = false;
+	    doManager("WorkInfoManager", "queryWorkInfoByOrderSNExtend",order_sn,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var workinfo_obj = JSON.parse(data.data);
+						if(workinfo_obj!=null&&workinfo_obj.order_sn!=null&&workinfo_obj.order_sn.length>0){
+							isExist = true;
+						}
+					}
+		});
+	    
+	    if(isExist){
+	    	layer.msg('该订单已被申诉！  ');
+	    	return false;
+	    }
+	    var model = "";
+	    if(status==2){
+	    	model = "exceptionorderupdate";
+	    }
+	    if(status==0){
+	    	model = "exceptionorder";
+	    }
+	    if(model ==""){
+	    	layer.msg('状态异常 ！  ');
+	    	return false;
+	    }
+		var path = getRootPath();
+	    var _type = "aaaa";
+	    
+	    var index = layer.load(1, {
+	    	  shade: [0.1,'#fff'] //0.1透明度的白色背景
+	    	});
+	    
+	    var app_reason = encodeURIComponent($("#app_reason").val());
+		$("#uploadFrom").attr("action", path + "/exceptionFileUpload.action?model="+model+"&store_no="+storeno+"&order_sn="+order_sn+"&app_reason="+app_reason);
+	    $("#uploadFrom").submit();
+		
+		
+	})
+	
+}
+function importSuccess(storeno) {
+	layer.alert('提交成功！', {
+		  closeBtn: 0
+		}, function(){
+			var url = "abnormal_order.html?t="+encode64(2)+"&c=&s=&e=&so="+encode64(storeno)+"&sn="+encode64(storename);
+			window.location.href=url;
+		});
+}
+
+</script>
+</body>
+</html>

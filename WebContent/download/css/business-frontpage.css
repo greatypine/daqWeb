@@ -1,0 +1,194 @@
+/*!
+ * Start Bootstrap - Business Frontpage HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+body {
+    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+}
+
+/* Header Image Background - Change the URL below to your image path (example: ../images/background.jpg) */
+
+.business-header {
+    height: 400px;
+    background: url('http://placehold.it/1920x400') center center no-repeat scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+
+/* Customize the text color and shadow color and to optimize text legibility. */
+
+.tagline {
+    text-shadow: 0 0 10px #000;
+    color: #fff;
+}
+
+.img-center {
+    margin: 0 auto;
+}
+
+footer {
+    margin: 50px 0;
+}
+
+
+
+
+.asset {
+    display: inline-block;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+
+
+.image-builder-cell {
+    width: 442px;
+    height: 500px;
+    background-image: url("../img/cell.png");
+}
+
+.image-builder-wash {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/wash.png");
+}
+
+.image-builder-clean {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/clean.png");
+}
+
+.image-builder-sent {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/sent.png");
+}
+
+.image-builder-repair {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/repair.png");
+}
+
+.image-builder-shop {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/shop.png");
+}
+.image-builder-old {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/old.png");
+}
+.image-builder-farm {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/farm.png");
+}
+
+
+
+.image-builder-notice {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/notice.png");
+}
+
+.image-builder-party {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/party.png");
+}
+
+.image-builder-dance {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/dance.png");
+}
+
+
+
+.image-builder-trust {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/trust.png");
+}
+
+.image-builder-fast {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/fast.png");
+}
+
+.image-builder-good {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/good.png");
+}
+.image-builder-cheap {
+    width: 244px;
+    height: 244px;
+    background-image: url("../img/cheap.png");
+}
+
+
+.image-builder-inout {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/inout.png");
+}
+.image-builder-house {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/house.png");
+}
+
+
+.image-builder-verify {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/verify.png");
+}
+
+
+
+.image-builder-citizen {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/citizen.png");
+}
+
+.image-builder-merry {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/merry.png");
+}
+
+
+.image-builder-trans {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/trans.png");
+}
+
+.image-builder-money {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/money.png");
+}
+
+.image-builder-social {
+    width: 122px;
+    height: 122px;
+    background-image: url("../img/social.png");
+}
+
+.bg-primary {
+    color: #FFF;
+    background-color: #849f52;
+}

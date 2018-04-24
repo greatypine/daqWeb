@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>事业部-服务专员</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 35px 35px 35px; float:left; width: 70%;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 35px 35px 35px; float:left; width: 30%;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .table td{position: relative;}
+    .nav-tabs-custom{border: none; box-shadow: none;}
+    .nav > li > a{padding: 5px 10px;}
+    
+   html, body {
+	 min-height: 100%;
+	 background-size: cover;
+	 background:#f1f1f1;
+   }
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>个人动态</em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+  
+  
+  <!-- <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+        <div class="pull-left">
+          <iframe src ="employeeInfo_banner.html" width="800" height="70" style="overflow: hidden; border: 0;"></iframe>
+        </div>
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+ <li ><a href="../crm/loginplatform.html">数据平台首页</a> </li>
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li class="user-header">
+                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+                  <p><strong ><span id="card_name">载入中...</span></strong></p>
+                  <p><span id="card_no">载入中...</span></p>
+                </li>
+                <li class="user-body">
+                </li>
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">国安数据首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header> -->
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box clearfix">
+            <div class="info_head with-border">
+              <div class="col-lg-4 text-center"><img src="dist/img/376884043677306248.png" alt="User Image"></div>
+              <div class="col-lg-8">
+
+                <h2 class="text-yellow">载入中..</h2>
+                <p>员工工号：<font id="gax_employee_no">载入中..</font></p>
+                <p>电话：<font id="gax_phone">载入中..</font></p>
+                <p>所属门店：<font id="gax_storename">载入中..</font></p> 
+
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="info_bottom">
+
+              <div class="nav-tabs-custom no-padding no-margin">
+                <!-- Tabs within a box -->
+                <ul class="nav nav-tabs pull-right">
+                  <!-- <li><a href="#sales-chart" data-toggle="tab">本月</a></li> -->
+                  <!-- <li class="active"><a href="#revenue-chart" data-toggle="tab">当日</a></li> -->
+                </ul>
+                <div class="tab-content no-padding">
+                  <!-- Morris chart - Sales -->
+               <!--    <div class="chart tab-pane active" id="revenue-chart" style="position: relative;">
+                    <h5 class="text-light-blue">当日门店成绩</h5>
+                    <div>
+                      <p>营业额总量：1098</p>
+                      <p>订单派送总量：10987</p>
+                      <p>拜访记录总量：1098</p>
+                    </div>
+                  </div> -->
+                  <div class="chart tab-pane active" id="sales-chart" style="position: relative;">
+                    <h5 class="text-light-blue">本月门店成绩</h5>
+                    <div>
+                      <p>门店新增客户量：<font id="new_count">载入中..</font></p>
+                      <p>门店GMV：<font id="store_gmv">载入中..</font></p>
+                      <p>负责产品GMV：<font id="career_gmv">载入中..</font></p>
+                     <!--  <p>拜访记录总量：1098</p> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 2.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+
+<!-- statistics -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+
+
+
+<script>
+
+var employee_no = decode64(getUrlParamByKey("employee_no"));
+
+$(function(){
+	  initcurruser();
+	  queryHumanByEmployeeNo(employee_no);
+	  
+	  queryAmountByEmployeeNo(employee_no);
+});
+
+
+
+var curr_user;
+function initcurruser(){
+		//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,
+  				function(data, textStatus, XMLHttpRequest) {
+  					if (data.result) {
+  						
+  						 curr_user = JSON.parse(data.data);
+  						 //queryBasicInfo(curr_user);
+  						 $("#employee_no").html(curr_user.employeeId);
+  						 $('span[class="hidden-xs"]').html(curr_user.name);
+  						 $("#card_name").html(curr_user.name);
+  						 $("#card_no").html(curr_user.employeeId);
+  						 
+  						 
+  					}
+  	},false);
+}
+
+
+function queryHumanByEmployeeNo(employee_no){
+	
+	doManager("HumanresourcesManager", "getEmployeeInfoByEmployeeNo",[employee_no],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						 var humanObj = JSON.parse(data.data);
+						 var career_show=humanObj.career_group;
+						 if(career_show==null||career_show==""){
+							 career_show="<font color='red'>未分配事业群</font>"
+						 }
+						 $(".text-yellow").html(humanObj.name+"<span class=\"h5\">"+humanObj.zw+"["+career_show+"]</span>");
+						 $("#gax_employee_no").html(humanObj.employee_no);
+						 $("#gax_phone").html(humanObj.phone);
+						 $("#gax_storename").html(humanObj.storename);
+					}
+	},false);
+}
+
+
+function queryAmountByEmployeeNo(employee_no){
+	
+	doManager("OrderManager", "querystoreamountbyemployeeno",[employee_no],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						 var humanObj = JSON.parse(data.data);
+						
+						 //********************************** 
+						 $("#new_count").html(humanObj.retaddcust);
+						 $("#store_gmv").html(humanObj.retamount);
+						 $("#career_gmv").html(humanObj.retcareergroup);
+						 
+					}
+	},false);
+}
+
+
+function doLogout() { 
+	layer.confirm('确定退出？', {
+		  	title:'提示',
+		  	offset:['100px','550px'],
+		  	move:false,
+		  	closeBtn:0,
+		  	skin:'layer-ext-crmskin',
+			btn: ['确定','取消'], //按钮
+		}, function(){
+			urlStr = "../logout.do";
+			window.location.href = urlStr;
+		}, function(){
+		  
+		});
+}  
+
+
+
+
+
+
+</script>
+
+</body>
+</html>

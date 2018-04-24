@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title id="title1"></title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="dist/css/tTurnover-head-scoll.css">
+    <!--map style-->
+    <link rel="stylesheet" href="dist/css/map-style.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="IE 9/html5shiv.min.js"></script>
+    <script src="IE 9/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .logo-lg img:nth-child(1){width: auto; height: 30px;}
+        .logo-lg img:nth-child(2){width: auto; height: 20px; margin-top: 5px;}
+        .box.box-navy{border-top-color: #001F3F;}
+        .badge{font-size: 14px;}
+        .progress-bar-default{background-color: #b5bbc8;}
+        .table tr td:nth-child(1){font-style: oblique; font-size: 14px;}
+        .table td:nth-child(4){text-align: left;}
+        .table th:nth-child(4){text-align: left;}
+        
+	    .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+		.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+		.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+		.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+		.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+    </style>
+    
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+		<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+		</div>
+       <div class="pull-left">
+			<div class="logo-lg">
+				<ul class="no-margin">
+					<li class="current"><em id="head_title"></em></li>
+				</ul>
+			</div>
+		</div>
+      </div>
+    </nav>
+  </header>
+    <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container" style="width:1230px">
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="nav-tabs-custom">
+		            <ul class="nav nav-tabs" id="nav-tabs">
+		            </ul>
+		            <div class="tab-content">
+		              	<div class="tab-pane active" id="tab_1">
+		              	<div class="box-body">
+				          	<div class="clearfix search-criteria">
+				            	<div class="selectorLine clearfix no-border">
+				            	<div class="search-title">查询口径：本月GMV（截止到昨日24点）</div>
+				            	<div class="search-con" style="overflow:visible;">
+				            	<div class="sl-v-list">
+				            	<div class="clearfix">
+				            	<input type="hidden" id="citySelected"/>
+				            	<input type="hidden" id="citySelectedName"/>
+				            		<!--
+				                	<div class="form-group col-lg-3">
+						              <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" disabled="true">
+						                <option value="cur_month" selected >本月新增（截止到昨日24点）</option>
+						              </select>
+						              <!-- /.input group -->
+						            </div-->
+					                <div class="form-group col-lg-3">
+					                	<select class="form-control select2" id="store_dep" onchange="updatestoreid(this)"> 
+					 	              	</select> 
+						            </div>
+				                </div>
+			              		</div>
+			             		</div>
+			            		</div>
+			            	</div>
+			            	<div class="clearfix">
+			            		<!-- 
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
+				                </div-->
+				                <!-- 
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="search_data(1)" class="btn btn-block btn-primary">查询</button>
+				                </div-->
+				                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" id="export_manual_store_button" onclick="export_ranking()" class="btn btn-block btn-warning">导出</button>
+				                </div>
+				            </div>
+				            <div class="box-body">
+					            <div class="tab-content">
+					             <table class="table table-striped" id="Ranking_table">
+		                            <tr id="list_title">
+		                                
+		                            </tr>
+                        		 </table>
+					            
+					              <!-- /.tab-pane -->
+					            </div>
+		                     <div style="position:absolute;bottom:16px;left:27px;width:25%">显示 <select id="pageRecords" name="pageRecords" onchange="chnagePageRecords()"  style="height:25px;line-height:25px;border-radius:4px;"><option value="5" selected="selected">5</option><option value="10">10</option><option value="20">20</option><option value="50">50</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord"></span> 条</div>
+			           		 <div class="tcdPageCode" id="page_element"></div>
+					       	</div>
+		             	</div>
+		             </div>
+		              <div class="tab-pane" id="tab_2">
+		                <div class="box-body">
+				          	<div class="clearfix search-criteria">
+				            	<div class="selectorLine clearfix no-border">
+				            	<div class="search-title">查询口径：本月GMV（截止到昨日24点）</div>
+				            	<div class="search-con" style="overflow:visible;">
+				            	<div class="sl-v-list">
+				            	<div class="clearfix">
+				            	<input type="hidden" id="citySelected2"/>
+				            	<input type="hidden" id="citySelectedName2"/>
+				                	<!-- 
+				                	<div class="form-group col-lg-3">
+						              <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" disabled="true">
+						                <option value="cur_month" selected >本月新增（截止到昨日24点）</option>
+						              </select>
+						              <!-- /.input group -->
+						            </div-->
+					                <div class="form-group col-lg-3">
+					                	<select class="form-control select2" id="store_dep2" onchange="updatestoreid2(this)"> 
+					 	              	</select> 
+						            </div>
+				                </div>
+			              		</div>
+			             		</div>
+			            		</div>
+			            	</div>
+			            	<div class="clearfix">
+			            		<!-- 
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
+				                </div-->
+				                <!-- 
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="search_data2(1)" class="btn btn-block btn-primary">查询</button>
+				                </div-->
+				                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" id="export_manual_dept_button" onclick="export_ranking2()" class="btn btn-block btn-warning">导出</button>
+				                </div>
+				            </div>
+				            <div class="box-body">
+					            <div class="tab-content">
+					              <table class="table table-striped" id="Ranking_table2">
+		                            <tr id="list_title2">
+		                                
+		                            </tr>
+                        		 </table>
+					            </div>
+			                     <div style="position:absolute;bottom:16px;left:27px;width:25%">显示 <select id="pageRecords2" name="pageRecords2" onchange="chnagePageRecords2()"  style="height:25px;line-height:25px;border-radius:4px;"><option value="5" selected="selected">5</option><option value="10">10</option><option value="20">20</option><option value="50">50</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord2"></span> 条</div>
+				           		 <div class="tcdPageCode" id="page_element2"></div>
+					       	</div>
+		             	</div>
+		              </div>
+		            </div>
+	          	</div>
+          </div>
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript">
+        
+        var methodMap = {"areaRanking_gmv":"selectAreaRankingOfStore",//片区gmv排序
+		        		 "deptRanking_gmv":"selectDeptRankingOfStore",//事业群gmv排序
+		        		 "channelRanking_gmv":"selectChannelRankingOfStore",//频道gmv排序
+		        		 "employeeRanking_gmv":"selectEmployeeRankingOfStore",//国安侠gmv排序
+		        		 "employeeRanking_order":"selectAreaOrderRanking",//国安侠订单量排序
+		        		 "eStoreRanking_gmv":"selectEStoreRankingOfStore",//E店gmv排序
+		        		 "deptServerRanking_gmv":"selectDeptServerRanking",//服务专员gmv排序
+		        		 "channelRanking_order":"selectChannelOrderRanking"};//频道订单量排序
+		
+		var search_flag = decode64(getUrlParamByKey("sf"));//查询某类数据标识（areaRanking_gmv、deptRanking_gmv、channelRanking_gmv、...）
+		var STORE_ID = decode64(getUrlParamByKey("s"));//门店Id
+		var from_store = getUrlParamByKey("f");//由总部门店跳转到当前页面的标志位（1）
+		$(document).ready(function(){
+			var list_title="";
+			var head_title="";
+			initCurruser();
+			if("areaRanking_gmv"==search_flag){
+				$("#title1").html("片区排名");
+				head_title = "<strong>片区排名</strong>";
+				list_title = '<th style="width: 5%">排名</th>'+
+			                '<th style="width: 30%">片区名称</th>'+
+			                '<th style="width: 40%"></th>'+
+			                '<th style="width: 25%">GMV（元）</th>';
+			}else if("employeeRanking_gmv"==search_flag){
+				$("#title1").html("国安侠排名");
+				head_title = "<strong>国安侠排名</strong>";
+				list_title = '<th style="width: 5%">排名</th>'+
+		                '<th style="width: 30%">国安侠名称</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">GMV（元）</th>';
+		                $("#nav-tabs").empty();
+		        		var li_Element = $("<li class='active'>");
+		        		var li2_Element = $("<li class=''>");
+		        		var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='true'>").html("国安侠GMV排名");
+		        		var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("国安侠订单量排名");
+		        		li_Element.append(a_Element);
+		        		li2_Element.append(b_Element);
+		        		$("#nav-tabs").append(li_Element).append(li2_Element);
+				searchInfo_data_OtherStep1();
+			}else if("channelRanking_gmv"==search_flag){
+				$("#title1").html("频道排名");
+				head_title = "<strong>频道排名</strong>";
+				list_title = '<th style="width: 5%">排名</th>'+
+		                '<th style="width: 30%">频道</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">GMV（元）</th>';
+				$("#nav-tabs").empty();
+        		var li_Element = $("<li class='active'>");
+        		var li2_Element = $("<li class=''>");
+        		var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='true'>").html("频道GMV排名");
+        		var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("频道订单量排名");
+        		li_Element.append(a_Element);
+        		li2_Element.append(b_Element);
+        		$("#nav-tabs").append(li_Element).append(li2_Element);
+        		searchInfo_data_OtherStep1();
+			}else if("eStoreRanking_gmv"==search_flag){
+				$("#title1").html("E店排名");
+				head_title = "<strong>E店排名</strong>";
+				list_title = '<th style="width: 5%">排名</th>'+
+		                '<th style="width: 30%">频道</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">订单量（单）</th>';
+			}
+			$("#head_title").append(head_title);
+			$("#list_title").append(list_title);
+			searchInfo_data_step1();
+    		
+    	});
+        <!--------------------------------------------------查询数据第一步 开始---------------------------------------------->
+	    
+        var isCreatePage=false;
+	    function searchInfo_data_step1(){
+	    	isCreatePage=false;
+	  		searchInfo_data_step2(1);
+	  	}
+	    
+	    <!----------------------------------------------------查询数据第一步 结束--------------------------------------------->
+	    
+	    
+	    <!---------------------------------------------------查询数据第二步 开始---------------------------------------------->
+	    
+	    var currentPage = 1;
+	    var totalPage = 1;
+	    var maxGmv=0;
+	    var totalRecords=0;
+	    function searchInfo_data_step2(cur_page){
+	    	$("#process_div").show();
+	   	 	$("#process_div_pic").show();
+	   	 	var methodName = methodMap[search_flag];
+	   	    var pageInfo = new Object();
+	 	    pageInfo.currentPage = cur_page;
+	 	    var pageRecords = $("#pageRecords").val();
+	 	    pageInfo.recordsPerPage = pageRecords;
+	 	    $("#list_title").nextAll().remove();
+	   	 	doManager("dynamicManager",methodName,[STORE_ID,pageInfo],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							
+							var resultData = JSON.parse(data.data);
+							var gmvList = resultData.gmv;
+							totalPage = resultData.totalPage;
+							totalRecords = resultData.totalRecords;
+							$("#totalRecord").html(totalRecords);
+			        	    if(!isCreatePage){
+			        		    $("#page_element").createPage({
+			   	       	  	    pageCount:totalPage,
+			   	       	  	    current:cur_page,
+			   	       	  	    backFn:function(p){
+			   	       	  			searchInfo_data_step2(p);
+			   	       	  	    }
+			   	       	  	   });
+			        		   isCreatePage=true;
+			        	    }
+			        	    
+			        	    var maxGmvBar=90;//初始最高gmv进度条的长度是90%
+			        	   
+			        	    for(var i=0;i<gmvList.length;i++){
+			        	    	var dataHtml="";
+			        	    	if(cur_page==1){//第一页
+			        	    		if(i==0){
+				        	    		maxGmv = gmvList[i].amount;
+				        	    		dataHtml = '<tr>'+
+						                                '<td class="text-red"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+						                                '<td>'+gmvList[i].name+'</td>'+
+						                                '<td>'+
+						                                '    <div class="progress progress-sm progress-striped active">'+
+						                                '        <div class="progress-bar progress-bar-danger" style="width: '+maxGmvBar+'%"></div>'+
+						                                '    </div>'+
+						                                '</td>'+
+						                                '<td><span class="badge bg-red">'+maxGmv+'</span></td>'+
+						                            '</tr>'; 
+				        	    	}else{
+				        	    		var gmv = gmvList[i].amount;
+				        	    		var gmvBar = (gmv/maxGmv)*maxGmvBar;
+				        	    		
+				        	    		if(i==1){
+				        	    			dataHtml = '<tr>'+
+							                                '<td class="text-green"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+							                                '<td>'+gmvList[i].name+'</td>'+
+							                                '<td>'+
+							                                '    <div class="progress progress-sm progress-striped active">'+
+							                                '        <div class="progress-bar progress-bar-success" style="width: '+gmvBar+'%"></div>'+
+							                                '    </div>'+
+							                                '</td>'+
+							                                '<td><span class="badge bg-green">'+gmv+'</span></td>'+
+							                            '</tr>'; 
+				        	    		}else if(i==2){
+				        	    			dataHtml = '<tr>'+
+							                                '<td class="text-aqua"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+							                                '<td>'+gmvList[i].name+'</td>'+
+							                                '<td>'+
+							                                '    <div class="progress progress-sm progress-striped active">'+
+							                                '        <div class="progress-bar progress-bar-info" style="width: '+gmvBar+'%"></div>'+
+							                                '    </div>'+
+							                                '</td>'+
+							                                '<td><span class="badge bg-aqua">'+gmv+'</span></td>'+
+							                            '</tr>';
+				        	    		}else{
+				        	    			dataHtml = '<tr>'+
+							                                '<td>'+(i+1)+'</td>'+
+							                                '<td>'+gmvList[i].name+'</td>'+
+							                                '<td>'+
+							                                    '<div class="progress progress-sm progress-striped active">'+
+							                                        '<div class="progress-bar progress-bar-default" style="width: '+gmvBar+'%"></div>'+
+							                                    '</div>'+
+							                                '</td>'+
+							                                '<td>'+gmv+'</td>'+
+							                            '</tr>';
+				        	    		}
+			        	    		}
+			        	    	
+			        	    	}else{//非第一页
+			        	    		var gmv = gmvList[i].amount;
+			        	    		var gmvBar = (gmv/maxGmv)*maxGmvBar;
+			        	    		var index;
+			        	    		if(cur_page==2){
+			        	    			index = i+1+parseInt(pageRecords);
+			        	    		}else if(cur_page>2){
+			        	    			index = (parseInt(cur_page)-1)*parseInt(pageRecords)+i+1;
+			        	    		}
+			        	    		dataHtml = '<tr>'+
+					                                '<td>'+index+'</td>'+
+					                                '<td>'+gmvList[i].name+'</td>'+
+					                                '<td>'+
+					                                    '<div class="progress progress-sm progress-striped active">'+
+					                                        '<div class="progress-bar progress-bar-default" style="width: '+gmvBar+'%"></div>'+
+					                                    '</div>'+
+					                                '</td>'+
+					                                '<td>'+gmv+'</td>'+
+					                            '</tr>';
+			        	    	}
+			        	    		$("#Ranking_table").append(dataHtml);
+			        	    }
+			        	    	
+			           }
+							
+						
+			},false); 
+	    }
+	     var isCreatePage2=false;
+	     function searchInfo_data_OtherStep1(){
+	    	 isCreatePage2=false;
+		  		searchInfo_data_OtherStep2(1);
+	     }
+	     
+		    function searchInfo_data_OtherStep2(cur_page){
+		    	var list_title = "";
+		    	if("employeeRanking_gmv"==search_flag){
+					list_title = '<th style="width: 5%">排名</th>'+
+			                '<th style="width: 30%">频道</th>'+
+			                '<th style="width: 40%"></th>'+
+			                '<th style="width: 25%">GMV（元）</th>';
+			        method = methodMap['employeeRanking_order'];
+				}else if("channelRanking_gmv"==search_flag){
+					list_title = '<th style="width: 5%">排名</th>'+
+			                '<th style="width: 30%">频道</th>'+
+			                '<th style="width: 40%"></th>'+
+			                '<th style="width: 25%">订单量（单）</th>';
+					method = methodMap['channelRanking_order'];
+				}
+		    	$("#list_title2").empty();
+		    	$("#list_title2").append(list_title);
+		    	$("#process_div").show();
+		   	 	$("#process_div_pic").show();
+		   	 	var methodName = methodMap[search_flag];
+		   	    var pageInfo = new Object();
+		 	    pageInfo.currentPage = cur_page;
+		 	    var pageRecords = $("#pageRecords2").val();
+		 	    pageInfo.recordsPerPage = pageRecords;
+		   	 	doManager("dynamicManager",methodName,[STORE_ID,pageInfo],
+						function(data, textStatus, XMLHttpRequest) {
+							if (data.result) {
+								
+								var resultData = JSON.parse(data.data);
+								var gmvList = resultData.gmv;
+								totalPage = resultData.totalPage;
+								totalRecords = resultData.totalRecords;
+								$("#totalRecord2").html(totalRecords);
+				        	    if(!isCreatePage2){
+				        		    $("#page_element2").createPage({
+				   	       	  	    pageCount:totalPage,
+				   	       	  	    current:cur_page,
+				   	       	  	    backFn:function(p){
+				   	       	  			searchInfo_data_step2(p);
+				   	       	  	    }
+				   	       	  	   });
+				        		   isCreatePage2=true;
+				        	    }
+				        	    
+				        	    var maxGmvBar=90;//初始最高gmv进度条的长度是90%
+				        	   
+				        	    for(var i=0;i<gmvList.length;i++){
+				        	    	var dataHtml="";
+				        	    	if(cur_page==1){//第一页
+				        	    		if(i==0){
+					        	    		maxGmv = gmvList[i].amount;
+					        	    		dataHtml = '<tr>'+
+							                                '<td class="text-red"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+							                                '<td>'+gmvList[i].name+'</td>'+
+							                                '<td>'+
+							                                '    <div class="progress progress-sm progress-striped active">'+
+							                                '        <div class="progress-bar progress-bar-danger" style="width: '+maxGmvBar+'%"></div>'+
+							                                '    </div>'+
+							                                '</td>'+
+							                                '<td><span class="badge bg-red">'+maxGmv+'</span></td>'+
+							                            '</tr>'; 
+					        	    	}else{
+					        	    		var gmv = gmvList[i].amount;
+					        	    		var gmvBar = (gmv/maxGmv)*maxGmvBar;
+					        	    		
+					        	    		if(i==1){
+					        	    			dataHtml = '<tr>'+
+								                                '<td class="text-green"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+								                                '<td>'+gmvList[i].name+'</td>'+
+								                                '<td>'+
+								                                '    <div class="progress progress-sm progress-striped active">'+
+								                                '        <div class="progress-bar progress-bar-success" style="width: '+gmvBar+'%"></div>'+
+								                                '    </div>'+
+								                                '</td>'+
+								                                '<td><span class="badge bg-green">'+gmv+'</span></td>'+
+								                            '</tr>'; 
+					        	    		}else if(i==2){
+					        	    			dataHtml = '<tr>'+
+								                                '<td class="text-aqua"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+								                                '<td>'+gmvList[i].name+'</td>'+
+								                                '<td>'+
+								                                '    <div class="progress progress-sm progress-striped active">'+
+								                                '        <div class="progress-bar progress-bar-info" style="width: '+gmvBar+'%"></div>'+
+								                                '    </div>'+
+								                                '</td>'+
+								                                '<td><span class="badge bg-aqua">'+gmv+'</span></td>'+
+								                            '</tr>';
+					        	    		}else{
+					        	    			dataHtml = '<tr>'+
+								                                '<td>'+(i+1)+'</td>'+
+								                                '<td>'+gmvList[i].name+'</td>'+
+								                                '<td>'+
+								                                    '<div class="progress progress-sm progress-striped active">'+
+								                                        '<div class="progress-bar progress-bar-default" style="width: '+gmvBar+'%"></div>'+
+								                                    '</div>'+
+								                                '</td>'+
+								                                '<td>'+gmv+'</td>'+
+								                            '</tr>';
+					        	    		}
+				        	    		}
+				        	    	
+				        	    	}else{//非第一页
+				        	    		var gmv = gmvList[i].amount;
+				        	    		var gmvBar = (gmv/maxGmv)*maxGmvBar;
+				        	    		var index;
+				        	    		if(cur_page==2){
+				        	    			index = i+1+parseInt(pageRecords);
+				        	    		}else if(cur_page>2){
+				        	    			index = (parseInt(cur_page)-1)*parseInt(pageRecords)+i+1;
+				        	    		}
+				        	    		dataHtml = '<tr>'+
+						                                '<td>'+index+'</td>'+
+						                                '<td>'+gmvList[i].name+'</td>'+
+						                                '<td>'+
+						                                    '<div class="progress progress-sm progress-striped active">'+
+						                                        '<div class="progress-bar progress-bar-default" style="width: '+gmvBar+'%"></div>'+
+						                                    '</div>'+
+						                                '</td>'+
+						                                '<td>'+gmv+'</td>'+
+						                            '</tr>';
+				        	    	}
+				        	    		$("#Ranking_table2").append(dataHtml);
+				        	    }
+				        	    	
+				           }
+								
+							
+				},false); 
+		    }
+	    //导出
+	    function export_ranking(){
+	    	$("#process_div").show();
+	   	 	$("#process_div_pic").show();
+	   	 	var methodName = methodMap[search_flag];
+		    doManager('dynamicManager','exportRanking',[STORE_ID,search_flag],function(data){
+		          if(data.result){
+		          	   var result= JSON.parse(data.data);
+			           if(result.status=='success'){
+			        	   window.location.href=result.data;
+			           }else{
+			        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+			        	   $("#process_div").hide();
+		        	       $("#process_div_pic").hide();
+			        	   return;
+			           }
+		          
+		          }else{
+		       	   crm_alert(5,"请稍后重新请求！");
+		          }
+		         $("#process_div").hide();
+		    	 $("#process_div_pic").hide();
+		      });
+	    }
+	    //导出
+	    function export_ranking2(){
+	    	$("#process_div").show();
+	   	 	$("#process_div_pic").show();
+	   	 	var methodName = methodMap[search_flag];
+		    doManager('dynamicManager','exportRanking',[STORE_ID,search_flag],function(data){
+		          if(data.result){
+		          	   var result= JSON.parse(data.data);
+			           if(result.status=='success'){
+			        	   window.location.href=result.data;
+			           }else{
+			        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+			        	   $("#process_div").hide();
+		        	       $("#process_div_pic").hide();
+			        	   return;
+			           }
+		          
+		          }else{
+		       	   crm_alert(5,"请稍后重新请求！");
+		          }
+		         $("#process_div").hide();
+		    	 $("#process_div_pic").hide();
+		      });
+	    }
+	    
+	    
+	    function chnagePageRecords(){
+	    	searchInfo_data_step1();
+	    }
+	    
+	    var EMPLOYEE_NO="";//当前门店店长员工号
+	    var EMPLOYEE_ID;//当前门店店长ID
+	    function initCurruser(){
+	    	var fromStore = decode64(from_store);
+	    		if(fromStore!=null&&fromStore=="1"){//由总部跳入
+	    			doManager("StoreManager", "selectStoreKeeperInfoByStoreId",[STORE_ID],function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var curr_store = JSON.parse(data.data);
+							 $("#store_dep").empty();
+							 $.each(eval(curr_store), function (idx, val) {
+							 	var option = $('<option value="'+val[0]['store_id']+'">'+val[0]['storeName']+'</option>')
+							 	var option2 = $('<option value="'+val[0]['store_id']+'">'+val[0]['storeName']+'</option>')
+							 	$("#store_dep").append(option);
+							 	$("#store_dep2").append(option2);
+							 });
+						}
+	    			});
+	    		}else{
+	    			//门店店长直接登录
+	    	    	//$("#login_logout").show();
+	    			doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+	    	  					if (data.result) {
+	    	  						 var curr_user = JSON.parse(data.data);
+	    	  						 EMPLOYEE_ID = curr_user.id;
+	    	  						 initSelected(EMPLOYEE_ID);
+	    	  					}
+	    	  			},false);
+	    		}
+	    }
+	function initSelected(employ_id){
+		doManager("storeManager", "findStoreByskid",[employ_id],function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					 var curr_store = JSON.parse(data.data);
+					 $("#store_dep").empty();
+					 $.each(eval(curr_store), function (idx, val) {
+					 	var option = $('<option value="'+val['store_id']+'">'+val['name']+'</option>')
+					 	var option2 = $('<option value="'+val['store_id']+'">'+val['name']+'</option>')
+					 	$("#store_dep").append(option);
+					 	$("#store_dep2").append(option2);
+					 });
+				}
+		},false);
+		
+	}
+	  //切换门店
+	  function updatestoreid(selectobj){
+			var store_id=selectobj.value;
+			STORE_ID = store_id;
+			searchInfo_data_step1();
+		}
+	  //切换门店
+	  function updatestoreid2(selectobj){
+			var store_id=selectobj.value;
+			STORE_ID = store_id;
+			searchInfo_data_OtherStep1();
+		}
+    </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据社区动态</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+     .user-header span{margin-left:10px;}
+    .box span{margin-left:10px;}
+    .row{margin-top:20px;}
+    .box-body p{line-height: 30px;}
+    .img-circle{box-shadow: 0 2px 5px rgba(0,0,0,0.4);}
+    .table img{width:70px; height: 70px; margin-top: 10px;}
+    .table th{vertical-align: middle!important;}
+  </style>
+ 
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <!-- <header class="main-header">
+    Logo
+
+    Header Navbar: style can be found in header.less
+    <nav class="navbar navbar-static-top">
+      Sidebar toggle button
+      <div class="container">
+
+         <div class="pull-left">
+          <div class="logo-lg clearfix">
+            <ul>
+              <li><a href="index.html" class="h2"> <img src="dist/img/logo.png"> </a></li>
+              <li><a href="index.html">片区动态</a> </li>
+              <li><a href="#" id="person_state">个人动态</a> </li>
+              <li><a href="#" id="person_state_area">片区信息</a> </li>
+              <li><a href="../crm/loginplatform.html">国安数据首页</a> </li>
+            </ul>
+          </div>
+        </div>
+ 
+         <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                User image
+                <li class="user-header">
+                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+
+                  <p><strong><span id="cur_card_name">载入中...</span></strong></p>
+                  <p>国安侠<span id="cur_card_no">载入中...</span></p>
+                  <p><span id="cur_store_name">载入中...</span></p>
+                </li>
+                Menu Body
+                <li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a id="person_center" href="#">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="index.html">片区动态</a>
+                    </div>
+                  </div>
+                  /.row
+                </li>
+                Menu Footer
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">国安数据首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header> -->
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header" style="margin-left:-30px;margin-right:-30px">
+          <div class="box box-default">
+           <!--  <div class="box-header with-border text-light-blue">用户画像</div> -->
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="col-lg-3 text-center"><img id="c_pic" src="dist/img/user2-160x160.jpg" style="width:140px;height:140px" class="img-circle" alt="User Image"></div>
+              <div class="col-lg-9">
+
+                <h3><span class="text-yellow" id="c_name"></span><span class="h4" id="c_age"></span><span class="h4" id="c_phone"></span></h3>
+                <p class="col-md-4" id="c_sex"></p>
+                <p class="col-md-4" id="c_nationality"></p>
+                <p class="col-md-4" id="c_house_property">租房性质：</p>
+                <p class="col-md-12" id="c_address">家庭住址：</p>
+
+              </div>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-body" style="padding:10px 20px;">
+              <table class="table">
+                <tr>
+                  <td width="20%" id="c_house_type">房屋类型：</td>
+                  <td width="20%" id="c_house_area">房屋面积(平方米)：</td>
+                  <td width="20%" id="c_house_toward">房屋朝向：</td>
+                  <td width="20%" id="c_house_style">房屋户型：</td>
+                  <td width="20%" rowspan="3" align="center" >户型图：<br><img id="c_house_pic" src="dist/img/user1-128x128.jpg"> </td>
+                </tr>
+                <tr>
+                  <td width="20%" id="c_job">职业：</td>
+                  <td width="20%" id="c_income">收入(元)：</td>
+                  <td width="20%" id="c_work_overtime">加班频率：</td>
+                  <td width="20%" id="c_other">其他信息：</td>
+                </tr>
+                <tr>
+                  <td width="20%" id="c_family_num">家庭人口数(人)：</td>
+                  <td width="20%" id="c_preschool_num">学龄前人数(人)：</td>
+                  <td width="20%" id="c_minor_num">未成年人数(人)：</td>
+                  <td width="20%" id="c_pet_type">宠物种类：</td>
+                </tr>
+                <tr>
+                  <td width="20%" id="nationality_gj">国籍：</td>
+                  <td width="20%" id="native_place_">籍贯：</td>
+                  <td width="20%" id="local_">户籍所在地：</td>
+                  <td width="20%" id="marital_status">婚姻状况：</td>
+                  <td width="20%" id="health_condition">健康状况：</td>
+                </tr>
+                <tr>
+                  <td width="20%" id="degree_of_education">教育状况：</td>
+                  <td width="20%" id="school_name">学校名称：</td>
+                  <td width="20%" id="is_car">汽车信息：</td>
+                  <td width="20%" id="automobile_brand">汽车品牌：</td>
+                  <td width="20%" id="money_manage">理财习惯：</td>
+                </tr>
+                <tr>
+                  <td width="20%" id="character_data">性格：</td>
+                  <td width="20%" id="household_income">家庭年收入：</td>
+                  <td width="20%" id="shopping_channel">购物渠道习惯：</td>
+                  <td width="20%">&nbsp;</td>
+                  <td width="20%">&nbsp;</td>
+                 
+                </tr>
+                <tr>
+                  <td width="20%" id="hobby_one">兴趣爱好1：</td>
+                  <td width="20%" id="hobby_two">兴趣爱好2：</td>
+                  <td width="20%" id="hobby_three">兴趣爱好3：</td>
+                  <td width="20%">&nbsp;</td>
+                  <td width="20%">&nbsp;</td>
+                </tr>
+                <tr id="family_content">
+                  <th width="20%" rowspan="2" valign="middle" id="family_title">家庭成员</th>
+                </tr>
+                
+              </table>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript">
+  var flag = decode64(getUrlParamByKey("flag"));//请求来源1（根据电话查询）：订单/快递  2（根据id查询）:拜访记录
+  var customer_id = decode64(getUrlParamByKey("customer_id"));
+  var house_id = decode64(getUrlParamByKey("house_id"));
+  var phone = decode64(getUrlParamByKey("phone"));
+  $(function(){
+	  initData();
+  })
+  
+  function doLogout() {
+		
+		layer.confirm('确定退出？', {
+		  	title:'提示',
+		  	offset:['100px','550px'],
+		  	move:false,
+		  	closeBtn:0,
+		  	skin:'layer-ext-crmskin',
+			btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+		});
+	}
+  function initData(){
+	  //登录用户信息
+	   doManager('UserManager','getCurrentUserDTO',null,function(data){
+	        if(data.result){
+	        	
+	        	var currentUser = JSON.parse(data.data);
+	        	$('span[class="hidden-xs"]').html(currentUser.name);
+				$("#cur_store_name").html(currentUser.store_name);
+				$("#cur_employee_no").html(currentUser.employeeId);
+				
+				$("#cur_card_name").html(currentUser.name);
+				$("#cur_card_no").html(currentUser.employeeId);
+				var urlStr = "user.html?employee_no="+encode64(currentUser.employeeId);
+				$("#person_center").attr("href",urlStr);
+				$("#person_state").attr("href",urlStr);
+				$("#person_state_area").attr("href",urlStr+"&#user");
+	        }else{
+	        	crm_alert(5,data.message);
+	        }
+	    });
+	   
+	   var method; 
+	   var param = [];
+	   if(flag==1){
+		   method = "findCustomerByCustomerPhone_crm";
+		   param=[null,null,phone];
+	   }else{
+		   method="findCustomerByCustomerIdAndHouseId_crm";
+		   if(house_id=="null"||house_id==""){
+			   house_id = null;
+		   }
+		   param=[customer_id,house_id,null]
+	   }
+	   //客户信息
+       doManager('CustomerManager',method,[customer_id,house_id,phone],function (data, textStatus, XMLHttpRequest){
+           if(data.result){
+               var customer = JSON.parse(data.data);
+               
+               //查询更多信息
+                doManager('CustomerDataManager','getCustomerDataByCustomerId',[customer.id],function(data){
+		            if(data.result){
+		            	if(data.data!=null&&data.data!="null"){
+		            		var customerData = JSON.parse(data.data);
+			                initCustomerData(customerData);
+		            	}
+		            	
+		            }else{
+		                crm_alert(5,data.message);
+		            }
+		        });
+                initCustomer(customer);
+               
+           }else{
+        	   crm_alert(5,data.message);
+           }
+       });
+  } 
+  
+
+  
+  
+  function initCustomer(customer){
+      
+      childs = customer.childs;
+      $("#c_pic").attr("src",customer.cus_pic==null?"dist/img/user2-160x160.jpg":customer.cus_pic);
+      $("#c_name").html(customer.name);
+      $("#c_age").html(customer.age==null?"":customer.age+"岁");
+      $("#c_sex").html("性别："+(customer.sex==0?"男":"女"));
+      $("#c_nationality").html("民族："+(customer.nationality==null?"":customer.nationality));
+      $("#c_house_property").html("住房性质："+(customer.house_property==1?"自有":"租住"));
+      $("#c_address").html("家庭住址："+(customer.address==null?"":customer.address));
+      if(customer.customer_address!=null){
+    	  $("#c_house_type").html("房屋类型："+(customer.customer_address.house_type==0?"平房":"楼房"));
+          $("#c_house_area").html("房屋面积(平方米)："+(customer.customer_address.house_area==null?"":customer.customer_address.house_area));
+          $("#c_house_toward").html("房屋朝向："+(customer.customer_address.house_toward==null?"":customer.customer_address.house_toward));
+          $("#c_house_style").html("房屋户型："+(customer.customer_address.house_style==null?"":customer.customer_address.house_style));
+          $("#c_house_pic").attr("src",customer.customer_address.house_pic==null?"dist/img/timg.jpg":customer.customer_address.house_pic);
+      }
+      
+      $("#c_job").html("职业："+(customer.job==null?"":customer.job.substring(3,customer.job.length)));
+      $("#c_income").html("收入(元)："+(customer.income==null?"":customer.income));
+      var corkOverTime="";
+      if(customer.work_overtime!=null){
+    	  if(customer.work_overtime==1){
+    		  
+    		  corkOverTime="从不";
+    	  }else if(customer.work_overtime==2){
+    		  corkOverTime="偶尔";
+    	  }else  if(customer.work_overtime==3){
+    		  
+    		  corkOverTime="经常";
+    	  }else if(customer.work_overtime==4){
+    		  corkOverTime="每天";
+    	  }
+      }
+      
+      $("#c_work_overtime").html("加班频率："+corkOverTime);
+      $("#c_other").html("其他信息："+(customer.other==null?"":customer.other));
+      $("#c_family_num").html("家庭人口数(人)："+(customer.family_num==null?"":customer.family_num));
+      $("#c_preschool_num").html("学龄前人数(人)："+(customer.preschool_num==null?"":customer.preschool_num));
+      $("#c_minor_num").html("未成年人数(人)："+(customer.minor_num==null?"":customer.minor_num));
+      $("#c_pet_type").html("宠物种类："+(customer.pet_type==null?"":customer.pet_type.substring(3,customer.pet_type.length)));
+    
+      
+	  $("#family_title").attr("rowspan",childs.length)
+      $(childs).each(function(index,element){
+    	  var strHtml="";
+          if(index == 0){
+        	  
+        	  strHtml ='<td width="20%">称谓：'+element.family_relation+'</td>'+
+        	  '<td width="20%">姓名：'+element.family_name+'</td>'+
+        	  '<td width="20%">电话：'+element.family_phone+'</td>'+
+        	  '<td width="20%">年龄：'+(element.family_age==null?"":element.family_age)+'</td>';
+        	  
+        	  $("#family_title").after(strHtml);
+              
+          }else{
+        	  strHtml = '<tr>'+
+        	  			'<td width="20%">称谓：'+element.family_relation+'</td>'+
+        	  			'<td width="20%">姓名：'+element.family_name+'</td>'+
+        	  			'<td width="20%">电话：'+element.family_phone+'</td>'+
+        	  			'<td width="20%">年龄：'+(element.family_age==null?"":element.family_age)+'</td>'+
+        	  			'</tr>';
+        	  			$("#family_content").after(strHtml);
+        	  
+          }
+         
+      });
+
+    
+  }
+  
+  //初始更多信息
+  function initCustomerData(customerData){
+    	
+	    $("#nationality_gj").html("国籍："+(customerData.nationality==null?"":customerData.nationality));
+		$("#native_place_").html("籍贯："+(customerData.native_place_city==null?"":customerData.native_place_city)+"&nbsp;"+(customerData.native_place_pro==null?"":customerData.native_place_pro));
+		$("#local_").html("户籍所在地："+(customerData.local_pro==null?"":customerData.local_pro)+"&nbsp;"+(customerData.local_city==null?"":customerData.local_city));
+		$("#health_condition").html("健康状况："+(customerData.health_condition==null?"":customerData.health_condition));
+		$("#marital_status").html("婚姻状况："+(customerData.marital_status==null?"":customerData.marital_status));
+		$("#degree_of_education").html("教育状况："+(customerData.degree_of_education==null?"":customerData.degree_of_education));
+		$("#school_name").html("学校名称："+(customerData.school_name==null?"":customerData.school_name));
+		$("#is_car").html("汽车信息："+(customerData.is_car==0?"有":"无"));
+		$("#automobile_brand").html("汽车品牌："+(customerData.automobile_brand==null?"":customerData.automobile_brand));
+		$("#money_manage").html("理财习惯："+(customerData.money_manage==null?"":customerData.money_manage));
+		$("#character_data").html("性格："+(customerData.character_data==null?"":customerData.character_data));
+		$("#household_income").html("家庭年收入："+(customerData.household_income==null?"":customerData.household_income));
+		$("#shopping_channel").html("购物渠道习惯："+(customerData.shopping_channel==null?"":customerData.shopping_channel));
+		$("#hobby_one").html("兴趣爱好1："+(customerData.hobby_one==null?"":customerData.hobby_one));
+		$("#hobby_two").html("兴趣爱好2："+(customerData.hobby_two==null?"":customerData.hobby_two));
+        $("#hobby_three").html("兴趣爱好3："+(customerData.hobby_three==null?"":customerData.hobby_three));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>更多每月动态</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="dist/css/top_style.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+     .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px; height: 40px; line-height: 40px; background-color: #e0e5fc;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    .content-header{margin: 0 auto;}
+	
+    .ranking{margin: 10px auto; width: 900px;position: relative;}
+    .ranking{font-size: 16px; line-height: 40px;}
+    .ranking .col-lg-1{font-size: 20px; padding-left: 5px; border-right: 1px solid #e0e0e0; height: 40px;}
+	.ranking .col-lg-4{border-right: 1px solid #e0e0e0;}
+    .real_pai1{background: url("dist/img/pai1.png") no-repeat 25px 8px; background-size:23px 23px; height: 35px;}
+    .real_pai2{background: url("dist/img/pai2.png") no-repeat 25px 8px; background-size:23px 23px; height: 35px;}
+    .real_pai3{background: url("dist/img/pai3.png") no-repeat 25px 8px; background-size:23px 23px; height: 35px;}
+	.text-blue{color:#39a3dd !important}
+	#process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	#gvmMonth{position: relative; z-index: 1000;}
+	#gvmMonth span{background-color: #74a7f1; padding: 8px 20px; font-weight: 800;}
+	#gmv_ul{position: relative; z-index: 10;border: 4px solid #74a7f1; margin-top: -25px; padding-top: 50px;}
+	#gmv_ul li:nth-child(2n){background-color: #fff;}
+	#gmv_ul li:nth-child(1){background-color: #74a7f1;}
+	#gmv_ul li{overflow: hidden; clear: both;background-color: #e0e5fc; text-align: center;}
+  </style>
+ 
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<div id="process_div" ></div>
+	<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper" style="background-color:#f1f1f1">
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+       <section class="content-header">
+       <div class="box box-default" style="margin-bottom:10px;">
+       <h3 class="text-center" id="gvmMonth"><span><strong></strong></span></h3>
+        <div class="real-time ranking clearfix">
+			<div style="position:absolute;right:10px;top:-10px;z-index:10000"><input type="hidden" id="currentMonth_store" value="" />
+	              <select class="form-control" style="width:120px" id="crm_date_store" onchange="reloadGMVByDate()">
+	                
+	              </select>
+	        </div>
+            <!-- <h4 style="margin-bottom: 20px;text-align:center">门店GMV排名</h4> -->
+            <ul id="gmv_ul">
+            
+            </ul>
+
+
+        </div>
+        </div>
+      </section>
+
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript" src="dist/js/top_style.js"></script>
+<script type="text/javascript">
+  var cityId = decode64(getUrlParamByKey("c"));//城市ID
+  var employeeId = decode64(getUrlParamByKey("e"));//员工编号
+  var month = decode64(getUrlParamByKey("f"));//月份
+  
+  $(function(){
+	  initGMVStoreDate();
+	  showDailyData();
+  })
+  
+
+ function showDailyData(){
+	  $("#gmv_ul").empty();
+	  var s_date = $("#crm_date_store").val();
+	  var dynamicDto = {
+			  cityId:cityId,
+	  		  employeeId:employeeId,
+	  		  limit:"N",
+	  		  month:s_date
+	  }
+	  $("#gvmMonth").find("span").eq(0).find("strong").eq(0).html(s_date+"月门店GMV排名");
+	  doManager("dynamicManager", "getMonthData",[dynamicDto],
+				function(data, textStatus, XMLHttpRequest) {
+					
+					if (data.result) {
+						var resultJson= JSON.parse(data.data);
+						
+						var header = '<li><div class="col-lg-1 no-padding" style="font-size:16px">序号</div>'
+							+'<div class="col-lg-4 no-padding">门店名称</div>'+ 
+				            '<div class="col-lg-4 no-padding">GMV</div>'+ 
+				            '<div class="col-lg-3 no-padding">环比增幅(%)</div></li>';
+				        $("#gmv_ul").append(header);
+						if(resultJson==null){
+							crm_alert(5,"系统错误，请重新请求！");
+							$("#process_div").hide();
+							$("#process_div_pic").hide();
+							return;
+						}else {
+							
+							if(resultJson.gmv_status=="fail"){
+								crm_alert(5,JSON.parse(resultJson.gmv).message);
+							}else{
+								var dailyData_gmv = JSON.parse(resultJson.gmv);
+								//$("#gmv_ul").empty();   
+								
+								for(var i=0;i<dailyData_gmv.length;i++){
+									var color='style="text-align:center;"';
+									if(i<10){
+										color='style="text-align:center;color:red"';
+									}
+									var info = '<li>';
+									if(i<3){
+										info = info+'<div class="col-lg-1 real_pai'+(i+1)+' no-padding" '+color+'></div>';
+									}else{
+										info = info+'<div class="col-lg-1  no-padding" '+color+'>'+(i+1)+'</div>';
+									}
+									var pesgmvpriord = dailyData_gmv[i].pesgmvpriord==-1000?'无':dailyData_gmv[i].pesgmvpriord+'%';
+									 info = info+
+								                '<div class="col-lg-4 no-padding">'+dailyData_gmv[i].store_name+'</div>'+
+								                '<div class="col-lg-4 no-padding"><b class="text-blue">'+dailyData_gmv[i].pesgmv+'</b></div>'+
+								                '<div class="col-lg-3 no-padding"><b class="text-blue">'+pesgmvpriord+'</b></div>'+
+								               '</li>';
+								    $("#gmv_ul").append(info);
+								               
+								}
+							}
+							
+							$("#process_div").hide();
+							$("#process_div_pic").hide();
+						}
+					}
+			},false);
+	  
+  }
+  var curDate = "";
+  function initGMVStoreDate(){
+	  var myDate = new Date();
+	  $("#crm_date_store").val(parseInt(month));
+	  var c_month = myDate.getMonth()+1;//当前月
+	  var curMonth = parseInt(month);//当前月
+	  var date_option = "";
+	  for(var i=1;i<=c_month;i++){
+		  var year_month = i;
+		  var y_m =i+"月";
+		  if(i==curMonth){
+			  date_option=date_option+"<option value='"+i+"' selected>"+y_m+"</option>";
+		  }else{
+			  date_option=date_option+"<option value='"+i+"' >"+y_m+"</option>";
+		  }
+	  }
+	  $("#crm_date_store").append(date_option);
+  }
+  
+  //门店GMV排名,点击时间下拉框展示每月的GMV和增幅排名
+  function reloadGMVByDate(){
+	  var s_date = $("#crm_date_store").val();
+	  var myDate = new Date();
+	  var c_year = myDate.getFullYear(); //当前年
+	  var c_month = myDate.getMonth();//当前月show
+	  var year_month = c_month+1;
+	  $("#currentMonth_store").val(s_date);
+	  $("#gvmMonth ").find("span").eq(0).find("strong").eq(0).html("GMV"+s_date+"月排名");
+ 	  showDailyData();
+  }
+  
+  
+</script>
+</body>
+</html>

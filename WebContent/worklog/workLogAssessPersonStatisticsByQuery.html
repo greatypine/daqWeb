@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>日誌打分个人统计</title>
+	<script type="text/javascript" src="../scripts/lib-main.js"></script>
+	<script type="text/javascript" src="../scripts/common/pms.js"></script>
+	<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+	<script type="text/javascript" src="../bizbase/js/refDialog.js"></script>
+	<script type="text/javascript" src="../scripts/common/common-simpletable.js"></script>
+	<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+	<link rel="stylesheet" href="../bizbase/script/tree/jquery.treeview.css" />
+	<link rel="StyleSheet" type="text/css" href="../scripts/css/common-simpletable.css">
+</head>
+<script type="text/javascript">
+	var beginDate = getUrlParamByKey("beginDate");
+	var endDate = getUrlParamByKey("endDate");
+	var orgName = getUrlParamByKey("orgName");
+	var userName = getUrlParamByKey("userName");
+	var posName = getUrlParamByKey("posName");
+	var personid = getUrlParamByKey("userId");
+	$(function(){
+		$("#times").text(beginDate+"~"+endDate);
+		$("#beginDate").val(beginDate);
+		$("#endDate").val(endDate);
+		$("#orgName").text(orgName);
+		$("#userName").text(userName);
+		$("#posName").text(posName);
+		$("#personid").val(personid);
+		/*editTab = new SimpleTable("toDoTab", {
+					param : 'conditionsDiv',
+					checkMode : 'single',
+					scrollX : true,
+					paging : false,
+					columns : {
+						id:{
+							header : '序Id',
+							width : '10%'
+						},
+						logdate:{
+							header : '日期',
+							width : '10%'
+						},
+						score : {
+							header : '评分等级',
+							width : '5%'
+						},
+						hours : {
+							header : '小时数',
+							width : '5%'
+						},
+						worktype : {
+							header : '工作类型',
+							width : '10%'
+						},
+						workcontent : {
+							header : '工作内容',
+							width : '10%'
+						},
+						workresult : {
+							header : '主要工作成果',
+							width : '10%'
+						},
+						
+						other : {
+							header : '需要其他学科支持的问题',
+							width : '15%'
+						},
+						support : {
+							header : '对院其他所得支持和建议',
+							width : '15%'
+						}	
+					},
+					formatters: {}
+				})*/
+			$$.executeSearch('workLogAssessPersongStatistic', 'conditionsDiv');
+
+	})
+	//给列加链接
+			 var COLUMNS = {
+			 		"workresult": function(aData, iColumn, sColumnName, map){
+			 					var value = map[sColumnName];
+								return "<div style='width:300px;word-break:break-all;word-wrap:break-word;' >" + value + "</div>";                   
+	 	
+						},
+					"workcontent": function(aData, iColumn, sColumnName, map){
+			 					var value = map[sColumnName];
+								return "<div style='width:100px;word-break:break-all;word-wrap:break-word;' >" + value + "</div>";                   
+	 	
+					},
+					"other": function(aData, iColumn, sColumnName, map){
+			 					var value = map[sColumnName];
+								return "<div style='width:150px;word-break:break-all;word-wrap:break-word;' >" + value + "</div>";                   
+	 	
+					},
+					"support": function(aData, iColumn, sColumnName, map){
+			 					var value = map[sColumnName];
+								return "<div style='width:150px;word-break:break-all;word-wrap:break-word;' >" + value + "</div>";                   
+	 	
+					}
+			 }
+			 var TABLE_HEADS = {
+					other : function(column){ return "<font >需要其他学科<br/>支持的问题</font>"; },
+					support:function(column){ return "<font >对院其他所的<br/>支持和建议</font>"; }
+				};
+	//格局化日期：yyyy-MM-dd
+    function formatDate(date) {
+        var myyear = date.getFullYear();
+        var mymonth = date.getMonth()+1;
+        var myweekday = date.getDate();
+
+        if(mymonth < 10){
+            mymonth = "0" + mymonth;
+        }
+        if(myweekday < 10){
+            myweekday = "0" + myweekday;
+        }
+        return (myyear+"-"+mymonth + "-" + myweekday);
+      }
+</script>
+<body style="height:100%">
+<div class="box">
+    <div class="title clear">
+        <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();"></div>
+        <div class="ico2"></div>
+        <div class="ico1"></div>
+        <a href="#">日誌管理 :</a>&nbsp;<a href="#">日誌打分个人统计</a>
+    </div>
+    <div class="containerbody padding4px">
+        <div class="containerheader">
+            <a href="#" onclick="toggleDiv('conditionsDiv','pic2');">
+                <img src="../scripts/images/22.png" align="absmiddle" id="pic2"/>
+            </a>日誌打分个人统计
+        </div>
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true">
+                <table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+                   <tr>
+                        <td class="basetext" colspan='1' style="width: 8%; text-align: right">
+               日志时间：	
+                        </td>
+                        <td class="baseform" colspan='2'>
+                      		<span id="times"></span>
+							<input type="hidden" id="beginDate" name="logdate">
+							<input type="hidden" id="endDate" name="logdate">
+						</td>
+					</tr>
+						<tr>
+					<td class="basetext" style="width: 15%; text-align: right">
+                             单位/部门：
+                        </td>
+                        <td class="baseform">
+                           <span id="orgName"></span>
+						</td>
+						<td class="basetext" style="width:15%; text-align: right">
+                             姓名：
+                        </td>
+						<td>
+                           <span id="userName"></span>
+						   <input type="hidden" id="personid" name="personid">
+                        </td>
+						<td class="basetext" style="width: 15%; text-align: right">
+                             职务/职称：
+                        </td>
+						<td>
+                           <span id="posName"></span>
+                        </td>
+         			</tr>
+                    
+                </table>
+                </form>
+				<!--<div id="toDoWorkLogListQuery" showcheckbox="false">
+        			<table id="toDoTab" queryid="workLogAssessPersongStatistic" showcheckbox="false" showPaging="false" style="width: 100%;margin:0px;padding:0px;">
+					</table>				</div>-->
+					<div id="workLogSearchContainer" titleAlign= "center" fnRender="renderColumns"  showcheckbox="false" showRidaoButton="true"
+		             searchDiv="conditionsDiv" usecache="true" queryid="workLogAssessPersongStatistic" showNo="false"
+		             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+		             showprint="false"  showcheckbox="true" >
+		       		 </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

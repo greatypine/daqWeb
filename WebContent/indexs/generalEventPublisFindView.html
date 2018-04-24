@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <meta http-equiv="Cache-Control" Content="no-cache"/>
+        <meta http-equiv="Pragma" Content="no-cache"/>
+        <meta http-equiv="Expires" Content="0"/>
+        <title>通知公告</title>
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        <script type="text/javascript" src="../scripts/lib-uploadTable.js">
+        </script>
+        <script>
+            $(document).ready(function(){
+				 var title = getUrlParamByKey("title");
+				 $("#title").text(title);
+                 onSearch();
+            });
+			
+			 function onSearch(){
+			 	 var monday = getUrlParamByKey("monday");
+				 $("#monday").val(monday+","+monday);
+                 $$.executeSearch('generalEventPublishSeQuery', 'conditionsDiv');
+            }
+
+        </script>
+        <style>
+            html {
+                overflow: hidden;
+                height: 100%;
+            }
+            
+            body {
+                overflow: auto;
+                _overflow: hidden;
+                background: #E6E6E6 url(../scripts/images/right.jpg) repeat-y right top;
+                height: 100%;
+                padding-right: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div class="rightcont clear">
+                <div class="box">
+                    <div style="background:url(../bizbase/images/i2/i2shellbackground.gif)">
+                        <div cellpadding="0" cellspacing="0" style="background-image:url(../bizbase/images/i2/masthead.gif);background-repeat:no-repeat;height:40px;">
+                        </div>
+                    </div>
+                    <div class="containerbody">
+                        <div id="nav_cont">
+                            <div id="purchaseInfoDiv">
+                            	 <div class="containerheader">
+                                    <strong>重要科技活动</strong>
+                                </div>
+                                <div class="containerbody" id="conditionsDiv">
+                                    <form class="pmsForm" id="purchaseForecastForm" name="purchaseForecastForm">
+                                        <table cellpadding="0" cellspacing="0" class="layout" width="100%">
+                                           <tr>
+                                                <td width="50%">
+                                                </td>
+                                                <td width="50%">
+                                                </td>
+                                            </tr>
+											 <tr>
+                                                <td colspan="2" id="title" align="center" name="title" style="font-size:17px">
+                                                </td>
+                                            </tr>
+										 <input id="monday" name="monday" type="hidden" value="" />
+                                        </table>
+                                    </form>
+                                    <div id="generalEventPublisFindhContainer" showNo="true" titleAlign= "center" showRidaoButton="false" searchDiv="conditionsDiv" usecache="true" queryid="generalEventPublishSeQuery" showsearch="false" showdisplay="false" showtitle="false" autoload="false" showprint="false" showpaging="false" showcheckbox="false">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+<style type="text/css"> 
+    table.display {
+        table-layout: fixed;
+        width: 100%;
+        border-collapse: collapse;
+        word-wrap: break-word;
+    }
+</style>

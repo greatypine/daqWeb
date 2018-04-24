@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>业务模块列表</title>
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        <script type="text/javascript">
+            //编辑按钮的定义
+            var editObj = {
+                html: '<a href="#">编辑</a>',
+                func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                    var id = allColumnsDataMap.id;
+                    window.location.href = 'RepairModule.html?MId=' + id + '';
+                }
+            }
+            //删除按钮的定义
+            var deleteObj = {
+                html: '<a href="#">删除</a>',
+                func: function(queryid, data, nTr, allColumns, allColumnsDataMap){
+                    var id = allColumnsDataMap.id;
+                    $$.showPromptDialog("系统提示", "确认删除?", false, 320, function(){
+                        //开始执行删除处理
+                        doManager("WFModuleManager", "deleteTBModule", id + "", function(data, textStatus, XMLHttpRequest){
+                            if (data.data == 1) {
+                                alert("删除成功！");
+                                window.location.href = 'tbmodule.html';
+                            }
+                            else {
+                                alert("该模块已有流程绑定,不可删除!");
+                            }
+                        });
+                    });
+                    
+                }
+            }
+            
+            
+            var opArr = [editObj, deleteObj];
+            
+            $(function(){
+                //初始化模块类型的下拉列表         
+                var resourceId = $("#moduleType")[0];
+                var resource = $dict.getDictList('wf_module_type');
+                var option = new Option('', '');
+                resourceId.add(option);
+                $(resource).each(function(i, element){
+                    var option = new Option(element.dictText, element.dictCode);
+                    resourceId.add(option);
+                });
+                
+            });
+            function rowDeleteData(row_id){
+                doManager("WFModuleManager", "deleteTBModule", row_id + "", function(data, textStatus, XMLHttpRequest){
+                    if (data.data == 1) {
+                        alert("删除成功！");
+                        window.location.href = 'tbmodule.html';
+                    }
+                    else {
+                        alert("该模块有流程绑定或其他原因不能删除!");
+                    }
+                });
+            }
+            
+            //增加
+            function doSubmit(){
+                window.location.href = 'AddModule.html';
+            }
+        </script>
+    </head>
+    <body>
+        <div class="box">
+            <!-- 这是第一部分的收缩框 -->
+            <div class="title clear">
+                <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();">
+                </div>
+                <div class="ico2">
+                </div>
+                <div class="ico1">
+                </div>
+                <a href="#">审批管理 :</a>&nbsp;<a href="#">模块管理</a>
+            </div>
+            <div class="containerheader">
+                <a href="#" onclick="toggleDiv('conditionDiv','pic2');"><img src="../scripts/images/22.png" align="absmiddle" id="pic2"/></a>搜索条件
+            </div>
+            <div class="containerbody" id = "conditionDiv" name = "conditionDiv">
+                <form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                    <table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                查询模块ID
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="20%">
+                                <input type="text" id="id" name="id" class="inputtext" likeOption="false" />
+                            </td>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                查询模块名称
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="20%">
+                                <input type="text" id="name" name="name" class="inputtext" likeOption="true"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                查询模块编号
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="20%">
+                                <input type="text" id="moduleCode" name="moduleCode" class="inputtext" likeOption="true"/>
+                            </td>
+                            <td align="right" nowrap="true" id="superIdTxt" colspan="1" width="20%">
+                                查询模块分类信息
+                            </td>
+                            <td align="left" nowrap="true" colspan="1" width="60%">
+                                <select id="moduleType" name="moduleType" style="width:172px;" inputType="select">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" nowrap="true" colspan="4">
+                                <input type="button" class="buttonu" type="button" value="查询" id="searchButton"/>&nbsp;<input type="reset" class="buttonu" type="reset" value="重置" id="resetButton"/>&nbsp;
+                                <td align="right" nowrap="true" colspan="1">
+                                    <button class="buttonu" value="增加" onclick="doSubmit()">
+                                        &nbsp;
+                                        增加业务模块
+                                    </button>
+                                </td>
+                            </td>
+                        </tr>
+                        <tr>
+                        </tr>
+                    </table>
+                </form>
+                <script type="text/javascript">
+                    $("#searchButton").click(function(){
+                        $$.executeSearch("wfQueryModule", "conditionDiv");
+                    });
+                </script>
+            </div>
+        </div>
+        <div id="moduleInfo" style="width:100%;margin:0px;padding:0px;">
+            <!--
+            <table id="StepTab" queryid="wfQueryModule"  style="width:100%;margin:0px;padding:0px;">
+            </table>
+            -->
+            <div id="testQuery" showcheckbox="false" searchDiv="conditionDiv" showsearch="false" showdisplay="false" showprint="false" queryid="wfQueryModule" operators="opArr" autosearch="false">
+            </div>
+        </div>
+    </body>
+</html>

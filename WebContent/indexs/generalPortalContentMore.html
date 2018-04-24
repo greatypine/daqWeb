@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Cache-Control" Content="no-cache">
+        <meta http-equiv="Pragma" Content="no-cache">
+        <meta http-equiv="Expires" Content="0">
+        <title>工作动态</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+    </head>
+    <script>
+        var contentType = getUrlParamByKey("contentType");
+        $(function(){
+            if (contentType == 0) {
+                $("#BidGridContainer").show();
+                $("#BidGridContainerHelp").hide();
+				$("#BidGridContainerKydt").hide();
+            }
+            else 
+                if (contentType == 2) {
+                    $("#BidGridContainerHelp").show();
+                    $("#BidGridContainer").hide();
+					$("#BidGridContainerKydt").hide();
+                }else{
+					$("#BidGridContainerKydt").show();
+					$("#BidGridContainer").hide();
+					$("#BidGridContainerHelp").hide();
+				}
+            //获得validator对象
+            $validator = new PMSValidator($("#searchForm")[0])
+            var d1 = $("#s1")[0], d2 = $("#s2")[0];
+            $validator.addDateCompareRule({
+                dateFrom: d1,
+                dateTo: d2,
+                msg: "变更开始时间应小于变更结束时间"
+            });
+            $dict.getDict("GENERAL_STATUS", builderStatusChechbox);
+            onSearchSup();
+        });
+        function builderStatusChechbox(dicData){
+            if (dicData && dicData.length > 0) {
+                var htmlStr = "";
+                $.each(dicData, function(index, dataObj){
+                    if (dataObj.dictCode != "3") {
+                        htmlStr = htmlStr + "<input type='checkbox' name='status' value='" + dataObj.dictCode + "'>" + dataObj.dictText;
+                    }
+                });
+                $("#statusTd").html(htmlStr);
+            }
+        }
+        
+        /*
+         * 查看
+         */
+        var viewObj = {
+            html: '<a href="#">查看</a>',
+            func: function(queryid, data, nTr, allColumns){
+                var json = convertDataToObj(data, allColumns);
+                var id = json.id;
+                var publishDate = new Date(parseInt(json.publishDate)).format("yyyy-MM-dd");
+                window.location.href = 'generalPortalContentView.html?id=' + id + "&publishDate=" + publishDate;
+                
+            }
+        }
+        $pmspage.opArr = [viewObj];
+        
+        /**
+         * 列表中将data数组数据转换成json对象
+         * @param {Object} data
+         * @param {Object} allColumns
+         */
+        function convertDataToObj(data, allColumns){
+            var json = "{";
+            for (var i = 0; i < data.length; i++) {
+                json += "'" + allColumns[i].key + "'";
+                json += ":"
+                json += "'" + data[i] + "',";
+            }
+            json = json.substr(0, json.length - 1) + "}";
+            var jsonObj = $.fromJSON(json);
+            return jsonObj;
+        }
+        
+        /**
+         * 查询列表
+         */
+        function onSearchSup(){
+            var date1 = $("#checkDate1").val();
+            var date2 = $("#checkDate2").val();
+            if (!("" == $.trim(date1) && "" == $.trim(date2))) {
+                if ("" == $.trim(date1)) {
+                    date1 = "1970-01-01";
+                }
+                if ("" == $.trim(date2)) {
+                    date2 = "2970-12-31";
+                }
+                $("#publishDate").val(date1 + "," + date2);
+            }
+            if (contentType == 0) {
+                $$.executeSearch('GeneralPortalContentMoreQuery', 'bidSearchDiv'); //queryid, the params div id.
+            }
+            else 
+                if (contentType == 2) {
+                    $$.executeSearch('GeneralPortalHelpContentMoreQuery', 'bidSearchDiv'); //queryid, the params div id.
+                }else{
+                    $$.executeSearch('GeneralPortalKydtContentMoreQuery', 'bidSearchDiv'); //queryid, the params div id.
+				}
+        }
+        
+        /**
+         * 重置
+         */
+        function resetSearch(){
+            $("#searchForm")[0].reset();
+            onSearchSup();
+        }
+    </script>
+    <body>
+        <div class="rightcont clear">
+            <div style="background: url(../bizbase/images/i2/i2shellbackground.gif)">
+                <div cellpadding="0" cellspacing="0" style="background-image: url(../bizbase/images/i2/masthead.gif); background-repeat: no-repeat; height: 40px;">
+                </div>
+            </div>
+            <table class="bigteble">
+                <tr>
+                    <td>
+                        <table class="Querytable">
+                            <tr class="Colorbar1">
+                                <td>
+                                    <strong>&nbsp;查询通知</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td bgcolor="#FFFFFF">
+                        <!--style="padding:5px;"-->
+                        <table class="Querytable">
+                            <tr class="Colorbar1">
+                                <td width="20" align="center">
+                                    <a href="#" onclick="toggleDiv('bidSearchDiv','pic2');"><img src="../scripts/images/22.png" align="absmiddle" id="pic2" /></a>
+                                </td>
+                                <td>
+                                    <strong>搜索条件</strong>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="containerbody" id="bidSearchDiv">
+                            <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true">
+                                <div id="conditionsDiv" class="containerbody">
+                                    <table cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                                        <tr>
+                                            <td class="Querytext">
+                                                标题:
+                                            </td>
+                                            <td class="Queryform">
+                                                <input type="text" class="inputtext" id="title" name="title" />
+                                            </td>
+                                            <td class="Querytext">
+                                                发布时间:
+                                            </td>
+                                            <td class="Queryform tdnormal">
+                                                <input type="hidden" id="publishDate" name="publishDate" /><input id="checkDate1" name="checkDate1" bidFormat="dateYMD" type="text" readonly validate="required:true" class="pmsDateField  inputtext_dis" style="width: 70px" /> 至<input id="checkDate2" name="checkDate2" bidFormat="dateYMD" type="text" readonly validate="required:true" class="pmsDateField  inputtext_dis" style="width: 70px" />
+                                            </td>
+                                        </tr>
+                                        <tr class="Colorbar3">
+                                            <td colspan="4">
+                                                <input align="right" role="button" class="buttonu" onClick="onSearchSup();" value="查询" type="button" />|<input align="right" role="button" class="buttonu" onClick="resetSearch();" value="重置" type="button" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </form>
+                        </div><!--<div style="padding: 5px">
+                        </div>-->
+                        <div id="BidGridContainer" titleAlign="center" showcheckbox="false" showRidaoButton="true" searchDiv="bidSearchDiv" usecache="true" queryid="GeneralPortalContentMoreQuery" showsearch="false" showdisplay="false" showtitle="true" autoload="false" showprint="false" showpaging="true" showcheckbox="true" operators="$pmspage.opArr">
+                        </div>
+                        <div id="BidGridContainerHelp" titleAlign="center" showcheckbox="false" showRidaoButton="true" searchDiv="bidSearchDiv" usecache="true" queryid="GeneralPortalHelpContentMoreQuery" showsearch="false" showdisplay="false" showtitle="true" autoload="false" showprint="false" showpaging="true" showcheckbox="true" operators="$pmspage.opArr">
+                        </div>
+						<div id="BidGridContainerKydt" titleAlign="center" showcheckbox="false" showRidaoButton="true" searchDiv="bidSearchDiv" usecache="true" queryid="GeneralPortalKydtContentMoreQuery" showsearch="false" showdisplay="false" showtitle="true" autoload="false" showprint="false" showpaging="true" showcheckbox="true" operators="$pmspage.opArr">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

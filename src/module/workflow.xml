@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xsi:schemaLocation="http://www.cnpc.com/2010/pmsconfig pmsconfig.xsd"
+ xmlns="http://www.cnpc.com/2010/pmsconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <module id="workFlowModule">
+        <package id="workflow">        
+            <managerpackage interfacePackage="com.cnpc.pms.workflow.manager"/>
+        </package>  
+        <package id="workFlowDefine" noEntity="true">
+            <managerpackage interfacePackage="com.cnpc.pms.workflow.wfflowdefine.manager"/>
+        </package>       
+        <package id="workIntance" noEntity="true">
+        		<daopackage interfacePackage="com.cnpc.pms.workflow.dao" implementPackage="com.cnpc.pms.workflow.dao.impl"/>
+            <managerpackage interfacePackage="com.cnpc.pms.workflow.wfinstance.manager"/>
+        </package>        
+    </module>
+	<module id="workDemoModule">
+        <package id="workDemo" >
+            <managerpackage interfacePackage="com.cnpc.pms.workflowdemo.manager"/>
+        </package>         
+    </module>
+	<module id="sendInfoModule">
+        <package id="sendinfo" >
+            <managerpackage interfacePackage="com.cnpc.pms.sendinfo.manager"/>
+        </package>         
+    </module>
+	<module id="sendInfoDemoModule">
+        <package id="sendinfoDemo" >
+            <managerpackage interfacePackage="com.cnpc.pms.sendinfodemo.manager"/>
+        </package>         
+    </module>
+</application>

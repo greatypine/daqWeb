@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 2 | Blank Page</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    body{background-color: #f1f1f1;}
+    a{color: #444;}
+
+    .ser_p{border-bottom: 1px solid #ddd; padding: 20px 0;}
+    .ser_p:nth-last-child(1){border: 0;}
+    .ser_p .col-lg-2 img{width: 100px;}
+    .margin-r-5{margin-right: 20px;}
+    .ser_p i{font-style: normal; margin-left: 20px;}
+
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+
+        <div class="pull-left">
+
+          <section class="sidebar logo-lg clearfix no-padding">
+
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+              <li><a href="index.html" class="h2"> <img src="dist/img/logo.png"> </a></li>
+              <li><a href="#">首页</a> </li>
+              <li><a href="index.html">门店动态</a> </li>
+              <li class="treeview">
+                <a href="#">
+                  <span>数据动态</span>
+                  <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="treeview-menu nav_dropdown">
+                  <li><a href="#">用户分析</a></li>
+                  <li>
+                    <a href="#">门店交易额<i class="fa fa-angle-right pull-right"></i></a>
+                    <ul class="treeview-menu nav_dropm">
+                      <li><a href="#">门店交易额</a></li>
+                      <li><a href="#">门店交易额</a></li>
+                      <li><a href="#">门店交易额</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#">国安侠送单量</a></li>
+                  <li><a href="#">国安侠好评次数</a></li>
+                  <li><a href="#">拜访记录统计</a> </li>
+                  <li><a href="#">客户画像统计</a> </li>
+                </ul>
+              </li>
+              <li><a href="#">找数据</a> </li>
+              <li><a href="#">用数据<i class="fa fa-angle-down"></i></a>
+                <ul class="treeview-menu nav_dropm">
+                  <li><a href="#">用户信息</a> </li>
+                  <li><a href="#">订单信息</a> </li>
+                </ul>
+              </li>
+              <li><a href="#">数据模型</a> <i class="fa fa-angle-down"></i>
+                <ul class="treeview-menu nav_dropm">
+                  <li><a href="#">异常订单</a> </li>
+                </ul>
+              </li>
+
+            </ul>
+
+          </section>
+
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                <span class="hidden-xs">王春</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                  <p><strong>王春</strong></p>
+                  <p>店长<span>A77777</span></p>
+                  <p>呼家楼店</p>
+                </li>
+                <li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">任务列表</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">我的消息</a>
+                    </div>
+                  </div>
+                  <!-- /.row -->
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="#" class="btn btn-default btn-flat">个人中心</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="#" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header with-border h4 text-light-blue"><strong>服务专员</strong></div>
+          <div class="box-body">
+
+            <div class="ser_p clearfix">
+                <div class="col-lg-2 text-center no-padding"><a href="#"><img src="dist/img/user5-128x128.jpg" class="img-circle"></a> </div>
+                <div class="col-lg-10 no-padding">
+                  <p><a href="#" class="margin-r-5 h4">王春 <small>A933080</small></a><a href="#">12345678901</a><i class="label label-primary">呼家楼店</i></p>
+                  <div class="clearfix">
+                    <p><span class="text-yellow">当月订单量：</span>3000单</p>
+                    <p><span class="text-red">当月营业额：</span>10332元</p>
+                  </div>
+                </div>
+            </div>
+            <div class="ser_p clearfix">
+              <div class="col-lg-2 text-center no-padding"><a href="#"><img src="dist/img/user5-128x128.jpg" class="img-circle"></a> </div>
+              <div class="col-lg-10 no-padding">
+                <p><a href="#" class="margin-r-5 h4">王春 <small>A933080</small></a><a href="#">12345678901</a><i class="label label-primary">呼家楼店</i></p>
+                <div class="clearfix">
+                  <p><span class="text-yellow">当月订单量：</span>3000单</p>
+                  <p><span class="text-red">当月营业额：</span>10332元</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<script>
+$(function(){
+  $(".nav_dropdown li").click(function(){
+    $(".nav_dropdown li").removeClass("nav_mark_bg");
+    $(this).addClass("nav_mark_bg");
+  });
+});
+
+</script>
+
+</body>
+</html>

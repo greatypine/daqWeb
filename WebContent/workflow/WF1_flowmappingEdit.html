@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>编辑流程对应信息</title>
+        <script type="text/javascript" src="../scripts/bidLib.js">
+        </script>
+        <script type="text/javascript">
+            var MainId = getUrlParamByKey("Id");
+            $(function(){
+                $validator = new PMSValidator($("#FK")[0], {
+                    bNormalDisplay: false,
+                    iDisplayLength: 4
+                });
+            });
+			
+			$(function(){
+                //初始化模块类型的下拉列表         
+                var resourceId = $("#rTableName")[0];
+                var resource = $dict.getDictList('wf_rtablename'); //获取rtablename的列表
+                var option = new Option('', '');
+                resourceId.add(option);
+                $(resource).each(function(i, element){
+                    var option = new Option(element.dictText, element.dictCode);
+                    resourceId.add(option);
+                });
+                
+            });
+			
+            $(function(){
+                var id = MainId;
+                alert(id);
+                if (id > 0) {
+                    doManager("WF1FlowMappingManager", "queryWF1FlowMapping", id + "", function(data, textStatus, XMLHttpRequest){
+                    
+                        var jsdata = $.fromJSON(data.data);
+                        $("#id").val(jsdata.id);
+                        $("#rTableName").val(jsdata.rTableName);
+                        $("#rId").val(jsdata.rId);
+                        $("#moduleId").val(jsdata.moduleId);
+                        $("#deptId").val(jsdata.deptId);
+                        $("#sheetId").val(jsdata.sheetId);
+                        $("#sheetName").val(jsdata.sheetName);
+                        $("#flowInstanceId").val(jsdata.flowInstanceId);
+                    });
+                }
+            });
+            function doSubmit(){
+                var obj = {
+                    id: $("#id").val(),
+                    rTableName: $("#rTableName").val(),
+                    rId: $("#rId").val(),
+                    moduleId: $("#moduleId").val(),
+                    deptId: $("#deptId").val(),
+                    sheetId: $("#sheetId").val(),
+                    sheetName: $("#sheetName").val(),
+                    flowInstanceId: $("#flowInstanceId").val(),
+                
+                }
+                doManager("WF1FlowMappingManager", "saveWF1FlowMapping", obj, function(data, textStatus, XMLHttpRequest){
+                    if (data.data) {
+                        alert("ok");
+                        var jsdata = $.fromJSON(data.data);
+                        $("#id").val(jsdata.id);
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                },false);
+                
+            }
+            
+            function doReturn(){
+                window.location.href = 'WF1_flowmapping.html';
+            }
+        </script>
+    </head>
+    <body style="margin-left: 3px; text-align: center;" background="images/leftbg.png">
+        <div class="rightcont body_bg clear" style="width: 300px; margin: 0px auto; padding: 0px auto;">
+            <div class="box">
+                <div class="containerbody">
+                    <form id="FK" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+                        <table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    Id:
+                                </td>
+                                <td>
+                                    <input type="text" id="id" name="id" disabled/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    rTableName:
+                                </td>
+                                <td>
+                                    <select id="rTableName" name="rTableName" style="width:172px;" inputType="select">
+                                	</select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    rId:
+                                </td>
+                                <td>
+                                    <input type="text" id="rId" name="rId" validate="required:true" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    moduleId:
+                                </td>
+                                <td>
+                                    <input type="text" id="moduleId" name="moduleId" validate="required:true, maxlength:50,minlength:1" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    deptId:
+                                </td>
+                                <td>
+                                    <input type="text" id="deptId" name="deptId" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    sheetId:
+                                </td>
+                                <td>
+                                    <input type="text" id="sheetId" name="sheetId" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    sheetName:
+                                </td>
+                                <td>
+                                    <input type="text" id="sheetName" name="sheetName" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true">
+                                    flowInstanceId:
+                                </td>
+                                <td>
+                                    <input type="text" id="flowInstanceId" name="flowInstanceId" disabled/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" nowrap="true" colspan="4">
+                                    <button class="buttonu" value="提交" onclick="doSubmit()">
+                                        &nbsp;
+                                        提交
+                                    </button>
+                                    <button class="buttonu" value="返回" onclick="doReturn()">
+                                        &nbsp;
+                                        返回
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

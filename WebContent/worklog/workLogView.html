@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/i2/style_sheet_core.css"/>
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+        <script type="text/javascript" src="../scripts/bidLib.js"></script>
+		<script type="text/javascript" src="../scripts/lib-main.js"></script>
+		<script type="text/javascript" src="../scripts/lib-uploadTable.js"></script>
+        <script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<script language="JavaScript" type="text/javascript">
+			var id = getUrlParamByKey("id");
+			var fromHtml = getUrlParamByKey("from");
+			$(function() {
+				//休假/工作字典
+		  		var workTypeDicts = $dict.getDictList("WORKLOG_WORKANDLEAVE_TYPE");
+           		 	$(workTypeDicts).each(function (i, element) {
+               		var option = new Option(element.dictText, element.dictCode);
+                	$("#holidayType")[0].add(option);
+            	});
+				if (id != null && id != "") {
+					doManager("workLogManager", "getWorkLogById", id, function(datas, textStatus, XMLHttpRequest) {
+						if (datas.result) {
+							var returnObj = $.fromJSON(datas.data);
+							setFormSimpleData(returnObj, "workLogForm");
+							var holidayType=$("#holidayType")[0];
+							for(var i=0;i<holidayType.options.length;i++){
+								if(holidayType.options[i].value==returnObj.holidayType){
+									holidayType.options[i].selected=true;
+								}
+							}
+							
+						}
+					});
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div class="rightcont body_bg clear">
+			<div class="box">
+				<div class="title clear">
+					<div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();" ></div>
+					<div class="ico2" ></div>
+					<div class="ico1" ></div>
+					<a href="#">工作日誌 :</a>&nbsp;<a href="#">查看工作日誌</a>
+				</div>
+				<div class="containerheader">
+					 <a href="#" onClick="toggleDiv('temp1','plusMinus1')"><img id="plusMinus1" src="../scripts/images/22.png"/></a>
+					工作日志&nbsp;&nbsp;&nbsp;&nbsp;
+				<span id="info"></span>
+				</div>
+				<div class="containerbody" id="temp1">
+					<form id="workLogForm" name="workLogForm" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+						<table style=" border:#000 solid 0px;" class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+							<tr>
+								<td align="right">
+									报送：
+								</td>
+								<td align="left" colspan="3">
+									院领导，科研处，本所领导，本室主任
+								</td>
+							</tr>
+							<tr>
+								<td align="right">
+									抄送人：
+								</td>
+								<td align="left" colspan="3">
+									<input type="text" name="toUserName" style="width:70%;" id="toUserName" readonly="readonly" class="inputtext_dis"/>
+								</td>
+							</tr>
+							<tr>
+								<td align="right">
+									填报日期：
+								</td>
+								<td align="left">
+									<input id="logDate" name="logDate" type="text" bidFormat="dateYMD" class="inputtext_dis" readonly="readonly"/>
+								</td>
+							</tr>
+							<tr>
+								<td align="right">
+                                   	工作/休假类型：
+                                </td>
+                                <td align="left">
+									<select name="holidayType" id="holidayType" class="inputselect" disabled>
+                                		<option value="" selected="selected"></option>
+                            		</select>
+                                </td>
+                                <td align="right">
+                                	会议名称：
+                                </td>
+                                <td align="left">
+                                	<input type="text" id="meeting" name="meeting" readonly="readonly" class="inputtext_dis"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            	<td align="right">
+                            		工作项目：
+                            	</td>
+                            	<td align="left">
+                            		<input type="text" id="workProject" name="workProject" readonly="readonly" class="inputtext_dis"/>
+                            	</td>
+                            	<td align="right">
+                            		小时数：
+                            	</td>
+                            	<td align="left">
+                            		<input type="text" id="hours" name="hours" validate="number:true" readonly="readonly" class="inputtext_dis"/>
+                            	</td>
+                            </tr>
+                            <tr>
+                            	<td align="right">
+                            		工作内容：
+                            	</td>
+                            	<td align="left" colspan="3">
+                            		<textarea rows="5" cols="20" class="inputtext_dis" style="width:90%" id="workContent" name="workContent" readonly="readonly"></textarea>
+                            	</td>
+                            </tr>
+                            <tr>
+                            	<td align="right" valign="middle">
+                            		工作成果（结论/体会/收获）：
+                            	</td>
+                            	<td align="left" colspan="3">
+                            		<textarea id="workResult" class="inputtext_dis" name="workResult" rows="8" cols="20" style="width:90%" readonly="readonly" ></textarea>
+                            	</td>
+                            </tr>
+                            <tr>
+                            	<td align="right" valign="middle">
+                            		需要其他学科支持的问题：
+                            	</td>
+                            	<td align="left" colspan="3">
+                            		<textarea id="other" class="inputtext_dis" name="other" rows="3" cols="20" style="width:90%" readonly="readonly" ></textarea>
+                            	</td>
+                            </tr>
+                            <tr>
+                            	<td align="right" valign="middle">
+                            		对院其他所的支持和建议：
+                            	</td>
+                            	<td align="left" colspan="3">
+                            		<textarea id="support" class="inputtext_dis" name="support" rows="3" cols="20" style="width:90%" readonly="readonly" ></textarea>
+                            	</td>
+                            </tr>
+						</table>
+					</form>
+				</div>
+				<div class="containerheader" align="right" style="padding:2px 5px 2px 0px">
+			 		<button class="buttonu" onclick="returnPage();" style="height:20px; width:60px">
+					返回
+					</button>
+				</div>
+			 </div>
+		 </div>
+	</body>
+	<script language="JavaScript">
+		function returnPage() {
+			window.location.href = fromHtml;
+		}
+	</script>
+</html>

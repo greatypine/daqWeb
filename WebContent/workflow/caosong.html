@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>流程抄送功能</title>
+		<script type="text/javascript" src="../scripts/lib-main.js"></script>
+  		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+  		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+	<script type="text/javascript">
+		$(function(){
+			var FlowId = getUrlParamByKey("flowInstanceId");//需要一个流程实例ID
+            var KsheetId = getUrlParamByKey("sheetID");//表单ID
+			var KmoduleId = getUrlParamByKey("moduleId");//业务模块Id
+			$("#save").click(function(){
+				var obj={
+					flowInstanceId:FlowId,
+					//sendId:$("#sendId").val(),不用取，从后台获取
+					receiverId:$("#receiverId").val(),
+					moduleId:KmoduleId,
+					state:0+'',
+					sheetId:KsheetId,
+					memo:$("#memo").val()
+				}
+				alert(obj.state);
+				doManager("WFCopyInfoManager", "addWFCopyInfo", obj, function(data, textStatus, XMLHttpRequest){
+                    	
+						if(data.result){
+							var jsdata = $.fromJSON(data.data);
+							alert("抄送成功");
+							window.close();
+						}else{
+							alert("抄送失败");
+						}
+					});
+			})
+		})
+	
+	
+</script>
+</head>
+<body>
+	<div class="rightcont body_bg clear" style="width: 300px; margin: 0px auto; padding: 0px auto;">
+		<div class="box">
+			<div class="containerbody">
+				<form id="orgAdd" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+					<table class="layout" cellpadding="0" cellspacing="0" border="0" bordercolor="red">
+						<tr>
+							<td align="left" nowrap="true" colspan="4"><strong>流程抄送:</strong></td>
+						</tr>
+						<tr>
+							<td width="15%" align="left" nowrap="true">收件人:</td>
+							<td><input type="text" id="receiverId" name="receiverId" class="inputtext" ></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true">消息:</td>
+							<td><input type="text" id="memo" name="memo" class="inputtext" ></td>
+						</tr>
+						<tr>
+							<td align="left" nowrap="true" colspan="4">
+								<button class="buttonu" value="确定" id="save" >&nbsp; 确定</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

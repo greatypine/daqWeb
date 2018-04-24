@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>基础数据模型</title>
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+<!-- Tell the browser to be responsive to screen width -->
+<meta
+	content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../crm/dist/css/skins/_all-skins.min.css">
+<link rel="stylesheet" href="../crm/dist/css/tTurnover-head-scoll.css">
+<!--map style-->
+<link rel="stylesheet" href="../crm/dist/css/map-style.css">
+<link rel="stylesheet" href="../crm/dist/css/onoffset.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+<style>
+/* .logo-lg i{margin-right: 5px;}
+    .logo-lg > ul > li:hover{border-bottom: 3px solid #46A3FF;-webkit-transition: all .2s ease-in-out;-o-transition: all .2s ease-in-out;transition: all .2s ease-in-out;}
+    .logo-lg > ul > li:hover > a{color: #66B3FF; font-weight: bold;}
+    .logo-lg > ul > li:hover i{color: #66B3FF;} */
+.col-lg-5 h5 {
+	margin-top: 20px;
+}
+/* #mapContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+     } */
+.menu {
+	position: absolute;
+	bottom: 10px;
+	right: 6px;
+	min-width: 150px;
+	background-color: #fff;
+	border-radius: 4px
+}
+
+.legend {
+	font-size: 14px;
+	padding: 15px 0 0 15px;
+}
+
+.menu_list {
+	width: 150px;
+	padding-top: 0px;
+	box-shadow: 1px 2px 1px rgba(0, 0, 0, .15);
+	-webkit-transition: all .3s ease-in-out;
+	-o-transition: all .3s ease-in-out;
+	transition: all .3s ease-in-out;
+}
+
+.menu_list li {
+	/* 	line-height: 22px;  */
+	font-size: 6px;
+	padding-right: 0;
+	/* 	padding-bottom: 10px; */
+}
+
+.menu_list li:nth-last-child(1) {
+	border: none;
+}
+/*.menu_list li span{color: #0a67f2; font-weight: bold; font-size: 16px; padding-right: 5px;}*/
+.menu_list li p:nth-child(1) {
+	padding-bottom: 2px;
+	color: #333;
+}
+
+p {
+	margin: 0;
+}
+
+.menu_list li a {
+	color: #999;
+	display: inline-block;
+	width: 100%;
+	text-decoration: none;
+	padding-top: 5px;
+}
+
+.no-padding {
+	padding: 0;
+}
+
+.menu_list .col-sm-3 {
+	height: 10px;
+	margin: 5px 0 0 0;
+	background-color: #00a7d0;
+}
+
+.menu_list .col-sm-9 b {
+	padding-left: 10px;
+}
+
+.menu_list::-webkit-scrollbar {
+	width: 8px;
+	background-color: #fff;
+}
+
+.menu_list::-webkit-scrollbar-thumb {
+	background-color: #adadad;
+	border-radius: 5px;
+}
+
+.menu_list::-webkit-scrollbar-track {
+	background-color: #fff;
+}
+
+.crumbs a {
+	padding: 5px 10px;
+	background-color: #3c8dbc;
+	color: #fff;
+	margin-right: 10px;
+	border-radius: 5px;
+}
+
+.crumbs .store_dis {
+	padding: 5px 10px;
+	background: none;
+	color: #2d3e50;
+	margin-right: 10px;
+	border-radius: 5px;
+	curosr: pointer
+}
+
+.table {
+	border: 1px solid #f4f4f4
+}
+
+.table tr td:nth-child(5), .table tr th:nth-child(5) {
+	border-left: 1px solid #357ca5;
+}
+.r-container li{border-bottom: 1px solid #e4e4e4; margin-top: 20px; padding-bottom: 10px; color: #666; line-height: 24px;}
+.r-container p:nth-child(1){font-weight: bold;}
+.r-container p span:nth-child(1){display: inline-block; width: 80px; color: #333;}
+/* .table tr td{text-align:center;vertical-align:middle; } */
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+	<!-- Site wrapper -->
+	<div class="wrapper">
+
+
+
+
+
+		<header class="main-header">
+			<nav class="navbar navbar-static-top">
+				<div class="container">
+					<div class="logo_img pull-left">
+						<img src="../crm/dist/img/logo.png" height="30"> <img
+							src="../crm/dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>基础数据模型</em></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+
+
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- <div class="container"> -->
+			<!-- Main content -->
+			<section class="content-header">
+				<div class="col-lg-5" style="background-color: #fff;" id="divheight">
+					<h4 class="text-light-blue">
+						<strong>社区基础信息</strong>
+					</h4>
+					<div>
+						<span class="text-muted"
+							style="padding-bottom: 10px; font-size: 16px;">范围:</span><span
+							id="showCoverage" class="text-yellow"
+							style="padding-bottom: 10px; font-size: 16px;">--</span>
+					</div>
+					<table class="table table-striped no-margin">
+						<tbody id="manual_tbody">
+							<tr>
+								<th></th>
+								<th>总数量</th>
+								<th>国安社区已覆盖数量</th>
+								<th class="text-aqua">服务覆盖率%</th>
+								<th>居民总户数</th>
+								<th><font id="showattention"
+									style="top: 7px; right: 75px; color: #ffcc00; font-size: 16px; font-weight: normal;">!</font>
+									居民数 <font id="attention"
+									style="font-size: 12px; white-space: nowrap; position: absolute; top: -3px; z-index: 1000; display: none; left: 12px">（户数*3）</font>
+								</th>
+								<th>国安社区已消费居民数</th>
+								<th class="text-aqua">居民覆盖率%</th>
+							</tr>
+							<tr id="province">
+								<td>省</td>
+								<td id="provinceCount">1</td>
+								<td id="conProvinceCount">1</td>
+								<td class="text-aqua" id="serviceCoverage">100.00%</td>
+								<td id="residentsHouseCount">--</td>
+								<td id="residentsCount">--</td>
+								<td id="customerCount">--</td>
+								<td id="residentsCoverage">--</td>
+							</tr>
+							<tr id="city">
+								<td>市
+								</th>
+								<td id="cityCount">1</td>
+								<td id="conCityCount">1</td>
+								<td class="text-aqua" id="cityserviceCoverage">100.00%</td>
+								<td id="cityResidentsHouseCount">--</td>
+								<td id="cityResidentsCount">--</td>
+								<td id="cityCustomerCount">--</td>
+								<td id="cityResidentsCoverage">--</td>
+							</tr>
+							<tr id="county">
+								<td>区</td>
+								<td id="countyCount">1</td>
+								<td id="conCountyCount">1</td>
+								<td class="text-aqua" id="countyServiceCoverage">100.00%</td>
+								<td id="countyResidentsHouseCount">--</td>
+								<td id="countyResidentsCount">--</td>
+								<td id="countyCustomerCount">--</td>
+								<td id="countyResidentsCoverage">--</td>
+							</tr>
+							<tr id="town">
+								<td>街道
+								</th>
+								<td id="townCount">--</td>
+								<td id="conTownCount">--</td>
+								<td class="text-aqua" id="townServiceCoverage">--</td>
+								<td id="townResidentsHouseCount">--</td>
+								<td id="townResidentsCount">--</td>
+								<td id="townCustomerCount">--</td>
+								<td id="townResidentsCoverage">--</td>
+							</tr>
+							<tr id="community">
+								<td>社区</td>
+								<td id="villageCount">--</td>
+								<td id="conVillageCount">--</td>
+								<td class="text-aqua" id="villageServiceCoverage">--</td>
+								<td id="villageResidentsHouseCount">--</td>
+								<td id="villageResidentsCount">--</td>
+								<td id="villageCustomerCount">--</td>
+								<td id="villageResidentsCoverage">--</td>
+							</tr>
+							<tr id="village">
+								<td>小区
+								</th>
+								<td id="tinyVillageCount">--</td>
+								<td id="conTinyVillageCount">--</td>
+								<td id="tinyVillageServiceCoverage">--</td>
+								<td id="tinyVillageResidentsHouseCount">--</td>
+								<td id="tinyVillageResidentsCount">--</td>
+								<td id="tinyVillageCustomerCount">--</td>
+								<td id="tinyVillageResidentsCoverage">--</td>
+							</tr>
+							<!-- <tr id="building">
+                  <td>楼房</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>
+                <tr id="house">
+                  <td>房间数</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr> -->
+						</tbody>
+					</table>
+					<div class="r-container">
+						<ol class="no-padding">
+							<li>
+								<p><span>小区名称：</span><span id="tiny_village_name">--</span></p>
+								<p><span>小区地址：</span><span id ="tiny_village_address">--</span></p>
+								<p><span>所属社区：</span><span id="village_name">--</span></p>
+								<p><span>所属街道：</span><span id="town_name">--</span></p>
+							</li>
+
+						</ol>
+					</div>
+				</div>
+				<div class="col-lg-7">
+					<div class="crumbs" style="display: none; margin-bottom: 10px;">
+						<a class="namehide" href="javascript:goCountry()">全国</a><span
+							class="namehide" style="color: #2d3e50">&nbsp;>&nbsp;</span><a
+							href="javascript:gopro()" id="pro_country">--</a><span
+							style="color: #2d3e50">&nbsp;>&nbsp;</span><a
+							href="javascript:void()" class="store_dis"
+							style="cursor: default" id="pro_country_store">--</a>
+					</div>
+					<div id="mapHeight" style="width: 100%;">
+						<div id="mapContainer"
+							style="background-color: rgba(0, 0, 0, 0.5); width: 100%; height: 100%;"></div>
+						<div class="menu" id="TULI" style="display: none; z-index: 120">
+							<div class="legend">
+								<b>--</b>
+							</div>
+							<div class="menu_list clearfix" id="test"
+								style="max-height: 300px; overflow-y: auto">
+								<ul id="areas_ul" class="no-padding">
+
+								</ul>
+							</div>
+							<div></div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- </div> -->
+		</div>
+		<!-- /.content-wrapper -->
+
+
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- jQuery 2.2.0 -->
+	<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+	<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+	<!-- Morris.js charts -->
+	<script src="../crm/bootstrap/js/raphael-min.js"></script>
+	<script src="../crm/plugins/morris/morris.min.js"></script>
+	<!-- FastClick -->
+	<script src="../crm/plugins/fastclick/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../crm/dist/js/app.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../crm/dist/js/demo.js"></script>
+	<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+	<!-- page script -->
+	<script src="../crm/dist/js/jquery.dataStatistics.js"></script>
+	<script type="text/javascript"
+		src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+
+	<script type="text/javascript">
+		autodivheight();
+		function autodivheight() { //函数：获取尺寸
+			//获取浏览器窗口高度
+			var winHeight = 0;
+			if (window.innerHeight)
+				winHeight = window.innerHeight;
+			else if ((document.body) && (document.body.clientHeight))
+				winHeight = document.body.clientHeight;
+			//通过深入Document内部对body进行检测，获取浏览器窗口高度
+			if (document.documentElement
+					&& document.documentElement.clientHeight)
+				winHeight = document.documentElement.clientHeight;
+			//DIV高度为浏览器窗口的高度
+			document.getElementById("mapHeight").style.height = winHeight - 129
+					+ "px";
+			document.getElementById("divheight").style.height = winHeight - 100
+					+ "px";
+		}
+		window.onresize = autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+	</script>
+	<!-- 引入 ECharts 文件 -->
+	<script src="../crm/dist/js/echarts.common.min.js"></script>
+	<script src="../crm/dist/js/china.js"></script>
+	<script>
+		var pageStatusInfo = {};
+		//初始化地图对象，加载地图
+		var map = new AMap.Map("mapContainer", {
+			resizeEnable : true,
+			doubleClickZoom : false,
+			zooms : [ 10, 18 ],
+		});
+
+		$(function() {
+			//获得参数
+			pageStatusInfo = getReauestParameters();
+			//显示页面统计数据
+			showPageContent(pageStatusInfo);
+			$(".crumbs").show();
+			if (pageStatusInfo.iscity == "city") {
+				$(".namehide").hide();
+			}
+			$("#pro_country").html(pageStatusInfo.cityName);
+			initStore(pageStatusInfo);
+			$("#showattention").on("mouseover", function(event) {
+				$("#attention").show();
+			});
+			$("#showattention").on("mouseout", function(event) {
+				$("#attention").hide();
+			});
+		});
+
+		//获取请求参数
+		var getReauestParameters = function() {
+			debugger;
+			var cityId = (decode64(getUrlParamByKey("c")) == 'null' || decode64(getUrlParamByKey("c")) == null) ? ''
+					: decode64(getUrlParamByKey("c"));
+			var storeId = (decode64(getUrlParamByKey("s")) == '' || decode64(getUrlParamByKey("s")) == null) ? ''
+					: decode64(getUrlParamByKey("s"));
+			// 省份ID
+			var provinceId = (decode64(getUrlParamByKey("p")) == 'null' || decode64(getUrlParamByKey("p")) == null) ? null
+					: decode64(getUrlParamByKey("p")).trim();
+			// 城市名称
+			var cityName = (decode64(getUrlParamByKey("cn")) == 'null' || decode64(getUrlParamByKey("cn")) == null) ? ''
+					: decode64(getUrlParamByKey("cn"));
+			// 缩放级别
+			//var zoomLevel = (decode64(getUrlParamByKey("zm")) == 'null'||decode64(getUrlParamByKey("zm")) == null) ? '' : decode64(getUrlParamByKey("zm"));
+			//省份名
+			var provinceName = (decode64(getUrlParamByKey("pn")) == 'null' || decode64(getUrlParamByKey("pn")) == null) ? null
+					: decode64(getUrlParamByKey("pn")).trim();
+			var iscity = (decode64(getUrlParamByKey("iscity")) == 'null' || decode64(getUrlParamByKey("iscity")) == null) ? ''
+					: decode64(getUrlParamByKey("iscity"));
+			var rtnData = {
+				"cityId" : cityId,
+				"provinceId" : provinceId,
+				"cityName" : cityName,
+				//"zoomLevel": zoomLevel,
+				"storeId" : storeId,
+				"provinceName" : provinceName,
+				"iscity" : iscity
+			};
+			return rtnData;
+		};
+
+		var showPageContent = function(pageStatusInfo) {
+			getStorePositionAndServiceArea(pageStatusInfo);
+			showData(pageStatusInfo);
+		}
+
+		//该数组用于该小区操作坐标
+		var polygonArray = [];
+		var polygonArrayCopy = [];
+		//服务区域
+		var polygonArea = [];
+		//存放所有小区的数组
+		var tinyAreaArray = [];//小区区域数组
+		var lastIdx;
+		var storeno = "";
+		var isDrawing = false;
+		var coordinate;//小区坐标
+		var storeService;//服务范围
+
+		/**获取门店的服务范围以及中心点**/
+		var aboutArea = {};
+		var arrayObj = new Array();//片区色块数组
+		var areaColor = {};//片区色块
+		var colorOther = "#080000";//灰色（超出20个片区的范围的）
+		var colorArrar = new Array("#007979", "#00FFFF", "#796400", "#FFD306",
+				"#009100", "#5151A2", "#8F4586", "#F75000", "#FF0000",
+				"#FF9797", "#FF0080", "#600000", "#820041", "#4B0091",
+				"#A8FF24", "#63B8FF", "#5E5E5E", "#bf88113d", "#0000FF",
+				"#7CCD7C");
+		function getStorePositionAndServiceArea(pageStatusInfo) {
+			doManager(
+					"areaManager",
+					"getTinyVillageCoord",
+					[ pageStatusInfo.storeId ],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+
+							var resultJson = JSON.parse(data.data);
+							if (resultJson != null && resultJson.code == 200) {
+								$("#areas_ul").empty();
+								coordinate = resultJson.coordinate;//小区坐标
+								storeService = resultJson.serviceArea;//服务范围
+								var areas = resultJson.areas;//片区
+								var store = resultJson.store;
+								$(".legend").html(
+										'<b style="color:red">' + store.name
+												+ '</b>');
+								for (var i = 0; i < areas.length; i++) {
+
+									//var color = getColor(i+1);
+									if (i < 20) {
+										areaColor[areas[i].area_no] = colorArrar[i];
+									} else if (i >= 20) {
+										areaColor[areas[i].area_no] = colorOther;
+									}
+									aboutArea[areas[i].area_no] = areas[i];
+									arrayObj.push(areaColor);
+									var name_a = areas[i].employee_a_name == null ? "无"
+											: areas[i].employee_a_name;
+									var name_b = areas[i].employee_b_name == null ? "无"
+											: areas[i].employee_b_name;
+									var areaName = areas[i].name;
+									if (areaName.length > 6) {
+										areaName = areaName.substring(0, 6)
+												+ "..."
+									}
+
+									var areaHtml = '<li class="col-lg-12" onmouseover="lightPloygon(\''
+											+ areas[i].area_no
+											+ '\')" onmouseout="showAllTinyArea()"><a style="cursor:pointer" onclick="showTinyVillage(\''
+											+ areas[i].area_no
+											+ '\')">'
+											+ '<div class="col-sm-3 no-padding" style="width:15%;background:'
+											+ areaColor[areas[i].area_no]
+											+ '"></div>'
+											+ '<div class="col-sm-9 no-padding" >'
+											+ '<p style="padding-left:10px;white-space:nowrap;"><span style="white-space:nowrap;display:inline-block">'
+											+ areaName
+											+ '</span></p>'
+											+ '</div>' + '</li>';
+									$("#areas_ul").append(areaHtml);
+								}
+								initArea(storeService, coordinate);
+								layer.closeAll();
+							} else {
+
+								$("#areas_ul").empty();
+								$("#TULI").hide();
+								layer.msg(resultJson.message);
+								map.clearMap();
+							}
+						} else {
+							$$.showMessage("系统信息", "数据加载异常！");
+						}
+					}, false);
+		}
+
+		//根据STORE_ID查询门店信息
+		var currentStore;
+		function initStore(pageStatusInfo) {
+			doManager("StoreManager", "findStore", [ pageStatusInfo.storeId ],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var store = JSON.parse(data.data);
+							$("#store_no").html(store.storeno);
+							$("#store_name_left_top").html(store.name);
+							$("#pro_country_store").html(store.name);
+							$("#showCoverage").html(store.name);
+							currentStore = store;
+						}
+					}, false);
+		}
+
+		var googleLayer = null;
+		//服务区域
+		var serviceRange;
+		function initArea(storeService, coordinate) {
+			map.clearMap();
+			//服务区域多边形
+			serviceRange = new AMap.Polygon({
+				path : storeService,//设置多边形边界路径
+				strokeColor : "#F00", //线颜色
+				strokeOpacity : 0.9, //线透明度
+				strokeWeight : 2, //线宽
+				fillColor : "#00DD00", //填充色
+				fillOpacity : 0
+			//填充透明度
+			});
+			serviceRange.setMap(map);
+			map.setCenter(serviceRange.getBounds().getCenter());
+			map.setZoom(13);
+
+			var areaTinyVillage;//小区坐标范围
+			var tinyVillageMarker;
+			var tinyVillagePolygon;
+			//     var tinyVillageText;
+			for (var i = 0; i < coordinate.length; i++) {
+				if (coordinate[i].areaNo != null && coordinate[i].areaNo != "") {
+					var $strokeColor = areaColor[coordinate[i].areaNo];
+
+					if (typeof ($strokeColor) == "undefined") {
+						$strokeColor = "#333333cf";
+					}
+					var $fillColor = areaColor[coordinate[i].areaNo];
+					if (typeof ($fillColor) == "undefined") {
+						$fillColor = "#333333cf";
+					}
+					//绘制小区
+					areaTinyVillage = new AMap.Polygon({
+						path : coordinate[i].coordinate_range.coordinates[0],//设置多边形边界路径
+						strokeColor : $strokeColor, //线颜色
+						strokeOpacity : 1.0, //线透明度
+						strokeWeight : 2, //线宽
+						fillColor : $fillColor, //填充色
+						fillOpacity : 0.45,//填充透明度
+						extData : {
+							"areaNo" : coordinate[i].areaNo,
+							"code" : coordinate[i].code
+						}
+					});
+
+					var tmp_tinyVillageCoordinate = {
+						area_no : coordinate[i].areaNo,
+						tinyVillagePolygon : areaTinyVillage,
+						strokeColor : $strokeColor,
+						fillColor : $fillColor
+					}
+					polygonArray.push(tmp_tinyVillageCoordinate);
+					polygonArrayCopy.push(tmp_tinyVillageCoordinate);
+					areaTinyVillage.setMap(map);
+
+					var $tinyVillageName = coordinate[i].name;
+					var strLength = -(($tinyVillageName.length * 14 + 20) / 2);
+					var $position = coordinate[i].location;
+					if ($position != null && $position.length == 2) {
+						//         	   tinyVillageMarker = new AMap.Marker({ //对小区添加自定义点标记
+						//         		    visible:false,
+						//       		        position: $position, //基点位置
+						//       		        offset: new AMap.Pixel(strLength, -36), //相对于基点的偏移位置
+						//       		       // draggable: true,  //是否可拖动
+						//       		        content: '<div class="marker-route marker-marker-bus-from">'+$tinyVillageName+'</div>'   //自定义点标记覆盖物内容
+						//       		    }); 
+						//         	   tinyVillageMarker.setMap(map);
+						//         	   var tinyAreaMrker={
+						//         			   area_no:coordinate[i].areaNo,
+						//         			   tinyAreaMarker:tinyVillageMarker
+						//         	   }
+						//         	   tinyAreaArray.push(tinyAreaMrker);
+						var bindArea = aboutArea[coordinate[i].areaNo];
+						var areaLength = -((bindArea.name.length * 14 + 20) / 2) + 40;
+						var aEmployee = bindArea.employee_a_name == null ? "无"
+								: bindArea.employee_a_name;
+						var areaName = bindArea.name;
+						/*  tinyVillageText = new AMap.Text({
+						   position: $position, //基点位置
+						   offset: new AMap.Pixel(areaLength, -2), //相对于基点的偏移位置
+						   text:areaName+" 负责人："+aEmployee
+						 });
+						 tinyVillageText.setMap(map); */
+
+					}
+				} else {
+					areaTinyVillage = new AMap.Polygon({
+						path : coordinate[i].coordinate_range.coordinates[0],//设置多边形边界路径
+						strokeColor : "#9c9c9c", //线颜色
+						strokeOpacity : 1.0, //线透明度
+						strokeWeight : 2, //线宽
+						fillColor : "#000", //填充色
+						fillOpacity : 0,//填充透明度
+						extData : {
+							"areaNo" : coordinate[i].areaNo,
+							"code" : coordinate[i].code
+						}
+					});
+					var tmp_tinyVillageCoordinate = {
+						area_no : coordinate[i].areaNo,
+						tinyVillagePolygon : areaTinyVillage,
+					}
+					areaTinyVillage.setMap(map);
+					polygonArray.push(tmp_tinyVillageCoordinate);
+					polygonArrayCopy.push(tmp_tinyVillageCoordinate);
+				}
+
+				areaTinyVillage.on("click",function(e){
+					var areaNo = e.target.getExtData().areaNo == ""?'null':e.target.getExtData().areaNo;
+					var code = e.target.getExtData().code;
+        			var provinceId = pageStatusInfo.provinceId;
+        			var cityId = pageStatusInfo.cityId;
+        			var cityName = pageStatusInfo.cityName;
+        			var storeId = pageStatusInfo.storeId;
+        			var zoomLevel = pageStatusInfo.zoomLevel;
+        			var iscity = pageStatusInfo.iscity;
+        			var url = "tiny_village_dataview.html?p=" + encode64(provinceId) + "&c=" + encode64(cityId) + "&s=" + encode64(storeId) + "&cn=" + encode64(cityName) + "&zm=" + encode64(zoomLevel) + "&cd=" + encode64(code) + "&an="+encode64(areaNo)+"&iscity="+encode64(iscity);
+        			window.open(url,"iframe");
+        			
+				});
+				areaTinyVillage.on("mouseover", function(e) {
+					var code = e.target.getExtData().code;
+					doManager("TinyVillageManager", "queryTinyVillageInfoByVillagecode",[ code ], function(data,textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var tinyVillage = JSON.parse(data.data).data;
+							var tiny_village_name = tinyVillage.tiny_village_name;
+							var tiny_village_address = tinyVillage.tiny_village_address;
+							var dellable = tinyVillage.dellable;
+							var tiny_village_id = tinyVillage.tiny_village_id;
+							var village_name = tinyVillage.village_name;
+							var town_name = tinyVillage.town_name;
+							if(dellable == 0 || dellable == null){
+								$("#tiny_village_name").html(tiny_village_name);
+							}else{
+								$("#tiny_village_name").html(tiny_village_name+"(待删除)");
+							}
+							$("#tiny_village_address").html(tiny_village_address);
+							$("#village_name").html(village_name);
+							$("#town_name").html(town_name);
+						}
+					}, false);
+				});
+				areaTinyVillage.on("mouseout", function(e) {
+					$("#tiny_village_name").html("--");
+					$("#tiny_village_address").html("--");
+					$("#village_name").html("--");
+					$("#town_name").html("--");
+					
+				});
+			}
+
+			$("#TULI").show();
+		}
+
+		function lightPloygon(area_no) {
+			for (var i = 0; i < polygonArray.length; i++) {//片区管辖小区坐标高亮显示
+				var areaNo = polygonArray[i].area_no;
+				if (areaNo == area_no) {
+					polygonArray[i].tinyVillagePolygon.show();
+				} else {
+					polygonArray[i].tinyVillagePolygon.hide();
+				}
+			}
+		}
+
+		//鼠标离开展示所有小区区域
+		function showAllTinyArea() {
+			for (var m = 0; m < polygonArrayCopy.length; m++) {//所有小区坐标区域重置颜色
+				polygonArrayCopy[m].tinyVillagePolygon.show();
+			}
+
+			for (var j = 0; j < tinyAreaArray.length; j++) {//片区管辖小区坐标显示小区名称
+				tinyAreaArray[j].tinyAreaMarker.hide();
+			}
+		}
+
+		function showTinyVillage(area_no) {
+			var storeId = pageStatusInfo.storeId;
+			//var storeName = pageStatusInfo.storeName;
+			var provinceId = pageStatusInfo.provinceId;
+			var provinceName = pageStatusInfo.provinceName;
+			var cityId = pageStatusInfo.cityId;
+			var cityName = pageStatusInfo.cityName;
+			var iscity = pageStatusInfo.iscity;
+			var url = "tiny_area_dataview.html?p=" + encode64(provinceId)
+					+ "&c=" + encode64(cityId) + "&s=" + encode64(storeId)
+					+ "&cn=" + encode64(cityName) + "&an=" + encode64(area_no)
+					+ "&pn=" + encode64(provinceName) + "&iscity="
+					+ encode64(iscity);
+			window.open(url, "iframe");
+		}
+
+		var showData = function(pageStatusInfo) {
+			doManager(
+					"MapBasicDataManager",
+					"getStoreBasicData",
+					pageStatusInfo.storeId,
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var jsonData = JSON.parse(data.data);
+							if (jsonData.code == 200) {
+								debugger;
+								var townCount = jsonData.townCount;
+								var conTownCount = jsonData.conTownCount;
+								var villageCount = jsonData.villageCount;
+								var conVillageCount = jsonData.conVillageCount;
+								var tinyVillageCount = jsonData.tinyVillageCount;
+								var conTinyVillageCount = jsonData.conTinyVillageCount;
+								var residentsHouseCount = jsonData.residentsHouseCount;
+								var customerCount = jsonData.customerCount;
+								//街道信息
+								$("#townCount").html(townCount);
+								$("#conTownCount").html(conTownCount);
+								var townServiceCount = townCount == 0 ? 0
+										: (conTownCount / townCount) * 100;
+								var townServiceCoverage = townServiceCount
+										.toFixed(2);
+								$("#townServiceCoverage").html(
+										townServiceCoverage + "%");
+								//社区信息
+								$("#villageCount").html(villageCount);
+								$("#conVillageCount").html(conVillageCount);
+								var villageServiceCount = villageCount == 0 ? 0
+										: (conVillageCount / villageCount) * 100;
+								var villageServiceCoverage = villageServiceCount
+										.toFixed(2);
+								$("#villageServiceCoverage").html(
+										villageServiceCoverage + "%");
+								//小区信息
+								$("#tinyVillageCount").html(tinyVillageCount);
+								$("#conTinyVillageCount").html(
+										conTinyVillageCount);
+								var serviceCount = tinyVillageCount == 0 ? 0
+										: (conTinyVillageCount / tinyVillageCount) * 100;
+								var serviceCoverage = serviceCount.toFixed(2);
+								$("#tinyVillageServiceCoverage").html(
+										serviceCoverage + "%");
+								$("#tinyVillageServiceCoverage").addClass(
+										"text-aqua");
+								//用户信息
+								$("#tinyVillageResidentsHouseCount").html(
+										residentsHouseCount);
+								var residentsCount = residentsHouseCount * 3;
+								$("#tinyVillageResidentsCount").html(
+										residentsCount);
+								$("#tinyVillageCustomerCount").html(
+										customerCount);
+								var peopleCount = residentsCount == 0 ? 0
+										: (customerCount / residentsCount) * 100;
+								var residentsCoverage = peopleCount.toFixed(2);
+								$("#tinyVillageResidentsCoverage").html(
+										residentsCoverage + "%");
+								$("#tinyVillageResidentsCoverage").addClass(
+										"text-aqua");
+							}
+						}
+					}, false);
+		}
+
+		//返回省市
+		function gopro() {
+			var provinceId = pageStatusInfo.provinceId;
+			var provinceName = pageStatusInfo.provinceName;
+			var cityId = pageStatusInfo.cityId;
+			var cityName = pageStatusInfo.cityName;
+			var iscity = pageStatusInfo.iscity;
+			var url = "china_city_dataview.html?p=" + encode64(provinceId)
+					+ "&c=" + encode64(cityId) + "&cn=" + encode64(cityName)
+					+ "&pn=" + encode64(provinceName) + "&iscity="
+					+ encode64(iscity);
+			window.open(url, "iframe");
+		}
+
+		//返回全国
+		function goCountry() {
+			window.open("china_city_dataview.html", "iframe");
+		}
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="Cache-Control" Content="no-cache">
+        <meta http-equiv="Pragma" Content="no-cache">
+        <meta http-equiv="Expires" Content="0">
+		<link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+      	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+        <script type="text/javascript"  src="js/calendar.js"></script>
+
+        <link type="text/css" rel="Stylesheet" href="js/style.css" />
+    </head>
+	<script type="text/javascript">
+		$(function(){
+				$("#inp").val(formatDate(new Date()))
+				createCalendar("selectcalendar",function(txt){
+					$("#inp").val(txt);
+					parent.workLogRightFrame.location.href='workLogAdds.html?val='+$("#inp").val();
+				});
+				doManager("workLogManager", "getLogdatesList", "", function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   for(var i=0;i<returnObj.length;i++){
+								$("#calendardiv"+returnObj[i]).css("background-color","#66ff33");
+							   }
+	                        }
+	                    }, true, {showWaiting: true});
+		})
+			
+			  function formatDate(date) {
+	            var myyear = date.getFullYear();
+	            var mymonth = date.getMonth()+1;
+	            var myweekday = date.getDate();
+	
+	            if(mymonth < 10){
+	                mymonth = "0" + mymonth;
+	            }
+	            if(myweekday < 10){
+	                myweekday = "0" + myweekday;
+	            }
+	            return (myyear+"-"+mymonth + "-" + myweekday);
+	        }
+		</script>
+    <body >
+        <input id="inp" class="Wdate" type="text" style="width:185px;">
+		<div id="selectcalendar"></div>
+    </body>
+</html>

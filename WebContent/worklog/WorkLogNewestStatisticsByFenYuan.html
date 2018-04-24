@@ -1,0 +1,854 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="X-UA-Compatible"content="IE=8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+        <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css" />
+      	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+		<script type="text/javascript" src="../scripts/common/pms.js"></script>
+		<script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+		<script type="text/javascript" src="../forecast/js/createProject.js"></script>
+		<script src="../bizbase/js/userDialog.js" type="text/javascript"></script>
+		<script src="../scripts/userCheck.js" type="text/javascript"></script>
+		<script type="text/javascript"  src="js/calendar.js"></script>
+		<link type="text/css" rel="Stylesheet" href="js/style.css" />
+		<style type="text/css">
+			.tdul{
+				margin:0px;
+				padding:0px;
+			}
+			.tdul li{
+				float:left;
+			}
+			.bigArrowLeft{
+				background: url(../scripts/images/bigArrowLeft.jpg) no-repeat;
+				 width:25px; 
+				 height:25px; 
+				 float:left;
+				  margin-right:10px;
+			}
+			.bigArrowRight{
+				background: url(../scripts/images/bigArrowRight.jpg) no-repeat;
+				 width:25px; 
+				 height:25px; 
+				 float:left;
+				  margin-right:10px;
+			}
+		</style>
+		<script language="JavaScript" type="text/javascript">
+			var psId;
+			var logDates = getUrlParamByKey("val");
+			var beginDates = getUrlParamByKey("beginDate");
+			var endDates = getUrlParamByKey("endDate");
+			var yglx = getUrlParamByKey("yglx");
+			var wd = getUrlParamByKey("wd");
+			var fy = getUrlParamByKey("fy");
+			var id = getUrlParamByKey("id");
+			$(function() {
+				var teampDATE=$("#logDate1").text();
+					doManager("workLogManager", "getPurStruOrgDTO", "", function (datas, textStatus, XMLHttpRequest) {
+	                        if (datas.result) {
+	                           var returnObj = $.fromJSON(datas.data);
+							   for(i=0;i<returnObj.length;i++){
+									var radioLevel="<input type='radio' name='type' onclick='clickSearch()' value='"+returnObj[i].code+"' />"+returnObj[i].name;
+
+									$("#yuanqu").append(radioLevel);
+									
+							   }
+							  if(fy!=null&&fy!=""){
+									$("input[name='type'][value='"+fy+"']").attr("checked",true);
+
+									}
+									onSearch();
+	                        }
+	                    }, true, {showWaiting: true});
+				$("input:radio[value='day']").click(function(){
+					$("#zhi").hide();
+					$("#logDate2").hide();
+					var tdate=$("#logDate1").text();
+					var newDate=toNewDate(tdate);
+					var newDayOfWeek = newDate.getDay(); 
+        			var newDay = newDate.getDate(); 
+        			var newMonth = newDate.getMonth(); 
+        			var newYear = newDate.getFullYear(); 
+
+					$("#logDate1").text(getDateNew(newYear,newMonth,newDay));
+					$("#beginLogDate").val(getDateNew(newYear,newMonth,newDay));
+					$("#logDate2").text(getDateNew(newYear,newMonth,newDay));
+					$("#endLogDate").val(getDateNew(newYear,newMonth,newDay));
+										showCalendar(newYear,newMonth,recal);
+
+				})
+				$("input:radio[value='week']").click(function(){
+					
+					$("#zhi").show();
+					$("#logDate2").show();
+					var tdate=$("#logDate1").text();
+					var newDate=toNewDate(tdate);
+					var newDayOfWeek = newDate.getDay(); 
+        			var newDay = newDate.getDate(); 
+        			var newMonth = newDate.getMonth(); 
+        			var newYear = newDate.getFullYear(); 
+					$("#logDate1").text(getWeekStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+					$("#beginLogDate").val(getWeekStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+					$("#logDate2").text(getWeekEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+					$("#endLogDate").val(getWeekEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+										showCalendar(newYear,newMonth,recal);
+
+				})
+				$("input:radio[value='month']").click(function(){
+					$("#zhi").show();
+					$("#logDate2").show();
+					var tdate=$("#logDate1").text();
+					var newDate=toNewDate(tdate);
+					var newDayOfWeek = newDate.getDay(); 
+        			var newDay = newDate.getDate(); 
+        			var newMonth = newDate.getMonth(); 
+        			var newYear = newDate.getFullYear(); 
+					$("#logDate1").text(getMonthStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+					$("#beginLogDate").val(getMonthStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+					$("#logDate2").text(getMonthEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+					$("#endLogDate").val(getMonthEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+										showCalendar(newYear,newMonth,recal);
+
+				})
+				$("input:radio[value='year']").click(function(){
+					$("#zhi").show();
+					$("#logDate2").show();
+					var tdate=$("#logDate1").text();
+					var newDate=toNewDate(tdate);
+					var newDayOfWeek = newDate.getDay(); 
+        			var newDay = newDate.getDate(); 
+        			var newMonth = newDate.getMonth(); 
+        			var newYear = newDate.getFullYear();
+					$("#logDate1").text(getYearStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+					$("#beginLogDate").val(getYearStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+					$("#logDate2").text(getYearEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+					$("#endLogDate").val(getYearEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+										showCalendar(newYear,newMonth,recal);
+
+				})
+				$("input:radio[name='type2']").click(function(){
+					if(Date.parse(formatDateTOparseByStr($("#logDate2").text()))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+						if(Date.parse(formatDateTOparseByStr($("#logDate1").text()))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+							$("#logDate1").text(getMonthStartDate());
+							$("#beginLogDate").val(getMonthStartDate());
+							$("#logDate2").text(formatDate(new Date()));
+							$("#endLogDate").val(formatDate(new Date()));
+							$("#toright").hide();
+						}else{
+							$("#logDate2").text(formatDate(new Date()));
+							$("#endLogDate").val(formatDate(new Date()));
+							$("#toright").hide();
+						}
+
+						
+					}else{
+						$("#toright").show();
+					}
+					geBetweenTime($("#beginLogDate").val(),$("#endLogDate").val());
+					onSearch();
+				})
+				$("input:radio[name='type1']").click(function(){
+					geBetweenTime($("#beginLogDate").val(),$("#endLogDate").val());
+					onSearch();
+				})
+				 //初始化日历控件
+				 if(logDates!=null&&logDates!=""){
+				 	 $("#s1").val(logDates);
+					 $("#logDate1").text(logDates);
+						$("#beginLogDate").val(logDates);
+						$("#logDate2").text(logDates);
+						$("#endLogDate").val(logDates);
+				 }else{
+				 	$("#s1").val(formatDate(new Date()));
+					$("#logDate1").text(formatDate(new Date()));
+					$("#beginLogDate").val(formatDate(new Date()));
+					$("#logDate2").text(formatDate(new Date()));
+					$("#endLogDate").val(formatDate(new Date()));
+				 }
+				 var ymd;
+				 if(beginDates!=null&&beginDates!=""){
+					$("#logDate1").text(beginDates);
+					$("#beginLogDate").val(beginDates);
+					ymd=beginDates;
+				}
+				 createCalendar("selectcalendar",recal,ymd,recalTwo);
+				if(logDates!=null&&logDates!=""){
+				 	
+					 $("#calendardiv"+ymd).css("background-color","#FDC951");
+				}
+				
+				if(endDates!=null&&endDates!=""){
+					$("#logDate2").text(endDates);
+					$("#endLogDate").val(endDates);
+					$("#logDate2").show();	
+					$("#zhi").show();	
+				}
+				if(yglx!=null&&yglx!=""){
+					alert("in");
+					$("input[name='type1'][value='"+yglx+"']").attr("checked",true);
+				}
+				if(wd!=null&&wd!=""){
+					$("input[name='type2'][value='"+wd+"']").attr("checked",true);
+
+				}
+				
+			});
+			var recalTwo=function(d){
+					var titleDates=document.getElementById("calendar").childNodes[1].childNodes[2].innerHTML;
+					var tYear;
+					var tMonth;
+					if(titleDates.length==7){
+						tYear=titleDates.substring(0,4);
+						tMonth="0"+titleDates.substring(5,6);
+					}else{
+						tYear=titleDates.substring(0,4);
+						tMonth=titleDates.substring(5,7);
+					}
+					var tdateBegin=tYear+"-"+tMonth+"-01";
+					var newDate=toNewDate(tdateBegin);
+					var newDayOfWeek = newDate.getDay(); //今天本周的第几天
+	        		var newDay = newDate.getDate(); //当前日
+	        		var newMonth = newDate.getMonth(); //当前月
+	        		var newYear = newDate.getFullYear(); //当前年
+					var monthDays=getMonthDaysNew(tYear,newMonth);
+					var tdateEnd=tYear+"-"+tMonth+"-"+monthDays;
+					$("input:radio[value='month']").attr("checked",true);
+						if(d==-1){//向左
+								if(Date.parse(formatDateTOparseByStr(tdateBegin))>Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+									
+								}else{
+									$("#toright").show();
+									$("#logDate1").text(tdateBegin);
+									$("#beginLogDate").val(tdateBegin);
+									$("#logDate2").text(tdateEnd);
+									$("#endLogDate").val(tdateEnd);
+									$("#logDate2").show();	
+									$("#zhi").show();
+								}
+									
+							
+						}else{//向右
+								$("#logDate1").text(tdateBegin);
+								$("#beginLogDate").val(tdateBegin);
+								$("#logDate2").text(tdateEnd);
+								$("#endLogDate").val(tdateEnd);
+								$("#logDate2").show();	
+								$("#zhi").show();	
+								if(Date.parse(formatDateTOparseByStr($("#logDate2").text()))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){//结束日期大于当期日期
+									if(Date.parse(formatDateTOparseByStr($("#logDate1").text()))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){//开始日期大于当前日期
+										$("#logDate1").text(formatDateToMonth(new Date())+"-01");
+										$("#beginLogDate").val(formatDateToMonth(new Date())+"-01");
+										$("#logDate2").text(formatDate(new Date()));
+										$("#endLogDate").val(formatDate(new Date()));
+										$("#toright").hide();
+									}else{
+										$("#logDate2").text(formatDate(new Date()));
+										$("#endLogDate").val(formatDate(new Date()));
+										$("#toright").hide();
+									}
+			
+									
+								}
+					
+						
+						}
+											
+											geBetweenTime($("#beginLogDate").val(),$("#endLogDate").val());
+
+						        $$.executeSearch('workLogToDoByFenYuanNew', 'conditionsDiv');
+
+				}
+			var recal=function(txt){
+					//window.location.href='WorkLogNewStatisticsByFenYuan.html?val='+txt;
+					clearClendar();
+					$("#calendardiv" + txt).css("background-color", "#FDC951");
+					//$("input:radio[value='day']").attr("checked",true);
+					$("#logDate2").hide();
+					$("#zhi").hide();
+					 $("#s1").val(txt);
+					 $("#toright").hide();
+					 $("#logDate1").text(txt);
+						$("#beginLogDate").val(txt);
+						$("#logDate2").text(txt);
+						$("#endLogDate").val(txt);
+						var tdate=$("#logDate1").text();
+						var newDate=toNewDate(tdate);
+						var newDayOfWeek = newDate.getDay(); 
+	        			var newDay = newDate.getDate(); 
+	        			var newMonth = newDate.getMonth(); 
+	        			var newYear = newDate.getFullYear(); 
+						if($("input:radio[value='day']").attr("checked")==true){
+							$("#logDate1").text(getDateNew(newYear,newMonth,newDay));
+							$("#beginLogDate").val(getDateNew(newYear,newMonth,newDay));
+							$("#logDate2").text(getDateNew(newYear,newMonth,newDay));
+							$("#endLogDate").val(getDateNew(newYear,newMonth,newDay));
+							showCalendar(newYear,newMonth,recal);
+							$("#logDate2").show();
+							$("#zhi").show();
+						}else if($("input:radio[value='week']").attr("checked")==true){
+							$("#logDate1").text(getWeekStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+							$("#beginLogDate").val(getWeekStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+							$("#logDate2").text(getWeekEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+							$("#endLogDate").val(getWeekEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+										showCalendar(newYear,newMonth,recal);
+										$("#logDate2").show();
+							$("#zhi").show();
+						}else if($("input:radio[value='month']").attr("checked")==true){
+							$("#logDate1").text(getMonthStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+							$("#beginLogDate").val(getMonthStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+							$("#logDate2").text(getMonthEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+							$("#endLogDate").val(getMonthEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+										showCalendar(newYear,newMonth,recal);
+										$("#logDate2").show();
+							$("#zhi").show();
+						}else if($("input:radio[value='year']").attr("checked")==true){
+							$("#logDate1").text(getYearStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+							$("#beginLogDate").val(getYearStartDateNew(newYear,newMonth, newDay,newDayOfWeek));
+							$("#logDate2").text(getYearEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+							$("#endLogDate").val(getYearEndDateNew(newYear,newMonth,newDay,newDayOfWeek));
+										showCalendar(newYear,newMonth,recal);
+										$("#logDate2").show();
+							$("#zhi").show();
+						}
+						if(Date.parse(formatDateTOparseByStr(txt))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+													$("#toright").hide();
+
+						}else{
+													$("#toright").show();
+
+						}
+						geBetweenTime($("#beginLogDate").val(),$("#endLogDate").val());
+
+					init();
+				}
+				function clickSearch(){
+					onSearch();
+				}
+			function init(){
+				 onSearch();
+				 geBetweenTime($("#beginLogDate").val(),$("#endLogDate").val());
+
+			}
+			function toLeft(){
+				var titleDates=document.getElementById("calendar").childNodes[1].childNodes[2].innerHTML;
+				var date1Value=$("#logDate1").text();
+				var date2Value=$("#logDate2").text();
+				var newDate=toNewDate(date1Value);
+				var newDayOfWeek = newDate.getDay(); //今天本周的第几天
+        		var newDay = newDate.getDate(); //当前日
+        		var newMonth = newDate.getMonth(); //当前月
+        		var newYear = newDate.getFullYear(); //当前年
+				$("#toright").show();
+				if($("input:radio[value='year']").attr("checked")==true){//以年为维度
+					var tempYear=newYear-1;
+					$("#logDate1").text(getYearStartDateNew(tempYear,newMonth, newDay,newDayOfWeek));
+					$("#beginLogDate").val(getYearStartDateNew(tempYear,newMonth, newDay,newDayOfWeek));
+					$("#logDate2").text(getYearEndDateNew(tempYear,newMonth,newDay,newDayOfWeek));
+					$("#endLogDate").val(getYearEndDateNew(tempYear,newMonth,newDay,newDayOfWeek));
+					changeYear(-1,recal,function(){});
+										showCalendar(tempYear,newMonth,recal);
+
+				}
+				if($("input:radio[value='month']").attr("checked")==true){//以月为维度
+					var tempMonth;
+					var tempYear;
+					if(newMonth>=1){
+						tempMonth=newMonth-1;
+						tempYear=newYear;
+					}else{
+						tempMonth=11;
+						tempYear=newYear-1;
+					}
+					 
+					$("#logDate1").text(getMonthStartDateNew(tempYear,tempMonth, newDay,newDayOfWeek));
+					$("#beginLogDate").val(getMonthStartDateNew(tempYear,tempMonth, newDay,newDayOfWeek));
+					$("#logDate2").text(getMonthEndDateNew(tempYear,tempMonth,newDay,newDayOfWeek));
+					$("#endLogDate").val(getMonthEndDateNew(tempYear,tempMonth,newDay,newDayOfWeek));
+					changeMonth(-1,recal,function(){});
+										showCalendar(tempYear,tempMonth,recal);
+
+				}
+				if ($("input:radio[value='week']").attr("checked") == true) {//以周为维度
+					var tempDay;
+					var tempMonth;
+					var tempYear;
+					if(newDay>7){//如果日期在当月大于7，则直接减
+						tempDay=newDay-7;
+						tempMonth=newMonth;
+						tempYear=newYear;
+					}else{//如果日期在当月小于7，则需要先获得上一个月的天数减去(7-newDay),如果上一个月是1月份则需要年份倒退1，
+						var LastMonthDays;
+						if(newMonth>=1){
+							lastMonth=newMonth-1;
+							tempMonth=newMonth-1;
+							tempYear=newYear;
+							LastMonthDays=getMonthDaysNew(tempYear,lastMonth);
+						}else{
+							lastMonth=11;
+							tempMonth=11;
+							tempYear=newYear-1;
+							LastMonthDays=getMonthDaysNew(tempYear,lastMonth);
+						}
+						tempDay=LastMonthDays-(7-newDay);
+						
+					}
+					if((tempMonth+1)!=titleDates.substring(5,6)&&(newMonth+1)!=titleDates.substring(5,7)){
+						changeMonth(-1,recal,function(){});
+											//showCalendar(newYear,(newMonth-1),recal);
+
+					}
+					$("#logDate1").text(getWeekStartDateNew(tempYear,tempMonth, tempDay,newDayOfWeek));
+					$("#beginLogDate").val(getWeekStartDateNew(tempYear,tempMonth, tempDay,newDayOfWeek));
+					$("#logDate2").text(getWeekEndDateNew(tempYear,tempMonth,tempDay,newDayOfWeek));
+					$("#endLogDate").val(getWeekEndDateNew(tempYear,tempMonth,tempDay,newDayOfWeek));
+				}
+				if ($("input:radio[value='day']").attr("checked") == true) {//以日为维度
+					var tempDay;
+					var tempMonth;
+					var tempYear;
+					if(newDay>1){//如果日期在当月大于1，则直接减
+						tempDay=newDay-1;
+						tempMonth=newMonth;
+						tempYear=newYear;
+					}else{//如果日期在当月等于1，则需要先获得上一个月的天数,如果上一个月是1月份则需要年份倒退1，
+						var LastMonthDays;
+						if(newMonth>=1){
+							lastMonth=newMonth-1;
+							tempMonth=newMonth-1;
+							tempYear=newYear;
+							LastMonthDays=getMonthDaysNew(tempYear,lastMonth);
+						}else{
+							lastMonth=11;
+							tempMonth=11;
+							tempYear=newYear-1;
+							LastMonthDays=getMonthDaysNew(tempYear,lastMonth);
+						}
+						tempDay=LastMonthDays;
+						
+					}
+					if(newDay==1){
+						changeMonth(-1,recal,function(){});
+											showCalendar(tempYear,tempMonth,recal);
+
+					}
+					
+					$("#logDate1").text(getDateNew(tempYear,tempMonth, tempDay));
+					$("#beginLogDate").val(getDateNew(tempYear,tempMonth, tempDay));
+					$("#logDate2").text(getDateNew(tempYear,tempMonth,tempDay));
+					$("#endLogDate").val(getDateNew(tempYear,tempMonth,tempDay));
+				}
+				geBetweenTime($("#beginLogDate").val(),$("#endLogDate").val());
+
+				$$.executeSearch('workLogToDoByFenYuanNew', 'conditionsDiv');
+
+			}
+			function toRight(){
+				var titleDates=document.getElementById("calendar").childNodes[1].childNodes[2].innerHTML;
+				var date1Value=$("#logDate1").text();
+				var date2Value=$("#logDate2").text();
+				var newDate=toNewDate(date1Value);
+				var newDayOfWeek = newDate.getDay(); //今天本周的第几天
+        		var newDay = newDate.getDate(); //当前日
+        		var newMonth = newDate.getMonth(); //当前月
+        		var newYear = newDate.getFullYear(); //当前年
+				if($("input:radio[value='year']").attr("checked")==true){//以年为维度
+					var tempYear=newYear+1;
+					$("#logDate1").text(getYearStartDateNew(tempYear,newMonth, newDay,newDayOfWeek));
+					$("#beginLogDate").val(getYearStartDateNew(tempYear,newMonth, newDay,newDayOfWeek));
+					$("#logDate2").text(getYearEndDateNew(tempYear,newMonth,newDay,newDayOfWeek));
+					$("#endLogDate").val(getYearEndDateNew(tempYear,newMonth,newDay,newDayOfWeek));
+					changeYear(1,recal,function(){});
+																showCalendar(tempYear,newMonth,recal);
+
+					
+				}
+				if($("input:radio[value='month']").attr("checked")==true){//以月为维度
+					var tempMonth;
+					var tempYear;
+					if(newMonth<11){
+						tempMonth=newMonth+1;
+						tempYear=newYear;
+					}else{
+						tempMonth=0;
+						tempYear=newYear+1;
+					}
+					 
+					$("#logDate1").text(getMonthStartDateNew(tempYear,tempMonth, newDay,newDayOfWeek));
+					$("#beginLogDate").val(getMonthStartDateNew(tempYear,tempMonth, newDay,newDayOfWeek));
+					$("#logDate2").text(getMonthEndDateNew(tempYear,tempMonth,newDay,newDayOfWeek));
+					$("#endLogDate").val(getMonthEndDateNew(tempYear,tempMonth,newDay,newDayOfWeek));
+					changeMonth(1,recal,function(){});
+																showCalendar(tempYear,tempMonth,recal);
+
+				}
+				if ($("input:radio[value='week']").attr("checked") == true) {//以周为维度
+					var tempDay;
+					var tempMonth;
+					var tempYear;
+					//先获取到本月的天数
+					var thisMonthDays=getMonthDaysNew(newYear,newMonth);
+					if(thisMonthDays-newDay>=7){//如果thisMonthDays-newDay>=7，则直接加
+						tempDay=newDay+7;
+						tempMonth=newMonth;
+						tempYear=newYear;
+					}else{//如果日期在thisMonthDays-newDay<7，则需要月份+1，新的日为7-(thisMonthDays-newDay),如果本月份为11，则需要年份+1，
+						if(newMonth<11){
+							tempMonth=newMonth+1;
+							tempYear=newYear;
+							tempDay=7-(thisMonthDays-newDay);
+						}else{
+							tempMonth=0;
+							tempYear=newYear+1;
+							tempDay=7-(thisMonthDays-newDay);
+						}
+					}
+					if((tempMonth+1)!=titleDates.substring(5,6)&&(newMonth+1)!=titleDates.substring(5,7)){
+						changeMonth(1,recal,function(){});
+																	showCalendar(tempYear,tempMonth,recal);
+
+					}
+					$("#logDate1").text(getWeekStartDateNew(tempYear,tempMonth, tempDay,newDayOfWeek));
+					$("#beginLogDate").val(getWeekStartDateNew(tempYear,tempMonth, tempDay,newDayOfWeek));
+					$("#logDate2").text(getWeekEndDateNew(tempYear,tempMonth,tempDay,newDayOfWeek));
+					$("#endLogDate").val(getWeekEndDateNew(tempYear,tempMonth,tempDay,newDayOfWeek));
+				}
+					if ($("input:radio[value='day']").attr("checked") == true) {//以日为维度
+					var tempDay;
+					var tempMonth;
+					var tempYear;
+					//先获取到本月的天数
+					var thisMonthDays=getMonthDaysNew(newYear,newMonth);
+					if(newDay<thisMonthDays){//如果日期不是当月的最大值，则直接减加
+						tempDay=newDay+1;
+						tempMonth=newMonth;
+						tempYear=newYear;
+					}else{//如果日期是当月的最大值，则月份+1，若月份是12月了，则需要年份加1，月份变成0
+						var LastMonthDays;
+						if(newMonth<11){
+							tempMonth=newMonth+1;
+							tempYear=newYear;
+							LastMonthDays=getMonthDaysNew(tempYear,lastMonth);
+						}else{
+							tempMonth=0;
+							tempYear=newYear+1;
+							LastMonthDays=getMonthDaysNew(tempYear,lastMonth);
+						}
+						tempDay=1;
+						
+					}
+					if(newDay==thisMonthDays){
+						changeMonth(1,recal,function(){});
+											showCalendar(tempYear,tempMonth,recal);
+
+					}
+					$("#logDate1").text(getDateNew(tempYear,tempMonth, tempDay));
+					$("#beginLogDate").val(getDateNew(tempYear,tempMonth, tempDay));
+					$("#logDate2").text(getDateNew(tempYear,tempMonth,tempDay));
+					$("#endLogDate").val(getDateNew(tempYear,tempMonth,tempDay));
+				}
+				if(Date.parse(formatDateTOparseByStr($("#logDate2").text()))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+						if(Date.parse(formatDateTOparseByStr($("#logDate1").text()))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+							$("#logDate1").text(getMonthStartDate());
+							$("#beginLogDate").val(getMonthStartDate());
+							$("#logDate2").text(formatDate(new Date()));
+							$("#endLogDate").val(formatDate(new Date()));
+							$("#toright").hide();
+						}else{
+							$("#logDate2").text(formatDate(new Date()));
+							$("#endLogDate").val(formatDate(new Date()));
+							$("#toright").hide();
+						}
+
+						
+					}
+					geBetweenTime($("#beginLogDate").val(),$("#endLogDate").val());
+
+					 $$.executeSearch('workLogToDoByFenYuanNew', 'conditionsDiv');
+
+			}
+			//datestr格式：yyyy-mm-dd
+			function toNewDate(datestr){
+				var newDate=new Date(Date.parse(formatDateTOparseByStr(datestr)));
+				return newDate;
+			}
+				  //格局化日期：yyyy-MM-dd
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth + "-" + myweekday);
+        }
+		function formatDateToMonth(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth);
+        }
+		//格局化日期：MM/dd/yyyy,传入的日期字符串格式为"YYYY-MM-DD"
+			 function formatDateTOparseByStr(datestr) {
+	            mymonth=datestr.substr(5,2);
+				myweekday=datestr.substr(8,2);
+				myyear=datestr.substr(0,4);
+	            return (mymonth + "/" + myweekday+"/"+myyear);
+	        }
+		 var now = new Date(); //当前日期
+        var nowDayOfWeek = now.getDay(); //今天本周的第几天
+        var nowDay = now.getDate(); //当前日
+        var nowMonth = now.getMonth(); //当前月
+        var nowYear = now.getFullYear(); //当前年
+		
+        //获得某月的天数
+        function getMonthDays(myMonth){
+            var monthStartDate = new Date(nowYear, myMonth, 1);
+            var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+            var   days   =   (monthEndDate   -   monthStartDate)/(1000   *   60   *   60   *   24);
+            return   days;
+        }
+		//获得本周的开端日期
+        function getWeekStartDate() {
+            var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek + 1);
+            return formatDate(weekStartDate);
+        }
+
+        //获得本周的停止日期
+        function getWeekEndDate() {
+            var weekEndDate = new Date(nowYear, nowMonth, nowDay + (7 - nowDayOfWeek));
+            return formatDate(weekEndDate);
+        }
+
+        //获得本月的开端日期
+        function getMonthStartDate(){
+            var monthStartDate = new Date(nowYear, nowMonth, 1);
+            return formatDate(monthStartDate);
+        }
+
+        //获得本月的停止日期
+        function getMonthEndDate(){
+            var monthEndDate = new Date(nowYear, nowMonth, getMonthDays(nowMonth));
+            return formatDate(monthEndDate);
+        }
+		//获取本年的开始日期
+		function getYearStartDate(){
+			var monthStartDate = new Date(nowYear, 0, 1);
+            return formatDate(monthStartDate);
+		}
+		//获得某年某月的天数
+        function getMonthDaysNew(year,month){
+            var monthStartDate = new Date(year, month, 1);
+            var monthEndDate = new Date(year,month + 1, 1);
+            var   days   =   (monthEndDate   -   monthStartDate)/(1000   *   60   *   60   *   24);
+            return   days;
+        }
+		//获取某一天
+		function getDateNew(year,month,newDay) {
+            var weekStartDate = new Date(year, month, newDay);
+            return formatDate(weekStartDate);
+        }
+		//获取周的开始日期
+		function getWeekStartDateNew(year,month,newDay,newDayOfWeek) {
+            var weekStartDate = new Date(year, month, newDay - newDayOfWeek );
+            return formatDate(weekStartDate);
+        }
+		//获得周的停止日期
+        function getWeekEndDateNew(year,month,newDay,newDayOfWeek) {
+            var weekEndDate = new Date(year, month, newDay + (7 - (newDayOfWeek+1)));
+            return formatDate(weekEndDate);
+        }
+		//获得月的开端日期
+        function getMonthStartDateNew(year,month,newDay,newDayOfWeek){
+            var monthStartDate = new Date(year, month, 1);
+            return formatDate(monthStartDate);
+        }
+		 //获得月的停止日期
+        function getMonthEndDateNew(year,month,newDay,newDayOfWeek){
+            var monthEndDate = new Date(year, month, getMonthDaysNew(year,month));
+            return formatDate(monthEndDate);
+        }
+		//获取年的开始日期
+		function getYearStartDateNew(year,month,newDay,newDayOfWeek){
+			var monthStartDate = new Date(year, 0, 1);
+            return formatDate(monthStartDate);
+		}
+		//获取年的结束日期
+		function getYearEndDateNew(year,month,newDay,newDayOfWeek){
+			var monthStartDate = new Date(year, 11, 31);
+            return formatDate(monthStartDate);
+		}
+		//传入的beginDate和endDate格式为："yyyy-mm-dd"
+		function geBetweenTime(beginDate,endDate){
+			clearClendar();
+			var bd=Date.parse(formatDateTOparseByStr(beginDate));
+			var ed;
+			if(Date.parse(formatDateTOparseByStr(endDate))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+						if(Date.parse(formatDateTOparseByStr(beginDate))>=Date.parse(formatDateTOparseByStr(formatDate(new Date())))){
+							return;
+						}else{
+							ed=Date.parse(formatDateTOparseByStr(formatDate(new Date())));
+						}
+
+						
+			}else{
+				ed=Date.parse(formatDateTOparseByStr(endDate));
+			}
+			var length=(ed-bd)/(60*60*24*1000);
+			for(i=0;i<=length;i++){
+				
+				var divDte=formatDate(new Date(Date.parse(formatDateTOparseByStr(beginDate))+i*(60*60*24*1000)));
+				 $("#calendardiv"+divDte).css("background-color","#FDC951");
+			}
+		}
+		//给列加链接
+			 var COLUMNS = {
+                   "name": function(aData, iColumn, sColumnName, map){
+                       var value = map[sColumnName];
+                       var orgId = map.id;
+					   var orgName=map.name;
+					   if(value!="合计"){
+					   		return "<a href='#' onclick='goNew(" + orgId+",\""+orgName+ "\")'>" + value + "</a>";
+
+					   }else{
+					   		return "<span>" + value + "</span>";
+					   }
+					}
+               }
+	 	function goNew(orgId,orgName){
+			if($("input[name='type']:checked").val()=="A"){
+				window.location="WorkLogNewestStatisticsBySLD.html?orgId=" + orgId+"&orgName="+orgName+"&fromwhere=WorkLogNewestStatisticsByFenYuan.html"
+				+"&beginDate="+$("#beginLogDate").val()+"&endDate="+$("#endLogDate").val()+"&yglx="+$("input[name='type1']:checked").val()+"&wd="+$("input[name='type2']:checked").val();
+
+			}else{
+				window.location="WorkLogNewestStatisticsBySLD2.html?orgId=" + orgId+"&orgName="+orgName+"&fromwhere=WorkLogNewestStatisticsByFenYuan.html"
+				+"&beginDate="+$("#beginLogDate").val()+"&endDate="+$("#endLogDate").val()+"&yglx="+$("input[name='type1']:checked").val()+"&wd="+$("input[name='type2']:checked").val()+"&fy="+$("input[name='type']:checked").val();
+
+			}
+		} 
+		</script>
+	</head>
+	<body>
+		<div class="rightcont body_bg clear">
+			<div class="box">
+				<div class="title clear">
+					<div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();" ></div>
+					<div class="ico2" ></div>
+					<div class="ico1" ></div>
+					<a href="#">工作日誌 :</a>&nbsp;<a href="#">日誌统计</a>
+				</div>		
+				<div class="containerheader">
+					 <a href="#" onClick="toggleDiv('temp1','plusMinus1')"><img id="plusMinus1" src="../scripts/images/22.png"/></a>
+					日誌统计&nbsp;&nbsp;&nbsp;&nbsp;
+				<span id="info"></span>
+				</div>
+				
+        
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true" >
+                	<input class="pmsRadio"  data="[['单位','单位','checked'],['关注','关注']]" />
+                	 <table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+					 <tr style="padding:0px;margin:0px;">
+					 	<td style="width:5%;height:150px;">
+							<div id="selectcalendar"></div>
+					 	</td>
+						<td style="width:95%;height:150px;padding:0px;margin:0px;">
+							<table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto">
+									<tr>
+											<td  width="30%" height="40px" align="right" style="padding-right:20px;">
+												分院选择：
+											</td>
+
+											<td id="yuanqu" align="left" width="70%" >
+												<!--<input type="radio" name="type" value="3301" checked/>研究院
+												<input type="radio" name="type" value="3302" />北京院
+												<input type="radio" name="type" value="xbfy" />西北分院
+												<input type="radio" name="type" value="121731" />杭州地质院
+												<input type="radio" name="type" value="3305" />廊坊分院
+												
+												<input type="radio" name="type" value="B" />北京院
+												<input type="radio" name="type" value="hzy" />杭州地质院
+												<input type="radio" name="type" value="E" />廊坊分院-->
+												<input type="radio" name="type" value="A"  checked/>研究院
+											</td>
+									</tr>
+									<tr>
+											<td width="30%" height="40px" align="right" style="padding-right:20px;">
+												用工类型:
+											</td>
+											<td>
+												<input type="radio" name="type1" value="-1" checked/>全体
+												<input type="radio" name="type1" value="1" />合同化
+												<input type="radio" name="type1" value="2" />市场化
+												<input type="radio" name="type1" value="3" />劳务化
+											</td>
+									</tr>
+									<tr>
+											<td width="30%" height="40px" align="right" style="padding-right:20px;">
+												统计时间段:
+											</td>
+											<td>
+												<input type="radio" name="type2" value="day" checked/>日
+												<input type="radio" name="type2" value="week" />周
+												<input type="radio" name="type2" value="month" />月
+												<input type="radio" name="type2" value="year" />年
+											</td>
+									</tr>
+									<tr>
+											<td>
+												
+											</td>
+											<td>
+												<ul class="tdul">
+												<li style="margin-right:10px;"><a class="bigArrowLeft" onclick="toLeft()"></a>
+												
+												<span name="logDate1" id="logDate1"></span>
+												<input type="hidden" name="beginLogDate" id="beginLogDate" likeOption="false"/>
+												<span id='zhi' style="display:none;">至</span>
+												<span name="logDate2" id="logDate2" style="display:none;"></span>
+												<input type="hidden" name="endLogDate" id="endLogDate" likeOption="false"/>
+												<input type="hidden" id="s1" revalidate="true" type="text" name="logDate" likeOption="false" validate="formatDate:true"  readonly yearRange="-100:+0" style="width:160px;margin-right: 5px;"/>
+												</li>
+												<li><a id="toright" class="bigArrowRight" onclick="toRight()" style="display:none;"></a>
+													<!--<input type="button" class="buttonu" value="查询" onclick="onSearch()" />-->
+
+												</li>
+												<ul>
+	
+											</td>
+									</tr>
+							 </table>
+					 	</td>
+					 </tr>
+					 </table>
+                
+                </form>
+            </div>
+         <div id="workLogSearchContainer" titleAlign= "center" fnRender="renderColumns" showcheckbox="false" showRidaoButton="true"
+             searchDiv="conditionsDiv" usecache="true" queryid="workLogToDoByFenYuanNew" showNo="false"
+             showsearch="false" showdisplay="false" showtitle="true" autoload="false"
+             showprint="false" showpaging="false" showcheckbox="true" operators=$pmspage.opArr>
+        </div>
+    </div>
+
+		 </div>
+	</body>
+</html>
+<script type="text/javascript">
+    function onSearch() {
+        $$.executeSearch('workLogToDoByFenYuanNew', 'conditionsDiv');
+    }
+</script>

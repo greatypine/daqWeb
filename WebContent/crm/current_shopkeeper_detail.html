@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title id="title1"></title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="dist/css/tTurnover-head-scoll.css">
+    <!--map style-->
+    <link rel="stylesheet" href="dist/css/map-style.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="IE 9/html5shiv.min.js"></script>
+    <script src="IE 9/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .logo-lg img:nth-child(1){width: auto; height: 30px;}
+        .logo-lg img:nth-child(2){width: auto; height: 20px; margin-top: 5px;}
+        .box.box-navy{border-top-color: #001F3F;}
+        .badge{font-size: 14px;}
+        .progress-bar-default{background-color: #b5bbc8;}
+        .table tr td:nth-child(1){font-style: oblique; font-size: 14px;}
+        .table td:nth-child(4){text-align: left;}
+        .table th:nth-child(4){text-align: left;}
+        
+	    .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+		.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+		.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+		.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+		.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+    
+    #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+    </style>
+    
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" ></div>
+<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em id="title2"></em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+  
+
+
+  <!--   <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="pull-left">
+                <div class="logo-lg clearfix">
+                    <ul class="sidebar-menu">
+                        <li><a href="index.html" class="h2"> <img src="dist/img/logo1.png"><img src="dist/img/title.png"> </a></li>
+                         <li class="nav-mark"><a href="#" id="title2"></a> </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="navbar-custom-menu">
+            </div>
+        </nav>
+    </header> -->
+    
+    
+    
+    
+    
+    
+    
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div class="container">
+            <section class="content-header clearfix">
+                <div class="box box-navy" >
+                    <div class="box-header">
+                        <h3 class="box-title" id="head_title"></h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="form-group col-lg-10" style="margin-top: 20px; padding: 0 25px;">
+            		</div>
+                    <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+		             <button type="button" onclick="export_ranking()" class="btn btn-block btn-warning">导出</button>
+		            </div>
+                    <div class="box-body no-padding">
+                        <table class="table table-striped" id="Ranking_table">
+                            <tr id="list_title">
+                                
+                            </tr>
+                        </table>
+                    </div>
+                     <div style="position:absolute;bottom:16px;left:27px;width:25%">显示 <select id="pageRecords" name="pageRecords" onchange="chnagePageRecords()"  style="height:25px;line-height:25px;border-radius:4px;"><option value="5" selected="selected">5</option><option value="10">10</option><option value="20">20</option><option value="50">50</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord"></span> 条</div>
+	           		 <div class="tcdPageCode" id="page_element"></div>
+                </div>
+               
+               
+	           
+            </section>
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript">
+        
+        var methodMap = {"areaRanking_gmv":"selectAreaRankingOfStore",//片区gmv排序
+		        		 "deptRanking_gmv":"selectDeptRankingOfStore",//事业群gmv排序
+		        		 "channelRanking_gmv":"selectChannelRankingOfStore",//频道gmv排序
+		        		 "employeeRanking_gmv":"selectEmployeeRankingOfStore",//国安侠gmv排序
+		        		 "employeeRanking_order":"selectAreaOrderRanking",//国安侠订单量排序
+		        		 "eStoreRanking_gmv":"selectEStoreRankingOfStore",//E店gmv排序
+		        		 "deptServerRanking_gmv":"selectDeptServerRanking",//服务专员gmv排序
+		        		 "channelRanking_order":"selectChannelOrderRanking",
+		        		 "gaxNewCusRanking":"getGaxOfAreaNewaddcus"};//国安侠拉新
+		
+		var search_flag = decode64(getUrlParamByKey("sf"));//查询某类数据标识（areaRanking_gmv、deptRanking_gmv、channelRanking_gmv、...）
+		var store_id = decode64(getUrlParamByKey("s"));//门店Id
+		var title = decode64(getUrlParamByKey("h"));//header
+		
+		$(document).ready(function(){
+			var list_title="";
+			var head_title="";
+			if("areaRanking_gmv"==search_flag){
+				$("#title1").html("片区排名"+title+"GMV）");
+				$("#title2").html("片区排名"+title+"GMV）");
+				head_title = "<strong>片区排名"+title+"GMV）</strong>";
+				list_title = '<th style="width: 5%">序号</th>'+
+			                '<th style="width: 30%">片区名称</th>'+
+			                '<th style="width: 40%"></th>'+
+			                '<th style="width: 25%">GMV（元）</th>';
+			}else if("employeeRanking_gmv"==search_flag){
+				$("#title1").html("国安侠排名"+title+"GMV）");
+				$("#title2").html("国安侠排名"+title+"GMV）");
+				head_title = "<strong>国安侠排名"+title+"GMV）</strong>";
+				list_title = '<th style="width: 5%">序号</th>'+
+		                '<th style="width: 30%">国安侠名称</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">GMV（元）</th>';
+			}else if("channelRanking_gmv"==search_flag){
+				$("#title1").html("频道排名"+title+"GMV）");
+				$("#title2").html("频道排名"+title+"GMV）");
+				head_title = "<strong>频道排名"+title+"GMV）</strong>";
+				list_title = '<th style="width: 5%">序号</th>'+
+		                '<th style="width: 30%">频道</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">GMV（元）</th>';
+			}else if("employeeRanking_order"==search_flag){
+				$("#title1").html("国安侠排名"+title+"订单量）");
+				$("#title2").html("国安侠排名"+title+"订单量）");
+				head_title = "<strong>国安侠排名"+title+"订单量）</strong>";
+				list_title = '<th style="width: 5%">序号</th>'+
+		                '<th style="width: 30%">国安侠名称</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">订单量（单）</th>';
+			}else if("channelRanking_order"==search_flag){
+				$("#title1").html("频道排名"+title+"订单量）");
+				$("#title2").html("频道排名"+title+"订单量）");
+				head_title = "<strong>频道排名"+title+"订单量）</strong>";
+				list_title = '<th style="width: 5%">序号</th>'+
+		                '<th style="width: 30%">频道</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">订单量（单）</th>';
+			}else if("eStoreRanking_gmv"==search_flag){
+				$("#title1").html("E店排名"+title+"GMV）");
+				$("#title2").html("E店排名"+title+"GMV）");
+				head_title = "<strong>E店排名"+title+"GMV）</strong>";
+				list_title = '<th style="width: 5%">序号</th>'+
+		                '<th style="width: 30%">频道</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">订单量（单）</th>';
+			}else if("gaxNewCusRanking"==search_flag){
+				$("#title1").html("国安侠排名"+title+"新用户）");
+				$("#title2").html("国安侠排名"+title+"新用户）");
+				head_title = "<strong>国安侠排名"+title+"新用户）</strong>";
+				list_title = '<th style="width: 5%">序号</th>'+
+		                '<th style="width: 30%">国安侠名称</th>'+
+		                '<th style="width: 40%"></th>'+
+		                '<th style="width: 25%">新用户量</th>';
+			}
+			$("#head_title").append(head_title);
+			$("#list_title").append(list_title);
+			searchInfo_data_step1();
+    		
+    	});
+        <!--------------------------------------------------查询数据第一步 开始---------------------------------------------->
+	    
+        var isCreatePage=false;
+	    function searchInfo_data_step1(){
+	    	isCreatePage=false;
+	  		searchInfo_data_step2(1);
+	  	}
+	    
+	    <!----------------------------------------------------查询数据第一步 结束--------------------------------------------->
+	    
+	    
+	    <!---------------------------------------------------查询数据第二步 开始---------------------------------------------->
+	    
+	    var currentPage = 1;
+	    var totalPage = 1;
+	    var maxGmv=0;
+	    var totalRecords=0;
+	    function searchInfo_data_step2(cur_page){
+	    	$("#process_div").show();
+	   	 	$("#process_div_pic").show();
+	   	 	var methodName = methodMap[search_flag];
+	   	    var pageInfo = new Object();
+	 	    pageInfo.currentPage = cur_page;
+	 	    var pageRecords = $("#pageRecords").val();
+	 	    pageInfo.recordsPerPage = pageRecords;
+	 	    $("#list_title").nextAll().remove();
+	   	 	doManager("dynamicManager",methodName,[store_id,pageInfo],
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							
+							var resultData = JSON.parse(data.data);
+							var gmvList = resultData.gmv;
+							totalPage = resultData.totalPage;
+							totalRecords = resultData.totalRecords;
+							$("#totalRecord").html(totalRecords);
+			        	    if(!isCreatePage){
+			        		    $("#page_element").createPage({
+			   	       	  	    pageCount:totalPage,
+			   	       	  	    current:cur_page,
+			   	       	  	    backFn:function(p){
+			   	       	  			searchInfo_data_step2(p);
+			   	       	  	    }
+			   	       	  	   });
+			        		   isCreatePage=true;
+			        	    }
+			        	    
+			        	    var maxGmvBar=90;//初始最高gmv进度条的长度是90%
+			        	   
+			        	    for(var i=0;i<gmvList.length;i++){
+			        	    	var dataHtml="";
+			        	    	if(cur_page==1){//第一页
+			        	    		if(i==0){
+				        	    		maxGmv = gmvList[i].amount;
+				        	    		if(maxGmv!=null&&parseInt(maxGmv)==0){
+				        	    			maxGmvBar=0;
+				        	    		}
+				        	    		dataHtml = '<tr>'+
+						                                '<td class="text-red"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+						                                '<td>'+gmvList[i].name+'</td>'+
+						                                '<td>'+
+						                                '    <div class="progress progress-sm progress-striped active">'+
+						                                '        <div class="progress-bar progress-bar-danger" style="width: '+maxGmvBar+'%"></div>'+
+						                                '    </div>'+
+						                                '</td>'+
+						                                '<td><span class="badge bg-red">'+maxGmv+'</span></td>'+
+						                            '</tr>'; 
+				        	    	}else{
+				        	    		var gmv = gmvList[i].amount;
+				        	    		var gmvBar = (gmv/maxGmv)*maxGmvBar;
+				        	    		
+				        	    		if(i==1){
+				        	    			dataHtml = '<tr>'+
+							                                '<td class="text-green"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+							                                '<td>'+gmvList[i].name+'</td>'+
+							                                '<td>'+
+							                                '    <div class="progress progress-sm progress-striped active">'+
+							                                '        <div class="progress-bar progress-bar-success" style="width: '+gmvBar+'%"></div>'+
+							                                '    </div>'+
+							                                '</td>'+
+							                                '<td><span class="badge bg-green">'+gmv+'</span></td>'+
+							                            '</tr>'; 
+				        	    		}else if(i==2){
+				        	    			dataHtml = '<tr>'+
+							                                '<td class="text-aqua"><strong style="font-size: 16px;">'+(i+1)+'</strong></td>'+
+							                                '<td>'+gmvList[i].name+'</td>'+
+							                                '<td>'+
+							                                '    <div class="progress progress-sm progress-striped active">'+
+							                                '        <div class="progress-bar progress-bar-info" style="width: '+gmvBar+'%"></div>'+
+							                                '    </div>'+
+							                                '</td>'+
+							                                '<td><span class="badge bg-aqua">'+gmv+'</span></td>'+
+							                            '</tr>';
+				        	    		}else{
+				        	    			dataHtml = '<tr>'+
+							                                '<td>'+(i+1)+'</td>'+
+							                                '<td>'+gmvList[i].name+'</td>'+
+							                                '<td>'+
+							                                    '<div class="progress progress-sm progress-striped active">'+
+							                                        '<div class="progress-bar progress-bar-default" style="width: '+gmvBar+'%"></div>'+
+							                                    '</div>'+
+							                                '</td>'+
+							                                '<td>'+gmv+'</td>'+
+							                            '</tr>';
+				        	    		}
+			        	    		}
+			        	    	
+			        	    	}else{//非第一页
+			        	    		var gmv = gmvList[i].amount;
+			        	    		var gmvBar = (gmv/maxGmv)*maxGmvBar;
+			        	    		var index;
+			        	    		if(cur_page==2){
+			        	    			index = i+1+parseInt(pageRecords);
+			        	    		}else if(cur_page>2){
+			        	    			index = (parseInt(cur_page)-1)*parseInt(pageRecords)+i+1;
+			        	    		}
+			        	    		dataHtml = '<tr>'+
+					                                '<td>'+index+'</td>'+
+					                                '<td>'+gmvList[i].name+'</td>'+
+					                                '<td>'+
+					                                    '<div class="progress progress-sm progress-striped active">'+
+					                                        '<div class="progress-bar progress-bar-default" style="width: '+gmvBar+'%"></div>'+
+					                                    '</div>'+
+					                                '</td>'+
+					                                '<td>'+gmv+'</td>'+
+					                            '</tr>';
+			        	    	}
+			        	    		$("#Ranking_table").append(dataHtml);
+			        	    }
+			        	    	
+			           }
+						$("#process_div").hide();
+						$("#process_div_pic").hide();	
+						
+			},false); 
+	   	  
+	    }
+	     
+	    //导出
+	    function export_ranking(){
+	    	$("#process_div").show();
+	   	 	$("#process_div_pic").show();
+	   	 	var methodName = methodMap[search_flag];
+		    doManager('dynamicManager','exportRanking',[store_id,search_flag],function(data){
+		          if(data.result){
+		          	   var result= JSON.parse(data.data);
+			           if(result.status=='success'){
+			        	   window.location.href=result.data;
+			           }else{
+			        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+			        	   $("#process_div").hide();
+		        	       $("#process_div_pic").hide();
+			        	   return;
+			           }
+		          
+		          }else{
+		       	   crm_alert(5,"请稍后重新请求！");
+		          }
+		         $("#process_div").hide();
+		    	 $("#process_div_pic").hide();
+		      });
+	    }
+	    
+	    
+	    function chnagePageRecords(){
+	    	searchInfo_data_step1();
+	    }
+    </script>
+</body>
+</html>

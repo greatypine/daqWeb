@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据社区动态</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .user-header span{margin-left:10px;}
+    .table{border-bottom: 1px solid #ddd;}
+    .table td{position: relative; border-top:1px solid #ddd!important;}
+    .table th{border-top:0!important;}
+    .table td:hover .pop{display: block;}
+    .pop {
+      position: absolute;
+      bottom: 35px;
+      left: 50%;
+      z-index: 1000;
+      display: none;
+      min-width: 140px;
+      padding: 5px 10px;;
+      margin: 2px 0 0 -70px;
+      font-size: 14px;
+      text-align: left;
+      list-style: none;
+      background-color: #fff;
+      -webkit-background-clip: padding-box;
+      background-clip: padding-box;
+      border: 1px solid #ccc;
+      border: 1px solid rgba(0, 0, 0, .15);
+      border-radius: 4px;
+      -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, .175)
+    }
+    .box-footer{border:0;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+        <div class="pull-left">
+          <h2 class="logo-lg"><a href="index.html" class="h2"> 划片动态</a></h2>
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- Messages: style can be found in dropdown.less-->
+            <li class="dropdown messages-menu">
+              <a class="dropdown-toggle" data-toggle="dropdown">
+                时间： 2017-03-30 14: 17: 34
+              </a>
+            </li>
+            <!-- Notifications: style can be found in dropdown.less -->
+            <li class="dropdown notifications-menu">
+              <a class="dropdown-toggle" data-toggle="dropdown">
+                方庄店
+              </a>
+            </li>
+            <!-- Tasks: style can be found in dropdown.less -->
+            <li class="dropdown tasks-menu">
+              <a class="dropdown-toggle" data-toggle="dropdown">
+                A77777
+              </a>
+            </li>
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu">
+              <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                <span class="hidden-xs">赵静</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                  <p><strong>赵静</strong></p>
+                  <p>国安侠<span>A77777</span></p>
+                </li>
+                <!-- Menu Body -->
+                <li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">划片区域</a>
+                    </div>
+                  </div>
+                  <!-- /.row -->
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="https://data.guoanshequ.com/daqWeb/bizbase/indexMain.html" class="btn btn-default btn-flat">国安数据管理</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="#" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+          <div class="box box-default">
+            <div class="box-header with-border">
+              <i class="fa fa-th"></i>
+              <h3 class="box-title">本月消费总量</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table text-center">
+                <tbody>
+                <tr>
+                  <th>#</th>
+                  <th>订单号</th>
+                  <th>姓名</th>
+                  <th>总价（元）</th>
+                  <th>购买时间</th>
+                  <th>商品类型</th>
+                  <th>服务国安侠</th>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷<div class="pop"><p>王大爷</p><p>12345678901</p></div></td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>王春<div class="pop"><p>国安侠</p><p>A00001</p></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷<div class="pop"><p>无用户画像</p></div></td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某<div class="pop"><p>国安侠</p><p>A00001</p></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷</td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷</td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷</td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷<div class="pop"><p>王大爷</p><p>12345678901</p></div></td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>王春<div class="pop"><p>国安侠</p><p>A00001</p></td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷<div class="pop"><p>无用户画像</p></div></td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某<div class="pop"><p>国安侠</p><p>A00001</p></td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷</td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷</td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>3340466716059187</td>
+                  <td>王大爷</td>
+                  <td>2013</td>
+                  <td>2017-02-11</td>
+                  <td>洗衣</td>
+                  <td>某某某</td>
+                </tr>
+                </tbody></table>
+            </div>
+            <!-- /.box-body -->
+            <div class="clearfix box-footer">
+              <ul class="pagination pagination-sm no-margin pull-right">
+                <li><a href="#">«</a></li>
+                <li><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">»</a></li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+      <!-- /.content -->
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+<!--   <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+</body>
+</html>

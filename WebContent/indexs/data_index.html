@@ -1,0 +1,374 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=8">
+        <!-- Powered By PGL v2 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=8">
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+        <meta http-equiv="Cache-Control" content="max-age:3600000">
+        <title>无标题文档</title>
+        <script type="text/javascript" src="../scripts/bidLib.js"></script>
+        <script type="text/javascript" src="../startbootstrap/js/echarts.min.js"></script>
+        <style type="text/css">
+            *{margin:0; padding:0; font-family:"微软雅黑", Arial, Helvetica, sans-serif;}
+            a{ text-decoration:none;}
+            .card{ border:1px solid #ddd; margin: 10px;background-color: white; clear:both; overflow:hidden;}
+            .card_banner{height:40px; line-height:40px; background-color:#4db1da; font-size:16px; font-weight:bold; color:#fff; padding-left:20px;}
+            .nav_top{margin:30px 20px; position:relative;}
+            .nav_left{float:left; width:60%;  margin-bottom:40px;}
+            .nav_left .share_style{float:left; width:48%; height:98px; border:1px solid #ddd; vertical-align:middle; position:relative;}
+			.share_style:nth-child(2n){float:right;}
+            .share_style:hover{border-color:#d01414;}
+            .share_style a{cursor:pointer }
+            .share_l{width:40%; height:100%; position:absolute; top:0; left:0;}
+			.share_l span{background-size:40%!important;}
+            .nav_user{ background-color:#4db1da;}
+            .nav_user span{ background:url(../images/icons1.png) no-repeat center center; width:100%; height:100%; display:block;}
+            .nav_express{background-color:#fcd12c;}
+            .nav_express span{ background:url(../images/icons2.png) no-repeat center center; width:100%; height:100%; display:block;}
+            .nav_order{background-color:#ff6d60;}
+            .nav_order span{ background:url(../images/icons3.png) no-repeat center center; width:100%; height:100%; display:block;}
+            .nav_more{background-color:#6ccac9;}
+            .nav_more span{ background:url(../images/icons4.png) no-repeat center center; width:100%; height:100%; display:block;}
+			.nav_record{background-color:#6ccac9;}
+            .nav_record span{ background:url(../images/icons5.png) no-repeat center center; width:100%; height:100%; display:block;}
+            .share_r{font-size:16px; color:#888; text-align:center; margin-left:50%; margin-top:20px;}
+            .f32{font-size:32px; color:#333;}
+            .nav_right{float:right; width:38%;  position:absolute; right:0; top:0;}
+            /*.nav_right span{width:310px; height:227px; border:4px solid #fff; display:inline-block; border-radius:10px; overflow:hidden;text-align: center;}
+            .nav_right span img{height:100%; overflow:hidden; }*/
+        </style>
+        <script type="text/javascript">
+	        Date.prototype.Format = function (fmt) { //author: meizz 
+	            var o = {
+	                "M+": this.getMonth() + 1, //月份 
+	                "d+": this.getDate(), //日 
+	                "h+": this.getHours(), //小时 
+	                "m+": this.getMinutes(), //分 
+	                "s+": this.getSeconds(), //秒 
+	                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+	                "S": this.getMilliseconds() //毫秒 
+	            };
+	            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	            for (var k in o)
+	            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	            return fmt;
+	        }
+        
+        
+            var current_user = null;
+            var obj;
+            $(function(){
+                doManager('UserManager','getCurrentUserDTO',null,function(data){
+                    if(data.result){
+                        current_user = JSON.parse(data.data);
+                        $('#store_id').val(current_user.store_id);
+                        
+                        doManager('UserManager','checkEmployeeOfDuty',[current_user.employeeId],function(data){
+                            if(data.result){
+                               var  dutyInfo = JSON.parse(data.data);
+                                if(dutyInfo.zw == "国安侠"){//国安侠
+                                    $("#customer_a").attr("href","../data_access/customer_list_address.html?employee_no="+current_user.employeeId+"&&grade=second&&cardtype=0");
+                                    current_user.usergroup.cardtype=0;
+                                }else if(dutyInfo.zw=="副店长"&&dutyInfo.remark=="国安侠"){
+                                    $("#customer_a").attr("href","../data_access/customer_list_address.html?employee_no="+current_user.employeeId+"&&grade=second&&cardtype=0");
+                                    current_user.usergroup.cardtype=0;
+                                }
+                                
+                                queryData();
+                                queryBiao();
+                            };
+                    	});
+                        
+                        
+                    }else{
+                        $$.showMessage('提示',data.message);
+                    }
+                });
+            });
+
+            function queryData(){
+            	$('#store_id').val(current_user.store_id);
+                var manager_name = "interManager";
+                var method_name = null;
+                var params = null;
+                if(current_user.usergroup.cardtype == 0){
+                    method_name = "getExpressAndCustomerCountNew";
+                    params = current_user.employeeId;
+                    $('#employee_no').val(current_user.employeeId);
+                    $('#img_header').attr("src","../images/img1.jpg");
+                    $(".card_banner").html('国安侠数据卡(本月数据)');
+					$("#order_id").attr("href","javascript:;");
+                    //$(".share_style a").attr("href","javascript:;");
+                	//$(".share_style a").click(function (event) {
+                	//	//event.preventDefault();   // 如果<a>定义了 target="_blank“ 需要这句来阻止打开新页面
+                	//});
+
+                	/* $('#div1').hide();
+                	$('#div2').hide(); */
+                	$('#div6').show();
+                	$('#div5').show(); 
+
+                	//$('.share_style a').css("cursor","default");
+                	//$('.share_style').hover(function(){
+                	//	$(this).css('border-color','#ddd');
+                	//});
+                	var employee_no_val = current_user.employeeId;
+                	var month_date = new Date().Format('yyyy-MM');
+                	//添加拜访记录 点击 
+                	$("#div3 a").attr("href","../data_access/relation_list.html?employee_no="+employee_no_val+"&&month_date="+month_date+"");
+                	
+                	$("#express_a").attr("href","../data_access/express_list.html?employee_no="+employee_no_val+"&&month_date="+month_date+"");
+
+                	$('.share_style a:not(#order_id)').css("cursor","pointer");
+                	$('.share_style').hover(function(){
+                		$(this).css('border-color','#ddd');
+                	});
+
+                }else if(current_user.usergroup.cardtype == 1){
+                    method_name = "getExpressAndCustomerStoreCountNew";
+                    params = [current_user.store_id];
+                    
+                    $('#img_header').attr("src","../images/img.jpg");
+                    $(".card_banner").html('门店数据卡(本月数据)');
+                    /* $('#div3').hide();
+                	$('#div4').hide(); */
+                    $('#div6').show();
+                	$('#div2').show();
+                }
+                if(method_name == null){
+                    return;
+                }
+                var arr = [ "update_user", "employee_no","store_id" ];
+				var o = {};
+                for ( var i in arr) {
+					var v = arr[i];
+					var va = $("#" + v).val();
+					o[v] = va;
+				}
+                o.express_no = "second";
+                doManager(manager_name,method_name,o,function(data){
+                    if(data.result){
+                        var result = JSON.parse(data.data);
+                        $('#p_Customer').html(result.Customer);
+                        $('#p_Express').html(result.Express);
+                        $('#p_Relation').html(result.Relation);
+                        $('p[name="p_Order"]').html(result.Order);
+                    }else{
+                        $$.showMessage('提示',data.message);
+                    }
+                });
+            }
+            
+            //图表数据
+            function queryBiao(){
+                var manager_name = "interManager";
+                var method_name = null;
+                var params = null;
+                if(current_user.usergroup.cardtype == 0){
+                    method_name = "getIndexByEmployeeCountNew";
+                }else if(current_user.usergroup.cardtype == 1){
+                    method_name = "getIndexByStoreCountNew";
+                }
+                if(method_name == null){
+                    return;
+                }
+                var arr = [ "update_user", "employee_no","store_id" ];
+				var o = {};
+                for ( var i in arr) {
+					var v = arr[i];
+					var va = $("#" + v).val();
+					o[v] = va;
+				}
+                o.express_no = "second";
+                doManager(manager_name,method_name,o,function(data){
+                    if(data.result){
+                        var result = JSON.parse(data.data);
+                       obj=result;
+                       init();
+                    }else{
+                        $$.showMessage('提示',data.message);
+                    }
+                });
+            }
+            
+            
+            
+        </script>
+    </head>
+
+    <body style="background: url('../bizbase/images/login-bg2.jpg') no-repeat center center; background-size: cover;">
+        <div class="card">
+            <div class="card_banner"></div>
+            <div class="nav_top">
+                <div class="nav_left" id="div6" style="display:none;">
+                    <div class="share_style"><a id="customer_a" href="../data_access/store_data_manager.html?index1=0">
+                        <div class="share_l nav_user"><span></span></div>
+                        <div class="share_r" style="margin-top: 13px">
+                            <p id="p_Customer" class="f32" style="padding: 0 0 5px 0;"></p>
+                            <div>用户画像</div>
+                            <div style="font-size:12px;color: #999;">（18基础字段完成量）</div>
+                        </div></a>
+                    </div>
+                    <div class="share_style"><a id="express_a" href="../data_access/store_data_manager.html?index1=1">
+                        <div class="share_l nav_express"><span></span></div>
+                        <div class="share_r">
+                            <p id="p_Express" class="f32"></p>
+                            <p>快递代送</p>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="nav_left" id="div2" style="display:none;">
+                   <!--  <div class="share_style" style="display:none"><a href="../data_access/store_data_manager.html?index1=3">
+                        <div class="share_l nav_order"><span></span></div>
+                        <div class="share_r">
+                            <p name="p_Order" class="f32"></p>
+                            <p>订单</p>
+                        </div></a>
+                    </div> -->
+                    <div class="share_style" id="div1"><a href="../data_access/store_data_manager.html?index1=0">
+                        <div class="share_l nav_more"><span></span></div>
+                        <div class="share_r">
+                            <p class="f32">更多</p>
+                        </div></a>
+                    </div>
+                </div>
+                <div class="nav_left" id="div5" style="display:none;">
+                    <div class="share_style" id="div3"><a href="../data_access/store_data_manager.html?index1=2">
+                        <div class="share_l nav_record"><span></span></div>
+                        <div class="share_r">
+                            <p id="p_Relation" class="f32"></p>
+                            <p>拜访记录</p>
+                        </div></a>
+                    </div>
+                    <!--  <div class="share_style" id="div4"><a id="order_id" href="../data_access/store_data_manager.html?index1=3">
+                        <div class="share_l nav_order"><span></span></div>
+                        <div class="share_r">
+                            <p name="p_Order" class="f32"></p>
+                            <p>订单</p>
+                        </div></a>
+                    </div> -->
+                </div>
+                <div class="nav_right"><div id="main" style="width:100%;height:240px;"></div></div>
+                <div id="conditionsDiv" style="display: none;">
+                <input type="text" id="store_id" name="store_id" likeOption="false" />
+                <input type="text" id="employee_no" name="employee_no"  likeOption="false" />
+                <input type="text" id="date_valler" name="date_valler" likeOption="false" />
+                <input type="text" id="update_user" name="update_user" likeOption="false" />
+        </div>
+            </div>
+        </div>
+<script type="text/javascript">
+
+function init(){
+	// 基于准备好的dom，初始化echarts实例
+	var myChart = echarts.init(document.getElementById('main'));
+
+	// 指定图表的配置项和数据
+	var option = {
+		baseOption: { // 这里是基本的『原子option』。
+			tooltip : {
+				trigger: 'item',
+				formatter: "{b} : {c} ({d}%)"
+			},
+			legend: {
+				orient: 'vertical',
+				x : 'left',
+				y : 'top',
+				data:obj
+			},
+			series : [
+				{
+					name: '',
+					type: 'pie',
+					radius : '90%',
+					center: ['60%', '50%'],
+					label: {
+						normal: {
+							show: false,
+							position: 'center'
+						},
+						emphasis: {
+							show: false,
+						}
+					},
+					data:obj,
+					itemStyle: {
+						emphasis: {
+							shadowBlur: 10,
+							shadowOffsetX: 0,
+							shadowColor: 'rgba(0, 0, 0, 0.5)'
+						}
+					}
+				}
+			]
+		},
+		media: [ // 这里定义了 media query 的逐条规则。
+			{
+				query: {
+					maxWidth: 250
+				},   // 这里写规则。
+				option: {       // 这里写此规则满足下的option。
+					series : [
+						{
+							name: '',
+							type: 'pie',
+							radius : '60%',
+							center: ['60%', '65%'],
+							data:obj,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						}
+					]
+				}
+			},
+			{                   // 这条里没有写规则，表示『默认』，
+				option: {       // 即所有规则都不满足时，采纳这个option。
+					series : [
+						{
+							name: '',
+							type: 'pie',
+							radius : '90%',
+							center: ['60%', '50%'],
+							data:obj,
+							itemStyle: {
+								emphasis: {
+									shadowBlur: 10,
+									shadowOffsetX: 0,
+									shadowColor: 'rgba(0, 0, 0, 0.5)'
+								}
+							}
+						}
+					]
+				}
+			}
+		]
+		
+	};
+
+	// 使用刚指定的配置项和数据显示图表。
+	myChart.setOption(option);
+	// 处理点击事件并且跳转到相应的百度搜索页面
+	 myChart.on('click', function (params) {
+		 if(current_user.usergroup.cardtype == 1){
+			 if(params.name=="快递代送"){
+				 window.location.href="../data_access/store_data_manager.html?index1=1";
+			 }else if(params.name=="用户画像"){
+				 window.location.href="../data_access/store_data_manager.html?index1=0";
+			 }else if(params.name=="订单"){
+				 //window.location.href="../data_access/store_data_manager.html?index1=3";
+			 }else if(params.name=="拜访记录"){
+				 //window.location.href="../data_access/store_data_manager.html?index1=2";
+			 }
+		 }
+		//window.open('https://www.baidu.com/s?wd=' + encodeURIComponent(params.name));
+	});
+}
+</script>
+    </body>
+</html>

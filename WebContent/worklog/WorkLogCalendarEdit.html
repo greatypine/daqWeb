@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible"content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Cache-Control" Content="no-cache">
+    <meta http-equiv="Pragma" Content="no-cache">
+    <meta http-equiv="Expires" Content="0">
+    <title>节假日设置</title>
+    <link rel="stylesheet" type="text/css" href="../scripts/css/style_sheet_core.css"/>
+    <link type="text/css" rel="stylesheet" href="../scripts/css/common-app.css"/>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/dataTablesLib.js"></script>
+    <script type="text/javascript" src="../scripts/common/pms.js"></script>
+    <script type="text/javascript" src="../scripts/common/pmsCommon.js"></script>
+    <script type="text/javascript">
+    	var id = getUrlParamByKey("id");
+		var days = getUrlParamByKey("days");
+		var types = getUrlParamByKey("type");
+		var flag;
+		$(function(){
+			if(types=="edit"){
+				doManager("workLogCalendarManager", "getWorkLogCalendar", id+"", function(datas, textStatus, XMLHttpRequest) {
+						if(datas.result){
+							var info = $.fromJSON(datas.data);
+							var newDate = new Date(info.workday);
+							$("#workday").val(formatDate(newDate));
+							$("input[name='type'][value=" + info.type + "]").attr("checked", true);
+							$("#memo").val(info.memo);
+						}
+					});
+			}
+		})
+    function onSave(){
+		if($("input[name='type']:checked").val()=="工作日"){
+			flag=1+"";
+		}else{
+			flag=0+"";
+		}
+		if($("#workday").val()==""||$("#workday").val()==null){
+			$$.showMessage("系统提示", "日期不能为空");
+
+		}else{
+			if(types=="edit"){
+			var obj={
+				id:id,
+				workday:$("#workday").val(),
+				days:days,
+				type:$("input[name='type']:checked").val(),
+				memo:$("#memo").val(),
+				isworkday:flag
+			}
+			doManager("workLogCalendarManager", "saveWorkLogCalendar", obj, function(datas, textStatus, XMLHttpRequest) {
+						if(datas.result){
+							$$.showPromptDialog("系统提示", "编辑成功。是返回节假日查询页面？", false, 320, function () {
+										window.location.href='WorkLogCalendarList.html';
+	               					 }, true, {showWaiting: true});
+						}
+					});
+			}else if(types=="add"){
+				doManager("workLogCalendarManager", "getwWorkLogCalendarByDate", $("#workday").val(), function(datas, textStatus, XMLHttpRequest) {
+							if(datas.result){
+								var jsondata=$.fromJSON(datas.data);
+								if(jsondata.id!=null&&jsondata.id!=""){
+									 var objNew={
+									 	id:jsondata.id,
+										workday:$("#workday").val(),
+										days:jsondata.days,
+										type:$("input[name='type']:checked").val(),
+										memo:$("#memo").val(),
+										isworkday:flag
+									 }
+									 doManager("workLogCalendarManager", "saveWorkLogCalendar", objNew, function(datas, textStatus, XMLHttpRequest) {
+										if(datas.result){
+											$$.showPromptDialog("系统提示", "编辑成功。是返回节假日查询页面？", false, 320, function () {
+														window.location.href='WorkLogCalendarList.html';
+					               					 }, true, {showWaiting: true});
+										}
+									});
+								}else{
+									$$.showMessage("系统提示", "该日期不存在");
+								}
+							}
+						});
+			}
+		}
+		
+	}
+	function returnBack(){
+		window.location.href='WorkLogCalendarList.html'
+	}
+	 //格局化日期：yyyy-MM-dd
+        function formatDate(date) {
+            var myyear = date.getFullYear();
+            var mymonth = date.getMonth()+1;
+            var myweekday = date.getDate();
+
+            if(mymonth < 10){
+                mymonth = "0" + mymonth;
+            }
+            if(myweekday < 10){
+                myweekday = "0" + myweekday;
+            }
+            return (myyear+"-"+mymonth + "-" + myweekday);
+        }
+    </script>
+</head>
+<body style="height:100%">
+<div class="box">
+    <div class="title clear">
+        <div class="arrowleft" style="cursor:hand;" onclick="toggleNavi();"></div>
+        <div class="ico2"></div>
+        <div class="ico1"></div>
+        <a href="#">日誌管理 :</a>&nbsp;<a href="#">新增法定节假日</a>
+    </div>
+    <div class="containerbody padding4px">
+        <div class="containerheader">
+            <a href="#" onclick="toggleDiv('conditionsDiv','pic2');">
+                <img src="../scripts/images/22.png" align="absmiddle" id="pic2"/>
+            </a>法定节假日设置
+        </div>
+            <div id="conditionsDiv" class="containerbody">
+                <form id="searchForm" class="pmsForm" validate="true" clienvalidate="true" >
+				<table cellpadding="0" cellspacing="0" style="min-width:100%;width:auto;margin-top:20px;">
+                   
+                 	<tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            	日期：
+                        </td>
+                        <td class="baseform">
+                      	 <input id="workday" revalidate="true" type="text" name="workday" validate="formatDate:true" class="pmsDateField" readonly yearRange="-100:+0" style="width:150px;margin-right: 5px;"/>
+						</td>
+					</tr>
+					<tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            	类型：
+                        </td>
+                        <td class="baseform">
+						<!--<select name="type" id="type" class="pmsSelect" data="[['周六日','周六日','selected'],['2','公共假日']]" />-->
+						<input class="pmsRadio" id="type" name="type" data="[['周六日','周六日','checked'],['公共假日','公共假日'],['工作日','工作日']]" />
+						</td>
+                    </tr>
+                    <tr>
+                        <td class="basetext" style="width: 8%; text-align: right">
+                            	备注：
+                        </td>
+                        <td class="baseform">
+						<input type="text" id="memo" name="memo" class="inputtext" >
+						</td>
+                    </tr>
+					<tr class="Colorbar3">
+                        <td colspan="4" style="width:100%">
+                            <input type="button" class="buttonu" value="保存" onclick="onSave();"/>&nbsp;|
+                            <input type="button" class="buttonu" value="返回" onclick="returnBack();"/>&nbsp;|
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+

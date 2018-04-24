@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+		
+	<!-- Quartz Scheduler -->
+    <bean id ="singletonScheduler" class="com.cnpc.pms.base.schedule.quartz.PmsSchedulerFactoryBean" destroy-method="destroy">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mockMode" value="${mock.quartz.singleton.tables}" />
+	</bean>
+    <bean id ="normalScehduler" class="com.cnpc.pms.base.schedule.quartz.PmsSchedulerFactoryBean" destroy-method="destroy">
+		<!--
+		<property name="globalTriggerListeners">
+			<list>
+				<ref bean="triggerListener" />
+			</list>
+		</property>
+		<property name="globalJobListeners">
+			<list>
+				<ref bean="taskListener" />
+			</list>
+		</property>
+		-->
+	</bean>
+	
+	<!--
+	<bean id="taskListener" class="com.cnpc.pms.base.schedule.quartz.PmsTaskListener"/>
+	<bean id="triggerListener" class="com.cnpc.pms.base.schedule.quartz.PmsTriggerListener"/>
+	-->
+		
+</beans>

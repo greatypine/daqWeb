@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据社区动态</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    a{color: #444;}
+    .user-header span{margin-left:10px;}
+    .box span{margin-left:10px;}
+    .box .col-lg-2 img{width: 100px;}
+    .box .col-lg-10{line-height: 40px;}
+    .table img{max-height: 150px;}
+    .lh128{line-height: 128px!important;}
+    .pd20{padding:20px!important;}
+    .text-left{text-align: left!important;}
+    .text-right{text-align: right!important;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box box-default">
+<!--           <div class="box-header text-light-blue"><strong>详情列表</strong></div> -->
+          <div class="box-body no-padding">
+            <table class="table">
+              <tbody>
+	              <tr>
+	              	<th>消费城市</th>
+	              	<th>消费门店</th>
+	                <th>消费片区</th>
+	                <th>消费小区</th>
+	                <th>国安侠</th>
+	                <th>首次消费时间</th>
+	              </tr>
+              </tbody>
+          	</table>
+            <!-- /.item -->
+          </div>
+
+        </div>
+      </section>
+      <!-- /.content -->
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript">
+var customer_id = decode64(getUrlParamByKey("customer_id"));
+var area_code = decode64(getUrlParamByKey("area_code"));
+var village_code = decode64(getUrlParamByKey("village_code"));
+$(function(){
+	
+	Date.prototype.format=function(fmt) {        
+	    var o = {        
+	    "M+" : this.getMonth()+1, //月份        
+	    "d+" : this.getDate(), //日        
+	    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+	    "H+" : this.getHours(), //小时        
+	    "m+" : this.getMinutes(), //分        
+	    "s+" : this.getSeconds(), //秒        
+	    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+	    "S" : this.getMilliseconds() //毫秒        
+	    };        
+	    var week = {        
+	    "0" : "\u65e5",        
+	    "1" : "\u4e00",        
+	    "2" : "\u4e8c",        
+	    "3" : "\u4e09",        
+	    "4" : "\u56db",        
+	    "5" : "\u4e94",        
+	    "6" : "\u516d"       
+	    };        
+	    if(/(y+)/.test(fmt)){        
+	        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+	    }        
+	    if(/(E+)/.test(fmt)){        
+	        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+	    }        
+	    for(var k in o){        
+	        if(new RegExp("("+ k +")").test(fmt)){        
+	            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+	        }        
+	    }        
+	    return fmt;        
+	}
+	 initOrderDetail(customer_id);
+});
+
+
+function initOrderDetail(customer_id){
+	$("#area_code").html(area_code);
+	$("#village_code").html(village_code);
+	doManager('userProfileManager','queryDetailByCusId',customer_id,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var order_obj = JSON.parse(data.data);
+					$(order_obj).each(function(i,obj){
+						var html = "<tr>"+
+						"<td class=\"lh128\">"+obj.city_name+"</td>"+
+						"<td class=\"lh128\">"+obj.store_name+"</td>"+
+// 		                "<td class=\"lh128\"><a style=\"color:#0FA6D8\" href=\"javascript:searchArea('','"+obj.area_code+"')\">"+obj.area_code+"</a></td>"+
+		                "<td class=\"lh128\">"+obj.area_code+"</td>"+
+		                "<td class=\"lh128\">"+obj.tiny_village_code+"</td>"+
+		                "<td class=\"lh128\">"+obj.employee_a_no+"</td>"+
+		                "<td class=\"lh128\">"+obj.first_order_time+"</td>"+
+		              	"</tr>";
+						$(".table tr:first").after(html);
+					});
+				}
+	},false);
+}
+
+//数据查找-查询片区数据
+function searchArea(areaname,areacode){
+	  var url = "dynamicData_areaInfo.html?an="+encode64(areaname)+"&ac="+encode64(areacode);
+	  window.open(url,"dynamicData_areaInfo");
+}
+
+function doLogout() { 
+		
+		layer.confirm('确定退出？', {
+			  	title:'提示',
+			  	offset:['100px','550px'],
+			  	move:false,
+			  	closeBtn:0,
+			  	skin:'layer-ext-crmskin',
+				btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+			});
+}
+
+</script>
+</body>
+</html>

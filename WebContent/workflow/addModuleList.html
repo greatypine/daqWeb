@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>修改委托待办</title>
+        <script type="text/javascript" src="../scripts/lib-main.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pms.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/pmsCommon.js">
+        </script>
+        <script type="text/javascript" src="../scripts/common/common-simpletable.js">
+        </script>
+        <link rel="StyleSheet" type="text/css" href="../scripts/css/validation.css">
+        <link rel="StyleSheet" type="text/css" href="../scripts/css/common-simpletable.css">
+        <script type="text/javascript">
+            var ID = getUrlParamByKey("Id")
+            $(function(){
+            
+            })
+            var jsdata;
+            var flag = 0;
+            function addDelegete(){
+                var objs = $$.getSelectedObj("ModuleListQuery");
+                doManager("WFDelegateModuleManager", "getListBydelegateId", ID + "", function(data, textStatus, XMLHttpRequest){
+                    if (data.result) {
+                        jsdata = $.fromJSON(data.data);
+                        for (i = 0; i < objs.length; i++) {
+                            alert("选中模块Id:"+objs[i][0]);
+                            flag = 0;
+                            for (j = 0; j < jsdata.length; j++) {
+//                                if (objs[i][0] == jsdata[j].moduleId) {
+//                                    flag = 1;
+//                                }
+								//现在改为ManyToOne方式进行定义,判断的对象是jsdata[j].module.id
+								//不再是jsdata[j].moduleId(已经无此字段了)
+                                if (objs[i][0] == jsdata[j].module.id) {
+                                    flag = 1;
+                                }
+                            }
+                            if (flag == 0) {
+                                var obj = {
+                                    delegateId: ID,
+                                    module: {
+										id: objs[i][0]
+									}
+                                }
+                                doManager("WFDelegateModuleManager", "addWFDelegateModule", obj, function(data, textStatus, XMLHttpRequest){
+                                    if (data.result) {
+                                        var jsondata = $.fromJSON(data.data);
+                                        alert("关联关系添加成功!");
+                                        window.location.href = 'editDelegate.html?Id=' + ID;
+                                    }else{
+										alert(data.message);
+									}
+                                },false);
+                            }
+                            else {
+                                alert("ID为" + objs[i][0] + "的业务模块已存在");
+                            }
+                            
+                        }
+                    }
+                });
+                
+            }
+        </script>
+    </head>
+    <body>
+        <div id="conditionsDiv" style="padding:10px;">
+            <form class="pmsForm" id="pmsForm" style="text-align:center;">
+                <input type="button" value="确认" id="toNew" class="buttonu" onclick="addDelegete()"/>
+            </form>
+        </div>
+        <div id="userContainer2" queryid="ModuleListQuery" queryformat="simple" showsearch="false" showdisplay="false" showtitle="true" showprint="false" showpaging="true" showcheckbox="true">
+        </div>
+    </body>
+</html>

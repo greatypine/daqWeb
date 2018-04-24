@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>目标值信息列表</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+</head>
+<style type="text/css">
+    	.display{
+    		width:100%
+    	}
+    </style>
+<script type="text/javascript">
+var win;
+$(function () {
+	//获取当前登录的用户
+	 doManager("UserManager", "findUserInfo", '', function(
+							data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							if(data.data!="null"){
+								var jsonData = $.fromJSON(data.data);
+								if(jsonData==3223||jsonData==3224||jsonData==3225){
+									$("#inser").hide();
+									//$pmspage.opArr = [ editObj  ];  
+								}else{
+									//判断是否可修改
+									//val flag = booleanCanEdit();
+									//$pmspage.opArr = [ editObj  ];  
+								}
+								//console.log(jsonData);
+							}
+						} else {
+							$$.showMessage("系统信息", "信息加载异常!");
+						}
+					},false);
+    //页面加载成功后需要获取数据
+    searchList();
+    $(".operateHeader").width("5%");
+});
+//记载页面时请求数据列表默认的方法
+function searchList() {
+    $$.executeSearch('storexpandQuery', 'conditionsDiv');
+    $(".operateHeader").width("5%");
+}
+function doClean() {
+    document.service_qa.reset();
+    searchList();
+}
+function insertTown(){
+	window.location.href="office_network_list_add.html";	
+}
+
+var editObj = {
+		html : '<a href="#" class="blue">修改</a>',
+		resourceId: "office_List_edit",
+		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+			var id = allColumnsDataMap.id;
+			window.location.href = "office_network_list_edit.html?id="+id;
+		}
+	}
+var COLUMNS = {
+		   "caozuo": function(aData, iColumn, sColumnName, map){
+				 var id = map['id'];
+				 var start_time = map['statistical_time_period'].split("~")[0];
+				 var end_time = map['statistical_time_period'].split("~")[1];
+				 var myDate = new Date();
+				 var date = myDate.toLocaleDateString(); //获取当前日期
+				 if(Date.parse(date) < Date.parse(end_time)) {//时间戳对比  
+					return '<a href="office_network_list_edit.html?id='+id+'">编辑</a>';
+			     }else{
+			    	 return '';
+			     }
+		    }
+}
+
+</script>
+<body style="height: 100%">
+	<div class="panel panel-default" style="margin: 10px">
+	    <div class="panel-heading">
+	        <h4 class="panel-title">
+	           目标值录入信息:
+	        </h4>
+	    </div>
+	</div>
+	    <div class="panel panel-primary">
+        <div class="panel-heading">目标值录入信息查询</div>
+        <div class="panel-body">
+            <div id="conditionsDiv" style="margin-top: 10px">
+                <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                      displaynumber="7">
+                    <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                        <tr>
+                            <td width="7%">录入时间:</td>
+                            <td>
+                                <input id="statistical_time_period" name="statistical_time_period" type="text" style="width:60%" class="form-control"/>
+                            </td>
+                            <td width="7%">城市:</td>
+                            <td>
+                                <input id="cityname" name="cityname" type="text" style="width:60%" class="form-control"/>
+                            </td>
+                            <td width="7%">查询维度:</td>
+                            <td>
+                                <select id="year" name="year" onchange="search_data();" style="width: 100%;"> 
+                                	<option value="0">周</option>
+					 	        </select> 
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="panel-footer" style="text-align: right">
+            <button class="btn btn-primary" onclick="searchList()">查询</button>
+            <button class="btn btn-primary" id="inser" onclick="insertTown()">添加</button>
+            <button class="btn btn-primary" onclick="doClean();">重置</button>
+        </div>
+    </div>
+    <div id="centerQueryGridContainer" class="panel panel-primary" queryid=storexpandQuery operators="$pmspage.opArr"
+         titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
+         showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+         showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true" style="100%"></div>
+</body>
+</html>

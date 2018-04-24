@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据社区动态</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    a{color: #444;}
+    .user-header span{margin-left:10px;}
+    .box span{margin-left:10px;}
+    .box .col-lg-2 img{width: 100px;}
+    .box .col-lg-10{line-height: 40px;}
+    .table img{max-height: 150px;}
+    .lh128{line-height: 128px!important;}
+    .pd20{padding:20px!important;}
+    .text-left{text-align: left!important;}
+    .text-right{text-align: right!important;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <!-- <header class="main-header">
+    Logo
+
+    Header Navbar: style can be found in header.less
+    <nav class="navbar navbar-static-top">
+      Sidebar toggle button
+      <div class="container">
+
+        <div class="pull-left">
+          <div class="logo-lg clearfix">
+            <ul>
+              <li><a href="index.html" class="h2"> <img src="dist/img/logo.png"> </a></li>
+              <li class="nav-mark"><a href="index.html">片区动态</a> </li>
+              <li><a href="#" id="person_state">个人动态</a> </li>
+              <li><a href="#" id="person_state_area">片区信息</a> </li>
+              <li><a href="../crm/loginplatform.html">数据管理平台</a> </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                User image
+                <li class="user-header">
+                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+
+                  <p><strong><span id="card_name">载入中...</span></strong></p>
+                  <p>国安侠<span id="card_no">载入中...</span></p>
+                  <p><span id="store_name">载入中...</span></p>
+                </li>
+                Menu Body
+                <li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="#" id="person_center" >个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="index.html">片区动态</a>
+                    </div>
+                  </div>
+                  /.row
+                </li>
+                Menu Footer
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">国安数据首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header> -->
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+          <div class="box box-default">
+            <div class="box-header with-border text-light-blue"><b>收货信息</b></div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="col-lg-12">
+                <p>收货姓名：<label id="rcv_name">加载中..</label></p>
+                <p>联系电话：<label id="rcv_phone">加载中..</label></p>
+                <p>收货地址：<label id="rcv_address">加载中..</label></p>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+      </section>
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header text-light-blue"><strong>订单详情</strong></div>
+          <div class="box-body no-padding">
+            <table class="table">
+              <tbody><tr>
+                <th>商品信息</th>
+                <th>单价（元）</th>
+                <th>数量</th>
+                <th>合计（元）</th>
+              </tr>
+              <!-- <label id="item_list"></label> -->
+             <!--  <tr>
+                <td>
+                  <div class="col-lg-3 text-center"><img src="dist/img/user8-128x128.jpg"></div>
+                  <div class="col-lg-9 text-left no-padding">
+                    <p>中华福临门稻花香5000g</p>
+                    <p class="text-muted">备注信息</p>
+                  </div>
+                </td>
+                <td class="lh128">89.9</td>
+                <td class="lh128">1</td>
+                <td class="lh128">89.9</td>
+              </tr>
+              
+              
+              <tr>
+                <td>
+                  <div class="col-lg-3 text-center"><img src="dist/img/user8-128x128.jpg"></div>
+                  <div class="col-lg-9 text-left no-padding">
+                    <p>中华福临门稻花香5000g</p>
+                    <p class="text-muted">备注信息</p>
+                  </div>
+                </td>
+                <td class="lh128">89.9</td>
+                <td class="lh128">1</td>
+                <td class="lh128">89.9</td>
+              </tr> -->
+              <tr>
+                <td colspan="4" class="pd20 text-right">商品总价：<b class="h4"><label id="trading_price">加载中..</label>元</b><br>实际付款：<b class="h4 text-red"><label id="payable_price">加载中..</label>元</b></td>
+              </tr>
+              <tr>
+                <td colspan="4" class="pd20 text-left">订单编号：<label id="order_sn">加载中..</label></td>
+              </tr>
+              <tr>
+                <td colspan="1" class="pd20 text-left">下单时间：<label id="start_time">加载中..</label></td>
+                
+                <td colspan="3" class="pd20 text-right">签收时间：<label id="receive_time">加载中..</label></td>
+              </tr>
+              </tbody></table>
+            <!-- /.item -->
+          </div>
+
+        </div>
+      </section>
+      <!-- /.content -->
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header with-border text-light-blue"> <b>服务国安侠</b></div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="col-lg-2 text-center no-padding"><a href="#"><img src="dist/img/376884043677306248.png" class="img-circle"></a> </div>
+            <div class="col-lg-10 no-padding">
+              <p><a href="#" id="service_emp">加载中..</a></p>
+              <p><a href="#" id="service_emp_phone">加载中..</a></p>
+            </div>
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+
+      </section>
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+<!--   <footer class="main-footer">
+    <div class="text-right hidden-xs">
+      <b>Version</b> 1.0
+    </div>
+
+  </footer> -->
+
+  <!-- /.control-sidebar -->
+  <!-- Add the sidebar's background. This div must be placed
+       immediately after the control sidebar -->
+  <div class="control-sidebar-bg"></div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- SlimScroll -->
+<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+<script type="text/javascript">
+var order_sn = decode64(getUrlParamByKey("order_sn"));
+$(function(){
+	
+	Date.prototype.format=function(fmt) {        
+	    var o = {        
+	    "M+" : this.getMonth()+1, //月份        
+	    "d+" : this.getDate(), //日        
+	    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+	    "H+" : this.getHours(), //小时        
+	    "m+" : this.getMinutes(), //分        
+	    "s+" : this.getSeconds(), //秒        
+	    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+	    "S" : this.getMilliseconds() //毫秒        
+	    };        
+	    var week = {        
+	    "0" : "\u65e5",        
+	    "1" : "\u4e00",        
+	    "2" : "\u4e8c",        
+	    "3" : "\u4e09",        
+	    "4" : "\u56db",        
+	    "5" : "\u4e94",        
+	    "6" : "\u516d"       
+	    };        
+	    if(/(y+)/.test(fmt)){        
+	        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+	    }        
+	    if(/(E+)/.test(fmt)){        
+	        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+	    }        
+	    for(var k in o){        
+	        if(new RegExp("("+ k +")").test(fmt)){        
+	            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+	        }        
+	    }        
+	    return fmt;        
+	}
+	
+	
+	 //alert(order_sn);
+	 //根据order_sn查询订单的明细信息 
+	 //initcurruser();
+	 
+	 initOrderDetail(order_sn);
+});
+
+
+
+
+function initcurruser(){
+		//取得当前登录人的门店
+	doManager("UserManager", "getCurrentUserDTO",null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var curr_user = JSON.parse(data.data);
+						//alert(curr_user.employeeId+""+curr_user.store_name+""+curr_user.name);
+						$('span[class="hidden-xs"]').html(curr_user.name);
+						$("#store_name").html(curr_user.store_name);
+						$("#employee_no").html(curr_user.employeeId);
+						
+						$("#card_name").html(curr_user.name);
+						$("#card_no").html(curr_user.employeeId);
+						var urlStr = "user.html?employee_no="+encode64(curr_user.employeeId);
+						$("#person_center").attr("href",urlStr);
+						$("#person_state").attr("href",urlStr);
+						$("#person_state_area").attr("href",urlStr+"&#user");
+					}
+	},false);
+}
+
+
+function initOrderDetail(order_sn){
+	doManager("OrderManager", "queryOrderInfoBySN",order_sn,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var order_obj = JSON.parse(data.data);
+					
+					var serv_emp = order_obj.employee_name==null?"":order_obj.employee_name;
+					var serv_emp_phone=order_obj.employee_phone==null?"":order_obj.employee_phone;
+					$("#service_emp").html("国安侠："+serv_emp); 
+					$("#service_emp_phone").html("联系电话："+serv_emp_phone);
+					
+					$("#order_sn").html(order_obj.order_sn);
+					var start_date_str=new Date(order_obj.create_time).format('yyyy-MM-dd HH:mm:ss');
+					
+					if(order_obj.receivedTime==null||order_obj.receivedTime==""){
+						$("#receive_time").html("--");
+					}else{
+						var receive_date_str=new Date(order_obj.receivedTime).format('yyyy-MM-dd HH:mm:ss');
+						$("#receive_time").html(receive_date_str);
+					}
+					
+					$("#start_time").html(start_date_str);
+					
+					
+					$("#trading_price").html(order_obj.trading_price);
+					$("#payable_price").html(order_obj.payable_price);
+					
+					$("#rcv_name").html(order_obj.short_name);
+					$("#rcv_phone").html(order_obj.mobilephone);
+					$("#rcv_address").html(order_obj.address);
+					
+					$(order_obj.item_list).each(function(i,obj){
+						var eshop_pro_name = obj.eshop_pro_name==null?"":obj.eshop_pro_name;
+						var remark = obj.remark==null?"无":obj.remark;
+						var html = '<tr>'+
+		                '<td>'+
+		                '  <div class="col-lg-3 text-center"><img width="128px" height="128px" src="'+obj.first_url+'"></div>'+
+		                '  <div class="col-lg-9 text-left no-padding">'+
+		                '    <p>'+eshop_pro_name+'</p>'+
+		                '    <p class="text-muted">备注信息:'+remark+'</p>'+
+		                '  </div>'+
+		                '</td>'+
+		                '<td class="lh128">'+obj.unit_price+'</td>'+
+		                '<td class="lh128">'+obj.quantity+'</td>'+
+		                '<td class="lh128">'+obj.unit_price*obj.quantity+'</td>'+
+		              	'</tr>';
+						$(".table tr:first").after(html);
+					});
+				}
+	},false);
+}
+
+
+
+function doLogout() { 
+		
+		layer.confirm('确定退出？', {
+			  	title:'提示',
+			  	offset:['100px','550px'],
+			  	move:false,
+			  	closeBtn:0,
+			  	skin:'layer-ext-crmskin',
+				btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+			});
+}
+
+
+
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

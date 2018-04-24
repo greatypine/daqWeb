@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>虚假交易结果统计</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom{padding:0 20px;}
+    .nav-tabs{border:0;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    
+    
+    .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+ 
+	 #process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+		#process_div_pic{
+			position:fixed;
+			top:50%;
+			left:50%; 
+			z-index:100000000; 
+			margin:-16px 0 0 -50px; 
+			width:100px; 
+			height:32px;
+			color: #fff;
+		}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+
+        <div class="pull-left">
+          <nav class="navbar navbar-static-top no-margin">
+            <!-- Sidebar toggle button-->
+
+            <div class="logo-lg clearfix">
+              <div class="logo-lg clearfix">
+	            <ul>
+	              <li><a href="javascript:parent.location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
+	              <li class="nav-mark"><a href="#">虚假交易结果统计</a> </li>
+	              <li><!-- <a href="user.html#user">片区信息</a> --> </li>
+	              <li></li>
+	            </ul>
+	          </div>
+            </div>
+
+          </nav>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container" style="width:1230px">
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue" id="abnormalorder"><strong>虚假交易结果统计</strong>
+          	<small class="text-red" style="padding-left: 10px;">注意：
+          	1.未经人工核实前定义为异常订单，人工核实确认后定义为虚假交易订单。
+          	</small><a herf="#" onclick="goToAbnormalOrder()" style="position:absolute;left:60%;top:20%;font-size:15px;text-decoration:underline;cursor:pointer">异常订单入口 >></a></br>
+            <small class="text-red" style="padding-left: 205px;">
+            2.如果作为绩效数据使用，请确保于每月3号上午8点以后，下载上月数据。
+            </small>
+          </div>
+          <div class="box-body">
+            <div class="form-group col-lg-4">
+              <label>查询时间</label>
+             <!--  <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar"></i>
+                </div>
+                <input type="text" class="form-control pull-right" id="be_date1">
+              </div> -->
+              <select class="form-control select2" id="date_order">
+                <option value="0" >上月</option>
+                <option value="1" selected>本月</option>
+              </select>
+              <!-- /.input group -->
+            </div>
+             <div class="form-group col-lg-4" id="showCity" >
+              <label>城市</label>
+             <input id="city_id_abnormalorder" name="city_id_abnormalorder" type="hidden" bidTableFlag="true" value=""/>
+             <input id="city_name_abnormalorder" name="city_name_abnormalorder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="city_name-search_abnormalorder" style="display: inherit;width: 90%"/>
+             <datalist id="city_name-search_abnormalorder">
+<!--                                     <option value="1"> -->
+<!--                                     <option value="2"> -->
+             </datalist>
+              <!-- /.input group -->
+            </div>
+            <div class="form-group col-lg-4">
+              <label>门店</label>
+             <input id="store_id_abnormalorder" name="store_id_abnormalorder" type="hidden" bidTableFlag="true" value=""/>
+             <input id="store_name_abnormalorder" name="store_name_abnormalorder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="store_name-search_abnormalorder" style="display: inherit;width: 90%"/>
+             <datalist id="store_name-search_abnormalorder">
+<!--                                     <option value="1"> -->
+<!--                                     <option value="2"> -->
+             </datalist>
+              <!-- /.input group -->
+            </div>
+            <div class="form-group col-lg-8" style="margin-top: 20px; padding: 0 25px;">
+            </div>
+            <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+              <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_abnormalorder(1)">查询</button>
+            </div>
+            <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+              <button type="button" onclick="export_abnormalorder()" class="btn btn-block btn-warning">导出</button>
+            </div>
+
+          </div>
+          <div class="box-body">
+            <div class="nav-tabs-custom">
+              <div class="tab-content">
+                <div>
+                  <table class="table table-striped">
+                    <tbody id="abnormalorder_tbody">
+	                    <tr>
+	                      <th width="10%">城市</th>
+	                      <th width="16%">门店名称</th>
+	                      <th width="16%">订单数量</th>
+	                      <th width="10%">有效金额</th>
+	                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              
+              <!-- /.tab-content -->
+            </div>
+            <div class="tcdPageCode" id="page_abnormalorder"></div>
+          </div>
+        </div>
+        
+      </section>
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+
+<!-- ./wrapper -->
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript">
+	layer.config({
+	
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	  
+	});
+	var cityId = decode64(getUrlParamByKey("c"));//城市ID
+	var initCity = cityId//城市ID
+	var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+	var storeId = decode64(getUrlParamByKey("s"));//门店编号
+	var target = decode64(getUrlParamByKey("t"));
+	var storeName=decode64(getUrlParamByKey("sn"));
+	var role = decode64(getUrlParamByKey("r"));//角色 code
+	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
+	var storeno = decode64(getUrlParamByKey("so"));//门店编号
+	$(function () {
+		
+		if(target==2){//店长
+			$("#city_name_abnormalorder").val(cityname);
+			$("#city_name_abnormalorder").attr("readonly",true);
+			$("#store_name_abnormalorder").val(storeName);
+			$("#store_id_abnormalorder").val(storeno);
+			$("#store_name_abnormalorder").attr("readonly",true);
+			
+		}else if(target==1){//城市级别
+// 			$("#city_id_abnormalorder").val(cityname);
+//         	$("#city_name_abnormalorder").val(cityname);
+//         	$("#city_name_abnormalorder").attr("readonly",true);
+
+			$("#showCity").show();
+        	if(role!="PTYYZXYCDDZ"){
+				$("#city_id_abnormalorder").val(cityname);
+	        	$("#city_name_abnormalorder").val(cityname);
+	        	$("#city_name_abnormalorder").attr("readonly",true);
+			}
+		}else if(target==0){
+			
+		}
+		
+		
+	    $(".logo-lg > ul > li").hover(function(){
+	      $(this).children(".nav_dropdown").toggle('1000');
+	    });
+
+    //Date range picker
+   /*  $('#be_date1').daterangepicker();
+	$('#be_date2').daterangepicker(); */
+	
+  });
+
+	 /**--------------------------------自动搜索城市---------------------------------------------------------------**/
+	 
+	  var lst_select_city=null;
+	  $('#city_name_abnormalorder').keyup(function(event){
+		   $("#store_id_abnormalorder").val("");
+		   $("#store_name_abnormalorder").val("");
+	       $('#store_name-search_abnormalorder').children().remove();
+	        var str_name = $(this).val();
+	        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+	        	$("#city_id_abnormalorder").val("");
+	            $('#city_name-search_abnormalorder').children().remove();
+	            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+	                return;
+	            }
+	            var city_id = null;
+	            if(target==1){
+	            	city_id = cityId;
+	            	
+	            }
+	            doManager('dynamicManager','selectAllCity',null,function(data){
+	                if(data.result){
+	                	
+	                	lst_select_city = JSON.parse(data.data);
+	                    $(lst_select_city).each(function(index,element){
+	                        $('#city_name-search_abnormalorder').append('<option value="'+element.cityname+'">');
+	                    });
+	                }else{
+	                	
+	                }
+	            });
+	        }
+	    });
+
+	     $('#city_name_abnormalorder').change(function(){
+	    	
+	         $(lst_select_city).each(function(index,element){
+	            if(element.cityname == $('#city_name_abnormalorder').val()){
+	            	
+	                $('#city_id_abnormalorder').val(element.id);
+	                return;
+	            }
+	         });
+	    }); 
+	 
+	 
+	 
+	
+	
+  
+  /**-----------------------------------搜索门店------------------------------------------------------**/
+  var lst_select_store=null;
+  $('#store_name_abnormalorder').keyup(function(event){
+		
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        	$("#store_id_abnormalorder").val("");
+            $('#store_name-search_abnormalorder').children().remove();
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            
+            
+            var city_id=null;
+            if(target==0){//总部
+            	city_id = ($("#city_id_abnormalorder").val())==""?null:($("#city_id_abnormalorder").val());
+                var city_name = $("#city_name_abnormalorder").val();
+                if(city_id==null&&city_name!=""){
+                	city_id=-10000;
+                }
+            }else if(target==1){//城市
+            	if(role=="PTYYZXYCDDZ"){
+                	city_id = ($("#city_id_abnormalorder").val())==""?null:($("#city_id_abnormalorder").val());
+
+            	}else{
+            		city_id = initCity;
+            	}
+            	
+            }
+           
+            doManager('dynamicManager','getStoreByCity',[target,employeeId,city_id,str_name],function(data){
+                if(data.result){
+                	
+                	lst_select_store = JSON.parse(data.data).storelist;
+                    $(lst_select_store).each(function(index,element){
+                        $('#store_name-search_abnormalorder').append('<option value="'+element.name+'">');
+                    });
+                }else{
+                	
+                }
+            });
+        }
+    });
+
+     $('#store_name_abnormalorder').change(function(){
+    	
+         $(lst_select_store).each(function(index,element){
+            if(element.name == $('#store_name_abnormalorder').val()){
+            	
+                $('#store_id_abnormalorder').val(element.storeno);
+                return;
+            }
+         });
+    }); 
+     
+     
+     
+ 
+    <!-------------------------------------------------------点击查询----------------------------------------------------------------->  
+   var isCreatePage=false;
+    function searchInfo_abnormalorder(cur_page){
+    	isCreatePage=false;
+    	searchInfo_abnormalorder1(cur_page);
+   }
+    
+    //查询上
+    var currentPage_abnormalorder = 1;
+    var totalPage_abnormalorder = 1;
+    function   searchInfo_abnormalorder1(cur_page){
+    	var begin_end_date = $("#date_order").val();
+    	if(begin_end_date==""){
+    		 crm_alert(0,"请选择时间！");
+    		 return;
+    	}
+    	searchInfo_abnormalorder2(cur_page,begin_end_date);
+    }
+      
+    function searchInfo_abnormalorder2(cur_page,begin_end_date){
+    	$("#process_div").show();
+   	 	$("#process_div_pic").show();
+    	var month = $("#date_order").val();
+ 	    var number_str = $("#store_id_abnormalorder").val(); 
+ 	    var storeName = $("#store_name_abnormalorder").val();
+ 	    if(number_str==""&&storeName!=""){
+ 	    	number_str=-10000;
+ 	    }
+ 	    
+ 	    var city=$("#city_id_abnormalorder").val();
+ 	    var city_name=$("#city_name_abnormalorder").val();
+ 	    
+ 	    if(city==""&&city_name!=""){
+ 	    	city="-10000";
+ 	    	city_name="-1000";
+ 	    }
+ 	   
+ 	   var abnormalOrderDto=null;
+ 	   if(target==0){
+ 		   
+		   abnormalOrderDto = {
+			    month:month,
+		  		storeno:number_str,
+		  		cityname:city_name,
+			}
+	    }else if(target==1){
+		   abnormalOrderDto = {
+			    month:month,
+		  		storeno:number_str,
+		  		cityname:city_name,
+			}
+	    }else if(target==2){
+	    	 abnormalOrderDto = {
+			    month:month,
+		  		storeno:number_str,
+		  		cityname:city_name,
+	 		}
+	    }
+ 	    var pageInfo = new Object();
+ 	    pageInfo.currentPage = cur_page;
+	    doManager('dsAbnormalOrderManager','queryAbnormalOrderResult',[abnormalOrderDto,pageInfo],function(data){
+           if(data.result){
+           	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   
+	        	   $("#abnormalorder_tbody").find("tr:gt(0)").remove(); 
+	        	   var jData = result.data;
+	        	   if(jData==null||jData.length==0){
+	        		   crm_alert(5,"系统查无此条件的数据");
+	        		   $("#page_abnormalorder").createPage({
+	        	 	  	    pageCount:0,
+	        	 	  	    current:0,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	
+	        	 	  	    }
+	        	 	  	});
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	   totalPage_abnormalorder = result.total_pages;
+	        	  
+	        	   if(!isCreatePage){
+	        		   $("#page_abnormalorder").createPage({
+		        	  	    pageCount:totalPage_abnormalorder,
+		        	  	    current:cur_page,
+		        	  	    backFn:function(p){
+		        	  	    	searchInfo_abnormalorder2(p,begin_end_date);
+		        	  	    }
+		        	  	});
+	        		   isCreatePage=true;
+	        	   }
+	        	  
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+	        		   infoStr= "<tr>"
+		                       +"<td>"+jData[i].cityname+"</td>"
+		                       +"<td>"+jData[i].storename+"</td>"
+		                       +"<td>"+jData[i].total+"</td>"
+		                       +"<td>"+jData[i].gmv+"</td>"
+		                       +"</tr>";
+		                       
+		                  $("#abnormalorder_tbody").append(infoStr);     
+	        	   }
+	           }else if(result.status=='fail'){
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }
+           
+           }else{
+        	   crm_alert(5,"请稍后重新请求！");
+           }
+          $("#process_div").hide();
+     	  $("#process_div_pic").hide();
+       }); 
+    }
+    
+    //导出上
+    function   export_abnormalorder(){
+    	$("#process_div").show();
+   	 	$("#process_div_pic").show();
+    	var month = $("#date_order").val();
+ 	    var number_str = $("#store_id_abnormalorder").val(); 
+ 	    var storeName = $("#store_name_abnormalorder").val();
+ 	    if(number_str==""&&storeName!=""){
+ 	    	number_str=-10000;
+ 	    }
+ 	    
+ 	    var city=$("#city_id_abnormalorder").val();
+ 	    var city_name=$("#city_name_abnormalorder").val();
+ 	    
+ 	    if(city==""&&city_name!=""){
+ 	    	city="-10000";
+ 	    	city_name="-1000";
+ 	    }
+ 	    
+ 	   var abnormalOrderDto=null;
+ 	   if(target==0){
+		   
+		   abnormalOrderDto = {
+			    month:month,
+		  		storeno:number_str,
+		  		cityname:city_name,
+			}
+	    }else if(target==1){
+		   abnormalOrderDto = {
+			    month:month,
+		  		storeno:number_str,
+		  		cityname:city_name,
+			}
+	    }else if(target==2){
+	    	 abnormalOrderDto = {
+			    month:month,
+		  		storeno:number_str,
+		  		cityname:city_name,
+	 		}
+	    }
+	   
+	    doManager('dsAbnormalOrderManager','exportAbnormalOrderResult',[abnormalOrderDto],function(data){
+          if(data.result){
+          	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   window.location.href=result.data;
+	           }else{
+	        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }
+          
+          }else{
+       	   crm_alert(5,"请稍后重新请求！");
+          }
+         $("#process_div").hide();
+    	 $("#process_div_pic").hide();
+      }); 
+   	   
+   }
+    
+    function goToAbnormalOrder(){
+    	 //t:职务 s:门店ID c:城市ID
+  	  if(target==0){
+  		 var url = "abnormal_order.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(employeeId)+"&r="+encode64(role)+"&cn=";
+   	  window.open(url,"abnormal_order"); 
+  	  }else if(target==1){
+  		  var url = "abnormal_order.html?t="+encode64(1)+"&s=&sn=&c="+ encode64(cityId)+"&e="+encode64(employeeId)+"&r="+encode64(role)+"&cn="+encode64(cityname);
+    	  window.open(url,"abnormal_order"); 
+  	  }else if(target==2){
+  	  	var url = "abnormal_order.html?t="+encode64(2)+"&c=&s=&e="+encode64(employeeId)+"&so="+encode64(storeno)+"&sn="+encode64(storeName);
+  	  	window.open(url,"abnormal_order"); 
+  	  }
+  	  
+    }
+    
+</script>
+
+</body>
+</html>

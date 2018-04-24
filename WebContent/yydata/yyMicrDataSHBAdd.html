@@ -1,0 +1,267 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Cache-Control" Content="no-cache">
+<meta http-equiv="Pragma" Content="no-cache">
+<meta http-equiv="Expires" Content="0">
+<link
+	href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css"
+	rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link
+	href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+
+<title>生活宝填报</title>
+<style type="text/css">
+body {
+	background-color: #e7e7e7;
+}
+
+h4 span {
+	float: right;
+}
+
+.tb_inputtable {
+	margin-top: 10px;
+	font-size: 14px;
+	background-color: #FFF;
+}
+
+.tb_inputtable,th,td {
+	border: 1px solid #ccc;
+}
+
+.tb_inputtable th,.tb_inputtable,td {
+	height: 35px;
+	line-height: 35px;
+}
+
+.tb_inputtable input {
+	height: 35px;
+	line-height: 35px;
+	width: 100%;
+	border: 0;
+	text-align: center;
+	color: #F00;
+	outline: none;
+}
+
+.but {
+	margin-top: 30px;
+	text-align: center;
+}
+</style>
+
+<script type="text/javascript">
+function dataCheck(){
+	   var obj = document.getElementsByName("numberInput");
+	   for(i=0;i<obj.length;i++){
+		   if(obj[i].value!=null&&obj[i].value!=""){
+			   if(!/^\d+(?=\.{0,1}\d+$|$)/.test(obj[i].value)){  
+			        alert("请输入数字!"); 
+			        return false;
+			    }    
+		   }
+	   }
+	   return true;
+	}
+	
+        function doSave(){
+        	if(!dataCheck()){
+				return;
+			}
+        	if($('#s1').val()==""||$('#s1').val()==null){
+        		alert("请选择日期！");
+        		return ;
+        	}
+        	var shbList=new Array();
+        	var inputs = $("table input");
+      		var obj1 = new Object();
+      		var oDate = new Date();
+      		var dtime=$('#s1').val()+" "+oDate.getHours()+":"+oDate.getMinutes()+":"+oDate.getSeconds();
+      		for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(3)[0].value;
+				obj.micr_type=inputs.eq(n)[0].value;
+				var a=(n+1)*3+1;
+				var b=(n+1)*3+2;
+				var c=(n+1)*3+3;
+				obj.week=inputs.eq(a)[0].value;
+				obj.month=inputs.eq(b)[0].value;
+				obj.total=inputs.eq(c)[0].value;
+				obj.date=dtime;
+				shbList.push(obj);
+      		}
+    	    //////////////////////////////////////////////////////
+    	    for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(13)[0].value;
+				obj.micr_type=inputs.eq(n)[0].value;
+				var a=11+(n+1)*3;
+				var b=12+(n+1)*3;
+				var c=13+(n+1)*3;
+				obj.week=inputs.eq(a)[0].value;
+	    		obj.month=inputs.eq(b)[0].value;
+	    	    obj.total=inputs.eq(c)[0].value;
+	    	    obj.date=dtime;
+				shbList.push(obj);
+    	    }
+    	    ////////////////////////////////////////////////////
+    	    for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(26)[0].value;
+				obj.micr_type=inputs.eq(n+23)[0].value;
+				var a=24+(n+1)*3;
+				var b=25+(n+1)*3;
+				var c=26+(n+1)*3;
+				obj.week=inputs.eq(a)[0].value;
+	    	    obj.month=inputs.eq(b)[0].value;
+	    	    obj.total=inputs.eq(c)[0].value;
+	    	    obj.date=dtime;
+				shbList.push(obj);
+    	    }
+			////////////////////////////////////////////////////
+			for(n=0;n<3;n++){
+				var obj=new Object();
+				obj.name=inputs.eq(36)[0].value;
+				obj.micr_type=inputs.eq(23+n)[0].value;
+				var a=34+(n+1)*3;
+				var b=35+(n+1)*3;
+				var c=36+(n+1)*3;
+				obj.week=inputs.eq(a)[0].value;
+	    	    obj.month=inputs.eq(b)[0].value;
+	    	    obj.total=inputs.eq(c)[0].value;
+	    	    obj.date=dtime;
+				shbList.push(obj);
+			}
+    	    doManager("yyMicrDataManager", "saveMicrDataShb", [shbList], function(data, textStatus, XMLHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    //var id = jsonData.id;
+                    alert("添加成功!");
+                    window.location.href = 'yyMicrDataSHBList.html';
+                }else{
+					$$.showMessage("系统信息", "添加失败!");
+				}
+            });
+        }
+</script>
+</head>
+
+<body>
+	<div class="panel panel-primary">
+			<div class="panel-heading">运营数据管理 :生活宝数据填报</div>
+			<div class="panel-body" id="conditionsDiv">
+				<form id="orgAdd" name="orgAdd" class="pmsForm" validate="true"
+					clientvalidate="true" >
+							<input id="s1" revalidate="true"
+								type="text" likeOption="false" name="date"
+								validate="formatDate:true" class="pmsDateField form-control"
+								yearRange="-100:+10" style="width: 27%; display: inline;"
+								readonly />
+				</form>
+			</div>
+		</div>
+	<table class="tb_inputtable" width="100%" border="1" cellspacing="0" cellpadding="0" >
+		<tr>
+			<th rowspan="4" scope="col" width="11%">产品经营分析</th>
+			<th rowspan="2" scope="col" width="11%">&nbsp;</th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="GMV（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="新增用户数（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="订单数（2016）" style="color: black;"/></th>
+		</tr>
+		<tr>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2B）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text" value=""  name="numberInput"/></td>
+			<td><input type="text" value=""  name="numberInput"/></td>
+			<td><input type="text" value=""  name="numberInput"/></td>
+			
+			<td><input type="text" value=""  name="numberInput"/></td>
+			<td><input type="text" value=""  name="numberInput"/></td>
+			<td><input type="text" value=""  name="numberInput"/></td>
+			
+			<td><input type="text" value=""  name="numberInput"/></td>
+			<td><input type="text" value=""  name="numberInput"/></td>
+			<td><input type="text" value=""  name="numberInput"/></td>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2C）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+		</tr>
+	</table>
+
+	<table class="tb_inputtable" width="100%" border="1" cellspacing="0" cellpadding="0">
+		<tr>
+			<th rowspan="4" scope="col" width="11%">产品经营分析</th>
+			<th rowspan="2" scope="col" width="11%">&nbsp;</th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="下单ID数（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="新增上线E店（2016）" style="color: black;"/></th>
+			<th colspan="3" scope="col" width="26%"><input type="text" value="新增SKU数（2016）" style="color: black;"/></th>
+		</tr>
+		<tr>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+			<th width="8%">周</th>
+			<th width="9%">月</th>
+			<th width="9%">累计</th>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2B）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+		</tr>
+		<tr>
+			<th><input type="text" value="生活宝（B2C）" style="color: black;" readonly="readonly"/></th>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+			<td><input type="text"  name="numberInput"/></td>
+		</tr>
+	</table>
+	<div class="but">
+		<input name="" type="submit" onclick="doSave();"/>
+	</div>
+</body>
+</html>

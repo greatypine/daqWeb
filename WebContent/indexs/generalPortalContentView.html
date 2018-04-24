@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible"content="IE=8">
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <meta http-equiv="Cache-Control" Content="no-cache"/>
+        <meta http-equiv="Pragma" Content="no-cache"/>
+        <meta http-equiv="Expires" Content="0"/>
+        <title>通知公告</title>
+         <script type="text/javascript" src="../scripts/bidLib.js"></script>
+		 <script type="text/javascript" src="../scripts/lib-uploadTable.js">
+          </script>
+        <script>
+            $(document).ready(function(){
+                var id = getUrlParamByKey("id");
+                var publishDate = getUrlParamByKey("publishDate");
+                // 修改界面，自动载入填充form数据
+                if (id != null && id != "") {
+                    doManager("generalPortalContentManager", "getContentById", id, function(datas, textStatus, XMLHttpRequest){
+                        if (datas.result) {
+                            var returnObj = $.fromJSON(datas.data);
+                            $("#title").text(returnObj.title);
+                            $("#titles").text(returnObj.title);
+                            $("#publishDate").text(publishDate);
+							$("#cnt").contents().find("body").html(returnObj.publishContent);
+							var cntHeight = $("#cnt").contents().find("body").height();
+							$("#cnt").height(cntHeight + 20); 
+
+							//$("#publishContent").html(returnObj.publishContent);
+                            //$("#publishDate").text(returnObj.publishContent);
+                            //setFormSimpleData(returnObj, "purchaseForecastForm");
+                            //显示附件
+                            if (returnObj.attachmentInfos.length > 0) {
+                                fileUploadTables[0].setValues(returnObj.attachmentInfos);
+                            }
+                        }
+                        else {
+                            $$.showMessage("系统提示", datas.message);
+                        }
+                    });
+                }
+            });
+        </script>
+        <style>
+            html {
+                overflow: hidden;
+                height: 100%;
+            }
+            
+            body {
+                overflow: auto;
+                _overflow: hidden;
+                background: #E6E6E6 url(../scripts/images/right.jpg) repeat-y right top;
+                height: 100%;
+                padding-right: 5px;
+            }
+			
+        </style>
+    </head>
+    <body>
+        <div >
+            <div class="rightcont clear">
+                <div class="box">
+                	<div style="background:url(../bizbase/images/i2/i2shellbackground.gif)">
+                		<div cellpadding="0" cellspacing="0" style="background-image:url(../bizbase/images/i2/masthead.gif);background-repeat:no-repeat;height:40px;">
+                        </div>
+                	</div>
+                       
+                    <div class="containerbody">
+                        <div id="nav_cont">
+                            <div id="purchaseInfoDiv">
+                                <div class="containerheader">
+                                    <strong id="titles"></strong>
+                                </div>
+                                <div class="containerbody" id="containerbody2">
+                                    <form class="pmsForm" id="purchaseForecastForm" name="purchaseForecastForm">
+                                        <input type="hidden" name="id" id="id" value="0" />
+                                        <table cellpadding="0" cellspacing="0" class="layout" width="100%">
+                                            <tr>
+                                                <td width="50%">
+                                                </td>
+                                                <td width="50%">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" id="title" align="center" name="title" style="font-size:17px">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <span><hr/></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" id="publishDate" name="publishDate" align="center">
+                                                </td>
+                                            </tr>
+											<tr>
+												<td colspan="2" name="publishContent" id="publishContent"  align="left">
+													<iframe frameborder="0" src="content.html" width="100%" height="100%" scrolling="no" id="cnt"></iframe>
+												</td>
+											</tr>
+                                           
+                                            <tr>
+                                                <td colspan="2" align="left" class="basetext">
+                                                    <div class="uploadTable" defaults="{showAddButton:false,tableColumnsShow:[true,true,true,true,false,false],tableColumnsType:['rownum','label','label','label']}">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <script>
+//                                            CKEDITOR.replace('publishContent', {
+//                                                extraPlugins: 'abbr',
+//                                                toolbar: 'Full'
+//                                            });
+//                                            var oEditor = CKEDITOR.instances.publishContent;
+                                        </script>
+                                    </form>
+                                </div>
+                            </div>
+                            <div id="flowInfoDiv" style="display:none">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>门店策划方案</title>
+  <style>
+    *{margin: 0; padding: 0;}
+    ul,li{list-style: none;}
+    input::-webkit-input-placeholder { /* WebKit browsers */
+      font-size:12px;
+    }
+    input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+      font-size:12px;
+    }
+    input::-moz-placeholder { /* Mozilla Firefox 19+ */
+      font-size:12px;
+    }
+    input:-ms-input-placeholder { /* Internet Explorer 10+ */
+      font-size:12px;
+    }
+    input{outline:none;}
+    p{ clear: both;}
+    .plan{width: 800px;  margin: 0 auto; font-size: 14px;}
+    .plan h3{text-align: center; color: #ff9c16;}
+    .plan_list input{ height: 30px; margin-top: 10px;}
+    .plan_list textarea{margin-top: 10px;}
+    .plan_list h5{margin-top: 20px; font-size: 14px;}
+    .plan_right{float: right; margin-top: 10px;}
+    .plan_list .input1{width: 100%;}
+    .plan_list .input2{width: 40%;}
+    .plan_list .input3{vertical-align:middle; margin-bottom:10px;}
+
+  </style>
+  <script type="text/javascript" src="../scripts/bidLib.js"></script>
+  <link
+          href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+  <link
+          href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css"
+          rel="stylesheet">
+  <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+  <link
+          href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css"
+          rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="../scripts/bidLib.js"></script>
+  <script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
+  <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+  <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+  <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <script type="text/javascript" src="../scripts/auto.js"></script>
+  <script type="text/javascript">
+
+      var id = getUrlParamByKey("id");
+      var pids = getUrlParamByKey("pids");
+
+      /**
+       * 校验数据
+       */
+    function dataCheckAndSave() {
+       return true;
+   }
+
+
+      /**
+       *
+       * 初始化当前登录人信息,获取当前登陆人的职务,员工编号(soteManagerNo,employeeNo)
+       **/
+      var cur_user;
+      function initCurrUserDto(){
+          //取得当前登录人的门店
+          doManager("UserManager", "getCurrentUserDTO",null,
+              function(data, textStatus, XMLHttpRequest) {
+                  if (data.result) {
+                      var current_uesr = JSON.parse(data.data);
+                      cur_user = current_uesr;
+                  }
+              },false);
+      }
+
+
+      //加载页面开始加载此函数
+      var storeId;
+      var userName;
+      var zw;
+      $(function(){
+          //初始化个人信息
+          initCurrUserDto();
+          zw = cur_user.zw;   /**获得职务*/
+          storeId = cur_user.store_id;   /**门店id*/
+          userName = cur_user.name;      /**当前登陆人姓名*/
+          cur_user.
+          if( zw == "店长" ){
+              // 如果是店长将活动专员你的按钮隐藏
+              document.getElementById("commissioner").style.display="none";
+          }else{
+              //如果是活动专员就将店长的按钮的隐藏 活动审批隐藏
+              document.getElementById("storeManager").style.display="none";
+          }
+      });
+
+    /*
+     * 提交表单
+     */
+    function doSave(){
+        //校验数据
+        dataCheckAndSave();
+        var arr = [ "activity_background","activity_topic","activity_content","activity_type",
+            "business_category","cooperative_mode","determineCooperation_merchant",
+            "determineCooperation_merchant_file","activitytarget_newAddusers",
+            "activitytarget_orderquantity","activitytarget_GMV","activeobjects_crowd",
+            "activeobjects_forecastPeople","activity_time","activity_site",
+            "activity_totalamount","budget_detail","emergency"];
+        var o = {};
+        for ( var i in arr) {
+            var v = arr[i];
+            var va = $("#" + v).val();
+            o[v] = va;
+        }
+        o.push("storeId",storeId);
+        o.push("activity_user",userName);
+        doManager("activityManager","saveActivityPlanScheme",o,
+            function(data,textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var jsonData = $.fromJSON(data.data);
+                $$.showMessage("系统信息", "添加成功!");
+                window.location.href = 'activity_list.html';
+            }else{
+                $$.showMessage("系统信息", "添加失败!");
+            }
+        });
+        return true;
+    }
+
+      /**
+       * 编辑预算明细
+       * @type {{html: string, resourceId: string, func: editbudgetDetail.func}}
+       */
+      var editbudgetDetail = {
+          html : '<a href="#">编辑预算明细</a>',
+          resourceId : "edit_activity",
+          func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+              var id = allColumnsDataMap.id;
+              var pids=allColumnsDataMap.relevaId;
+              window.location.href = "edit_activity.html?id="+id+"&pids="+pids;
+          }
+      }
+
+      $pmspage.opArr = [ editbudgetDetail , publishObj ];
+
+  </script>
+</head>
+<body>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+     <table CELLPADDING="5">
+        <tr>
+          <td>
+            活动信息填写
+          </td>
+          <td colspan="10">
+            <button id = "returnBack" class="btn btn-primary" onclick="window.history.go(-1)"></button>
+          </td>
+        </tr>
+     </table>
+  </div>
+  <div class="panel-body">
+    <div id="conditionsDiv" style="margin-top: 0px">
+      <form id="service_qa" name="service_qa" class="pmsForm"
+            validate="true" clientvalidate="true" displaynumber="7">
+        <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto;border-collapse:separate; border-spacing:10px;">
+          <tr>
+            <td width="5%">1.活动背景(为什么做这个活动?有何依据?):</td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activity_background" name="activity_background" type="text" style="width: 60%" class="form-control"
+                     placeholder="活动背景需要阐述在活动执行前的调研,居民对于此活动的需求情况,表明此活动执行的可行性和意义" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              2.活动主题(或名称)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activity_topic" name="activity_topic" style="width: 60%" class="form-control" type="text"
+                     placeholder="活动主题(或名称)必须具有创意,不能使用如'羽毛球比赛','乒乓球比赛'等通用名称">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              3.活动内容(简单概括)
+              <input type="file" id="determineCooperation_merchant_file" name="determineCooperation_merchant_file" >上传附件</input>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activity_content" name="activity_content" style="width: 60%" class="form-control" type="text"
+                     placeholder="从第一个环节开始,到最后都要介绍(开场白,活动介绍,物资发放,活动中的环节,休息环节详细介绍)--活动执行手册(上传附件即可)">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              4.活动类型(大类加小类)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activity_type" name="activity_type" style="width: 60%" class="form-control" type="text"
+                     placeholder="活动大类为'文娱类'和'公益类',活动小类包括......">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              5.活动招商点位介绍
+            </td>
+          </tr>
+          <tr>
+            <td>
+              商家类别:
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="business_category" name="business_category" style="width: 20%" class="form-control" type="text"
+                     placeholder="意向合作商家类别(玩具商,面包房等)"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              合作模式：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="cooperative_mode" name="cooperative_mode" style="width: 20%" class="form-control" type="text"
+                     placeholder="合作模式(实物赞助,物资赞助,其它)">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              已确定合作商家：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input  class="input3" type="radio" checked>有<input class="input3" type="radio">无
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="determineCooperation_merchant" name="determineCooperation_merchant" type="file" >上传附件</input>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              6.活动目标(活动想达到什么目标?写明预估新增用户量,下单量、销售额)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              (1)新增用户量：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activitytarget_newAddusers" name="activitytarget_newAddusers" style="width: 20%" class="form-control" type="text" placeholder="意向合作商家类别(玩具商,面包房等)">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              (2)订单量：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activitytarget_orderquantity" name="activitytarget_orderquantity" style="width: 20%" class="form-control" type="text" placeholder="合作模式(实物赞助,物资赞助,其它)">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              (3)GMV：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activitytarget_GMV" name="activitytarget_GMV" class="input3" type="radio" checked>有<input id="activitytarget_GMV1" name="activitytarget_GMV" class="input3" type="radio">无
+            </td>
+          </tr>
+          <tr>
+            <td>
+              7.活动对象(预估人数)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              (1)活动对象人群：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activeobjects_crowd" name="activeobjects_crowd" style="width: 20%" class="form-control" type="text" placeholder="意向合作商家类别(玩具商,面包房等)">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              (2)预估人数：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activeobjects_forecastPeople" name="activeobjects_forecastPeople" style="width: 20%" class="form-control" type="text" placeholder="合作模式(实物赞助,物资赞助,其它)">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              8.活动时间
+            </td>
+          </tr>
+          <tr>
+            <td style="padding-top: 0px">
+            <input id="activity_time"
+            revalidate="true" type="text" name="activity_time"
+            validate="formatDate:true" class="pmsDateField form-control"
+            readonly yearRange="-100:+0"
+            style="width: 25%; margin-right: 5px; display: inherit;"
+            likeOption="false" />
+              <!--至-->
+            <!--<input id="s2" revalidate="true"-->
+            <!--type="text" name="express_date" validate="formatDate:true"-->
+            <!--class="pmsDateField form-control" readonly yearRange="-100:+0"-->
+            <!--style="width: 25%; margin-left: 5px; margin-right: 5px; display: inherit;"-->
+            <!--likeOption="false" />-->
+            </td>
+          </tr>
+          <tr>
+            <td>
+              9.活动地点
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activity_site" name="activity_site" style="width: 60%" class="form-control" type="text" placeholder="需写明活动场地">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              10.活动预算（需有预算明细）
+            </td>
+          </tr>
+          <tr>
+            <td>
+              (1)总金额：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="activity_totalamount" name="activity_totalamount" style="width: 20%" class="form-control" type="text">
+            </td>
+          </tr>
+          <tr>
+            <td>
+              (2)预算明细：
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button id= "budget_detail" class="btn btn-primary" onclick="showbudgetDetail();">预算明细</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              11.突发情况解决(可能的突发情况是什么?解决方案是什么?)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <!-- 突发情况 -->
+              <textarea id="emergency" name="emergency" style="width: 60%" class="form-control" type="text" rows="5" placeholder="需写明活动场地"></textarea>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+  <div class="panel-footer" style="text-align: center">
+    <button class="btn btn-primary" onclick="return doSave()">提交</button>
+    <!--<button class="btn btn-primary" onclick="doClean();">重置</button>-->
+  </div>
+
+  <div id="relation_div">
+    <form id="pmsForm" name="pmsForm" class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+      <div id="div_relation_btn">
+
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
