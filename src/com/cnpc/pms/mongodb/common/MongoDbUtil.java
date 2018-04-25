@@ -23,9 +23,9 @@ public class MongoDbUtil {
 	
 	private String host1;
 	
-	private String host2;
-	
-	private String host3;
+//	private String host2;
+//	
+//	private String host3;
 	
 	
 	
@@ -65,27 +65,27 @@ public class MongoDbUtil {
 
 
 
-	public String getHost2() {
-		return host2;
-	}
-
-
-
-	public void setHost2(String host2) {
-		this.host2 = host2;
-	}
-
-
-
-	public String getHost3() {
-		return host3;
-	}
-
-
-
-	public void setHost3(String host3) {
-		this.host3 = host3;
-	}
+//	public String getHost2() {
+//		return host2;
+//	}
+//
+//
+//
+//	public void setHost2(String host2) {
+//		this.host2 = host2;
+//	}
+//
+//
+//
+//	public String getHost3() {
+//		return host3;
+//	}
+//
+//
+//
+//	public void setHost3(String host3) {
+//		this.host3 = host3;
+//	}
 
 	
 	
@@ -122,7 +122,7 @@ public class MongoDbUtil {
 				 urlSb.append(userName).append(":").append(password).append("@");
 			 }
 			 
-			 urlSb.append(host1).append(",").append(host2).append(",").append(host3).append("/gemini?safe=true;socketTimeoutMS=150000");
+			 urlSb.append(host1).append("/gemini?safe=true;socketTimeoutMS=150000");
 			 
 			 
 		       // 连接到 mongodb 服务
