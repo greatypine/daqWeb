@@ -377,4 +377,18 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 		cell.setCellStyle(getCellStyle_common());
 		cell.setCellValue(new HSSFRichTextString(value == null ? null : value.toString()));
 	}
+
+	@Override
+	public StoreDocumentInfo findStoreDocumentById(Long store_id) {
+		StoreDocumentInfo documentInfo = this.findStoreDocumentInfoByStoreId(store_id);
+		if (documentInfo == null) {
+			documentInfo = new StoreDocumentInfo();
+			// 根据门店id获取门店信息
+			StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+			Store store = storeManager.findStore(store_id);
+			documentInfo.setName(store.getName());
+			documentInfo.setStore_id(store.getStore_id());
+		}
+		return documentInfo;
+	}
 }
