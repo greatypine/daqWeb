@@ -717,14 +717,4 @@
     </query>
     
     
-    
-    
-    <query id="querymsgnoticelist" header="门店管理系统通知公告列表" baseclass="com.cnpc.pms.personal.entity.MsgNotice" order="id desc">
-        <column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
-        <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="25%"/>
-        <column key="content" header="内容" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="10%"/>
-        <column key="notice_user" header="创建人" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="40%"/>
-        <column key="notice_date" header="日期" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="25%"/>
-    </query>
-    
 </pmsquery>

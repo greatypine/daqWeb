@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>公告列表</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<script>
+    var win;
+    var array=new Array();
+	//初始化所有门店 
+    $(function () {
+    	//doClean();
+        //页面加载成功后需要获取数据
+        searchList();
+        //sdk
+    });
+
+    //记载页面时请求数据列表默认的方法
+    function searchList() {
+        $$.executeSearch('queryNoticeList', 'conditionsDiv');
+    }
+
+    
+    function doClean() {
+        document.service_qa.reset();
+    }
+    
+    
+    //验证是不是空
+    function isnull(str) {
+        return str == null || str == "null" || str === "" || str == "undefined" || typeof(str) == "undefined";
+    }
+
+    function doAdd(){
+    	 window.location.href = 'notice_send.html';
+    }
+
+    
+    var detailObj = {
+            html: '<a href="#"  class="blue">详情</a>',
+            resourceId: "",
+            func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            	
+            		 var noticeNo = allColumnsDataMap.noticeNo;
+            		
+                     doManager('noticeManager','selectNoticeByNoticeNo',[noticeNo],function(data){
+                        if(data.result){
+                           var result = JSON.parse(data.data);
+                           
+                           
+                           $("#title_s").empty();
+                           $("#title_s").append(detailInfo.title);
+                           
+                           
+                           $("#content_s").empty();
+                           $("#content_s").append(detailInfo.content);
+                           
+                           $("#type_s").empty();
+                           if(detailInfo.type=="1"){
+                            	$("#type_s").append("事务");
+                           }else if(detailInfo.type=="2"){
+                            	$("#type_s").append("业务");
+                           }
+                          
+                          
+                           $("#grade_s").empty();
+                           if(detailInfo.grade=="1"){
+                          		$("#grade_s").append("高");
+                           }else if(detailInfo.grade=="2"){
+                          		$("#grade_s").append("中");
+                           }else if(detailInfo.grade=="3"){
+                          		$("#grade_s").append("低");
+                           }
+                           
+                           $("#cityes_s").empty();
+                           $("#cityes_s").append(detailInfo.cityes);
+                           
+                           $("#stores_s").empty();
+                           $("#stores_s").append(detailInfo.stores);
+                           
+                           $("#zw_s").empty();
+                           $("#zw_s").append(detailInfo.zw);
+                           
+                           $('#noticeDetail_div').dialog({
+                               bgiframe : true,
+                               title : "提示",
+                               width : 400,
+                               height : 423,
+                               modal : true
+                           });
+    	                }else{
+                            $$.showMessage('提示',data.message);
+                        }
+                     }); 
+               
+            }
+        };
+
+        $pmspage.opArr = [detailObj];
+    
+    
+    var COLUMNS = {
+            "title": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                if(value.length >30){
+                    value = value.substring(0,30) + "...";
+                }
+                return value;
+            },
+            "content": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                
+                if(value!=null&&value!=""&&value.length>30){
+                	value=value.substring(0,30)+"...";
+                }
+                return value;
+            },
+            "type": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                
+                if(value=="1"){
+                	value="事务";
+                }else if(value=="2"){
+                	value="业务";
+                }
+                return value;
+            },
+            "grade": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                
+                if(value=="1"){
+                	 value="高";
+                }else if(value=="2"){
+                	value="中";
+                }else if(value=="3"){
+                	value="低";
+                }
+                return value;
+            },
+            "releaseUnit": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+               
+                if(value!=null&&value!=""&&value.length>7){
+                	 value=value.substring(0,7)+"...";
+                }
+                return value;
+            }
+        }
+    
+
+
+    
+  
+    
+</script>
+<style type="text/css">
+    .but {
+        float: right;
+        text-align: center;
+    }
+    .but input{background-color:transparent; border:1px solid #fff; border-radius:3px; padding:0 13px; margin-right:30px;}
+</style>
+<body style="height: 100%">
+<div class="panel panel-default" style="margin: 10px">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+              公告列表
+        </h4>
+    </div>
+</div>
+<div class="rightcont clear">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <label id="imp_base_div">-</label>&nbsp;公告查询
+        </div>
+        <div class="panel-body" id="imp_data_div">
+            <div id="conditionsDiv" style="margin-top: 0px">
+                <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                      displaynumber="7">
+                    <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                        <tr>
+                            <td width="5%">标题:</td>
+                            <td>
+                                <input id="title" name="title" type="text" style="width:20%" class="form-control"/>
+                            </td>
+                            
+                            
+                        </tr>
+                       
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="panel-footer" style="text-align: right">
+            <button class="btn btn-primary" onclick="searchList()">查询</button>
+            <button class="btn btn-primary" onclick="doClean();">重置</button>
+            <button class="btn btn-primary" onclick="doAdd();">新增</button>
+        </div>
+    </div>
+    <div id="centerQueryGridContainer" class="panel panel-primary" queryid="queryNoticeList" operators="$pmspage.opArr"
+         titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="true"
+         showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+         showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
+
+</div>
+</body>
+</html>
+
+
+<div id="noticeDetail_div" style="display:none;height:360px">
+    <div>
+       	<table cellpadding="0" cellspacing="0" id="notice_show" style="min-width: 100%;width: auto;">
+       		<tr>
+       			<td width="8px"><span>公告类型：</span></td>
+       			<td>
+        			<span id="type_s"></span>
+       			</td>
+       		</tr> 
+       		<tr>
+       			<td width="8px"><span>公告等级：</span></td>
+       			<td>
+        			<span id="grade_s"></span>
+       			</td>
+       		</tr> 
+       		<tr>
+       			<td width="8px"><span>发布单位：</span></td>
+       			<td>
+        			<span id="releaseUnit_s"></span>
+       			</td>
+       		</tr> 
+       		<tr>
+       			<td width="8px"><span>标题：</span></td>
+       			<td>
+        			<span id="title_s"></span>
+       			</td>
+       		</tr> 
+       		<tr>
+       			<td width="8px"><span>内容：</span></td>
+        		<td>
+        			<textarea id="content_s" cols="40" style="height:100px;resize:none;" readonly="readonly"></textarea>
+        		</td>
+        	</tr>
+        	<tr>
+       			<td width="8px"><span>城市：</span></td>
+        		<td>
+        			<textarea id="cityes_s" cols="40" style="height:50px;resize:none;" readonly="readonly"></textarea>
+        		</td>
+        	</tr>
+       		<tr>
+       			<td width="8px"><span>门店：</span></td>
+        		<td>
+        			<textarea id="stores_s" cols="40" style="height:70px;resize:none;" readonly="readonly"></textarea>
+        		</td>
+        	</tr>
+        	<tr>
+       			<td width="8px"><span>职务：</span></td>
+        		<td>
+        			<textarea id="zw_s" cols="40" style="height:50px;resize:none;" readonly="readonly"></textarea>
+        		</td>
+        	</tr>
+       	 </table>
+      </div>	
+</div> 

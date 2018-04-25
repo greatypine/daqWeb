@@ -639,6 +639,16 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			
+			if (url.contains("NoticeManager")) {//公告
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			
+			if (url.contains("NoticeReciverManager")) {//公告通知
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			UserSession userSession = SessionManager.getUserSession();
 			if (userSession == null || userSession.getSessionData() == null
 					|| userSession.getSessionData().get("user") == null) {
