@@ -110,8 +110,7 @@ public class PlatformStoreManagerImpl extends BizBaseCommonManager implements Pl
 			BasicDBObject query = new BasicDBObject();
 			query.append("employeeId", new BasicDBObject("$in", list1));
 			FindIterable<Document> projection = collection.find(query)
-					.projection(new Document("_id", "$employeeId").append("employeeId", 1).append("position", 1)
-							.append("updateTime", new Document("$eq", new Date(format2))));
+					.projection(new Document("_id", "$employeeId").append("employeeId", 1).append("position", 1));
 			MongoCursor<Document> cursor = projection.iterator();
 			JSONObject jObject = null;
 			while (cursor.hasNext()) {
