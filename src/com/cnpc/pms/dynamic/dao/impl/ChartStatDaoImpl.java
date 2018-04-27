@@ -32,7 +32,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dod.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND dod.store_name not like '%企业购%' ";
+		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		Map<String, Object> order_obj = null;
@@ -60,6 +63,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND dom.store_name not like '%企业购%' ";
+		}
 		sql = sql + " GROUP BY DATE_FORMAT(dom.sign_time,'%H') ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -84,6 +91,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND dom.store_name not like '%企业购%' ";
+		}
 		sql = sql + " GROUP BY DATE(dom.sign_time) ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -107,6 +118,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		}
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dst.channel_name like '%"+csd.getChannelname()+"%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND dst.store_name not like '%企业购%' ";
 		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -136,6 +151,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND dom.store_name not like '%企业购%' ";
+		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		Map<String, Object> order_obj = null;
@@ -162,6 +181,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND channel_name like '%"+csd.getChannelname()+"%' ";
 		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND store_name not like '%企业购%' ";
+		}
 		sql = sql + " GROUP BY week_date";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -173,8 +196,8 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByMonth(ChartStatDto csd){
-		String sql = "SELECT IFNULL(FLOOR(SUM(dst.order_amount)),0) AS month_amount,CONCAT(dst.year,'-',dst.month) AS month_time,dst.month AS month_index from ds_storetrade_channel dst "
-				+ "WHERE dst.store_name NOT LIKE '%测试%' ";
+		String sql = "SELECT IFNULL(FLOOR(SUM(dst.order_amount)),0) AS month_amount,CONCAT(dst.year,'-',dst.month) AS month_time from ds_storetrade_channel dst "
+				+ "WHERE dst.store_name NOT LIKE '%测试%' AND dst.year = YEAR(curdate()) ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dst.storeno = '"+csd.getStoreno()+"' ";
 		}
@@ -187,7 +210,36 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dst.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND dst.store_name not like '%企业购%' ";
+		}
 		sql = sql + " GROUP BY dst.year,dst.month ";
+		
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> queryTargetByMonth(ChartStatDto csd){
+		String sql = "SELECT IFNULL(FLOOR(SUM(dt.gmv)),0) AS month_amount,CONCAT(dt. YEAR, '-', dt. MONTH) AS month_time FROM df_gmv_target dt "
+				+ "WHERE dt.year = YEAR(curdate()) ";
+		if(StringUtils.isNotEmpty(csd.getCityname())){
+			sql = sql + " AND dt.city_name='"+csd.getCityname()+"' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getDeptname())){
+			sql = sql + " AND dt.dep_name like '%"+csd.getDeptname()+"%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getChannelname())){
+			sql = sql + " AND dt.channel_name like '%"+csd.getChannelname()+"%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getSmallBLabel())){
+			sql = sql + " AND dt.c_label=" + csd.getcLabel() +" AND dt.small_b_label="+csd.getSmallBLabel();
+		}
+		sql = sql + " GROUP BY dt.year,dt.month ";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -211,6 +263,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		}
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND channel_name like '%"+csd.getChannelname()+"%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+			sql = sql + " AND store_name not like '%企业购%' ";
 		}
 		sql = sql + " GROUP BY city_name,store_name,time HAVING time>=DATE_FORMAT(DATE_SUB( CURRENT_DATE() , INTERVAL 3 MONTH ),'%Y-%c') ";
 		

@@ -13,6 +13,8 @@ public class ChartStatDto {
 	String cityname;
 	String deptname;
 	String channelname;
+	String cLabel;
+	String smallBLabel;
 	
 	public String getStoreno() {
 		return storeno;
@@ -37,6 +39,18 @@ public class ChartStatDto {
 	}
 	public void setChannelname(String channelname) {
 		this.channelname = channelname;
+	}
+	public String getcLabel() {
+		return cLabel;
+	}
+	public void setcLabel(String cLabel) {
+		this.cLabel = cLabel;
+	}
+	public String getSmallBLabel() {
+		return smallBLabel;
+	}
+	public void setSmallBLabel(String smallBLabel) {
+		this.smallBLabel = smallBLabel;
 	}
 	
 }

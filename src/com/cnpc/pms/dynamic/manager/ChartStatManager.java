@@ -68,6 +68,11 @@ public interface ChartStatManager extends IManager {
 	public List<Map<String, Object>> queryTurnoverByMonth(ChartStatDto csd);
 	
 	/**
+	 * 查询营业额目标值K点
+	 */
+	public List<Map<String, Object>> queryTargetByMonth(ChartStatDto csd);
+	
+	/**
 	 * 查询GMV散点图
 	 */
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartStatDto csd);

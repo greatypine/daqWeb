@@ -22,6 +22,8 @@ public interface ChartStatDao extends IDAO{
 	
 	public List<Map<String, Object>> queryTurnoverByMonth(ChartStatDto csd);
 	
+	public List<Map<String, Object>> queryTargetByMonth(ChartStatDto csd);
+	
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartStatDto csd);
 	
 	public Map<String, Object> queryDayUser(ChartStatDto csd);
