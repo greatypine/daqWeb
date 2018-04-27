@@ -53,48 +53,72 @@
                      doManager('noticeManager','selectNoticeByNoticeNo',[noticeNo],function(data){
                         if(data.result){
                            var result = JSON.parse(data.data);
-                           
-                           
-                           $("#title_s").empty();
-                           $("#title_s").append(detailInfo.title);
-                           
-                           
-                           $("#content_s").empty();
-                           $("#content_s").append(detailInfo.content);
-                           
-                           $("#type_s").empty();
-                           if(detailInfo.type=="1"){
-                            	$("#type_s").append("事务");
-                           }else if(detailInfo.type=="2"){
-                            	$("#type_s").append("业务");
+                           var detailInfo = result.data;
+                           if(detailInfo!=null&&detailInfo.length>0){
+                        	   $("#title_s").empty();
+                               $("#title_s").append(detailInfo[0].title);
+                               
+                               
+                               $("#content_s").empty();
+                               $("#content_s").append(detailInfo[0].content);
+                               
+                               $("#type_s").empty();
+                               if(detailInfo[0].type=="1"){
+                                	$("#type_s").append("事务");
+                               }else if(detailInfo.type=="2"){
+                                	$("#type_s").append("业务");
+                               }
+                              
+                              
+                               $("#grade_s").empty();
+                               if(detailInfo[0].grade=="1"){
+                              		$("#grade_s").append("高");
+                               }else if(detailInfo[0].grade=="2"){
+                              		$("#grade_s").append("中");
+                               }else if(detailInfo[0].grade=="3"){
+                              		$("#grade_s").append("低");
+                               }
+                               
+                               $("#releaseUnit_s").empty();
+                               $("#releaseUnit_s").append(detailInfo[0].releaseUnit);
+                               
+                               $("#cityes_s").empty();
+                               if(detailInfo[0].cityes==null||detailInfo[0].cityes==""){
+                            	   $("#cityes_s").append("全部");
+                               }else{
+                            	   $("#cityes_s").append(detailInfo[0].cityes);
+                               }
+                               
+                               
+                               
+                               $("#stores_s").empty();
+                               if(detailInfo[0].stores==null||detailInfo[0].stores==""){
+                            	   $("#stores_s").append("全部");
+                               }else{
+                            	   $("#stores_s").append(detailInfo[0].stores);
+                               }
+                               
+                               
+                               $("#zw_s").empty();
+                               if(detailInfo[0].zw==null||detailInfo[0].zw==""){
+                            	   $("#zw_s").append("全部");
+                               }else{
+                            	   $("#zw_s").append(detailInfo[0].zw);
+                               }
+                               
+                               
+                               $('#noticeDetail_div').dialog({
+                                   bgiframe : true,
+                                   title : "提示",
+                                   width : 450,
+                                   height : 500,
+                                   modal : true
+                               });
+                           }else{
+                        	   $$.showMessage('提示',"暂时无法查看，请稍后");
                            }
-                          
-                          
-                           $("#grade_s").empty();
-                           if(detailInfo.grade=="1"){
-                          		$("#grade_s").append("高");
-                           }else if(detailInfo.grade=="2"){
-                          		$("#grade_s").append("中");
-                           }else if(detailInfo.grade=="3"){
-                          		$("#grade_s").append("低");
-                           }
                            
-                           $("#cityes_s").empty();
-                           $("#cityes_s").append(detailInfo.cityes);
                            
-                           $("#stores_s").empty();
-                           $("#stores_s").append(detailInfo.stores);
-                           
-                           $("#zw_s").empty();
-                           $("#zw_s").append(detailInfo.zw);
-                           
-                           $('#noticeDetail_div').dialog({
-                               bgiframe : true,
-                               title : "提示",
-                               width : 400,
-                               height : 423,
-                               modal : true
-                           });
     	                }else{
                             $$.showMessage('提示',data.message);
                         }
@@ -216,7 +240,7 @@
 
 <div id="noticeDetail_div" style="display:none;height:360px">
     <div>
-       	<table cellpadding="0" cellspacing="0" id="notice_show" style="min-width: 100%;width: auto;">
+       	<table id="notice_show" style="min-width: 100%;width: auto;border-collapse:separate; border-spacing:0px 5px;" >
        		<tr>
        			<td width="8px"><span>公告类型：</span></td>
        			<td>
@@ -236,31 +260,31 @@
        			</td>
        		</tr> 
        		<tr>
-       			<td width="8px"><span>标题：</span></td>
+       			<td width="8px"><span>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题：</span></td>
        			<td>
-        			<span id="title_s"></span>
+        			<textarea id="title_s" cols="40" style="height:40px;resize:none;" readonly="readonly"></textarea>
        			</td>
        		</tr> 
        		<tr>
-       			<td width="8px"><span>内容：</span></td>
+       			<td width="8px"><span>内&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容：</span></td>
         		<td>
         			<textarea id="content_s" cols="40" style="height:100px;resize:none;" readonly="readonly"></textarea>
         		</td>
         	</tr>
         	<tr>
-       			<td width="8px"><span>城市：</span></td>
+       			<td width="8px"><span>城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市：</span></td>
         		<td>
         			<textarea id="cityes_s" cols="40" style="height:50px;resize:none;" readonly="readonly"></textarea>
         		</td>
         	</tr>
        		<tr>
-       			<td width="8px"><span>门店：</span></td>
+       			<td width="8px"><span>门&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;店：</span></td>
         		<td>
         			<textarea id="stores_s" cols="40" style="height:70px;resize:none;" readonly="readonly"></textarea>
         		</td>
         	</tr>
         	<tr>
-       			<td width="8px"><span>职务：</span></td>
+       			<td width="8px"><span>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span></td>
         		<td>
         			<textarea id="zw_s" cols="40" style="height:50px;resize:none;" readonly="readonly"></textarea>
         		</td>
