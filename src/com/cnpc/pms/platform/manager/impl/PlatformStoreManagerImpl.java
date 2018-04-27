@@ -94,7 +94,7 @@ public class PlatformStoreManagerImpl extends BizBaseCommonManager implements Pl
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			Date date = new Date();
-			SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd");
+			SimpleDateFormat format = new SimpleDateFormat("YYYY/MM/dd");
 			String format2 = format.format(date);
 			PlatformStoreDao platformStoreDao = (PlatformStoreDao) SpringHelper
 					.getBean(PlatformStoreDao.class.getName());
@@ -108,7 +108,8 @@ public class PlatformStoreManagerImpl extends BizBaseCommonManager implements Pl
 			MongoCollection<Document> collection = database.getCollection("employee_position");
 			org.json.JSONArray jArray = new org.json.JSONArray();
 			BasicDBObject query = new BasicDBObject();
-			query.append("employeeId", new BasicDBObject("$in", list1));
+			query.append("employeeId", new BasicDBObject("$in", list1)).append("updateTime",
+					new Document("$eq", new Date(format2)));
 			FindIterable<Document> projection = collection.find(query)
 					.projection(new Document("_id", "$employeeId").append("employeeId", 1).append("position", 1));
 			MongoCursor<Document> cursor = projection.iterator();

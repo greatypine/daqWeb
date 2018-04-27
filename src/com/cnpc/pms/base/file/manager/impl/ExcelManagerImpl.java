@@ -175,9 +175,10 @@ public class ExcelManagerImpl extends BizBaseCommonManager implements ExcelManag
 				if (store_id == null || "".equals(store_id) || tinyVillage.getResidents_number() == null
 						|| "".equals(tinyVillage.getResidents_number())) {
 					tinyVillage.setStore_id(store.getStore_id());
-					tinyVillage.setResidents_number(tv.getResidents_number());
-					tinyVillage = saveTinyVillage(tinyVillage);
 				}
+				tinyVillage.setResidents_number(tv.getResidents_number());
+				tinyVillage.setAddress(tv.getAddress());
+				tinyVillage = saveTinyVillage(tinyVillage);
 			}
 			// 插入楼房数据 t_building
 			building = new Building();
@@ -261,9 +262,11 @@ public class ExcelManagerImpl extends BizBaseCommonManager implements ExcelManag
 				if (store_id == null || "".equals(store_id) || tinyVillage.getResidents_number() == null
 						|| "".equals(tinyVillage.getResidents_number())) {
 					tinyVillage.setStore_id(store.getStore_id());
-					tinyVillage.setResidents_number(tv.getResidents_number());
-					tinyVillage = saveTinyVillage(tinyVillage);
+
 				}
+				tinyVillage.setResidents_number(tv.getResidents_number());
+				tinyVillage.setAddress(tv.getAddress());
+				tinyVillage = saveTinyVillage(tinyVillage);
 			}
 			// 插入楼房数据 t_building
 			building = new Building();
@@ -352,9 +355,10 @@ public class ExcelManagerImpl extends BizBaseCommonManager implements ExcelManag
 				if (store_id == null || "".equals(store_id) || tinyVillage.getResidents_number() == null
 						|| "".equals(tinyVillage.getResidents_number())) {
 					tinyVillage.setStore_id(store.getStore_id());
-					tinyVillage.setResidents_number(tv.getResidents_number());
-					tinyVillage = saveTinyVillage(tinyVillage);
 				}
+				tinyVillage.setResidents_number(tv.getResidents_number());
+				tinyVillage.setAddress(tv.getAddress());
+				tinyVillage = saveTinyVillage(tinyVillage);
 			}
 			// System.out.println("--tinyVillage---------------villageId="+villageId+"------townId="+townId+"----tinyvillageId="+tinyVillageId);
 
@@ -446,9 +450,10 @@ public class ExcelManagerImpl extends BizBaseCommonManager implements ExcelManag
 				if (store_id == null || "".equals(store_id) || tinyVillage.getResidents_number() == null
 						|| "".equals(tinyVillage.getResidents_number())) {
 					tinyVillage.setStore_id(store.getStore_id());
-					tinyVillage.setResidents_number(tv.getResidents_number());
-					tinyVillage = saveTinyVillage(tinyVillage);
 				}
+				tinyVillage.setResidents_number(tv.getResidents_number());
+				tinyVillage.setAddress(tv.getAddress());
+				tinyVillage = saveTinyVillage(tinyVillage);
 			}
 			// 插入楼房数据 t_building
 			building = new Building();
@@ -528,9 +533,10 @@ public class ExcelManagerImpl extends BizBaseCommonManager implements ExcelManag
 				if (store_id == null || "".equals(store_id) || tinyVillage.getResidents_number() == null
 						|| "".equals(tinyVillage.getResidents_number())) {
 					tinyVillage.setStore_id(store.getStore_id());
-					tinyVillage.setResidents_number(tv.getResidents_number());
-					tinyVillage = saveTinyVillage(tinyVillage);
 				}
+				tinyVillage.setResidents_number(tv.getResidents_number());
+				tinyVillage.setAddress(tv.getAddress());
+				tinyVillage = saveTinyVillage(tinyVillage);
 				tinyVillageId = tinyVillage.getId();
 			}
 

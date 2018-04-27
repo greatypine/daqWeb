@@ -55,6 +55,8 @@
 <script type="text/javascript">
 var lst_select_tiny;
 var id = getUrlParamByKey("id");
+var store_id_md = getUrlParamByKey("store_id");
+var JSZ_MD = getUrlParamByKey("JSZ");
 	$(function(){
 		initview();
 		//获取门店信息
@@ -88,6 +90,12 @@ var id = getUrlParamByKey("id");
 	})
 	
 	function initview(){
+		if(JSZ_MD=='MDGLYJSZ'){
+			$("#name").attr("readOnly","true");
+			$("#baocun").hide();
+			findstoreDocumentByStoreId(store_id_md);
+			return;
+		}
 		if(id == null || id == ''){
 			$("#id1").hide();
 			$("#name").show();
@@ -254,6 +262,89 @@ var id = getUrlParamByKey("id");
 	        }
 	    },false);
 	}
+	
+	
+	function findstoreDocumentByStoreId(storeid){
+		doManager('StoreDocumentInfoManager','findStoreDocumentByStoreId',storeid,function(data){
+	        if(data.result){
+	        	if(data.data!="null"){
+					var jsonData = $.fromJSON(data.data);
+					for ( var key in jsonData) {
+						var va = jsonData[key];
+						$("#"+key).val(va);
+						if(key=='audit_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(audit_file);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='plane_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(plane_plan);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='record_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(record_drawing);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='business_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(business_license);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='food_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(food_card);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='tobacco_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(tobacco_card);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='book_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(book_card);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='xx_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(xx_card);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='other_pic'){
+							if(va!=null&&va!=''){
+								$("#"+key).show();
+								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(other_card);">'+va.substring(0,25)+'</a>')
+							}
+						}else if(key=='name'){
+							$("#"+key).val(va);
+						}else if(key=='audit_status'){
+							if(va==1){
+								$("#baocun").hide();
+								$("#submit").hide();
+								if(id==null||id==''){
+									 $$.showMessage("提示","该门店详情正在审核!");
+								}
+							}else if(va==2||va==3){
+								$("#baocun").hide();
+							}
+						}
+					}
+				}
+	        }else{
+	            $$.showMessage("提示",data.message);
+	        }
+	    },false);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	var path = getRootPath();
 	function downloadFile(pic_name){
 		console.log(pic_name.id);
@@ -270,13 +361,22 @@ var id = getUrlParamByKey("id");
 			o[v] = va;
 		}
 		o['card_content']=$("#card_content option:selected").val();
+		if(JSZ_MD=='MDGLYJSZ'){
+			o['jsz']='MDGLYJSZ';
+		}
 		doManager("StoreDocumentInfoManager", "saveOrUpdateStoreDocumentInfo", o, function(data,
 				textStatus, XMLHttpRequest) {
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
 				var model="card";
-				$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val());
-			    $("#uploadForm").submit();
+				if(JSZ_MD=='MDGLYJSZ'){
+					$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val()+"&JSZ=MDGLYJSZ");
+				    $("#uploadForm").submit();
+				}else{
+					$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val());
+				    $("#uploadForm").submit();
+				}
+				
 			    alert("提交成功");
 			}else{
 				$$.showMessage("提示",data.message);
@@ -351,8 +451,8 @@ var id = getUrlParamByKey("id");
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
 				var model="card";
-				$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val());
-			    $("#uploadForm").submit();
+					$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val());
+				    $("#uploadForm").submit();
 			    alert("保存成功");
 			}else{
 				$$.showMessage("提示",data.message);

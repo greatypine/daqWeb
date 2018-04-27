@@ -36,6 +36,7 @@ import com.cnpc.pms.personal.entity.Attachment;
 import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.StoreDocumentInfo;
+import com.cnpc.pms.personal.manager.StoreDocumentInfoHistoryManager;
 import com.cnpc.pms.personal.manager.StoreDocumentInfoManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.manager.WorkInfoManager;
@@ -69,6 +70,8 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 		documentInfo.setAudit_date(storeDocumentInfo.getAudit_date());
 		if (storeDocumentInfo.getAudit_status() != null && storeDocumentInfo.getAudit_status() == 0) {
 			documentInfo.setAudit_status(0);
+		} else if ("MDGLYJSZ".equals(storeDocumentInfo.getJsz())) {
+			documentInfo.setAudit_status(3);
 		} else {
 			documentInfo.setAudit_status(1);
 		}
@@ -78,8 +81,12 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 		documentInfo.setCard_content(storeDocumentInfo.getCard_content());
 		documentInfo.setStore_id(storeDocumentInfo.getStore_id());
 		preObject(documentInfo);
+		StoreDocumentInfoHistoryManager storeDocumentInfoHistoryManager = (StoreDocumentInfoHistoryManager) SpringHelper
+				.getBean("storeDocumentInfoHistoryManager");
+		storeDocumentInfoHistoryManager.InsertStoreDocumentInfoHistory(documentInfo);
 		this.saveObject(documentInfo);
-		if (storeDocumentInfo.getAudit_status() != null && storeDocumentInfo.getAudit_status() == 0) {
+		if ((storeDocumentInfo.getAudit_status() != null && storeDocumentInfo.getAudit_status() == 0)
+				|| "MDGLYJSZ".equals(storeDocumentInfo.getJsz())) {
 
 		} else {
 			// 添加审核任务
@@ -379,16 +386,46 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 	}
 
 	@Override
-	public StoreDocumentInfo findStoreDocumentById(Long store_id) {
-		StoreDocumentInfo documentInfo = this.findStoreDocumentInfoByStoreId(store_id);
-		if (documentInfo == null) {
-			documentInfo = new StoreDocumentInfo();
-			// 根据门店id获取门店信息
-			StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-			Store store = storeManager.findStore(store_id);
-			documentInfo.setName(store.getName());
-			documentInfo.setStore_id(store.getStore_id());
+	public StoreDocumentInfo findStoreDocumentByStoreId(Long store_id) {
+		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+		Store store = storeManager.findStore(store_id);
+		List<?> list = this.getList(FilterFactory.getSimpleFilter("store_id=" + store.getStore_id()));
+		if (list != null && list.size() > 0) {
+			AttachmentManager attachmentManager = (AttachmentManager) SpringHelper.getBean("attachmentManager");
+			StoreDocumentInfo storeDocumentInfo = (StoreDocumentInfo) list.get(0);
+
+			for (int i = 4; i <= 12; i++) {
+				Attachment attachment = attachmentManager.findAttachmentByStoreIdType(storeDocumentInfo.getStore_id(),
+						i);
+				if (attachment != null) {
+					if ("other_card".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setOther_pic(attachment.getFile_name());
+					} else if ("xx_card".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setXx_pic(attachment.getFile_name());
+					} else if ("book_card".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setBook_pic(attachment.getFile_name());
+					} else if ("tobacco_card".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setTobacco_pic(attachment.getFile_name());
+					} else if ("food_card".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setFood_pic(attachment.getFile_name());
+					} else if ("business_license".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setBusiness_pic(attachment.getFile_name());
+					} else if ("record_drawing".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setRecord_pic(attachment.getFile_name());
+					} else if ("plane_plan".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setPlane_pic(attachment.getFile_name());
+					} else if ("audit_file".equals(attachment.getFile_type_name())) {
+						storeDocumentInfo.setAudit_pic(attachment.getFile_name());
+					}
+				}
+			}
+			storeDocumentInfo.setName(store.getName());
+			return storeDocumentInfo;
+		} else {
+			StoreDocumentInfo storeDocumentInfo = new StoreDocumentInfo();
+			storeDocumentInfo.setStore_id(store.getStore_id());
+			storeDocumentInfo.setName(store.getName());
+			return storeDocumentInfo;
 		}
-		return documentInfo;
 	}
 }
