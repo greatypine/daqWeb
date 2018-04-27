@@ -57,11 +57,11 @@ public interface StoreDocumentInfoManager extends IManager {
 	File exprotStoreDetail() throws Exception;
 
 	/**
-	 * 根据门店id获取门店详情信息
+	 * 根据门店id查询门店详情，如果详情为空时将门店名传过去
 	 * 
 	 * @param store_id
 	 * @return
 	 */
-	StoreDocumentInfo findStoreDocumentById(Long store_id);
+	StoreDocumentInfo findStoreDocumentByStoreId(Long store_id);
 
 }

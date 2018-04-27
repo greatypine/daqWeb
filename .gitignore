@@ -8,3 +8,5 @@ target
 bin/
 build/
 .externalToolBuilders/
+.idea/
+out/

@@ -37,7 +37,7 @@ public class UploadStoreFileAction extends HttpServlet {
 		System.out.println("调用文件上传的方法");
 		String model = req.getParameter("model");
 		String store_id = req.getParameter("store_id");
-
+		String jsz = req.getParameter("JSZ");
 		resp.setContentType("text/html");
 		PrintWriter writer = resp.getWriter();
 		String fileLoad = "";
@@ -167,6 +167,10 @@ public class UploadStoreFileAction extends HttpServlet {
 					}
 
 				}
+			}
+			if ("MDGLYJSZ".equals(jsz)) {
+				writer.write(
+						"<script type='text/javascript'>window.location.href = 'data_access/store_list.html';</script>");
 			}
 			if ("contract".equals(model)) {
 				writer.write(

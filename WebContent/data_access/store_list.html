@@ -172,7 +172,9 @@ function addVillage(){
 			 if(name.substring(name.length-3, name.length)=='储备店'||name=='办公室'){
 				 return '';
 			 }
-			 if(JSZ=='CSMDGLZ'||JSZ=='QYJL'||JSZ=='GLY'||GLY){
+			  if(JSZ=='MDGLYJSZ'){
+				 return '<a href="add_store.html?store_id='+store_id+'&sp=2&JSZ=MDGLYJSZ">编辑</a>    <a href="add_storedocumentinfo.html?store_id='+store_id+'&JSZ=MDGLYJSZ" >门店更多</a>';
+			 }else if(JSZ=='CSMDGLZ'||JSZ=='QYJL'||JSZ=='GLY'||GLY){
 					 return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>';
 			 }else if (JSZ=='ZBCSGLBYHGLJSZ'){
 					 return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>    <a href="#" onclick="openstore('+store_id+')">运营门店</a>';

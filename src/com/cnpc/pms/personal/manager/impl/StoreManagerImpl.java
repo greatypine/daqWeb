@@ -72,6 +72,7 @@ import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.HumanresourcesManager;
 import com.cnpc.pms.personal.manager.ProvinceManager;
 import com.cnpc.pms.personal.manager.StoreDynamicManager;
+import com.cnpc.pms.personal.manager.StoreHistoryManager;
 import com.cnpc.pms.personal.manager.StoreKeeperManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.manager.TownManager;
@@ -1574,6 +1575,19 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("storeno")));// 门店编号
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("ordnumber")));// 开店序号
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("city_name")));// 城市
+
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("rent_area")));// 计租面积
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("agency_fee")));// 中介费
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("increase")));// 递增
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("increase_fee")));// 增容费
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("rent_free")));// 免租期
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("taxes")));// 税金
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("submit_date")));// 功能方案提交日期
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("audit_date")));// 功能方案通过日期
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("enter_date")));// 装修进场日期
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("enter_end_date")));// 装修竣工日期
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("card_content")));// 证照内容
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("if_bussins")));// 有无营业执照
 				nJobIndex++;
 			}
 			fis_out_excel = new FileOutputStream(file_new);
@@ -2045,6 +2059,8 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 
 	@Override
 	public Store insertStoresyncDynamicStore(StoreDynamic storeDynamic) {
+		StoreHistoryManager storeHistoryManager = (StoreHistoryManager) SpringHelper.getBean("storeHistoryManager");
+		storeHistoryManager.insertStoreHistory(storeDynamic);
 		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 		Store store = this.findStore(storeDynamic.getStore_id());
@@ -2099,6 +2115,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setCreate_user(storeDynamic.getCreate_user());
 			store.setOrdnumber(storeDynamic.getOrdnumber());
 			store.setFormattype(storeDynamic.getFormattype());
+			store.setCreate_time(storeDynamic.getCreate_time());
 			storeManager.saveObject(store);
 		} else {
 			store = new Store();
@@ -2153,6 +2170,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setCreate_user(storeDynamic.getCreate_user());
 			store.setOrdnumber(storeDynamic.getOrdnumber());
 			store.setFormattype(storeDynamic.getFormattype());
+			store.setCreate_time(storeDynamic.getCreate_time());
 			storeDao.insertStore(store);
 		}
 		return store;

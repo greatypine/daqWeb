@@ -5,10 +5,9 @@
 var JsCache = {
     set: function (key, value, timeOut) {
         var getDefaultDeadline = function () {
-            var nextDay = new Date();
-            nextDay.setDate(nextDay.getDate() + 1);
-            var deadLine = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate(), 0, 0, 0);
-            return deadLine.getTime();
+            var currentTime = new Date();
+            var deadLine = currentTime.setHours(currentTime.getHours() + 5);
+            return deadLine;
         } ;
         var nameSpace = encode64(window.location.pathname) + "_";
         if (!localStorage.getItem(nameSpace)) {
@@ -16,7 +15,7 @@ var JsCache = {
         }
         var lKey = nameSpace + key;
         var curTime = new Date().getTime();
-        localStorage.setItem(lKey, encode64(JSON.stringify(value)))
+        localStorage.setItem(lKey, encode64(JSON.stringify(value)));
         if (timeOut) {
             localStorage.setItem(lKey + '_timeout', (curTime + (timeOut * 1000)).toString())
         }

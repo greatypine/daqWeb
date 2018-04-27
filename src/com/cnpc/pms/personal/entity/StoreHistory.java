@@ -4,28 +4,22 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
-import com.cnpc.pms.base.entity.OptLockEntity;
+import com.cnpc.pms.base.entity.DataEntity;
 
-/**
- * 门店动态
- * 
- * @author sunning
- *
- */
 @Entity
-@Table(name = "t_store_dynamic")
-public class StoreDynamic extends OptLockEntity {
-
-	@Id
-	@GeneratedValue
+@Table(name = "t_store_history")
+public class StoreHistory extends DataEntity {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	@Column(name = "store_id")
 	private Long store_id;
 	/**
 	 * 高德城市编码
@@ -55,12 +49,12 @@ public class StoreDynamic extends OptLockEntity {
 	/**
 	 * 地址
 	 */
-	@Column(length = 100, name = "address")
+	@Column(length = 20, name = "address")
 	private String address;
 	/**
 	 * 详细地址
 	 */
-	@Column(length = 100, name = "detail_address")
+	@Column(length = 20, name = "detail_address")
 	private String detail_address;
 	/**
 	 * 电话
@@ -144,17 +138,6 @@ public class StoreDynamic extends OptLockEntity {
 	// 业态类型
 	@Column(length = 255, name = "formattype")
 	private String formattype;
-	// jsz
-	@Transient
-	private String jsz;
-
-	public String getJsz() {
-		return jsz;
-	}
-
-	public void setJsz(String jsz) {
-		this.jsz = jsz;
-	}
 
 	public String getFormattype() {
 		return formattype;
@@ -452,9 +435,9 @@ public class StoreDynamic extends OptLockEntity {
 
 	/**
 	 * 状态标志位
+	 * 
+	 * @Column(name = "status") private Integer status;
 	 */
-	@Column(name = "status")
-	private int status;
 	/**
 	 * 状态标志位
 	 */
@@ -469,24 +452,6 @@ public class StoreDynamic extends OptLockEntity {
 	public void setFlag(Integer flag) {
 		this.flag = flag;
 	}
-
-	/**
-	 * 创建者
-	 */
-	@Column(length = 36, name = "create_user")
-	private String create_user;
-
-	/**
-	 * 创建时间
-	 */
-	@Column(name = "create_time")
-	private Date create_time;
-
-	/**
-	 * 修改者
-	 */
-	@Column(length = 36, name = "update_user")
-	private String update_user;
 
 	/**
 	 * 管理的街道
@@ -569,12 +534,6 @@ public class StoreDynamic extends OptLockEntity {
 		this.town_name = town_name;
 	}
 
-	/**
-	 * 修改时间
-	 */
-	@Column(name = "update_time")
-	private Date update_time;
-
 	@Column(length = 36, name = "platformid")
 	private String platformid;
 	@Column(length = 255, name = "platformname")
@@ -588,8 +547,6 @@ public class StoreDynamic extends OptLockEntity {
 		this.platformname = platformname;
 	}
 
-	@Column(length = 36, name = "id")
-	private String id;
 	/**
 	 * 门店编号
 	 */
@@ -616,14 +573,6 @@ public class StoreDynamic extends OptLockEntity {
 
 	public void setWhite(String white) {
 		this.white = white;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getPlatformid() {
@@ -753,45 +702,11 @@ public class StoreDynamic extends OptLockEntity {
 		return coordinate_y;
 	}
 
-	public int getStatus() {
-		return status;
-	}
-
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public String getCreate_user() {
-		return create_user;
-	}
-
-	public void setCreate_user(String create_user) {
-		this.create_user = create_user;
-	}
-
-	public Date getCreate_time() {
-		return create_time;
-	}
-
-	public void setCreate_time(Date create_time) {
-		this.create_time = create_time;
-	}
-
-	public String getUpdate_user() {
-		return update_user;
-	}
-
-	public void setUpdate_user(String update_user) {
-		this.update_user = update_user;
-	}
-
-	public Date getUpdate_time() {
-		return update_time;
-	}
-
-	public void setUpdate_time(Date update_time) {
-		this.update_time = update_time;
-	}
+	/*
+	 * public Integer getStatus() { return status; }
+	 * 
+	 * public void setStatus(Integer status) { this.status = status; }
+	 */
 
 	public Date getOpen_time() {
 		return open_time;
@@ -848,5 +763,4 @@ public class StoreDynamic extends OptLockEntity {
 	public void setGaode_address(String gaode_address) {
 		this.gaode_address = gaode_address;
 	}
-
 }

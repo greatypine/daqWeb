@@ -65,6 +65,16 @@ public class StoreDocumentInfo extends DataEntity {
 	private String other_pic;
 	@Transient
 	private String caozuo;
+	@Transient
+	private String jsz;
+
+	public String getJsz() {
+		return jsz;
+	}
+
+	public void setJsz(String jsz) {
+		this.jsz = jsz;
+	}
 
 	public String getCaozuo() {
 		return caozuo;
