@@ -19,24 +19,58 @@
         	
         	$("#employee_no").val(employeeId);
         	
+        	if((selectCity==""||selectCity=="null")){//全部
+            	getCity(1);
+      		}else{
+      			getCity(2);
+      			allCity = selectCity.split(",");
+      		}
+        	
             //页面加载成功后需要获取数据
             searchList();
+            
         });
+        
+        var allCity = new Array();
+        var cityArray = new Array();
+        function getCity(f){
+         	
+        	doManager('noticeManager','getCityOfRole',null,function(data){
+                if(data.result){
+                    var result = JSON.parse(data.data).data;
+                    cityArray = result;
+                    if(f==1){
+                    	if(result!=null&&result.length>0){
+                        	for(var i=0;i<result.length;i++){
+                        		allCity.push(result[i].citycode);
+                        	}
+                        }
+                    }
+                    
+                }else{
+                    $$.showMessage('提示',data.message);
+                }
+            },false); 
+        }
+        
         
         var COLUMNS = {
                 "id": function(aData, iColumn, sColumnName, map){
                      var citycode = map["citycode"];
-                    
+                     var regex_city= new RegExp("^[a-zA-Z0-9]+");//总部角色
 	           		 if(selectCity==""||selectCity=="null"){//全部
-	           			 return '<input type="checkbox" name="chkbox" value="'+map[sColumnName]+'" checked="true"/>';
-	           		 }else if(selectCity.indexOf(",")>=0){
-	           			 var cityArray = selectCity.split(",");
-	           			 for(var i=0;i<cityArray.length;i++){
-	           				 if(citycode==cityArray[i]){
-	           					return '<input type="checkbox" name="chkbox" value="'+map[sColumnName]+'" checked="true"/>';
-	           				 }else{
-	           					return '<input type="checkbox" name="chkbox" value="'+map[sColumnName]+'"/>';
-	           				 }
+	           			 if(isInArray(allCity,citycode)&&checkstatus){
+	                         return '<input type="checkbox" name="chkbox"  onclick="citycheck(this)" value="'+citycode+'" checked="true"/>';
+
+	           			 }else{
+	           		    	 return '<input type="checkbox" name="chkbox" onclick="citycheck(this)" value="'+citycode+'" />';
+
+	           			 }
+	           		 }else if((selectCity.indexOf(",")>=0||regex_city.test(selectCity))){
+	           			 if(isInArray(allCity,citycode)&&checkstatus){
+	           		    	 return '<input type="checkbox" name="chkbox" onclick="citycheck(this)" value="'+citycode+'" checked="true"/>';
+	           			 }else{
+	                         return '<input type="checkbox" name="chkbox"  onclick="citycheck(this)" value="'+citycode+'"/>';
 	           			 }
 	           		 }
                  
@@ -44,6 +78,29 @@
             }
         
         
+        function isInArray(arr,value){
+            for(var i = 0; i < arr.length; i++){
+                if(value === arr[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        
+      
+        function citycheck(city){
+        	if(city.checked){
+        		allCity.push(city.value);
+        	}else{
+        		for(n in allCity){
+        			if(allCity[n]==city.value){
+        				allCity.splice(n,1);
+        			}
+        		}
+        	}
+        	
+        }
         //记载页面时请求数据列表默认的方法
         function searchList() {
         		 $$.executeSearch('queryNoticeReceiveCity', 'conditionsDiv');
@@ -51,23 +108,60 @@
 
         function doSubmit(){
             var jsons=new Array();
-            var objs = $$.getSelectedObj("queryNoticeReceiveCity");
-            if (objs.length != 0) {
-            	for(var i=0;i<objs.length;i++){
-            		json = {id:objs[i][0],name:objs[i][1],code:objs[i][2]};
-            		jsons.push(json);
+//             var objs = $("#queryNoticeReceiveCity_id").find("tr:gt(0)");
+//             if (objs.length != 0) {
+//             	for(var i=0;i<objs.length;i++){
+//             		var checkStatus = $(objs[i]).find("td:eq(0)").children()[0].checked;
+//             		if(checkStatus){
+//             			var json = {id:$(objs[i]).find("td:eq(0)").children()[0].value,name:$(objs[i]).find("td:eq(1)").html(),code:$(objs[i]).find("td:eq(2)").html()};
+//                 		jsons.push(json);
+//             		}
+            		
+            		
+//             	}
+//             } 
+            if (allCity.length != 0) {
+            	for(var i=0;i<allCity.length;i++){
+            		var city = getCityInfo(allCity[i]);
+           			var json = {name:city.cityname,code:city.citycode};
+               		jsons.push(json);
             	}
             } 
-           
             parent.win.callBack(jsons);
             parent.win.hide();
         }
       
-         
+      function getCityInfo(code){
+        	
+       		for(n in cityArray){
+       			if(cityArray[n].citycode==code){
+       				return cityArray[n]
+       			}
+       		}
+        	
+        }
+      
+      var checkstatus=true;
+      function  clearChecked(){
+      	 checkstatus = false;
+      	allCity.splice(0,allCity.length);
+      	 var objs = $("#queryNoticeReceiveCity_id").find("tr:gt(0)");
+	         if (objs.length != 0) {
+	         	for(var i=0;i<objs.length;i++){
+	         		var checkStatus = $(objs[i]).find("td:eq(0)").children()[0].checked;
+	         		if(checkStatus){
+	         			$(objs[i]).find("td:eq(0)").children()[0].checked=false;
+	         		}
+	         	}
+	         }
+	     }
     </script>
     <style type="text/css">
         html,body{
             height: 100%;
+        }
+        .display{
+        width:100%;
         }
     </style>
 </head>
@@ -98,6 +192,7 @@
                 </div>
                 <div class="panel-footer"  align="right">
                     <input class="btn btn-primary" onClick="searchList()" value="查询" type="button"/>
+                    <input class="btn btn-primary" onClick="clearChecked()" value="清空选中" type="button"/>
                 </div>
             </div>
             <div id="gridContainer" searchDiv="conditionsDiv" queryid="queryNoticeReceiveCity" class="panel panel-primary"

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmsquery>
      <query id="queryNoticeReceiveCity" header="城市"  order="id desc" method="noticeManager.getNoticeCity">
-        <column key="id" header="" display="true" type="java.lang.Long" allowSearch="true" allowSort="true" align="center" width="10%"/>
-        <column key="cityname" header="城市名称"  operator="like" align="center" allowSort="true" type="String" width="30%"/>
-        <column key="citycode" header="城市编码"  align="center" allowSort="true" type="String" width="30%"/>
-        <column key="employee_no" header="员工编号" display="false" operator="eq" align="center" allowSort="true" type="String" width="30%"/>
+        <column key="id" header="选择" display="true" type="java.lang.Long" allowSearch="true" allowSort="false" align="center" width="10%"/>
+        <column key="cityname" header="城市名称"  operator="like" align="center" allowSort="true" type="String" width="45%"/>
+        <column key="citycode" header="城市编码"  align="center" allowSort="true" type="String" width="45%"/>
+       
     </query>
 
     <query id="queryNoticeReceiveStoreByCity" header="门店"  order="id desc" method="noticeManager.queryStoreByCity">
-        <column key="store_id" type="java.lang.Long"  header="" display="false" allowSearch="true" allowSort="true" align="center" width="10%"/>
+        <column key="store_id" type="java.lang.Long"  header="选择" display="true" allowSearch="true" allowSort="false" align="center" width="10%"/>
         <column key="name" type="java.lang.String" header="门店名称" operator="like" display="true" width="30%" allowSearch="true" allowSort="true" align="center"/>
         <column key="city_id" type="java.lang.String" header="所属城市Id" operator="eq"  display="false" align="center" allowSort="true" width="30%"/>
         <column key="city_name" type="java.lang.String" header="所属城市" operator="eq"  display="true" align="center" allowSort="true" width="30%"/>
-        <column key="employeeId" type="java.lang.Long" header="用户ID" operator="eq"  display="false" align="center" allowSort="true" width="30%"/>
     </query>
-    <query id="queryNoticeReceiveZW" header="职务"  order="id desc" method="noticeManager.getNoticeReceiveZW">
+    <query id="queryNoticeReceiveZW" header="职务"   method="noticeManager.getNoticeReceiveZW">
+        <column key="id" type="java.lang.Long" header="选择" operator="like" display="true" width="10%" allowSearch="true" allowSort="false" align="center"/>
         <column key="zw" type="java.lang.String" header="职务" operator="like" display="true" width="30%" allowSearch="true" allowSort="true" align="center"/>
     </query>
     

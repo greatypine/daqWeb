@@ -110,4 +110,38 @@ public interface NoticeManager extends IManager{
 	* @author gbl
 	 */
 	public Map<String,Object> selectNoticeByNoticeNo(String noticeNo);
+	
+	/**
+	 * 
+	* @Title: getCityOfRole  
+	* @Description: TODO 根据不同登录用户查询管辖的城市 
+	* 2018年4月27日
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String,Object> getCityOfRole();
+	
+	/**
+	 * 
+	* @Title: getStoreOfRole  
+	* @Description: TODO 根据城市搜索门店 
+	* 2018年4月28日
+	* @param @param cityCode
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String,Object> getStoreOfRole(String cityCode);
+	
+	/**
+	 * 
+	* @Title: getAllZw  
+	* @Description: TODO 查询职务 
+	* 2018年4月28日
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String,Object> getAllZw();
 }

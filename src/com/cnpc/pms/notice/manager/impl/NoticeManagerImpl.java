@@ -261,4 +261,105 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> getCityOfRole() {
+		UserManager umanager = (UserManager)SpringHelper.getBean("userManager");
+		NoticeDao noticeDao = (NoticeDao)SpringHelper.getBean(NoticeDao.class.getName());
+		UserDTO userDTO = umanager.getCurrentUserDTO();
+		String userCode = userDTO.getUsergroup().getCode();
+	    Pattern p_zb = Pattern.compile("^(ZB|zb)\\w*$");
+	    Pattern p_cs = Pattern.compile("^(CS|cs)\\w*$"); 
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Matcher m_zb = p_zb.matcher(userCode);  
+		Matcher m_cs = p_cs.matcher(userCode);
+		
+		try {
+			if(m_zb.matches()){
+				list = noticeDao.getCityOfZb();
+			}else if(m_cs.matches()){
+				list = noticeDao.getCityOfCs(userDTO.getId());
+			}
+			result.put("data", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("data", list);
+			return result;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getStoreOfRole(String cityCode) {
+		UserManager umanager = (UserManager)SpringHelper.getBean("userManager");
+		NoticeDao noticeDao = (NoticeDao)SpringHelper.getBean(NoticeDao.class.getName());
+		UserDTO userDTO = umanager.getCurrentUserDTO();
+		String userCode = userDTO.getUsergroup().getCode();
+	    Pattern p_zb = Pattern.compile("^(ZB|zb)\\w*$");
+	    Pattern p_cs = Pattern.compile("^(CS|cs)\\w*$"); 
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		List<Map<String,Object>> cityList = new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Matcher m_zb = p_zb.matcher(userCode);  
+		Matcher m_cs = p_cs.matcher(userCode);
+		
+		try {
+			if(m_zb.matches()){
+				if(cityCode!=null&&!"".equals(cityCode)){
+					
+					String[] citycodeArr = cityCode.split(",");
+					StringBuilder sb = new StringBuilder();
+					for(String code:citycodeArr){
+						sb.append(",").append("'").append(code).append("'");
+					}
+					cityCode = sb.toString().substring(1);
+				}
+				list = noticeDao.getStoreByCity(cityCode);
+			}else if(m_cs.matches()){
+				if(cityCode==null||"".equals(cityCode)){
+					cityList = noticeDao.getCityOfCs(userDTO.getId());
+					StringBuilder sb = new StringBuilder();
+					for(int i=0;i<cityList.size();i++){
+						sb.append(",").append(cityList.get(i).get("citycode"));
+					}
+					if(cityList!=null&&cityList.size()>0){
+						list =  noticeDao.getStoreByCity(sb.toString().substring(1));
+					}
+					
+				}
+				
+			}
+			result.put("data", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("data", list);
+			return result;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getAllZw() {
+		NoticeDao noticeDao = (NoticeDao)SpringHelper.getBean(NoticeDao.class.getName());
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		
+		try {
+			
+			list = noticeDao.getAllZw();
+			result.put("data", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("data", list);
+			return result;
+		}
+		
+		return result;
+	}
+
 }

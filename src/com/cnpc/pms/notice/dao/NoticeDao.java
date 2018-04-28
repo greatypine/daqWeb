@@ -123,4 +123,12 @@ public interface NoticeDao {
 	* @author gbl
 	 */
 	public List<Map<String,Object>> selectNoticeByNoticeNo(String noticeNo);
+	
+	public List<Map<String,Object>> getCityOfZb();
+	
+	public List<Map<String,Object>> getCityOfCs(Long userId);
+	
+	public List<Map<String,Object>> getStoreByCity(String cityCode);
+	
+	public List<Map<String,Object>> getAllZw();
 }
