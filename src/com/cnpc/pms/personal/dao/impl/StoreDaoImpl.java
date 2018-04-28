@@ -371,7 +371,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getStoreDate(String where) {
-		String find_sql = "SELECT sto.`name`,sto.storeno,sto.platformname,sto.platformid,sto.storetypename,sto.city_name FROM t_store sto LEFT JOIN t_town town ON FIND_IN_SET(town.id,sto.town_id) where 1=1 and sto.storetype!='W' AND sto.storeno is not NULL and sto.flag=0 "
+		String find_sql = "SELECT sto.`name`,sto.storeno,sto.platformname,sto.platformid,sto.storetypename,sto.city_name FROM t_store sto LEFT JOIN t_town town ON FIND_IN_SET(town.id,sto.town_id) where 1=1 and sto.storetype!='W' AND sto.storeno is not NULL and sto.flag=0 and (sto.name not like '%办公室%' and sto.name not like '%储备店%' and sto.name not like '%测试%') and sto.estate!='闭店中'"
 				+ where + "GROUP BY sto.store_id ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(find_sql);
 		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -391,8 +391,11 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public List<Map<String, Object>> getStoreListDate(String where) {
 		String find_sql = "SELECT store.city_name,store.`name`,IF(store.storetype='W','',store.storeno)as storeno,IF(store.storetype='W','',store.storetypename) as storetypename,store.superMicro,store.estate,DATE_FORMAT(store.open_shop_time,'%Y/%c/%e') as open_shop_time,town.`name` as townname,IFNULL(store.address,store.detail_address) as detail_address,store.ordnumber,IFNULL(usee.mobilephone,usee.phone) as mobilephone,  usee.`name` as shopmanager, "
-				+ " coun.`name` as countname,IFNULL(store.nature,'') as nature,IFNULL(store.tenancy_term,'') as tenancyTerm,IFNULL(store.rental,'') as rental,IFNULL(store.payment_method,'') as payment_method FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
-				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0 and store.auditor_status=3 "
+				+ " coun.`name` as countname,IFNULL(store.nature,'') as nature,IFNULL(store.tenancy_term,'') as tenancyTerm,IFNULL(store.rental,'') as rental,IFNULL(store.payment_method,'') as payment_method "
+				+ " ,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins"
+				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
+				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id	"
+				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%') AND store.storetype!='V' AND store.estate!='闭店中'  AND store.storeno is not NULL and store.flag=0  "
 				+ where + " order by store.city_name desc,store.ordnumber";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(find_sql);
 		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -874,7 +877,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> findStoreXuanZhi(String where, PageInfo pageInfo) {
 		// sql查询列，用于页面展示所有的数据
 		String find_sql = "SELECT sto.store_id,sto.storetypename,sto.city_name,sto.`name`,GROUP_CONCAT(town.name) as town_name  from t_store sto left join t_town town ON FIND_IN_SET(town.id,sto.town_id) "
-				+ " WHERE sto.store_id not in (SELECT store_id FROM t_store_document_info) AND sto.storetype!='V' and IFNULL(sto.estate,'')!='闭店中' AND sto.auditor_status=3 AND (sto.`name` NOT LIKE '%储备店%' AND sto.name NOT LIKE '%办公室%' AND sto.name NOT LIKE '%测试%') and sto.flag=0 "
+				+ " WHERE sto.store_id not in (SELECT store_id FROM t_store_document_info) AND sto.storetype!='V' and IFNULL(sto.estate,'')!='闭店中' AND (sto.`name` NOT LIKE '%储备店%' AND sto.name NOT LIKE '%办公室%' AND sto.name NOT LIKE '%测试%') and sto.flag=0 "
 				+ where + " GROUP BY sto.store_id";
 		// SQL查询对象
 		String str_count_sql = "SELECT count(1) from (" + find_sql + ") cc";
@@ -1148,7 +1151,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ year + "' GROUP BY city_name) t2 " + "ON t1.cityname = t2.city_name LEFT JOIN "
 				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and estate != '闭店中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and DATE_FORMAT(create_time,'%Y') = '"
 				+ year + "' GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name LEFT JOIN "
-				+ "(select cooperative_task,self_support_task,cityname,cityno from di_storexpand  where 1=1 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname) t4 " + "ON t1.cityname = t4.cityname;";
+				+ "(select cooperative_task,self_support_task,cityname,cityno from di_storexpand  where 1=1 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname) t4 "
+				+ "ON t1.cityname = t4.cityname;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1182,4 +1186,60 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 	}
+
+	@Override
+	public Map<String, Object> queryAboutStoreInfo(String where, PageInfo pageInfo) {
+		String sql = "SELECT store.city_name,store.`name`,IF(store.storetype='W','',store.storeno)as storeno,IF(store.storetype='W','',store.storetypename) as storetypename,store.superMicro,store.estate,DATE_FORMAT(store.open_shop_time,'%Y/%c/%e') as open_shop_time,town.`name` as townname,IFNULL(store.address,store.detail_address) as detail_address,store.ordnumber,IFNULL(usee.mobilephone,usee.phone) as mobilephone,  usee.`name` as shopmanager, "
+				+ " coun.`name` as countname,IFNULL(store.nature,'') as nature,IFNULL(store.tenancy_term,'') as tenancyTerm,IFNULL(store.rental,'') as rental,IFNULL(store.payment_method,'') as payment_method "
+				+ " ,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins "
+				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
+				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id "
+				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0  "
+				+ where + " order by store.city_name desc,store.ordnumber";
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+
+		Integer total_pages = 0;
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+
+		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession()
+				.createSQLQuery(sql_count);
+		Object total = query_count.uniqueResult();
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<?> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+		total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+		map_result.put("pageinfo", pageInfo);
+		map_result.put("data", list);
+		map_result.put("status", "success");
+		map_result.put("totalPage", total_pages);
+		return map_result;
+	}
+
+	@Override
+	public Map<String, Object> exportAboutStore(String where) {
+		String sql = "SELECT store.city_name,store.`name`,IF(store.storetype='W','',store.storeno)as storeno,IF(store.storetype='W','',store.storetypename) as storetypename,store.superMicro,store.estate,DATE_FORMAT(store.open_shop_time,'%Y/%c/%e') as open_shop_time,town.`name` as townname,IFNULL(store.address,store.detail_address) as detail_address,store.ordnumber,IFNULL(usee.mobilephone,usee.phone) as mobilephone,  usee.`name` as shopmanager, "
+				+ " coun.`name` as countname,IFNULL(store.nature,'') as nature,IFNULL(store.tenancy_term,'') as tenancyTerm,IFNULL(store.rental,'') as rental,IFNULL(store.payment_method,'') as payment_method "
+				+ " ,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins "
+				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
+				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id "
+				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0  "
+				+ where + " order by store.city_name desc,store.ordnumber";
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		List<?> list = null;
+		Integer total_pages = 0;
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		map_result.put("data", list);
+		map_result.put("status", "success");
+		map_result.put("totalPage", total_pages);
+		return map_result;
+	}
+
 }

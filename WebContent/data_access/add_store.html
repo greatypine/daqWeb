@@ -55,6 +55,7 @@ var obj;
 var flag=true;
 var id = getUrlParamByKey("store_id");
 var sp = getUrlParamByKey("sp");
+var store_JSZ = getUrlParamByKey("JSZ");
 var storeTypeValue;
 var JSZ='';
 var citycode="";
@@ -89,7 +90,7 @@ function initview(){
 					if(jsonData.usergroup.code=='GLY'){
 						$(".bixuan").hide();
 						var a = document.getElementById("storetype");//mySelect是select 的Id
-						  a.options[7].selected = true;
+						  a.options[8].selected = true;
 						  a.disabled=true;
 						//JSZ=jsonData.usergroup.code;
 					}
@@ -102,7 +103,7 @@ function initview(){
 	
 	
 	$("#showattention").mouseover(function(event){
-		$("#attention").show();
+		$("#attention").show();"WebContent/data_access/add_store.html"
   	});
   	$("#showattention").mouseout(function(event){
   		$("#attention").hide();
@@ -647,6 +648,9 @@ function downloadFile(pic_name){
 				o['gaode_cityCode']=citycode;
 				o['gaode_adCode']=adcode;
 				o['gaode_address']=gaodeaddress;
+				if(store_JSZ=='MDGLYJSZ'){
+					o['jsz']='MDGLYJSZ';
+				}
 				var ttt=$('#open_shop_time').val();
 				if(ttt!=null&&ttt!=''){
 					var datt=ttt.split(' ');
@@ -656,17 +660,32 @@ function downloadFile(pic_name){
 						textStatus, XMLHttpRequest) {
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
-						if(id == null || id == ''){
-							var model="contract";
-							$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id);
-						    $("#uploadForm").submit();
-							alert("提交成功！");
+						if(store_JSZ=='MDGLYJSZ'){
+							if(jsonData.store_id == null || jsonData.store_id == ''){
+								/* var model="contract";
+								$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id);
+							    $("#uploadForm").submit(); */
+								alert("提交失败！");
+							}else{
+								var model="contract";
+								$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id+"&JSZ=MDGLYJSZ");
+							   $("#uploadForm").submit();
+							    alert("提交成功！");
+							}
 						}else{
-							var model="contract";
-							$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id);
-						   $("#uploadForm").submit();
-						    alert("提交成功！");
+							if(jsonData.store_id == null || jsonData.store_id == ''){
+								/* var model="contract";
+								$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id);
+							    $("#uploadForm").submit(); */
+								alert("提交失败！");
+							}else{
+								var model="contract";
+								$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id);
+							   $("#uploadForm").submit();
+							    alert("提交成功！");
+							}
 						}
+						
 					} else {
 						$("#submit").removeAttr("disabled"); 
 						$$.showMessage("系统信息", "提交失败!");

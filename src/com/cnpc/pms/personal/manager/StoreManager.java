@@ -8,6 +8,7 @@ import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.StoreDynamic;
 
@@ -324,4 +325,11 @@ public interface StoreManager extends IManager {
 	Map<String, Object> findStoreNetTozhan();
 
 	public Map<String, Object> getAllOpenProvinces();
+
+	Map<String, Object> queryAboutOfStoreInfo(DynamicDto dynamicDto, PageInfo pageInfo);
+
+	Map<String, Object> exportAboutOfStoreData(DynamicDto dynamicDto);
+
+	Map<String, Object> exportAboutOfStoreDataInfo(DynamicDto dynamicDto);
+
 }

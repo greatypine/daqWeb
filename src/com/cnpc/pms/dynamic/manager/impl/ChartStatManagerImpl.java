@@ -83,6 +83,13 @@ public class ChartStatManagerImpl extends BizBaseCommonManager implements ChartS
 	}
 	
 	@Override
+	public List<Map<String, Object>> queryTargetByMonth(ChartStatDto csd){
+		ChartStatDao chartStatDao = (ChartStatDao)SpringHelper.getBean(ChartStatDao.class.getName());
+		List<Map<String, Object>> lst_data = chartStatDao.queryTargetByMonth(csd);
+    	return lst_data;
+	}
+	
+	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartStatDto csd){
 		ChartStatDao chartStatDao = (ChartStatDao)SpringHelper.getBean(ChartStatDao.class.getName());
 		List<Map<String, Object>> lst_data = chartStatDao.queryDataOfScatterplot(csd);
