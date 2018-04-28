@@ -274,6 +274,22 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     @Override
     public Humanresources queryHumanresourceById(Long id){
     	Humanresources humanresources = (Humanresources)this.getObject(id);
+    	
+    	//如果selectStoreIds不为空 则查询门店名字
+    	String selectStoreids = humanresources.getSelectStoreIds();
+    	if(selectStoreids!=null&&selectStoreids.length()>0&&selectStoreids.contains(",")){
+    		String strs = selectStoreids.substring(1,selectStoreids.length()-1);
+    		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+    		IFilter repFilter =FilterFactory.getSimpleFilter("store_id in("+strs+")");
+    		List<Store> lstList = (List<Store>) storeManager.getList(repFilter);
+    		if(lstList!=null&&lstList.size()>0){
+    			String storenames = "";
+    			for(Store s :lstList){
+    				storenames+=s.getName()+",";
+    			}
+    			humanresources.setSelectStoreNames(storenames);
+    		}
+    	}
     	return humanresources;
     }
     
@@ -327,7 +343,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     			return rcv;
     		}else{
     			//保存数据
-    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上服务专员")){
+    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上产品专员")){
     				Store store = storeManager.findStoreByName(humanresources.getStorename());
         	    	if(store!=null){
         	    		humanresources.setStore_id(store.getStore_id());
@@ -369,7 +385,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     			}
     			String new_employee_no = initMaxEmployee(maxEmployeeNo);
     			humanresources.setEmployee_no(new_employee_no);
-    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上服务专员")){
+    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上产品专员")){
     				Store store = storeManager.findStoreByName(humanresources.getStorename());
         	    	if(store!=null){
         	    		humanresources.setStore_id(store.getStore_id());
@@ -638,6 +654,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	hr.setContractdatestart(humanresources.getContractdatestart());
     	hr.setContractdateend(humanresources.getContractdateend());
     	hr.setCareer_group(humanresources.getCareer_group());
+    	hr.setSelectStoreIds(humanresources.getSelectStoreIds());
     	
     	boolean isLeave = false;
     	//如果状态为离职状态
@@ -666,7 +683,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		if(humanresources.getZw()!=null&&humanresources.getZw().equals("市场专员")){
 			store = null;
 		}
-		if(humanresources.getZw()!=null&&humanresources.getZw().equals("线上服务专员")){
+		if(humanresources.getZw()!=null&&humanresources.getZw().equals("线上产品专员")){
 			store = null;
 		}
 		// 如果界面上选择的门店 为空 那此人为 星店店长 或市场专员
