@@ -4348,7 +4348,17 @@ var curr_user;
 	  }
 	  window.open(url,"dynamicData_tinyvillage");
   }
-  
+  //数据查找-小区数据
+  function searchStoreData(){
+  	  var url = "";
+	  var target=pageStatusInfo.targets;
+	  if(target==0){
+	  	url = "dynamicData_storeInfo.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id);
+	  }else if(target==1){
+	  	url = "dynamicData_storeInfo.html?t="+encode64(target)+"&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);
+	  }
+	  window.open(url);
+  }
   
   //数据地图-热力图-营业额热力图
   function gotogmvheat(){
