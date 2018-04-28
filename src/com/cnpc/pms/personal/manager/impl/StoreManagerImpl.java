@@ -2492,11 +2492,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 					row = sheet.createRow(i + 1);
 					for (int cellIndex = 0; cellIndex < headers_key.length; cellIndex++) {
 						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+						sheet.autoSizeColumn(cellIndex);
 					}
 				}
 
 				File file_xls = new File(
-						str_file_dir_path + File.separator + System.currentTimeMillis() + "_aboutTinyvillage.xls");
+						str_file_dir_path + File.separator + System.currentTimeMillis() + "_aboutStore.xls");
 				if (file_xls.exists()) {
 					file_xls.delete();
 				}
