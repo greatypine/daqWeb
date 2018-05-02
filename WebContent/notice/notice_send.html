@@ -155,6 +155,7 @@ function showTemplateInfo(t){
 	            autoOpen:false,
 	            width:_this.width,
 	            height:_this.height,
+	            open:function(event,ui){$(".ui-icon-closethick").hide()},
 	            buttons : {
 	                "确定": function(){
 	                    window.frames["select_win"].doSubmit();
