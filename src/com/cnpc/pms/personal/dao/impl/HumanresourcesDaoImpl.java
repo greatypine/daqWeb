@@ -237,7 +237,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		public List<Map<String, Object>> exportHuman(Humanresources humanresources){
 			String sqlwhere = " 1=1 ";
 			if(humanresources!=null&&humanresources.getHumanstatus()!=null){
-				sqlwhere +=" and humanstatus = '"+humanresources.getHumanstatus()+"'";
+				sqlwhere +=" and a.humanstatus = '"+humanresources.getHumanstatus()+"'";
 			}
 			if(humanresources!=null&&humanresources.getTopostdate()!=null&&humanresources.getTopostdate().length()>0){
 				String startDate = humanresources.getTopostdate().split("-")[0].toString().trim();
@@ -245,32 +245,32 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 				
 				if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
 					//在职
-					sqlwhere +=" and DATE_FORMAT(topostdate,'%Y/%m/%d') >='"+startDate+"'";
-					sqlwhere +=" and DATE_FORMAT(topostdate,'%Y/%m/%d') <='"+endDate+"'";
+					sqlwhere +=" and DATE_FORMAT(a.topostdate,'%Y/%m/%d') >='"+startDate+"'";
+					sqlwhere +=" and DATE_FORMAT(a.topostdate,'%Y/%m/%d') <='"+endDate+"'";
 				}else if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(2L)){
 					//离职
-					sqlwhere +=" and DATE_FORMAT(leavedate,'%Y/%m/%d') >='"+startDate+"'";
-					sqlwhere +=" and DATE_FORMAT(leavedate,'%Y/%m/%d') <='"+endDate+"'";
+					sqlwhere +=" and DATE_FORMAT(a.leavedate,'%Y/%m/%d') >='"+startDate+"'";
+					sqlwhere +=" and DATE_FORMAT(a.leavedate,'%Y/%m/%d') <='"+endDate+"'";
 				}
 			}
 			
 			if(humanresources!=null&&humanresources.getCitySelect()!=null&&humanresources.getCitySelect().length()>0){
-				sqlwhere +=" and citySelect = '"+humanresources.getCitySelect()+"'";
+				sqlwhere +=" and a.citySelect = '"+humanresources.getCitySelect()+"'";
 			}
 			if(humanresources!=null&&humanresources.getStorename()!=null&&humanresources.getStorename().length()>0){
-				sqlwhere +=" and storename = '"+humanresources.getStorename()+"'";
+				sqlwhere +=" and a.storename = '"+humanresources.getStorename()+"'";
 			}
 			if(humanresources!=null&&humanresources.getName()!=null&&humanresources.getName().length()>0){
-				sqlwhere +=" and name like '%"+humanresources.getName().trim()+"%'";
+				sqlwhere +=" and a.name like '%"+humanresources.getName().trim()+"%'";
 			}
 			if(humanresources!=null&&humanresources.getPhone()!=null&&humanresources.getPhone().length()>0){
-				sqlwhere +=" and phone = '"+humanresources.getPhone().trim()+"'";
+				sqlwhere +=" and a.phone = '"+humanresources.getPhone().trim()+"'";
 			}
 			if(humanresources!=null&&humanresources.getEmployee_no()!=null&&humanresources.getEmployee_no().length()>0){
-				sqlwhere +=" and employee_no = '"+humanresources.getEmployee_no().trim()+"'";
+				sqlwhere +=" and a.employee_no = '"+humanresources.getEmployee_no().trim()+"'";
 			}
 			
-			String sql = "SELECT * FROM t_humanresources a where "+sqlwhere ;
+			String sql = "SELECT a.name,a.employee_no,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;

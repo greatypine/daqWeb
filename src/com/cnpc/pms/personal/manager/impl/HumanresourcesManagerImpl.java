@@ -343,7 +343,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     			return rcv;
     		}else{
     			//保存数据
-    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上产品专员")){
+    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上服务专员")){
     				Store store = storeManager.findStoreByName(humanresources.getStorename());
         	    	if(store!=null){
         	    		humanresources.setStore_id(store.getStore_id());
@@ -385,7 +385,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     			}
     			String new_employee_no = initMaxEmployee(maxEmployeeNo);
     			humanresources.setEmployee_no(new_employee_no);
-    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上产品专员")){
+    			if(!humanresources.getZw().equals("市场专员")&&!humanresources.getZw().equals("线上服务专员")){
     				Store store = storeManager.findStoreByName(humanresources.getStorename());
         	    	if(store!=null){
         	    		humanresources.setStore_id(store.getStore_id());
@@ -683,7 +683,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		if(humanresources.getZw()!=null&&humanresources.getZw().equals("市场专员")){
 			store = null;
 		}
-		if(humanresources.getZw()!=null&&humanresources.getZw().equals("线上产品专员")){
+		if(humanresources.getZw()!=null&&humanresources.getZw().equals("线上服务专员")){
 			store = null;
 		}
 		// 如果界面上选择的门店 为空 那此人为 星店店长 或市场专员
@@ -3433,8 +3433,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   	        XSSFRow row = sheet.createRow(0);
   	        
   	      //定义表头 以及 要填入的 字段 
-  	      String[] str_headers = {"员工姓名","员工编号","门店","城市","岗位","事业群","入职日期"};
-		  String[] headers_key = {"name","employee_no","storename","citySelect","zw","career_group","topostdate"};
+  	      String[] str_headers = {"员工姓名","员工编号","门店","城市","岗位","事业群","入职日期","门店编号"};
+		  String[] headers_key = {"name","employee_no","storename","citySelect","zw","career_group","topostdate","storeno"};
   	       if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
 				//在职
   	    	    str_headers[6]="入职日期";
