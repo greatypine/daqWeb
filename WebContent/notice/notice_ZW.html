@@ -11,13 +11,87 @@
     <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
           type="text/css">
     <script>
-       
+        var selectZw = decodeURIComponent(getUrlParamByKey("zw"));
     	var arr =new Array();
         $(function () {
+        	
+        	
+        	if((selectZw==""||selectZw=="null")){//全部
+        		getZW();
+      		}else{
+      			allZW = selectZw.split(",");
+      		}
             //页面加载成功后需要获取数据
             searchList();
         });
         
+        
+        var allZW = new Array();
+        function getZW(){
+         	
+        	doManager('noticeManager','getAllZw',null,function(data){
+                if(data.result){
+                    var result = JSON.parse(data.data).data;
+                    if(result!=null&&result.length>0){
+                    	for(var i=0;i<result.length;i++){
+                    		allZW.push(result[i].zw);
+                    	}
+                    }
+                  
+                }else{
+                    $$.showMessage('提示',data.message);
+                }
+            },false); 
+        }
+        
+        
+        var COLUMNS = {
+                "id": function(aData, iColumn, sColumnName, map){
+                     var zw = map["zw"];
+                     
+	           		 if(selectZw==""||selectZw=="null"){//全部
+	           			 if(isInArray(allZW,zw)&&checkstatus){
+	                         return '<input type="checkbox" name="chkbox"  onclick="zwcheck(this)" value="'+zw+'" checked="true"/>';
+
+	           			 }else{
+	           		    	 return '<input type="checkbox" name="chkbox" onclick="zwcheck(this)" value="'+zw+'" />';
+
+	           			 }
+	           		 }else if((selectZw.indexOf(",")>=0||selectZw!="")){
+	           			 if(isInArray(allZW,zw)&&checkstatus){
+	           		    	 return '<input type="checkbox" name="chkbox" onclick="zwcheck(this)" value="'+zw+'" checked="true"/>';
+	           			 }else{
+	                         return '<input type="checkbox" name="chkbox"  onclick="zwcheck(this)" value="'+zw+'"/>';
+	           			 }
+	           		 }
+                 
+                }
+            }
+        
+        
+        function isInArray(arr,value){
+            for(var i = 0; i < arr.length; i++){
+                if(value === arr[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        
+      
+        function zwcheck(zw){
+        	if(zw.checked){
+        		allZW.push(zw.value);
+        	}else{
+        		for(n in allZW){
+        			if(allZW[n]==zw.value){
+        				allZW.splice(n,1);
+        			}
+        		}
+        	}
+        	
+        }
         
         //记载页面时请求数据列表默认的方法
         function searchList() {
@@ -26,23 +100,52 @@
 
         function doSubmit(){
             var jsons=new Array();
-            var objs = $$.getSelectedObj("queryNoticeReceiveZW");
-            if (objs.length != 0) {
-            	for(var i=0;i<objs.length;i++){
-            		json = {zw:objs[i][0]};
-            		jsons.push(json);
-            	}
-            } 
-           
+//             var objs = $("#queryNoticeReceiveZW_id").find("tr:gt(0)");
+//             if (objs.length != 0) {
+//             	for(var i=0;i<objs.length;i++){
+//             		var checkStatus = $(objs[i]).find("td:eq(0)").children()[0].checked;
+//             		if(checkStatus){
+//             			var json = {zw:$(objs[i]).find("td:eq(1)").html()};
+//                 		jsons.push(json);
+//             		}
+//             	}
+//             } 
+
+            	if (allZW.length != 0) {
+            		for(var i=0;i<allZW.length;i++){
+            			var json = {zw:allZW[i]};
+                		jsons.push(json);
+            		}
+            	} 
+            
             parent.win.callBack(jsons);
             parent.win.hide();
         }
       
+        
+        var checkstatus=true;
+        function  clearChecked(){
+        	 checkstatus = false;
+        	 allZW.splice(0,allZW.length);
+        	 var objs = $("#queryNoticeReceiveZW_id").find("tr:gt(0)");
+	         if (objs.length != 0) {
+	         	for(var i=0;i<objs.length;i++){
+	         		var checkStatus = $(objs[i]).find("td:eq(0)").children()[0].checked;
+	         		if(checkStatus){
+	         			$(objs[i]).find("td:eq(0)").children()[0].checked=false;
+	         		}
+	         	}
+	         }
+	     }
          
     </script>
     <style type="text/css">
         html,body{
             height: 100%;
+        }
+        
+        .display{
+        width:100%;
         }
     </style>
 </head>
@@ -73,11 +176,12 @@
                 </div>
                 <div class="panel-footer"  align="right">
                     <input class="btn btn-primary" onClick="searchList()" value="查询" type="button"/>
+                     <input class="btn btn-primary" onClick="clearChecked()" value="清空选中" type="button"/>
                 </div>
             </div>
             <div id="gridContainer" searchDiv="conditionsDiv" queryid="queryNoticeReceiveZW" class="panel panel-primary"
                  operators="$pmspage.opArr" titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="false"
-                 showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="true"
+                 showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="false"
                  checkmode="multiple" autoload="false" showno="false">
             </div>
         </div>

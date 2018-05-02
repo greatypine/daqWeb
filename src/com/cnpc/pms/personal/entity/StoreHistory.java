@@ -49,12 +49,12 @@ public class StoreHistory extends DataEntity {
 	/**
 	 * 地址
 	 */
-	@Column(length = 20, name = "address")
+	@Column(length = 255, name = "address")
 	private String address;
 	/**
 	 * 详细地址
 	 */
-	@Column(length = 20, name = "detail_address")
+	@Column(length = 255, name = "detail_address")
 	private String detail_address;
 	/**
 	 * 电话

@@ -8,5 +8,11 @@
             <daopackage interfacePackage="com.cnpc.pms.notice.dao"
                         implementPackage="com.cnpc.pms.notice.dao.impl"/>
         </package>
+         <package id="noticeReciver">
+            <managerpackage interfacePackage="com.cnpc.pms.notice.manager"
+                            implementPackage="com.cnpc.pms.notice.manager.impl"/>
+            <daopackage interfacePackage="com.cnpc.pms.notice.dao"
+                        implementPackage="com.cnpc.pms.notice.dao.impl"/>
+        </package>
     </module>
 </application>

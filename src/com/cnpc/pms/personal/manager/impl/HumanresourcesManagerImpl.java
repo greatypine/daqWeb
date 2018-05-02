@@ -274,6 +274,22 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     @Override
     public Humanresources queryHumanresourceById(Long id){
     	Humanresources humanresources = (Humanresources)this.getObject(id);
+    	
+    	//如果selectStoreIds不为空 则查询门店名字
+    	String selectStoreids = humanresources.getSelectStoreIds();
+    	if(selectStoreids!=null&&selectStoreids.length()>0&&selectStoreids.contains(",")){
+    		String strs = selectStoreids.substring(1,selectStoreids.length()-1);
+    		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+    		IFilter repFilter =FilterFactory.getSimpleFilter("store_id in("+strs+")");
+    		List<Store> lstList = (List<Store>) storeManager.getList(repFilter);
+    		if(lstList!=null&&lstList.size()>0){
+    			String storenames = "";
+    			for(Store s :lstList){
+    				storenames+=s.getName()+",";
+    			}
+    			humanresources.setSelectStoreNames(storenames);
+    		}
+    	}
     	return humanresources;
     }
     
@@ -638,6 +654,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	hr.setContractdatestart(humanresources.getContractdatestart());
     	hr.setContractdateend(humanresources.getContractdateend());
     	hr.setCareer_group(humanresources.getCareer_group());
+    	hr.setSelectStoreIds(humanresources.getSelectStoreIds());
     	
     	boolean isLeave = false;
     	//如果状态为离职状态
@@ -3416,8 +3433,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   	        XSSFRow row = sheet.createRow(0);
   	        
   	      //定义表头 以及 要填入的 字段 
-  	      String[] str_headers = {"员工姓名","员工编号","门店","城市","岗位","事业群","入职日期"};
-		  String[] headers_key = {"name","employee_no","storename","citySelect","zw","career_group","topostdate"};
+  	      String[] str_headers = {"员工姓名","员工编号","门店","城市","岗位","事业群","入职日期","门店编号"};
+		  String[] headers_key = {"name","employee_no","storename","citySelect","zw","career_group","topostdate","storeno"};
   	       if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
 				//在职
   	    	    str_headers[6]="入职日期";

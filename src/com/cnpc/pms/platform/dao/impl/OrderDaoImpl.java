@@ -2171,5 +2171,54 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
         }
 		return lst_result;
 	}
+
+	@Override 
+	public Map<String, Object> queryOrderByEmployeeNo(String store_id, String employee_no, PageInfo pageInfo) {
+		// 查询片区 里的 所有服务 
+    	String sqlwhere =" from (SELECT "+
+    	"	a.*,t_customer.mobilephone,t_customer.short_name as customer_name "+
+    	"FROM	(		SELECT tor.* FROM t_order tor "+
+    	"		WHERE tor.sign_time >=concat(YEAR(CURDATE()),'-01-01')"+
+    	"		AND tor.store_id = '"+store_id+"'"+
+    	"	) a"+
+    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
+    	" INNER JOIN  t_employee te on a.employee_id = te.id and te.code='"+employee_no+"'"+
+        " ) t JOIN t_order_item ON t_order_item.order_id = t.id GROUP BY t.order_sn  ORDER BY t.sign_time desc";
+    	
+    	String sql="SELECT t.id,t.order_sn,t.customer_id,store_id,t.employee_name,t.sign_time,t.customer_name,t.mobilephone,concat(GROUP_CONCAT(t_order_item.eshop_pro_name),'') as eshop_pro_name  "+ sqlwhere;
+    	String sqlcount = "select count(1) as totalcount "+ sqlwhere;
+    	
+    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+    	
+    	Map<String, Object> maps = new HashMap<String, Object>();
+		try {
+			SQLQuery querycount = session.createSQLQuery(sqlcount);
+			String countnum = querycount.list().size()+"";
+			//SQL查询对象
+			String retSql = "select * from ("+sql+") z";
+			SQLQuery query = session.createSQLQuery(retSql);
+			//获得查询数据
+			List<Map<String, Object>> lst_data  = query
+			        .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+			        .setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
+			        .setMaxResults(pageInfo.getRecordsPerPage()).list();
+			
+			
+			int pages = 0;
+			if(countnum!="0"){
+				pages =(Integer.parseInt(countnum)-1)/10+1;
+			}
+			maps.put("data", lst_data);
+			maps.put("totalpage", countnum);
+			maps.put("pagenum", pages);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}finally{
+			session.close();
+		}
+    	return maps;
+	}
 	
 }

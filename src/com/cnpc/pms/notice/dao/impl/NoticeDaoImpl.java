@@ -190,5 +190,78 @@ public class NoticeDaoImpl extends BaseDAOHibernate implements NoticeDao{
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 	}
+
+	@Override
+	public List<Map<String, Object>> getCityOfZb() {
+		String sql="select * from    t_dist_citycode a where a.status=0 ";
+		//SQL查询对象
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        //获得查询数据
+        List<Map<String, Object>> lst_data = query
+                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        //如果没有数据返回
+        if(lst_data == null || lst_data.size() == 0){
+            return new ArrayList<Map<String, Object>>();
+        }
+        return (List<Map<String,Object>>)lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getCityOfCs(Long userId) {
+		String sql="select * from   t_dist_city a where a.status=0  and pk_userid="+userId;
+		//SQL查询对象
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+       
+        //获得查询数据
+        List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+
+        //如果没有数据返回
+        if(lst_data == null || lst_data.size() == 0){
+            return new ArrayList<Map<String, Object>>();
+        }
+
+        return (List<Map<String,Object>>)lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getStoreByCity(String cityCode) {
+		String whereStr="";
+		if(cityCode!=null&&!"".equals(cityCode)){
+			whereStr = " where citycode in ("+cityCode+")";
+		}
+		String sql="select b.store_id,b.name,b.city_name from (select * from t_dist_citycode "+whereStr+") as a inner join t_store as b on a.cityname=b.city_name ";
+		//SQL查询对象
+        SQLQuery query = getHibernateTemplate().getSessionFactory()
+                .getCurrentSession().createSQLQuery(sql);
+       
+        //获得查询数据
+        List<Map<String, Object>> lst_data = query
+                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        //如果没有数据返回
+        if(lst_data == null || lst_data.size() == 0){
+            return new ArrayList<Map<String, Object>>();
+        }
+
+        return (List<Map<String,Object>>)lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllZw() {
+		String sql=" select a.zw,1 as id from (select DISTINCT zw from t_humanresources union ALL select DISTINCT zw from t_storekeeper) as a ";
+		//SQL查询对象
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        
+        //获得查询数据
+        List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+        //如果没有数据返回
+        if(lst_data == null || lst_data.size() == 0){
+            return new ArrayList<Map<String, Object>>();
+        }
+
+
+        return (List<Map<String,Object>>)lst_data;
+	}
 	 
 }

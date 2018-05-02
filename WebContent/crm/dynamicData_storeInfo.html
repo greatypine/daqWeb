@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>小区档案</title>
+  <title>门店信息档案</title>
     <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -107,7 +107,7 @@
 					<div class="pull-left">
 						<div class="logo-lg">
 							<ul class="no-margin">
-								<li class="current"><em>小区档案</em></li>
+								<li class="current"><em>门店信息档案</em></li>
 							</ul>
 						</div>
 					</div>
@@ -126,17 +126,13 @@
       <section class="content-header">
         <div class="box box-default">
           <div class="box-header  text-light-blue">
-          <div class="pull-left "><strong>小区档案查询</strong></div>
+          <div class="pull-left "><strong>门店信息档案查询</strong></div>
           </div>
           <div class="box-body">
            <form id="reset_form">
           <div class="clearfix">
             <div class="form-group col-lg-3">
               <label>城市</label>
-<!--              <input id="city_id_area" name="city_id_area" type="hidden" bidTableFlag="true" value=""/> -->
-<!--              <input id="city_name_area" name="city_name_area" maxlength="40" type="text" class="form-control" placeholder="全部城市" bidTableFlag="true" list="city_name-search_area" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);display: inherit;width: 90%"/> -->
-<!--              <datalist id="city_name-search_area"> -->
-<!--              </datalist> -->
 							<input id="city_id_area" name="city_id_area" type="hidden" value=""/>
 							  <input type="text" class="form-control"  placeholder="城市" id="city_name_area" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
 				              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
@@ -157,27 +153,16 @@
 	              </div>
               <!-- /.input group -->
             </div>
-           </div>
-             <div class="clearfix">
-            <div class="form-group col-lg-3">
-              <label>小区名称</label>
-             <input id="tinyvillageName" name="tinyvillageName" placeholder="小区名称" maxlength="40" type="text" class="form-control" bidTableFlag="true"  style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);display: inherit;width: 90%"/>
-              
-            </div>
-            <div class="form-group col-lg-3">
-              	<label>小区编号</label>
-              	<input id="tinyvillageCode" name="tinyvillageCode" placeholder="小区编号" maxlength="40" type="text" class="form-control" bidTableFlag="true"  style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);display: inherit;width: 90%"/>
+             <div class="form-group col-lg-3">
+              	<label>门店编号</label>
+              	<input id="storeNo" name="storeNo" placeholder="门店编号" maxlength="40" type="text" class="form-control" bidTableFlag="true"  style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);display: inherit;width: 90%"/>
             </div>
             <div class="form-group col-lg-3">
               <label>街道名称</label>
               <input id="townName" name="townName" placeholder="街道名称" maxlength="40" type="text" class="form-control" bidTableFlag="true"  style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);display: inherit;width: 90%"/>
 
             </div>
-            <div class="form-group col-lg-3">
-              <label>社区名称</label>
-              <input id="villageName" name="villageName" placeholder="社区名称" maxlength="40" type="text" class="form-control" bidTableFlag="true"  style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);display: inherit;width: 90%"/>
-            </div>
-             </div>
+           </div>
              </form>
             <div class="clearfix">
 	            <div class="form-group col-lg-6" style="margin-top: 20px; padding: 0 25px;">
@@ -201,17 +186,18 @@
                     <tbody id="area_tbody">
 	                    <tr>
 	                      <th width="8%">城市</th>
-	                      <th width="10%">小区名称</th>
-	                      <th width="10%">小区编号</th>
-	                      <th width="6%">小区居民户数</th>
-	                      <th width="8%">小区面积</th>
-	                      <th width="6%">已消费人数</th>
-	                      <th width="4%">小区地图</th>
-	                      <th width="4%">删除标签</th>
-	                      <th width="10%">所属门店</th>
+	                      <th width="10%">门店名称</th>
+	                      <th width="6%">门店编号</th>
+	                      <th width="6%">区域</th>
 	                      <th width="10%">所属街道</th>
-	                      <th width="12%">所属社区</th>
-	                      <th width="10%">小区类型</th>
+	                      <th width="8%">门店类型</th>
+	                      <th width="4%">是否微超</th>
+	                      <th width="6%">目前状态</th>
+	                      <th width="8%">门店开业时间</th>
+	                      <th width="6%">属性</th>
+	                      <th width="14%">位置</th>
+	                      <th width="6%">店长</th>
+	                      <th width="8%">门店电话</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -465,10 +451,8 @@
    	 	var cityName = $("#city_name_area").val();
  	    var number_str = $("#store_id_area").val(); //门店id
  	    var storeName = $("#store_name_area").val();//门店名称
- 	    var tinyvillageName = $("#tinyvillageName").val();//小区名称
- 	    var tinyvillageCode = $("#tinyvillageCode").val();//小区编号
- 	    var townName = $("#townName").val();//街道名称
- 	    var villageName = $("#villageName").val();//社区名称
+ 	    var storeNo = $("#storeNo").val();//门店编号
+ 	    var townName = $("#townName").val();//街道名字
  	    if(number_str==""&&storeName!=""){
  	    	number_str=-10000;
  	    }
@@ -485,10 +469,8 @@
 		  		employeeId:curr_user.id,
 		  		target:target,
 		  		storeId:number_str,
-		  		tinyvillageName:tinyvillageName,
-		  		tinyvillageCode:tinyvillageCode,
+		  		storeNo:storeNo,
 		  		townName:townName,
-		  		villageName:villageName,
 		  		storeName:storeName
 		   }
 		}else  if(target==1){
@@ -498,11 +480,9 @@
 	 		  		employeeId:curr_user.id,
 	 		  		target:target,
 	 		  		storeId:number_str,
-	 		  		tinyvillageName:tinyvillageName,
-	 		  		tinyvillageCode:tinyvillageCode,
-	 		  		townName:townName,
-	 		  		villageName:villageName,
-	 		  		storeName:storeName
+	 		  		storeNo:storeNo,
+			  		townName:townName,
+			  		storeName:storeName
   			}
 	    }else if(target==2){
 	    	dynamicDto = {
@@ -511,17 +491,15 @@
 			  		employeeId:curr_user.id,
 			  		target:target,
 			  		storeId:number_str,
-			  		tinyvillageName:tinyvillageName,
-			  		tinyvillageCode:tinyvillageCode,
+			  		storeNo:storeNo,
 			  		townName:townName,
-			  		villageName:villageName,
 			  		storeName:storeName
   			}
 	    }
  	    var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
  	   pageInfo.recordsPerPage = autoPageRecordes;
-	    doManager('tinyVillageManager','queryAboutOfTinyvillage',[dynamicDto,pageInfo],function(data){
+	     doManager('storeManager','queryAboutOfStoreInfo',[dynamicDto,pageInfo],function(data){
            if(data.result){
            	   var result= JSON.parse(data.data);
 	           if(result.status=='success'){
@@ -557,42 +535,20 @@
 	        	  
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-	        		   var cc='';
-	        		   if(jData[i].tinyvillage_type==0){
-	        			   cc='平房';
-	        		   }else if(jData[i].tinyvillage_type==1){
-	        			   cc='楼房';
-	        		   }else if(jData[i].tinyvillage_type==2){
-	        			   cc='商业';
-	        		   }else if(jData[i].tinyvillage_type==3){
-	        			   cc='公园/广场';
-	        		   }else if(jData[i].tinyvillage_type==4){
-	        			   cc='混合类型';
-	        		   }else if(jData[i].tinyvillage_type==5){
-	        			   cc='其它';
-	        		   }
-	        		   
-	        		   var mm='';
-	        		   if(jData[i].tiny_map=='无'){
-	        			   mm='无';
-	        		   }else{
-	        			   mm='<a href="javascript:void(0);" target="myFrameId" onclick="showIframe(\''+jData[i].tinyvillage_code+'\',\''+jData[i].id+'\')">有</a>'
-	        		   }
-	        		   
-	        		   
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
 		                       +"<td>"+jData[i].name+"</td>"
-		                       +"<td>"+jData[i].tinyvillage_code+"</td>"
-		                       +"<td>"+jData[i].residents_number+"</td>"
-		                       +"<td>"+jData[i].vallage_area+"</td>"
-		                       +"<td>"+jData[i].consumer_number+"</td>"
-		                       +"<td>"+mm+"</td>"
-		                       +"<td>"+jData[i].dellable+"</td>"
-		                       +"<td>"+jData[i].store_name+"</td>"
-		                       +"<td>"+jData[i].town_name+"</td>"
-		                       +"<td>"+jData[i].village_name+"</td>"
-		                       +"<td>"+cc+"</td>"
+		                       +"<td>"+jData[i].storeno+"</td>"
+		                       +"<td>"+(jData[i].countname==null?"":jData[i].countname)+"</td>"
+		                       +"<td>"+(jData[i].townname==null?"":jData[i].townname)+"</td>"
+		                       +"<td>"+(jData[i].storetypename==null?"":jData[i].storetypename)+"</td>"
+		                       +"<td>"+(jData[i].superMicro==null?"":jData[i].superMicro)+"</td>"
+		                       +"<td>"+(jData[i].estate==null?"":jData[i].estate)+"</td>"
+		                       +"<td>"+(jData[i].open_shop_time==null?"":jData[i].open_shop_time)+"</td>"
+		                       +"<td>"+(jData[i].nature==null?"":jData[i].nature)+"</td>"
+		                       +"<td>"+(jData[i].detail_address==null?"":jData[i].detail_address)+"</td>"
+		                       +"<td>"+(jData[i].shopmanager==null?"":jData[i].shopmanager)+"</td>"
+		                       +"<td>"+(jData[i].mobilephone==null?"":jData[i].mobilephone)+"</td>"
 		                       +"</tr>";
 		                       
 		                  $("#area_tbody").append(infoStr);     
@@ -615,7 +571,7 @@
            }
           $("#process_div").hide();
      	  $("#process_div_pic").hide();
-       }); 
+       });
     }  
     function showIframe(tinycode,tinyId){
     	
@@ -662,10 +618,8 @@
   	 	var cityName = $("#city_name_area").val();
  	    var number_str = $("#store_id_area").val(); //门店id
  	    var storeName = $("#store_name_area").val();//门店名称
- 	    var tinyvillageName = $("#tinyvillageName").val();//小区名称
- 	    var tinyvillageCode = $("#tinyvillageCode").val();//小区编号
+ 	    var storeNo = $("#storeNo").val();//小区名称
  	    var townName = $("#townName").val();//街道名称
- 	    var villageName = $("#villageName").val();//社区名称
  	   var dynamicDto=null;
  	  if(target==0){
 	       var cityId = $("#city_id_area").val();
@@ -679,11 +633,9 @@
 		  		employeeId:curr_user.id,
 		  		target:target,
 		  		storeId:number_str,
-		  		tinyvillageName:tinyvillageName,
-		  		tinyvillageCode:tinyvillageCode,
 		  		townName:townName,
-		  		villageName:villageName,
-		  		storeName:storeName
+		  		storeName:storeName,
+		  		storeNo:storeNo
 		   }
 		}else  if(target==1){
 	    	 dynamicDto = {
@@ -692,11 +644,9 @@
 	 		  		employeeId:curr_user.id,
 	 		  		target:target,
 	 		  		storeId:number_str,
-	 		  		tinyvillageName:tinyvillageName,
-	 		  		tinyvillageCode:tinyvillageCode,
 	 		  		townName:townName,
-	 		  		villageName:villageName,
-	 		  		storeName:storeName
+			  		storeName:storeName,
+			  		storeNo:storeNo
  			}
 	    }else if(target==2){
 	    	dynamicDto = {
@@ -705,15 +655,13 @@
 			  		employeeId:curr_user.id,
 			  		target:target,
 			  		storeId:number_str,
-			  		tinyvillageName:tinyvillageName,
-			  		tinyvillageCode:tinyvillageCode,
 			  		townName:townName,
-			  		villageName:villageName,
-			  		storeName:storeName
+			  		storeName:storeName,
+			  		storeNo:storeNo
  			}
 	    }
 	   
-	    doManager('tinyVillageManager','exportAboutOfTinyvillage',[dynamicDto],function(data){
+	    doManager('storeManager','exportAboutOfStoreData',[dynamicDto],function(data){
           if(data.result){
           	   var result= JSON.parse(data.data);
 	           if(result.status=='success'){

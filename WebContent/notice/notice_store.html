@@ -13,6 +13,7 @@
     <script>
         var city = getUrlParamByKey("city");
         var employeeId = getUrlParamByKey("employee_no");
+        var selectStore = getUrlParamByKey("selectStore");
     	var arr =new Array();
         $(function () {
         	$("#city").val(city);
@@ -20,6 +21,12 @@
         		
         		$("#employeeId").val(employeeId);
         	}
+        	if((selectStore==""||selectStore=="null")){//全部
+            	getStore(1);
+      		}else{
+      			getStore(2);
+      			allStore = selectStore.split(",");
+      		}
             //页面加载成功后需要获取数据
             searchList();
         });
@@ -31,27 +38,140 @@
         function searchList() {
             $$.executeSearch('queryNoticeReceiveStoreByCity', 'conditionsDiv');
         }
+        
+        
+        
+        var allStore = new Array();
+        var storeArray = new Array();
+        function getStore(f){
+         	if(city==""){
+         		city=null;
+         	}
+        	doManager('noticeManager','getStoreOfRole',[city],function(data){
+                if(data.result){
+                    var result = JSON.parse(data.data).data;
+                    storeArray = result;
+                    if(f==1){
+                    	if(result!=null&&result.length>0){
+                        	for(var i=0;i<result.length;i++){
+                        		allStore.push(result[i].store_id+"");
+                        	}
+                        }
+                    }
+                    
+                  
+                }else{
+                    $$.showMessage('提示',data.message);
+                }
+            },false); 
+        }
+        
+        
+        var COLUMNS = {
+                "store_id": function(aData, iColumn, sColumnName, map){
+                     var store_id = map[sColumnName];
+                     var regex_store= new RegExp("^[0-9]+");
+	           		 if((selectStore==""||selectStore=="null")){//全部
+	           			 if(isInArray(allStore,store_id+"")&&checkstatus){
+	           		    	 return '<input type="checkbox" name="chkbox" onclick="storecheck(this)" value="'+store_id+'" checked="true"/>';
+	           			 }else{
+	           				 return  '<input type="checkbox" name="chkbox"  onclick="storecheck(this)" value="'+store_id+'"/>';
 
+	           			 }
+	           		 }else if(selectStore.indexOf(",")>=0||regex_store.test(selectStore)){
+	           			 if(isInArray(allStore,store_id+"")&&checkstatus){
+	           		    	 return '<input type="checkbox" name="chkbox" onclick="storecheck(this)" value="'+store_id+'" checked="true"/>';
+	           			 }else{
+	                         return '<input type="checkbox" name="chkbox"  onclick="storecheck(this)" value="'+store_id+'"/>';
+	           			 }
+	           		 }
+                 
+                }
+            }
+        
+        
+        
+        function isInArray(arr,value){
+            for(var i = 0; i < arr.length; i++){
+                if(value === arr[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function storecheck(store){
+        	checkstatus=true;
+        	if(store.checked){
+        		allStore.push(store.value);
+        	}else{
+        		for(n in allStore){
+        			if(allStore[n]==store.value){
+        				allStore.splice(n,1);
+        			}
+        		}
+        	}
+        	
+        }
+        
         function doSubmit(){
             var jsons=new Array();
-            var objs = $$.getSelectedObj("queryNoticeReceiveStoreByCity");
-            if (objs.length != 0) {
-            	
-            	for(var i=0;i<objs.length;i++){
-            		json = {storeId:objs[i][2],storeName:objs[i][0],cityName:objs[i][1]};
-            		jsons.push(json);
-            	}
-            } 
-           
+//             var objs = $("#queryNoticeReceiveStoreByCity_id").find("tr:gt(0)");
+//             if (objs.length != 0) {
+//             	for(var i=0;i<objs.length;i++){
+//             		var checkStatus = $(objs[i]).find("td:eq(0)").children()[0].checked;
+//             		if(checkStatus){
+//             			var json = {storeId:$(objs[i]).find("td:eq(0)").children()[0].value,storeName:$(objs[i]).find("td:eq(1)").html(),cityName:$(objs[i]).find("td:eq(2)").html()};
+//                 		jsons.push(json);
+//             		}
+            		
+            		
+//             	}
+//             } 
+
+	            if (allStore.length != 0) {
+	            		for(var i=0;i<allStore.length;i++){
+	            			var store = getStoreInfo(allStore[i]);
+	            			var json = {storeId:store.store_id,storeName:store.name,cityName:store.cityname};
+	                		jsons.push(json);
+	            	}
+	            } 
             parent.win.callBack(jsons);
             parent.win.hide();
         }
       
+        
+        function getStoreInfo(storeId){
+        	
+       		for(n in storeArray){
+       			if(storeArray[n].store_id==storeId){
+       				return storeArray[n]
+       			}
+       		}
+        	
+        }
          
+        var checkstatus=true;
+        function  clearChecked(){
+        	 checkstatus = false;
+        	 allStore.splice(0,allStore.length);
+        	 var objs = $("#queryNoticeReceiveStoreByCity_id").find("tr:gt(0)");
+	         if (objs.length != 0) {
+	         	for(var i=0;i<objs.length;i++){
+	         		var checkStatus = $(objs[i]).find("td:eq(0)").children()[0].checked;
+	         		if(checkStatus){
+	         			$(objs[i]).find("td:eq(0)").children()[0].checked=false;
+	         		}
+	         	}
+	         }
+	     }
     </script>
     <style type="text/css">
         html,body{
             height: 100%;
+        }
+        .display{
+        width:100%;
         }
     </style>
 </head>
@@ -84,11 +204,12 @@
                 </div>
                 <div class="panel-footer"  align="right">
                     <input class="btn btn-primary" onClick="searchList()" value="查询" type="button"/>
+                    <input class="btn btn-primary" onClick="clearChecked()" value="清空选中" type="button"/>
                 </div>
             </div>
             <div id="gridContainer" searchDiv="conditionsDiv" queryid="queryNoticeReceiveStoreByCity" class="panel panel-primary"
                  operators="$pmspage.opArr" titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="false"
-                 showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="true"
+                 showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="false"
                  checkmode="multiple" autoload="false" showno="false">
             </div>
         </div>

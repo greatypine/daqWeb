@@ -204,7 +204,7 @@
       <section class="content-header">
         <div class="box clearfix">
             <div class="info_head with-border">
-              <div class="col-lg-4 text-center"><img src="dist/img/376884043677306248.png" alt="User Image"></div>
+              <div class="col-lg-4 text-center"> <img id="user_pic" src="dist/img/376884043677306248.png" alt="User Image"></div>
               <div class="col-lg-8">
 
                 <h2 class="text-yellow">载入中...</h2>
@@ -480,6 +480,7 @@ function initcurruser(){
 							$("#cur_card_name").html(curr_user.name);
 							$("#cur_card_no").html(curr_user.zw+" "+curr_user.employeeId);
 							initStore();
+							getUserHeadPortraits();
 						}else{
 							$("#cur_card_name").html(curr_user.name);
 							$("#cur_store_name").html("");
@@ -494,6 +495,20 @@ function initcurruser(){
 						
 					}
 	},false);
+}
+
+//获取员工头像
+function getUserHeadPortraits(){
+	doManager('InterManager', 'findEmployeePicByEmployeeId',[employee_no],
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var user_pic = JSON.parse(data.data);
+					if(user_pic.dataMap!=null){
+						$("#user_pic").attr("src",user_pic.dataMap.pngUrl);
+					}
+					
+				}
+		},false);
 }
 
 function initStore(){

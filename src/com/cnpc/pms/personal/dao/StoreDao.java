@@ -278,44 +278,44 @@ public interface StoreDao extends IDAO {
 	public List<Map<String, Object>> exportStoreStatusList(Store store);
 
 	Store insertStore(Store store);
-	
+
 	/**
 	 * 
-	 * TODO  查询不同门店类型的近六周开业情况
-	 * 2018年4月8日
+	 * TODO 查询不同门店类型的近六周开业情况 2018年4月8日
+	 * 
 	 * @author gaoll
 	 * @param nature
 	 * @return
 	 */
-	public List<Map<String,Object>> getOpenStoreByWeek(String nature);
-	
+	public List<Map<String, Object>> getOpenStoreByWeek(String nature);
+
 	/**
 	 * 
-	 * TODO  查询某一年各城市开店目标及开业情况
-	 * 2018年4月8日
+	 * TODO 查询某一年各城市开店目标及开业情况 2018年4月8日
+	 * 
 	 * @author gaoll
 	 * @param year
 	 * @return
 	 */
-	public List<Map<String,Object>> getStoreNatureByYear(String year);
-	
+	public List<Map<String, Object>> getStoreNatureByYear(String year);
+
 	/**
 	 * 
-	 * TODO  分城市统计'筹备中'门店数量
-	 * 2018年4月8日
+	 * TODO 分城市统计'筹备中'门店数量 2018年4月8日
+	 * 
 	 * @author gaoll
 	 * @return
 	 */
-	public List<Map<String,Object>> getStoreStateCount();
-	
+	public List<Map<String, Object>> getStoreStateCount();
+
 	/**
 	 * 
-	 * TODO  分城市查询门店数量及营业证食品流通证情况
-	 * 2018年4月8日
+	 * TODO 分城市查询门店数量及营业证食品流通证情况 2018年4月8日
+	 * 
 	 * @author gaoll
 	 * @return
 	 */
-	public List<Map<String,Object>> getStoreCardBycity();
+	public List<Map<String, Object>> getStoreCardBycity();
 
 	/**
 	 * 获取2017年已进入的城市
@@ -381,4 +381,7 @@ public interface StoreDao extends IDAO {
 	 */
 	List<Map<String, Object>> findSixWeekStoreData();
 
+	Map<String, Object> queryAboutStoreInfo(String where, PageInfo pageInfo);
+
+	Map<String, Object> exportAboutStore(String where);
 }

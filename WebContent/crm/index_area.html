@@ -474,8 +474,11 @@
               $('#area_name').html(jsonArea.name);
               $("#area_no").html(jsonArea.area_no);
               var employee_a_name = jsonArea.employee_a_name==null?"无":jsonArea.employee_a_name;
-              var employee_b_name = jsonArea.employee_b_name==null?"无":jsonArea.employee_b_name;	  
-              $("#area_manager").html(employee_a_name+"(A)"+"&nbsp;&nbsp;&nbsp;"+employee_b_name+"(B)");
+              var employee_b_name = jsonArea.employee_b_name==null?"无":jsonArea.employee_b_name;
+              var employee_a_no = jsonArea.employee_a_no==null?"":jsonArea.employee_a_no;
+              var employee_b_no = jsonArea.employee_b_no==null?"":jsonArea.employee_b_no;
+              var userStr= "<a style='color:#2138ec' href=\"javaScript:goToUser('"+employee_a_no+"')\">"+employee_a_name+"(A)</a>&nbsp;&nbsp;&nbsp;&nbsp;<a style='color:#2138ec' href=\"javaScript:goToUser('"+employee_b_no+"')\">"+employee_b_name+"(B)</a>";
+              $("#area_manager").html(userStr); 
               querySeveralDaysPerformanceOfArea("gmv");
               queryCurMonthPerformanceOfArea("gmv");
               querySeveralDaysPerformanceOfArea("consumer");
@@ -484,7 +487,15 @@
       },false);
   }
   
-  
+  function goToUser(no){
+	  if(no!=null&&no!=""){
+		  window.open("user.html?employee_no="+encode64(no),'userpage');
+	  }else{
+		  layer.msg("员工编号有误");
+	  }
+	  
+	 
+  }
   
   
   

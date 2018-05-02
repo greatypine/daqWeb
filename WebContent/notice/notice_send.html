@@ -155,6 +155,7 @@ function showTemplateInfo(t){
 	            autoOpen:false,
 	            width:_this.width,
 	            height:_this.height,
+	            open:function(event,ui){$(".ui-icon-closethick").hide()},
 	            buttons : {
 	                "确定": function(){
 	                    window.frames["select_win"].doSubmit();
@@ -223,6 +224,10 @@ function showTemplateInfo(t){
         	selectStore = null;
         	selectZw = null;
         	selectEmployee = null;
+    	}else{
+    		$("#receive_city").html('<div class="tag" id="allStore">全部</div>');
+    		$("#receive_store").html('<div class="tag" id="allStore">全部</div>');
+        	$("#receive_zw").html('<div class="tag" id="allZW">全部</div>');
     	}
     }
     
@@ -232,7 +237,7 @@ function showTemplateInfo(t){
     	 if(selectCity!=null&&selectCity.length>0){
     		cityInfo = selectCity.join();
     	 }
-    	 var page="notice_store.html?city="+cityInfo+"&employee_no="+loginUser.id;
+    	 var page="notice_store.html?city="+cityInfo+"&employee_no="+loginUser.id+"&selectStore="+selectStore;
     	 win = new checkWin(fun,page,"选择门店");
          win.show();
     }
@@ -260,11 +265,18 @@ function showTemplateInfo(t){
         	
         	selectZw = null;
         	selectEmployee = null;
+    	}else{
+    		$("#receive_store").html('<div class="tag" id="allZW">全部</div>');
+    		$("#receive_zw").html('<div class="tag" id="allZW">全部</div>');
     	}
     }
     
     function getZW(fun){
-    	 var page="notice_ZW.html";
+    	 var zw=""; 
+    	 if(selectZw!=null){
+    		 zw=selectZw.join();
+    	 }
+    	 var page="notice_ZW.html?zw="+encodeURIComponent(zw);
     	 win = new checkWin(fun,page,"选择职务");
          win.show();
     }
@@ -287,7 +299,9 @@ function showTemplateInfo(t){
     	if(zw!=""){
     		$("#receive_zw").html(zw);
         	//$("#receive_employee").html('<div class="tag" id="allEmployee">全部</div>');
-        	selectEmployee = null;
+        	//selectEmployee = null;
+    	}else{
+    		$("#receive_zw").html('<div class="tag" id="allEmployee">全部</div>');
     	}
     }
     

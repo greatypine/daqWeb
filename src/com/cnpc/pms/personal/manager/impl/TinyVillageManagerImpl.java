@@ -1287,10 +1287,23 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
 		Map<String, Object> result = new HashMap<String, Object>();
 		StringBuilder sb_where = new StringBuilder();
-		// 获取当前用户
-		User sessionUser = null;
-		if (null != SessionManager.getUserSession() && null != SessionManager.getUserSession().getSessionData()) {
-			sessionUser = (User) SessionManager.getUserSession().getSessionData().get("user");
+		/*
+		 * // 获取当前用户 User sessionUser = null; if (null !=
+		 * SessionManager.getUserSession() && null !=
+		 * SessionManager.getUserSession().getSessionData()) { sessionUser =
+		 * (User) SessionManager.getUserSession().getSessionData().get("user");
+		 * }
+		 */
+		String cityssql = "";
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		String citysql = "";
+		if (distCityList != null && distCityList.size() > 0) {
+			for (DistCity d : distCityList) {
+				citysql += " city.name like '%" + d.getCityname() + "%' or";
+			}
+		}
+		if (citysql.substring(0, citysql.length() - 2).length() > 0) {
+			sb_where.append(" and (" + citysql.substring(0, citysql.length() - 2) + ")");
 		}
 		try {
 			if (dynamicDto.getTarget() == 0) {// 总部
@@ -1521,8 +1534,16 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 		StringBuilder sb_where = new StringBuilder();
 		// 获取当前用户
 		User sessionUser = null;
-		if (null != SessionManager.getUserSession() && null != SessionManager.getUserSession().getSessionData()) {
-			sessionUser = (User) SessionManager.getUserSession().getSessionData().get("user");
+		String cityssql = "";
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		String citysql = "";
+		if (distCityList != null && distCityList.size() > 0) {
+			for (DistCity d : distCityList) {
+				citysql += " city.name like '%" + d.getCityname() + "%' or";
+			}
+		}
+		if (citysql.substring(0, citysql.length() - 2).length() > 0) {
+			sb_where.append(" and (" + citysql.substring(0, citysql.length() - 2) + ")");
 		}
 		try {
 			if (dynamicDto.getTarget() == 0) {// 总部
@@ -1587,18 +1608,18 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 
 	@Override
 	public Map<String, Object> queryTinyVillageInfoByVillagecode(String code) {
-		Map<String,Object> result = new HashMap<String,Object>();
+		Map<String, Object> result = new HashMap<String, Object>();
 		try {
-			TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+			TinyVillageDao tinyVillageDao = (TinyVillageDao) SpringHelper.getBean(TinyVillageDao.class.getName());
 			List<Map<String, Object>> findTinyVillageInfoByCode = tinyVillageDao.findTinyVillageInfoByCode(code);
-			result.put("data",findTinyVillageInfoByCode.get(0));
-			result.put("code",CodeEnum.success.getValue());
+			result.put("data", findTinyVillageInfoByCode.get(0));
+			result.put("code", CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
 			JSONObject temp = new JSONObject();
-			result.put("code",CodeEnum.error.getValue());
+			result.put("code", CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
 			return result;
 		}

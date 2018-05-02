@@ -39,6 +39,15 @@ public class Humanresources extends DataEntity{
 	private String name;
 	
 	/**
+	 * 线上服务专员所管辖门店
+	 */
+	@Column(length = 255, name = "selectStoreIds")
+	private String selectStoreIds;
+	
+	@Transient
+	private String selectStoreNames;
+	
+	/**
 	 * 性别
 	 */
 	@Column(length = 45, name = "sex")
@@ -1064,6 +1073,22 @@ public class Humanresources extends DataEntity{
 
 	public void setCareer_group(String career_group) {
 		this.career_group = career_group;
+	}
+
+	public String getSelectStoreIds() {
+		return selectStoreIds;
+	}
+
+	public void setSelectStoreIds(String selectStoreIds) {
+		this.selectStoreIds = selectStoreIds;
+	}
+
+	public String getSelectStoreNames() {
+		return selectStoreNames;
+	}
+
+	public void setSelectStoreNames(String selectStoreNames) {
+		this.selectStoreNames = selectStoreNames;
 	}
 	
 	/***********培训结束********************/

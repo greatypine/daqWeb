@@ -8,19 +8,31 @@ import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
+import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.notice.dao.NoticeReciverDao;
 
 public class NoticeReciverDaoImpl extends BaseDAOHibernate implements NoticeReciverDao {
 
 	@Override
-	public List<Map<String, Object>> selectNoticeReciver(String employeeNo) {
-		String sql="select * from t_notice_reciver where employeeNo='"+employeeNo+"'";
+	public List<Map<String, Object>> selectNoticeReciver(String employeeNo,PageInfo pageInfo) {
+		String sql="select a.*,b.title,b.content,b.type from t_notice_reciver as a inner join  t_notice as b on a.noticeNo=b.noticeNo  where employeeNo='"+employeeNo+"' order by noticeNo";
 		
-		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		//SQL查询对象
+        SQLQuery query = getHibernateTemplate().getSessionFactory()
+                .getCurrentSession().createSQLQuery(sql);
         
-	    //获得查询数据
-	    List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	
+        
+        pageInfo.setTotalRecords(query.list().size());
+        //获得查询数据
+        List<Map<String, Object>> lst_data = query
+                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+                .setFirstResult(
+                        pageInfo.getRecordsPerPage()
+                                * (pageInfo.getCurrentPage() - 1))
+                .setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+
+        
 	    //如果没有数据返回
 	    if(lst_data == null || lst_data.size() == 0){
 	        return new ArrayList<Map<String, Object>>();

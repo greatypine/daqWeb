@@ -3,13 +3,16 @@ package com.cnpc.pms.notice.manager;
 import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.inter.common.Result;
+import com.cnpc.pms.notice.entity.NoticeReciver;
 
 /**
  * 
  * @author gbl
  * 公告接收者
  */
-public interface NoticeReciverMananger extends IManager {
+public interface NoticeReciverManager extends IManager {
 	
 	/**
 	 * 
@@ -22,7 +25,7 @@ public interface NoticeReciverMananger extends IManager {
 	* @throws  
 	* @author gbl
 	 */
-	public Map<String,Object> selectNoticeReciver(String employeeNo);
+	public Result selectNoticeReciver(NoticeReciver noticeReciver,PageInfo pageInfo);
 	
 	/**
 	 * 
