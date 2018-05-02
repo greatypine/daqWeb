@@ -2492,7 +2492,6 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 					row = sheet.createRow(i + 1);
 					for (int cellIndex = 0; cellIndex < headers_key.length; cellIndex++) {
 						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-						sheet.autoSizeColumn(cellIndex);
 					}
 				}
 
