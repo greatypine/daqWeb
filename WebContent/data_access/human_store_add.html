@@ -160,11 +160,11 @@ Date.prototype.format=function(fmt) {
 			} */
 		}
 		
-		if(zw=='线上产品专员'){
-			//线上产品专员  门店IDs
+		if(zw=='线上服务专员'){
+			//线上服务专员  门店IDs
 			var selectStoreIds = $("#selectStoreIds").val();
 			if(selectStoreIds==null||selectStoreIds.trim()==""){
-				$$.showMessage("系统信息","请选择线上产品专员管辖范围 !");
+				$$.showMessage("系统信息","请选择线上服务专员管辖范围 !");
 				return ;
 			}
 		}
@@ -181,7 +181,7 @@ Date.prototype.format=function(fmt) {
 		}
 		
 		
-		if(zw!='市场专员'&&zw!='线上产品专员'){
+		if(zw!='市场专员'&&zw!='线上服务专员'){
 			var store_name = $('#storename').val();
 			if (store_name == "" || store_name == null) {
 				$$.showMessage("系统信息","请填写门店 !");
@@ -387,7 +387,7 @@ Date.prototype.format=function(fmt) {
 				$("#storename").attr("readonly","");
 			}
 			
-			if(zw!=null&&zw.trim()=="线上产品专员"){
+			if(zw!=null&&zw.trim()=="线上服务专员"){
 				$("#storename").css('background','#EDEDED');
 				$("#storename").attr("readonly","true");
 				$("#storename").val('');
@@ -412,7 +412,7 @@ Date.prototype.format=function(fmt) {
 			}
 			
 			
-			if(zw!=null&&(zw.trim()=="服务专员"||zw.trim()=="线上产品专员")){
+			if(zw!=null&&(zw.trim()=="服务专员"||zw.trim()=="线上服务专员")){
 				$("#career_group").show();
 				$("#syqfont").show();
 			}else{
@@ -467,7 +467,7 @@ Date.prototype.format=function(fmt) {
 			o["leavercvlistdate"]=$("#leavercvlistdate").val();
 		}
 		
-		if(o["zw"].indexOf("线上产品专员")>-1){
+		if(o["zw"].indexOf("线上服务专员")>-1){
 			o["selectStoreIds"]=$("#selectStoreIds").val();
 		}
 		
@@ -826,7 +826,7 @@ Date.prototype.format=function(fmt) {
 						<option value="库房管理员">库房管理员</option>
 						<option value="仓库主管">仓库主管</option>
 						<option value="配送主管">配送主管</option>
-						<option value="线上产品专员">线上产品专员</option>
+						<option value="线上服务专员">线上服务专员</option>
 					</select>
 					
 					<font id="syqfont">事业群</font>
@@ -844,7 +844,7 @@ Date.prototype.format=function(fmt) {
 			
 			
 			<tr id="storefw">
-				<!-- 线上产品专员 选择多个门店 -->
+				<!-- 线上服务专员 选择多个门店 -->
 				<td>
 	                	<p style="float:left; padding-top:11px;"><font color="red">*</font>管辖范围：
 	                    <label id="showSelectName"></label>

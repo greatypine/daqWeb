@@ -39,7 +39,7 @@ public class HumanresourcesLog extends DataEntity{
 	private String name;
 	
 	/**
-	 * 线上产品专员所管辖门店
+	 * 线上服务专员所管辖门店
 	 */
 	@Column(length = 255, name = "selectStoreIds")
 	private String selectStoreIds;
