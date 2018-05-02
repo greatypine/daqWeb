@@ -3122,7 +3122,7 @@ var getDailyData = function(){
 				cityId:pageStatusInfo["cityId"]
     	}
      var startTime = new Date().getTime();
-     doManager("dynamicManager", "getDailyNowStoreTotalPrice",[dynamicDto],
+     doManager("dynamicManager", "getDailyStoreTotlePrice",[dynamicDto],
   			function(data, textStatus, XMLHttpRequest) {
   				if (data.result) {
   					 var resultJson= JSON.parse(data.data);
