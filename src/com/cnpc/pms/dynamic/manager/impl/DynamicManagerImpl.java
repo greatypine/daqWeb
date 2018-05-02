@@ -4372,6 +4372,26 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		result.put("daily", dailyOrder);
 		return result;
 	}
+	@Override
+	public Map<String, Object> getDailyNowStoreTotalPrice(DynamicDto dd) {
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		Map<String, Object> result = new HashMap<String,Object>();
+		List<Map<String,Object>> dailyStoreOrderList = new ArrayList<Map<String,Object>>();
+		List<Map<String,Object>> dailyUserList = new ArrayList<Map<String,Object>>();
+		dailyStoreOrderList = dynamicDao.getDailyNowStoreOrderOfCurDay(dd);
+		if(dailyStoreOrderList!=null&&dailyStoreOrderList.size()>0){
+			Map<String,Object> dailyStoreOrderMap = dailyStoreOrderList.get(0);
+			dailyUserList = dynamicDao.getDailyNowUserOfCurDay(dd);
+			if(dailyUserList.size()>0){
+				dailyStoreOrderMap.put("customer_count", dailyUserList.get(0).get("customer_count"));
+			}else{
+				dailyStoreOrderMap.put("customer_count", 0);
+			}
+		}
+		String dailyOrder = this.getDailyStoreOrderData(dd,dailyStoreOrderList);
+		result.put("daily", dailyOrder);
+		return result;
+	}
 	public String getDailyStoreOrderData(DynamicDto dd,List<Map<String,Object>> dailyStoreOrderList) {
 		JSONArray json = new JSONArray();
         for(Map<String,Object> dailyOrder : dailyStoreOrderList){

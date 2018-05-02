@@ -5,9 +5,10 @@
 var JsCache = {
     set: function (key, value, timeOut) {
         var getDefaultDeadline = function () {
-            var currentTime = new Date();
-            var deadLine = currentTime.setHours(currentTime.getHours() + 5);
-            return deadLine;
+             var nextDay = new Date();
+            nextDay.setDate(nextDay.getDate() + 1);
+            var deadLine = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate(), 0, 0, 0);
+            return deadLine.getTime();
         } ;
         var nameSpace = encode64(window.location.pathname) + "_";
         if (!localStorage.getItem(nameSpace)) {
