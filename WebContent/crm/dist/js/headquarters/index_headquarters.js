@@ -3124,7 +3124,7 @@ var getDailyData = function(){
      var startTime = new Date().getTime();
      doManager("dynamicManager", "getDailyStoreTotlePrice",[dynamicDto],
   			function(data, textStatus, XMLHttpRequest) {
-  				if (data.result) {
+  				if (data.result) { 
   					 var resultJson= JSON.parse(data.data);
   					 var dailyData = JSON.parse(resultJson.daily);
   					 var totle_price = dailyData[0].storecur_all_price==null?"0":dailyData[0].storecur_all_price;
