@@ -1534,8 +1534,16 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 		StringBuilder sb_where = new StringBuilder();
 		// 获取当前用户
 		User sessionUser = null;
-		if (null != SessionManager.getUserSession() && null != SessionManager.getUserSession().getSessionData()) {
-			sessionUser = (User) SessionManager.getUserSession().getSessionData().get("user");
+		String cityssql = "";
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		String citysql = "";
+		if (distCityList != null && distCityList.size() > 0) {
+			for (DistCity d : distCityList) {
+				citysql += " city.name like '%" + d.getCityname() + "%' or";
+			}
+		}
+		if (citysql.substring(0, citysql.length() - 2).length() > 0) {
+			sb_where.append(" and (" + citysql.substring(0, citysql.length() - 2) + ")");
 		}
 		try {
 			if (dynamicDto.getTarget() == 0) {// 总部
