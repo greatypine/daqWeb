@@ -3260,7 +3260,7 @@ var getDailyData = function(){
   					}*/
   					//$("#tradesumofCurYears").html(changeMoney(parseInt(tradesumofyear)+parseInt(totalprice)));
   				}
-  		});
+  		},false);
   		
     //console.log('chonfu method in ' + (new Date().getTime() - startTime) + ' millisecond');
     }
