@@ -2396,6 +2396,15 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 		Map<String, Object> result = new HashMap<String, Object>();
 		StringBuilder sb_where = new StringBuilder();
+		String cityssql = "";
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		if (distCityList != null && distCityList.size() > 0) {
+			for (DistCity d : distCityList) {
+				cityssql += "'" + d.getCityname() + "',";
+			}
+			cityssql = cityssql.substring(0, cityssql.length() - 1);
+		}
 		try {
 			if (dynamicDto.getTarget() == 0) {// 总部
 				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
@@ -2425,22 +2434,32 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
 					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
 				}
-				result = storeDao.queryAboutStoreInfo(sb_where.toString(), pageInfo);
-			} else if (dynamicDto.getTarget() == 2) {// 店长
-				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
-					sb_where.append(" and store.city_name like '%" + dynamicDto.getCityName() + "%'");
-				}
-				if (dynamicDto.getStoreName() != null && !"".equals(dynamicDto.getStoreName())) {
-					sb_where.append(" and store.name like '%" + dynamicDto.getStoreName() + "%'");
-				}
-				if (dynamicDto.getStoreNo() != null && !"".equals(dynamicDto.getStoreNo())) {
-					sb_where.append(" and store.storeno ='" + dynamicDto.getStoreNo() + "'");
-				}
-				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
-					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
+				if (cityssql != "" && cityssql.length() > 0) {
+					sb_where.append(" and store.city_name in (" + cityssql + ")");
+				} else {
+					sb_where.append(" and 0=1 ");
 				}
 				result = storeDao.queryAboutStoreInfo(sb_where.toString(), pageInfo);
-			} else {
+			} /*
+				 * else if (dynamicDto.getTarget() == 2) {// 店长 if
+				 * (dynamicDto.getCityName() != null &&
+				 * !"".equals(dynamicDto.getCityName())) { sb_where.append(
+				 * " and store.city_name like '%" + dynamicDto.getCityName() +
+				 * "%'"); } if (dynamicDto.getStoreName() != null &&
+				 * !"".equals(dynamicDto.getStoreName())) { sb_where.append(
+				 * " and store.name like '%" + dynamicDto.getStoreName() +
+				 * "%'"); } if (dynamicDto.getStoreNo() != null &&
+				 * !"".equals(dynamicDto.getStoreNo())) { sb_where.append(
+				 * " and store.storeno ='" + dynamicDto.getStoreNo() + "'"); }
+				 * if (dynamicDto.getTownName() != null &&
+				 * !"".equals(dynamicDto.getTownName())) { sb_where.append(
+				 * " and town.name like '%" + dynamicDto.getTownName() + "%'");
+				 * } if (cityssql != "" && cityssql.length() > 0) {
+				 * sb_where.append(" and store.city_name in (" + cityssql +
+				 * ")"); } else { sb_where.append(" and 0=1 "); } result =
+				 * storeDao.queryAboutStoreInfo(sb_where.toString(), pageInfo);
+				 * }
+				 */ else {
 				JSONObject temp = new JSONObject();
 				temp.put("data", "");
 				temp.put("message", "该用户无权限");
@@ -2561,6 +2580,15 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 		Map<String, Object> result = new HashMap<String, Object>();
 		StringBuilder sb_where = new StringBuilder();
+		String cityssql = "";
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		if (distCityList != null && distCityList.size() > 0) {
+			for (DistCity d : distCityList) {
+				cityssql += "'" + d.getCityname() + "',";
+			}
+			cityssql = cityssql.substring(0, cityssql.length() - 1);
+		}
 		try {
 			if (dynamicDto.getTarget() == 0) {// 总部
 				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
@@ -2590,22 +2618,31 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
 					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
 				}
-				result = storeDao.exportAboutStore(sb_where.toString());
-			} else if (dynamicDto.getTarget() == 2) {// 店长
-				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
-					sb_where.append(" and store.city_name like '%" + dynamicDto.getCityName() + "%'");
-				}
-				if (dynamicDto.getStoreName() != null && !"".equals(dynamicDto.getStoreName())) {
-					sb_where.append(" and store.name like '%" + dynamicDto.getStoreName() + "%'");
-				}
-				if (dynamicDto.getStoreNo() != null && !"".equals(dynamicDto.getStoreNo())) {
-					sb_where.append(" and store.storeno ='" + dynamicDto.getStoreNo() + "'");
-				}
-				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
-					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
+				if (cityssql != "" && cityssql.length() > 0) {
+					sb_where.append(" and store.city_name in (" + cityssql + ")");
+				} else {
+					sb_where.append(" and 0=1 ");
 				}
 				result = storeDao.exportAboutStore(sb_where.toString());
-			} else {
+			} /*
+				 * else if (dynamicDto.getTarget() == 2) {// 店长 if
+				 * (dynamicDto.getCityName() != null &&
+				 * !"".equals(dynamicDto.getCityName())) { sb_where.append(
+				 * " and store.city_name like '%" + dynamicDto.getCityName() +
+				 * "%'"); } if (dynamicDto.getStoreName() != null &&
+				 * !"".equals(dynamicDto.getStoreName())) { sb_where.append(
+				 * " and store.name like '%" + dynamicDto.getStoreName() +
+				 * "%'"); } if (dynamicDto.getStoreNo() != null &&
+				 * !"".equals(dynamicDto.getStoreNo())) { sb_where.append(
+				 * " and store.storeno ='" + dynamicDto.getStoreNo() + "'"); }
+				 * if (dynamicDto.getTownName() != null &&
+				 * !"".equals(dynamicDto.getTownName())) { sb_where.append(
+				 * " and town.name like '%" + dynamicDto.getTownName() + "%'");
+				 * } if (cityssql != "" && cityssql.length() > 0) {
+				 * sb_where.append(" and store.city_name in (" + cityssql +
+				 * ")"); } else { sb_where.append(" and 0=1 "); } result =
+				 * storeDao.exportAboutStore(sb_where.toString()); }
+				 */ else {
 				JSONObject temp = new JSONObject();
 				temp.put("data", "");
 				temp.put("message", "该用户无权限");
