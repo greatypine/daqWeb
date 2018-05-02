@@ -892,6 +892,7 @@ var showStatisticInfo = function (statisticData) {
 };
 // 获取历史数据
 var getHistoryData = function (pageStatusInfo) {
+	/*
     var cacheKey = CACHE_HEADER_HISTORY_DATA + pageStatusInfo.getCacheKey();
     // 从缓存获取数据
     var historyData = JsCache.get(cacheKey);
@@ -899,6 +900,7 @@ var getHistoryData = function (pageStatusInfo) {
         //console.log('show history data base on js cache.')
         showHistoryData(historyData);
     } else {
+    */
         // 准备服务端数据请求参数
         var reqestParameter = {
             month:pageStatusInfo.currentMonth,
@@ -936,26 +938,31 @@ var getHistoryData = function (pageStatusInfo) {
 		                         }
 		                         ,false);
                                 showHistoryData(historyDataFromServer);
-                                JsCache.set(cacheKey, historyDataFromServer);
+                                //JsCache.set(cacheKey, historyDataFromServer);
                             }
                         },false);
                 }
             },false);
         //console.log('request history data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
-    }
+    //}
 };
 // 显示历史数据
 var showHistoryData = function (historyData) {
+	/*
     $("#tradesumofcurmonthHid").html(parseInt(historyData.curMonthTurnover));
     $("#tradesumofhistoryHid").html(parseInt(historyData.historyTurnover));
-    $("#tradesumofmonthCustmomerHid").html(parseInt(historyData.customer_count));
     //$("#tradesumoflastmonthCustmomerHid").html(parseInt(historyData.last_customer_count));//上月用户量
-    $("#tradesumofhistoryCustmomerHid").html(parseInt(historyData.history_customer_count));
     $("#tradesumoflasthistoryCustmomerHid").html(parseInt(historyData.last_history_customer_count));
-    $("#tradesumofmonthOrderHid").html(parseInt(historyData.month_order_count==null?'0':historyData.month_order_count));
-    $("#tradesumofhistoryOrderHid").html(parseInt(historyData.history_order_count==null?'0':historyData.history_order_count));
     //$("#tradesumoflastmonthOrderHid").html(parseInt(historyData.last_order_count==null?'0':historyData.last_order_count));
     $("#tradesumofyearHid").html(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum));
+    */
+    $("#tradesumofhistoryCustmomerHid").html(parseInt(historyData.history_customer_count));
+    $("#tradesumofhistoryOrderHid").html(parseInt(historyData.history_order_count==null?'0':historyData.history_order_count));
+    $("#tradesumofmonthOrderHid").html(parseInt(historyData.month_order_count==null?'0':historyData.month_order_count));
+    $("#tradesumofmonthCustmomerHid").html(parseInt(historyData.customer_count));
+    $("#tradesumofcurmonths").html(changeMoney(parseInt(historyData.curMonthTurnover)));
+    $("#tradesumofCurYears").html(changeMoney(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum)));
+    $("#tradesumofhistorys").html(changeMoney(parseInt(historyData.historyTurnover)+(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum))));
 };
 var getLastMonthOrderCustomerCount = function(pageStatusInfo){
 	var cacheKey = CACHE_HEADER_CUSTOMER_COUNT_DATA + pageStatusInfo.getCacheKey();
@@ -3115,7 +3122,7 @@ var getDailyData = function(){
 				cityId:pageStatusInfo["cityId"]
     	}
      var startTime = new Date().getTime();
-     doManager("dynamicManager", "getDailyStoreTotlePrice",[dynamicDto],
+     doManager("dynamicManager", "getDailyNowStoreTotalPrice",[dynamicDto],
   			function(data, textStatus, XMLHttpRequest) {
   				if (data.result) {
   					 var resultJson= JSON.parse(data.data);
@@ -3137,8 +3144,8 @@ var getDailyData = function(){
   						dojob(totalprice.substring(totalprice.length-9,totalprice.length)); 
   					}
   					
-  					var tradesumofcurmonth = $("#tradesumofcurmonthHid").text();//本月营业额
-  					var tradesumofhistory = $("#tradesumofhistoryHid").text();//历史营业额
+  					//var tradesumofcurmonth = $("#tradesumofcurmonthHid").text();//本月营业额
+  					//var tradesumofhistory = $("#tradesumofhistoryHid").text();//历史营业额
   					var tradesumofcustomerMonth = $("#tradesumofmonthCustmomerHid").text();//本月用户量
   					var tradesumoflastmonthCustmomer = $("#tradesumoflastmonthCustmomerHid").text();//上月今天用户量
   					var tradesumofcustomerHistory = $("#tradesumofhistoryCustmomerHid").text();//历史用户量
@@ -3146,9 +3153,9 @@ var getDailyData = function(){
   					var tradesumofmonthOrder = $("#tradesumofmonthOrderHid").text();//本月订单量
   					var tradesumofhistoryOrder = $("#tradesumofhistoryOrderHid").text();//历史订单量
   					var tradesumoflastmonthOrder = $("#tradesumoflastmonthOrderHid").text();//上月今天订单量
-  					var tradesumofyear = $("#tradesumofyearHid").text();//上月订单
-  					$("#tradesumofcurmonths").html(changeMoney(parseInt(tradesumofcurmonth)+parseInt(totalprice)));
-  					$("#tradesumofhistorys").html(changeMoney(parseInt(tradesumofhistory)+parseInt(totalprice)));
+  					//var tradesumofyear = $("#tradesumofyearHid").text();//上月订单
+  					//$("#tradesumofcurmonths").html(changeMoney(parseInt(tradesumofcurmonth)+parseInt(totalprice)));
+  					//$("#tradesumofhistorys").html(changeMoney(parseInt(tradesumofhistory)+parseInt(totalprice)));
   					$("#tradesumofmonthCustmomer").html(parseInt(tradesumofcustomerMonth)+parseInt(daily_user_count));
   					$("#tradesumofhistoryCustmomer").html(parseInt(tradesumofcustomerHistory)+parseInt(daily_user_count));
   					//$("#tradesumofhistoryCustmomer").html(parseInt(1630694));
@@ -3251,7 +3258,7 @@ var getDailyData = function(){
   							$("#tradesumofhistoryCustmomer").removeClass("gaugetb2").addClass("gaugetb3");
   							$("#sing_id_2").removeClass("gaugetb2").addClass("gaugetb3");
   					}*/
-  					$("#tradesumofCurYears").html(changeMoney(parseInt(tradesumofyear)+parseInt(totalprice)));
+  					//$("#tradesumofCurYears").html(changeMoney(parseInt(tradesumofyear)+parseInt(totalprice)));
   				}
   		});
   		
@@ -3441,6 +3448,10 @@ var getReauestParameters = function () {
 	initcurruser();
 	initCustomerInfo();//菜单 判断非总部不显示 
 	var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+	if(curr_user==null){
+		urlStr = "../logout.do";
+		window.location.href = urlStr;
+	}
   	if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
   		targets = 1;
   		var cityId_ = (decode64(getUrlParamByKey("c")) == 'null'||decode64(getUrlParamByKey("c")) == null) ? '' : decode64(getUrlParamByKey("c"));

@@ -2480,8 +2480,8 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				String[] str_headers = { "城市", "门店名称", "门店编号", "区域", "所属街道", "门店类型", "是否微超", "目前状态", "门店开业时间", "属性",
 						"位置", "店长", "门店电话" };
 				String[] headers_key = { "city_name", "name", "storeno", "countname", "townname", "storetypename",
-						"superMicro", "estate", "open_shop_time", "nature", "detail_address", "detail_address",
-						"shopmanager", "mobilephone" };
+						"superMicro", "estate", "open_shop_time", "nature", "detail_address", "shopmanager",
+						"mobilephone" };
 				for (int i = 0; i < str_headers.length; i++) {
 					HSSFCell cell = row.createCell(i);
 					cell.setCellStyle(getHeaderStyle());
@@ -2496,7 +2496,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				}
 
 				File file_xls = new File(
-						str_file_dir_path + File.separator + System.currentTimeMillis() + "_aboutTinyvillage.xls");
+						str_file_dir_path + File.separator + System.currentTimeMillis() + "_aboutStore.xls");
 				if (file_xls.exists()) {
 					file_xls.delete();
 				}
