@@ -788,4 +788,23 @@ public interface DynamicDao extends IDAO{
 	 */
 	public List<Map<String, Object>> queryMonthAndLastMonthTodayCustomerOrderCount(
 			DynamicDto dd);
+	/**
+	 * 
+	 * 查询当日的所有门店的成交额 
+	 * @param dd
+	 * @return
+	 */
+	public List<Map<String, Object>> getDailyNowStoreOrderOfCurDay(DynamicDto dd);
+	/**
+	 * 查询当日实时累计用户量
+	 * @param dd
+	 * @return
+	 */
+	public List<Map<String, Object>> getDailyNowUserOfCurDay(DynamicDto dd);
+
+	/**
+	 * 获得最新的订单所在的城市
+	 * @return
+	 */
+	public List<Map<String, Object>> getDailyFirstOrderCity();
 }

@@ -933,7 +933,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
 		String sql = "SELECT d.id as city_id,ds.city_name,SUM(ds.order_amount) as gmv_sum,t.province_id," +
-				"t.`name` FROM ds_storetrade ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join  t_dist_citycode d on d.cityname=t.city_name  " +
+				"t.`name` FROM ds_ope_gmv_store_month ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join  t_dist_citycode d on d.cityname=t.city_name  " +
 				"WHERE ds.`month`='"+dd.getMonth()+"' and ds.`year`='"+dd.getYear()+"' "+provinceStr+cityStr+" GROUP BY ds.city_name  ORDER BY gmv_sum DESC ";
 		String sql_count = "SELECT count(tdd.city_name) as city_count from ("+sql+") tdd ";
 		Query query_count = this.getHibernateTemplate().getSessionFactory()
@@ -992,8 +992,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql = "SELECT d.id as city_id,t.city_name as city_name,t.store_id as store_id,ds.store_name as store_name,ds.pesgmv as store_pesgmv,t.province_id " +
-				"FROM ds_storetrade ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join t_dist_citycode d on d.cityname=t.city_name  WHERE " +"t.storeno is not null "+
+		String sql = "SELECT d.id as city_id,t.city_name as city_name,t.store_id as store_id,ds.store_name as store_name,ds.order_amount as store_pesgmv,t.province_id " +
+				"FROM ds_ope_gmv_store_month ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join t_dist_citycode d on d.cityname=t.city_name  WHERE " +"t.storeno is not null "+
 				" and ds.`month`='"+dd.getMonth()+"' " +
 				"and ds.`year`='"+dd.getYear()+"' "+provinceStr+cityStr+" ORDER BY store_pesgmv DESC ";
 		String sql_count = "SELECT count(tdd.store_name) as store_count from ("+sql+") tdd ";
@@ -1071,7 +1071,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select dsch.city_name as city_name,d.id as city_id,tdht.career_group as dep_name,ifnull(sum(order_amount),0) as order_amount from ds_storetrade_channel dsch "+
+		String sql ="select dsch.city_name as city_name,d.id as city_id,tdht.career_group as dep_name,ifnull(sum(order_amount),0) as order_amount from ds_ope_gmv_storechannel_month dsch "+
 					"left join t_store ts on (dsch.storeno = ts.storeno) "+
 					"left join t_data_human_type tdht on (tdht.career_group like CONCAT('%',dsch.dep_name,'%')) "+
 					"left join t_dist_citycode d on d.cityname=ts.city_name  "+
@@ -1140,7 +1140,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select d.id as city_id,d.cityname as city_name,channel_name,ifnull(sum(order_amount),0) as order_amount from ds_storetrade_channel dsch "+
+		String sql ="select d.id as city_id,d.cityname as city_name,channel_name,ifnull(sum(order_amount),0) as order_amount from ds_ope_gmv_storechannel_month dsch "+
 				"left join t_store ts on (dsch.storeno = ts.storeno) "+
 				" left join t_dist_citycode d on d.cityname=ts.city_name "+
 				"where ts.storeno is not null and year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and channel_name is not null "+
@@ -1206,7 +1206,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public List<Map<String, Object>> findStoreCount(DynamicDto dd) {
 		String sql="";
 		if(dd.getTarget()==1){//省
-			sql="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%'";
+			sql="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id " +
+					"left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%' and " +
+					"t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and t.storetype!='V' ";
 		}else if(dd.getTarget()==0||dd.getTarget()==3){//全国
 			
 			String whereStr = "";
@@ -1214,7 +1216,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				whereStr = " and t1.id="+dd.getCityId();
 			}
 			
-			sql ="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%' "+ whereStr+"";
+			sql ="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%' " +
+					"and t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and t.storetype!='V' "+ whereStr+"";
 		}
 		
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -1680,7 +1683,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select ifnull(sum(order_amount),0) as order_amount,ifnull(sum(order_count),0) as order_count from ds_storetrade dst "+
+		String sql ="select ifnull(sum(order_amount),0) as order_amount,ifnull(sum(order_count),0) as order_count from ds_ope_gmv_store_month dst "+
 				"left join t_store ts on (dst.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name "+
 				" where dst.store_name not like '%测试%' and year ="+dynamicDto.getYear()+" and month ="+dynamicDto.getMonth()+" "+
 				  provinceStr + cityStr ;
@@ -1803,9 +1806,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select ifnull(sum(order_amount),0) as order_amount,ifnull(sum(order_count),0) as history_order_count from ds_storetrade_history dst "+
+		String sql ="select ifnull(sum(order_amount),0) as order_amount,ifnull(sum(order_count),0) as history_order_count from ds_ope_gmv_store_history dst "+
 				" left join t_store ts on (dst.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name "+
-				" where dst.storename not like '%测试%' "+ provinceStr + cityStr ;
+				" where dst.store_name not like '%测试%' "+ provinceStr + cityStr ;
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		Map<String, Object> resuMap = new HashMap<String,Object>();
@@ -2003,14 +2006,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 					" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
-					" ) a right join (select username as name,employeeno as employee_no,storeid as store_id from ds_topdata where   year ="+dynamicDto.getYear()+" and month ="+dynamicDto.getMonth()+" and zw ='国安侠' and humanstatus =1 and storeid IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
+					" ) a right join (select username as name,employeeno as employee_no,storeid as store_id from ds_topdata where   year ="+dynamicDto.getYear()+" and month ="+dynamicDto.getMonth()+" and zw ='国安侠' and (humanstatus =1 or (humanstatus=2 and YEAR(DATE(leavedate)) =YEAR(DATE_ADD(NOW(),INTERVAL -1 MONTH)) and MONTH(DATE(leavedate))=MONTH(DATE_ADD(NOW(),INTERVAL -1 MONTH)))) and storeid IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
 		}else if("cur".equals(dynamicDto.getSearchstr())){//当前月
 			
 			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0)  as cusnum_ten,ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum,cusnum_ten "+
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 					" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
-					" ) a  right join (select name,employee_no,store_id from t_humanresources where humanstatus = 1 and  zw = '国安侠' and store_id IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
+					" ) a  right join (select name,employee_no,store_id from t_humanresources where (humanstatus = 1 or (humanstatus=2 and YEAR(DATE(leavedate)) =YEAR(NOW()) and MONTH(DATE(leavedate))=MONTH(NOW()))) and  zw = '国安侠' and store_id IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
 		}
 		
 		sql=sql+" where 1=1 ";
@@ -2229,7 +2232,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			monthStr = " AND dcomt.year="+dd.getYear()+"";
 		}
 		sqlStr = "SELECT sum(dcomt.order_amount) as year_sum_gmv " +
-					" FROM ds_storetrade dcomt left join t_store ts on dcomt.storeno=ts.storeno left join t_dist_citycode d on d.cityname=ts.city_name " +
+					" FROM ds_ope_gmv_store_month dcomt left join t_store ts on dcomt.storeno=ts.storeno left join t_dist_citycode d on d.cityname=ts.city_name " +
 					"WHERE 1=1  " +
 					monthStr+provinceStr + cityStr;
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
@@ -2746,6 +2749,111 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	     }catch (Exception e){
 	         e.printStackTrace();
 	     }
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getDailyNowStoreOrderOfCurDay(DynamicDto dd) {
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+			zx = "yes";
+		}
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		String sql = "SELECT IFNULL(COUNT(tor.trading_price),0) AS checked_order_count,IFNULL(SUM(tor.total_quantity), 0) " +
+				"AS total_order_count,IFNULL(SUM(tor.trading_price),0) AS storecur_all_price,IFNULL" +
+				"(SUM(tor.total_quantity),0) AS total_quantity FROM df_mass_order_daily tor LEFT JOIN t_store t " +
+				"ON tor.store_code=t.storeno left join  t_dist_citycode d on d.cityname=t.city_name  " +
+				"WHERE tor.store_name NOT LIKE '%测试%' and tor.sign_time  BETWEEN '"+dd.getBeginDate()+
+				" 00:00:00' and '"+dd.getEndDate()+" 23:59:59'"+provinceStr+cityStr;
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			List<?> lst_data = query
+					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	        if(lst_data != null){
+	            for(Object obj : lst_data){
+	            	 Map<String,Object> map_data = (Map<String,Object>)obj;
+	                 Map<String,Object> map_content = (Map<String,Object>)obj;
+	                 map_content.put("storecur_all_price",map_data.get("storecur_all_price"));
+	                 map_content.put("checked_order_count",map_data.get("checked_order_count"));
+	                 lst_result.add(map_content);
+	            }
+	        }
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getDailyNowUserOfCurDay(DynamicDto dd) {
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+			zx = "yes";
+		}
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		String sql = "SELECT COUNT(DISTINCT customer_id) customer_count  FROM df_mass_order_daily " +
+				"tor LEFT JOIN t_store t ON tor.store_code=t.storeno left join t_dist_citycode d on d.cityname=t.city_name  " +
+				"WHERE tor.store_name NOT LIKE '%测试%' and tor.sign_time  BETWEEN '"+dd.getBeginDate()+
+				" 00:00:00' and '"+dd.getEndDate()+" 23:59:59'"+provinceStr+cityStr;
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			List<?> lst_data = query
+                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            if(lst_data != null){
+                for(Object obj : lst_data){
+                    Map<String,Object> map_data = (Map<String,Object>)obj;
+                    Map<String,Object> map_content = (Map<String,Object>)obj;
+                    map_content.put("customer_count",map_data.get("customer_count"));
+                    lst_result.add(map_content);
+                }
+            }
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+	@Override
+	public List<Map<String, Object>> getDailyFirstOrderCity() {
+		String sqlStr = "";
+		sqlStr="SELECT t.store_province_code as province_code,t.store_city_code as city_code,tor.signe_time FROM df_mass_order_daily tor LEFT JOIN " +
+				"t_store t ON t.storeno = tor.store_code  WHERE t.store_city_code IS NOT null ORDER BY tor.sign_time DESC LIMIT 6 ";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sqlStr);
+			List<Map<String,Object>> lst_data = query
+                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
 		return lst_result;
 	}
 }
