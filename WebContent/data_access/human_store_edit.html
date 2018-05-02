@@ -1110,7 +1110,7 @@ Date.prototype.format=function(fmt) {
 			<tr>
 				<td>
 					<p>
-						身份证号：<input type="text" id="cardnumber" isautotab="true" onkeyup="value=value.replace(/[\W]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"  maxlength="18" />
+						<font color="red">*</font>身份证号：<input type="text" id="cardnumber" isautotab="true" onkeyup="value=value.replace(/[\W]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"  maxlength="18" />
 					</p>
 				</td>
 
@@ -1182,7 +1182,7 @@ Date.prototype.format=function(fmt) {
 				</td>
 				<td>
 					<p>
-						联系电话（本人电话）：<input type="text" id="phone" isautotab="true"  style="width: 23%" onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11"/>
+						<font color="red">*</font>联系电话（本人电话）：<input type="text" id="phone" isautotab="true"  style="width: 23%" onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11"/>
 					</p>
 				</td>
 
