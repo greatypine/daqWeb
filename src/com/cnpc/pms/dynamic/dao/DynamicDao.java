@@ -770,6 +770,16 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public List<Map<String, Object>> queryCityByName(String cityname);
+
+	/**
+	 * 
+	 * TODO 查询国安侠平均消费用户数 
+	 * 2018年4月24日
+	 * @author gaoll
+	 * @param number
+	 * @return
+	 */
+	public Map<String, Object> queryEmployeeAvgCustomer(Integer number);
 	/**
 	 * 查询某月当天的用户量和上个月当天用户量和订单量
 	 * <(如果当天的日大于上个月的月末时间,就按照月末那天进行计算)>
