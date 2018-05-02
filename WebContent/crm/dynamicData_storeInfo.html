@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>门店档案</title>
+  <title>门店信息档案</title>
     <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -107,7 +107,7 @@
 					<div class="pull-left">
 						<div class="logo-lg">
 							<ul class="no-margin">
-								<li class="current"><em>门店档案</em></li>
+								<li class="current"><em>门店信息档案</em></li>
 							</ul>
 						</div>
 					</div>
@@ -126,7 +126,7 @@
       <section class="content-header">
         <div class="box box-default">
           <div class="box-header  text-light-blue">
-          <div class="pull-left "><strong>门店档案查询</strong></div>
+          <div class="pull-left "><strong>门店信息档案查询</strong></div>
           </div>
           <div class="box-body">
            <form id="reset_form">
@@ -696,8 +696,11 @@
       		
   	  	  }else if(target==1){//城市级别
   	  		$("#store_id_area").val("");
+  	  		$("#store_name_area").empty();
   	    	$("#store_name-search_area").empty();
-  	    	$("#city_name_area").val("");
+  	    	$("#city_id_area").val("");
+      		$("#city_name-search_area").empty();
+      		$("#city_name_area").val("");
   	  	  }else if(target==2){//店长
   	  			$("#store_name_area").val("");
   	  	  }
