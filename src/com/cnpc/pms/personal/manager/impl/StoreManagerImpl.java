@@ -2168,7 +2168,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setProvince_id(storeDynamic.getProvince_id());
 			store.setCityName(storeDynamic.getCityName());
 			store.setUpdate_user(storeDynamic.getUpdate_user());
-			store.setUpdate_time(new Date());
+			store.setUpdate_time(storeDynamic.getUpdate_time());
 			store.setCityNo(storeDynamic.getCityNo());
 			store.setStoreno(storeDynamic.getStoreno());
 			store.setVersion(storeDynamic.getVersion());
