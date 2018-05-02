@@ -2002,14 +2002,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 					" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
-					" ) a right join (select username as name,employeeno as employee_no,storeid as store_id from ds_topdata where   year ="+dynamicDto.getYear()+" and month ="+dynamicDto.getMonth()+" and zw ='国安侠' and humanstatus =1 and storeid IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
+					" ) a right join (select username as name,employeeno as employee_no,storeid as store_id from ds_topdata where   year ="+dynamicDto.getYear()+" and month ="+dynamicDto.getMonth()+" and zw ='国安侠' and (humanstatus =1 or (humanstatus=2 and YEAR(DATE(leavedate)) =YEAR(DATE_ADD(NOW(),INTERVAL -1 MONTH)) and MONTH(DATE(leavedate))=MONTH(DATE_ADD(NOW(),INTERVAL -1 MONTH)))) and storeid IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
 		}else if("cur".equals(dynamicDto.getSearchstr())){//当前月
 			
 			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0)  as cusnum_ten,ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum,cusnum_ten "+
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
 					" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
-					" ) a  right join (select name,employee_no,store_id from t_humanresources where humanstatus = 1 and  zw = '国安侠' and store_id IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
+					" ) a  right join (select name,employee_no,store_id from t_humanresources where (humanstatus = 1 or (humanstatus=2 and YEAR(DATE(leavedate)) =YEAR(NOW()) and MONTH(DATE(leavedate))=MONTH(NOW()))) and  zw = '国安侠' and store_id IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
 		}
 		
 		sql=sql+" where 1=1 ";
