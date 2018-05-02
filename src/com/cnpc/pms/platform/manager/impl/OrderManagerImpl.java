@@ -97,10 +97,8 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     	User user = userManager.findEmployeeByEmployeeNo(employee_no);
     	if(user!=null){
     		Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
-        	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
-        	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
         	if(store!=null){
-            	return orderDao.queryOrderListByEmployeeNo(store.get("platformid").toString(), employee_no,area_names,pageInfo);
+            	return orderDao.queryOrderByEmployeeNo(store.get("platformid").toString(), employee_no,pageInfo);
         	}else{
         		return null;
         	}
