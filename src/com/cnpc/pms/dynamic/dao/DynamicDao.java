@@ -710,7 +710,7 @@ public interface DynamicDao extends IDAO{
 	 */
 	public List<Map<String, Object>> queryHistoryCustomerCount(DynamicDto dd);
 	/**
-	 * 查询总部当月成交用户量
+	 * 查询总部当月成交用户量 
 	 * @param dd
 	 * @return
 	 */
