@@ -478,7 +478,7 @@
               var employee_a_no = jsonArea.employee_a_no==null?"":jsonArea.employee_a_no;
               var employee_b_no = jsonArea.employee_b_no==null?"":jsonArea.employee_b_no;
               var userStr= "<a style='color:#2138ec' href=\"javaScript:goToUser('"+employee_a_no+"')\">"+employee_a_name+"(A)</a>&nbsp;&nbsp;&nbsp;&nbsp;<a style='color:#2138ec' href=\"javaScript:goToUser('"+employee_b_no+"')\">"+employee_b_name+"(B)</a>";
-              $("#area_manager").html(userStr);
+              $("#area_manager").html(userStr); 
               querySeveralDaysPerformanceOfArea("gmv");
               queryCurMonthPerformanceOfArea("gmv");
               querySeveralDaysPerformanceOfArea("consumer");

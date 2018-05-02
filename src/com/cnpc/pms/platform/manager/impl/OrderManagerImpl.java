@@ -97,7 +97,7 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     	User user = userManager.findEmployeeByEmployeeNo(employee_no);
     	if(user!=null){
     		Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
-        	if(store!=null){
+        	if(store!=null){ 
             	return orderDao.queryOrderByEmployeeNo(store.get("platformid").toString(), employee_no,pageInfo);
         	}else{
         		return null;
