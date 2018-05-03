@@ -2979,7 +2979,7 @@ option22 = {
 	    }
   },
   legend: {
-    data:['新增用户','消费用户'],
+    data:['消费用户','新增用户'],
     right:0,
     orient:'vertical',
   },
@@ -3290,7 +3290,7 @@ option24 = {
 //K线图--分时
 var xData = function() {
   var data = [];
-  for (var i = 1; i < 25; i++) {
+  for (var i = 0; i < 24; i++) {
     data.push(i + "时");
   }
   return data;
@@ -4058,7 +4058,7 @@ function getCityNet(){
 			var dataBeautyTown=new Array();//未覆盖街道
 			var xDataTown=new Array();//覆盖率(街道)
 			for(var m=0;m<citydata.length;m++){
-				 xAxisData[m]=citydata[m].cityName.length>4?citydata[m].cityName.substring(0,4)+'..':citydata[m].cityName;
+				 xAxisData[m]=citydata[m].cityName.length>4?citydata[m].cityName.substring(0,5)+'\n'+citydata[m].cityName.substring(5,citydata[m].cityName.length):citydata[m].cityName;
 				dataBeast[m]=citydata[m].coverCountyCounty;
 				dataBeauty[m]=citydata[m].notcoverCountyCounty;
 				xData[m]=parseFloat(((parseInt(citydata[m].coverCountyCounty)/parseInt(citydata[m].countytotal))*100).toFixed(2));
@@ -4799,7 +4799,7 @@ function oneyearorsixweek(){
 		                    		xDataArray17.push(city_name+"\n"+area_count);
 		                    		stringData+='<tr><td bgcolor="#ff0">'+city_name+'</td><td>'+store_count+'</td><td>'+area_count+'</td><td>'+employee_count+'</td></tr>';
 		                    		if(i == areaArray.length - 1){
-		                    			stringData+='<tr><td bgcolor="#ff0">'+'全国'+'</td><td>'+storeCount+'</td><td>'+areaCount+'</td><td>'+empCount+'</td></tr>';
+		                    			stringData+='<tr><td bgcolor="#ff0">'+'合计'+'</td><td>'+storeCount+'</td><td>'+areaCount+'</td><td>'+empCount+'</td></tr>';
 		                    		}
 		                    	}
 		                    }
