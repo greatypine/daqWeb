@@ -180,7 +180,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> getStoreById(Long id) {
 		String sql = "select a.*,b.name as keeperName,b.employeeId from "
 				+ "(select skid,name,store_id from t_store  where rmid=" + id + ") as a"
-				+ " INNER JOIN tb_bizbase_user as b on a.skid = b.id order by a.store_id";
+				+ " INNER JOIN tb_bizbase_user as b on a.skid = b.id order by a.store_id ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

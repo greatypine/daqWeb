@@ -1232,14 +1232,14 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		UserDAO userDAO = (UserDAO) SpringHelper.getBean(UserDAO.class.getName());
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<Map<String, Object>> list1 = storeDao.getStoreById(id);// 门店数
-		List<Map<String, Object>> list2 = storeDao.getStoreKeeper(id);// 店长数
-		List<Map<String, Object>> gaxlist = userDAO.getEmployeeOfStore(null, employee_no, "QYJL");
+		//List<Map<String, Object>> list2 = storeDao.getStoreKeeper(id);// 店长数
+		//List<Map<String, Object>> gaxlist = userDAO.getEmployeeOfStore(null, employee_no, "QYJL");
 		result.put("store", list1);
-		result.put("storeKeeper", list2);
-		result.put("storeTotal", list1 == null ? 0 : list1.size());
-		result.put("storeKeeperTotal", list2 == null ? 0 : list2.size());
-		result.put("gax", gaxlist);
-		result.put("gaxTotal", gaxlist == null ? 0 : gaxlist.size());
+		//result.put("storeKeeper", list2);
+		//result.put("storeTotal", list1 == null ? 0 : list1.size());
+		//result.put("storeKeeperTotal", list2 == null ? 0 : list2.size());
+		//result.put("gax", gaxlist);
+		//result.put("gaxTotal", gaxlist == null ? 0 : gaxlist.size());
 		return result;
 	}
 
