@@ -2968,6 +2968,15 @@ option22 = {
   },
   tooltip : {
     trigger: 'axis',
+    formatter:function(params)//数据格式
+	    {
+	    var relVal = params[0]['name']+"<br/>";
+	     $.each(eval(params.reverse()), function (idx, val) {
+	        relVal += val['marker']+val['seriesName']+ ' : ' + String(val['value']);
+	        relVal+="<br/>";
+	     });
+	     return relVal;
+	    }
   },
   legend: {
     data:['新增用户','消费用户'],
@@ -2994,7 +3003,7 @@ option22 = {
       },
       axisLabel:{
         show: true,
-        interval: 1,
+        interval: 2,
       }
     }
   ],
@@ -3045,11 +3054,22 @@ option22 = {
 // 客流分析
 option23 = {
   title: {
-    text:"各时段客流分析",x: '5%', y: '0%',textStyle:{fontSize:"16"},
+    text:"近7日客流分析",x: '5%', y: '0%',textStyle:{fontSize:"16"},
   },
   tooltip : {
-    trigger: 'axis',
-  },
+      trigger: 'axis',
+      formatter:function(params)//数据格式
+            {
+            var relVal = params[0]['name']+"<br/>";
+            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
+	        relVal+="<br/>";
+            relVal += params[2]['marker']+params[2]['seriesName']+ ' : ' + String(params[2]['value']);
+	        relVal+="<br/>";
+            relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
+	        relVal+="<br/>";
+             return relVal;
+        }
+    },
   legend: {
     data:['复购率','新增用户量','消费用户量'],
     right:0,
@@ -3059,7 +3079,7 @@ option23 = {
     left: '1%',
     right: '2%',
     bottom: '3%',
-    top: '18%',
+    top: '20%',
     containLabel: true
   },
   xAxis: {
@@ -5024,8 +5044,8 @@ function oneyearorsixweek(){
 					cityname:null,
 					deptname:null,
 					channelname:null,
-					cLabel:1,
-					smallBLabel:1
+					cLabel:0,
+					smallBLabel:0
 				}
 		}
 		
