@@ -29,6 +29,7 @@ var timer_china_beat;//城市闪动的定时
 var timer_china_beat2;//城市大图闪动的定时
 var fullScreenChart;
 var screenlogin=getUrlParamByKey("su");
+var loginType = getUrlParamByKey("lgt");
 layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
   });
@@ -37,7 +38,7 @@ function loginShow(){
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
 		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
 	    var callback = function callback(data, textStatus, XMLHttpRequest) {
-	    	window.parent.location=getRootPath() + "/crm/index_headquarters.html";
+	    	window.parent.location=getRootPath() + "/crm/index_headquarters.html?lgt=ph";
 		};
 	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
 			alert("登录信息错误，请确认输入或联系管理员!");
@@ -3122,9 +3123,10 @@ var getDailyData = function(){
 				cityId:pageStatusInfo["cityId"]
     	}
      var startTime = new Date().getTime();
-     doManager("dynamicManager", "getDailyNowStoreTotalPrice",[dynamicDto],
+     doManager("dynamicManager", "getDailyStoreTotlePrice",[dynamicDto],
   			function(data, textStatus, XMLHttpRequest) {
-  				if (data.result) {
+  			//1
+  				if (data.result) { 
   					 var resultJson= JSON.parse(data.data);
   					 var dailyData = JSON.parse(resultJson.daily);
   					 var totle_price = dailyData[0].storecur_all_price==null?"0":dailyData[0].storecur_all_price;
@@ -3448,9 +3450,11 @@ var getReauestParameters = function () {
 	initcurruser();
 	initCustomerInfo();//菜单 判断非总部不显示 
 	var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
-	if(curr_user==null){
-		urlStr = "../logout.do";
-		window.location.href = urlStr;
+	if(loginType!='ph'){
+		if(curr_user==null){
+			urlStr = "../logout.do";
+			window.location.href = urlStr;
+		}
 	}
   	if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
   		targets = 1;
