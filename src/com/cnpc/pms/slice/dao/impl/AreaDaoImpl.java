@@ -671,6 +671,28 @@ public class AreaDaoImpl extends BaseDAOHibernate implements AreaDao {
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 	}
+
+	@Override
+	public List<Map<String, Object>> queryAreaCountByCity() {
+		String sql = "select city_name,count(DISTINCT store.store_id) as store_count,count(DISTINCT area.area_no) as area_count,count(DISTINCT area.employee_a_no) as employee_count "
+				+"from t_store store INNER JOIN t_area area ON store.store_id = area.store_id where area.`status` = 0 "
+				+"and store.flag = 0 and store.estate != '闭店中' and store.name not like '%办公室%' and store.name not like '%储备%' and store.name not like '%测试%' and "
+				+"store.storetype != 'V' GROUP BY store.city_name";
+
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryAllAreaCount() {
+		String sql = "select COUNT(DISTINCT store_id) as store_count,count(DISTINCT id) as area_count,count(DISTINCT employee_a_no) as emp_count, "
+				+"sum(case WHEN WEEKOFYEAR(DATE_FORMAT(create_time,'%Y-%m-%d')) = WEEKOFYEAR(NOW()) THEN 1 else 0 END) as week_count  from t_area where status = 0";
+
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
 	
 	
 
