@@ -5,18 +5,27 @@
 var JsCache = {
     set: function (key, value, timeOut) {
         var getDefaultDeadline = function () {
-             var nextDay = new Date();
-            nextDay.setDate(nextDay.getDate() + 1);
-            var deadLine = new Date(nextDay.getFullYear(), nextDay.getMonth(), nextDay.getDate(), 0, 0, 0);
-            return deadLine.getTime();
+             var currentTime = new Date();
+            var deadLine = currentTime.setHours(currentTime.getHours() + 5);
+            return deadLine;
         } ;
         var nameSpace = encode64(window.location.pathname) + "_";
-        if (!localStorage.getItem(nameSpace)) {
-            localStorage.setItem(nameSpace, getDefaultDeadline());
-        }
-        var lKey = nameSpace + key;
-        var curTime = new Date().getTime();
-        localStorage.setItem(lKey, encode64(JSON.stringify(value)));
+        try{
+	        if (!localStorage.getItem(nameSpace)) {
+	            localStorage.setItem(nameSpace, getDefaultDeadline());
+	        }
+	        var lKey = nameSpace + key;
+	        var curTime = new Date().getTime();
+        	localStorage.setItem(lKey, encode64(JSON.stringify(value)));
+        }catch(oException){
+		    if(oException.name == 'QuotaExceededError'){
+		        console.log('超出本地存储限额！');
+		        //如果历史信息不重要了，可清空后再设置
+		        localStorage.clear();
+		        //localStorage.setItem(lKey,encode64(JSON.stringify(value)));
+		    }
+		
+		}
         if (timeOut) {
             localStorage.setItem(lKey + '_timeout', (curTime + (timeOut * 1000)).toString())
         }
