@@ -3071,7 +3071,7 @@ option23 = {
         }
     },
   legend: {
-    data:['复购率','新增用户量','消费用户量'],
+    data:['复购率','消费用户量','新增用户量'],
     right:0,
     orient:'vertical',
   },
