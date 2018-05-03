@@ -3953,19 +3953,19 @@ var citycover2017= new Array();//2017年覆盖城市
 var citycover2018=new Array();//2018年覆盖城市
 var screenlogin=getUrlParamByKey("su");
 $(function(){	 
-	//loginShow();
-	//getCityNet();
-	//findStoreNetDate();
-	//oneyearorsixweek();
-	//storeDevelopmentProgress();
-	//progressOfNetworkConstruction();
-	//humanresourseInfo();
-	//customerInfo();
-	//areaInfo();
-	//GMVInfo();
+	loginShow();
+	getCityNet();
+	findStoreNetDate();
+	oneyearorsixweek();
+	storeDevelopmentProgress();
+	progressOfNetworkConstruction();
+	humanresourseInfo();
+	customerInfo();
+	areaInfo();
+	GMVInfo();
 });
 
-/*function loginShow(){
+function loginShow(){
 	
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
 		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
@@ -4899,8 +4899,8 @@ function oneyearorsixweek(){
 							xData[index]=element.day_time;
 							yData[index]=element.turnover;
 		                });
-						chart27_option.xAxis[0].data=xData;
-						chart27_option.series[0].data=yData;
+						/*chart27_option.xAxis[0].data=xData;
+						chart27_option.series[0].data=yData;*/
 						chart27.setOption(chart27_option);
 					}
 			});
@@ -4992,6 +4992,31 @@ function oneyearorsixweek(){
 		
 		var iCheckStr = "cb";
 		function getShareParam(){
+			 /*var cLabel=0;
+			 var smallBLabel=0;
+			 if(iCheckStr=='cb') {
+				 cLabel=1;
+				 smallBLabel=1;
+			 }
+			 var storeno = $("#store_id_manual").val()==""?null:$("#store_id_manual").val();
+			  var cityName = $("#citySelect  option:selected").val();
+			  if(cityName!="" && cityName!=undefined){
+			    if(cityName=="黔东南苗族侗族自治州"){
+			    	cityName="黔东南州";
+			  	}else{
+			    	cityName=cityName+"市";
+			    	}
+			  }else{
+			    cityName = null;
+			  }
+		      var deptname = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
+		      if(deptname!="" && deptname=="全部事业群"){
+		    	  deptname = null;
+		      }
+		      var channelname = $("#channelSelect option:selected").html()==""?null:$("#channelSelect option:selected").html();
+		      if(channelname!="" && channelname=="全部频道"){
+		    	  channelname = null;
+		      }*/
 			  
 			  return shareChartStatDto = {				
 					storeno:null,
@@ -5048,4 +5073,4 @@ function oneyearorsixweek(){
 		        }
 		    }
 		    return result;
-		}*/
+		}
