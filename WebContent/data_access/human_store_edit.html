@@ -194,6 +194,7 @@ Date.prototype.format=function(fmt) {
 			} */
 		}
 		
+		/*
 		if(zw=='线上服务专员'){
 			//线上服务专员  门店IDs
 			var selectStoreIds = $("#selectStoreIds").val();
@@ -202,7 +203,7 @@ Date.prototype.format=function(fmt) {
 				return ;
 			}
 		}
-		
+		*/
 		
 		if(zw!='市场专员'&&zw!='线上服务专员'){
 			var store_name = $('#storename').val();
@@ -603,9 +604,9 @@ Date.prototype.format=function(fmt) {
 				$("#storename").attr("readonly","");
 				$("#storefw").hide();
 				$("#storefwbtn").attr("disabled",true);
-				$("#selectStoreIds").val("");
+				/* $("#selectStoreIds").val("");
 				$("#selectStoreName").val("");
-				$("#showSelectName").html("");
+				$("#showSelectName").html(""); */
 			}
 			
 			
@@ -684,6 +685,8 @@ Date.prototype.format=function(fmt) {
 		
 		if(o["zw"].indexOf("线上服务专员")>-1){
 			o["selectStoreIds"]=$("#selectStoreIds").val();
+		}else{
+			o["selectStoreIds"]="";
 		}
 		
 		
@@ -1066,12 +1069,12 @@ Date.prototype.format=function(fmt) {
 		    <tr id="storefw">
 				<!-- 线上服务专员 选择多个门店 -->
 				<td>
-	                	<p style="float:left; padding-top:11px;"><font color="red">*</font>管辖范围：
+	                	<p style="float:left; padding-top:11px;"><!-- <font color="red">*</font> -->管辖范围：
 	                    <label id="showSelectName"></label>
 	                    <input type="hidden" id="selectStoreName" value="" />
 	                    <input type="hidden" id="selectStoreIds" value="" />
-	                    <button id="storefwbtn" class="btn btn-primary" onclick="showStoreWinNoEnter(setStoreSelect);">选择门店</button> 
-	            </td>
+<!-- 	                    <button id="storefwbtn" class="btn btn-primary" onclick="showStoreWinNoEnter(setStoreSelect);">选择门店</button> 
+ -->	            </td>
 	            <td>
 	            </td>
 	                
