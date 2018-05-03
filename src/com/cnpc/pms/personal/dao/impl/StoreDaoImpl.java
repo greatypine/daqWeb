@@ -1136,7 +1136,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> getOpenStoreByWeek(String nature) {
 		String sql = "select nature,YEARWEEK(create_time) as week_date,count(1) as count,subdate(DATE_FORMAT(create_time,'%Y-%m-%d'),date_format(create_time, '%w') - 7) AS week_time from t_store ts "
 				+ "WHERE nature is not null and create_time is not null and nature = '" + nature
-				+ "' and estate != '闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and YEARWEEK(date_format(create_time,'%Y-%m-%d')) > YEARWEEK(now())-6 group by week_date;";
+				+ "' and estate != '闭店中'  AND storetype!='V' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and YEARWEEK(date_format(create_time,'%Y-%m-%d')) > YEARWEEK(now())-6 group by week_date;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1147,9 +1147,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> getStoreNatureByYear(String year) {
 		String sql = "select t1.cityname,DATE_FORMAT(t1.create_time,'%Y') AS create_year,t1.cityno,ifnull(t2.count,0) as ' cooperative_complete',ifnull(t3.count,0) as 'self_complete',"
 				+ "ifnull(t4.cooperative_task,0) as cooperative_task,ifnull(t4.self_support_task,0) as self_support_task from t_dist_citycode t1 LEFT JOIN "
-				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and estate != '闭店中' and nature = '合作店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and DATE_FORMAT(create_time,'%Y') = '"
+				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and estate != '闭店中' and nature = '合作店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' and DATE_FORMAT(create_time,'%Y') = '"
 				+ year + "' GROUP BY city_name) t2 " + "ON t1.cityname = t2.city_name LEFT JOIN "
-				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and estate != '闭店中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and DATE_FORMAT(create_time,'%Y') = '"
+				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and estate != '闭店中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' and DATE_FORMAT(create_time,'%Y') = '"
 				+ year + "' GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name LEFT JOIN "
 				+ "(select cooperative_task,self_support_task,cityname,cityno from di_storexpand  where 1=1 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname) t4 "
 				+ "ON t1.cityname = t4.cityname;";
@@ -1161,7 +1161,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getStoreStateCount() {
-		String sql = "select city_name,count(1) as count from t_store where estate = '筹备中' and flag = 0 and estate != '闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' GROUP BY city_name;";
+		String sql = "select city_name,count(1) as count from t_store where estate = '筹备中' and flag = 0 and estate != '闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' GROUP BY city_name;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1171,14 +1171,14 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public List<Map<String, Object>> getStoreCardBycity() {
 		String sql = "select ta.city_name,ifnull(ta.store_count,0) as store_count,ifnull(tb.`double_card`,0) as double_card,ifnull(tc.`business_license`,0) as business_license,ifnull(td.`no_card`,0) as no_card from ( "
-				+ "select count(*) as store_count,city_name from t_store where flag = 0 and estate != '闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' GROUP BY city_name) ta "
+				+ "select count(*) as store_count,city_name from t_store where flag = 0 and estate != '闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' GROUP BY city_name) ta "
 				+ "LEFT JOIN (select COUNT(t1.store_id) as 'double_card',t1.city_name from ( "
 				+ "select t_store.store_id,t_store.`name`,t_store.city_name,t_attachment.file_type from t_store INNER JOIN t_attachment ON t_store.store_id = t_attachment.store_id where t_attachment.file_type = 7) t1 "
 				+ "INNER JOIN (select t_store.store_id,t_store.`name`,t_store.city_name,t_attachment.file_type from t_store INNER JOIN t_attachment ON t_store.store_id =  t_attachment.store_id where t_attachment.file_type = 8) t2 "
 				+ "ON t1.store_id = t2.store_id GROUP BY t1.city_name) tb ON ta.city_name = tb.city_name LEFT JOIN (select COUNT(*) as 'business_license',t.city_name from (select t_store.store_id,t_store.city_name from t_store "
 				+ "INNER JOIN t_attachment ON t_store.store_id = t_attachment.store_id where t_attachment.file_type = 7) t where t.store_id not in (select t_store.store_id from t_store "
 				+ "INNER JOIN t_attachment ON t_store.store_id =  t_attachment.store_id where t_attachment.file_type = 8)GROUP BY t.city_name) tc ON ta.city_name = tc.city_name LEFT JOIN (select count(store_id) as 'no_card',city_name from t_store "
-				+ "where flag = 0 and estate != '闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and store_id not in (select t_store.store_id from t_store INNER JOIN t_attachment ON t_store.store_id = t_attachment.store_id "
+				+ "where flag = 0 and estate != '闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%'  AND storetype!='V' and store_id not in (select t_store.store_id from t_store INNER JOIN t_attachment ON t_store.store_id = t_attachment.store_id "
 				+ "where t_attachment.file_type = 7 UNION All select t_store.store_id from t_store INNER JOIN t_attachment ON t_store.store_id = t_attachment.store_id where t_attachment.file_type = 8 GROUP BY t_store.store_id) GROUP BY city_name ) "
 				+ "td ON ta.city_name = td.city_name;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
