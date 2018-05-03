@@ -29,7 +29,6 @@ var timer_china_beat;//城市闪动的定时
 var timer_china_beat2;//城市大图闪动的定时
 var fullScreenChart;
 var screenlogin=getUrlParamByKey("su");
-var loginType = getUrlParamByKey("lgt");
 layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
   });
@@ -38,7 +37,7 @@ function loginShow(){
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
 		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
 	    var callback = function callback(data, textStatus, XMLHttpRequest) {
-	    	window.parent.location=getRootPath() + "/crm/index_headquarters.html?lgt=ph";
+	    	window.parent.location=getRootPath() + "/crm/index_headquarters.html";
 		};
 	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
 			alert("登录信息错误，请确认输入或联系管理员!");
@@ -3450,7 +3449,8 @@ var getReauestParameters = function () {
 	initcurruser();
 	initCustomerInfo();//菜单 判断非总部不显示 
 	var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
-	if(loginType!='ph'){
+	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+	}else{
 		if(curr_user==null){
 			urlStr = "../logout.do";
 			window.location.href = urlStr;
