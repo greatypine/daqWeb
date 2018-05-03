@@ -6409,4 +6409,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		}
 		return result;		
 	}
+	
+
+	@Override
+	public Map<String, Object> queryEmployeeAvgCustomer() {
+		Integer nunber = Calendar.getInstance().get(Calendar.MONTH)+1;
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		dynamicDao.queryEmployeeAvgCustomer(nunber);
+		return null;
+	}
 }

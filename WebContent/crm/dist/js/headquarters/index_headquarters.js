@@ -3122,9 +3122,10 @@ var getDailyData = function(){
 				cityId:pageStatusInfo["cityId"]
     	}
      var startTime = new Date().getTime();
-     doManager("dynamicManager", "getDailyNowStoreTotalPrice",[dynamicDto],
+     doManager("dynamicManager", "getDailyStoreTotlePrice",[dynamicDto],
   			function(data, textStatus, XMLHttpRequest) {
-  				if (data.result) {
+  			//1
+  				if (data.result) { 
   					 var resultJson= JSON.parse(data.data);
   					 var dailyData = JSON.parse(resultJson.daily);
   					 var totle_price = dailyData[0].storecur_all_price==null?"0":dailyData[0].storecur_all_price;
@@ -3260,7 +3261,7 @@ var getDailyData = function(){
   					}*/
   					//$("#tradesumofCurYears").html(changeMoney(parseInt(tradesumofyear)+parseInt(totalprice)));
   				}
-  		},false);
+  		});
   		
     //console.log('chonfu method in ' + (new Date().getTime() - startTime) + ' millisecond');
     }
@@ -3448,9 +3449,12 @@ var getReauestParameters = function () {
 	initcurruser();
 	initCustomerInfo();//菜单 判断非总部不显示 
 	var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
-	if(curr_user==null){
-		urlStr = "../logout.do";
-		window.location.href = urlStr;
+	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+	}else{
+		if(curr_user==null){
+			urlStr = "../logout.do";
+			window.location.href = urlStr;
+		}
 	}
   	if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
   		targets = 1;

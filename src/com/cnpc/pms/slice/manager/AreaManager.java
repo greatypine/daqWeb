@@ -262,5 +262,14 @@ public interface AreaManager extends IManager {
 	 */
 	public Map<String, Object> selectTinyVillageCoordOfArea(Long storeId,String areaNo);
 	
+	/**
+	 * 
+	 * TODO 全国门店画片情况
+	 * 2018年4月26日
+	 * @author gaoll
+	 * @return
+	 */
+	public Map<String, Object> selectAllArea();
+	
 	
 }

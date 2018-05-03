@@ -980,4 +980,14 @@ public interface DynamicManager extends IManager{
      * @return
      */
 	public Map<String, Object> queryMonthAndLastMonthTodayCustomerOrderCount(DynamicDto dd);
+	
+
+	/**
+     * 
+     * TODO  查询国安侠平均消费用户数 
+     * 2018年4月24日
+     * @author gaoll
+     * @return
+     */
+    public Map<String, Object> queryEmployeeAvgCustomer();
 }

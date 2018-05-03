@@ -407,4 +407,18 @@ public interface OrderDao {
 	 */
 	public List<Map<String, Object>>findChannelByDept(String deptId);
 
+	
+	/**
+	 * 
+	* @Title: queryOrderByEmployeeNo  
+	* @Description: TODO 国安侠送单 
+	* 2018年5月2日
+	* @param @param store_id
+	* @param @param employee_no
+	* @param @param pageInfo
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	 public Map<String, Object> queryOrderByEmployeeNo(String store_id,String employee_no,PageInfo pageInfo);
 }

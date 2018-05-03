@@ -1391,8 +1391,8 @@ function initStoreHistoryGMV(){
 	        		var area_no =   e.target.getExtData().areaNo;
 	        		var area_name =  e.target.getExtData().areaName;
 	                var url = "index_area.html?ao=" + encode64(area_no);
-	                window.open(url,"index_area");
-	        	});
+	                window.open(url);
+	        	}); 
 	        	var tmp_tinyVillageCoordinate={
 	        			area_no:coordinate[i].areaNo,
 	        			tinyVillagePolygon:areaTinyVillage,

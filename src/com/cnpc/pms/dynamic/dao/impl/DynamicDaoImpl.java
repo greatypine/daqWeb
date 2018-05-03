@@ -3,6 +3,7 @@
  */
 package com.cnpc.pms.dynamic.dao.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -2679,6 +2680,17 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
             e.printStackTrace();
         }
 		return lst_data;
+	}
+
+	@Override
+	public Map<String, Object> queryEmployeeAvgCustomer(Integer number) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMM");
+		StringBuilder sb = new StringBuilder();
+		sb.append("");
+		for(int i = number; i >0; i--){
+			
+		}
+		return null;
 	}
 
 	@Override
