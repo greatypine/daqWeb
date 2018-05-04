@@ -16,10 +16,12 @@ import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.inter.common.CodeEnum;
+import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.messageModel.dao.MessageNewDao;
 import com.cnpc.pms.messageModel.entity.Message;
 import com.cnpc.pms.messageModel.entity.MessageSendUtil;
 import com.cnpc.pms.notice.dao.NoticeDao;
+import com.cnpc.pms.notice.dao.NoticeReciverDao;
 import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.manager.NoticeManager;
 import com.cnpc.pms.notice.util.SendNotice;
@@ -356,6 +358,28 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("data", list);
+			return result;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> deleteNotice(String noticeNo) {
+        NoticeDao noticeDao = (NoticeDao)SpringHelper.getBean(NoticeDao.class.getName());
+		NoticeReciverDao noReciverDao = (NoticeReciverDao)SpringHelper.getBean(NoticeReciverDao.class.getName());
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		try {
+			
+			noticeDao.deleteNotice(noticeNo);
+			noReciverDao.deleteNoticeReciver(noticeNo);
+			result.put("code",CodeEnum.success.getValue());
+			result.put("message","撤销成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message","撤销失败");
 			return result;
 		}
 		

@@ -126,8 +126,39 @@
                
             }
         };
-
-        $pmspage.opArr = [detailObj];
+        
+    
+    
+    
+     var deleteObj = {
+            html: '<a href="#"  class="blue">撤销</a>',
+            resourceId: "del",
+            func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            
+            		 $$.showConfirm("提示","是否继续撤销当前公告？",function () {
+                		 var noticeNo = allColumnsDataMap["noticeNo"];
+                         doManager('noticeManager','deleteNotice',[noticeNo],function(data){
+                            if(data.result){
+                                var result = JSON.parse(data.data).code
+                                if(result=="200"){
+                                	searchList();
+                                }else{
+                                	$$.showMessage('提示',"撤销失败");
+                                }
+                            }else{
+                                $$.showMessage('提示',"撤销失败");
+                            }
+                         });
+                     });
+            	
+            	
+            
+            }
+        };
+    
+    
+        
+        $pmspage.opArr = [detailObj,deleteObj];
     
     
     var COLUMNS = {

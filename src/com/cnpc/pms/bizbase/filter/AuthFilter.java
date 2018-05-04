@@ -634,6 +634,11 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			
+			if (url.contains("chartStatManager")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 
 			if (url.contains("MessageNewManager")) {
 				filterChain.doFilter(servletRequest, servletResponse);
