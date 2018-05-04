@@ -2873,7 +2873,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			provinceStr1+=" and dom.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		String sql = "SELECT IFNULL(FLOOR(sum(dom.trading_price)), 0) AS week_gmv,date_format(dom.sign_time, '%m-%d') AS week_date FROM df_mass_order_monthly dom  " +
-				"WHERE dom.store_name NOT LIKE '%测试%' AND dom.sign_time >='"+dd.getBeginDate()+"' AND dom.sign_time<='"+dd.getEndDate()+"' "+provinceStr1+cityStr1+"   GROUP BY DATE(dom.sign_time) ";
+				"WHERE dom.store_name NOT LIKE '%测试%' AND dom.sign_time >='"+dd.getBeginDate()+" 00:00:00' AND dom.sign_time<='"+dd.getEndDate()+" 23:59:59' "+provinceStr1+cityStr1+"   GROUP BY DATE(dom.sign_time) ";
 		List<Map<String, Object>> lst_data = null;
 		try{
 	    	 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);

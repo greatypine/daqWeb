@@ -1914,7 +1914,7 @@ var showCityRankGmv = function (cityRankDataGmv) {
     });
 	cityRankGmvOption.xAxis[0].data = data.reverse();
     cityRankGmvOption.series[0].data = data1.reverse();
-    cityRankGmvOption.title[0].text = "城市近7日GMV走势";
+    cityRankGmvOption.title[0].text = "近7日GMV走势";
     cityRankChartGmv.setOption(cityRankGmvOption,true);
 };
 // 获取门店排名(GMV)数据
