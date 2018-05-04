@@ -2700,7 +2700,7 @@ option16 = {
   },
   grid: {
     left: '1%',
-    right: '2%',
+    right: '8%',
     bottom: '3%',
     top: '18%',
     containLabel: true
@@ -2746,7 +2746,7 @@ option17 = {
   },
   grid: {
     left: '1%',
-    right: '2%',
+    right: '8%',
     bottom: '3%',
     top: '18%',
     containLabel: true
@@ -3141,7 +3141,7 @@ option23 = {
           label: {
             show: true,
             position: 'top',
-            formatter: '{c} ',
+            formatter: '{c}% ',
           },
         }
 
