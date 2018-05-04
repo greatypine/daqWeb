@@ -7,6 +7,7 @@ import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.messageModel.entity.Message;
+import com.cnpc.pms.notice.dto.NoticeDto;
 import com.cnpc.pms.notice.entity.Notice;
 
 /**
@@ -156,4 +157,16 @@ public interface NoticeManager extends IManager{
 	* @throws
 	 */
 	public Map<String,Object> deleteNotice(String noticeNo);
+	
+	/**
+	 * 
+	* @Title: editNotice  
+	* @Description: TODO 更新公告 
+	* 2018年5月4日
+	* @param @param notice
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String,Object> editNotice(NoticeDto notice);
 }

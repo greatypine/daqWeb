@@ -2910,7 +2910,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				"t.storetype !='W' AND t.storetypename IS NOT NULL "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
-		try{
+		try{ 
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sqlStr);
 			List<Map<String,Object>> lst_data = query
