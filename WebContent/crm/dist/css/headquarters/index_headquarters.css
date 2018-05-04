@@ -1,6 +1,8 @@
-.dl-horizontal dt{width: 30%;}
+	.dl-horizontal dt{width: 30%;}
     .dl-horizontal dd{margin-left: 38%;}
-        .info_head,.info_bottom{min-height: 180px;}
+    .info_head{width: 25%; float:left; position: absolute;}
+    .info_head_dl{display: none;}
+    .info_head,.info_bottom{min-height: 180px;}
     .info_head:hover,.info_bottom:hover{height: auto;}
     .box{width: 100%; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6); background: none; height: 180px; overflow: hidden; color: #fff; overflow: hidden;  margin-bottom: 0; position: absolute; z-index: 1000;}
     .box-header{color: #fff;}

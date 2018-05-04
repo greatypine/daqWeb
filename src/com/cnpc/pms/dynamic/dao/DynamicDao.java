@@ -807,4 +807,21 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public List<Map<String, Object>> getDailyFirstOrderCity();
+	
+	/**
+	 * 查询近七日GMV走势图
+	 * @param dd
+	 * @param provinceNO 
+	 * @param cityNO 
+	 * @return
+	 */
+	public Map<String, Object> getCityGMVRangeForWeek(DynamicDto dd, List<Map<String, Object>> cityNO, 
+			List<Map<String, Object>> provinceNO);
+
+	/**
+	 * 获取门店种类的个数,分城市,省
+	 * @param dd
+	 * @return
+	 */
+	public List<Map<String, Object>> getStoreKindCountByCityAndProvince(DynamicDto dd);
 }

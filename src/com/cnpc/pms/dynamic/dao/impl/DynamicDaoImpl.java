@@ -2856,4 +2856,67 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }
 		return lst_result;
 	}
+	@Override
+	public Map<String, Object> getCityGMVRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO, 
+			List<Map<String, Object>> provinceNO) {
+		Map<String, Object> map_all = new HashMap<String, Object>();
+		String cityStr1 = "";
+		String provinceStr1 = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr1+=" and dom.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr1+=" and dom.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		String sql = "SELECT IFNULL(FLOOR(sum(dom.trading_price)), 0) AS week_gmv,date_format(dom.sign_time, '%m-%d') AS week_date FROM df_mass_order_monthly dom  " +
+				"WHERE dom.store_name NOT LIKE '%测试%' AND dom.sign_time >='"+dd.getBeginDate()+"' AND dom.sign_time<='"+dd.getEndDate()+"' "+provinceStr1+cityStr1+"   GROUP BY DATE(dom.sign_time) ";
+		List<Map<String, Object>> lst_data = null;
+		try{
+	    	 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+	    	 lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }
+		map_all.put("lst_data", lst_data);
+		return map_all;
+	}
+	@Override
+	public List<Map<String, Object>> getStoreKindCountByCityAndProvince(
+			DynamicDto dd) {
+		String cityStr = "";
+		String provinceStr = "";
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String zx = "no";
+		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+			zx = "yes";
+		}
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		String sqlStr = "";
+		sqlStr="SELECT t.storetypename AS storetypename,count(storetypename) AS store_kind_count " +
+				"FROM t_store t LEFT JOIN t_dist_citycode d ON t.cityno=d.cityno  WHERE t.storetype !='V' AND t.storetype !='W' AND t.storetypename IS NOT NULL "+provinceStr+cityStr+"  GROUP BY t.storetypename ORDER BY store_kind_count DESC";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sqlStr);
+			List<Map<String,Object>> lst_data = query
+                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
+	}
 }

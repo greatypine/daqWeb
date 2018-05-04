@@ -50,6 +50,9 @@ function loginShow(){
 }
 $(document).ready(function () {
 	loginShow();
+	//鼠标放概要统计展开
+	showMoreSummaryStatistics();
+	getStoreKindsNumber();
     var startTime = new Date().getTime();
     // 获取请求参数
     var requestParameters = getReauestParameters();
@@ -99,6 +102,8 @@ const SHOW_LEVEL_CITY = 'city';
 // 显示页面
 var showPageContent = function (pageStatusInfo) {
     clearInterval(timerId);
+    //切换门店种类个数
+    getStoreKindsNumber();
 	//获得上月某日订单量和用户量
     getLastMonthOrderCustomerCount(pageStatusInfo);
     // 显示历史数据
@@ -192,135 +197,109 @@ var initPageElements = function () {
     storeRankChartOrder = echarts.init(document.getElementById('main7'));
     // 初始化事业群排名(GMV)显示图
 	businessDepRankChartGMV = echarts.init(document.getElementById('main4'));
-    cityRankGmvOption = {
-        title: [
-            {x: '2%', y: '0%', textStyle: {color: "#efefef", fontSize: "16"}},
-        ],
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: { // 坐标轴指示器，坐标轴触发有效
-                "type": "shadow" // 默认为直线，可选为："line" | "shadow"
-            },
-            formatter:function(params)//数据格式
-            {
-            var relVal = params[0].name+"<br/>";
-            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + changeMoney(String(params[0]['value']));
-            return relVal;
-            },
-           	position: function (point, params, dom, rect, size) {
-	        // 固定在顶部
-	        return [point[0], '10%'];
-      		}
+	cityRankGmvOption = {
+    title:[
+      //{text:"城市排名（GMV:元）",x: '2%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
+      {x: '2%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
+    ],
+    tooltip : {
+      trigger: 'axis',
+      position: function (point, params, dom, rect, size) {
+        // 固定在顶部
+        return [point[0], '10%'];
+      }
+    },
+    calculable : true,
+    grid: {
+      left: '3%',
+      right: '5%',
+      top: '17%',
+      height: 280, //设置grid高度
+      containLabel: true
+    },
+    xAxis : [
+      {
+        type : 'category',
+        data : ['社区一','上海上海','天津天','社区一','上海上海','天津天'],
+        boundaryGap : false,
+       // max:4,
+        axisLine: {
+          lineStyle: {
+            color: '#ccc'
+          }
         },
-        calculable: true,
-        grid: {
-            left: '-5%',
-            right: '2%',
-            top: '15%',
-            height: 260, //设置grid高度
-            containLabel: true
+        /*axisLabel:{
+          "show": true,
+          interval: 1,
+          //rotate:45,//倾斜度 -90 至 90 默认为0
+          textStyle:{
+            color:"#fff"
+          }
+        }*/
+        axisLabel: {
+          interval: 0,
+          textStyle:{
+            color:"#fff"
+          }
+          /*
+          formatter:function(value)
+          {
+            //debugger
+            var ret = "";//拼接加\n返回的类目项
+            var maxLength = 3;//每项显示文字个数
+            var valLength = value.length;//X轴类目项的文字个数
+            var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
+            if (rowN > 1)//如果类目项的文字大于3,
+            {
+              for (var i = 0; i < rowN; i++) {
+                var temp = "";//每次截取的字符串
+                var start = i * maxLength;//开始截取的位置
+                var end = start + maxLength;//结束截取的位置
+                //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
+                temp = value.substring(start, end) + "\n";
+                ret += temp; //凭借最终的字符串
+              }
+              return ret;
+            }
+            else {
+              return value;
+            }
+          }
+          */
+        }
+
+      }
+    ],
+    yAxis : [
+      {
+        splitLine: {show: false},
+        axisLine: {
+          lineStyle: {
+            color: '#ccc'
+          }
+        }
+      }
+    ],
+    series : [
+      {
+        cursor: 'default',
+        //name:'一街坊、八街坊东、八街西、永定路社区社区部',
+        type:'line',
+        data:[ 25.6, 76.7, 30.5,25.6, 76.7, 30.5],
+        smooth: true,
+        showAllSymbol: true,
+        symbol: 'emptyCircle',
+        symbolSize: 10,
+        markPoint: {
+          data: [
+            {type: 'max', name: '最大值'},
+            {type: 'min', name: '最小值'}
+          ]
         },
-        xAxis: [
-            {
-                type: 'category',
-                data: [],
-                max: 4,
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    show: false
-                },
-                axisTick: {
-                    show: false
-                },
-                axisTick: {
-          			alignWithLabel: true
-        		},
-        		/*
-                axisLabel: {
-                    "show": true,
-                    //rotate:65,//倾斜度 -90 至 90 默认为0
-                    rotate:45,//倾斜度 -90 至 90 默认为0
-                    textStyle: {
-                        color: "#fff"
-                    },
-                 */
-                axisLabel: {
-		          interval: 0,
-		          textStyle:{
-		            color:"#fff"
-		          },
-                    formatter: function(value) {
-			            if ((typeof(value)!="undefined")&&(value.length > 3)) {
-			              return value.substring(0,2) + "...";
-			            } else {
-			              return value;
-			            }
-			          }
-                }
-            }
-        ],
-        yAxis: [
-            {
-                type: 'value',
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    show: false
-                },
-                axisTick: {
-                    show: false
-                },
-                axisLabel: {
-                    "show": false
-                }
-            }
-        ],
-        series: [
-            {
-                name: 'GMV',
-                type: 'bar',
-                data: [],
-                index:['a', 'b'] ,
-		        barWidth : 30,//柱图宽度
-		        barMaxWidth:30,//最大宽度
-		        barGap: 10,
-		        barCategoryGap: 10,
-                itemStyle: {
-                    normal: {
-                        color: function (params) {
-                            // build a color map as your need.
-                            var colorList = [
-                                '#ff6600', '#ca702d', '#418ba1', '#129bd3', '#a0b6a4',
-                            ];
-                            return colorList[params.dataIndex];
-                        },
-                        borderWidth: 0,
-            			barBorderRadius: [10, 10, 10, 10],
-                        label: {
-                            show: true,
-                            position: 'top',
-                            formatter: function(value) 
-							{ 
-							return changeMoney(value.data); 
-							} 
-                        }
-                    }
-                }
-            }
-        ]
-    };
-    // 事件绑定
-    cityRankChartGmv.on('click', function (params) {
-        var cityId = cityRankGmvOption.xAxis[0].extdata[params.dataIndex];
-        pageStatusInfo.cityId = cityId;
-        pageStatusInfo.cityName = params.name;
-        pageStatusInfo.showLevel = SHOW_LEVEL_CITY;
-        // 重置页面显示
-        showPageContent(pageStatusInfo);
-    });
+
+      }
+    ]
+  };
     cityUserOption = {
 	 title:[
     		{x: '10%', y: '3%',textStyle:{color:"#efefef",fontSize:"16"}},
@@ -1894,7 +1873,7 @@ var getGaodeMapData = function (pageStatusInfo) {
     }
     return storeServiceRange;
 };
-// 获取城市排名数据
+// 近七日GMV走势图
 var getCityRankDataGmv = function (pageStatusInfo) {
     var cacheKey = CACHE_HEADER_CITY_RANK_GVM + pageStatusInfo.getCacheKey();
     // 从缓存获取数据
@@ -1912,9 +1891,9 @@ var getCityRankDataGmv = function (pageStatusInfo) {
         }
         //console.log('\trequest: city rank gmv. ');
         //console.log(reqestParameter);
-        // 全国城市排名
+        // 近七日GMV走势图
         var startTime = new Date().getTime();
-        doManager("dynamicManager", "getLastMonthCityRankingTop10",[reqestParameter,pageStatusInfo.pageInfo,null],
+        doManager("dynamicManager", "getCityGMVRangeForWeek",[reqestParameter],
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
@@ -1927,20 +1906,16 @@ var getCityRankDataGmv = function (pageStatusInfo) {
 };
 // 显示城市排名
 var showCityRankGmv = function (cityRankDataGmv) {
-    // 柱状图属性：城市排名
-    var xAxis = [];
-    var series = [];
-    var extData = [];
-    $.each(eval(cityRankDataGmv['gmv']), function (idx, val) {
-        xAxis.push(val['city_name']);
-        series.push(parseInt(val['gmv_sum']));
-        extData.push(parseInt(val['city_id']));
+  	var data = [];
+    var data1 = [];
+    $.each(eval(cityRankDataGmv['lst_data']), function (idx, val) {
+    	data.push(val['week_date']);
+    	data1.push(val['week_gmv']);
     });
-    cityRankGmvOption.xAxis[0].data = xAxis;
-    cityRankGmvOption.xAxis[0].extdata = extData;
-    cityRankGmvOption.series[0].data = series;
-    cityRankGmvOption.title[0].text="城市排名("+pageStatusInfo['currentMonth']+"月GMV)";
-    cityRankChartGmv.setOption(cityRankGmvOption);
+	cityRankGmvOption.xAxis[0].data = data.reverse();
+    cityRankGmvOption.series[0].data = data1.reverse();
+    cityRankGmvOption.title[0].text = "城市近7日GMV走势";
+    cityRankChartGmv.setOption(cityRankGmvOption,true);
 };
 // 获取门店排名(GMV)数据
 var getStoreRankDataGmv = function (pageStatusInfo) {
@@ -2860,7 +2835,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     grid: {
       top: '25%',
       left: '3%',
-      right: '0',
+      right: '2%',
       bottom: '3%',
       containLabel: true
     },
@@ -4750,6 +4725,40 @@ function findArray(array, feature, all = true) {
         }
     }
     return -1;
+}
+function showMoreSummaryStatistics(){
+	  $(".info_head").mouseover(function(){
+	    $(this).css('width','30%');
+	    $(this).find("dl").css('width','50%');
+	    $("#info_head_dl").show();
+	  });
+	  $(".info_head").mouseleave(function(){
+	    $(this).css('width','25%');
+	    $(this).find("dl:first").css('width','100%');
+	    $("#info_head_dl").hide();
+	  });
+}
+function getStoreKindsNumber(){
+	   var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+        }
+        // 门店种类个数
+        var startTime = new Date().getTime();
+        doManager("dynamicManager", "getStoreKindCount",[reqestParameter],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var resultJson = JSON.parse(data.data);
+                    $("#info_head_dl").empty();
+                    $.each(eval(resultJson['kind']), function (idx, val) {
+                    	var dt = $("<dt>").html(val['storetypename']);
+                    	var dd = $("<dd>").html(val['store_kind_count']);
+                    	$("#info_head_dl").append(dt).append(dd);
+                    });
+                }
+            });
 }
 function  clearCache(){
 	localStorage.clear();

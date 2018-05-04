@@ -990,4 +990,16 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public Map<String, Object> queryEmployeeAvgCustomer();
+    
+    /**
+     * 查询近七日GMV走势图
+     * @param dd
+     * @return
+     */
+    public Map<String, Object> getCityGMVRangeForWeek(DynamicDto dd);
+    /**
+     * 获取门店种类类型个数
+     * @return
+     */
+    public Map<String, Object> getStoreKindCount(DynamicDto dd);
 }
