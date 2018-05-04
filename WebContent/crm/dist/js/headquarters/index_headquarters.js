@@ -3741,8 +3741,8 @@ var initStoreKeeper = function(){
     var infoStr="";
     var human_list1 = statisticExtendInfo.storeKeeper;
     for(var i=0;i<human_list1.length;i++){
-        var employee_name = human_list1[i].keeperName;
-        var employee_no = human_list1[i].employeeId;
+        var employee_name = human_list1[i].keeperName==null?"":human_list1[i].keeperName;
+        var employee_no = human_list1[i].employeeId==null?"":human_list1[i].employeeId;
         var employee_storename = human_list1[i].storeName;  //门店
         var employee_citySelect = human_list1[i].city_name;   //城市
         var employee_phone = human_list1[i].mobilephone==null?"":human_list1[i].mobilephone;
