@@ -2904,7 +2904,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
 		String sqlStr = "";
-		sqlStr="SELECT CASE WHEN t.storetype = 'X' THEN '经营星店' WHEN t.storetype = 'E' THEN '校园月店' " +
+		sqlStr="SELECT CASE WHEN t.storetype = 'X' THEN '经营星店' WHEN t.storetype = 'E' THEN '校园店' " +
 				"ELSE t.storetypename END AS storetypename,count(storetypename) AS store_kind_count " +
 				"FROM t_store t LEFT JOIN t_dist_citycode d ON t.cityno=d.cityno  WHERE t.storetype !='V' AND " +
 				"t.storetype !='W' AND t.storetypename IS NOT NULL "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
