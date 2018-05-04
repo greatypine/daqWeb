@@ -131,4 +131,16 @@ public interface NoticeDao {
 	public List<Map<String,Object>> getStoreByCity(String cityCode);
 	
 	public List<Map<String,Object>> getAllZw();
+	
+	/**
+	 * 
+	* @Title: deleteNotice  
+	* @Description: TODO 撤销公告 
+	* 2018年5月4日
+	* @param @param noticeNo
+	* @param @return      
+	* @return int 
+	* @throws
+	 */
+	public int deleteNotice(String noticeNo);
 }

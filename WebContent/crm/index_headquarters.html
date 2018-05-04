@@ -245,11 +245,11 @@
             <!-- Main content -->
     <section class="content-header clearfix">
       <!--城市门店信息-->
-      <div class="info_head" style="width: 25%; float:left; position: relative;">
+      <div class="info_head">
         <div class="box no-border">
           <div class="box-header h4"><strong id="currentCity"></strong></div>
           <div class="box-body no-padding" id="mdxx" style="margin-top: -5px;">
-            <dl class="dl-horizontal" id="gaiyaotongji">
+            <dl class="dl-horizontal pull-left" id="gaiyaotongji" style="width: 100%;">
               <dt id="cityT">城市</dt>
               <dd id="cityD"><a href="javascript:initCityInfo();" style="color:#00c0ef" id="city_total">载入中...</a></dd>
               <dt id="storeT">门店</dt>
@@ -259,12 +259,14 @@
               <dt id="storePeoleT">门店人员</dt>
               <dd ><a href="javascript:initEmployeeInfo();" style="color:#00c0ef" id="employee_total">载入中...</a></dd>
             </dl>
+            <dl class="dl-horizontal info_head_dl pull-left" id="info_head_dl" >
+            </dl>
           </div>
         </div>
         </div>
 		
               <!--实时数据-->
-      <div class="text-muted"  style="width: 48%; float:left; position: relative; margin: 0 1%;">
+      <div class="text-muted"  style="width: 48%; float:left; position: relative; margin: 0 1%; left: 25%;">
         <div class="gaugetb1 clearfix text-center">
           <div class="col-sm-4">
           	<input type="hidden" id="tradesumofcurmonthHid">
@@ -344,7 +346,7 @@
         <div class="col-sm-3 no-padding">
         <div id="main1" style="width: 100%;height:400px;"></div>
         <div id="main12" style="width: 100%;height:200px;"></div>
-        <div class="gengduo" id="city_gmv_more"><a>更多</a></div>
+        <div class="gengduo" id="city_gmv_more" style="top: 405px;"><a>更多</a></div>
       </div>
       <div class="col-sm-6 no-padding" style="height: 400px;">
           <div class="clearfix">

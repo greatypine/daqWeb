@@ -15,7 +15,7 @@ public class NoticeReciverDaoImpl extends BaseDAOHibernate implements NoticeReci
 
 	@Override
 	public List<Map<String, Object>> selectNoticeReciver(String employeeNo,PageInfo pageInfo) {
-		String sql="select a.*,b.title,b.content,b.type from t_notice_reciver as a inner join  t_notice as b on a.noticeNo=b.noticeNo  where employeeNo='"+employeeNo+"' order by isRead,noticeNo desc";
+		String sql="select a.*,b.title,b.content,b.type from t_notice_reciver as a inner join  t_notice as b on a.noticeNo=b.noticeNo  where employeeNo='"+employeeNo+"' and a.status=0 and b.status=0 order by isRead,noticeNo desc";
 		
 		//SQL查询对象
         SQLQuery query = getHibernateTemplate().getSessionFactory()
@@ -51,6 +51,14 @@ public class NoticeReciverDaoImpl extends BaseDAOHibernate implements NoticeReci
 			e.printStackTrace();
 			return -1;
 		}
+	}
+
+	@Override
+	public int deleteNoticeReciver(String noticeNo) {
+		String sql = "update t_notice_reciver set status=1 where noticeNo='"+noticeNo+"'";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql.toString());
+		return query.executeUpdate();
+		
 	}
 
 }

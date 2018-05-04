@@ -1242,7 +1242,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					" t_dist_citycode tdc  "+whereStr+") t1	on t.city_name  = t1.cityname ) t2  " +
 					" INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id";
 		}else if(dd.getTarget()==1){//省
-			sql="select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t.name as storeName,t.city_name from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname left JOIN tb_bizbase_user as tbu on t.skid = tbu.id  where  t.name not like '%测试%'";
+			sql="select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t.name as storeName,t.city_name from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname left JOIN tb_bizbase_user as tbu on t.skid = tbu.id  where  t.name not like '%测试%' and tbu.employeeId is not null";
 		}
 		
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -2843,6 +2843,71 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String sqlStr = "";
 		sqlStr="SELECT t.store_province_code as province_code,t.store_city_code as city_code,tor.signe_time FROM df_mass_order_daily tor LEFT JOIN " +
 				"t_store t ON t.storeno = tor.store_code  WHERE t.store_city_code IS NOT null ORDER BY tor.sign_time DESC LIMIT 6 ";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sqlStr);
+			List<Map<String,Object>> lst_data = query
+                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
+	}
+	@Override
+	public Map<String, Object> getCityGMVRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO, 
+			List<Map<String, Object>> provinceNO) {
+		Map<String, Object> map_all = new HashMap<String, Object>();
+		String cityStr1 = "";
+		String provinceStr1 = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr1+=" and dom.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr1+=" and dom.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		String sql = "SELECT IFNULL(FLOOR(sum(dom.trading_price)), 0) AS week_gmv,date_format(dom.sign_time, '%m-%d') AS week_date FROM df_mass_order_monthly dom  " +
+				"WHERE dom.store_name NOT LIKE '%测试%' AND dom.sign_time >='"+dd.getBeginDate()+"' AND dom.sign_time<='"+dd.getEndDate()+"' "+provinceStr1+cityStr1+"   GROUP BY DATE(dom.sign_time) ";
+		List<Map<String, Object>> lst_data = null;
+		try{
+	    	 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+	    	 lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }
+		map_all.put("lst_data", lst_data);
+		return map_all;
+	}
+	@Override
+	public List<Map<String, Object>> getStoreKindCountByCityAndProvince(
+			DynamicDto dd) {
+		String cityStr = "";
+		String provinceStr = "";
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String zx = "no";
+		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+			zx = "yes";
+		}
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		String sqlStr = "";
+		sqlStr="SELECT CASE WHEN t.storetype = 'X' THEN '经营星店' WHEN t.storetype = 'E' THEN '校园店' " +
+				"ELSE t.storetypename END AS storetypename,count(storetypename) AS store_kind_count " +
+				"FROM t_store t LEFT JOIN t_dist_citycode d ON t.cityno=d.cityno  WHERE t.storetype !='V' AND " +
+				"t.storetype !='W' AND t.storetypename IS NOT NULL "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
 		try{

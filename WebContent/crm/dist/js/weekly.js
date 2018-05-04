@@ -5044,8 +5044,8 @@ function oneyearorsixweek(){
 					cityname:null,
 					deptname:null,
 					channelname:null,
-					cLabel:0,
-					smallBLabel:0
+					cLabel:1,
+					smallBLabel:1
 				}
 		}
 		

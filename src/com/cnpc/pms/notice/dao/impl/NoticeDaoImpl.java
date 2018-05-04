@@ -184,7 +184,7 @@ public class NoticeDaoImpl extends BaseDAOHibernate implements NoticeDao{
 
 	@Override
 	public List<Map<String, Object>> selectNoticeByNoticeNo(String noticeNo) {
-		String sql = "select create_time,create_user,title,content,type,grade,releaseUnit,cityes,stores,zw,noticeNo,id from t_notice where noticeNo='"+noticeNo+"'";
+		String sql = "select create_time,create_user,title,content,type,grade,releaseUnit,cityes,stores,zw,noticeNo,id from t_notice where status=0 and noticeNo='"+noticeNo+"'";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		//获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -262,6 +262,13 @@ public class NoticeDaoImpl extends BaseDAOHibernate implements NoticeDao{
 
 
         return (List<Map<String,Object>>)lst_data;
+	}
+
+	@Override
+	public int deleteNotice(String noticeNo) {
+		String sql="update t_notice set status=1 where noticeNo='"+noticeNo+"'";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		return query.executeUpdate();
 	}
 	 
 }
