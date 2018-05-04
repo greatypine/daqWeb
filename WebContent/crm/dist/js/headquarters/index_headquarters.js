@@ -1914,7 +1914,7 @@ var showCityRankGmv = function (cityRankDataGmv) {
     });
 	cityRankGmvOption.xAxis[0].data = data.reverse();
     cityRankGmvOption.series[0].data = data1.reverse();
-    cityRankGmvOption.title[0].text = "城市近7日GMV走势";
+    cityRankGmvOption.title[0].text = "近7日GMV走势";
     cityRankChartGmv.setOption(cityRankGmvOption,true);
 };
 // 获取门店排名(GMV)数据
@@ -2599,7 +2599,7 @@ var getBusinessDepRankDataGmv = function (pageStatusInfo) {
         //console.log(reqestParameter);
         var startTime = new Date().getTime();
         // 全国门店(订单量)排名
-        doManager("dynamicManager", "queryTradeByDepName",[reqestParameter,pageStatusInfo.pageInfo,null],
+        doManager("dynamicManager", "queryTradeByDepName",[reqestParameter,null,null],
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
@@ -4728,7 +4728,7 @@ function findArray(array, feature, all = true) {
 }
 function showMoreSummaryStatistics(){
 	  $(".info_head").mouseover(function(){
-	    $(this).css('width','30%');
+	    $(this).css('width','35%');
 	    $(this).find("dl").css('width','50%');
 	    $("#info_head_dl").show();
 	  });

@@ -1229,12 +1229,9 @@
 
 			},
 			legend: {
-				x: '4%',
-				top: '11%',
-				textStyle: {
-					color: '#90979c',
-				},
-				data: ['女', '男', '平均']
+				x: '78%',
+				top: '1%',
+				data: ['月总数', '营业指标']
 			},
 
 
@@ -1301,7 +1298,7 @@
 				//backgroundColor:'#fff'
 			}],
 			series: [{
-				name: "总数",
+				name: "月总数",
 				type: "line",
 				symbolSize:10,
 				symbol:'circle',
@@ -1321,7 +1318,7 @@
 				data:yData_month
 			},
 			{
-				name: "总数",
+				name: "营业指标",
 				type: "line",
 				symbolSize:10,
 				symbol:'circle',
@@ -1823,6 +1820,15 @@
 				}
 		},false);
 		
+		
+		var targetCityname = shareChartStatDto.cityname;
+		if(targetCityname!='' && targetCityname!=null){
+			if(targetCityname=="黔东南州"){
+				shareChartStatDto.cityname="黔东南苗族侗族自治州";
+		  	}else{
+		  		shareChartStatDto.cityname=targetCityname.substring(0,targetCityname.length-1);
+		    }
+		}
 		doManager("chartStatManager","queryTargetByMonth",[shareChartStatDto],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {

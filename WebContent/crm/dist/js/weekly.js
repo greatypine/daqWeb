@@ -4008,7 +4008,6 @@ function loginShow(){
 
 //获取城市城市网络体系概况
 function getCityNet(){
-	debugger;
 	  doManager("storeManager","findStoreCityDynamic",null,function(data,textStatus,XmlHttpRequest){
 		if (data.result) {  
 			var province = [];
@@ -4931,7 +4930,6 @@ function oneyearorsixweek(){
 	  function initWeekData(){
 			doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto],
 				function(data,textStatus,XmlHttpRequest){
-				debugger;
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
 						$(jsonData).each(function(index,element){
@@ -4957,7 +4955,6 @@ function oneyearorsixweek(){
 		    var months = getYearAndMonth('2017-12-1',curMonth);
 			doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto],
 				function(data,textStatus,XmlHttpRequest){
-				debugger;
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
 						xData_month = months;
@@ -4973,7 +4970,6 @@ function oneyearorsixweek(){
 			
 			doManager("chartStatManager","queryTargetByMonth",[shareChartStatDto],
 				function(data,textStatus,XmlHttpRequest){
-				debugger;
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
 						yData_month_target = new Array(months.length+1).join(0).split('');

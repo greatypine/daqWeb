@@ -267,7 +267,7 @@ public class DsAbnormalOrderDaoImpl extends BaseDAOHibernate implements DsAbnorm
 		//当月累计营业额
 		@Override
 		public Map<String, Object> queryOrderAmountByMonth(int year,int month,String dep_name){
-			String sql = "select sum(ds_storetrade_channel.order_amount) as order_amount from ds_storetrade_channel WHERE year = "+year+" AND month = "+month+" and dep_name like '%"+dep_name+"%'";
+			String sql = "select sum(ds_ope_gmv_storechannel_month.order_amount) as order_amount from ds_ope_gmv_storechannel_month WHERE year = "+year+" AND month = "+month+" and dep_name like '%"+dep_name+"%'";
 			SQLQuery query = getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql.toString());
 			
@@ -287,7 +287,7 @@ public class DsAbnormalOrderDaoImpl extends BaseDAOHibernate implements DsAbnorm
 		
 		@Override
 		public List<Map<String, Object>> queryOrderAmountByGroupCity(int year,int month,String dep_name){
-			String sql = "SELECT city_name,sum(order_amount) as totalamount FROM ds_storetrade_channel WHERE dep_name like '%"+dep_name+"%' AND year= "+year+" AND month = "+month+" GROUP BY city_name";
+			String sql = "SELECT city_name,sum(order_amount) as totalamount FROM ds_ope_gmv_storechannel_month WHERE dep_name like '%"+dep_name+"%' AND year= "+year+" AND month = "+month+" GROUP BY city_name";
 			SQLQuery query = getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql.toString());
 			
@@ -307,7 +307,7 @@ public class DsAbnormalOrderDaoImpl extends BaseDAOHibernate implements DsAbnorm
 		
 		@Override
 		public List<Map<String, Object>> queryOrderAmountByChannel(int year,int month,String dep_name){
-			String sql = "SELECT channel_name,sum(order_amount) as totalamount FROM ds_storetrade_channel WHERE dep_name like '%"+dep_name+"%' AND year= "+year+" AND month = "+month+" GROUP BY channel_name";
+			String sql = "SELECT channel_name,sum(order_amount) as totalamount FROM ds_ope_gmv_storechannel_month WHERE dep_name like '%"+dep_name+"%' AND year= "+year+" AND month = "+month+" GROUP BY channel_name";
 			SQLQuery query = getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql.toString());
 			
@@ -350,7 +350,7 @@ public class DsAbnormalOrderDaoImpl extends BaseDAOHibernate implements DsAbnorm
 		}
 		@Override
 		public Map<String, Object> queryorderamountbycareergroup(int year,int month,String storeno,String careergroup){
-			String sql = "SELECT sum(order_amount) as order_amount_career from ds_storetrade_channel WHERE storeno = '"+storeno+"' AND year = "+year+" AND month = "+month+" AND dep_name LIKE '%"+careergroup+"%'";
+			String sql = "SELECT sum(order_amount) as order_amount_career from ds_ope_gmv_storechannel_month WHERE storeno = '"+storeno+"' AND year = "+year+" AND month = "+month+" AND dep_name LIKE '%"+careergroup+"%'";
 			SQLQuery query = getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql.toString());
 			
@@ -367,7 +367,7 @@ public class DsAbnormalOrderDaoImpl extends BaseDAOHibernate implements DsAbnorm
 		}
 		@Override
 		public Map<String, Object> queryorderamountbystoreno(int year,int month,String storeno){
-			String sql = "SELECT sum(order_amount) as order_amount from ds_storetrade_channel WHERE storeno = '"+storeno+"' AND year = "+year+" AND month = "+month+"";
+			String sql = "SELECT sum(order_amount) as order_amount from ds_ope_gmv_storechannel_month WHERE storeno = '"+storeno+"' AND year = "+year+" AND month = "+month+"";
 			SQLQuery query = getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql.toString());
 			
