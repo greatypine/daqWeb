@@ -3,6 +3,8 @@ package com.cnpc.pms.notice.dao;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.base.paging.impl.PageInfo;
+
 /**
  * 
  * @author gbl
@@ -21,7 +23,7 @@ public interface NoticeReciverDao {
 	* @throws  
 	* @author gbl
 	 */
-	public List<Map<String,Object>> selectNoticeReciver(String employeeNo);
+	public List<Map<String,Object>> selectNoticeReciver(String employeeNo,PageInfo pageInfo);
 	
 	/**
 	 * 

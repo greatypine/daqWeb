@@ -3,6 +3,7 @@ package com.cnpc.pms.personal.manager.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,9 +15,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -46,6 +50,7 @@ import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.dao.DynamicDao;
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.manager.DynamicManager;
 import com.cnpc.pms.mongodb.common.MongoDbUtil;
 import com.cnpc.pms.personal.dao.CountyDao;
@@ -1227,14 +1232,14 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		UserDAO userDAO = (UserDAO) SpringHelper.getBean(UserDAO.class.getName());
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<Map<String, Object>> list1 = storeDao.getStoreById(id);// 门店数
-		List<Map<String, Object>> list2 = storeDao.getStoreKeeper(id);// 店长数
-		List<Map<String, Object>> gaxlist = userDAO.getEmployeeOfStore(null, employee_no, "QYJL");
+		//List<Map<String, Object>> list2 = storeDao.getStoreKeeper(id);// 店长数
+		//List<Map<String, Object>> gaxlist = userDAO.getEmployeeOfStore(null, employee_no, "QYJL");
 		result.put("store", list1);
-		result.put("storeKeeper", list2);
-		result.put("storeTotal", list1 == null ? 0 : list1.size());
-		result.put("storeKeeperTotal", list2 == null ? 0 : list2.size());
-		result.put("gax", gaxlist);
-		result.put("gaxTotal", gaxlist == null ? 0 : gaxlist.size());
+		//result.put("storeKeeper", list2);
+		//result.put("storeTotal", list1 == null ? 0 : list1.size());
+		//result.put("storeKeeperTotal", list2 == null ? 0 : list2.size());
+		//result.put("gax", gaxlist);
+		//result.put("gaxTotal", gaxlist == null ? 0 : gaxlist.size());
 		return result;
 	}
 
@@ -2163,7 +2168,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setProvince_id(storeDynamic.getProvince_id());
 			store.setCityName(storeDynamic.getCityName());
 			store.setUpdate_user(storeDynamic.getUpdate_user());
-			store.setUpdate_time(new Date());
+			store.setUpdate_time(storeDynamic.getUpdate_time());
 			store.setCityNo(storeDynamic.getCityNo());
 			store.setStoreno(storeDynamic.getStoreno());
 			store.setVersion(storeDynamic.getVersion());
@@ -2385,4 +2390,276 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		}
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> queryAboutOfStoreInfo(DynamicDto dynamicDto, PageInfo pageInfo) {
+		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result = new HashMap<String, Object>();
+		StringBuilder sb_where = new StringBuilder();
+		String cityssql = "";
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		if (distCityList != null && distCityList.size() > 0) {
+			for (DistCity d : distCityList) {
+				cityssql += "'" + d.getCityname() + "',";
+			}
+			cityssql = cityssql.substring(0, cityssql.length() - 1);
+		}
+		try {
+			if (dynamicDto.getTarget() == 0) {// 总部
+				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
+					sb_where.append(" and store.city_name like '%" + dynamicDto.getCityName() + "%'");
+				}
+				if (dynamicDto.getStoreName() != null && !"".equals(dynamicDto.getStoreName())) {
+					sb_where.append(" and store.name like '%" + dynamicDto.getStoreName() + "%'");
+				}
+				if (dynamicDto.getStoreNo() != null && !"".equals(dynamicDto.getStoreNo())) {
+					sb_where.append(" and store.storeno ='" + dynamicDto.getStoreNo() + "'");
+				}
+				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
+					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
+				}
+				result = storeDao.queryAboutStoreInfo(sb_where.toString(), pageInfo);
+
+			} else if (dynamicDto.getTarget() == 1) {// 城市总监
+				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
+					sb_where.append(" and store.city_name like '%" + dynamicDto.getCityName() + "%'");
+				}
+				if (dynamicDto.getStoreName() != null && !"".equals(dynamicDto.getStoreName())) {
+					sb_where.append(" and store.name like '%" + dynamicDto.getStoreName() + "%'");
+				}
+				if (dynamicDto.getStoreNo() != null && !"".equals(dynamicDto.getStoreNo())) {
+					sb_where.append(" and store.storeno ='" + dynamicDto.getStoreNo() + "'");
+				}
+				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
+					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
+				}
+				if (cityssql != "" && cityssql.length() > 0) {
+					sb_where.append(" and store.city_name in (" + cityssql + ")");
+				} else {
+					sb_where.append(" and 0=1 ");
+				}
+				result = storeDao.queryAboutStoreInfo(sb_where.toString(), pageInfo);
+			} /*
+				 * else if (dynamicDto.getTarget() == 2) {// 店长 if
+				 * (dynamicDto.getCityName() != null &&
+				 * !"".equals(dynamicDto.getCityName())) { sb_where.append(
+				 * " and store.city_name like '%" + dynamicDto.getCityName() +
+				 * "%'"); } if (dynamicDto.getStoreName() != null &&
+				 * !"".equals(dynamicDto.getStoreName())) { sb_where.append(
+				 * " and store.name like '%" + dynamicDto.getStoreName() +
+				 * "%'"); } if (dynamicDto.getStoreNo() != null &&
+				 * !"".equals(dynamicDto.getStoreNo())) { sb_where.append(
+				 * " and store.storeno ='" + dynamicDto.getStoreNo() + "'"); }
+				 * if (dynamicDto.getTownName() != null &&
+				 * !"".equals(dynamicDto.getTownName())) { sb_where.append(
+				 * " and town.name like '%" + dynamicDto.getTownName() + "%'");
+				 * } if (cityssql != "" && cityssql.length() > 0) {
+				 * sb_where.append(" and store.city_name in (" + cityssql +
+				 * ")"); } else { sb_where.append(" and 0=1 "); } result =
+				 * storeDao.queryAboutStoreInfo(sb_where.toString(), pageInfo);
+				 * }
+				 */ else {
+				JSONObject temp = new JSONObject();
+				temp.put("data", "");
+				temp.put("message", "该用户无权限");
+				result.put("status", "storefail");
+				result.put("data", temp.toString());
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSONObject temp = new JSONObject();
+			temp.put("data", "");
+			temp.put("message", "系统错误！");
+			result.put("status", "storefail");
+			return result;
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> exportAboutOfStoreData(DynamicDto dynamicDto) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> map = this.exportAboutOfStoreDataInfo(dynamicDto);
+		if (map.get("data") != null) {// 成功返回数据
+
+			List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("data");
+			if (list != null && list.size() > 0) {
+				String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_web_path = PropertiesUtil.getValue("file.web.root");
+
+				HSSFWorkbook wb = new HSSFWorkbook();
+				// 创建Excel的工作sheet,对应到一个excel文档的tab
+
+				setCellStyle_common(wb);
+				setHeaderStyle(wb);
+				HSSFSheet sheet = wb.createSheet("门店信息");
+				HSSFRow row = sheet.createRow(0);
+				String[] str_headers = { "城市", "门店名称", "门店编号", "区域", "所属街道", "门店类型", "是否微超", "目前状态", "门店开业时间", "属性",
+						"位置", "店长", "门店电话" };
+				String[] headers_key = { "city_name", "name", "storeno", "countname", "townname", "storetypename",
+						"superMicro", "estate", "open_shop_time", "nature", "detail_address", "shopmanager",
+						"mobilephone" };
+				for (int i = 0; i < str_headers.length; i++) {
+					HSSFCell cell = row.createCell(i);
+					cell.setCellStyle(getHeaderStyle());
+					cell.setCellValue(new HSSFRichTextString(str_headers[i]));
+				}
+
+				for (int i = 0; i < list.size(); i++) {
+					row = sheet.createRow(i + 1);
+					for (int cellIndex = 0; cellIndex < headers_key.length; cellIndex++) {
+						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+					}
+				}
+
+				File file_xls = new File(
+						str_file_dir_path + File.separator + System.currentTimeMillis() + "_aboutStore.xls");
+				if (file_xls.exists()) {
+					file_xls.delete();
+				}
+				FileOutputStream os = null;
+				try {
+					os = new FileOutputStream(file_xls.getAbsoluteFile());
+					wb.write(os);
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					if (os != null) {
+						try {
+							os.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+
+				result.put("message", "导出成功！");
+				result.put("status", "success");
+				result.put("data", str_web_path.concat(file_xls.getName()));// 测试环境修改str_file_dir_path
+			} else {
+				result.put("message", "没有数据！");
+				result.put("status", "null");
+			}
+
+		} else {
+			result.put("message", "请重新操作！");
+			result.put("status", "fail");
+		}
+
+		return result;
+	}
+
+	private HSSFCellStyle style_header = null;
+
+	private HSSFCellStyle getHeaderStyle() {
+		return style_header;
+	}
+
+	private void setHeaderStyle(HSSFWorkbook wb) {
+
+		// 创建单元格样式
+		style_header = wb.createCellStyle();
+		style_header.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		style_header.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		style_header.setFillForegroundColor(HSSFColor.LIGHT_TURQUOISE.index);
+		style_header.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
+		// 设置边框
+		style_header.setBottomBorderColor(HSSFColor.BLACK.index);
+		style_header.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+		style_header.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		style_header.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		style_header.setBorderTop(HSSFCellStyle.BORDER_THIN);
+
+	}
+
+	@Override
+	public Map<String, Object> exportAboutOfStoreDataInfo(DynamicDto dynamicDto) {
+		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result = new HashMap<String, Object>();
+		StringBuilder sb_where = new StringBuilder();
+		String cityssql = "";
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		if (distCityList != null && distCityList.size() > 0) {
+			for (DistCity d : distCityList) {
+				cityssql += "'" + d.getCityname() + "',";
+			}
+			cityssql = cityssql.substring(0, cityssql.length() - 1);
+		}
+		try {
+			if (dynamicDto.getTarget() == 0) {// 总部
+				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
+					sb_where.append(" and store.city_name like '%" + dynamicDto.getCityName() + "%'");
+				}
+				if (dynamicDto.getStoreName() != null && !"".equals(dynamicDto.getStoreName())) {
+					sb_where.append(" and store.name like '%" + dynamicDto.getStoreName() + "%'");
+				}
+				if (dynamicDto.getStoreNo() != null && !"".equals(dynamicDto.getStoreNo())) {
+					sb_where.append(" and store.storeno ='" + dynamicDto.getStoreNo() + "'");
+				}
+				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
+					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
+				}
+				result = storeDao.exportAboutStore(sb_where.toString());
+
+			} else if (dynamicDto.getTarget() == 1) {// 城市总监
+				if (dynamicDto.getCityName() != null && !"".equals(dynamicDto.getCityName())) {
+					sb_where.append(" and store.city_name like '%" + dynamicDto.getCityName() + "%'");
+				}
+				if (dynamicDto.getStoreName() != null && !"".equals(dynamicDto.getStoreName())) {
+					sb_where.append(" and store.name like '%" + dynamicDto.getStoreName() + "%'");
+				}
+				if (dynamicDto.getStoreNo() != null && !"".equals(dynamicDto.getStoreNo())) {
+					sb_where.append(" and store.storeno ='" + dynamicDto.getStoreNo() + "'");
+				}
+				if (dynamicDto.getTownName() != null && !"".equals(dynamicDto.getTownName())) {
+					sb_where.append(" and town.name like '%" + dynamicDto.getTownName() + "%'");
+				}
+				if (cityssql != "" && cityssql.length() > 0) {
+					sb_where.append(" and store.city_name in (" + cityssql + ")");
+				} else {
+					sb_where.append(" and 0=1 ");
+				}
+				result = storeDao.exportAboutStore(sb_where.toString());
+			} /*
+				 * else if (dynamicDto.getTarget() == 2) {// 店长 if
+				 * (dynamicDto.getCityName() != null &&
+				 * !"".equals(dynamicDto.getCityName())) { sb_where.append(
+				 * " and store.city_name like '%" + dynamicDto.getCityName() +
+				 * "%'"); } if (dynamicDto.getStoreName() != null &&
+				 * !"".equals(dynamicDto.getStoreName())) { sb_where.append(
+				 * " and store.name like '%" + dynamicDto.getStoreName() +
+				 * "%'"); } if (dynamicDto.getStoreNo() != null &&
+				 * !"".equals(dynamicDto.getStoreNo())) { sb_where.append(
+				 * " and store.storeno ='" + dynamicDto.getStoreNo() + "'"); }
+				 * if (dynamicDto.getTownName() != null &&
+				 * !"".equals(dynamicDto.getTownName())) { sb_where.append(
+				 * " and town.name like '%" + dynamicDto.getTownName() + "%'");
+				 * } if (cityssql != "" && cityssql.length() > 0) {
+				 * sb_where.append(" and store.city_name in (" + cityssql +
+				 * ")"); } else { sb_where.append(" and 0=1 "); } result =
+				 * storeDao.exportAboutStore(sb_where.toString()); }
+				 */ else {
+				JSONObject temp = new JSONObject();
+				temp.put("data", "");
+				temp.put("message", "该用户无权限");
+				result.put("status", "storefail");
+				result.put("data", temp.toString());
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JSONObject temp = new JSONObject();
+			temp.put("data", "");
+			temp.put("message", "系统错误！");
+			result.put("status", "storefail");
+			return result;
+		}
+
+		return result;
+	}
+
 }

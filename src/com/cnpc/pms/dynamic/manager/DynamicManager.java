@@ -613,6 +613,12 @@ public interface DynamicManager extends IManager{
 	 */
 	public Map<String, Object> getDailyStoreTotlePrice(DynamicDto dd);
 	/**
+	 * TODO 查询当日门店总成交额-调整查询表df_mass_order_daily
+	 * @author zhangli
+	 * @return
+	 */
+	public Map<String, Object> getDailyNowStoreTotalPrice(DynamicDto dd);
+	/**
 	 * TODO 查询城市数,门店数,门店人数
 	 * @author zhangli
 	 * @return
@@ -974,4 +980,14 @@ public interface DynamicManager extends IManager{
      * @return
      */
 	public Map<String, Object> queryMonthAndLastMonthTodayCustomerOrderCount(DynamicDto dd);
+	
+
+	/**
+     * 
+     * TODO  查询国安侠平均消费用户数 
+     * 2018年4月24日
+     * @author gaoll
+     * @return
+     */
+    public Map<String, Object> queryEmployeeAvgCustomer();
 }

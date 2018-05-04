@@ -117,7 +117,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> queryMonthTurnover(ChartStatDto csd) {
-		String sql = "SELECT IFNULL(FLOOR(sum(dst.order_amount)),0) as month_amount FROM ds_storetrade_channel dst WHERE dst.year = YEAR(curdate()) AND dst.month = MONTH(curdate()) "
+		String sql = "SELECT IFNULL(FLOOR(sum(dst.order_amount)),0) as month_amount FROM ds_ope_gmv_storechannel_month dst WHERE dst.year = YEAR(curdate()) AND dst.month = MONTH(curdate()) "
 				+ "AND dst.store_name NOT LIKE '%测试%'";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dst.storeno = '"+csd.getStoreno()+"' ";

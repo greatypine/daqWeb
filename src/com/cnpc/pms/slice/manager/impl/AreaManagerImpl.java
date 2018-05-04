@@ -1529,5 +1529,16 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> selectAllArea() {
+		Map<String, Object> result = new HashMap<String,Object>();
+		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+		List<Map<String,Object>> queryAreaCountByCity = areaDao.queryAreaCountByCity();
+		List<Map<String,Object>> queryAllAreaCount = areaDao.queryAllAreaCount();
+		result.put("queryAreaCountByCity", queryAreaCountByCity);
+		result.put("queryAllAreaCount", queryAllAreaCount);
+		return result;
+	}
+
 
 }

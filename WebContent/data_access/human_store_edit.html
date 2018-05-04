@@ -160,6 +160,19 @@ Date.prototype.format=function(fmt) {
 		}
 		
 		
+		
+		var humanstatus = $("#humanstatus  option:selected").val();
+		if(humanstatus==2){
+			//离职日期必填 
+			var leavedate = $("#leavedate").val();
+			if(leavedate==null||leavedate.trim()==""){
+				$$.showMessage("系统信息","请选择离职日期!");
+				return;
+			}
+			
+		}
+		
+		
 		var zw =$("#zw  option:selected").val();
 		
 		if(zw==null||zw.trim()==""){
@@ -180,6 +193,17 @@ Date.prototype.format=function(fmt) {
 				return;
 			} */
 		}
+		
+		/*
+		if(zw=='线上服务专员'){
+			//线上服务专员  门店IDs
+			var selectStoreIds = $("#selectStoreIds").val();
+			if(selectStoreIds==null||selectStoreIds.trim()==""){
+				$$.showMessage("系统信息","请选择线上服务专员管辖范围 !");
+				return ;
+			}
+		}
+		*/
 		
 		if(zw!='市场专员'&&zw!='线上服务专员'){
 			var store_name = $('#storename').val();
@@ -395,6 +419,21 @@ Date.prototype.format=function(fmt) {
 							}
 						}
 						tmpphone=$("#phone").val();
+						
+						//..................................
+						if(va=="线上服务专员"){
+							$("#selectStoreIds").val(jsonData.selectStoreIds);
+							$("#selectStoreName").val(jsonData.selectStoreNames);
+							$("#showSelectName").html($("#selectStoreName").val());
+						}
+						/* var showStoreName = $("#selectStoreName").val();
+						if(showStoreName.length>12){
+							showStoreName=showStoreName.substring(0, 12)+"...";
+						}
+						//临时界面的显示 
+						$("#showSelectName").html(showStoreName); */
+						
+						
 						/*
 						if(key!=null&&key=="store_id"){
 							document.getElementById(key).value = va;
@@ -503,6 +542,8 @@ Date.prototype.format=function(fmt) {
 													$("#storename").css('background','#EDEDED');
 													$("#storename").attr("readonly","true");
 													$("#storename").val('');
+													
+													//$("#selectStoreIds").val(va.replace(/,,/g,","));
 												}
 											}else{
 												
@@ -527,7 +568,7 @@ Date.prototype.format=function(fmt) {
 				//$("#express_company").attr("value",express_company);
 				//$("#express_company option[text='"+express_company+"']").attr("selected", true);
 			}
-		});
+		},false);
 		
 		$("#humanstatus").change(function(){
 			var humanstatus = $("#humanstatus  option:selected").val();
@@ -556,9 +597,16 @@ Date.prototype.format=function(fmt) {
 				$("#storename").css('background','#EDEDED');
 				$("#storename").attr("readonly","true");
 				$("#storename").val('');
+				$("#storefw").show();
+				$("#storefwbtn").attr("disabled",false);
 			}else{
 				$("#storename").css('background','');
 				$("#storename").attr("readonly","");
+				$("#storefw").hide();
+				$("#storefwbtn").attr("disabled",true);
+				/* $("#selectStoreIds").val("");
+				$("#selectStoreName").val("");
+				$("#showSelectName").html(""); */
 			}
 			
 			
@@ -580,6 +628,18 @@ Date.prototype.format=function(fmt) {
 			
 			
 		});
+		
+		
+		var loadzw = $("#zw  option:selected").val();
+		if(loadzw!=null&&loadzw.trim()=="线上服务专员"){
+			$("#storefw").show();
+		}else{
+			$("#storefw").hide();
+			$("#storefwbtn").attr("disabled",true);
+			$("#selectStoreIds").val("");
+			$("#selectStoreName").val("");
+			$("#showSelectName").html("");
+		}
 		
 	});
 
@@ -622,6 +682,14 @@ Date.prototype.format=function(fmt) {
 			o["leavercvlistdate"]=$("#leavercvlistdate").val();
 		}
 		
+		
+		if(o["zw"].indexOf("线上服务专员")>-1){
+			o["selectStoreIds"]=$("#selectStoreIds").val();
+		}else{
+			o["selectStoreIds"]="";
+		}
+		
+		
 		doManager("HumanresourcesManager", "updateHumanresources", o , function(data,
 				textStatus, XMLHttpRequest) {
 			if (data.result) {
@@ -659,6 +727,121 @@ Date.prototype.format=function(fmt) {
 		  window.location.href = 'human_store_list.html'+searchUrl;
 	}
      
+	
+	
+	
+	var wins;
+
+    /**
+     * 选择城市,创建一个城市列表并显示
+     * @param {Object} callback
+     *
+     */
+    function showStoreWinNoEnter(callback){
+    	var citySelect = $("#citySelect").val();
+ 		if(citySelect==null||citySelect==""){
+ 			$$.showMessage("系统信息","请选择城市!");
+ 			return;
+ 		}
+ 		
+   		/* 	if (!dataCheck()) {
+ 			return;
+ 		} */
+        wins = new checkWin(callback);
+        wins.show();
+        $('html, body').animate({scrollTop:0});
+        $(".ui-dialog-titlebar-close").remove();
+    }
+	
+   /* //删除当前行 
+   function deletetr(nowTr){ 
+      $(nowTr).closest('tr').remove();
+   } */
+	function setStoreSelect(jsons){
+   	var selectStoreNames = "";
+   	var selectStoreIds = "";
+		$.each(jsons,function(n,value) {
+			/* var obj="<tr>"+
+					"<th>"+value.id+"</th>"+
+					"<th>"+value.name+"</th>"+
+					"<th>"+value.address+"</th>"+
+					"<th><a href=\"#\" onclick=\"deletetr(this);\"><font color=\"blue\">删除</font></a></th>"+
+				    "</tr>"; */
+			var objName = value.name;
+			selectStoreNames+=","+objName+",";
+			var objId = value.id;
+			selectStoreIds+=","+objId+",";
+		});
+		
+		
+		//真实的ID和名称
+		$("#selectStoreName").val(selectStoreNames.replace(/,,/g, ","));
+		$("#selectStoreIds").val(selectStoreIds.replace(/,,/g, ","));
+		
+		if(selectStoreNames.length>12){
+			selectStoreNames=selectStoreNames.substring(0, 12)+"...";
+		}
+		//临时界面的显示 
+		$("#showSelectName").html(selectStoreNames.replace(/,,/g, ","));
+		
+		
+   }
+	
+    
+	
+	 /**
+   *
+   * @param {Object} callback 	回调函数
+   * 健康屋门店callback
+   * 返回值json
+   */
+  var checkWin = function(callback){
+      this.wins = $("<div style='overflow-y: hidden'></div>");
+      var _this = this;
+      var par = $("#selectStoreIds").val();
+      var city = encodeURIComponent($("#citySelect").val());
+      var initWin = function(){
+          _this.wins.html('<iframe name="selectWin" frameborder="0" width="100%" height="100%" src="../data_access/select_view/select_store_checkbox_zy.html?ids='+par+'&city='+city+'" scrolling="yes"></iframe>');
+          _this.wins.dialog({
+              bgiframe: true,
+              title:"选择门店",
+              autoOpen:false,
+              width:_this.width,
+              height:_this.height,
+              buttons : {
+                  "确定": function(){
+                      window.frames["selectWin"].doSubmit();
+                      _this.wins.remove();
+                  },
+                  "取消":function(){
+                      _this.hide();
+                      _this.wins.remove();
+                  }
+              },
+              modal:true
+          });
+      };
+      this.width = 900;
+      this.height = 730;
+      this.callBack = function(json){
+          if (callback && typeof(callback) == 'function') {
+              callback(json);
+          }
+      };
+
+      this.show = function(){
+          _this.wins.dialog("open");
+      };
+
+      this.hide = function(){
+          if(_this.onSubmitHandler){
+              _this.onSubmitHandler();
+          }
+          _this.wins.dialog("close");
+      };
+      initWin();
+  }
+   
 </script>
 
 </head>
@@ -780,7 +963,7 @@ Date.prototype.format=function(fmt) {
 	            <tr class="leavediv">
 	            	<td>
 	                	<p>
-							<span style="float:left; margin-top:13px;">离职时间：</span>&nbsp;&nbsp;<!-- <input type="text" id="leavedate" isautotab="true" /> -->
+							<span style="float:left; margin-top:13px;"><font color="red">*</font>离职时间：</span>&nbsp;&nbsp;<!-- <input type="text" id="leavedate" isautotab="true" /> -->
 							<input id="leavedate" revalidate="true" type="text" 
 									validate="formatDate:true" class="pmsDateField form-control"
 									readonly yearRange="-100:+0"
@@ -880,6 +1063,29 @@ Date.prototype.format=function(fmt) {
 				</td>
 			</tr>
 			
+			
+			
+			
+		    <tr id="storefw">
+				<!-- 线上服务专员 选择多个门店 -->
+				<td>
+	                	<p style="float:left; padding-top:11px;"><!-- <font color="red">*</font> -->管辖范围：
+	                    <label id="showSelectName"></label>
+	                    <input type="hidden" id="selectStoreName" value="" />
+	                    <input type="hidden" id="selectStoreIds" value="" />
+<!-- 	                    <button id="storefwbtn" class="btn btn-primary" onclick="showStoreWinNoEnter(setStoreSelect);">选择门店</button> 
+ -->	            </td>
+	            <td>
+	            </td>
+	                
+			</tr>
+			
+			
+			
+			
+			
+			
+			
 			<tr>
             
             	 <td>
@@ -907,7 +1113,7 @@ Date.prototype.format=function(fmt) {
 			<tr>
 				<td>
 					<p>
-						身份证号：<input type="text" id="cardnumber" isautotab="true" onkeyup="value=value.replace(/[\W]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"  maxlength="18" />
+						<font color="red">*</font>身份证号：<input type="text" id="cardnumber" isautotab="true" onkeyup="value=value.replace(/[\W]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"  maxlength="18" />
 					</p>
 				</td>
 
@@ -979,7 +1185,7 @@ Date.prototype.format=function(fmt) {
 				</td>
 				<td>
 					<p>
-						联系电话（本人电话）：<input type="text" id="phone" isautotab="true"  style="width: 23%" onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11"/>
+						<font color="red">*</font>联系电话（本人电话）：<input type="text" id="phone" isautotab="true"  style="width: 23%" onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11"/>
 					</p>
 				</td>
 

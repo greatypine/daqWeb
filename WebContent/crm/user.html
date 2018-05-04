@@ -204,7 +204,7 @@
       <section class="content-header">
         <div class="box clearfix">
             <div class="info_head with-border">
-              <div class="col-lg-4 text-center"><img src="dist/img/376884043677306248.png" alt="User Image"></div>
+              <div class="col-lg-4 text-center"> <img id="user_pic" src="dist/img/376884043677306248.png" alt="User Image"></div>
               <div class="col-lg-8">
 
                 <h2 class="text-yellow">载入中...</h2>
@@ -480,20 +480,35 @@ function initcurruser(){
 							$("#cur_card_name").html(curr_user.name);
 							$("#cur_card_no").html(curr_user.zw+" "+curr_user.employeeId);
 							initStore();
+							
 						}else{
 							$("#cur_card_name").html(curr_user.name);
 							$("#cur_store_name").html("");
 							$("#cur_employee_no").html("");
 							$("#cur_card_no").parent().html("");
-							$(".text-yellow").html(curr_user.name);
-							$("#employee_no").html("");
-							$("#remark").html("");
-							$("#phone").html(curr_user.phone);
-							$("#storename").html("");
+							//$(".text-yellow").html(curr_user.name);
+							//$("#employee_no").html("");
+							//$("#remark").html("");
+							//$("#phone").html(curr_user.phone);
+							//$("#storename").html("");
 						}
 						
 					}
 	},false);
+}
+
+//获取员工头像
+function getUserHeadPortraits(){
+	doManager('InterManager', 'findEmployeePicByEmployeeId',[employee_no],
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var user_pic = JSON.parse(data.data);
+					if(user_pic.dataMap!=null){
+						$("#user_pic").attr("src",user_pic.dataMap.pngUrl);
+					}
+					
+				}
+		},false);
 }
 
 function initStore(){
@@ -535,6 +550,7 @@ function initStore(){
 	
 	
 	function initemployeeinfo(employee_no){
+		getUserHeadPortraits();
 		//取得当前登录人的门店
 		doManager("HumanresourcesManager", "queryEmployeeInfoByNo",employee_no,
 					function(data, textStatus, XMLHttpRequest) {
@@ -641,7 +657,7 @@ function initStore(){
 							 var customer_id = obj['customer_id'];
 							 var store_id = obj['store_id'];
 							 var employee_name = obj['employee_name'];
-							 var order_date = obj['order_date'];
+							 var order_date = obj['sign_time'];
 							 var mobilephone = obj['mobilephone'];
 							 var customer_name = obj['customer_name']==null?"":obj['customer_name'];
 							 var eshop_pro_name = obj['eshop_pro_name'];

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.base.paging.impl.PageInfo;
-import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.slice.entity.Area;
 import com.cnpc.pms.slice.entity.AreaInfo;
@@ -285,4 +284,24 @@ public interface AreaDao {
 	 * @return
 	 */
 	public List<Map<String, Object>> queryHouseHoldNumber(DynamicDto dynamicDto);
+	
+	/**
+	 * 
+	 * TODO 查询各城市片区数信息 
+	 * 2018年4月24日
+	 * @author gaoll
+	 * @param
+	 * @return
+	 */
+	public List<Map<String, Object>> queryAreaCountByCity();
+	
+	/**
+	 * 
+	 * TODO 查询片区数信息 
+	 * 2018年4月24日
+	 * @author gaoll
+	 * @param
+	 * @return
+	 */
+	public List<Map<String, Object>> queryAllAreaCount();
 }

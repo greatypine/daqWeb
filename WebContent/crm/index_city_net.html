@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>周报</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -32,7 +33,7 @@
   .table-bordered{border: 1px solid #999; table-layout:fixed;}
   .table-bordered > tbody > tr > th,.table-bordered > tbody > tr > td{border: 1px solid #999;}
   .table tr td:nth-child(1){width:70px; white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
-  .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden;z-index:1000;}
+  .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
   .download p{font-size: 12px;}
   .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
     /* Firefox: */
@@ -65,6 +66,24 @@
     50%  {left:0px; top:10px;}
     100% {left:0px; top:0px;}
   }
+  /*tab切换*/
+  .nav-tabs{padding: 10px 0 0 20px;}
+  .nav-tabs > li{ margin: 0; background-color: rgba(245,90,68,0.5);border: 1px solid rgba(245,90,68,0.5); width: 60px; height: 26px;  text-align: center; margin-right: 5px; border-radius: 5px; cursor: pointer;}
+  .nav-tabs > li.active{}
+  .nav-tabs > li > a{color: rgba(255,255,255,1); padding: 0; display: block; width: 100%; height: 100%; line-height: 24px}
+  .nav-tabs > li > a:hover{border-color: transparent; color: #fff;}
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{ background-color: #fff; border: 1px solid #f55a44; border: 0; color: #f55a44;border-radius: 5px;}
+  /*tab切换 end*/
+  .pframe{background-color: rgba(0,0,0,0.5); height: 100%; min-height: 100%; position: fixed; top: 0; left: 0; width:100%; min-width: 100%; overflow: hidden}
+  #pf-operate{overflow-y: auto;}
+  #pf-operate::-webkit-scrollbar{width: 8px; background-color: #fff;}
+  #pf-operate::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+  #pf-operate::-webkit-scrollbar-track{background-color: #fff;}
+  .pframe .box{margin-top: 100px;}
+  .pframe .table > tbody > tr > td{line-height: 34px;}
+  .pf-frequency,.pf-operate{display: none;}
+  
+  
     #process_div{ 
 		background-color:#292a2b; 
 		display:inline; 
@@ -116,7 +135,6 @@
   <div class="content-wrapper">
     <div class="container" style="width: 1300px;">
       <!-- Main content -->
-
       <section class="content-header">
         <div class="box box-default">
           <div class="box-header h1 text-light-blue"><strong>城市网络体系概况</strong></div>
@@ -216,7 +234,7 @@
                 <tr>
                   <th width="50"></th>
                   <th colspan="5">门店业态分类</th>
-                  <th colspan="2">合作备注</th>
+                  <th rowspan="2">合作备注</th>
                 </tr>
                 <tr>
                   <th></th>
@@ -225,7 +243,6 @@
                   <th>超市连锁店</th>
                   <th>广电营业厅</th>
                   <th>其它</th>
-                  <th></th>
                 </tr>
                 <tr class="text-red">
                   <th>全国</th>
@@ -467,14 +484,14 @@
                 </tr> -->
               </table>
             </div>
-            <div class="col-sm-12" id="main16" style="height: 350px;"></div>
+            <div class="col-sm-12" id="maincard" style="height: 350px;"></div>
           </div>
         </div>
         <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue"><strong>公司人员体系</strong></div>
           <div class="box-body">
             <div class="col-sm-6" id="main7" style="height: 350px;"></div>
-            <div class="col-sm-6" id="main17" style="height: 350px;"></div>
+            <div class="col-sm-6" id="mainemp" style="height: 350px;"></div>
             <!-- <div id="main8" style="height: 350px;"></div> -->
             <div class="col-sm-12">
               <table class="table table-bordered" id="weekcount">
@@ -568,12 +585,928 @@
             </div>
           </div>
         </div>
+        <div class="box box-default" style="margin-top: 50px;">
+          <div class="box-header h1 text-light-blue"><strong>全国门店划片情况</strong></div>
+          <div class="box-body">
+            <div class="col-sm-6">
+              <p><b>门店划片情况</b></p>
+              <p>截止到<span id="nowdate">2018年4月18号</span>，全国共计完成<b class="text-red" id="storeCount">294</b>家门店划片，本周完成<b class="text-red" id="weekCount">3</b>家门店划片，共计<b class="text-red" id="areaCount">3366</b>个片区，片区分配国安侠<b class="text-red" id="empCount">3366</b>名。</p>
+              <div id="main16" style="height: 250px;"></div>
+              <div id="main17" style="height: 250px;"></div>
+            </div>
+            <div class="col-sm-6">
+              <table class="table table-striped table-bordered" id="areaInfo">
+                <tr class="bg-light-blue">
+                  <th>城市</th>
+                  <th>划片门店数</th>
+                  <th>划片片区数</th>
+                  <th>划片国安侠数</th>
+                </tr>
+                <!-- <tr>
+                  <td bgcolor="#ff0">北京</td>
+                  <td>125</td>
+                  <td>1333</td>
+                  <td>1069</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">广州</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">贵阳</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">昆明</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">上海</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">深圳</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">沈阳</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">天津</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#ff0">长沙</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr class="text-red">
+                  <th bgcolor="#ff0">合计</th>
+                  <th>295</th>
+                  <th>3366</th>
+                  <th>2512</th>
+                </tr> -->
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="box box-default" style="margin-top: 50px;">
+          <div class="box-header h1 text-light-blue"><strong>用户分析</strong></div>
+          <div class="box-body">
+            <div class="col-sm-12">
+              <!-- <p><b>2018年4月国安侠人均消费用户数分析</b></p>
+              <p>1、4月消费用户，<span class="text-red">天津、沈阳、北京高于平均水平</span>，其余城市低于平均水平；</p>
+              <p>2、与3月第二周对比，4月消费用户保持增长趋势，<span class="text-red">北京、沈阳、天津、深圳</span>消费用户有增长趋势；</p>
+              <p>3、从新老用户占比来看，1月、2月、3月新用户占比分别是<span class="text-red">80%、79%和84%</span>， 4月第二周拉新<span class="text-red">69%</span> ，4月第二周拉新<span class="text-red">74%</span>，本周<span class="text-red">沈阳</span>公司拉新超出所有公司。</p>
+              <table class="table table-striped table-bordered">
+                <tr class="bg-light-blue">
+                  <th>城市</th>
+                  <th>1月消费用户</th>
+                  <th>2月消费用户</th>
+                  <th>3月消费用户</th>
+                  <th>4月截止18号人均消费用户数</th>
+                  <th>4月新消费用户</th>
+                  <th>拉新占比</th>
+                  <th>3月第一周</th>
+                  <th>4月第一周</th>
+                  <th>3月第二周</th>
+                  <th>4月第二周</th>
+                </tr>
+                <tr>
+                  <td>北京</td>
+                  <td>125</td>
+                  <td>1333</td>
+                  <td>1069</td>
+                  <td>125</td>
+                  <td>1333</td>
+                  <td>1069</td>
+                  <td>125</td>
+                  <td>1333</td>
+                  <td>1069</td>
+                  <td>125</td>
+                </tr>
+                <tr>
+                  <td>广州</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                  <td>110</td>
+                </tr>
+                <tr>
+                  <td>贵阳</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>314</td>
+                </tr>
+                <tr>
+                  <td>昆明</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>314</td>
+                </tr>
+                <tr>
+                  <td>上海</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>314</td>
+                </tr>
+                <tr>
+                  <td>深圳</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>314</td>
+                </tr>
+                <tr>
+                  <td>沈阳</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>314</td>
+                </tr>
+                <tr>
+                  <td>天津</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>314</td>
+                </tr>
+                <tr>
+                  <td>长沙</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>314</td>
+                </tr>
+                <tr class="text-red">
+                  <th>合计</th>
+                  <th>295</th>
+                  <th>3366</th>
+                  <th>2512</th>
+                  <th>295</th>
+                  <th>3366</th>
+                  <th>2512</th>
+                  <th>295</th>
+                  <th>3366</th>
+                  <th>2512</th>
+                  <th>3366</th>
+                </tr>
+              </table> -->
+              <div class="col-sm-6 no-padding" id="main22" style="height: 350px;"></div>
+              <div class="col-sm-6 no-padding" id="main23" style="height: 350px;"></div>
+              <!-- <small class="pull-right">数据来源：国安数据<br>取数时间段：20180401-20180418</small> -->
+            </div>
+          </div>
+        </div>
+        <!-- <div class="box box-default" >
+          <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——社区活动举办场次</strong><a class="pull-right btn btn-default btn-sm pfedit">编辑</a></div>
+          <div class="box-body">
+            <div class="col-sm-12">
+              <table class="table table-striped table-bordered" id="pf-fre1">
+                <tr class="bg-light-blue">
+                  <th colspan="2">类型</th>
+                  <th>北京</th>
+                  <th>上海</th>
+                  <th>天津</th>
+                  <th>广州</th>
+                  <th>深圳</th>
+                  <th>云南</th>
+                  <th>贵州</th>
+                  <th>辽宁</th>
+                  <th>全国</th>
+                </tr>
+                <tr>
+                  <th colspan="2">覆盖社区</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th rowspan="4" style="table-layout:fixed; white-space: normal; overflow: auto;">社区活动举办场次</th>
+                  <th>文娱类活动</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>公益类活动</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>志愿者活动</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>活动小计</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th colspan="2">活动参与人数</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th colspan="2">单场活动人数</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </table>
+              <div class="col-sm-6" id="main18" style="height: 350px;"></div>
+              <div class="col-sm-6" id="main19" style="height: 350px;"></div>
+            </div>
+          </div>
+        </div> -->
+        <!-- <div class="box box-default" style="margin-top: 50px;">
+          <div class="box-header h1 text-light-blue"><strong>混片儿情况——社区关键人及微信群运营情况</strong><a class="pull-right btn btn-default btn-sm pfoperate">编辑</a></div>
+          <div class="box-body">
+            <div class="col-sm-12">
+               <table class="table table-striped table-bordered " id="pfoperate1" style="margin-top: 15px;">
+                <tr class="bg-light-blue">
+                  <th colspan="2">社区关键人运营</th>
+                  <th>北京</th>
+                  <th>上海</th>
+                  <th>天津</th>
+                  <th>广州</th>
+                  <th>深圳</th>
+                  <th>云南</th>
+                  <th>贵州</th>
+                  <th>合计</th>
+                  <th>环比</th>
+                </tr>
+                <tr>
+                  <th rowspan="2" style="table-layout:fixed; white-space: normal; overflow: auto;">社区关键人数量</th>
+                  <th>社区关键人数量</th>
+                  <td>125</td>
+                  <td>1333</td>
+                  <td>1069</td>
+                  <td>125</td>
+                  <td>1333</td>
+                  <td>1069</td>
+                  <td>125</td>
+                  <td>1333</td>
+                  <td>1069</td>
+                </tr>
+                <tr>
+                  <th>店均数量</th>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                </tr>
+                <tr>
+                  <th rowspan="5">店均数量</th>
+                  <th>政府从业人员</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <th>普通居民</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <th>民间组织人员</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <th>社区商户</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+              </table>
+              <div class="clearfix">
+                <div class="col-sm-6" id="main20" style="height: 350px;"></div>
+                <div class="col-sm-6" id="main21" style="height: 350px;"></div>
+              </div>
+              <table class="table table-striped table-bordered " id="pfoperate1_1" style="margin-top: 15px;">
+                <tr class="bg-light-blue">
+                  <th>微信运营群</th>
+                  <th>北京</th>
+                  <th>上海</th>
+                  <th>天津</th>
+                  <th>广州</th>
+                  <th>深圳</th>
+                  <th>云南</th>
+                  <th>贵州</th>
+                  <th>合计</th>
+                  <th>环比</th>
+                </tr>
+                <tr>
+                  <th>门店数量</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群数量</th>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                  <td>10</td>
+                  <td>110</td>
+                  <td>100</td>
+                </tr>
+                <tr>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">店均微信群数量</th>
+                  <td>34</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                </tr>
+                <tr>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群内客户数量</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群人数</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">与门店人员有互动的客户数量</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群互动人数</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+                <tr>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信互动活跃人群占比</th>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                  <td>24</td>
+                  <td>314</td>
+                  <td>163</td>
+                </tr>
+              </table>
+              <div  id="main24" style="height: 350px;"></div>
+            </div>
+          </div>
+        </div> -->
+        <div class="box box-default" style="margin-top: 50px;">
+          <div class="box-header h1 text-light-blue"><strong>GMV</strong></div>
+          <div class="box-body">
+            <div class="col-sm-12">
+              <div class="nav_l" id="nav_l">
+                <!-- Tabs within a box -->
+                <ul class="nav nav-tabs no-border">
+                  <!--<li><a href="#revenue-chart" data-toggle="tab">实时</a></li>-->
+                  <li class="active"><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">时</a></li>
+                  <li><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
+                  <li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li>
+                  <li><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li>
+                  <!--<div class="col-sm-1 pull-right"><button type="button" class="btn btn-block btn-sm" style="margin-right: 50px; font-size: 14px; background-color: rgba(0,0,0,0.1);color: #fff">对比</button></div>-->
+                </ul>
+                <div class="tab-content no-padding" id="tab-content">
+                  <!-- Morris chart - Sales -->
+                  <!--<div class="chart tab-pane" id="revenue-chart">
+                    <div id="main25" style="height: 300px;"></div>
+                  </div>-->
+                  <div class="chart tab-pane active" id="sales-chart">
+                    <div id="main26" style="width: 100%; height: 300px;"></div>
+                  </div>
+                  <div class="chart tab-pane" id="day-chart">
+                    <div id="main27" style="width: 100%; height: 300px;"></div>
+                  </div>
+                  <div class="chart tab-pane" id="week-chart">
+                    <div id="main28" style="width: 100%; height: 300px;"></div>
+                  </div>
+                  <div class="chart tab-pane" id="month-chart">
+                    <div id="main29" style="width: 100%; height: 300px;"></div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        
       </section>
 
     </div>
   </div>
   </div>
   <!-- /.content-wrapper -->
+  <div class="pframe pf-frequency">
+    <div class="container" style="width: 1300px;">
+      <div class="box box-default">
+        <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——社区活动举办场次</strong><a class="pull-right btn btn-warning btn-sm">保存</a><a class="pull-right btn btn-default btn-sm margin-r-5">取消</a></div>
+        <div class="box-body">
+          <div class="col-sm-12">
+            <table class="table table-striped table-bordered"  id="pf-fre2">
+              <tr class="bg-light-blue">
+                <th colspan="2">类型</th>
+                <th>北京</th>
+                <th>上海</th>
+                <th>天津</th>
+                <th>广州</th>
+                <th>深圳</th>
+                <th>云南</th>
+                <th>贵州</th>
+                <th>辽宁</th>
+                <th>全国</th>
+              </tr>
+              <tr>
+                <td colspan="2">覆盖社区</td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th rowspan="4" style="table-layout:fixed; white-space: normal; overflow: auto;">社区活动举办场次</th>
+                <th>文娱类活动</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>公益类活动</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>志愿者活动</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>活动小计</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th colspan="2">活动参与人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th colspan="2">单场活动人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pframe pf-operate">
+    <div class="container" style="width: 1300px;">
+      <div class="box box-default" id="pf-operate">
+        <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——社区关键人及微信群运营情况</strong><a class="pull-right btn btn-warning btn-sm">保存</a><a class="pull-right btn btn-default btn-sm margin-r-5">取消</a></div>
+        <div class="box-body">
+          <div class="col-sm-12">
+            <table class="table table-striped table-bordered" id="pfoperate2">
+              <tr class="bg-light-blue">
+                <th colspan="2">社区关键人运营</th>
+                <th>北京</th>
+                <th>上海</th>
+                <th>天津</th>
+                <th>广州</th>
+                <th>深圳</th>
+                <th>云南</th>
+                <th>贵州</th>
+                <th>合计</th>
+                <th>环比</th>
+              </tr>
+              <tr>
+                <th rowspan="2" style="table-layout:fixed; white-space: normal; overflow: auto;">社区关键人数量</td>
+                <th>社区关键人数量</th>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>店均数量</th>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+              </tr>
+              <tr>
+                <th rowspan="5">店均数量</th>
+                <th>政府从业人员</th>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>普通居民</th>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>民间组织人员</th>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>社区商户</th>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+                <td><input type="number" class="form-control"></td>
+              </tr>
+            </table>
+            <table class="table table-striped table-bordered" id="pfoperate2_2" style="margin-top: 15px;">
+              <tr class="bg-light-blue">
+                <th>微信运营群</th>
+                <th>北京</th>
+                <th>上海</th>
+                <th>天津</th>
+                <th>广州</th>
+                <th>深圳</th>
+                <th>云南</th>
+                <th>贵州</th>
+                <th>合计</th>
+                <th>环比</th>
+              </tr>
+              <tr>
+                <th>门店数量</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+              <tr>
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群数量</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+              <tr>
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">店均微信群数量</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+              <tr>
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群内客户数量</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+              <tr>
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+              <tr>
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">与门店人员有互动的客户数量</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+              <tr>
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群互动人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+              <tr>
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信互动活跃人群占比</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
 </div>
 <!-- ./wrapper -->
@@ -599,2670 +1532,27 @@
 <script src="dist/js/utils/htmlToPdf/html2canvas.js"></script>
 <script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script src="dist/js/weekly.js"></script>
 
 <script>
 
-  var myChart1 = echarts.init(document.getElementById('main1'));
-  var myChart2 = echarts.init(document.getElementById('main2'));
-  var myChart3 = echarts.init(document.getElementById('main3'));
-  var myChart4 = echarts.init(document.getElementById('main4'));
-  var myChart5 = echarts.init(document.getElementById('main5'));
-  var myChart6 = echarts.init(document.getElementById('main6'));
-  var myChart16 = echarts.init(document.getElementById('main16'));
-  var myChart7 = echarts.init(document.getElementById('main7'));
-  var myChart17 = echarts.init(document.getElementById('main17'));
-  //var myChart8 = echarts.init(document.getElementById('main8'));
-  var myChart9 = echarts.init(document.getElementById('main9'));
-  var myChart10 = echarts.init(document.getElementById('main10'));
-  var myChart11 = echarts.init(document.getElementById('main11'));
-  var myChart12 = echarts.init(document.getElementById('main12'));
-  var myChart13 = echarts.init(document.getElementById('main13'));
-  var myChart14 = echarts.init(document.getElementById('main14'));
-  var myChart15 = echarts.init(document.getElementById('main15'));
-
-  //城市总的行政区县、已有门店开业的区县数量
-  /*var data = [
-    {name: '海门', value: 9},
-    {name: '鄂尔多斯', value: 12},
-    {name: '招远', value: 12},
-    {name: '舟山', value: 12},
-    {name: '齐齐哈尔', value: 14},
-    {name: '盐城', value: 15},
-    {name: '赤峰', value: 16},
-    {name: '青岛', value: 18},
-    {name: '乳山', value: 18},
-    {name: '金昌', value: 19},
-    {name: '泉州', value: 21},
-    {name: '莱西', value: 21},
-    {name: '日照', value: 21},
-    {name: '胶南', value: 22},
-    {name: '南通', value: 23},
-    {name: '拉萨', value: 24},
-    {name: '云浮', value: 24},
-    {name: '梅州', value: 25},
-    {name: '文登', value: 25},
-    {name: '上海', value: 25},
-    {name: '攀枝花', value: 25},
-    {name: '威海', value: 25},
-    {name: '承德', value: 25},
-    {name: '厦门', value: 26},
-    {name: '汕尾', value: 26},
-    {name: '潮州', value: 26},
-    {name: '丹东', value: 27},
-    {name: '太仓', value: 27},
-    {name: '曲靖', value: 27},
-    {name: '烟台', value: 28},
-    {name: '福州', value: 29},
-    {name: '瓦房店', value: 30},
-    {name: '即墨', value: 30},
-    {name: '抚顺', value: 31},
-    {name: '玉溪', value: 31},
-    {name: '张家口', value: 31},
-    {name: '阳泉', value: 31},
-    {name: '莱州', value: 32},
-    {name: '湖州', value: 32},
-    {name: '汕头', value: 32},
-    {name: '昆山', value: 33},
-    {name: '宁波', value: 33},
-    {name: '湛江', value: 33},
-    {name: '揭阳', value: 34},
-    {name: '荣成', value: 34},
-    {name: '连云港', value: 35},
-    {name: '葫芦岛', value: 35},
-    {name: '常熟', value: 36},
-    {name: '东莞', value: 36},
-    {name: '河源', value: 36},
-    {name: '淮安', value: 36},
-    {name: '泰州', value: 36},
-    {name: '南宁', value: 37},
-    {name: '营口', value: 37},
-    {name: '惠州', value: 37},
-    {name: '江阴', value: 37},
-    {name: '蓬莱', value: 37},
-    {name: '韶关', value: 38},
-    {name: '嘉峪关', value: 38},
-    {name: '广州', value: 38},
-    {name: '延安', value: 38},
-    {name: '太原', value: 39},
-    {name: '清远', value: 39},
-    {name: '中山', value: 39},
-    {name: '昆明', value: 39},
-    {name: '寿光', value: 40},
-    {name: '盘锦', value: 40},
-    {name: '长治', value: 41},
-    {name: '深圳', value: 41},
-    {name: '珠海', value: 42},
-    {name: '宿迁', value: 43},
-    {name: '咸阳', value: 43},
-    {name: '铜川', value: 44},
-    {name: '平度', value: 44},
-    {name: '佛山', value: 44},
-    {name: '海口', value: 44},
-    {name: '江门', value: 45},
-    {name: '章丘', value: 45},
-    {name: '肇庆', value: 46},
-    {name: '大连', value: 47},
-    {name: '临汾', value: 47},
-    {name: '吴江', value: 47},
-    {name: '石嘴山', value: 49},
-    {name: '沈阳', value: 50},
-    {name: '苏州', value: 50},
-    {name: '茂名', value: 50},
-    {name: '嘉兴', value: 51},
-    {name: '长春', value: 51},
-    {name: '胶州', value: 52},
-    {name: '银川', value: 52},
-    {name: '张家港', value: 52},
-    {name: '三门峡', value: 53},
-    {name: '锦州', value: 54},
-    {name: '南昌', value: 54},
-    {name: '柳州', value: 54},
-    {name: '三亚', value: 54},
-    {name: '自贡', value: 56},
-    {name: '吉林', value: 56},
-    {name: '阳江', value: 57},
-    {name: '泸州', value: 57},
-    {name: '西宁', value: 57},
-    {name: '宜宾', value: 58},
-    {name: '呼和浩特', value: 58},
-    {name: '成都', value: 58},
-    {name: '大同', value: 58},
-    {name: '镇江', value: 59},
-    {name: '桂林', value: 59},
-    {name: '张家界', value: 59},
-    {name: '宜兴', value: 59},
-    {name: '北海', value: 60},
-    {name: '西安', value: 61},
-    {name: '金坛', value: 62},
-    {name: '东营', value: 62},
-    {name: '牡丹江', value: 63},
-    {name: '遵义', value: 63},
-    {name: '绍兴', value: 63},
-    {name: '扬州', value: 64},
-    {name: '常州', value: 64},
-    {name: '潍坊', value: 65},
-    {name: '重庆', value: 66},
-    {name: '台州', value: 67},
-    {name: '南京', value: 67},
-    {name: '滨州', value: 70},
-    {name: '贵阳', value: 71},
-    {name: '无锡', value: 71},
-    {name: '本溪', value: 71},
-    {name: '克拉玛依', value: 72},
-    {name: '渭南', value: 72},
-    {name: '马鞍山', value: 72},
-    {name: '宝鸡', value: 72},
-    {name: '焦作', value: 75},
-    {name: '句容', value: 75},
-    {name: '北京', value: 79},
-    {name: '徐州', value: 79},
-    {name: '衡水', value: 80},
-    {name: '包头', value: 80},
-    {name: '绵阳', value: 80},
-    {name: '乌鲁木齐', value: 84},
-    {name: '枣庄', value: 84},
-    {name: '杭州', value: 84},
-    {name: '淄博', value: 85},
-    {name: '鞍山', value: 86},
-    {name: '溧阳', value: 86},
-    {name: '库尔勒', value: 86},
-    {name: '安阳', value: 90},
-    {name: '开封', value: 90},
-    {name: '济南', value: 92},
-    {name: '德阳', value: 93},
-    {name: '温州', value: 95},
-    {name: '九江', value: 96},
-    {name: '邯郸', value: 98},
-    {name: '临安', value: 99},
-    {name: '兰州', value: 99},
-    {name: '沧州', value: 100},
-    {name: '临沂', value: 103},
-    {name: '南充', value: 104},
-    {name: '天津', value: 105},
-    {name: '富阳', value: 106},
-    {name: '泰安', value: 112},
-    {name: '诸暨', value: 112},
-    {name: '郑州', value: 113},
-    {name: '哈尔滨', value: 114},
-    {name: '聊城', value: 116},
-    {name: '芜湖', value: 117},
-    {name: '唐山', value: 119},
-    {name: '平顶山', value: 119},
-    {name: '邢台', value: 119},
-    {name: '德州', value: 120},
-    {name: '济宁', value: 120},
-    {name: '荆州', value: 127},
-    {name: '宜昌', value: 130},
-    {name: '义乌', value: 132},
-    {name: '丽水', value: 133},
-    {name: '洛阳', value: 134},
-    {name: '秦皇岛', value: 136},
-    {name: '株洲', value: 143},
-    {name: '石家庄', value: 147},
-    {name: '莱芜', value: 148},
-    {name: '常德', value: 152},
-    {name: '保定', value: 153},
-    {name: '湘潭', value: 154},
-    {name: '金华', value: 157},
-    {name: '岳阳', value: 169},
-    {name: '长沙', value: 175},
-    {name: '衢州', value: 177},
-    {name: '廊坊', value: 193},
-    {name: '菏泽', value: 194},
-    {name: '合肥', value: 229},
-    {name: '武汉', value: 273},
-    {name: '大庆', value: 279}
-  ];
-
-  var geoCoordMap = {
-    '海门':[121.15,31.89],
-    '鄂尔多斯':[109.781327,39.608266],
-    '招远':[120.38,37.35],
-    '舟山':[122.207216,29.985295],
-    '齐齐哈尔':[123.97,47.33],
-    '盐城':[120.13,33.38],
-    '赤峰':[118.87,42.28],
-    '青岛':[120.33,36.07],
-    '乳山':[121.52,36.89],
-    '金昌':[102.188043,38.520089],
-    '泉州':[118.58,24.93],
-    '莱西':[120.53,36.86],
-    '日照':[119.46,35.42],
-    '胶南':[119.97,35.88],
-    '南通':[121.05,32.08],
-    '拉萨':[91.11,29.97],
-    '云浮':[112.02,22.93],
-    '梅州':[116.1,24.55],
-    '文登':[122.05,37.2],
-    '上海':[121.48,31.22],
-    '攀枝花':[101.718637,26.582347],
-    '威海':[122.1,37.5],
-    '承德':[117.93,40.97],
-    '厦门':[118.1,24.46],
-    '汕尾':[115.375279,22.786211],
-    '潮州':[116.63,23.68],
-    '丹东':[124.37,40.13],
-    '太仓':[121.1,31.45],
-    '曲靖':[103.79,25.51],
-    '烟台':[121.39,37.52],
-    '福州':[119.3,26.08],
-    '瓦房店':[121.979603,39.627114],
-    '即墨':[120.45,36.38],
-    '抚顺':[123.97,41.97],
-    '玉溪':[102.52,24.35],
-    '张家口':[114.87,40.82],
-    '阳泉':[113.57,37.85],
-    '莱州':[119.942327,37.177017],
-    '湖州':[120.1,30.86],
-    '汕头':[116.69,23.39],
-    '昆山':[120.95,31.39],
-    '宁波':[121.56,29.86],
-    '湛江':[110.359377,21.270708],
-    '揭阳':[116.35,23.55],
-    '荣成':[122.41,37.16],
-    '连云港':[119.16,34.59],
-    '葫芦岛':[120.836932,40.711052],
-    '常熟':[120.74,31.64],
-    '东莞':[113.75,23.04],
-    '河源':[114.68,23.73],
-    '淮安':[119.15,33.5],
-    '泰州':[119.9,32.49],
-    '南宁':[108.33,22.84],
-    '营口':[122.18,40.65],
-    '惠州':[114.4,23.09],
-    '江阴':[120.26,31.91],
-    '蓬莱':[120.75,37.8],
-    '韶关':[113.62,24.84],
-    '嘉峪关':[98.289152,39.77313],
-    '广州':[113.23,23.16],
-    '延安':[109.47,36.6],
-    '太原':[112.53,37.87],
-    '清远':[113.01,23.7],
-    '中山':[113.38,22.52],
-    '昆明':[102.73,25.04],
-    '寿光':[118.73,36.86],
-    '盘锦':[122.070714,41.119997],
-    '长治':[113.08,36.18],
-    '深圳':[114.07,22.62],
-    '珠海':[113.52,22.3],
-    '宿迁':[118.3,33.96],
-    '咸阳':[108.72,34.36],
-    '铜川':[109.11,35.09],
-    '平度':[119.97,36.77],
-    '佛山':[113.11,23.05],
-    '海口':[110.35,20.02],
-    '江门':[113.06,22.61],
-    '章丘':[117.53,36.72],
-    '肇庆':[112.44,23.05],
-    '大连':[121.62,38.92],
-    '临汾':[111.5,36.08],
-    '吴江':[120.63,31.16],
-    '石嘴山':[106.39,39.04],
-    '沈阳':[123.38,41.8],
-    '苏州':[120.62,31.32],
-    '茂名':[110.88,21.68],
-    '嘉兴':[120.76,30.77],
-    '长春':[125.35,43.88],
-    '胶州':[120.03336,36.264622],
-    '银川':[106.27,38.47],
-    '张家港':[120.555821,31.875428],
-    '三门峡':[111.19,34.76],
-    '锦州':[121.15,41.13],
-    '南昌':[115.89,28.68],
-    '柳州':[109.4,24.33],
-    '三亚':[109.511909,18.252847],
-    '自贡':[104.778442,29.33903],
-    '吉林':[126.57,43.87],
-    '阳江':[111.95,21.85],
-    '泸州':[105.39,28.91],
-    '西宁':[101.74,36.56],
-    '宜宾':[104.56,29.77],
-    '呼和浩特':[111.65,40.82],
-    '成都':[104.06,30.67],
-    '大同':[113.3,40.12],
-    '镇江':[119.44,32.2],
-    '桂林':[110.28,25.29],
-    '张家界':[110.479191,29.117096],
-    '宜兴':[119.82,31.36],
-    '北海':[109.12,21.49],
-    '西安':[108.95,34.27],
-    '金坛':[119.56,31.74],
-    '东营':[118.49,37.46],
-    '牡丹江':[129.58,44.6],
-    '遵义':[106.9,27.7],
-    '绍兴':[120.58,30.01],
-    '扬州':[119.42,32.39],
-    '常州':[119.95,31.79],
-    '潍坊':[119.1,36.62],
-    '重庆':[106.54,29.59],
-    '台州':[121.420757,28.656386],
-    '南京':[118.78,32.04],
-    '滨州':[118.03,37.36],
-    '贵阳':[106.71,26.57],
-    '无锡':[120.29,31.59],
-    '本溪':[123.73,41.3],
-    '克拉玛依':[84.77,45.59],
-    '渭南':[109.5,34.52],
-    '马鞍山':[118.48,31.56],
-    '宝鸡':[107.15,34.38],
-    '焦作':[113.21,35.24],
-    '句容':[119.16,31.95],
-    '北京':[116.46,39.92],
-    '徐州':[117.2,34.26],
-    '衡水':[115.72,37.72],
-    '包头':[110,40.58],
-    '绵阳':[104.73,31.48],
-    '乌鲁木齐':[87.68,43.77],
-    '枣庄':[117.57,34.86],
-    '杭州':[120.19,30.26],
-    '淄博':[118.05,36.78],
-    '鞍山':[122.85,41.12],
-    '溧阳':[119.48,31.43],
-    '库尔勒':[86.06,41.68],
-    '安阳':[114.35,36.1],
-    '开封':[114.35,34.79],
-    '济南':[117,36.65],
-    '德阳':[104.37,31.13],
-    '温州':[120.65,28.01],
-    '九江':[115.97,29.71],
-    '邯郸':[114.47,36.6],
-    '临安':[119.72,30.23],
-    '兰州':[103.73,36.03],
-    '沧州':[116.83,38.33],
-    '临沂':[118.35,35.05],
-    '南充':[106.110698,30.837793],
-    '天津':[117.2,39.13],
-    '富阳':[119.95,30.07],
-    '泰安':[117.13,36.18],
-    '诸暨':[120.23,29.71],
-    '郑州':[113.65,34.76],
-    '哈尔滨':[126.63,45.75],
-    '聊城':[115.97,36.45],
-    '芜湖':[118.38,31.33],
-    '唐山':[118.02,39.63],
-    '平顶山':[113.29,33.75],
-    '邢台':[114.48,37.05],
-    '德州':[116.29,37.45],
-    '济宁':[116.59,35.38],
-    '荆州':[112.239741,30.335165],
-    '宜昌':[111.3,30.7],
-    '义乌':[120.06,29.32],
-    '丽水':[119.92,28.45],
-    '洛阳':[112.44,34.7],
-    '秦皇岛':[119.57,39.95],
-    '株洲':[113.16,27.83],
-    '石家庄':[114.48,38.03],
-    '莱芜':[117.67,36.19],
-    '常德':[111.69,29.05],
-    '保定':[115.48,38.85],
-    '湘潭':[112.91,27.87],
-    '金华':[119.64,29.12],
-    '岳阳':[113.09,29.37],
-    '长沙':[113,28.21],
-    '衢州':[118.88,28.97],
-    '廊坊':[116.7,39.53],
-    '菏泽':[115.480656,35.23375],
-    '合肥':[117.27,31.86],
-    '武汉':[114.31,30.52],
-    '大庆':[125.03,46.58]
-  };
-
-  var convertData = function (data) {
-    var res = [];
-    for (var i = 0; i < data.length; i++) {
-      var geoCoord = geoCoordMap[data[i].name];
-      if (geoCoord) {
-        res.push({
-          name: data[i].name,
-          value: geoCoord.concat(data[i].value)
-        });
-      }
-    }
-    return res;
-  };
-
-  function renderItem(params, api) {
-    var coords = [
-      [116.7,39.53],
-      [103.73,36.03],
-      [112.91,27.87],
-      [120.65,28.01],
-      [119.57,39.95]
-    ];
-    var points = [];
-    for (var i = 0; i < coords.length; i++) {
-      points.push(api.coord(coords[i]));
-    }
-    var color = api.visual('color');
-
-    return {
-      type: 'polygon',
-      shape: {
-        points: echarts.graphic.clipPointsByRect(points, {
-          x: params.coordSys.x,
-          y: params.coordSys.y,
-          width: params.coordSys.width,
-          height: params.coordSys.height
-        })
-      },
-      style: api.style({
-        fill: color,
-        stroke: echarts.color.lift(color)
-      })
-    };
-  }
-
-  option1 = {
-    backgroundColor: '#404a59',
-    title: {
-      text: '全国主要城市空气质量',
-      subtext: 'data from PM25.in',
-      sublink: 'http://www.pm25.in',
-      left: 'center',
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    tooltip : {
-      trigger: 'item'
-    },
-    bmap: {
-      center: [104.114129, 37.550339],
-      zoom: 5,
-      roam: true,
-      mapStyle: {
-        styleJson: [
-          {
-            "featureType": "water",
-            "elementType": "all",
-            "stylers": {
-              "color": "#044161"
-            }
-          },
-          {
-            "featureType": "land",
-            "elementType": "all",
-            "stylers": {
-              "color": "#004981"
-            }
-          },
-          {
-            "featureType": "boundary",
-            "elementType": "geometry",
-            "stylers": {
-              "color": "#064f85"
-            }
-          },
-          {
-            "featureType": "railway",
-            "elementType": "all",
-            "stylers": {
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "highway",
-            "elementType": "geometry",
-            "stylers": {
-              "color": "#004981"
-            }
-          },
-          {
-            "featureType": "highway",
-            "elementType": "geometry.fill",
-            "stylers": {
-              "color": "#005b96",
-              "lightness": 1
-            }
-          },
-          {
-            "featureType": "highway",
-            "elementType": "labels",
-            "stylers": {
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "arterial",
-            "elementType": "geometry",
-            "stylers": {
-              "color": "#004981"
-            }
-          },
-          {
-            "featureType": "arterial",
-            "elementType": "geometry.fill",
-            "stylers": {
-              "color": "#00508b"
-            }
-          },
-          {
-            "featureType": "poi",
-            "elementType": "all",
-            "stylers": {
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "green",
-            "elementType": "all",
-            "stylers": {
-              "color": "#056197",
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "subway",
-            "elementType": "all",
-            "stylers": {
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "manmade",
-            "elementType": "all",
-            "stylers": {
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "local",
-            "elementType": "all",
-            "stylers": {
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "arterial",
-            "elementType": "labels",
-            "stylers": {
-              "visibility": "off"
-            }
-          },
-          {
-            "featureType": "boundary",
-            "elementType": "geometry.fill",
-            "stylers": {
-              "color": "#029fd4"
-            }
-          },
-          {
-            "featureType": "building",
-            "elementType": "all",
-            "stylers": {
-              "color": "#1a5787"
-            }
-          },
-          {
-            "featureType": "label",
-            "elementType": "all",
-            "stylers": {
-              "visibility": "off"
-            }
-          }
-        ]
-      }
-    },
-    series : [
-      {
-        name: 'pm2.5',
-        type: 'scatter',
-        coordinateSystem: 'bmap',
-        data: convertData(data),
-        symbolSize: function (val) {
-          return val[2] / 10;
-        },
-        label: {
-          normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: false
-          },
-          emphasis: {
-            show: true
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: '#fff'
-          }
-        }
-      },
-      {
-        name: 'Top 5',
-        type: 'effectScatter',
-        coordinateSystem: 'bmap',
-        data: convertData(data.sort(function (a, b) {
-          return b.value - a.value;
-        }).slice(0, 6)),
-        symbolSize: function (val) {
-          return val[2] / 10;
-        },
-        showEffectOn: 'emphasis',
-        rippleEffect: {
-          brushType: 'stroke'
-        },
-        hoverAnimation: true,
-        label: {
-          normal: {
-            formatter: '{b}',
-            position: 'right',
-            show: true
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: '#f4e925',
-            shadowBlur: 10,
-            shadowColor: '#333'
-          }
-        },
-        zlevel: 1
-      },
-      {
-        type: 'custom',
-        coordinateSystem: 'bmap',
-        renderItem: renderItem,
-        itemStyle: {
-          normal: {
-            opacity: 0.5
-          }
-        },
-        animation: false,
-        silent: true,
-        data: [0],
-        z: -10
-      }
-    ]
-  };*/
-  var geoCoordMap = {
-		    '海门':[121.15,31.89],
-		    '鄂尔多斯':[109.781327,39.608266],
-		    '招远':[120.38,37.35],
-		    '舟山':[122.207216,29.985295],
-		    '齐齐哈尔':[123.97,47.33],
-		    '盐城':[120.13,33.38],
-		    '赤峰':[118.87,42.28],
-		    '青岛':[120.33,36.07],
-		    '乳山':[121.52,36.89],
-		    '金昌':[102.188043,38.520089],
-		    '泉州':[118.58,24.93],
-		    '莱西':[120.53,36.86],
-		    '日照':[119.46,35.42],
-		    '胶南':[119.97,35.88],
-		    '南通':[121.05,32.08],
-		    '拉萨':[91.11,29.97],
-		    '云浮':[112.02,22.93],
-		    '梅州':[116.1,24.55],
-		    '文登':[122.05,37.2],
-		    '上海':[121.48,31.22],
-		    '攀枝花':[101.718637,26.582347],
-		    '威海':[122.1,37.5],
-		    '承德':[117.93,40.97],
-		    '厦门':[118.1,24.46],
-		    '汕尾':[115.375279,22.786211],
-		    '潮州':[116.63,23.68],
-		    '丹东':[124.37,40.13],
-		    '太仓':[121.1,31.45],
-		    '曲靖':[103.79,25.51],
-		    '烟台':[121.39,37.52],
-		    '福州':[119.3,26.08],
-		    '瓦房店':[121.979603,39.627114],
-		    '即墨':[120.45,36.38],
-		    '抚顺':[123.97,41.97],
-		    '玉溪':[102.52,24.35],
-		    '张家口':[114.87,40.82],
-		    '阳泉':[113.57,37.85],
-		    '莱州':[119.942327,37.177017],
-		    '湖州':[120.1,30.86],
-		    '汕头':[116.69,23.39],
-		    '昆山':[120.95,31.39],
-		    '宁波':[121.56,29.86],
-		    '湛江':[110.359377,21.270708],
-		    '揭阳':[116.35,23.55],
-		    '荣成':[122.41,37.16],
-		    '连云港':[119.16,34.59],
-		    '葫芦岛':[120.836932,40.711052],
-		    '常熟':[120.74,31.64],
-		    '东莞':[113.75,23.04],
-		    '河源':[114.68,23.73],
-		    '淮安':[119.15,33.5],
-		    '泰州':[119.9,32.49],
-		    '南宁':[108.33,22.84],
-		    '营口':[122.18,40.65],
-		    '惠州':[114.4,23.09],
-		    '江阴':[120.26,31.91],
-		    '蓬莱':[120.75,37.8],
-		    '韶关':[113.62,24.84],
-		    '嘉峪关':[98.289152,39.77313],
-		    '广州':[113.23,23.16],
-		    '延安':[109.47,36.6],
-		    '太原':[112.53,37.87],
-		    '清远':[113.01,23.7],
-		    '中山':[113.38,22.52],
-		    '昆明':[102.73,25.04],
-		    '寿光':[118.73,36.86],
-		    '盘锦':[122.070714,41.119997],
-		    '长治':[113.08,36.18],
-		    '深圳':[114.07,22.62],
-		    '珠海':[113.52,22.3],
-		    '宿迁':[118.3,33.96],
-		    '咸阳':[108.72,34.36],
-		    '铜川':[109.11,35.09],
-		    '平度':[119.97,36.77],
-		    '佛山':[113.11,23.05],
-		    '海口':[110.35,20.02],
-		    '江门':[113.06,22.61],
-		    '章丘':[117.53,36.72],
-		    '肇庆':[112.44,23.05],
-		    '大连':[121.62,38.92],
-		    '临汾':[111.5,36.08],
-		    '吴江':[120.63,31.16],
-		    '石嘴山':[106.39,39.04],
-		    '沈阳':[123.38,41.8],
-		    '苏州':[120.62,31.32],
-		    '茂名':[110.88,21.68],
-		    '嘉兴':[120.76,30.77],
-		    '长春':[125.35,43.88],
-		    '胶州':[120.03336,36.264622],
-		    '银川':[106.27,38.47],
-		    '张家港':[120.555821,31.875428],
-		    '三门峡':[111.19,34.76],
-		    '锦州':[121.15,41.13],
-		    '南昌':[115.89,28.68],
-		    '柳州':[109.4,24.33],
-		    '三亚':[109.511909,18.252847],
-		    '自贡':[104.778442,29.33903],
-		    '吉林':[126.57,43.87],
-		    '阳江':[111.95,21.85],
-		    '泸州':[105.39,28.91],
-		    '西宁':[101.74,36.56],
-		    '宜宾':[104.56,29.77],
-		    '呼和浩特':[111.65,40.82],
-		    '成都':[104.06,30.67],
-		    '大同':[113.3,40.12],
-		    '镇江':[119.44,32.2],
-		    '桂林':[110.28,25.29],
-		    '张家界':[110.479191,29.117096],
-		    '宜兴':[119.82,31.36],
-		    '北海':[109.12,21.49],
-		    '西安':[108.95,34.27],
-		    '金坛':[119.56,31.74],
-		    '东营':[118.49,37.46],
-		    '牡丹江':[129.58,44.6],
-		    '遵义':[106.9,27.7],
-		    '绍兴':[120.58,30.01],
-		    '扬州':[119.42,32.39],
-		    '常州':[119.95,31.79],
-		    '潍坊':[119.1,36.62],
-		    '重庆':[106.54,29.59],
-		    '台州':[121.420757,28.656386],
-		    '南京':[118.78,32.04],
-		    '滨州':[118.03,37.36],
-		    '贵阳':[106.71,26.57],
-		    '无锡':[120.29,31.59],
-		    '本溪':[123.73,41.3],
-		    '克拉玛依':[84.77,45.59],
-		    '渭南':[109.5,34.52],
-		    '马鞍山':[118.48,31.56],
-		    '宝鸡':[107.15,34.38],
-		    '焦作':[113.21,35.24],
-		    '句容':[119.16,31.95],
-		    '北京':[116.46,39.92],
-		    '徐州':[117.2,34.26],
-		    '衡水':[115.72,37.72],
-		    '包头':[110,40.58],
-		    '绵阳':[104.73,31.48],
-		    '乌鲁木齐':[87.68,43.77],
-		    '枣庄':[117.57,34.86],
-		    '杭州':[120.19,30.26],
-		    '淄博':[118.05,36.78],
-		    '鞍山':[122.85,41.12],
-		    '溧阳':[119.48,31.43],
-		    '库尔勒':[86.06,41.68],
-		    '安阳':[114.35,36.1],
-		    '开封':[114.35,34.79],
-		    '济南':[117,36.65],
-		    '德阳':[104.37,31.13],
-		    '温州':[120.65,28.01],
-		    '九江':[115.97,29.71],
-		    '邯郸':[114.47,36.6],
-		    '临安':[119.72,30.23],
-		    '兰州':[103.73,36.03],
-		    '沧州':[116.83,38.33],
-		    '临沂':[118.35,35.05],
-		    '南充':[106.110698,30.837793],
-		    '天津':[117.2,39.13],
-		    '富阳':[119.95,30.07],
-		    '泰安':[117.13,36.18],
-		    '诸暨':[120.23,29.71],
-		    '郑州':[113.65,34.76],
-		    '哈尔滨':[126.63,45.75],
-		    '聊城':[115.97,36.45],
-		    '芜湖':[118.38,31.33],
-		    '唐山':[118.02,39.63],
-		    '平顶山':[113.29,33.75],
-		    '邢台':[114.48,37.05],
-		    '德州':[116.29,37.45],
-		    '济宁':[116.59,35.38],
-		    '荆州':[112.239741,30.335165],
-		    '宜昌':[111.3,30.7],
-		    '义乌':[120.06,29.32],
-		    '丽水':[119.92,28.45],
-		    '洛阳':[112.44,34.7],
-		    '秦皇岛':[119.57,39.95],
-		    '株洲':[113.16,27.83],
-		    '石家庄':[114.48,38.03],
-		    '莱芜':[117.67,36.19],
-		    '常德':[111.69,29.05],
-		    '保定':[115.48,38.85],
-		    '湘潭':[112.91,27.87],
-		    '金华':[119.64,29.12],
-		    '岳阳':[113.09,29.37],
-		    '长沙':[113,28.21],
-		    '衢州':[118.88,28.97],
-		    '廊坊':[116.7,39.53],
-		    '菏泽':[115.480656,35.23375],
-		    '合肥':[117.27,31.86],
-		    '武汉':[114.31,30.52],
-		    '大庆':[125.03,46.58],
-		    '乌兰察布':[113.125152, 41.035476],
-		    '黔东南苗族侗族自治州':[107.982859, 26.583442]
-		  };
-  var max = 480, min = 9; // todo
-  var maxSize4Pin = 100, minSize4Pin = 20;
-  var convertData = function (data) {
-    var res = [];
-    for (var i = 0; i < data.length; i++) {
-      var geoCoord = geoCoordMap[data[i].name];
-      if (geoCoord) {
-        res.push({
-          name: data[i].name,
-          value: geoCoord.concat(data[i].value)
-        });
-      }
-    }
-    return res;
-  };
-  option1 = {
-		    title: {
-		      text: '城市分布',
-		      x: 'center',
-		      textStyle: {
-		        color: '#424242'
-		      }
-		    },
-		    /*tooltip: {
-		      trigger: 'item',
-		      formatter: function (params) {
-		        if(typeof(params.value)[2] == "undefined"){
-		          return params.name + ' : ' + params.value;
-		        }else{
-		          return params.name + ' : ' + params.value[2];
-		        }
-		      }
-		    },
-		    visualMap: {
-		     min: 0,
-		     max: 1500,
-		     left: '-100%',
-		     top: 'bottom',
-		     text: ['High', 'Low'],
-		     seriesIndex: [1],
-		     inRange: {
-		     color: ['#e0ffff', '#006edd']
-		     },
-		     calculable: false
-		     },*/
-		    visualMap: {
-		      show: false,
-		      min: 0,
-		      max: 500,
-		      left: 'left',
-		      top: 'bottom',
-		      text: ['高', '低'], // 文本，默认为数值文本
-		      calculable: true,
-		      seriesIndex: [1],
-		      inRange: {
-		        // color: ['#3B5077', '#031525'] // 蓝黑
-		        // color: ['#ffc0cb', '#800080'] // 红紫
-		        // color: ['#3C3B3F', '#605C3C'] // 黑绿
-		        //color: ['#0f0c29', '#302b63', '#24243e'] // 黑紫黑
-		        //color: ['#23074d', '#cc5333'] // 紫红
-		        // color: ['#00467F', '#A5CC82'] // 蓝绿
-		        // color: ['#1488CC', '#2B32B2'] // 浅蓝
-		        // color: ['#00467F', '#A5CC82'] // 蓝绿
-		        // color: ['#00467F', '#A5CC82'] // 蓝绿
-		        // color: ['#00467F', '#A5CC82'] // 蓝绿
-		        // color: ['#00467F', '#A5CC82'] // 蓝绿
-				color: ['#F00','#BE77FF'] // 蓝绿
-		      }
-		    },
-		    geo: {
-		      map: 'china',
-		      roam: true,
-		      // scaleLimit:{
-		      //   max:'1.2',
-		      //   min:'0.7'
-		      // },
-		      label: {
-		        normal: {
-		          show: false,
-		        },
-		        emphasis: {
-		          show: false,
-		        }
-		      },
-		      roam:false,
-		      itemStyle: {
-		        normal: {
-		          borderColor: 'rgba(0, 0, 0, 0.2)'
-		        },
-		        emphasis: {
-		          areaColor: null,
-		          shadowOffsetX: 0,
-		          shadowOffsetY: 0,
-		          shadowBlur: 20,
-		          borderWidth: 0,
-		          shadowColor: 'rgba(0, 0, 0, 0.5)'
-		        }
-		      }
-		    },
-		    series : [
-		      {
-		        name: '17年已进入城市',
-		        type: 'scatter',
-		        coordinateSystem: 'geo',
-		        data: [],
-		        symbolSize: function (val) {
-		          return val[2] / 10;
-		        },
-		        label: {
-		          normal: {
-		            formatter: '{b}',
-		            position: 'right',
-		            show: true
-		          },
-		          emphasis: {
-		            show: true
-		          }
-		        },
-		        itemStyle: {
-		          normal: {
-		            color: '#f00'
-		          }
-		        }
-		      },
-		      {
-		        type: 'map',
-		        map: 'china',
-		        geoIndex: 0,
-		        aspectScale: 0.75, //长宽比
-		        showLegendSymbol: false, // 存在legend时显示
-		        label: {
-		          normal: {
-		            show: false
-		          },
-		          emphasis: {
-		            show: false,
-		            textStyle: {
-		              color: '#FFF'
-		            }
-		          }
-		        },
-		        roam: true,
-		        itemStyle: {
-		          normal: {
-		            areaColor: '#031525',
-		            borderColor: '#FFFFFF',
-		          },
-		          emphasis: {
-		            areaColor: '#2B91B7'
-		          }
-		        },
-		        animation: false,
-		        data: []
-		      },
-		      {
-		        name: '18年新进入城市',
-		        type: 'effectScatter',
-		        coordinateSystem: 'geo',
-		        data: [],
-		        symbolSize: function (val) {
-		          return val[2] / 10;
-		        },
-		        showEffectOn: 'render',
-		        rippleEffect: {
-		          brushType: 'stroke'
-		        },
-		        hoverAnimation: true,
-		        label: {
-		          normal: {
-		            formatter: '{b}',
-		            position: 'right',
-		            show: true
-		          }
-		        },
-		        itemStyle: {
-		          normal: {
-		            color: '#FF8C00',
-		            shadowBlur: 10,
-		            shadowColor: '#05C3F9'
-		          }
-		        },
-		        zlevel: 1
-		      },
-
-		    ]
-		  };
-
-		  //城市总的街道、已有门店开业的街道数量
-		  /* var dataBeast=[660, 841, 521, 820, 578, 727, 598, 792];
-		  var dataBeauty=[541, 513, 792, 701, 660, 729, 782, 660];
-		  var xAxisData=['北京','上海','天津','广州','深圳','贵阳','昆明','沈阳']; */
-		  var dataTotal=function(){
-		    var data=[];
-		    for(var i=0;i<dataBeauty.length;i++){
-		      data.push(dataBeauty[i]+dataBeast[i]);
-		    }
-		    return data;
-		  }
-		  option9 = {
-				    //color:['#019aba','#7a201f','#11565d'],
-				    title: {
-				      text: '已开城市覆盖情况(区域)',
-				      textStyle: {
-				        x: 'center',
-				        textStyle: {color: '#424242'}
-				      },
-				    },
-				    legend:{
-				      right:'0',
-				      textStyle: {
-				        color: '#666',
-				        fontSize: 12,
-				      },
-				      data:['已布点区域','未布点区域','覆盖率'],
-				    },
-				    tooltip:{
-				      show:true,
-				      trigger: 'axis',
-				      axisPointer: {
-				        type:'cross',
-				        crossStyle:{color:'#ddd',},
-				      },
-				    },
-				    grid:{
-				      left:5,
-				      right:5,
-				      top:60,
-				      bottom:50,
-				      containLabel:true,
-				    },
-				    xAxis: {
-				      show:true,
-				      axisLabel:{
-				        interval:0,
-				        rotate:-20,
-				        margin: 30,
-				        textStyle:{
-				          color:'#666',
-				          align: 'center'
-				        },
-				      },
-				      axisTick:{
-				        alignWithLabel:true,
-				        lineStyle:{
-				          color:'#666',
-
-				        },
-				      },
-				      data:[],
-				    },
-				    yAxis: [
-				      {
-				        type:'value',
-				        nameTextStyle:{
-				          color:'#666',
-				        },
-				        axisLabel:{
-				          textStyle:{
-				            color:'#666',
-				          },
-				        },
-				        axisTick:{
-				          alignWithLabel:true,
-				          lineStyle:{
-				            color:'#666',
-
-				          },
-				        },
-				        splitLine:{
-				          show:false,
-				        },
-				      },
-				      {
-				        type:'value',
-				        name: '百分比',
-				        min:0,
-				        nameTextStyle:{
-				          color:'#666',
-				        },
-				        axisLabel:{
-				          textStyle:{
-				            color:'#666',
-				          },
-				        },
-				        axisTick:{
-				          alignWithLabel:true,
-				          lineStyle:{
-				            color:'#666',
-
-				          },
-				        },
-				        splitLine:{
-				          show:false,
-				        },
-				      },
-				    ],
-				    series: [
-				      {
-				        type: 'bar',
-				        name:'已布点区域',
-				        stack:'布点区域',
-				        yAxisIndex:0,
-				        data:[],
-				        label: {
-				          normal: {
-				            show:false,
-				            position: 'insideTop',
-				            offset:[0,-5],
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				          emphasis: {
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				        },
-				      },
-				      {
-				        type: 'bar',
-				        name:'未布点区域',
-				        stack:'布点区域',
-				        yAxisIndex:0,
-				        data:[],
-				        label: {
-				          normal: {
-				            show:false,
-				            position: 'insideTop',
-				            offset:[0,-5],
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				          emphasis: {
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				        },
-				      },
-				      {
-				        type: 'line',
-				        name:'覆盖率',
-				        yAxisIndex:1,
-				        data:[],
-				        label: {
-				          normal: {
-				            show:true,
-				            position: 'insideTop',
-				            offset: [0,-30],
-				            textStyle:{
-				              color:'#000',
-				            },
-				          },
-				          emphasis: {
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				        },
-				        // symbol:'image://../imgs/point1.png',
-				        symbolSize:8,
-				        itemStyle: {
-				          normal: {
-				             "color": "#01B3D7",
-				            barBorderRadius: 0,
-				            label: {
-				              show:true,
-				              position: "top",
-				              formatter: '{c}% '
-				            }
-				          }
-				        },
-				        lineStyle: {
-				          normal: {
-				            color: '#01B3D7',
-				            width: 1,
-
-				          },
-				        },
-				      },
-				    ]
-				  };
-
-				  //城市总的街道、已有门店开业的街道数量
-				   option15 = {
-				    //color:['#019aba','#7a201f','#11565d'],
-				    title: {
-				      text: '已开城市覆盖情况(街道)',
-				      textStyle: {
-				        x: 'center',
-				        textStyle: {color: '#424242'}
-				      },
-				    },
-				    legend:{
-				      right:'0',
-				      textStyle: {
-				        color: '#666',
-				        fontSize: 12,
-				      },
-				      data:['已布点街道','未布点街道','覆盖率'],
-				    },
-				    tooltip:{
-				      show:true,
-				      trigger: 'axis',
-				      axisPointer: {
-				        type:'cross',
-				        crossStyle:{color:'#ddd',},
-				      },
-				    },
-				    grid:{
-				      left:5,
-				      right:5,
-				      top:60,
-				      bottom:50,
-				      containLabel:true,
-				    },
-				    xAxis: {
-				      show:true,
-				      axisLabel:{
-				        interval:0,
-				        rotate:-20,
-				        margin: 30,
-				        textStyle:{
-				          color:'#666',
-				          align: 'center'
-				        },
-				      },
-				      axisTick:{
-				        alignWithLabel:true,
-				        lineStyle:{
-				          color:'#666',
-
-				        },
-				      },
-				      data:[],
-				    },
-				    yAxis: [
-				      {
-				        type:'value',
-				        nameTextStyle:{
-				          color:'#666',
-				        },
-				        axisLabel:{
-				          textStyle:{
-				            color:'#666',
-				          },
-				        },
-				        axisTick:{
-				          alignWithLabel:true,
-				          lineStyle:{
-				            color:'#666',
-
-				          },
-				        },
-				        splitLine:{
-				          show:false,
-				        },
-				      },
-				      {
-				        type:'value',
-				        name: '百分比',
-				        min:0,
-				        nameTextStyle:{
-				          color:'#666',
-				        },
-				        axisLabel:{
-				          textStyle:{
-				            color:'#666',
-				          },
-				        },
-				        axisTick:{
-				          alignWithLabel:true,
-				          lineStyle:{
-				            color:'#666',
-
-				          },
-				        },
-				        splitLine:{
-				          show:false,
-				        },
-				      },
-				    ],
-				    series: [
-				      {
-				        type: 'bar',
-				        name:'已布点街道',
-				        stack:'布点区域',
-				        yAxisIndex:0,
-				        data:[],
-				        label: {
-				          normal: {
-				            show:false,
-				            position: 'insideTop',
-				            offset:[0,-5],
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				          emphasis: {
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				        },
-				      },
-				      {
-				        type: 'bar',
-				        name:'未布点街道',
-				        stack:'布点区域',
-				        yAxisIndex:0,
-				        data:[],
-				        label: {
-				          normal: {
-				            show:false,
-				            position: 'insideTop',
-				            offset:[0,-5],
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				          emphasis: {
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				        },
-				      },
-				      {
-				        type: 'line',
-				        name:'覆盖率',
-				        yAxisIndex:1,
-				        data:[],
-				        label: {
-				          normal: {
-				            show:true,
-				            position: 'insideTop',
-				            offset: [0,-30],
-				            textStyle:{
-				              color:'#000',
-				            },
-				          },
-				          emphasis: {
-				            textStyle:{
-				              color:'#fff',
-				            },
-				          },
-				        },
-				        // symbol:'image://../imgs/point1.png',
-				        symbolSize:8,
-				        itemStyle: {
-				          normal: {
-				             "color": "#01B3D7",
-				            barBorderRadius: 0,
-				            label: {
-				              show:true,
-				              position: "top",
-				              formatter: '{c}% '
-				            }
-				          }
-				        },
-				        lineStyle: {
-				          normal: {
-				            color: '#01B3D7',
-				            width: 1,
-
-				          },
-				        },
-				      },
-				    ]
-				  };
-
-				  //网络业态分布--自营店
-				  option2 = {
-				    title: {text: '自营店',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
-				    tooltip: {
-				      trigger: 'axis',
-				      axisPointer: {
-				        type: 'shadow',
-				        textStyle: {color: '#fff'}
-				      },
-				    },
-				    grid: {
-				      borderWidth: 0,
-				      right:30,
-				      top: 100,
-				      bottom: 40,
-				      textStyle: {color: '#fff'}
-				    },
-				    legend: {
-				      top: '30',
-				      textStyle: {color: '#90979c',},
-				      data: []
-				    },
-				    calculable: true,
-				    xAxis: [{
-				      type: 'category',
-				      axisLine: {
-				        lineStyle: {
-				          color: '#90979c'
-				        }
-				      },
-				      splitLine: {
-				        show: false
-				      },
-				      axisTick: {
-				        show: false
-				      },
-				      splitArea: {
-				        show: false
-				      },
-				      axisLabel: {
-				        interval: 0,
-				        rotate:-20
-				      },
-				      data: [],
-				    }],
-				    yAxis: [{
-				      type: 'value',
-				      splitLine: {show: false},
-				      axisLine: {
-				        lineStyle: {color: '#90979c'}
-				      },
-				      axisTick: {show: false},
-				      axisLabel: {interval: 0,},
-				      splitArea: {show: false},
-				    }],
-				    /*dataZoom: [{
-				      show: true,
-				      height: 20,
-				      xAxisIndex: [0],
-				      bottom: 30,
-				      start: 0,
-				      end: 50,
-				      handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
-				      handleSize: '110%',
-				      handleStyle:{color:'#d3dee5',},
-				      textStyle:{color:'#fff'},
-				      borderColor:'#90979c'
-				    }, {
-				      type: 'inside',
-				      show: true,
-				      height: 15,
-				      start: 1,
-				      end: 35
-				    }],*/
-				    series: []
-				  }
-
-				  //网络业态分布--合作店
-				  option10 = {
-						  title: {text: '合作店',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
-						    tooltip: {
-						      trigger: 'axis',
-						      axisPointer: {
-						        type: 'shadow',
-						        textStyle: {color: '#fff'}
-						      },
-						    },
-						    grid: {
-						      borderWidth: 0,
-						      right:30,
-						      top: 100,
-						      bottom: 40,
-						      textStyle: {color: '#fff'}
-						    },
-						    legend: {
-						      top: '30',
-						      left:"left",
-						      y:"8%",
-						      itemWidth:18,
-						      itemHeight:12,
-						      textStyle: {color: '#90979c',fontSize:14},
-						      data: []
-						    },
-						    calculable: true,
-						    xAxis: [{
-						      type: 'category',
-						      axisLine: {
-						        lineStyle: {
-						          color: '#90979c'
-						        }
-						      },
-						      splitLine: {
-						        show: false
-						      },
-						      axisTick: {
-						        show: false
-						      },
-						      splitArea: {
-						        show: false
-						      },
-						      axisLabel: {
-						        interval: 0,
-						        rotate:-20
-						      },
-						      data: [],
-						    }],
-						    yAxis: [{
-						      type: 'value',
-						      splitLine: {show: false},
-						      axisLine: {
-						        lineStyle: {color: '#90979c'}
-						      },
-						      axisTick: {show: false},
-						      axisLabel: {interval: 0,},
-						      splitArea: {show: false},
-						    }],
-						    /*dataZoom: [{
-						      show: true,
-						      height: 20,
-						      xAxisIndex: [0],
-						      bottom: 30,
-						      start: 0,
-						      end: 50,
-						      handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
-						      handleSize: '110%',
-						      handleStyle:{color:'#d3dee5',},
-						      textStyle:{color:'#fff'},
-						      borderColor:'#90979c'
-						    }, {
-						      type: 'inside',
-						      show: true,
-						      height: 15,
-						      start: 1,
-						      end: 35
-						    }],*/
-						    series: []
-				  }
-
-  //网路拓展趋势--近一年
- //网路拓展趋势--近一年
-  var option3 = {
-    title: {text: '近一年情况走势',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
-    tooltip : {trigger: 'axis',},
-    legend: {
-      data:['总量','自营店','合作店'],
-      right:0,
-    },
-    grid: {
-      top: '12%',
-      left: '1%',
-      right: '10%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis : [
-      {
-        type : 'category',
-        boundaryGap : false,
-        data : [],
-        splitLine: {show: false},
-        axisTick:{show: false},
-      }
-    ],
-    yAxis : [
-      {
-        type : 'value',
-        splitLine: {show: false},
-        axisTick:{show: false},
-      }
-    ],
-    series : [
-      {
-        name:'总量',
-        type:'line',
-        areaStyle: {normal: {color:'#EEC8C6'}},
-        data:[],
-        itemStyle: {normal: {
-            label: {
-                show: true,
-                formatter: function(p) {
-                  return p.value > 0 ? (p.value) : '';
-                }
-              }
-            }},
-        smooth: true
-      },
-      {
-        name:'自营店',
-        type:'line',
-        areaStyle: {normal: {color:'#3E5361'}},
-        data:[],
-        itemStyle: {
-        	normal: {
-                label: {
-                  show: true,
-                  formatter: function(p) {
-                    return p.value > 0 ? (p.value) : '';
-                  }
-                }
-              }
-        },
-        smooth: true
-      },
-      {
-        name:'合作店',
-        type:'line',
-        areaStyle: {normal: {color:'#91BDC2'}},
-        data:[],
-        itemStyle: {
-        	normal: {
-                label: {
-                  show: true,
-                  formatter: function(p) {
-                    return p.value > 0 ? (p.value) : '';
-                  }
-                }
-              }
-        },
-        smooth: true
-      }
-    ]
-  };
-
-  //网路拓展趋势--近6周
-  var option11 = {
-    title: {text: '近六周情况走势',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
-    tooltip : {trigger: 'axis',},
-    legend: {
-      data:['总量','自营店','合作店'],
-      right:0,
-    },
-    grid: {
-      top: '12%',
-      left: '1%',
-      right: '7%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis : [
-      {
-        type : 'category',
-        boundaryGap : false,
-        data : [],
-        splitLine: {show: false},
-        axisTick:{show: false},
-      }
-    ],
-    yAxis : [
-      {
-        type : 'value',
-        splitLine: {show: false},
-        axisTick:{show: false},
-      }
-    ],
-    series : [
-      {
-        name:'总量',
-        type:'line',
-        areaStyle: {normal: {color:'#EEC8C6'}},
-        data:[],
-        itemStyle: {normal: {
-            label: {
-                show: true,
-                formatter: function(p) {
-                  return p.value > 0 ? (p.value) : '';
-                }
-              }
-            }},
-        smooth: true
-      },
-      {
-        name:'自营店',
-        type:'line',
-        areaStyle: {normal: {color:'#3E5361'}},
-        data:[],
-        itemStyle: {
-        	normal: {
-                label: {
-                  show: true,
-                  formatter: function(p) {
-                    return p.value > 0 ? (p.value) : '';
-                  }
-                }
-              }
-        },
-        smooth: true
-      },
-      {
-        name:'合作店',
-        type:'line',
-        areaStyle: {normal: {color:'#91BDC2'}},
-        data:[],
-        itemStyle: {
-        	normal: {
-                label: {
-                  show: true,
-                  formatter: function(p) {
-                    return p.value > 0 ? (p.value) : '';
-                  }
-                }
-              }
-        },
-        smooth: true
-      }
-    ]
-  };
-
-  //已上会通过数量、累计签约数量
-  var xData = function() {
-    var data = [];
-    for (var i = 1; i < 13; i++) {
-      data.push(i + "月份");
-    }
-    return data;
-  }();
-
-  option4 = {
-    title: {
-      text: '城市公司选址动态',
-      textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
-    },
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        type: 'shadow',
-        textStyle: {
-          color: '#fff'
-        }
-      },
-    },
-    grid: {
-      borderWidth: 0,
-      top: 70,
-      bottom: 42,
-      textStyle: {
-        color: '#fff'
-      }
-    },
-    legend: {
-      top: '8%',
-      right: '5%',
-      textStyle: {
-        color: '#90979c',
-      },
-      data: ['已上会通过数量','累计签约数量']
-    },
-    calculable: true,
-    xAxis: [{
-      type: 'category',
-      axisLine: {
-        lineStyle: {
-          color: '#90979c'
-        }
-      },
-      splitLine: {
-        show: false
-      },
-      axisTick: {
-        show: false
-      },
-      splitArea: {
-        show: false
-      },
-      axisLabel: {
-        interval: 0,
-      },
-      data: [],
-    }],
-    yAxis: [{
-      type: 'value',
-      splitLine: {
-        show: false
-      },
-      axisLine: {
-        lineStyle: {
-          color: '#90979c'
-        }
-      },
-      axisTick: {
-        show: false
-      },
-      axisLabel: {
-        interval: 0,
-      },
-      splitArea: {
-        show: false
-      },
-
-    }],
-//     dataZoom: [
-//              /*   {
-//       show: true,
-//       height: 20,
-//       xAxisIndex: [0],
-//       bottom: 20,
-//       start: 20,
-//       end: 100,
-
-//     },  */
-//     {
-//       type: 'inside',
-//       show: true,
-//       height: 15,
-//       start: 1,
-//       end: 35
-//     }],
-    series: [{
-      name: '已上会通过数量',
-      type: 'bar',
-      stack: '总量',
-      barMaxWidth: 35,
-      barGap: '10%',
-      itemStyle: {
-        normal: {
-          color: '#5b9bd5',
-          label: {
-            show: true,
-            textStyle: {
-              color: '#000'
-            },
-            position: 'insideTop',
-            formatter: function(p) {
-              return p.value > 0 ? (p.value) : '';
-            }
-          }
-        }
-      },
-      data: [],
-    },
-      {
-        name: '累计签约数量',
-        type: 'bar',
-        stack: '总量',
-        itemStyle: {
-          normal: {
-            color: '#ed7d31',
-            barBorderRadius: 0,
-            label: {
-              show: true,
-              position: 'top',
-              formatter: function(p) {
-                return p.value > 0 ? (p.value) : '';
-              }
-            }
-          }
-        },
-        data: []
-      }
-    ]
-  }
-
-  //近六周的选址签约数量
-   var title = "近六周的选址签约数量";
-  /* var legendData= ['投诉量','解决量','投诉解决率'];
-  var serieData = [];
-  var metaDate = [
-    [120, 140, 100, 120, 300, 230, 130, 170,140, 120, 300, 230],
-    [200, 120, 300, 200, 170, 300, 200, 180,200, 190, 300, 200],
-    [100,200, 140, 300, 200, 180, 100, 300, 230, 130, 100 ,300,]
-  ] */
-  /* for(var v=0; v < legendData.length ; v++){
-    var serie = {
-      name:legendData[v],
-      type: 'line',
-      symbol:"circle",
-      symbolSize:10,
-      data: metaDate[v]
-    };
-    serieData.push(serie)
-  } */
-  //var colors = ["#036BC8","#4A95FF","#5EBEFC","#2EF7F3","#FFFFFF"];
-  var option5 = {
-    title : {text: title,textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
-    legend: {
-      show:true,left:"right",data:[],y:"8%",
-      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
-    },
-    //color:colors,
-    grid: {left: '2%',top:"20%",bottom: "7%",right:"5%",containLabel: true},
-    tooltip : { trigger: 'axis',axisPointer : { type : 'shadow'}},
-    xAxis: [
-      {
-        type: 'category',
-        axisLine: { show: true,lineStyle:{ color:'#6173A3' }},
-        axisLabel:{interval:1,textStyle:{color:'#9ea7c4',fontSize:12} },
-        axisTick : {show: false},
-        data:[],
-      },
-    ],
-    yAxis: [
-      {
-        axisTick : {show: false},
-        splitLine: {show:false},
-        axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
-        axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
-      },
-    ],
-    series:[]
-  };
-
-  //统计“筹备中”门店数量
-  option6 = {
-    title : {text: '筹备中门店数量',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
-    color: ['#3398DB'],
-    tooltip : {
-      trigger: 'axis',
-      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-      }
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '5%',
-      top: '20%',
-      containLabel: true
-    },
-    xAxis : [
-      {
-        type : 'category',
-        data : [],
-        axisLine: { show: true,lineStyle:{ color:'#6173A3' }},
-        axisLabel:{interval:0,textStyle:{color:'#9ea7c4',fontSize:12} },
-        axisTick : {show: false},
-      }
-    ],
-    yAxis : [
-      {max:0,
-    	  name:'门店数量',
-        axisTick : {show: false},
-        splitLine: {show:false},
-        axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
-        axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
-      }
-    ],
-    series : [
-      {
-        name:'门店数量',
-        type:'bar',
-        barWidth: '40%',
-        data:[]
-      },
-
-    ],
-    label: {
-      normal: {
-        show: true,
-        position: 'top',
-        formatter: '{c}'
-      }
-    },
-    itemStyle: {
-      normal: {
-
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-          offset: 0,
-          color: 'rgba(17, 168,171, 1)'
-        }, {
-          offset: 1,
-          color: 'rgba(17, 168,171, 0.1)'
-        }]),
-        shadowColor: 'rgba(0, 0, 0, 0.1)',
-        shadowBlur: 10
-      }
-    }
-  };
-  //证照
-  option16 = {
-		    title : {text: '门店证照统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
-		    tooltip: {
-		        trigger: 'axis',
-		        axisPointer: {
-		            type: 'shadow'
-		        }
-		    },
-		    legend: {
-		    	 show:true,left:"right", data: ['门店数量', '双证齐全', '仅营业照', '无证照'],y:"8%",
-		         itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
-		       
-		    },
-		    /* toolbox: {
-		        show: true,
-		        orient: 'vertical',
-		        left: 'right',
-		        top: 'center',
-		        feature: {
-		            mark: {show: true},
-		            dataView: {show: true, readOnly: false},
-		            magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-		            restore: {show: true},
-		            saveAsImage: {show: true}
-		        }
-		    }, */
-		    calculable: true,
-		    xAxis: [
-		        {
-		            type: 'category',
-		            axisTick: {show: true},
-		            data: []
-		        }
-		    ],
-		    yAxis: [
-		        {
-		            type: 'value'
-		        }
-		    ],
-		    series: [
-		        {
-		            name: '门店数量',
-		            type: 'bar',
-		            barGap: 0,
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
-		            data: []
-		        },
-		        {
-		            name: '双证齐全',
-		            type: 'bar',
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
-		            data: []
-		        },
-		        {
-		            name: '仅营业照',
-		            type: 'bar',
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
-		            data: []
-		        },
-		        {
-		            name: '无证照',
-		            type: 'bar',
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
-		            data: []
-		        }
-		    ]
-		};
-
-  //人员动态
-  option7 = {
-    title: {
-      text: '近六周人员动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
-    },
-    tooltip: {trigger: 'axis'},
-    legend: {
-      data:['离职数量','入职数量'],left:"right",y:"8%",
-      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
-    },
-    grid: {
-      left: '3%',
-      right: '5.6%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [{
-      type: 'category',
-      boundaryGap: false,
-      data: []
-    }],
-    yAxis: 
-    	{
-            axisTick : {show: false},
-            splitLine: {show:false},
-            axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
-            axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
-          },
-    series: [
-      {
-        name:'离职数量',
-        type:'line',
-        data:[],
-        itemStyle: {
-            normal: {
-              label: {
-                show: true,
-                formatter: function(p) {
-                  return p.value > 0 ? (p.value) : '';
-                }
-              }
-            }
-        }
-      },
-      {
-        name:'入职数量',
-        type:'line',
-        data:[],
-        itemStyle: {
-            normal: {
-              label: {
-                show: true,
-                formatter: function(p) {
-                  return p.value > 0 ? (p.value) : '';
-                }
-              }
-            }
-        }
-      }
-    ]
-  };
-	//人员动态：总数
-  option17 = {
-    title: {
-      text: '近六周总人数统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
-    },
-    legend: {
-        data:['总人数'],left:"right",y:"8%",
-        itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
-      },
-      color:["#036BC8"],
-    tooltip: {trigger: 'axis'},
-    grid: {
-      left: '3%',
-      right: '5.6%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [{
-      type: 'category',
-      boundaryGap: false,
-      data: []
-    }],
-    yAxis: {
-      type: 'value',
-      splitLine: {show:false},
-      //interval: 10,
-    },
-    series: [
-      {
-        name:'总人数',
-        type:'line',
-        stack: '总量',
-        data:[],
-        itemStyle: {
-            normal: {
-              label: {
-                show: true,
-                formatter: function(p) {
-                  return p.value > 0 ? (p.value) : '';
-                }
-              }
-            }
-        }
-      },
-    ]
-  };
-
-  //人员编制动态
-  /* option8 = {
-    title: {
-      text: '人员编制动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
-    },
-    tooltip: {trigger: 'axis'},
-    legend: {
-      data: ['线上人员', '门店人员（含店长）', '专员']
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [{
-      type: 'category',
-      data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-    }],
-    yAxis: [{
-      type: 'value',
-      //name: '投诉举报数',
-      axisLabel: {
-        formatter: '{value}'
-      }
-    }],
-    series: [{
-      name: '线上人员',
-      type: 'bar',
-      itemStyle:{
-        normal:{color:'#01949B'},
-      },
-      markPoint : {
-        data : [
-          {type : 'max', name : '最大值'},
-          {type : 'min', name : '最小值'}
-        ]
-      },
-       //markLine : {
-        //data : [
-         // {type : 'average', name : '平均值'}
-        //]
-      },
-      data: [2031, 1793, 3640, 2593, 4377,3201, 2275, 3289, 3356,2859,4244,3945]
-    }, {
-      name: '门店人员（含店长）',
-      type: 'bar',
-      itemStyle:{
-        normal:{color:'#EBA954'},
-      },
-      markPoint : {
-        data : [
-          {type : 'max', name : '最大值'},
-          {type : 'min', name : '最小值'}
-        ]
-      },
-      //markLine : {
-       // data : [
-        //  {type : 'average', name : '平均值'}
-        //]
-      //},
-      data: [1043, 1456, 1900, 1200, 2100,1870, 980, 1569, 1130, 1490,2300, 2210]
-    }, {
-      name: '专员',
-      type: 'bar',
-      itemStyle:{
-        normal:{color:'#C23531'},
-      },
-      markPoint : {
-        data : [
-          {type : 'max', name : '最大值'},
-          {type : 'min', name : '最小值'}
-        ]
-      },
-      // markLine : {
-      //  data : [
-        //  {type : 'average', name : '平均值'}
-       // ]
-      //},
-      data: [787, 571, 999, 341, 231,812, 735, 231,322,712,1230, 870]
-    }]
-  }; */
-
-//18年门店拓展进度
-  option12 = {
-    title: {
-      text: '近六周门店拓展进度',
-      textAlign: 'left',
-      textStyle:{fontSize:"16",fontWeight:"normal"}
-    },
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {
-        lineStyle: {
-          color: '#ddd'
-        }
-      },
-      /* textStyle: {
-        color: '#7588E4',
-      }, */
-      extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
-    },
-    legend: {
-      right: '3%',
-      data: ['自营店','合作店']
-    },
-    grid: {
-      left: '2%',
-      right: '3.5%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [{
-      type: 'category',
-      //data: ['00:00','2:00','4:00','6:00','8:00','10:00','12:00','14:00','16:00','18:00','20:00',"22:00"],
-      data:[],
-      boundaryGap: false,
-      splitLine: {
-        show: true,
-        interval: 'auto',
-        lineStyle: {color: '#D4DFF5'}
-      },
-      axisTick: {show: false},
-      axisLine: {lineStyle: {color: '#609ee9'}},
-      axisLabel: {textStyle: {fontSize: 14}}
-    }],
-    yAxis: [{
-      type: 'value',
-      name: '门店数量',
-      splitLine: {lineStyle: {color: ['#D4DFF5']}},
-      axisTick: {show: false},
-      axisLine: {lineStyle: {color: '#609ee9'}},
-      axisLabel: {textStyle: {fontSize: 14}}
-      
-    }],
-    series: [{
-      name: '自营店',
-      type: 'line',
-      smooth: true,
-      showSymbol: false,
-      symbol: 'circle',
-      symbolSize: 6,
-      data: [],
-      areaStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: 'rgba(199, 237, 250,0.5)'
-          }, {
-            offset: 1,
-            color: 'rgba(199, 237, 250,0.2)'
-          }], false)
-        }
-      },
-      itemStyle: {
-        normal: {
-          label: {
-            show: true,
-            position: 'top'
-          },
-          color: '#f7b851'
-        }
-      },
-      lineStyle: {
-        normal: {width: 3}
-      }
-    }, {
-      name: '合作店',
-      type: 'line',
-      smooth: true,
-      showSymbol: false,
-      symbol: 'circle',
-      symbolSize: 6,
-      data: [],
-      areaStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-            offset: 0,
-            color: 'rgba(216, 244, 247,1)'
-          }, {
-            offset: 1,
-            color: 'rgba(216, 244, 247,1)'
-          }], false)
-        }
-      },
-      itemStyle: {
-        normal: {
-        	label: {
-                show: true,
-                position: 'top'
-              },
-          color: '#58c8da'
-        }
-      },
-      lineStyle: {
-        normal: {width: 3}
-      }
-    }]
-  };
-
-  //18年自营店拓展进度
-  option13 = {
-    title: {
-      text: '18年自营店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
-    },
-    color:["#f00","#61a0a8","#2f4554"],
-    tooltip: {
-      trigger: 'axis'
-    },
-    grid: {
-      left: '1%',
-      right: '2%',
-      bottom: '3%',
-      containLabel: true
-    },
-    legend: {
-      right:'0',
-      data: ['达标率', '已完成', '任务目标']
-    },
-    xAxis: [{
-      type: 'category',
-      axisTick: {
-        alignWithLabel: true
-      },
-      data:[],
-      //data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
-    }],
-    yAxis: [{
-      type: 'value',
-      name: '门店数量',
-      min: 0,
-      position: 'left',
-      axisLabel: {
-        formatter: '{value} '
-      },
-      splitLine: {
-          show: false
-      }
-    }, {
-      type: 'value',
-      name: '百分比',
-      min: 0,
-      position: 'right',
-      axisLabel: {
-        formatter: '{value} '
-      },
-      splitLine: {
-          show: false
-      }
-    }],
-    series: [{
-      name: '达标率',
-      type: 'line',
-      label: {
-        normal: {
-          show: true,
-          position: 'top',
-        }
-      },
-      yAxisIndex: 1,
-      lineStyle: {
-        normal: {
-          width: 3,
-          shadowColor: 'rgba(0,0,0,0.4)',
-          shadowBlur: 10,
-          shadowOffsetY: 10
-        }
-      },
-      itemStyle: {
-          normal:{
-            label: {
-              show: true,
-              position: 'top',
-              formatter: '{c}% ',
-            },
-          }
-
-        },
-      data: []
-    }, {
-        name: '任务目标',
-        type: 'bar',
-        stack: "总量",
-        yAxisIndex: 0,
-        label: {
-          normal: {
-            show: true,
-            position: 'insideTop'
-          }
-        },
-        data: []
-      },
-      {
-      name: '已完成',
-      type: 'bar',
-      stack: "总量",
-      yAxisIndex: 0,
-      label: {
-    	 
-        normal: {/* 
-        	textStyle: {
-                color: '#f00',
-               	distance:"1px"
-              }, */
-              position: 'top',
-          show: true
-        }
-      },
-      data: []
-    }]
-  };
-
-  //18年合作店拓展进度
-  option14 = {
-    title: {
-      text: '18年合作店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
-    },
-    color:["#f00","#61a0a8","#2f4554"],
-    tooltip: {trigger: 'axis'},
-    grid: {
-      left: '1%',
-      right: '2%',
-      bottom: '3%',
-      containLabel: true
-    },
-    legend: {
-      right:'0',
-      data: ['达标率', '已完成', '任务目标']
-    },
-    xAxis: [{
-      type: 'category',
-      axisTick: {
-        alignWithLabel: true
-      },
-      data:[]
-      //data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
-    }],
-    yAxis: [{
-      type: 'value',
-      name: '门店数量',
-      min: 0,
-      position: 'left',
-      axisLabel: {
-        formatter: '{value} '
-      },
-      splitLine: {
-          show: false
-      }
-    }, {
-      type: 'value',
-      name: '百分比',
-      min: 0,
-      position: 'right',
-      axisLabel: {
-        formatter: '{value} '
-      },
-      splitLine: {
-          show: false
-      }
-    }],
-    series: [{
-      name: '达标率',
-      type: 'line',
-      label: {
-        normal: {
-          show: true,
-          position: 'top',
-        }
-      },
-      lineStyle: {
-        normal: {
-          width: 3,
-          shadowColor: 'rgba(0,0,0,0.4)',
-          shadowBlur: 10,
-          shadowOffsetY: 10
-        }
-      },
-      yAxisIndex: 1,
-      itemStyle: {
-          normal:{
-            label: {
-              show: true,
-              position: 'top',
-              formatter: '{c}% ',
-            },
-          }
-
-        },
-      data: []
-    }, {
-      name: '任务目标',
-      stack: "总量",
-      type: 'bar',
-      yAxisIndex: 0,
-      label: {
-        normal: {
-          show: true,
-          position: 'insideTop'
-        }
-      },
-      itemStyle:{normal:{}},
-      data: []
-    }, {
-        name: '已完成',
-        stack: "总量",
-        type: 'bar',
-        yAxisIndex: 0,
-        label: {
-          normal: {
-            show: true,
-            position: 'top'
-          }
-        },
-        data: []
-      }]
-  };
-
-  myChart1.setOption(option1);
-  myChart2.setOption(option2);
-  myChart3.setOption(option3);
-  myChart4.setOption(option4);
-  myChart5.setOption(option5);
-  myChart6.setOption(option6);
-  myChart16.setOption(option16);
-  myChart7.setOption(option7);
-  myChart17.setOption(option17);
- // myChart8.setOption(option8);
-  myChart9.setOption(option9);
-  myChart10.setOption(option10);
-  myChart11.setOption(option11);
-  myChart12.setOption(option12);
-  myChart13.setOption(option13);
-  myChart14.setOption(option14);
-  myChart15.setOption(option15);
+autodivheight();
+function autodivheight(){ //函数：获取尺寸
+  //获取浏览器窗口高度
+  var winHeight=0;
+  if (window.innerHeight)
+    winHeight = window.innerHeight;
+  else if ((document.body) && (document.body.clientHeight))
+    winHeight = document.body.clientHeight;
+  //通过深入Document内部对body进行检测，获取浏览器窗口高度
+  if (document.documentElement && document.documentElement.clientHeight)
+    winHeight = document.documentElement.clientHeight;
+  //DIV高度为浏览器窗口的高度
+  //document.getElementById("test").style.height= winHeight +"px";
+  //DIV高度为浏览器窗口高度的一半
+  document.getElementById("pf-operate").style.maxHeight= winHeight - 200 +"px";
+}
+window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
   //pdf下载
   $(document).ready(function () {
       
@@ -3315,7 +1605,117 @@
 </script>
 
 <script type="text/javascript">
-var citycover2017= new Array();//2017年覆盖城市
+$(function(){
+
+    $(".pfedit").click(function(){
+      $(this).parents("body").css("overflow","hidden");
+      var numArr1 = [];
+      $('#pf-fre1 tr td').each(function(i){
+        numArr1.push($(this).text());
+      });
+      $(this).parents().children(".pf-frequency").show();
+      $('#pf-fre2 tr input').each(function(i){
+        $(this).val(numArr1[i]);
+      });
+    });
+    $(".pf-frequency .btn-default").click(function(){
+      $(this).parents(".pf-frequency").hide();
+      $(this).parents("body").css("overflow","auto");
+    });
+    $(".pf-frequency .btn-warning").click(function(){
+  	 	var updateNumArr1=[];
+       $('#pf-fre2 tr input').each(function(i){
+         updateNumArr1.push($(this).val());
+       });
+       $('#pf-fre1 tr td').each(function(i){
+           $(this).text(updateNumArr1[i]);
+       });
+      $(this).parents(".pf-frequency").hide();
+      $(this).parents("body").css("overflow","auto");
+    });
+    
+    $('#pf-fre2 tr input').keyup(function(i){
+    	var sum=0;
+    	var lastInput = $(this).parent().parent().find("input").last();
+    	$($(this).parent().parent()).find("input").not(lastInput).each(function(i,t){
+    		
+    		 sum+= isNaN(parseInt($(t).val())) ? 0 : parseInt($(t).val());
+    	})
+    	
+    	$(lastInput).val(sum);
+     });
+     
+ 
+    	
+    
+
+      $(".pfoperate").click(function(){
+        $(this).parents("body").css("overflow","hidden");
+        var numArr2=[];
+        var numArr3=[];
+        $('#pfoperate1 tr td').each(function(i){
+        	numArr2.push($(this).text());
+        });
+        $('#pfoperate1_1 tr td').each(function(i){
+        	numArr3.push($(this).text());
+        });
+        $(this).parents().children(".pf-operate").show();
+        $('#pfoperate2 tr input').each(function(i){
+            $(this).val(numArr2[i]);
+        });
+        $('#pfoperate2_2 tr input').each(function(i){
+            $(this).val(numArr3[i]);
+        });
+        
+      });
+      $(".pf-operate .btn-default").click(function(){
+        $(this).parents(".pf-operate").hide();
+        $(this).parents("body").css("overflow","auto");
+      });
+      $(".pf-operate .btn-warning").click(function(){
+    	  var updateNumArr2=[];
+    	  var updateNumArr3=[];
+    	  $('#pfoperate2 tr input').each(function(i){
+    		  updateNumArr2.push($(this).val());
+            });
+            $('#pfoperate1 tr td').each(function(i){
+                $(this).text(updateNumArr2[i]);
+            });
+          $('#pfoperate2_2 tr input').each(function(i){
+        	  updateNumArr3.push($(this).val());
+          });
+          $('#pfoperate1_1 tr td').each(function(i){
+              $(this).text(updateNumArr3[i]);
+          });
+        $(this).parents(".pf-operate").hide();
+        $(this).parents("body").css("overflow","auto");
+      });
+      $('#pfoperate2 tr input').keyup(function(i){
+    	var sum=0;
+    	var lastTD = $(this).parent().parent().find("td").last();
+      	var lastTD_index = $(lastTD).index();
+      	
+      	$($(this).parent().parent()).find("input:lt("+(lastTD_index-2)+")").each(function(i,t){
+      		 sum+=parseInt($(t).val());
+      	})
+      	
+      	$($(lastTD).prev()).find("input").val(sum);
+      });
+      $('#pfoperate2_2 tr input').keyup(function(i){
+   	  	var sum=0;
+     		var lastTD = $(this).parent().parent().find("td").last();
+       	var lastTD_index = $(lastTD).index();
+       	
+       	$($(this).parent().parent()).find("input:lt("+(lastTD_index-2)+")").each(function(i,t){
+       		 sum+=parseInt($(t).val());
+       	})
+       	
+       	$($(lastTD).prev()).find("input").val(sum);
+      });
+
+
+  });
+/* var citycover2017= new Array();//2017年覆盖城市
 var citycover2018=new Array();//2018年覆盖城市
 $(function(){
 	getCityNet();
@@ -3335,7 +1735,6 @@ function getCityNet(){
 		            function(data, textStatus, XMLHttpRequest) {
 		                if (data.result) {
 		                    var resultJson= JSON.parse(data.data);
-		                    console.log(resultJson);
 		                    $.each(eval(resultJson['province']), function (idx, val) {
 			    				var object = new Object();
 			    				object['name'] = val['name'].replace("市","").replace("省","").replace("自治区","");
@@ -3404,7 +1803,6 @@ function findStoreNetDate(){
 		if (data.result) {
 			var jsonData = $.fromJSON(data.data);
 			var ziyings=jsonData.ziyingdian;
-			console.log(ziyings);
 			if(ziyings.length>0){
 				var xdataArray = ['生活中心店','街道月店','经营星店','校园店','独立微超店','药店','前置仓','数码连锁店','超市连锁店','广店营业厅'];
 				var legendArray = new Array();
@@ -3657,13 +2055,13 @@ function oneyearorsixweek(){
 	
 	
 	
-}
+} */
 
 </script>
 <script type="text/javascript">
 
 	
-	var storeDevelopmentProgress = function(){
+	/* var storeDevelopmentProgress = function(){
 		
 		var dateArray = new Array();
 		var citynameArray = new Array();
@@ -3678,7 +2076,6 @@ function oneyearorsixweek(){
 		doManager("storeManager","finyStoreCountOfCity",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
-				console.log(jsonData);
 				//六周时间轴
 				var dateArray = new Array();
 				var dateAndWeek = jsonData.dateAndWeek;
@@ -3857,7 +2254,6 @@ function oneyearorsixweek(){
 		doManager("storexpandManager","progressOfNetworkConstruction",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
-				console.log(jsonData);
 				var contractAndthroughByYear = jsonData.contractAndthroughByYear;
 				var cityArray = new Array();
 				var contractQuantityArray = new Array();
@@ -3971,12 +2367,12 @@ function oneyearorsixweek(){
 						}
 					}
 					$("#storecard").append(cardString);
-					 option16.series[0].data=storeCountArray;
-					 option16.series[1].data=double_cardArray;
-					 option16.series[2].data=business_licenseArray;
-					 option16.series[3].data=no_cardArray; 
-					option16.xAxis[0]["data"] = cardCitynameArray;
-					myChart16.setOption(option16);
+					 optionCard.series[0].data=storeCountArray;
+					 optionCard.series[1].data=double_cardArray;
+					 optionCard.series[2].data=business_licenseArray;
+					 optionCard.series[3].data=no_cardArray; 
+					optionCard.xAxis[0]["data"] = cardCitynameArray;
+					myChartCard.setOption(optionCard);
 				}
 			}
 		});
@@ -3994,7 +2390,7 @@ function oneyearorsixweek(){
 					dateArray.push(datetimes);
 				}
 				option7.xAxis[0]["data"] = dateArray;
-				option17.xAxis[0]["data"] = dateArray;
+				optionEmp.xAxis[0]["data"] = dateArray;
 				var queryHumanTotal = jsonData.queryHumanTotal;
 				var humanTotalArray = new Array();
 				if(queryHumanTotal.length >0){
@@ -4005,9 +2401,9 @@ function oneyearorsixweek(){
 					humanTotalArray.push(queryHumanTotal[0].week5);
 					humanTotalArray.push(queryHumanTotal[0].week6);
 				}
-				option17.series[0].data=humanTotalArray;
-				option17.yAxis.min = (queryHumanTotal[0].week1*1).toFixed(0);
-				myChart17.setOption(option17);
+				optionEmp.series[0].data=humanTotalArray;
+				optionEmp.yAxis.min = (queryHumanTotal[0].week1*1).toFixed(0);
+				myChartEmp.setOption(optionEmp);
 				
 				var queryLeaveHuman = jsonData.queryLeaveHuman;
 				var leaveHumanArray = [0,0,0,0,0,0];
@@ -4084,11 +2480,55 @@ function oneyearorsixweek(){
 						'<td>'+guoanxia+'</td><td>'+fuwu+'</td><td>'+zonghe+'</td><td  class="text-red">'+personCount+'</td><td>'+avgPerson.toFixed(2)+'</td><td>'+topostcount+'</td><td>'+leavecount+'</td></tr>';
 					}
 					$("#weekcount").append(stringdata);
-					
 				}
 			}
 		});
-	}
+	} */
+	
+	/* var customerInfo = function(){
+		var reqestParameter = {
+	        }
+		//7天
+        doManager("dynamicManager", "getWeekCustomerOrderRate",[reqestParameter],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var resultJson = JSON.parse(data.data);
+                    console.log(resultJson);
+                    var data = [];
+                  	var data1 = [];
+                    var data2 = [];
+                    var data3 = [];
+                    $.each(eval(resultJson['lst_data']), function (idx, val) {
+                    	var rate = "";
+                    	var str = "";
+                    	if(parseInt(val['pay_cus_count'])==0){
+                    		rate = 0;
+                    	}else{
+                    		str = (((parseInt(val['pay_cus_count'])-parseInt(val['new_cus_count']))/parseInt(val['pay_cus_count'])*100)+'');
+                    		rate = str.substring(0,str.lastIndexOf(".")+2);
+                    	}
+                    	data.push(val['week_date']);
+                    	data1.push(val['new_cus_count']);
+                		data2.push(val['pay_cus_count']);
+                		data3.push(rate);
+                    });
+                    option23.xAxis.data = data.reverse();
+                    option23.series[0].data = data3.reverse();
+                    option23.series[1].data = data1.reverse();
+                    option23.series[2].data = data2.reverse();
+                	//customerNewChartOption.title.text="近7天客流趋势";
+                	option23.yAxis[1].min = 0;
+                	if(Math.max.apply(null, data3)<10||data3.length==0){
+                		option23.yAxis[1].max = 10;
+                	}else{
+                		option23.yAxis[1].max = parseInt(Math.max.apply(null, data3)/0.7);
+                	}
+                	myChart23.setOption(option23);
+                    
+                }
+         });
+        //console.log('request turnover customer data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
+     } */
 </script>
 </body>
 </html>

@@ -10,7 +10,7 @@ import com.cnpc.pms.messageModel.entity.Message;
 import com.cnpc.pms.messageModel.entity.MessageSendUtil;
 import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.entity.NoticeReciver;
-import com.cnpc.pms.notice.manager.NoticeReciverMananger;
+import com.cnpc.pms.notice.manager.NoticeReciverManager;
 import com.cnpc.pms.personal.entity.SendMessage;
 import com.cnpc.pms.personal.manager.SendMessageManager;
 
@@ -29,7 +29,7 @@ public class SendNotice implements Runnable {
 	@Override
 	public void run() {
 		
-		NoticeReciverMananger nrm = (NoticeReciverMananger)SpringHelper.getBean("noticeReciverMananger");
+		NoticeReciverManager nrm = (NoticeReciverManager)SpringHelper.getBean("noticeReciverManager");
 		InterManager interManager = (InterManager)SpringHelper.getBean("interManager");
 		SendMessageManager sendMessageManager = (SendMessageManager)SpringHelper.getBean("sendMessageManager");
 		try {

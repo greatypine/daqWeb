@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>门店首页</title>
+  <title>运营经理首页</title>
   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
@@ -307,91 +307,6 @@
     </nav>
 </header>
 
-  
-  
-  
-  
-  <!-- <header class="main-header">
-     <nav class="navbar navbar-static-top">
-        <div class="pull-left">
- 		<section class="sidebar logo-lg clearfix no-padding">
-            <ul class="sidebar-menu">
-              <li id="countryFirstPage_img" style="display:none"><a href="javascript:goCountry();" class="h2"> <img src="dist/img/logo1.png"> <img src="dist/img/title.png"></a></li>
-              <li id="storeFirstPage_img" ><a href="javascript:location.reload();" class="h2"> <img src="dist/img/logo1.png"> <img src="dist/img/title.png"></a></li>
-		      <li class="nav-mark" id="countryFirstPage_a" style="display:none"><a href="javascript:goCountry();"></a> </li>
-		      <li class="nav-mark" id="storeFirstPage_a"><a href="javascript:location.reload();"></a> </li>
-              <li class="treeview">
-                <a href="#">
-                  <span onclick="goStatistics()">数据统计</span>
-                </a>
-              </li>
-              
-              <li class="treeview">
-                <a href="#">
-                  <span>数据模型</span>
-                  <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="treeview-menu nav_dropdown">
-                 	 <li><a href="#"><span>订单模型</span>&nbsp;<i class="fa fa-angle-right pull-right"></i></a>
-		                <ul class="treeview-menu nav_dropm">
-		                <li><a href="javascript:goToAbnormalOrder()">异常订单</a> </li>
-		                <li><a href="javascript:goToPublicOrder()">公海订单</a> </li>
-		                </ul>
-		              </li>
-		              <li><a href="#"><span>地图模型</span>&nbsp;<i class="fa fa-angle-right pull-right"></i></a>
-		                <ul class="treeview-menu nav_dropm">
-			                <li><a href="javascript:goToTinyArea()">混片区域分布</a> </li>
-		                </ul>
-		              </li>
-                </ul>
-                </li>
-              <li><a href="#"><span>数据档案</span>&nbsp;<i class="fa fa-angle-down"></i></a>
-                <ul class="treeview-menu nav_dropdown">
-                  <li><a href="javascript:searchData()">订单档案</a> </li>
-                </ul>
-              </li>
-            </ul>
-          </section>
-        </div>
-
-        <div class="navbar-custom-menu">
-          <ul class="nav navbar-nav">
-            <li ><a href="../crm/loginplatform.html">数据平台首页</a> </li>
-            <li class="dropdown user user-menu" id="login_logout" style="display:block">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
-                <span class="hidden-xs">载入中...</span>
-              </a>
-              <ul class="dropdown-menu">
-                <li class="user-header">
-                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
-                  <p><strong ><span id="card_name">载入中...</span></strong></p>
-                  <p><span id="card_no">载入中...</span></p>
-                  <p ><span id="store_name">载入中...</span></p> 
-                </li>
-                <li class="user-header">
-                </li>
-                <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
-                  </div>
-                  <div class="pull-right">
-                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
-                  </div>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-    </nav>
-  </header> -->
-  
-  
-  
-  
-  
-  
-  
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" >
@@ -547,8 +462,7 @@
 <script type="text/javascript">
 	<!-------------------------传递的参数	开始--------------------------->
 	var storeId = decode64(getUrlParamByKey("s"));//门店ID
-	
-	var STORE_ID=storeId; 
+
 	var cityId_ecode = getUrlParamByKey("c");//城市ID
 	var proId_ecode = getUrlParamByKey("p");//省ID
 	var cityName_ecode = decode64(getUrlParamByKey("cn"));//省ID
@@ -730,17 +644,7 @@
 		 
 		var store_id=selectobj.value;
 		STORE_ID = store_id;
-		//更改店长用户的 store_id
-		var url = "../dispatcher.action";
-		var data = new PMSRequestObject("userManager", "updateUserStoreId",[store_id,EMPLOYEE_NO]);
-		$$.ajax(url, "requestString=" + data.toJsonString(), function(datas,
-				textStatus, XMLHttpRequest) {
-			if (datas.result) {
-				refreshView();
-			}else{
-				$$.showMessage("系统信息", "切换失败!");
-			}
-		});
+		window.location.href="operationManager.html?s="+encode64(store_id);
 	}
    
    //重新切换门店后刷新页面数据
@@ -775,7 +679,7 @@
  				if (data.result) {
  					var store = JSON.parse(data.data);
  					$("#store_no").html(store.storeno);
- 					$("#store_name_left_top").html(store.name);
+ 					
  					$("#pro_country_store").html(store.name);
  					currentStore = store;
  				}
@@ -791,115 +695,13 @@ var totalcount = 100;//默认5分钟
 
 var EMPLOYEE_NO="";//当前门店店长员工号
 var EMPLOYEE_ID;//当前门店店长ID
-function initCurruser(){
-	    //var fromStore = decode64(from_store);
-		if(targets!=null&&targets=="0"){//由总部跳入
-// 			$("#storeFirstPage_a").hide();
-// 			$("#storeFirstPage_img").hide();
-// 			$("#countryFirstPage_img").show();
-// 			$("#countryFirstPage_a").children("a").html("总部首页");
-// 			$("#countryFirstPage_a").show();
-			$(".crumbs").show();
-			$("#pro_country").html(cityName_ecode);
-			$("#quanguo_a").show();
-			$("#quanguo_span").show();
-			$("#quanguo_span").css("color","#f6f6f6")
-			//$("#login_logout").show();
-			$('span[class="hidden-xs"]').html(ln);
-			$("#card_name").html(ln);
-			$("#card_no").html("");
-			$("#store_name").html("");
-			initStore();
-			doManager("StoreManager", "selectStoreKeeperInfoByStoreId",[STORE_ID],function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						 var storeKeeperList = JSON.parse(data.data).storeKeeper;
-						 if(storeKeeperList!=null&&storeKeeperList.length>0){
-							 var storeKeeper = storeKeeperList[0];
-// 							 $("#employee_no").html(storeKeeper.employeeId);
-// 	  						 $('span[class="hidden-xs"]').html(storeKeeper.name);
-// 	  						 $("#card_name").html(storeKeeper.name);
-	  						 if(storeKeeper.employeeId==null||storeKeeper.employeeId=="null"){
-	  							EMPLOYEE_NO = "";
-	  							
-	  						 }else{
-	  							EMPLOYEE_NO = storeKeeper.employeeId;
-	  						 }
-	  						 EMPLOYEE_ID = storeKeeper.id;
-	  						 $("#more_storeDiv").empty();
-	  						 var storeHtml='<select id="allStore" onclick="siwtchStore(event)" onchange="updatestoreid(this)" style="color:#101010" ></select>';
-	  						 $("#more_storeDiv").append(storeHtml);
-	  						 for(var i=0;i<storeKeeperList.length;i++){
-	  							var option = '<option value="'+storeKeeperList[i].store_id+'">'+storeKeeperList[i].storeName+'</option>'; 
-	  							$("#allStore").append(option);
-	  						 }
-	  						 
-							 var store_more = "<span style='font-size:12px'>&nbsp;&nbsp;<span   style='color:#3c8dbc;cursor:pointer' onclick='showMoreStore()'>切换</span></span>"
-							 $("#store_name_left_top").append(store_more);
-							 $("#allStore").val(STORE_ID);
-	  						 showStoreAllInfo();//展示门店信息
-						 }
-					}
-			},false);
-			
-	    }else if(targets!=null&&targets=="1"){//城市跳入
-	    	$(".crumbs").show();
-			$("#pro_country").html(cityName_ecode);
-			
-// 			$("#storeFirstPage_a").hide();
-// 			$("#storeFirstPage_img").hide();
-// 			$("#countryFirstPage_img").show();
-// 			$("#countryFirstPage_a").children("a").html("城市首页");
-// 			$("#countryFirstPage_a").show();
-			$(".crumbs").show();
-			$("#pro_country").html(cityName_ecode);
-			
-			//$("#login_logout").show();
-			$('span[class="hidden-xs"]').html(ln);
-			$("#card_name").html(ln);
-			$("#card_no").html("");
-			$("#store_name").html("");
-			initStore();
-			doManager("StoreManager", "selectStoreKeeperInfoByStoreId",[STORE_ID],function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						 var storeKeeperList = JSON.parse(data.data).storeKeeper;
-						 if(storeKeeperList!=null&&storeKeeperList.length>0){
-							 var storeKeeper = storeKeeperList[0];
-// 							 $("#employee_no").html(storeKeeper.employeeId);
-// 	  						 $('span[class="hidden-xs"]').html(storeKeeper.name);
-// 	  						 $("#card_name").html(storeKeeper.name);
-	  						 if(storeKeeper.employeeId==null||storeKeeper.employeeId=="null"){
-	  							EMPLOYEE_NO = "";
-	  							
-	  						 }else{
-	  							EMPLOYEE_NO = storeKeeper.employeeId;
-	  						 }
-	  						 EMPLOYEE_ID = storeKeeper.id;
-	  						 $("#more_storeDiv").empty();
-	  						 var storeHtml='<select id="allStore" onclick="siwtchStore(event)" onchange="updatestoreid(this)" style="color:#101010" ></select>';
-	  						 $("#more_storeDiv").append(storeHtml);
-	  						 for(var i=0;i<storeKeeperList.length;i++){
-	  							var option = '<option value="'+storeKeeperList[i].store_id+'">'+storeKeeperList[i].storeName+'</option>'; 
-	  							$("#allStore").append(option);
-	  						 }
-	  						 
-							 var store_more = "<span style='font-size:12px'>&nbsp;&nbsp;<span   style='color:#3c8dbc;cursor:pointer' onclick='showMoreStore()'>切换</span></span>"
-							 $("#store_name_left_top").append(store_more);
-							 $("#allStore").val(STORE_ID);
-	  						 showStoreAllInfo();//展示门店信息
-						 }
-					}
-			},false);
-	    }else{//门店店长直接登录
-	    	
-			$("#storeFirstPage_a").children("a").html("门店首页");
-	    	//$("#login_logout").show();
+function initCurruser(){	    	
 			doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
 	  					if (data.result) {
 	  						
 	  						 var curr_user = JSON.parse(data.data);
-	  						 
-	  						 STORE_ID = curr_user.store_id;
-	  						 EMPLOYEE_ID = curr_user.id;
+	  						 getMoreStore(curr_user);//获取更多门店
+	  						
 	  						 initStore();
 	  						 
 	  						 if(curr_user.employeeId==null||curr_user.employeeId=="null"){
@@ -911,17 +713,11 @@ function initCurruser(){
 	  						 $("#employee_no").html(EMPLOYEE_NO);
 	  						 $('span[class="hidden-xs"]').html(curr_user.name);
 	  						 $("#card_name").html(curr_user.name);
-	  						 $("#store_name").html(curr_user.store_name);
-	  						 $("#more_storeDiv").empty();
-	  						 $("#more_storeDiv").append(curr_user.store_name);
-							 var store_more = "<span style='font-size:12px'>&nbsp;&nbsp;<span   style='color:#3c8dbc;cursor:pointer' onclick='showMoreStore()'>切换</span></span>"
-							 $("#store_name_left_top").append(store_more);
 	  						 $("#card_no").html(curr_user.zw+" "+EMPLOYEE_NO);
 	  						 showStoreAllInfo();//展示门店信息
-	   						
 	  					}
 	  			},false);
-	    }
+	    
 		
 		<!------------------------------每日动态营业额	开始---------------------------------->
 		    chonfu();//第一次动态加载每日营业额
@@ -952,7 +748,48 @@ function initCurruser(){
 		
 		<!----------------------------每日动态营业额	结束-------------------------------------->
 	}
-	
+
+//获取更多管辖的门店
+var STORE_ID;
+function getMoreStore(cur_user){
+	  doManager("StoreManager", "getAllTotalOfArea",[cur_user.id,cur_user.id],
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var resultJson= JSON.parse(data.data);
+						var storelist = resultJson.store;
+					    if(storelist!=null&&storelist.length>0){
+					    	$("#more_storeDiv").empty();
+	  						 var storeHtml='<select id="allStore" onclick="siwtchStore(event)" onchange="updatestoreid(this)" style="color:#101010" ></select>';
+	  						 $("#more_storeDiv").append(storeHtml);
+	  						 for(var i=0;i<storelist.length;i++){
+	  							if(storeId!=null&&storeId==storelist[i].store_id){
+	  								var option = '<option value="'+storelist[i].store_id+'" selected>'+storelist[i].name+'</option>'; 
+		  							$("#allStore").append(option);
+		  							STORE_ID = storelist[i].store_id;
+									$("#store_name_left_top").html(storelist[i].name);
+	  							}else{
+	  								var option = '<option value="'+storelist[i].store_id+'" >'+storelist[i].name+'</option>'; 
+		  							$("#allStore").append(option);
+	  							}
+	  							
+	  						 }
+	  						 
+							 var store_more = "<span style='font-size:12px'>&nbsp;&nbsp;<span   style='color:#3c8dbc;cursor:pointer' onclick='showMoreStore()'>切换</span></span>"
+							 if(storeId==null){
+								 STORE_ID = storelist[0].store_id;
+								 $("#store_name_left_top").html(storelist[0].name); 
+							 }
+							 
+							
+							 $("#store_name_left_top").append(store_more);
+					    }
+						 
+					}
+			},false);
+	    
+}
+
+
 //加载展示数据卡数据（若当前日期是当前月的第一天，则显示上月数据）
 function showDataCard(){
 	  $("#process_div").show();
