@@ -15,6 +15,7 @@ public class ChartStatDto {
 	String channelname;
 	String cLabel;
 	String smallBLabel;
+	String maxBLabel;
 	
 	public String getStoreno() {
 		return storeno;
@@ -51,6 +52,12 @@ public class ChartStatDto {
 	}
 	public void setSmallBLabel(String smallBLabel) {
 		this.smallBLabel = smallBLabel;
+	}
+	public String getMaxBLabel() {
+		return maxBLabel;
+	}
+	public void setMaxBLabel(String maxBLabel) {
+		this.maxBLabel = maxBLabel;
 	}
 	
 }

@@ -23,12 +23,10 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
 	   folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
+  <link rel="stylesheet" href="plugins/iCheck/all.css">
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE 9]>
   <script src="IE 9/html5shiv.min.js"></script>
-  <script src="IE 9/respond.min.js"></script>
-  <![endif]-->
+  <script src="IE 9/respond.min.js"></script><![endif]-->
   <style>
   html,body,.skin-blue .wrapper{background-color: #f1f1f1; min-height: 100%;}
   p{margin: 0;}
@@ -128,6 +126,12 @@
                   <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
                   </div>
                 </div>
+                <div class="col-sm-12 form-group no-padding no-margin">
+		          	<label><input type="checkbox" class="minimal-red" id="cbClick" value="cb"><span style="padding-left: 10px;">C端+小B端</span></label>
+		        </div>
+		        <div class="col-sm-12 form-group no-padding no-margin">
+		          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B端</span></label>
+		        </div>
                 <div class="col-sm-12 col-xs-12 text-center no-padding has-error">
 		          <button type="button" class="btn btn-block btn-error btn-sm" id="search-btn-contrast" style="margin: 10px auto 0 auto; font-size: 14px;">加入对比</button>
 		        </div>
@@ -154,7 +158,7 @@
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs no-border">
 <!--               <li class="active"><a href="#revenue-chart" data-toggle="tab">实时</a></li> -->
-              <li class="active"><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">分时</a></li>
+              <li class="active"><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">时</a></li>
               <li><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
               <li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li>
               <li><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li>
@@ -257,6 +261,8 @@ var cityname = decode64(getUrlParamByKey("cn"));//城市名称
 var nameStr1=decode64(getUrlParamByKey("nameStr1"));
 var nameStr2=decode64(getUrlParamByKey("nameStr2"));
 var nameStr3=decode64(getUrlParamByKey("nameStr3"));
+var iCheckStr = decode64(getUrlParamByKey("icheck"));
+var iCheckMaxStr = decode64(getUrlParamByKey("icheckmax"));
 
 //   var myChart1 = echarts.init(document.getElementById('main4'));
 
@@ -912,6 +918,7 @@ var chart4_option;
 <script>
 	var xData_month = [];
 	var yData_month = [];
+	var yData_month_target = [];
 	var xData_month2 = [];
 	var yData_month2 = [];
 	var xData_month3 = [];
@@ -939,7 +946,7 @@ var chart4_option;
 				},
 			},
       legend: {
-        data:['条件1','条件2','条件3'],
+        data:['条件1','条件2','条件3','营业指标'],
         x: 'right'
       },
 			grid: {
@@ -1001,7 +1008,7 @@ var chart4_option;
 				height: '30',
 				xAxisIndex: [0],
 				bottom: '30',
-				start: '10',
+				start: '0',
 				end: '100',
 				handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
 				handleSize: '110%',
@@ -1078,7 +1085,24 @@ var chart4_option;
 	          }
 	        },
 	        data:yData_month3
-	      }
+	      },
+			{
+				name: "营业指标",
+				type: "line",
+				symbolSize:10,
+				symbol:'circle',
+				itemStyle: {
+					normal: {
+	                  color: '#000',
+	                  barBorderRadius: 0,
+	                  lineStyle:{
+	                    width:2,
+	                    type:'dotted'  //'dotted'虚线 'solid'实线
+	                  }
+	                }
+				},
+				data:yData_month_target
+			},
 		]
 		}
 
@@ -1187,16 +1211,44 @@ var chart4_option;
 	  $("#search-btn-contrast").click(function(){
 		  selectionExcute();
 	 });
+	  
+	 //C+小B端iCheck
+	 if(iCheckStr=='cb'){
+		 $('#cbClick').attr("checked","checked");
+	 }
+	 $('#cbClick').on('ifChecked', function(event){ //ifChecked 事件应该在插件初始化之前绑定 
+		 iCheckStr = $(this).val();
+		 selectionExcute();
+	 });
+	 $('#cbClick').on('ifUnchecked', function(event){
+		 iCheckStr = "";
+		 selectionExcute();
+	 }); 
+	 $('#cbClick').iCheck({
+	  	checkboxClass: 'icheckbox_minimal-red'
+	 });
+	 //大B端iCheck
+	 if(iCheckMaxStr=='maxb'){
+		 $('#maxbClick').attr("checked","checked");
+	 }
+	 $('#maxbClick').on('ifChecked', function(event){ //ifChecked 事件应该在插件初始化之前绑定 
+		 iCheckMaxStr = $(this).val();
+		 selectionExcute();
+	 });
+	 $('#maxbClick').on('ifUnchecked', function(event){
+		 iCheckMaxStr = "";
+		 selectionExcute();
+	 }); 
+	 $('#maxbClick').iCheck({
+	  	checkboxClass: 'icheckbox_minimal-red'
+	 });
+	 
 	  $("#contrast").click(function(){
 		  if(shareChartStatDto1==null && shareChartStatDto2==null && shareChartStatDto3==null){
 			  crm_alert(0,"请选择要对比的条件！");
 			  return;
 		  }
-		  chartresize1();
-		  chartresize2();
-		  chartresize3();
-		  chartresize4();
-		  search_manual_k();
+		  excuteChart();
 	 }); 
 	  $("#reset").click(function(){
 		  hourData = [];
@@ -1231,6 +1283,7 @@ var chart4_option;
 		  
 		  xData_month = [];
 		  yData_month = [];
+		  yData_month_target = [];
 		  xData_month2 = [];
 		  yData_month2 = [];
 		  xData_month3 = [];
@@ -1241,6 +1294,7 @@ var chart4_option;
 		  chart6_option.series[1].data=yData_month2;
 // 		  chart6_option.xAxis[2].data=xData_month3;
 		  chart6_option.series[2].data=yData_month3;
+		  chart6_option.series[3].data=yData_month_target;
 		  chart6.setOption(chart6_option);
 		  
 		  shareChartStatDto1=null;
@@ -1455,6 +1509,16 @@ var chart4_option;
 	}
    
 	function getShareParam(){
+		 var cLabel=0;
+		 var smallBLabel=0;
+		 var maxBLabel=0;
+		 if(iCheckStr=='cb') {
+			 cLabel=1;
+			 smallBLabel=1;
+		 }
+		 if(iCheckMaxStr=='maxb') {
+			 maxBLabel=1;
+		 }
 		  var storeno = $("#store_id_manual").val()==""?null:$("#store_id_manual").val();
 		  var cityName = $("#citySelect  option:selected").val();
 		  if(cityName!="" && cityName!=undefined){
@@ -1479,7 +1543,10 @@ var chart4_option;
 				storeno:storeno,
 				cityname:cityName,
 				deptname:deptname,
-				channelname:channelname	
+				channelname:channelname,
+				cLabel:cLabel,
+				maxBLabel:maxBLabel,
+			 	smallBLabel:smallBLabel
 			}
 	}
 	
@@ -1490,6 +1557,37 @@ var chart4_option;
 		var labelName3 = $("#label_manual_third").val();		
 		var nameStrTemp = "";
 		var shareChartStatDtoTemp = getShareParam();
+		if(shareChartStatDtoTemp!=null && iCheckStr==''){
+			shareChartStatDtoTemp.cLabel=0;
+			shareChartStatDtoTemp.smallBLabel=0;
+		}
+		if(shareChartStatDto1!=null){
+			shareChartStatDto1.cLabel=0;
+			shareChartStatDto1.smallBLabel=0;
+		}
+		if(shareChartStatDto2!=null){
+			shareChartStatDto2.cLabel=0;
+			shareChartStatDto2.smallBLabel=0;
+		}
+		if(shareChartStatDto3!=null){
+			shareChartStatDto3.cLabel=0;
+			shareChartStatDto3.smallBLabel=0;
+		}
+		
+		if(shareChartStatDtoTemp!=null && iCheckMaxStr==''){
+			shareChartStatDtoTemp.maxBLabel=0;
+		}
+		if(shareChartStatDto1!=null){
+			shareChartStatDto1.maxBLabel=0;
+		}
+		if(shareChartStatDto2!=null){
+			shareChartStatDto2.cLabel=0;
+			shareChartStatDto2.maxBLabel=0;
+		}
+		if(shareChartStatDto3!=null){
+			shareChartStatDto3.cLabel=0;
+			shareChartStatDto3.maxBLabel=0;
+		}
 		var deptName = shareChartStatDtoTemp.deptname==null?'全部事业群':shareChartStatDtoTemp.deptname;
     	var channelName = shareChartStatDtoTemp.channelname==null?'全部频道':shareChartStatDtoTemp.channelname;
     	var cityName = shareChartStatDtoTemp.cityname==null?'全部城市':shareChartStatDtoTemp.cityname;
@@ -1537,6 +1635,7 @@ var chart4_option;
 		  //月GMV
 		  xData_month = [];
 		  yData_month = [];
+		  yData_month_target = [];
 		  xData_month2 = [];
 		  yData_month2 = [];
 		  xData_month3 = [];
@@ -1549,6 +1648,13 @@ var chart4_option;
   var hourData3 = [];
   function initHourData(){
   		var nowHour = now.getHours();
+  		if(shareChartStatDto1!=null && iCheckStr=='cb') {
+	    	shareChartStatDto1.cLabel=1;
+	    	shareChartStatDto1.smallBLabel=1;
+	    }
+  		if(shareChartStatDto1!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto1.maxBLabel=1;
+	    }
   		if(shareChartStatDto1!=null && shareChartStatDto1.cityname=="全部城市"){
   			shareChartStatDto1.cityname = '';
   		}
@@ -1571,6 +1677,13 @@ var chart4_option;
  				}
  		});
  		
+ 		if(shareChartStatDto2!=null && iCheckStr=='cb') {
+	    	shareChartStatDto2.cLabel=1;
+	    	shareChartStatDto2.smallBLabel=1;
+	    }
+ 		if(shareChartStatDto2!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto2.maxBLabel=1;
+	    }
  		if(shareChartStatDto2!=null && shareChartStatDto2.cityname=="全部城市"){
   			shareChartStatDto2.cityname = '';
   		}
@@ -1593,6 +1706,13 @@ var chart4_option;
  				}
  		});
  		
+ 		if(shareChartStatDto3!=null && iCheckStr=='cb') {
+	    	shareChartStatDto3.cLabel=1;
+	    	shareChartStatDto3.smallBLabel=1;
+	    }
+ 		if(shareChartStatDto3!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto3.maxBLabel=1;
+	    }
  		if(shareChartStatDto3!=null && shareChartStatDto3.cityname=="全部城市"){
   			shareChartStatDto3.cityname = '';
   		}
@@ -1617,7 +1737,23 @@ var chart4_option;
  	} 
   
   function initDayData(){
-	  var curDay = getCurDay();
+	  	var curDay = getCurDay();
+	  	if(shareChartStatDto1!=null && iCheckStr=='cb') {
+	    	shareChartStatDto1.cLabel=1;
+	    	shareChartStatDto1.smallBLabel=1;
+	    }
+	  	if(shareChartStatDto1!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto1.maxBLabel=1;
+	    }
+	  	if(shareChartStatDto1!=null && shareChartStatDto1.cityname=="全部城市"){
+  			shareChartStatDto1.cityname = '';
+  		}
+  		if(shareChartStatDto1!=null && shareChartStatDto1.channelname=="全部频道"){
+  			shareChartStatDto1.channelname = '';
+  		}
+  		if(shareChartStatDto1!=null && shareChartStatDto1.deptname=="全部事业群"){
+  			shareChartStatDto1.deptname = '';
+  		}
 	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto1],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1632,7 +1768,23 @@ var chart4_option;
 					chart5.setOption(chart5_option);
 				}
 		});
-	  
+	
+	  	if(shareChartStatDto2!=null && iCheckStr=='cb') {
+	    	shareChartStatDto2.cLabel=1;
+	    	shareChartStatDto2.smallBLabel=1;
+	    }
+	  	if(shareChartStatDto2!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto2.maxBLabel=1;
+	    }
+	  	if(shareChartStatDto2!=null && shareChartStatDto2.cityname=="全部城市"){
+			shareChartStatDto2.cityname = '';
+		}
+		if(shareChartStatDto2!=null && shareChartStatDto2.channelname=="全部频道"){
+			shareChartStatDto2.channelname = '';
+		}
+		if(shareChartStatDto2!=null && shareChartStatDto2.deptname=="全部事业群"){
+			shareChartStatDto2.deptname = '';
+		}
 	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto2],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1648,6 +1800,22 @@ var chart4_option;
 				}
 		});
 	  
+	  	if(shareChartStatDto3!=null && iCheckStr=='cb') {
+	    	shareChartStatDto3.cLabel=1;
+	    	shareChartStatDto3.smallBLabel=1;
+	    }
+	  	if(shareChartStatDto3!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto3.maxBLabel=1;
+	    }
+	  	if(shareChartStatDto3!=null && shareChartStatDto3.cityname=="全部城市"){
+			shareChartStatDto3.cityname = '';
+		}
+		if(shareChartStatDto3!=null && shareChartStatDto3.channelname=="全部频道"){
+			shareChartStatDto3.channelname = '';
+		}
+		if(shareChartStatDto3!=null && shareChartStatDto3.deptname=="全部事业群"){
+			shareChartStatDto3.deptname = '';
+		}  
 	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto3],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1668,6 +1836,22 @@ var chart4_option;
   var weekData2 = [];
   var weekData3 = [];
   function initWeekData(){
+	  	if(shareChartStatDto1!=null && iCheckStr=='cb') {
+	    	shareChartStatDto1.cLabel=1;
+	    	shareChartStatDto1.smallBLabel=1;
+	    }
+	  	if(shareChartStatDto1!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto1.maxBLabel=1;
+	    }
+	  	if(shareChartStatDto1!=null && shareChartStatDto1.cityname=="全部城市"){
+			shareChartStatDto1.cityname = '';
+		}
+		if(shareChartStatDto1!=null && shareChartStatDto1.channelname=="全部频道"){
+			shareChartStatDto1.channelname = '';
+		}
+		if(shareChartStatDto1!=null && shareChartStatDto1.deptname=="全部事业群"){
+			shareChartStatDto1.deptname = '';
+		}
 		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto1],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1681,6 +1865,22 @@ var chart4_option;
 				}
 		},false);
 		
+		if(shareChartStatDto2!=null && iCheckStr=='cb') {
+	    	shareChartStatDto2.cLabel=1;
+	    	shareChartStatDto2.smallBLabel=1;
+	    }
+		if(shareChartStatDto2!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto2.maxBLabel=1;
+	    }
+		if(shareChartStatDto2!=null && shareChartStatDto2.cityname=="全部城市"){
+  			shareChartStatDto2.cityname = '';
+  		}
+ 		if(shareChartStatDto2!=null && shareChartStatDto2.channelname=="全部频道"){
+  			shareChartStatDto2.channelname = '';
+  		}
+ 		if(shareChartStatDto2!=null && shareChartStatDto2.deptname=="全部事业群"){
+  			shareChartStatDto2.deptname = '';
+  		}
 		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto2],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1694,6 +1894,22 @@ var chart4_option;
 				}
 		});
 		
+		if(shareChartStatDto3!=null && iCheckStr=='cb') {
+	    	shareChartStatDto3.cLabel=1;
+	    	shareChartStatDto3.smallBLabel=1;
+	    }
+		if(shareChartStatDto3!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto3.maxBLabel=1;
+	    }
+		if(shareChartStatDto3!=null && shareChartStatDto3.cityname=="全部城市"){
+  			shareChartStatDto3.cityname = '';
+  		}
+ 		if(shareChartStatDto3!=null && shareChartStatDto3.channelname=="全部频道"){
+  			shareChartStatDto3.channelname = '';
+  		}
+ 		if(shareChartStatDto3!=null && shareChartStatDto3.deptname=="全部事业群"){
+  			shareChartStatDto3.deptname = '';
+  		}
 		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto3],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1711,8 +1927,24 @@ var chart4_option;
 	} 
   
   function initMonthData(){
+	    if(shareChartStatDto1!=null && iCheckStr=='cb') {
+	    	shareChartStatDto1.cLabel=1;
+	    	shareChartStatDto1.smallBLabel=1;
+	    }
+	    if(shareChartStatDto1!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto1.maxBLabel=1;
+	    }
+	    if(shareChartStatDto1!=null && shareChartStatDto1.cityname=="全部城市"){
+  			shareChartStatDto1.cityname = '';
+  		}
+  		if(shareChartStatDto1!=null && shareChartStatDto1.channelname=="全部频道"){
+  			shareChartStatDto1.channelname = '';
+  		}
+  		if(shareChartStatDto1!=null && shareChartStatDto1.deptname=="全部事业群"){
+  			shareChartStatDto1.deptname = '';
+  		}
 	    var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
-	    var months = getYearAndMonth('2017-7-1',curMonth);
+	    var months = getYearAndMonth('2017-12-1',curMonth);
 		doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto1],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1729,6 +1961,22 @@ var chart4_option;
 				}
 		});
 		
+		if(shareChartStatDto2!=null && iCheckStr=='cb') {
+	    	shareChartStatDto2.cLabel=1;
+	    	shareChartStatDto2.smallBLabel=1;
+	    }
+		if(shareChartStatDto2!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto2.maxBLabel=1;
+	    }
+		if(shareChartStatDto2!=null && shareChartStatDto2.cityname=="全部城市"){
+  			shareChartStatDto2.cityname = '';
+  		}
+ 		if(shareChartStatDto2!=null && shareChartStatDto2.channelname=="全部频道"){
+  			shareChartStatDto2.channelname = '';
+  		}
+ 		if(shareChartStatDto2!=null && shareChartStatDto2.deptname=="全部事业群"){
+  			shareChartStatDto2.deptname = '';
+  		}
 		doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto2],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1745,6 +1993,22 @@ var chart4_option;
 				}
 		});
 		
+		if(shareChartStatDto3!=null && iCheckStr=='cb') {
+	    	shareChartStatDto3.cLabel=1;
+	    	shareChartStatDto3.smallBLabel=1;
+	    }
+		if(shareChartStatDto3!=null && iCheckMaxStr=='maxb') {
+	    	shareChartStatDto3.maxBLabel=1;
+	    }
+		if(shareChartStatDto3!=null && shareChartStatDto3.cityname=="全部城市"){
+  			shareChartStatDto3.cityname = '';
+  		}
+ 		if(shareChartStatDto3!=null && shareChartStatDto3.channelname=="全部频道"){
+  			shareChartStatDto3.channelname = '';
+  		}
+ 		if(shareChartStatDto3!=null && shareChartStatDto3.deptname=="全部事业群"){
+  			shareChartStatDto3.deptname = '';
+  		}
 		doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto3],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -1760,7 +2024,31 @@ var chart4_option;
 					chart6.setOption(chart6_option);
 				}
 		});
+		
+		shareChartStatDto = getShareParam();
+		doManager("chartStatManager","queryTargetByMonth",[shareChartStatDto],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					yData_month_target = new Array(months.length+1).join(0).split('');
+					$(jsonData).each(function(index,element){
+						var indexTemp = jQuery.inArray(element.month_time,months);
+						yData_month_target[indexTemp]=element.month_amount;
+               		});
+					chart6_option.series[3].data=yData_month_target;
+					chart6.setOption(chart6_option);
+				}
+		});
+		
 	} 
+  
+  function excuteChart(){
+		chartresize1();
+	  	chartresize2();
+	  	chartresize3();
+	  	chartresize4();
+	  	search_manual_k();
+	}
   
   Date.prototype.toLocaleString = function() {
       return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();

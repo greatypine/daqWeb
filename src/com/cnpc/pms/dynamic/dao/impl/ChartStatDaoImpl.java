@@ -33,8 +33,12 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dod.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
 			sql = sql + " AND dod.store_name not like '%企业购%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
+			sql = sql + " AND dod.store_name like '%企业购%' ";
 		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -64,8 +68,12 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
 			sql = sql + " AND dom.store_name not like '%企业购%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
+			sql = sql + " AND dom.store_name like '%企业购%' ";
 		}
 		sql = sql + " GROUP BY DATE_FORMAT(dom.sign_time,'%H') ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -92,8 +100,12 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
 			sql = sql + " AND dom.store_name not like '%企业购%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
+			sql = sql + " AND dom.store_name like '%企业购%' ";
 		}
 		sql = sql + " GROUP BY DATE(dom.sign_time) ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -120,8 +132,12 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dst.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
 			sql = sql + " AND dst.store_name not like '%企业购%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
+			sql = sql + " AND dst.store_name like '%企业购%' ";
 		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -152,8 +168,12 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
 			sql = sql + " AND dom.store_name not like '%企业购%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
+			sql = sql + " AND dom.store_name like '%企业购%' ";
 		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -182,8 +202,12 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND channel_name like '%"+csd.getChannelname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
 			sql = sql + " AND store_name not like '%企业购%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
+			sql = sql + " AND store_name like '%企业购%' ";
 		}
 		sql = sql + " GROUP BY week_date";
 		
@@ -211,8 +235,12 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dst.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
 			sql = sql + " AND dst.store_name not like '%企业购%' ";
+		}
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
+				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
+			sql = sql + " AND dst.store_name like '%企业购%' ";
 		}
 		sql = sql + " GROUP BY dst.year,dst.month ";
 		
@@ -238,6 +266,9 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getSmallBLabel())){
 			sql = sql + " AND dt.c_label=" + csd.getcLabel() +" AND dt.small_b_label="+csd.getSmallBLabel();
+		}
+		if(StringUtils.isNotEmpty(csd.getMaxBLabel())){
+			sql = sql + " AND dt.big_b_label=" + csd.getMaxBLabel();
 		}
 		sql = sql + " GROUP BY dt.year,dt.month ";
 		
