@@ -2599,7 +2599,7 @@ var getBusinessDepRankDataGmv = function (pageStatusInfo) {
         //console.log(reqestParameter);
         var startTime = new Date().getTime();
         // 全国门店(订单量)排名
-        doManager("dynamicManager", "queryTradeByDepName",[reqestParameter,pageStatusInfo.pageInfo,null],
+        doManager("dynamicManager", "queryTradeByDepName",[reqestParameter,null,null],
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
