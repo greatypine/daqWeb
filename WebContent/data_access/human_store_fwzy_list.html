@@ -123,6 +123,7 @@ var p_citySelect = decode64(getUrlParamByKey("citySelect"));
     //记载页面时请求数据列表默认的方法
     function searchList() {
         $$.executeSearch('humanresourcesfwzyQuery', 'conditionsDiv');
+        $(".display").css("width","100%");
     }
 
     //验证是不是空
