@@ -1242,7 +1242,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					" t_dist_citycode tdc  "+whereStr+") t1	on t.city_name  = t1.cityname ) t2  " +
 					" INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id";
 		}else if(dd.getTarget()==1){//省
-			sql="select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t.name as storeName,t.city_name from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname left JOIN tb_bizbase_user as tbu on t.skid = tbu.id  where  t.name not like '%测试%'";
+			sql="select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t.name as storeName,t.city_name from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname left JOIN tb_bizbase_user as tbu on t.skid = tbu.id  where  t.name not like '%测试%' and tbu.employeeId is not null";
 		}
 		
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);

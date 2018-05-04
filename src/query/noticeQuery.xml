@@ -18,7 +18,7 @@
         <column key="zw" type="java.lang.String" header="职务" operator="like" display="true" width="30%" allowSearch="true" allowSort="true" align="center"/>
     </query>
     
-    <query id="queryNoticeList" header="公告列表" baseclass="com.cnpc.pms.notice.entity.Notice" order="id desc">
+    <query id="queryNoticeList" header="公告列表" baseclass="com.cnpc.pms.notice.entity.Notice" order="id desc" filter="status = 0">
         <column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
         <column key="noticeNo" header="序号" type="java.lang.String" operator="eq" align="center" allowSort="false" display="false"  width="5%"/>
         <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="20%"/>

@@ -40,6 +40,16 @@ public interface NoticeReciverDao {
 	public int updateNoticeReciverIsRead(String noticeNo,String employeeNo);
 	
 	
-	
+	/**
+	 * 
+	* @Title: deleteNoticeReciver  
+	* @Description: TODO 撤销公告接收人 
+	* 2018年5月4日
+	* @param @param noticeNo
+	* @param @return      
+	* @return int 
+	* @throws
+	 */
+	public int deleteNoticeReciver(String noticeNo);
 	
 }

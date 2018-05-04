@@ -144,4 +144,16 @@ public interface NoticeManager extends IManager{
 	* @throws
 	 */
 	public Map<String,Object> getAllZw();
+	
+	/**
+	 * 
+	* @Title: deleteNotice  
+	* @Description: TODO 撤销公告 
+	* 2018年5月4日
+	* @param @param noticeNo
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String,Object> deleteNotice(String noticeNo);
 }
