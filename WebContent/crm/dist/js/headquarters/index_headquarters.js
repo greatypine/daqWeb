@@ -4728,7 +4728,7 @@ function findArray(array, feature, all = true) {
 }
 function showMoreSummaryStatistics(){
 	  $(".info_head").mouseover(function(){
-	    $(this).css('width','30%');
+	    $(this).css('width','35%');
 	    $(this).find("dl").css('width','50%');
 	    $("#info_head_dl").show();
 	  });
