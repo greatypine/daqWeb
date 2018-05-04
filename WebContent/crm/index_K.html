@@ -1820,6 +1820,15 @@
 				}
 		},false);
 		
+		
+		var targetCityname = shareChartStatDto.cityname;
+		if(targetCityname!='' && targetCityname!=null){
+			if(targetCityname=="黔东南州"){
+				shareChartStatDto.cityname="黔东南苗族侗族自治州";
+		  	}else{
+		  		shareChartStatDto.cityname=targetCityname.substring(0,targetCityname.length-1);
+		    }
+		}
 		doManager("chartStatManager","queryTargetByMonth",[shareChartStatDto],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
