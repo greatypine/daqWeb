@@ -117,8 +117,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> queryMonthTurnover(ChartStatDto csd) {
-		String sql = "SELECT IFNULL(FLOOR(sum(dst.order_amount)),0) as month_amount FROM ds_ope_gmv_storechannel_month dst WHERE dst.year = YEAR(curdate()) AND dst.month = MONTH(curdate()) "
-				+ "AND dst.store_name NOT LIKE '%测试%'";
+		String sql = "SELECT IFNULL(FLOOR(sum(dst.order_amount)),0) as month_amount FROM ds_ope_gmv_storechannel_month dst WHERE dst.year = YEAR(curdate()) AND dst.month = MONTH(curdate()) ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dst.storeno = '"+csd.getStoreno()+"' ";
 		}
@@ -220,8 +219,8 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByMonth(ChartStatDto csd){
-		String sql = "SELECT IFNULL(FLOOR(SUM(dst.order_amount)),0) AS month_amount,CONCAT(dst.year,'-',dst.month) AS month_time from ds_storetrade_channel dst "
-				+ "WHERE dst.store_name NOT LIKE '%测试%' AND dst.year = YEAR(curdate()) ";
+		String sql = "SELECT IFNULL(FLOOR(SUM(dst.order_amount)),0) AS month_amount,CONCAT(dst.year,'-',dst.month) AS month_time from ds_ope_gmv_storechannel_month dst "
+				+ "WHERE dst.year = YEAR(curdate()) ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dst.storeno = '"+csd.getStoreno()+"' ";
 		}
@@ -282,7 +281,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartStatDto csd){
 		String sql = "SELECT IFNULL(SUM(dsc.order_count),0) AS order_count,	IFNULL(FLOOR(SUM(dsc.order_amount)),0) AS order_amount, dsc.city_name, dsc.store_name,CONCAT(dsc.year,'-',dsc.month) as time "
-				+ "FROM ds_storetrade_channel dsc WHERE dsc.store_name NOT LIKE '%测试%' AND dsc.storeno IS NOT NULL AND dsc.storeno != '' ";
+				+ "FROM ds_ope_gmv_storechannel_month dsc WHERE 1=1 ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dsc.storeno = '"+csd.getStoreno()+"' ";
 		}

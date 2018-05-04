@@ -1742,7 +1742,7 @@
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
 					curMonthData = jsonData.month_amount;
-					$("#curMonthGMV").html(changeMoney(parseInt(curMonthData)+parseInt(curDayGMV)));
+					$("#curMonthGMV").html(changeMoney(parseInt(curMonthData)));
 				}
 		});
 	} 
