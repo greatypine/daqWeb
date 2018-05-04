@@ -323,7 +323,7 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 					cityList = noticeDao.getCityOfCs(userDTO.getId());
 					StringBuilder sb = new StringBuilder();
 					for(int i=0;i<cityList.size();i++){
-						sb.append(",").append(cityList.get(i).get("citycode"));
+						sb.append(",").append("'").append(cityList.get(i).get("citycode")).append("'");
 					}
 					if(cityList!=null&&cityList.size()>0){
 						list =  noticeDao.getStoreByCity(sb.toString().substring(1));
