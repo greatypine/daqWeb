@@ -934,7 +934,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		String sql = "SELECT d.id as city_id,ds.city_name,SUM(ds.order_amount) as gmv_sum,t.province_id," +
 				"t.`name` FROM ds_ope_gmv_store_month ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join  t_dist_citycode d on d.cityname=t.city_name  " +
-				"WHERE ds.`month`='"+dd.getMonth()+"' and ds.`year`='"+dd.getYear()+"' "+provinceStr+cityStr+" GROUP BY ds.city_name  ORDER BY gmv_sum DESC ";
+				"WHERE ds.`month`='"+dd.getMonth()+"' and ds.`year`='"+dd.getYear()+"' "+provinceStr+cityStr+" AND d.id IS NOT NULL GROUP BY ds.city_name  ORDER BY gmv_sum DESC ";
 		String sql_count = "SELECT count(tdd.city_name) as city_count from ("+sql+") tdd ";
 		Query query_count = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql_count);

@@ -6434,11 +6434,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			if(province_id!=null&&province_id!=""){
 				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
 			}
-			String beginDate = "2018-03-02";
-    		String curDate = "2018-03-08";
-//			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
-//			String curDate = DateUtils.lastDate();
-//			String beginDate = DateUtils.getBeforeDate(cur,-7);
+//			String beginDate = "2018-03-02";
+//    		String curDate = "2018-03-08";
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			String beginDate = DateUtils.getBeforeDate(cur,-7);
 			dd.setBeginDate(beginDate);
 			dd.setEndDate(curDate);
 			Map<String, Object> customerOrderRate = dynamicDao.getCityGMVRangeForWeek(dd,cityNO,provinceNO);
