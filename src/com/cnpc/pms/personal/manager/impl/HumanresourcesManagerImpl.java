@@ -1094,6 +1094,242 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 
 		return file_new;
 	}
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public File exportFwzyHumanExcel() throws Exception {
+		String str_file_name = "export_fwzyhuman_template";
+		String strRootpath = Thread.currentThread().getContextClassLoader().getResource(File.separator).getPath();
+		//配置文件中的路径
+		String str_filepath = strRootpath.concat(getPropertiesValueUtil().getStringValue(str_file_name).replace("/", File.separator));
+		File file_template = new File(str_filepath);
+
+		FSP fsp = new FSP();
+		fsp.setSort(SortFactory.createSort("update_time",ISort.ASC));
+		
+		
+		//取得当前登录人 所管理城市
+    	UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
+    	StringBuffer sbfCondition = new StringBuffer();
+		String cityssql = "";
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		if(distCityList!=null&&distCityList.size()>0){
+			for(DistCity d:distCityList){
+				cityssql += "'"+d.getCityname()+"',";
+			}
+			cityssql=cityssql.substring(0, cityssql.length()-1);
+		}
+		
+		if(cityssql!=""&&cityssql.length()>0){
+			sbfCondition.append(" citySelect in ("+cityssql+")");
+		}else{
+			sbfCondition.append(" 0=1 ");
+		}
+		sbfCondition.append(" and zw = '线上服务专员' and humanstatus in (1,2) ");
+		
+		IFilter iFilter = FilterFactory.getSimpleFilter(sbfCondition.toString());
+		fsp.setUserFilter(iFilter);
+		
+		List<Humanresources> lst_humanList = (List<Humanresources>)this.getList(fsp);
+		
+
+		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+		for(Humanresources h:lst_humanList){
+			//如果selectStoreIds不为空 则查询门店名字
+	    	String selectStoreids = h.getSelectStoreIds();
+	    	if(selectStoreids!=null&&selectStoreids.length()>0&&selectStoreids.contains(",")){
+	    		String strs = selectStoreids.substring(1,selectStoreids.length()-1);
+	    		IFilter repFilter =FilterFactory.getSimpleFilter("store_id in("+strs+")");
+	    		List<Store> lstList = (List<Store>) storeManager.getList(repFilter);
+	    		if(lstList!=null&&lstList.size()>0){
+	    			String storenames = "";
+	    			for(Store s :lstList){
+	    				storenames+=s.getName()+",";
+	    			}
+	    			h.setSelectStoreNames(storenames);
+	    		}
+	    	}
+		
+		}
+		
+		
+
+		String str_file_dir_path = PropertiesUtil.getValue("file.root");
+		String str_newfilepath = str_file_dir_path + "human_fwzy_list.xls";
+		File file_new = new File(str_newfilepath);
+		if(file_new.exists()){
+			file_new.delete();
+		}
+
+		FileCopyUtils.copy(file_template, file_new);
+		FileInputStream fis_input_excel = new FileInputStream(file_new);
+		FileOutputStream fis_out_excel = null;
+		Workbook wb_humaninfo = new HSSFWorkbook(new POIFSFileSystem(fis_input_excel));
+		try{
+			setCellStyle_common(wb_humaninfo);
+
+			Sheet sh_job = wb_humaninfo.getSheetAt(0);
+			Sheet sh_quit = wb_humaninfo.getSheetAt(1);
+			int nJobIndex = 2;
+			int nQuitIndex = 2;
+			Map<String,Humanresources> map_humanresources = new HashMap<String, Humanresources>();
+
+			for (Humanresources humanresources : lst_humanList) {
+				Row obj_row = null;
+				map_humanresources.put(humanresources.getEmployee_no(),humanresources);
+				int cellIndex = 0;
+				if(humanresources.getHumanstatus() == 1L){
+					sh_job.createRow(nJobIndex);
+					obj_row = sh_job.getRow(nJobIndex);
+					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue((nJobIndex - 1)));//序号
+				}else if(humanresources.getHumanstatus() == 2L){
+					sh_quit.createRow(nQuitIndex);
+					obj_row = sh_quit.getRow(nQuitIndex);
+					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue((nQuitIndex - 1)));//序号
+					setCellValue(obj_row, cellIndex ++,ValueUtil.getStringValue(humanresources.getLeavedate()));//序号
+				}else{
+					continue;
+				}
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCitySelect()));//城市
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getEmployee_no()));//员工号
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getName()));//姓名
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getAuthorizedtype()));//人员类别
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getOrgname()));//所属机构
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getDeptlevel1()));//一级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getDeptlevel2()));//二级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getDeptlevel3()));//三级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getSelectStoreNames()));//门店
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getReporthigher()));//汇报上级
+				String expzw = humanresources.getZw();
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(expzw));//职位
+				/*setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getProfessnallevel()));//职级
+
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getInterndate()));//外包/实习生入职日期T
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getTopostdate()));//正式员工入职日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getContractdatestart()));//合同开始日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getContractdateend()));//合同结束日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getSigncount()));//签订次数
+
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCardnumber()));//身份证号码
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getSex()));//性别
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getBirthday()));//出生日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getNation()));//民族
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getEducation()));//学历
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getSchool()));//毕业学校
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getProfession()));//专业
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCensusregister()));//户籍
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getMarriage()));//婚姻状况
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getPhone()));//本人电话
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getRelationname()));//紧急联系人姓名
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getTel()));//紧急联系人电话
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getRelationtype()));//与本人关系
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getJobchannel()));//招聘渠道
+*/				if(humanresources.getHumanstatus() == 2L){
+					/*setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getLeavereason()));//离职原因
+					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getLeavetype()));//离职类型
+					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getLeavercvlistdate()));//收单日期
+*/					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCareer_group()));//事业群
+					nQuitIndex ++;
+				}else{
+					/*setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getOffername()));//推荐人姓名
+*/					
+					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCareer_group()));//事业群
+					
+					nJobIndex++;
+				}
+
+			}
+
+			/*Sheet sh_change = wb_humaninfo.getSheetAt(2);
+
+			int nChangeIndex = 2;
+			fsp = new FSP();
+			fsp.setSort(SortFactory.createSort("id",ISort.ASC));
+			HumanresourcesChangeManager humanresourcesChangeManager = (HumanresourcesChangeManager)SpringHelper.getBean("humanresourcesChangeManager");
+			List<HumanresourcesChange> lst_humanChangeList = (List<HumanresourcesChange>)humanresourcesChangeManager.getList(fsp);
+			for(HumanresourcesChange humanresourcesChange : lst_humanChangeList){
+				sh_change.createRow(nChangeIndex);
+				Row obj_row = sh_change.getRow(nChangeIndex);
+				if(!map_humanresources.containsKey(humanresourcesChange.getEmployee_no())){
+					continue;
+				}
+				int cellIndex = 0;
+				Humanresources humanresources = map_humanresources.get(humanresourcesChange.getEmployee_no());
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue((nChangeIndex - 1)));//序号
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangedate()));//序号
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCitySelect()));//城市
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getEmployee_no()));//员工号
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getName()));//姓名
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getAuthorizedtype()));//人员类别
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getOrgname()));//所属机构
+
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getDeptlevel1()));//一级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getDeptlevel2()));//二级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getDeptlevel3()));//三级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getStorename()));//门店
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getReporthigher()));//汇报上级
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getZw()));//职位
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getProfessnallevel()));//职级
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getCareer_group()));//事业群
+				
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangeorgname()));//所属机构
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangedeptlevel1()));//一级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangedeptlevel2()));//二级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangedeptlevel3()));//三级部门
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangestorename()));//门店
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangereporthigher()));//汇报上级
+				String changezw = humanresourcesChange.getChangezw();
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(changezw));//职位
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangeprofessnallevel()));//职级
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresourcesChange.getChangecareer_group()));//更改后事业群
+
+
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getInterndate()));//外包/实习生入职日期T
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getTopostdate()));//正式员工入职日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getContractdatestart()));//合同开始日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getContractdateend()));//合同结束日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getSigncount()));//签订次数
+
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCardnumber()));//身份证号码
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getSex()));//性别
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getBirthday()));//出生日期
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getNation()));//民族
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getEducation()));//学历
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getSchool()));//毕业学校
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getProfession()));//专业
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCensusregister()));//户籍
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getMarriage()));//婚姻状况
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getPhone()));//本人电话
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getRelationname()));//紧急联系人姓名
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getTel()));//紧急联系人电话
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getRelationtype()));//与本人关系
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getJobchannel()));//招聘渠道
+				setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getOffername()));//推荐人姓名
+				nChangeIndex ++;
+			}*/
+			fis_out_excel = new FileOutputStream(file_new);
+			wb_humaninfo.write(fis_out_excel);
+		}catch (Exception e){
+			throw e;
+		} finally {
+			if(fis_out_excel!=null){
+				fis_out_excel.close();
+			}
+			if(fis_input_excel!=null){
+				fis_input_excel.close();
+			}
+		}
+
+
+		return file_new;
+	}
+	
+	
 
 	private void changeSystemUser(Humanresources hr, Long humanstatus) {
 		try {
@@ -1574,6 +1810,135 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		fsp.setPage(pageInfo);
 		fsp.setUserFilter(iFilter);
 		lst_data = this.getList(fsp);
+		
+		returnMap.put("pageinfo", pageInfo);
+		returnMap.put("header", "");
+		returnMap.put("data", lst_data);
+		return returnMap;
+	}
+    
+    
+    
+    
+    
+    
+    /**
+     * 线上服务专员列表
+     */
+    @Override
+    public Map<String, Object> queryhumanbasefwzyList(QueryConditions condition) {
+    	UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
+    	StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+    	/*UserDTO userDTO = manager.getCurrentUserDTO();
+		Long store_id = userDTO.getStore_id();*/
+		Map<String,Object> returnMap = new java.util.HashMap<String, Object>();
+		PageInfo pageInfo = condition.getPageinfo();
+		String name = null;
+		String employee_no = null;
+		String begindate=null;
+		String enddate = null;
+		String humanstatus=null;
+		String storename=null;
+		String zw = null;
+		String citySelect=null;
+		for(Map<String, Object> map : condition.getConditions()){
+			if("name".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				name = map.get("value").toString();
+			}
+			if("employee_no".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				employee_no = map.get("value").toString();
+			}
+			if("humanstatus".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				humanstatus = map.get("value").toString();
+			}
+			if("storename".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				storename = map.get("value").toString();
+			}
+			if("zw".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				zw = map.get("value").toString();
+				/*if(zw!=null&&zw.contains("事务")){
+					zw=zw.replace("事务", "综合");
+				}*/
+			}
+			if("citySelect".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				citySelect = map.get("value").toString();
+			}
+			
+		}
+		List<Humanresources> lst_data = null;
+		FSP fsp = new FSP();
+		fsp.setSort(SortFactory.createSort("id", ISort.DESC));
+		StringBuffer sbfCondition = new StringBuffer(); 
+		
+		//取得当前登录人 所管理城市
+		String cityssql = "";
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		if(distCityList!=null&&distCityList.size()>0){
+			for(DistCity d:distCityList){
+				cityssql += "'"+d.getCityname()+"',";
+			}
+			cityssql=cityssql.substring(0, cityssql.length()-1);
+		}
+		
+		sbfCondition.append(" status!=1 ");
+		
+		if(cityssql!=""&&cityssql.length()>0){
+			sbfCondition.append(" and citySelect in ("+cityssql+")");
+		}else{
+			sbfCondition.append(" and 0=1 ");
+		}
+		
+		
+		if(name!=null){
+			sbfCondition.append(" and name like '%"+name+"%'");
+		}
+		if(employee_no!=null){
+			sbfCondition.append(" and employee_no like '%"+employee_no+"%'");
+		}
+		if(humanstatus!=null){
+			sbfCondition.append(" and humanstatus = '1'");
+		}
+		/*if(storename!=null&&storename.length()>0){
+			Store store = storeManager.findStoreByName(storename);
+			if(store!=null){
+				sbfCondition.append(" and store_id="+store.getStore_id());
+			}else{
+				sbfCondition.append(" and store_id=0 ");
+			}
+			
+		}*/
+		if(zw!=null){
+			sbfCondition.append(" and zw like '%"+zw+"%'");
+		}
+		if(citySelect!=null){
+			sbfCondition.append(" and citySelect like '%"+citySelect+"%'");
+		}
+		sbfCondition.append(" and humanstatus = '1'");
+		sbfCondition.append(" order by humanstatus ASC,DATE_FORMAT(topostdate,'%Y-%m-%d') DESC,update_time DESC ");
+		
+		IFilter iFilter =FilterFactory.getSimpleFilter(sbfCondition.toString());
+		fsp.setPage(pageInfo);
+		fsp.setUserFilter(iFilter);
+		lst_data = (List<Humanresources>) this.getList(fsp);
+		
+		for(Humanresources h:lst_data){
+			//如果selectStoreIds不为空 则查询门店名字
+	    	String selectStoreids = h.getSelectStoreIds();
+	    	if(selectStoreids!=null&&selectStoreids.length()>0&&selectStoreids.contains(",")){
+	    		String strs = selectStoreids.substring(1,selectStoreids.length()-1);
+	    		IFilter repFilter =FilterFactory.getSimpleFilter("store_id in("+strs+")");
+	    		List<Store> lstList = (List<Store>) storeManager.getList(repFilter);
+	    		if(lstList!=null&&lstList.size()>0){
+	    			String storenames = "";
+	    			for(Store s :lstList){
+	    				storenames+=s.getName()+",";
+	    			}
+	    			h.setSelectStoreNames(storenames);
+	    		}
+	    	}
+		
+		}
+		
 		
 		returnMap.put("pageinfo", pageInfo);
 		returnMap.put("header", "");

@@ -85,7 +85,17 @@ public class DownloadAction extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else if ("city_human_list".equals(str_file_name)) {
+		} else if("human_fwzy_list".equals(str_file_name)){
+			try {
+				HumanresourcesManager humanresourcesManager = (HumanresourcesManager) SpringHelper
+						.getBean("humanresourcesManager");
+				File file = humanresourcesManager.exportFwzyHumanExcel();
+				DownloadUtil.downLoadFile(file.getAbsolutePath(), resp,
+						"humanfwzyList" + DateUtils.dateFormat(new Date()) + ".xls", "xls");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else if ("city_human_list".equals(str_file_name)) {
 			try {
 				// HumanresourcesManager humanresourcesManager =
 				// (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");

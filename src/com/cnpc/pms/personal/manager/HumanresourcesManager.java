@@ -182,4 +182,10 @@ public interface HumanresourcesManager extends IManager {
     
     public Map<String,Object> getWeekPoint();
     
+    
+    
+    public Map<String, Object> queryhumanbasefwzyList(QueryConditions condition);
+    
+    public File exportFwzyHumanExcel() throws Exception ;
+    
 }
