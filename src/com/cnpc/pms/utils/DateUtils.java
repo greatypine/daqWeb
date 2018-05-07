@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -360,6 +361,31 @@ public class DateUtils {
 		return c.get(Calendar.WEEK_OF_YEAR);
 	}
 
+	/**
+	 * 获取当年的周，从周日开始
+	 * @param weeks
+	 * @return
+	 */
+	public static List<String> getDateByWeek(){
+		int weeks = getWeekOfYear(new Date());
+		List<String> list = new ArrayList<String>();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = new GregorianCalendar();
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setTime(new Date());
+		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+		Date date = c.getTime();
+		Date date2 = getDateBeforeOneDate(date);
+		for (int i = 0; i < weeks; i++) {
+			Date weekBefore = getWeekBefore(i, date2);
+			list.add(dateFormat.format(weekBefore));
+		}
+
+		Collections.sort(list);
+		
+		return list;  
+	}
+	
 	public static Date getWeekBefore(int n, Date date) {
 		Calendar c = Calendar.getInstance();
 
@@ -427,20 +453,22 @@ public class DateUtils {
         return sdf.format(cal.getTime());
 	}
 	public static void main(String[] args) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Calendar c = new GregorianCalendar();
-		c.setFirstDayOfWeek(Calendar.MONDAY);
-		c.setTime(new Date());
-		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
-		Date date = c.getTime();
-		String format = dateFormat.format(date);
-		System.out.println(format);
-		int weekOfYear = getWeekOfYear(date);
-		System.out.println(weekOfYear);
-		Date date2 = getDateBeforeOneDate(date);
-		System.out.println(dateFormat.format(date2));
-		int weekOfYear2 = getWeekOfYear(date);
-		System.out.println(weekOfYear2);
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		Calendar c = new GregorianCalendar();
+//		c.setFirstDayOfWeek(Calendar.MONDAY);
+//		c.setTime(new Date());
+//		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+//		Date date = c.getTime();
+//		String format = dateFormat.format(date);
+//		System.out.println(format);
+//		int weekOfYear = getWeekOfYear(date);
+//		System.out.println(weekOfYear);
+//		Date date2 = getDateBeforeOneDate(date);
+//		System.out.println(dateFormat.format(date2));
+//		int weekOfYear2 = getWeekOfYear(date);
+//		System.out.println(weekOfYear2);
+		 List<String> list = getDateByWeek();
+		 System.out.println(list.toString());
 	}
 
 }

@@ -193,10 +193,10 @@
 						</span>
                 </div>
                 <div class="col-sm-6 form-group no-padding no-margin">
-		          	<label><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C端+小B端</span></label>
+		          	<label><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C+小B</span></label>
 		        </div>
 		        <div class="col-sm-6 form-group no-padding no-margin">
-		          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B端</span></label>
+		          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B</span></label>
 		        </div>
               </form>
             </div>
@@ -280,6 +280,40 @@
 <!-- 总部首页 script -->
 <!-- <script src="dist/js/headquarters/index_K.js"></script> -->
 <script type="text/javascript">
+
+Date.prototype.format=function(fmt) {        
+    var o = {        
+    "M+" : this.getMonth()+1, //月份        
+    "d+" : this.getDate(), //日        
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+    "H+" : this.getHours(), //小时        
+    "m+" : this.getMinutes(), //分        
+    "s+" : this.getSeconds(), //秒        
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+    "S" : this.getMilliseconds() //毫秒        
+    };        
+    var week = {        
+    "0" : "\u65e5",        
+    "1" : "\u4e00",        
+    "2" : "\u4e8c",        
+    "3" : "\u4e09",        
+    "4" : "\u56db",        
+    "5" : "\u4e94",        
+    "6" : "\u516d"       
+    };        
+    if(/(y+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+    }        
+    if(/(E+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+    }        
+    for(var k in o){        
+        if(new RegExp("("+ k +")").test(fmt)){        
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+        }        
+    }        
+    return fmt;        
+} 
 
   autodivheight();
   function autodivheight(){ //函数：获取尺寸
@@ -1051,13 +1085,6 @@
 		chart7 = echarts.init(document.getElementById('main7'));
 
 // 		//K线图--周
-// 		var xData = function() {
-// 			var data = [];
-// 			for (var i = 1; i < 25; i++) {
-// 				data.push('第' +i + "周");
-// 			}
-// 			return data;
-// 		}();
 
 		chart7_option = {
 			backgroundColor: "#f55a44",
@@ -1122,7 +1149,7 @@
 				splitArea: {
 					show: false
 				},
-
+				
 			}],
 			dataZoom: [{
 			 show: true,
@@ -1347,6 +1374,18 @@
 			chart6.resize(width);
 		}
 	}
+	
+	var xData_week_temp = function() {
+		var dataTemp = [];
+		doManager("chartStatManager","getDateByWeek",null,
+	   			function(data,textStatus,XmlHttpRequest){
+	   				if (data.result) {
+	   					var jsonData = $.fromJSON(data.data);
+	   					dataTemp = jsonData;
+	   				}
+	   		},false);	
+		return dataTemp;
+	};
   
   var shareChartStatDto=null; //全局参数变量	
   var shareChartStatDto1=null;
@@ -1428,6 +1467,8 @@
 			}
 		});
 	  	
+	  	
+	  xData_week = xData_week_temp();
 	  initRealData();
 	  chartresize1();
 	  chartresize2();
@@ -1722,7 +1763,7 @@
  			function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
  					var nowHour = now.getHours();
- 					hourData=new Array(nowHour+1).join(0).split('');
+ 					hourData=new Array(nowHour+2).join(0).split('');
  					var jsonData = $.fromJSON(data.data);
  					$(jsonData).each(function(index,element){
  						hourData[parseInt(element.time)]=element.turnover;
@@ -1753,20 +1794,19 @@
   
   var weekData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   function initWeekData(){
+	  weekData = new Array(xData_week.length+1).join(0).split('');
 		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
 					$(jsonData).each(function(index,element){
-// 						weekData[parseInt(element.week_time)-1]=element.week_amount;
-						weekData[index]=element.week_amount;
-						xData_week[index]=new Date(element.week_time).toLocaleString();
+						var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+						var indexTemp = jQuery.inArray(dateTemp,xData_week);
+						weekData[indexTemp]=element.week_amount;
                     });
 					chart7_option.series[0].data=weekData;
 					chart7.setOption(chart7_option);
 				}
-				$("#process_div").hide();
-				$("#process_div_pic").hide();
 		});
 	} 
   
@@ -1805,6 +1845,8 @@
 					chart6.setOption(chart6_option);
 				}
 		});
+		$("#process_div").hide();
+		$("#process_div_pic").hide();
 	} 
   
   function initOnlineOfflineTurnover(){

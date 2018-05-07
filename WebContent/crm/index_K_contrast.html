@@ -216,6 +216,40 @@
 	$(".select2").select2();
   });
 
+  Date.prototype.format=function(fmt) {        
+	    var o = {        
+	    "M+" : this.getMonth()+1, //月份        
+	    "d+" : this.getDate(), //日        
+	    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+	    "H+" : this.getHours(), //小时        
+	    "m+" : this.getMinutes(), //分        
+	    "s+" : this.getSeconds(), //秒        
+	    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+	    "S" : this.getMilliseconds() //毫秒        
+	    };        
+	    var week = {        
+	    "0" : "\u65e5",        
+	    "1" : "\u4e00",        
+	    "2" : "\u4e8c",        
+	    "3" : "\u4e09",        
+	    "4" : "\u56db",        
+	    "5" : "\u4e94",        
+	    "6" : "\u516d"       
+	    };        
+	    if(/(y+)/.test(fmt)){        
+	        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+	    }        
+	    if(/(E+)/.test(fmt)){        
+	        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+	    }        
+	    for(var k in o){        
+	        if(new RegExp("("+ k +")").test(fmt)){        
+	            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+	        }        
+	    }        
+	    return fmt;        
+	} 
+  
   autodivheight();
   function autodivheight(){ //函数：获取尺寸
 	//获取浏览器窗口高度
@@ -725,8 +759,6 @@ var chart4_option;
 	var chart7 ;
 	var chart7_option;
 	var xData_week=[];
-	var xData_week2=[];
-	var xData_week3=[];
 	function chartresize4(){
 		//console.log("chartresize");
 		var temp4 = new initchart4();
@@ -1096,6 +1128,18 @@ var chart4_option;
 		}
 	}
 	
+	var xData_week_temp = function() {
+		var dataTemp = [];
+		doManager("chartStatManager","getDateByWeek",null,
+	   			function(data,textStatus,XmlHttpRequest){
+	   				if (data.result) {
+	   					var jsonData = $.fromJSON(data.data);
+	   					dataTemp = jsonData;
+	   				}
+	   		},false);	
+		return dataTemp;
+	};
+	
   var shareChartStatDto=null; //全局参数变量	 
   var shareChartStatDto1=null;
   var shareChartStatDto2=null;
@@ -1176,6 +1220,7 @@ var chart4_option;
 	}
   	$("#label_manual_third").val(nameStr3);
 	  
+  	  xData_week = xData_week_temp();
 	  chartresize1();
 	  chartresize2();
 	  chartresize3();
@@ -1555,7 +1600,7 @@ var chart4_option;
  		doManager("chartStatManager","queryTurnoverByHour",[shareChartStatDto1],
  			function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
- 					hourData=new Array(nowHour+1).join(0).split('');
+ 					hourData=new Array(nowHour+2).join(0).split('');
  					var jsonData = $.fromJSON(data.data);
  					$(jsonData).each(function(index,element){
  						hourData[parseInt(element.time)]=element.turnover;
@@ -1577,7 +1622,7 @@ var chart4_option;
  		doManager("chartStatManager","queryTurnoverByHour",[shareChartStatDto2],
  			function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
- 					hourData2=new Array(nowHour+1).join(0).split('');
+ 					hourData2=new Array(nowHour+2).join(0).split('');
  					var jsonData = $.fromJSON(data.data);
  					$(jsonData).each(function(index,element){
  						hourData2[parseInt(element.time)]=element.turnover;
@@ -1600,7 +1645,7 @@ var chart4_option;
  			function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
  					var jsonData = $.fromJSON(data.data);
- 					hourData3=new Array(nowHour+1).join(0).split('');
+ 					hourData3=new Array(nowHour+2).join(0).split('');
  					$(jsonData).each(function(index,element){
  						hourData3[parseInt(element.time)]=element.turnover;
                      });
@@ -1701,10 +1746,12 @@ var chart4_option;
 		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto1],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
+					weekData = new Array(xData_week.length+1).join(0).split('');
 					var jsonData = $.fromJSON(data.data);
 					$(jsonData).each(function(index,element){
-						weekData[index]=element.week_amount;
-						xData_week[index]=new Date(element.week_time).toLocaleString();
+						var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+						var indexTemp = jQuery.inArray(dateTemp,xData_week);
+						weekData[indexTemp]=element.week_amount;
                     });
 					chart7_option.series[0].data=weekData;
 					chart7.setOption(chart7_option);
@@ -1723,10 +1770,12 @@ var chart4_option;
 		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto2],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
+					weekData2 = new Array(xData_week.length+1).join(0).split('');
 					var jsonData = $.fromJSON(data.data);
 					$(jsonData).each(function(index,element){
-						weekData2[index]=element.week_amount;
-						xData_week2[index]=new Date(element.week_time).toLocaleString();
+						var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+						var indexTemp = jQuery.inArray(dateTemp,xData_week);
+						weekData2[indexTemp]=element.week_amount;
                     });
 					chart7_option.series[1].data=weekData2;
 					chart7.setOption(chart7_option);
@@ -1745,10 +1794,12 @@ var chart4_option;
 		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto3],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
+					weekData3 = new Array(xData_week.length+1).join(0).split('');
 					var jsonData = $.fromJSON(data.data);
 					$(jsonData).each(function(index,element){
-						weekData3[index]=element.week_amount;
-						xData_week3[index]=new Date(element.week_time).toLocaleString();
+						var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+						var indexTemp = jQuery.inArray(dateTemp,xData_week);
+						weekData3[indexTemp]=element.week_amount;
                     });
 					chart7_option.series[2].data=weekData3;
 					chart7.setOption(chart7_option);

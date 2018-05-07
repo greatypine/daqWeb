@@ -58,6 +58,11 @@ public interface ChartStatManager extends IManager {
 	public List<Map<String, Object>> queryTurnoverByDay(ChartStatDto csd);
 	
 	/**
+	 * 获取当年的周，从周日开始
+	 */
+	public List<String> getDateByWeek();
+	
+	/**
 	 * 查询周营业额K点
 	 */
 	public List<Map<String, Object>> queryTurnoverByWeek(ChartStatDto csd);
