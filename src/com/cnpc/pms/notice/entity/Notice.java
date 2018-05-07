@@ -15,7 +15,7 @@ import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 @Entity
 @Table(name = "t_notice")
 public class Notice extends DataEntity{
-	private static final long serialVersionUID = 1L;
+	
 
 	@Column(name = "title",length=255)
 	private String title;//标题

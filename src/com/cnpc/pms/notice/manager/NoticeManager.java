@@ -168,5 +168,7 @@ public interface NoticeManager extends IManager{
 	* @return Map<String,Object> 
 	* @throws
 	 */
-	public Map<String,Object> editNotice(NoticeDto notice);
+	public Map<String,Object> editNotice(Notice notice);
+	
+	public Notice getNoticeById(Long id);
 }

@@ -5,6 +5,9 @@ import javax.persistence.Column;
 public class NoticeDto {
 
 	
+	
+	private Long id;
+	
 	private String title;//标题
 	
 	private String content;//内容
@@ -63,6 +66,14 @@ public class NoticeDto {
 
 	public void setGrade(Integer grade) {
 		this.grade = grade;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	

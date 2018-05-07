@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.BeanUtils;
+
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
@@ -26,6 +28,9 @@ import com.cnpc.pms.notice.dto.NoticeDto;
 import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.manager.NoticeManager;
 import com.cnpc.pms.notice.util.SendNotice;
+import com.cnpc.pms.personal.entity.TinyArea;
+import com.cnpc.pms.personal.manager.TinyAreaManager;
+import com.cnpc.pms.slice.entity.Area;
 import com.cnpc.pms.slice.entity.AreaInfo;
 
 public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeManager{
@@ -389,19 +394,22 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 	}
 
 	@Override
-	public Map<String, Object> editNotice(NoticeDto notice) {
+	public Map<String, Object> editNotice(Notice notice) {
 		Map<String,Object> result = new HashMap<String,Object>();
+		NoticeManager noticeManager = (NoticeManager) SpringHelper.getBean("noticeManager");
+		
+		Notice ne=null;
 		try {
-			List<Notice> noticeList = (List<Notice>) this.getList(FilterFactory.getSimpleFilter("noticeNo", notice.getNoticeNo()));
-			if (noticeList != null && noticeList.size() > 0) {
-				Notice ne = noticeList.get(0);
+			
+			
+			    ne = (Notice)this.getObject(notice.getId());
 				ne.setTitle(notice.getTitle());
-				ne.setContent(notice.getContent());
+			    ne.setContent(notice.getContent());
 				preObject(ne);
-				saveObject(ne);
+				noticeManager.saveObject(ne);
 				result.put("code", CodeEnum.success.getValue());
 				result.put("message","修改成功");
-			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			result.put("code", CodeEnum.error.getValue());
@@ -410,6 +418,17 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 		}
 		
 		return result;
+	}
+
+	@Override
+	public Notice getNoticeById(Long id) {
+		NoticeManager noticeManager = (NoticeManager) SpringHelper.getBean("noticeManager");
+		List<?> lst_data = this.getList(FilterFactory.getSimpleFilter("id=" + id));
+				
+		if (lst_data != null && lst_data.size() > 0) {
+			return (Notice) lst_data.get(0);
+		}
+		return null;
 	}
 
 }

@@ -42,25 +42,25 @@
     	 window.location.href = 'notice_send.html';
     }
 
-    
+    var editNoticeID="";
     var detailObj = {
             html: '<a href="#"  class="blue">详情</a>',
             resourceId: "",
             func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
             	
             		 var noticeNo = allColumnsDataMap.noticeNo;
-            		
+            		 editNoticeID = allColumnsDataMap["id"];
                      doManager('noticeManager','selectNoticeByNoticeNo',[noticeNo],function(data){
                         if(data.result){
                            var result = JSON.parse(data.data);
                            var detailInfo = result.data;
                            if(detailInfo!=null&&detailInfo.length>0){
                         	   $("#title_s").empty();
-                               $("#title_s").append(detailInfo[0].title);
+                               $("#title_s").val(detailInfo[0].title);
                                
                                
                                $("#content_s").empty();
-                               $("#content_s").append(detailInfo[0].content);
+                               $("#content_s").val(detailInfo[0].content);
                                
                                $("#type_s").empty();
                                if(detailInfo[0].type=="1"){
@@ -84,34 +84,33 @@
                                
                                $("#cityes_s").empty();
                                if(detailInfo[0].cityes==null||detailInfo[0].cityes==""){
-                            	   $("#cityes_s").append("全部");
+                            	   $("#cityes_s").val("全部");
                                }else{
-                            	   $("#cityes_s").append(detailInfo[0].cityes);
+                            	   $("#cityes_s").val(detailInfo[0].cityes);
                                }
                                
                                
                                
                                $("#stores_s").empty();
                                if(detailInfo[0].stores==null||detailInfo[0].stores==""){
-                            	   $("#stores_s").append("全部");
+                            	   $("#stores_s").val("全部");
                                }else{
-                            	   $("#stores_s").append(detailInfo[0].stores);
+                            	   $("#stores_s").val(detailInfo[0].stores);
                                }
                                
                                
                                $("#zw_s").empty();
                                if(detailInfo[0].zw==null||detailInfo[0].zw==""){
-                            	   $("#zw_s").append("全部");
+                            	   $("#zw_s").val("全部");
                                }else{
-                            	   $("#zw_s").append(detailInfo[0].zw);
+                            	   $("#zw_s").val(detailInfo[0].zw);
                                }
-                               
                                
                                $('#noticeDetail_div').dialog({
                                    bgiframe : true,
                                    title : "提示",
                                    width : 450,
-                                   height : 500,
+                                   height : 540,
                                    modal : true
                                });
                            }else{
@@ -128,7 +127,31 @@
         };
         
     
-    
+    function editNotice(){
+    	 $$.showConfirm("提示","是否继续提交？",function () {
+    		 
+    		 var title = $("#title_s").val();
+    		 var content = $("#content_s").val();
+    		 var notice = {
+    				 title:title,
+    				 content:content,
+    				 id:editNoticeID
+    		 }
+             doManager('noticeManager','editNotice',[notice],function(data){
+                if(data.result){
+                    var result = JSON.parse(data.data).code
+                    if(result=="200"){
+                    	searchList();
+                    	$('#noticeDetail_div').dialog("close");
+                    }else{
+                    	$$.showMessage('提示',"修改失败");
+                    }
+                }else{
+                    $$.showMessage('提示',"修改失败");
+                }
+             });
+         });
+    }
     
      var deleteObj = {
             html: '<a href="#"  class="blue">撤销</a>',
@@ -293,32 +316,36 @@
        		<tr>
        			<td width="8px"><span>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题：</span></td>
        			<td>
-        			<textarea id="title_s" cols="40" style="height:40px;resize:none;" readonly="readonly"></textarea>
+        			<textarea id="title_s" cols="40" style="height:40px;resize:none;" ></textarea>
        			</td>
        		</tr> 
        		<tr>
        			<td width="8px"><span>内&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容：</span></td>
         		<td>
-        			<textarea id="content_s" cols="40" style="height:100px;resize:none;" readonly="readonly"></textarea>
+        			<textarea id="content_s" cols="40" style="height:100px;resize:none;" ></textarea>
         		</td>
         	</tr>
         	<tr>
        			<td width="8px"><span>城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;市：</span></td>
         		<td>
-        			<textarea id="cityes_s" cols="40" style="height:50px;resize:none;" readonly="readonly"></textarea>
+        			<textarea id="cityes_s" cols="40" style="height:50px;resize:none;background-color:#d3d3d3c7" readonly="readonly"></textarea>
         		</td>
         	</tr>
        		<tr>
        			<td width="8px"><span>门&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;店：</span></td>
         		<td>
-        			<textarea id="stores_s" cols="40" style="height:70px;resize:none;" readonly="readonly"></textarea>
+        			<textarea id="stores_s" cols="40" style="height:70px;resize:none;background-color:#d3d3d3c7" readonly="readonly"></textarea>
         		</td>
         	</tr>
         	<tr>
        			<td width="8px"><span>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span></td>
         		<td>
-        			<textarea id="zw_s" cols="40" style="height:50px;resize:none;" readonly="readonly"></textarea>
+        			<textarea id="zw_s" cols="40" style="height:50px;resize:none;background-color:#d3d3d3c7" readonly="readonly"></textarea>
         		</td>
+        	</tr>
+        	
+        	<tr>
+       			<td colspan="2" style="text-align:center"><button id="eidtBtn" class="btn btn-primary" onclick="editNotice()">提交</button></td>
         	</tr>
        	 </table>
       </div>	
