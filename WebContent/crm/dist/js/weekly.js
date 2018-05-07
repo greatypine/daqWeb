@@ -3667,13 +3667,13 @@ var initchart4 = function(){
         show: false
       },
       axisTick: {
-        show: false
+        show: true
       },
       splitArea: {
         show: false
       },
       axisLabel: {
-        interval: 0,
+        interval: 1,
 
       },
       data: xData_week,
@@ -4926,22 +4926,32 @@ function oneyearorsixweek(){
 			});
 	  }
 	  
-	  var weekData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	  var xData_week_temp = function() {
+			var dataTemp = [];
+			doManager("chartStatManager","getDateByWeek",null,
+		   			function(data,textStatus,XmlHttpRequest){
+		   				if (data.result) {
+		   					var jsonData = $.fromJSON(data.data);
+		   					dataTemp = jsonData;
+		   				}
+		   		},false);	
+			return dataTemp;
+		};
+	  
+//	  var weekData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 	  function initWeekData(){
+		  weekData = new Array(xData_week.length+1).join(0).split('');
 			doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto],
 				function(data,textStatus,XmlHttpRequest){
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
 						$(jsonData).each(function(index,element){
-//	 						weekData[parseInt(element.week_time)-1]=element.week_amount;
-							weekData[index]=element.week_amount;
-							xData_week[index]=new Date(element.week_time).toLocaleString();
+							var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+							var indexTemp = jQuery.inArray(dateTemp,xData_week);
+							weekData[indexTemp]=element.week_amount;
 	                    });
-						//chart28_option.series[0].data=weekData;
 						chart28.setOption(chart28_option);
 					}
-					$("#process_div").hide();
-					$("#process_div_pic").hide();
 			});
 		} 
 	  
@@ -4986,7 +4996,7 @@ function oneyearorsixweek(){
 	  
 	//搜索
 		function search_manual_k(){
-				 	  
+			  xData_week = xData_week_temp();	 	  
 		 	  shareChartStatDto = getShareParam();
 			  //分时GMV
 			  hourData = [];
