@@ -148,7 +148,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	}
 
 	
-	public double  getStoretradeOfGAX(DynamicDto dd){
+	public double  getStoretradeOfGAX(DynamicDto dd){ 
 		String sub_str="";
 		if(dd.getTarget()==1){//城市总监
 			if(dd.getEmployeeId()!=null&&!"".equals(dd.getEmployeeId())){
@@ -906,7 +906,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public List<Map<String, Object>> queryStoreTradeOfDept(DynamicDto dynamicDto) {
 		String sql = "select SUM(d.gmv) as gmv,name,storeno,career_group,storename,employee_no from (select a.*,b.store_name,b.dep_name,IFNULL(b.gmv,0) as gmv,ifnull(c.name,'') as name,ifnull(c.employee_no,'') as employee_no from "+
 					" (select ts.storeno,ts.name as storename,ts.store_id,td.career_group from t_store ts,t_data_human_type td where storeno in ("+dynamicDto.getStoreNo()+")) a LEFT JOIN "+
-					" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_storetrade_channel where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
+					" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_ope_gmv_storechannel_month where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
 					" on a.storeno = b.storeno and a.career_group like CONCAT('%',b.dep_name,'%') LEFT JOIN (select th.name,th.employee_no,th.career_group,ts.storeno  from t_humanresources th INNER JOIN t_store ts on th.store_id = ts.store_id  and   th.zw='服务专员' and th.humanstatus = 1) c on  a.career_group  = c.career_group and c.storeno = a.storeno) d  GROUP BY d.storeno,d.career_group,d.employee_no";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1367,7 +1367,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String sql="select SUM(d.gmv) as gmv,storeno,career_group,storename from "+
 				" (select a.*,b.store_name,b.dep_name,IFNULL(b.gmv,0) as gmv from "+
 				" (select ts.storeno,ts.name as storename,ts.store_id,td.career_group from t_store ts,t_data_human_type td where storeno='"+dynamicDto.getStoreNo()+"') a LEFT JOIN "+ 
-				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_storetrade_channel where year= "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"' GROUP BY storeno,dep_name) b  on a.storeno = b.storeno and  a.career_group like CONCAT('%',b.dep_name,'%') "+
+				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_ope_gmv_storechannel_month where year= "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"' GROUP BY storeno,dep_name) b  on a.storeno = b.storeno and  a.career_group like CONCAT('%',b.dep_name,'%') "+
 				" ) d  GROUP BY d.storeno,d.career_group";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1380,7 +1380,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public Map<String, Object> selectChannelRankingOfStore(DynamicDto dynamicDto,PageInfo pageInfo) {
 		//String sql="select convert(SUM(IFNULL(gmv_price,0)),decimal(20,2)) as amount,channel_name as name from df_mass_order_monthly where DATE_FORMAT(sign_time,'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m') and store_code='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc";
 	    //String sql="select SUM(IFNULL(order_amount,0)) as amount,channel_name as name from ds_storetrade_channel where year = 2017 and month=11 and storeno='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc";
-		String sql="select SUM(IFNULL(order_amount,0)) as amount,channel_name as name from ds_storetrade_channel where year = "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc";
+		String sql="select SUM(IFNULL(order_amount,0)) as amount,channel_name as name from ds_ope_gmv_storechannel_month where year = "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc";
 
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
 		Map<String,Object> map_result = new HashMap<String,Object>();
@@ -1514,7 +1514,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 //				" on a.storeno = b.store_code and a.career_group like CONCAT('%',b.department_name,'%') LEFT JOIN (select th.name,th.employee_no,th.career_group,ts.storeno  from t_humanresources th INNER JOIN t_store ts on th.store_id = ts.store_id  and   th.zw='服务专员' and th.humanstatus = 1 and ts.storeno='"+dynamicDto.getStoreNo()+"') c on  a.career_group  = c.career_group and c.storeno = a.storeno) d  GROUP BY d.storeno,d.career_group,d.employee_no having d.employee_no is not null and d.employee_no!=''  order by gmv desc ";
 		String sql = "select SUM(d.gmv) as gmv,name,storeno,career_group,storename,employee_no from (select a.*,b.store_name,b.dep_name,IFNULL(b.gmv,0) as gmv,ifnull(c.name,'') as name,ifnull(c.employee_no,'') as employee_no from "+
 				" (select ts.storeno,ts.name as storename,ts.store_id,td.career_group from t_store ts,t_data_human_type td where storeno = '"+dynamicDto.getStoreNo()+"') a LEFT JOIN "+
-				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_storetrade_channel where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
+				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_ope_gmv_storechannel_month where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
 				" on a.storeno = b.storeno and  a.career_group like CONCAT('%',b.dep_name,'%') LEFT JOIN (select th.name,th.employee_no,th.career_group,ts.storeno  from t_humanresources th INNER JOIN t_store ts on th.store_id = ts.store_id  and   th.zw='服务专员' and th.humanstatus = 1) c on  a.career_group  = c.career_group and c.storeno = a.storeno) d  GROUP BY d.storeno,d.career_group,d.employee_no having d.employee_no is not null and d.employee_no!=''  order by gmv desc ";
 	SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 	List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1561,7 +1561,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public Map<String, Object> selectChannelOrderRanking(DynamicDto dynamicDto,PageInfo pageInfo) {
 		//String sql="select count(1)  as amount,channel_name as name from df_mass_order_monthly where DATE_FORMAT(sign_time,'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m') and store_code='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc ";
 		//String sql="select sum(ifnull(order_count,0))  as amount,channel_name as name from ds_storetrade_channel where year = 2017 and month=11 and storeno='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc ";
-		String sql="select sum(ifnull(order_count,0))  as amount,channel_name as name from ds_storetrade_channel where year = "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc ";
+		String sql="select sum(ifnull(order_count,0))  as amount,channel_name as name from ds_ope_gmv_storechannel_month where year = "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"'  GROUP BY channel_name order by amount desc ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
 		
@@ -1621,7 +1621,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select dsch.id as channel_id,channel_name,ifnull(sum(order_count),0) as order_count from ds_storetrade_channel dsch "+
+		String sql ="select dsch.id as channel_id,channel_name,ifnull(sum(order_count),0) as order_count from ds_ope_gmv_storechannel_month dsch "+
 				"left join t_store ts on (dsch.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name  "+
 				"where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and channel_name is not null "+
 				 provinceStr + cityStr +
@@ -1777,7 +1777,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		String sql = "select name as employee_name,sum(gmv) gmv from (select SUM(d.gmv) as gmv,name,storeno,career_group,storename,employee_no from (select a.*,b.store_name,b.dep_name,IFNULL(b.gmv,0) as gmv,ifnull(c.name,'') as name,ifnull(c.employee_no,'') as employee_no from "+
 				" (select ts.storeno,ts.name as storename,ts.store_id,td.career_group from t_store ts,t_data_human_type td "+provinceStr+cityStr+") a LEFT JOIN "+
-				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_storetrade_channel where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
+				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_ope_gmv_storechannel_month where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
 				" on a.storeno = b.storeno and b.dep_name like CONCAT('%',a.career_group,'%') "+ 
 				" LEFT JOIN (select th.name,th.employee_no,th.career_group,ts.storeno  from t_humanresources th INNER JOIN t_store ts on th.store_id = ts.store_id  and   th.zw='服务专员' and th.humanstatus = 1) c on  a.career_group  = c.career_group and c.storeno = a.storeno) d  "+ 
 				" GROUP BY d.storeno,d.career_group,d.employee_no) tmpline " +
@@ -2910,7 +2910,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				"t.storetype !='W' AND t.storetypename IS NOT NULL "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
-		try{
+		try{ 
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sqlStr);
 			List<Map<String,Object>> lst_data = query

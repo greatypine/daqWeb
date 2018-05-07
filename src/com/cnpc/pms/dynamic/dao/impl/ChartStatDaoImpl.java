@@ -24,7 +24,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dod.store_code = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dod.store_city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND dod.store_city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND dod.department_name like '%"+csd.getDeptname()+"%' ";
@@ -59,7 +59,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dom.store_code = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dom.store_city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND dom.store_city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND dom.department_name like '%"+csd.getDeptname()+"%' ";
@@ -91,7 +91,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dom.store_code = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dom.store_city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND dom.store_city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND dom.department_name like '%"+csd.getDeptname()+"%' ";
@@ -158,7 +158,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dom.store_code = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dom.store_city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND dom.store_city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND dom.department_name like '%"+csd.getDeptname()+"%' ";
@@ -192,7 +192,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND store_code = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND store_city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND store_city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND department_name like '%"+csd.getDeptname()+"%' ";
@@ -225,7 +225,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dst.storeno = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dst.city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND dst.city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND dst.dep_name like '%"+csd.getDeptname()+"%' ";
@@ -255,7 +255,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		String sql = "SELECT IFNULL(FLOOR(SUM(dt.gmv)),0) AS month_amount,CONCAT(dt. YEAR, '-', dt. MONTH) AS month_time FROM df_gmv_target dt "
 				+ "WHERE dt.year = YEAR(curdate()) ";
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dt.city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND dt.city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND dt.dep_name like '%"+csd.getDeptname()+"%' ";
@@ -286,7 +286,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dsc.storeno = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dsc.city_name='"+csd.getCityname()+"' ";
+			sql = sql + " AND dsc.city_name like '"+csd.getCityname()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getDeptname())){
 			sql = sql + " AND dep_name like '%"+csd.getDeptname()+"%' ";

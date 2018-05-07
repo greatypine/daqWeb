@@ -119,12 +119,6 @@
           <div class="auto hidden" id="auto_contrast" style="width: 94%;z-index: 99999;">
           </div>
         </div>
-        <div class="col-sm-6 form-group no-padding no-margin">
-          	<label><input type="checkbox" class="minimal-red" id="cbClickContrast" value="cb" checked><span style="padding-left: 10px;">C端+小B端</span></label>
-        </div>
-        <div class="col-sm-6 form-group no-padding no-margin">
-          	<label><input type="checkbox" class="minimal-red" id="maxbClickContrast" value="maxb" checked><span style="padding-left: 10px;">大B端</span></label>
-        </div>
 		<div class="col-sm-12 text-center no-padding has-error">
           <button type="button" class="btn btn-block btn-error btn-sm" id="search-btn-contrast" style="margin: 10px 45px 0 auto; font-size: 14px;">加入对比</button>
         </div>
@@ -202,7 +196,7 @@
 		          	<label><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C端+小B端</span></label>
 		        </div>
 		        <div class="col-sm-6 form-group no-padding no-margin">
-		          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb" checked><span style="padding-left: 10px;">大B端</span></label>
+		          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B端</span></label>
 		        </div>
               </form>
             </div>
@@ -1483,26 +1477,6 @@
 	 $('#maxbClick').iCheck({
 	  	checkboxClass: 'icheckbox_minimal-red'
 	 });
-	 //悬浮框小B端iCheck
-	 $('#cbClickContrast').on('ifChecked', function(event){ //ifChecked 事件应该在插件初始化之前绑定 
-		 iCheckContrastStr = $(this).val();
-	 });
-	 $('#cbClickContrast').on('ifUnchecked', function(event){
-		 iCheckContrastStr = "";
-	 });
-	 $('#cbClickContrast').iCheck({
-	  	checkboxClass: 'icheckbox_minimal-red'
-	 });
-	 //悬浮框大B端iCheck	 
-	 $('#maxbClickContrast').on('ifChecked', function(event){ //ifChecked 事件应该在插件初始化之前绑定 
-		 iCheckContrastMaxStr = $(this).val();
-	 });
-	 $('#maxbClickContrast').on('ifUnchecked', function(event){
-		 iCheckContrastMaxStr = "";
-	 });
-	 $('#maxbClickContrast').iCheck({
-	  	checkboxClass: 'icheckbox_minimal-red'
-	 });
 	  //＋对比
 	  $("#search-btn-add").click(function(){
 		  var labelName1 = $("#label_manual_first").html();
@@ -1658,11 +1632,11 @@
 	  $("#contrast").click(function(){
 		  var url = "";
 		  if(target==0){
-		  	url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&icheck="+encode64(iCheckContrastStr)+"&icheckmax="+encode64(iCheckContrastMaxStr)+"&#ff";
+		  	url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&#ff";
 		  }else if(target==1){
-		  	url = "index_K_contrast.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e=&r=&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&icheck="+encode64(iCheckContrastStr)+"&icheckmax="+encode64(iCheckContrastMaxStr)+"&#ff";
+		  	url = "index_K_contrast.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e=&r=&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&#ff";
 		  }else{
-			  url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&icheck="+encode64(iCheckContrastStr)+"&icheckmax="+encode64(iCheckContrastMaxStr)+"&#ff";
+			  url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&#ff";
 		  }
 		  window.open(url,"index_K_contrast"); 
 	  });
@@ -1676,10 +1650,8 @@
 // 	  var cityName = $("#citySelect  option:selected").val();
 // 	  if(cityName!="" && cityName!=undefined){
 // 	    if(cityName=="黔东南苗族侗族自治州"){
-// 	    	cityName="黔东南州";
-// 	  	}else{
-// 	    	cityName=cityName+"市";
-// 	    	}
+// 	    	cityName="黔东南";
+// 	  	}
 // 	  }else{
 // 	    cityName = null;
 // 	  }
@@ -1820,15 +1792,6 @@
 				}
 		},false);
 		
-		
-		var targetCityname = shareChartStatDto.cityname;
-		if(targetCityname!='' && targetCityname!=null){
-			if(targetCityname=="黔东南州"){
-				shareChartStatDto.cityname="黔东南苗族侗族自治州";
-		  	}else{
-		  		shareChartStatDto.cityname=targetCityname.substring(0,targetCityname.length-1);
-		    }
-		}
 		doManager("chartStatManager","queryTargetByMonth",[shareChartStatDto],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -2222,7 +2185,7 @@
 	}
   
 	var iCheckStr = "cb";
-	var iCheckMaxStr = "maxb";
+	var iCheckMaxStr = "";
 	function getShareParam(){
 		 var cLabel=0;
 		 var maxBLabel=0;
@@ -2238,10 +2201,8 @@
 		  var cityName = $("#citySelect  option:selected").val();
 		  if(cityName!="" && cityName!=undefined){
 		    if(cityName=="黔东南苗族侗族自治州"){
-		    	cityName="黔东南州";
-		  	}else{
-		    	cityName=cityName+"市";
-		    	}
+		    	cityName="黔东南";
+		  	}
 		  }else{
 		    cityName = null;
 		  }
@@ -2265,27 +2226,13 @@
 			}
 	}
 	
-	var iCheckContrastStr = "cb";
-	var iCheckContrastMaxStr = "maxb";
 	function getShareParamContrast(){
-		 var cLabel=0;
-		 var maxBLabel=0;
-		 var smallBLabel=0;
-		 if(iCheckContrastStr=='cb') {
-			 cLabel=1;
-			 smallBLabel=1;
-		 }
-		 if(iCheckContrastMaxStr=='maxb') {
-			 maxBLabel=1;
-		 }
 		 var storeno = $("#store_id_manual_contrast").val()==""?null:$("#store_id_manual_contrast").val();
 		  var cityName = $("#citySelectContrast  option:selected").val();
 		  if(cityName!="" && cityName!=undefined){
 		    if(cityName=="黔东南苗族侗族自治州"){
-		    	cityName="黔东南州";
-		  	}else{
-		    	cityName=cityName+"市";
-		    	}
+		    	cityName="黔东南";
+		  	}
 		  }else{
 		    cityName = null;
 		  }
@@ -2302,10 +2249,7 @@
 				storeno:storeno,
 				cityname:cityName,
 				deptname:deptname,
-				channelname:channelname,
-				cLabel:cLabel,
-				maxBLabel:maxBLabel,
-				smallBLabel:smallBLabel
+				channelname:channelname
 			}
 	}
 	

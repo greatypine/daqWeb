@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -22,9 +22,11 @@ import com.cnpc.pms.messageModel.entity.Message;
 import com.cnpc.pms.messageModel.entity.MessageSendUtil;
 import com.cnpc.pms.notice.dao.NoticeDao;
 import com.cnpc.pms.notice.dao.NoticeReciverDao;
+import com.cnpc.pms.notice.dto.NoticeDto;
 import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.manager.NoticeManager;
 import com.cnpc.pms.notice.util.SendNotice;
+import com.cnpc.pms.slice.entity.AreaInfo;
 
 public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeManager{
 
@@ -380,6 +382,30 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message","撤销失败");
+			return result;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> editNotice(NoticeDto notice) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			List<Notice> noticeList = (List<Notice>) this.getList(FilterFactory.getSimpleFilter("noticeNo", notice.getNoticeNo()));
+			if (noticeList != null && noticeList.size() > 0) {
+				Notice ne = noticeList.get(0);
+				ne.setTitle(notice.getTitle());
+				ne.setContent(notice.getContent());
+				preObject(ne);
+				saveObject(ne);
+				result.put("code", CodeEnum.success.getValue());
+				result.put("message","修改成功");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", CodeEnum.error.getValue());
+			result.put("message","修改失败");
 			return result;
 		}
 		

@@ -63,7 +63,7 @@ public class BatchManagerImpl extends BizBaseCommonManager implements BatchManag
 	private static String staticQuerySql =
 			"select '门店GMV' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_storetrade where year =${year} and month =${month}" +
 			" union " +
-			"select '门店交易额（按频道）' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_storetrade_channel where year =${year} and month =${month}" +
+			"select '门店交易额（按频道）' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_ope_gmv_storechannel_month where year =${year} and month =${month}" +
 			" union "+
 			"select '国安侠GMV' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_emptrade where year =${year} and month =${month}"+
 			" union " +
