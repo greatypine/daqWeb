@@ -906,7 +906,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public List<Map<String, Object>> queryStoreTradeOfDept(DynamicDto dynamicDto) {
 		String sql = "select SUM(d.gmv) as gmv,name,storeno,career_group,storename,employee_no from (select a.*,b.store_name,b.dep_name,IFNULL(b.gmv,0) as gmv,ifnull(c.name,'') as name,ifnull(c.employee_no,'') as employee_no from "+
 					" (select ts.storeno,ts.name as storename,ts.store_id,td.career_group from t_store ts,t_data_human_type td where storeno in ("+dynamicDto.getStoreNo()+")) a LEFT JOIN "+
-					" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_storetrade_channel where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
+					" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_ope_gmv_storechannel_month where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
 					" on a.storeno = b.storeno and a.career_group like CONCAT('%',b.dep_name,'%') LEFT JOIN (select th.name,th.employee_no,th.career_group,ts.storeno  from t_humanresources th INNER JOIN t_store ts on th.store_id = ts.store_id  and   th.zw='服务专员' and th.humanstatus = 1) c on  a.career_group  = c.career_group and c.storeno = a.storeno) d  GROUP BY d.storeno,d.career_group,d.employee_no";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1621,7 +1621,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select dsch.id as channel_id,channel_name,ifnull(sum(order_count),0) as order_count from ds_storetrade_channel dsch "+
+		String sql ="select dsch.id as channel_id,channel_name,ifnull(sum(order_count),0) as order_count from ds_ope_gmv_storechannel_month dsch "+
 				"left join t_store ts on (dsch.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name  "+
 				"where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and channel_name is not null "+
 				 provinceStr + cityStr +
@@ -1777,7 +1777,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		String sql = "select name as employee_name,sum(gmv) gmv from (select SUM(d.gmv) as gmv,name,storeno,career_group,storename,employee_no from (select a.*,b.store_name,b.dep_name,IFNULL(b.gmv,0) as gmv,ifnull(c.name,'') as name,ifnull(c.employee_no,'') as employee_no from "+
 				" (select ts.storeno,ts.name as storename,ts.store_id,td.career_group from t_store ts,t_data_human_type td "+provinceStr+cityStr+") a LEFT JOIN "+
-				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_storetrade_channel where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
+				" (select store_name,storeno,dep_name,SUM(IFNULL(order_amount,0)) as gmv from ds_ope_gmv_storechannel_month where year="+dynamicDto.getYear()+"  and month="+dynamicDto.getMonth()+" GROUP BY storeno,dep_name) b "+
 				" on a.storeno = b.storeno and b.dep_name like CONCAT('%',a.career_group,'%') "+ 
 				" LEFT JOIN (select th.name,th.employee_no,th.career_group,ts.storeno  from t_humanresources th INNER JOIN t_store ts on th.store_id = ts.store_id  and   th.zw='服务专员' and th.humanstatus = 1) c on  a.career_group  = c.career_group and c.storeno = a.storeno) d  "+ 
 				" GROUP BY d.storeno,d.career_group,d.employee_no) tmpline " +
