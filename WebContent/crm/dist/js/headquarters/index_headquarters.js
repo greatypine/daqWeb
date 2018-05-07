@@ -64,6 +64,8 @@ $(document).ready(function () {
 	initcurruser();
     // 设置页面初始显示参数
     pageStatusInfo = initPageStatusInfo(requestParameters);
+	//菜单根据权限是否显示
+	menuShowByRole();
     //console.log('\tinit page parameter');
     //console.log(pageStatusInfo);
     // 显示页面统计数据
@@ -119,7 +121,7 @@ var showPageContent = function (pageStatusInfo) {
 
     // 显示城市排名(GMV)
     getCityRankDataGmv(pageStatusInfo);
-
+    
     // 显示门店排名(GMV)
     getStoreRankDataGmv(pageStatusInfo);
 
@@ -1904,7 +1906,7 @@ var getCityRankDataGmv = function (pageStatusInfo) {
         //console.log('request city rank gmv data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
     }
 };
-// 显示城市排名
+// 显示近7天GMV走势
 var showCityRankGmv = function (cityRankDataGmv) {
   	var data = [];
     var data1 = [];
@@ -3455,7 +3457,9 @@ var getReauestParameters = function () {
 		    // 城市名称
 		    cityName = (decode64(getUrlParamByKey("cn")) == 'null'||decode64(getUrlParamByKey("cn")) == null) ? '' : decode64(getUrlParamByKey("cn"));
 		    $("#currentCity").empty();
-		    $("#currentCity").html("概要统计");
+		    var gengduo = $('<span class="pull-right" style="font-size: 12px;cursor:pointer" id="net_more">更多</span>');
+		    $("#gaiyao").append(gengduo);
+		    $("#currentCity").html("线下网络体系");
 	}
     // 城市ID
     // 缩放级别
@@ -4550,7 +4554,21 @@ var initClick = function(){
         var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
         window.open(url);
     });
-    
+    $("#gmv_rank_more").on('click',function(){
+    	var role = curr_user.usergroup.code;
+	   var url = "";
+	   var target=pageStatusInfo.targets;
+	   if(target==0){
+	  	 url = "index_K.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+	   }else if(target==1){
+	  	 url = "index_K.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+	   }
+	   window.open(url,"index_K");
+    });
+    $("#net_more").on('click',function(){
+        var url = "index_city_net.html";
+        window.open(url);
+    });
 }
 function outputcents(amount) {//小数部分(两位)
     amount = Math.round(((amount) - Math.floor(amount)) * 100);
@@ -4759,6 +4777,13 @@ function getStoreKindsNumber(){
                     });
                 }
             });
+}
+function menuShowByRole(){
+	  if(pageStatusInfo.targets==0){
+		$("#city_net").show();
+	  }else if(pageStatusInfo.targets==1){
+		  $("#city_net").hide();
+	  }
 }
 function  clearCache(){
 	localStorage.clear();

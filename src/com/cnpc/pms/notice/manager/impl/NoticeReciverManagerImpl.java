@@ -11,6 +11,7 @@ import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.dao.core.IDAORoot;
 import com.cnpc.pms.base.exception.PMSManagerException;
 import com.cnpc.pms.base.paging.FSP;
+import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.IJoin;
 import com.cnpc.pms.base.paging.impl.PageInfo;
@@ -21,6 +22,7 @@ import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.notice.dao.NoticeReciverDao;
 import com.cnpc.pms.notice.entity.NoticeReciver;
 import com.cnpc.pms.notice.manager.NoticeReciverManager;
+import com.cnpc.pms.slice.entity.AreaInfo;
 
 public class NoticeReciverManagerImpl extends BizBaseCommonManager implements NoticeReciverManager {
 
@@ -49,6 +51,25 @@ public class NoticeReciverManagerImpl extends BizBaseCommonManager implements No
 		NoticeReciverDao noticeReciverDao = (NoticeReciverDao)SpringHelper.getBean(NoticeReciverDao.class.getName());
 		
 		return noticeReciverDao.updateNoticeReciverIsRead(noticeNo, employeeNo);
+	}
+
+	@Override
+	public List<NoticeReciver> selectNoticeReciverOfUnRead(String employeeNo) {
+		NoticeReciverManager nrm = (NoticeReciverManager)SpringHelper.getBean("noticeReciverManager");
+		List<NoticeReciver> lst_areaInfos = new ArrayList<NoticeReciver>();
+		try {
+			lst_areaInfos = (List<NoticeReciver>) nrm.getList(FilterFactory.getSimpleFilter("employeeNo", employeeNo).appendAnd(FilterFactory.getSimpleFilter("status", 0)).appendAnd(FilterFactory.getSimpleFilter("isRead", 0)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return lst_areaInfos;
+		}
+		return lst_areaInfos;
+	}
+
+	@Override
+	public int getUnReadNotice(String employeeNo) {
+		List<NoticeReciver> lst_areaInfos = this.selectNoticeReciverOfUnRead(employeeNo);
+		return  lst_areaInfos.size();
 	}
 
 	

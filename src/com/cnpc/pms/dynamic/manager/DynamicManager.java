@@ -1002,4 +1002,10 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public Map<String, Object> getStoreKindCount(DynamicDto dd);
+    /**
+     * 查询近30日GMV走势图
+     * @param dd
+     * @return
+     */
+    public Map<String, Object> getCityGMVRangeForMonth(DynamicDto dd);
 }

@@ -6487,4 +6487,62 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		result.put("kind", dynamicMap);
 		return result;
 	}
+	@Override
+	public Map<String, Object> getCityGMVRangeForMonth(DynamicDto dd) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		String curDate = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+		String beginDate = DateUtils.getBeforeDate(curDate,-30);
+		String endDate = DateUtils.lastDate();
+		String lastDate = DateUtils.lastDate();
+		dd.setBeginDate(beginDate);
+		dd.setEndDate(endDate);
+//		String lastDate = "2018-03-29";
+//		dd.setBeginDate("2018-03-01");
+//		dd.setEndDate("2018-03-30");
+		try {
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+			Map<String, Object> newMonthUserCount = dynamicDao.getCityGMVRangeForMonth(dd,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) newMonthUserCount.get("lst_data");
+			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+			String maxDateStr = lastDate;    
+		    String minDateStr = "";    
+		    Calendar calc =Calendar.getInstance();      
+	         for(int i=0;i<30;i++){  
+	        	 calc.setTime(sdf.parse(maxDateStr));    
+	             calc.add(calc.DATE, -i);    
+	             Date minDate = calc.getTime();    
+	             minDateStr = sdf.format(minDate);   
+	           	Map<String,Object> lst_map = new HashMap<String, Object>();
+	           	lst_map.put("week_date", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
+	           	lst_map.put("month_gmv", 0);
+				for(int j=0;j<lst_data.size();j++){
+	    			Map<String,Object> lst_map_week = lst_data.get(j);
+	    			String dateStr = String.valueOf(lst_map_week.get("week_date"));
+	    			if(minDateStr.contains(dateStr)){
+	    				lst_data.remove(j);
+	    				String week_date = String.valueOf(lst_map_week.get("week_date"));
+	    				lst_map.put("week_date", week_date);
+	    				lst_map.put("month_gmv", lst_map_week.get("month_gmv"));
+	    				
+	    			}
+				}
+				lst_data.add(lst_map);
+	         }
+	         result.put("lst_data", lst_data);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

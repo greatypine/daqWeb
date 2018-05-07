@@ -824,4 +824,14 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public List<Map<String, Object>> getStoreKindCountByCityAndProvince(DynamicDto dd);
+	/**
+	 * 查询近30日GMV走势图
+	 * @param dd
+	 * @param provinceNO 
+	 * @param cityNO 
+	 * @return
+	 */
+	public Map<String, Object> getCityGMVRangeForMonth(DynamicDto dd,
+			List<Map<String, Object>> cityNO,
+			List<Map<String, Object>> provinceNO);
 }

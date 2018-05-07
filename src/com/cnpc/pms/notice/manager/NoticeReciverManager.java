@@ -1,5 +1,6 @@
 package com.cnpc.pms.notice.manager;
 
+import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
@@ -40,5 +41,28 @@ public interface NoticeReciverManager extends IManager {
 	 */
 	public int updateNoticeReciverIsRead(String noticeNo,String employeeNo);
 	
+	/**
+	 * 
+	* @Title: selectNoticeReciver  
+	* @Description: TODO 查询未读的公告 
+	* 2018年5月7日
+	* @param @param employeeNo
+	* @param @return      
+	* @return List<NoticeReciver> 
+	* @throws
+	 */
+	public List<NoticeReciver> selectNoticeReciverOfUnRead(String  employeeNo);
+	
+	/**
+	 * 
+	* @Title: getUnReadNotice  
+	* @Description: TODO  获取未读公告数量
+	* 2018年5月7日
+	* @param @param employeeNo
+	* @param @return      
+	* @return int 
+	* @throws
+	 */
+	public int getUnReadNotice(String  employeeNo);
 	
 }
