@@ -76,12 +76,28 @@
     $(function(){
     	initcurruser();
     	
-        
+    	
     });
+    
     var loginUser = null;
     var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
 	var regex_cs = new RegExp("^(CS|cs)\w*");//城市角色
 	
+	
+	function showAlt(tag){
+		if(tag=="sms"){
+			layer.tips('手机短信', '#sms_img', {
+				  tips: [1, '#f1c524'], //还可配置颜色
+				  time: 2000
+				});
+		}else if(tag=="app"){
+			layer.tips('国安数据APP', '#app_img', {
+				  tips: [1, '#e44508'], //还可配置颜色
+				  time: 2000
+				});
+		}
+		
+	}
     function initcurruser(){
   		//取得当前登录人的门店
 		doManager("UserManager", "getCurrentUserDTO",null,
@@ -550,7 +566,7 @@ function showNoticeWay(){
                         <tr>
                             <td style="width:12%">通知方式<span style="color:red"></span></td>
                             <td>
-                               <div id="notice_way" style="height:35px"><img src="img/sms.png" height="35" alt="手机短信"/>&nbsp;&nbsp;<img src="img/gasj.png" height="35" alt="国安数据APP"/></div>
+                               <div id="notice_way" style="height:35px"><img id="sms_img" onmouseover="showAlt('sms')"  src="img/sms.png" height="35" alt="手机短信"/>&nbsp;&nbsp;<img id="app_img" src="img/gasj.png" onmouseover="showAlt('app')" height="35" alt="国安数据APP"/></div>
                             </td>
                         </tr>
                          <tr>
