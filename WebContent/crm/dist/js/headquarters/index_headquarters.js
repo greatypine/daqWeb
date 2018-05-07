@@ -64,6 +64,8 @@ $(document).ready(function () {
 	initcurruser();
     // 设置页面初始显示参数
     pageStatusInfo = initPageStatusInfo(requestParameters);
+	//菜单根据权限是否显示
+	menuShowByRole();
     //console.log('\tinit page parameter');
     //console.log(pageStatusInfo);
     // 显示页面统计数据
@@ -4775,6 +4777,13 @@ function getStoreKindsNumber(){
                     });
                 }
             });
+}
+function menuShowByRole(){
+	  if(pageStatusInfo.targets==0){
+		$("#city_net").show();
+	  }else if(pageStatusInfo.targets==1){
+		  $("#city_net").hide();
+	  }
 }
 function  clearCache(){
 	localStorage.clear();
