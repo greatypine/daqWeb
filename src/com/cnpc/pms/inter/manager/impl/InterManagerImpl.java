@@ -3424,8 +3424,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				HttpHost proxy = new HttpHost(proxyip, proxyport, "http");
 				RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
 				/** 上线时，添加代理设置 **/
-				//CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();;
-				CloseableHttpClient httpclient = HttpClients.createDefault();
+				CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();;
+				//CloseableHttpClient httpclient = HttpClients.createDefault();
 				HttpGet httpGet = new HttpGet(String.format(url, new Object[]{mobilephone,sendcode_gb2312}));
 				CloseableHttpResponse response = httpclient.execute(httpGet);
 				resultString = EntityUtils.toString(response.getEntity(), "utf-8");
