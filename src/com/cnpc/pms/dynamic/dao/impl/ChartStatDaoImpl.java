@@ -254,11 +254,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	public List<Map<String, Object>> queryTargetByMonth(ChartStatDto csd){
 		String sql = "SELECT IFNULL(FLOOR(SUM(dt.gmv)),0) AS month_amount,CONCAT(dt. YEAR, '-', dt. MONTH) AS month_time FROM df_gmv_target dt "
 				+ "WHERE dt.year = YEAR(curdate()) ";
-		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dt.city_name like '"+csd.getCityname()+"%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getDeptname())){
-			sql = sql + " AND dt.dep_name like '%"+csd.getDeptname()+"%' ";
+		if(StringUtils.isEmpty(csd.getCityname()) && StringUtils.isEmpty(csd.getDeptname())){
+			sql = sql + " AND dt.city_name!='' ";
+		}else{
+			if(StringUtils.isNotEmpty(csd.getCityname())){
+				sql = sql + " AND dt.city_name like '"+csd.getCityname()+"%' ";
+			}
+			if(StringUtils.isNotEmpty(csd.getDeptname())){
+				sql = sql + " AND dt.dep_name like '%"+csd.getDeptname()+"%' ";
+			}
 		}
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dt.channel_name like '%"+csd.getChannelname()+"%' ";
