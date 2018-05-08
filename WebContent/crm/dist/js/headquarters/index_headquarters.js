@@ -993,13 +993,23 @@ var setMapData = function (pageStatusInfo, params) {
         if (pageStatusInfo['showLevel'] == SHOW_LEVEL_CHINA) {
             if (params.data.citycode) {
             	if(isMunicipality(params.name)){
-            		pageStatusInfo['showLevel'] = SHOW_LEVEL_CITY;
-	                pageStatusInfo['cityId'] = params.data['province_id'];
-	                pageStatusInfo['cityName'] = params.name;
+            		$.each(eval(openedProvinceMunicipality), function (idx, val) {
+	    				if(params.data['name']==val['name']){
+		    				province_id = val['province_id'];
+					        pageStatusInfo.cityId = province_id;
+					        pageStatusInfo.cityName = params.data['name'];
+					        pageStatusInfo.showLevel = SHOW_LEVEL_CITY;
+	    				}
+	     			});
             	}else{
-            		pageStatusInfo['showLevel'] = SHOW_LEVEL_CITY;
-	                pageStatusInfo['cityId'] = params.data['cityId'];
-	                pageStatusInfo['cityName'] = params.name;
+            		$.each(eval(openedCity), function (idx, val) {
+	    				if(val['name'].indexOf(params.data['name'])>-1){
+		    				cityId = val['cityId'];
+					        pageStatusInfo.cityId = cityId;
+					        pageStatusInfo.cityName = params.data['name'];
+					        pageStatusInfo.showLevel = SHOW_LEVEL_CITY;
+	    				}
+	     			});
             	}
                 // 重置页面显示
     			showPageContent(pageStatusInfo);
@@ -1723,7 +1733,7 @@ function nocease(){
     option.series[1].data = null;
     option.series[2].data = convertData1(datas); 
     }
-    mapChart.setOption(option);
+    mapChart.setOption(option,true);
 }
 function getBeatJson(){
 		doManager("dynamicManager", "getDailyFirstOrderCity",[], function (data, textStatus, XMLHttpRequest) {
@@ -1749,14 +1759,14 @@ function nocease2(){
     option.series[1].data = null;
     option.series[2].data = convertData1(datas); 
     }
-    fullScreenChart.setOption(option);
+    fullScreenChart.setOption(option,true);
 }
 var getBeatData = function(datas,jsonData){
 	for(var i=1;i<jsonData['daily'].length;i++){
 		var object = new Object();
 		object.name = jsonData['daily'][i]['city_name'];
 		object.value = jsonData['daily'][i-1]['city_name'];
-		object.citycode = jsonData['daily'][i]['city_code'];
+		object.citycode = jsonData['daily'][i]['cityno'];
 		object.selected = true;
 		datas.push(object);
 	};
