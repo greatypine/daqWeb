@@ -4433,7 +4433,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String, Object> result  = new HashMap<String, Object>();
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
-			List<Map<String,Object>> cityCountList = dynamicDao.findCityCount(dd);
+			List<Map<String,Object>> cityCountList = dynamicDao.selectAllCitySort(dd);
 			List<Map<String,Object>> storeCountList = dynamicDao.findStoreCount(dd);
 			List<Map<String,Object>> storeKeeperCountList = dynamicDao.findStoreKeeperCount(dd);
 			Map<String,Object> storeGaxCountList = dynamicDao.findGaxCount(dd,pageInfo);
@@ -5918,16 +5918,18 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		List<Map<String, Object>> allCityList = dynamicDao.selectAllCity();
-		dailyStoreOrderCityList = orderDao.getDailyFirstOrderCity();
+		//dailyStoreOrderCityList = orderDao.getDailyFirstOrderCity();
+		dailyStoreOrderCityList = dynamicDao.selectAllCitySort(null);
 		for (int i = 0; i < allCityList.size(); i++) {
 			Map<String, Object> cityMap = allCityList.get(i);
 			String cityno = String.valueOf(cityMap.get("cityno"));
-			if(cityno.startsWith("00")){
-				cityno = cityno.substring(1,cityno.length());
-			}
+//			if(cityno.startsWith("00")){
+//				cityno = cityno.substring(1,cityno.length());
+//			}
 			for (int j = 0; j < dailyStoreOrderCityList.size(); j++) {
 				Map<String, Object> orderCityMap = dailyStoreOrderCityList.get(j);
-				String cityCode = String.valueOf(orderCityMap.get("city_code"));
+//				String cityCode = String.valueOf(orderCityMap.get("city_code"));
+				String cityCode = String.valueOf(orderCityMap.get("cityno"));
 				if(cityno.equals(cityCode)){
 					orderCityMap.put("city_name", cityMap.get("cityname"));
 				}

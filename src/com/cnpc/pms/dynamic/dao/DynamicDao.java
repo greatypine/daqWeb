@@ -834,4 +834,9 @@ public interface DynamicDao extends IDAO{
 	public Map<String, Object> getCityGMVRangeForMonth(DynamicDto dd,
 			List<Map<String, Object>> cityNO,
 			List<Map<String, Object>> provinceNO);
+	/**
+	 * 查询已开店的所有城市
+	 * @return
+	 */
+	public List<Map<String, Object>> selectAllCitySort(DynamicDto dd);
 }

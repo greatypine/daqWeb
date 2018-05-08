@@ -2950,4 +2950,35 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		map_all.put("lst_data", lst_data);
 		return map_all;
 	}
+
+	@Override
+	public List<Map<String, Object>> selectAllCitySort(DynamicDto dd) {
+		String sql= "";
+		if(dd==null){
+			sql="SELECT d.cityname as city_name,d.id as id,d.citycode as citycode,d.cityno as cityno FROM t_store t LEFT JOIN t_dist_citycode d ON t.city_name=d.cityname WHERE t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' and t.storetype!='V' AND ifnull(t.estate,'')!='闭店中' GROUP BY t.cityno ";
+		}else{
+			String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+			String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+			String provinceStr = "";
+			String cityStr = "";
+			String zx = "no";
+			if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+				zx = "yes";
+			}
+			if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+				provinceStr+=" AND province_id='"+province_id+"' ";
+			}
+			if(city_id!=null&&city_id!=""){
+				cityStr+=" and dd.id='"+city_id+"' ";
+			}else if("yes".equals(zx)){
+				cityStr+=" and dd.id='"+province_id+"' ";
+			}
+			sql = "SELECT dd.* FROM (SELECT d.cityname as city_name,d.id as id,d.citycode as citycode,d.cityno as cityno,t.province_id as province_id  FROM t_store t LEFT JOIN t_dist_citycode d ON t.city_name=d.cityname WHERE t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' and t.storetype!='V' AND ifnull(t.estate,'')!='闭店中' GROUP BY t.cityno) dd LEFT JOIN t_province tp ON tp.id = dd.province_id where 1=1 " +
+					provinceStr+cityStr;
+		}
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+	    //获得查询数据
+	    List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	    return lst_data;
+	}
 }

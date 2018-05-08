@@ -28,6 +28,7 @@ var openedCity;
 var timer_china_beat;//城市闪动的定时
 var timer_china_beat2;//城市大图闪动的定时
 var fullScreenChart;
+var beatData;
 var screenlogin=getUrlParamByKey("su");
 layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
@@ -49,6 +50,8 @@ function loginShow(){
 	
 }
 $(document).ready(function () {
+	//获得闪图数据
+	getBeatJson();
 	loginShow();
 	//鼠标放概要统计展开
 	showMoreSummaryStatistics();
@@ -1706,13 +1709,8 @@ dataArray[9]=[{name:'上海',value:'长沙'}];
 
 //一直要执行的函数
 function nocease(){
-	var datas = [];
-	doManager("dynamicManager", "getDailyFirstOrderCity",[], function (data, textStatus, XMLHttpRequest) {
-            if (data.result) {
-                var jsonData = JSON.parse(data.data);
-				getBeatData(datas,jsonData);
-            }
-       }, false);
+    var datas = [];
+    getBeatData(datas,beatData);
     //随机取1-5
     //datas=dataArray[Math.floor(Math.random() * dataArray.length + 1)-1];
     var option = mapChart.getOption();
@@ -1727,15 +1725,18 @@ function nocease(){
     }
     mapChart.setOption(option);
 }
+function getBeatJson(){
+		doManager("dynamicManager", "getDailyFirstOrderCity",[], function (data, textStatus, XMLHttpRequest) {
+	            if (data.result) {
+	                var jsonData = JSON.parse(data.data);
+	                beatData = jsonData;
+	            }
+	   }, false);
+}
 //一直要执行的函数
 function nocease2(){
 	var datas = [];
-	doManager("dynamicManager", "getDailyFirstOrderCity",[], function (data, textStatus, XMLHttpRequest) {
-            if (data.result) {
-                var jsonData = JSON.parse(data.data);
-                getBeatData(datas,jsonData);
-            }
-       }, false);
+    getBeatData(datas,beatData);
     //随机取1-5
     //datas=dataArray[Math.floor(Math.random() * dataArray.length + 1)-1];
     var option = fullScreenChart.getOption();
@@ -1751,36 +1752,14 @@ function nocease2(){
     fullScreenChart.setOption(option);
 }
 var getBeatData = function(datas,jsonData){
-	var object = new Object();
-	object.name = jsonData['daily'][5]['city_name'];
-	object.value = jsonData['daily'][4]['city_name'];
-	object.citycode = jsonData['daily'][5]['city_code'];
-	object.selected = true;
-	datas.push(object);
-	var object = new Object();
-	object.name = jsonData['daily'][4]['city_name'];
-	object.value = jsonData['daily'][3]['city_name'];
-	object.citycode = jsonData['daily'][4]['city_code'];
-	object.selected = true;
-	datas.push(object);
-	var object = new Object();
-	object.name = jsonData['daily'][3]['city_name'];
-	object.value = jsonData['daily'][2]['city_name'];
-	object.citycode = jsonData['daily'][3]['city_code'];
-	object.selected = true;
-	datas.push(object);
-	var object = new Object();
-	object.name = jsonData['daily'][2]['city_name'];
-	object.value = jsonData['daily'][1]['city_name'];
-	object.citycode = jsonData['daily'][2]['city_code'];
-	object.selected = true;
-	datas.push(object);
-	var object = new Object();
-	object.name = jsonData['daily'][1]['city_name'];
-	object.value = jsonData['daily'][0]['city_name'];
-	object.citycode = jsonData['daily'][1]['city_code'];
-	object.selected = true;
-	datas.push(object);
+	for(var i=1;i<jsonData['daily'].length;i++){
+		var object = new Object();
+		object.name = jsonData['daily'][i]['city_name'];
+		object.value = jsonData['daily'][i-1]['city_name'];
+		object.citycode = jsonData['daily'][i]['city_code'];
+		object.selected = true;
+		datas.push(object);
+	};
 	$.each(datas, function (idx, val) {
 		if(isMunicipality(val['name']) == true){
 	    	var index = findArray(openedProvinceMunicipality, {name: val['name']});
@@ -3457,7 +3436,7 @@ var getReauestParameters = function () {
 		    // 城市名称
 		    cityName = (decode64(getUrlParamByKey("cn")) == 'null'||decode64(getUrlParamByKey("cn")) == null) ? '' : decode64(getUrlParamByKey("cn"));
 		    $("#currentCity").empty();
-		    var gengduo = $('<span class="pull-right" style="font-size: 12px;cursor:pointer" id="net_more">更多</span>');
+		    var gengduo = $('<span class="pull-right" style="font-size: 12px;cursor:pointer;color: #747474;" id="net_more">更多</span>');
 		    $("#gaiyao").append(gengduo);
 		    $("#currentCity").html("线下网络体系");
 	}
