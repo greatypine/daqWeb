@@ -192,12 +192,14 @@
 							<button type="button" name="search" id="search-btn2" class="btn btn-flat"><i class="fa fa-search"></i></button>
 						</span>
                 </div>
-                <div class="col-sm-6 form-group no-padding no-margin">
+                <div class="col-sm-12 no-padding">
+                	<div class="col-sm-6 form-group no-padding no-margin">
 		          	<label><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C+小B</span></label>
 		        </div>
 		        <div class="col-sm-6 form-group no-padding no-margin">
 		          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B</span></label>
 		        </div>
+               	</div>
               </form>
             </div>
 			<div class="dmodule1 data_module1" id="data_module1">
@@ -1836,13 +1838,19 @@ Date.prototype.format=function(fmt) {
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					yData_month_target = new Array(months.length+1).join(0).split('');
-					$(jsonData).each(function(index,element){
-						var indexTemp = jQuery.inArray(element.month_time,months);
-						yData_month_target[indexTemp]=element.month_amount;
-               		});
-					chart6_option.series[1].data=yData_month_target;
-					chart6.setOption(chart6_option);
+					if(jsonData.length!=0){
+						yData_month_target = new Array(months.length+1).join(0).split('');
+						$(jsonData).each(function(index,element){
+							var indexTemp = jQuery.inArray(element.month_time,months);
+							yData_month_target[indexTemp]=element.month_amount;
+	               		});
+						chart6_option.series[1].data=yData_month_target;
+						chart6.setOption(chart6_option);
+					}else{//没有数据时不显示
+						yData_month_target = [];
+						chart6_option.series[1].data=yData_month_target;
+						chart6.setOption(chart6_option);
+					}
 				}
 		});
 		$("#process_div").hide();

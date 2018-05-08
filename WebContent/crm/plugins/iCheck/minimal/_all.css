@@ -48,7 +48,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -58,7 +58,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* green */
 .icheckbox_minimal-green,
@@ -110,7 +110,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -120,7 +120,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* blue */
 .icheckbox_minimal-blue,
@@ -172,7 +172,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 3/2),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -182,7 +182,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* aero */
 .icheckbox_minimal-aero,
@@ -234,7 +234,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 3/2),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -244,7 +244,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* grey */
 .icheckbox_minimal-grey,
@@ -296,7 +296,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -306,7 +306,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* orange */
 .icheckbox_minimal-orange,
@@ -358,7 +358,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -368,7 +368,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* yellow */
 .icheckbox_minimal-yellow,
@@ -420,7 +420,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -430,7 +430,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* pink */
 .icheckbox_minimal-pink,
@@ -482,7 +482,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -492,7 +492,7 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
 
 /* purple */
 .icheckbox_minimal-purple,
@@ -544,7 +544,7 @@
     }
 
 /* Retina support */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (-moz-min-device-pixel-ratio: 1.5),
        only screen and (-o-min-device-pixel-ratio: 1.5),
        only screen and (min-device-pixel-ratio: 1.5) {
@@ -554,4 +554,4 @@
         -webkit-background-size: 200px 20px;
         background-size: 200px 20px;
     }
-}
+} */
