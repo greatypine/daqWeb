@@ -141,7 +141,7 @@
                   <input type="text" style="display:block;background-color: #2aff00;" class="form-control" placeholder="条件标签2" readonly="readonly" id="label_manual_second"/>
                   <input type="text" style="display:block;background-color: #00eaff;" class="form-control" placeholder="条件标签3" readonly="readonly" id="label_manual_third"/>
                   <input type="text" style="display:block;background-color: #ffea00;" class="form-control" placeholder="条件标签4" readonly="readonly" id="label_manual_fourth"/>
-                  <input type="text" style="display:block;background-color: #004eff;" class="form-control" placeholder="条件标签5" readonly="readonly" id="label_manual_fifth"/>
+                  <input type="text" style="display:block;background-color: #004eff;color:#fff" class="form-control" placeholder="条件标签5" readonly="readonly" id="label_manual_fifth"/>
 	            </div>
 	            <div class="col-sm-12 col-xs-12 no-padding form-group" style="margin: 10px auto 0 auto;">
 <!-- 	              <p><span>某某事业群  某某频道<i class="fa fa-remove"></i></span></p> -->
@@ -1334,6 +1334,8 @@ var chart4_option;
   var shareChartStatDto1=null;
   var shareChartStatDto2=null;
   var shareChartStatDto3=null;
+  var shareChartStatDto4=null;
+  var shareChartStatDto5=null;
   $(function(){
 	  initalldept();
 	  initallchannel();
@@ -1495,19 +1497,13 @@ var chart4_option;
 		  chart7_option.series[4].data=weekData5;
 		  chart7.setOption(chart7_option); 
 		  
-		  xData_month = [];
 		  yData_month = [];
-		  xData_month2 = [];
 		  yData_month2 = [];
-		  xData_month3 = [];
 		  yData_month3 = [];
 		  yData_month4 = [];
 		  yData_month5 = [];
-		  chart6_option.xAxis[0].data=xData_month;
 		  chart6_option.series[0].data=yData_month;
-// 		  chart6_option.xAxis[1].data=xData_month2;
 		  chart6_option.series[1].data=yData_month2;
-// 		  chart6_option.xAxis[2].data=xData_month3;
 		  chart6_option.series[2].data=yData_month3;
 		  chart6_option.series[3].data=yData_month4;
 		  chart6_option.series[4].data=yData_month5;
@@ -1534,6 +1530,8 @@ var chart4_option;
 		  $("#label_manual_first").val("");
 		  $("#label_manual_second").val("");
 		  $("#label_manual_third").val("");
+		  $("#label_manual_fourth").val("");
+		  $("#label_manual_fifth").val("");
 	 }); 
   })
 	
@@ -2196,8 +2194,6 @@ var chart4_option;
 				}
 		});
 		
-		$("#process_div").hide();
-		$("#process_div_pic").hide();
 	} 
   
   function initMonthData(){
@@ -2317,6 +2313,8 @@ var chart4_option;
 					chart6.setOption(chart6_option);
 				}
 		});
+		$("#process_div").hide();
+		$("#process_div_pic").hide();
 	} 
   
   function excuteChart(){
