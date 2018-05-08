@@ -66,15 +66,19 @@
 			alert("总部上会通过数量必须为数字");
 			return;
 		}
-		var cooperative_task = $("#cooperative_task").val().replace(/(^\s*)|(\s*$)/g, "")
-		if(!isNumber(cooperative_task)){
-			alert("合作店任务目标必须为数字");
-			return;
+		var cooperative_task = $("#cooperative_task").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(cooperative_task!=""){
+			if(!isNumber(cooperative_task)){
+				alert("合作店任务目标必须为数字");
+				return;
+			}
 		}
-		var self_support_task = $("#self_support_task").val().replace(/(^\s*)|(\s*$)/g, "")
-		if(!isNumber(self_support_task)){
-			alert("自营店任务目标必须为数字");
-			return;
+		var self_support_task = $("#self_support_task").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(self_support_task!=""){
+			if(!isNumber(self_support_task)){
+				alert("自营店任务目标必须为数字");
+				return;
+			}
 		}
 		yanzhenAdd();		
 	}
@@ -210,7 +214,7 @@
 			</td>
 			<td width="33.33%">
 				<p>勘察商铺数量：<span style="color: red">*</span></p>
-				<p><input type="text" name="survey_quantity" id="survey_quantity" onkeyup="value=value.replace(/^\s+|\s+$/g,'').replace(/\'/g,'')"/></p>
+				<p><input type="text" name="survey_quantity" id="survey_quantity" onkeyup="value=value.replace(/[^\d.]/g,'')"/></p>
 			</td>
 			<td width="33.33%">
 				<p class="read">完成签约数量：<span style="color: red">*</span></p>
@@ -224,7 +228,7 @@
 			</td>
 			<td>
 				<p class="read">合作店任务目标：(2018年)</p>
-				<p class="read"><input type="text" name="cooperative_task" id="cooperative_task"/></p>
+				<p class="read"><input type="text" name="cooperative_task" onkeyup="value=value.replace(/[^\d.]/g,'')" id="cooperative_task"/></p>
 			</td>
 			<td>
 				<p>自营店任务目标：(2018年)</p>

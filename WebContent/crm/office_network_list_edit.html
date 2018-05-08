@@ -128,15 +128,19 @@
 			alert("总部上会通过数量必须为数字");
 			return;
 		}
-		var cooperative_task = $("#cooperative_task").val().replace(/(^\s*)|(\s*$)/g, "")
-		if(!isNumber(cooperative_task)){
-			alert("合作店任务目标必须为数字");
-			return;
+		var cooperative_task = $("#cooperative_task").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(cooperative_task!=""){
+			if(!isNumber(cooperative_task)){
+				alert("合作店任务目标必须为数字");
+				return;
+			}
 		}
-		var self_support_task = $("#self_support_task").val().replace(/(^\s*)|(\s*$)/g, "")
-		if(!isNumber(self_support_task)){
-			alert("自营店任务目标必须为数字");
-			return;
+		var self_support_task = $("#self_support_task").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(self_support_task!=""){
+			if(!isNumber(self_support_task)){
+				alert("自营店任务目标必须为数字");
+				return;
+			}
 		}
 		doSave();		
 	}
@@ -260,7 +264,7 @@
 		</tr>
 		<tr>
 			<td width="33.33%">
-				<p>总部上会通过数量：<span style="color: red">*</span></p>
+				<p>总部上会通过数量：</p>
 				<p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="through_quantity" id="through_quantity"/></p>
 			</td>
 			<td>
