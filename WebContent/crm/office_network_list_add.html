@@ -137,8 +137,12 @@
  		    function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
  					var jsonData = $.fromJSON(data.data);
- 					$("#citySelect").append("<option value='0'>全部城市</option>");
+ 					//$("#citySelect").append("<option value='0'>全部城市</option>");
  					$(jsonData).each(function(index,element){
+ 					if(index==0){
+ 						$("#cityname").val(element.cityname);
+ 					 	$("#cityno").val(element.cityno);
+ 					}
  						$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
                      });
  				}
