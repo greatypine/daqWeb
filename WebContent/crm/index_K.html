@@ -131,8 +131,14 @@
         <div class="col-sm-12 text-center form-group" style="display:none;" id="label_third_group">
           	<p><label id="label_manual_third"></label><i id="label_third_reset" class="fa fa-remove pull-right"></i></p>
         </div>
+        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_fourth_group">
+          	<p><label id="label_manual_fourth"></label><i id="label_fourth_reset" class="fa fa-remove pull-right"></i></p>
+        </div>
+        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_fifth_group">
+          	<p><label id="label_manual_fifth"></label><i id="label_fifth_reset" class="fa fa-remove pull-right"></i></p>
+        </div>
         <button type="button" class="mybtn btn btn-block btn-warning btn-sm" id="contrast">开始对比</button>
-        <label class="mybtn" id="warning_text" style="display:none;margin: 15px auto 0 50px;font-size: 14px;">最多3个</label>
+        <label class="mybtn" id="warning_text" style="display:none;margin: 15px auto 0 50px;font-size: 14px;">最多5个</label>
       </form>
     </section>
     <!-- /.sidebar -->
@@ -1210,7 +1216,6 @@ Date.prototype.format=function(fmt) {
 	}
 </script>
 <script>
-	var xData_month = [];
 	var yData_month = [];
 	var yData_month_target = [];
 	var chart6;
@@ -1224,13 +1229,12 @@ Date.prototype.format=function(fmt) {
 		chart6 = echarts.init(document.getElementById('main6'));
 
 		//K线图--月
-// 		var xData_month = function() {
-// 			var data = [];
-// 			for (var i = 1; i < 13; i++) {
-// 				data.push(now.getFullYear()+"-"+i);
-// 			}
-// 			return data;
-// 		}();
+		var xData_month = function() {
+			var data = [];
+			var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
+			data = getYearAndMonth('2017-12-1',curMonth);
+			return data;
+		}();
 
 		chart6_option = {
 			backgroundColor: "#f55a44",
@@ -1525,6 +1529,8 @@ Date.prototype.format=function(fmt) {
 		  var labelName1 = $("#label_manual_first").html();
 		  var labelName2 = $("#label_manual_second").html();
 		  var labelName3 = $("#label_manual_third").html();
+		  var labelName4 = $("#label_manual_fourth").html();
+		  var labelName5 = $("#label_manual_fifth").html();
 		  var lable_first = document.getElementById("warning_text");
 	      lable_first.style.display = "block";
 	    
@@ -1535,7 +1541,8 @@ Date.prototype.format=function(fmt) {
 	      var cityName = shareChartStatDtoTemp.cityname==null?'全部城市':shareChartStatDtoTemp.cityname;
 	      var storeNo = shareChartStatDtoTemp.storeno==null?'':shareChartStatDtoTemp.storeno;
 	      var nameStrTemp = deptName+" "+channelName+" "+cityName+" "+storename;
-	      if($.trim(nameStrTemp)==$.trim(nameStr1Html) || $.trim(nameStrTemp)==$.trim(nameStr2Html) || $.trim(nameStrTemp)==$.trim(nameStr3Html)){//对比条件重复过滤
+	      if($.trim(nameStrTemp)==$.trim(nameStr1Html) || $.trim(nameStrTemp)==$.trim(nameStr2Html) || $.trim(nameStrTemp)==$.trim(nameStr3Html) 
+	    		  || $.trim(nameStrTemp)==$.trim(nameStr4Html) || $.trim(nameStrTemp)==$.trim(nameStr5Html)){//对比条件重复过滤
 	    	document.body.className = "skin-blue sidebar-mini"; 
     	  	return;
     	  }
@@ -1566,22 +1573,46 @@ Date.prototype.format=function(fmt) {
 				nameStr3Html = nameStrTemp;
 		    	$("#label_manual_third").html(nameStr3Html);
 		    	nameStr3 = nameStr3Html+" "+storeNo;
-		    }    
+		    }else if(labelName4.length==0){
+		    	var lable_flag = document.getElementById("label_fourth_group");
+		    	lable_flag.style.display = "block";
+		    	var lable_reset = document.getElementById("label_fourth_reset");
+				lable_reset.style.display = "block";
+		    	shareChartStatDto4 = shareChartStatDtoTemp;
+				nameStr4Html = nameStrTemp;
+		    	$("#label_manual_fourth").html(nameStr4Html);
+		    	nameStr4 = nameStr4Html+" "+storeNo;
+		    }else if(labelName5.length==0){
+		    	var lable_flag = document.getElementById("label_fifth_group");
+		    	lable_flag.style.display = "block";
+		    	var lable_reset = document.getElementById("label_fifth_reset");
+				lable_reset.style.display = "block";
+		    	shareChartStatDto5 = shareChartStatDtoTemp;
+				nameStr5Html = nameStrTemp;
+		    	$("#label_manual_fifth").html(nameStr5Html);
+		    	nameStr5 = nameStr5Html+" "+storeNo;
+		    }       
 	      document.body.className = "skin-blue sidebar-mini"; 
 	  });
 	  
 	  var nameStr1="";
 	  var nameStr2="";
 	  var nameStr3="";
+	  var nameStr4="";
+	  var nameStr5="";
 	  var nameStr1Html="";
 	  var nameStr2Html="";
 	  var nameStr3Html="";
+	  var nameStr4Html="";
+	  var nameStr5Html="";
 	  
 	  $("#search-btn-contrast").click(function(){
 			var storename = $("#store_name_manual_contrast").val()==null?'':$("#store_name_manual_contrast").val();
 			var labelName1 = $("#label_manual_first").html();
 			var labelName2 = $("#label_manual_second").html();
 			var labelName3 = $("#label_manual_third").html();
+			var labelName4 = $("#label_manual_fourth").html();
+			var labelName5 = $("#label_manual_fifth").html();
 			var lable_first = document.getElementById("warning_text");
 	    	lable_first.style.display = "block";
 	    	
@@ -1591,7 +1622,8 @@ Date.prototype.format=function(fmt) {
 	    	var cityName = shareChartStatDtoTemp.cityname==null?'全部城市':shareChartStatDtoTemp.cityname;
 	    	var storeNo = shareChartStatDtoTemp.storeno==null?'':shareChartStatDtoTemp.storeno;
 	    	var nameStrTemp = deptName+" "+channelName+" "+cityName+" "+storename;
-	    	if($.trim(nameStrTemp)==$.trim(nameStr1Html) || $.trim(nameStrTemp)==$.trim(nameStr2Html) || $.trim(nameStrTemp)==$.trim(nameStr3Html)){//对比条件重复过滤
+	    	if($.trim(nameStrTemp)==$.trim(nameStr1Html) || $.trim(nameStrTemp)==$.trim(nameStr2Html) || $.trim(nameStrTemp)==$.trim(nameStr3Html) 
+	    			|| $.trim(nameStrTemp)==$.trim(nameStr4Html) || $.trim(nameStrTemp)==$.trim(nameStr5Html)){//对比条件重复过滤
 	    		return;
 	    	}
 		    if(labelName1.length==0){
@@ -1621,6 +1653,24 @@ Date.prototype.format=function(fmt) {
 				nameStr3Html = nameStrTemp;
 		    	$("#label_manual_third").html(nameStr3Html);
 		    	nameStr3 = nameStr3Html+" "+storeNo;
+		    }else if(labelName4.length==0){
+		    	var lable_flag = document.getElementById("label_fourth_group");
+		    	lable_flag.style.display = "block";
+		    	var lable_reset = document.getElementById("label_fourth_reset");
+				lable_reset.style.display = "block";
+		    	shareChartStatDto4 = shareChartStatDtoTemp;
+				nameStr4Html = nameStrTemp;
+		    	$("#label_manual_fourth").html(nameStr4Html);
+		    	nameStr4 = nameStr4Html+" "+storeNo;
+		    }else if(labelName5.length==0){
+		    	var lable_flag = document.getElementById("label_fifth_group");
+		    	lable_flag.style.display = "block";
+		    	var lable_reset = document.getElementById("label_fifth_reset");
+				lable_reset.style.display = "block";
+		    	shareChartStatDto5 = shareChartStatDtoTemp;
+				nameStr5Html = nameStrTemp;
+		    	$("#label_manual_fifth").html(nameStr5Html);
+		    	nameStr5 = nameStr5Html+" "+storeNo;
 		    }
 		 });
 	  
@@ -1633,9 +1683,12 @@ Date.prototype.format=function(fmt) {
 		  var labelName1 = $("#label_manual_first").html();
 		  var labelName2 = $("#label_manual_second").html();
 		  var labelName3 = $("#label_manual_third").html();
+		  var labelName4 = $("#label_manual_fourth").html();
+		  var labelName5 = $("#label_manual_fifth").html();
 		  var lable_reset = document.getElementById("label_first_group");
 		  lable_reset.style.display = "none";
-		  if(labelName1.length==0 && labelName2.length==0 &&labelName3.length==0){
+		  if(labelName1.length==0 && labelName2.length==0 && labelName3.length==0 
+				  && labelName4.length==0 && labelName5.length==0){
 			var lable_first = document.getElementById("warning_text");
   			lable_first.style.display = "none";
 		  }
@@ -1649,9 +1702,12 @@ Date.prototype.format=function(fmt) {
 		  var labelName1 = $("#label_manual_first").html();
 		  var labelName2 = $("#label_manual_second").html();
 		  var labelName3 = $("#label_manual_third").html();
+		  var labelName4 = $("#label_manual_fourth").html();
+		  var labelName5 = $("#label_manual_fifth").html();
 		  var lable_reset = document.getElementById("label_second_group");
 		  lable_reset.style.display = "none";
-		  if(labelName1.length==0 && labelName2.length==0 &&labelName3.length==0){
+		  if(labelName1.length==0 && labelName2.length==0 &&labelName3.length==0 
+				  && labelName4.length==0 && labelName5.length==0){
 			var lable_first = document.getElementById("warning_text");
   			lable_first.style.display = "none";
 		  }
@@ -1665,9 +1721,50 @@ Date.prototype.format=function(fmt) {
 		  var labelName1 = $("#label_manual_first").html();
 		  var labelName2 = $("#label_manual_second").html();
 		  var labelName3 = $("#label_manual_third").html();
+		  var labelName4 = $("#label_manual_fourth").html();
+		  var labelName5 = $("#label_manual_fifth").html();
 		  var lable_reset = document.getElementById("label_third_group");
 		  lable_reset.style.display = "none";
-		  if(labelName1.length==0 && labelName2.length==0 &&labelName3.length==0){
+		  if(labelName1.length==0 && labelName2.length==0 &&labelName3.length==0 
+				  && labelName4.length==0 && labelName5.length==0){
+			var lable_first = document.getElementById("warning_text");
+  			lable_first.style.display = "none";
+		  }
+	  });
+	  $("#label_fourth_reset").click(function(){
+		  nameStr4 = "";
+		  nameStr4Html = "";
+		  $("#label_manual_fourth").html("");
+		  $("#channelSelectContrast").empty();
+		  initallchannelcontrast();
+		  var labelName1 = $("#label_manual_first").html();
+		  var labelName2 = $("#label_manual_second").html();
+		  var labelName3 = $("#label_manual_third").html();
+		  var labelName4 = $("#label_manual_fourth").html();
+		  var labelName5 = $("#label_manual_fifth").html();
+		  var lable_reset = document.getElementById("label_fourth_group");
+		  lable_reset.style.display = "none";
+		  if(labelName1.length==0 && labelName2.length==0 &&labelName3.length==0 
+				  && labelName4.length==0 && labelName5.length==0){
+			var lable_first = document.getElementById("warning_text");
+  			lable_first.style.display = "none";
+		  }
+	  });
+	  $("#label_fifth_reset").click(function(){
+		  nameStr5 = "";
+		  nameStr5Html = "";
+		  $("#label_manual_fifth").html("");
+		  $("#channelSelectContrast").empty();
+		  initallchannelcontrast();
+		  var labelName1 = $("#label_manual_first").html();
+		  var labelName2 = $("#label_manual_second").html();
+		  var labelName3 = $("#label_manual_third").html();
+		  var labelName4 = $("#label_manual_fourth").html();
+		  var labelName5 = $("#label_manual_fifth").html();
+		  var lable_reset = document.getElementById("label_fifth_group");
+		  lable_reset.style.display = "none";
+		  if(labelName1.length==0 && labelName2.length==0 &&labelName3.length==0 
+				  && labelName4.length==0 && labelName5.length==0){
 			var lable_first = document.getElementById("warning_text");
   			lable_first.style.display = "none";
 		  }
@@ -1675,11 +1772,11 @@ Date.prototype.format=function(fmt) {
 	  $("#contrast").click(function(){
 		  var url = "";
 		  if(target==0){
-		  	url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&#ff";
+		  	url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&nameStr4="+encode64(nameStr4)+"&nameStr5="+encode64(nameStr5)+"&#ff";
 		  }else if(target==1){
-		  	url = "index_K_contrast.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e=&r=&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&#ff";
+		  	url = "index_K_contrast.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e=&r=&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&nameStr4="+encode64(nameStr4)+"&nameStr5="+encode64(nameStr5)+"&#ff";
 		  }else{
-			  url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&#ff";
+			  url = "index_K_contrast.html?t="+encode64('0')+"&nameStr1="+encode64(nameStr1)+"&nameStr2="+encode64(nameStr2)+"&nameStr3="+encode64(nameStr3)+"&nameStr4="+encode64(nameStr4)+"&nameStr5="+encode64(nameStr5)+"&#ff";
 		  }
 		  window.open(url,"index_K_contrast"); 
 	  });
@@ -1819,17 +1916,15 @@ Date.prototype.format=function(fmt) {
   function initMonthData(){
 	    var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
 	    var months = getYearAndMonth('2017-12-1',curMonth);
+		yData_month = new Array(months.length+1).join(0).split('');
 		doManager("chartStatManager","queryTurnoverByMonth",[shareChartStatDto],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					xData_month = months;
-					yData_month = new Array(months.length+1).join(0).split('');
 					$(jsonData).each(function(index,element){
 						var indexTemp = jQuery.inArray(element.month_time,months);
 						yData_month[indexTemp]=element.month_amount;
                		});
-					chart6_option.xAxis[0].data=xData_month;
 					chart6_option.series[0].data=yData_month;
 				}
 		},false);
@@ -2358,7 +2453,6 @@ Date.prototype.format=function(fmt) {
 		  weekData = [];
 		  initWeekData();
 		  //月GMV
-		  xData_month = [];
 		  yData_month = [];
 		  yData_month_target = [];
 		  initMonthData();
