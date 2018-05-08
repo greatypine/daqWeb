@@ -1,4 +1,4 @@
-// 格式化日期格式
+//格式化日期格式
 Date.prototype.format=function(fmt) {        
     var o = {        
     "M+" : this.getMonth()+1, //月份        
@@ -1143,7 +1143,7 @@ option1 = {
 				    xAxis: {
 				      show:true,
 				      axisLabel:{
-				        interval:0,
+				        interval:1,
 				        rotate:-20,
 				        margin: 30,
 				        textStyle:{
@@ -1331,7 +1331,7 @@ option1 = {
 				    xAxis: {
 				      show:true,
 				      axisLabel:{
-				        interval:0,
+				        interval:1,
 				        rotate:-20,
 				        margin: 30,
 				        textStyle:{
@@ -3984,6 +3984,7 @@ $(function(){
 	customerInfo();
 	areaInfo();
 	GMVInfo();
+	//storeActivitiesInfo();
 });
 
 function loginShow(){
@@ -4996,7 +4997,7 @@ function oneyearorsixweek(){
 	  
 	//搜索
 		function search_manual_k(){
-			  xData_week = xData_week_temp();	 	  
+			  xData_week = xData_week_temp();
 		 	  shareChartStatDto = getShareParam();
 			  //分时GMV
 			  hourData = [];
@@ -5101,3 +5102,19 @@ function oneyearorsixweek(){
 		    }
 		    return result;
 		}
+		
+	/*var storeActivitiesInfo = function(){
+		doManager("storeActivitiesManager","getNewStoreActivtiesInfo",null,
+				function(data,textStatus,XmlHttpRequest){
+			if(data.result){
+				var jsonData = $.fromJSON(data.data);
+				var newActivitiesInfo = jsonData.newActivitiesInfo;
+				console.log(newActivitiesInfo);
+				if(newActivitiesInfo.length > 0){
+					for(i = 0; i < newActivitiesInfo.length; i++){
+						
+					}
+				}
+			}
+		},false);
+	}*/
