@@ -1590,7 +1590,7 @@ public class InterDaoImpl extends DAORootHibernate implements InterDao {
 			whereStr= "select store_id,platformid from t_store where rmid = (select id from tb_bizbase_user where employeeId='"+employeeId+"')";
 		}
 		
-		String sql = "select  sum(ifnull(b.order_count,0)) as  ordercount,round(SUM(ifnull(b.order_amount,0)),0) as total_price, DATE_FORMAT(STR_TO_DATE(concat(b.year,'-',b.month),'%Y-%m'), '%c月') AS order_date   from ("+whereStr+") as a left join  ds_storetrade b on a.platformid = b.platformid  group by concat(b.year,'-',b.month) ";
+		String sql = "select  sum(ifnull(b.order_count,0)) as  ordercount,round(SUM(ifnull(b.order_amount,0)),0) as total_price, DATE_FORMAT(STR_TO_DATE(concat(b.year,'-',b.month),'%Y-%m'), '%c月') AS order_date   from ("+whereStr+") as a left join  ds_pes_gmv_store_month b on a.platformid = b.platformid  group by concat(b.year,'-',b.month) ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
@@ -1611,7 +1611,7 @@ public class InterDaoImpl extends DAORootHibernate implements InterDao {
 			whereStr= "select t.store_id,t.platformid,t.name,t.skid,tbu.name as employeeName from t_store t left join tb_bizbase_user as tbu on t.skid = tbu.id  where rmid ="+employeeId;
 		}
 		
-		String sql = "select  ifnull(b.order_count,0) as  ordercount,round(ifnull(b.order_amount,0),0) as total_price,a.store_id,a.name,a.skid,a.employeeName   from ("+whereStr+") as a left join  ds_storetrade b on a.platformid = b.platformid  and concat(b.year,'-',b.month)='"+q_date+"' order by ordercount desc limit 20";
+		String sql = "select  ifnull(b.order_count,0) as  ordercount,round(ifnull(b.order_amount,0),0) as total_price,a.store_id,a.name,a.skid,a.employeeName   from ("+whereStr+") as a left join  ds_pes_gmv_store_month b on a.platformid = b.platformid  and concat(b.year,'-',b.month)='"+q_date+"' order by ordercount desc limit 20";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;

@@ -61,15 +61,15 @@ public class BatchManagerImpl extends BizBaseCommonManager implements BatchManag
 	};
 
 	private static String staticQuerySql =
-			"select '门店GMV' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_storetrade where year =${year} and month =${month}" +
+			"select '门店GMV' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_pes_gmv_store_month where year =${year} and month =${month}" +
 			" union " +
 			"select '门店交易额（按频道）' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_ope_gmv_storechannel_month where year =${year} and month =${month}" +
 			" union "+
-			"select '国安侠GMV' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_emptrade where year =${year} and month =${month}"+
+			"select '国安侠GMV' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_pes_gmv_emp_month where year =${year} and month =${month}"+
 			" union " +
 			"select '国安侠好评次数' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_rewardtimes where year =${year} and month =${month}" +
 			" union " +
-			"select '国安侠送单量(按频道)' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_sendorders where year =${year} and month =${month}" +
+			"select '国安侠送单量(按频道)' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_pes_order_empchannel_month where year =${year} and month =${month}" +
 			" union " +
 			"select '员工店长' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_topdata where year =${year} and month =${month}" +
 			" union " +
@@ -87,9 +87,9 @@ public class BatchManagerImpl extends BizBaseCommonManager implements BatchManag
 			" union "+
 			"select '用户档案' as taskname,count(1) as datanum,max(create_time) as maxtime from df_user_profile "+
 			" union "+
-			"select '事业群gmv调度' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_deptgmv where year =${year} and month =${month} "+
+			"select '事业群gmv调度' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_pes_gmv_storedept_month where year =${year} and month =${month} "+
 			" union "+
-			"select '事业群消费用户数调度' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_deptcus where year =${year} and month =${month} "
+			"select '事业群消费用户数调度' as taskname,count(1) as datanum,max(createtime) as maxtime from ds_pes_customer_storedept_month where year =${year} and month =${month} "
 			;
 	
 	private static final String APP_KEY = "1004";
