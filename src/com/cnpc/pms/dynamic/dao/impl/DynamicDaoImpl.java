@@ -140,7 +140,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if(dd.getTarget()==2){//店长
 			sub_str = " and storeno='"+dd.getStoreNo()+"'";
 		}
-		 String sql="select ifnull(sum(ifnull(pesgmv,0)),0) as amount  from ds_storetrade where year="+dd.getYear()+" and month="+dd.getMonth()+sub_str;
+		 String sql="select ifnull(sum(ifnull(pesgmv,0)),0) as amount  from ds_pes_gmv_store_month where year="+dd.getYear()+" and month="+dd.getMonth()+sub_str;
 		
 		 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 	    
@@ -165,7 +165,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if(dd.getTarget()==2){//店长
 			sub_str = " and storeno='"+dd.getStoreNo()+"'";
 		}
-		 String sql="select ifnull(sum(ifnull(pesgmv,0)),0) as amount  from ds_emptrade where year="+dd.getYear()+" and month="+dd.getMonth()+sub_str;
+		 String sql="select ifnull(sum(ifnull(pesgmv,0)),0) as amount  from ds_pes_gmv_emp_month where year="+dd.getYear()+" and month="+dd.getMonth()+sub_str;
 		
 		 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 	    
@@ -192,12 +192,12 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			sub_str = " where t.store_id="+dd.getStoreId();
 		}else if(dd.getTarget()==3){//国安侠
 			dd.setEmployeeNo(dd.getEmployeeName()+"+"+dd.getEmployeeNo());
-			String sql="SELECT IFNULL(SUM(IFNULL(aa.datanum,0)),0) AS amount FROM ds_sendorders aa  where username='"+dd.getEmployeeNo()+"' and aa.year="+dd.getYear()+" and aa.month= "+dd.getMonth();
+			String sql="SELECT IFNULL(SUM(IFNULL(aa.datanum,0)),0) AS amount FROM ds_pes_order_empchannel_month aa  where username='"+dd.getEmployeeNo()+"' and aa.year="+dd.getYear()+" and aa.month= "+dd.getMonth();
 			
 			 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		     return Integer.valueOf(query.uniqueResult().toString());
 		}
-		String sql="SELECT IFNULL(SUM(IFNULL(aa.datanum,0)),0) AS amount FROM ds_sendorders aa  INNER JOIN "
+		String sql="SELECT IFNULL(SUM(IFNULL(aa.datanum,0)),0) AS amount FROM ds_pes_order_empchannel_month aa  INNER JOIN "
 				+"  (SELECT t.store_id,t.platformid FROM t_store t "
 				+ sub_str
 				+"  ) bb on aa.platformid = bb.platformid and aa.year="+dd.getYear()+" and aa.month= "+dd.getMonth();
@@ -398,7 +398,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	@Override
 	public List<Map<String, Object>> getStoretradeList(Long cityId, Long employeeId, Integer year, Integer month,
 			String flag) {
-		String sql="SELECT aa.* FROM ds_storetrade aa  INNER JOIN "
+		String sql="SELECT aa.* FROM ds_pes_gmv_store_month aa  INNER JOIN "
 				+"  (SELECT t.store_id,t.platformid FROM t_store t INNER JOIN "
 				+"	(SELECT tdc.id,tdc.cityname FROM	t_dist_city a INNER JOIN "
 				
@@ -1428,7 +1428,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
 		String  sql = "SELECT d.id as city_id,t.city_name as city_name,t.store_id as store_id,ds.store_name as store_name,sum(ds.order_count) AS order_count,t.province_id " +
-				"FROM ds_storetrade ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join t_dist_citycode d on d.cityname=t.city_name  WHERE t.storeno is not null and " +
+				"FROM ds_pes_gmv_store_month ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join t_dist_citycode d on d.cityname=t.city_name  WHERE t.storeno is not null and " +
 				"ds.`month`='"+dd.getMonth()+"' and ds.`year`='"+dd.getYear()+"'"+provinceStr+cityStr+" GROUP BY ds.store_name ORDER BY " +
 				"order_count DESC ";
 		String sql_count = "SELECT count(tdd.store_name) as store_order_count from ("+sql+") tdd ";
@@ -1476,7 +1476,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		//String sql = "select SUM(IFNULL(pesgmv,0)) as amount,employee_a_no,employee_a_name as name  from ds_areatrade where storeno='"+dynamicDto.getStoreNo()+"' and year=2017 and month=11 group by employee_a_no ORDER BY amount desc";
 
 		String sql=" select employee_no as employee_a_no,employee_name as name,IFNULL(pesgmv,0) as amount "+
-				" from ds_emptrade where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and storeno= '"+dynamicDto.getStoreNo()+"'  ORDER BY amount desc";
+				" from ds_pes_gmv_emp_month where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and storeno= '"+dynamicDto.getStoreNo()+"'  ORDER BY amount desc";
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
 		Map<String,Object> map_result = new HashMap<String,Object>();
 		List<?> list=null;
@@ -1594,7 +1594,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	
 	@Override
 	public List<Map<String, Object>> selectGMVOfStore(DynamicDto dynamicDto) {
-		String sql="select * from ds_storetrade where year = "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"'";
+		String sql="select * from ds_pes_gmv_store_month where year = "+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno='"+dynamicDto.getStoreNo()+"'";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
@@ -1715,7 +1715,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select dat.city_name as city_name,d.id as city_id,dat.store_name as store_name,dat.employee_name AS employee_a_name,dat.employee_no AS employee_no,pesgmv as pesgmv from ds_emptrade dat "+
+		String sql ="select dat.city_name as city_name,d.id as city_id,dat.store_name as store_name,dat.employee_name AS employee_a_name,dat.employee_no AS employee_no,pesgmv as pesgmv from ds_pes_gmv_emp_month dat "+
 				"left join t_store ts on (dat.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name "+
 				"where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" "+
 				 provinceStr + cityStr +"order by pesgmv desc ";
@@ -1888,7 +1888,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	@Override
 	public Map<String, Object> employeeOfAreaGmv(DynamicDto dynamicDto, PageInfo pageInfo) {
 		String sql=" select city_name,storeno,store_name,employee_no,employee_name,pesgmv,pes_sendgmv,pes_areagmv,pes_assigngmv,pes_pergmv"+
-					" from ds_emptrade where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and storeno in ("+dynamicDto.getStoreNo()+")";
+					" from ds_pes_gmv_emp_month where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and storeno in ("+dynamicDto.getStoreNo()+")";
 		if(dynamicDto.getEmployeeNo()!=null&&!"".equals(dynamicDto.getEmployeeNo())){
 			sql=sql+" and employee_no like '%"+dynamicDto.getEmployeeNo()+"%'";
 		}
@@ -1926,7 +1926,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		
 		String sql=" select city_name,storeno,store_name, pesgmv,order_amount, other_order_amount,returned_amount, other_returned_amount, order_count,other_order_count, returned_count, other_returned_count "+
-				   " from ds_storetrade where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno in ("+dynamicDto.getStoreNo()+")";
+				   " from ds_pes_gmv_store_month where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno in ("+dynamicDto.getStoreNo()+")";
 		Query query = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql);
 		
@@ -2517,7 +2517,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			whereStr = whereStr+" and dss.employee_no like '%"+dd.getEmployeeNo()+"%'";
 		}
 		String sql="select datanum as total,dss.deptname,dss.channelname,dss.cityname,dss.storename,dss.storeno,dss.employee_no,ifnull(dss.username,'') as username"+
-				" from ds_sendorders dss "+
+				" from ds_pes_order_empchannel_month dss "+ 
 				" where year="+dd.getYear()+" and month="+dd.getMonth()+whereStr+
 				" and dss.storeno in ("+dd.getStoreNo()+")"+
 				" and dss.employee_no is not null and dss.employee_no !=''";
@@ -2565,7 +2565,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			whereStr = whereStr+" and storeno = '"+dd.getStoreNo()+"'";
 		}
 		String sql="select cityname,storeno,storename,deptname,pesgmv"+
-				" from ds_deptgmv  "+
+				" from ds_pes_gmv_storedept_month  "+
 				" where year="+dd.getYear()+" and month="+dd.getMonth()+whereStr+
 				" order by storeno";
 		
@@ -2610,7 +2610,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			whereStr = whereStr+" and storeno = '"+dd.getStoreNo()+"'";
 		}
 		String sql="select cityname,storeno,storename,deptname,cusnum,ifnull(cusnum_ten,0) as cusnum_ten"+
-				" from ds_deptcus  "+
+				" from ds_pes_customer_storedept_month  "+
 				" where year="+dd.getYear()+" and month="+dd.getMonth()+whereStr+
 				" order by storeno";
 		

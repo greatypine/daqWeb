@@ -343,11 +343,11 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if (orderBy != null && orderBy.length() > 0) {
 			orderStr += " order by t3." + orderBy + " desc ";
 		}
-		countStr += "select city_name,count(store_name) as storeCount from (select city_name,store_name from ds_storetrade GROUP BY city_name,store_name) t5 where t5.city_name=CONCAT((select t6.cityname from t_dist_citycode t6 where t6.id="
+		countStr += "select city_name,count(store_name) as storeCount from (select city_name,store_name from ds_pes_gmv_store_month GROUP BY city_name,store_name) t5 where t5.city_name=CONCAT((select t6.cityname from t_dist_citycode t6 where t6.id="
 				+ cityId + "),'市')";
 		sqlStr += "select t3.city_name,t3.storeno,t3.store_name,t3.pesgmv,t3.`year`,t3.`month`,t3.pesgmvpriord from "
 				+ "(select t1.storeno,t1.city_name,t1.store_name, t1.pesgmv,t1.`year` as year,t1.`month`  as month,"
-				+ "CASE WHEN round((t1.pesgmv-t2.pesgmv)/t2.pesgmv*100,1) IS NULL THEN -1000 ELSE round((t1.pesgmv-t2.pesgmv)/t2.pesgmv*100,1) END  as pesgmvpriord from ds_storetrade t1 left join ds_storetrade t2 on "
+				+ "CASE WHEN round((t1.pesgmv-t2.pesgmv)/t2.pesgmv*100,1) IS NULL THEN -1000 ELSE round((t1.pesgmv-t2.pesgmv)/t2.pesgmv*100,1) END  as pesgmvpriord from ds_pes_gmv_store_month t1 left join ds_pes_gmv_store_month t2 on "
 				+ "t1.`month`-1=t2.`month` and t1.`year`=t2.`year` and t1.store_name=t2.store_name GROUP BY t1.store_name,t1.`year`,"
 				+ "t1.`month` ORDER BY t1.store_name) t3 WHERE t3.pesgmvpriord is not NULL and t3.store_name not like '%企业购%' and t3.`month`='"
 				+ dd.getMonth() + "' and t3.`year`='" + dd.getYear()
