@@ -142,6 +142,11 @@
 				return;
 			}
 		}
+		var citySelect = $("#citySelect").val();
+		if(citySelect == null||citySelect == "0"){
+			alert("城市不能为空");
+			return;
+		}
 		doSave();		
 	}
 	
@@ -171,7 +176,7 @@
  		    function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
  					var jsonData = $.fromJSON(data.data);
- 					$("#citySelect").append("<option value='0'>全部城市</option>");
+ 					//$("#citySelect").append("<option value='0'>全部城市</option>");
  					$(jsonData).each(function(index,element){
  						$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
                      });
@@ -246,7 +251,6 @@
 			<td width="33.33%">
 				<p>统计时间：<span style="color: red" id="statistics">*</span></p>
 				<p><select id="statistical_time_period" onchange="searchWeekTime();" style="width: 38%; background-color: #EEEEEE;" disabled="disabled"> 
-						<option value="">全部</option>
 						<option value="1">上周</option>
 						<option value="2">本周</option>
 						<option value="3">下周</option>

@@ -80,6 +80,11 @@
 				return;
 			}
 		}
+		var citySelect = $("#citySelect").val();
+		if(citySelect == null||citySelect == "0"){
+			alert("城市不能为空");
+			return;
+		}
 		yanzhenAdd();		
 	}
 	
@@ -124,6 +129,8 @@
 }
 	$(function(){
 		initallcity();
+		initWeekTime();
+		searchWeekTime();
 	});
 	function initallcity(){
  		doManager("DistCityCodeManager","queryAllDistCityList",null,
@@ -137,6 +144,9 @@
  				}
  		});
  	}
+	function initWeekTime(){
+		$("#statistical_time_period").val('1');
+	}
 	function searchWeekTime(){
 		var searchWeekType = $("#statistical_time_period").val();
 		if(searchWeekType=="1"){//上周
@@ -205,7 +215,6 @@
 			<td width="33.33%">
 				<p>统计时间：<span style="color: red" id="statistics">*</span></p>
 				<p><select id="statistical_time_period" onchange="searchWeekTime();" style="width: 38%"> 
-						<option value="">全部</option>
 						<option value="1">上周</option>
 						<option value="2">本周</option>
 						<option value="3">下周</option>
