@@ -389,7 +389,7 @@ public class MessageNewDaoImpl extends BaseDAOHibernate implements MessageNewDao
 	
 	@Override
 	public Integer getUnReadMessage(Message message) {
-		String sql="select count(id) as amount from t_message where isRead=0 and isDelete=0 and type not like 'news_%' and receiveId='"+message.getReceiveId()+"'";
+		String sql="select count(id) as amount from t_message where isRead=0 and isDelete=0 and type not like '%other_notice%' and receiveId='"+message.getReceiveId()+"'";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql.toString());
 		return Integer.parseInt(query.uniqueResult().toString());
 	}
