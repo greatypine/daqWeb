@@ -159,7 +159,7 @@ public class NoticeDaoImpl extends BaseDAOHibernate implements NoticeDao{
 		    " INNER JOIN  t_humanresources b on a.employeeId = b.employee_no "+		
 		    " INNER JOIN t_store t on t.store_id = b.store_id ) tt  where tt.humanstatus=1";
 
-		    if(param.get("city")!=null){
+		    if(param.get("city")!=null){ 
 				
 				sql =sql+ " and   tt.city_name in (select cityname from t_dist_citycode where citycode in "+param.get("city")+")";
 			}

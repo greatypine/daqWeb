@@ -9,7 +9,7 @@ import com.cnpc.pms.inter.manager.InterManager;
 import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.entity.NoticeReciver;
 import com.cnpc.pms.notice.manager.NoticeReciverManager;
-import com.cnpc.pms.personal.manager.SendMessageManager;
+import com.cnpc.pms.personal.manager.SendMessageManager; 
 
 /**
  * 
