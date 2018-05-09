@@ -18,6 +18,16 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<Map<String, Object>> queryContainsStoreDistCityList(){
+		String sql = "select DISTINCT(cityno) as cityno,city_name as cityname from t_store ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
 	public Map<String, Object> queryDayTurnover(ChartStatDto csd) {
 		
 		String sql = "SELECT IFNULL(FLOOR(SUM(dod.trading_price)),0) AS day_amount FROM df_mass_order_daily dod WHERE DATE(dod.sign_time) = DATE(curdate()) "

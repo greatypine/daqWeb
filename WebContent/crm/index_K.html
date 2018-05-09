@@ -2197,6 +2197,17 @@ Date.prototype.format = function() {
 	}
   
   function initallcity(){
+	   var effectiveCity = [];
+	   doManager("chartStatManager","queryContainsStoreDistCityList",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						effectiveCity.push(element.cityname);
+                   });
+				}
+		},false);
+	  
 		doManager("distCityCodeManager","queryAllDistCityList",null,
 		    function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
@@ -2204,8 +2215,11 @@ Date.prototype.format = function() {
 					$("#citySelect").append("<option value=''>全部城市</option>");
 					$("#citySelectContrast").append("<option value=''>全部城市</option>");
 					$(jsonData).each(function(index,element){
-						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
-						$("#citySelectContrast").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+						var indexTemp = jQuery.inArray(element.cityname,effectiveCity);
+						if(indexTemp>=0){
+							$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+							$("#citySelectContrast").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+						}
                    });
 				}
 		});
@@ -2244,13 +2258,27 @@ Date.prototype.format = function() {
 	}
 	
    function initcurcity(){
+	   var effectiveCity = [];
+	   doManager("chartStatManager","queryContainsStoreDistCityList",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						effectiveCity.push(element.cityname);
+                   });
+				}
+		},false);
+	   
 		doManager("userManager","getCurrentUserCity",null,
 		    function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
 					$(jsonData).each(function(index,element){
-						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
-						$("#citySelectContrast").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+						var indexTemp = jQuery.inArray(element.cityname,effectiveCity);
+						if(indexTemp>=0){
+							$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+							$("#citySelectContrast").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+						}
                    });
 					
 				}

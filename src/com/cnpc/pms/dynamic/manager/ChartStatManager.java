@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.dynamic.entity.ChartStatDto;
+import com.cnpc.pms.personal.entity.DistCityCode;
 
 /**
  * @Function：K线图
@@ -16,6 +17,11 @@ import com.cnpc.pms.dynamic.entity.ChartStatDto;
 public interface ChartStatManager extends IManager {
 	
 	/**------------------GMV数据分析相关接口-------------------------------*/
+	
+	/**
+	 * 查询包含门店的城市列表
+	 */
+	public List<Map<String, Object>> queryContainsStoreDistCityList();
 	
 	/**
 	 * 查询所有的事业群
