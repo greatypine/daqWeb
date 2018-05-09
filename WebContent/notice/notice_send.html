@@ -180,7 +180,7 @@ function showTemplateInfo(t){
 	            buttons : {
 	                "确定": function(){
 	                    window.frames["select_win"].doSubmit();
-	                    _this.win.remove();
+	                    
 	                },
 	                "取消":function(){
 	                    _this.hide();
@@ -227,11 +227,18 @@ function showTemplateInfo(t){
     	selectCity = new Array();
     	saveCity = new Array();
     	var city="";
+    	if(data.length>0){
+    		
+    	}
     	for(var i=0;i<data.length;i++){
     		if(i==7){
     			city=city+'<div class="tag" >...</div>';
     		}else if(i<7){
-    			city=city+'<div class="tag" id="'+data[i].code+'"+>'+data[i].name+'</div>';
+    			var city_name = data[i].name;
+    			if(city_name!=null&&city_name.length>6){
+    				city_name = city_name.substring(0,5)+"...";
+    			}
+    			city=city+'<div class="tag" id="'+data[i].code+'"+>'+city_name+'</div>';
     		}
     		selectCity[i] = data[i].code;
     		saveCity[i] = data[i].name;
@@ -246,7 +253,8 @@ function showTemplateInfo(t){
         	selectZw = null;
         	selectEmployee = null;
     	}else{
-    		$("#receive_city").html('<div class="tag" id="allStore">全部</div>');
+    		//$("#receive_city").html('<div class="tag" id="allStore">全部</div>');
+    		$("#receive_city").empty();
     		$("#receive_store").html('<div class="tag" id="allStore">全部</div>');
         	$("#receive_zw").html('<div class="tag" id="allZW">全部</div>');
     	}
@@ -273,7 +281,11 @@ function showTemplateInfo(t){
     		if(i==7){
     			store=store+'<div class="tag" >...</div>';
     		}else if(i<7){
-    			store=store+'<div class="tag" id="'+data[i].storeId+'"+>'+data[i].storeName+'</div>';
+    			var store_name = data[i].storeName;
+    			if(store_name!=null&&store_name.length>6){
+    				store_name = store_name.substring(0,5)+"...";
+    			}
+    			store=store+'<div class="tag" id="'+data[i].storeId+'"+>'+store_name+'</div>';
     		}
     		
     		selectStore[i] = data[i].storeId;
@@ -287,7 +299,8 @@ function showTemplateInfo(t){
         	selectZw = null;
         	selectEmployee = null;
     	}else{
-    		$("#receive_store").html('<div class="tag" id="allZW">全部</div>');
+    		//$("#receive_store").html('<div class="tag" id="allZW">全部</div>');
+    		$("#receive_store").empty();
     		$("#receive_zw").html('<div class="tag" id="allZW">全部</div>');
     	}
     }

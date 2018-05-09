@@ -126,9 +126,14 @@
            			var json = {name:city.cityname,code:city.citycode};
                		jsons.push(json);
             	}
+            	parent.win.callBack(jsons);
+                parent.win.hide();
+                parent.win.win.remove();
+            }else{
+            	 $$.showMessage('提示',"请选择至少一个城市");
+            	 return;
             } 
-            parent.win.callBack(jsons);
-            parent.win.hide();
+            
         }
       
       function getCityInfo(code){

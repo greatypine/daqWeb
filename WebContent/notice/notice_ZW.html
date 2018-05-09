@@ -116,10 +116,16 @@
             			var json = {zw:allZW[i]};
                 		jsons.push(json);
             		}
+            		
+            		parent.win.callBack(jsons);
+                    parent.win.hide();
+                    parent.win.win.remove();
+            	}else{
+            		$$.showMessage('提示',"请选择至少一个职务");
+	            	 return;
             	} 
             
-            parent.win.callBack(jsons);
-            parent.win.hide();
+            
         }
       
         
