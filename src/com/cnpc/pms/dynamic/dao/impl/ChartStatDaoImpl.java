@@ -1,5 +1,7 @@
 package com.cnpc.pms.dynamic.dao.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,16 @@ import com.cnpc.pms.utils.DateUtils;
 
 public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> queryContainsStoreDistCityList(){
+		String sql = "select DISTINCT(cityno) as cityno,city_name as cityname from t_store where name not like '%储备%' and name not like '%办公%' and name not like '%测试%' and flag=0 ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> queryDayTurnover(ChartStatDto csd) {
@@ -32,13 +44,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dod.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dod.store_name not like '%企业购%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dod.store_name like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND dod.store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND dod.store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new HashMap<String, Object>();
+			}
 		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -67,13 +81,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dom.store_name not like '%企业购%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dom.store_name like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND dom.store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND dom.store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new ArrayList<Map<String, Object>>();
+			}
 		}
 		sql = sql + " GROUP BY DATE_FORMAT(dom.sign_time,'%H') ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -99,13 +115,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dom.store_name not like '%企业购%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dom.store_name like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND dom.store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND dom.store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new ArrayList<Map<String, Object>>();
+			}
 		}
 		sql = sql + " GROUP BY DATE(dom.sign_time) ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -130,13 +148,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dst.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dst.store_name not like '%企业购%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dst.store_name like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND dst.store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND dst.store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new HashMap<String, Object>();
+			}
 		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -166,13 +186,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dom.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dom.store_name not like '%企业购%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dom.store_name like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND dom.store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND dom.store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new HashMap<String, Object>();
+			}
 		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -200,13 +222,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
-			sql = sql + " AND store_name not like '%企业购%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
-			sql = sql + " AND store_name like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new ArrayList<Map<String, Object>>();
+			}
 		}
 		sql = sql + " GROUP BY week_date";
 		
@@ -233,13 +257,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dst.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dst.store_name not like '%企业购%' ";
-		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "0".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){
-			sql = sql + " AND dst.store_name like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND dst.store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND dst.store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new ArrayList<Map<String, Object>>();
+			}
 		}
 		sql = sql + " GROUP BY dst.year,dst.month ";
 		
@@ -254,7 +280,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	public List<Map<String, Object>> queryTargetByMonth(ChartStatDto csd){
 		String sql = "SELECT IFNULL(FLOOR(SUM(dt.gmv)),0) AS month_amount,CONCAT(dt. YEAR, '-', dt. MONTH) AS month_time FROM df_gmv_target dt "
 				+ "WHERE dt.year = YEAR(curdate()) ";
-		if(StringUtils.isEmpty(csd.getCityname()) && StringUtils.isEmpty(csd.getDeptname())){
+		if(StringUtils.isEmpty(csd.getCityname()) && StringUtils.isEmpty(csd.getDeptname()) && StringUtils.isEmpty(csd.getChannelname())){
 			sql = sql + " AND dt.city_name!='' ";
 		}else{
 			if(StringUtils.isNotEmpty(csd.getCityname())){
@@ -298,9 +324,15 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND channel_name like '%"+csd.getChannelname()+"%' ";
 		}
-		if(StringUtils.isNotEmpty(csd.getcLabel()) && "1".equals(csd.getcLabel()) 
-				&& StringUtils.isNotEmpty(csd.getSmallBLabel()) && "1".equals(csd.getSmallBLabel())){
-			sql = sql + " AND store_name not like '%企业购%' ";
+		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getcLabel())){
+			if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "0".equals(csd.getMaxBLabel())){//C+小B
+				sql = sql + " AND store_name not like '%企业购%' ";
+			}else if("0".equals(csd.getcLabel()) && "0".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//大B
+				sql = sql + " AND store_name like '%企业购%' ";
+			}else if("1".equals(csd.getcLabel()) && "1".equals(csd.getSmallBLabel()) && "1".equals(csd.getMaxBLabel())){//All
+			}else{
+				return new ArrayList<Map<String, Object>>();
+			}
 		}
 		sql = sql + " GROUP BY city_name,store_name,time HAVING time>=DATE_FORMAT(DATE_SUB( CURRENT_DATE() , INTERVAL 3 MONTH ),'%Y-%c') ";
 		

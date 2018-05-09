@@ -7,6 +7,8 @@ import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.dynamic.entity.ChartStatDto;
 
 public interface ChartStatDao extends IDAO{
+	
+	public List<Map<String, Object>> queryContainsStoreDistCityList();
 
 	public Map<String, Object> queryDayTurnover(ChartStatDto csd); 
 	
