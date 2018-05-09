@@ -8,11 +8,19 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.dynamic.dao.ChartStatDao;
 import com.cnpc.pms.dynamic.entity.ChartStatDto;
 import com.cnpc.pms.dynamic.manager.ChartStatManager;
+import com.cnpc.pms.personal.entity.DistCityCode;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.DateUtils;
 
 public class ChartStatManagerImpl extends BizBaseCommonManager implements ChartStatManager {
 
+	@Override
+	public List<Map<String, Object>> queryContainsStoreDistCityList(){
+		ChartStatDao chartStatDao = (ChartStatDao)SpringHelper.getBean(ChartStatDao.class.getName());
+		List<Map<String, Object>> lst_data = chartStatDao.queryContainsStoreDistCityList();
+    	return lst_data;
+	}
+	
 	@Override
 	public List<Map<String, Object>> queryAllDept(){
 		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());

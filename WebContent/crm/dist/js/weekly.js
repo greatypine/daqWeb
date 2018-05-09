@@ -5052,7 +5052,8 @@ function oneyearorsixweek(){
 					deptname:null,
 					channelname:null,
 					cLabel:1,
-					smallBLabel:1
+					smallBLabel:1,
+					maxBLabel:0
 				}
 		}
 		

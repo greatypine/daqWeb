@@ -135,9 +135,14 @@
 	            			var json = {storeId:store.store_id,storeName:store.name,cityName:store.cityname};
 	                		jsons.push(json);
 	            	}
-	            } 
-            parent.win.callBack(jsons);
-            parent.win.hide();
+            		parent.win.callBack(jsons);
+                    parent.win.hide();
+                    parent.win.win.remove();
+	            }else{
+	            	 $$.showMessage('提示',"请选择至少一个门店");
+	            	 return;
+	            }
+            
         }
       
         
