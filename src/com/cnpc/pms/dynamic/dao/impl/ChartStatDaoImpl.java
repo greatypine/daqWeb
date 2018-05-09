@@ -19,7 +19,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryContainsStoreDistCityList(){
-		String sql = "select DISTINCT(cityno) as cityno,city_name as cityname from t_store ";
+		String sql = "select DISTINCT(cityno) as cityno,city_name as cityname from t_store where name not like '%储备%' ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
