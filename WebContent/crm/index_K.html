@@ -200,11 +200,11 @@
                 </div>
                 <div class="col-sm-12 no-padding">
                 	<div class="col-sm-6 form-group no-padding no-margin">
-		          	<label><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C+小B</span></label>
-		        </div>
-		        <div class="col-sm-6 form-group no-padding no-margin">
-		          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B</span></label>
-		        </div>
+		          		<label id="cbLabel"><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C+小B</span></label>
+		        	</div>
+			        <div class="col-sm-6 form-group no-padding no-margin">
+			          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B</span></label>
+			        </div>
                	</div>
               </form>
             </div>
@@ -289,39 +289,49 @@
 <!-- <script src="dist/js/headquarters/index_K.js"></script> -->
 <script type="text/javascript">
 
-Date.prototype.format=function(fmt) {        
-    var o = {        
-    "M+" : this.getMonth()+1, //月份        
-    "d+" : this.getDate(), //日        
-    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
-    "H+" : this.getHours(), //小时        
-    "m+" : this.getMinutes(), //分        
-    "s+" : this.getSeconds(), //秒        
-    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
-    "S" : this.getMilliseconds() //毫秒        
-    };        
-    var week = {        
-    "0" : "\u65e5",        
-    "1" : "\u4e00",        
-    "2" : "\u4e8c",        
-    "3" : "\u4e09",        
-    "4" : "\u56db",        
-    "5" : "\u4e94",        
-    "6" : "\u516d"       
-    };        
-    if(/(y+)/.test(fmt)){        
-        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
-    }        
-    if(/(E+)/.test(fmt)){        
-        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
-    }        
-    for(var k in o){        
-        if(new RegExp("("+ k +")").test(fmt)){        
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
-        }        
-    }        
-    return fmt;        
-} 
+// Date.prototype.format=function(fmt) {        
+//     var o = {        
+//     "M+" : this.getMonth()+1, //月份        
+//     "d+" : this.getDate(), //日        
+//     "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+//     "H+" : this.getHours(), //小时        
+//     "m+" : this.getMinutes(), //分        
+//     "s+" : this.getSeconds(), //秒        
+//     "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+//     "S" : this.getMilliseconds() //毫秒        
+//     };        
+//     var week = {        
+//     "0" : "\u65e5",        
+//     "1" : "\u4e00",        
+//     "2" : "\u4e8c",        
+//     "3" : "\u4e09",        
+//     "4" : "\u56db",        
+//     "5" : "\u4e94",        
+//     "6" : "\u516d"       
+//     };        
+//     if(/(y+)/.test(fmt)){        
+//         fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+//     }        
+//     if(/(E+)/.test(fmt)){        
+//         fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+//     }        
+//     for(var k in o){        
+//         if(new RegExp("("+ k +")").test(fmt)){        
+//             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+//         }        
+//     }        
+//     return fmt;        
+// } 
+
+Date.prototype.format = function() {  
+    var s = '';  
+    var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
+    var day = this.getDate()>=10?this.getDate():('0'+this.getDate());  
+    s += this.getFullYear() + '-'; // 获取年份。  
+    s += mouth + "-"; // 获取月份。  
+    s += day; // 获取日。  
+    return (s); // 返回日期。  
+};
 
   autodivheight();
   function autodivheight(){ //函数：获取尺寸
@@ -952,13 +962,13 @@ Date.prototype.format=function(fmt) {
   	chart5 = echarts.init(document.getElementById('main5'));
 
     //K线图--日
-//     var xData = function() {
-//       var data = [];
-//       for (var i = 1; i < 8; i++) {
-//         data.push(i + "天");
-//       }
-//       return data;
-//     }();
+    var xData = function() {
+      var data = [];
+      var fistDay = getFirstDayOfYear();
+      var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+      data = getAllDate(fistDay,curDay);
+      return data;
+    }();
   	
     chart5_option = {
       backgroundColor: "#f55a44",
@@ -1231,7 +1241,7 @@ Date.prototype.format=function(fmt) {
 		//K线图--月
 		var xData_month = function() {
 			var data = [];
-			var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
+			var curMonth = now.getFullYear()+'-12-31';
 			data = getYearAndMonth('2017-12-1',curMonth);
 			return data;
 		}();
@@ -1249,7 +1259,7 @@ Date.prototype.format=function(fmt) {
 			},
 			grid: {
 				borderWidth: '0',
-				left: '5%',
+				left: '6%',
 				right: '5%',
 				bottom: '30%',
 				top: '10%',
@@ -1492,12 +1502,18 @@ Date.prototype.format=function(fmt) {
 		 excuteChart();
 	 }); 
 	 $("#deptSelect").change(function(){
+		 $('#cbLabel').children("div").addClass('checked'); 
+		 iCheckStr = $('#cbClick').val();
 		 excuteChart();
 	 });
 	 $("#channelSelect").change(function(){
+		 $('#cbLabel').children("div").addClass('checked'); 
+		 iCheckStr = $('#cbClick').val();
 		 excuteChart();
 	 });
 	 $("#citySelect").change(function(){
+		 $('#cbLabel').children("div").addClass('checked'); 
+		 iCheckStr = $('#cbClick').val();
 		 excuteChart();
 	 });
 	 //小B端iCheck
@@ -1826,15 +1842,19 @@ Date.prototype.format=function(fmt) {
 //       });
   }
   
-  var curDayGMV;
+  var curDayGMV = '0';
   function inintCurDayData(){
 	  doManager("chartStatManager","queryDayTurnover",[shareChartStatDto],
 			function(datax,textStatus,XmlHttpRequest){
 				if (datax.result) {
 					var jsonData = $.fromJSON(datax.data);
-					curDayGMV = jsonData.day_amount;
-					real_value = jsonData.day_amount;
-					$("#curDayGMV").html(parseFloat(curDayGMV).toLocaleString());
+					if(Object.keys(jsonData).length!=0){
+						curDayGMV = jsonData.day_amount;
+// 						real_value = jsonData.day_amount;
+						$("#curDayGMV").html(parseFloat(curDayGMV).toLocaleString());
+					}else{
+						$("#curDayGMV").html('0');
+					}
 				}
 		},false);
 // 	  myChart1.setOption({
@@ -1850,8 +1870,12 @@ Date.prototype.format=function(fmt) {
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					curMonthData = jsonData.month_amount;
-					$("#curMonthGMV").html(changeMoney(parseInt(curMonthData)));
+					if(Object.keys(jsonData).length!=0){
+						curMonthData = jsonData.month_amount;
+						$("#curMonthGMV").html(changeMoney(parseInt(curMonthData)));
+					}else{
+						$("#curMonthGMV").html('0万');
+					}
 				}
 		});
 	} 
@@ -1864,29 +1888,42 @@ Date.prototype.format=function(fmt) {
  					var nowHour = now.getHours();
  					hourData=new Array(nowHour+2).join(0).split('');
  					var jsonData = $.fromJSON(data.data);
- 					$(jsonData).each(function(index,element){
- 						hourData[parseInt(element.time)]=element.turnover;
-                     });
-					chart4_option.series[0].data=hourData;
-					chart4.setOption(chart4_option);
+ 					if(jsonData.length!=0){
+ 						$(jsonData).each(function(index,element){
+ 	 						hourData[parseInt(element.time)]=element.turnover;
+ 	                     });
+ 						chart4_option.series[0].data=hourData;
+ 						chart4.setOption(chart4_option);
+ 					}else{
+ 						hourData = [];
+ 						chart4_option.series[0].data=hourData;
+ 						chart4.setOption(chart4_option);
+ 					}
  				}
  		});
  	} 
   
   function initDayData(){
-	  var curDay = getCurDay();
+	  var fistDay = getFirstDayOfYear();
+	  var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+	  xData = getAllDate(fistDay,curDay);
 	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
+					yData=new Array(xData.length+1).join(0).split('');
 					var jsonData = $.fromJSON(data.data);
-					yData=new Array(curDay+1).join(0).split('');
-					$(jsonData).each(function(index,element){
-						xData[index]=element.day_time;
-						yData[index]=element.turnover;
-	                });
-					chart5_option.xAxis[0].data=xData;
-					chart5_option.series[0].data=yData;
-					chart5.setOption(chart5_option);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var indexTemp = jQuery.inArray(element.day_time,xData);
+							yData[indexTemp]=element.turnover;
+		                });
+						chart5_option.series[0].data=yData;
+						chart5.setOption(chart5_option);
+					}else{
+						yData = [];
+						chart5_option.series[0].data=yData;
+						chart5.setOption(chart5_option);
+					}
 				}
 		});
   }
@@ -1898,13 +1935,19 @@ Date.prototype.format=function(fmt) {
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					$(jsonData).each(function(index,element){
-						var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
-						var indexTemp = jQuery.inArray(dateTemp,xData_week);
-						weekData[indexTemp]=element.week_amount;
-                    });
-					chart7_option.series[0].data=weekData;
-					chart7.setOption(chart7_option);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+							var indexTemp = jQuery.inArray(dateTemp,xData_week);
+							weekData[indexTemp]=element.week_amount;
+	                    });
+						chart7_option.series[0].data=weekData;
+						chart7.setOption(chart7_option);
+					}else{
+						weekData = [];
+						chart7_option.series[0].data=weekData;
+						chart7.setOption(chart7_option);
+					}
 				}
 		});
 	} 
@@ -1921,11 +1964,16 @@ Date.prototype.format=function(fmt) {
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					$(jsonData).each(function(index,element){
-						var indexTemp = jQuery.inArray(element.month_time,months);
-						yData_month[indexTemp]=element.month_amount;
-               		});
-					chart6_option.series[0].data=yData_month;
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var indexTemp = jQuery.inArray(element.month_time,months);
+							yData_month[indexTemp]=element.month_amount;
+	               		});
+						chart6_option.series[0].data=yData_month;
+					}else{
+						yData_month = [];
+						chart6_option.series[0].data=yData_month;
+					}
 				}
 		},false);
 		
@@ -1934,9 +1982,11 @@ Date.prototype.format=function(fmt) {
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
 					if(jsonData.length!=0){
-						yData_month_target = new Array(months.length+1).join(0).split('');
+						yData_month_target = new Array(12).join(0).split('');
+						var curMonth = now.getFullYear()+'-12-31';
+						var monthData = getYearAndMonth('2017-12-1',curMonth);
 						$(jsonData).each(function(index,element){
-							var indexTemp = jQuery.inArray(element.month_time,months);
+							var indexTemp = jQuery.inArray(element.month_time,monthData);
 							yData_month_target[indexTemp]=element.month_amount;
 	               		});
 						chart6_option.series[1].data=yData_month_target;
@@ -1969,17 +2019,23 @@ Date.prototype.format=function(fmt) {
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					$(jsonData).each(function(index,element){
-						var temp = [];
-						temp.push(element.order_count);
-						temp.push((element.order_amount/10000).toFixed(2));
-						temp.push(element.city_name);
-						temp.push(element.store_name);
-						temp.push(element.time);
-						dataBJ.push(temp);
-                 	});
-					option3.series[0].data = dataBJ;
-					myChart3.setOption(option3,true);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var temp = [];
+							temp.push(element.order_count);
+							temp.push((element.order_amount/10000).toFixed(2));
+							temp.push(element.city_name);
+							temp.push(element.store_name);
+							temp.push(element.time);
+							dataBJ.push(temp);
+	                 	});
+						option3.series[0].data = dataBJ;
+						myChart3.setOption(option3,true);
+					}else{
+						dataBJ = [];
+						option3.series[0].data = dataBJ;
+						myChart3.setOption(option3,true);	
+					}
 				}
 		});
   }
@@ -2446,7 +2502,6 @@ Date.prototype.format=function(fmt) {
 		  initHourData();
 // 		  setInterval(initHourData, 5000);
 		  //日GMV
-		  xData = [];
    		  yData = [];
 		  initDayData();
 		  //周GMV
@@ -2469,7 +2524,7 @@ Date.prototype.format=function(fmt) {
 	  	chartresize3();
 	  	chartresize4();
 	  	search_manual_k();
-	  	timeTicket=setInterval(loadtime, 5000);
+// 	  	timeTicket=setInterval(loadtime, 5000);
 	}
 	
 	function changeMoney (x) {
@@ -2488,23 +2543,41 @@ Date.prototype.format=function(fmt) {
 	    return Dight;  
 	 }
   //获取当前日期为今年的第几天
-  function getCurDay(){
-	  var dateArr = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);  
-	  var date = new Date();  
-	  var day = date.getDate();  
-	  var month = date.getMonth(); //getMonth()是从0开始  
-	  var year = date.getFullYear();  
-	  var result = 0;  
-	  for ( var i = 0; i < month; i++) {  
-	      result += dateArr[i];  
-	  }  
-	  result += day;  
-	  //判断是否闰年  
-	  if (month > 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {  
-	      result += 1;  
-	  }  
-	  return result;
+//   function getCurDay(){
+// 	  var dateArr = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);  
+// 	  var date = new Date();  
+// 	  var day = date.getDate();  
+// 	  var month = date.getMonth(); //getMonth()是从0开始  
+// 	  var year = date.getFullYear();  
+// 	  var result = 0;  
+// 	  for ( var i = 0; i < month; i++) {  
+// 	      result += dateArr[i];  
+// 	  }  
+// 	  result += day;  
+// 	  //判断是否闰年  
+// 	  if (month > 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {  
+// 	      result += 1;  
+// 	  }  
+// 	  return result;
+//   }
+  
+  //获取当年第一天
+  function getFirstDayOfYear() {
+	 var nowTime = new Date();
+	 nowTime.setDate(1);
+	 nowTime.setMonth(0);
+     return timeFormat(nowTime);
   }
+   //日期格式化，返回值形式为yy-mm-dd
+   function timeFormat(date) {
+       if (!date || typeof(date) === "string") {
+           this.error("参数异常，请检查...");
+      }
+      var y = date.getFullYear(); //年
+      var m = date.getMonth() + 1; //月
+      var d = date.getDate(); //日
+      return y + "-" + m + "-" + d;
+   }
   //获取两个时间段内的月份数据
   function getYearAndMonth(start, end) {
 	    var result = [];
@@ -2532,6 +2605,24 @@ Date.prototype.format=function(fmt) {
 	    }
 	    return result;
 	}
+  
+  //获取当年所有的日期
+  function getAllDate(begin, end) {  
+	  var result = [];
+      var ab = begin.split("-");  
+      var ae = end.split("-");  
+      var db = new Date();  
+      db.setUTCFullYear(ab[0], ab[1] - 1, ab[2]);  
+      var de = new Date();  
+      de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);  
+      var unixDb = db.getTime();  
+      var unixDe = de.getTime();  
+      for (var k = unixDb; k <= unixDe;) {  
+          result.push((new Date(parseInt(k))).format());
+          k = k + 24 * 60 * 60 * 1000;  
+      }  
+      return result;
+  } 
 </script>
 
 </body>
