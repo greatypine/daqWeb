@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>片区数据</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+  html,body,.skin-blue .wrapper{background-color: #f1f1f1; min-height: 100%;}
+  p{margin: 0;}
+  /*tab切换*/
+  .nav-tabs > li{line-height: 40px; float: none; display: inline-block;}
+  .nav-tabs > li > a{color: #666;}
+  .nav-tabs > li > a:hover{border-color: transparent}
+  .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{border: 0; border-bottom: 2px solid #1874ef; color: #1874ef}
+  /*tab切换 end*/
+  .nav_l{box-shadow: 2px 0 5px rgba(0,0,0,0.5); background-color: #fff; overflow-y: scroll;}
+  .nav_l::-webkit-scrollbar{width: 8px; background-color: #fff;}
+  .nav_l::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+  .nav_l::-webkit-scrollbar-track{background-color: #fff;}
+  .bg-light-blue-gradient{border-radius: 5px; margin-top: 10px;}
+  .dl-horizontal dt{width: 90px;}
+  .dl-horizontal dd{margin-left: 110px;}
+  .dl-horizontal span{padding-left: 20px;}
+  .bg-light-blue-gradient .col-sm-3{background-color: #0045a0; border-radius: 5px; color: #ffee00; line-height: 36px; padding-top: 15px; padding-bottom: 15px;}
+  .bg-light-blue-gradient .col-sm-3 p:nth-child(1){font-size: 28px; font-weight: bold;}
+  
+  #mapContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+     } 
+     
+     
+     .marker-route {
+          position: absolute;
+          padding: 5px 10px;
+          color: #e90000;
+          background:#4598e0;
+          cursor: pointer;
+          white-space:nowrap;
+          position: relative;
+          color: #fff;
+          border-radius: 3px;
+          font-size:14px;
+        }
+     .marker-route:after {
+       	content:'';
+        position: absolute;
+       	width: 0;
+	    height: 0;
+	    border-left: 5px solid transparent;
+	    border-right: 5px solid transparent;
+	    border-top: 6px solid #4598e0;
+      	bottom: -6px;
+       	left:50%;
+       	margin-left:-5px;
+      }
+    #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	
+	
+	.menu{position: absolute; bottom: 10px;  right: 20px; width: 550px; background-color: rgba(73,73,72,.6); border-radius: 10px; box-shadow: 1px 2px 1px rgba(0,0,0,.15);-webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out;}
+	.legend{font-size: 16px; color: #fff;}
+	.menu_list{ width: 535px; padding: 10px 0 0 15px; color: #dfdfdf;}
+	.menu_list_bg{height: 10px; width: 100%; background: -webkit-linear-gradient(#ffee0000,#f6ff01,#ffc001,#ff9c01,#ff6701,#ff1901); /* Safari 5.1 - 6.0 */ background: -o-linear-gradient(#ffee0000,#f6ff01,#ffc001,#ff9c01,#ff6701,#ff1901); /* Opera 11.1 - 12.0 */ background: -moz-linear-gradient(#ffee0000,#f6ff01,#ffc001,#ff9c01,#ff6701,#ff1901); /* Firefox 3.6 - 15 */ background: linear-gradient(to right, #ffee0000,#f6ff01,#ffc001,#ff9c01,#ff6701,#ff1901); /* 标准的语法（必须放在最后） */}
+	.menu_list li{float: left; width: 20%; text-align: right; 
+/* 	padding: 5px 0 10px 0; */
+	}
+	
+	 .menu_1{position: absolute; top:30px;  right: 20px; width: 180px; background-color: #fff;}
+	.legend_1{font-size: 15px; padding: 15px 0 0 15px;}
+	.menu_list_1{ width: 180px; padding-top: 10px; box-shadow: 1px 2px 1px rgba(0,0,0,.15);-webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out;}
+
+	.menu_list_1 li{line-height: 22px; font-size: 12px; padding-bottom: 10px;}
+	.menu_list_1 li:nth-last-child(1){border: none;}
+	.menu_list_1 li p:nth-child(1){padding-bottom: 2px; color: #333;}
+	p{margin: 0;}
+    .menu_list_1 li a{color: #999; display: inline-block; width: 100%; text-decoration: none; padding-top: 5px;}
+
+	.no-padding{padding: 0;}
+    .menu_list_1 .col-sm-3{ height: 15px; margin: 5px 0 0 0;}
+	.menu_list_1 .col-sm-9 b{padding-left: 10px;}
+	
+	  	/*弹窗蓝色title样式*/	
+  	div.amap-info-content{
+  		padding:0 0 0 0;
+  	}
+  	div.amap-info-outer{
+  		padding:0px;
+  	}
+  	a.amap-info-close{
+  		top:10px
+  	}
+  	/*弹窗X样式*/
+  	A:link{
+  		font-size: 14px;
+	    color: #eee;
+	    text-decoration: none;
+  	}
+  	
+  	A:visited{
+  		font-size: 14px;
+	    color: #eee;
+	    text-decoration: none;
+  	}
+  	
+  	.layui-layer-btn a{
+  	   font-size:12px;
+  	}
+	
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <div id="process_div" ></div>
+  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+  <header class="main-header">
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+        <div class="logo_img pull-left"><img src="dist/img/logo1.png" height="30"><img src="dist/img/title.png" height="20"></div>
+        <div class="pull-left">
+          <div class="logo-lg">
+<!--             <ul class="no-margin"> -->
+<!--               <li class="current"> -->
+<!--                 <em class="logo_cs">数据运营<i class="glyphicon glyphicon-triangle-bottom"></i></em> -->
+<!--                 <div class="TDsec-nav"> -->
+<!--                   <div class="secNav-box"> -->
+<!--                     <dl class="col-sm-3"> -->
+<!--                       <dt><i></i>运营数据</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-money"></span>营业额统计</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-user-plus"></span>用户运营</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-cubes"></span>产品运营</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-institution"></span>门店运营</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-comments-o"></span>混片情况</a></dd> -->
+<!--                     </dl> -->
+<!--                     <dl class="col-sm-3"> -->
+<!--                       <dt><i></i>绩效数据</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-line-chart"></span>门店GMV</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-area-chart"></span>门店拉新</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-bar-chart"></span>国安侠拉新</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd> -->
+<!--                     </dl> -->
+<!--                     <dl class="col-sm-3"> -->
+<!--                       <dt><i></i>档案数据</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-file-o"></span>订单档案</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-newspaper-o"></span>员工档案</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-copy"></span>片区档案</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-clipboard"></span>小区档案</a></dd> -->
+<!--                     </dl> -->
+<!--                     <dl class="col-sm-3"> -->
+<!--                       <dt><i></i>排名数据</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd> -->
+<!--                     </dl> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </li> -->
+<!--               <li> -->
+<!--                 <em>数据模型<i class="glyphicon glyphicon-triangle-bottom"></i></em> -->
+<!--                 <div class="TDsec-nav"> -->
+<!--                   <div class="secNav-box"> -->
+<!--                     <dl class="col-sm-4"> -->
+<!--                       <dt><i></i>社区模型</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-sitemap"></span>基础数据模型</a></dd> -->
+<!--                     </dl> -->
+<!--                     <dl class="col-sm-4"> -->
+<!--                       <dt><i></i>订单模型</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-server"></span>公海订单</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-warning "></span>异常订单</a></dd> -->
+<!--                     </dl> -->
+<!--                     <dl class="col-sm-4"> -->
+<!--                       <dt><i></i>用户模型</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-street-view"></span>用户画像</a></dd> -->
+<!--                     </dl> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </li> -->
+<!--               <li> -->
+<!--                 <em>数据地图<i class="glyphicon glyphicon-triangle-bottom"></i></em> -->
+<!--                 <div class="TDsec-nav"> -->
+<!--                   <div class="secNav-box"> -->
+<!--                     <dl class="col-sm-4"> -->
+<!--                       <dt><i></i>热力图</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-money"></span>订单热力图</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-user-secret"></span>用户人力图</a></dd> -->
+<!--                     </dl> -->
+<!--                     <dl class="col-sm-4"> -->
+<!--                       <dt><i></i>覆盖范围</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-object-group"></span>门店覆盖范围</a></dd> -->
+<!--                       <dd><a href="#"><span class="fa fa-map-o"></span>片区分布图</a></dd> -->
+<!--                     </dl> -->
+<!--                     <dl class="col-sm-4"> -->
+<!--                       <dt><i></i>动态图</dt> -->
+<!--                       <dd><a href="#"><span class="fa fa-group"></span>国安侠分布图</a></dd> -->
+<!--                     </dl> -->
+<!--                   </div> -->
+<!--                 </div> -->
+<!--               </li> -->
+
+<!--             </ul> -->
+
+
+          </div>
+        </div>
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+
+<!--             <li class="dropdown user user-menu"> -->
+<!--               <a href="#" class="dropdown-toggle" data-toggle="dropdown"> -->
+<!--                 <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
+<!--                 <span class="hidden-xs">王春</span> -->
+<!--               </a> -->
+<!--               <ul class="dropdown-menu"> -->
+<!--                 User image -->
+<!--                 <li class="user-header"> -->
+<!--                   <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"> -->
+
+<!--                   <p><strong>王春</strong></p> -->
+<!--                   <p>店长<span>A77777</span></p> -->
+<!--                   <p>呼家楼店</p> -->
+<!--                 </li> -->
+
+<!--                 Menu Footer -->
+<!--                 <li class="user-footer"> -->
+<!--                   <div class="pull-left"> -->
+<!--                     <a href="#" class="btn btn-default btn-flat">个人中心</a> -->
+<!--                   </div> -->
+<!--                   <div class="pull-right"> -->
+<!--                     <a href="#" class="btn btn-default btn-flat">退出</a> -->
+<!--                   </div> -->
+<!--                 </li> -->
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+      <!-- Main content -->
+      <section>
+        <div class="col-sm-5 nav_l" id="nav_l">
+          <div class="bg-light-blue-gradient">
+            <div class="box-body"style="padding-right: 20px;">
+              <dl class="dl-horizontal col-sm-9 no-padding">
+                <dt>片区名称</dt>
+                <dd id="area_name"></dd>
+                <dt>片区编号</dt>
+                <dd id="area_no"></dd>
+                <dt>片区总户数</dt>
+                <dd id="house_total"></dd>
+                <!-- <dt>已服务户数</dt>
+                <dd>敬请期待...</dd> -->
+                <dt>片区管家</dt>
+                <dd id="area_manager"></dd>
+<!--                 <dt>片区范围</dt> -->
+<!--                 <dd id="area_info">关东店社区<span>向军南里-5</span><span><a id="to_detail" class="text-light-blue" href="#">详情</a></span><br></dd> -->
+              </dl>
+              <div class="col-sm-3 text-center">
+                <p id="order_amount"></p>
+                <p id="order_date"></p>
+              </div>
+            </div>
+          </div>
+          <!-- Tabs within a box -->
+          <ul class="nav nav-tabs no-border text-center">
+            <li class="active"><a href="#revenue-chart" onclick="javascript:showTinyVillageHeat('gmv')" data-toggle="tab">营业额</a></li>
+            <li>|</li>
+            <li><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize()">用户量</a></li>
+          </ul>
+          <div class="tab-content no-padding" id="tab-content">
+            <!-- Morris chart - Sales -->
+            <div class="chart tab-pane active" id="revenue-chart">
+              <div class="col-sm-12 no-padding" id="main1" style="height: 300px; margin-top: 20px;"></div>
+              <div class="col-sm-6" id="main2" style="height: 300px; margin-top: 20px;"></div>
+              <div class="col-sm-6" id="main3" style="height: 300px; margin-top: 20px;"></div>
+            </div>
+            <div class="chart tab-pane" id="sales-chart">
+              <div class="col-sm-12 no-padding">
+                <div id="main4" style="width: 100%; height: 300px; margin-top: 20px;"></div>
+              </div>
+              <div class="col-sm-6" id="main5" style="height: 300px; margin-top: 20px;"></div>
+              <div class="col-sm-6" id="main6" style="height: 300px; margin-top: 20px;"></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-sm-7"  style="padding-left:0px;padding-right:0px;">
+          	<div class="box-body"  style="position:relative" id="mapHeight">
+          		<div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
+          		<div class="menu" id="heat_legend_color" style="display:none">
+				   <div class="menu_list clearfix" id="test">
+					   <div class="legend">小区营业额(元)</div>
+					   <div class="menu_list_bg"></div>
+					   <ul id="heat_legend_title">
+					   </ul>
+				   </div>
+				   <div></div>
+			   </div>
+			   <div class="menu_1">
+			   <div class="legend_1"><b>图例：</b></div>
+			   <div class="menu_list_1 clearfix">
+				   <ul  id="example" class='no-padding'>
+				   </ul>
+			   </div>
+			  
+		   </div>
+        </div>
+      </section>
+  </div>
+  <!-- /.content-wrapper -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- <script src="dist/js/nav-scroll.js"></script> -->
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
+<script language="javascript" src="../scripts/common/heatMap_color.js"></script>
+<script>
+  var myChart1 = echarts.init(document.getElementById('main1'));
+  var myChart2 = echarts.init(document.getElementById('main2'));
+  var myChart3 = echarts.init(document.getElementById('main3'));
+
+  var areaNo = decode64(getUrlParamByKey("ao"));//片区编号
+  
+  
+  
+  
+//初始化地图对象，加载地图
+  var map = new AMap.Map("mapContainer", {
+      resizeEnable : true,
+      zoom : 15
+  });
+
+
+  map.plugin(["AMap.ToolBar"],function(){
+      //加载工具条
+      var toolBaropt = {
+          offset :new AMap.Pixel(20,55),//相对于地图容器左上角的偏移量，正数代表向右下偏移。默认为AMap.Pixel(10,10)
+          /*
+           *控件停靠位置
+           *LT:左上角;
+           *RT:右上角;
+           *LB:左下角;
+           *RB:右下角;
+           *默认位置：LT
+           */
+          position : 'LT',
+          ruler : true,//标尺键盘是否可见，默认为true
+          noIpLocate : false,//定位失败后，是否开启IP定位，默认为false
+          locate : true,//是否显示定位按钮，默认为false
+          liteStyle : false,//是否使用精简模式，默认为false
+          direction : true,//方向键盘是否可见，默认为true
+          autoPosition : false,//是否自动定位，即地图初始化加载完成后，是否自动定位的用户所在地，在支持HTML5的浏览器中有效，默认为false
+
+          /**
+           *是否使用高德定位sdk用来辅助优化定位效果，默认：false.
+           *仅供在使用了高德定位sdk的APP中，嵌入webview页面时使用
+           *注：如果要使用辅助定位的功能，除了需要将useNative属性设置为true以外，
+           *还需要调用高德定位idk中，AMapLocationClient类的startAssistantLocation()方法开启辅助H5定位功能；
+           *不用时，可以调用stopAssistantLocation()方法停止辅助H5定位功能。具体用法可参考定位SDK的参考手册
+           */
+          useNative : false
+      }
+      var tool = new AMap.ToolBar(toolBaropt);
+      map.addControl(tool);
+  });
+  
+  
+  $(function(){
+	  initArea();
+	  setExample();
+	  getStorePosition();
+	  showTinyVillageHeat("gmv");//小区热力图
+	  showEmployeeDriverRecord();
+  })
+  
+  
+  var setExample = function(){
+	    $("#example").empty();
+		$("#example").append("<li class='col-lg-12'><div class='col-sm-3' style='width:60px;margin:7px 0px 0px -15px'><img style='width:100%;' src='../aboutMap/dist/img/storelogo.png'/></div><div class='col-sm-9' style='margin:6px 0px 0px -9px'><p>门店位置</p></div></li><li class='col-lg-12'><div class='col-sm-3' style='border:2px solid #5c69cc;'></div><div class='col-sm-9'><p>门店服务区</p></div></li>"
+		+"<li class='col-lg-12'><div class='col-sm-3' style='border:2px solid #ab50d0;'></div><div class='col-sm-9'><p>小区</p></div></li>");
+  }
+  
+    autodivheight();
+    function autodivheight(){ //函数：获取尺寸
+        //获取浏览器窗口高度
+        var winHeight=0;
+        if (window.innerHeight)
+            winHeight = window.innerHeight;
+        else if ((document.body) && (document.body.clientHeight))
+            winHeight = document.body.clientHeight;
+        //通过深入Document内部对body进行检测，获取浏览器窗口高度
+        if (document.documentElement && document.documentElement.clientHeight)
+            winHeight = document.documentElement.clientHeight;
+        //DIV高度为浏览器窗口的高度
+        //document.getElementById("test").style.height= winHeight +"px";
+        //DIV高度为浏览器窗口高度的一半
+        document.getElementById("mapHeight").style.height= winHeight-60 +"px";
+    }
+    window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+  
+  //初始化片区信息
+  var cur_area;
+  var chartData_severalDay = {}; 
+  var chartData_curMonth = {};
+  function initArea(){
+	  doManager('areaManager','queryAreaByAreaNo',[areaNo],function(data){
+          if(data.result){
+              var jsonArea = JSON.parse(data.data);
+              cur_area = jsonArea;
+              
+              $('#area_name').html(jsonArea.name);
+              $("#area_no").html(jsonArea.area_no);
+              var employee_a_name = jsonArea.employee_a_name==null?"无":jsonArea.employee_a_name;
+              var employee_b_name = jsonArea.employee_b_name==null?"无":jsonArea.employee_b_name;
+              var employee_a_no = jsonArea.employee_a_no==null?"":jsonArea.employee_a_no;
+              var employee_b_no = jsonArea.employee_b_no==null?"":jsonArea.employee_b_no;
+              var userStr= "<a style='text-decoration:underline' href=\"javaScript:goToUser('"+employee_a_no+"')\">"+employee_a_name+"</a>(A)&nbsp;&nbsp;&nbsp;&nbsp;<a style='text-decoration:underline' href=\"javaScript:goToUser('"+employee_b_no+"')\">"+employee_b_name+"</a>(B)";
+              $("#area_manager").html(userStr); 
+              querySeveralDaysPerformanceOfArea("gmv");
+              queryCurMonthPerformanceOfArea("gmv");
+              querySeveralDaysPerformanceOfArea("consumer");
+              queryCurMonthPerformanceOfArea("consumer");
+          }
+      },false);
+  }
+  
+  function goToUser(no){
+	  if(no!=null&&no!=""){
+		  window.open("user.html?employee_no="+encode64(no));
+	  }
+	  
+	 
+  }
+  
+  
+  
+  //获取门店中心点
+  function getStorePosition(){
+ 	  doManager("areaManager", "getStoreServiceAreaAndPosition", [cur_area.store_id], function(
+ 				data, textStatus, XMLHttpRequest) {
+ 			if (data.result) {
+ 				var resultJson = JSON.parse(data.data);
+ 				if(resultJson.code == 200){
+ 					var position = resultJson.position;
+ 					var store = resultJson.store;
+ 					//初始化地图对象，加载地图
+ 					
+ 					var storeMarker = new AMap.Marker({ //添加自定义点标记
+        		        map: map,
+        		        visible:true,
+        		        position: position, //基点位置
+         		        //icon:"../aboutMap/dist/img/splogo.png",
+						//offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
+        		        extData:{"storeName":store.name},
+        		       // draggable: true,  //是否可拖动
+ 			           content:'<div style="width:40px"><img  style="width:100%" src="../aboutMap/dist/img/storelogo.png"></div>',
+        		    });
+ 					
+ 					storeMarker.on("mouseover",function(e){
+        				var storeName = e.target.getExtData().storeName;
+        				e.target.setTitle(storeName);
+        			});
+ 					map.setCenter(position);
+ 					
+ 					
+ 					
+ 					getMapData();
+ 				}else{
+ 					layer.msg("暂时无法定位门店")
+ 				}
+ 			}
+ 		},false);
+ }
+  
+  //获取片区小区信息
+  var coordinate;
+  function getMapData(){
+  	doManager("areaManager", "selectTinyVillageCoordOfArea",[cur_area.store_id,cur_area.area_no], function(data, textStatus,XMLHttpRequest) {
+          if(data.result){
+          	
+          	var resultJson= JSON.parse(data.data);
+          	if(resultJson!=null){
+          		coordinate = resultJson.coordinate;//小区坐标
+          		var storeService = resultJson.serviceArea;//服务范围
+          		var  tinyVillage = resultJson.tinyVillage;//小区
+          		initTinyVillage(storeService,coordinate);//绘制地图
+          	}
+          }else{
+              layer.msg("地图数据加载异常！");
+          }},false);
+  }
+
+
+  var googleLayer = null;
+  //服务区域
+  var  serviceRange;
+  var polygonArray = [];
+  var polygonMap={};
+
+  function initTinyVillage(storeService,coordinate) {
+     
+      //服务区域多边形
+      serviceRange = new AMap.Polygon({
+          path: storeService,//设置多边形边界路径
+          strokeColor: "#5c69cc", //线颜色
+          strokeOpacity: 0.9, //线透明度
+          strokeWeight: 2,    //线宽
+          fillColor: "#00DD00", //填充色
+          fillOpacity: 0//填充透明度
+      });
+      serviceRange.setMap(map);
+      serviceRange.on("click", function () {
+          setNavListVisible(false);
+      });
+
+      var areaTinyVillage;//小区坐标范围
+      var tinyVillageMarker;
+      var tinyVillagePolygon;
+     
+      for(var i=0;i<coordinate.length;i++){
+             
+              //绘制小区
+          	areaTinyVillage = new AMap.Polygon({
+                      path:coordinate[i].coordinate_range.coordinates[0],//设置多边形边界路径
+                      strokeColor:"#ab50d0", //线颜色
+                      strokeOpacity:0.8, //线透明度
+                      strokeWeight: 1,    //线宽
+                      fillColor: "#6d6969", //填充色
+                      fillOpacity:0.5,//填充透明度
+                      extData:{"tinyVillageNo":coordinate[i].code,"tinyVillageName":coordinate[i].name} 
+                  });
+              
+              areaTinyVillage.setMap(map);
+              polygonMap[coordinate[i].code] = areaTinyVillage;
+//               var tmp_tinyVillageCoordinate={
+// 	        			code:coordinate[i].code,
+// 	        			tinyVillagePolygon:areaTinyVillage
+// 	        	}  
+//               polygonArray.push(tmp_tinyVillageCoordinate);
+          	  areaTinyVillage.on("click",function(e){
+                  var code= e.target.getExtData().tinyVillageNo;
+					var url = "dynamicData_tinyvillage.html?e=&code="+encode64(code);
+	   				window.open(url,"dynamicData_tinyvillage");
+					
+	        	});
+                var $tinyVillageName = coordinate[i].name;  
+          	    areaTinyVillage.on("mouseover", function (e) {
+          	    	var code= e.target.getExtData().tinyVillageNo;       
+                    var name = e.target.getExtData().tinyVillageName;         
+          	   
+					var info="";
+					info = info+"<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#00c0ef;padding:5px 18px 5px 10px;color:#fff\"><span>小区信息</span></div>";
+					info = info+"<div style=\"padding:10px 18px 0px 14px;line-height:24px;\">";
+			        info = info+"<b>小区名称："+(name==null?"无":name)+"</b></br>";
+			        var resultJson = chartData_curMonth[dataModel];
+			        var data = resultJson.tinyVillageData;
+			        if(dataModel=="gmv"){
+			       	      var dataInfo = "<b>小区营业额："+0+"</b></div></div>";
+			       	      if(data!=null&&data.length>0){
+		       			      
+			       			  for(var i=0;i<data.length;i++){
+			       			  	  var t_code = data[i].code;
+			       			  	  if(t_code==code){
+			       			  		dataInfo= "<b>小区营业额："+data[i].gmv+"</b></div></div>";
+			       			  		break;
+			       			  	  }
+			       			  }
+		       			  }
+			        	
+			        }else if(dataModel=="consumer"){
+			        	 var dataInfo = "<b>小区营业额："+0+"</b></div></div>";
+			        	 if(data!=null&&data.length>0){
+			        		 for(var i=0;i<data.length;i++){
+			       			  	  var t_code = data[i].code;
+			       			  	  if(t_code==code){
+			       			  		dataInfo = "<b>小区消费用户量："+data[i].consumer+"</b></div></div>";
+			       			  		break;
+			       			  	  }
+			       			  }
+			        	 }
+			        	
+			        
+			        }
+			        info = info+dataInfo;
+			        infoWindow1 = new AMap.InfoWindow({ 
+			             content: info  //使用默认信息窗体框样式，显示信息内容
+			         });
+			         infoWindow1.open(map, e.target.getBounds().getCenter());
+                 });
+          	     
+            }
+      }
+      
+  
+  
+  
+  
+  
+  //查询趋势图数据
+  function querySeveralDaysPerformanceOfArea(dataType){
+	  var dynamicDto = {
+              storeId:cur_area.store_id,
+              areaNo:cur_area.area_no,
+              dataType:dataType
+          }
+	  doManager("dynamicManager", "querySeveralDaysPerformanceOfArea", [dynamicDto], function(
+				data, textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var resultJson = JSON.parse(data.data);
+				var houseHold = resultJson.houseHold;
+				var data1 = resultJson.data1;
+				var data2 = resultJson.data2;
+				
+				
+				chartData_severalDay[dataType] = resultJson;
+				if("gmv"==dataType){
+					$("#house_total").html(houseHold);
+					showTrendChartData(data1,data2,dataType);//趋势图
+				}
+				
+				
+			}else{
+				layer.msg("暂时无法获取近七日营业额");
+			}
+		});
+	  
+  }
+
+  function showEmployeeDriverRecord(){
+	  if(cur_area.employee_a_no!=null){
+		  doManager("mongoDBManager", "queryEmployeeDiveRecord", [cur_area.employee_a_no], function(
+					data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var resultJson = JSON.parse(data.data);
+					if(resultJson!=null&&resultJson.data.length>0){
+						 var locations = resultJson.data[0].locations;
+						 var cur_loaction = locations[locations.length-1];
+						 var diverPolyline = new AMap.Polyline({
+					         path:locations,          //设置线覆盖物路径
+					         strokeColor: "#f00", //线颜色
+					         strokeOpacity: 0.8,       //线透明度
+					         strokeWeight: 0.8,        //线宽
+					         strokeStyle: "solid"   //线样式
+					     });
+						 diverPolyline.setMap(map);
+						 
+						 var marker = new AMap.Marker({
+							 map:map,
+							 icon:"../aboutMap/dist/img/gaxlogo.png",
+							 position:cur_loaction,
+							 offset: new AMap.Pixel(-10, -20)
+						 });
+					}
+					
+				}else{
+					layer.msg("暂时无法获取员工数据");
+				}
+			});
+	  }
+	
+  }
+  
+  //查询当月的数据
+  function queryCurMonthPerformanceOfArea(dataType){
+	  var myDate = new Date();
+	  var c_month = myDate.getMonth()+1;//当前月
+	  $("#order_date").html(c_month+"月订单量");
+	  var dynamicDto = {
+              storeId:cur_area.store_id,
+              areaNo:cur_area.area_no,
+              dataType:dataType
+          }
+	  doManager("dynamicManager", "queryCurMonthPerformanceOfArea", [dynamicDto], function(
+				data, textStatus, XMLHttpRequest) {
+			if (data.result) {
+					var resultJson = JSON.parse(data.data);
+					chartData_curMonth[dataType] = resultJson;
+					var order = resultJson.order;
+					$("#order_amount").html(order);
+					if("gmv"==dataType){
+						
+						var deptData = resultJson.deptData;
+						var channelData = resultJson.channelData;
+						showDeptChartData(deptData,dataType)//事业部
+						showChannelChartData(channelData,dataType);//频道
+						
+					}
+					
+			}else{
+				layer.msg("暂时无法获取各事业部和频道营业额");
+			}
+		},false);
+	  $("#process_div").hide();
+      $("#process_div_pic").hide();
+  }
+  
+  //展示图例
+//   function showMapLegend(p1,p2,p3){
+// 	 var colorArray =  getHeatMapColorLegend(p1,p2);
+// 	 if("gmv"==p3){
+// 		 $(".legend").html("小区营业额（元）");
+// 	 }else if("consumer"==p3){
+// 		 $(".legend").html("小区消费用户（人）");
+// 	 }
+// 	 getDynamicLegend(colorArray);
+	 
+	  
+//   }
+  
+    function showMapLegend(p1,p2){
+	 var colorArray =  getHeatColorLegend(p1);
+	 if("gmv"==p2){
+		 $(".legend").html("小区营业额（元）");
+	 }else if("consumer"==p2){
+		 $(".legend").html("小区消费用户（人）");
+	 }
+	 getDynamicLegend(colorArray);
+	 
+	  
+  }
+  
+  //展示小区数据热度
+  var dataModel;
+  function showTinyVillageHeat(dataType){
+	  dataModel = dataType;
+	  var resultJson = chartData_curMonth[dataType];
+	  var data = resultJson.tinyVillageData;
+	  if(data!=null&&data.length>0){
+		  var minV;
+		  var maxV;
+		  
+		  
+		  if("gmv"==dataType){
+// 			 minV = data[data.length-1].gmv;
+// 			 maxV = data[0].gmv;
+// 			 showMapLegend(minV,maxV,dataType);
+			  
+			  var sum=0;
+			  for(var i=0;i<data.length;i++){
+			  	sum+=data[i].gmv;
+			  }
+			  var avgV=sum/data.length;
+			  showMapLegend(avgV,dataType);
+			 
+			 
+			 
+			 for(var j=0;j<data.length;j++){
+				  var code_j = data[j].code;
+				  var gmv = data[j].gmv;
+				  
+				  var color = getHeatMapColorLocation(avgV,data[j].gmv);
+				  var tinyVillage = polygonMap[code_j];
+				 
+				  if(tinyVillage!=null){
+					  tinyVillage.setOptions({
+						  fillColor:color,
+						  fillOpacity:0.7,
+						  strokeColor: "#ab50d0", //线颜色
+		  		          strokeOpacity: 1, //线透明度
+		  		          strokeWeight: 0    //线宽
+						});
+				  }
+			 }
+		  }else if("consumer"==dataType){
+// 			  minV = data[data.length-1].consumer;
+// 			  maxV = data[0].consumer;
+// 			  showMapLegend(minV,maxV,dataType);
+			  
+			  var sum=0;
+			  for(var i=0;i<data.length;i++){
+			  	sum+=data[i].consumer;
+			  }
+			  var avgV=sum/data.length;
+			  showMapLegend(avgV,dataType);
+			 
+			  for(var j=0;j<data.length;j++){
+				  var code_j = data[j].code;
+				  var color = getHeatMapColorLocation(avgV,data[j].consumer);
+				  var tinyVillage = polygonMap[code_j];
+				  if(tinyVillage!=null){
+					  tinyVillage.setOptions({
+						  fillColor:color,
+						  fillOpacity:0.7,
+						  strokeColor: "#ab50d0", //线颜色
+		  		          strokeOpacity: 1, //线透明度
+		  		          strokeWeight: 0    //线宽
+						});
+				  }
+			  }
+		  }
+		  
+		  
+	  }
+	  
+  }
+  
+	//展示走势图chart
+	function showTrendChartData(data1,data2,dataType){
+		var c_name1 = new Array();
+		var c_value1 = new Array();
+		
+		
+		var c_value2 = new Array();
+		
+		if("gmv"==dataType){
+		
+			
+			if(data1!=null){
+				for(var i=0;i<data1.length;i++){
+					var v = data1[i].gmv;
+					var n = data1[i].signTime;
+					c_name1.push(n);
+					c_value1.push(v);
+				}
+				
+				option1.xAxis.data = c_name1;
+				option1.series[0].data = c_value1;
+				option1.title.text = "营业额（近七日）";
+			}
+			myChart1.setOption(option1);
+		}else if("consumer"==dataType){
+			
+			if(data1!=null){
+				for(var i=0;i<data1.length;i++){
+					var v = data1[i].customer;
+					var n = data1[i].signTime;
+					c_name1.push(n);
+					c_value1.push(v);
+				}
+				
+				chart4_option.xAxis.data = c_name1;
+				chart4_option.series[0].data = c_value1;
+				
+			}
+			
+			
+			if(data2!=null){
+				for(var i=0;i<data2.length;i++){
+					var v = data2[i].consumer;
+					var n = data2[i].signTime;
+					//c_name2.push(n);
+					c_value2.push(v);
+				}
+				
+				chart4_option.series[1].data = c_value2;
+			}
+			
+			chart4.setOption(chart4_option);
+		}
+	}	
+	//展示事业群chart
+	function showDeptChartData(deptData,dataType){
+		var deptNV = new Array();
+		var myDate = new Date();
+  	  	var c_month = myDate.getMonth()+1;//当前月
+		if("gmv"==dataType){
+			for(var i=0;i<deptData.length;i++){
+				var v = deptData[i].gmv;
+				var n = deptData[i].department_name;
+				var vnMap = {};
+				vnMap["value"] = v;
+				vnMap["name"] = n;
+				deptNV.push(vnMap);
+				
+			}
+			option2.title.text = "事业群营业额（"+c_month+"月）";
+			option2.series[0].data = deptNV;
+			myChart2.setOption(option2);
+		}else if("consumer"==dataType){
+			for(var i=0;i<deptData.length;i++){
+				var v = deptData[i].consumer;
+				var n = deptData[i].department_name;
+				var vnMap = {};
+				vnMap["value"] = v;
+				vnMap["name"] = n;
+				deptNV.push(vnMap);
+				
+			}
+			chart5_option.title.text = "事业群消费用户（"+c_month+"月）";
+			chart5_option.series[0].data = deptNV;
+			chart5.setOption(chart5_option);
+		}
+		
+		
+		 
+	}
+	
+	//展示频道chart
+	function showChannelChartData(channelData,dataType){
+		var channelNV = new Array();
+		var myDate = new Date();
+  	  	var c_month = myDate.getMonth()+1;//当前月
+		if("gmv"==dataType){
+			for(var i=0;i<channelData.length;i++){
+				var v = channelData[i].gmv;
+				var n = channelData[i].channel_name;
+				var vnMap = {};
+				vnMap["value"] = v;
+				vnMap["name"] = n;
+				channelNV.push(vnMap);
+				
+			}
+			option3.title.text = "频道营业额（"+c_month+"月）";
+			option3.series[0].data = channelNV;
+			myChart3.setOption(option3);
+		}else if("consumer"==dataType){//用户
+			for(var i=0;i<channelData.length;i++){
+				var v = channelData[i].consumer;
+				var n = channelData[i].channel_name;
+				var vnMap = {};
+				vnMap["value"] = v;
+				vnMap["name"] = n;
+				channelNV.push(vnMap);
+				
+			}
+			chart6_option.title.text = "频道消费用户（"+c_month+"月）";
+			chart6_option.series[0].data = channelNV;
+			chart6.setOption(chart6_option);
+		}
+		
+		
+	}
+		
+	 //营业额
+	  var option1 = {
+	    title: {
+	      text:"营业额（近七日）",x: '1%', y: '1%',textStyle:{color:"#444",fontSize:"16"},
+	    },
+	    tooltip : {
+	      trigger: 'axis',
+	    },
+	    grid: {
+	      top: '25%',
+	      left: '5%',
+	      right: '5%',
+	      bottom: '3%',
+	      containLabel: true
+	    },
+	    xAxis: {
+	      type: 'category',
+	      data: [],
+	      boundaryGap: false,
+	      splitLine: {
+	        show: false
+	      },
+	      axisLine: {
+	        show: true,
+	        lineStyle:{color:'#ffc203'},
+	      },
+	      axisTick:{
+	        show: false
+	      },
+	      axisLabel:{
+	        show: true,
+	        rotate:45,//倾斜度 -90 至 90 默认为0
+	        textStyle: {color:'#444'}
+	      },
+	    },
+	    yAxis: {
+	      type: 'value',
+	      splitLine: {
+	        show: false
+	      },
+	      axisLine: {
+	        show: true,
+	        lineStyle:{color:'#ffc203'},
+	      },
+	      axisTick:{
+	        show: false
+	      },
+	      axisLabel:{
+	        show: true,
+	        textStyle: {color:'#444'}
+	      },
+	    },
+	    series: [
+	      {
+	        name:'营业额',
+	        data: [],
+	        type: 'line',
+	        itemStyle: {
+	          normal:{
+	            color:'#ffc203',
+	            label: {
+	              show: true,
+	              position: 'top',
+	              formatter: '{c} ',
+	            },
+	          }
+	        },
+	        //areaStyle: {normal: {}}
+
+	      },
+
+	    ]
+	  };
+
+  //事业部
+  var option2 = {
+    title: {
+      text:"事业部",x: '1%', y: '1%',textStyle:{color:"#444",fontSize:"16"},
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: "{b}<br/>{c} ({d}%)",
+      position: ['50%', '50%']
+    },
+    series: [{
+     
+      type: 'pie',
+      radius: '90%',
+      center: ['50%', '55%'],
+      clockwise: false,
+      cursor: 'default',
+      data: [],
+      label: {
+        normal: {
+          show: false
+        }
+      },
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderWidth: 4,
+          borderColor: '#ffffff',
+        },
+        emphasis: {
+          borderWidth: 0,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }],
+    color: [
+      '#00acee',
+      '#52cdd5',
+      '#79d9f1',
+      '#a7e7ff',
+      '#c8efff'
+    ],
+  };
+
+  //频道
+  var option3 = {
+    title: {
+      text:"频道",x: '1%', y: '1%',textStyle:{color:"#444",fontSize:"16"},
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: "{a} <br/>{b}: {c} ({d}%)"
+    },
+    series: [
+      {
+        name:'频道',
+        type:'pie',
+        cursor: 'default',
+        center: ['50%', '55%'],
+        radius: ['60%', '90%'],
+        color: ['#e062ae', '#37a2da', '#67e0e3', '#ffdb5c', '#ff9f7f'],
+        avoidLabelOverlap: false,
+        label: {
+          normal: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '20',
+              fontWeight: 'bold'
+            }
+          }
+        },
+        labelLine: {
+          normal: {
+            show: false
+          }
+        },
+        data:[
+        
+        ],
+        itemStyle: {
+          emphasis: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+
+
+      }
+    ]
+  };
+
+ 
+
+</script>
+<script>
+  var chart4;
+  var chart4_option;
+  var chart5;
+  var chart5_option;
+  var chart6;
+  var chart6_option;
+  function chartresize(){
+	showTinyVillageHeat("consumer");//小区热力图
+    //console.log("chartresize");
+    var temp = new initchart();
+    temp.resize();
+    
+  }
+  var initchart = function(){
+	
+    chart4 = echarts.init(document.getElementById('main4'));
+    chart5 = echarts.init(document.getElementById('main5'));
+    chart6 = echarts.init(document.getElementById('main6'));
+    chart4_option={
+      title: {
+        text:"用户量（近七日）",x: '1%', y: '1%',textStyle:{color:"#444",fontSize:"16"},
+      },
+      tooltip : {
+        trigger: 'axis',
+      },
+      legend: {
+        data:['拉新客户量','消费客户量'],
+        textStyle:{color:"#444",fontSize:"12"},
+        right:0,
+        orient:'vertical',
+      },
+      grid: {
+        top: '25%',
+        left: '5%',
+        right: '5%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: {
+        type: 'category',
+        data: [],
+        boundaryGap: false,
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          show: true,
+          lineStyle:{color:'#ffc203'},
+        },
+        axisTick:{
+          show: false
+        },
+        axisLabel:{
+          show: true,
+          rotate:45,//倾斜度 -90 至 90 默认为0
+          textStyle: {color:'#444'}
+        },
+      },
+      yAxis: {
+        type: 'value',
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          show: true,
+          lineStyle:{color:'#ffc203'},
+        },
+        axisTick:{
+          show: false
+        },
+        axisLabel:{
+          show: true,
+         
+          textStyle: {color:'#444'}
+        },
+      },
+      series: [
+        {
+          name:"拉新客户量",
+          data: [],
+          type: 'line',
+          lineStyle: {
+            color:'#ffc203'
+          },
+          itemStyle: {
+            normal:{
+              color:'#ffc203',
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{c} ',
+              },
+            }
+
+          }
+
+        },
+        {
+          name:"消费客户量",
+          data: [],
+          type: 'line',
+          
+          label: {
+            show: true,
+            position: 'top',
+            formatter: '{c} ',
+            textStyle:{
+              color:"#ff3064"
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: "#ff3064",
+              label: {
+                show: true,
+                textStyle: {
+                  color: "#444"
+                },
+                position: "insideTop",
+
+              }
+            }
+          }
+        }
+
+      ]
+    }
+   
+    var resultJson = chartData_severalDay["consumer"];
+    var data1 = resultJson.data1;
+	var data2 = resultJson.data2;
+	showTrendChartData(data1,data2,"consumer");//趋势图
+	
+    chart5_option={
+      title: {
+        text:"事业部",x: '1%', y: '1%',textStyle:{color:"#444",fontSize:"16"},
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: "{b}<br/>{c} ({d}%)",
+        position: ['50%', '50%']
+      },
+      series: [{
+       
+        type: 'pie',
+        radius: '90%',
+        cursor: 'default',
+        center: ['50%', '55%'],
+        clockwise: false,
+        data: [],
+        label: {
+          normal: {
+            show: false
+          }
+        },
+        labelLine: {
+          normal: {
+            show: false
+          }
+        },
+        itemStyle: {
+          normal: {
+            borderWidth: 4,
+            borderColor: '#ffffff',
+          },
+          emphasis: {
+            borderWidth: 0,
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }],
+      color: [
+        '#00acee',
+        '#52cdd5',
+        '#79d9f1',
+        '#a7e7ff',
+        '#c8efff'
+      ],
+    }
+
+    chart6_option={
+      title: {
+        text:"频道",x: '1%', y: '0%',textStyle:{color:"#444",fontSize:"16"},
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: "{a} <br/>{b}: {c} ({d}%)"
+      },
+      series: [
+        {
+          name:'频道',
+          type:'pie',
+          cursor: 'default',
+          radius: ['60%', '90%'],
+          center: ['50%', '55%'],
+          color: ['#e062ae', '#37a2da', '#67e0e3', '#ffdb5c', '#ff9f7f'],
+          avoidLabelOverlap: false,
+          label: {
+            normal: {
+              show: false,
+              position: 'center'
+            },
+            emphasis: {
+              show: true,
+              textStyle: {
+                fontSize: '20',
+                fontWeight: 'bold'
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              show: false
+            }
+          },
+          data:[
+            
+          ],
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+
+
+        }
+      ]
+    }
+
+    
+    
+    var resultJson = chartData_curMonth["consumer"];
+    var tinyVillageData = resultJson.tinyVillageData;
+	var deptData = resultJson.deptData;
+	var channelData = resultJson.channelData;
+	showDeptChartData(deptData,"consumer")//事业部
+	showChannelChartData(channelData,"consumer");//频道
+	
+	
+    $(function(){
+      window.onresize = function(){
+        chart4.resize();
+        chart5.resize();
+        chart6.resize();
+      }
+    })
+    this.resize = function size(){
+      var chart4div=document.getElementById('main4');
+      var chart5div=document.getElementById('main5');
+      var chart6div=document.getElementById('main6');
+      var tabcontent = document.getElementById('tab-content');
+      width=tabcontent.offsetWidth;
+      //height=tabcontent.offsetHeight;
+      chart4div.style.width=width+'px';
+      chart5div.style.width=width/2+'px';
+      chart6div.style.width=width/2+'px';
+      //chart4div.style.height=height+'px';
+      chart4.resize(width);
+      chart5.resize(width/2);
+      chart6.resize(width/2);
+    }
+  }
+</script>
+<script type="text/javascript">
+  autodivheight();
+  function autodivheight(){ //函数：获取尺寸
+    //获取浏览器窗口高度
+    var winHeight=0;
+    if (window.innerHeight)
+      winHeight = window.innerHeight;
+    else if ((document.body) && (document.body.clientHeight))
+      winHeight = document.body.clientHeight;
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    if (document.documentElement && document.documentElement.clientHeight)
+      winHeight = document.documentElement.clientHeight;
+    //DIV高度为浏览器窗口的高度
+    document.getElementById("nav_l").style.height= winHeight - 60  +"px";
+  }
+  window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+</script>
+
+</body>
+</html>
