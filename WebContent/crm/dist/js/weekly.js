@@ -52,13 +52,13 @@ var myChart14 = echarts.init(document.getElementById('main14'));
 var myChart15 = echarts.init(document.getElementById('main15'));
 var myChart16 = echarts.init(document.getElementById('main16'));
 var myChart17 = echarts.init(document.getElementById('main17'));
-var myChart18 = echarts.init(document.getElementById('main18'));
-var myChart19 = echarts.init(document.getElementById('main19'));
-var myChart20 = echarts.init(document.getElementById('main20'));
-var myChart21 = echarts.init(document.getElementById('main21'));
+//var myChart18 = echarts.init(document.getElementById('main18'));
+//var myChart19 = echarts.init(document.getElementById('main19'));
+//var myChart20 = echarts.init(document.getElementById('main20'));
+//var myChart21 = echarts.init(document.getElementById('main21'));
 var myChart22 = echarts.init(document.getElementById('main22'));
 var myChart23 = echarts.init(document.getElementById('main23'));
-var myChart24 = echarts.init(document.getElementById('main24'));
+//var myChart24 = echarts.init(document.getElementById('main24'));
 var myChart26 = echarts.init(document.getElementById('main26'));
 
 //城市总的行政区县、已有门店开业的区县数量
@@ -2083,6 +2083,12 @@ optionCard = {
 		         itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
 		       
 		    },
+		    grid: {
+		        left: '3%',
+		        right: '5.6%',
+		        bottom: '3%',
+		        containLabel: true
+		      },
 		    /* toolbox: {
 		        show: true,
 		        orient: 'vertical',
@@ -2796,10 +2802,11 @@ option18 = {
     top: '18%',
     containLabel: true
   },
-  xAxis: {
-    data: ['\n1333', '文娱类活动\n110', '公益类活动\n314', '志愿者活动\n208', '活动小计\n652'],
+  xAxis: [{
+    //data: ['\n1333', '文娱类活动\n110', '公益类活动\n314', '志愿者活动\n208', '活动小计\n652'],
+	data:[],
     axisTick: {show: false}
-  },
+  }],
   yAxis: {
     axisTick: {show: false}
   },
@@ -2823,7 +2830,8 @@ option18 = {
         }], false)
       }
     },
-    data: [125, 10, 24, 21, 52]
+    //data: [125, 10, 24, 21, 52]
+    data:[]
   }]
 };
 
@@ -2840,17 +2848,19 @@ option19 = {
     top: '18%',
     containLabel: true
   },
-  xAxis: {
+  xAxis: [{
     type: 'category',
-    data: ['北京\n36', '上海\n8', '天津\n47', '广州\n202', '深圳\n239', '云南\n40', '贵州\n70', '辽宁\n81', '全国\n44'],
+    data:[],
+    //data: ['北京\n36', '上海\n8', '天津\n47', '广州\n202', '深圳\n239', '云南\n40', '贵州\n70', '辽宁\n81', '全国\n44'],
     axisTick: {show: false}
-  },
+  }],
   yAxis: {
     type: 'value',
     axisTick: {show: false}
   },
   series: [{
-    data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932],
+    //data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932],
+	data:[],
     type: 'line',
     label: {
       normal: {
@@ -3448,13 +3458,13 @@ myChart14.setOption(option14);
 myChart15.setOption(option15);
 myChart16.setOption(option16);
 myChart17.setOption(option17);
-myChart18.setOption(option18);
-myChart19.setOption(option19);
-myChart20.setOption(option20);
-myChart21.setOption(option21);
+//myChart18.setOption(option18);
+//myChart19.setOption(option19);
+//myChart20.setOption(option20);
+//myChart21.setOption(option21);
 myChart22.setOption(option22);
 myChart23.setOption(option23);
-myChart24.setOption(option24);
+//myChart24.setOption(option24);
 myChart26.setOption(option26);
 
 function chartresize2(){
@@ -3984,7 +3994,7 @@ $(function(){
 	customerInfo();
 	areaInfo();
 	GMVInfo();
-	storeActivitiesInfo();
+	//storeActivitiesInfo();
 });
 
 function loginShow(){
@@ -4536,6 +4546,7 @@ function oneyearorsixweek(){
 				var contractQuantityArray = new Array();
 				var throughQuantityArray = new Array();
 				var dateArray = new Array();
+				//var contractQuantitySum = 0;
 				if(contractAndthroughByYear.length > 0){
 					for(var i = 0; i < contractAndthroughByYear.length; i++){
 						var cityData = contractAndthroughByYear[i];
@@ -4543,6 +4554,7 @@ function oneyearorsixweek(){
 						cityArray.push(cityname);
 						var contractQuantity = cityData.contract_quantity;
 						contractQuantityArray.push(contractQuantity);
+						//contractQuantitySum += contractQuantity;
 						var throughQuantity = cityData.through_quantity;
 						throughQuantityArray.push(throughQuantity);
 					}
@@ -4599,10 +4611,12 @@ function oneyearorsixweek(){
 				var storeStateCount = jsonData.storeStateCount;
 				var main6CitynameArray = new Array();
 				var main6DataArray = new Array();
+				//var preStoreSum = 0;
 				if(storeStateCount.length > 0){
 					for(var i = 0; i < storeStateCount.length; i++){
 						main6CitynameArray.push(storeStateCount[i].city_name);
 						main6DataArray.push(storeStateCount[i].count);
+						//preStoreSum += storeStateCount[i].count;
 					}
 				}
 				if(Math.max.apply(null, main6DataArray)<10||main6DataArray.length==0){
@@ -4618,6 +4632,9 @@ function oneyearorsixweek(){
 				var business_licenseTotal = 0,double_cardTotal = 0,no_cardTotal = 0,store_countTotal = 0;
 				var storeCountArray = new Array(),double_cardArray = new Array(),business_licenseArray = new Array(),no_cardArray = new Array();
 				var cardCitynameArray = new Array();
+				/*var double_card_rateTotal = 0;
+				var business_card_rateTotal = 0;
+				var no_card_rateTotal = 0;*/
 				if(storeCardBycity.length > 0){
 					for(var i = 0; i < storeCardBycity.length; i++){
 						var storeCard = storeCardBycity[i];
@@ -4639,7 +4656,9 @@ function oneyearorsixweek(){
 
 						cardString += '<tr><td title="'+cityname+'">'+cityname+'</td><td>'+store_count+'</td><td>'+double_card+'</td><td>'+business_license+'</td><td>'+no_card+'</td><td>'+double_card_rate.toFixed(2)+'%</td></tr>';
 						if(i == storeCardBycity.length-1){
-							var double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
+							/*double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
+							business_card_rateTotal = (business_licenseTotal/store_countTotal)*100;
+							no_card_rateTotal = (no_cardTotal/store_countTotal)*100;*/
 							cardString += '<tr class="text-red"><td>合计</td><td>'+store_countTotal+'</td><td>'+double_cardTotal+'</td><td>'+business_licenseTotal+'</td><td>'+no_cardTotal+'</td><td>'+double_card_rateTotal.toFixed(2)+'%</td></tr>';
 						}
 					}
@@ -4651,6 +4670,12 @@ function oneyearorsixweek(){
 					optionCard.xAxis[0]["data"] = cardCitynameArray;
 					myChartCard.setOption(optionCard);
 				}
+				/*$("#signedCount").html(contractQuantitySum);
+				$("#preStoreCount").html(preStoreSum);
+				$("#openCount").html(store_countTotal);
+				$("#doubleCardCount").html(double_card_rateTotal.toFixed(2));
+				$("#businessCardCount").html(business_card_rateTotal.toFixed(2));
+				$("#noCardCount").html(no_card_rateTotal.toFixed(2));*/
 			}
 		},false);
 	}
@@ -5104,17 +5129,37 @@ function oneyearorsixweek(){
 		    return result;
 		}
 		
-	var storeActivitiesInfo = function(){
+	/*var storeActivitiesInfo = function(){
 		doManager("storeActivitiesManager","getNewStoreActivtiesInfo",null,
 				function(data,textStatus,XmlHttpRequest){
 			if(data.result){
 				var jsonData = $.fromJSON(data.data);
 				var newActivitiesInfo = jsonData.newActivitiesInfo;
+				var findConVillageCountOfCity = jsonData.findConVillageCountOfCity;
+				console.log(findConVillageCountOfCity);
 				console.log(newActivitiesInfo);
 				var citynameArray = new Array();
 				var number_of_activitiy_array = new Array();
-				var x_data_opation18 = new Array();
+				var x_data_option18 = new Array();
 				var activities_sum_array = new Array();
+				var count_sum = 0;
+				if(findConVillageCountOfCity.length > 0){
+					for(var i = 0;i < findConVillageCountOfCity.length; i++){
+						var villageInfo = findConVillageCountOfCity[i];
+						var count = villageInfo.count;
+						var cityname = villageInfo.city_name;
+						$('#pf-fre1 tr').eq(0).find("th").each(function(z,t){
+							if(cityname == $(t).html()){
+								var m = z-1;
+								count_sum += count;
+								$('#pf-fre1 tr').eq(1).find("td:eq("+m+")").text(count);
+							}
+						});
+					}
+				}
+				$('#pf-fre1 tr').eq(1).find("td:last").text(count_sum);
+				activities_sum_array.push(count_sum);
+				x_data_option18.push('\n'+count_sum);
 				if(newActivitiesInfo.length > 0){
 					var secondTr = $("#pf-fre1 tr").eq(1);
 					var table =document.getElementById("pf-fre1");
@@ -5140,10 +5185,10 @@ function oneyearorsixweek(){
 						var avtivities_count = avtivities.avtivities_count;
 						avtivities_count_sum += avtivities_count;
 						var cityname = avtivities.cityname;
-						citynameArray.push(cityname);
+						citynameArray.push(cityname+"\n"+numbers_of_single_activitie);
 						number_of_activitiy_array.push(numbers_of_single_activitie);
-						$("#pf-fre1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(i,t){
-				    	    var col_index = i;
+						$("#pf-fre1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(x,t){
+				    	    var col_index = x;
 				    	    if(cityname == $(t).html()){
 				    	    	$(t).parent().nextAll().not(secondTr).each(function(z,t){
 						    	    if(z==0)$(t).find("td:eq("+col_index+")").text(recreational_activities);
@@ -5156,21 +5201,34 @@ function oneyearorsixweek(){
 				    	    }
 				       });
 						if(i == newActivitiesInfo.length - 1){
-							 $('#pf-fre1 tr').each(function(i,t){
-								  if(i == 2)$(t).find("td:last").text(recreational_activities_sum);
-								  if(i == 3)$(t).find("td:last").text(public_welfare_activities_sum);
-								  if(i == 4)$(t).find("td:last").text(volunteer_activity_sum);
-								  if(i == 5)$(t).find("td:last").text(avtivities_count_sum);
-								  if(i == 6)$(t).find("td:last").text(numbers_of_activities_sum);
-								  if(i == 7)$(t).find("td:last").text(numbers_of_single_activitie_sum);
-								  activities_sum_array.push(recreational_activities_sum);
-								  activities_sum_array.push(public_welfare_activities_sum);
-								  activities_sum_array.push(volunteer_activity_sum);
-								  activities_sum_array.push(avtivities_count_sum);
+							
+							 $('#pf-fre1 tr').each(function(x,t){
+								  //if(x == 1)$(t).find("td:last").text(count_sum);
+								  if(x == 2)$(t).find("td:last").text(recreational_activities_sum);
+								  if(x == 3)$(t).find("td:last").text(public_welfare_activities_sum);
+								  if(x == 4)$(t).find("td:last").text(volunteer_activity_sum);
+								  if(x == 5)$(t).find("td:last").text(avtivities_count_sum);
+								  if(x == 6)$(t).find("td:last").text(numbers_of_activities_sum);
+								  if(x == 7)$(t).find("td:last").text(numbers_of_single_activitie_sum);
 							 });
+							 
+							  activities_sum_array.push(recreational_activities_sum);
+							  activities_sum_array.push(public_welfare_activities_sum);
+							  activities_sum_array.push(volunteer_activity_sum);
+							  activities_sum_array.push(avtivities_count_sum);
+							  x_data_option18.push('文娱类活动\n'+recreational_activities_sum);
+							  x_data_option18.push('公益类活动\n'+public_welfare_activities_sum);
+							  x_data_option18.push('志愿者活动\n'+volunteer_activity_sum);
+							  x_data_option18.push('活动小计\n'+avtivities_count_sum);
 						}
 					}
+				    option18.series[0].data=activities_sum_array;
+					option18.xAxis[0]["data"] = x_data_option18;
+					myChart18.setOption(option18);
+					option19.series[0].data=number_of_activitiy_array;
+					option19.xAxis[0]["data"] = citynameArray;
+					myChart19.setOption(option19);
 				}
 			}
 		},false);
-	}
+	}*/
