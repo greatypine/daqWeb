@@ -547,5 +547,5 @@ public interface InterManager extends IManager {
 	 * @param storexpand
 	 * @return
 	 */
-    //public Result saveOrUpdateOfficeNetwork(Storexpand storexpand);
+    public Result saveOrUpdateOfficeNetwork(Storexpand storexpand);
 }

@@ -58,6 +58,7 @@ import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.HouseCustomerDao;
 import com.cnpc.pms.personal.dao.RelationDao;
 import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.dao.StorexpandDao;
 import com.cnpc.pms.personal.dao.TinyVillageDao;
 import com.cnpc.pms.personal.dto.BannerInfoDto;
 import com.cnpc.pms.personal.dto.CityCodeDto;
@@ -82,6 +83,7 @@ import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.StoreAddress;
 import com.cnpc.pms.personal.entity.StoreRequirement;
 import com.cnpc.pms.personal.entity.StoreStandard;
+import com.cnpc.pms.personal.entity.Storexpand;
 import com.cnpc.pms.personal.entity.UserLoginLog;
 import com.cnpc.pms.personal.entity.WorkRecordTotal;
 import com.cnpc.pms.personal.entity.WxUserAuth;
@@ -99,6 +101,7 @@ import com.cnpc.pms.personal.manager.StoreAddressManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.manager.StoreRequirementManager;
 import com.cnpc.pms.personal.manager.StoreStandardManager;
+import com.cnpc.pms.personal.manager.StorexpandManager;
 import com.cnpc.pms.personal.manager.TinyVillageManager;
 import com.cnpc.pms.personal.manager.UserLoginLogManager;
 import com.cnpc.pms.personal.manager.WorkRecordTotalManager;
@@ -3456,5 +3459,106 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			}
 			return null;
 		}
-		
+		@Override
+		public Result saveOrUpdateOfficeNetwork(Storexpand storexpand) {
+			Result result = new Result();
+			try{
+				Storexpand saveStorexpand = null;
+				if (storexpand.getId() != null) {
+					saveStorexpand = getStorexpandById(storexpand.getId());
+				} else {
+					saveStorexpand = new Storexpand();
+				}
+				if(storexpand.getCityname()==null){
+					result.setCode(CodeEnum.error.getValue());
+					result.setMessage("城市名称不能为空！");
+					return result;
+				}
+				if(storexpand.getSurvey_quantity()==null){
+					result.setCode(CodeEnum.error.getValue());
+					result.setMessage("勘察商铺不能为空！");
+					return result;
+				}
+				if(storexpand.getThrough_quantity()==null){
+					result.setCode(CodeEnum.error.getValue());
+					result.setMessage("总部上会通过数量不能为空！");
+					return result;
+				}
+				if(storexpand.getContract_quantity()==null){
+					result.setCode(CodeEnum.error.getValue());
+					result.setMessage("完成签约数量不能为空！");
+					return result;
+				}
+				if(storexpand.getStatistical_time_period()==null){
+					result.setCode(CodeEnum.error.getValue());
+			        result.setMessage("录入时间不能为空！");
+			        return result;
+				}
+				saveStorexpand.setCityname(storexpand.getCityname());
+				saveStorexpand.setCityno(storexpand.getCityno());
+				saveStorexpand.setSurvey_quantity(storexpand.getSurvey_quantity());
+				saveStorexpand.setContract_quantity(storexpand.getContract_quantity());
+				saveStorexpand.setCooperative_task(storexpand.getCooperative_task());
+				saveStorexpand.setSelf_support_task(storexpand.getSelf_support_task());
+				saveStorexpand.setThrough_quantity(storexpand.getThrough_quantity());
+				saveStorexpand.setStart_time(storexpand.getStart_time());
+				saveStorexpand.setEnd_time(storexpand.getEnd_time());
+				saveStorexpand.setStatistical_time_period(storexpand.getStart_time()+"~"+storexpand.getEnd_time());
+				preObject(saveStorexpand);
+				StorexpandManager officeNetworkManager = (StorexpandManager) SpringHelper.getBean("storexpandManager");
+				if (storexpand.getId() == null) {
+					Map<String, Object> countStorexpandMap = getStatistics((storexpand.getStart_time()+"~"+storexpand.getEnd_time()),storexpand.getCityname());
+					if(Integer.parseInt(String.valueOf(countStorexpandMap.get("statistics")))>0){
+						result.setMessage("该目标值已录入,请返回列表修改!");
+					}else{
+						this.insertOfficeNetwork(saveStorexpand);
+						result.setData(saveStorexpand);
+						result.setMessage("添加成功!");
+					}
+				}else{
+					officeNetworkManager.saveObject(saveStorexpand);
+					result.setData(saveStorexpand);
+					result.setMessage("修改成功!");
+				}
+				result.setCode(CodeEnum.success.getValue());
+				return result;
+			}catch (Exception e) {
+				result.setCode(CodeEnum.error.getValue());
+				e.printStackTrace();
+			}
+			return result;
+		}
+		public void insertOfficeNetwork(Storexpand saveStorexpand) {
+			StorexpandManager auditManager=(StorexpandManager)SpringHelper.getBean("storexpandManager");
+			Storexpand storexpand = new Storexpand();
+			storexpand.setCityname(saveStorexpand.getCityname());
+			storexpand.setCityno(saveStorexpand.getCityno());
+			storexpand.setContract_quantity(saveStorexpand.getContract_quantity());
+			storexpand.setSelf_support_task(saveStorexpand.getSelf_support_task());
+			storexpand.setCooperative_task(saveStorexpand.getCooperative_task());
+			storexpand.setSurvey_quantity(saveStorexpand.getSurvey_quantity());
+			storexpand.setThrough_quantity(saveStorexpand.getThrough_quantity());
+			if(saveStorexpand.getStatistical_time_period()!=null&&!"".equals(saveStorexpand.getStatistical_time_period())){
+				storexpand.setStart_time(saveStorexpand.getStart_time());
+				storexpand.setEnd_time(saveStorexpand.getEnd_time());
+				storexpand.setStatistical_time_period(saveStorexpand.getStart_time()+"~"+saveStorexpand.getEnd_time());
+			}
+			storexpand.setStatistical_time_period(saveStorexpand.getStatistical_time_period());
+			preObject(storexpand);
+			auditManager.saveObject(storexpand);
+		}
+		public Storexpand getStorexpandById(Long id) {
+			List<?> list = this.getList(FilterFactory.getSimpleFilter("id", id));
+			if (list != null && list.size() > 0) {
+				 Storexpand storexpand = (Storexpand) list.get(0);
+				 return storexpand;
+			}
+			return null;
+		}
+		public Map<String, Object> getStatistics(String statistics,String cityname) {
+			Map<String,Object> result = new HashMap<String,Object>();
+			StorexpandDao storexpandDao = (StorexpandDao)SpringHelper.getBean(StorexpandDao.class.getName());
+			result = storexpandDao.getStatisticsExist(statistics,cityname);
+			return result;
+		}
 }
