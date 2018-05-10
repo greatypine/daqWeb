@@ -52,13 +52,13 @@ var myChart14 = echarts.init(document.getElementById('main14'));
 var myChart15 = echarts.init(document.getElementById('main15'));
 var myChart16 = echarts.init(document.getElementById('main16'));
 var myChart17 = echarts.init(document.getElementById('main17'));
-//var myChart18 = echarts.init(document.getElementById('main18'));
-//var myChart19 = echarts.init(document.getElementById('main19'));
-//var myChart20 = echarts.init(document.getElementById('main20'));
-//var myChart21 = echarts.init(document.getElementById('main21'));
+var myChart18 = echarts.init(document.getElementById('main18'));
+var myChart19 = echarts.init(document.getElementById('main19'));
+var myChart20 = echarts.init(document.getElementById('main20'));
+var myChart21 = echarts.init(document.getElementById('main21'));
 var myChart22 = echarts.init(document.getElementById('main22'));
 var myChart23 = echarts.init(document.getElementById('main23'));
-//var myChart24 = echarts.init(document.getElementById('main24'));
+var myChart24 = echarts.init(document.getElementById('main24'));
 var myChart26 = echarts.init(document.getElementById('main26'));
 
 //城市总的行政区县、已有门店开业的区县数量
@@ -3448,13 +3448,13 @@ myChart14.setOption(option14);
 myChart15.setOption(option15);
 myChart16.setOption(option16);
 myChart17.setOption(option17);
-//myChart18.setOption(option18);
-//myChart19.setOption(option19);
-//myChart20.setOption(option20);
-//myChart21.setOption(option21);
+myChart18.setOption(option18);
+myChart19.setOption(option19);
+myChart20.setOption(option20);
+myChart21.setOption(option21);
 myChart22.setOption(option22);
 myChart23.setOption(option23);
-//myChart24.setOption(option24);
+myChart24.setOption(option24);
 myChart26.setOption(option26);
 
 function chartresize2(){
@@ -3984,7 +3984,7 @@ $(function(){
 	customerInfo();
 	areaInfo();
 	GMVInfo();
-	//storeActivitiesInfo();
+	storeActivitiesInfo();
 });
 
 function loginShow(){
@@ -5104,18 +5104,73 @@ function oneyearorsixweek(){
 		    return result;
 		}
 		
-	/*var storeActivitiesInfo = function(){
+	var storeActivitiesInfo = function(){
 		doManager("storeActivitiesManager","getNewStoreActivtiesInfo",null,
 				function(data,textStatus,XmlHttpRequest){
 			if(data.result){
 				var jsonData = $.fromJSON(data.data);
 				var newActivitiesInfo = jsonData.newActivitiesInfo;
 				console.log(newActivitiesInfo);
+				var citynameArray = new Array();
+				var number_of_activitiy_array = new Array();
+				var x_data_opation18 = new Array();
+				var activities_sum_array = new Array();
 				if(newActivitiesInfo.length > 0){
-					for(i = 0; i < newActivitiesInfo.length; i++){
-						
+					var secondTr = $("#pf-fre1 tr").eq(1);
+					var table =document.getElementById("pf-fre1");
+				    var cellnumber = table.rows[0].cells.length;
+				    var numbers_of_activities_sum = 0;
+				    var numbers_of_single_activitie_sum = 0;
+				    var public_welfare_activities_sum = 0;
+				    var recreational_activities_sum = 0;
+				    var volunteer_activity_sum = 0;
+				    var avtivities_count_sum = 0;
+				    for(var i = 0; i < newActivitiesInfo.length; i++){
+						var avtivities = newActivitiesInfo[i];
+						var numbers_of_activities = avtivities.numbers_of_activities;
+						numbers_of_activities_sum += numbers_of_activities;
+						var numbers_of_single_activitie = avtivities.numbers_of_single_activitie;
+						numbers_of_single_activitie_sum += numbers_of_single_activitie;
+						var public_welfare_activities = avtivities.public_welfare_activities;
+						public_welfare_activities_sum += public_welfare_activities;
+						var recreational_activities = avtivities.recreational_activities;
+						recreational_activities_sum += recreational_activities;
+						var volunteer_activity = avtivities.volunteer_activity;
+						volunteer_activity_sum += volunteer_activity;
+						var avtivities_count = avtivities.avtivities_count;
+						avtivities_count_sum += avtivities_count;
+						var cityname = avtivities.cityname;
+						citynameArray.push(cityname);
+						number_of_activitiy_array.push(numbers_of_single_activitie);
+						$("#pf-fre1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(i,t){
+				    	    var col_index = i;
+				    	    if(cityname == $(t).html()){
+				    	    	$(t).parent().nextAll().not(secondTr).each(function(z,t){
+						    	    if(z==0)$(t).find("td:eq("+col_index+")").text(recreational_activities);
+						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(public_welfare_activities);
+						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(volunteer_activity);
+						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(avtivities_count);
+						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(numbers_of_activities);
+						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(numbers_of_single_activitie);
+					       		});
+				    	    }
+				       });
+						if(i == newActivitiesInfo.length - 1){
+							 $('#pf-fre1 tr').each(function(i,t){
+								  if(i == 2)$(t).find("td:last").text(recreational_activities_sum);
+								  if(i == 3)$(t).find("td:last").text(public_welfare_activities_sum);
+								  if(i == 4)$(t).find("td:last").text(volunteer_activity_sum);
+								  if(i == 5)$(t).find("td:last").text(avtivities_count_sum);
+								  if(i == 6)$(t).find("td:last").text(numbers_of_activities_sum);
+								  if(i == 7)$(t).find("td:last").text(numbers_of_single_activitie_sum);
+								  activities_sum_array.push(recreational_activities_sum);
+								  activities_sum_array.push(public_welfare_activities_sum);
+								  activities_sum_array.push(volunteer_activity_sum);
+								  activities_sum_array.push(avtivities_count_sum);
+							 });
+						}
 					}
 				}
 			}
 		},false);
-	}*/
+	}
