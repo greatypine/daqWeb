@@ -430,7 +430,10 @@ Date.prototype.format=function(fmt) {
 	var storeno = decode64(getUrlParamByKey("so"));//门店编号
 	var role = decode64(getUrlParamByKey("r"));//角色 code
 	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
+	//从营业额分析页面 跳转过来
 	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
+	var channelname = decode64(getUrlParamByKey("channel"));//频道名称
+	var time = decode64(getUrlParamByKey("time"));//查询时间
 	//从门店GMV、国安侠GMV 跳转过来（Editor:gaobaolei）
 	var tag = decode64(getUrlParamByKey("tag"));//订单标签
 	
@@ -461,6 +464,7 @@ Date.prototype.format=function(fmt) {
     if(target==0){//总部
     	initallcity(); 
     	initallstore();
+    	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
     }else if(target==1){//城市
     	initcurcity();
     	$("#citySelect").prop("disabled", true);
@@ -475,6 +479,15 @@ Date.prototype.format=function(fmt) {
     	$("#store_name_manual").val(storeName);
 		$("#store_name_manual").attr("readonly",true);
     }
+    //从营业额分析页面跳转  参数赋值
+    $("#store_id_manual").val(storeNo);
+	$("#store_name_manual").val(storeName);
+	$("#channel_manual").val(channelname);
+	$("#dept_manual").val(deptname);
+	$("#dept_private_manual").val(deptname);
+	$("#channel_manual").val(channelname);
+	$('#auto_date').data('daterangepicker').setStartDate(time);
+	$('#auto_date').data('daterangepicker').setEndDate(time);
     
   	//更多显示
     $(".how-more").click(function(){
@@ -730,7 +743,7 @@ Date.prototype.format=function(fmt) {
  						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
                      });
  				}
- 		});
+ 		},false);
  	} 
      
     var array=new Array();
