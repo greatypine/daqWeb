@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>用户模型-群体画像</title>
+<link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+<!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+<!-- Morris charts -->
+<link rel="stylesheet" href="../crm/plugins/morris/morris.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+     folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../crm/dist/css/skins/_all-skins.min.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="IE 9/html5shiv.min.js"></script>
+<script src="IE 9/respond.min.js"></script>
+<![endif]-->
+<style>
+    p{margin: 0;}
+    .skin-blue .wrapper{ background-color: #f1f1f1;}
+    .content-wrapper{font-family: Helvetica, Arial, sans-serif; max-width: 1500px; margin: 0 auto;}
+    section{padding: 0 40px;}
+    .sidebar-form{background-color: #11214e; padding: 8px 0 7px 18px; border-radius: 10px!important; border-radius: 10px!important; margin: 20px 0 0 0!important; width: 300px;}
+    .skin-blue .sidebar-form input[type="text"]{background-color: #fff; border-radius: 10px!important;}
+    .skin-blue .sidebar-form .btn{background-color: #11214e; color: #fff; font-size: 20px; padding: 0 10px; margin-left: 1px;}
+
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+
+	<div class="hide">
+		<input type="hidden" id="config-gridSize" class="range-slider"
+			value="10" style="display: none;"> <input type="hidden"
+			id="config-bold" value="600"> <input type="hidden"
+			id="config-dppx" value="1">
+			
+			
+		<input id="config-background" class="pick-color-item"
+		 readonly="" placeholder="特大" value="#f1f1f1">
+		 
+		 
+	</div>
+	
+	
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="../crm/dist/img/logo.png" height="30">
+						<img src="../crm/dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>群体画像</em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+
+
+<div class="content-wrapper" style="max-width: 1600px; margin: 0 auto">
+
+    <section>
+        <div class="col-lg-5">
+            <div id="canvas-container">
+                <canvas id="canvas" class="canvas" width="631" height="631"></canvas>
+                <div id="html-canvas" class="canvas hide"
+                     style="width: 631px; height: 631px; background-color: rgb(51, 51, 51);">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7">
+        	<!--
+        	<div class="sidebar-form no-border pull-right">
+                <div class="input-group">
+                    <input type="text" class="form-control timepicker no-border" placeholder="搜索手机号">
+                    <span class="input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </div>-->
+            
+            <div id="main1" style="width: 100%;height:200px;"></div>
+            <div id="main2" style="width: 100%;height:350px;"></div>
+        </div>
+    </section>
+
+</div>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+<!-- 导航 -->
+<!-- <script src="dist/js/nav-scroll.js"></script> -->
+
+
+<script type="text/javascript" src="../crm/plugins/jquery.page.js"></script>
+<script type="text/javascript" src="../crm/plugins/moment.min.js"></script>
+<script type="text/javascript" src="../crm/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+
+<script>
+    var Mlist= [{name: "日用百货", size: 9, num: 1, color: "#ca435d"}, { name: "快周边",size: 7,num: 1,color: "#fdb52f"
+        }, {name: "今晚报大厦", size: 7, num: 1, color: "#1f8236"}, { name: "天桥北里",size: 7,num: 1,color: "#f86f13"
+        }, {name: "生鲜频道", size: 6, num: 1, color: "#008000"}, { name: "特产频道",size: 6,num: 1,color: "#2d8cf0"
+        }, {name: "国安优选", size: 6, num: 1, color: "#ca435d"}, { name: "快递",size: 6,num: 1,color: "#1f8236"
+        }, {name: "家修", size: 6, num: 1, color: "#2d8cf0"}, { name: "社区合伙人",size: 6,num: 1,color: "#2d8cf0"
+        }, {name: "养老餐", size: 6, num: 1, color: "#2d8cf0"}, { name: "国安汽车",size: 6,num: 1,color: "#2d8cf0"
+        }, {name: "酒饮冲调", size: 6, num: 1, color: "#2d8cf0"}, { name: "母婴亲子",size: 6,num: 1,color: "#f86f13"
+        }, {name: "娱乐", size: 6, num: 1, color: "#ca435d"}, { name: "绿植",size: 6,num: 1,color: "#ca435d"
+        }, {name: "国安家电", size: 6, num: 1, color: "#2d8cf0"}, { name: "健康服务",size: 6,num: 1,color: "#2d8cf0"
+        }, {name: "医药服务", size: 5, num: 1, color: "#2d8cf0"}, { name: "环境",size: 5,num: 1,color: "#2d8cf0"
+        }, {name: "老年用品", size: 5, num: 1, color: "#2d8cf0"}, { name: "公共通",size: 5,num: 1,color: "#008000"
+        }, {name: "日化美妆", size: 5, num: 1, color: "#008000"}, { name: "便民仓",size: 5,num: 1,color: "#2d8cf0"
+        }, {name: "海外直邮-海外购", size: 5, num: 1, color: "#f86f13"}, { name: "扶贫频道", size: 5, num: 1, color: "#f86f13"
+        }, {name: "天桥北里", size: 5, num: 1, color: "#2d8cf0"}, { name: "华威南路", size: 5, num: 1, color: "#f86f13"
+        }, {name: "石佛营西里", size: 4, num: 1, color: "#2d8cf0"}, { name: "红松路", size: 4, num: 1, color: "#008000"
+        }, {name: "国安社区", size: 4, num: 1, color: "#008000"}, { name: "左安路", size: 4, num: 1, color: "#f86f13"
+        }, {name: "国安社区春华店", size: 4, num: 1, color: "#2d8cf0"}, { name: "北京新天地", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "红松路", size: 4, num: 1, color: "#2d8cf0"}, { name: "龙兴南二路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "信德大厦", size: 4, num: 1, color: "#008000"}, { name: "宏昌路", size: 4, num: 1, color: "#008000"
+        }, {name: "华威南路", size: 4, num: 1, color: "#2d8cf0"}, { name: "东泽园", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "中海城", size: 4, num: 1, color: "#f86f13"}, { name: "南丰路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "万博苑", size: 4, num: 1, color: "#2d8cf0"}, { name: "新华西街", size: 4, num: 1, color: "#008000"
+        }, {name: "中汇大厦", size: 4, num: 1, color: "#f86f13"}, { name: "呼家楼宾馆", size: 4, num: 1, color: "#008000"
+        }, {name: "京师大厦", size: 4, num: 1, color: "#008000"}, { name: "弘善家园", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "律纬路", size: 4, num: 1, color: "#f86f13"}, { name: "朝阳公园南路", size: 4, num: 1, color: "#f86f13"
+        }, {name: "新会道", size: 4, num: 1, color: "#f86f13"}, { name: "西花市大街", size: 4, num: 1, color: "#f86f13"
+        }, {name: "金澳国际", size: 4, num: 1, color: "#f86f13"}, { name: "万博商厦", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "安定门外大街", size: 4, num: 1, color: "#2d8cf0"}, { name: "万隆滨河新苑", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "城市之星大厦", size: 4, num: 1, color: "#2d8cf0"}, { name: "百万庄大街", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "美景东方", size: 4, num: 1, color: "#008000"}, { name: "四合上院", size: 4, num: 1, color: "#f86f13"
+        }, {name: "立汤路", size: 4, num: 1, color: "#2d8cf0"}, { name: "华龙道", size: 4, num: 1, color: "#008000"
+        }, {name: "保利城花园", size: 4, num: 1, color: "#2d8cf0"}, { name: "草桥东路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "犀地9号", size: 4, num: 1, color: "#f86f13"}, { name: "中关村东路", size: 4, num: 1, color: "#f86f13"
+        }, {name: "太平桥东里", size: 4, num: 1, color: "#2d8cf0"}, { name: "裘马都", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "晶都国际", size: 4, num: 1, color: "#008000"}, { name: "南城街", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "酒仙桥路", size: 4, num: 1, color: "#f86f13"}, { name: "太平庄东一路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "真武家园", size: 4, num: 1, color: "#2d8cf0"}, { name: "民安小区", size: 4, num: 1, color: "#f86f13"
+        }, {name: "润园里", size: 4, num: 1, color: "#2d8cf0"}, { name: "五行科技创意园", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "国安社区(翠生店)", size: 4, num: 1, color: "#f86f13"}, { name: "南新路", size: 4, num: 1, color: "#008000"
+        }, {name: "兴都大楼", size: 4, num: 1, color: "#2d8cf0"}, { name: "文化园西路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "成寿寺路", size: 4, num: 1, color: "#2d8cf0"}, { name: "京果商厦", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "龙湖唐宁one", size: 4, num: 1, color: "#2d8cf0"}, { name: "奥城商业广场", size: 4, num: 1, color: "#f86f13"
+        }, {name: "三林路", size: 4, num: 1, color: "#2d8cf0"}, { name: "青年路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "朝阳北路", size: 4, num: 1, color: "#2d8cf0"}, { name: "商通大厦", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "太平庄东路", size: 4, num: 1, color: "#2d8cf0"}, { name: "水运名苑5号", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "西鑫大厦", size: 4, num: 1, color: "#2d8cf0"}, { name: "万柳中路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "风采里6号", size: 4, num: 1, color: "#f86f13"}, { name: "成庄南巷", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "莲宝路7号", size: 4, num: 1, color: "#2d8cf0"}, { name: "新源街", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "北三环东路", size: 4, num: 1, color: "#f86f13"}, { name: "陈家营西路", size: 4, num: 1, color: "#2d8cf0"
+        }, {name: "兴华公寓", size: 3, num: 1, color: "#2d8cf0"}, { name: "国美第一城", size: 3, num: 1, color: "#008000"
+        }, {name: "铜锣湾花园8号", size: 3, num: 1, color: "#2d8cf0"}, { name: "阳光晶典4号", size: 3, num: 1, color: "#f86f13"
+        }, {name: "新安花园A栋", size: 3, num: 1, color: "#2d8cf0"}, { name: "万柳西路", size: 3, num: 1, color: "#008000"
+        }, {name: "乐活坊5号", size: 3, num: 1, color: "#2d8cf0"}, { name: "学湖里NO6号", size: 3, num: 1, color: "#2d8cf0"
+        }, {name: "保利·茉莉公馆", size: 3, num: 1, color: "#2d8cf0"}, { name: "蓝靛厂西路", size: 3, num: 1, color: "#008000"
+        }, {name: "慧忠路", size: 3, num: 1, color: "#2d8cf0"}, { name: "回龙观西大街", size: 3, num: 1, color: "#2d8cf0"
+        }, {name: "芳群园4区", size: 3, num: 1, color: "#2d8cf0"}, { name: "右安门内大街", size: 3, num: 1, color: "#008000"
+        }, {name: "水运名苑", size: 3, num: 1, color: "#2d8cf0"}, { name: "先登里(新会道)", size: 3, num: 1, color: "#2d8cf0"
+        }, {name: "丽水莲花小区", size: 3, num: 1, color: "#008000"}, { name: "东亚·马赛公馆", size: 3, num: 1, color: "#008000"
+        }, {name: "林业大学北路", size: 3, num: 1, color: "#2d8cf0"}, { name: "永定门东街中里", size: 3, num: 1, color: "#008000"
+        }, {name: "春柳公寓", size: 3, num: 1, color: "#f86f13"}, { name: "优仕庭园", size: 3, num: 1, color: "#2d8cf0"
+        }, {name: "马赛公馆", size: 3, num: 1, color: "#2d8cf0"}, { name: "正阳街", size: 3, num: 1, color: "#2d8cf0"
+        }, {name: "明光村小区", size: 3, num: 1, color: "#f86f13"}, { name: "蓝靛厂观山园", size: 3, num: 1, color: "#2d8cf0"
+        }, {name: "前程里社区", size: 3, num: 1, color: "#2d8cf0"}, { name: "莲宝路7号", size: 3, num: 1, color: "#2d8cf0"
+        }, {name: "十一经路", size: 3, num: 1, color: "#2d8cf0"}, { name: "十一经路", size: 3, num: 1, color: "#2d8cf0"
+        }];
+        var path = getRootPath();
+        
+        $(function(){
+        	initcurruser();
+        	if(curr_user!=null&&curr_user.usergroup.code.indexOf('ZB')!=0){
+		  		/* window.location.href="loginplatform.html"; */
+	  		}
+        });
+        
+        var curr_user;
+	function initcurruser(){
+		//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,
+  				function(data, textStatus, XMLHttpRequest) {
+  					if (data.result) {
+  						 curr_user = JSON.parse(data.data);
+  					}
+  	},false);
+	}
+	
+</script>
+
+<!--标签云-->
+<script type="text/javascript" src="../crm/sjfx-group_files/vendor.bundle.js"></script>
+<script type="text/javascript" src="../crm/sjfx-group_files/bundle.js"></script>
+
+<!-- 引入 ECharts 文件 -->
+<script src="../crm/dist/js/echarts.common.min.js"></script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    var myChart2 = echarts.init(document.getElementById('main2'));
+
+    // 指定图表的配置项和数据
+    var option1 = {
+        tooltip: {
+            trigger: 'item',
+            axisPointer: {
+                type: null // 默认为直线，可选为：'line' | 'shadow'
+            },
+            //backgroundColor: 'rgba(255,255,255,1)',
+            //padding: [5, 10],
+            //textStyle: {
+            //color: '#7588E4',
+            //},
+
+            //formatter: '<div style="text-align: center;">流失用户金币分布</div>{b}  :  {c}'
+        },
+        grid: {
+            left: '10%',
+            right: '10%',
+            bottom: '10%',
+            top: '10%'
+        },
+        xAxis: [{
+            type: 'value',
+            show: false
+        }],
+        yAxis: [{
+            type: 'category',
+            //boundaryGap: true,
+            splitLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            axisLabel: {
+                //margin: 5,
+                textStyle: {
+                    fontSize: 14
+                    //color:"rgba(255, 255, 255, .75)"
+                },
+                interval : 0,
+                                formatter : function(params){
+                                    var newParamsName = "";
+                                    var paramsNameNumber = params.length;
+                                    var provideNumber = 4;
+                                    var rowNumber = Math.ceil(paramsNameNumber / provideNumber);
+                                    if (paramsNameNumber > provideNumber) {
+                                        for (var p = 0; p < rowNumber; p++) {
+                                            var tempStr = "";
+                                            var start = p * provideNumber;
+                                            var end = start + provideNumber;
+                                            if (p == rowNumber - 1) {
+                                                tempStr = params.substring(start, paramsNameNumber);
+                                            } else {
+                                                tempStr = params.substring(start, end) + "\n";
+                                            }
+                                            newParamsName += tempStr;
+                                        }
+
+                                    } else {
+                                        newParamsName = params;
+                                    }
+                                    return newParamsName
+                                }
+            },
+            data: [
+                '线上  消费用户', '到店  消费用户'
+            ].reverse()
+        }],
+        series: [{
+            name: '消费用户',
+            type: 'bar',
+            stack: '总量',
+            barWidth: '60%',
+            itemStyle: {
+                normal: {
+                    color: function(params) {
+                        // build a color map as your need.
+                        var colorList = [
+                            '#e5584f','#279fb7',
+                        ];
+                        return colorList[params.dataIndex]
+                    },
+                    label: {
+                        show: true,
+                        position: 'top',
+                        //formatter: '{b}\n{c}',
+                        formatter: '{c}万+ '
+                    }
+                }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    position: 'right',
+                    formatter: '{c}万+'
+                }
+            },
+            data: [271, 22].reverse()
+        }]
+    };
+
+    var option2 = {
+    	title : {
+	      text: '门店用户量',
+	      x: '45%',
+	      y: '15%',
+	      textStyle:{color:"#11214e",fontSize:"16"}
+	    },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis :
+        {
+
+            type : 'category',
+            axisLabel:{
+                textStyle:{
+                    fontSize:22,
+                    color:'#11214e'
+                },
+                interval : 0,
+                                formatter : function(params){
+                                    var newParamsName = "";
+                                    var paramsNameNumber = params.length;
+                                    var provideNumber = 4;
+                                    var rowNumber = Math.ceil(paramsNameNumber / provideNumber);
+                                    if (paramsNameNumber > provideNumber) {
+                                        for (var p = 0; p < rowNumber; p++) {
+                                            var tempStr = "";
+                                            var start = p * provideNumber;
+                                            var end = start + provideNumber;
+                                            if (p == rowNumber - 1) {
+                                                tempStr = params.substring(start, paramsNameNumber);
+                                            } else {
+                                                tempStr = params.substring(start, end) + "\n";
+                                            }
+                                            newParamsName += tempStr;
+                                        }
+
+                                    } else {
+                                        newParamsName = params;
+                                    }
+                                    return newParamsName
+                                }
+            },
+            axisLine:{
+                show:false
+            },
+            axisTick:{
+                show:false
+            },
+            splitLine:{
+                show:false
+            },
+            splitArea:{
+                show:false
+            },
+            data : ['广州  彩虹店', '天津  鼓楼店', '天津  新开河店', '天津  广开店', '天津  万兴店'],
+            
+        },
+        yAxis : {
+            min:0,
+            max:5,
+            axisLabel:{
+                show:false
+            },
+            axisTick:{
+                show:false
+            },
+            axisLine:{
+                show:false
+            },
+            splitLine:{
+                show:false
+            },
+            splitArea:{
+                show:false
+            }
+        },
+        series : [
+            {
+                type: 'pictorialBar',
+                symbol: 'triangle',
+                symbolSize: [52, 30],
+                symbolPosition: 'end',
+                symbolOffset: [0, '-99%'],
+                z: 10,
+                data: [3.5 , 2.2 , 1.9 , 1.6 , 1.6 ],
+                itemStyle: {
+                    normal: {
+                        color: function(params) {
+                            // build a color map as your need.
+                            var colorList = [
+                                '#e5a704','#279fb7','#e5584f','#90cedb','#e15d6b',
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            //formatter: '{b}\n{c}',
+                            formatter: '{c}万+'
+                        }
+                    }
+                }
+            },
+            {
+                name:'',
+                type:'bar',
+                barWidth: '40%',
+                data: [3.5 , 2.2 , 1.9 , 1.6 , 1.6 ],
+                label: {
+                    normal: {
+                        show: false,
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: function(params) {
+                            // build a color map as your need.
+                            var colorList = [
+                                '#e5a704','#279fb7','#e5584f','#90cedb','#e15d6b',
+                            ];
+                            return colorList[params.dataIndex]
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+                            //formatter: '{b}\n{c}',
+                            formatter: '{c}万+'
+                        }
+                    }
+                }
+
+            },
+
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option1);
+    myChart2.setOption(option2);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>用户模型-单体画像</title>
+<link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+<!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+<!-- Morris charts -->
+<link rel="stylesheet" href="../crm/plugins/morris/morris.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+     folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="../crm/dist/css/skins/_all-skins.min.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="IE 9/html5shiv.min.js"></script>
+<script src="IE 9/respond.min.js"></script>
+<![endif]-->
+<style>
+     p{margin: 0;}
+    .skin-blue .wrapper{background-color: #f1f1f1;}
+    .content-wrapper{font-family: Helvetica, Arial, sans-serif; max-width: 1500px; margin: 0 auto; }
+    .portrait_con{background: url("../crm/dist/img/userimg3.png") no-repeat 40% 60px; display: block; height: 913px; background-size: 80%;}
+    .por_count{color: #fff; border-radius: 15px; font-size: 12px; max-width: 100px;max-width: 250px; min-height: 90px; line-height: 30px; margin: 60px auto 0 auto; padding: 10px 0px 0 0; box-shadow: 0 1px 5px rgba(0,0,0,0.4);-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.4); position: relative;}
+    .por_count:nth-child(1){margin-top: 50%;}
+    .por_count i{font-size: 42px; margin-top: 15px;}
+    .por_count p:nth-child(2){font-size: 26px;}
+    .por_c1{background-color: #00a1d6;}
+    .por_c2{background-color: #ef831a;}
+    .por_c3{background-color: #f25d8e;}
+    .tot_line{position: absolute; width: 1px; overflow: hidden; height: 70%; top: 0; margin: 8% 0;}
+    .total_line1{background-color: #0f6b8a; left: 33%;}
+    .total_line2{background-color: #a95f17; right: 33%;}
+    .total_line3{background-color: #b02a56; left: 33%;}
+    .sidebar-form{background-color: #11214e; padding: 8px 0 7px 18px; border-radius: 10px!important; border-radius: 10px!important; margin: 20px 0 0 0!important;}
+    .skin-blue .sidebar-form input[type="text"]{background-color: #fff; border-radius: 10px!important;}
+    .skin-blue .sidebar-form .btn{background-color: #11214e; color: #fff; font-size: 20px; padding: 0 10px; margin-left: 1px;}
+    .basics{background-color: #11214e; border-radius: 10px; color: #fff; padding: 20px 40px 20px 40px; margin-top: 30px;font-size: 12px;}
+    .basics_img img{border-radius: 50%; width: 94px; height: 94px; border: 10px solid #fff;}
+    .basics_tit{ position: relative; margin-top: 15px;}
+    .basics_tit span{font-size: 14px; background-color: #11214e; padding: 0 8px; font-weight: bold; height: 20px; position: relative; z-index: 2;}
+    .basics_tit em{ position: absolute; top: 10px; left: 0; background-color: #ccc; width: 100%; height: 1px; overflow: hidden; z-index: 1;}
+    .dl-horizontal dt{width: 60px; text-align: left; }
+    .dl-horizontal dt i{width: 30px; font-size: 16px; padding-top: 1px;}
+    .dl-horizontal dd{margin-left: 80px; color: #999da1; line-height: 22px;}
+    .basics dl{margin: 0px 0 0 0;}
+    .barrage{color: #333; font-size: 16px; margin-top: 50px; height: 280px; overflow-y: hidden;}
+    .barrage li{width: 100%; margin-bottom: 30px;}
+    .barrage li i{width: 30px; height: 30px; border-radius: 5px; font-size: 16px; text-align: center; line-height: 30px; margin-right: 5px; color: #fff; box-shadow: 0 1px 5px rgba(0,0,0,0.4);-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.4);}
+    .barrage li span{padding: 0 5px;}
+    .barrage li span:nth-child(3){color: #f55600;}
+    .bar_order i{background-color: #00a1d6;}
+    .bar_bf i{background-color: #f25d8e;}
+
+    /*左侧人形*/
+    .portrait{height: 913px;}
+    /*.portrait_con{width: 100%; background: url("dist/img/userimg3.png") no-repeat 44% 50%; background-size: 80%; position: absolute; top: 0;height: 813px;}*/
+    .por_line_red{position: absolute; border-width: 1px;border-style: solid; background-color: #fbfbfb; color: #ffa20f; font-weight: bold; font-size: 16px; min-width: 10px; text-align: center;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+    .por_line_blue{position: absolute; border-width: 1px;border-style: solid; background-color: #fbfbfb; color: #4cc3fd; font-weight: bold; font-size: 16px; min-width: 10px; text-align: center;}
+    @media only screen and (max-width: 1920px) {
+        .por_line1{top:100px;  left: 16%;width: 50px; height: 50px; line-height: 50px; border-radius: 50%;}
+        .por_line2{top:175px;  left: 7%;border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line3{top:240px;  left: 8%;width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line4{top:355px;  left: 5%;border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line5{top:400px;  left: 8%;width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line6{top:530px;  left: 6%;border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line7{top:610px;  left: 1%;width: 300px; border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line8{top:135px;  right: 125px;border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line9{top:211px;  right: 132px;width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line10{top:289px; right: 50px;width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line11{top:395px; right: 100px;border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line12{top:453px; right: 85px;width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line13{top:560px; right: 245px;border-radius: 5px; padding: 5px 15px 3px 15px;}
+    }
+    @media only screen and (max-width: 1400px) {
+        .por_line1{top:95px; left: 16%; width: 50px; height: 50px; line-height: 50px; border-radius: 50%;}
+        .por_line2{top:155px; left: 7%; border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line3{top:205px; left: 8%; width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line4{top:305px; left: 5%; border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line5{top:340px; left: 8%; width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line6{top:450px; left: 5%; border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line7{top:520px; left: 1%; width: 300px; border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line8{top:125px; right: 125px; border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line9{top:185px; right: 132px; width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line10{top:235px; right: 50px; width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line11{top:338px; right: 70px; border-radius: 5px; padding: 5px 15px 3px 15px;}
+        .por_line12{top:395px; right: 85px; width: 80px; height: 80px; line-height: 80px; border-radius: 50%;}
+        .por_line13{top:460px; right: 185px; border-radius: 5px; padding: 5px 15px 3px 15px;}
+    }
+    
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="../crm/dist/img/logo.png" height="30">
+						<img src="../crm/dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>单体画像</em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+  
+  
+
+<div class="content-wrapper" style="max-width: 1600px;">
+
+    <section class="clearfix">
+        <div class="col-lg-7 portrait">
+            <!-- <div class="portrait_bg"><img id="sex_pic" src="dist/img/userimg3.png"> </div> -->
+            <div class="portrait_con">
+                <span class="por_line_red por_line1" id="sex">性别</span>
+                <span class="por_line_red por_line2" id="nationality">民族</span>
+                <span class="por_line_red por_line3" id="house_property">房屋性质</span>
+                <span class="por_line_red por_line4" id="job">职业</span>
+                <span class="por_line_red por_line5" id="income"><font size="1px;">收入水平</font></span>
+                <span class="por_line_red por_line6" id="children">婚姻</span><!-- 子女情况  -->
+                <span class="por_line_red por_line7" id="address">地址</span>
+                
+                <span class="por_line_blue por_line8" id="hycd">活跃期</span>
+                <span class="por_line_blue por_line9" id="xfnl"><font size="1px;">消费能力</font></span>
+                <span class="por_line_blue por_line10" id="xdcs">忠诚度</span>
+                <span class="por_line_blue por_line11" id="pdmc">消费偏好</span>
+                <span class="por_line_blue por_line12" id="zffs">支付方式</span>
+                <span class="por_line_blue por_line13" id="ztcs">到店消费次数</span>
+            </div>
+        </div>
+        <div class="col-lg-2 no-padding">
+	        <div class="por_count por_c1 text-center">
+	                <div class="col-sm-4 no-padding"><i class="fa fa-glass" style="color: #0f6b8a"></i></div>
+	                <div class="tot_line total_line1"></div>
+	                <div class="col-sm-8 no-padding">
+	                    <p>消费次数</p>
+	                    <p id="order_count">359</p>
+	                </div>
+	            </div>
+	            <div class="por_count por_c2 text-center">
+	                <div class="col-sm-8 no-padding">
+	                    <p>消费总金额</p>
+	                    <p id="trading_price_sum">5698</p>
+	                </div>
+	                <div class="tot_line total_line2"></div>
+	                <div class="col-sm-4 no-padding"><i class="fa fa-cny" style="color: #a95f17"></i></div>
+	            </div>
+	            <div class="por_count por_c3 text-center">
+	                <div class="col-sm-4 no-padding"><i class="fa fa-comments" style="color: #b02a56;"></i></div>
+	                <div class="tot_line total_line3"></div>
+	                <div class="col-sm-8 no-padding">
+	                    <p>被拜访次数</p>
+	                    <p id="relation_count">58</p>
+	                </div>
+	       </div>
+            <!-- <div class="por_count por_c1 text-center">
+                <p>消费次数</p>
+                <p id="order_count">- -</p>
+            </div>
+            <div class="por_count por_c2 text-center">
+                <p>消费总金额</p>
+                <p id="trading_price_sum">- -</p>
+            </div>
+            <div class="por_count por_c3 text-center">
+                <p>被拜访次数</p>
+                <p id="relation_count">- -</p>
+            </div> -->
+        </div>
+        <div class="col-lg-3">
+          <!--   <div class="sidebar-form no-border">
+                <div class="input-group">
+                    <input type="text" class="form-control timepicker no-border" placeholder="搜索手机号" id="txt_mobilephone" onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11" />
+                    <span class="input-group-btn">
+                        <button type="button" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </div> -->
+            <div class="basics">
+                <div class="basics_img text-center"><img id="face_pic" src="../crm/dist/img/userimg2.png"> </div>
+                <div class="basics_tit text-center"><span>基本信息</span><em></em></div>
+                <dl class="dl-horizontal">
+                    <dt><i class="fa fa-user"></i>姓名</dt>
+                    <dd id="name">李女士</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt><i class="fa fa-phone"></i>电话</dt>
+                    <dd id="mobilephone">13888888888</dd>
+                </dl>
+                <dl class="dl-horizontal">
+                    <dt><i class="fa fa-map-marker"></i>地址</dt>
+                    <dd id="address_right">北京市朝阳区XXXX小区</dd>
+                </dl>
+            </div>
+            <div class="barrage" id="show">
+                <ul class="no-padding">
+                    <li class="bar_order" id="bar_order0"></li>
+                    <li class="bar_bf" id="bar_bf0"></li>
+                    <li class="bar_order" id="bar_order1"></li>
+                    <li class="bar_bf" id="bar_bf1"></li>
+                    <li class="bar_order" id="bar_order2"></li>
+                    <li class="bar_bf" id="bar_bf2"></li>
+                    <li class="bar_order" id="bar_order3"></li>
+                    <li class="bar_bf" id="bar_bf3"></li>
+                    <li class="bar_order" id="bar_order4"></li>
+                    <li class="bar_bf" id="bar_bf4"></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- Select2 -->
+<script src="../crm/plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="../crm/plugins/iCheck/icheck.min.js"></script>
+<!-- FastClick -->
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+<!-- <script src="dist/js/nav-scroll.js"></script> -->
+
+
+<script type="text/javascript" src="../crm/plugins/jquery.page.js"></script>
+<script type="text/javascript" src="../crm/plugins/moment.min.js"></script>
+<script type="text/javascript" src="../crm/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+
+
+<script>
+Date.prototype.format=function(fmt) {        
+    var o = {        
+    "M+" : this.getMonth()+1, //月份        
+    "d+" : this.getDate(), //日        
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+    "H+" : this.getHours(), //小时        
+    "m+" : this.getMinutes(), //分        
+    "s+" : this.getSeconds(), //秒        
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+    "S" : this.getMilliseconds() //毫秒        
+    };        
+    var week = {        
+    "0" : "\u65e5",        
+    "1" : "\u4e00",        
+    "2" : "\u4e8c",        
+    "3" : "\u4e09",        
+    "4" : "\u56db",        
+    "5" : "\u4e94",        
+    "6" : "\u516d"       
+    };        
+    if(/(y+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+    }        
+    if(/(E+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+    }        
+    for(var k in o){        
+        if(new RegExp("("+ k +")").test(fmt)){        
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+        }        
+    }        
+    return fmt;        
+} 
+$(function () {
+	initcurruser();
+	var mobilephone = decode64(getUrlParamByKey("mp"));//用户电话
+	if(mobilephone!=null){//用户运营跳转处理
+		$("#txt_mobilephone").val(mobilephone);
+		searchCustomerByPhone(); 
+	}
+	
+	$("#search-btn").click(function(){
+		var phone = $("#txt_mobilephone").val();
+		if(phone==""||phone==null||phone.trim().length!=11){
+			crm_alert(0,"电话格式不正确！");
+		}else{
+			searchCustomerByPhone();	
+		}
+		
+	});
+	
+	if(curr_user!=null&&curr_user.usergroup.code.indexOf('ZB')!=0){
+		 /*  window.location.href="loginplatform.html"; */
+	  }
+	
+});
+
+
+
+var curr_user;
+function initcurruser(){
+		//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,
+  				function(data, textStatus, XMLHttpRequest) {
+  					if (data.result) {
+  						 curr_user = JSON.parse(data.data);
+  					}
+  	},false);
+	}
+	
+
+
+function startmarquee(lh, speed, delay) {
+    var t;
+    var oHeight = 210;/** div的高度 **/
+    var p = false;
+    var o = document.getElementById("show");
+    var preTop = 0;
+    o.scrollTop = 0;
+    function start() {
+        t = setInterval(scrolling, speed);
+        o.scrollTop += 1;
+    }
+    function scrolling() {
+        if (o.scrollTop % lh != 0
+                && o.scrollTop % (o.scrollHeight - oHeight - 1) != 0) {
+            preTop = o.scrollTop;
+            o.scrollTop += 1;
+            if (preTop >= o.scrollHeight || preTop == o.scrollTop) {
+                o.scrollTop = 0;
+            }
+        } else {
+            clearInterval(t);
+            setTimeout(start, delay);
+        }
+    }
+    setTimeout(start, delay);
+}
+window.onload=function(){
+    /**startmarquee(一次滚动高度,速度,停留时间);**/
+    startmarquee(60, 10, 1500);
+}
+
+
+
+
+
+
+
+
+
+
+var citys = "";
+var phonelog="";
+function searchCustomerByPhone(){
+	var mobilephone=$("#txt_mobilephone").val();
+	if(mobilephone==phonelog){
+		return;
+	}else{
+		phonelog=mobilephone;
+	}
+	doManager("UserTagManager","getUserTagByPhone",mobilephone,
+	    function(data,textStatus,XmlHttpRequest){
+			if (data.result) {
+				 var jsonData_userTab = $.fromJSON(data.data);
+				 var jsonData = jsonData_userTab==null?null:jsonData_userTab.userTab;
+				 var channels_obj = $.fromJSON(data.data);
+				 var channels = channels_obj==null?null:channels_obj.channels;
+				 var relations_obj = $.fromJSON(data.data);
+				 var relations = relations_obj==null?null:relations_obj.relations;
+				 var orders_obj = $.fromJSON(data.data);
+				 var orders = orders_obj==null?null:orders_obj.orders;
+				 var face_pic_obj = $.fromJSON(data.data);
+				 var face_pic = face_pic_obj==null?null:face_pic_obj.face_pic;
+				 
+				 var relations_count_obj = $.fromJSON(data.data);
+				 var relations_count = relations_count_obj==null?"":relations_count_obj.relations_count;
+				 
+				 if(typeof(face_pic)!="undefined"&&face_pic!=null){
+					 $("#face_pic").attr("src",face_pic);
+				 }else{
+					 $("#face_pic").attr("src","../crm/dist/img/userimg2.png");
+				 }
+				 
+				 
+				 var sex="";
+				 var name_online="";
+				 var name_offline="";
+				 var mobilephone = "";
+				 var nationality = "";
+				 var house_property = "";
+				 var job = "";
+				 var income = "";
+				 var address = "";
+				 
+				 if(jsonData!=null){
+					 sex = jsonData.sex;
+					 name_online = jsonData.name_online;
+					 
+					 //更新2个字段取值 名字和地址 
+					 name_offline=jsonData.address_name;
+					 address=jsonData.address_address;
+					 if(name_offline==null||name_offline==""){
+						 name_offline = jsonData.name_offline;
+					 }
+					 if(address==null||address==""){
+						address=jsonData.address;
+					 }
+					 
+					 mobilephone=jsonData.mobilephone;
+					 nationality = jsonData.nationality;
+					 house_property = jsonData.house_property;
+					 job = jsonData.job;
+					 income = jsonData.income;
+					 
+					 
+				 }
+				 //性别  0男 1女
+				 if(sex===0){
+					 $("#sex").html("男");
+					 //图片换成男的
+					 $(".portrait_con").css("background-image","url(../crm/dist/img/userimg4.png)");
+				 }else if(sex==1){
+					 $("#sex").html("女");
+					 //图片换成女的
+					 $(".portrait_con").css("background-image","url(../crm/dist/img/userimg3.png)");
+				 }else{
+					 $("#sex").html("暂无");
+					 $(".portrait_con").css("background-image","url(../crm/dist/img/userimg4.png)");
+				 }
+				 
+				 //姓名
+				 if(name_offline!=""){
+					 $("#name").html(name_offline);
+				 }else{
+					 $("#name").html("暂无");
+				 }
+				 //电话
+				 if(mobilephone!=""){
+					 $("#mobilephone").html(mobilephone);
+				 }else{
+					 $("#mobilephone").html("暂无");
+				 }
+				 
+				 //地址
+				 if(address!=null&&address!=""){
+					 $("#address_right").html(address);
+					 $("#address").html(address);
+				 }else{
+					 $("#address_right").html("暂无");
+					 $("#address").html("暂无");
+				 }
+				
+				 //民族
+				 if(nationality!=""&&nationality!=null&&nationality!="null"){
+					 $("#nationality").html("民族 "+nationality);
+				 }else{
+					 $("#nationality").html("暂无");
+				 }
+				 
+				 //住房性质 1 自有  2租住
+				 if(house_property==1){
+					 house_property="自有住房";
+				 }else if(house_property==2){
+					 house_property="租住住房";
+				 }else{
+					 house_property="暂无";
+				 }
+				 $("#house_property").html(house_property);
+				 //职业
+				 if(job!=null&&job!=""){
+					 if(job.indexOf('_')>-1){
+						 $("#job").html(job.split('_')[1]);
+					 }else{
+						 $("#job").html(job);
+					 }
+				 }else{
+					$("#job").html("暂无");
+				 }
+				 
+				 
+				 //收入水平 
+				 if(income==""||income=="0-6000"){
+					 income="低";
+				 }else if(income=="20000以上"){
+					 income="高";
+				 }else{
+					 income="中";
+				 }
+				 $("#income").html("<font size='1px'>收入水平 "+income+"</font>");
+				 
+				 //最后消费时间 0-30天 活跃期   31-60沉默期     61-180睡眠期     180天以上 流失期 
+				 var latest_order_time = "暂无";
+				 var trading_price_max = "0";
+				 var order_count="0";
+				 var buy_inshop_count = "0";
+				 var trading_price_sum = "0";
+				 if(jsonData!=null){
+					 latest_order_time=jsonData.latest_order_time;
+					 var s1 = new Date(latest_order_time).format("yyyy-MM-dd")
+					 s1 = new Date(s1.replace(/-/g, "/"));
+					 s2 = new Date();//当前日期：2017-04-24
+					 var days = s2.getTime() - s1.getTime();
+					 var time = parseInt(days / (1000 * 60 * 60 * 24));
+					 if(time<=30){
+						 latest_order_time="活跃期";
+					 }else if(time>=31&&time<60){
+						 latest_order_time="沉默期";
+					 }else if(time>=61&&time<180){
+						 latest_order_time="睡眠期";
+					 }else{
+						 latest_order_time="流失期";
+					 }
+					 
+					 //单笔最大消费  0-100低 101-300中  301以上 高  
+					 trading_price_max = jsonData.trading_price_max;
+					 var trading_price_max_no = parseInt(trading_price_max);
+					 if(trading_price_max_no<=100){
+						 trading_price_max="<font size='1px'>消费能力 低</font>";
+					 }else if(trading_price_max_no>=301){
+						 trading_price_max="<font size='1px'>消费能力 高</font>";
+					 }else{
+						 trading_price_max="<font size='1px'>消费能力 中</font>";
+					 }
+					 
+					 
+					 
+					 //下单次数 1次  新客户   2次 老客户  3次 忠诚客户  3次以上 粉丝客户 
+					 order_count=jsonData.order_count;
+					 //消费次数 
+					 $("#order_count").html(order_count);
+					
+					 var order_count_no = parseInt(order_count);
+					 if(order_count_no==1){
+						 order_count="新客户";
+					 }else if(order_count_no==2){
+						 order_count="老客户";
+					 }else if(order_count_no==3){
+						 order_count="忠诚客户";
+					 }else if(order_count_no>3){
+						 order_count="粉丝客户";
+					 }else{
+						 order_count="暂无";
+					 }
+					 buy_inshop_count = jsonData.buy_inshop_count;
+					 
+					 
+					 trading_price_sum = jsonData.trading_price_sum;
+					 
+					 //活跃程度
+					 $("#hycd").html(latest_order_time);
+					 //消费能力
+					 $("#xfnl").html(trading_price_max);
+					 //下单次数
+					 $("#xdcs").html(order_count);
+					 //到店次数 
+					 $("#ztcs").html("到店消费次数 "+buy_inshop_count);
+					 //下单总金额 
+					 $("#trading_price_sum").html(trading_price_sum);
+					 //常用支付
+					 $("#zffs").html("微信支付");
+				 }else{
+					 $("#income").html("暂无");
+					 $("#order_count").html("暂无");
+					 //活跃程度
+					 $("#hycd").html("暂无");
+					 //消费能力
+					 $("#xfnl").html("暂无");
+					 //下单次数
+					 $("#xdcs").html("暂无");
+					 //到店次数 
+					 $("#ztcs").html("暂无");
+					 //下单总金额 
+					 $("#trading_price_sum").html("暂无");
+					//常用支付
+					 $("#zffs").html("暂无");
+					
+				 }
+				
+				 
+				//子女情况
+				var children_tmp = "";
+				var lastNo = mobilephone.substring(mobilephone.length-1,mobilephone.length);
+				if(name_offline!=""){
+					if("13579".indexOf(lastNo)>-1){
+						children_tmp="已婚";
+					}else{
+						children_tmp="未婚";
+					}
+				}else{
+					children_tmp="暂无";
+				}
+				
+				 $("#children").html(children_tmp);
+				 
+				 
+				 var pdmc="";
+				 if(channels!=null){
+					 $(channels).each(function(i,obj){
+						 if(pdmc.indexOf(obj.channel_name)==-1){
+							 pdmc+=obj.channel_name+",";
+						 }
+					 });
+					 if(pdmc.length>0&&pdmc.length>8){
+						 pdmc=pdmc.substring(0,10)+"...";
+					 }else{
+						 pdmc=pdmc.substring(0,pdmc.length-1);
+					 }
+				 }
+				 //消费兴趣
+				 if(pdmc!=""){
+					 $("#pdmc").html(pdmc);	 
+				 }else{
+					 $("#pdmc").html("暂无");
+				 }
+				 
+				 
+				 //被拜访次数
+				 $("#relation_count").html(relations_count);
+				 if(relations!=null&&relations.length>0){
+					 //显示最后一次拜访信息
+					 $(relations).each(function(i,obj){
+						 $("#bar_bf"+i).empty();
+						 var employee_name = obj.employee_name==null?"":obj.employee_name;
+						 var relatio_type=obj.relation_type==null?"":obj.relation_type;
+						 var relation_date = new Date(obj.relation_date).format('yyyy-MM-dd');
+						 if(employee_name=="undefined"||employee_name=="null"||typeof(employee_name)=="undefined"){
+							 employee_name="";
+						 }
+						 if(relatio_type=="undefined"||relatio_type=="null"||typeof(relatio_type)=="undefined"){
+							 relatio_type="其它方式";
+						 }
+						 var bar_bf_html = "<i class=\"fa fa-commenting-o\"></i><span>"+relation_date+"</span>员工<span class=\"text-yellow\">"+employee_name+"</span> 通过 "+relatio_type+" 拜访";
+						 $("#bar_bf"+i).append(bar_bf_html);
+					 });
+				 }else{
+					 $("#bar_bf0").empty();
+					 $("#bar_bf1").empty();
+					 $("#bar_bf2").empty();
+					 $("#bar_bf3").empty();
+					 $("#bar_bf4").empty();
+				 }
+				 
+				 
+				 
+				 
+				 if(orders!=null&&orders.length>0){
+					 $(orders).each(function(i,obj){
+						 $("#bar_order"+i).empty();
+						 var storename = obj.store_name==null?"":obj.store_name;
+						 var trading_price = obj.trading_price==null?"0":obj.trading_price;
+						 var signtime = new Date(obj.sign_time).format('yyyy-MM-dd');
+						 if(storename=="undefined"||storename=="null"||typeof(storename)=="undefined"){
+							 storename="门店";
+						 }
+						 if(trading_price=="undefined"||trading_price=="null"||typeof(trading_price)=="undefined"){
+							 trading_price="0";
+						 }
+						 var bar_order_html = "<i class=\"fa fa-file-text-o\"></i><span>"+signtime+"</span>在<span class=\"text-yellow\">"+storename+"</span> 消费 "+trading_price+" 元";
+						 $("#bar_order"+i).append(bar_order_html);
+					 });
+				 }else{
+					 $("#bar_order0").empty();
+					 $("#bar_order1").empty();
+					 $("#bar_order2").empty();
+					 $("#bar_order3").empty();
+					 $("#bar_order4").empty();
+				 }
+				 
+				 
+				 
+				 
+			}
+	},false);
+}
+
+</script>
+
+</body>
+</html>

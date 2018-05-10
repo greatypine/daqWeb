@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>用户画像</title>
+<link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+<!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+<!-- Bootstrap 3.3.6 -->
+<link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+<!-- Ionicons -->
+<link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+<!-- Morris charts -->
+<link rel="stylesheet" href="../crm/plugins/morris/morris.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+     folder instead of downloading all of them to reduce the load. -->
+<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="IE 9/html5shiv.min.js"></script>
+<script src="IE 9/respond.min.js"></script>
+<![endif]-->
+<style>
+    p{margin: 0;}
+    .wrapper{background-color: #3f3f3f;}
+    .content-wrapper{background-color: transparent;}
+    section{padding: 0 40px;}
+    section button{width: 120px; margin-right: 20px;}
+    .sjfx_record{color: #fec400; margin-top: 30px;}
+    .sjfx_record .col-sm-4{margin: 20px 0 0 0;}
+    .sjfx_record .col-sm-4 p:nth-child(1){font-size: 28px; font-weight: bold;}
+    .sjfx_record .col-sm-4 p:nth-child(2){font-size: 12px; padding-top: 5px; opacity: 0.8;}
+
+</style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="../crm/dist/img/logo.png" height="30">
+						<img src="../crm/dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>用户画像</em></li>
+							</ul>
+						</div>
+					</div>
+      
+      
+      
+      
+     <!--  <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+
+                    <li ><a href="../crm/loginplatform.html">数据平台首页</a> </li>
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="../crm/dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                User image
+                <li class="user-header">
+                  <img src="../crm/dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+                  <p><strong ><span id="card_name">载入中...</span></strong></p>
+                  <p><span id="card_no">载入中...</span></p>
+                </li>
+                <li class="user-header">
+                </li>
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+                </ul>
+            </div> -->
+      
+      
+      
+      
+      </div>
+    </nav>
+  </header>
+  
+  
+<!-- <header class="main-header">
+    <nav class="navbar navbar-static-top">
+        <div class="container">
+            <div class="logo_img pull-left"><img src="dist/img/logo1.png" height="30"><img src="dist/img/title.png" height="20"></div>
+            <div class="pull-left">
+                <div class="logo-lg">
+                    <ul class="no-margin">
+                        <li class="current">
+                            <em>数据运营<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                            <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>运营数据</dt>
+                                        <dd><a href="#"><span class="fa fa-money"></span>营业额统计</a></dd>
+                                        <dd><a href="#"><span class="fa fa-user-plus"></span>用户运营</a></dd>
+                                        <dd><a href="#"><span class="fa fa-cubes"></span>产品运营</a></dd>
+                                        <dd><a href="#"><span class="fa fa-institution"></span>门店运营</a></dd>
+                                        <dd><a href="#"><span class="fa fa-comments-o"></span>混片情况</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>绩效数据</dt>
+                                        <dd><a href="#"><span class="fa fa-line-chart"></span>门店GMV</a></dd>
+                                        <dd><a href="#"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd>
+                                        <dd><a href="#"><span class="fa fa-area-chart"></span>门店拉新</a></dd>
+                                        <dd><a href="#"><span class="fa fa-bar-chart"></span>国安侠拉新</a></dd>
+                                        <dd><a href="#"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>档案数据</dt>
+                                        <dd class="logo-prohibit"><a href="#"><span class="fa fa-file-o"></span>订单档案</a></dd>
+                                        <dd><a href="#"><span class="fa fa-newspaper-o"></span>员工档案</a></dd>
+                                        <dd><a href="#"><span class="fa fa-copy"></span>片区档案</a></dd>
+                                        <dd><a href="#"><span class="fa fa-clipboard"></span>小区档案</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>排名数据</dt>
+                                        <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd>
+                                        <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <em>数据模型<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                            <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="col-sm-4">
+                                        <dt><i></i>社区模型</dt>
+                                        <dd><a href="#"><span class="fa fa-sitemap"></span>基础数据模型</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-4">
+                                        <dt><i></i>订单模型</dt>
+                                        <dd><a href="#"><span class="fa fa-server"></span>公海订单</a></dd>
+                                        <dd><a href="#"><span class="fa fa-warning "></span>异常订单</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-4">
+                                        <dt><i></i>用户模型</dt>
+                                        <dd><a href="#"><span class="fa fa-street-view"></span>用户画像</a></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <em>数据地图<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                            <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="col-sm-4">
+                                        <dt><i></i>热力图</dt>
+                                        <dd><a href="#"><span class="fa fa-money"></span>订单热力图</a></dd>
+                                        <dd><a href="#"><span class="fa fa-user-secret"></span>用户人力图</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-4">
+                                        <dt><i></i>覆盖范围</dt>
+                                        <dd><a href="#"><span class="fa fa-object-group"></span>门店覆盖范围</a></dd>
+                                        <dd><a href="#"><span class="fa fa-map-o"></span>片区分布图</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-4">
+                                        <dt><i></i>动态图</dt>
+                                        <dd><a href="#"><span class="fa fa-group"></span>国安侠分布图</a></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+            </div>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs">王春</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            User image
+                            <li class="user-header">
+                                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                                <p><strong>王春</strong></p>
+                                <p>店长<span>A77777</span></p>
+                                <p>呼家楼店</p>
+                            </li>
+
+                            Menu Footer
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">个人中心</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-default btn-flat">退出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header> -->
+
+<div class="content-wrapper" style="max-width: 1600px; margin: 0 auto">
+
+    <section>
+        <h4 class="clearfix">
+            <button type="button" class="btn btn-danger pull-right" id="groupInfo">群体画像</button>
+            <button type="button" class="btn btn-danger pull-right" id="personInfo">单体画像</button>
+        </h4>
+        <div class="col-lg-5">
+            <div id="main1" style="width: 100%;height:600px;"></div>
+        </div>
+        <div class="col-lg-7">
+            <div class="sjfx_record text-center clearfix">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <p>280万+</p>
+                    <p>消费用户</p>
+                </div>
+                <div class="col-sm-4">
+                    <p>60万+</p>
+                    <p>用户档案</p>
+                </div>
+                <div class="col-sm-4">
+                    <p>1:1.8</p>
+                    <p>女/男比例</p>
+                </div>
+                <div class="col-sm-4">
+                    <p>20万+</p>
+                    <p>活跃用户</p>
+                </div>
+                <div class="col-sm-4">
+                    <p>10万+</p>
+                    <p>粉丝用户</p>
+                </div>
+            </div>
+            <div id="main2" style="width: 100%;height:380px;"></div>
+        </div>
+    </section>
+
+</div>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- Select2 -->
+<script src="../crm/plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="../crm/plugins/iCheck/icheck.min.js"></script>
+<!-- FastClick -->
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+<!-- 导航 -->
+<!-- <script src="dist/js/nav-scroll.js"></script> -->
+
+
+<script type="text/javascript" src="../crm/plugins/jquery.page.js"></script>
+<script type="text/javascript" src="../crm/plugins/moment.min.js"></script>
+<script type="text/javascript" src="../crm/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+
+
+<!-- 引入 ECharts 文件 -->
+<script src="../crm/dist/js/echarts.common.min.js"></script>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    var myChart2 = echarts.init(document.getElementById('main2'));
+
+    // 指定图表的配置项和数据
+    var option1 = {
+        title: {
+            text: '用户分布',
+            textStyle:{
+                color: '#fff',
+                fontSize:'20',
+            }
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b} <br/>{a}: {c} ({d}%)"
+        },
+        color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#ffc000', '#1fcf61', '#df5c24', '#aced66', '#f1e82b', '#e46de1'],
+        //color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5', '#ffc000', '#1fcf61', '#44d5d0', '#aced66', '#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5', '#ffc000', '#1fcf61', '#44d5d0', '#aced66'],
+        legend: { //图例组件，颜色和名字
+            left: '55',
+            bottom: '50',
+            orient: 'horizontal',
+            itemGap: 12, //图例每项之间的间隔
+            itemWidth: 10,
+            itemHeight: 10,
+            icon: 'rect',
+            data: ['日用百货', '快周边','国安优选','生鲜频道', '洗衣', '快递', '特产频道', '养老餐', '家修', '社区合伙人', '国安汽车', '母婴亲子', '休闲食品', '保洁', '酒饮冲调', '安心出游', '家居家具', '娱乐' ],
+            textStyle: {
+                color: [],
+                fontStyle: 'normal',
+                fontFamily: '微软雅黑',
+                fontSize: 12,
+            }
+        },
+        series: [{
+            name: '用户数量',
+            type: 'pie',
+            clockwise: false, //饼图的扇区是否是顺时针排布
+            minAngle: 20, //最小的扇区角度（0 ~ 360）
+            center: ['50%', '45%'], //饼图的中心（圆心）坐标
+            radius: [54, 196], //饼图的半径
+            avoidLabelOverlap: true, ////是否启用防止标签重叠
+            itemStyle: { //图形样式
+                normal: {
+                    borderColor: '#1e2239',
+                    borderWidth: 1.5,
+                },
+            },
+            label: { //标签的位置
+                normal: {
+                    show: true,
+                    position: 'inside', //标签的位置
+                    formatter: "{d}%",
+                    textStyle: {
+                        color: '#fff',
+                    }
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            data: [
+                {value: 145319,name: '快周边'},
+                {value: 140311,name: '国安优选'},
+                {value: 128671,name: '生鲜频道'},
+                {value: 869715,name: '日用百货'},
+                {value: 73212,name: '洗衣'},
+                {value: 68732,name: '快递'},
+                {value: 63133,name: '特产频道'},
+                {value: 32600,name: '养老餐'},
+                {value: 31122,name: '家修'},
+                {value: 25956,name: '社区合伙人'},
+                /*{value: 20218,name: '国安汽车'},
+                {value: 16477,name: '母婴亲子'},
+                {value: 13620,name: '休闲食品'},
+                {value: 11246,name: '保洁'},
+                {value: 10984,name: '酒饮冲调'},
+                {value: 10662,name: '安心出游'},
+                {value: 10655,name: '家居家具'},
+                {value: 10450,name: '娱乐'}*/
+            ]
+        }, {
+            name: '',
+            type: 'pie',
+            clockwise: false,
+            silent: true,
+            minAngle: 20, //最小的扇区角度（0 ~ 360）
+            center: ['50%', '45%'], //饼图的中心（圆心）坐标
+            radius: [0, 49], //饼图的半径
+            itemStyle: { //图形样式
+                normal: {
+                    borderColor: '#1e2239',
+                    borderWidth: 1.5,
+                    opacity: 0.21,
+                }
+            },
+            label: { //标签的位置
+                normal: {
+                    show: false,
+                }
+            },
+            data: [
+                {value: 145319,name: '快周边'},
+                {value: 140311,name: '国安优选'},
+                {value: 128671,name: '生鲜频道'},
+                {value: 869715,name: '日用百货'},
+                {value: 73212,name: '洗衣'},
+                {value: 68732,name: '快递'},
+                {value: 63133,name: '特产频道'},
+                {value: 32600,name: '养老餐'},
+                {value: 31122,name: '家修'},
+                {value: 25956,name: '社区合伙人'},
+                /*{value: 20218,name: '国安汽车'},
+                {value: 16477,name: '母婴亲子'},
+                {value: 13620,name: '休闲食品'},
+                {value: 11246,name: '保洁'},
+                {value: 10984,name: '酒饮冲调'},
+                {value: 10662,name: '安心出游'},
+                {value: 10655,name: '家居家具'},
+                {value: 10450,name: '娱乐'}*/
+            ]
+        }]
+    };
+
+    var option2 = {
+    	title : {
+    		      text: '用户量',
+    		      x: '90%',
+    		      y: '16%',
+    		      textStyle:{color:"#fec400",fontSize:"12"}
+    		    }, 
+        tooltip : {
+            show:true,
+        },
+
+        xAxis : [
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : ['2016-01','2016-07','2017-01','2017-07','2018-01'],
+                axisLabel: {
+                    interval: 0,
+                    color:'#fff',
+                },
+                splitLine:{
+                    show:false,
+                },
+                axisTick:{
+                    show:false,
+                },
+                axisLine: {
+                    show: false
+                },
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                splitLine:{
+                    show:false,
+                },
+                axisLabel:{
+                    show:false,
+                },
+                axisTick:{
+                    show:false,
+                },
+                axisLine:{
+                    show:false,
+                },
+            }
+        ],
+        series : [
+            {
+                name:'累计用户量(万)',
+                type:'line',
+                //stack: '总量',
+                symbolSize:10,
+                symbol:'circle',
+                areaStyle: {
+                    normal: {
+                        color:'rgba(254,196,0,1)',
+                    }
+                },
+                itemStyle:{
+                    normal: {
+                        color:'rgba(254,196,0,1)',
+                    }
+                },
+                data:[ 0.14, 6, 40, 98, 286],
+                label: {
+                	normal: {
+                        show: true,
+                        position: 'top', //标签的位置
+                        formatter: "{c}万+",
+                        textStyle: {
+                            color: '#fff',
+                        }
+                    }
+                }
+            }
+
+        ]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option1);
+    myChart2.setOption(option2);
+    
+  $(function(){
+	  initcurruser();
+	  $("#personInfo").click(function(){
+		  window.open("user_model_demo.html","user_model");
+	  });
+	  $("#groupInfo").click(function(){
+		  window.open("sjfx-group_demo.html","user_group");
+	  });
+	  if(curr_user!=null&&curr_user.usergroup.code.indexOf('ZB')!=0){
+		  /* window.location.href="loginplatform.html"; */
+	  }
+  });  
+    
+    
+    var curr_user;
+    function initcurruser(){
+    		//取得当前登录人的门店
+   		doManager("UserManager", "getCurrentUserDTO",null,
+      				function(data, textStatus, XMLHttpRequest) {
+      					if (data.result) {
+      						 curr_user = JSON.parse(data.data);
+      						 $("#employee_no").html(curr_user.employeeId);
+      						 $('span[class="hidden-xs"]').html(curr_user.name);
+      						 $("#card_name").html(curr_user.name);
+      						 $("#card_no").html(curr_user.employeeId);
+      					}
+      	},false);
+    	}
+    
+    
+    function doLogout() {
+		layer.confirm('确定退出？', {
+			  	title:'提示',
+			  	shadeClose:true,
+			  	closeBtn:0,
+			  	skin: 'layer-ext-otherskin',
+			  	offset:['100px','550px'],
+			  	move:false,
+				btn: ['确定','取消'], //按钮
+			}, function(){
+				currentUser=null;
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+			});
+	}
+    
+</script>
+
+</body>
+</html>
