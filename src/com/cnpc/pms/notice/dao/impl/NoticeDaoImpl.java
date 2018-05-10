@@ -149,18 +149,27 @@ public class NoticeDaoImpl extends BaseDAOHibernate implements NoticeDao{
 
 	@Override
 	public List<Map<String, Object>> getReceiveEmployee(Map<String, Object> param) {
-		String sql = "select a.employeeId,a.token,a.os,a.client_id,a.mobilephone,b.storeno as storeNo,b.store_id as storeId  from tb_bizbase_user as  a inner join  t_store as b  on a.store_id = b.store_id where a.disabledFlag=1 and employeeId is not null";
-			if(param.get("city")!=null){
+		    String sql = "select tt.employeeId,tt.token,tt.os,tt.client_id,tt.phone as mobilephone,tt.storeno as storeNo,tt.store_id as storeId from "+
+		    
+		    " (SELECT sk.employee_no as employeeId,tu.token,tu.os,tu.client_id,sk.phone,sk.zw,sk.humanstatus,ts.storeno,ts.store_id,ts.name,ts.city_name FROM t_store ts "+
+		    " INNER JOIN tb_bizbase_user tu ON tu.id=ts.skid "+
+		    " INNER JOIN t_storekeeper sk ON sk.employee_no=tu.employeeId "+
+		    " UNION ALL"+
+		    " SELECT a.employeeId,a.token,a.os,a.client_id,b.phone, b.zw,b.humanstatus,t.storeno,t.store_id,t.name,t.city_name FROM tb_bizbase_user AS a"+
+		    " INNER JOIN  t_humanresources b on a.employeeId = b.employee_no "+		
+		    " INNER JOIN t_store t on t.store_id = b.store_id ) tt  where tt.humanstatus=1";
+
+		    if(param.get("city")!=null){ 
 				
-				sql =sql+ " and   b.city_name in (select cityname from t_dist_citycode where citycode in "+param.get("city")+")";
+				sql =sql+ " and   tt.city_name in (select cityname from t_dist_citycode where citycode in "+param.get("city")+")";
 			}
 			
 			if(param.get("store")!=null){
-				sql =sql+ " and b.store_id in "+param.get("store");
+				sql =sql+ " and tt.store_id in "+param.get("store");
 			}
 			
 			if(param.get("zw")!=null){
-				sql =sql+ "  and a.zw in "+param.get("zw");
+				sql =sql+ "  and tt.zw in "+param.get("zw");
 			}
 			
 		

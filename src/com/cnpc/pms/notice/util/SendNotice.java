@@ -6,13 +6,10 @@ import java.util.Map;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.inter.manager.InterManager;
-import com.cnpc.pms.messageModel.entity.Message;
-import com.cnpc.pms.messageModel.entity.MessageSendUtil;
 import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.entity.NoticeReciver;
 import com.cnpc.pms.notice.manager.NoticeReciverManager;
-import com.cnpc.pms.personal.entity.SendMessage;
-import com.cnpc.pms.personal.manager.SendMessageManager;
+import com.cnpc.pms.personal.manager.SendMessageManager; 
 
 /**
  * 
@@ -88,16 +85,16 @@ public class SendNotice implements Runnable {
 					NoticeSebdUtil.getInstance().pushNotice(user, notice);
 					
 					//发送短信
-					if(mobilePhone!=null&&!"".equals(mobilePhone)){
-						String resultString = interManager.commonSendMessage(mobilePhone.toString(), notice.getTitle(), null);
-						SendMessage sendMessage = new SendMessage();
-						sendMessage.setFunctionname("公告通知");
-						sendMessage.setMobilephone(mobilePhone.toString());
-						sendMessage.setCode(notice.getTitle());
-						sendMessage.setRcvmessage(resultString);
-						sendMessage.setMsgstatus(1L);//未使用 
-						sendMessageManager.saveSendMessage(sendMessage);
-					}
+//					if(mobilePhone!=null&&!"".equals(mobilePhone)){
+//						String resultString = interManager.commonSendMessage(mobilePhone.toString(), notice.getTitle(), null);
+//						SendMessage sendMessage = new SendMessage();
+//						sendMessage.setFunctionname("公告通知");
+//						sendMessage.setMobilephone(mobilePhone.toString());
+//						sendMessage.setCode(notice.getTitle());
+//						sendMessage.setRcvmessage(resultString);
+//						sendMessage.setMsgstatus(1L);//未使用 
+//						sendMessageManager.saveSendMessage(sendMessage);
+//					}
 				}else if(notice.getGrade()==2){//中级
 					
 					user = new User();
