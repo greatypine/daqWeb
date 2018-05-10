@@ -125,7 +125,7 @@ import com.cnpc.pms.utils.ValueUtil;
 public class InterManagerImpl extends BizBaseCommonManager implements InterManager {
 
     /**
-     * 获取当前版本号
+     * 获取当前版本号 
      * @return 当前版本号
      */
     @Override
