@@ -1088,6 +1088,23 @@ Date.prototype.format = function() {
       chart5div.style.width=width+'px';
       chart5.resize(width);
     }
+    
+  	chart5.on('click', function (params) {
+	  	var dayTime = "";
+	  	dayTime = params.name;
+	  	var dataParam = getShareParam();
+	  	var storename = $("#store_name_manual").val()==null?"":$("#store_name_manual").val();
+	  	var deptname = dataParam.deptname==null?"":dataParam.deptname;
+	  	var cityname = dataParam.cityname==null?"":dataParam.cityname;
+	  	var storeno = dataParam.storeno==null?"":dataParam.storeno;
+	  	var channelname = dataParam.channelname==null?"":dataParam.channelname;
+	    if(target==0){
+			url = "searchData_view.html?t="+encode64('0')+"&s=&c=&e=&r=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime);
+		}else if(target==1){
+			url = "searchData_view.html?t="+encode64(1)+"&e=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime);
+		}
+		window.open(url,"searchData_view");
+	});
   }
 </script>
 <script>
