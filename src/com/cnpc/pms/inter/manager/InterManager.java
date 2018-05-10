@@ -10,6 +10,7 @@ import com.cnpc.pms.personal.entity.Customer;
 import com.cnpc.pms.personal.entity.Express;
 import com.cnpc.pms.personal.entity.SiteSelection;
 import com.cnpc.pms.personal.entity.StoreAddress;
+import com.cnpc.pms.personal.entity.Storexpand;
 import com.cnpc.pms.personal.entity.UserLoginLog;
 import com.cnpc.pms.personal.entity.WorkRecordTotal;
 import com.cnpc.pms.personal.entity.WxUserAuth;
@@ -540,4 +541,11 @@ public interface InterManager extends IManager {
 	
 	//系统校验用户是否存在的方法。外部系统登录用。
 	public User commonValidUser(String userCode,String password);
+	
+	/**
+	 * 新增或修改目标值
+	 * @param storexpand
+	 * @return
+	 */
+    //public Result saveOrUpdateOfficeNetwork(Storexpand storexpand);
 }

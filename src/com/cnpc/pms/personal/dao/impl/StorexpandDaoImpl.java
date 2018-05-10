@@ -101,6 +101,8 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 		if(lst_data!=null&&lst_data.size()>0){
 			Map<String, Object> map_lst = (Map<String, Object>)lst_data.get(0);
 			resuMap.put("statistics",map_lst.get("statistics_count"));
+		}else{
+			resuMap.put("statistics",0);
 		}
 		return resuMap;
 	}

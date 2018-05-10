@@ -4711,7 +4711,8 @@ function goToDeptConsumer(){
       window.open(url,"dynamicData_dept_consumer");
 }
 
-function findArray(array, feature, all = true) {
+function findArray(array, feature, all) {
+    var all = arguments[2] ? arguments[2] : true;
     for(let index in array){
         let cur = array[index];
         if(feature instanceof Object){
