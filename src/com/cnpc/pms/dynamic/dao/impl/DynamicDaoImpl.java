@@ -1208,7 +1208,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		if(dd.getTarget()==1){//省
 			sql="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id " +
 					"left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%' and " +
-					"t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and t.storetype!='V' ";
+					"t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and ifnull(t.estate,'') !='闭店中' and t.storetype!='V' and t.storetype!='W' ";
 		}else if(dd.getTarget()==0||dd.getTarget()==3){//全国
 			
 			String whereStr = "";
@@ -1217,7 +1217,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			}
 			
 			sql ="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%' " +
-					"and t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and t.storetype!='V' "+ whereStr+"";
+					"and t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and ifnull(t.estate,'') !='闭店中' and t.storetype!='V' and t.storetype!='W' "+ whereStr+"";
 		}
 		
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -2907,7 +2907,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		sqlStr="SELECT CASE WHEN t.storetype = 'X' THEN '经营星店' WHEN t.storetype = 'E' THEN '校园店' " +
 				"ELSE t.storetypename END AS storetypename,count(storetypename) AS store_kind_count " +
 				"FROM t_store t LEFT JOIN t_dist_citycode d ON t.cityno=d.cityno  WHERE t.storetype !='V' AND " +
-				"t.storetype !='W' AND t.storetypename IS NOT NULL "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
+				"t.storetype !='W' AND t.storetypename IS NOT NULL and t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' AND ifnull(t.estate,'')!='闭店中' "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
 		try{ 
@@ -2955,7 +2955,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public List<Map<String, Object>> selectAllCitySort(DynamicDto dd) {
 		String sql= "";
 		if(dd==null){
-			sql="SELECT d.cityname as city_name,d.id as id,d.citycode as citycode,d.cityno as cityno FROM t_store t LEFT JOIN t_dist_citycode d ON t.city_name=d.cityname WHERE t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' and t.storetype!='V' AND ifnull(t.estate,'')!='闭店中' GROUP BY t.cityno ";
+			sql="SELECT d.cityname as city_name,d.id as id,d.citycode as citycode,d.cityno as cityno FROM t_store t LEFT JOIN t_dist_citycode d ON t.city_name=d.cityname WHERE t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' and t.storetype!='V' and t.storetype !='W' AND ifnull(t.estate,'')!='闭店中' GROUP BY t.cityno ";
 		}else{
 			String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
 			String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
@@ -2973,7 +2973,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			}else if("yes".equals(zx)){
 				cityStr+=" and dd.id='"+province_id+"' ";
 			}
-			sql = "SELECT dd.* FROM (SELECT d.cityname as city_name,d.id as id,d.citycode as citycode,d.cityno as cityno,t.province_id as province_id  FROM t_store t LEFT JOIN t_dist_citycode d ON t.city_name=d.cityname WHERE t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' and t.storetype!='V' AND ifnull(t.estate,'')!='闭店中' GROUP BY t.cityno) dd LEFT JOIN t_province tp ON tp.id = dd.province_id where 1=1 " +
+			sql = "SELECT dd.* FROM (SELECT d.cityname as city_name,d.id as id,d.citycode as citycode,d.cityno as cityno,t.province_id as province_id  FROM t_store t LEFT JOIN t_dist_citycode d ON t.city_name=d.cityname WHERE t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' and t.storetype!='V' and t.storetype !='W' AND ifnull(t.estate,'')!='闭店中' GROUP BY t.cityno) dd LEFT JOIN t_province tp ON tp.id = dd.province_id where 1=1 " +
 					provinceStr+cityStr;
 		}
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
