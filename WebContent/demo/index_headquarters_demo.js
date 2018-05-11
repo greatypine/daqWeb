@@ -943,7 +943,7 @@ var showHistoryData = function (historyData) {
     //$("#tradesumoflastmonthOrderHid").html(parseInt(historyData.last_order_count==null?'0':historyData.last_order_count));
     $("#tradesumofyearHid").html(RandomNum(10000,30000)));
     */
-    $("#tradesumofhistoryCustmomerHid").html(RandomNum(10000,30000));
+    $("#tradesumofhistoryCustmomerHid").html(RandomNum(500000,30000));
     $("#tradesumofhistoryOrderHid").html(RandomNum(100000,300000));
     $("#tradesumofmonthOrderHid").html(RandomNum(10000,30000));
     $("#tradesumofmonthCustmomerHid").html(RandomNum(10000,30000));
