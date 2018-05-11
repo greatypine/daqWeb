@@ -1,6 +1,7 @@
 var STORE_DAILY_TOTAL_GMV= 33467;
-var AREA_ORDER_AMOUNT = Math.round((1.1-Math.random())*99);
-var AREA_HOUSE_AMOUNT = Math.round((1.1-Math.random())*666);
+var AREA_ORDER_AMOUNT = Math.round((1.1-Math.random())*300);
+var AREA_HOUSE_AMOUNT = 502;
+
 
 //获取近期日gmv
 function getRecentlySevenDay_gmv(){
@@ -10,12 +11,12 @@ function getRecentlySevenDay_gmv(){
     
 	for(var i=0;i<8;i++){
 		var preDate = new Date(curDate.getTime() - i*24*60*60*1000); //前i天
-		var c_year = myDate.getFullYear(); 
-		var c_month = myDate.getMonth()+1;
-		var c_day = myDate.getDate();
+		var c_year = preDate.getFullYear(); 
+		var c_month = preDate.getMonth()+1;
+		var c_day = preDate.getDate();
 		var dateStr = c_year+"-"+c_month+"-"+c_day;
 		key.push(dateStr);
-		value.push((1.1-Math.random())*102);
+		value.push(((1.1-Math.random())*10000).toFixed(2));
 	}
 	
 	var kv = {"xAxis":key,"series":value};
@@ -33,14 +34,14 @@ function getRecentlySevenDay_customer(){
     
 	for(var i=0;i<8;i++){
 		var preDate = new Date(curDate.getTime() - i*24*60*60*1000); //前i天
-		var c_year = myDate.getFullYear(); 
-		var c_month = myDate.getMonth()+1;
-		var c_day = myDate.getDate();
+		var c_year = preDate.getFullYear(); 
+		var c_month = preDate.getMonth()+1;
+		var c_day = preDate.getDate();
 		var dateStr = c_year+"-"+c_month+"-"+c_day;
 		key.push(dateStr);
-		var laxin = Math.round((1.1-Math.random())*10);
+		var laxin = Math.round((1.1-Math.random())*50);
 		value0.push(laxin);
-		value1.push(laxin+Math.round((1.1-Math.random())*10));
+		value1.push(laxin+Math.round((1.1-Math.random())*50));
 	}
 	
 	var kv = {"xAxis":key,"series0":value0,"series1":value1};
@@ -55,7 +56,7 @@ function getDepartment_gmv(){
 	
 	for(var i=0;i<deptArray.length;i++){
 		var vnMap = {};
-		var v = (1.1-Math.random())*102;
+		var v = ((1.1-Math.random())*10000).toFixed(2);
 		vnMap["value"] = v;
 		vnMap["name"] = deptArray[i];
 		deptNV.push(vnMap);
@@ -66,12 +67,12 @@ function getDepartment_gmv(){
 
 //获取频道当月gmv
 var channelArray = ['家修','养老餐','日用百货','社区书屋','休闲食品','安心出游','医药服务'];
-function getDepartment_gmv(){
+function getChannel_gmv(){
     var channelNV = new Array(); 
 	
 	for(var i=0;i<channelArray.length;i++){
 		var vnMap = {};
-		var v = (1.1-Math.random())*51;
+		var v = ((1.1-Math.random())*10000).toFixed(2);
 		vnMap["value"] = v;
 		vnMap["name"] = channelArray[i];
 		channelNV.push(vnMap);
@@ -87,7 +88,7 @@ function getDepartment_consumer(){
 	
 	for(var i=0;i<deptArray.length;i++){
 		var vnMap = {};
-		var v = Math.round((1.1-Math.random())*10);
+		var v = Math.round((1.1-Math.random())*100);
 		vnMap["value"] = v;
 		vnMap["name"] = deptArray[i];
 		deptNV.push(vnMap);
@@ -97,12 +98,12 @@ function getDepartment_consumer(){
 }
 
 //获取频道当月消费用户
-function getDepartment_consumer(){
+function getChannel_consumer(){
     var channelNV = new Array(); 
 	
 	for(var i=0;i<channelArray.length;i++){
 		var vnMap = {};
-		var v = Math.round((1.1-Math.random())*5);
+		var v = Math.round((1.1-Math.random())*60);
 		vnMap["value"] = v;
 		vnMap["name"] = channelArray[i];
 		channelNV.push(vnMap);

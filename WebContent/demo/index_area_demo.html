@@ -8,18 +8,18 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
   <!-- Morris charts -->
-  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <link rel="stylesheet" href="../crm/plugins/morris/morris.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../crm/dist/css/skins/_all-skins.min.css">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -157,13 +157,13 @@
 <!-- Site wrapper -->
 <div class="wrapper">
   <div id="process_div" ></div>
-  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../crm/dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
   <header class="main-header">
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
       <div class="container">
-        <div class="logo_img pull-left"><img src="dist/img/logo1.png" height="30"><img src="dist/img/title.png" height="20"></div>
+        <div class="logo_img pull-left"><img src="../crm/dist/img/logo1.png" height="30"><img src="../crm/dist/img/title.png" height="20"></div>
         <div class="pull-left">
           <div class="logo-lg">
 <!--             <ul class="no-margin"> -->
@@ -296,7 +296,7 @@
                 <dt>片区编号</dt>
                 <dd id="area_no"></dd>
                 <dt>片区总户数</dt>
-                <dd id="house_total"></dd>
+                <dd id="house_total">102</dd>
                 <!-- <dt>已服务户数</dt>
                 <dd>敬请期待...</dd> -->
                 <dt>片区管家</dt>
@@ -362,21 +362,23 @@
 <!-- ./wrapper -->
 
 <!-- jQuery 2.2.0 -->
-<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
 <!-- FastClick -->
-<script src="plugins/fastclick/fastclick.js"></script>
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
-<script src="dist/js/app.min.js"></script>
+<script src="../crm/dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
+<script src="../crm/dist/js/demo.js"></script>
 <!-- <script src="dist/js/nav-scroll.js"></script> -->
 <!-- 引入 ECharts 文件 -->
-<script src="dist/js/echarts.common.min.js"></script>
+<script src="../crm/dist/js/echarts.common.min.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
 <script language="javascript" src="../scripts/common/heatMap_color.js"></script>
+<script type="text/javascript" src="js/current_shopkeeper_demo.js"></script>
+<script type="text/javascript" src="js/index_area_demo.js"></script>
 <script>
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart2 = echarts.init(document.getElementById('main2'));
@@ -434,6 +436,11 @@
 	  getStorePosition();
 	  showTinyVillageHeat("gmv");//小区热力图
 	  showEmployeeDriverRecord();
+	  queryCurMonthPerformanceOfArea("gmv");
+	  $("#order_amount").html(AREA_ORDER_AMOUNT);
+	  var curDate = new Date();
+	  var c_month = curDate.getMonth()+1;
+	  $("#order_date").html(c_month+"月订单量")
   })
   
   
@@ -466,30 +473,28 @@
   var chartData_severalDay = {}; 
   var chartData_curMonth = {};
   function initArea(){
-	  doManager('areaManager','queryAreaByAreaNo',[areaNo],function(data){
-          if(data.result){
-              var jsonArea = JSON.parse(data.data);
-              cur_area = jsonArea;
-              
-              $('#area_name').html(jsonArea.name);
-              $("#area_no").html(jsonArea.area_no);
-              var employee_a_name = jsonArea.employee_a_name==null?"无":jsonArea.employee_a_name;
-              var employee_b_name = jsonArea.employee_b_name==null?"无":jsonArea.employee_b_name;
-              var employee_a_no = jsonArea.employee_a_no==null?"":jsonArea.employee_a_no;
-              var employee_b_no = jsonArea.employee_b_no==null?"":jsonArea.employee_b_no;
-              var userStr= "<a style='text-decoration:underline' href=\"javaScript:goToUser('"+employee_a_no+"')\">"+employee_a_name+"</a>(A)&nbsp;&nbsp;&nbsp;&nbsp;<a style='text-decoration:underline' href=\"javaScript:goToUser('"+employee_b_no+"')\">"+employee_b_name+"</a>(B)";
-              $("#area_manager").html(userStr); 
-              querySeveralDaysPerformanceOfArea("gmv");
-              queryCurMonthPerformanceOfArea("gmv");
-              querySeveralDaysPerformanceOfArea("consumer");
-              queryCurMonthPerformanceOfArea("consumer");
-          }
-      },false);
+	  for(var i=0;i<areas.length;i++){
+		  var area_no = areas[i].area_no;
+		  if(area_no==areaNo){
+			  cur_area = areas[i];
+			  break;
+		  }
+	  }
+	  
+	  $('#area_name').html(cur_area.name);
+      $("#area_no").html(cur_area.area_no);
+      var employee_a_name = cur_area.employee_a_name==null?"无":cur_area.employee_a_name;
+      var employee_b_name = cur_area.employee_b_name==null?"无":cur_area.employee_b_name;
+      var employee_a_no = cur_area.employee_a_no==null?"":cur_area.employee_a_no;
+      var employee_b_no = cur_area.employee_b_no==null?"":cur_area.employee_b_no;
+      var userStr= "<a style='text-decoration:underline' href=\"javaScript:goToUser('"+employee_a_no+"')\">"+employee_a_name+"</a>(A)&nbsp;&nbsp;&nbsp;&nbsp;<a style='text-decoration:underline' href=\"javaScript:goToUser('"+employee_b_no+"')\">"+employee_b_name+"</a>(B)";
+      $("#area_manager").html(userStr); 
+
   }
   
   function goToUser(no){
 	  if(no!=null&&no!=""){
-		  window.open("user.html?employee_no="+encode64(no));
+		  window.open("user_demo.html?employee_no="+encode64(no));
 	  }
 	  
 	 
@@ -499,58 +504,48 @@
   
   //获取门店中心点
   function getStorePosition(){
- 	  doManager("areaManager", "getStoreServiceAreaAndPosition", [cur_area.store_id], function(
- 				data, textStatus, XMLHttpRequest) {
- 			if (data.result) {
- 				var resultJson = JSON.parse(data.data);
- 				if(resultJson.code == 200){
- 					var position = resultJson.position;
- 					var store = resultJson.store;
- 					//初始化地图对象，加载地图
- 					
- 					var storeMarker = new AMap.Marker({ //添加自定义点标记
-        		        map: map,
-        		        visible:true,
-        		        position: position, //基点位置
-         		        //icon:"../aboutMap/dist/img/splogo.png",
-						//offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
-        		        extData:{"storeName":store.name},
-        		       // draggable: true,  //是否可拖动
- 			           content:'<div style="width:40px"><img  style="width:100%" src="../aboutMap/dist/img/storelogo.png"></div>',
-        		    });
- 					
- 					storeMarker.on("mouseover",function(e){
-        				var storeName = e.target.getExtData().storeName;
-        				e.target.setTitle(storeName);
-        			});
- 					map.setCenter(position);
- 					
- 					
- 					
- 					getMapData();
- 				}else{
- 					layer.msg("暂时无法定位门店")
- 				}
- 			}
- 		},false);
+		
+			//初始化地图对象，加载地图
+			
+			var storeMarker = new AMap.Marker({ //添加自定义点标记
+	        map: map,
+	        visible:true,
+	        position:[117.23533,39.093887], //基点位置
+		        //icon:"../aboutMap/dist/img/splogo.png",
+			//offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
+	        extData:{"storeName":store.name},
+	       // draggable: true,  //是否可拖动
+	           content:'<div style="width:40px"><img  style="width:100%" src="../aboutMap/dist/img/storelogo.png"></div>',
+	        });
+			
+			storeMarker.on("mouseover",function(e){
+				var storeName = e.target.getExtData().storeName;
+				e.target.setTitle(storeName);
+		    });
+		    map.setCenter([117.23533,39.093887]);
+			getMapData();
  }
   
   //获取片区小区信息
   var coordinate;
+  var tiny_gmv = [];
+  var tiny_consumer = [];
   function getMapData(){
-  	doManager("areaManager", "selectTinyVillageCoordOfArea",[cur_area.store_id,cur_area.area_no], function(data, textStatus,XMLHttpRequest) {
-          if(data.result){
-          	
-          	var resultJson= JSON.parse(data.data);
-          	if(resultJson!=null){
-          		coordinate = resultJson.coordinate;//小区坐标
-          		var storeService = resultJson.serviceArea;//服务范围
-          		var  tinyVillage = resultJson.tinyVillage;//小区
-          		initTinyVillage(storeService,coordinate);//绘制地图
-          	}
-          }else{
-              layer.msg("地图数据加载异常！");
-          }},false);
+	var coordinate_tiny = [];
+	for(var i=0;i<STORE_COORDINATE.length;i++){
+		var tem_coor = STORE_COORDINATE[i];
+		if(tem_coor["areaNo"]==areaNo){
+			 coordinate_tiny.push(tem_coor);
+			 var temp_gmv = (1.1-Math.random())*10000; 
+       	     var code_gmv = {"gmv":temp_gmv,"code":tem_coor["code"]};
+       	     var temp_consumer = Math.round((1.1-Math.random())*50); 
+       	     var code_consumer = {"consumer":temp_consumer,"code":tem_coor["code"]};
+       	     tiny_gmv.push(code_gmv);
+       	     tiny_consumer.push(code_consumer);
+		}
+	
+	}
+	initTinyVillage(storeService,coordinate_tiny);//绘制地图
   }
 
 
@@ -559,7 +554,7 @@
   var  serviceRange;
   var polygonArray = [];
   var polygonMap={};
-
+  
   function initTinyVillage(storeService,coordinate) {
      
       //服务区域多边形
@@ -602,7 +597,7 @@
 //               polygonArray.push(tmp_tinyVillageCoordinate);
           	  areaTinyVillage.on("click",function(e){
                   var code= e.target.getExtData().tinyVillageNo;
-					var url = "dynamicData_tinyvillage.html?e=&code="+encode64(code);
+					var url = "../crm/dynamicData_tinyvillage.html?e=&code="+encode64(code);
 	   				window.open(url,"dynamicData_tinyvillage");
 					
 	        	});
@@ -615,34 +610,26 @@
 					info = info+"<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#00c0ef;padding:5px 18px 5px 10px;color:#fff\"><span>小区信息</span></div>";
 					info = info+"<div style=\"padding:10px 18px 0px 14px;line-height:24px;\">";
 			        info = info+"<b>小区名称："+(name==null?"无":name)+"</b></br>";
-			        var resultJson = chartData_curMonth[dataModel];
-			        var data = resultJson.tinyVillageData;
-			        if(dataModel=="gmv"){
-			       	      var dataInfo = "<b>小区营业额："+0+"</b></div></div>";
-			       	      if(data!=null&&data.length>0){
-		       			      
-			       			  for(var i=0;i<data.length;i++){
-			       			  	  var t_code = data[i].code;
-			       			  	  if(t_code==code){
-			       			  		dataInfo= "<b>小区营业额："+data[i].gmv+"</b></div></div>";
-			       			  		break;
-			       			  	  }
-			       			  }
-		       			  }
-			        	
-			        }else if(dataModel=="consumer"){
-			        	 var dataInfo = "<b>小区营业额："+0+"</b></div></div>";
-			        	 if(data!=null&&data.length>0){
-			        		 for(var i=0;i<data.length;i++){
-			       			  	  var t_code = data[i].code;
-			       			  	  if(t_code==code){
-			       			  		dataInfo = "<b>小区消费用户量："+data[i].consumer+"</b></div></div>";
-			       			  		break;
-			       			  	  }
-			       			  }
-			        	 }
-			        	
 			        
+			        if(dataModel=="gmv"){
+			        	 for(var i=0;i<tiny_gmv.length;i++){
+			        		 if(tiny_gmv[i].code==code){
+			        			 var dataInfo =  "<b>小区营业额："+tiny_gmv[i].gmv.toFixed(2)+"</b></div></div>";
+			        			 break;
+			        		 }
+			        	 }
+			       	     
+			       	   
+			        }else if(dataModel=="consumer"){
+			        	
+			        	 for(var i=0;i<tiny_consumer.length;i++){
+			        		 if(tiny_consumer[i].code==code){
+			        			 var dataInfo = "<b>小区消费用户量："+tiny_consumer[i].consumer+"</b></div></div>";
+			        			 break;
+			        		 }
+			        	 }
+			        	 
+			        	
 			        }
 			        info = info+dataInfo;
 			        infoWindow1 = new AMap.InfoWindow({ 
@@ -653,106 +640,36 @@
           	     
             }
       }
-      
-  
-  
-  
-  
-  
-  //查询趋势图数据
-  function querySeveralDaysPerformanceOfArea(dataType){
-	  var dynamicDto = {
-              storeId:cur_area.store_id,
-              areaNo:cur_area.area_no,
-              dataType:dataType
-          }
-	  doManager("dynamicManager", "querySeveralDaysPerformanceOfArea", [dynamicDto], function(
-				data, textStatus, XMLHttpRequest) {
-			if (data.result) {
-				var resultJson = JSON.parse(data.data);
-				var houseHold = resultJson.houseHold;
-				var data1 = resultJson.data1;
-				var data2 = resultJson.data2;
-				
-				
-				chartData_severalDay[dataType] = resultJson;
-				if("gmv"==dataType){
-					$("#house_total").html(houseHold);
-					showTrendChartData(data1,data2,dataType);//趋势图
-				}
-				
-				
-			}else{
-				layer.msg("暂时无法获取近七日营业额");
-			}
-		});
-	  
-  }
+
 
   function showEmployeeDriverRecord(){
-	  if(cur_area.employee_a_no!=null){
-		  doManager("mongoDBManager", "queryEmployeeDiveRecord", [cur_area.employee_a_no], function(
-					data, textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var resultJson = JSON.parse(data.data);
-					if(resultJson!=null&&resultJson.data.length>0){
-						 var locations = resultJson.data[0].locations;
-						 var cur_loaction = locations[locations.length-1];
-						 var diverPolyline = new AMap.Polyline({
-					         path:locations,          //设置线覆盖物路径
-					         strokeColor: "#f00", //线颜色
-					         strokeOpacity: 0.8,       //线透明度
-					         strokeWeight: 0.8,        //线宽
-					         strokeStyle: "solid"   //线样式
-					     });
-						 diverPolyline.setMap(map);
-						 
-						 var marker = new AMap.Marker({
-							 map:map,
-							 icon:"../aboutMap/dist/img/gaxlogo.png",
-							 position:cur_loaction,
-							 offset: new AMap.Pixel(-10, -20)
-						 });
-					}
-					
-				}else{
-					layer.msg("暂时无法获取员工数据");
-				}
-			});
-	  }
+	  
+	     var locations =[[117.229424,39.093169],[117.229424,39.09317],[117.229477,39.093142],[117.229483,39.093138],[117.229423,39.093223],[117.229375,39.093261],[117.229387,39.093226],[117.229393,39.093226],[117.229397,39.093234],[117.229344,39.093243],[117.229381,39.09324],[117.229382,39.093227],[117.229361,39.093241],[117.22939,39.093227],[117.229424,39.093216],[117.229506,39.09325],[117.229497,39.093238],[117.226827,39.09341],[117.225904,39.09658],[117.224266,39.097047],[117.220365,39.099229],[117.219223,39.099817],[117.219153,39.099858],[117.219226,39.099291],[117.219025,39.099577],[117.219086,39.099634],[117.219063,39.099543],[117.219122,39.099301],[117.219124,39.0993],[117.219124,39.0993],[117.21916,39.099622],[117.219007,39.099732],[117.22079,39.099222],[117.223504,39.098088],[117.225947,39.095899],[117.227424,39.093282],[117.229502,39.093151],[117.2295,39.093151],[117.229591,39.093174],[117.229591,39.093174],[117.229425,39.093216],[117.229424,39.093216],[117.229424,39.093216],[117.229424,39.093216],[117.229392,39.093224],[117.22939,39.093224],[117.229393,39.093224],[117.229425,39.093212],[117.229423,39.093212],[117.229424,39.093212],[117.229424,39.093212],[117.229413,39.093204],[117.229423,39.09321],[117.229401,39.093227],[117.229462,39.093188],[117.229395,39.093217],[117.229396,39.093213],[117.229401,39.093216],[117.229423,39.093212],[117.229441,39.09322],[117.229387,39.093228],[117.229429,39.093223],[117.22942,39.093213],[117.229374,39.093217],[117.229399,39.093215],[117.229399,39.093234],[117.229401,39.093235],[117.229401,39.093235],[117.202682,39.099804],[117.235619,39.09547],[117.229574,39.095869],[117.229576,39.095867],[117.229576,39.095867],[117.229576,39.095867],[117.229576,39.095867],[117.229576,39.095867],[117.229576,39.095867],[117.229576,39.095867],[117.229576,39.095867],[117.229443,39.093206],[117.229446,39.093204],[117.229446,39.093204],[117.229434,39.093225],[117.229431,39.093224],[117.229431,39.093224],[117.229431,39.093224],[117.229431,39.093224],[117.229489,39.093126],[117.229492,39.093128],[117.229492,39.093128],[117.229492,39.093128],[117.229492,39.093128],[117.229492,39.093128],[117.229492,39.093128],[117.229452,39.093162],[117.229454,39.093163],[117.229454,39.093163],[117.229454,39.093163],[117.229454,39.093163],[117.229458,39.093188],[117.22972,39.094245],[117.229007,39.093478],[117.229332,39.093941],[117.229362,39.09398],[117.229378,39.093227],[117.229378,39.093227],[117.230099,39.095848],[117.230095,39.095848],[117.230095,39.095848],[117.230095,39.095848],[117.230095,39.095848],[117.230095,39.095848],[117.22946,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229462,39.09322],[117.229455,39.093218],[117.229454,39.09322],[117.229454,39.09322],[117.229342,39.093251],[117.22934,39.09325],[117.229507,39.093174],[117.229515,39.093214],[117.22855,39.094058],[117.227972,39.094218],[117.228904,39.093555],[117.229166,39.093561],[117.229164,39.093563],[117.259193,39.108242],[117.259001,39.108073],[117.258998,39.108068],[117.247683,39.108362],[117.24512,39.106537],[117.243272,39.104743],[117.240879,39.102506],[117.238386,39.100541],[117.235209,39.098914],[117.231964,39.096821],[117.233049,39.094131],[117.230636,39.09304],[117.229377,39.093104],[117.229378,39.093105],[117.229424,39.093212],[117.229424,39.093212],[117.229706,39.093182],[117.227242,39.093426],[117.229648,39.09416],[117.229645,39.094162],[117.229645,39.094162],[117.229576,39.093201],[117.229576,39.093201],[117.229576,39.093201],[117.229576,39.093201],[117.230091,39.095531],[117.230087,39.095531],[117.235672,39.094196],[117.229408,39.093212],[117.229408,39.093212],[117.229453,39.093184],[117.229492,39.093182],[117.229492,39.093182],[117.229516,39.093331],[117.229284,39.093542],[117.229262,39.093709],[117.229469,39.093197],[117.229469,39.093197],[117.229308,39.093749],[117.22945,39.093176],[117.229683,39.09304],[117.229694,39.093024],[117.229647,39.093021],[117.229417,39.093071],[117.22944,39.093173],[117.229439,39.093174],[117.229439,39.093174],[117.229439,39.093174],[117.229439,39.093174],[117.229495,39.09312],[117.22924,39.093749],[117.229629,39.094102],[117.227083,39.093727],[117.226059,39.09372],[117.22045,39.092533],[117.21846,39.092152],[117.217695,39.093182],[117.217626,39.094096],[117.217666,39.095283],[117.217662,39.095351],[117.217474,39.09382],[117.216256,39.093482],[117.215689,39.093259],[117.215691,39.093258],[117.215783,39.09322],[117.215782,39.09322],[117.229103,39.093415],[117.229602,39.093056],[117.229395,39.093209],[117.229403,39.093218],[117.22955,39.092895],[117.229853,39.092224],[117.229935,39.093098],[117.229935,39.093098],[117.229515,39.093182],[117.229515,39.093182],[117.229515,39.093182],[117.229488,39.093184],[117.229485,39.093185],[117.22945,39.093179],[117.229563,39.093132],[117.229553,39.093173],[117.229487,39.093201],[117.229535,39.09363],[117.229429,39.093466],[117.229388,39.09314],[117.229417,39.092694],[117.228554,39.093753],[117.228653,39.09366],[117.228653,39.093658],[117.228653,39.093658],[117.228866,39.093764],[117.228867,39.093765],[117.228867,39.093765],[117.229523,39.093231],[117.235825,39.094181],[117.229507,39.093227],[117.229507,39.093227],[117.229507,39.093227],[117.229702,39.092782],[117.229698,39.092781],[117.229698,39.092781],[117.229698,39.092781],[117.229702,39.095189],[117.228783,39.093327],[117.228783,39.093327],[117.228783,39.093327],[117.228783,39.093327],[117.228449,39.093409],[117.230122,39.095673],[117.230125,39.095673],[117.230125,39.095673],[117.229378,39.093655],[117.229378,39.093655],[117.229439,39.093216],[117.229439,39.093216],[117.229063,39.093828],[117.229482,39.093226],[117.229426,39.093408],[117.229515,39.093246],[117.229422,39.093255],[117.229385,39.092887],[117.229261,39.093433],[117.226413,39.093215],[117.226397,39.09243],[117.225606,39.092226],[117.224696,39.091861],[117.223857,39.091824],[117.223854,39.091824],[117.223854,39.091824],[117.227924,39.095602],[117.227921,39.0956],[117.227921,39.0956],[117.229897,39.093109],[117.229718,39.09315],[117.229721,39.093151],[117.229414,39.093231],[117.229475,39.093185],[117.229435,39.093216],[117.229679,39.09318],[117.229466,39.093219],[117.229575,39.093738],[117.229786,39.092443],[117.229507,39.094867],[117.229507,39.094868],[117.229538,39.093117],[117.229607,39.093117],[117.229607,39.093117],[117.20266,39.099773],[117.202809,39.098889],[117.208939,39.100872],[117.202589,39.09965],[117.202589,39.09965],[117.202589,39.09965],[117.202589,39.09965],[117.202589,39.09965],[117.202589,39.09965],[117.202539,39.099687],[117.202705,39.09954],[117.202549,39.099758],[117.20248,39.0995],[117.202478,39.099487],[117.202614,39.099775],[117.202703,39.099906],[117.202573,39.099797],[117.202563,39.099778],[117.202563,39.099778],[117.202559,39.099796],[117.203078,39.097441],[117.203079,39.097439],[117.203079,39.097439],[117.20265,39.09976],[117.202651,39.099759],[117.202652,39.099758],[117.202652,39.099758],[117.229378,39.093227],[117.229378,39.093227],[117.229411,39.093179],[117.229436,39.093231],[117.229439,39.093231],[117.229439,39.093231]];
+		 var cur_loaction = [117.229439,39.093231];
+		 var diverPolyline = new AMap.Polyline({
+	         path:locations,          //设置线覆盖物路径
+	         strokeColor: "#f00", //线颜色
+	         strokeOpacity: 0.8,       //线透明度
+	         strokeWeight: 0.8,        //线宽
+	         strokeStyle: "solid"   //线样式
+	     });
+		 diverPolyline.setMap(map);
+		 
+		 var marker = new AMap.Marker({
+			 map:map,
+			 icon:"../aboutMap/dist/img/gaxlogo.png",
+			 position:cur_loaction,
+			 offset: new AMap.Pixel(-10, -20)
+		 });
 	
   }
   
   //查询当月的数据
   function queryCurMonthPerformanceOfArea(dataType){
-	  var myDate = new Date();
-	  var c_month = myDate.getMonth()+1;//当前月
-	  $("#order_date").html(c_month+"月订单量");
-	  var dynamicDto = {
-              storeId:cur_area.store_id,
-              areaNo:cur_area.area_no,
-              dataType:dataType
-          }
-	  doManager("dynamicManager", "queryCurMonthPerformanceOfArea", [dynamicDto], function(
-				data, textStatus, XMLHttpRequest) {
-			if (data.result) {
-					var resultJson = JSON.parse(data.data);
-					chartData_curMonth[dataType] = resultJson;
-					var order = resultJson.order;
-					$("#order_amount").html(order);
-					if("gmv"==dataType){
-						
-						var deptData = resultJson.deptData;
-						var channelData = resultJson.channelData;
-						showDeptChartData(deptData,dataType)//事业部
-						showChannelChartData(channelData,dataType);//频道
-						
-					}
-					
-			}else{
-				layer.msg("暂时无法获取各事业部和频道营业额");
-			}
-		},false);
+
+	  showDeptChartData(null,dataType)//事业部
+	  showChannelChartData(null,dataType);//频道
+	  showTrendChartData(null,null,dataType)
 	  $("#process_div").hide();
       $("#process_div_pic").hide();
   }
@@ -785,13 +702,9 @@
   //展示小区数据热度
   var dataModel;
   function showTinyVillageHeat(dataType){
-	  dataModel = dataType;
-	  var resultJson = chartData_curMonth[dataType];
-	  var data = resultJson.tinyVillageData;
-	  if(data!=null&&data.length>0){
+	      dataModel = dataType;
 		  var minV;
 		  var maxV;
-		  
 		  
 		  if("gmv"==dataType){
 // 			 minV = data[data.length-1].gmv;
@@ -799,19 +712,17 @@
 // 			 showMapLegend(minV,maxV,dataType);
 			  
 			  var sum=0;
-			  for(var i=0;i<data.length;i++){
-			  	sum+=data[i].gmv;
+			  for(var i=0;i<tiny_gmv.length;i++){
+			  	sum+=tiny_gmv[i].gmv;
 			  }
-			  var avgV=sum/data.length;
+			  var avgV=sum/tiny_gmv.length;
 			  showMapLegend(avgV,dataType);
 			 
-			 
-			 
-			 for(var j=0;j<data.length;j++){
-				  var code_j = data[j].code;
-				  var gmv = data[j].gmv;
+			  for(var j=0;j<tiny_gmv.length;j++){
+				  var code_j = tiny_gmv[j].code;
+				  var gmv = tiny_gmv[j].gmv;
 				  
-				  var color = getHeatMapColorLocation(avgV,data[j].gmv);
+				  var color = getHeatMapColorLocation(avgV,tiny_gmv[j].gmv);
 				  var tinyVillage = polygonMap[code_j];
 				 
 				  if(tinyVillage!=null){
@@ -830,15 +741,15 @@
 // 			  showMapLegend(minV,maxV,dataType);
 			  
 			  var sum=0;
-			  for(var i=0;i<data.length;i++){
-			  	sum+=data[i].consumer;
+			  for(var i=0;i<tiny_consumer.length;i++){
+			  	sum+=tiny_consumer[i].consumer;
 			  }
-			  var avgV=sum/data.length;
+			  var avgV=sum/tiny_consumer.length;
 			  showMapLegend(avgV,dataType);
 			 
-			  for(var j=0;j<data.length;j++){
-				  var code_j = data[j].code;
-				  var color = getHeatMapColorLocation(avgV,data[j].consumer);
+			  for(var j=0;j<tiny_consumer.length;j++){
+				  var code_j = tiny_consumer[j].code;
+				  var color = getHeatMapColorLocation(avgV,tiny_consumer[j].consumer);
 				  var tinyVillage = polygonMap[code_j];
 				  if(tinyVillage!=null){
 					  tinyVillage.setOptions({
@@ -851,9 +762,7 @@
 				  }
 			  }
 		  }
-		  
-		  
-	  }
+
 	  
   }
   
@@ -866,118 +775,52 @@
 		var c_value2 = new Array();
 		
 		if("gmv"==dataType){
-		
-			
-			if(data1!=null){
-				for(var i=0;i<data1.length;i++){
-					var v = data1[i].gmv;
-					var n = data1[i].signTime;
-					c_name1.push(n);
-					c_value1.push(v);
-				}
-				
-				option1.xAxis.data = c_name1;
-				option1.series[0].data = c_value1;
-				option1.title.text = "营业额（近七日）";
-			}
-			myChart1.setOption(option1);
+	        var kv = getRecentlySevenDay_gmv();
+			option1.xAxis.data = kv["xAxis"];
+			option1.series[0].data = kv["series"];
+			option1.title.text = "营业额（近七日）";
+		    myChart1.setOption(option1);
 		}else if("consumer"==dataType){
-			
-			if(data1!=null){
-				for(var i=0;i<data1.length;i++){
-					var v = data1[i].customer;
-					var n = data1[i].signTime;
-					c_name1.push(n);
-					c_value1.push(v);
-				}
-				
-				chart4_option.xAxis.data = c_name1;
-				chart4_option.series[0].data = c_value1;
-				
-			}
-			
-			
-			if(data2!=null){
-				for(var i=0;i<data2.length;i++){
-					var v = data2[i].consumer;
-					var n = data2[i].signTime;
-					//c_name2.push(n);
-					c_value2.push(v);
-				}
-				
-				chart4_option.series[1].data = c_value2;
-			}
-			
+			var kv = getRecentlySevenDay_customer();
+		    chart4_option.xAxis.data = kv["xAxis"];
+		    chart4_option.series[0].data = kv["series0"];
+		    chart4_option.series[1].data = kv["series1"];
 			chart4.setOption(chart4_option);
 		}
 	}	
 	//展示事业群chart
 	function showDeptChartData(deptData,dataType){
-		var deptNV = new Array();
+		
 		var myDate = new Date();
   	  	var c_month = myDate.getMonth()+1;//当前月
 		if("gmv"==dataType){
-			for(var i=0;i<deptData.length;i++){
-				var v = deptData[i].gmv;
-				var n = deptData[i].department_name;
-				var vnMap = {};
-				vnMap["value"] = v;
-				vnMap["name"] = n;
-				deptNV.push(vnMap);
-				
-			}
+			
 			option2.title.text = "事业群营业额（"+c_month+"月）";
-			option2.series[0].data = deptNV;
+			option2.series[0].data = getDepartment_gmv();
 			myChart2.setOption(option2);
 		}else if("consumer"==dataType){
-			for(var i=0;i<deptData.length;i++){
-				var v = deptData[i].consumer;
-				var n = deptData[i].department_name;
-				var vnMap = {};
-				vnMap["value"] = v;
-				vnMap["name"] = n;
-				deptNV.push(vnMap);
-				
-			}
+			
 			chart5_option.title.text = "事业群消费用户（"+c_month+"月）";
-			chart5_option.series[0].data = deptNV;
+			chart5_option.series[0].data = getDepartment_consumer();
 			chart5.setOption(chart5_option);
 		}
-		
-		
 		 
 	}
 	
 	//展示频道chart
 	function showChannelChartData(channelData,dataType){
-		var channelNV = new Array();
+		
 		var myDate = new Date();
   	  	var c_month = myDate.getMonth()+1;//当前月
 		if("gmv"==dataType){
-			for(var i=0;i<channelData.length;i++){
-				var v = channelData[i].gmv;
-				var n = channelData[i].channel_name;
-				var vnMap = {};
-				vnMap["value"] = v;
-				vnMap["name"] = n;
-				channelNV.push(vnMap);
-				
-			}
+			
 			option3.title.text = "频道营业额（"+c_month+"月）";
-			option3.series[0].data = channelNV;
+			option3.series[0].data = getChannel_gmv();	
 			myChart3.setOption(option3);
 		}else if("consumer"==dataType){//用户
-			for(var i=0;i<channelData.length;i++){
-				var v = channelData[i].consumer;
-				var n = channelData[i].channel_name;
-				var vnMap = {};
-				vnMap["value"] = v;
-				vnMap["name"] = n;
-				channelNV.push(vnMap);
-				
-			}
+			
 			chart6_option.title.text = "频道消费用户（"+c_month+"月）";
-			chart6_option.series[0].data = channelNV;
+			chart6_option.series[0].data = getChannel_consumer();
 			chart6.setOption(chart6_option);
 		}
 		
@@ -1292,10 +1135,8 @@
       ]
     }
    
-    var resultJson = chartData_severalDay["consumer"];
-    var data1 = resultJson.data1;
-	var data2 = resultJson.data2;
-	showTrendChartData(data1,data2,"consumer");//趋势图
+  
+	showTrendChartData(null,null,"consumer");//趋势图
 	
     chart5_option={
       title: {
@@ -1397,14 +1238,10 @@
       ]
     }
 
+    showDeptChartData(null,"consumer")//事业部
+	showChannelChartData(null,"consumer");//频道 
     
-    
-    var resultJson = chartData_curMonth["consumer"];
-    var tinyVillageData = resultJson.tinyVillageData;
-	var deptData = resultJson.deptData;
-	var channelData = resultJson.channelData;
-	showDeptChartData(deptData,"consumer")//事业部
-	showChannelChartData(channelData,"consumer");//频道
+   
 	
 	
     $(function(){

@@ -181,7 +181,6 @@
             </div>
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <li ><a href="../crm/loginplatform.html">数据平台首页</a> </li>
             <li class="dropdown user user-menu">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <img src="../crm/dist/img/376884043677306248.png" class="user-image" alt="User Image">
@@ -210,9 +209,6 @@
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
-                  </div>
                   <div class="pull-right">
                     <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
                   </div>
@@ -271,7 +267,7 @@
           <div class="digit_set set_last"></div>
           </div>
         </div>
-        <div align="right" style="margin-top: 10px;margin-right:40px;">动态滚动<input id="onoffset" class="mui-switch mui-switch-anim" type="checkbox" style="zoom:50%;vertical-align:-5px;" /><select style="width: 100px;color: black;background-color: #D3D3D3;width:60px;height:20px;" id="setTime"><option value="5">5分</option><option value="30">30分</option><option value="60">1小时</option><option value="240">4小时</option><option value="525600">一年</option></select></div>
+<!--         <div align="right" style="margin-top: 10px;margin-right:40px;">动态滚动<input id="onoffset" class="mui-switch mui-switch-anim" type="checkbox" style="zoom:50%;vertical-align:-5px;" /><select style="width: 100px;color: black;background-color: #D3D3D3;width:60px;height:20px;" id="setTime"><option value="5">5分</option><option value="30">30分</option><option value="60">1小时</option><option value="240">4小时</option><option value="525600">一年</option></select></div> -->
       </div>
       <!--历史数据-->
 
@@ -281,7 +277,7 @@
     <section class="content-header clearfix" style="margin-top: 30px;">
       <div class="col-sm-4">
         <div id="main1" style="width: 80%;height:400px;"></div>
-        <div class="gengduo" ><a href="javascript:more_area_gmv()">更多</a></div>
+<!--         <div class="gengduo" ><a href="javascript:more_area_gmv()">更多</a></div> -->
       </div>
       <div class="col-sm-4 no-padding">
 		  <div class="crumbs" style="display:none"><a href="javascript:goCountry()" style="display:none" id="quanguo_a">全国</a><span style="display:none" style="color:#f6f6f6" id='quanguo_span'>&nbsp;>&nbsp;</span><a href="javascript:gopro()" id="pro_country">--</a><span style="color:#f6f6f6">&nbsp;>&nbsp;</span><a href="javascript:void()" class="store_dis" style="cursor:default" id="pro_country_store">--</a> 
@@ -309,14 +305,14 @@
     <section class="content-header clearfix" style="margin-top: 30px;">
       <div class="col-sm-3 no-padding">
         <div id="main3" style="width: 100%;height:320px;"></div>
-        <div class="gengduo" ><a href="javascript:more_gax_gmv()">更多</a></div>
+<!--         <div class="gengduo" ><a href="javascript:more_gax_gmv()">更多</a></div> -->
         <div id="main7" style="width: 100%;height:350px;margin:0 5%;"></div>
-        <div class="gengduo" style="top:333px" ><a href="javascript:more_gax_order()">更多</a></div>
+<!--         <div class="gengduo" style="top:333px" ><a href="javascript:more_gax_order()">更多</a></div> -->
       </div>
       <div class="col-sm-6 no-padding">
         <div class="pull-left" style="width: 50%">
           <div id="main5" style="width: 100%;height:600px;"></div>
-          <div class="gengduo" style="right:470px"><a href="javascript:more_estore_gmv()">更多</a></div>
+<!--           <div class="gengduo" style="right:470px"><a href="javascript:more_estore_gmv()">更多</a></div> -->
         </div>
         <div class="pull-left" style="width: 50%">
           <div id="main6" style="width: 100%;height:600px;"></div>
@@ -324,9 +320,9 @@
       </div>
       <div class="col-sm-3 no-padding">
         <div id="main4" style="width: 100%;height:300px;"></div>
-        <div class="gengduo" ><a href="javascript:more_channel_gmv()">更多</a></div>
+<!--         <div class="gengduo" ><a href="javascript:more_channel_gmv()">更多</a></div> -->
         <div id="main8" style="width: 100%;height:350px;"></div>
-        <div class="gengduo" style="top:310px" ><a href="javascript:more_channel_order()">更多</a></div>
+<!--         <div class="gengduo" style="top:310px" ><a href="javascript:more_channel_order()">更多</a></div> -->
       </div>
     </section>
 
@@ -363,6 +359,7 @@
 <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
 <!-- gooey-menu -->
 <script type="text/javascript" src="../crm/plugins/gooey_menu/gooey.min.js"></script>
+<script type="text/javascript" src="js/current_shopkeeper_demo.js"></script>
 <script type="text/javascript">
 	<!-------------------------传递的参数	开始--------------------------->
 	var storeId = decode64(getUrlParamByKey("s"));//门店ID
@@ -399,30 +396,7 @@
     <!----------------------------设置layer的全局样式	结束------------------>
     var openStatus=false;
     $(document).ready(function(){
-	  $("#data_card").gooeymenu({//右侧gooey数据卡初始化
-          bgColor: "#4682b4",
-          contentColor: "white",
-          style: "vertical",
-          horizontal: {
-              menuItemPosition: "Glue"
-          },
-          vertical: {
-              menuItemPosition: "spaced",
-              direction: "down"
-          },
-          circle: {
-              radius: 100
-          },
-          margin: "small",
-          size: 70,
-          bounce: false,
-          bounceLength: "medium",
-          transitionStep: 100,
-          hover: "#4682b4",
-          open:function(){
-        		  
-          }
-      });
+
 	  
         <!------------------顶部导航动态效果	开始--------------------->
          $(".sidebar-menu > li").mouseenter(function(){
@@ -463,7 +437,7 @@
 		  initEStoreRanking_gmv();//E-店GMV排名
 		  initDeptServerRanking_gmv();//服务专员GMV排名
 		  initChannelRanking_order();//频道订单排名
-		  showDataCard();//数据卡
+
 		  $("#process_div").hide();
 		  $("#process_div_pic").hide();
 		  <!-------------------------加载页面展示数据 	结束------------->
@@ -596,6 +570,7 @@
  					$("#store_no").html(store.storeno);
  					$("#store_name_left_top").html(store.name);
  					$("#pro_country_store").html(store.name);
+ 					$(".legend").html('<b style="color:red">'+store.name+'</b>');
  					currentStore = store;
  				}
  		},false);
@@ -741,8 +716,6 @@ function initCurruser(){
 		
 		<!------------------------------每日动态营业额	开始---------------------------------->
 		    chonfu();//第一次动态加载每日营业额
-			onoffcount--;//减一次（chonfu里有onoffcount加一次）
-			
 			if(typeof(time_)!="undefined"){
 				clearInterval(time_);
 			}
@@ -751,82 +724,7 @@ function initCurruser(){
 		<!----------------------------每日动态营业额	结束-------------------------------------->
 	}
 	
-//加载展示数据卡数据（若当前日期是当前月的第一天，则显示上月数据）
-function showDataCard(){
-	  $("#process_div").show();
-	  $("#process_div_pic").show();
-	  var myDate = new Date();
-	  var c_year = myDate.getFullYear(); //当前年
-	  var c_month = myDate.getMonth()+1;//当前月
-	  var c_day = myDate.getDate();//当前天
-	  var method = "getDataCardInfo";
-	  var search_month;
-	  var search_year;
-	  if(parseInt(c_day)==1){//当月第一天
-		  if(parseInt(c_month)==1){//当年第一个月
-			  search_year = parseInt(c_year)-1;
-			  search_month = 12;
-		  }else{
-			  search_year=c_year;
-			  search_month = parseInt(c_month)-1;
-		  }
-	  }else{
-		  search_year = c_year;
-		  search_month = c_month;
-	  }
-	  var dynamicDto = {
-			  cityId:"",
-	  		  employeeNo:EMPLOYEE_NO,
-	  		  year:search_year,
-	  		  storeId:STORE_ID,
-	  		  month:parseInt(search_month),
-	  		  target:2,
-	  		  storeNo:currentStore.storeno
-	  }
-	 
-	  doManager("dynamicManager", method,[dynamicDto],
-				function(data, textStatus, XMLHttpRequest) {
-					//layer.close(loadDataCard);
-					if (data.result) {
-						var resultJson= JSON.parse(data.data);
-						$("#v_newaddcus").text(resultJson.newaddcus);//门店拉新
-						$("#v_newaddcus_gax").text(resultJson.newaddcus_gax);//国安侠拉新
-						$("#v_storetrade").text(resultJson.storetrade);//门店gmv
-						$("#v_storetrade_gax").text(resultJson.storetrade_gax);//国安侠gmv
-						$("#v_rewardtimes").text(resultJson.rewardtimes);//好评次数
-						
-						$("nav[id='data_card'] a").on("mouseover",function(){
-							var pp = $(this).children();
-							$(this).css({"width":"90px"});
-							$(this).css({"height":"90px"});
-							$(this).css({"line-height":"90px"});
-							$(this).css({"margin":"-10px 0px 0px -10px"});
-							$(this).css({"background-color":"#47a3ff"});
-							if(typeof(pp)!="undefined"){
-								$($(pp)[0]).hide();
-								$($(pp)[1]).show();
-							}
-						});
-						
-						$("nav[id='data_card'] a").on("mouseout",function(){
-							$("nav[id='data_card'] a").each(function(){
-								$(this).css({"width":"70px"});
-								$(this).css({"height":"70px"});
-								$(this).css({"line-height":"70px"});
-								$(this).css({"margin":"0px 0px 0px 0px"});
-								$(this).css({"background-color":"#4682b4"});
-								var pp = $(this).children();
-								if(typeof(pp)!="undefined"){
-									$($(pp)[0]).show();
-									$($(pp)[1]).hide();
-								}
-							});
-						});
-					}
-			});
-	       
-	  		
-}
+
 
 	
 
@@ -863,11 +761,11 @@ function showStoreAllInfo(){
 		},false);
 }
 
-var total_price = 213206;
+var STORE_DAILY_TOTAL_GMV = 13206;
 //动态获取每日营业额
 function chonfu(){
 	var increment = Math.round(Math.random()*99);
-	STORE_DAILY_TOTAL_GMV = STORE_DAILY_TOTAL_GMV+increment;
+	STORE_DAILY_TOTAL_GMV = parseInt(STORE_DAILY_TOTAL_GMV)+increment+"";
 	if(STORE_DAILY_TOTAL_GMV.length>8){
 		dojob(STORE_DAILY_TOTAL_GMV.substring(0,STORE_DAILY_TOTAL_GMV.length)); 
 	}else{
@@ -1024,21 +922,9 @@ function initStoreHistoryGMV(){
  var servicePosition_y = "";
  var storeCenterPostion;
  function getStorePosition(){
- 	  doManager("areaManager", "getStoreServiceAreaAndPosition", [STORE_ID], function(
- 				data, textStatus, XMLHttpRequest) {
- 			if (data.result) {
- 				var resultJson = JSON.parse(data.data);
- 				if(resultJson.code == 200){
- 					var position = resultJson.position;
- 					storeCenterPostion = position;
- 					//初始化地图对象，加载地图
- 					map.setCenter(position);
- 					servicePositionIsExist = true;
- 				}else{
- 					servicePositionIsExist = false;
- 				}
- 			}
- 		},false);
+ 	  
+ 	map.setCenter([117.23533,39.093887]);
+ 				
  }
 
 
@@ -1062,57 +948,37 @@ function initStoreHistoryGMV(){
 	var colorOther = "#080000";//灰色（超出20个片区的范围的）
 	var colorArrar = new Array("#007979","#00FFFF","#796400","#FFD306","#009100","#5151A2","#8F4586","#F75000","#FF0000","#FF9797","#FF0080","#600000","#820041","#4B0091","#A8FF24","#63B8FF","#5E5E5E","#bf88113d","#0000FF","#7CCD7C");
 	function getStorePositionAndServiceArea(){
-		 doManager("areaManager", "getTinyVillageCoord",[STORE_ID], function(data, textStatus,XMLHttpRequest) {
-		        if(data.result){
-		            
-		        	var resultJson= JSON.parse(data.data);
-		        	if(resultJson!=null&&resultJson.code==200){
-		        		$("#areas_ul").empty();	
-		        		coordinate = resultJson.coordinate;//小区坐标
-		        		storeService = resultJson.serviceArea;//服务范围
-		        		var areas = resultJson.areas;//片区
-		        		var store = resultJson.store;
-		        		$(".legend").html('<b style="color:red">'+store.name+'</b>');
-		        		for(var i=0;i<areas.length;i++){
-		        			 
-		        			//var color = getColor(i+1);
-		        			if(i<20){
-		        				areaColor[areas[i].area_no] = colorArrar[i];
-		        			}else if(i>=20){
-		        				areaColor[areas[i].area_no] =colorOther;
-		        			}
-		        			aboutArea[areas[i].area_no] = areas[i];
-		        			arrayObj.push(areaColor);
-		        			var name_a = areas[i].employee_a_name==null?"无":areas[i].employee_a_name;
-	            			var name_b = areas[i].employee_b_name==null?"无":areas[i].employee_b_name;
-	            			var areaName = areas[i].name;
-	            			if(areaName.length>6){
-	            				areaName = areaName.substring(0,6) + "..."
-	            			}
-	            			
-            				var  areaHtml= '<li class="col-lg-12" onmouseover="lightPloygon(\''+areas[i].area_no+'\')" onmouseout="showAllTinyArea()">'+
-					     				   '<div class="col-sm-3 no-padding" style="width:15%;background:'+areaColor[areas[i].area_no]+'"></div>'+
-					    				   '<div class="col-sm-9 no-padding" >'+
-					    					   '<p style="padding-left:10px;white-space:nowrap;"><span style="white-space:nowrap;display:inline-block">'+areaName+'</span></p>'+
-					    				   '</div>'+
-					    			   '</li>';
-				 			$("#areas_ul").append(areaHtml);
-		        		}
-		        		initArea(storeService,coordinate);
-		        		layer.closeAll();
-		        	}else{
-		        		
-		        		$("#areas_ul").empty();
-		        		$("#TULI").hide();
-		        		layer.msg(resultJson.message);
-		        		map.clearMap();
-		        	}
-		            
-		        	
-		            
-		        }else{
-		            $$.showMessage("系统信息", "数据加载异常！");
-		        }},false);
+		coordinate = STORE_COORDINATE;//小区坐标
+		$("#areas_ul").empty();	
+		//$(".legend").html('<b style="color:red">'+store.name+'</b>');
+		for(var i=0;i<areas.length;i++){
+			 
+			//var color = getColor(i+1);
+			if(i<20){
+				areaColor[areas[i].area_no] = colorArrar[i];
+			}else if(i>=20){
+				areaColor[areas[i].area_no] =colorOther;
+			}
+			aboutArea[areas[i].area_no] = areas[i];
+			arrayObj.push(areaColor);
+			var name_a = areas[i].employee_a_name==null?"无":areas[i].employee_a_name;
+			var name_b = areas[i].employee_b_name==null?"无":areas[i].employee_b_name;
+			var areaName = areas[i].name;
+			if(areaName.length>6){
+				areaName = areaName.substring(0,6) + "..."
+			}
+			
+			var  areaHtml= '<li class="col-lg-12" onmouseover="lightPloygon(\''+areas[i].area_no+'\')" onmouseout="showAllTinyArea()">'+
+	     				   '<div class="col-sm-3 no-padding" style="width:15%;background:'+areaColor[areas[i].area_no]+'"></div>'+
+	    				   '<div class="col-sm-9 no-padding" >'+
+	    					   '<p style="padding-left:10px;white-space:nowrap;"><span style="white-space:nowrap;display:inline-block">'+areaName+'</span></p>'+
+	    				   '</div>'+
+	    			   '</li>';
+ 			$("#areas_ul").append(areaHtml);
+		}
+		initArea(storeService,coordinate);
+		layer.closeAll();
+
 	}
 	
 
@@ -1162,7 +1028,7 @@ function initStoreHistoryGMV(){
 	        	areaTinyVillage.on("click",function(e){
 	        		var area_no =   e.target.getExtData().areaNo;
 	        		var area_name =  e.target.getExtData().areaName;
-	                var url = "index_area.html?ao=" + encode64(area_no);
+	                var url = "index_area_demo.html?ao=" + encode64(area_no);
 	                window.open(url);
 	        	}); 
 	        	var tmp_tinyVillageCoordinate={
@@ -1215,65 +1081,47 @@ function initStoreHistoryGMV(){
 	
 	//事业部gmv排名
 	function  initDeptRanking_gmv(){
-			//取得当前登录人的门店
-			doManager("dynamicManager", "selectDeptRankingOfStore",[STORE_ID],
-					function(data, textStatus, XMLHttpRequest) {
-						if (data.result) {
-							var deptGmv = JSON.parse(data.data).gmv;
-							var deptName = new Array();
-							var deptNV = new Array();
-							
-							if(deptGmv!=null){
-								for(var i=0;i<deptGmv.length;i++){
-									var v = deptGmv[i].gmv;
-									var n = deptGmv[i].career_group;
-									var vnMap = {};
-									vnMap["value"] = v;
-									vnMap["name"] = n;
-									deptName.push(n);
-									deptNV.push(vnMap);
-									
-								}
-								option2.legend.data = deptName;
-								option2.series[0].data = deptNV;
-								option2.title.text = "事业群排名"+gmv_month_title+"GMV）";
-								myChart2.setOption(option2);  
-							}
-						}
-				});
+		var deptGmv = [{"name":"崔艺凡","gmv":626698.5,"storename":"挂甲寺店","employee_no":"TJ000283","storeno":"0022Y0030","career_group":"商业创新事业部"},{"name":"张云","gmv":22905.27,"storename":"挂甲寺店","employee_no":"TJ000793","storeno":"0022Y0030","career_group":"国安优易事业部"},{"name":"王明月","gmv":22905.27,"storename":"挂甲寺店","employee_no":"TJ000166","storeno":"0022Y0030","career_group":"国安优易事业部"},{"name":"付艳丽","gmv":120223,"storename":"挂甲寺店","employee_no":"TJ000353","storeno":"0022Y0030","career_group":"家务事事业部"},{"name":"李玥","gmv":460182,"storename":"挂甲寺店","employee_no":"TJ000319","storeno":"0022Y0030","career_group":"老年之家事业部"},{"name":"王泓锦","gmv":190211,"storename":"挂甲寺店","employee_no":"TJ000628","storeno":"0022Y0030","career_group":"健康事业部"}];
+		var deptName = new Array();
+		var deptNV = new Array();
+		
+		if(deptGmv!=null){
+			for(var i=0;i<deptGmv.length;i++){
+				var v = deptGmv[i].gmv;
+				var n = deptGmv[i].career_group;
+				var vnMap = {};
+				vnMap["value"] = v;
+				vnMap["name"] = n;
+				deptName.push(n);
+				deptNV.push(vnMap);
+				
+			}
+			option2.legend.data = deptName;
+			option2.series[0].data = deptNV;
+			option2.title.text = "事业群排名"+gmv_month_title+"GMV）";
+			myChart2.setOption(option2);  
+		}
 	}
 	
 	//频道gmv排名
 	function  initChannelRanking_gmv(){
-			//取得当前登录人的门店
-			var pageInfo = new Object();
-	 	    pageInfo.currentPage = 1;
-	 	    pageInfo.recordsPerPage = 5;
-			doManager("dynamicManager", "selectChannelRankingOfStore",[STORE_ID,pageInfo],
-					function(data, textStatus, XMLHttpRequest) {
-						if (data.result) {
-							var channelGmv = JSON.parse(data.data).gmv;
-// 							var channelName = new Array();
-// 							var channelValue = new Array();
-							var channelName = new Array();
- 							var channelValue = new Array();
-							if(channelGmv!=null){
-								for(var i=0;i<channelGmv.length;i++){
-									var v = channelGmv[i].amount;
-									var n = channelGmv[i].name;
-									channelName[i]=n;
-									channelValue[i]=v;
-								}
-								
-								option4.xAxis[0].data = channelName;
-								option4.series[0].data = channelValue;
-								option4.title[0].text = "频道排名"+gmv_month_title+"GMV）";
+		var channelGmv = [{"name":"安心出游","amount":503326},{"name":"社区好房","amount":499990},{"name":"国安家电","amount":106656},{"name":"日用百货","amount":22272.87},{"name":"快周边","amount":20052.5}];
+		var channelName = new Array();
+		var channelValue = new Array();
+		if(channelGmv!=null){
+			for(var i=0;i<channelGmv.length;i++){
+				var v = channelGmv[i].amount;
+				var n = channelGmv[i].name;
+				channelName[i]=n;
+				channelValue[i]=v;
+			}
+			
+			option4.xAxis[0].data = channelName;
+			option4.series[0].data = channelValue;
+			option4.title[0].text = "频道排名"+gmv_month_title+"GMV）";
 
-								myChart4.setOption(option4);  
-							}
-							
-						}
-				});
+			myChart4.setOption(option4);  
+		}
 	}
 	
 	
@@ -1285,395 +1133,132 @@ function initStoreHistoryGMV(){
 	
 	//片区gmv排名
 	function  initAreaRanking_gmv(){
-			//取得当前登录人的门店
-			var pageInfo = new Object();
-	 	    pageInfo.currentPage = 1;
-	 	    pageInfo.recordsPerPage = 5;
-			
-	 	    doManager("dynamicManager", "selectAreaRankingOfStore",[STORE_ID,pageInfo],
-					function(data, textStatus, XMLHttpRequest) {
-						if (data.result) {
-							var areaGmv = JSON.parse(data.data).gmv;
-							var areaName = new Array();
-							var areaValue = new Array();
-							
-							if(areaGmv!=null){
-								for(var i=0;i<areaGmv.length;i++){
-									var v = areaGmv[i].amount;
-									var n = areaGmv[i].name;
-									areaName[i] = n;
-									areaValue[i] = v;
-								}
-								option1.xAxis[0].data = areaName;
-								option1.series[0].data = areaValue;
-								option1.title[0].text = "片区排名"+gmv_month_title+"GMV）";
-								myChart1.setOption(option1);  
-							}
-							
-							
-						}
-				},false);
+		var areaGmv = [{"name":"龙都花园 景兴西里","amount":262939.3,"area_no":"0022Y003000026"},{"name":"云广新里 重华里社区","amount":179962.1,"area_no":"0022Y003000027"},{"name":"前程里社区","amount":112374.1,"area_no":"0022Y003000019"},{"name":"南北大街社区","amount":110689.28,"area_no":"0022Y003000018"},{"name":"麦格理社区 景兴里","amount":99171.3,"area_no":"0022Y003000023"}];
+		var areaName = new Array();
+		var areaValue = new Array();
+		
+		if(areaGmv!=null){
+			for(var i=0;i<areaGmv.length;i++){
+				var v = areaGmv[i].amount;
+				var n = areaGmv[i].name;
+				areaName[i] = n;
+				areaValue[i] = v;
+			}
+			option1.xAxis[0].data = areaName;
+			option1.series[0].data = areaValue;
+			option1.title[0].text = "片区排名"+gmv_month_title+"GMV）";
+			myChart1.setOption(option1);  
+		}
 	}
 	
 	//服务专员gmv
 	function  initDeptServerRanking_gmv(){
-		//取得当前登录人的门店
-		doManager("dynamicManager", "selectDeptServerRanking",[STORE_ID],
-				function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						var deptGmv = JSON.parse(data.data).gmv;
-// 						var deptName = new Array();
-// 						var deptNV = new Array();
-						var deptName = new Array();
-						var deptNV = new Array();
-						if(deptGmv!=null){
-							for(var i=0;i<deptGmv.length;i++){
-								var v = deptGmv[i].gmv;
-								var n = deptGmv[i].name;
-								var vnMap = {};
-								vnMap["value"] = v;
-								vnMap["name"] = n;
-								deptName[i]=n;
-								deptNV[i] = v;
-								
-							}
-							option6.yAxis[0].data = deptName.reverse();
-							option6.series[0].data = deptNV.reverse();
-							option6.title[0].text = "服务专员排名"+gmv_month_title+"GMV）";
-							myChart6.setOption(option6);  
-						}
-					}
-			},false);
+		var deptGmv = [{"name":"崔艺凡","gmv":626698.5,"storename":"挂甲寺店","employee_no":"TJ000283","storeno":"0022Y0030","career_group":"商业创新事业部"},{"name":"张云","gmv":22905.27,"storename":"挂甲寺店","employee_no":"TJ000793","storeno":"0022Y0030","career_group":"国安优易事业部"},{"name":"王明月","gmv":22905.27,"storename":"挂甲寺店","employee_no":"TJ000166","storeno":"0022Y0030","career_group":"国安优易事业部"},{"name":"付艳丽","gmv":1023,"storename":"挂甲寺店","employee_no":"TJ000353","storeno":"0022Y0030","career_group":"家务事事业部"},{"name":"李玥","gmv":797,"storename":"挂甲寺店","employee_no":"TJ000319","storeno":"0022Y0030","career_group":"老年之家事业部"},{"name":"王泓锦","gmv":0,"storename":"挂甲寺店","employee_no":"TJ000628","storeno":"0022Y0030","career_group":"健康事业部"}];
+		var deptName = new Array();
+		var deptNV = new Array();
+		if(deptGmv!=null){
+			for(var i=0;i<deptGmv.length;i++){
+				var v = deptGmv[i].gmv;
+				var n = deptGmv[i].name;
+				var vnMap = {};
+				vnMap["value"] = v;
+				vnMap["name"] = n;
+				deptName[i]=n;
+				deptNV[i] = v;
+				
+			}
+			option6.yAxis[0].data = deptName.reverse();
+			option6.series[0].data = deptNV.reverse();
+			option6.title[0].text = "服务专员排名"+gmv_month_title+"GMV）";
+			myChart6.setOption(option6);  
+		}
 	}
 	
 	//国安侠gmv排名
 	var option3_employee;
 	function  initEmployeeRanking_gmv(){
-			//取得当前登录人的门店
-			var pageInfo = new Object();
-	 	    pageInfo.currentPage = 1;
-	 	    pageInfo.recordsPerPage = 5;
-			doManager("dynamicManager", "selectEmployeeRankingOfStore",[STORE_ID,pageInfo],
-					function(data, textStatus, XMLHttpRequest) {
-						if (data.result) {
-							var empGmv = JSON.parse(data.data).gmv;
-// 							var empName = new Array();
-// 							var empValue = new Array();
-							var empName = new Array();
-							var empValue = new Array();
-							option3_employee = new Array();
-							if(empGmv!=null){
-								for(var i=0;i<empGmv.length;i++){
-									var v = empGmv[i].amount;
-									var n = empGmv[i].name;
-									empName[i]=n;
-									empValue[i]=v;
-									option3_employee[i] = empGmv[i].employee_a_no;
-								}
-								option3.xAxis[0].data = empName;
-								option3.series[0].data = empValue;
-								option3.title[0].text = "国安侠排名"+gmv_month_title+"GMV）";
-								myChart3.setOption(option3);  
-							}
-							
-							
-						}
-				},false);
+		var empGmv = [{"employee_a_no":"TJ000526","name":"李斌","amount":259587.01},{"employee_a_no":"TJ000565","name":"张春篪","amount":177904.31},{"employee_a_no":"TJ000258","name":"朱盼雨","amount":109011.59},{"employee_a_no":"TJ000303","name":"顾晓磊","amount":107776.91},{"employee_a_no":"TJ000677","name":"任罡毅","amount":96690.11}];
+		var empName = new Array();
+		var empValue = new Array();
+		option3_employee = new Array();
+		if(empGmv!=null){
+			for(var i=0;i<empGmv.length;i++){
+				var v = empGmv[i].amount;
+				var n = empGmv[i].name;
+				empName[i]=n;
+				empValue[i]=v;
+				option3_employee[i] = empGmv[i].employee_a_no;
+			}
+			option3.xAxis[0].data = empName;
+			option3.series[0].data = empValue;
+			option3.title[0].text = "国安侠排名"+gmv_month_title+"GMV）";
+			myChart3.setOption(option3);  
+		}
 	}
 	
 	//国安侠片区订单排名
 	var option7_employee;
 	function  initEmployeeRanking_order(){
-			//取得当前登录人的门店
-			var pageInfo = new Object();
-	 	    pageInfo.currentPage = 1;
-	 	    pageInfo.recordsPerPage = 5;
-	 	   //doManager("dynamicManager", "selectAreaOrderRanking",[STORE_ID,pageInfo],
-			doManager("dynamicManager", "getGaxOfAreaNewaddcus",[STORE_ID,pageInfo],
-					function(data, textStatus, XMLHttpRequest) {
-						if (data.result) {
-							var empOrder = JSON.parse(data.data).gmv;
-// 							var empName = new Array();
-// 							var empValue = new Array();
-							var empName = new Array();
-							var empValue = new Array();
-							option7_employee = new Array();
-							if(empOrder!=null){
-								for(var i=0;i<empOrder.length;i++){
-									var v = empOrder[i].amount;
-									var n = empOrder[i].name;
-									empName[i]=n;
-									empValue[i]=v;
-									//option7_employee[i] = empOrder[i].employee_a_no;
-								}
-								option7.xAxis[0].data = empName;
-								option7.series[0].data = empValue;
-								option7.title[0].text = "国安侠排名"+gmv_month_title+"新用户）";
-								myChart7.setOption(option7);  
-							}
-							
-							
-						}
-				},false);
+		var empOrder = [{"name":"顾晓磊","info_employee_a_no":"TJ000303","amount":305},{"name":"李斌","info_employee_a_no":"TJ000526","amount":260},{"name":"任罡毅","info_employee_a_no":"TJ000677","amount":213},{"name":"张春篪","info_employee_a_no":"TJ000565","amount":180},{"name":"马维博","info_employee_a_no":"TJ000352","amount":151}];
+		var empName = new Array();
+		var empValue = new Array();
+		option7_employee = new Array();
+		if(empOrder!=null){
+			for(var i=0;i<empOrder.length;i++){
+				var v = empOrder[i].amount;
+				var n = empOrder[i].name;
+				empName[i]=n;
+				empValue[i]=v;
+				//option7_employee[i] = empOrder[i].employee_a_no;
+			}
+			option7.xAxis[0].data = empName;
+			option7.series[0].data = empValue;
+			option7.title[0].text = "国安侠排名"+gmv_month_title+"新用户）";
+			myChart7.setOption(option7);  
+		}
+		
 	}
 	
 	
 	//E店gmv排名
 	function  initEStoreRanking_gmv(){
-			//取得当前登录人的门店
-			var pageInfo = new Object();
-	 	    pageInfo.currentPage = 1;
-	 	    pageInfo.recordsPerPage = 5;
-			doManager("dynamicManager", "selectEStoreRankingOfStore",[STORE_ID,pageInfo],
-					function(data, textStatus, XMLHttpRequest) {
-						if (data.result) {
-							var estoreGmv = JSON.parse(data.data).gmv;
-// 							var estoreName = new Array();
-// 							var estoreValue = new Array();
-							var estoreName = new Array();
-							var estoreValue = new Array();
-							if(estoreGmv!=null){
-								for(var i=0;i<estoreGmv.length;i++){
-									var v = estoreGmv[i].amount;
-									var n = estoreGmv[i].name==null?"":estoreGmv[i].name;
-									estoreName[i]=n;
-									estoreValue[i]=v;
-								}
-								option5.yAxis[0].data = estoreName.reverse();
-								option5.series[0].data = estoreValue.reverse();
-								option5.title[0].text = "E店排名"+gmv_month_title+"GMV）";
-								myChart5.setOption(option5);  
-							}
-							
-							
-						}
-				},false);
+		var estoreGmv = [{"name":"安泰假日旅行社（CX）","eshop_id":"d","amount":503326},{"name":"宏润房地产（活动）","eshop_id":"3","amount":499990},{"name":"汉德森数码专营店（团购2店）","eshop_id":"f","amount":106656},{"name":"天津优超店","eshop_id":"6","amount":18960.27},{"name":"厨味轩水饺锅贴（平江道店）代购","eshop_id":"7","amount":9838}];
+		var estoreName = new Array();
+		var estoreValue = new Array();
+		if(estoreGmv!=null){
+			for(var i=0;i<estoreGmv.length;i++){
+				var v = estoreGmv[i].amount;
+				var n = estoreGmv[i].name==null?"":estoreGmv[i].name;
+				estoreName[i]=n;
+				estoreValue[i]=v;
+			}
+			option5.yAxis[0].data = estoreName.reverse();
+			option5.series[0].data = estoreValue.reverse();
+			option5.title[0].text = "E店排名"+gmv_month_title+"GMV）";
+			myChart5.setOption(option5);  
+		}
 	}
 	
 	
 	function initChannelRanking_order(){
-		//取得当前登录人的门店
-		var pageInfo = new Object();
- 	    pageInfo.currentPage = 1;
- 	    pageInfo.recordsPerPage = 5;
-		doManager("dynamicManager", "selectChannelOrderRanking",[STORE_ID,pageInfo],
-				function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						var channelOrder = JSON.parse(data.data).gmv;
-// 						var channelName = new Array();
-// 						var channelValue = new Array();
-						var channelName = new Array();
-						var channelValue = new Array();
-						if(channelOrder!=null){
-							for(var i=0;i<channelOrder.length;i++){
-								var v = channelOrder[i].amount;
-								var n = channelOrder[i].name;
-								channelName[i]=n;
-								channelValue[i]=v;
-							}
-							option8.xAxis[0].data = channelName;
-							option8.series[0].data = channelValue;
-							option8.title[0].text = "频道排名"+gmv_month_title+"订单量）";
-							myChart8.setOption(option8);  
-						}
-						
-					}
-			},false);
-	}
-	
-	//营业额统计
-	function goToTurnoverStat(){
-		var url = "turnoverStat_view.html?t="+encode64(2)+"&s=&c=&cn="+encode64(currentStore.cityName)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
-		window.open(url,"turnoverStat_view"); 
-	}
-	
-
-	//用户运营
-  	function goToUserOperationStat(){
-	  	var url = "userOperationStat_view.html?t="+encode64(2)+"&s=&c=&cn="+encode64(currentStore.cityName)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
-	  	window.open(url,"userOperationStat_view"); 
-  	}
-	
-	//门店拉新
-
-	function goToNewaddcus(){
-		 
-		  var url = "dynamicData_newaddcus_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
-		  window.open(url,"dynamicData_newaddcus_analysis");
-	}
-	
-	/**
-	   * 国安侠内拉新GMV
-	   */
-	  function goToNewAddCustomerGMVToSend() {
-	   	
-	      var url = "dynamicData_newAddCustomer_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#fg";
-	      window.open(url,"dynamicData_newAddCustomer_GMV");
-	  }
-// 	//复购用户
-// 	function goToRebuycus(){
-// 		  var url = "dynamicData_newaddcus_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-// 		  window.open(url,"dynamicData_newaddcus_analysis");
-// 	}
-	//交易额  
-	function goToStoretrade(){
-		  var url = "dynamicData_storetrade_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_storetrade_analysis");
-	}
-	//送单量
-// 	function goToSendorders(){
-// 		  var url = "dynamicData_sendorders_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#ff";
-// 		  window.open(url,"dynamicData_sendorders_analysis");
-// 	}
-	
-	//好评次数
-	function goToRewardtimes(){
-		  var url = "dynamicData_rewardtimes_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_rewardtimes_analysis");
-	}
-	
-	 //异常订单
-	function goToAbnormalOrder(){
-		  //t:职务 s:门店ID c:城市ID
-		  var url = "abnormal_order.html?t="+encode64(2)+"&c=&s=&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
-		  window.open(url,"abnormal_order"); 
-	}
-	 
-	//跳转公海 订单界面 
-	function goToPublicOrder(){
-		  //t:职务 s:门店ID c:城市ID
-		  var url = "public_order.html?t="+encode64(2)+"&c=&s=&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
-		  window.open(url,"public_order"); 
-	}
-	
-	
-	//拜访记录
-	function goToRelation(){
-		 
-		  var url = "dynamicData_relation_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_relation_analysis"); 
-	}
-	
-	/**
-	 * 客户画像
-	 **/
-	function goToCustomer(){
-		  var url = "dynamicData_customer_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_customer_analysis");
+		var channelOrder = [{"name":"快周边","amount":1491},{"name":"日用百货","amount":545},{"name":"国安优选","amount":70},{"name":"社区好房","amount":40},{"name":"安心出游","amount":25}];
+		var channelName = new Array();
+		var channelValue = new Array();
+		if(channelOrder!=null){
+			for(var i=0;i<channelOrder.length;i++){
+				var v = channelOrder[i].amount;
+				var n = channelOrder[i].name;
+				channelName[i]=n;
+				channelValue[i]=v;
+			}
+			option8.xAxis[0].data = channelName;
+			option8.series[0].data = channelValue;
+			option8.title[0].text = "频道排名"+gmv_month_title+"订单量）";
+			myChart8.setOption(option8);  
+		}
+		
 	}
 
-  /**
-   * 快递派送
-   */
-  function goToExpressToSend() {
-    var url = "dynamicData_express_send.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-    window.open(url,"dynamicData_express_analysis");
-  }
-
-
-  /**
-   * 片区内GMV
-   */
-  function goToAreaGMVToSend() {
-   
-      var url = "dynamicData_area_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-      window.open(url,"dynamicData_area_GMV");
-  }
-
-  function goToSendOrders() {
-	   
-      var url = "dynamicData_employee_sendOrders.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-      window.open(url,"dynamicData_employee_sendOrders");
-  }
-
-
-  /**
-   * 片区内重点产品GMV
-   */
-  function goToEmphasesProductsGMVToSend() {
-   	
-      var url = "dynamicData_emphasesProducts_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-      window.open(url,"dynamicData_emphasesProducts_GMV");
-  }
-
-	//写字楼
-	function goToBusinessInfo(){
-		  crm_alert(0,"尚未开放！");
-		  //var url = "dynamicData_business_analysis.html?t="+encode64(2)+"&c=&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&#fg";
-		  //window.open(url,"dynamicData_business_analysis");
-	}
-	
-	//商业信息
-	function goToOfficeInfo(){
-		  crm_alert(0,"尚未开放！");
-		  //var url = "dynamicData_office_analysis.html?t="+encode64(2)+"&c=&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&#fg";
-		  //window.open(url,"dynamicData_office_analysis");
-	}
-	
-	
-	//异常订单
-	function goToAbnormalOrderResult(){
-		  //t:职务 s:门店ID c:城市ID
-		 
-		  var url = "abnormal_order_result.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s=&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
-		  window.open(url,"abnormal_order_result"); 
-	}
-	
-	function goToStoreTradeOfDept(){
-		  var url = "dynamicData_dept_gmv.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name);
-		  window.open(url,"dynamicData_dept_gmv");
-	}
-	
-	//数据查找-片区数据
-    function searchArea(){
-	   var url = "dynamicData_areaInfo.html";
- 	   window.open(url,"dynamicData_areaInfo");
-    }
-	
-	//订单档案
-	function searchData(){
-		  try{
-			  saveAccessModuleLog("数据动态系统","订单档案",returnCitySN,0,"");
-		  }catch(error){}
-		  var url = "searchData_view.html?t="+encode64(2)+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName);
-		  window.open(url,"searchData_view");
-	}
-	/* //员工档案 
-	function searchEmployeeData(){
-		  var url = "humanresources_list.html?t="+encode64(2)+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName);
-		  window.open(url,"searchEmployeeData_view");
-	} */
-	
-	//用户档案
-	function goToUserProfileStat(){
-		 var url = "userProfile_view.html?t="+encode64(2)+"&s=&sn=&c=cn=&e=&r=&#ff";
-		 window.open(url,"userProfile_view"); 
-	}
-	
-	function useData(){
-		  crm_alert(0,"尚未开放！");
-	}
-	
-	function aboutCustomerInfo(){
-		  crm_alert(0,"尚未开放！");
-	}
-	
-	function aboutOrderInfo(){
-		  crm_alert(0,"尚未开放！");
-	}
-	
-	function goToGMVInfo(){
-		  var url = "dynamicData_gmv_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_gmv_analysis"); 
-	}
-	
-	
-	function goToTinyArea(){
-		  //var url = "../aboutMap/data_index.html?t="+encode64(2)+"&s="+encode64(STORE_ID)+"&sn="+encode64(currentStore.name)+"&c=&e="+encode64(EMPLOYEE_ID)+"&r=&cn=";
-		  var url = "../aboutMap/data_index.html?t=2&nav=tiny&s=&c=&cn=&e=";
-		  window.open(url,"tinyArea_view"); 
-	}
-	
 	
 	//退出
 	function doLogout() { 
@@ -1895,6 +1480,7 @@ function initStoreHistoryGMV(){
 		        name:'GMV',
 		        type:'bar',
 		        data:[],
+		        cursor: 'default',
 		        barWidth : 30,//柱图宽度
 		        barMaxWidth:30,//最大宽度
 		        barGap: 5,
@@ -1927,15 +1513,7 @@ function initStoreHistoryGMV(){
 	  window.open(URL,"employeeRanking_gmv");
   }
   
-  myChart3.on('click', function (params){
 
-	  var index = params.dataIndex;
-	  var employeeNo = option3_employee[index];
-	  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
-	  window.open(URL,"employeeInfo");
-	 
-	 
-  })
   
 //   myChart5.on('click', function (params){
 // 	  var URL="current_shopkeeper_detail.html?s="+encode64(STORE_ID)+"&sf="+encode64("eStoreRanking_gmv");
