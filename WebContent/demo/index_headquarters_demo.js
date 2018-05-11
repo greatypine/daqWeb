@@ -895,9 +895,9 @@ var showHistoryData = function () {
     $("#tradesumofhistoryOrderHid").html(RandomNum(100000,300000));
     $("#tradesumofmonthOrderHid").html(RandomNum(10000,30000));
     $("#tradesumofmonthCustmomerHid").html(RandomNum(10000,30000));
-    $("#tradesumofcurmonths").html(changeMoney(parseInt(RandomNum(100000,300000))));
-    $("#tradesumofCurYears").html(changeMoney(parseInt(RandomNum(100000,300000))));
-    $("#tradesumofhistorys").html(changeMoney(parseInt(RandomNum(100000000,300000000))));
+    $("#tradesumofcurmonths").html(changeMoney(parseInt(RandomNum(10000000,30000000))));
+    $("#tradesumofCurYears").html(changeMoney(parseInt(RandomNum(550000000,800000000))));
+    $("#tradesumofhistorys").html(changeMoney(parseInt(RandomNum(3000000000,6000000000))));
 };
 var getLastMonthOrderCustomerCount = function(pageStatusInfo){
 	var cacheKey = CACHE_HEADER_CUSTOMER_COUNT_DATA + pageStatusInfo.getCacheKey();
