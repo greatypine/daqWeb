@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>首页</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- ../crm/bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../crm/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../crm/dist/css/tTurnover-head-scoll.css">
+  <!--map style-->
+  <link rel="stylesheet" href="../crm/dist/css/map-style.css">
+  <link rel="stylesheet" href="../crm/dist/css/onoffset.css">
+  <!-- 总部首页 style -->
+  <link rel="stylesheet" href="../crm/dist/css/headquarters/index_headquarters.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="../scripts/layui/css/layui.css" media="all">
+  
+  <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+  
+  <style>
+  #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+ <div id="process_div" ></div> 
+ <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../crm/dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
+
+<!-- Site wrapper -->
+<div class="wrapper">
+  <div id="mask" style="width: 100%;height:100%;">
+    <!-- <div id="mask-header"><button class="btn btn-primary">退出</button></div> -->
+    <div id="mask-body"></div>
+  </div>
+
+
+<!-- 新header -->
+<header class="main-header">
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <div>
+            <div class="logo_img pull-left" onclick="clearCache();" id="clearCache"><img src="../crm/dist/img/logo1.png" height="30"><img src="../crm/dist/img/title.png" height="20"></div>
+             <div class="pull-left">
+		          <div class="logo-lg">
+		            <ul class="no-margin">
+                        <li class="current">
+                            <em>数据运营<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+<!--                             <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="pull-left">
+                                        <dt><i></i>运营数据</dt>
+                                        <dd><a href="javascript:goToTurnoverStat()"><span class="fa fa-money"></span>营业额统计</a></dd>
+                                        <dd><a href="javascript:goToUserOperationStat()"><span class="fa fa-user-plus"></span>用户运营</a></dd>
+                                        <dd id="city_net"><a href="javascript:goToCityNet()"><span class="fa fa-institution"></span>线下网络体系</a></dd>
+                                        <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-cubes"></span>产品运营</a></dd>
+                                        <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-comments-o"></span>混片情况</a></dd>
+                                    </dl>
+                                    <dl class="pull-left">
+                                        <dt style="text-align:center"><i></i>绩效数据</dt>
+                                        <dd class="col-sm-6"><a href="javascript:goToStoretrade()"><span class="fa fa-line-chart"></span>门店GMV</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToNewaddcus()"><span class="fa fa-area-chart"></span>门店用户</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToAreaGMVToSend()"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToNewAddCustomerGMVToSend()"><span class="fa fa-bar-chart"></span>国安侠用户</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToDeptGMV()"><span class="fa fa-book"></span>事业群GMV</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToDeptConsumer()"><span class="fa fa-female"></span>事业群用户</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToSendOrders()"><span class="fa fa-calendar-check-o"></span>国安侠送单量</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToRewardtimes()"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>
+                                    </dl>
+                                    <dl class="pull-left">
+                                        <dt><i></i>档案数据</dt>
+                                        <dd><a href="javascript:goToUserProfileStat()"><span class="fa fa-user"></span>用户档案 </a>
+                                        <img alt="" src="../crm/dist/img/new.gif" style="position:absolute;width:27px;height:24px;margin-top:-10px;margin-left:5px;"></dd>
+                                        <dd><a href="javascript:searchData()"><span class="fa fa-file-o"></span>订单档案</a></dd>
+                                        <dd><a href="javascript:searchEmployeeData()"><span class="fa fa-newspaper-o"></span>员工档案</a></dd>
+                                        <dd><a href="javascript:searchArea()"><span class="fa fa-copy"></span>片区档案</a></dd>
+                                        <dd><a href="javascript:searchTinyvillageData()"><span class="fa fa-clipboard"></span>小区档案</a></dd>
+                                    	<dd><a href="javascript:searchStoreData()"><span class="fa fa-book"></span>门店信息档案</a></dd>
+                                    </dl>
+                                    <dl class="pull-left">
+                                        <dt><i></i>排名数据</dt>
+                                        <dd><a href="javascript:searchRank(1)"><span class="fa fa-signal"></span>城市排名</a></dd>
+                                        <dd><a href="javascript:searchRank(2)"><span class="fa fa-home"></span>门店排名</a></dd>
+                                        <dd><a href="javascript:searchRank(4)"><span class="fa fa-male"></span>国安侠排名</a></dd>
+                                        <dd><a href="javascript:searchRank(5)"><span class="fa fa-cart-plus"></span>商品排名</a></dd>
+                                        <dd><a href="javascript:searchRank(6)"><span class="fa fa-object-ungroup"></span>事业群排名</a></dd>
+                                        <dd><a href="javascript:searchRank(7)"><span class="fa fa-gears"></span>频道排名</a></dd>
+                                    </dl>
+                                </div>
+                            </div> -->
+                        </li>
+                        <li>
+                            <em>数据模型<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                             <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="col-sm-4">
+                                        <dt><i></i>社区模型</dt>
+                                        <dd><a href="javascript:toToBaseDataModule()"><span class="fa fa-sitemap"></span>基础数据模型</a></dd>
+                                    </dl>
+                                    <!-- <dl class="col-sm-4">
+                                        <dt><i></i>订单模型</dt>
+                                        <dd><a href="javascript:goToPublicOrder()"><span class="fa fa-server"></span>公海订单</a></dd>
+                                        <dd><a href="javascript:goToAbnormalOrder()"><span class="fa fa-warning "></span>异常订单</a></dd>
+                                    </dl> -->
+                                    <dl class="col-sm-4" id="user_model">
+                                        <dt><i></i>用户模型</dt>
+                                        <dd><a href="javascript:goTosjfxIndex()"><span class="fa fa-street-view"></span>用户画像</a></dd>
+                                    </dl> 
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <em>数据地图<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+                            <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>经典热力图</dt>
+                                        <dd><a href="javascript:gotogmvheat()"><span class="fa fa-money"></span>营业额热力图</a></dd>
+                                        <dd><a href="javascript:gotoorderheat()"><span class="fa fa-area-chart"></span>订单热力图</a></dd>
+                                        <dd><a href="javascript:gotocustomerheat()"><span class="fa fa-user-secret"></span>用户热力图</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>小区热力图</dt>
+                                        <dd><a href="javascript:gotogmvheatxq()"><span class="fa fa-calculator"></span>营业额热力图</a></dd>
+                                        <dd><a href="javascript:gotoorderheatxq()"><span class="fa fa-bar-chart"></span>订单热力图</a></dd>
+                                        <dd><a href="javascript:gotocustomerheatxq()"><span class="fa fa-child"></span>用户热力图</a></dd>
+                                    </dl>
+                                    
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>覆盖范围</dt>
+                                        <dd><a href="javascript:goToMapView()"><span class="fa fa-object-group"></span>门店覆盖范围</a></dd>
+                                        <dd><a href="javascript:goToTinyArea()"><span class="fa fa-map-o"></span>片区分布图</a></dd>
+                                    </dl>
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>动态图</dt>
+                                        <dd><a href="javascript:gotoemployeefb()"><span class="fa fa-group"></span>国安侠分布图</a></dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <em>数据分析<i class="glyphicon glyphicon-triangle-bottom"></i></em>
+<!--                             <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>分析图</dt>
+                                        <dd><a href="javascript:gotok()"><span class="fa fa-line-chart"></span>营业额分析</a></dd>
+										<dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-bar-chart"></span>用户分析</a></dd>
+										<dd><a href="javascript:goto_user_k()"><span class="fa fa-bar-chart"></span>用户分析</a></dd>
+                                    </dl>
+                                </div>
+                            </div> -->
+                        </li>
+                    </ul>
+                </div>
+                </div>
+            <div class="navbar-custom-menu">
+           <ul class="nav navbar-nav">
+	           <li ><!-- <a href="../crm/loginplatform.html">数据平台首页</a> --> </li>
+	            <li class="dropdown user user-menu">
+	              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+	                <img src="../crm/dist/img/376884043677306248.png" class="user-image" alt="User Image">
+	                <span class="hidden-xs">载入中...</span>
+	              </a>
+	              <ul class="dropdown-menu">
+	                <!-- User image -->
+	                <li class="user-header">
+	                  <img src="../crm/dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+	
+	                  <p><strong ><span id="card_name">载入中...</span></strong></p>
+	                  <p><span id="card_no">载入中...</span></p>
+	                  <!-- <p ><span id="store_name">载入中...</span></p> -->
+	                </li>
+	                <!-- Menu Body -->
+	                <li class="user-header">
+	                 <!--  <div class="row">
+	                    <div class="col-xs-6 text-center">
+	                      <a href="user.html">个人中心</a>
+	                    </div>
+	                    <div class="col-xs-6 text-center">
+	                      <a href="user.html">划片区域</a>
+	                    </div>
+	                  </div> -->
+	                  <!-- /.row -->
+	                </li>
+	                <!-- Menu Footer-->
+	                <li class="user-footer">
+	                  <div class="pull-left">
+	                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
+	                  </div>
+	                  <div class="pull-right">
+	                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+	                  </div>
+	                </li>
+	              </ul>
+	            </li>
+           </ul>
+         </div>
+       </div>
+    </nav>
+</header>
+	
+
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+            <!-- Main content -->
+    <section class="content-header clearfix">
+      <!--城市门店信息-->
+      <div class="info_head">
+        <div class="box no-border">
+          <div class="box-header h4" id="gaiyao"><strong id="currentCity"></strong></div>
+          <div class="box-body no-padding" id="mdxx" style="margin-top: -5px;">
+            <dl class="dl-horizontal pull-left" id="gaiyaotongji" style="width: 100%;">
+              <dt id="cityT">城市</dt>
+              <dd id="cityD"><a href="javascript:initCityInfo();" style="color:#00c0ef" id="city_total">载入中...</a></dd>
+              <dt id="storeT">门店</dt>
+              <dd ><a href="javascript:initStore();" style="color:#00c0ef" id="store_total">载入中...</a></dd>
+              <dt id="storeKeeperT">店长</dt>
+              <dd ><a href="javascript:initStoreKeeper();" style="color:#00c0ef" id="storeKeeper_total">载入中...</a></dd>
+              <dt id="storePeoleT">门店人员</dt>
+              <dd ><a href="javascript:initEmployeeInfo();" style="color:#00c0ef" id="employee_total">载入中...</a></dd>
+            </dl>
+            <dl class="dl-horizontal info_head_dl pull-left" id="info_head_dl" >
+            </dl>
+          </div>
+        </div>
+        </div>
+		
+              <!--实时数据-->
+      <div class="text-muted"  style="width: 48%; float:left; position: relative; margin: 0 1%; left: 25%;">
+        <div class="gaugetb1 clearfix text-center">
+          <div class="col-sm-4">
+          	<input type="hidden" id="tradesumofcurmonthHid">
+            <h5 class="no-margin">当月营业额</h5>
+            <p id="tradesumofcurmonths"></p>
+          </div>
+          <div class="col-sm-4">
+          	<input type="hidden" id="tradesumofyearHid">
+            <h5 class="no-margin">当年营业额</h5>
+            <p id="tradesumofCurYears"></p>
+          </div>
+          <div class="col-sm-4">
+          	<input type="hidden" id="tradesumofhistoryHid">
+            <h5 class="no-margin">历史营业额</h5>
+            <p id="tradesumofhistorys"></p>
+          </div>
+        </div>
+        <h3 class="text-right" style="margin-top:10px;">当日营业额（元）</h3>
+        <div class="dataStatistics">
+	        <div class="data_new" style="cursor: default;">
+	          <div class="digit_set"></div>
+	          <div class="digit_set"></div>
+	          <div class="digit_set"></div>
+	          <div class="douhao" id="dou1"></div>
+	          <div class="digit_set"></div>
+	          <div class="digit_set"></div>
+	          <div class="digit_set"></div>
+	          <div class="douhao" id="dou2"></div>
+	          <div class="digit_set"></div>
+	          <div class="digit_set"></div>
+	          <div class="digit_set set_last"></div>
+          </div>
+        </div>
+        <!--         <div align="right" style="margin-top: 10px;margin-right: 423px;">动态滚动<input id="onoffset" class="mui-switch mui-switch-anim" type="checkbox" style="zoom:50%;vertical-align:-5px;" /><select style="width: 60px;color: black;" id="setTime"><option value="0"></option><option value="5">5分</option><option value="30">30分</option><option value="60">1小时</option><option value="240">4小时</option></select></div> -->
+        
+      </div>
+        <!--历史数据-->
+      <div class="info_bottom" style="width: 25%; float:right; position: relative;">
+      <div class="box no-border">
+        <div class="col-sm-6">
+            <h4 class="gaugetb2" id="sing_id_1">本月用户量</h4>
+            <input type="hidden" id="tradesumofmonthCustmomerHid">
+            <input type="hidden" id="tradesumoflastmonthCustmomerHid">
+            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofmonthCustmomer"></div>
+            <div class="col-sm-2 increase" id="sing_id"><i class="fa fa-long-arrow-up" id="sign_1"></i></div>
+            <div class="col-sm-5 no-padding text-center"><p class="increase" id="customer_month_ratio"></p>环比</div>
+          </div>
+          <div class="col-sm-6">
+            <h4 class="gaugetb2" id="sing_id_4">本月订单量</h4>
+            <input type="hidden" id="tradesumofmonthOrderHid">
+            <input type="hidden" id="tradesumoflastmonthOrderHid">
+            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofmonthOrder"></div>
+            <div class="col-sm-2 increase" id="sing_id4"><i class="fa  fa-long-arrow-up" id="sign_4"></i></div>
+            <div class="col-sm-5 no-padding text-center"><p class="increase" id="order_count_ratio"></p>环比</div>
+          </div>
+          <div class="col-sm-6">
+            <h4 class="gaugetb2" id="sing_id_2">历史总用户量</h4>
+            <input type="hidden" id="tradesumofhistoryCustmomerHid">
+            <input type="hidden" id="tradesumoflasthistoryCustmomerHid">
+            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofhistoryCustmomer"></div>
+            <!-- <div class="col-sm-2 decline" id="sing_id2"><i class="fa fa-long-arrow-down" id="sign_2"></i></div>
+            <div class="col-sm-5 no-padding text-center"><p class="decline" id="customer_history_ratio"></p>环比</div>
+             -->
+          </div>
+          <div class="col-sm-6">
+            <h4 class="gaugetb2" id="sing_id_3">历史总订单量</h4>
+            <input type="hidden" id="tradesumofhistoryOrderHid">
+            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofhistoryOrder"></div>
+            <!-- <div class="col-sm-2 increase" id="sing_id3"><i class="fa fa-long-arrow-up" id="sign_3"></i></div>
+            <div class="col-sm-5 no-padding text-center"><p class="increase" id="order_history_ratio"></p>环比</div>
+             -->
+          </div>
+          </div>
+        </div>
+      </section>
+      <section class="content-header clearfix" style="margin-top: 15px;">
+        <div class="col-sm-3 no-padding">
+        <div id="main1" style="width: 100%;height:400px;"></div>
+        <div id="main12" style="width: 100%;height:200px;"></div>
+        <div class="gengduo" id="gmv_rank_more" style="display: none;"><a>更多</a></div>
+        <div class="gengduo" id="city_gmv_more" style="top: 405px;display: none;"><a>更多</a></div>
+      </div>
+      <div class="col-sm-6 no-padding" style="height: 400px;">
+          <div class="clearfix">
+        <div class="crumbs pull-left"></div>
+          <div class="pull-right" id="fullScreen"><img src="../crm/dist/img/fullscreen.png"> </div>
+          </div>
+        <div id="main9" style="width: 100%;height:650px;"></div>
+        <!--<div id="main10" style="width: 100%;height:400px;"></div>-->
+        <div class="box-body" style="position:relative;height:350px;top:7px;display:none" id="mapHeight">
+          <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);border-radius:20px;z-index:120"></div>
+          <div class="menu" id="TULI" style="display:none">
+			  <div class="legend" ><b>--</b></div>
+			  <div class="menu_list clearfix" id="test">
+			  	<ul id="areas_ul" class="no-padding">
+
+			  	</ul>
+			 </div>
+		 	<div></div>
+		 </div>
+        </div>
+      </div>
+      <div class="col-sm-3 no-padding">
+        <div id="main2" style="width: 100%;height:300px;"></div>
+        <div id="main11" style="width: 100%;height:300px;"></div>
+        <!-- <div class="gengduo" id="businessDep_gmv_more"><a>更多</a></div> -->
+      </div>
+    </section>
+
+    <section class="content-header clearfix" style="margin-top: 30px;">
+      <div class="col-sm-3 no-padding" style="position: relative;">
+        <div id="main3" style="width: 100%;height:300px;"></div>
+        <div class="gengduo" id="store_gmv_more" style="display: none;"><a>更多</a></div>
+        <div id="main7" style="width: 100%;height:300px;" style="margin-top: 10px;"></div>
+        <div class="gengduo" id="store_order_more" style="top:305px;display: none;"><a>更多</a></div>
+      </div>
+      <div class="col-sm-6 no-padding">
+        <div class="pull-left" style="width: 50%;position: relative;">
+          <div id="main5" style="width: 100%;height:600px;"></div>
+          <div class="gengduo" id="guoanxia_gmv_more" style="display: none;"><a>更多</a></div>
+        </div>
+        <div class="pull-left" style="width: 50%">
+          <div id="main6" style="width: 100%;height:600px;"></div>
+          <div class="gengduo" id="commodity_gmv_more" style="display: none;"><a>更多</a></div>
+        </div>
+      </div>
+      <div class="col-sm-3 no-padding">
+        <div id="main4" style="width: 100%;height:300px;"></div>
+        <div class="gengduo" id="businessDep_gmv_more" style="display: none;"><a>更多</a></div>
+        <div id="main8" style="width: 100%;height:300px;" style="margin-top: 10px;"></div>
+      </div>
+      <div class="gengduo" id="channel_gmv_more" style="top:305px;display: none;"><a>更多</a></div>
+    </section>
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+<!-- ./wrapper -->
+<div class="control-sidebar-bg" id="control-sidebar-bg"></div>
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- ../crm/bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../crm/bootstrap/js/raphael-min.js"></script>
+<script src="../crm/plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+
+<!-- 新header -->
+<script src="../crm/dist/js/nav-scroll.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- page script -->
+<!-- statistics -->
+<script src="../crm/dist/js/jquery.dataStatistics.js"></script>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="../crm/dist/js/echarts.common.min.js"></script>
+<script src="../crm/dist/js/china.js"></script>
+<!-- 页面缓存 script -->
+<script src="../crm/dist/js/headquarters/cache.js"></script>
+<script src="../crm/dist/js/headquarters/echarts-wordcloud.js"></script>
+<!-- 总部首页 script -->
+<script src="index_headquarters_demo.js"></script>
+<script src="index_headquarters.json"></script>
+<script type="text/javascript"  src="js/tian_jin.js"></script>
+<script src="../crm/dist/js/headquarters/conversion_utils.js"></script>
+<script type="text/javascript">
+</script>
+
+
+</body>
+
+<div id="store_detail_div" style="height:247px;display:none">
+  	<div style="width:100%;background-color:#fffafa;vertical-align:baseline;padding-left:10px">
+  	<span style="position:relative;top:1px">门店编号：</span> <input id="store_search_storeno" type="text" style="position:relative;top:1px;width:100px;height:30px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  	<span style="position:relative;top:1px">店名：</span> <input id="store_search_name" type="text" style="position:relative;top:1px;width:100px;height:30px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		<button  onclick="searchEmployee_store()" style="position:relative;top:-1px;width:46px;height:26px;line-height:26px;vertical-align:middle ;text-align:center;font-size:14px" >搜索</button> 
+  		<button  onclick="resetSearch_store()" style="position:relative;top:-1px;width:46px;height:26px;line-height:26px;vertical-align:middle ;text-align:center;font-size:14px" >重置</button>
+  	</div>
+  	
+  	<table id="store_detail_table" style="width:100%;text-align:center;border-collapse:inherit;border-spacing:2px" border="0"  >
+  	<tr style="height:25px;background-color:#00c0ef;color:white" id="store_detail_title">
+  		<td width="30px">序号</td>
+  		<td>门店编号</td>
+  		<td>店名</td>
+  		<td>城市</td>
+  	</tr>
+  	</table>
+</div>
+
+
+<div id="employee_detail_div" style="height:340px;display: none;">
+	<div style="width:100%;background-color:#fffafa;vertical-align:baseline;padding-left:10px">
+  		姓名: <input id="gax_search_name" type="text" style="width:100px;height:30px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		城市: <input id="gax_search_city" type="text" style="width:100px;height:30px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		门店: <input id="gax_search_storename" type="text" style="width:100px;height:30px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		<button  onclick="searchEmployee()" style="width:46px;height:26px;line-height:26px;vertical-align:middle ;text-align:center;font-size:14px" >搜索</button> 
+  		<button  onclick="resetSearch_employee()" style="width:46px;height:26px;line-height:26px;vertical-align:middle ;text-align:center;font-size:14px" >重置</button>
+  	</div>
+  	<table id="employee_detail_table" style="width:100%;text-align:center;border-collapse:separate;border-spacing:2px" border="0" cellspacing="3" cellpadding="2"  >
+  	<tr style="height:25px;background-color:#00c0ef;color:white" id="employee_detail_title">
+  		<td width="30px">序号</td>
+  		<td>员工号</td>
+  		<td>姓名</td>
+  		<td>城市</td>
+  		<td>门店</td>
+  	</tr>
+  	</table>
+  	<div id="employee_page" style="padding:10px 10px 0 70px"></div>
+</div>
+
+
+<div id="city_detail_div" style="height:247px;display:none">
+  	<table id="city_detail_table" style="width:100%;text-align:center;border-collapse:separate;border-spacing:2px" border="0" cellspacing="3" cellpadding="2"  >
+  	<tr style="height:25px;background-color:#00c0ef;color:white" id="city_detail_title">
+  		<td width="30px">序号</td>
+  		<td>名称</td>
+  		<!-- <td>代码</td>
+  		<td>编号</td> -->
+  	</tr>
+  	</table>
+</div>
+
+<div id="storeKeeper_detail_div" style="height:247px;display:none">
+  	<div style="width:100%;background-color:#fffafa;vertical-align:baseline;padding-left:10px">
+  	员工号： <input id="storeKeeper_search_employeeNo" type="text" style="width:100px;height:30px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  	姓名： <input id="storeKeeper_search_name" type="text" style="width:100px;height:30px;border: 1px solid #aec1ca;border-radius: 2px;" />
+  		<button  onclick="searchEmployee_storeKeeper()" style="width:46px;height:26px;line-height:26px;vertical-align:middle ;text-align:center;font-size:14px" >搜索</button> 
+  		<button  onclick="resetSearch_storeKeeper()" style="width:46px;height:26px;line-height:26px;vertical-align:middle ;text-align:center;font-size:14px" >重置</button>
+  	</div>
+  	<table id="storeKeeper_detail_table" style="width:100%;text-align:center;border-collapse:inherit;border-spacing:2px" border="0"  >
+  	<tr style="height:25px;background-color:#00c0ef;color:white" id="storeKeeper_detail_title">
+  		<td width="30px">序号</td>
+  		<td>员工号</td>
+  		<td>姓名</td>
+  		<td>城市</td>
+  		<td>门店</td>
+  		<td>电话</td>
+  	</tr>
+  	</table>
+</div>
+<div id="more_cityDiv" style="width:90px;height:50px;display:none">
+  	<select id="switch_city" onchange="changeCity()" style="
+    height: 30px;
+    margin: 10px 10px 10px 20px;
+    width: 210px;
+    border-radius: 6px;">
+	</select>
+</div>
+</html>
