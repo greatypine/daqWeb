@@ -2797,7 +2797,7 @@ var getDailyData = function(){
         timerId = setInterval(chonfu,1000);
 }
  function chonfu(){
-  					var totalprice = 80000+RandomNum(1000,5000)+'';
+  					var totalprice = 800000+RandomNum(1000,5000)+'';
   					if(totalprice.indexOf(".")>0){
   						totalprice = totalprice.substring(0,totalprice.lastIndexOf("."));
   					}
