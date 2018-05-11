@@ -1,0 +1,833 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>区域热力图</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../aboutMap/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../aboutMap/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../aboutMap/plugins/daterangepicker/daterangepicker.css">
+	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+    <style type="text/css">
+    	*{margin: 0; padding: 0;}
+		ul,li{list-style: none;}
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            font-size: 12px;;
+        }
+
+        #mapContainer {
+            position: absolute; 
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        } 
+     #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	.content-header{padding-top: 0;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg i{margin-right: 5px;}
+    .logo-lg > ul > li:hover{border-bottom: 3px solid #46A3FF;-webkit-transition: all .2s ease-in-out;-o-transition: all .2s ease-in-out;transition: all .2s ease-in-out;}
+    .logo-lg > ul > li:hover > a{color: #66B3FF; font-weight: bold;}
+    .logo-lg > ul > li:hover i{color: #66B3FF;}
+    .logo-lg > ul > li:hover:nth-child(1){border: 0;}
+
+    .form-group{line-height: 34px;}
+    .form-group label{font-size: 12px; margin: 0; display: block; height: 30px;}
+    /* .daterangepicker {left:50%!important;margin-left:-150px} */
+    .menu_1{position: absolute; top:30px;  right: 20px; width: 180px; background-color: #fff;}
+	.legend_1{font-size: 15px; padding: 15px 0 0 15px;}
+	.menu_list_1{ width: 180px; padding-top: 10px; box-shadow: 1px 2px 1px rgba(0,0,0,.15);-webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out;}
+
+	.menu_list_1 li{line-height: 22px; font-size: 12px; padding-bottom: 10px;}
+	.menu_list_1 li:nth-last-child(1){border: none;}
+	.menu_list_1 li p:nth-child(1){padding-bottom: 2px; color: #333;}
+	p{margin: 0;}
+    .menu_list_1 li a{color: #999; display: inline-block; width: 100%; text-decoration: none; padding-top: 5px;}
+
+	.no-padding{padding: 0;}
+    .menu_list_1 .col-sm-3{ height: 15px; margin: 5px 0 0 0;}
+	.menu_list_1 .col-sm-9 b{padding-left: 10px;}
+	
+	
+	
+	 .info {
+            border: solid 1px silver;
+        }
+        div.info-top {
+            position: relative;
+            background: none repeat scroll 0 0 #F9F9F9;
+            border-bottom: 1px solid #CCC;
+            border-radius: 5px 5px 0 0;
+        }
+        div.info-top div {
+            display: inline-block;
+            color: #333333;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 31px;
+            padding: 0 10px;
+        }
+        div.info-top img {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            transition-duration: 0.25s;
+        }
+        div.info-top img:hover {
+            box-shadow: 0px 0px 5px #000;
+        }
+        div.info-middle {
+            font-size: 12px;
+            padding: 6px;
+            line-height: 20px;
+        }
+        div.info-bottom {
+            height: 0px;
+            width: 100%;
+            clear: both;
+            text-align: center;
+        }
+        div.info-bottom img {
+            position: relative;
+            z-index: 104;
+        }
+        span {
+            margin-left: 5px;
+            font-size: 11px;
+        }
+        .info-middle img {
+            float: left;
+            margin-right: 6px;
+        }
+        /*全屏按钮*/
+        .pull-right-fullscreen {
+        	position:absolute;
+        	z-index:10;
+        	right:20px;
+        }
+        /*全屏样式*/
+	    #mask{width:100%; height:100%; position:fixed; top:0; left:0; display: none; z-index:9999999; background-color: rgba(0,0,0,0.7);}
+	    #mask-body{ position: absolute; top: 50px; left: 50px; height: 600px; opacity: 1; z-index: 99; }
+	    #mask-header{ position: absolute; top: 50px; left: 0px; height: 50px; opacity: 1; z-index: 999; }
+	    #mask-header>button{ padding: 3px 5px;  position: absolute; left: 15px; top: -45px; cursor: pointer; }
+	    
+	    
+     </style>  
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <div id="mask" style="width: 100%;height:100%;z-index:120px">
+    <div id="mask-header"><button class="btn btn-primary">退出</button></div>
+    <div id="mask-body"></div>
+  </div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+  <div id="process_div" ></div>
+  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../aboutMap/dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+    <div class="container">
+      <!-- Main content -->
+
+      <section class="content-header">
+
+        <div class="box-header" style="padding:10px 0">
+          <div class="form-group col-sm-2 no-padding">
+            <label>城市</label>
+            <select class="form-control select2" id="cityName" >
+              <!-- <option>北京</option> -->
+            </select>
+          </div>
+          <div class="form-group col-sm-3">
+            <label>门店</label>
+            <select class="form-control select2" id="storeName">
+              <!-- <option>北京</option> -->
+            </select>
+          </div>
+          <div class="form-group col-sm-3">
+            <label>数据源</label>
+              <select class="form-control select2" id="type">
+                <option value="yye">营业额</option>
+                <option value="ddl">订单量</option>
+                <option value="yhl">用户量</option>
+              </select>
+          </div>
+          <div class="form-group col-sm-3 no-padding" id="datetime">
+            <label>时间</label>
+            <div class="input-group" id="time">
+              <div class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+              </div>
+                 <input type="text" class="form-control pull-right" id="auto_date"  placeholder="点击选择日期" readonly="readonly">
+            </div>
+          </div>
+          <div class="form-group col-sm-1">
+            <label></label>
+            <button type="button" class="btn btn-block btn-primary btn-sm" onclick="showHeat()">查看</button>
+          </div>
+
+
+        </div>
+        <span class="pull-right-fullscreen" onclick="fullscreen();">
+         	<img src="../aboutMap/dist/img/fullscreen.png">
+         </span>
+         <input id="fscreen" hidden="hidden">
+        <div class="box-body" style="position:relative" id="mapHeight">
+          <div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
+          <!--右侧图例-->
+		   <div class="menu_1">
+			   <div class="legend_1"><b>图例：</b></div>
+			   <div class="menu_list_1 clearfix">
+				   <ul  id="example">
+					   <!-- <li class="col-lg-12">
+						   <div class="col-sm-3"></div>
+						   <div class="col-sm-9">
+							   <p>门店服务区</p>
+						   </div>
+					   </li>
+					   <li class="col-lg-12">
+						   <div class="col-sm-3"></div>
+						   <div class="col-sm-9">
+							   <p>小区</p>
+						   </div>
+					   </li> -->
+				   </ul>
+			   </div>
+			   <div></div>
+		   </div>
+		   <!--右侧图里-->
+
+        </div>
+
+</section>
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../crm/bootstrap/js/raphael-min.js"></script>
+<!-- FastClick -->
+<script src="../crm/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../crm/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../crm/dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- bootstrap datepicker -->
+<script type="text/javascript" src="../aboutMap/plugins/daterangepicker/moment.min.js"></script>
+<script src="../aboutMap/plugins/daterangepicker/daterangepicker.js"></script>
+<script language="javascript" src="../scripts/common/heatMap_color.js"></script>
+
+<script type="text/javascript">
+    autodivheight();
+    function autodivheight(){ //函数：获取尺寸
+        //获取浏览器窗口高度
+        var winHeight=0;
+        if (window.innerHeight)
+            winHeight = window.innerHeight;
+        else if ((document.body) && (document.body.clientHeight))
+            winHeight = document.body.clientHeight;
+        //通过深入Document内部对body进行检测，获取浏览器窗口高度
+        if (document.documentElement && document.documentElement.clientHeight)
+            winHeight = document.documentElement.clientHeight;
+        //DIV高度为浏览器窗口的高度
+        //document.getElementById("test").style.height= winHeight +"px";
+        //DIV高度为浏览器窗口高度的一半
+        document.getElementById("mapHeight").style.height= winHeight - 130 +"px";
+    }
+    window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+</script>
+<script type="text/javascript">
+//格式化日期格式
+Date.prototype.format=function(fmt) {        
+    var o = {        
+    "M+" : this.getMonth()+1, //月份        
+    "d+" : this.getDate(), //日        
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+    "H+" : this.getHours(), //小时        
+    "m+" : this.getMinutes(), //分        
+    "s+" : this.getSeconds(), //秒        
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+    "S" : this.getMilliseconds() //毫秒        
+    };        
+    var week = {        
+    "0" : "\u65e5",        
+    "1" : "\u4e00",        
+    "2" : "\u4e8c",        
+    "3" : "\u4e09",        
+    "4" : "\u56db",        
+    "5" : "\u4e94",        
+    "6" : "\u516d"       
+    };        
+    if(/(y+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+    }        
+    if(/(E+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+    }        
+    for(var k in o){        
+        if(new RegExp("("+ k +")").test(fmt)){        
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+        }        
+    }        
+    return fmt;        
+} 
+
+$("#mask-header>button").click(function(){ 
+	$("#mask").css('display',"none");
+	document.getElementById("mapHeight").style.height= "600px";
+	$("#mapHeight").removeAttr("style");
+    $("#mapHeight").css({"position":"relative","top":"0px"});
+    autodivheight();
+	$("#fscreen").after($("#mapHeight"));
+  
+});
+
+debugger;
+var cityId = decode64(getUrlParamByKey("c"));     /**城市ID*/
+var cityName = decode64(getUrlParamByKey("cn")); /**城市名称*/
+var employeeId = decode64(getUrlParamByKey("e")); /**员工编号*/
+var target = decode64(getUrlParamByKey("t"));   /**1.城市；2.门店**/
+var storeIdNo = decode64(getUrlParamByKey("si"));    /**门店编号*/
+var type = decode64(getUrlParamByKey("ty")); /**查询类型*/
+var storeId;
+var storeNo;
+if(storeIdNo !="null"){
+	storeId = storeIdNo.split(",")[0].trim();
+	storeNo = storeIdNo.split(",")[1].trim();
+}
+var beginDate = decode64(getUrlParamByKey("be"));
+var endDate = decode64(getUrlParamByKey("en"));
+var OrderHeatDto = {};
+
+var getRequestParam = function(){
+	if(target==1){
+		if(storeIdNo.trim() == "null"){
+			OrderHeatDto = {//城市
+			        city_id:cityId,
+			        employee_id:employeeId,
+			        type:type,
+			        beginDate:beginDate,
+			        endDate:endDate
+			}
+		}else{
+			OrderHeatDto = {
+			        city_id:cityId,
+			        employee_id:employeeId,
+			        type:type,
+			        store_id:storeId,
+			        beginDate:beginDate,
+			        endDate:endDate
+			}
+		}
+	}else if(target==2){//门店
+		OrderHeatDto = {
+	        employee_id:employeeId,
+	        store_id:storeId,
+	        type:type,
+	        beginDate:beginDate,
+	        endDate:endDate
+	    }
+	}
+	return OrderHeatDto;
+}
+
+var setExample = function(){
+	$("#example").empty();
+	if(storeIdNo.trim() == "null"){
+		$("#example").append("<li class='col-lg-12'><div class='col-sm-3' style='border:2px solid #5c69cc;'></div><div class='col-sm-9'><p>门店服务区</p></div></li>");
+	}else{
+		$("#example").append("<li class='col-lg-12'><div class='col-sm-3' style='border:2px solid #5c69cc;'></div><div class='col-sm-9'><p>门店服务区</p></div></li>"
+				   +"<li class='col-lg-12'><div class='col-sm-3' style='border:2px solid #30c429;'></div><div class='col-sm-9'><p>小区</p></div></li>");
+	}
+}
+
+
+
+//初始化地图对象，加载地图
+var map = new AMap.Map("mapContainer", {
+    resizeEnable : true,
+    doubleClickZoom : false
+});
+map.setMapStyle('amap://styles/light');
+//map.setCity(cityName);
+
+map.plugin(["AMap.ToolBar"],function(){
+    //加载工具条
+    var toolBaropt = {
+        offset :new AMap.Pixel(10,55),//相对于地图容器左上角的偏移量，正数代表向右下偏移。默认为AMap.Pixel(10,10)
+        position : 'LT',//工具放置位置RT:右上角;
+        ruler : true,//标尺键盘是否可见，默认为true
+        noIpLocate : false,//定位失败后，是否开启IP定位，默认为false
+        locate : true,//是否显示定位按钮，默认为false
+        liteStyle : false,//是否使用精简模式，默认为false
+        direction : true,//方向键盘是否可见，默认为true
+        autoPosition : false,//是否自动定位，即地图初始化加载完成后，是否自动定位的用户所在地，在支持HTML5的浏览器中有效，默认为false
+        useNative : false
+    }
+    var tool = new AMap.ToolBar(toolBaropt);
+    map.addControl(tool);
+});
+
+//判断浏览区是否支持canvas
+function isSupportCanvas() {
+    var elem = document.createElement('canvas');
+    return !!(elem.getContext && elem.getContext('2d'));
+}
+
+var jsonData;
+$(function(){
+	 var minDate = new Date();
+	    minDate.setDate(1);
+	    minDate.setMonth(minDate.getMonth()-1);
+	    var mdate = minDate.format('yyyy/MM/dd')+" 00:00";
+	$('#auto_date').daterangepicker({
+		"locale": {
+	        "format": "YYYY/MM/DD HH:mm",
+	        "separator": " - ",
+	        "applyLabel": "确定",
+	        "cancelLabel": "取消",
+	        "fromLabel": "From",
+	        "toLabel": "To"
+    	},
+    	startDate: beginDate,
+		endDate: endDate,
+		timePicker:true,
+		timePicker24Hour:true,
+        minDate:mdate,
+        maxDate:new Date()
+	});
+    $("#auto_date").val(beginDate+"-"+endDate);
+	OrderHeatDto = getRequestParam();
+	initcurruser();
+	getTypeOption();
+	initData();
+	$("#cityName").change(function(){
+		storeIdNo = "";
+		  changeStoreName();
+		});
+	$("#storeName option[value='del']").remove();
+}); 
+
+function changeStoreName(){
+	 var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+	 var regex_zb = new RegExp("^(ZB|zb)\w*");
+	 var regex_yw = new RegExp("^(YW|yw)\w*");
+     if(regex_cs.test(curr_user.usergroup.code) || regex_zb.test(curr_user.usergroup.code) || regex_yw.test(curr_user.usergroup.code)){
+		target = 1;
+		var options=$("#cityName option:selected");
+		var cityId = options.val();
+		getStoreName(curr_user,cityId);
+	}else if(curr_user.usergroup.code == "QYJLJSZ"){
+		target = 1;
+		getStoreName(curr_user,null);
+	}else{
+		target = 2;
+		getStoreName(curr_user,null);
+	}
+}
+
+function initData(){
+	$("#process_div").show();
+	$("#process_div_pic").show();
+	setExample();
+	doManager("OrderHeatManager", "getLagLatByOrder",[OrderHeatDto], function(data, textStatus,XMLHttpRequest) {
+        if(data.result){
+        	jsonData = JSON.parse(data.data);
+        	if(target == 1){//城市
+        		if(storeId == null){
+        			map.clearMap();
+        			$("#heat_legend_color").hide();
+            		map.setCity(cityName);
+        			var serviceArea = jsonData.serviceArea;
+            		var heatData = jsonData.orderHeat;
+            		var heatCount = jsonData.orderCount;
+            		if(serviceArea.code == 200){
+                    	//服务范围数组
+                    	serviceArray = serviceArea.data;
+                    	if(serviceArray!=null && serviceArray.length>0){
+                    		var servicePolygon;
+                        	for(var i=0;i<serviceArray.length;i++){
+                        		var polygonArray = serviceArray[i];
+                        		var serviceCoordinates=polygonArray.vertex;
+                        		var position = polygonArray.position;
+                        		var storeName = polygonArray.storeName;
+                        		//画服务范围多边形
+                        		if(polygonArray.storeNo != "0021Y0020"){
+                        			   servicePolygon = new AMap.Polygon({
+                         			   path:serviceCoordinates,
+                         		       strokeColor: "#5c69cc", //线颜色
+                         		       strokeOpacity: 1, //线透明度
+                         		       strokeWeight: 2,    //线宽
+                         		       fillColor: "#046ad3", //填充色
+                         		       fillOpacity: 0,//填充透明度
+                         		       extData:{"storeName":storeName}
+                         		 	});
+                         			servicePolygon.setMap(map);
+                        		}
+                        	}
+                    	}
+                    }
+            		heatShowByCity(heatData,heatCount,map);
+        		}else{
+        			storeHeat(jsonData);
+        		}
+        	}else{//门店
+        		storeHeat(jsonData);
+        	}
+        	$("#process_div").hide();
+			 $("#process_div_pic").hide();
+        }else{
+        	crm_alert(0,"数据加载异常！");
+        }
+    }); 
+}
+
+var curr_user;
+function initcurruser(){
+		//取得当前登录人的门店
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			curr_user = JSON.parse(data.data);
+			$("#employee_no").html(curr_user.employeeId);
+			$('span[class="hidden-xs"]').html(curr_user.name);
+			$("#card_name").html(curr_user.name);
+			if(curr_user.employeeId==null||curr_user.employeeId=="null"){
+				employeeID = "";
+			}else{
+				employeeID = curr_user.employeeId;
+			}
+			getCityName();
+			changeStoreName();
+			 $("#card_no").html(curr_user.zw+" "+employeeID);
+		}
+  	},false);
+}
+var heatmap;
+var storeHeat = function(jsonDate){
+	map.clearMap();
+	var servicePolygon;
+	var serviceAreaAndPosition = jsonData.serviceAreaAndPosition;
+	if(serviceAreaAndPosition.code == 200){
+		var serviceArea = serviceAreaAndPosition.serviceArea;
+		var servicePosition = serviceAreaAndPosition.position;
+		 if(serviceArea.length>0){
+			servicePolygon = new AMap.Polygon({
+				path : serviceArea,
+			        strokeColor: "#5c69cc", //线颜色
+			        strokeOpacity: 0.9, //线透明度
+			        strokeWeight: 3,    //线宽
+			        fillColor: "#046ad3", //填充色
+			        fillOpacity: 0//填充透明度
+		 		});
+				servicePolygon.setMap(map);
+				map.setCenter(servicePolygon.getBounds().getCenter());
+				map.setZoom(16);
+		 }
+	}else if(serviceAreaAndPosition.code == 9000003){
+		crm_alert(0,"门店服务范围不存在！");
+	}
+	var heatData = jsonData.orderHeat;
+	var heatCount = jsonData.orderCount;
+	var tinyVillageCoord = jsonData.tinyVillageCoord;
+	if(tinyVillageCoord.code == 200 &&　tinyVillageCoord.data.length>0){
+		var tinyVillageCoords = tinyVillageCoord.data;
+		var vallagePolygon;
+		debugger;
+		for(var i = 0; i<tinyVillageCoords.length; i++){
+			var coordinates = tinyVillageCoords[i];
+			if(coordinates.storeNo == storeNo){
+				vallagePolygon = new AMap.Polygon({
+	     			path : coordinates.data,
+	  		        strokeColor: "#30c429", //线颜色
+	  		        strokeOpacity: 0.9, //线透明度
+	  		        strokeWeight: 2,    //线宽
+	  		        fillColor: "#046ad3", //填充色
+	  		        fillOpacity: 0,//填充透明度
+		 		});
+				vallagePolygon.setMap(map);
+			}
+		}
+	}
+	heatShowByStore(heatData,heatCount,map);
+	
+}
+
+var heatShowByStore = function(jsonDataCoordinate,heatCount,map){
+	var max = parseInt((heatCount[0].maxCount-heatCount[0].minCount)*0.2);
+	if (!isSupportCanvas()) {
+	    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+	}
+	map.plugin(["AMap.Heatmap"], function() {
+	    //初始化heatmap对象
+	    heatmap = new AMap.Heatmap(map, {
+	        radius: 20, //给定半径
+	        opacity: [0, 0.8]
+	    });
+	    //设置数据集：该数据为北京部分“公园”数据
+	    heatmap.setDataSet({
+	        data: jsonDataCoordinate,
+	        max:max,
+	    });
+	    heatmap.setMap(map);
+		heatmap.show();
+	});
+	
+}
+
+var heatShowByCity = function(jsonDataCoordinate,heatCount,map){
+	debugger;
+	var max = parseInt((heatCount[0].maxCount-heatCount[0].minCount)*0.2);
+	if (!isSupportCanvas()) {
+	    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+	}
+	map.plugin(["AMap.Heatmap"], function() {
+	    //初始化heatmap对象
+	    heatmap = new AMap.Heatmap(map, {
+	        radius: 20, //给定半径
+	        opacity: [0, 0.8]
+	        ,gradient:{
+	         0.5: 'blue',
+	         0.65: 'rgb(117,211,248)',
+	         0.7: 'rgb(0, 255, 0)',
+	         0.9: '#ffea00',
+	         1.0: 'red'
+	         }
+	    });
+	    heatmap.setDataSet({
+	        data: jsonDataCoordinate,
+	        max:max
+	    });
+		heatmap.setMap(map);
+		heatmap.show();
+	});
+}
+
+function getCityName(){
+	doManager("UserManager", "getCurrentUserCity",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var citylist= JSON.parse(data.data);
+			if(citylist.length == 0){
+				crm_alert(0,"该账号未分配城市！");
+				return;
+			}
+			//var real_current_city = init_city_id==null?cityinfo.city:"";
+			var citylistLength = citylist.length;
+			if(citylistLength == 0){
+				$("#cityName").attr("disabled",true);
+			}
+			if(citylistLength == 1){
+				var cityName = citylist[0].cityname==null?"":citylist[0].cityname;
+				var cityid = citylist[0].cityid;
+				$("#cityName").append("<option value='"+cityid+"'>"+cityName+"</option>");
+				$("#cityName").attr("disabled",true);
+			}
+			if(citylistLength > 1){
+				for(var i = 0; i<citylistLength; i++){
+					var cityInfo = citylist[i];
+					var cityName = cityInfo.cityname;
+					var cityid = cityInfo.cityid;
+					$("#cityName").append("<option value='"+cityid+"'>"+cityName+"</option>");
+					if(cityid == cityId){
+						$($("#cityName").find("option")[i]).attr("selected","selected");
+					}
+				}
+			}
+		}
+	},false);   
+}
+
+function getStoreName(curr_user,cityId){
+	doManager("StoreManager", "findStoreByCurUser",[curr_user,cityId],function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var storeList= JSON.parse(data.data);
+			$("#storeName").empty();
+			if(storeList.length == 0){
+				crm_alert(0,"该账号未分配门店！");
+				$("#storeName").attr("disabled",true);
+				return;
+			}
+			if(storeList.length == 1){
+				var storeName = storeList[0].name;
+				var storeid = storeList[0].store_id;
+				var storeno = storeList[0].storeno;
+				$("#storeName").append("<option value='"+storeid+","+storeno+"'>"+storeName+"</option>");
+					$("#storeName").attr("disabled",true);
+			}
+			if(storeList.length > 1){
+				if(target == 1){
+					$("#storeName").append("<option>"+"全部门店"+"</option>");
+					if(storeIdNo.trim() == "null"){
+						$($("#storeName").children("option:first-child")).attr("selected","selected");
+					}
+					for(var i = 0; i< storeList.length; i++){
+						var store =  storeList[i];
+						var storeName = store.name;
+						var storeid = store.store_id;
+						var storeno = storeList[i].storeno;
+						if(storeid != 9900228 && storeno != "0021Y0020"){
+							$("#storeName").append("<option value='"+storeid+","+storeno+"'>"+storeName+"</option>");
+							if(storeid == storeId){
+								$($("#storeName").find("option")[i+1]).attr("selected","selected");
+							}
+						}else{
+							$("#storeName").append("<option value='del'></option>");
+						}
+						
+					}
+				}else{
+					for(var i = 0; i< storeList.length; i++){
+						var store =  storeList[i];
+						var storeName = store.name;
+						var storeid = store.store_id;
+						var storeno = storeList[i].storeno;
+						if(storeid != 9900228 && storeno != "0021Y0020"){
+							$("#storeName").append("<option value='"+storeid+","+storeno+"'>"+storeName+"</option>");
+							if(storeid == storeId){
+								$($("#storeName").find("option")[i]).attr("selected","selected");
+							}
+						}else{
+							$("#storeName").append("<option value='del'></option>");
+						}
+						
+					}
+				}
+			}
+		}
+	},false);   
+}
+
+function getTypeOption(){
+	if(type == "ddl"){
+		$($("#type").children("option:nth-child(2)")).attr("selected","selected");
+	}else if(type == "yye"){
+		$($("#type").children("option:first-child")).attr("selected","selected");
+	}else{
+		$($("#type").children("option:last-child")).attr("selected","selected");
+	}
+}
+
+function showHeat(){
+	var cityoptions=$("#cityName option:selected");
+	cityId = cityoptions.val();
+	cityName = cityoptions.text();
+	var typeoptions = $("#type option:selected");
+	type = typeoptions.val();
+	var storeoptions = $("#storeName option:selected");
+	if(storeoptions.text() != "全部门店"){
+		storeIdNo = storeoptions.val();
+		storeId = storeIdNo.split(",")[0];
+		storeNo = storeIdNo.split(",")[1];
+	}else{
+		storeIdNo = "null";
+		storeId = null;
+	}
+    var date = $("#auto_date").val();
+   	beginDate = date.split("-")[0].trim();
+   	endDate = date.split("-")[1].trim();
+   	var ndate = new Date().format('yyyy/MM').split("/");
+    var nyear = parseInt(ndate[0]) , 
+    nmonth = parseInt(ndate[1]) , 
+    byear = parseInt((beginDate.split("/"))[0]) , 
+    bmonth = parseInt((beginDate.split("/"))[1]) , 
+    //通过年,月差计算月份差
+    months = (nyear - byear) * 12 + (nmonth-bmonth) + 1;
+   /*  if(months>2){
+    	crm_alert(0,"仅查询本月及上月数据，请修改时间！");
+    	return ;
+    } */
+	OrderHeatDto = getRequestParam();
+	heatmap.setDataSet({
+        data: {}
+    });
+	initData();
+	
+}
+
+function automaxheight(){ //函数：获取尺寸
+    //获取浏览器窗口高度
+    var winHeight=0;
+    var winWidth=0;
+    if (window.innerHeight){
+        winHeight = window.innerHeight;
+        winWidth= window.innerWidth;}
+    else if ((document.body) && (document.body.clientHeight)){
+        winHeight = document.body.clientHeight;
+        winWidth = document.body.clientWidth;}
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    else if (document.documentElement && document.documentElement.clientHeight){
+        winHeight = document.documentElement.clientHeight;
+        winWidth = document.documentElement.clientWidth;}
+    //DIV高度为浏览器窗口的高度
+    //document.getElementById("test").style.height= winHeight +"px";
+    //DIV高度为浏览器窗口高度的一半
+    document.getElementById("mapHeight").style.height= winHeight+"px";
+    document.getElementById("mapHeight").style.width= winWidth+"px";
+    $("#mask-body").css({"top":"0px"});
+    $("#mask-body").css({"left":"0px"});
+    $("#mapContainer").css({"border-radius":"0"});
+    
+}	
+
+function fullscreen(){
+	debugger;
+	automaxheight();
+    $("#mask").css("display","block");
+   	$("#mapHeight").show();
+   	var copyMap = $("#mapHeight");
+   	$("#mask-body").html(copyMap);
+}
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 2 | Blank Page</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../aboutMap/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../aboutMap/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../aboutMap/plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .logo-lg i{margin-right: 5px;}
+    .logo-lg > ul > li:hover{border-bottom: 3px solid #46A3FF;-webkit-transition: all .2s ease-in-out;-o-transition: all .2s ease-in-out;transition: all .2s ease-in-out;}
+    .logo-lg > ul > li:hover > a{color: #66B3FF; font-weight: bold;}
+    .logo-lg > ul > li:hover i{color: #66B3FF;}
+
+    .form-group{line-height: 34px;}
+    .form-group label{font-size: 16px;}
+
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="container">
+
+        <div class="pull-left">
+          <div class="logo-lg clearfix">
+            <ul>
+              <li><a href="index_demo.html" class="h2"> <img src="../aboutMap/dist/img/logo_2.png"> </a></li>
+              <li><a href="#"><i class="fa fa-home"></i>首页</a> </li>
+              <li class="nav-mark"><a href="#"><i class="fa fa-pie-chart"></i>区域热力图</a> </li>
+              <li><a href="#"><i class="fa fa-line-chart"></i>片区分布图</a></li>
+              <li><a href="#"><i class="fa fa-line-chart"></i>国安侠分布图</a></li>
+              <li><a href="#"><i class="fa fa-object-group"></i>门店覆盖范围</a> </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <li><a href="#">数据平台首页</a> </li>
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="dist/img/user8-128x128.jpg" class="user-image" alt="User Image">
+                <span class="hidden-xs">王春</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="dist/img/user8-128x128.jpg" class="img-circle" alt="User Image">
+
+                  <p><strong>王春</strong></p>
+                  <p>店长<span>A77777</span></p>
+                  <p>呼家楼店</p>
+                </li>
+                <!--<li class="user-body">
+                  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">任务列表</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">我的消息</a>
+                    </div>
+                  </div>
+
+                </li>-->
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="#" class="btn btn-default btn-flat">数据平台首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="#" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container" style="padding-top: 100px;">
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6 no-padding">
+          <div class="box-header h2"><strong>请选择您要查询的区域</strong></div>
+          <div class="box-body">
+
+            <div class="form-group col-lg-6 no-padding">
+              <label class="col-sm-2 control-label no-padding text-right">省份</label>
+
+              <div class="col-sm-10">
+                <select class="form-control select2">
+                  <option>北京</option>
+                  <option>上海</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-lg-6 no-padding">
+              <label class="col-sm-2 control-label no-padding text-right">城市</label>
+
+              <div class="col-sm-10">
+                <select class="form-control select2">
+                  <option>北京</option>
+                  <option>上海</option>
+                </select>
+              </div>
+            </div>
+            <div class="clearfix">
+              <div class="form-group col-lg-6 no-padding">
+                <label class="col-sm-2 control-label no-padding text-right">门店</label>
+
+                <div class="col-sm-10">
+                  <select class="form-control select2">
+                    <option>北京</option>
+                    <option>上海</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix">
+              <div class="form-group col-lg-6 no-padding">
+                <label class="col-sm-2 control-label no-padding text-right">时间</label>
+
+                <div class="col-sm-10">
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right active" id="reservation">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix">
+              <div class="form-group col-lg-6 no-padding">
+                <div class="col-sm-2 no-padding"></div>
+                <div class="col-sm-6"><button type="button" class="btn btn-block btn-primary">查看地图</button></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-lg-3"></div>
+      </section>
+
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../aboutMap/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../aboutMap/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../aboutMap/bootstrap/js/raphael-min.js"></script>
+<!-- FastClick -->
+<script src="../aboutMap/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- bootstrap datepicker -->
+<script src="../aboutMap/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="../aboutMap/plugins/daterangepicker/daterangepicker.js"></script>
+
+<script>
+  $(function () {
+    $(".logo-lg > ul > li").mouseenter(function(){
+      $(this).children(".nav_dropdown").show();
+    });
+    $(".logo-lg > ul > li").mouseleave(function(){
+      $(this).children(".nav_dropdown").hide();
+    });
+
+    //Date range picker
+    $('#reservation').daterangepicker();
+  });
+
+</script>
+
+</body>
+</html>

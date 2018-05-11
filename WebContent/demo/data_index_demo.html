@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>数据地图</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="../aboutMap/bootstrap/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../aboutMap/dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="../aboutMap/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="../aboutMap/plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+
+    .logo-lg i{margin-right: 5px;}
+    .logo-lg > ul > li:hover{border-bottom: 3px solid #46A3FF;-webkit-transition: all .2s ease-in-out;-o-transition: all .2s ease-in-out;transition: all .2s ease-in-out;}
+    .logo-lg > ul > li:hover > a{color: #66B3FF; font-weight: bold;}
+    .logo-lg > ul > li:hover i{color: #66B3FF;}
+    .logo-lg > ul > li:hover:nth-child(1){border: 0;}
+    .banner{background-color: #07317d; height: 300px; width: 100%; text-align: center;}
+    .banner img{height: 300px;}
+    .column{width: 700px; margin: 60px auto 100px auto;}
+    .column div{text-align: center;}
+    .column img{width: 80px; height: auto;}
+    .column p{padding-top: 5px;}
+    .h3{position: relative; width: 500px; margin: 0 auto 60px auto; border-top: 2px solid #000;}
+    .text{background-color: #f1f1f1; position: absolute; top: -15px;; left: 90px;z-index: 10000; width: 330px;}
+
+  </style>
+  <script>
+  </script>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<!-- <div class="wrapper"> -->
+
+  <header class="main-header">
+    <!-- Logo -->
+
+    <!-- Header Navbar: style can be found in header.less -->
+     <nav class="navbar navbar-static-top">
+      <!-- Sidebar toggle button-->
+      <div class="">
+
+ 		<div class="pull-left">
+          <div class="logo-lg clearfix">
+            <ul>
+              <li><img src="../aboutMap/dist/img/logo_2.png"></li>
+<!--               <li id="map" style="display:none"><a href="china_city_dataview_demo.html" target="iframe"><i class="fa fa-user"></i>地图</a> </li> -->
+              <li id="main" style="display:none" class="nav-mark"><a href="china_map_demo.html" target="iframe"><i class="fa fa-home"></i>首页</a> </li>
+              <li id="heat" style="display:none"><a href="dynamic_map_demo.html" target="iframe"><i class="fa fa-pie-chart"></i>经典热力图</a> </li>
+              <li id="village_heat" style="display:none"><a href="village_dynamic_map_demo.html" target="iframe"><i class="fa fa-cubes"></i>小区热力图</a> </li>
+              <li id="tinyArea" style="display:none"><a href="tinyArea_map_distribution_demo.html" target="iframe"><i class="fa fa-line-chart"></i>片区分布图</a></li>
+              <li id="store_cover" style="display:none"><a href="store_cover_demo.html" target="iframe"><i class="fa fa-object-group"></i>门店覆盖范围</a> </li>
+              <li id="employee" style="display:none"><a href="employee_drive_navigation_demo.html" target="iframe"><i class="fa fa-user"></i>国安侠分布图</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="pull-left">
+<!--  		<section class="sidebar logo-lg clearfix no-padding"> -->
+<!--             sidebar menu: : style can be found in sidebar.less -->
+<!--             <ul class="sidebar-menu"> -->
+<!--               <li><a href="javascript:location.reload();" class="h2"> <img src="dist/img/ditulogo.png"> </a></li> -->
+<!--             </ul> -->
+
+<!--           </section> -->
+           
+        </div>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+			<li><a href="index_headquarters_demo.html">首页</a> </li>
+            <li class="dropdown user user-menu">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="../aboutMap/dist/img/376884043677306248.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">载入中...</span>
+              </a>
+              <ul class="dropdown-menu">
+                <!-- User image -->
+                <li class="user-header">
+                  <img src="../aboutMap/dist/img/376884043677306248.png" class="img-circle" alt="User Image">
+
+                  <p><strong ><span id="card_name">载入中...</span></strong></p>
+                  <p><span id="card_no">载入中...</span></p>
+                  <!-- <p ><span id="store_name">载入中...</span></p> -->
+                </li>
+                <!-- Menu Body -->
+                <li class="user-body">
+                 <!--  <div class="row">
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">个人中心</a>
+                    </div>
+                    <div class="col-xs-6 text-center">
+                      <a href="user.html">划片区域</a>
+                    </div>
+                  </div> -->
+                  <!-- /.row -->
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="pull-left">
+                    <a href="index_headquarters_demo.html" class="btn btn-default btn-flat">首页</a>
+                  </div>
+                  <div class="pull-right">
+                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <!-- <div class="content-wrapper"> -->
+  <iframe class="content-wrapper" id="mainFrame" name="iframe"  scrolling="no"  width="100%" frameborder="0"></iframe>
+    <!-- <div class="banner">
+      <img src="dist/img/banner1.jpg">
+    </div>
+    <div class="container">
+      Main content
+      <section class="content-header">
+
+        <div class="clearfix column">
+          <div class="h3"><span class="text">如何用数据驱动业务增长</span></div>
+          <div class="col-sm-4"><img src="dist/img/icon1.png"><p>掌握过去数据</p></div>
+          <div class="col-sm-4"><img src="dist/img/icon2.png"><p>为现在做决定</p></div>
+          <div class="col-sm-4"><img src="dist/img/icon3.png"><p>未来趋势判断</p></div>
+        </div>
+      </section>
+
+    </div> -->
+  <!-- </div> -->
+  <!-- /.content-wrapper -->
+
+
+<!-- </div> -->
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="../aboutMap/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="../aboutMap/bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="../crm/bootstrap/js/raphael-min.js"></script>
+<!-- FastClick -->
+<script src="../aboutMap/plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="../aboutMap/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../aboutMap/dist/js/demo.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<!-- bootstrap datepicker -->
+<script src="../aboutMap/plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="../aboutMap/plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript">
+/* autodivheight();
+function autodivheight(){ //函数：获取尺寸
+    //获取浏览器窗口高度
+    var winHeight=0;
+    if (window.innerHeight)
+        winHeight = window.innerHeight;
+    else if ((document.body) && (document.body.clientHeight))
+        winHeight = document.body.clientHeight;
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    if (document.documentElement && document.documentElement.clientHeight)
+        winHeight = document.documentElement.clientHeight;
+    //DIV高度为浏览器窗口的高度
+    //document.getElementById("test").style.height= winHeight +"px";
+    //DIV高度为浏览器窗口高度的一半
+    document.getElementById("iframeDiv").style.height= winHeight- 200 +"px";
+    document.getElementById("mainFrame").style.height= winHeight;
+}
+window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度 */
+</script>
+<script>
+var status = decode64(getUrlParamByKey("c")); /**查询类型*/
+var nav = getUrlParamByKey("nav");
+var target = getUrlParamByKey("t");
+  $(function () {
+    $(".logo-lg > ul > li").mouseenter(function(){
+      $(this).children(".nav_dropdown").show();
+    });
+    $(".logo-lg > ul > li").mouseleave(function(){
+      $(this).children(".nav_dropdown").hide();
+    });
+    $(".logo-lg > ul > li").on("click",function(e){
+    	$(".logo-lg > ul > li").removeClass("nav-mark");
+        $(this).addClass("nav-mark");
+    });
+    if(nav == "heat"){
+    	var type =  getUrlParamByKey("type");
+		 $("#mainFrame",parent.document.body).attr("src","dynamic_map_demo.html?type="+type);
+    	 $(".logo-lg > ul > li").removeClass("nav-mark");
+         $("#heat").addClass("nav-mark");
+    }else if(nav == "tiny"){
+    	 $("#mainFrame",parent.document.body).attr("src","tinyArea_map_distribution_demo.html");
+    	 $(".logo-lg > ul > li").removeClass("nav-mark");
+         $("#tinyArea").addClass("nav-mark");
+    }else if(nav == "store"){
+    	 $("#mainFrame",parent.document.body).attr("src","store_cover_demo.html");
+    	 $(".logo-lg > ul > li").removeClass("nav-mark");
+         $("#store_cover").addClass("nav-mark");
+    }else if(nav == "emp"){
+    	 $("#mainFrame",parent.document.body).attr("src","employee_drive_navigation_demo.html");
+    	 $(".logo-lg > ul > li").removeClass("nav-mark");
+         $("#employee").addClass("nav-mark");
+    }else if(nav == "village_heat"){
+    	var type =  getUrlParamByKey("type");
+    	$("#mainFrame",parent.document.body).attr("src","village_dynamic_map_demo.html?type="+type);
+   	 	$(".logo-lg > ul > li").removeClass("nav-mark");
+        $("#village_heat").addClass("nav-mark");
+    }else{
+        $("#mainFrame",parent.document.body).attr("src","china_map_demo.html");
+    }
+  });
+  
+  $(function(){
+		initcurruser(); 
+		
+	});
+	var target;
+	var curr_user;
+	function initcurruser(){
+			//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var employeeID="";
+				curr_user = JSON.parse(data.data);
+				$("#employee_no").html(curr_user.employeeId);
+				$('span[class="hidden-xs"]').html(curr_user.name);
+				$("#card_name").html(curr_user.name);
+				var zw = curr_user.zw==null?"":curr_user.zw;
+				if(curr_user.employeeId==null||curr_user.employeeId=="null"){
+					employeeID = "";
+				}else{
+					employeeID = curr_user.employeeId;
+				}
+				
+				$("#card_no").html(zw+" "+employeeID);
+				var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+				var regex_zb = new RegExp("^(ZB|zb)\w*");//总部级别
+				var regex_yw = new RegExp("^(YW|yw)\w*");//事业部级别
+			     if(regex_cs.test(curr_user.usergroup.code) || regex_zb.test(curr_user.usergroup.code) || regex_yw.test(curr_user.usergroup.code)){
+			    	  $("#store_cover").show();
+				   	  $("#main").show();
+				   	  $("#heat").show();
+				   	  $("#employee").show();
+				   	  $("#tinyArea").show();
+				   	  $("#village_heat").show();
+				   	  /* $("#map").show(); */
+			     }else{
+			    	  $("#store_cover").hide();
+				   	  $("#main").show();
+				   	  $("#heat").show();
+				   	  $("#employee").show();
+				   	  $("#tinyArea").show();
+				   	  $("#village_heat").show();
+				   	  /* $("#map").show(); */
+			     }
+			}
+	  	},false);
+	}
+
+	
+  function doLogout() {
+		layer.confirm('确定退出？', {
+			  	title:'提示',
+			  	shadeClose:true,
+			  	closeBtn:0,
+			  	skin: 'layer-ext-otherskin',
+			  	offset:['100px','550px'],
+			  	move:false,
+				btn: ['确定','取消'], //按钮
+			}, function(){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}, function(){
+			  
+			});
+	}
+</script>
+
+</body>
+</html>
