@@ -406,14 +406,14 @@ public class WorkRecordTotalManagerImpl extends BizBaseCommonManager implements 
 	        
 	         sh_data.setColumnWidth(51+appendDays, "行为表现".getBytes().length*2*156);
 	         setCellValue(obj_row_title1, 51+appendDays, ValueUtil.getStringValue("员工工作行为表现"));
-	         sh_data.setColumnWidth(52+appendDays, "拉新客".getBytes().length*2*156);
+	        /* sh_data.setColumnWidth(52+appendDays, "拉新客".getBytes().length*2*156);
 	         setCellValue(obj_row_title1, 52+appendDays, ValueUtil.getStringValue("拉新客户数"));
 	         sh_data.setColumnWidth(53+appendDays, "营业额".getBytes().length*2*156);
 	         setCellValue(obj_row_title1, 53+appendDays, ValueUtil.getStringValue("营业额"));
 	         sh_data.setColumnWidth(54+appendDays, "店面库房".getBytes().length*2*156);
 	         setCellValue(obj_row_title1, 54+appendDays, ValueUtil.getStringValue("店面和库房管理"));
 	         sh_data.setColumnWidth(55+appendDays, "重点产品增长".getBytes().length*2*156);
-	         setCellValue(obj_row_title1, 55+appendDays, ValueUtil.getStringValue("重点产品增长率打分"));
+	         setCellValue(obj_row_title1, 55+appendDays, ValueUtil.getStringValue("重点产品增长率打分"));*/
 	         
 
 			//第四行 填报单位
@@ -550,18 +550,18 @@ public class WorkRecordTotalManagerImpl extends BizBaseCommonManager implements 
     	        	//setCellValue(obj_row, 51+appendDays, ValueUtil.getStringValue(workRecord.getScore()));
     	        	
     	        	setCellValue(obj_row, 51+appendDays, ValueUtil.getStringValue(""));
-    				setCellValue(obj_row, 52+appendDays, ValueUtil.getStringValue(""));
+    				/*setCellValue(obj_row, 52+appendDays, ValueUtil.getStringValue(""));
     	        	setCellValue(obj_row, 53+appendDays, ValueUtil.getStringValue(""));
-    	        	setCellValue(obj_row, 54+appendDays, ValueUtil.getStringValue(""));
+    	        	setCellValue(obj_row, 54+appendDays, ValueUtil.getStringValue(""));*/
     	        	
     	        	if(lst_scoreRecords!=null){
     	        		for(ScoreRecord s:lst_scoreRecords){
     	        			if(workRecord.getEmployee_no()!=null&&workRecord.getEmployee_no().equals(s.getEmployee_no())){
     	        				setCellValue(obj_row, 51+appendDays, ValueUtil.getStringValue(s.getScore()));
-    	        				setCellValue(obj_row, 52+appendDays, ValueUtil.getStringValue(s.getMixedType_repeatBuyCostomer()));
+    	        				/*setCellValue(obj_row, 52+appendDays, ValueUtil.getStringValue(s.getMixedType_repeatBuyCostomer()));
     	        	        	setCellValue(obj_row, 53+appendDays, ValueUtil.getStringValue(s.getTurnover()));
     	        	        	setCellValue(obj_row, 54+appendDays, ValueUtil.getStringValue(s.getStoreroom()));
-    	        	        	setCellValue(obj_row, 55+appendDays, ValueUtil.getStringValue(s.getEmprise()));
+    	        	        	setCellValue(obj_row, 55+appendDays, ValueUtil.getStringValue(s.getEmprise()));*/
     	        			}
     	        		}
     	        	}
