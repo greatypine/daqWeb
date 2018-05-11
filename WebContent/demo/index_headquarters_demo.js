@@ -2794,7 +2794,7 @@ var showCityUser = function(CityUserData){
 //获取当日累计营业额(元)数据
 var getDailyData = function(){
         chonfu();
-        timerId = setInterval(chonfu,1000);
+        timerId = setInterval(chonfu,2000);
 }
  function chonfu(){
   					var totalprice = 800000+RandomNum(1000,5000)+'';
