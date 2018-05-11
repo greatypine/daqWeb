@@ -3205,10 +3205,10 @@ var initStore = function(){
     var storeInfo="";
     for(var i=0;i<storelist.length;i++){
         var store_name = storelist[i].name;
-        var store_id = storelist[i].store_id;
+        var store_id = "9900287";
         var storeNo = storelist[i].storeno==null?"":storelist[i].storeno;
         var cityId = storelist[i].cityId;
-        var cityName = storelist[i].city_name;
+        var cityName = "天津";
         storeInfo = storeInfo+"<tr style='cursor:pointer' onclick='goStore(this)'  id='tr_"+store_id+"_"+cityId+"' ><td>"+parseInt(i+1)+"</td><td>"+storeNo+"</td><td>"+store_name+"</td><td>"+cityName+"</td></tr>";
     }
     $("#store_detail_title").nextAll().empty();
