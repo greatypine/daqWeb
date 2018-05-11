@@ -589,7 +589,7 @@ $(document).ready(function(){
   						//alert(curr_user.employeeId+""+curr_user.store_name+""+curr_user.name);
   						$('#username').html(curr_user.name);
   						$("#employee_no").html(curr_user.employeeId);
-  						if(returnObj.user.code=="gasq"){
+  						if(curr_user.code=="gasq"){
   							window.location=getRootPath() +  "/demo/index_headquarters_demo.html";
   							return;
   						}

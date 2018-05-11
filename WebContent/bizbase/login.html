@@ -383,6 +383,7 @@ function toUpdatePwd(){//encode64(target)
 					
 					if(returnObj.user.code=="gasq"){
 						window.location=getRootPath() +  "/demo/index_headquarters_demo.html";
+						return;
 					}
 					
 						 doManager("DefaultConfigManager", "getDefaultConfig",[returnObj.user.employeeId,returnObj.user.name],
