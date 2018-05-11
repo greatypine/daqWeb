@@ -1,3 +1,35 @@
+function getRootPath(){
+	var curWwwPath=window.document.location.href;
+	var pathName=window.document.location.pathname;
+	var pos=curWwwPath.indexOf(pathName);
+	var localhostPaht=curWwwPath.substring(0,pos);
+	var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+	return(localhostPaht+projectName);
+}
+var demoURL = getRootPath();
+
+
+function loadScript(url, callback) {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    if (typeof(callback) != "undefined") {
+        if (script.readyState) {
+            script.onreadystatechange = function() {
+                if (script.readyState == "loaded" || script.readyState == "complete") {
+                    script.onreadystatechange = null;
+                    callback();
+                }
+            };
+        } else {
+            script.onload = function() {
+                callback();
+            };
+        }
+    };
+    script.src = url;
+    document.body.appendChild(script);
+}
+
 var importCityjs = function(cityName){
 	if(cityName == "北京"){
 		document.write('<script language="javascript" src="js/bei_jing.js"></script>');
@@ -6,7 +38,16 @@ var importCityjs = function(cityName){
 	}else if(cityName == "天津"){
 		document.write('<script language="javascript" src="js/tian_jin.js"></script>');
 	}else if(cityName == "长沙"){
-		document.write('<script language="javascript" src="js/chang_sha.js"></script>');
+	//var oHead = document.getElementsByTagName('head')[0];
+	//var oScript = document.createElement('script');
+	//oScript.setAttribute('src',demoURL+'/demo/js/chang_sha.js');
+	//oScript.setAttribute('type','text/javascript');
+	//oHead.appendChild(oScript);
+		//document.write('<script type="text/javascript" src="'+demoURL+'/demo/js/chang_sha.js"></script>');
+		loadScript(demoURL+'/demo/js/chang_sha.js', function() { 
+		      var serviceArea = beijing_storeServiceDataOfCity();
+		      return serviceArea;
+		});
 	}else if(cityName == "广州"){
 		document.write('<script language="javascript" src="js/guang_zhou.js"></script>');
 	}else if(cityName == "贵阳"){
@@ -35,7 +76,7 @@ var getcityservice = function(cityName){
 	}else if(cityName == "天津"){
 		serviceArea = tianjin_storeServiceDataOfCity();
 	}else if(cityName == "长沙"){
-		serviceArea = changsha_storeServiceDataOfCity();
+	    serviceArea = changsha_storeServiceDataOfCity();
 	}else if(cityName == "广州"){
 		serviceArea = guangzhou_storeServiceDataOfCity();
 	}else if(cityName == "贵阳"){

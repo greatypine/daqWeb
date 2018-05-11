@@ -306,6 +306,9 @@
 <!-- bootstrap datepicker -->
 <script type="text/javascript" src="../aboutMap/plugins/bootstrp-datarangepicker/moment.min.js"></script>
 <script src="../aboutMap/plugins/bootstrp-datarangepicker/daterangepicker.js"></script>
+<script type="text/javascript"  src="js/tian_jin.js"></script>
+<script type="text/javascript"  src="js/employee.js"></script>
+
 <script type="text/javascript">
     autodivheight();
     function autodivheight(){ //函数：获取尺寸
@@ -561,7 +564,6 @@ var getPageContent = function(requestInfoDto){
 	$("#process_div").hide();
 	$("#process_div_pic").hide();
 	
-	//setTimeout(dynamicDrawDriverRecode(),60000);
 	setTimeout(function(){
 		console.log(maxlocationIndex);
 		 for(var z = 0; z < maxlocationIndex; z++){
@@ -598,12 +600,11 @@ var getPageContent = function(requestInfoDto){
 					console.log(x);
 					if(x == maxlocationIndex - 1){
 					 	
-						timeout= window.setInterval(refreshEmployeeRrcode,60000);
 				 	}
 				},z*500);
 			 })();
 		}
-	},1000);
+	},2000);
 	
 	
 }
@@ -657,140 +658,40 @@ function getEmployeeStatus(employeeno){
 	 },false);
 }
 
-//设置每10秒刷新一次国安侠位置
-function refreshEmployeeRrcode(){
-	doManager("GAXDriveRecodeManager", "getDynamicDriveRecode",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
-       if(data.result){
-			var jsonData = JSON.parse(data.data);
-			var employeeArr = new Array;
-		  	if(typeof(jsonData.diverRecode) != "undefined"){
-		  		employeeArr = jsonData.diverRecode.data; 
-		  	}
-   		   	if(employeeArr != null && employeeArr.length > 0){
-   			   var empIdArray = new Array();
-   			   for(var x = 0; x < employeeArr.length; x++){
-   					empIdArray.push(employeeArr[x].id);
-   			   }
-   			   for(var i = 0; i < employeeArr.length; i++){
-					var empDiver = employeeArr[i];
-					var locations = empDiver.locations;
-       				var employeeNo = empDiver.employeeNo;
-       				var employeeName = empDiver.employeeName;
-       				var nameNo = empDiver.storeName;
-       				var storeName = nameNo;
-       				var employeeId = empDiver.id;
-       				var platformid = empDiver.platformid;
-					if($.inArray(employeeId, employeeArray) == -1){
-						employeeArray.push(employeeId);
-	   					if(serviceArray.length >0){
-	   					 	for(var z = 0; z <serviceArray.length; z++){
-	   							var storeService = serviceArray[z];
-	   							if(storeService.platformid == platformid){
-	   								 empDiver["storearea"]=storeService.servicePolygon;
-	   								 break;
-	   							}
-	   							if(platformid == null || platformid.trim() == ""){
-	   								 empDiver["storearea"] = null;
-	   							}
-	   						}
-	   				 	}else{
-	   					 	empDiver["storearea"]=storeServicePolygon;
-	   				 	}
-	   					if(empDiver.storearea !=null && !empDiver.storearea.contains(locations)){
-	   						var diverPolyline = drawEmployeeDiverPolyline(locations,"offline");
-	   						empDiver["polyline"] = diverPolyline;
-	   						var marker =  drawEmployeePosition(locations,empDiver,"offservice")
-	   						empDiver["marker"] = marker;
-	   					}else if(empDiver.storearea !=null && empDiver.storearea.contains(locations)){
-	   						var diverPolyline = drawEmployeeDiverPolyline(locations,"online");
-	   						empDiver["polyline"] = diverPolyline;
-	   						var marker =  drawEmployeePosition(locations,empDiver,"online")
-	   						empDiver["marker"] = marker;
-	   					}else{
-	   						console.log("store service area is null !");
-	   					}
-        				diverRecodeArray.push(empDiver);
-				   }else{
-					   for(var j = diverRecodeArray.length-1; j >= 0; j--){
-	   					   var employeeDrive = diverRecodeArray[j];
-	   					   var empid = employeeDrive.id;
-	   					   if($.inArray(empid, empIdArray) == -1){
-	   							employeeArray.splice(jQuery.inArray(empid,employeeArray),1);
-	   							var marker = employeeDrive.marker;
-	   							var polyline = employeeDrive.polyline;
-	   							if(typeof(marker) != "undefined"){
-	   								map.remove(marker);
-	   							}
-	   							if(typeof(polyline) != "undefined"){
-	   								map.remove(polyline);
-	   							}
-	   							diverRecodeArray.splice(j,1);
-	   					   }else{ 
-	   							if(employeeId == employeeDrive.id){
-	   								var marker = employeeDrive.marker;
-		   							var polyline = employeeDrive.polyline;
-		   							if(typeof(marker) != "undefined" && typeof(polyline) != "undefined"){
-		   								employeeDrive.marker.setPosition(locations);
-		   								employeeDrive.polyline.getPath().push(locations);
-				   						employeeDrive.polyline.setPath(employeeDrive.polyline.getPath());
-				   						if(employeeDrive.storearea != null && !employeeDrive.storearea.contains(locations)){
-				   							employeeDrive.polyline.setOptions({"strokeColor":"#000"});
-				   							employeeDrive.marker.setIcon('../aboutMap/dist/img/offservicegaxlogo.png');
-									   	}else{
-										  	employeeDrive.polyline.setOptions({"strokeColor":"#f00"});
-				   							employeeDrive.marker.setIcon('../aboutMap/dist/img/gaxlogo.png');
-									   	}
-				   						break ;
-		   							}
-		   					   }
-	   					   }
-	   				   }
-				   }
-				}
-   		   }else{
-   			   for(var j = diverRecodeArray.length-1; j >= 0; j--){
-  					   	var employeeDrive = diverRecodeArray[j];
-					employeeArray.splice(jQuery.inArray(empid,employeeArray),1);
-					var marker = employeeDrive.marker;
-					var polyline = employeeDrive.polyline;
-					if(typeof(marker) != "undefined"){
-						map.remove(marker);
-					}
-					if(typeof(polyline) != "undefined"){
-						map.remove(polyline);
-					}
-					diverRecodeArray.splice(j,1);
-  				   }
-   		   }
-       }else{
-       		crm_alert(0,"数据加载异常！");
-       } 
-   });
-}
-
-
 //门店服务范围数组
 var serviceArray = new Array();
 //单个门店时，门店服务范围
 var storeServicePolygon;
 //获取门店服务范围
 var getStoreServiceAndPosition = function(requestInfoDto){
-	doManager("GAXDriveRecodeManager", "getStoreServiceAreaAndPosition",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
-		if(data.result){
-        	var jsonData = JSON.parse(data.data);
+			var serviceArea = tianjin_storeServiceDataOfCity();
         	if(storeIdNo.trim() == "null"){//城市
-        		map.setCity(cityName);
-        		serviceArray = jsonData.serviceArea;
-               	for(var i=0;i<serviceArray.length;i++){
-               		var polygonArray = serviceArray[i];
-               		var servicePolygon =  drawStoreService(polygonArray.storeServiceArea);
-             			polygonArray["servicePolygon"] = servicePolygon;
-               	}
-               	//debugger;
-               	var positionArray = jsonData.position;
-               	for(var j=0;j<positionArray.length;j++){
-          				drawStorePosition(positionArray[j].position,positionArray[j].storeName);
-               	}
+        		if(serviceArea.code == 200){
+                	//服务范围数组
+                	serviceArray = serviceArea.data;
+                	if(serviceArray!=null && serviceArray.length>0){
+                		var servicePolygon;
+                    	for(var i=0;i<serviceArray.length;i++){
+                    		var polygonArray = serviceArray[i];
+                    		var serviceCoordinates=polygonArray.vertex;
+                    		var position = polygonArray.position;
+                    		var storeName = polygonArray.storeName;
+                    		//画服务范围多边形
+                    		if(polygonArray.storeNo != "0021Y0020"){
+                    			   servicePolygon = new AMap.Polygon({
+                     			   path:serviceCoordinates,
+                     		       strokeColor: "#5c69cc", //线颜色
+                     		       strokeOpacity: 1, //线透明度
+                     		       strokeWeight: 2,    //线宽
+                     		       fillColor: "#046ad3", //填充色
+                     		       fillOpacity: 0,//填充透明度
+                     		       extData:{"storeName":storeName}
+                     		 	});
+                     			servicePolygon.setMap(map);
+                    		}
+                    	}
+                	}
+                }
         	}else{//门店
 	        	var serviceArea = jsonData.serviceArea;
         		if(serviceArea.code == 200){
@@ -802,10 +703,6 @@ var getStoreServiceAndPosition = function(requestInfoDto){
                 	crm_alert(0,"门店服务范围不存在！");
                 }
         	}
-        }else{
-        	crm_alert(0,"门店数据加载异常！");
-        }
-    },false);
 }
 
 //画门店服务员范围
@@ -952,10 +849,7 @@ var drawEmployeePosition = function(diverLocations,employeeInfo,online){
 function getEmployeeDriverRecodeHistory(){
 	employeeArray.splice(0,employeeArray.length);
 	diverRecodeArray.splice(0,diverRecodeArray.length);
-	doManager("GAXDriveRecodeManager", "getDriveRecode",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
-		//debugger;
-		if(data.result){
-        	var jsonData = JSON.parse(data.data);
+        	var jsonData = employeeDriverRecode();
     		var diverRecode = jsonData.diverRecode;
     		if(typeof(diverRecode.data) != "undefined"){
     			diverRecodeArray = diverRecode.data; 
@@ -970,19 +864,15 @@ function getEmployeeDriverRecodeHistory(){
     				var employeeId = empDiver.id;
     				var online = empDiver.online;
     				employeeArray.push(employeeId);
-    				var diverPolyline =  drawEmployeeDiverPolyline(locations,online);
-    				empDiver["polyline"] = diverPolyline;
-    				  if(!$("#driveClick").is(':checked')){
+    				/* diverPolyline =  drawEmployeeDiverPolyline(locations,online);
+    				empDiver["polyline"] = diverPolyline; */
+    				  /* if(!$("#driveClick").is(':checked')){
     					 diverPolyline.hide();
-    				 } 
+    				 } */
     				 var marker =  drawEmployeePosition(locations[locations.length-1],empDiver,online);
     				 empDiver["marker"] = marker;
     			}
     		}
-        }else{
-        	crm_alert(0,"数据加载异常！");
-        }
-    },false);
 }
 
 var timeout;
@@ -994,10 +884,7 @@ function getEmployeeDriverRecodeRealtime(){
 	//requestInfoDto["beginDate"] = "2017/12/18 00:00";
 	//requestInfoDto["endDate"] = '2017/12/18 23:00';
 	requestInfoDto["isRealtime"] = "realtime";
-	doManager("GAXDriveRecodeManager", "getDriveRecode",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
-		//debugger;
-		if(data.result){
-        	var jsonData = JSON.parse(data.data);
+        	var jsonData = employeeDriverRecode();
     		var diverRecode = jsonData.diverRecode;
     		if(typeof(diverRecode.data) != "undefined"){
     			diverRecodeArray = diverRecode.data; 
@@ -1064,81 +951,9 @@ function getEmployeeDriverRecodeRealtime(){
     				}
     			}
     		}
-        }else{
-        	crm_alert(0,"数据加载异常！");
-        }
-    },false);
-	/* doManager("GAXDriveRecodeManager", "getDynamicDriveRecode",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
-		if(data.result){
-        	var jsonData = JSON.parse(data.data);
-        	if(typeof(jsonData.diverRecode) != "undefined"){
-        		diverRecodeArray = jsonData.diverRecode.data; 
-        	}
-        		if(diverRecodeArray != null && diverRecodeArray.length > 0){
-        			var diverPolyline;
-        			var marker;
-        			debugger;
-        			for(var i = 0; i < diverRecodeArray.length; i++){
-        				var empDiver = diverRecodeArray[i];
-        				var locations = empDiver.locations;
-        				var platformid = empDiver.platformid;
-        				var employeeId = empDiver.id;
-        				employeeArray.push(employeeId);
-        				 if(serviceArray.length>0){
-       						for(var j = 0; j <serviceArray.length; j++){
-       							var storeService = serviceArray[j];
-       							if(storeService.platformid == platformid){
-       								 empDiver["storearea"]=storeService.servicePolygon;
-       								if(!empDiver.storearea.contains(locations)){
-       									var diverPolyline =  drawEmployeeDiverPolyline(locations,"offline");
-       		        				 	empDiver["polyline"] = diverPolyline;
-       		        				 	var marker = drawEmployeePosition(locations,empDiver,"offservice");
-	            						empDiver["marker"] = marker;
-       								}else{
-       									var diverPolyline =  drawEmployeeDiverPolyline(locations,"online");
-       		        				 	empDiver["polyline"] = diverPolyline;
-       		        				 	var marker = drawEmployeePosition(locations,empDiver,"online");
-	            						empDiver["marker"] = marker;
-       								}
-       								 break;
-       							}
-       							if(platformid == null || platformid.trim() == ""){
-       								empDiver["storearea"] = null;
-       							}
-       						}
-        				}else{
-        					empDiver["storearea"]= storeServicePolygon;
-        					if(!empDiver.storearea.contains(locations)){
-        						var diverPolyline =  drawEmployeeDiverPolyline(locations,"offline");
-		        				empDiver["polyline"] = diverPolyline;
-		        				var marker = drawEmployeePosition(locations,empDiver,"offservice");
-        						empDiver["marker"] = marker;
-							}else{
-								var diverPolyline =  drawEmployeeDiverPolyline(locations,"online");
-		        				empDiver["polyline"] = diverPolyline;
-		        				var marker = drawEmployeePosition(locations,empDiver,"online");
-        						empDiver["marker"] = marker;
-							}
-        				}
-        			}
-        	}
-        }else{
-        	crm_alert(0,"数据加载异常！");
-        }
-		timeout= window.setInterval(refreshEmployeeRrcode,20000);
-    },false); */
 	
 }
 
-/* window.onload = function(){
-	 for(var z = 0; z < maxlocationIndex; z++){
-		//setTimeout(test(),1000);
-		test();
-	} 
-	alert("1");
-	timeout= window.setInterval(refreshEmployeeRrcode,60000);
-} */
- 
 
 var curr_user;
 function initcurruser(){

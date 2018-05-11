@@ -264,6 +264,8 @@
 <script type="text/javascript" src="../aboutMap/plugins/daterangepicker/moment.min.js"></script>
 <script src="../aboutMap/plugins/daterangepicker/daterangepicker.js"></script>
 <script language="javascript" src="../scripts/common/heatMap_color.js"></script>
+<script type="text/javascript"  src="js/tian_jin.js"></script>
+<script type="text/javascript"  src="js/tianjin_heat.js"></script>
 
 <script type="text/javascript">
     autodivheight();
@@ -332,7 +334,7 @@ $("#mask-header>button").click(function(){
 
 debugger;
 var cityId = decode64(getUrlParamByKey("c"));     /**城市ID*/
-var cityName = decode64(getUrlParamByKey("cn")); /**城市名称*/
+var cityName = "天津";//decode64(getUrlParamByKey("cn")); /**城市名称*/
 var employeeId = decode64(getUrlParamByKey("e")); /**员工编号*/
 var target = decode64(getUrlParamByKey("t"));   /**1.城市；2.门店**/
 var storeIdNo = decode64(getUrlParamByKey("si"));    /**门店编号*/
@@ -478,17 +480,14 @@ function initData(){
 	$("#process_div").show();
 	$("#process_div_pic").show();
 	setExample();
-	doManager("OrderHeatManager", "getLagLatByOrder",[OrderHeatDto], function(data, textStatus,XMLHttpRequest) {
-        if(data.result){
-        	jsonData = JSON.parse(data.data);
         	if(target == 1){//城市
         		if(storeId == null){
         			map.clearMap();
         			$("#heat_legend_color").hide();
             		map.setCity(cityName);
-        			var serviceArea = jsonData.serviceArea;
-            		var heatData = jsonData.orderHeat;
-            		var heatCount = jsonData.orderCount;
+            		map.setZoom(16);
+        			var serviceArea = tianjin_storeServiceDataOfCity();
+            		var heatData = selJsonDataCoordinate();
             		if(serviceArea.code == 200){
                     	//服务范围数组
                     	serviceArray = serviceArea.data;
@@ -515,19 +514,15 @@ function initData(){
                         	}
                     	}
                     }
-            		heatShowByCity(heatData,heatCount,map);
+            		heatShowByCity(heatData,3000,map);
         		}else{
-        			storeHeat(jsonData);
+        			storeHeat();
         		}
         	}else{//门店
-        		storeHeat(jsonData);
+        		storeHeat();
         	}
         	$("#process_div").hide();
 			 $("#process_div_pic").hide();
-        }else{
-        	crm_alert(0,"数据加载异常！");
-        }
-    }); 
 }
 
 var curr_user;
@@ -552,9 +547,10 @@ function initcurruser(){
   	},false);
 }
 var heatmap;
-var storeHeat = function(jsonDate){
+var storeHeat = function(){
 	map.clearMap();
 	var servicePolygon;
+	jsonData = storeorderheat();
 	var serviceAreaAndPosition = jsonData.serviceAreaAndPosition;
 	if(serviceAreaAndPosition.code == 200){
 		var serviceArea = serviceAreaAndPosition.serviceArea;
@@ -584,7 +580,6 @@ var storeHeat = function(jsonDate){
 		debugger;
 		for(var i = 0; i<tinyVillageCoords.length; i++){
 			var coordinates = tinyVillageCoords[i];
-			if(coordinates.storeNo == storeNo){
 				vallagePolygon = new AMap.Polygon({
 	     			path : coordinates.data,
 	  		        strokeColor: "#30c429", //线颜色
@@ -594,7 +589,6 @@ var storeHeat = function(jsonDate){
 	  		        fillOpacity: 0,//填充透明度
 		 		});
 				vallagePolygon.setMap(map);
-			}
 		}
 	}
 	heatShowByStore(heatData,heatCount,map);
@@ -602,7 +596,7 @@ var storeHeat = function(jsonDate){
 }
 
 var heatShowByStore = function(jsonDataCoordinate,heatCount,map){
-	var max = parseInt((heatCount[0].maxCount-heatCount[0].minCount)*0.2);
+	var max = parseInt((heatCount[0].maxCount-heatCount[0].minCount)*0.05);
 	if (!isSupportCanvas()) {
 	    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
 	}
@@ -624,8 +618,7 @@ var heatShowByStore = function(jsonDataCoordinate,heatCount,map){
 }
 
 var heatShowByCity = function(jsonDataCoordinate,heatCount,map){
-	debugger;
-	var max = parseInt((heatCount[0].maxCount-heatCount[0].minCount)*0.2);
+	var max = heatCount;
 	if (!isSupportCanvas()) {
 	    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
 	}

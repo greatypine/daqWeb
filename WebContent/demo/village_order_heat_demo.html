@@ -171,7 +171,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
   <div id="process_div" ></div>
-  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../aboutMap/dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../abountMap/dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
     <div class="container">
       <!-- Main content -->
 
@@ -215,7 +215,7 @@
 
         </div>
         <span class="pull-right-fullscreen" onclick="fullscreen();">
-         	<img src="../aboutMap/dist/img/fullscreen.png">
+         	<img src="dist/img/fullscreen.png">
          </span>
          <input id="fscreen" hidden="hidden">
         <div class="box-body" style="position:relative" id="mapHeight">
@@ -281,6 +281,8 @@
 <script type="text/javascript" src="../aboutMap/plugins/daterangepicker/moment.min.js"></script>
 <script src="../aboutMap/plugins/daterangepicker/daterangepicker.js"></script>
 <script language="javascript" src="../scripts/common/heatMap_color.js"></script>
+<script type="text/javascript"  src="js/tian_jin.js"></script>
+<script type="text/javascript"  src="js/tianjin_heat.js"></script>
 
 <script type="text/javascript">
     autodivheight();
@@ -349,7 +351,7 @@ $("#mask-header>button").click(function(){
 
 debugger;
 var cityId = decode64(getUrlParamByKey("c"));     /**城市ID*/
-var cityName = decode64(getUrlParamByKey("cn")); /**城市名称*/
+var cityName = "天津"; /**城市名称*/
 var employeeId = decode64(getUrlParamByKey("e")); /**员工编号*/
 var target = decode64(getUrlParamByKey("t"));   /**1.城市；2.门店**/
 var storeIdNo = decode64(getUrlParamByKey("si"));    /**门店编号*/
@@ -491,17 +493,12 @@ function initData(){
 	$("#process_div").show();
 	$("#process_div_pic").show();
 	setExample();
-	doManager("OrderHeatManager", "getLatLngByVillage",[OrderHeatDto], function(data, textStatus,XMLHttpRequest) {
-        if(data.result){
-        	jsonData = JSON.parse(data.data);
         	if(target == 1){//城市
         		if(storeId == null){
         			map.clearMap();
         			$("#heat_legend_color").hide();
             		map.setCity(cityName);
-        			var serviceArea = jsonData.serviceArea;
-            		var heatData = jsonData.orderHeat;
-            		var heatCount = jsonData.orderCount;
+        			var serviceArea = tianjin_storeServiceDataOfCity();
             		if(serviceArea.code == 200){
                     	//服务范围数组
                     	serviceArray = serviceArea.data;
@@ -528,7 +525,7 @@ function initData(){
                         	}
                     	}
                     }
-	          			var heatCount = jsonData.orderCount;
+	          			var heatCount = selHeatCount();
 	      				//var maxCount = heatCount[0].maxCount;
 	          			//var minCount = heatCount[0].minCount;
 	          			//if( maxCount != null && minCount != null ){
@@ -539,7 +536,7 @@ function initData(){
 		          				setMenuLegend(colorArray);
 	              			}
 	          			//}
-	          			var tinyVillageCoord = jsonData.tinyVillageCoord;
+	          			var tinyVillageCoord = selTinyVillageCoord();
 	          			if(tinyVillageCoord.code == 200 &&　tinyVillageCoord.data.length>0){
 	             				var tinyVillageCoords = tinyVillageCoord.data;
 	          				var vallagePolygon;
@@ -591,17 +588,13 @@ function initData(){
 	          				}
 	          			}
           			}else{
-          				storeHeat(jsonData);
+          				storeHeat();
           			}
         	}else{//门店
-        		storeHeat(jsonData);
+        		storeHeat();
         	}
         	$("#process_div").hide();
-			 $("#process_div_pic").hide();
-        }else{
-        	crm_alert(0,"数据加载异常！");
-        }
-    }); 
+			 $("#process_div_pic").hide(); 
 }
 
 var curr_user;
@@ -626,7 +619,8 @@ function initcurruser(){
   	},false);
 }
 var heatmap;
-var storeHeat = function(jsonDate){
+var storeHeat = function(){
+	jsonData = stroeOfHeat();
 	map.clearMap();
 	$("#heat_legend_color").hide();
 	var servicePolygon;
@@ -660,7 +654,6 @@ var storeHeat = function(jsonDate){
 	             }
 			//}
 			var tinyVillageCoord = jsonData.tinyVillageCoord;
-			var tinyVillageCoord = jsonData.tinyVillageCoord;
 			if(tinyVillageCoord.code == 200 &&　tinyVillageCoord.data.length>0){
 				var tinyVillageCoords = tinyVillageCoord.data;
 				var vallagePolygon;
@@ -670,7 +663,6 @@ var storeHeat = function(jsonDate){
 					if(count != 0 && count != null){
 						//var color = getHeatMapColorLocation(minCount,maxCount,count);
 						var color = getHeatMapColorLocation(avgCount,count);
-						if(coordinates.storeNo == storeNo){
 							vallagePolygon = new AMap.Polygon({
 				     			path : coordinates.data,
 				  		        strokeColor: "#ab50d0", //线颜色
@@ -681,9 +673,7 @@ var storeHeat = function(jsonDate){
 				  		        extData:{"count":count,"name":coordinates.tinyVillageName,"storeName":coordinates.storeName}
 					 		});
 							vallagePolygon.setMap(map);
-						}
 					}else{
-						if(coordinates.storeNo == storeNo){
 							vallagePolygon = new AMap.Polygon({
 				     			path : coordinates.data,
 				  		        strokeColor: "#ab50d0", //线颜色
@@ -694,7 +684,6 @@ var storeHeat = function(jsonDate){
 				  		        extData:{"count":0,"name":coordinates.tinyVillageName,"storeName":coordinates.storeName}
 					 		});
 							vallagePolygon.setMap(map);
-						}
 					}
 					vallagePolygon.on("mouseover",function(e){
   						var storeName = e.target.getExtData().storeName;
@@ -839,7 +828,7 @@ function setMenuLegend(colorArray){
 function showHeat(){
 	var cityoptions=$("#cityName option:selected");
 	cityId = cityoptions.val();
-	cityName = cityoptions.text();
+	cityName = "天津";
 	var typeoptions = $("#type option:selected");
 	type = typeoptions.val();
 	var storeoptions = $("#storeName option:selected");

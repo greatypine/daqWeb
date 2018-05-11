@@ -160,7 +160,7 @@
             </select>
           </div>
           <div class="form-group col-sm-3">
-            <label style="overflow:hidden">门店<span style="color:#a9a9a9;float:right" id="areaCount">--个片区</span></label>
+            <label style="overflow:hidden">门店<span style="color:#a9a9a9;float:right" id="areaCount">10个片区</span></label>
             <select class="form-control select2" id="storeId_select" onchange="switchCity()">
               <!-- <option>北京</option> -->
             </select>
@@ -208,6 +208,7 @@
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/bidLib.js"></script>
 <script type="text/javascript" src="../scripts/custom_color.js"></script>
+<script type="text/javascript"  src="js/tian_jin.js"></script>
 <script type="text/javascript">
     var windowHeight = 0;
     var windowWidth = 0;
@@ -294,10 +295,9 @@
     //初始化地图对象，加载地图
     var map = new AMap.Map("mapContainer", {
         resizeEnable : true,
-        center :centerPosition,//创建中心点坐标
-        zoom : 15
+        //center :centerPosition,//创建中心点坐标
+        zoom : 15,
     });
-
 
     map.plugin(["AMap.ToolBar"],function(){
         //加载工具条
@@ -365,10 +365,8 @@
     })
     
     function initData(){
-    	doManager("areaManager", "getTinyVillageCoord",storeId, function(data, textStatus,XMLHttpRequest) {
-            if(data.result){
             	$("#areas_ul").empty();
-            	var resultJson= JSON.parse(data.data);
+            	var resultJson= tianjin_pianqu();
             	if(resultJson!=null){
             		var coordinate = resultJson.coordinate;//小区坐标
             		var storeService = resultJson.serviceArea;//服务范围
@@ -403,11 +401,7 @@
             		}
             	}
                 initArea(storeService,coordinate);//绘制地图
-                createShade(storeService);  
-                
-            }else{
-                $$.showMessage("系统信息", "数据加载异常！");
-            }},false);
+                createShade(storeService);
     }
 
 
@@ -427,6 +421,7 @@
             fillOpacity: 0//填充透明度
         });
         serviceRange.setMap(map);
+        map.setCenter(serviceRange.getBounds().getCenter());
         serviceRange.on("click", function () {
             setNavListVisible(false);
         });
@@ -661,12 +656,10 @@ function initcityAndStore(){
       								$("#storeId_select").append("<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>");
       								if(storeId == storelist[i].store_id){
       									$($("#storeId_select").find("option")[i]).attr("selected","selected");
-      									showAreaCount(storelist[i].store_id);
       								}
       							}
       						}
    							
-   							/* showAreaCount(storelist[0].store_id);//展示片区数量 */
    							
    						}
    					}
@@ -689,7 +682,6 @@ function initcityAndStore(){
       								store_city[storelist[i].store_id] = storelist[i].cityName;
       								if(storeId == storelist[i].store_id){
       									$($("#storeId_select").find("option")[i]).attr("selected","selected");
-      									showAreaCount(storelist[i].store_id);
       								}
       							}
       							$("#cityName").append("<option value='"+storelist[0].cityName+"'>"+storelist[0].cityName+"</option>");
@@ -697,7 +689,6 @@ function initcityAndStore(){
       							
       						}
    							
-   							/* showAreaCount(storelist[0].store_id); */
    						}
    					}
    			},false); 
@@ -705,18 +696,6 @@ function initcityAndStore(){
 
 }
 
-
-function showAreaCount(storeId){
-	
-	doManager("areaManager", "getAreaCountOfStore",[storeId],
-				function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						var count= JSON.parse(data.data);
-						$("#areaCount").html(count+"个片区");
-					}
-			},false); 
-	
-}
 //切换城市
 function manageCity(){
 	$("#storeId_select").empty();
@@ -740,7 +719,6 @@ function manageCity(){
 						}
 					}
 			},false); 
-	showAreaCount($("#storeId_select").val());
 }
 
 
@@ -749,35 +727,12 @@ function manageCity(){
  */
 function switchCity(){
 	 var storeId = $("#storeId_select").val();
-	 showAreaCount(storeId);
 	 if(target==2){
 		 $("#cityName").empty();
 		 $("#cityName").append("<option value='"+store_city[storeId]+"'>"+store_city[storeId]+"</option>");
 	 }
 	
 }
-
-function showArea(){
-	storeId = $("#storeId_select").val();
-	doManager("areaManager", "getStoreServiceAreaAndPosition",[storeId], function(
-			data, textStatus, XMLHttpRequest) {
-		if (data.result) {
-			var resultJson = JSON.parse(data.data);
-			if(resultJson.code == 200){
-				var serviceArea = resultJson.serviceArea;
-				var positions = resultJson.position;
-			    map.setCenter(positions);
-				initData();
-			}else{
-				servicePositionIsExist = false;
-				crm_alert(0,"当前门店服务范围不存在！");
-			}
-		}else{
-			 crm_alert(5,"请稍后重新请求！");
-		}
-	});
-}
-
 
 function automaxheight(){ //函数：获取尺寸
     //获取浏览器窗口高度
@@ -811,6 +766,9 @@ function fullscreen(){
    	$("#mask-body").html(copyMap);
 }
 
+function showArea(){
+	initData();
+}
 
 
 </script>

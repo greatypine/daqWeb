@@ -235,8 +235,10 @@
 <script src="../crm/dist/js/demo.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <!--  <script src="../crm/plugins/morris/morris.min.js"></script> -->
-<script src="js/FileSaver.min.js"></script>
-<script src="js/storeServiceOfCity.js"></script>
+<script type="text/javascript" src="js/FileSaver.min.js"></script>
+<!-- <script type="text/javascript" src="js/storeServiceOfCity.js"></script> -->
+<script type="text/javascript"  src="js/tian_jin.js"></script>
+<!-- <script language="javascript" src="js/bei_jing.js"></script> -->
 <script type="text/javascript">
     autodivheight();
     function autodivheight(){ //函数：获取尺寸
@@ -268,7 +270,7 @@ $("#mask-header>button").click(function(){
 });
 
 var cityId = decode64(getUrlParamByKey("c"));     /**城市ID*/
-var cityName = decode64(getUrlParamByKey("cn")); /**城市名称*/
+var cityName = "天津";//decode64(getUrlParamByKey("cn")); /**城市名称*/
 var employeeId = decode64(getUrlParamByKey("e")); /**员工编号*/
 var target = decode64(getUrlParamByKey("t"));   /**1.城市；2.门店**/
 var serviceArray = [];/**门店服务范围数组*/
@@ -342,7 +344,7 @@ function draw(){
 }
 
 $(function(){
-	importCityjs(cityName);
+	//importCityjs(cityName);
 	initcurruser();
 	initData();
 });
@@ -352,7 +354,8 @@ function initData(){
 	$("#process_div").show();
 	$("#process_div_pic").show();
                 //服务范围展示
-                var serviceArea = getcityservice(cityName);
+                var serviceArea = tianjin_storeServiceDataOfCity();
+                console.log("serviceArea:"+serviceArea);
                 if(serviceArea.code == 200){
                 	//服务范围数组
                 	serviceArray = serviceArea.data;
@@ -395,7 +398,8 @@ function initData(){
                 	}
                 }
                 //坐标范围展示
-                 var coordinatesArea = getcitycoordinates(cityName);
+                 var coordinatesArea = tianjin_storeCoordinatesDataOfCity();
+                console.log(coordinatesArea);
                  if(coordinatesArea.code == 200){
                 	 //坐标范围数组
                 	 coordinatesArray = coordinatesArea.data;
@@ -553,7 +557,7 @@ var showCover = function(){
     	$("#serviceClick").prop("checked","checked");
     	$("#landminingClick").prop("checked","checked");
     	$("#areaClick").prop("checked",false);
-    	map.setCity(cityName);
+    	map.setCity("天津");
     	map.clearMap();
     	draw();
       	initData(); 
