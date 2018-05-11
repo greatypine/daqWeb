@@ -62,5 +62,17 @@ public interface TinyAreaManager extends IManager {
 	public TinyArea findTinyAreaByTinyId(Long tinyId, String storeNo);
 
 	TinyArea getTinyAreaByTinyId(Long tinyId);
+	
+	/**
+	 * 
+	* @Title: updateTinyAreaBelong  
+	* @Description: TODO 设置tinyArea belong 
+	* 2018年5月9日
+	* @param @param tinyId
+	* @param @param belong      
+	* @return void 
+	* @throws
+	 */
+	public void updateTinyAreaBelong(Long tinyId,String belong);
 
 }

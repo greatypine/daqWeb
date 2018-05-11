@@ -42,6 +42,7 @@ import com.cnpc.pms.slice.entity.Area;
 import com.cnpc.pms.slice.entity.AreaInfo;
 import com.cnpc.pms.slice.manager.AreaManager;
 import com.gexin.fastjson.JSONArray;
+import com.ibm.db2.jcc.am.be;
 import com.mongodb.BasicDBObject;
 import com.mongodb.MongoQueryException;
 import com.mongodb.MongoWriteException;
@@ -314,6 +315,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						tArea.setTiny_village_id(tinyVillageCode.getTiny_village_id());
 						tArea.setVallage_area(tCoordDto.getVallage_area());
 						tArea.setStatus(0);
+						tArea.setBelong("private");
 						Map<String, Object> saveTinyArea = tinyAreaManager.updateTinyAreaOfCoord(tArea);//更新小区范围
 						if("-1".equals(saveTinyArea.get("code"))){//保存失败
 							//collection.deleteMany(Filters.eq("code",tinyVillageCode.getCode()));//删除之前的坐标记录
@@ -1447,6 +1449,62 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			   jArray.put(jObject);
 	    }
 		result.put("data", JSONArray.parse(jArray.toString()));
+		return result;
+	}
+ 
+
+	@Override
+	public Map<String, Object> updateTinyAreaBelong(String storeNo,String townIds,String belong) {
+		TinyAreaDao tinyAreaDao = (TinyAreaDao)SpringHelper.getBean(TinyAreaDao.class.getName());
+		TinyAreaManager tam = (TinyAreaManager)SpringHelper.getBean("tinyAreaManager");
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			List<Map<String,Object>> list = tinyAreaDao.selectTinyAreaByTownId(storeNo, townIds);
+			
+			MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
+			MongoDatabase database = mDbUtil.getDatabase();
+		   
+			MongoCollection<Document> collection = database.getCollection("tiny_area");
+			BasicDBObject query = new BasicDBObject();
+			query.append("storeNo",storeNo);
+			FindIterable<Document> dIterable = collection.find(query);
+			MongoCursor<Document> cursor = dIterable.iterator(); 
+			
+			
+			if(dIterable==null){
+				result.put("code",CodeEnum.error.getValue());
+				result.put("message","街道所有小区没有绑定坐标");
+			}else{
+				org.json.JSONArray tmp_jarray = new org.json.JSONArray();
+				Map<String, Object> tinyAreaInfo = new HashMap<String,Object>();
+				
+				while(cursor.hasNext()){
+					Document teDocument = cursor.next();
+					JSONObject jObject = new JSONObject(teDocument.toJson());
+					
+					String code = jObject.getString("code");
+					
+					for(Map<String, Object> m:list){
+						if(code.equals(m.get("code"))){
+							Document updateDoc = new Document("belong",belong);
+							collection.updateMany(Filters.eq("code",m.get("code")), new Document("$set",updateDoc));
+							if(m.get("tiny_village_id")!=null){
+								tam.updateTinyAreaBelong(Long.parseLong(m.get("tiny_village_id").toString()),belong);
+							}
+							break;
+						}
+					}
+				}
+				result.put("code",CodeEnum.success.getValue());
+				result.put("message", CodeEnum.success.getDescription());
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+		}
+		
 		return result;
 	}
 

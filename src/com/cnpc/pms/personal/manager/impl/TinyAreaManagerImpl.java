@@ -170,4 +170,18 @@ public class TinyAreaManagerImpl extends BizBaseCommonManager implements TinyAre
 		return null;
 	}
 
+	@Override
+	public void updateTinyAreaBelong(Long tinyId, String belong) {
+		TinyArea ta = null;
+		try {
+			ta = this.getTinyAreaByTinyId(tinyId);
+		    ta.setBelong(belong);
+		    preObject(ta);
+		    this.saveObject(ta);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+
 }

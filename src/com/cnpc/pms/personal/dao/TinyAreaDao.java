@@ -71,4 +71,16 @@ public interface TinyAreaDao extends IDAO {
 	 */
 	public void updateTinyAreaEmployeeIsNull_A(String employeeNo);
 	public void updateTinyAreaEmployeeIsNull_B(String employeeNo);
+	
+	/**
+	 * 
+	* @Title: selectTinyAreaByTownId  
+	* @Description: TODO 根据街道查询小区坐标数据 
+	* 2018年5月9日
+	* @param @param townIds
+	* @param @return      
+	* @return List<Map<String,Object>> 
+	* @throws
+	 */
+	public List<Map<String,Object>> selectTinyAreaByTownId(String storeNo,String townIds);
 }

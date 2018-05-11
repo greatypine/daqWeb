@@ -47,6 +47,8 @@ public class TinyArea extends DataEntity{
 		@Column(name = "vallage_area",length=255)
 		private String vallage_area;
 		
+		@Column(name="belong",columnDefinition="varchar(10) default 'private'")
+		private String belong;//public:公有   private:私有
 
 		public String getCode() {
 			return code;
@@ -127,6 +129,14 @@ public class TinyArea extends DataEntity{
 
 		public void setVallage_area(String vallage_area) {
 			this.vallage_area = vallage_area;
+		}
+
+		public String getBelong() {
+			return belong;
+		}
+
+		public void setBelong(String belong) {
+			this.belong = belong;
 		}
 
 	

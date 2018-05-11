@@ -379,12 +379,18 @@ function toUpdatePwd(){//encode64(target)
 						tobecontinue=returnObj;
 						toUpdatePwd();//初始密码直接 跳转 不弹出提示 。
 						return;
-					}  
+					} 
+					
+					if(returnObj.user.code=="gasq"){
+						window.location=getRootPath() +  "/demo/index_headquarters_demo.html";
+						return;
+					}
 					
 						 doManager("DefaultConfigManager", "getDefaultConfig",[returnObj.user.employeeId,returnObj.user.name],
 							function(data, textStatus, XMLHttpRequest) {
 								if (data.result) {
 									var defaultInfo = $.fromJSON(data.data);
+									
 									if(defaultInfo==null||defaultInfo.default_system==-1){
 										window.parent.location=getRootPath() + "/crm/loginplatform.html";
 									}else{
