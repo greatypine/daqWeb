@@ -110,7 +110,7 @@ var showPageContent = function (pageStatusInfo) {
     //切换门店种类个数
     getStoreKindsNumber();
 	//获得上月某日订单量和用户量
-    getLastMonthOrderCustomerCount(pageStatusInfo);
+    //getLastMonthOrderCustomerCount(pageStatusInfo);
     // 显示历史数据
     getHistoryData(pageStatusInfo);
     getDailyData();
@@ -879,62 +879,10 @@ var showStatisticInfo = function (statisticData) {
 };
 // 获取历史数据
 var getHistoryData = function (pageStatusInfo) {
-	/*
-    var cacheKey = CACHE_HEADER_HISTORY_DATA + pageStatusInfo.getCacheKey();
-    // 从缓存获取数据
-    var historyData = JsCache.get(cacheKey);
-    if (historyData) {
-        //console.log('show history data base on js cache.')
-        showHistoryData(historyData);
-    } else {
-    */
-        // 准备服务端数据请求参数
-        var reqestParameter = {
-            month:pageStatusInfo.currentMonth,
-            year:pageStatusInfo.currentYear,
-            provinceId:pageStatusInfo.provinceId,
-            cityId:pageStatusInfo.cityId
-
-        }
-        //console.log('\trequest: history data');
-        //console.log(reqestParameter);
-        var startTime = new Date().getTime();
-        // 查询当月累计营业额
-        doManager("dynamicManager", "queryTradeSumByMonth",[reqestParameter],
-            function(data, textStatus, XMLHttpRequest) {
-                if (data.result) {
-                    var resultJson= JSON.parse(data.data);
-                    var historyDataFromServer = {'curMonthTurnover':resultJson.cur_order_amount,'customer_count':resultJson.customer_count,
-                    'month_order_count':resultJson.month_order_count,'last_order_count':resultJson.last_order_count
-                    ,'last_customer_count':resultJson.last_customer_count};
-                    // 查询历史累计营业额
-                    doManager("dynamicManager", "queryTradeSumOfHistory",[reqestParameter],
-                        function(data, textStatus, XMLHttpRequest) {
-                            if (data.result) {
-                                var resultJson= JSON.parse(data.data);
-                                historyDataFromServer['historyTurnover'] = resultJson.history_order_amount;
-                                historyDataFromServer['history_customer_count'] = resultJson.history_customer_count;
-                                historyDataFromServer['last_history_customer_count'] = resultJson.last_history_customer_count;
-                                historyDataFromServer['history_order_count'] = resultJson.history_order_count;
-                                doManager("dynamicManager", "getSumOfCurYear",[reqestParameter],
-		                        function(data, textStatus, XMLHttpRequest) {
-		                            if (data.result) {
-		                            	var resultJson= JSON.parse(data.data);
-		                            	historyDataFromServer['year_gmv_sum'] = resultJson.year_gmv_sum[0].year_sum_gmv;
-		                         	}
-		                         }
-		                         ,false);
-                                showHistoryData(historyDataFromServer);
-                                //JsCache.set(cacheKey, historyDataFromServer);
-                            }
-                        },false);
-                }
-            },false);
-        //console.log('request history data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
-    //}
+	showHistoryData();
 };
 // 显示历史数据
-var showHistoryData = function (historyData) {
+var showHistoryData = function () {
 	/*
     $("#tradesumofcurmonthHid").html(RandomNum(10000,30000));
     $("#tradesumofhistoryHid").html(RandomNum(10000,30000));
