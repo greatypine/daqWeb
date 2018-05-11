@@ -3223,16 +3223,16 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
         RelationDao relationDao = (RelationDao)SpringHelper.getBean(RelationDao.class.getName());
         //PlatformEmployee platformEmployee = platformEmployeeManager.findPlatformEmployeeByEmployeeNo(employee_no);
         //int ordercount = orderDao.gettotalOrderCount(null, platformEmployee.getId());
-        int expresscount = expressDao.gettotalExpressCount(employee_no);
+        //int expresscount = expressDao.gettotalExpressCount(employee_no);
         //int relationcount = expressDao.getTotalRelationCount(employee_no);
-        int relationcount = relationDao.getRelationCount(employee_no);
-        Object customerCount = customerManager.getCustomerCount(employee_no).get("total");
+        //int relationcount = relationDao.getRelationCount(employee_no);
+        //Object customerCount = customerManager.getCustomerCount(employee_no).get("total");
         
-        map.put("relationcount", relationcount);
-        map.put("expresscount", expresscount);
+        //map.put("relationcount", relationcount);
+        //map.put("expresscount", expresscount);
         //map.put("ordercount", ordercount);
         map.put("human", humanresources);
-        map.put("customercount", customerCount);
+        //map.put("customercount", customerCount);
 		return map;
 	}
 	
