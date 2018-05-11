@@ -426,7 +426,7 @@ function showAreaDistribute(){
 			crm_alert(0,"该门店不存在！");
 			return ;
 		} */
-		doManager("areaManager", "getStoreServiceAreaAndPosition",[storeId], function(
+		/* doManager("areaManager", "getStoreServiceAreaAndPosition",[storeId], function(
 				data, textStatus, XMLHttpRequest) {
 			if (data.result) {
 				var resultJson = JSON.parse(data.data);
@@ -436,10 +436,10 @@ function showAreaDistribute(){
 					var x= positions[0];
 					var y= positions[1];
 					servicePosition = x+","+y;
-					servicePositionIsExist = true;
+					servicePositionIsExist = true; */
 					window.open("area_distribution_demo.html?c="+servicePosition+"&sid="+storeId+"&ci="+cityId,"iframe");
 					
-				}else{
+				/* }else{
 					servicePositionIsExist = false;
 					crm_alert(0,"当前门店服务范围不存在！");
 				}
@@ -447,7 +447,7 @@ function showAreaDistribute(){
 				 crm_alert(5,"请稍后重新请求！");
 			}
 		});
-	}
+	} */
 }
 
 /**
