@@ -3,8 +3,8 @@
  */
 package com.cnpc.pms.mongodb.manager.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.event.ListSelectionEvent;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -425,6 +424,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				   jObject.put("storeName", storetmp.getName());
 				   //jObject.put("location",doc.get("location"));
 				   jObject.put("tinyVillageName", doc.get("name"));
+				   jObject.put("belong",doc.get("belong"));
 				   jObject.put("areaNo","");
 				   jObject.put("areaName","");
 				   jObject.put("employee_a_no","");
@@ -597,7 +597,8 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			}
 		    // 注意这里的数据类型是document  
 			MongoCollection<Document> collection2 = database.getCollection("store_position");
-			FindIterable<Document> dIterable2 = collection2.find(Filters.eq("_id", store.getPlatformid()));
+			//Filters.eq("_id", store.getPlatformid());
+			FindIterable<Document> dIterable2 = collection2.find(new Document("_id",store.getPlatformid()).append("status", 0));
 			Document document2 = dIterable2.first();
 			
 			if(document2==null){
@@ -831,14 +832,14 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		    // 先查询门店服务范围
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			BasicDBObject query = new BasicDBObject();
-			query.append("storeId", new BasicDBObject("$in",platformIdArray));
+			query.append("storeId", new BasicDBObject("$in",platformIdArray)).append("status", 0);
 			FindIterable<Document> dIterable = collection.find(query);
 			MongoCursor<Document> cursor = dIterable.iterator(); 
 			
 			//查询门店中心坐标点
 			MongoCollection<Document> collection2 = database.getCollection("store_position");
 			BasicDBObject query2 = new BasicDBObject();
-			query2.append("_id", new BasicDBObject("$in",platformIdArray));
+			query2.append("_id", new BasicDBObject("$in",platformIdArray)).append("status", 0);
 			FindIterable<Document> dIterable2 = collection2.find(query2);
 			MongoCursor<Document> cursor2 = dIterable2.iterator(); 
 			
@@ -1116,14 +1117,14 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		    // 先查询门店服务范围
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			BasicDBObject query = new BasicDBObject();
-			query.append("storeId", new BasicDBObject("$in",platformIdArray));
+			query.append("storeId", new BasicDBObject("$in",platformIdArray)).append("status", 0);
 			FindIterable<Document> dIterable = collection.find(query);
 			MongoCursor<Document> cursor = dIterable.iterator(); 
 			
 			//查询门店中心坐标点
 			MongoCollection<Document> collection2 = database.getCollection("store_position");
 			BasicDBObject query2 = new BasicDBObject();
-			query2.append("_id", new BasicDBObject("$in",platformIdArray));
+			query2.append("_id", new BasicDBObject("$in",platformIdArray)).append("status", 0);
 			FindIterable<Document> dIterable2 = collection2.find(query2);
 			MongoCursor<Document> cursor2 = dIterable2.iterator(); 
 			
@@ -1187,6 +1188,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		for (int i = 0; i < list.size(); i++) {
 			list1.add(list.get(i).get("employeeId"));
 		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<Document> pipeline = new ArrayList<Document>();
 		Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1))); 
 		pipeline.add(match);
@@ -1201,7 +1203,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		//filter.put("locations.orderStatus", new Document("$ne",null));
 		Document match1 = new Document("$match",filter);
 		pipeline.add(match1);
-		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
+		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")).append("createTime", new Document("$push","$locations.createTime")));
 		pipeline.add(group);
 		AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
 		MongoCursor<Document> cursor = aggregate.iterator();
@@ -1210,6 +1212,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	           Document doc = cursor.next();  
 	           jObject = new JSONObject();
 			   jObject.put("locations", doc.get("locations"));
+			   jObject.put("createTime", doc.get("createTime"));
 			   jObject.put("id", doc.get("_id"));
 			 //  jObject.put("position", doc.get("position"));
 			   for(int i = 0; i < list.size(); i++){
