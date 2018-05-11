@@ -3789,7 +3789,7 @@ var curr_user;
   }
   //用户画像（新）
   function goTosjfxIndex(){
-	  var url = "sjfx-index.html";
+	  var url = "sjfx-index_demo.html";
 	  window.open(url,"sjfx-index");
   }
  
