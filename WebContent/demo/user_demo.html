@@ -184,17 +184,7 @@
           </div>
         </div>
       </section>
-      <section class="content-header">
-        <div class="box box-default"><a name="user"></a>
-          <div class="box-header with-border text-light-blue"><strong>划片区域</strong></div>
-          <div class="box-body"  id="area_info">
-            <!-- <p><span class="col-md-4">金台里社区</span><span class="col-md-4">金台里10号楼</span><span class="col-md-4">1</span></p>
-            <p><span class="col-md-4">金台里社区</span><span class="col-md-4">金台西里21号楼</span><span class="col-md-4">全部</span></p>
-           --></div>
 
-
-        </div>
-      </section>
       <!-- /.content -->
     </div>
   </div>
@@ -307,6 +297,8 @@ function initcurruser(){
 	},false);
 }
 
+
+
 //获取员工头像
 function getUserHeadPortraits(){
 	doManager('InterManager', 'findEmployeePicByEmployeeId',[employee_no],
@@ -314,7 +306,18 @@ function getUserHeadPortraits(){
 				if (data.result) {
 					var user_pic = JSON.parse(data.data);
 					if(user_pic.dataMap!=null){
-						$("#user_pic").attr("src",user_pic.dataMap.pngUrl);
+						
+						$.ajax({ 
+							   url:user_pic.dataMap.pngUrl, 
+							   type:'HEAD', 
+							   error: function() { 
+							       console.log("user_pic_none");
+							   }, 
+							   success: function() { 
+								   $("#user_pic").attr("src",user_pic.dataMap.pngUrl);
+							   } 
+							});
+						
 					}
 					
 				}
@@ -334,26 +337,26 @@ function initStore(){
 /******************快递查询片区管理员及所管所有小区 开始***********************/
 	function initareainfo(employee_no){
 		//取得当前登录人的门店
-		doManager("AreaManager", "queryAreaByEmployeeNo",[employee_no,area_id],
-					function(data, textStatus, XMLHttpRequest) {
-						if (data.result) {
-							var curr_area = JSON.parse(data.data);
-							//$(".text-yellow").html(curr_area.area.name);
-							//子集 
-							var objList = curr_area.areaInfo;
-							$("#area_info").empty();
-							if(objList!=null){
-								$.each(objList, function(i,obj) {
-									 var vill = obj['villname'];
-									 var tiny = obj['tinyname']==null?"全部":obj['tinyname'];
-									 var buil = obj['buildingname']==null?"全部":obj['buildingname'];
-									 var html = "<p><span class=\"col-md-4\">"+vill+"</span><span class=\"col-md-4\">"+tiny+"</span><span class=\"col-md-4\">"+buil+"</span></p>";
-									 $("#area_info").append(html);
-								});
-							}
+// 		doManager("AreaManager", "queryAreaByEmployeeNo",[employee_no,area_id],
+// 					function(data, textStatus, XMLHttpRequest) {
+// 						if (data.result) {
+// 							var curr_area = JSON.parse(data.data);
+// 							//$(".text-yellow").html(curr_area.area.name);
+// 							//子集 
+// 							var objList = curr_area.areaInfo;
+// 							$("#area_info").empty();
+// 							if(objList!=null){
+// 								$.each(objList, function(i,obj) {
+// 									 var vill = obj['villname'];
+// 									 var tiny = obj['tinyname']==null?"全部":obj['tinyname'];
+// 									 var buil = obj['buildingname']==null?"全部":obj['buildingname'];
+// 									 var html = "<p><span class=\"col-md-4\">"+vill+"</span><span class=\"col-md-4\">"+tiny+"</span><span class=\"col-md-4\">"+buil+"</span></p>";
+// 									 $("#area_info").append(html);
+// 								});
+// 							}
 							
-						}
-		},false);
+// 						}
+// 		},false);
 	}
 /******************快递查询片区管理员及所管所有小区结束  ***********************/
 	

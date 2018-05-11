@@ -595,12 +595,12 @@
 // 	        			tinyVillagePolygon:areaTinyVillage
 // 	        	}  
 //               polygonArray.push(tmp_tinyVillageCoordinate);
-          	  areaTinyVillage.on("click",function(e){
-                  var code= e.target.getExtData().tinyVillageNo;
-					var url = "../crm/dynamicData_tinyvillage.html?e=&code="+encode64(code);
-	   				window.open(url,"dynamicData_tinyvillage");
+//           	  areaTinyVillage.on("click",function(e){
+//                   var code= e.target.getExtData().tinyVillageNo;
+// 					var url = "../crm/dynamicData_tinyvillage.html?e=&code="+encode64(code);
+// 	   				window.open(url,"dynamicData_tinyvillage");
 					
-	        	});
+// 	        	});
                 var $tinyVillageName = coordinate[i].name;  
           	    areaTinyVillage.on("mouseover", function (e) {
           	    	var code= e.target.getExtData().tinyVillageNo;       

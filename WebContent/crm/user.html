@@ -504,7 +504,18 @@ function getUserHeadPortraits(){
 				if (data.result) {
 					var user_pic = JSON.parse(data.data);
 					if(user_pic.dataMap!=null){
-						$("#user_pic").attr("src",user_pic.dataMap.pngUrl);
+						
+						$.ajax({ 
+							   url:user_pic.dataMap.pngUrl, 
+							   type:'HEAD', 
+							   error: function() { 
+							       console.log("user_pic_none");
+							   }, 
+							   success: function() { 
+								   $("#user_pic").attr("src",user_pic.dataMap.pngUrl);
+							   } 
+							});
+						
 					}
 					
 				}
