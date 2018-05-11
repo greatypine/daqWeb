@@ -486,8 +486,10 @@ Date.prototype.format=function(fmt) {
 	$("#dept_manual").val(deptname);
 	$("#dept_private_manual").val(deptname);
 	$("#channel_manual").val(channelname);
-	$('#auto_date').data('daterangepicker').setStartDate(time);
-	$('#auto_date').data('daterangepicker').setEndDate(time);
+	if(time!=null){
+		$('#auto_date').data('daterangepicker').setStartDate(time);
+		$('#auto_date').data('daterangepicker').setEndDate(time);
+	}
     
   	//更多显示
     $(".how-more").click(function(){
@@ -1051,6 +1053,7 @@ Date.prototype.format=function(fmt) {
 	        	   for(var i=0;i<jData.length;i++){
        			       var s="";
        			       var c="";
+       			       var r="";
        			       if(jData[i].sign_time!=null){
        			    		var d=	new Date();
        			     		d.setTime(jData[i].sign_time);
@@ -1061,7 +1064,12 @@ Date.prototype.format=function(fmt) {
 	   			     		d.setTime(jData[i].create_time);
 	   			   		 	c=d.format('yyyy-MM-dd HH:mm:ss')
    			       		}
-       			    
+       			    	if(jData[i].return_time!=null){
+       			    		var d=	new Date();
+       			     		d.setTime(jData[i].return_time);
+       			   		 	r=d.format('yyyy-MM-dd HH:mm:ss')
+       			        }
+       			    		
        			    var area_name = (jData[i].area_name==null || jData[i].area_name=='')?'无':jData[i].area_name;
        			    var customer_name = jData[i].customer_name==null?'':jData[i].customer_name;
        			    var addr_name = jData[i].addr_name==null?'':jData[i].addr_name;
@@ -1087,7 +1095,13 @@ Date.prototype.format=function(fmt) {
 			        
        			    var ctime="<strong>下单时间：</strong>"+c+"<br>";
  			       	var stime="<strong>签收时间：</strong>"+s+"<br>";
- 			        var tcontent =ctime+stime+"@timetips"+i;
+ 			       	var rtime="<strong>退货时间：</strong>"+r+"<br>";
+ 			        var tcontent = "";
+ 			       	if(r!=null && r!=""){
+ 			        	tcontent =ctime+stime+rtime+"@timetips"+i;
+ 			       	}else{
+ 			       		tcontent =ctime+stime+"@timetips"+i;	
+ 			       	}
 			        var tid = "timetips"+i;
 			        
  			       	var dept="<strong>事业群：</strong>"+department_name+"<br>";
