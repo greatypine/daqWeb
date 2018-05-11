@@ -3882,34 +3882,34 @@ var curr_user;
   
   //数据地图-热力图-营业额热力图
   function gotogmvheat(){
-	  var url = "../aboutMap/data_index.html?t=1&nav=heat&type=yye&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=heat&type=yye&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
   //数据地图-热力图-订单热力图
   function gotoorderheat(){
-	  var url = "../aboutMap/data_index.html?t=1&nav=heat&type=ddl&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=heat&type=ddl&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
   //数据地图-热力图-用户热力图
   function gotocustomerheat(){
-	  var url = "../aboutMap/data_index.html?t=1&nav=heat&type=yhl&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=heat&type=yhl&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
   
   
   //数据地图-热力图-营业额热力图
   function gotogmvheatxq(){
-	  var url = "../aboutMap/data_index.html?t=1&nav=village_heat&type=yye&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=village_heat&type=yye&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
   //数据地图-热力图-订单热力图
   function gotoorderheatxq(){
-	  var url = "../aboutMap/data_index.html?t=1&nav=village_heat&type=ddl&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=village_heat&type=ddl&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
   //数据地图-热力图-用户热力图
   function gotocustomerheatxq(){
-	  var url = "../aboutMap/data_index.html?t=1&nav=village_heat&type=yhl&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=village_heat&type=yhl&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
   
@@ -3918,18 +3918,18 @@ var curr_user;
   //数据地图-覆盖范围-门店覆盖范围
   function goToMapView(){
 	  var role = curr_user.usergroup.code;
-	  var url = "../aboutMap/data_index.html?t=1&nav=store&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=store&s=&c=&cn=&e=";
 	  window.open(url,"data_index"); 
   }
   //数据地图-覆盖范围-片区分布图
   function goToTinyArea(){
 	  var role = curr_user.usergroup.code;
-	  var url = "../aboutMap/data_index.html?t=1&nav=tiny&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=tiny&s=&c=&cn=&e=";
 	  window.open(url,"data_index"); 
   }
   //数据地图-动态图-国安侠分布
   function gotoemployeefb(){
-	  var url = "../aboutMap/data_index.html?t=1&nav=emp&s=&c=&cn=&e=";
+	  var url = "data_index_demo.html?t=1&nav=emp&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
   //数据模型-社区模型-基础数据模型  //全国
