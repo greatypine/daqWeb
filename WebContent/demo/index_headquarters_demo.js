@@ -3314,7 +3314,7 @@ var resetSearch_store = function(){
 	  function goEmployee(t){
 		  var employeeNo =   $(t).attr("id").split("_")[1];
 		  
-		  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
+		  var URL="../crm/employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
 		  window.open(URL); 
 	  }
 //初始化店长
@@ -3394,7 +3394,7 @@ function goStoreKeeper(t){
 
     var id =   $(t).attr("id").split("_")[2];
     var employee = $(t).attr("id").split("_")[1];
-    var URL="storekeeper_user.html?"+"userId="+encode64(id)+"&employeeNo="+encode64(employee);
+    var URL="../crm/storekeeper_user.html?"+"userId="+encode64(id)+"&employeeNo="+encode64(employee);
     window.open(URL);
 }
   //弹窗-搜索
