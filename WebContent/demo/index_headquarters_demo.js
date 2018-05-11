@@ -826,7 +826,7 @@ function  createEmployeePage(){
 	                var employee_no = human_list2[i].employee_no;
 	                var employee_storename = human_list2[i].storeName;  //门店
 	                var employee_citySelect = human_list2[i].city_name;   //城市
-	                infoStr = infoStr+"<tr style='cursor:pointer'  id='tr_"+employee_no+"' onclick='goEmployee(this)'><td>"+parseInt(i+1)+"</td><td>"+employee_no+"</td><td>"+employee_name+"</td><td>"+employee_citySelect+"</td><td>"+employee_storename+"</td></tr>"
+	                infoStr = infoStr+"<tr style='cursor:pointer'  id='tr_"+employee_no+"' /*onclick='goEmployee(this)'*/><td>"+parseInt(i+1)+"</td><td>"+employee_no+"</td><td>"+employee_name+"</td><td>"+employee_citySelect+"</td><td>"+employee_storename+"</td></tr>"
 	            }
 	            $("#employee_detail_title").nextAll().remove();
 	            $("#employee_detail_title").after(infoStr);
@@ -3277,7 +3277,7 @@ var initStoreKeeper = function(){
         var employee_citySelect = human_list1[i].city_name;   //城市
         var employee_phone = human_list1[i].mobilephone==null?"":human_list1[i].mobilephone;
         var uid =  human_list1[i].id;
-        infoStr = infoStr+"<tr style='cursor:pointer'  id='tr_"+employee_no+"_"+uid+"' onclick='goStoreKeeper(this)'><td>"+parseInt(i+1)+"</td><td>"+employee_no+"</td><td>"+employee_name+"</td><td>"+employee_citySelect+"</td><td>"+employee_storename+"</td><td>"+employee_phone+"</td></tr>";
+        infoStr = infoStr+"<tr style='cursor:pointer'  id='tr_"+employee_no+"_"+uid+"' /*onclick='goStoreKeeper(this)'*/><td>"+parseInt(i+1)+"</td><td>"+employee_no+"</td><td>"+employee_name+"</td><td>"+employee_citySelect+"</td><td>"+employee_storename+"</td><td>"+employee_phone+"</td></tr>";
     }
 
     $("#storeKeeper_detail_title").nextAll().remove();
