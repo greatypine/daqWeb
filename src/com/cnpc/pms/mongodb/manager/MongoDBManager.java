@@ -257,11 +257,27 @@ public interface MongoDBManager extends IManager{
 	
 	/**
 	 * 
-	 * TODO 查询国安侠运行轨迹 
+	 * TODO 查询国安侠运行轨迹  
 	 * 2018年3月7日
 	 * @author gaobaolei
 	 * @param employeeNo
 	 * @return
 	 */
 	public Map<String, Object> queryEmployeeDiveRecord(String employeeNo);
+	
+	/**
+	 * 
+	* @Title: updateTinyAreaBelong  
+	* @Description: TODO 设置门店小区坐标归属
+	* 2018年5月9日
+	* @param @param storeNo 门店编号
+	* @param @param townIds 街道 例如  8,12,12
+	* @param @param belong private、public
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String,Object> updateTinyAreaBelong(String storeNo,String townIds,String belong);
+	
+	
 }
