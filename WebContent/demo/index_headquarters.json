@@ -2,166 +2,170 @@ var indexData = {
 	"china": {
 		"rank_gmv": {
 			"lst_data": [{
+				"week_date": "05-13",
+				"week_gmv": 5801063
+			}, {
+				"week_date": "05-12",
+				"week_gmv": 6236078
+			}, {
+				"week_date": "05-11",
+				"week_gmv": 6377003
+			}, {
 				"week_date": "05-10",
-				"week_gmv": 234576
+				"week_gmv": 7439204
 			}, {
 				"week_date": "05-09",
-				"week_gmv": 335535
+				"week_gmv": 7269372
 			}, {
 				"week_date": "05-08",
-				"week_gmv": 343556
+				"week_gmv": 6490092
 			}, {
 				"week_date": "05-07",
-				"week_gmv": 454554
-			}, {
-				"week_date": "05-06",
-				"week_gmv": 454455
-			}, {
-				"week_date": "05-05",
-				"week_gmv": 454567
-			}, {
-				"week_date": "05-04",
-				"week_gmv": 121213
+				"week_gmv": 5880790
 			}]
 		},
 		"city_user_gmv": {
 			"gmv": [{
-				"gmv_sum": 23233.8,
+				"gmv_sum": 38249974.52,
 				"city_name": "天津",
 				"province_id": 2,
 				"name": "万兴店",
 				"city_id": 3
 			}, {
-				"gmv_sum": 86787.45,
+				"gmv_sum": 11550478.92,
 				"city_name": "北京",
 				"province_id": 1,
 				"name": "白纸坊店",
 				"city_id": 1
 			}, {
-				"gmv_sum": 23233.08,
+				"gmv_sum": 3467171.09,
 				"city_name": "沈阳",
 				"province_id": 6,
-				"name": "山东庙店",
+				"name": "山东庙闭店",
 				"city_id": 4
 			}, {
-				"gmv_sum": 23233.55,
-				"city_name": "上海",
-				"province_id": 9,
-				"name": "平凉路店",
-				"city_id": 2
-			}, {
-				"gmv_sum": 13244.25,
+				"gmv_sum": 2278148.85,
 				"city_name": "昆明",
 				"province_id": 25,
 				"name": "红云店",
 				"city_id": 6
 			}, {
-				"gmv_sum": 32322.82,
+				"gmv_sum": 1839974.86,
+				"city_name": "上海",
+				"province_id": 9,
+				"name": "平凉路店",
+				"city_id": 2
+			}, {
+				"gmv_sum": 476507.11,
 				"city_name": "贵阳",
 				"province_id": 24,
 				"name": "未来方舟店",
 				"city_id": 5
 			}, {
-				"gmv_sum": 32345.37,
+				"gmv_sum": 306698.86,
 				"city_name": "广州",
 				"province_id": 19,
 				"name": "逢源店",
 				"city_id": 8
 			}, {
-				"gmv_sum": 545353.91,
+				"gmv_sum": 292750.06,
 				"city_name": "深圳",
 				"province_id": 19,
 				"name": "南山保利城花园店",
 				"city_id": 7
 			}, {
-				"gmv_sum": 32323.74,
+				"gmv_sum": 210617.51,
 				"city_name": "黔东南苗族侗族自治州",
 				"province_id": 24,
 				"name": "上马石店",
 				"city_id": 10
 			}, {
-				"gmv_sum": 44545,
+				"gmv_sum": 91881.5,
 				"city_name": "长沙",
 				"province_id": 18,
 				"name": "长沙树木岭店",
 				"city_id": 11
 			}, {
-				"gmv_sum": 5657.26,
+				"gmv_sum": 18467.62,
 				"city_name": "武汉",
 				"province_id": 17,
 				"name": "香港路店",
 				"city_id": 12
 			}, {
-				"gmv_sum": 4545.4,
+				"gmv_sum": 306.2,
 				"city_name": "乌兰察布",
 				"province_id": 5,
 				"name": "乌兰察布职业学院店",
 				"city_id": 9
+			}, {
+				"gmv_sum": 0,
+				"city_name": "石家庄",
+				"province_id": 3,
+				"name": "育才店",
+				"city_id": 19
 			}]
 		},
 		"store_gmv": {
 			"gmv": [{
-					"store_id": 9900287,
-					"city_name": "天津",
-					"store_name": "第六大道店",
-					"store_pesgmv": 6666,
-					"city_id": 3
-				},
-				{
-					"store_id": 9900287,
-					"city_name": "天津",
-					"store_name": "二号桥店",
-					"store_pesgmv": 5555,
-					"city_id": 3
-				}, {
-					"store_id": 9900287,
-					"city_name": "天津",
-					"store_name": "鼓楼店",
-					"store_pesgmv": 4444,
-					"city_id": 3
-				}, {
-					"store_id": 9900287,
-					"city_name": "天津",
-					"store_name": "挂甲寺店",
-					"store_pesgmv": 3333,
-					"city_id": 3
-				}, {
-					"store_id": 9900287,
-					"city_name": "天津",
-					"store_name": "铁东路店",
-					"store_pesgmv": 2121,
-					"city_id": 3
-				}
-			]
+				"store_id": 9900287,
+				"city_name": "天津",
+				"store_name": "第六大道店",
+				"store_pesgmv": 3170208.48,
+				"city_id": 3
+			}, {
+				"store_id": 9900287,
+				"city_name": "天津",
+				"store_name": "鼓楼店",
+				"store_pesgmv": 2607028.4,
+				"city_id": 3
+			}, {
+				"store_id": 9900287,
+				"city_name": "天津",
+				"store_name": "二号桥店",
+				"store_pesgmv": 2370395.16,
+				"city_id": 3
+			}, {
+				"store_id": 9900287,
+				"city_name": "天津",
+				"store_name": "万兴店",
+				"store_pesgmv": 1885655.22,
+				"city_id": 3
+			}, {
+				"store_id": 9900287,
+				"city_name": "天津",
+				"store_name": "常州道店",
+				"store_pesgmv": 1697685.53,
+				"city_id": 3
+			}]
 		},
 		"store_order_user_count": {
 			"gmv": [{
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
-				"store_name": "第六大道店",
+				"store_name": "二号桥店",
 				"city_code": "022",
-				"customer_count": 3333
+				"customer_count": 5877
 			}, {
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
-				"store_name": "新兴店",
+				"store_name": "第六大道店",
 				"city_code": "022",
-				"customer_count": 2333
+				"customer_count": 5596
 			}, {
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
 				"store_name": "常州道店",
 				"city_code": "022",
-				"customer_count": 2111
+				"customer_count": 5507
 			}, {
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
-				"store_name": "二号桥店",
+				"store_name": "新兴店",
 				"city_code": "022",
-				"customer_count": 1999
+				"customer_count": 5470
 			}, {
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
 				"store_name": "越秀路店",
 				"city_code": "022",
-				"customer_count": 1555
+				"customer_count": 5361
 			}],
-			"total_pages": 66,
+			"total_pages": 67,
 			"cityList": [{
 				"create_user_id": null,
 				"cityno": "0010",
@@ -436,44 +440,44 @@ var indexData = {
 		},
 		"guoanxia_rank_gmv": {
 			"gmv": [{
-				"pesgmv": 777777,
+				"pesgmv": 894022.58,
 				"city_name": "天津",
 				"employee_a_name": "王鹏",
 				"store_name": "鼓楼店"
 			}, {
-				"pesgmv": 666666,
-				"city_name": "天津",
-				"employee_a_name": "谢淘",
-				"store_name": "鼓楼店"
-			}, {
-				"pesgmv": 555555,
+				"pesgmv": 871030.38,
 				"city_name": "天津",
 				"employee_a_name": "李春阳",
 				"store_name": "鼓楼店"
 			}, {
-				"pesgmv": 444444,
+				"pesgmv": 768043.58,
+				"city_name": "天津",
+				"employee_a_name": "谢淘",
+				"store_name": "鼓楼店"
+			}, {
+				"pesgmv": 538214.58,
 				"city_name": "天津",
 				"employee_a_name": "高飞",
 				"store_name": "二号桥店"
 			}, {
-				"pesgmv": 333333,
+				"pesgmv": 478769.16,
 				"city_name": "天津",
 				"employee_a_name": "宁月",
 				"store_name": "第六大道店"
 			}, {
-				"pesgmv": 222222,
+				"pesgmv": 475570.18,
 				"city_name": "天津",
 				"employee_a_name": "李新岩",
 				"store_name": "第六大道店"
 			}, {
-				"pesgmv": 111111,
+				"pesgmv": 473942.18,
 				"city_name": "天津",
 				"employee_a_name": "刘晓尧",
 				"store_name": "第六大道店"
 			}, {
-				"pesgmv": 99999,
+				"pesgmv": 472384.08,
 				"city_name": "天津",
-				"employee_a_name": "高迪",
+				"employee_a_name": "史志雄",
 				"store_name": "第六大道店"
 			}]
 		},
@@ -722,156 +726,156 @@ var indexData = {
 		},
 		"new_month_userCount": {
 			"lst_data": [{
-				"new_cus_count": 122,
+				"new_cus_count": 17021,
+				"week_date": "05-13",
+				"pay_cus_count": 22140
+			}, {
+				"new_cus_count": 15593,
+				"week_date": "05-12",
+				"pay_cus_count": 20762
+			}, {
+				"new_cus_count": 14435,
+				"week_date": "05-11",
+				"pay_cus_count": 20718
+			}, {
+				"new_cus_count": 13950,
 				"week_date": "05-10",
-				"pay_cus_count": 232
+				"pay_cus_count": 19503
 			}, {
-				"new_cus_count": 122,
+				"new_cus_count": 13411,
 				"week_date": "05-09",
-				"pay_cus_count": 344
+				"pay_cus_count": 18919
 			}, {
-				"new_cus_count": 212,
+				"new_cus_count": 12023,
 				"week_date": "05-08",
-				"pay_cus_count": 343
+				"pay_cus_count": 18175
 			}, {
-				"new_cus_count": 322,
+				"new_cus_count": 11460,
 				"week_date": "05-07",
-				"pay_cus_count": 345
+				"pay_cus_count": 17472
 			}, {
-				"new_cus_count": 234,
+				"new_cus_count": 12104,
 				"week_date": "05-06",
-				"pay_cus_count": 211
+				"pay_cus_count": 17349
 			}, {
-				"new_cus_count": 323,
+				"new_cus_count": 11591,
 				"week_date": "05-05",
-				"pay_cus_count": 123
+				"pay_cus_count": 17203
 			}, {
-				"new_cus_count": 232,
+				"new_cus_count": 9500,
 				"week_date": "05-04",
-				"pay_cus_count": 121
+				"pay_cus_count": 15207
 			}, {
-				"new_cus_count": 677,
+				"new_cus_count": 8132,
 				"week_date": "05-03",
-				"pay_cus_count": 344
+				"pay_cus_count": 13340
 			}, {
-				"new_cus_count": 121,
+				"new_cus_count": 7517,
 				"week_date": "05-02",
-				"pay_cus_count": 100
+				"pay_cus_count": 13370
 			}, {
-				"new_cus_count": 435,
+				"new_cus_count": 7137,
 				"week_date": "05-01",
-				"pay_cus_count": 232
+				"pay_cus_count": 12306
 			}, {
-				"new_cus_count": 232,
+				"new_cus_count": 18201,
 				"week_date": "04-30",
-				"pay_cus_count": 122
+				"pay_cus_count": 26065
 			}, {
-				"new_cus_count": 232,
+				"new_cus_count": 17783,
 				"week_date": "04-29",
-				"pay_cus_count": 145
+				"pay_cus_count": 25421
 			}, {
-				"new_cus_count": 234,
+				"new_cus_count": 14315,
 				"week_date": "04-28",
-				"pay_cus_count": 100
+				"pay_cus_count": 21598
 			}, {
-				"new_cus_count": 224,
+				"new_cus_count": 19438,
 				"week_date": "04-27",
-				"pay_cus_count": 99
+				"pay_cus_count": 27194
 			}, {
-				"new_cus_count": 454,
+				"new_cus_count": 14846,
 				"week_date": "04-26",
-				"pay_cus_count": 212
+				"pay_cus_count": 21351
 			}, {
-				"new_cus_count": 232,
+				"new_cus_count": 14374,
 				"week_date": "04-25",
-				"pay_cus_count": 122
+				"pay_cus_count": 19421
 			}, {
-				"new_cus_count": 323,
+				"new_cus_count": 11594,
 				"week_date": "04-24",
-				"pay_cus_count": 123
+				"pay_cus_count": 16884
 			}, {
-				"new_cus_count": 224,
+				"new_cus_count": 10461,
 				"week_date": "04-23",
-				"pay_cus_count": 101
+				"pay_cus_count": 15058
 			}, {
-				"new_cus_count": 322,
+				"new_cus_count": 13906,
 				"week_date": "04-22",
-				"pay_cus_count": 200
+				"pay_cus_count": 18702
 			}, {
-				"new_cus_count": 456,
+				"new_cus_count": 12233,
 				"week_date": "04-21",
-				"pay_cus_count": 321
+				"pay_cus_count": 16305
 			}, {
-				"new_cus_count": 232,
+				"new_cus_count": 14292,
 				"week_date": "04-20",
-				"pay_cus_count": 188
+				"pay_cus_count": 19673
 			}, {
-				"new_cus_count": 133,
+				"new_cus_count": 10251,
 				"week_date": "04-19",
-				"pay_cus_count": 121
+				"pay_cus_count": 15288
 			}, {
-				"new_cus_count": 232,
+				"new_cus_count": 10243,
 				"week_date": "04-18",
-				"pay_cus_count": 132
+				"pay_cus_count": 14742
 			}, {
-				"new_cus_count": 345,
+				"new_cus_count": 10108,
 				"week_date": "04-17",
-				"pay_cus_count": 123
+				"pay_cus_count": 14392
 			}, {
-				"new_cus_count": 235,
+				"new_cus_count": 11130,
 				"week_date": "04-16",
-				"pay_cus_count": 221
+				"pay_cus_count": 15606
 			}, {
-				"new_cus_count": 343,
+				"new_cus_count": 13619,
 				"week_date": "04-15",
-				"pay_cus_count": 122
+				"pay_cus_count": 17460
 			}, {
-				"new_cus_count": 434,
+				"new_cus_count": 10214,
 				"week_date": "04-14",
-				"pay_cus_count": 122
-			}, {
-				"new_cus_count": 233,
-				"week_date": "04-13",
-				"pay_cus_count": 122
-			}, {
-				"new_cus_count": 233,
-				"week_date": "04-12",
-				"pay_cus_count": 233
-			}, {
-				"new_cus_count": 269,
-				"week_date": "04-11",
-				"pay_cus_count": 132
+				"pay_cus_count": 14766
 			}]
 		},
 		"new_week_userCount": {
 			"lst_data": [{
-				"new_cus_count": 121,
+				"new_cus_count": 17021,
+				"week_date": "05-13",
+				"pay_cus_count": 22140
+			}, {
+				"new_cus_count": 15593,
+				"week_date": "05-12",
+				"pay_cus_count": 20762
+			}, {
+				"new_cus_count": 14435,
+				"week_date": "05-11",
+				"pay_cus_count": 20718
+			}, {
+				"new_cus_count": 13950,
 				"week_date": "05-10",
-				"pay_cus_count": 243
+				"pay_cus_count": 19503
 			}, {
-				"new_cus_count": 211,
+				"new_cus_count": 13411,
 				"week_date": "05-09",
-				"pay_cus_count": 232
+				"pay_cus_count": 18919
 			}, {
-				"new_cus_count": 91,
+				"new_cus_count": 12023,
 				"week_date": "05-08",
-				"pay_cus_count": 111
+				"pay_cus_count": 18175
 			}, {
-				"new_cus_count": 200,
+				"new_cus_count": 11460,
 				"week_date": "05-07",
-				"pay_cus_count": 300
-			}, {
-				"new_cus_count": 214,
-				"week_date": "05-06",
-				"pay_cus_count": 234
-			}, {
-				"new_cus_count": 122,
-				"week_date": "05-05",
-				"pay_cus_count": 232
-			}, {
-				"new_cus_count": 121,
-				"week_date": "05-04",
-				"pay_cus_count": 232
+				"pay_cus_count": 17472
 			}]
 		},
 		"dep_gmv": {
@@ -917,27 +921,27 @@ var indexData = {
 				"channel_name": "社区好房",
 				"city_name": "北京",
 				"city_id": 1,
-				"order_amount": 232323
-			}, {
-				"channel_name": "日用百货",
-				"city_name": "北京",
-				"city_id": 1,
-				"order_amount": 435435
+				"order_amount": 19289519.00
 			}, {
 				"channel_name": "安心出游",
 				"city_name": "北京",
 				"city_id": 1,
-				"order_amount": 87878
+				"order_amount": 10576356.90
+			}, {
+				"channel_name": "日用百货",
+				"city_name": "北京",
+				"city_id": 1,
+				"order_amount": 8692205.92
 			}, {
 				"channel_name": "国安家电",
 				"city_name": "北京",
 				"city_id": 1,
-				"order_amount": 232332
+				"order_amount": 7030813.10
 			}, {
 				"channel_name": "生鲜频道",
 				"city_name": "北京",
 				"city_id": 1,
-				"order_amount": 34344
+				"order_amount": 2285085.66
 			}]
 		}
 	},
@@ -968,7 +972,7 @@ var indexData = {
 		},
 		"city_user_gmv": {
 			"gmv": [{
-				"gmv_sum": 3543545,
+				"gmv_sum": 11550478.92,
 				"city_name": "北京",
 				"province_id": 1,
 				"name": "白纸坊店",
@@ -978,62 +982,62 @@ var indexData = {
 		"store_gmv": {
 			"gmv": [{
 				"store_id": 9900287,
-				"city_name": "北京",
-				"store_name": "中仓店",
-				"store_pesgmv": 9999,
-				"city_id": 1
+				"city_name": "天津",
+				"store_name": "第六大道店",
+				"store_pesgmv": 3170208.48,
+				"city_id": 3
 			}, {
 				"store_id": 9900287,
-				"city_name": "北京",
-				"store_name": "羊坊店",
-				"store_pesgmv": 8888,
-				"city_id": 1
+				"city_name": "天津",
+				"store_name": "鼓楼店",
+				"store_pesgmv": 2607028.4,
+				"city_id": 3
 			}, {
 				"store_id": 9900287,
-				"city_name": "北京",
-				"store_name": "潘家园店",
-				"store_pesgmv": 7777,
-				"city_id": 1
+				"city_name": "天津",
+				"store_name": "二号桥店",
+				"store_pesgmv": 2370395.16,
+				"city_id": 3
 			}, {
 				"store_id": 9900287,
-				"city_name": "北京",
-				"store_name": "呼家楼店",
-				"store_pesgmv": 6666,
-				"city_id": 1
+				"city_name": "天津",
+				"store_name": "万兴店",
+				"store_pesgmv": 1885655.22,
+				"city_id": 3
 			}, {
 				"store_id": 9900287,
-				"city_name": "北京",
-				"store_name": "中关村店",
-				"store_pesgmv": 5555,
-				"city_id": 1
+				"city_name": "天津",
+				"store_name": "常州道店",
+				"store_pesgmv": 1697685.53,
+				"city_id": 3
 			}]
 		},
 		"store_order_user_count": {
 			"gmv": [{
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
-				"store_name": "花园路店",
-				"city_code": "010",
-				"customer_count": 1000
-			}, {
-				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
 				"store_name": "金顶街店",
 				"city_code": "010",
-				"customer_count": 800
+				"customer_count": 1617
+			}, {
+				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
+				"store_name": "花园路店",
+				"city_code": "010",
+				"customer_count": 1611
 			}, {
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
 				"store_name": "东湖店",
 				"city_code": "010",
-				"customer_count": 700
-			}, {
-				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
-				"store_name": "回龙观店",
-				"city_code": "010",
-				"customer_count": 600
+				"customer_count": 1372
 			}, {
 				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
 				"store_name": "曙光店",
 				"city_code": "010",
-				"customer_count": 500
+				"customer_count": 1197
+			}, {
+				"store_id": "8ad89f885cd2f71a015ce28261c75e9a",
+				"store_name": "回龙观店",
+				"city_code": "010",
+				"customer_count": 1195
 			}],
 			"total_pages": 28,
 			"cityList": [{
@@ -1310,44 +1314,44 @@ var indexData = {
 		},
 		"guoanxia_rank_gmv": {
 			"gmv": [{
-				"pesgmv": 21212,
+				"pesgmv": 193837.49,
 				"city_name": "北京",
 				"employee_a_name": "李建",
 				"store_name": "中仓店"
 			}, {
-				"pesgmv": 20212,
-				"city_name": "北京",
-				"employee_a_name": "冈阔",
-				"store_name": "中仓店"
-			}, {
-				"pesgmv": 19008,
-				"city_name": "北京",
-				"employee_a_name": "高凯",
-				"store_name": "中仓店"
-			}, {
-				"pesgmv": 12122,
+				"pesgmv": 101981.46,
 				"city_name": "北京",
 				"employee_a_name": "关立鹏",
 				"store_name": "方庄店"
 			}, {
-				"pesgmv": 10000,
+				"pesgmv": 101095.54,
+				"city_name": "北京",
+				"employee_a_name": "高凯",
+				"store_name": "中仓店"
+			}, {
+				"pesgmv": 100898.18,
+				"city_name": "北京",
+				"employee_a_name": "冈阔",
+				"store_name": "中仓店"
+			}, {
+				"pesgmv": 75794.4,
+				"city_name": "北京",
+				"employee_a_name": "王亚鹏",
+				"store_name": "德胜门店"
+			}, {
+				"pesgmv": 72924.59,
 				"city_name": "北京",
 				"employee_a_name": "吴华健",
 				"store_name": "东湖店"
 			}, {
-				"pesgmv": 9876,
+				"pesgmv": 64037.86,
 				"city_name": "北京",
 				"employee_a_name": "金博群",
 				"store_name": "西八里庄店"
 			}, {
-				"pesgmv": 8000,
+				"pesgmv": 60564.1,
 				"city_name": "北京",
-				"employee_a_name": "杨策",
-				"store_name": "永定门店"
-			}, {
-				"pesgmv": 7000,
-				"city_name": "北京",
-				"employee_a_name": "袁俊博",
+				"employee_a_name": "孙凯",
 				"store_name": "四季青店"
 			}]
 		},
@@ -1596,144 +1600,33 @@ var indexData = {
 		},
 		"new_month_userCount": {
 			"lst_data": [{
-				"new_cus_count": 1000,
+				"new_cus_count": 1861,
+				"week_date": "05-13",
+				"pay_cus_count": 4834
+			}, {
+				"new_cus_count": 1963,
+				"week_date": "05-12",
+				"pay_cus_count": 4793
+			}, {
+				"new_cus_count": 2855,
+				"week_date": "05-11",
+				"pay_cus_count": 6381
+			}, {
+				"new_cus_count": 2058,
 				"week_date": "05-10",
-				"pay_cus_count": 8000
+				"pay_cus_count": 4858
 			}, {
-				"new_cus_count": 900,
+				"new_cus_count": 1808,
 				"week_date": "05-09",
-				"pay_cus_count": 7000
-			}, {
-				"new_cus_count": 700,
-				"week_date": "05-08",
-				"pay_cus_count": 6000
-			}, {
-				"new_cus_count": 600,
-				"week_date": "05-07",
-				"pay_cus_count": 5000
-			}, {
-				"new_cus_count": 500,
-				"week_date": "05-06",
-				"pay_cus_count": 4000
-			}, {
-				"new_cus_count": 400,
-				"week_date": "05-05",
-				"pay_cus_count": 3000
-			}, {
-				"new_cus_count": 300,
-				"week_date": "05-04",
-				"pay_cus_count": 2000
-			}, {
-				"new_cus_count": 500,
-				"week_date": "05-03",
-				"pay_cus_count": 4000
-			}, {
-				"new_cus_count": 2837,
-				"week_date": "05-02",
-				"pay_cus_count": 6157
-			}, {
-				"new_cus_count": 700,
-				"week_date": "05-01",
-				"pay_cus_count": 4000
-			}, {
-				"new_cus_count": 900,
-				"week_date": "04-30",
-				"pay_cus_count": 3000
-			}, {
-				"new_cus_count": 1200,
-				"week_date": "04-29",
-				"pay_cus_count": 1210
-			}, {
-				"new_cus_count": 900,
-				"week_date": "04-28",
-				"pay_cus_count": 1000
-			}, {
-				"new_cus_count": 800,
-				"week_date": "04-27",
-				"pay_cus_count": 6000
-			}, {
-				"new_cus_count": 500,
-				"week_date": "04-26",
-				"pay_cus_count": 3000
-			}, {
-				"new_cus_count": 800,
-				"week_date": "04-25",
-				"pay_cus_count": 3000
-			}, {
-				"new_cus_count": 900,
-				"week_date": "04-24",
-				"pay_cus_count": 2000
-			}, {
-				"new_cus_count": 600,
-				"week_date": "04-23",
-				"pay_cus_count": 1000
-			}, {
-				"new_cus_count": 300,
-				"week_date": "04-22",
-				"pay_cus_count": 1219
-			}, {
-				"new_cus_count": 454,
-				"week_date": "04-21",
-				"pay_cus_count": 1214
-			}, {
-				"new_cus_count": 545,
-				"week_date": "04-20",
-				"pay_cus_count": 1211
-			}, {
-				"new_cus_count": 343,
-				"week_date": "04-19",
-				"pay_cus_count": 2132
-			}, {
-				"new_cus_count": 353,
-				"week_date": "04-18",
-				"pay_cus_count": 1215
-			}, {
-				"new_cus_count": 456,
-				"week_date": "04-17",
-				"pay_cus_count": 1214
-			}, {
-				"new_cus_count": 545,
-				"week_date": "04-16",
-				"pay_cus_count": 1212
-			}, {
-				"new_cus_count": 343,
-				"week_date": "04-15",
-				"pay_cus_count": 1213
-			}, {
-				"new_cus_count": 646,
-				"week_date": "04-14",
-				"pay_cus_count": 1212
-			}, {
-				"new_cus_count": 455,
-				"week_date": "04-13",
-				"pay_cus_count": 1211
-			}, {
-				"new_cus_count": 543,
-				"week_date": "04-12",
-				"pay_cus_count": 1671
-			}, {
-				"new_cus_count": 868,
-				"week_date": "04-11",
-				"pay_cus_count": 1211
-			}]
-		},
-		"new_week_userCount": {
-			"lst_data": [{
-				"new_cus_count": 323,
-				"week_date": "05-10",
-				"pay_cus_count": 3342
-			}, {
-				"new_cus_count": 44,
-				"week_date": "05-09",
-				"pay_cus_count": 2112
+				"pay_cus_count": 4771
 			}, {
 				"new_cus_count": 2107,
 				"week_date": "05-08",
 				"pay_cus_count": 4965
 			}, {
-				"new_cus_count": 317,
+				"new_cus_count": 3217,
 				"week_date": "05-07",
-				"pay_cus_count": 5210
+				"pay_cus_count": 5990
 			}, {
 				"new_cus_count": 2835,
 				"week_date": "05-06",
@@ -1741,11 +1634,122 @@ var indexData = {
 			}, {
 				"new_cus_count": 3709,
 				"week_date": "05-05",
-				"pay_cus_count": 6753
+				"pay_cus_count": 6853
 			}, {
-				"new_cus_count": 1212,
+				"new_cus_count": 3169,
 				"week_date": "05-04",
 				"pay_cus_count": 6626
+			}, {
+				"new_cus_count": 2602,
+				"week_date": "05-03",
+				"pay_cus_count": 5721
+			}, {
+				"new_cus_count": 2837,
+				"week_date": "05-02",
+				"pay_cus_count": 6157
+			}, {
+				"new_cus_count": 2441,
+				"week_date": "05-01",
+				"pay_cus_count": 5043
+			}, {
+				"new_cus_count": 5446,
+				"week_date": "04-30",
+				"pay_cus_count": 8896
+			}, {
+				"new_cus_count": 6975,
+				"week_date": "04-29",
+				"pay_cus_count": 10668
+			}, {
+				"new_cus_count": 4786,
+				"week_date": "04-28",
+				"pay_cus_count": 8803
+			}, {
+				"new_cus_count": 4882,
+				"week_date": "04-27",
+				"pay_cus_count": 8438
+			}, {
+				"new_cus_count": 4008,
+				"week_date": "04-26",
+				"pay_cus_count": 6573
+			}, {
+				"new_cus_count": 4304,
+				"week_date": "04-25",
+				"pay_cus_count": 6833
+			}, {
+				"new_cus_count": 4782,
+				"week_date": "04-24",
+				"pay_cus_count": 7697
+			}, {
+				"new_cus_count": 4352,
+				"week_date": "04-23",
+				"pay_cus_count": 6973
+			}, {
+				"new_cus_count": 5759,
+				"week_date": "04-22",
+				"pay_cus_count": 8506
+			}, {
+				"new_cus_count": 4881,
+				"week_date": "04-21",
+				"pay_cus_count": 6793
+			}, {
+				"new_cus_count": 5618,
+				"week_date": "04-20",
+				"pay_cus_count": 8658
+			}, {
+				"new_cus_count": 4089,
+				"week_date": "04-19",
+				"pay_cus_count": 6922
+			}, {
+				"new_cus_count": 4035,
+				"week_date": "04-18",
+				"pay_cus_count": 6535
+			}, {
+				"new_cus_count": 3978,
+				"week_date": "04-17",
+				"pay_cus_count": 6374
+			}, {
+				"new_cus_count": 4173,
+				"week_date": "04-16",
+				"pay_cus_count": 6846
+			}, {
+				"new_cus_count": 4386,
+				"week_date": "04-15",
+				"pay_cus_count": 6581
+			}, {
+				"new_cus_count": 3556,
+				"week_date": "04-14",
+				"pay_cus_count": 6200
+			}]
+		},
+		"new_week_userCount": {
+			"lst_data": [{
+				"new_cus_count": 1861,
+				"week_date": "05-13",
+				"pay_cus_count": 4834
+			}, {
+				"new_cus_count": 1963,
+				"week_date": "05-12",
+				"pay_cus_count": 4793
+			}, {
+				"new_cus_count": 2855,
+				"week_date": "05-11",
+				"pay_cus_count": 6381
+			}, {
+				"new_cus_count": 2058,
+				"week_date": "05-10",
+				"pay_cus_count": 4858
+			}, {
+				"new_cus_count": 1808,
+				"week_date": "05-09",
+				"pay_cus_count": 4771
+			}, {
+				"new_cus_count": 2107,
+				"week_date": "05-08",
+				"pay_cus_count": 4965
+			}, {
+				"new_cus_count": 3217,
+				"week_date": "05-07",
+				"pay_cus_count": 5990
 			}]
 		},
 		"dep_gmv": {
@@ -1791,53 +1795,53 @@ var indexData = {
 				"channel_name": "日用百货",
 				"city_name": "北京",
 				"city_id": 1,
-				"order_amount": 23233
-			}, {
-				"channel_name": "养老服务",
-				"city_name": "北京",
-				"city_id": 1,
-				"order_amount": 43443
-			}, {
-				"channel_name": "生鲜频道",
-				"city_name": "北京",
-				"city_id": 1,
-				"order_amount": 43433
+				"order_amount": 1827692.07
 			}, {
 				"channel_name": "国安家电",
 				"city_name": "北京",
 				"city_id": 1,
-				"order_amount": 13133
+				"order_amount": 1624624.00
+			}, {
+				"channel_name": "生鲜频道",
+				"city_name": "北京",
+				"city_id": 1,
+				"order_amount": 1495584.84
+			}, {
+				"channel_name": "养老服务",
+				"city_name": "北京",
+				"city_id": 1,
+				"order_amount": 1157606.84
 			}, {
 				"channel_name": "家装",
 				"city_name": "北京",
 				"city_id": 1,
-				"order_amount": 34341
+				"order_amount": 890128.00
 			}]
 		}
 	},
 	"city": {
 		"rank_gmv": {
 			"lst_data": [{
+				"week_date": "05-13",
+				"week_gmv": 2905201
+			}, {
+				"week_date": "05-12",
+				"week_gmv": 3715685
+			}, {
+				"week_date": "05-11",
+				"week_gmv": 3401592
+			}, {
 				"week_date": "05-10",
-				"week_gmv": 323223
+				"week_gmv": 3622820
 			}, {
 				"week_date": "05-09",
-				"week_gmv": 34344
+				"week_gmv": 5429770
 			}, {
 				"week_date": "05-08",
-				"week_gmv": 12123
+				"week_gmv": 3969379
 			}, {
 				"week_date": "05-07",
-				"week_gmv": 34324
-			}, {
-				"week_date": "05-06",
-				"week_gmv": 24244
-			}, {
-				"week_date": "05-05",
-				"week_gmv": 24321
-			}, {
-				"week_date": "05-04",
-				"week_gmv": 35355
+				"week_gmv": 3924336
 			}]
 		},
 		"city_user_gmv": {
@@ -1852,34 +1856,34 @@ var indexData = {
 		"store_gmv": {
 			"gmv": [{
 				"store_id": 9900287,
-				"city_name": "天津",
-				"store_name": "第六大道店",
-				"store_pesgmv": 3333,
-				"city_id": 3
+				"city_name": "北京",
+				"store_name": "中仓店",
+				"store_pesgmv": 415373.92,
+				"city_id": 1
 			}, {
 				"store_id": 9900287,
-				"city_name": "天津",
-				"store_name": "二号桥店",
-				"store_pesgmv": 2222,
-				"city_id": 3
+				"city_name": "北京",
+				"store_name": "太平桥店",
+				"store_pesgmv": 303578.95,
+				"city_id": 1
 			}, {
 				"store_id": 9900287,
-				"city_name": "天津",
-				"store_name": "鼓楼店",
-				"store_pesgmv": 2121,
-				"city_id": 3
+				"city_name": "北京",
+				"store_name": "羊坊店",
+				"store_pesgmv": 220856.82,
+				"city_id": 1
 			}, {
 				"store_id": 9900287,
-				"city_name": "天津",
-				"store_name": "挂甲寺店",
-				"store_pesgmv": 2090,
-				"city_id": 3
+				"city_name": "北京",
+				"store_name": "潘家园店",
+				"store_pesgmv": 211259.87,
+				"city_id": 1
 			}, {
 				"store_id": 9900287,
-				"city_name": "天津",
-				"store_name": "铁东路店",
-				"store_pesgmv": 1677,
-				"city_id": 3
+				"city_name": "北京",
+				"store_name": "德胜门店",
+				"store_pesgmv": 207186.56,
+				"city_id": 1
 			}]
 		},
 		"store_order_user_count": {
@@ -2184,45 +2188,45 @@ var indexData = {
 		},
 		"guoanxia_rank_gmv": {
 			"gmv": [{
-				"pesgmv": 9999,
-				"city_name": "天津",
-				"employee_a_name": "王鹏",
-				"store_name": "鼓楼店"
+				"pesgmv": 193837.49,
+				"city_name": "北京",
+				"employee_a_name": "李建",
+				"store_name": "中仓店"
 			}, {
-				"pesgmv": 8888,
-				"city_name": "天津",
-				"employee_a_name": "谢淘",
-				"store_name": "鼓楼店"
+				"pesgmv": 101981.46,
+				"city_name": "北京",
+				"employee_a_name": "关立鹏",
+				"store_name": "方庄店"
 			}, {
-				"pesgmv": 7777,
-				"city_name": "天津",
-				"employee_a_name": "李春阳",
-				"store_name": "鼓楼店"
+				"pesgmv": 101095.54,
+				"city_name": "北京",
+				"employee_a_name": "高凯",
+				"store_name": "中仓店"
 			}, {
-				"pesgmv": 6666,
-				"city_name": "天津",
-				"employee_a_name": "高飞",
-				"store_name": "二号桥店"
+				"pesgmv": 100898.18,
+				"city_name": "北京",
+				"employee_a_name": "冈阔",
+				"store_name": "中仓店"
 			}, {
-				"pesgmv": 5555,
-				"city_name": "天津",
-				"employee_a_name": "宁月",
-				"store_name": "第六大道店"
+				"pesgmv": 75794.4,
+				"city_name": "北京",
+				"employee_a_name": "王亚鹏",
+				"store_name": "德胜门店"
 			}, {
-				"pesgmv": 4444,
-				"city_name": "天津",
-				"employee_a_name": "李新岩",
-				"store_name": "第六大道店"
+				"pesgmv": 72924.59,
+				"city_name": "北京",
+				"employee_a_name": "吴华健",
+				"store_name": "东湖店"
 			}, {
-				"pesgmv": 3333,
-				"city_name": "天津",
-				"employee_a_name": "刘晓尧",
-				"store_name": "第六大道店"
+				"pesgmv": 64037.86,
+				"city_name": "北京",
+				"employee_a_name": "金博群",
+				"store_name": "西八里庄店"
 			}, {
-				"pesgmv": 2222,
-				"city_name": "天津",
-				"employee_a_name": "高迪",
-				"store_name": "第六大道店"
+				"pesgmv": 60564.1,
+				"city_name": "北京",
+				"employee_a_name": "孙凯",
+				"store_name": "四季青店"
 			}]
 		},
 		"product_rank_gmv": {
@@ -2470,156 +2474,156 @@ var indexData = {
 		},
 		"new_month_userCount": {
 			"lst_data": [{
-				"new_cus_count": 956,
+				"new_cus_count": 12692,
+				"week_date": "05-13",
+				"pay_cus_count": 13557
+			}, {
+				"new_cus_count": 11392,
+				"week_date": "05-12",
+				"pay_cus_count": 12417
+			}, {
+				"new_cus_count": 9561,
+				"week_date": "05-11",
+				"pay_cus_count": 10997
+			}, {
+				"new_cus_count": 9756,
 				"week_date": "05-10",
-				"pay_cus_count": 1212
+				"pay_cus_count": 11172
 			}, {
-				"new_cus_count": 964,
+				"new_cus_count": 9364,
 				"week_date": "05-09",
-				"pay_cus_count": 1093
+				"pay_cus_count": 10493
 			}, {
-				"new_cus_count": 771,
+				"new_cus_count": 7721,
 				"week_date": "05-08",
-				"pay_cus_count": 964
+				"pay_cus_count": 9624
 			}, {
-				"new_cus_count": 692,
+				"new_cus_count": 6192,
 				"week_date": "05-07",
-				"pay_cus_count": 799
+				"pay_cus_count": 7929
 			}, {
-				"new_cus_count": 702,
+				"new_cus_count": 7029,
 				"week_date": "05-06",
-				"pay_cus_count": 858
+				"pay_cus_count": 8158
 			}, {
-				"new_cus_count": 550,
+				"new_cus_count": 5350,
 				"week_date": "05-05",
-				"pay_cus_count": 696
+				"pay_cus_count": 6596
 			}, {
-				"new_cus_count": 464,
+				"new_cus_count": 4648,
 				"week_date": "05-04",
-				"pay_cus_count": 532
+				"pay_cus_count": 5632
 			}, {
-				"new_cus_count": 377,
+				"new_cus_count": 3757,
 				"week_date": "05-03",
-				"pay_cus_count": 470
+				"pay_cus_count": 4705
 			}, {
-				"new_cus_count": 265,
+				"new_cus_count": 2645,
 				"week_date": "05-02",
-				"pay_cus_count": 382
+				"pay_cus_count": 3872
 			}, {
-				"new_cus_count": 268,
+				"new_cus_count": 2868,
 				"week_date": "05-01",
-				"pay_cus_count": 427
+				"pay_cus_count": 4217
 			}, {
-				"new_cus_count": 855,
+				"new_cus_count": 8255,
 				"week_date": "04-30",
-				"pay_cus_count": 1159
+				"pay_cus_count": 11259
 			}, {
-				"new_cus_count": 681,
+				"new_cus_count": 6881,
 				"week_date": "04-29",
-				"pay_cus_count": 964
+				"pay_cus_count": 9364
 			}, {
-				"new_cus_count": 627,
+				"new_cus_count": 6227,
 				"week_date": "04-28",
-				"pay_cus_count": 834
+				"pay_cus_count": 8234
 			}, {
-				"new_cus_count": 1034,
+				"new_cus_count": 10734,
 				"week_date": "04-27",
-				"pay_cus_count": 1326
+				"pay_cus_count": 13296
 			}, {
-				"new_cus_count": 642,
+				"new_cus_count": 6442,
 				"week_date": "04-26",
-				"pay_cus_count": 836
+				"pay_cus_count": 8536
 			}, {
-				"new_cus_count": 583,
+				"new_cus_count": 5083,
 				"week_date": "04-25",
-				"pay_cus_count": 598
+				"pay_cus_count": 5988
 			}, {
-				"new_cus_count": 498,
+				"new_cus_count": 4298,
 				"week_date": "04-24",
-				"pay_cus_count": 535
+				"pay_cus_count": 5335
 			}, {
-				"new_cus_count": 341,
+				"new_cus_count": 3421,
 				"week_date": "04-23",
-				"pay_cus_count": 445
+				"pay_cus_count": 4245
 			}, {
-				"new_cus_count": 463,
+				"new_cus_count": 4603,
 				"week_date": "04-22",
-				"pay_cus_count": 544
+				"pay_cus_count": 5464
 			}, {
-				"new_cus_count": 420,
+				"new_cus_count": 4240,
 				"week_date": "04-21",
-				"pay_cus_count": 519
+				"pay_cus_count": 5109
 			}, {
-				"new_cus_count": 505,
+				"new_cus_count": 5105,
 				"week_date": "04-20",
-				"pay_cus_count": 613
+				"pay_cus_count": 6113
 			}, {
-				"new_cus_count": 479,
+				"new_cus_count": 4079,
 				"week_date": "04-19",
-				"pay_cus_count": 589
+				"pay_cus_count": 5189
 			}, {
-				"new_cus_count": 442,
+				"new_cus_count": 4442,
 				"week_date": "04-18",
-				"pay_cus_count": 531
+				"pay_cus_count": 5371
 			}, {
-				"new_cus_count": 408,
+				"new_cus_count": 4208,
 				"week_date": "04-17",
-				"pay_cus_count": 498
+				"pay_cus_count": 4918
 			}, {
-				"new_cus_count": 549,
+				"new_cus_count": 5349,
 				"week_date": "04-16",
-				"pay_cus_count": 641
+				"pay_cus_count": 6041
 			}, {
-				"new_cus_count": 773,
+				"new_cus_count": 7373,
 				"week_date": "04-15",
-				"pay_cus_count": 870
+				"pay_cus_count": 8070
 			}, {
-				"new_cus_count": 491,
+				"new_cus_count": 4891,
 				"week_date": "04-14",
-				"pay_cus_count": 555
-			}, {
-				"new_cus_count": 393,
-				"week_date": "04-13",
-				"pay_cus_count": 523
-			}, {
-				"new_cus_count": 222,
-				"week_date": "04-12",
-				"pay_cus_count": 358
-			}, {
-				"new_cus_count": 209,
-				"week_date": "04-11",
-				"pay_cus_count": 346
+				"pay_cus_count": 5755
 			}]
 		},
 		"new_week_userCount": {
 			"lst_data": [{
+				"new_cus_count": 12692,
+				"week_date": "05-13",
+				"pay_cus_count": 13557
+			}, {
+				"new_cus_count": 11392,
+				"week_date": "05-12",
+				"pay_cus_count": 12417
+			}, {
+				"new_cus_count": 9561,
+				"week_date": "05-11",
+				"pay_cus_count": 10997
+			}, {
 				"new_cus_count": 9756,
 				"week_date": "05-10",
-				"pay_cus_count": 1172
+				"pay_cus_count": 11172
 			}, {
 				"new_cus_count": 9364,
 				"week_date": "05-09",
-				"pay_cus_count": 1093
+				"pay_cus_count": 10493
 			}, {
 				"new_cus_count": 7721,
 				"week_date": "05-08",
-				"pay_cus_count": 924
+				"pay_cus_count": 9624
 			}, {
 				"new_cus_count": 6192,
 				"week_date": "05-07",
-				"pay_cus_count": 799
-			}, {
-				"new_cus_count": 7029,
-				"week_date": "05-06",
-				"pay_cus_count": 818
-			}, {
-				"new_cus_count": 5350,
-				"week_date": "05-05",
-				"pay_cus_count": 696
-			}, {
-				"new_cus_count": 4648,
-				"week_date": "05-04",
-				"pay_cus_count": 532
+				"pay_cus_count": 7929
 			}]
 		},
 		"dep_gmv": {
