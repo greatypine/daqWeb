@@ -847,25 +847,25 @@ var showStatisticInfo = function (statisticData) {
     var storeKeeperCount = statisticData.storeKeeper == null ? 0 : statisticData.storeKeeper.length;
     var employeeCount = statisticData.employee == null ? 0 : statisticData.employee.pageinfo.totalRecords;
 	var dtmd = $("<dt id='storeT'>门店</dt>");
-	var ddmd = $("<dd><a href='javascript:initStore();' style='color:#00c0ef' id='store_total'>载入中...</a></dd>");
+	var ddmd = $("<dd><a href='#' style='color:#FFFFFF;cursor:default' id='store_total'>载入中...</a></dd>");
 	var dtdz= $("<dt id='storeKeeperT'>店长</dt>");
-	var dddz = $("<dd><a href='javascript:initStoreKeeper();' style='color:#00c0ef' id='storeKeeper_total'>载入中...</a></dd>");
+	var dddz = $("<dd><a href='#' style='color:#FFFFFF;cursor:default' id='storeKeeper_total'>载入中...</a></dd>");
 	var dtmdry= $("<dt id='storePeoleT'>门店人员</dt>");
-	var ddmdry = $("<dd><a href='javascript:initEmployeeInfo();' style='color:#00c0ef' id='employee_total'>载入中...</a></dd>");
+	var ddmdry = $("<dd><a href='#' style='color:#FFFFFF;cursor:default' id='employee_total'>载入中...</a></dd>");
     $("#gaiyaotongji").empty();
     $("#gaiyaotongji").append(dtmd).append(ddmd).append(dtdz).append(dddz).append(dtmdry).append(ddmdry);
     if(pageStatusInfo.targets==0){
     	var dtcs = $("<dt id='cityT'>").html("城市");
-    	var ddcs = $("<dd id='cityD'><a href='javascript:initCityInfo();' style='color:#00c0ef' id='city_total'>载入中...</a></dd>");
+    	var ddcs = $("<dd id='cityD'><a href='#' style='color:#FFFFFF;cursor:default' id='city_total'>载入中...</a></dd>");
     	$("#gaiyaotongji").prepend(ddcs).prepend(dtcs);
-    	$("#city_total").html(cityCount + "<span>个</span>");
-	    $("#store_total").html(storeCount + "<span>个</span>");
-	    $("#storeKeeper_total").html(storeKeeperCount + "<span>人</span>");
-	    $("#employee_total").html(employeeCount + "<span>人</span>");
+    	$("#city_total").html("13" + "<span>个</span>");
+	    $("#store_total").html("469" + "<span>个</span>");
+	    $("#storeKeeper_total").html("953" + "<span>人</span>");
+	    $("#employee_total").html("5434" + "<span>人</span>");
     }else if(pageStatusInfo.targets==1){
-    	$("#store_total").html(storeCount + "<span>个</span>");
-	    $("#storeKeeper_total").html(storeKeeperCount + "<span>人</span>");
-	    $("#employee_total").html(employeeCount + "<span>人</span>");
+    	$("#store_total").html(469 + "<span>个</span>");
+	    $("#storeKeeper_total").html(953 + "<span>人</span>");
+	    $("#employee_total").html(5434 + "<span>人</span>");
     	var dtxq = $("<dt>").html("小区");
     	var ddxq = $("<dd id='tinyVillage_total'>").html("载入中...");
     	var dtsq = $("<dt>").html("社区");
@@ -884,20 +884,20 @@ var getHistoryData = function (pageStatusInfo) {
 // 显示历史数据
 var showHistoryData = function () {
 	/*
-    $("#tradesumofcurmonthHid").html(RandomNum(10000,30000));
-    $("#tradesumofhistoryHid").html(RandomNum(10000,30000));
+    $("#tradesumofcurmonthHid").html(parseInt(RandomNumByTime(7))+parseInt(RandomNum(10000,30000)));
+    $("#tradesumofhistoryHid").html(parseInt(RandomNumByTime(7))+parseInt(RandomNum(10000,30000)));
     //$("#tradesumoflastmonthCustmomerHid").html(parseInt(historyData.last_customer_count));//上月用户量
-    $("#tradesumoflasthistoryCustmomerHid").html(RandomNum(10000,30000));
+    $("#tradesumoflasthistoryCustmomerHid").html(parseInt(RandomNumByTime(7))+parseInt(RandomNum(10000,30000)));
     //$("#tradesumoflastmonthOrderHid").html(parseInt(historyData.last_order_count==null?'0':historyData.last_order_count));
-    $("#tradesumofyearHid").html(RandomNum(10000,30000)));
+    $("#tradesumofyearHid").html(RandomNumByTime(7)+RandomNum(10000,30000)));
     */
-    $("#tradesumofhistoryCustmomerHid").html(RandomNum(500000,30000));
-    $("#tradesumofhistoryOrderHid").html(RandomNum(100000,300000));
-    $("#tradesumofmonthOrderHid").html(RandomNum(10000,30000));
-    $("#tradesumofmonthCustmomerHid").html(RandomNum(10000,30000));
-    $("#tradesumofcurmonths").html(changeMoney(parseInt(RandomNum(10000000,30000000))));
-    $("#tradesumofCurYears").html(changeMoney(parseInt(RandomNum(550000000,800000000))));
-    $("#tradesumofhistorys").html(changeMoney(parseInt(RandomNum(3000000000,6000000000))));
+    $("#tradesumofhistoryCustmomerHid").html(2379905);
+    $("#tradesumofhistoryOrderHid").html(1173263);
+    $("#tradesumofmonthOrderHid").html(434904);
+    $("#tradesumofmonthCustmomerHid").html(211950);
+    $("#tradesumofcurmonths").html(changeMoney(parseInt(6273.24*10000)));
+    $("#tradesumofCurYears").html(changeMoney(parseInt(7.52*10000*10000)));
+    $("#tradesumofhistorys").html(changeMoney(parseInt(53.97*10000*10000)));
 };
 var getLastMonthOrderCustomerCount = function(pageStatusInfo){
 	var cacheKey = CACHE_HEADER_CUSTOMER_COUNT_DATA + pageStatusInfo.getCacheKey();
@@ -2745,7 +2745,7 @@ var getDailyData = function(){
         timerId = setInterval(chonfu,2000);
 }
  function chonfu(){
-  					var totalprice = 800000+RandomNum(1000,5000)+'';
+  					var totalprice = parseInt(RandomNumByTime(4))+parseInt(RandomNum(100,500))+'';
   					if(totalprice.indexOf(".")>0){
   						totalprice = totalprice.substring(0,totalprice.lastIndexOf("."));
   					}
@@ -2760,12 +2760,12 @@ var getDailyData = function(){
   					var tradesumofcustomerHistory = $("#tradesumofhistoryCustmomerHid").text();//历史用户量
   					var tradesumofmonthOrder = $("#tradesumofmonthOrderHid").text();//本月订单量
   					var tradesumofhistoryOrder = $("#tradesumofhistoryOrderHid").text();//历史订单量
-  					$("#tradesumofmonthCustmomer").html(parseInt(tradesumofcustomerMonth)+parseInt(RandomNum(1000,3000)));
-  					$("#tradesumofhistoryCustmomer").html(parseInt(tradesumofcustomerHistory)+parseInt(RandomNum(1000,3000)));
-  					$("#tradesumofmonthOrder").html(parseInt(tradesumofmonthOrder)+parseInt(RandomNum(1000,3000)));
-  					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder)+parseInt(RandomNum(1000,3000)));
-  					$("#customer_month_ratio").html(parseInt((parseInt(RandomNum(1000,3000))-parseInt(RandomNum(1000,3000)))/parseInt(RandomNum(1000,3000))*100)+'%');
-  					$("#order_count_ratio").html(parseInt((parseInt(RandomNum(1000,3000))-parseInt(RandomNum(1000,3000)))/parseInt(RandomNum(1000,3000))*100)+'%');
+  					$("#tradesumofmonthCustmomer").html(parseInt(tradesumofcustomerMonth));
+  					$("#tradesumofhistoryCustmomer").html(parseInt(tradesumofcustomerHistory));
+  					$("#tradesumofmonthOrder").html(parseInt(tradesumofmonthOrder));
+  					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder));
+  					$("#customer_month_ratio").html(25+'%');
+  					$("#order_count_ratio").html(33+'%');
     //console.log('chonfu method in ' + (new Date().getTime() - startTime) + ' millisecond');
     }
     var ns=[];
@@ -4329,4 +4329,8 @@ function RandomNum(Min, Max) {
         var num = Min + Math.round(Rand * Range) - 1;
         return num;
       }
+ }
+ function RandomNumByTime(index_){
+ 	    var now = new Date();
+	    return String(now.getTime()).substring(index_,String(now.getTime()).length);
  }
