@@ -419,7 +419,35 @@ function showTemplateInfo(t){
 		  doSave2();
       });
   }  
-    
+  
+  //上传附件
+  function uploadFile(){
+	  var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=notice_file";
+      var elementsId = ['noticefile'];
+      $.ajaxFileUpload({
+          url: url,
+          type: 'post',
+          secureuri: false, //一般设置为false
+          fileElementId: elementsId, // 上传文件的id、name属性名
+          dataType: 'JSON', //返回值类型，一般设置为json、application/json
+          success: function(data, status){
+              data = JSON.parse(data);
+              if(data.result){
+                  var pmsFile = JSON.parse(data.data);
+               //$('#cus_pic').attr('src',getFilePath()+pmsFile.filePath);
+                 $('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
+                 
+              }else{
+                  $$.showMessage('提示',data.message);
+              }
+          },
+          error: function(data, status, e){
+              $$.showMessage("提示",e);
+          }
+      });
+	  
+	  
+  }
 //发送消息
  function doSave2(){
 	
@@ -489,7 +517,7 @@ function showTemplateInfo(t){
 	}
 	
 	var grade = $("#grade").val();
-	
+	var filepath = $("#filePath").attr("src");
 	$("#btnSave").val("发送中...");
 	var index = layer.load(2, {
 		  shade: [0.2,'#0a0a0a'] //0.1透明度的白色背景
@@ -510,7 +538,8 @@ function showTemplateInfo(t){
 			receiveUser:user,
 			cityes:cityes,
 			stores:stores,
-			zw:jobs
+			zw:jobs,
+			filePath:filepath
 	}
 	
  	doManager('noticeManager','saveNotice',[notice],function(data){
@@ -547,6 +576,53 @@ function showNoticeWay(){
 	}
 	
 }
+
+var maxsize = 100*1024*1024;//2M  
+var errMsg = "上传的附件文件不能超过100M！！！";  
+var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过100M，建议使用IE、FireFox、Chrome浏览器。";  
+var  browserCfg = {};  
+var ua = window.navigator.userAgent;  
+if (ua.indexOf("MSIE")>=1){  
+    browserCfg.ie = true;  
+}else if(ua.indexOf("Firefox")>=1){  
+    browserCfg.firefox = true;  
+}else if(ua.indexOf("Chrome")>=1){  
+    browserCfg.chrome = true;  
+}  
+
+function checkfile(){  
+    try{  
+        var obj_file = document.getElementById("noticefile");  
+        if(obj_file.value==""){  
+            $$.showMessage('提示',"请先选择上传文件");
+            return;  
+        }  
+        var filesize = 0;  
+        if(browserCfg.firefox || browserCfg.chrome ){  
+            filesize = obj_file.files[0].size;  //如果用jquery是obj_file[0]
+        }else if(browserCfg.ie){  
+            var obj_img = document.getElementById('tempimg');  
+            obj_img.dynsrc=obj_file.value;  
+            filesize = obj_img.fileSize;  
+        }else{  
+        	$$.showMessage('提示',tipMsg);
+            return;  
+        }  
+        if(filesize==-1){  
+            $$.showMessage('提示',tipMsg);
+            return;  
+        }else if(filesize>maxsize){  
+           
+            $$.showMessage('提示',errMsg);
+            return;  
+        }else{  
+        	uploadFile();
+            return;  
+        }  
+    }catch(e){  
+    	$$.showMessage('提示',e);
+    }  
+}  
 </script>
 <body style="height: 100%">
     <div class="rightcont clear">
@@ -607,9 +683,18 @@ function showNoticeWay(){
                             	<textarea id="content" name="content" class="form-control" style="width:60%;height:80px"></textarea>
                             </td>
                         </tr>
-                        
+                        <tr>
+                            <td style="width:15%">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件</td>
+                            <td>
+                                <form action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadNoticeForm" target="t_f_a_o" style="width:110%; float:left;">
+                                 <img id="tempimg" dynsrc="" src="" style="display:none" />  
+                                 <input type="file" isuploadtable="true" id="noticefile" name="noticefile" class="form-control" style="width:60%;"  onchange="checkfile()">
+                            	 <input type="hidden"  id="filePath" name="filePath">
+                            	</form>
+                            </td>
+                        </tr>
 		           </table>
-		        
+		           <iframe name="t_f_a_o" id="t_f_a_o" style="display: none"></iframe>
             </div>
          </div>
          

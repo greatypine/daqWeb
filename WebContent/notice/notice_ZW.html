@@ -81,6 +81,7 @@
         
       
         function zwcheck(zw){
+        	checkstatus=true;
         	if(zw.checked){
         		allZW.push(zw.value);
         	}else{
@@ -165,7 +166,7 @@
                     <table class="bigteble">
                         <tr>
                             <td align="left" width="4%" class="basetext">
-                                名称:				
+                                职务:				
                             </td>
                             <td class="baseform" align="left" width="25%">
                                 <input type="text" name="zw" id="zw" class="form-control" style="width: 20%" onkeyup="value=this.value.replace(/\s+/g,'')"/>
