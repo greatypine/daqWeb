@@ -47,6 +47,9 @@ public class Notice extends DataEntity{
 	@Column(name="zw")
 	private String zw;
 	
+	@Column(name="filePath",length=200)
+	private String filePath;//附件路径
+	
 	public String getTitle() {
 		return title;
 	}
@@ -125,6 +128,14 @@ public class Notice extends DataEntity{
 
 	public void setZw(String zw) {
 		this.zw = zw;
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	
