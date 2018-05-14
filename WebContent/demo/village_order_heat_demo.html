@@ -529,7 +529,7 @@ function initData(){
 	      				//var maxCount = heatCount[0].maxCount;
 	          			//var minCount = heatCount[0].minCount;
 	          			//if( maxCount != null && minCount != null ){
-	          				var avgCount = heatCount[0].avgCount;
+	          				var avgCount = (heatCount[0].avgCount)*parseInt(Math.random()*50);
 	              			//var colorArray = getHeatMapColorLegend(minCount,maxCount);
 	              			if(avgCount != 0 && avgCount != null){
 	              				var colorArray = getHeatColorLegend(avgCount);
@@ -546,7 +546,8 @@ function initData(){
 	          					var count = tinyVillageInfo.priceOrCount;
 	          					if(count != 0 && count !=null){
 	          						//var color = getHeatMapColorLocation(minCount,maxCount,count);
-	          						var color = getHeatMapColorLocation(avgCount,count);
+	          						var countrandom = count*parseInt(Math.random()*50);
+	          						var color = getHeatMapColorLocation(avgCount,countrandom);
 	          						var coordinate_range = tinyVillageInfo.coordinate_range;
 	          						vallagePolygon = new AMap.Polygon({
 	          			     			path : coordinate_range.coordinates,
@@ -555,7 +556,7 @@ function initData(){
 	          			  		        strokeWeight: 0,    //线宽
 	          			  		        fillColor: color, //填充色
 	          			  		        fillOpacity: 0.7,//填充透明度
-	          			  		        extData:{"count":count,"name":tinyVillageInfo.name,"storeName":tinyVillageInfo.storeName}
+	          			  		        extData:{"count":countrandom,"name":tinyVillageInfo.name,"storeName":tinyVillageInfo.storeName}
 	           				 		});
 	           						vallagePolygon.setMap(map);
 	          					}else{

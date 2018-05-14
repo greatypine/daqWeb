@@ -668,12 +668,14 @@ var getStoreServiceAndPosition = function(requestInfoDto){
 	debugger;
 	map.clearMap();
 	serviceArray = [];
-	map.setCity(cityName);
+	
 			
         	if(storeIdNo.trim() == "null"){//城市
         		var serviceArea = tianjin_storeServiceDataOfCity();
                 console.log("serviceArea:"+serviceArea);
+                map.setCity(cityName);
         			 if(serviceArea.code == 200){
+        				 
         	            	//服务范围数组
         	            	serviceArray = serviceArea.data;
         	            	if(serviceArray!=null && serviceArray.length>0){
@@ -690,11 +692,11 @@ var getStoreServiceAndPosition = function(requestInfoDto){
         	            	}
         	            }
         	}else{//门店
-	        	var serviceArea = storeService();
-        			storeServicePolygon =  drawStoreService(serviceArea.serviceArea.serviceArea);
+	        	var serviceAreaInfo = storeService();
+        			storeServicePolygon =  drawStoreService(serviceAreaInfo.serviceArea.serviceArea);
         			map.setZoom(14);
-          			map.setCenter(serviceArea.position);
-          			drawStorePosition(serviceArea.position,null); 
+          			map.setCenter(serviceAreaInfo.serviceArea.position);
+          			drawStorePosition(serviceAreaInfo.serviceArea.position,null); 
                
         	}
 }
