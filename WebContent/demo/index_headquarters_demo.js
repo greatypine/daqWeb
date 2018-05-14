@@ -2745,7 +2745,7 @@ var getDailyData = function(){
         timerId = setInterval(chonfu,2000);
 }
  function chonfu(){
-  					var totalprice = parseInt(RandomNumByTime(4))+parseInt(RandomNum(100,500))+'';
+  					var totalprice = parseInt(changenum())+parseInt(RandomNum(100,500))+'';
   					if(totalprice.indexOf(".")>0){
   						totalprice = totalprice.substring(0,totalprice.lastIndexOf("."));
   					}
@@ -4334,3 +4334,10 @@ function RandomNum(Min, Max) {
  	    var now = new Date();
 	    return String(now.getTime()).substring(index_,String(now.getTime()).length);
  }
+function randNum(n){
+       return ( Math.floor ( Math.random ( ) * n + 1 ) );
+}
+function changenum(){
+		var randNumval = randNum(1000);
+		return parseInt(RandomNumByTime(6))*1.4+parseInt(randNumval);
+   }
