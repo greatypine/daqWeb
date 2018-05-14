@@ -171,7 +171,7 @@
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
   <div id="process_div" ></div>
-  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../abountMap/dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../aboutMap/dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
     <div class="container">
       <!-- Main content -->
 
@@ -215,7 +215,7 @@
 
         </div>
         <span class="pull-right-fullscreen" onclick="fullscreen();">
-         	<img src="dist/img/fullscreen.png">
+         	<img src="../aboutMap/dist/img/fullscreen.png">
          </span>
          <input id="fscreen" hidden="hidden">
         <div class="box-body" style="position:relative" id="mapHeight">
@@ -620,26 +620,26 @@ function initcurruser(){
 }
 var heatmap;
 var storeHeat = function(){
+	debugger;
 	jsonData = stroeOfHeat();
 	map.clearMap();
 	$("#heat_legend_color").hide();
-	var servicePolygon;
 	var serviceAreaAndPosition = jsonData.serviceAreaAndPosition;
 	if(serviceAreaAndPosition.code == 200){
 		var serviceArea = serviceAreaAndPosition.serviceArea;
 		var servicePosition = serviceAreaAndPosition.position;
 		 if(serviceArea.length>0){
-			servicePolygon = new AMap.Polygon({
-				path : serviceArea,
+			var a1 = new AMap.Polygon({
+					path : serviceArea,
 			        strokeColor: "#5c69cc", //线颜色
 			        strokeOpacity: 0.9, //线透明度
 			        strokeWeight: 3,    //线宽
 			        fillColor: "#046ad3", //填充色
 			        fillOpacity: 0//填充透明度
 		 		});
-				servicePolygon.setMap(map);
-				map.setCenter(servicePolygon.getBounds().getCenter());
-				map.setZoom(16);
+				a1.setMap(map);
+				map.setCenter(servicePosition);
+				map.setZoom(15);
 		 }
 
 			var heatCount = jsonData.orderCount;
