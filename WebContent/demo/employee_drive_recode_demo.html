@@ -377,7 +377,7 @@ $("#mask-header>button").click(function(){
 //debugger;
 //获得参数
 var cityId = decode64(getUrlParamByKey("c"));     /**城市ID*/
-var cityName = decode64(getUrlParamByKey("cn")); /**城市名称*/
+var cityName = "天津";//decode64(getUrlParamByKey("cn")); /**城市名称*/
 var employeeId = decode64(getUrlParamByKey("e")); /**员工编号*/
 var target = decode64(getUrlParamByKey("t"));   /**1.城市；2.门店**/
 var storeIdNo = decode64(getUrlParamByKey("id"));    /**门店编号*/
@@ -605,8 +605,6 @@ var getPageContent = function(requestInfoDto){
 			 })();
 		}
 	},2000);
-	
-	
 }
 
 function test(){
@@ -663,45 +661,41 @@ var serviceArray = new Array();
 //单个门店时，门店服务范围
 var storeServicePolygon;
 //获取门店服务范围
+//画服务范围多边形
+
+
 var getStoreServiceAndPosition = function(requestInfoDto){
-			var serviceArea = tianjin_storeServiceDataOfCity();
+	debugger;
+	map.clearMap();
+	serviceArray = [];
+	map.setCity(cityName);
+			
         	if(storeIdNo.trim() == "null"){//城市
-        		if(serviceArea.code == 200){
-                	//服务范围数组
-                	serviceArray = serviceArea.data;
-                	if(serviceArray!=null && serviceArray.length>0){
-                		var servicePolygon;
-                    	for(var i=0;i<serviceArray.length;i++){
-                    		var polygonArray = serviceArray[i];
-                    		var serviceCoordinates=polygonArray.vertex;
-                    		var position = polygonArray.position;
-                    		var storeName = polygonArray.storeName;
-                    		//画服务范围多边形
-                    		if(polygonArray.storeNo != "0021Y0020"){
-                    			   servicePolygon = new AMap.Polygon({
-                     			   path:serviceCoordinates,
-                     		       strokeColor: "#5c69cc", //线颜色
-                     		       strokeOpacity: 1, //线透明度
-                     		       strokeWeight: 2,    //线宽
-                     		       fillColor: "#046ad3", //填充色
-                     		       fillOpacity: 0,//填充透明度
-                     		       extData:{"storeName":storeName}
-                     		 	});
-                     			servicePolygon.setMap(map);
-                    		}
-                    	}
-                	}
-                }
+        		var serviceArea = tianjin_storeServiceDataOfCity();
+                console.log("serviceArea:"+serviceArea);
+        			 if(serviceArea.code == 200){
+        	            	//服务范围数组
+        	            	serviceArray = serviceArea.data;
+        	            	if(serviceArray!=null && serviceArray.length>0){
+        	                	for(var i=0;i<serviceArray.length;i++){
+        	                		var polygonArray = serviceArray[i];
+        	                		var serviceCoordinates=polygonArray.vertex;
+        	                		var storeNo = polygonArray.storeNo;
+        	                		var storeName = polygonArray.storeName;
+       	                			var position = polygonArray.position;
+       	                    		var servicePolygon = drawStoreService(serviceCoordinates);
+       	                    		polygonArray["servicePolygon"] = servicePolygon;
+       	                    		drawStorePosition(position,storeName);
+        	                	}
+        	            	}
+        	            }
         	}else{//门店
-	        	var serviceArea = jsonData.serviceArea;
-        		if(serviceArea.code == 200){
-        			storeServicePolygon =  drawStoreService(serviceArea.serviceArea);
+	        	var serviceArea = storeService();
+        			storeServicePolygon =  drawStoreService(serviceArea.serviceArea.serviceArea);
         			map.setZoom(14);
-          			map.setCenter(storeServicePolygon.getBounds().getCenter());
+          			map.setCenter(serviceArea.position);
           			drawStorePosition(serviceArea.position,null); 
-                }else if(serviceArea.code == 9000003){
-                	crm_alert(0,"门店服务范围不存在！");
-                }
+               
         	}
 }
 
@@ -849,7 +843,14 @@ var drawEmployeePosition = function(diverLocations,employeeInfo,online){
 function getEmployeeDriverRecodeHistory(){
 	employeeArray.splice(0,employeeArray.length);
 	diverRecodeArray.splice(0,diverRecodeArray.length);
-        	var jsonData = employeeDriverRecode();
+	debugger;
+	var jsonData;
+	if(storeIdNo == "null"){
+		jsonData = employeeDriverRecode(true);
+	}else{
+		jsonData = employeeDriverRecode(false);
+	}
+        	
     		var diverRecode = jsonData.diverRecode;
     		if(typeof(diverRecode.data) != "undefined"){
     			diverRecodeArray = diverRecode.data; 
@@ -864,11 +865,11 @@ function getEmployeeDriverRecodeHistory(){
     				var employeeId = empDiver.id;
     				var online = empDiver.online;
     				employeeArray.push(employeeId);
-    				/* diverPolyline =  drawEmployeeDiverPolyline(locations,online);
-    				empDiver["polyline"] = diverPolyline; */
-    				  /* if(!$("#driveClick").is(':checked')){
-    					 diverPolyline.hide();
-    				 } */
+    				var diverPolyline =  drawEmployeeDiverPolyline(locations,online);
+    				empDiver["polyline"] = diverPolyline;
+    				if(!$("#driveClick").is(':checked') && diverPolyline != null){
+						diverPolyline.hide();
+    				 } 
     				 var marker =  drawEmployeePosition(locations[locations.length-1],empDiver,online);
     				 empDiver["marker"] = marker;
     			}
@@ -878,13 +879,17 @@ function getEmployeeDriverRecodeHistory(){
 var timeout;
 var maxlocationIndex = 0;
 function getEmployeeDriverRecodeRealtime(){
+	diverRecodeArray = [];
 	employeeArray.splice(0,employeeArray.length);
-	requestInfoDto["beginDate"] = new Date().format('yyyy/MM/dd')+" 00:00";
-	requestInfoDto["endDate"] = new Date().format('yyyy/MM/dd HH:mm');
-	//requestInfoDto["beginDate"] = "2017/12/18 00:00";
-	//requestInfoDto["endDate"] = '2017/12/18 23:00';
+	requestInfoDto["beginDate"] = "2017/12/18 00:00";
+	requestInfoDto["endDate"] = '2017/12/18 23:00';
 	requestInfoDto["isRealtime"] = "realtime";
-        	var jsonData = employeeDriverRecode();
+	var jsonData;
+	if(serviceArray.length >0){
+		jsonData = employeeDriverRecode(true);
+	}else{
+		jsonData = employeeDriverRecode(false);
+	}
     		var diverRecode = jsonData.diverRecode;
     		if(typeof(diverRecode.data) != "undefined"){
     			diverRecodeArray = diverRecode.data; 
@@ -907,7 +912,7 @@ function getEmployeeDriverRecodeRealtime(){
    						for(var j = 0; j <serviceArray.length; j++){
    							var locationIndex = 0;
    							var storeService = serviceArray[j];
-   							if(storeService.platformid == platformid){
+   							if(storeService.storeId == platformid){
    								 empDiver["storearea"]=storeService.servicePolygon;
    								if(!empDiver.storearea.contains(locations[locationIndex])){
    									var diverPolyline =  drawEmployeeDiverPolyline(locations[locationIndex],"offline");
@@ -982,11 +987,16 @@ function employeeDrive(){
 	var length = diverRecodeArray.length;
 	if($("#driveClick").is(':checked')){
 		for(var i = 0; i < length; i++){
-			diverRecodeArray[i].polyline.show();
+			if(diverRecodeArray[i].polyline != null){
+				diverRecodeArray[i].polyline.show();
+			}
+			
 		}
 	}else{
 		for(var i = 0; i < length; i++){
-			diverRecodeArray[i].polyline.hide();
+			if(diverRecodeArray[i].polyline != null){
+				diverRecodeArray[i].polyline.hide();
+			}
 		}
 	}
 }
@@ -1218,7 +1228,7 @@ function showEmployeeRecode(){
 	window.clearInterval(timeout);
 	var cityoptions=$("#cityName option:selected");
 	cityId = cityoptions.val();
-	cityName = cityoptions.text();
+	cityName = "天津";//cityoptions.text();
 	var storeoptions = $("#storeName option:selected");
 	storeName =  storeoptions.text();
 	if(storeoptions.text() != "全部门店"){
