@@ -227,7 +227,7 @@
     <!-- Main content -->
     <section class="content-header clearfix">
        <div class="info_head with-border col-lg-3 col-sm-3 col-xs-12">
-        <div class="box no-border">
+        <div class="box no-border" style="cursor:default">
           <div class="box-header h4 text-yellow"><strong id="store_name_left_top">--</strong></div>
           <div class="box-body no-padding" id="mdxx">
             <dl class="dl-horizontal">
@@ -764,7 +764,7 @@ function showStoreAllInfo(){
 var STORE_DAILY_TOTAL_GMV = 1206;
 //动态获取每日营业额
 function chonfu(){
-	var increment = Math.round(Math.random()*10);
+	var increment = Math.round(Math.random()*20);
 	STORE_DAILY_TOTAL_GMV = parseInt(STORE_DAILY_TOTAL_GMV)+increment+"";
 	if(STORE_DAILY_TOTAL_GMV.length>8){
 		dojob(STORE_DAILY_TOTAL_GMV.substring(0,STORE_DAILY_TOTAL_GMV.length)); 
