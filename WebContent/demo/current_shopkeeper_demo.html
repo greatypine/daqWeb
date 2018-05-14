@@ -719,7 +719,7 @@ function initCurruser(){
 			if(typeof(time_)!="undefined"){
 				clearInterval(time_);
 			}
-	        time_ = setInterval(chonfu,2000);  
+	        time_ = setInterval(chonfu,3000);  
 		
 		<!----------------------------每日动态营业额	结束-------------------------------------->
 	}
@@ -761,10 +761,10 @@ function showStoreAllInfo(){
 		},false);
 }
 
-var STORE_DAILY_TOTAL_GMV = 2206;
+var STORE_DAILY_TOTAL_GMV = 1206;
 //动态获取每日营业额
 function chonfu(){
-	var increment = Math.round(Math.random()*99);
+	var increment = Math.round(Math.random()*10);
 	STORE_DAILY_TOTAL_GMV = parseInt(STORE_DAILY_TOTAL_GMV)+increment+"";
 	if(STORE_DAILY_TOTAL_GMV.length>8){
 		dojob(STORE_DAILY_TOTAL_GMV.substring(0,STORE_DAILY_TOTAL_GMV.length)); 
