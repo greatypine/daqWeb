@@ -948,25 +948,25 @@ var indexData = {
 	"province": {
 		"rank_gmv": {
 			"lst_data": [{
-				"week_date": "05-10",
+				"week_date": "05-13",
 				"week_gmv": 33434
 			}, {
-				"week_date": "05-09",
+				"week_date": "05-12",
 				"week_gmv": 31434
 			}, {
-				"week_date": "05-08",
+				"week_date": "05-11",
 				"week_gmv": 23323
 			}, {
-				"week_date": "05-07",
+				"week_date": "05-10",
 				"week_gmv": 46464
 			}, {
-				"week_date": "05-06",
+				"week_date": "05-09",
 				"week_gmv": 57767
 			}, {
-				"week_date": "05-05",
+				"week_date": "05-08",
 				"week_gmv": 21222
 			}, {
-				"week_date": "05-04",
+				"week_date": "05-07",
 				"week_gmv": 43434
 			}]
 		},
