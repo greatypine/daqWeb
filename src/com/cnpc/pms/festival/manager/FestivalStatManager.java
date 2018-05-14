@@ -1,4 +1,4 @@
-package com.cnpc.pms.festival.mananger;
+package com.cnpc.pms.festival.manager;
 
 import java.util.List;
 import java.util.Map;

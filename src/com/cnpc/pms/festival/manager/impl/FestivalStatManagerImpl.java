@@ -1,4 +1,4 @@
-package com.cnpc.pms.festival.mananger.impl;
+package com.cnpc.pms.festival.manager.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.festival.dao.FestivalStatDao;
-import com.cnpc.pms.festival.mananger.FestivalStatManager;
+import com.cnpc.pms.festival.manager.FestivalStatManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 
 /**

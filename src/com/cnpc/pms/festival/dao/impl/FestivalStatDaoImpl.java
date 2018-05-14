@@ -15,7 +15,7 @@ public class FestivalStatDaoImpl extends BaseDAOHibernate implements FestivalSta
 	@Override
 	public List<Map<String, Object>> eshopRanking(String dateTime) {
 		String sql = "SELECT dod.eshop_name, SUM(dod.trading_price) AS trading_price FROM df_mass_order_daily dod WHERE	DATE_FORMAT(dod.sign_time,'%Y-%m-%d')='"+dateTime+"' "
-				+ " GROUP BY dod.eshop_id ORDER BY trading_price DESC LIMIT 10 ";
+				+ " GROUP BY dod.eshop_id ORDER BY trading_price DESC LIMIT 5 ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -39,7 +39,7 @@ public class FestivalStatDaoImpl extends BaseDAOHibernate implements FestivalSta
 	@Override
 	public List<Map<String, Object>> cityRanking(String dateTime) {
 		String sql = "SELECT dod.store_city_name, SUM(dod.trading_price) AS trading_price FROM	df_mass_order_daily dod "
-				+ " WHERE DATE_FORMAT(dod.sign_time, '%Y-%m-%d') = '"+dateTime+"' GROUP BY store_city_code ORDER BY trading_price DESC LIMIT 10 ";
+				+ " WHERE DATE_FORMAT(dod.sign_time, '%Y-%m-%d') = '"+dateTime+"' GROUP BY store_city_code ORDER BY trading_price DESC LIMIT 12 ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
