@@ -140,6 +140,13 @@
         <div class="box box-default">
          	<div class="box-header h4 text-light-blue">
           	<div class="pull-left "><strong>事业群GMV</strong></div>
+          	<div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
+         	<div class="pull-left text-red" style="font-size:75%">
+         			  1.绩效GMV已去除<a  href="javascript:gotoOrderRecord(1)" >畅卡</a>统计。</br>
+			          2.绩效GMV已去除<a  href="javascript:gotoOrderRecord(2)" >快周边</a>统计。</br>
+			          3.绩效GMV已去除<a  href="javascript:gotoOrderRecord(3)" >已退货</a>统计。</br>
+			          4.绩效GMV已去除<a  href="javascript:gotoAbnormalOrder(3)" >异常订单</a>统计。</br>
+			</div>
           </div>
           <div class="box-body">
             <form id="searchform">
@@ -704,6 +711,21 @@ function resetSerachParam(){
    		$("#store_name_tradetype").val("");
      	$("#store_name-search_tradetype").empty();
       }
+}
+
+function gotoOrderRecord(t){
+	if(target==0||target==1){
+		if(t==1){//去畅卡（小贷）
+   		 var url = "searchData_view.html?t="+encode64(target)+"&s=&sn=&c=&e="+encode64(employeeId)+"&r=&cn=&tag="+encode64("小贷");
+   		 window.open(url,"searchData_view");
+       	}else if(t==2){//快周边
+       		var url = "searchData_view.html?t="+encode64(target)+"&s=&sn=&c=&e="+encode64(employeeId)+"&r=&cn=&tag="+encode64("快周边");
+       		 window.open(url,"searchData_view");
+       	}else if(t==3){//已退货（款）
+       		var url = "searchData_view.html?t="+encode64(target)+"&s=&sn=&c=&e="+encode64(employeeId)+"&r=&cn=&tag="+encode64("已退款");
+      		 	window.open(url,"searchData_view");
+       	}
+	}
 }
    
 </script>
