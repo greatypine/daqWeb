@@ -745,13 +745,13 @@ function showStoreAllInfo(){
 						$("#address_text").html("无");
 						$(info).each(function(i,t){
 							if(t.zw=='国安侠'){
-								$("#gax_num").html("<a href='javascript:initGaxInfo()'>"+t.total+"</a>人");
+								$("#gax_num").html("<span >"+t.total+"</span>人");
 							}else if(t.zw=="事务管理"){
-								$("#zhgl_num").html("<a href='javascript:initZhglInfo()'>"+t.total+"</a>人");
+								$("#zhgl_num").html("<span >"+t.total+"</span>人");
 							}else if(t.zw=="副店长"){
 								$("#fdz_name").html(t.name);
 							}else if(t.zw=="服务专员"){
-								$("#fwzy_num").html("<a href='javascript:initFWZYInfo()'>"+t.total+"</a>人");
+								$("#fwzy_num").html("<span >"+t.total+"</span>人");
 							}else if(t.zw=='店长'){
 								$("#dz_name").html(t.name+"<span>"+(t.phone==null?"":t.phone)+"</span>");
 							}
@@ -761,7 +761,7 @@ function showStoreAllInfo(){
 		},false);
 }
 
-var STORE_DAILY_TOTAL_GMV = 13206;
+var STORE_DAILY_TOTAL_GMV = 2206;
 //动态获取每日营业额
 function chonfu(){
 	var increment = Math.round(Math.random()*99);

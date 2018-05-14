@@ -437,7 +437,7 @@
 	  showTinyVillageHeat("gmv");//小区热力图
 	  showEmployeeDriverRecord();
 	  queryCurMonthPerformanceOfArea("gmv");
-	  $("#order_amount").html(AREA_ORDER_AMOUNT);
+	  $("#order_amount").html(AREA_ORDER[areaNo]);
 	  var curDate = new Date();
 	  var c_month = curDate.getMonth()+1;
 	  $("#order_date").html(c_month+"月订单量")
@@ -543,7 +543,7 @@
        	     tiny_gmv.push(code_gmv);
        	     tiny_consumer.push(code_consumer);
 		}
-	
+		
 	}
 	initTinyVillage(storeService,coordinate_tiny);//绘制地图
   }
