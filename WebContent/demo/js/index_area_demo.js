@@ -13,7 +13,13 @@ function getRecentlySevenDay_gmv(){
 		var preDate = new Date(curDate.getTime() - i*24*60*60*1000); //前i天
 		var c_year = preDate.getFullYear(); 
 		var c_month = preDate.getMonth()+1;
+		if(c_month<10){
+			c_month = "0"+c_month;
+		}
 		var c_day = preDate.getDate();
+		if(c_day<10){
+			c_day = "0"+c_day;
+		}
 		var dateStr = c_year+"-"+c_month+"-"+c_day;
 		key.push(dateStr);
 		value.push(((1.1-Math.random())*10000).toFixed(2));
@@ -36,7 +42,13 @@ function getRecentlySevenDay_customer(){
 		var preDate = new Date(curDate.getTime() - i*24*60*60*1000); //前i天
 		var c_year = preDate.getFullYear(); 
 		var c_month = preDate.getMonth()+1;
+		if(c_month<10){
+			c_month = "0"+c_month;
+		}
 		var c_day = preDate.getDate();
+		if(c_day<10){
+			c_day = "0"+c_day;
+		}
 		var dateStr = c_year+"-"+c_month+"-"+c_day;
 		key.push(dateStr);
 		var laxin = Math.round((1.1-Math.random())*50);
