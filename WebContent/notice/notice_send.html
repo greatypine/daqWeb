@@ -129,42 +129,6 @@
     	   },false);
   	}
 
-
-
-
-
-function showTemplateInfo(t){
-	var code = $(t).val();
-	
-	if(code!=""){
-		
-		for(var i=0;i<templateDetail.length;i++){
-			var cur_code = templateDetail[i].code;
-			var type=templateDetail[i].model;
-			if(cur_code==code){
-				
-				if(type=="MMXG"||type=="YHHX"){
-					
-					$("#title").val(templateDetail[i].name);
-					$("#content").val(templateDetail[i].content);
-					$("#title").attr("readonly","readonly");
-					$("#content").attr("readonly","readonly");
-				}else{
-					$("#title").val(templateDetail[i].name);
-					$("#content").val(templateDetail[i].content);
-					$("#title").removeAttr("readonly");
-					$("#content").removeAttr("readonly");
-				}
-				
-			}
-			
-			
-		}
-	}
-	
-}
-
-
 	var checkWin = function(fun,page,title){
 	    this.win = $("<div style='overflow-y: hidden'></div>");
 	    var _this = this;
@@ -422,6 +386,7 @@ function showTemplateInfo(t){
   
   //上传附件
   function uploadFile(){
+	  var lay_index = layer.load("2");
 	  var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=notice_file";
       var elementsId = ['noticefile'];
       $.ajaxFileUpload({
@@ -434,9 +399,10 @@ function showTemplateInfo(t){
               data = JSON.parse(data);
               if(data.result){
                   var pmsFile = JSON.parse(data.data);
-               //$('#cus_pic').attr('src',getFilePath()+pmsFile.filePath);
-                 $('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
-                 
+                $('#filePath').attr('src',getFilePath()+pmsFile.filePath);
+                 //$('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
+                $('#fileName').val(pmsFile.name+"."+pmsFile.fileSuffix);
+                 layer.close(lay_index);
               }else{
                   $$.showMessage('提示',data.message);
               }
@@ -518,6 +484,7 @@ function showTemplateInfo(t){
 	
 	var grade = $("#grade").val();
 	var filepath = $("#filePath").attr("src");
+	var fileName = $("#fileName").val();
 	$("#btnSave").val("发送中...");
 	var index = layer.load(2, {
 		  shade: [0.2,'#0a0a0a'] //0.1透明度的白色背景
@@ -539,7 +506,8 @@ function showTemplateInfo(t){
 			cityes:cityes,
 			stores:stores,
 			zw:jobs,
-			filePath:filepath
+			filePath:filepath,
+			fileName:fileName
 	}
 	
  	doManager('noticeManager','saveNotice',[notice],function(data){
@@ -590,12 +558,31 @@ if (ua.indexOf("MSIE")>=1){
     browserCfg.chrome = true;  
 }  
 
+function isInArray(arr,value){
+    for(var i = 0; i < arr.length; i++){
+        if(value === arr[i]){
+            return true;
+        }
+    }
+    return false;
+}
+
+var fileTypeArray = ["doc","docx","xls","xlsx","jpg","png","jpeg","bmp","gif","zip"];
 function checkfile(){  
     try{  
         var obj_file = document.getElementById("noticefile");  
         if(obj_file.value==""){  
             $$.showMessage('提示',"请先选择上传文件");
             return;  
+        }else{
+        	var fileType=obj_file.value.substring(obj_file.value.lastIndexOf(".")+1,obj_file.value.length);
+        	if(!isInArray(fileTypeArray,fileType)){
+        		$$.showMessage('提示',"只支持"+fileTypeArray.join("、")+" 格式文件");
+        		$("#noticefile").val('');
+        		$("#filePath").val('');
+        		$("#fileName").val('');
+        		return;
+        	}
         }  
         var filesize = 0;  
         if(browserCfg.firefox || browserCfg.chrome ){  
@@ -641,7 +628,7 @@ function checkfile(){
                         <tr>
                             <td style="width:12%">公告类型<span style="color:red">*</span></td>
                             <td>
-                                <select id="type" name="type" class="form-control"  style="width: 60%" onchange="showTemplateInfo(this)">
+                                <select id="type" name="type" class="form-control"  style="width: 60%" >
                                     <option value="">请选择</option>
                                     <option value="1">事务</option>
 <!--                                     <option value="2">业务</option> -->
@@ -686,10 +673,11 @@ function checkfile(){
                         <tr>
                             <td style="width:15%">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件</td>
                             <td>
-                                <form action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadNoticeForm" target="t_f_a_o" style="width:110%; float:left;">
+                                <form id="noticeFile_form" action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadNoticeForm" target="t_f_a_o" style="width:110%; float:left;">
                                  <img id="tempimg" dynsrc="" src="" style="display:none" />  
                                  <input type="file" isuploadtable="true" id="noticefile" name="noticefile" class="form-control" style="width:60%;"  onchange="checkfile()">
                             	 <input type="hidden"  id="filePath" name="filePath">
+                            	  <input type="hidden"  id="fileName" name="fileName">
                             	</form>
                             </td>
                         </tr>
