@@ -43,6 +43,8 @@
     }
 
     var editNoticeID="";
+    var filepath= "";
+    var fileName="";
     var detailObj = {
             html: '<a href="#"  class="blue">详情</a>',
             resourceId: "",
@@ -106,11 +108,22 @@
                             	   $("#zw_s").val(detailInfo[0].zw);
                                }
                                
+                               var filePath = detailInfo[0].filePath;
+                               if(filePath!=null&&filePath!=""){
+                            	   filepath = detailInfo[0].filePath;
+                            	   fileName = detailInfo[0].fileName;
+                            	   //$("#notice_file_td").html('<a onclick="javascript:loadNoticeFile()" style="text-decoration:underline;color:#277ce8" href="#">'+detailInfo[0].fileName+'</a>')
+                            	 $("#notice_file_td").html('<a  style="text-decoration:underline;color:#277ce8" download="'+detailInfo[0].fileName+'" href="'+filepath+'">'+detailInfo[0].fileName+'</a>')
+                               
+                               }else{
+                            	   $("#notice_file_td").html("无");
+                               }
+                               
                                $('#noticeDetail_div').dialog({
                                    bgiframe : true,
                                    title : "提示",
                                    width : 450,
-                                   height : 540,
+                                   height : 570,
                                    modal : true
                                });
                            }else{
@@ -127,6 +140,19 @@
         };
         
     
+    
+    function  loadNoticeFile(){
+    	  
+		  window.open(getRootPath() + "/downloadFile.action?folder_name=notice_file&file_name="+encodeURI(encodeURI(fileName)));
+    	 /* var $eleForm = $("<form method='get'></form>");
+
+         $eleForm.attr("action",filepath);
+
+         $(document.body).append($eleForm);
+
+         //提交表单，实现下载
+         $eleForm.submit(); */
+    }
     function editNotice(){
     	 $$.showConfirm("提示","是否继续提交？",function () {
     		 
@@ -341,6 +367,12 @@
        			<td width="8px"><span>职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;务：</span></td>
         		<td>
         			<textarea id="zw_s" cols="40" style="height:50px;resize:none;background-color:#d3d3d3c7" readonly="readonly"></textarea>
+        		</td>
+        	</tr>
+        	<tr>
+       			<td width="8px"><span>附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件：</span></td>
+        		<td id="notice_file_td">
+        			
         		</td>
         	</tr>
         	

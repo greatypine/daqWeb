@@ -328,7 +328,7 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 				}
 				list = noticeDao.getStoreByCity(cityCode);
 			}else if(m_cs.matches()){
-				if(cityCode==null||"".equals(cityCode)){
+				if(cityCode!=null&&!"".equals(cityCode)){
 					cityList = noticeDao.getCityOfCs(userDTO.getId());
 					StringBuilder sb = new StringBuilder();
 					for(int i=0;i<cityList.size();i++){
