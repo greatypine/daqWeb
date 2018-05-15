@@ -567,23 +567,24 @@ function isInArray(arr,value){
     return false;
 }
 
-var fileTypeArray = ["doc","docx","xls","xlsx","jpg","png","jpeg","bmp","gif","zip"];
+//var fileTypeArray = ["doc","docx","xls","xlsx","jpg","png","jpeg","bmp","gif","zip"];
 function checkfile(){  
     try{  
         var obj_file = document.getElementById("noticefile");  
         if(obj_file.value==""){  
             $$.showMessage('提示',"请先选择上传文件");
             return;  
-        }else{
-        	var fileType=obj_file.value.substring(obj_file.value.lastIndexOf(".")+1,obj_file.value.length);
-        	if(!isInArray(fileTypeArray,fileType)){
-        		$$.showMessage('提示',"只支持"+fileTypeArray.join("、")+" 格式文件");
-        		$("#noticefile").val('');
-        		$("#filePath").val('');
-        		$("#fileName").val('');
-        		return;
-        	}
-        }  
+        }
+//         else{
+//         	var fileType=obj_file.value.substring(obj_file.value.lastIndexOf(".")+1,obj_file.value.length);
+//         	if(!isInArray(fileTypeArray,fileType)){
+//         		$$.showMessage('提示',"只支持"+fileTypeArray.join("、")+" 格式文件");
+//         		$("#noticefile").val('');
+//         		$("#filePath").val('');
+//         		$("#fileName").val('');
+//         		return;
+//         	}
+//         }  
         var filesize = 0;  
         if(browserCfg.firefox || browserCfg.chrome ){  
             filesize = obj_file.files[0].size;  //如果用jquery是obj_file[0]
