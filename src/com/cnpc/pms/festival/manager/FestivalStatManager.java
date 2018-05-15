@@ -44,4 +44,9 @@ public interface FestivalStatManager extends IManager {
 	 */
 	public List<Map<String, Object>> queryUserByHour(String dateTime);
 	
+	/**
+	 * 热力图数据统计
+	 */
+	public List<Map<String, Object>> queryOrderHeatInfo(String dateTime,String citycode);
+	
 }
