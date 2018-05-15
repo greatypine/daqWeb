@@ -158,6 +158,24 @@
 	.menu_list li{float: left; width: 20%; text-align: right; 
 /* 	padding: 5px 0 10px 0; */
 	}
+	
+	  	/*弹窗蓝色title样式*/	
+  	div.amap-info-content{
+  		padding:0 0 0 0;
+  	}
+  	div.amap-info-outer{
+  		padding:0px;
+  	}
+  	a.amap-info-close{
+  		top:10px
+  	}
+  	/*弹窗X样式*/
+  	A:link{
+  		font-size: 14px;
+	    color: #eee;
+	    text-decoration: none;
+  	}
+  	
      </style>  
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -577,7 +595,7 @@ function initData(){
 	          						var name = e.target.getExtData().name;
 	          						var count = e.target.getExtData().count;
 	           						var info = [];
-		            				info.push("<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#00c0ef;padding:5px 18px 5px 10px;color:#fff\"><span>小区信息</span></div> ");
+		            				info.push("<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#00c0ef;padding:5px 18px 5px 10px;color:#fff\"><span>小区信息</span></div>");
 		            		        info.push("<div style=\"padding:0px 18px 0px 14px;line-height:24px;\"><b>门店名称："+storeName+"</b>");
 		            		        info.push("<b>小区名称："+(name==null?"无":name)+"</b>");
 		            		        info.push("<b>"+infowindowName+"："+count+"</b></div></div>");
