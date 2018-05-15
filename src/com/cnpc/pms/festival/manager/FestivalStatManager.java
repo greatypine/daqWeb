@@ -13,6 +13,11 @@ import com.cnpc.pms.base.manager.IManager;
  * @version V1.0
  */
 public interface FestivalStatManager extends IManager {
+	
+	/**
+	 * 产品销量排名
+	 */
+	public List<Map<String, Object>> productRanking(String dateTime);
 
 	/**
 	 * E店销售额排名

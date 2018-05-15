@@ -19,6 +19,13 @@ import com.cnpc.pms.platform.dao.OrderDao;
 public class FestivalStatManagerImpl extends BizBaseCommonManager implements FestivalStatManager{
 
 	@Override
+	public List<Map<String, Object>> productRanking(String dateTime){
+		FestivalStatDao festivalStatDao = (FestivalStatDao)SpringHelper.getBean(FestivalStatDao.class.getName());
+		List<Map<String, Object>> lst_data = festivalStatDao.productRanking(dateTime);
+    	return lst_data;
+	}
+	
+	@Override
 	public List<Map<String, Object>> eshopRanking(String dateTime) {
 		FestivalStatDao festivalStatDao = (FestivalStatDao)SpringHelper.getBean(FestivalStatDao.class.getName());
 		List<Map<String, Object>> lst_data = festivalStatDao.eshopRanking(dateTime);

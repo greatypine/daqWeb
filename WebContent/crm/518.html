@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安数据518数据大屏</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="dist/css/tTurnover-head-scoll.css">
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    body{background: url("dist/img/518_bg.jpg") no-repeat center; background-size: cover; overflow: auto;}
+    section{width: 1510px; margin: 0 auto;}
+    p{margin: 0;}
+    .carnival_l,.carnival_r{width: 24%; padding-top: 30px;}
+    .carnival_c{width: 50%; margin: 0 1%; padding-top: 50px;}
+    .carnival_c img{height: 85px;}
+
+    /*翻页效果*/
+    .dataStatistics{cursor: pointer; color: #fff; font-family: Trebuchet MS; text-align: center; position: relative; font-size: 90px; line-height: 95px; margin-top: 10px;}
+    .data_new{position: relative; width: 100%}
+    .digit_set{float: none!important;border:0; border-radius: 4px; perspective: 200px; height: 95px!important; margin: 0 -6px!important; width: 65px!important;}
+    .digit_wrap{line-height: 95px;}
+    .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #6f15ae; border-radius: 4px; width: 63px;}
+    .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #6f15ae; border-radius: 4px; text-align: center; width: 63px;}
+    .dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}
+    .dataStatistics .digit > div.digit_bottom .digit_wrap,.dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -75%; line-height: 95px;}
+    .douhao{width: 12px; height: 15px; background: url("dist/518img/douhao_518.png") no-repeat; display: inline-block; margin: 0 -10px}
+    .time{font-size: 18px; color: #fff; margin-right: 30px; margin-top: 10px;}
+    .conusers{color: #fff; font-size: 20px; margin-top: 20px;}
+    .conusers span{font-size: 36px; color: #f9bf0e; font-family: "Century Gothic";}
+    .conusers div p:nth-child(2){text-transform: uppercase; font-size: 24px; color: rgba(255,255,255,0.3); font-family: "Times New Roman"; margin-top: -7px;}
+
+    /*左边*/
+    .title{font-size: 20px; color: #fff600;}
+    .com_con{ border: 3px solid rgba(255,255,255,0.1); padding: 5px;}
+    .com_tit{color: #fff;}
+    .com_tit span{text-transform: uppercase; font-size: 16px; color: rgba(255,255,255,0.3); font-family:"Times New Roman"; padding-left: 5px;}
+    .sales-volume,.sales-amount{width: 50%;}
+    .sales-volume li{color: #0078ff; clear: both; overflow: hidden; width: 97%; position: relative; padding: 5px 1.5%;font-size: 12px;}
+    .product_num{font-size: 24px; position: absolute; top: 14px;  left: 0; width: 18px; text-align: center;}
+    .product_nav{margin-left: 18px;}
+    .com_progress .clearfix,.city_progress .clearfix{ margin-top: 5px}
+    .sales-volume .product_tit{background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,12,251,0.5));
+      /* Safari 5.1 - 6.0 */
+      background: -o-linear-gradient(right, rgba(0,0,0,0), rgba(0,12,251,0.5)); /* Opera 11.1 - 12.0 */
+      background: -moz-linear-gradient(right, rgba(0,0,0,0), rgba(0,12,251,0.5)); /* Firefox 3.6 - 15 */
+      background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,12,251,0.5)); /* 标准的语法（必须放在最后） */
+      color: #00f0ff; height: 30px; line-height: 30px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+    .sales-volume .progress{background: -webkit-linear-gradient(rgba(0,0,0,0), rgba(0,12,251,0.5)); background: -o-linear-gradient(right, rgba(0,0,0,0), rgba(0,12,251,0.5)); background: -moz-linear-gradient(right, rgba(0,0,0,0), rgba(0,12,251,0.5)); background: linear-gradient(to right, rgba(0,0,0,0), rgba(0,12,251,0.5)); height: 5px;}
+    .sales-volume .progress-bar{background-color: #00baff;}
+    .sales-amount li{color: #b87d30; clear: both; overflow: hidden; width: 98%; position: relative; padding: 10px 1% 0 1%;font-size: 12px;}
+    .sales-amount .product_tit{background: -webkit-linear-gradient(rgba(255,255,255,0), rgba(141,151,70,0.3));
+      background: -o-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); /* Opera 11.1 - 12.0 */
+      background: -moz-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); /* Firefox 3.6 - 15 */
+      background: linear-gradient(to right, rgba(255,255,255,0), rgba(141,151,70,0.3)); /* 标准的语法（必须放在最后） */
+      color: #f6ba6b; height: 30px; line-height: 30px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
+    .sales-amount .progress{background: -webkit-linear-gradient(rgba(255,255,255,0), rgba(141,151,70,0.3)); background: -o-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); background: -moz-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); background: linear-gradient(to right, rgba(255,255,255,0), rgba(141,151,70,0.3)); height: 5px;}
+    .sales-amount .progress-bar{background-color: #eb9017;}
+
+    /*右边*/
+    .city_progress{line-height: 30px;}
+    .city_tit{white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; color: #00f0ff;}
+    .proportion li{padding: 10px 1.5%;}
+    .proportion .product_num{width: 30px; text-align: center; top: 16px;}
+    .proportion .product_nav{margin-left: 30px;}
+    
+     #mapContainer {
+         position: absolute; 
+         top: 0;
+         left: 0;
+         right: 0;
+         bottom: 0;
+     }
+     
+    *{margin: 0; padding: 0;}
+	ul,li{list-style: none;}
+    body {
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        font-size: 12px;;
+    } 
+
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<section>
+  <div class="carnival_l pull-left">
+    <div class="commodity">
+      <div class="title">商品销量/销售额</div>
+      <div class="com_con clearfix">
+        <div class="sales-volume pull-left">
+          <div class="com_tit">销量<span>sales volume</span></div>
+          <ul class="no-padding">
+            <li id="product_0">
+              <div class="product_num">1</div>
+              <div class="product_nav">
+                <div class="product_tit" id="product_name_0">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="product_bar_0"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="product_price_0">Loading</span>
+                    <small class="pull-right" id="product_percent_0">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="product_1">
+              <div class="product_num">2</div>
+              <div class="product_nav">
+                <div class="product_tit" id="product_name_1">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="product_bar_1"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="product_price_1">Loading</span>
+                    <small class="pull-right" id="product_percent_1">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="product_2">
+              <div class="product_num">3</div>
+              <div class="product_nav">
+                <div class="product_tit" id="product_name_2">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="product_bar_2"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="product_price_2">Loading</span>
+                    <small class="pull-right" id="product_percent_2">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="product_3">
+              <div class="product_num">4</div>
+              <div class="product_nav">
+                <div class="product_tit" id="product_name_3">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="product_bar_3"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="product_price_3">Loading</span>
+                    <small class="pull-right" id="product_percent_3">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="product_4">
+              <div class="product_num">5</div>
+              <div class="product_nav">
+                <div class="product_tit" id="product_name_4">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="product_bar_4"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="product_price_4">Loading</span>
+                    <small class="pull-right" id="product_percent_4">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="sales-amount pull-left">
+          <div class="com_tit">销售额<span>sales amount</span></div>
+          <ul class="no-padding">
+            <li id="eshop_0">
+              <div class="product_num">1</div>
+              <div class="product_nav">
+                <div class="product_tit" id="eshop_name_0">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="eshop_bar_0"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="eshop_price_0">Loading</span>
+                    <small class="pull-right" id="eshop_percent_0">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="eshop_1">
+              <div class="product_num">2</div>
+              <div class="product_nav">
+                <div class="product_tit" id="eshop_name_1">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="eshop_bar_1"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="eshop_price_1">Loading</span>
+                    <small class="pull-right" id="eshop_percent_1">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="eshop_2">
+              <div class="product_num">3</div>
+              <div class="product_nav">
+                <div class="product_tit" id="eshop_name_2">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="eshop_bar_2"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="eshop_price_2">Loading</span>
+                    <small class="pull-right" id="eshop_percent_2">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="eshop_3">
+              <div class="product_num">4</div>
+              <div class="product_nav">
+                <div class="product_tit" id="eshop_name_3">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="eshop_bar_3"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="eshop_price_3">Loading</span>
+                    <small class="pull-right" id="eshop_percent_3">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="eshop_4">
+              <div class="product_num">5</div>
+              <div class="product_nav">
+                <div class="product_tit" id="eshop_name_4">Loading</div>
+                <div class="com_progress">
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="eshop_bar_4"></div>
+                  </div>
+                  <div class="clearfix">
+                    <span class="pull-left" id="eshop_price_4">Loading</span>
+                    <small class="pull-right" id="eshop_percent_4">Loading</small>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="main2" style="height: 290px;"></div>
+  </div>
+  <div class="carnival_c pull-left">
+    <div class="text-center"><img src="dist/518img/img1.png"></div>
+    <div class="text-right time" id="now_time">00:00:00</div>
+    <div class="dataStatistics">
+      <div class="data_new">
+        <div class="digit_set"></div>
+        <div class="digit_set"></div>
+        <div class="digit_set"></div>
+        <div class="douhao" id="dou1"></div>
+        <div class="digit_set"></div>
+        <div class="digit_set"></div>
+        <div class="digit_set"></div>
+        <div class="douhao" id="dou2"></div>
+        <div class="digit_set"></div>
+        <div class="digit_set"></div>
+        <div class="digit_set set_last"></div>
+      </div>
+    </div>
+    <div class="clearfix conusers">
+      <div class="pull-left">
+        <p>消费用户数：<span id="pay_customer">Loading</span></p>
+        <p>Consumer number</p>
+      </div>
+      <div class="pull-right text-right">
+        <p>新用户占比：<span id="new_customer_percent">Loading</span></p>
+        <p>New user occupation ratio</p>
+      </div>
+    </div>
+    <div id="main1" style="height: 350px;"></div>
+  </div>
+  <div class="carnival_r pull-right">
+    <div class="proportion">
+      <div class="title">营业额城市占比</div>
+      <div class="com_con clearfix">
+        <div class="sales-volume pull-left">
+          <ul class="no-padding">
+            <li id="city_0">
+              <div class="product_num">1</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_0">Loading</span>
+                    <small class="pull-right" id="city_percent_0">100%</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_0"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_1">
+              <div class="product_num">2</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_1">Loading</span>
+                    <small class="pull-right" id="city_percent_1">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_1"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_2">
+              <div class="product_num">3</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_2">Loading</span>
+                    <small class="pull-right" id="city_percent_2">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_2"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_3">
+              <div class="product_num">4</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_3">Loading</span>
+                    <small class="pull-right" id="city_percent_3">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_3"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_4">
+              <div class="product_num">5</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_4">Loading</span>
+                    <small class="pull-right" id="city_percent_4">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_4"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_5">
+              <div class="product_num">6</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_5">Loading</span>
+                    <small class="pull-right" id="city_percent_5">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_5"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="sales-volume pull-left">
+          <ul class="no-padding">
+            <li id="city_6">
+              <div class="product_num">7</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_6">Loading</span>
+                    <small class="pull-right" id="city_percent_6"></small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_6"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_7">
+              <div class="product_num">8</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_7">Loading</span>
+                    <small class="pull-right" id="city_percent_7">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_7"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_8">
+              <div class="product_num">9</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_8">Loading</span>
+                    <small class="pull-right" id="city_percent_8">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_8"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_9">
+              <div class="product_num">10</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_9">Loading</span>
+                    <small class="pull-right" id="city_percent_9">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_9"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_10">
+              <div class="product_num">11</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_10">Loading</span>
+                    <small class="pull-right" id="city_percent_10">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_10"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+            <li id="city_11">
+              <div class="product_num">12</div>
+              <div class="product_nav">
+                <div class="city_progress">
+                  <div class="clearfix">
+                    <span class="pull-left city_tit" id="city_name_11">Loading</span>
+                    <small class="pull-right" id="city_percent_11">Loading</small>
+                  </div>
+                  <div class="progress no-margin">
+                    <div class="progress-bar" id="city_bar_11"></div>
+                  </div>
+                </div>
+
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div id="main3" style="height: 290px;">
+<!--    		<div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div> -->
+    </div>
+  </div>
+</section>
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/jquery.dataStatistics.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script language="javascript" src="../scripts/common/heatMap_color.js"></script>
+<script>
+  $(document).ready(function(){
+//     $('.dataStatistics').dataStatistics({min:1,max:146,time:200000,len:8});
+  });
+</script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script src="dist/js/china.js"></script>
+<script>
+  var myChart1 = echarts.init(document.getElementById('main1'));
+
+  var xData = function() {
+    var data = [];
+    for (var i = 0; i < 24; i++) {
+      data.push(i + "时");
+    }
+    return data;
+  }();
+  
+  option1 = {
+    color: ['#16abfe','#ff7070'],
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross',
+        crossStyle: {
+          color: '#999'
+        }
+      }
+    },
+    legend: {
+      data: ['用户人数', 'GMV'],
+      right:10,
+      top:20,
+      textStyle: {color: '#fff',},
+    },
+    grid: {
+      left: '0',
+      right: '0',
+      top: '70',
+      bottom: '20',
+      containLabel: true
+    },
+    xAxis: [{
+      type: 'category',
+      boundaryGap: false,
+      axisLabel:{
+        textStyle: {color: '#fff'}
+      },
+      axisLine: {
+        lineStyle: {color: '#fff'}
+      },
+      axisTick:{show:false},
+      data: xData,
+    }],
+    yAxis: [
+      {
+        type: 'value',
+        //name: '用户人数',
+        /*axisLabel: {
+          formatter: '{value}'
+        },*/
+        splitLine:{show:false},
+        axisLine:{show:false},
+        axisTick:{show:false}
+      }, {
+        type: 'value',
+        //name: 'GMV',
+        splitLine:{show:false},
+        axisLine:{show:false},
+        axisTick:{show:false}
+      },
+    ],
+    series: [{
+      name: '用户人数',
+      type: 'line',
+      yAxisIndex: 0,
+      data: userData,
+      areaStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+            offset: 0,
+            color: 'rgba(22, 171, 245,0.5)'
+          }, {
+            offset: 1,
+            color: 'rgba(22, 171, 245,0.5)'
+          }], false)
+        }
+      },
+    },
+      {
+        name: 'GMV',
+        type: 'line',
+        yAxisIndex: 1,
+        smooth: true,
+        data: gmvData,
+        areaStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+              offset: 0,
+              color: 'rgba(254, 119, 119,0.5)'
+            }, {
+              offset: 1,
+              color: 'rgba(254, 119, 119,0.5)'
+            }], false)
+          }
+        },
+
+        markPoint: {
+          show : true,
+          data: [
+            {name: '某个坐标',
+              coord: [10, 20]},
+          ]
+        },
+
+      }
+    ]
+  };
+
+  myChart1.setOption(option1);
+  
+  
+  //格式化日期
+  Date.prototype.format = function() {  
+	    var s = '';  
+	    var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
+	    var day = this.getDate()>=10?this.getDate():('0'+this.getDate());  
+	    s += this.getFullYear() + '-'; // 获取年份。  
+	    s += mouth + "-"; // 获取月份。  
+	    s += day; // 获取日。  
+	    return (s); // 返回日期。  
+	}; 
+  
+  
+  $(function(){
+	  timeTicket = setInterval(timerData, 1000);
+	  timerData();
+	  timeTicket = setInterval(turnoverAndUserData, 3000);
+	  turnoverAndUserData();
+	  timeTicket = setInterval(initHourData, 60000);
+	  initHourData();
+	  timeTicket = setInterval(initProductRankingData, 300000);
+	  initProductRankingData();
+	  timeTicket = setInterval(initEshopRankingData, 300000);
+	  initEshopRankingData();
+	  timeTicket = setInterval(initCityRankingData, 300000);
+	  initCityRankingData();
+  });
+  
+  var festivalDate = '2018-05-15';
+  
+  //左上角产品销量初化
+  var productName = [];
+  var productPrice = [];
+  function initProductRankingData(){
+		doManager("festivalStatManager","productRanking",[festivalDate],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							productName[index] = element.product_name;
+							productPrice[index] = element.product_count;
+						});
+						
+						for(var i=0;i<5;i++){
+							if(i<jsonData.length){
+								$("#product_name_"+i).html(productName[i]);
+								$("#product_price_"+i).html(productPrice[i]);
+								var percent = Math.round(productPrice[i]/productPrice[0] * 10000) / 100.00;
+								$("#product_percent_"+i).html(percent.toFixed(0) + "%");
+								var bar = document.getElementById("product_bar_"+i);
+								bar.style.width=percent.toFixed(0) + "%";
+							}else{
+								document.getElementById( "product_"+i).style.display= "none";
+							}
+						}
+					}
+				}
+		});
+	} 
+  
+  //左上角E店销售额初始化
+  var eshopName = [];
+  var eshopPrice = [];
+  function initEshopRankingData(){
+		doManager("festivalStatManager","eshopRanking",[festivalDate],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							eshopName[index] = element.eshop_name;
+							eshopPrice[index] = element.trading_price;
+						});
+						
+						for(var i=0;i<5;i++){
+							if(i<jsonData.length){
+								$("#eshop_name_"+i).html(eshopName[i]);
+								$("#eshop_price_"+i).html("￥"+eshopPrice[i]);
+								var percent = Math.round(eshopPrice[i]/eshopPrice[0] * 10000) / 100.00;
+								$("#eshop_percent_"+i).html(percent.toFixed(0) + "%");
+								var bar = document.getElementById("eshop_bar_"+i);
+								bar.style.width=percent.toFixed(0) + "%";
+							}else{
+								document.getElementById( "eshop_"+i).style.display= "none";
+							}
+						}
+					}
+				}
+		});
+	} 
+  
+  //大屏数字初始化
+  function timerData(){
+  	  var now_time = new Date();
+	  var fix_time = "2018-05-18 23:59:59";//固定时间
+	  if(now_time > new Date(fix_time)){
+		  now_time = new Date(fix_time);
+	  }
+	  $("#now_time").html((now_time.getHours() < 10 ? '0' + now_time.getHours():now_time.getHours())+":"+(now_time.getMinutes() < 10 ? '0' + now_time.getMinutes():now_time.getMinutes())+":"+(now_time.getSeconds() < 10 ? '0' + now_time.getSeconds():now_time.getSeconds()));
+  }
+  
+  function turnoverAndUserData(){
+	  var total_price = '0';
+	  doManager("festivalStatManager","queryTurnover",[festivalDate],
+		function(data,textStatus,XmlHttpRequest){
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(Object.keys(jsonData).length!=0){
+					total_price = jsonData.trading_price;
+				}
+				total_price = total_price + '';
+				if(total_price.indexOf(".")>0){
+					total_price = total_price.substring(0,total_price.lastIndexOf("."));
+				}
+				if(total_price.length>8){
+					dojob(total_price.substring(0,total_price.length)); 
+				}else{
+					total_price = "000000000"+total_price;
+					dojob(total_price.substring(total_price.length-9,total_price.length)); 
+				}
+			}
+		}); 
+	  
+	  var pay_customer = '0';
+	  doManager("festivalStatManager","queryPayUser",[festivalDate],
+		function(data,textStatus,XmlHttpRequest){
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(Object.keys(jsonData).length!=0){
+					pay_customer = jsonData.pay_customer;
+				}
+				$("#pay_customer").html(pay_customer);
+			}
+		},false); 
+	  
+	  var new_customer = '0';
+	  var new_customer_percent = '0';
+	  doManager("festivalStatManager","queryNewCusUser",[festivalDate],
+		function(data,textStatus,XmlHttpRequest){
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(Object.keys(jsonData).length!=0){
+					new_customer = jsonData.new_customer;
+					if(pay_customer!=0){
+						var percent_temp = Math.round(new_customer/pay_customer * 10000) / 100.00;
+						new_customer_percent = percent_temp.toFixed(0);
+					}
+				}
+				$("#new_customer_percent").html(new_customer_percent + "%");
+			}
+		}); 
+  }
+  
+  var ns=[];
+  var changeno="";
+  var srcnumber = "";
+  function dojob(now_number){
+		 //$(".dataStatistics").html("");
+	  	 var ths = $(".dataStatistics");//解决this指向问题
+	        var html = '<div class="digit">' +
+		      '  <div class="digit_top">' +
+		      '    <span class="digit_wrap"></span>' +
+		      '  </div>' +
+		      '  <div class="shadow_top"></div>' +
+		      '  <div class="digit_bottom">' +
+		      '    <span class="digit_wrap"></span>' +
+		      '  </div>' +
+		      '  <div class="shadow_bottom"></div>' +
+		      '</div>';
+	          
+		      var htmlactive = '<div class="digit active">' +
+		      '  <div class="digit_top">' +
+		      '    <span class="digit_wrap"></span>' +
+		      '  </div>' +
+		      '  <div class="shadow_top"></div>' +
+		      '  <div class="digit_bottom">' +
+		      '    <span class="digit_wrap"></span>' +
+		      '  </div>' +
+		      '  <div class="shadow_bottom"></div>' +
+		      '</div>';
+	        var htmlprevious = '<div class="digit previous active">' +
+		      '  <div class="digit_top">' +
+		      '    <span class="digit_wrap"></span>' +
+		      '  </div>' +
+		      '  <div class="shadow_top"></div>' +
+		      '  <div class="digit_bottom">' +
+		      '    <span class="digit_wrap"></span>' +
+		      '  </div>' +
+		      '  <div class="shadow_bottom"></div>' +
+		      '</div>';
+		      
+	          var nowNums=now_number.split("");
+	          
+	          changeno="";
+	          for(var i=0;i<9;i++){
+	        	  if(nowNums[i]!=ns[i]){
+	        		  ns[i]=nowNums[i];
+	        		  changeno+=i+"";
+	        	  }
+	          }
+	        //alert(changeno); 
+	          var isbefore = true;//标记第一位是否0,0显示空
+	          var countsign = 1;
+		      ths.find('.digit_set').each(function(index,obj) {
+		    	    $(this).empty();
+		    	    if(srcnumber!=now_number&&changeno.indexOf(index)>-1){//如果相等  样式不变 
+		    	    	$(this).append(htmlactive);
+		    	    	$(this).append(htmlprevious);
+		    	    }else{
+		    	    	$(this).append(html);
+		    	    }
+		    	    
+		            var nowNumber = nowNums[index]; 
+		            if(nowNumber==0&&isbefore){
+		            	nowNumber="";
+		            	$(this).hide();
+		            }else{
+		            	isbefore=false;
+		            	$(this).show();
+		            }
+		            if(index==8&&nowNumber==""){
+		            	nowNumber="0";
+		            	$(this).show();
+		            }
+		            countsign++;
+		            if(nowNumber!=""){
+		            	$(this).find('.digit_wrap').append(nowNumber);
+		            }
+		      });
+		      srcnumber=now_number;
+	  		  if(parseInt(now_number)<1000000){
+	  			  $("#dou1").hide();
+	  			  if(parseInt(now_number)<1000){
+	  				$("#dou2").hide();
+	  			  }else{
+	  				$("#dou2").show();
+	  			  }
+	  		  }else{
+	  			$("#dou1").show();
+	  			$("#dou2").show();
+	  		  } 
+	}
+  
+  //GMV/用户K线图初始化
+  var gmvData = [];
+  var userData = [];
+  function initHourData(){
+  		var nowHour = new Date().getHours();
+  		
+ 		doManager("festivalStatManager","queryTurnoverByHour",[festivalDate],
+ 			function(data,textStatus,XmlHttpRequest){
+ 				if (data.result) {
+ 					gmvData=new Array(nowHour+2).join(0).split('');
+ 					var jsonData = $.fromJSON(data.data);
+ 					if(jsonData.length!=0){
+ 						$(jsonData).each(function(index,element){
+ 							gmvData[parseInt(element.time)]=element.trading_price;
+ 							if(parseInt(element.time)>0){
+ 								gmvData[parseInt(element.time)]+=gmvData[parseInt(element.time)-1];
+ 							}
+ 	                     });
+ 						option1.series[1].data=gmvData;
+ 						myChart1.setOption(option1);
+ 					}else{
+ 						gmvData = [];
+ 						option1.series[1].data=gmvData;
+ 						myChart1.setOption(option1);
+ 					}
+ 				}
+ 		});
+ 		
+ 		doManager("festivalStatManager","queryUserByHour",[festivalDate],
+ 			function(data,textStatus,XmlHttpRequest){
+ 				if (data.result) {
+ 					userData=new Array(nowHour+2).join(0).split('');
+ 					var jsonData = $.fromJSON(data.data);
+ 					if(jsonData.length!=0){
+ 						$(jsonData).each(function(index,element){
+ 							userData[parseInt(element.time)]=element.pay_customer;
+ 							if(parseInt(element.time)>0){
+ 								userData[parseInt(element.time)]+=userData[parseInt(element.time)-1];
+ 							}
+ 	                     });
+ 						option1.series[0].data=userData;
+ 						myChart1.setOption(option1);
+ 					}else{
+ 						gmvData = [];
+ 						option1.series[0].data=userData;
+ 						myChart1.setOption(option1);
+ 					}
+ 				}
+ 		});
+ 	}
+  
+  
+  //右上角营业额城市占比初始化
+  var cityName = [];
+  var cityPrice = [];
+  function initCityRankingData(){
+		doManager("festivalStatManager","cityRanking",[festivalDate],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							cityName[index] = element.store_city_name;
+							cityPrice[index] = element.trading_price;
+						});
+						
+						for(var i=0;i<12;i++){
+							if(i<jsonData.length){
+								$("#city_name_"+i).html(cityName[i]);
+								var percent = Math.round(cityPrice[i]/cityPrice[0] * 10000) / 100.00;
+								$("#city_percent_"+i).html(percent.toFixed(0) + "%");
+								var bar = document.getElementById("city_bar_"+i);
+								bar.style.width=percent.toFixed(0) + "%";
+							}else{
+								document.getElementById( "city_"+i).style.display= "none";
+							}
+						}
+					}
+				}
+		});
+	}  
+  
+  
+  	//热力图初始化
+  	var firstDate = new Date();
+	var h = firstDate.getHours()-firstDate.getHours();
+	firstDate.setHours(h);
+	var bdate = firstDate.format('yyyy/MM/dd HH:mm');
+	
+	var map = new AMap.Map("mapContainer", {
+	    resizeEnable : true,
+	    //center :centerPosition,//创建中心点坐标
+	    zoom : 5,
+	});
+	map.setCity("北京");
+	map.setMapStyle('amap://styles/'+"darkblue");
+	//FestivalStatManager
+	$(function(){
+		initData();
+		timeTicket = setInterval(nowTimeData, 12000);
+	
+	})
+	
+	
+	//判断浏览区是否支持canvas
+	function isSupportCanvas() {
+	    var elem = document.createElement('canvas');
+	    return !!(elem.getContext && elem.getContext('2d'));
+	}
+	
+	var heatmap;
+	function initData(){
+		doManager("festivalStatManager", "queryOrderHeatInfo",[bdate,"090"], function(data, textStatus,XMLHttpRequest) {
+	        if(data.result){
+	        	jsonData = JSON.parse(data.data);
+	        	if (!isSupportCanvas()) {
+	        	    alert('热力图仅对支持canvas的浏览器适用,您所使用的浏览器不能使用热力图功能,请换个浏览器试试~')
+	        	}
+	        	map.plugin(["AMap.Heatmap"], function() {
+	        	    //初始化heatmap对象
+	        	    heatmap = new AMap.Heatmap(map, {
+	        	        radius: 20, //给定半径
+	        	        opacity: [0, 1]
+	        	        ,gradient:{
+	        	         0.5: '#332c02',
+	        	         0.65: 'rgb(117,211,248)',
+	        	         0.7: 'rgb(0, 255, 0)',
+	        	         0.9: '#ffea00',
+	        	         1.0: 'red'
+	        	         }
+	        	    });
+	        	    heatmap.setDataSet({
+	        	        data: jsonData,
+	        	        max:20
+	        	    });
+	        		heatmap.setMap(map);
+	        		heatmap.show();
+	        	});
+	        }else{
+	        	crm_alert(0,"数据加载异常！");
+	        }
+	    },false); 
+	}
+	
+	
+	
+	var nowTimeData = function(){
+		var timeH = firstDate.getHours()+4;
+		firstDate.setHours(timeH);
+		bdate = firstDate.format('yyyy/MM/dd HH:mm');
+		if(timeH >= new Date().getHours()){
+			window.clearInterval(timeTicket);
+			setTimeout(function(){
+				heatmap.setDataSet({
+			        data: {}
+			    });
+				firstDate.setHours(timeH-timeH);
+				timeTicket = setInterval(nowTimeData, 10000);
+				initData();
+			},15000);
+			
+		}else{
+			heatmap.setDataSet({
+		        data: {}
+		    });
+			initData();
+		}
+		
+	}
+  
+</script>
+</body>
+</html>
