@@ -423,6 +423,13 @@ public interface OrderDao {
 	 public Map<String, Object> queryOrderByEmployeeNo(String store_id,String employee_no,PageInfo pageInfo);
 	 
 	 /**
+	  * 根据节日日期 统计销售额
+	  * @param dateTime
+	  * @return
+	  */
+	 public Map<String, Object> queryTurnover(String dateTime);
+	 
+	 /**
 	  * 根据节日日期 统计新用户数
 	  * @param dateTime
 	  * @return

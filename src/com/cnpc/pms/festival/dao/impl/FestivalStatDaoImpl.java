@@ -23,9 +23,8 @@ public class FestivalStatDaoImpl extends BaseDAOHibernate implements FestivalSta
 	}
 
 	@Override
-	public Map<String, Object> queryTurnoverAndUser(String dateTime) {
-		String sql = "select SUM(dod.trading_price) AS trading_price,COUNT(DISTINCT(dod.customer_id)) as pay_customer  from df_mass_order_daily dod "
-				+ " WHERE DATE_FORMAT(dod.sign_time,'%Y-%m-%d')='"+dateTime+"' ";
+	public Map<String, Object> queryPayUser(String dateTime) {
+		String sql = "select COUNT(DISTINCT(dod.customer_id)) as pay_customer  from df_mass_order_daily dod WHERE DATE_FORMAT(dod.sign_time,'%Y-%m-%d')='"+dateTime+"' ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		Map<String, Object> order_obj = null;
@@ -48,7 +47,7 @@ public class FestivalStatDaoImpl extends BaseDAOHibernate implements FestivalSta
 
 	@Override
 	public List<Map<String, Object>> queryTurnoverByHour(String dateTime) {
-		String sql = "SELECT SUM(dod.trading_price) AS trading_price, DATE_FORMAT(dod.sign_time, '%H') AS time FROM	df_mass_order_daily dod "
+		String sql = "SELECT IFNULL(SUM(dod.trading_price),0) AS trading_price, DATE_FORMAT(dod.sign_time, '%H') AS time FROM	df_mass_order_daily dod "
 				+ " WHERE DATE_FORMAT(dod.sign_time, '%Y-%m-%d') = '"+dateTime+"' GROUP BY	DATE_FORMAT(dod.sign_time, '%H') ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据

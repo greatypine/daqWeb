@@ -2222,8 +2222,28 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public Map<String, Object> queryTurnover(String dateTime){
+		String sql="SELECT IFNULL(SUM(dcm.trading_price),0) AS trading_price FROM df_order_signed_daily dcm WHERE DATE_FORMAT(dcm.df_signed_time, '%Y-%m-%d') = '"+dateTime+"' ";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+	 	List<Map<String, Object>> lst_data = null;
+	 	Map<String, Object> map_r = null;
+	     try{
+	        SQLQuery query = session.createSQLQuery(sql);
+	        lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	        if(lst_data!=null&&lst_data.size()>0){
+		    	 map_r =  lst_data.get(0);
+		     }
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }finally {
+	         session.close();
+	     }
+	    return map_r;	
+	}
+	
+	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryNewCusUser(String dateTime){
-		String sql="SELECT count(DISTINCT dcm.customer_id) FROM df_customer_order_month_trade dcm WHERE	DATE_FORMAT(dcm.create_time, '%Y-%m-%d') = '"+dateTime+"' "
+		String sql="SELECT count(DISTINCT dcm.customer_id) as new_customer FROM df_customer_order_month_trade dcm WHERE	DATE_FORMAT(dcm.create_time, '%Y-%m-%d') = '"+dateTime+"' "
 				+ "AND dcm.order_ym = '201805' AND dcm.order_month_count = 1 ";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 	 	List<Map<String, Object>> lst_data = null;

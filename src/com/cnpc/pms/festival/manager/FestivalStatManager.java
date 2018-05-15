@@ -20,9 +20,14 @@ public interface FestivalStatManager extends IManager {
 	public List<Map<String, Object>> eshopRanking(String dateTime);
 	
 	/**
-	 * 统计销售总额及消费用户数
+	 * 统计消费用户数
 	 */
-	public Map<String, Object> queryTurnoverAndUser(String dateTime);
+	public Map<String, Object> queryPayUser(String dateTime);
+	
+	/**
+	 * 统计销售总额
+	 */
+	public Map<String, Object> queryTurnover(String dateTime);
 	
 	/**
 	 * 统计新用户数

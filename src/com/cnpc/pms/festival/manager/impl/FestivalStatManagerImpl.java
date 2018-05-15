@@ -26,12 +26,19 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 	}
 
 	@Override
-	public Map<String, Object> queryTurnoverAndUser(String dateTime) {
+	public Map<String, Object> queryPayUser(String dateTime) {
 		FestivalStatDao festivalStatDao = (FestivalStatDao)SpringHelper.getBean(FestivalStatDao.class.getName());
-		Map<String,Object> order_obj = festivalStatDao.queryTurnoverAndUser(dateTime);
+		Map<String,Object> order_obj = festivalStatDao.queryPayUser(dateTime);
 		return order_obj;
 	}
 
+	@Override
+	public Map<String, Object> queryTurnover(String dateTime){
+		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+		Map<String,Object> order_obj = orderDao.queryTurnover(dateTime);
+		return order_obj;
+	}
+	
 	@Override
 	public Map<String, Object> queryNewCusUser(String dateTime) {
 		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());

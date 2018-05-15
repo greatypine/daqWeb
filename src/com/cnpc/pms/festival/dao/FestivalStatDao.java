@@ -11,10 +11,10 @@ public interface FestivalStatDao {
 	public List<Map<String, Object>> eshopRanking(String dateTime);
 	
 	/**
-	 * 统计销售总额及消费用户数
+	 * 统计消费用户数
 	 */
-	public Map<String, Object> queryTurnoverAndUser(String dateTime);
-	
+	public Map<String, Object> queryPayUser(String dateTime);
+
 	/**
 	 * 城市营业额排名
 	 */
