@@ -60,4 +60,11 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
     	return lst_data;
 	}
 
+	@Override
+	public List<Map<String, Object>> queryOrderHeatInfo(String dateTime,String citycode) {
+		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+		return orderDao.queryOrderHeatfromDaily(dateTime,"010");
+		
+	}
+
 }

@@ -428,4 +428,13 @@ public interface OrderDao {
 	  * @return
 	  */
 	 public Map<String, Object> queryNewCusUser(String dateTime);
+	 
+	 /**
+	  * 根据节日日期 统计新用户数
+	  * @param dateTime
+	  * @return
+	  */
+	 public List<Map<String, Object>> queryOrderHeatfromDaily(String dateTime,String citycode);
+	 
+	 
 }

@@ -2241,5 +2241,22 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	     }
 	    return map_r;
 	}
+
+	@Override
+	public List<Map<String, Object>> queryOrderHeatfromDaily(String dateTime,String citycode) {
+		String sql="select COUNT(daily.id) as count,daily.latitude as lat,daily.longitude as lng from df_order_signed_daily daily INNER JOIN t_store store ON daily.store_id = store.id where "
+				+"store.city_code = '"+citycode+"' and  daily.latitude is not null and   daily.df_signed_time<'"+dateTime+"' GROUP BY daily.latitude,daily.longitude";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+	 	List<Map<String, Object>> lst_data = null;
+	     try{
+	        SQLQuery query = session.createSQLQuery(sql);
+	        lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }finally {
+	         session.close();
+	     }
+	    return lst_data;
+	}
 	
 }
