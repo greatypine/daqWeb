@@ -552,7 +552,9 @@
 //初始化地图
   var mapChart = echarts.init(document.getElementById('main2'));
   const SHOW_LEVEL_CHINA = 'china';
+  var openedProvinceMunicipality;
   $(document).ready(function () {
+	showMap();
   	getBeatJson();
   	initMapParams();
   });
@@ -664,6 +666,31 @@
       }
     ]
   };
+  var showMap = function () {
+	  var province = [];
+		doManager("dynamicManager", "getAllOpenProvinces",[],
+	            function(data, textStatus, XMLHttpRequest) {
+	                if (data.result) {
+	                    var resultJson= JSON.parse(data.data);
+	                    $.each(eval(resultJson['province']), function (idx, val) {
+		    				var object = new Object();
+		    				object['province_id'] = val['province_id'];
+		    				object['name'] = val['name'].replace("市","").replace("省","").replace("自治区","");
+		    				//object['type'] = val['type'];
+		    				if(val['selected']=='true'){
+		    					object['selected'] = true;
+		    					var object2 = new Object();
+		    					object2['areaColor'] = '#fbcde4';
+		    					var object3 = new Object();
+		    					object3['emphasis'] = object2;
+		    					object['itemStyle'] = object3;
+		    				}
+		    				province.push(object);
+		     			});
+	                }
+	            },false);
+	    openedProvinceMunicipality = province;
+  }
   var mapSeries = function(){
 		var item = {
 	                    type: 'map',
@@ -683,11 +710,11 @@
 			            },
 	                    itemStyle: {
 		                    normal: {
-		                    areaColor: '#fff',
+		                    areaColor: '#3c3b3f',
 		                    //borderColor: '#fff'
 	                  	},
 		                  emphasis: {
-		                    areaColor: '#fff'
+		                    areaColor: '#3c3b3f'
 		                  }
 	                    },
 	                    animation: false
@@ -741,7 +768,7 @@ var citySeries = function(){
                 name: 'city',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
-                symbolSize: 20,
+                symbolSize: 15,
 				showEffectOn: 'render',
 				rippleEffect: {
 				  brushType: 'stroke'
@@ -756,9 +783,9 @@ var citySeries = function(){
 				},
 				itemStyle: {
 				  normal: {
-				    color: '#fb8800',
+				    color: '#ff0000',
 				    shadowBlur: 10,
-				    shadowColor: '#fb8800'
+				    shadowColor: '#ff0000'
 				  }
 				},
               }
@@ -1020,7 +1047,7 @@ var convertData1 = function (data) {
       mapOption.series.push(item0);
   	  mapOption.geo.map = SHOW_LEVEL_CHINA;
       mapOption.series[0].mapType = SHOW_LEVEL_CHINA;
-      //mapOption.series[0].data = openedProvinceMunicipality;
+      mapOption.series[0].data = openedProvinceMunicipality;
       var item1 = lineSeries();
       mapOption.series.push(item1);
       var item2 = citySeries();
