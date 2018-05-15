@@ -1199,18 +1199,13 @@ Date.prototype.format=function(fmt) {
   
   
   $(function(){
-// 	  timeTicket = setInterval(timerData, 1000);
 	  timerData();
-// 	  timeTicket = setInterval(turnoverAndUserData, 3000);
 	  turnoverAndUserData();
-// 	  timeTicket = setInterval(initHourData, 60000);
 	  initHourData();
-	  timeTicket = setInterval(initProductRankingData, 300000);
 	  initProductRankingData();
-	  timeTicket = setInterval(initEshopRankingData, 300000);
 	  initEshopRankingData();
-	  timeTicket = setInterval(initCityRankingData, 300000);
 	  initCityRankingData();
+	  timeTicket = setInterval(timerData, 1000);		  
   });
   
   var festivalDate = '2018-05-15';
@@ -1278,11 +1273,19 @@ Date.prototype.format=function(fmt) {
 	} 
   
   //大屏数字初始化
+  var fix_time = "2018-05-18 23:59:59";//固定时间
+  var now_time;
   function timerData(){
-  	  var now_time = new Date();
-	  var fix_time = "2018-05-18 23:59:59";//固定时间
-	  if(now_time > new Date(fix_time)){
+	  if(new Date() > new Date(fix_time)){
 		  now_time = new Date(fix_time);
+		  window.clearInterval(mapTimeTicket);
+	  }else{
+		  now_time = new Date();
+		  timeTicket = setInterval(turnoverAndUserData, 3000);
+		  timeTicket = setInterval(initHourData, 60000);
+		  timeTicket = setInterval(initProductRankingData, 300000);
+		  timeTicket = setInterval(initEshopRankingData, 300000);
+		  timeTicket = setInterval(initCityRankingData, 300000);
 	  }
 	  $("#now_time").html((now_time.getHours() < 10 ? '0' + now_time.getHours():now_time.getHours())+":"+(now_time.getMinutes() < 10 ? '0' + now_time.getMinutes():now_time.getMinutes())+":"+(now_time.getSeconds() < 10 ? '0' + now_time.getSeconds():now_time.getSeconds()));
   }
