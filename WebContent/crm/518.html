@@ -5,8 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>国安数据518数据大屏</title>
   <!-- Tell the browser to be responsive to screen width -->
-  <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -21,6 +20,7 @@
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
   <link rel="stylesheet" href="dist/css/tTurnover-head-scoll.css">
+  <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
   <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor"></script>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -29,35 +29,54 @@
   <script src="IE 9/respond.min.js"></script>
   <![endif]-->
   <style>
-    body{background: url("dist/img/518_bg.jpg") no-repeat center; background-size: cover; overflow: auto;}
-    section{width: 1510px; margin: 0 auto;}
+    body{background: url("dist/518img/img2.gif") no-repeat center; background-size: cover; overflow: auto;}
+    section{min-width: 1320px; margin: 0 auto; position: relative; padding: 0 20px;}
     p{margin: 0;}
-    .carnival_l,.carnival_r{width: 24%; padding-top: 30px;}
-    .carnival_c{width: 50%; margin: 0 1%; padding-top: 50px;}
-    .carnival_c img{height: 85px;}
+    .carnival_l,.carnival_r{width: 22%; padding-top: 30px; position: relative;}
+    .carnival_c{width: 50%; margin: 0 1%; padding-top: 85px; position: relative;}
+    .carnival_c img{height: 95px;}
 
     /*翻页效果*/
-    .dataStatistics{cursor: pointer; color: #fff; font-family: Trebuchet MS; text-align: center; position: relative; font-size: 90px; line-height: 95px; margin-top: 10px;}
+    .dataStatistics{cursor: pointer; color: #fff; font-family: Trebuchet MS; text-align: center; position: relative; font-size: 100px; line-height: 115px; margin-top: 10px;}
     .data_new{position: relative; width: 100%}
-    .digit_set{float: none!important;border:0; border-radius: 4px; perspective: 200px; height: 95px!important; margin: 0 -6px!important; width: 65px!important;}
-    .digit_wrap{line-height: 95px;}
-    .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #6f15ae; border-radius: 4px; width: 63px;}
-    .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #6f15ae; border-radius: 4px; text-align: center; width: 63px;}
+    .digit_set{float: none!important;border:0; border-radius: 4px; perspective: 200px; height: 115px!important; margin: 0 -3px!important; width: 75px!important;}
+    .digit_wrap{line-height: 115px;}
+    .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #6f15ae; border-radius: 4px; width: 73px;}
+    .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #6f15ae; border-radius: 4px; text-align: center; width: 73px;}
     .dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}
-    .dataStatistics .digit > div.digit_bottom .digit_wrap,.dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -75%; line-height: 95px;}
+    .dataStatistics .digit > div.digit_bottom .digit_wrap,.dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -80%; line-height: 115px;}
     .douhao{width: 12px; height: 15px; background: url("dist/518img/douhao_518.png") no-repeat; display: inline-block; margin: 0 -10px}
     .time{font-size: 18px; color: #fff; margin-right: 30px; margin-top: 10px;}
-    .conusers{color: #fff; font-size: 20px; margin-top: 20px;}
-    .conusers span{font-size: 36px; color: #f9bf0e; font-family: "Century Gothic";}
+    .conusers{color: #fff; font-size: 18px; margin-top: 60px;}
+    .conusers span{font-size: 34px; color: #f9bf0e; font-family: "Century Gothic";}
     .conusers div p:nth-child(2){text-transform: uppercase; font-size: 24px; color: rgba(255,255,255,0.3); font-family: "Times New Roman"; margin-top: -7px;}
+	#main1{ position: absolute; bottom: 0;}
 
     /*左边*/
     .title{font-size: 20px; color: #fff600;}
-    .com_con{ border: 3px solid rgba(255,255,255,0.1); padding: 5px;}
+    .com_con::before, .com_con::after {position: absolute;top: 0;bottom: 0;left: 0;right: 0;}
+    .com_con {width: 368px;height: 388px;margin-top: 30px;color: #69ca62;box-shadow: inset 0 0 0 1px rgba(105, 202, 98, 0.5);position: relative;}
+    .com_con::before, .com_con::after {content: '';z-index: -1;margin: -5%;box-shadow: inset 0 0 0 2px; animation: clipMe 8s linear infinite;}
+    .com_con::before {animation-delay: -4s;}
+    @keyframes clipMe {
+      0%, 100% {
+        clip: rect(0px, 420.0px, 2px, 0px);
+      }
+      25% {
+        clip: rect(0px, 2px, 420.0px, 0px);
+      }
+      50% {
+        clip: rect(438.0px, 420.0px, 440.0px, 0px);
+      }
+      75% {
+        clip: rect(0px, 438.0px, 440.0px, 438.0px);
+      }
+    }
     .com_tit{color: #fff;}
     .com_tit span{text-transform: uppercase; font-size: 16px; color: rgba(255,255,255,0.3); font-family:"Times New Roman"; padding-left: 5px;}
-    .sales-volume,.sales-amount{width: 50%;}
-    .sales-volume li{color: #0078ff; clear: both; overflow: hidden; width: 97%; position: relative; padding: 5px 1.5%;font-size: 12px;}
+    .sales-volume{width: 48%; padding: 2% 0 1% 2%;}
+    .sales-amount{width: 48%; padding: 2% 2% 1% 0;}
+    .sales-volume li{color: #0078ff; clear: both; overflow: hidden; width: 100%; position: relative; padding: 5px 0;font-size: 12px;}
     .product_num{font-size: 24px; position: absolute; top: 14px;  left: 0; width: 18px; text-align: center;}
     .product_nav{margin-left: 18px;}
     .com_progress .clearfix,.city_progress .clearfix{ margin-top: 5px}
@@ -84,36 +103,27 @@
     .proportion li{padding: 10px 1.5%;}
     .proportion .product_num{width: 30px; text-align: center; top: 16px;}
     .proportion .product_nav{margin-left: 30px;}
-    
-     #mapContainer {
-         position: absolute; 
-         top: 0;
-         left: 0;
-         right: 0;
-         bottom: 0;
-     }
-     
-    *{margin: 0; padding: 0;}
-	ul,li{list-style: none;}
-    body {
-        margin: 0;
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        font-size: 12px;;
-    } 
+    .relitu{position: relative; height: 450px; margin: 50px 50px 0 -20px;}
+    #mapContainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
 
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 
 <section>
+  <div class="sec_bg"></div>
   <div class="carnival_l pull-left">
     <div class="commodity">
       <div class="title">商品销量/销售额</div>
-      <div class="com_con clearfix">
+      <div class="com_con">
         <div class="sales-volume pull-left">
-          <div class="com_tit">销量<span>sales volume</span></div>
+          <div class="com_tit">销量</div>
           <ul class="no-padding">
             <li id="product_0">
               <div class="product_num">1</div>
@@ -197,8 +207,8 @@
             </li>
           </ul>
         </div>
-        <div class="sales-amount pull-left">
-          <div class="com_tit">销售额<span>sales amount</span></div>
+        <div class="sales-amount pull-right">
+          <div class="com_tit">销售额</div>
           <ul class="no-padding">
             <li id="eshop_0">
               <div class="product_num">1</div>
@@ -284,10 +294,10 @@
         </div>
       </div>
     </div>
-    <div id="main2" style="height: 290px;"></div>
+    <div id="main2" style="height: 400px;"></div>
   </div>
-  <div class="carnival_c pull-left">
-    <div class="text-center"><img src="dist/518img/img1.png"></div>
+  <div class="carnival_c pull-left" id="carnival_c">
+    <div class="text-center"><img src="dist/518img/img3.png"></div>
     <div class="text-right time" id="now_time">00:00:00</div>
     <div class="dataStatistics">
       <div class="data_new">
@@ -307,19 +317,17 @@
     <div class="clearfix conusers">
       <div class="pull-left">
         <p>消费用户数：<span id="pay_customer">Loading</span></p>
-        <p>Consumer number</p>
       </div>
       <div class="pull-right text-right">
         <p>新用户占比：<span id="new_customer_percent">Loading</span></p>
-        <p>New user occupation ratio</p>
       </div>
     </div>
-    <div id="main1" style="height: 350px;"></div>
+    <div id="main1" style="height: 350px; width: 100%; margin: 0 auto;"></div>
   </div>
   <div class="carnival_r pull-right">
     <div class="proportion">
       <div class="title">营业额城市占比</div>
-      <div class="com_con clearfix">
+      <div class="com_con">
         <div class="sales-volume pull-left">
           <ul class="no-padding">
             <li id="city_0">
@@ -510,8 +518,8 @@
         </div>
       </div>
     </div>
-    <div id="main3" style="height: 290px;">
-<!--    		<div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div> -->
+    <div class="relitu">
+      <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
     </div>
   </div>
 </section>
@@ -543,6 +551,31 @@
   $(document).ready(function(){
 //     $('.dataStatistics').dataStatistics({min:1,max:146,time:200000,len:8});
   });
+  
+  autodivheight();
+  function autodivheight(){ //函数：获取尺寸
+    //获取浏览器窗口高度
+    var winHeight=0;
+    if (window.innerHeight)
+      winHeight = window.innerHeight;
+    else if ((document.body) && (document.body.clientHeight))
+      winHeight = document.body.clientHeight;
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    if (document.documentElement && document.documentElement.clientHeight)
+      winHeight = document.documentElement.clientHeight;
+    //DIV高度为浏览器窗口的高度
+    document.getElementById("carnival_c").style.height= winHeight +"px";
+    document.getElementById("main1").style.height= winHeight/2 +"px";
+  }
+  window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+
+  var map = new AMap.Map("mapContainer", {
+    resizeEnable : true,
+    //center :centerPosition,//创建中心点坐标
+    zoom : 5,
+  });
+  map.setCity("北京");
+  map.setMapStyle('amap://styles/'+"darkblue");
 </script>
 <!-- 引入 ECharts 文件 -->
 <script src="dist/js/echarts.common.min.js"></script>
@@ -655,13 +688,13 @@
           }
         },
 
-        markPoint: {
-          show : true,
-          data: [
-            {name: '某个坐标',
-              coord: [10, 20]},
-          ]
-        },
+//         markPoint: {
+//           show : true,
+//           data: [
+//             {name: '某个坐标',
+//               coord: [10, 20]},
+//           ]
+//         },
 
       }
     ]
@@ -1056,7 +1089,76 @@ var convertData1 = function (data) {
       mapChart.setOption(mapOption,true);
   }
   myChart1.setOption(option1);
-//一直要执行的函数
+  
+  myChart1.on("click",function(params){
+    var name = params.name;
+    var value = params.value;
+    var index = params.dataIndex;
+    var data = params.data;
+    console.info(name+"\n"+value+"\n"+index+"\n"+data);
+  });
+  
+  //判断pc浏览器是否缩放，若返回100则为默认无缩放，如果大于100则是放大，否则缩小
+  function detectZoom (){
+    var ratio = 0,
+      screen = window.screen,
+      ua = navigator.userAgent.toLowerCase();
+
+    if (window.devicePixelRatio !== undefined) {
+      ratio = window.devicePixelRatio;
+    }
+    else if (~ua.indexOf('msie')) {
+      if (screen.deviceXDPI && screen.logicalXDPI) {
+        ratio = screen.deviceXDPI / screen.logicalXDPI;
+      }
+    }
+    else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+      ratio = window.outerWidth / window.innerWidth;
+    }
+
+    if (ratio){
+      ratio = Math.round(ratio * 100);
+    }
+
+    return ratio;
+  };
+  //window.onresize 事件可用于检测页面是否触发了放大或缩小。
+  $(function(){
+    //alert(detectZoom())
+  })
+  $(window).on('resize',function(){
+    isScale();
+  });
+  //判断PC端浏览器缩放比例不是100%时的情况
+  function isScale(){
+    var rate = detectZoom();
+    if(rate != 100){
+      //如何让页面的缩放比例自动为100,'transform':'scale(1,1)'没有用，又无法自动条用键盘事件，目前只能提示让用户如果想使用100%的比例手动去触发按ctrl+0
+      console.log(1)
+      alert('当前页面不是100%显示，请按键盘ctrl+0恢复100%显示标准，以防页面显示错乱！')
+    }
+  }
+  
+  //阻止pc端浏览器缩放js代码
+  //由于浏览器菜单栏属于系统软件权限，没发控制，我们着手解决ctrl/cammond + +/- 或 Windows下ctrl + 滚轮 缩放页面的情况，只能通过js来控制了
+  // jqeury version
+  $(document).ready(function () {
+    // chrome 浏览器直接加上下面这个样式就行了，但是ff不识别
+    $('body').css('zoom', 'reset');
+    $(document).keydown(function (event) {
+      //event.metaKey mac的command键
+      if ((event.ctrlKey === true || event.metaKey === true)&& (event.which === 61 || event.which === 107 || event.which === 173 || event.which === 109 || event.which === 187  || event.which === 189)){
+        event.preventDefault();
+      }
+    });
+    $(window).bind('mousewheel DOMMouseScroll', function (event) {
+      if (event.ctrlKey === true || event.metaKey) {
+        event.preventDefault();
+      }
+    });
+  });
+  
+ //一直要执行的函数
   function nocease(){
       var datas = [];
       getBeatData(datas,beatData);
@@ -1085,31 +1187,52 @@ var convertData1 = function (data) {
 		};
 	}
 mapChart.setOption(mapOption,true);
+
   //格式化日期
-  Date.prototype.format = function() {  
-	    var s = '';  
-	    var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
-	    var day = this.getDate()>=10?this.getDate():('0'+this.getDate());  
-	    s += this.getFullYear() + '-'; // 获取年份。  
-	    s += mouth + "-"; // 获取月份。  
-	    s += day; // 获取日。  
-	    return (s); // 返回日期。  
-	}; 
+  //格式化日期格式
+Date.prototype.format=function(fmt) {        
+    var o = {        
+    "M+" : this.getMonth()+1, //月份        
+    "d+" : this.getDate(), //日        
+    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
+    "H+" : this.getHours(), //小时        
+    "m+" : this.getMinutes(), //分        
+    "s+" : this.getSeconds(), //秒        
+    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
+    "S" : this.getMilliseconds() //毫秒        
+    };        
+    var week = {        
+    "0" : "\u65e5",        
+    "1" : "\u4e00",        
+    "2" : "\u4e8c",        
+    "3" : "\u4e09",        
+    "4" : "\u56db",        
+    "5" : "\u4e94",        
+    "6" : "\u516d"       
+    };        
+    if(/(y+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
+    }        
+    if(/(E+)/.test(fmt)){        
+        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
+    }        
+    for(var k in o){        
+        if(new RegExp("("+ k +")").test(fmt)){        
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
+        }        
+    }        
+    return fmt;        
+}
   
   
   $(function(){
-	  timeTicket = setInterval(timerData, 1000);
 	  timerData();
-	  timeTicket = setInterval(turnoverAndUserData, 3000);
 	  turnoverAndUserData();
-	  timeTicket = setInterval(initHourData, 60000);
 	  initHourData();
-	  timeTicket = setInterval(initProductRankingData, 300000);
 	  initProductRankingData();
-	  timeTicket = setInterval(initEshopRankingData, 300000);
 	  initEshopRankingData();
-	  timeTicket = setInterval(initCityRankingData, 300000);
 	  initCityRankingData();
+	  timeTicket = setInterval(timerData, 1000);		  
   });
   
   var festivalDate = '2018-05-15';
@@ -1177,11 +1300,19 @@ mapChart.setOption(mapOption,true);
 	} 
   
   //大屏数字初始化
+  var fix_time = "2018-05-18 23:59:59";//固定时间
+  var now_time;
   function timerData(){
-  	  var now_time = new Date();
-	  var fix_time = "2018-05-18 23:59:59";//固定时间
-	  if(now_time > new Date(fix_time)){
+	  if(new Date() > new Date(fix_time)){
 		  now_time = new Date(fix_time);
+		  window.clearInterval(mapTimeTicket);
+	  }else{
+		  now_time = new Date();
+		  timeTicket = setInterval(turnoverAndUserData, 3000);
+		  timeTicket = setInterval(initHourData, 60000);
+		  timeTicket = setInterval(initProductRankingData, 300000);
+		  timeTicket = setInterval(initEshopRankingData, 300000);
+		  timeTicket = setInterval(initCityRankingData, 300000);
 	  }
 	  $("#now_time").html((now_time.getHours() < 10 ? '0' + now_time.getHours():now_time.getHours())+":"+(now_time.getMinutes() < 10 ? '0' + now_time.getMinutes():now_time.getMinutes())+":"+(now_time.getSeconds() < 10 ? '0' + now_time.getSeconds():now_time.getSeconds()));
   }
@@ -1412,6 +1543,7 @@ mapChart.setOption(mapOption,true);
   
   
   	//热力图初始化
+  	var mapTimeTicket;
   	var firstDate = new Date();
 	var h = firstDate.getHours()-firstDate.getHours();
 	firstDate.setHours(h);
@@ -1423,11 +1555,11 @@ mapChart.setOption(mapOption,true);
 	    zoom : 5,
 	});
 	map.setCity("北京");
-	map.setMapStyle('amap://styles/'+"darkblue");
+	map.setMapStyle('amap://styles/'+"fresh");
 	//FestivalStatManager
 	$(function(){
 		initData();
-		timeTicket = setInterval(nowTimeData, 12000);
+		mapTimeTicket = setInterval(nowTimeData, 2000);
 	
 	})
 	
@@ -1452,7 +1584,7 @@ mapChart.setOption(mapOption,true);
 	        	        radius: 20, //给定半径
 	        	        opacity: [0, 1]
 	        	        ,gradient:{
-	        	         0.5: '#332c02',
+	        	         0.5: 'blue',
 	        	         0.65: 'rgb(117,211,248)',
 	        	         0.7: 'rgb(0, 255, 0)',
 	        	         0.9: '#ffea00',
@@ -1475,17 +1607,17 @@ mapChart.setOption(mapOption,true);
 	
 	
 	var nowTimeData = function(){
-		var timeH = firstDate.getHours()+4;
+		var timeH = firstDate.getHours()+1;
 		firstDate.setHours(timeH);
 		bdate = firstDate.format('yyyy/MM/dd HH:mm');
 		if(timeH >= new Date().getHours()){
-			window.clearInterval(timeTicket);
+			window.clearInterval(mapTimeTicket);
 			setTimeout(function(){
 				heatmap.setDataSet({
 			        data: {}
 			    });
 				firstDate.setHours(timeH-timeH);
-				timeTicket = setInterval(nowTimeData, 10000);
+				mapTimeTicket = setInterval(nowTimeData, 2000);
 				initData();
 			},15000);
 			
