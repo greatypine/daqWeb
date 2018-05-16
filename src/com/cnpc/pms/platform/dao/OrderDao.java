@@ -443,5 +443,5 @@ public interface OrderDao {
 	  */
 	 public List<Map<String, Object>> queryOrderHeatfromDaily(String dateTime,String citycode);
 	 
-	 
+	 public List<Map<String, Object>> queryRecentlyOrder(String dateTime);
 }

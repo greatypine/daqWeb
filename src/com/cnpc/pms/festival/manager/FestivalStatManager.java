@@ -63,6 +63,8 @@ public interface FestivalStatManager extends IManager {
 	 */
 	public List<Map<String, Object>> queryOrderHeatInfo(String dateTime,String citycode);
 	
+	public List<Map<String, Object>> queryRecentlyOrder(String dateTime);
+	
 	public Map<String,Object> empdiver(RequestInfoDto requestInfoDto);
 	
 	public MongoCursor<Document> getData(List<Object> list,String bdate,String edate);

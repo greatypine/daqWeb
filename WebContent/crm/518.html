@@ -71,16 +71,16 @@
     .com_con::before {animation-delay: -4s;}
     @keyframes clipMe {
       0%, 100% {
-        clip: rect(0px, 410.0px, 2px, 0px);
+        clip: rect(0px, 400.0px, 0px, 0px);
       }
       25% {
-        clip: rect(0px, 2px, 410.0px, 0px);
+        clip: rect(0px, 2px, 400.0px, 0px);
       }
       50% {
-        clip: rect(428.0px, 410.0px, 420.0px, 0px);
+        clip: rect(398.0px, 400.0px, 400.0px, 0px);
       }
       75% {
-        clip: rect(0px, 418.0px, 420.0px, 418.0px);
+        clip: rect(0px, 398.0px, 400.0px, 398.0px);
       }
     }
     .com_tit{color: #fff;}
@@ -358,17 +358,9 @@
     <div class="pull-left" style="position: relative; width: 50%">
       <div id="main2" style="width: 100%; margin-top: 40px;"></div>
       <div class="barrage" id="show">
-        <ul class="no-padding">
-          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米购买了一袋大米购买了一袋大米购买了一袋大米购买了一袋大米购买了一袋大米</li>
-          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
-          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+        <ul class="no-padding" id="roll_info">
+<!--           <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li> -->
+<!--           <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li> -->
         </ul>
       </div>
     </div>
@@ -628,6 +620,16 @@
   }
   window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
 
+  //定义变量获取屏幕视口宽度
+  var windowWidth = $(window).width();
+  if(windowWidth < 1600){
+    $(".time").css('margin-right','23%');
+  }
+  if(windowWidth >= 1600){
+    $(".time").css('margin-right','27%');
+  }
+  
+  /*热力图*/
   var map = new AMap.Map("mapContainer", {
     resizeEnable : true,
     //center :centerPosition,//创建中心点坐标
@@ -709,7 +711,7 @@
       textStyle: {color: '#fff',},
     },
     grid: {
-      left: '-30',
+      left: '-20',
       right: '-30',
       top: '70',
       bottom: '0',
@@ -1323,12 +1325,14 @@ Date.prototype.format=function(fmt) {
 	  timerData();
 	  turnoverAndUserData();
 	  initHourData();
+	  initRollingInfoData();
 	  initProductRankingData();
 	  initEshopRankingData();
 	  initCityRankingData();
 	  timeTicket = setInterval(timerData, 1000);
 	  timeTicket = setInterval(turnoverAndUserData, 3000);
 	  timeTicket = setInterval(initHourData, 60000);
+	  timeTicket = setInterval(initRollingInfoData, 5000);
 	  timeTicket = setInterval(initProductRankingData, 300000);
 	  timeTicket = setInterval(initEshopRankingData, 300000);
 	  timeTicket = setInterval(initCityRankingData, 300000);
@@ -1605,6 +1609,27 @@ Date.prototype.format=function(fmt) {
  		});
  	}
   
+  //滚动信息
+  function initRollingInfoData(){
+	  doManager("festivalStatManager","queryRecentlyOrder",[festivalDate],
+		function(data,textStatus,XmlHttpRequest){
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData.length!=0){
+					var infoStr = "";
+					$(jsonData).each(function(index,element){
+						if(index%2==0){
+							infoStr = infoStr + "<li class=\"bar_order\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
+						}else{
+							infoStr = infoStr + "<li class=\"bar_order\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
+						}
+					});
+					$("#roll_info").append(infoStr);  
+				}
+			}
+	});
+  }
+  
   
   //右上角营业额城市占比初始化
   var cityName = [];
@@ -1827,7 +1852,6 @@ Date.prototype.format=function(fmt) {
 	    				 setTimeout(function (){
 	    					 console.log(new Date());
 		    					 if(x%timeIndex == 0){
-		    						 debugger;
 		    						 timeshow++;
 		    						 if(timeshow <= new Date().getHours()){
 		    							 $("#timeshow2").html(timeshow+"时"); 

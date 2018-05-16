@@ -103,6 +103,13 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 	}
 
 	@Override
+	public List<Map<String, Object>> queryRecentlyOrder(String dateTime){
+		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+		List<Map<String, Object>> lst_data = orderDao.queryRecentlyOrder(dateTime);
+		return lst_data;
+	}
+	
+	@Override
 	public Map<String, Object> empdiver(RequestInfoDto requestInfoDto) {
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		Map<String, Object> result = new HashMap<String, Object>();
