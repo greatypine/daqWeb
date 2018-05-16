@@ -44,7 +44,7 @@
     /*翻页效果*/
     .dataStatistics{cursor: pointer; color: #fff; font-family: Trebuchet MS; text-align: center; position: relative; font-size: 95px; line-height: 95px; width: 70%;}
     .data_new{position: relative; width: 100%}
-    .digit_set{float: none!important;border:0; border-radius: 4px; perspective: 200px; height: 95px!important; margin: 0 -10px!important; width: 65px!important;}
+    .digit_set{float: none!important;border:0; border-radius: 4px; perspective: 200px; height: 95px!important; margin: 0 -12px!important; width: 65px!important;}
     .digit_wrap{line-height: 95px;}
     .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #6f15ae; border-radius: 4px; width: 63px;}
     .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #6f15ae; border-radius: 4px; text-align: center; width: 63px;}
@@ -55,6 +55,7 @@
     .conusers{color: #fff; font-size: 18px; margin: 20px auto 0 auto; max-width: 55%;}
     .conusers span{font-size: 34px; color: #f9bf0e; font-family: "Century Gothic";}
     .conusers div p:nth-child(2){text-transform: uppercase; font-size: 24px; color: rgba(255,255,255,0.3); font-family: "Times New Roman"; margin-top: -7px;}
+	#main1,#main2{width: 50%;}
 
     /*左边*/
     .title{font-size: 20px; color: #fff600;}
@@ -107,17 +108,19 @@
     .proportion li{padding: 10px 1.5%;}
     .proportion .product_num{width: 30px; text-align: center; top: 16px;}
     .proportion .product_nav{margin-left: 30px;}
-    .relitu{position: relative; height: 450px; margin: 50px 50px 0 -20px;}
+    .relitu{position: relative; margin: 50px 0px 0 -20px; color: #fff;}
+    select{border: 0; border-bottom: 1px solid #2f1db2; background-color: transparent; width: 50%; color: #fff; outline: none;}
+    select option{color: #666;}
     #mapContainer {
       position: absolute;
-      top: 0;
+      top: 40px;
       left: 0;
       right: 0;
       bottom: 0;
     }
     #mapContainer2 {
       position: absolute;
-      top: 0;
+      top: 40px;
       left: 0;
       right: 0;
       bottom: 0;
@@ -307,11 +310,11 @@
     </div>
     <!-- <div id="main2" style="height: 450px;"></div> -->
     <div class="relitu">
-      <div id="mapContainer2" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
-      <div class="col-sm-5 has-warning form-group" style="padding: 0 5px 0 0;">
-          <select class="form-control select2" id="citySelect2">
-          </select>
+      	<div class="relitu_select">
+        <select id="citySelect2"></select>
+        <span class="pull-right">14时</span>
       </div>
+      <div id="mapContainer2" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
     </div>
   </div>
   <div class="carnival_c pull-left" id="carnival_c">
@@ -320,6 +323,7 @@
       <div class="activity-img" style="margin-top: -10px;"><img src="dist/518img/img3.png"></div>
       <div class="dataStatistics">
         <div class="data_new">
+          <span style="font-size: 30px; font-weight: normal; margin-right: -20px; margin-left: -10px;">￥</span>
           <div class="digit_set"></div>
           <div class="digit_set"></div>
           <div class="digit_set"></div>
@@ -345,7 +349,9 @@
       </div>
       <div class="text-right time" id="now_time">00:00:00</div>
     </div>
-    <div id="main1" style="height: 320px; width: 90%; margin: 0 auto;"></div>
+   <div class="pull-left" id="main1" style="height: 320px;"></div>
+   <div class="pull-left" id="main2" style="height: 450px;"></div>
+
   </div>
   <div class="carnival_r pull-right">
     <div class="proportion">
@@ -542,11 +548,12 @@
       </div>
     </div>
     <div class="relitu">
-      <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
-      <div class="col-sm-5 has-warning form-group" style="padding: 0 5px 0 0;">
-          <select class="form-control select2" id="citySelect">
-          </select>
+      	<div class="relitu_select">
+        <select id="citySelect"></select>
+        <span class="pull-right">14时</span>
       </div>
+      <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
+    </div>
     </div>
   </div>
 </section>
@@ -593,6 +600,8 @@
     //DIV高度为浏览器窗口的高度
     //document.getElementById("carnival_c").style.height= winHeight +"px";
     document.getElementById("main1").style.height= winHeight/2 - 40 +"px";
+    document.getElementById("mapContainer").style.height= winHeight/2 - 80 +"px";
+    document.getElementById("mapContainer2").style.height= winHeight/2 - 80 +"px";
   }
   window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
 
@@ -671,12 +680,14 @@
         },*/
         splitLine:{show:false},
         axisLine:{show:false},
+        axisLabel:{show:false},
         axisTick:{show:false}
       }, {
         type: 'value',
         //name: 'GMV',
         splitLine:{show:false},
         axisLine:{show:false},
+        axisLabel:{show:false},
         axisTick:{show:false}
       },
     ],
@@ -1583,7 +1594,7 @@ Date.prototype.format=function(fmt) {
 	    zoom : 5,
 	});
 	map.setCity("北京");
-	map.setMapStyle('amap://styles/'+"fresh");
+	map.setMapStyle('amap://styles/'+"darkblue");
 	//国安侠动态图
 	var map2 = new AMap.Map("mapContainer2", {
 	    resizeEnable : true,
@@ -1591,7 +1602,7 @@ Date.prototype.format=function(fmt) {
 	    zoom : 5,
 	});
 	map2.setCity("北京");
-	map2.setMapStyle('amap://styles/'+"fresh");
+	map2.setMapStyle('amap://styles/'+"darkblue");
 	
 	//FestivalStatManager
 	$(function(){
