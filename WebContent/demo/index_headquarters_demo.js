@@ -891,8 +891,8 @@ var showHistoryData = function () {
     //$("#tradesumoflastmonthOrderHid").html(parseInt(historyData.last_order_count==null?'0':historyData.last_order_count));
     $("#tradesumofyearHid").html(RandomNumByTime(7)+RandomNum(10000,30000)));
     */
-    $("#tradesumofhistoryCustmomerHid").html(2379905);
-    $("#tradesumofhistoryOrderHid").html(1173263);
+    $("#tradesumofhistoryCustmomerHid").html(5479920);
+    $("#tradesumofhistoryOrderHid").html(13074521);
     $("#tradesumofmonthOrderHid").html(434904);
     $("#tradesumofmonthCustmomerHid").html(211950);
     $("#tradesumofcurmonths").html(changeMoney(parseInt(6273.24*10000)));
