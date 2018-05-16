@@ -336,7 +336,7 @@
                 <div class="city_progress">
                   <div class="clearfix">
                     <span class="pull-left city_tit" id="city_name_0">Loading</span>
-                    <small class="pull-right" id="city_percent_0">100%</small>
+                    <small class="pull-right" id="city_percent_0">Loading</small>
                   </div>
                   <div class="progress no-margin">
                     <div class="progress-bar" id="city_bar_0"></div>
@@ -590,7 +590,9 @@
 //初始化地图
   var mapChart = echarts.init(document.getElementById('main2'));
   const SHOW_LEVEL_CHINA = 'china';
+  var openedProvinceMunicipality;
   $(document).ready(function () {
+	showMap();
   	getBeatJson();
   	initMapParams();
   });
@@ -633,7 +635,7 @@
         textStyle: {color: '#fff'}
       },
       axisLine: {
-        lineStyle: {color: '#fff'}
+        lineStyle: {color: '#000'}
       },
       axisTick:{show:false},
       data: xData,
@@ -702,6 +704,31 @@
       }
     ]
   };
+  var showMap = function () {
+	  var province = [];
+		doManager("dynamicManager", "getAllOpenProvinces",[],
+	            function(data, textStatus, XMLHttpRequest) {
+	                if (data.result) {
+	                    var resultJson= JSON.parse(data.data);
+	                    $.each(eval(resultJson['province']), function (idx, val) {
+		    				var object = new Object();
+		    				object['province_id'] = val['province_id'];
+		    				object['name'] = val['name'].replace("市","").replace("省","").replace("自治区","");
+		    				//object['type'] = val['type'];
+		    				if(val['selected']=='true'){
+		    					object['selected'] = true;
+		    					var object2 = new Object();
+		    					object2['areaColor'] = '#fbcde4';
+		    					var object3 = new Object();
+		    					object3['emphasis'] = object2;
+		    					object['itemStyle'] = object3;
+		    				}
+		    				province.push(object);
+		     			});
+	                }
+	            },false);
+	    openedProvinceMunicipality = province;
+  }
   var mapSeries = function(){
 		var item = {
 	                    type: 'map',
@@ -721,11 +748,11 @@
 			            },
 	                    itemStyle: {
 		                    normal: {
-		                    areaColor: '#fff',
+		                    areaColor: '#3c3b3f',
 		                    //borderColor: '#fff'
 	                  	},
 		                  emphasis: {
-		                    areaColor: '#fff'
+		                    areaColor: '#3c3b3f'
 		                  }
 	                    },
 	                    animation: false
@@ -779,7 +806,7 @@ var citySeries = function(){
                 name: 'city',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
-                symbolSize: 20,
+                symbolSize: 15,
 				showEffectOn: 'render',
 				rippleEffect: {
 				  brushType: 'stroke'
@@ -794,9 +821,9 @@ var citySeries = function(){
 				},
 				itemStyle: {
 				  normal: {
-				    color: '#fb8800',
+				    color: '#ff0000',
 				    shadowBlur: 10,
-				    shadowColor: '#fb8800'
+				    shadowColor: '#ff0000'
 				  }
 				},
               }
@@ -1058,7 +1085,7 @@ var convertData1 = function (data) {
       mapOption.series.push(item0);
   	  mapOption.geo.map = SHOW_LEVEL_CHINA;
       mapOption.series[0].mapType = SHOW_LEVEL_CHINA;
-      //mapOption.series[0].data = openedProvinceMunicipality;
+      mapOption.series[0].data = openedProvinceMunicipality;
       var item1 = lineSeries();
       mapOption.series.push(item1);
       var item2 = citySeries();
@@ -1204,21 +1231,16 @@ Date.prototype.format=function(fmt) {
   
   
   $(function(){
-// 	  timeTicket = setInterval(timerData, 1000);
 	  timerData();
-// 	  timeTicket = setInterval(turnoverAndUserData, 3000);
 	  turnoverAndUserData();
-// 	  timeTicket = setInterval(initHourData, 60000);
 	  initHourData();
-	  timeTicket = setInterval(initProductRankingData, 300000);
 	  initProductRankingData();
-	  timeTicket = setInterval(initEshopRankingData, 300000);
 	  initEshopRankingData();
-	  timeTicket = setInterval(initCityRankingData, 300000);
 	  initCityRankingData();
+	  timeTicket = setInterval(timerData, 1000);		  
   });
   
-  var festivalDate = '2018-05-15';
+  var festivalDate = new Date().format("yyyy-MM-dd");
   
   //左上角产品销量初化
   var productName = [];
@@ -1283,11 +1305,19 @@ Date.prototype.format=function(fmt) {
 	} 
   
   //大屏数字初始化
+  var fix_time = "2018-05-18 23:59:59";//固定截止时间
+  var now_time;
   function timerData(){
-  	  var now_time = new Date();
-	  var fix_time = "2018-05-18 23:59:59";//固定时间
-	  if(now_time > new Date(fix_time)){
+	  if(new Date() > new Date(fix_time)){
 		  now_time = new Date(fix_time);
+		  window.clearInterval(mapTimeTicket);
+	  }else{
+		  now_time = new Date();
+		  timeTicket = setInterval(turnoverAndUserData, 3000);
+		  timeTicket = setInterval(initHourData, 60000);
+		  timeTicket = setInterval(initProductRankingData, 300000);
+		  timeTicket = setInterval(initEshopRankingData, 300000);
+		  timeTicket = setInterval(initCityRankingData, 300000);
 	  }
 	  $("#now_time").html((now_time.getHours() < 10 ? '0' + now_time.getHours():now_time.getHours())+":"+(now_time.getMinutes() < 10 ? '0' + now_time.getMinutes():now_time.getMinutes())+":"+(now_time.getSeconds() < 10 ? '0' + now_time.getSeconds():now_time.getSeconds()));
   }
@@ -1477,7 +1507,7 @@ Date.prototype.format=function(fmt) {
  						option1.series[0].data=userData;
  						myChart1.setOption(option1);
  					}else{
- 						gmvData = [];
+ 						userData = [];
  						option1.series[0].data=userData;
  						myChart1.setOption(option1);
  					}

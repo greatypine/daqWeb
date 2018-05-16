@@ -410,8 +410,8 @@
               data = JSON.parse(data);
               if(data.result){
                   var pmsFile = JSON.parse(data.data);
-                $('#filePath').attr('src',getFilePath()+pmsFile.filePath);
-                 //$('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
+                //$('#filePath').attr('src',getFilePath()+pmsFile.filePath);
+                $('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
                 $('#fileName').val(pmsFile.name+"."+pmsFile.fileSuffix);
                  layer.close(lay_index);
               }else{
