@@ -46,16 +46,22 @@
     .data_new{position: relative; width: 100%}
     .digit_set{float: none!important;border:0; border-radius: 4px; perspective: 200px; height: 95px!important; margin: 0 -12px!important; width: 65px!important;}
     .digit_wrap{line-height: 95px;}
-    .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #6f15ae; border-radius: 4px; width: 63px;}
-    .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #6f15ae; border-radius: 4px; text-align: center; width: 63px;}
+    .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #00000c; border-radius: 4px; width: 63px;}
+    .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #00000c; border-radius: 4px; text-align: center; width: 63px;}
     /*.dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}*/
-    .dataStatistics .digit > div.digit_bottom .digit_wrap,.dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -75%; line-height: 95px;}
+    .dataStatistics .digit > div.digit_bottom .digit_wrap,.dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -76%; line-height: 95px;}
     .douhao{width: 12px; height: 15px; background: url("dist/518img/douhao_518.png") no-repeat; display: inline-block; margin: 0 -10px}
     .time{font-size: 18px; color: #fff; margin-top: 3%; margin-right: 28%; letter-spacing: 4px;}
     .conusers{color: #fff; font-size: 18px; margin: 20px auto 0 auto; max-width: 55%;}
     .conusers span{font-size: 34px; color: #f9bf0e; font-family: "Century Gothic";}
     .conusers div p:nth-child(2){text-transform: uppercase; font-size: 24px; color: rgba(255,255,255,0.3); font-family: "Times New Roman"; margin-top: -7px;}
-	#main1,#main2{width: 50%;}
+	.barrage{width:80%;color: #009cff; font-size: 16px; margin-top: 50px; overflow-y: hidden; position: absolute; top: 20px; left: 50px;}
+    .barrage li{width: 100%; margin-bottom: 30px;}
+    .barrage li i{width: 30px; height: 30px; border-radius: 5px; font-size: 16px; text-align: center; line-height: 26px; margin-right: 5px; color: #fff; box-shadow: 0 1px 5px rgba(0,0,0,0.4);-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.4);}
+    .barrage li span{padding: 0 5px;}
+    .barrage li span:nth-child(3){color: #f55600;}
+    .bar_order i{background-color: #00a1d6;}
+    .bar_bf i{background-color: #f25d8e;}
 
     /*左边*/
     .title{font-size: 20px; color: #fff600;}
@@ -348,8 +354,24 @@
       </div>
       <div class="text-right time" id="now_time">00:00:00</div>
     </div>
-   <div class="pull-left" id="main1" style="height: 320px;"></div>
-   <div class="pull-left" id="main2" style="height: 450px;"></div>
+   <div class="pull-left" id="main1" style="height: 320px; width: 50%"></div>
+    <div class="pull-left" style="position: relative; width: 50%">
+      <div id="main2" style="width: 100%; margin-top: 40px;"></div>
+      <div class="barrage" id="show">
+        <ul class="no-padding">
+          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米购买了一袋大米购买了一袋大米购买了一袋大米购买了一袋大米购买了一袋大米</li>
+          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+          <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li>
+        </ul>
+      </div>
+    </div>
 
   </div>
   <div class="carnival_r pull-right">
@@ -599,6 +621,8 @@
     //DIV高度为浏览器窗口的高度
     //document.getElementById("carnival_c").style.height= winHeight +"px";
     document.getElementById("main1").style.height= winHeight/2 - 40 +"px";
+    document.getElementById("main2").style.height= winHeight/2 - 60 +"px";
+    document.getElementById("show").style.height= winHeight/2 - 120 +"px";
     document.getElementById("mapContainer").style.height= winHeight/2 - 80 +"px";
     document.getElementById("mapContainer2").style.height= winHeight/2 - 80 +"px";
   }
@@ -611,6 +635,39 @@
   });
   map.setCity("北京");
   map.setMapStyle('amap://styles/'+"darkblue");
+  
+  /*滚动*/
+  function startmarquee(lh, speed, delay) {
+    var t;
+    var oHeight = 210;/** div的高度 **/
+    var p = false;
+    var o = document.getElementById("show");
+    var preTop = 0;
+    o.scrollTop = 0;
+    function start() {
+      t = setInterval(scrolling, speed);
+      o.scrollTop += 1;
+    }
+    function scrolling() {
+      if (o.scrollTop % lh != 0
+        && o.scrollTop % (o.scrollHeight - oHeight - 1) != 0) {
+        preTop = o.scrollTop;
+        o.scrollTop += 1;
+        if (preTop >= o.scrollHeight || preTop == o.scrollTop) {
+          o.scrollTop = 0;
+        }
+      } else {
+        clearInterval(t);
+        setTimeout(start, delay);
+      }
+    }
+    setTimeout(start, delay);
+  }
+  window.onload=function(){
+    /**startmarquee(一次滚动高度,速度,停留时间);**/
+    startmarquee(60, 10, 1500);
+  }
+  
 </script>
 <!-- 引入 ECharts 文件 -->
 <script src="dist/js/echarts.common.min.js"></script>
@@ -652,10 +709,10 @@
       textStyle: {color: '#fff',},
     },
     grid: {
-      left: '0',
-      right: '0',
+      left: '-30',
+      right: '-30',
       top: '70',
-      bottom: '20',
+      bottom: '0',
       containLabel: true
     },
     xAxis: [{
@@ -750,7 +807,7 @@
 		    				if(val['selected']=='true'){
 		    					object['selected'] = true;
 		    					var object2 = new Object();
-		    					object2['areaColor'] = '#fbcde4';
+		    					object2['areaColor'] = '#3c3b3f';
 		    					var object3 = new Object();
 		    					object3['emphasis'] = object2;
 		    					object['itemStyle'] = object3;
@@ -838,7 +895,7 @@ var citySeries = function(){
                 name: 'city',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
-                symbolSize: 15,
+                symbolSize: 8,
 				showEffectOn: 'render',
 				rippleEffect: {
 				  brushType: 'stroke'
@@ -1127,13 +1184,13 @@ var convertData1 = function (data) {
   }
   myChart1.setOption(option1);
   
-  myChart1.on("click",function(params){
-    var name = params.name;
-    var value = params.value;
-    var index = params.dataIndex;
-    var data = params.data;
-    console.info(name+"\n"+value+"\n"+index+"\n"+data);
-  });
+//   myChart1.on("click",function(params){
+//     var name = params.name;
+//     var value = params.value;
+//     var index = params.dataIndex;
+//     var data = params.data;
+//     console.info(name+"\n"+value+"\n"+index+"\n"+data);
+//   });
   
   //判断pc浏览器是否缩放，若返回100则为默认无缩放，如果大于100则是放大，否则缩小
   function detectZoom (){
