@@ -861,10 +861,10 @@ var showStatisticInfo = function (statisticData) {
     	$("#city_total").html("13" + "<span>个</span>");
 	    $("#store_total").html("469" + "<span>个</span>");
 	    $("#storeKeeper_total").html("953" + "<span>人</span>");
-	    $("#employee_total").html("5434" + "<span>人</span>");
+	    $("#employee_total").html("9380" + "<span>人</span>");
     }else if(pageStatusInfo.targets==1){
     	$("#store_total").html(469 + "<span>个</span>");
-	    $("#storeKeeper_total").html(953 + "<span>人</span>");
+	    $("#storeKeeper_total").html(9380 + "<span>人</span>");
 	    $("#employee_total").html(5434 + "<span>人</span>");
     	var dtxq = $("<dt>").html("小区");
     	var ddxq = $("<dd id='tinyVillage_total'>").html("载入中...");
