@@ -111,6 +111,13 @@
       right: 0;
       bottom: 0;
     }
+    #mapContainer2 {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
 
   </style>
 </head>
@@ -294,7 +301,7 @@
         </div>
       </div>
     </div>
-    <div id="main2" style="height: 400px;"></div>
+    <div id="main2" style="height: 450px;"></div>
   </div>
   <div class="carnival_c pull-left" id="carnival_c">
     <div class="text-center"><img src="dist/518img/img3.png"></div>
@@ -588,7 +595,7 @@
 <script>
   var myChart1 = echarts.init(document.getElementById('main1'));
 //初始化地图
-  var mapChart = echarts.init(document.getElementById('main2'));
+  //var mapChart = echarts.init(document.getElementById('main2'));
   const SHOW_LEVEL_CHINA = 'china';
   var openedProvinceMunicipality;
   $(document).ready(function () {
@@ -1091,7 +1098,7 @@ var convertData1 = function (data) {
       var item2 = citySeries();
       mapOption.series.push(item2);
       timer_china_beat = setInterval("nocease()","2000");
-      mapChart.setOption(mapOption,true);
+      //mapChart.setOption(mapOption,true);
   }
   myChart1.setOption(option1);
   
@@ -1169,8 +1176,8 @@ var convertData1 = function (data) {
       getBeatData(datas,beatData);
       //随机取1-5
       //datas=dataArray[Math.floor(Math.random() * dataArray.length + 1)-1];
-      var option = mapChart.getOption();
-      if(datas[0].name)
+      //var option = mapChart.getOption();
+     /*  if(datas[0].name)
       {
       option.series[1].data = convertData(datas);
       option.series[2].data = convertData1(datas);
@@ -1178,8 +1185,8 @@ var convertData1 = function (data) {
       else{
       option.series[1].data = null;
       option.series[2].data = convertData1(datas); 
-      }
-      mapChart.setOption(option,true);
+      } */
+      //mapChart.setOption(option,true);
   }
   var getBeatData = function(datas,jsonData){
 		for(var i=1;i<jsonData['daily'].length;i++){
@@ -1191,7 +1198,7 @@ var convertData1 = function (data) {
 			datas.push(object);
 		};
 	}
-mapChart.setOption(mapOption,true);
+//mapChart.setOption(mapOption,true);
 
   //格式化日期
   //格式化日期格式
@@ -1553,7 +1560,7 @@ Date.prototype.format=function(fmt) {
 	var h = firstDate.getHours()-firstDate.getHours();
 	firstDate.setHours(h);
 	var bdate = firstDate.format('yyyy/MM/dd HH:mm');
-	
+	//热力图
 	var map = new AMap.Map("mapContainer", {
 	    resizeEnable : true,
 	    //center :centerPosition,//创建中心点坐标
@@ -1561,11 +1568,21 @@ Date.prototype.format=function(fmt) {
 	});
 	map.setCity("北京");
 	map.setMapStyle('amap://styles/'+"fresh");
+	//国安侠动态图
+	var map2 = new AMap.Map("mapContainer2", {
+	    resizeEnable : true,
+	    //center :centerPosition,//创建中心点坐标
+	    zoom : 5,
+	});
+	map2.setCity("北京");
+	map2.setMapStyle('amap://styles/'+"fresh");
+	
 	//FestivalStatManager
 	$(function(){
 		getCity();
 		initData();
 		mapTimeTicket = setInterval(nowTimeData, 2000);
+		getEmployeeDriverRecodeRealtime();
 		$("#citySelect").change(function(){
 			map.clearMap();
 			var cityname = $("#citySelect option:selected").html();
@@ -1574,7 +1591,8 @@ Date.prototype.format=function(fmt) {
 			firstDate.setHours(timeH-timeH)
 			bdate = firstDate.format('yyyy/MM/dd HH:mm');
 			initData();
-		})
+		});
+		
 	
 	})
 	
@@ -1654,12 +1672,148 @@ Date.prototype.format=function(fmt) {
 						var jsonData = $.fromJSON(data.data);
 						$(jsonData).each(function(index,element){
 							$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
+							$("#citySelect2").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
 							if(element.cityname == "北京"){
 								$("#citySelect opation:eq("+index+")").attr("selected",true);
 							}
 	                   });
 					}
 			},false);
+	}
+	
+	var maxlocationIndex = 0;
+	var diverRecodeArray = new Array();
+	function getEmployeeDriverRecodeRealtime(){
+		requestInfoDto = {//城市
+		        cityId:1,
+		        beginDate:new Date().format('yyyy/MM/dd')+" 00:00",
+		        endDate:new Date().format('yyyy/MM/dd HH:mm'),
+		        online:"online"
+		}
+		
+		doManager("festivalStatManager", "empdiver",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
+			
+			if(data.result){
+	        	var jsonData = JSON.parse(data.data);
+	    		if(typeof(jsonData) != "undefined"){
+	    			diverRecodeArray = jsonData.data; 
+	    		}
+	    		if(diverRecodeArray != null && diverRecodeArray.length > 0){
+	    			var diverPolyline;
+	    			var marker;
+	    			for(var i = 0; i < diverRecodeArray.length; i++){
+	    				var empDiver = diverRecodeArray[i];
+	    				var locations = empDiver.locations;
+	    				var platformid = empDiver.platformid;
+	    				var employeeId = empDiver.id;
+	    				var online = empDiver.online;
+	    				var length = locations.length;
+	    				if(maxlocationIndex < length){
+	    					maxlocationIndex = length;
+	    				}
+  						var locationIndex = 0;
+						var diverPolyline =  drawEmployeeDiverPolyline(locations[locationIndex]);
+        				empDiver["polyline"] = diverPolyline;
+        				var marker = drawEmployeePosition(locations[locationIndex],empDiver);
+         				empDiver["marker"] = marker;
+         				locationIndex++;
+         				empDiver["locationIndex"] = locationIndex;
+   					}
+	    		}
+	    		setTimeout(function(){
+	    			console.log(maxlocationIndex);
+	    			 for(var z = 0; z < maxlocationIndex; z++){
+	    				 (function(){
+	    					 var x = z;
+	    				 setTimeout(function (){
+	    					 console.log(new Date());
+	    						for(var i = 0; i < diverRecodeArray.length; i++){
+	    							var empDiver = diverRecodeArray[i];
+	    							var locations = empDiver.locations;
+	    							var platformid = empDiver.platformid;
+	    							var employeeId = empDiver.id;
+	    							var online = empDiver.online;
+	    							var length = locations.length;
+	    							var locationIndex = empDiver.locationIndex;
+	    							var marker = empDiver.marker;
+	    							var polyline = empDiver.polyline;
+	    							if(typeof(marker) != "undefined" && typeof(polyline) != "undefined"){
+	    								if(length > locationIndex){
+	    									empDiver.marker.setPosition(locations[locationIndex]);
+	    									empDiver.polyline.getPath().push(locations[locationIndex]);
+	    									empDiver.polyline.setPath(empDiver.polyline.getPath());
+	    						   			empDiver.polyline.setOptions({"strokeColor":"#f00"});
+	    						   			empDiver.marker.setIcon('../aboutMap/dist/img/gaxlogo.png');
+	    									empDiver.locationIndex++;
+	    								}
+	    							}
+	    						}
+	    						console.log(x);
+	    						if(x == maxlocationIndex - 1){
+	    						 	
+	    							//timeout= window.setInterval(refreshEmployeeRrcode,60000);
+	    					 	}
+	    					},z*500);
+	    				 })();
+	    			}
+	    		},1000);
+	        }else{
+	        	crm_alert(0,"数据加载异常！");
+	        }
+	    });		
+		
+	}
+	
+	//画国安侠线路图
+	var drawEmployeeDiverPolyline = function(diverLocations){
+		var diverPolyline = new AMap.Polyline({
+	        path: diverLocations,          //设置线覆盖物路径
+	        strokeColor: "#042eff", //线颜色
+	        strokeOpacity: 0.8,       //线透明度
+	        strokeWeight: 0.8,        //线宽
+	        strokeStyle: "solid"   //线样式
+	    });
+		diverPolyline.setMap(map2);
+		return diverPolyline;
+	}
+	
+	//画国安侠坐标位置
+	var drawEmployeePosition = function(diverLocations,employeeInfo,online){
+		var marker = new AMap.Marker({
+			 map:map2,
+			 icon:"../aboutMap/dist/img/gaxlogo.png",
+			 position: diverLocations,
+			 offset: new AMap.Pixel(-10, -20),
+			 /* extData:{
+				 "storeName":employeeInfo.storeName,
+				 "employeeName":employeeInfo.employeeName,
+				 "employeeNo":employeeInfo.employeeNo
+			 } */
+		 });
+		/* if(marker != null){
+			marker.on("mouseover",function(e){
+				 //实例化信息窗体
+				    var title = '门店名称：'+e.target.getExtData().storeName,
+				        content = [];
+				    content.push("员工姓名："+e.target.getExtData().employeeName);
+				    var empno = e.target.getExtData().employeeNo;
+				    if(typeof(empno) == "undefined"){
+				    	content.push("员工编号："+"暂无");
+				    }else{
+				    	content.push("员工编号："+e.target.getExtData().employeeNo);
+				    }
+				    var infoWindow = new AMap.InfoWindow({
+				        isCustom: true,  //使用自定义窗体
+				        content: createInfoWindow(title, content.join("<br/>")),
+				        offset: new AMap.Pixel(16, -45)
+				    });
+				 	infoWindow.open(map, e.target.getPosition());
+			 })
+			 marker.on("mouseout",function(e){
+				 closeInfoWindow();
+			 });
+		} */
+		return marker;
 	}
 </script>
 </body>
