@@ -3,7 +3,11 @@ package com.cnpc.pms.festival.manager;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.Document;
+
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.heatmap.entity.RequestInfoDto;
+import com.mongodb.client.MongoCursor;
 
 /**
  * @Function：节日 518 数据大屏
@@ -58,5 +62,9 @@ public interface FestivalStatManager extends IManager {
 	 * 热力图数据统计
 	 */
 	public List<Map<String, Object>> queryOrderHeatInfo(String dateTime,String citycode);
+	
+	public Map<String,Object> empdiver(RequestInfoDto requestInfoDto);
+	
+	public MongoCursor<Document> getData(List<Object> list,String bdate,String edate);
 	
 }

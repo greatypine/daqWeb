@@ -303,7 +303,14 @@
         </div>
       </div>
     </div>
-    <div id="main2" style="height: 450px;"></div>
+    <!-- <div id="main2" style="height: 450px;"></div> -->
+    <div class="relitu">
+      <div id="mapContainer2" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
+      <div class="col-sm-5 has-warning form-group" style="padding: 0 5px 0 0;">
+          <select class="form-control select2" id="citySelect2">
+          </select>
+      </div>
+    </div>
   </div>
   <div class="carnival_c pull-left" id="carnival_c">
     <div class="text-center activity-logo"><img src="dist/518img/img1.png"></div>
@@ -1570,7 +1577,6 @@ Date.prototype.format=function(fmt) {
 	    zoom : 5,
 	});
 	map.setCity("北京");
-<<<<<<< HEAD
 	map.setMapStyle('amap://styles/'+"fresh");
 	//国安侠动态图
 	var map2 = new AMap.Map("mapContainer2", {
@@ -1581,9 +1587,6 @@ Date.prototype.format=function(fmt) {
 	map2.setCity("北京");
 	map2.setMapStyle('amap://styles/'+"fresh");
 	
-=======
-	map.setMapStyle('amap://styles/'+"darkblue");
->>>>>>> branch 'master' of http://10.16.31.112/guoanshuju/daqWeb.git
 	//FestivalStatManager
 	$(function(){
 		getCity();
