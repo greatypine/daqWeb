@@ -30,12 +30,14 @@
   <![endif]-->
   <style>
     body{ overflow: auto; min-height: 100%;}
-    section{min-width: 1320px; margin: 0 auto; position: relative; padding: 0 20px; z-index: 11;clear: both;overflow: hidden;background: url("dist/518img/518-bg3.jpg") no-repeat top center; background-size: 100% 100%; min-height: 100%;}
+    section{min-width: 1320px; margin: 0 auto; position: relative; padding: 0 20px; z-index: 11;clear: both;overflow: hidden;background: url("dist/518img/518-bg2.jpg") no-repeat top center; background-size: 100% 100%; min-height: 100%;}
     p{margin: 0;}
-    .carnival_l,.carnival_r{width: 20%; padding-top: 30px; position: relative;}
-    .carnival_c{width: 60%; padding-top: 65px; position: relative;}
+    .carnival_l,.carnival_r{width: 20%; padding-top: 50px; position: relative;}
+    .carnival_c{width: 60%; position: relative;}
+    .carnival_c_bg{ padding-top: 65px;background: url("dist/518img/img4.png") no-repeat top center; background-size:auto 100%;}
     .activity-logo img{max-height: 170px; padding-left: 20px;}
     .activity-img  img{max-height: 60px; margin-left: 22%;}
+    .sec_bg{position: absolute; top: 0; left: 0;}
     .sec_bg img:nth-child(1){ height: 23px;}
     .sec_bg img:nth-child(2){ height: 20px;}
 
@@ -49,15 +51,15 @@
     /*.dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}*/
     .dataStatistics .digit > div.digit_bottom .digit_wrap,.dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -75%; line-height: 95px;}
     .douhao{width: 12px; height: 15px; background: url("dist/518img/douhao_518.png") no-repeat; display: inline-block; margin: 0 -10px}
-    .time{font-size: 18px; color: #fff; margin-top: 3%; margin-right: 27%; letter-spacing: 4px;}
-    .conusers{color: #fff; font-size: 18px; margin: 20px auto 0 auto; width: 60%;}
+    .time{font-size: 18px; color: #fff; margin-top: 3%; margin-right: 28%; letter-spacing: 4px;}
+    .conusers{color: #fff; font-size: 18px; margin: 20px auto 0 auto; max-width: 55%;}
     .conusers span{font-size: 34px; color: #f9bf0e; font-family: "Century Gothic";}
     .conusers div p:nth-child(2){text-transform: uppercase; font-size: 24px; color: rgba(255,255,255,0.3); font-family: "Times New Roman"; margin-top: -7px;}
 
     /*左边*/
     .title{font-size: 20px; color: #fff600;}
     .com_con::before, .com_con::after {position: absolute;top: 0;bottom: 0;left: 0;right: 0;}
-    .com_con {width: 368px;height: 388px;margin-top: 30px;color: #69ca62;position: relative;}
+    .com_con {height: 388px;margin-top: 30px;color: #69ca62;position: relative;}
     .com_con::before, .com_con::after {content: '';z-index: -1;margin: -1%;box-shadow: inset 0 0 0 2px; animation:clipMe 8s linear infinite;}
     .com_con::before {animation-delay: -4s;}
     @keyframes clipMe {
@@ -313,33 +315,37 @@
     </div>
   </div>
   <div class="carnival_c pull-left" id="carnival_c">
-    <div class="text-center activity-logo"><img src="dist/518img/img1.png"></div>
-    <div class="activity-img" style="margin-top: -10px;"><img src="dist/518img/img3.png"></div>
-    <div class="dataStatistics">
-      <div class="data_new">
-        <div class="digit_set"></div>
-        <div class="digit_set"></div>
-        <div class="digit_set"></div>
-        <div class="douhao" id="dou1"></div>
-        <div class="digit_set"></div>
-        <div class="digit_set"></div>
-        <div class="digit_set"></div>
-        <div class="douhao" id="dou2"></div>
-        <div class="digit_set"></div>
-        <div class="digit_set"></div>
-        <div class="digit_set set_last"></div>
+    <div class="carnival_c_bg">
+      <div class="text-center activity-logo"><img src="dist/518img/img1.png"></div>
+      <div class="activity-img" style="margin-top: -10px;"><img src="dist/518img/img3.png"></div>
+      <div class="dataStatistics">
+        <div class="data_new">
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+          <div class="douhao" id="dou1"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+          <div class="douhao" id="dou2"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set"></div>
+          <div class="digit_set set_last"></div>
+        </div>
       </div>
+      <div class="clearfix conusers">
+        <div class="pull-left">
+          <p>消费用户数：<span id="pay_customer">Loading</span></p>
+          <!--<p>Consumer number</p>-->
+        </div>
+        <div class="pull-right text-right">
+          <p>新用户占比：<span id="new_customer_percent">Loading</span></p>
+          <!--<p>New user occupation ratio</p>-->
+        </div>
+      </div>
+      <div class="text-right time" id="now_time">00:00:00</div>
     </div>
-    <div class="clearfix conusers">
-      <div class="pull-left">
-        <p>消费用户数：<span id="pay_customer">Loading</span></p>
-      </div>
-      <div class="pull-right text-right">
-        <p>新用户占比：<span id="new_customer_percent">Loading</span></p>
-      </div>
-    </div>
-    <div class="text-right time" id="now_time">00:00:00</div>
-    <div id="main1" style="height: 320px; width: 100%; margin: 0 auto;"></div>
+    <div id="main1" style="height: 320px; width: 90%; margin: 0 auto;"></div>
   </div>
   <div class="carnival_r pull-right">
     <div class="proportion">
@@ -1697,8 +1703,7 @@ Date.prototype.format=function(fmt) {
 		requestInfoDto = {//城市
 		        cityId:1,
 		        beginDate:new Date().format('yyyy/MM/dd')+" 00:00",
-		        endDate:new Date().format('yyyy/MM/dd HH:mm'),
-		        online:"online"
+		        endDate:new Date().format('yyyy/MM/dd HH:mm')
 		}
 		
 		doManager("festivalStatManager", "empdiver",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
