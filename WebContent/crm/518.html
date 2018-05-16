@@ -308,7 +308,6 @@
         </div>
       </div>
     </div>
-    <!-- <div id="main2" style="height: 450px;"></div> -->
     <div class="relitu">
       	<div class="relitu_select">
         <select id="citySelect2"></select>
@@ -618,8 +617,8 @@
 <script src="dist/js/china.js"></script>
 <script>
   var myChart1 = echarts.init(document.getElementById('main1'));
-//初始化地图
-  //var mapChart = echarts.init(document.getElementById('main2'));
+  //初始化地图
+  var mapChart = echarts.init(document.getElementById('main2'));
   const SHOW_LEVEL_CHINA = 'china';
   var openedProvinceMunicipality;
   $(document).ready(function () {
@@ -1123,8 +1122,8 @@ var convertData1 = function (data) {
       mapOption.series.push(item1);
       var item2 = citySeries();
       mapOption.series.push(item2);
-      timer_china_beat = setInterval("nocease()","2000");
-      //mapChart.setOption(mapOption,true);
+      timer_china_beat = setInterval("nocease()","3000");
+      mapChart.setOption(mapOption,true);
   }
   myChart1.setOption(option1);
   
@@ -1202,8 +1201,8 @@ var convertData1 = function (data) {
       getBeatData(datas,beatData);
       //随机取1-5
       //datas=dataArray[Math.floor(Math.random() * dataArray.length + 1)-1];
-      //var option = mapChart.getOption();
-     /*  if(datas[0].name)
+      var option = mapChart.getOption();
+       if(datas[0].name)
       {
       option.series[1].data = convertData(datas);
       option.series[2].data = convertData1(datas);
@@ -1211,8 +1210,8 @@ var convertData1 = function (data) {
       else{
       option.series[1].data = null;
       option.series[2].data = convertData1(datas); 
-      } */
-      //mapChart.setOption(option,true);
+      }
+      mapChart.setOption(option,true);
   }
   var getBeatData = function(datas,jsonData){
 		for(var i=1;i<jsonData['daily'].length;i++){
@@ -1224,7 +1223,7 @@ var convertData1 = function (data) {
 			datas.push(object);
 		};
 	}
-//mapChart.setOption(mapOption,true);
+mapChart.setOption(mapOption,true);
 
   //格式化日期
   //格式化日期格式
