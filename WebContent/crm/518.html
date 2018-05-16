@@ -1694,6 +1694,9 @@ Date.prototype.format=function(fmt) {
 	var maxlocationIndex = 0;
 	var diverRecodeArray = new Array();
 	function getEmployeeDriverRecodeRealtime(){
+		map2.clearMap();
+		diverRecodeArray = [];
+		maxlocationIndex = 0;
 		requestInfoDto = {//城市
 		        cityId:1,
 		        beginDate:new Date().format('yyyy/MM/dd')+" 00:00",
@@ -1760,10 +1763,10 @@ Date.prototype.format=function(fmt) {
 	    						}
 	    						console.log(x);
 	    						if(x == maxlocationIndex - 1){
-	    						 	
+	    							getEmployeeDriverRecodeRealtime();
 	    							//timeout= window.setInterval(refreshEmployeeRrcode,60000);
 	    					 	}
-	    					},z*500);
+	    					},z*100);
 	    				 })();
 	    			}
 	    		},1000);
