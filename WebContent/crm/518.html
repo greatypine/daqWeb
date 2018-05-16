@@ -519,7 +519,12 @@
       </div>
     </div>
     <div class="relitu">
+    	
       <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
+      <div class="col-sm-5 has-warning form-group" style="padding: 0 5px 0 0;">
+          <select class="form-control select2" id="citySelect">
+          </select>
+      </div>
     </div>
   </div>
 </section>
@@ -1528,8 +1533,18 @@ Date.prototype.format=function(fmt) {
 	map.setMapStyle('amap://styles/'+"fresh");
 	//FestivalStatManager
 	$(function(){
+		getCity();
 		initData();
 		mapTimeTicket = setInterval(nowTimeData, 2000);
+		$("#citySelect").change(function(){
+			map.clearMap();
+			var cityname = $("#citySelect option:selected").html();
+			map.setCity(cityname);
+			var timeH = firstDate.getHours();
+			firstDate.setHours(timeH-timeH)
+			bdate = firstDate.format('yyyy/MM/dd HH:mm');
+			initData();
+		})
 	
 	})
 	
@@ -1542,7 +1557,8 @@ Date.prototype.format=function(fmt) {
 	
 	var heatmap;
 	function initData(){
-		doManager("festivalStatManager", "queryOrderHeatInfo",[bdate,"090"], function(data, textStatus,XMLHttpRequest) {
+		var cityno = $("#citySelect option:selected").val();
+		doManager("festivalStatManager", "queryOrderHeatInfo",[bdate,cityno], function(data, textStatus,XMLHttpRequest) {
 	        if(data.result){
 	        	jsonData = JSON.parse(data.data);
 	        	if (!isSupportCanvas()) {
@@ -1600,6 +1616,21 @@ Date.prototype.format=function(fmt) {
 		
 	}
   
+	//获得城市列表
+	function getCity(){
+		   doManager("chartStatManager","queryContainsStoreDistCityList",null,
+			    function(data,textStatus,XmlHttpRequest){
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						$(jsonData).each(function(index,element){
+							$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
+							if(element.cityname == "北京"){
+								$("#citySelect opation:eq("+index+")").attr("selected",true);
+							}
+	                   });
+					}
+			},false);
+	}
 </script>
 </body>
 </html>
