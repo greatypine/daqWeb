@@ -1608,6 +1608,16 @@ Date.prototype.format=function(fmt) {
 			bdate = firstDate.format('yyyy/MM/dd HH:mm');
 			initData();
 		});
+		$("#citySelect2").change(function(){
+			map.clearMap();
+			var cityname = $("#citySelect2 option:selected").html();
+			map.setCity(cityname);
+			var timeH = firstDate.getHours();
+			firstDate.setHours(timeH-timeH)
+			bdate = firstDate.format('yyyy/MM/dd HH:mm');
+			getEmployeeDriverRecodeRealtime();
+			
+		});
 		
 	
 	})
@@ -1704,7 +1714,7 @@ Date.prototype.format=function(fmt) {
 		diverRecodeArray = [];
 		maxlocationIndex = 0;
 		requestInfoDto = {//城市
-		        cityId:1,
+				cityno: $("#citySelect option:selected").val();,
 		        beginDate:new Date().format('yyyy/MM/dd')+" 00:00",
 		        endDate:new Date().format('yyyy/MM/dd HH:mm')
 		}
@@ -1738,6 +1748,8 @@ Date.prototype.format=function(fmt) {
          				empDiver["locationIndex"] = locationIndex;
    					}
 	    		}
+	    		var timeshow = 0;
+	    		var timeIndex = praseInt(maxlocationIndex/new Date().getHours());
 	    		setTimeout(function(){
 	    			console.log(maxlocationIndex);
 	    			 for(var z = 0; z < maxlocationIndex; z++){
@@ -1745,6 +1757,10 @@ Date.prototype.format=function(fmt) {
 	    					 var x = z;
 	    				 setTimeout(function (){
 	    					 console.log(new Date());
+		    					 if(z%timeIndex == 0){
+		    						 timeshow++;
+		    						 $("#timeshow").html(timeshow+"时")
+		    					 }
 	    						for(var i = 0; i < diverRecodeArray.length; i++){
 	    							var empDiver = diverRecodeArray[i];
 	    							var locations = empDiver.locations;
@@ -1760,8 +1776,6 @@ Date.prototype.format=function(fmt) {
 	    									empDiver.marker.setPosition(locations[locationIndex]);
 	    									empDiver.polyline.getPath().push(locations[locationIndex]);
 	    									empDiver.polyline.setPath(empDiver.polyline.getPath());
-	    						   			empDiver.polyline.setOptions({"strokeColor":"#f00"});
-	    						   			empDiver.marker.setIcon('../aboutMap/dist/img/gaxlogo.png');
 	    									empDiver.locationIndex++;
 	    								}
 	    							}
@@ -1799,7 +1813,7 @@ Date.prototype.format=function(fmt) {
 	var drawEmployeePosition = function(diverLocations,employeeInfo,online){
 		var marker = new AMap.Marker({
 			 map:map2,
-			 icon:"../aboutMap/dist/img/gaxlogo.png",
+			 icon:"dist/518img/518gaxlogo.png",
 			 position: diverLocations,
 			 offset: new AMap.Pixel(-10, -20),
 			 /* extData:{
