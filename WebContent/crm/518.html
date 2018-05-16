@@ -336,7 +336,7 @@
                 <div class="city_progress">
                   <div class="clearfix">
                     <span class="pull-left city_tit" id="city_name_0">Loading</span>
-                    <small class="pull-right" id="city_percent_0">100%</small>
+                    <small class="pull-right" id="city_percent_0">Loading</small>
                   </div>
                   <div class="progress no-margin">
                     <div class="progress-bar" id="city_bar_0"></div>
@@ -630,7 +630,7 @@
         textStyle: {color: '#fff'}
       },
       axisLine: {
-        lineStyle: {color: '#fff'}
+        lineStyle: {color: '#000'}
       },
       axisTick:{show:false},
       data: xData,
@@ -1235,7 +1235,7 @@ Date.prototype.format=function(fmt) {
 	  timeTicket = setInterval(timerData, 1000);		  
   });
   
-  var festivalDate = '2018-05-15';
+  var festivalDate = new Date().format("yyyy-MM-dd");
   
   //左上角产品销量初化
   var productName = [];
@@ -1300,7 +1300,7 @@ Date.prototype.format=function(fmt) {
 	} 
   
   //大屏数字初始化
-  var fix_time = "2018-05-18 23:59:59";//固定时间
+  var fix_time = "2018-05-18 23:59:59";//固定截止时间
   var now_time;
   function timerData(){
 	  if(new Date() > new Date(fix_time)){
@@ -1502,7 +1502,7 @@ Date.prototype.format=function(fmt) {
  						option1.series[0].data=userData;
  						myChart1.setOption(option1);
  					}else{
- 						gmvData = [];
+ 						userData = [];
  						option1.series[0].data=userData;
  						myChart1.setOption(option1);
  					}
