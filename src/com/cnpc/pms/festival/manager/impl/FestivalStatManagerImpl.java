@@ -105,13 +105,9 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 	@Override
 	public Map<String, Object> empdiver(RequestInfoDto requestInfoDto) {
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		Map<String, Object> result = new HashMap<String, Object>();
-
-
 		PlatformStoreDao platformStoreDao = (PlatformStoreDao)SpringHelper.getBean(PlatformStoreDao.class.getName());
-		List<Map<String, Object>> cityNOOfCityById = storeDao.getCityNOOfCityById(requestInfoDto.getCityId());
-		String cityNo = String.valueOf(cityNOOfCityById.get(0).get("cityno"));
+		String cityNo = requestInfoDto.getCityno();
 		if(cityNo.startsWith("00")){
 			cityNo = cityNo.substring(1,cityNo.length());
 		}
