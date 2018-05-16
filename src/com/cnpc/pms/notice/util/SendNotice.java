@@ -53,9 +53,7 @@ public class SendNotice implements Runnable {
 				}
 				
 				
-				if(employeeId==null||token==null||client_id==null||os==null){
-					continue;
-				}
+				
 				
 				NoticeReciver nr = new NoticeReciver();
 				
@@ -76,6 +74,9 @@ public class SendNotice implements Runnable {
 				nr.setUpdate_user_id(notice.getUpdate_user_id());
 				nrm.saveObject(nr);
 				
+				if(employeeId==null||token==null||client_id==null||os==null){
+					continue;
+				}
 				if(notice.getGrade()==1){//高级
 					user = new User();
 					user.setOs(os.toString());

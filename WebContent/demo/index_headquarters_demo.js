@@ -861,10 +861,10 @@ var showStatisticInfo = function (statisticData) {
     	$("#city_total").html("13" + "<span>个</span>");
 	    $("#store_total").html("469" + "<span>个</span>");
 	    $("#storeKeeper_total").html("953" + "<span>人</span>");
-	    $("#employee_total").html("5434" + "<span>人</span>");
+	    $("#employee_total").html("9380" + "<span>人</span>");
     }else if(pageStatusInfo.targets==1){
     	$("#store_total").html(469 + "<span>个</span>");
-	    $("#storeKeeper_total").html(953 + "<span>人</span>");
+	    $("#storeKeeper_total").html(9380 + "<span>人</span>");
 	    $("#employee_total").html(5434 + "<span>人</span>");
     	var dtxq = $("<dt>").html("小区");
     	var ddxq = $("<dd id='tinyVillage_total'>").html("载入中...");
@@ -891,8 +891,8 @@ var showHistoryData = function () {
     //$("#tradesumoflastmonthOrderHid").html(parseInt(historyData.last_order_count==null?'0':historyData.last_order_count));
     $("#tradesumofyearHid").html(RandomNumByTime(7)+RandomNum(10000,30000)));
     */
-    $("#tradesumofhistoryCustmomerHid").html(2379905);
-    $("#tradesumofhistoryOrderHid").html(1173263);
+    $("#tradesumofhistoryCustmomerHid").html(5479920);
+    $("#tradesumofhistoryOrderHid").html(13074521);
     $("#tradesumofmonthOrderHid").html(434904);
     $("#tradesumofmonthCustmomerHid").html(211950);
     $("#tradesumofcurmonths").html(changeMoney(parseInt(6273.24*10000)));
