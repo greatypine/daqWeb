@@ -81,7 +81,7 @@ $(document).ready(function () {
     initClick();
     //点击大屏幕数据进入到监控页
     $(".data_new").click(function(){
-    	gotok();
+    	gotolive();
 	});
 });
 
@@ -3991,6 +3991,11 @@ var curr_user;
 	  	url = "index_K.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
 	  }
 	  window.open(url,"index_K"); 
+  }
+  
+  //518直播间
+  function gotolive(){
+	  window.open("518.html","518");
   }
   
   //用户分析
