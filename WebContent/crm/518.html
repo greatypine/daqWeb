@@ -1576,7 +1576,7 @@ Date.prototype.format=function(fmt) {
  					var jsonData = $.fromJSON(data.data);
  					if(jsonData.length!=0){
  						$(jsonData).each(function(index,element){
- 							gmvData[parseInt(element.time)]=element.trading_price;
+ 							gmvData[parseInt(element.time)]=parseInt(element.trading_price);
  							if(parseInt(element.time)>0){
  								gmvData[parseInt(element.time)]+=gmvData[parseInt(element.time)-1];
  							}
