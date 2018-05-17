@@ -6,7 +6,7 @@
   <title>国安数据直播间</title>
   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -608,37 +608,98 @@
 		}
 		
 	}
-  
-  
-  autodivheight();
-  function autodivheight(){ //函数：获取尺寸
-	//获取浏览器窗口高度
-    var winHeight=0;
-    var winWidth=0;
-    if (window.innerHeight)
-      winHeight = window.innerHeight;
-    else if ((document.body) && (document.body.clientHeight))
-      winHeight = document.body.clientHeight;
-    //通过深入Document内部对body进行检测，获取浏览器窗口高度
-    if (document.documentElement && document.documentElement.clientHeight)
-      winHeight = document.documentElement.clientHeight;
-    //DIV高度为浏览器窗口的高度
-    //document.getElementById("carnival_c").style.height= winHeight +"px";
-    document.getElementById("main1").style.height= winHeight/2 - 40 +"px";
-    document.getElementById("main2").style.height= winHeight/2 - 60 +"px";
-    document.getElementById("show").style.height= winHeight/2 - 120 +"px";
-    document.getElementById("mapContainer").style.height= winHeight/2 - 80 +"px";
-    document.getElementById("mapContainer2").style.height= winHeight/2 - 80 +"px";
-  }
-  window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
 
   //定义变量获取屏幕视口宽度
   var windowWidth = $(window).width();
-  if(windowWidth < 1600){
-    $(".time").css('margin-right','23%');
+  if(windowWidth >= 1400){
+    $(".time").css('margin-right','22%');
+    $(".conusers").css('max-width','70%');
+    // 判断pc浏览器是否缩放，若返回100则为默认无缩放，如果大于100则是放大，否则缩小
+    function detectZoom (){
+      var ratio = 0,
+        screen = window.screen,
+        ua = navigator.userAgent.toLowerCase();
+
+      if (window.devicePixelRatio !== undefined) {
+        ratio = window.devicePixelRatio;
+      }
+      else if (~ua.indexOf('msie')) {
+        if (screen.deviceXDPI && screen.logicalXDPI) {
+          ratio = screen.deviceXDPI / screen.logicalXDPI;
+        }
+      }
+      else if (window.outerWidth !== undefined && window.innerWidth !== undefined) {
+        ratio = window.outerWidth / window.innerWidth;
+      }
+
+      if (ratio){
+        ratio = Math.round(ratio * 100);
+      }
+
+      return ratio;
+    };
+    //window.onresize 事件可用于检测页面是否触发了放大或缩小。
+    $(function(){
+      //alert(detectZoom())
+    })
+    $(window).on('resize',function(){
+      isScale();
+    });
+    //判断PC端浏览器缩放比例不是100%时的情况
+    function isScale(){
+      var rate = detectZoom();
+      if(rate != 100){
+        //如何让页面的缩放比例自动为100,'transform':'scale(1,1)'没有用，又无法自动条用键盘事件，目前只能提示让用户如果想使用100%的比例手动去触发按ctrl+0
+        console.log(1)
+        //alert('当前页面不是100%显示，请按键盘ctrl+0恢复100%显示标准，以防页面显示错乱！')
+      }
+    }
+
+    //阻止pc端浏览器缩放js代码
+    //由于浏览器菜单栏属于系统软件权限，没发控制，我们着手解决ctrl/cammond + +/- 或 Windows下ctrl + 滚轮 缩放页面的情况，只能通过js来控制了
+    // jqeury version
+    $(document).ready(function () {
+      // chrome 浏览器直接加上下面这个样式就行了，但是ff不识别
+      $('body').css('zoom', 'reset');
+      $(document).keydown(function (event) {
+        //event.metaKey mac的command键
+        if ((event.ctrlKey === true || event.metaKey === true)&& (event.which === 61 || event.which === 107 || event.which === 173 || event.which === 109 || event.which === 187  || event.which === 189)){
+          event.preventDefault();
+        }
+      });
+      $(window).bind('mousewheel DOMMouseScroll', function (event) {
+        if (event.ctrlKey === true || event.metaKey) {
+          event.preventDefault();
+        }
+      });
+    });
+
+    autodivheight();
+    function autodivheight(){ //函数：获取尺寸
+      //获取浏览器窗口高度
+      var winHeight=0;
+      var winWidth=0;
+      if (window.innerHeight)
+        winHeight = window.innerHeight;
+      else if ((document.body) && (document.body.clientHeight))
+        winHeight = document.body.clientHeight;
+      //通过深入Document内部对body进行检测，获取浏览器窗口高度
+      if (document.documentElement && document.documentElement.clientHeight)
+        winHeight = document.documentElement.clientHeight;
+      //DIV高度为浏览器窗口的高度
+      //document.getElementById("carnival_c").style.height= winHeight +"px";
+      document.getElementById("main1").style.height= winHeight/2 - 40 +"px";
+      document.getElementById("main2").style.height= winHeight/2 - 60 +"px";
+      document.getElementById("show").style.height= winHeight/2 - 120 +"px";
+      document.getElementById("mapContainer").style.height= winHeight/2 - 80 +"px";
+      document.getElementById("mapContainer2").style.height= winHeight/2 - 80 +"px";
+    }
+    window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+
   }
   if(windowWidth >= 1600){
     $(".time").css('margin-right','28%');
+    $(".conusers").css('max-width','55%');
   }
   
   /*热力图*/
