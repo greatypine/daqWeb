@@ -3,7 +3,6 @@ package com.cnpc.pms.personal.manager;
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.personal.entity.ScoreRecordTotal;
-import com.cnpc.pms.personal.entity.WorkRecordTotal;
 
 import java.util.List;
 import java.util.Map;
@@ -36,4 +35,10 @@ public interface ScoreRecordTotalManager extends IManager{
 	
 	public ScoreRecordTotal updateScoreRecordTotalMult(ScoreRecordTotal scoreRecordTotal);
 
+	/**
+	 * 查找门店选址审批人
+	 *
+	 * @return
+	 */
+	public String findScoreUserName(String order_sn);
 }
