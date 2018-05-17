@@ -437,11 +437,16 @@ public interface OrderDao {
 	 public Map<String, Object> queryNewCusUser(String dateTime);
 	 
 	 /**
+	  * 统计新增社员数
+	  */
+	 public List<Map<String, Object>> queryNewVipCusUser(String dateTime);
+	 
+	 /**
 	  * 根据节日日期 统计新用户数
 	  * @param dateTime
 	  * @return
 	  */
 	 public List<Map<String, Object>> queryOrderHeatfromDaily(String dateTime,String citycode);
 	 
-	 
+	 public List<Map<String, Object>> queryRecentlyOrder(String dateTime);
 }

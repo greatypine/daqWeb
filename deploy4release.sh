@@ -21,7 +21,7 @@ fi
 
 cd "$work_dir"
 echo 'making warfile...'
-if /bin/sh $command_str$para_str; then
+if  $command_str$para_str; then
     echo 'making warfile success!'
     if [ "$work_dir/$file_name" != $dest_file ]; then
         mv "$work_dir/$file_name" $dest_file
