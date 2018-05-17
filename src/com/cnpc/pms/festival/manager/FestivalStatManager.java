@@ -46,7 +46,7 @@ public interface FestivalStatManager extends IManager {
 	/**
 	 * 统计新增社员数
 	 */
-	public Map<String, Object> queryNewVipCusUser(String dateTime);
+	public List<Map<String, Object>> queryNewVipCusUser(String dateTime);
 	
 	/**
 	 * 城市营业额排名

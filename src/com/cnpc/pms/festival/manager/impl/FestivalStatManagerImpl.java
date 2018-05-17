@@ -70,10 +70,10 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 	}
 
 	@Override
-	public Map<String, Object> queryNewVipCusUser(String dateTime){
+	public List<Map<String, Object>> queryNewVipCusUser(String dateTime){
 		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
-		Map<String,Object> order_obj = orderDao.queryNewVipCusUser(dateTime);
-		return order_obj;
+		List<Map<String,Object>> lst_data = orderDao.queryNewVipCusUser(dateTime);
+		return lst_data;
 	}
 	
 	@Override
@@ -279,6 +279,7 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 			return result;
 		}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public MongoCursor<Document> getData(List<Object> list, String bdate, String edate) {
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
