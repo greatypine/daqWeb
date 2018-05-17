@@ -1333,6 +1333,7 @@ Date.prototype.format=function(fmt) {
   $(function(){
 	  timerData();
 	  turnoverAndUserData();
+	  initCustomerData();
 	  initHourData();
 	  initRollingInfoData();
 	  initProductRankingData();
@@ -1340,6 +1341,7 @@ Date.prototype.format=function(fmt) {
 	  initCityRankingData();
 	  timeTicket = setInterval(timerData, 1000);
 	  timeTicket = setInterval(turnoverAndUserData, 3000);
+	  timeTicket = setInterval(initCustomerData, 60000);
 	  timeTicket = setInterval(initHourData, 60000);
 	  timeTicket = setInterval(initRollingInfoData, 60000);
 	  timeTicket = setInterval(initProductRankingData, 300000);
@@ -1444,7 +1446,10 @@ Date.prototype.format=function(fmt) {
 				}
 			}
 		}); 
-	  
+  }
+  
+  //消费+新增社员
+  function initCustomerData(){
 	  var pay_customer = '0';
 	  doManager("festivalStatManager","queryPayUser",[festivalDate],
 		function(data,textStatus,XmlHttpRequest){
@@ -1465,7 +1470,7 @@ Date.prototype.format=function(fmt) {
 				vip_customer = jsonData.length;
 				$("#vip_customer").html(vip_customer);
 			}
-		}); 
+		});   
   }
   
   var ns=[];
