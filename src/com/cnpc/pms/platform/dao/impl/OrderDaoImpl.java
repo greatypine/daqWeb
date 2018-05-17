@@ -2279,4 +2279,24 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	    return lst_data;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Map<String, Object>> queryRecentlyOrder(String dateTime){
+		String sql = "SELECT tc.mobilephone, ts. NAME as eshop_name,  toi.quantity,	toi.unit, toi.eshop_pro_name,DATE_FORMAT(toi.create_time, '%H:%i') AS buy_time "
+				+ "FROM df_order_signed_daily tor JOIN t_order_item toi ON (tor.id = toi.order_id) JOIN t_store ts ON (tor.store_id = ts.id) JOIN t_customer tc "
+				+ "ON (tor.customer_id = tc.id) ORDER BY tor.create_time DESC LIMIT 10 ";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = session.createSQLQuery(sql);
+			List<Map<String,Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+		return lst_result;
+	}
+	
 }

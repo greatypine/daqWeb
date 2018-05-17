@@ -64,13 +64,29 @@
 	   	    width: 110px;
 		    height: 22px;
 		    color:#f4f4f4;
-		    background-color:#5ea6bb;
+		    background-color:#3a90cb;
 		    text-align: center;
 		    vertical-align: middle;
 		    line-height: 22px;
 		    float:left;
 		    margin-left:5px;
     	}
+    	
+    	
+    	#notice_way span{
+		    text-align: center;
+		    padding: 2px;
+		    margin: 0;
+		    font-family: helvetica,arial,sans-serif;
+		    color: #777;
+		    font-size: 35px;
+		    font-weight: bold;
+		    text-shadow:0 0 0.2em #2bb6f9, 0 0 0.2em #77c0ff;
+	        position:relative;
+	        top:10px
+		}
+
+	
 </style>
 <script type="text/javascript">
     $(function(){
@@ -86,17 +102,12 @@
 	
 	function showAlt(tag){
 		if(tag=="sms"){
-			layer.tips('手机短信,稍后开放！！！', '#sms_img', {
+			layer.tips('通过手机短信通知,稍后开放！！！', '#sms_img', {
 				  tips: [1, '#b6bcc1'], //还可配置颜色
 				  time: 2000
 				});
 		}else if(tag=="app"){
-			layer.tips('国安数据APP', '#app_img', {
-				  tips: [1, '#b7333f'], //还可配置颜色
-				  time: 2000
-				});
-		}else if(tag=="mini_APP"){
-			layer.tips('国安数据微信小程序', '#mini_img', {
+			layer.tips('通过国安数据APP通知', '#app_img', {
 				  tips: [1, '#b7333f'], //还可配置颜色
 				  time: 2000
 				});
@@ -400,7 +411,7 @@
               if(data.result){
                   var pmsFile = JSON.parse(data.data);
                 $('#filePath').attr('src',getFilePath()+pmsFile.filePath);
-                 //$('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
+                //$('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
                 $('#fileName').val(pmsFile.name+"."+pmsFile.fileSuffix);
                  layer.close(lay_index);
               }else{
@@ -532,15 +543,18 @@ function showNoticeWay(){
 	if(grade==1){//高级
 		$($("#notice_way").children("img")[0]).show();
 		$($("#notice_way").children("img")[1]).show();
-		$($("#notice_way").children("img")[2]).show();
+		$("#no_notice").hide();
+		
 	}else if(grade==2){//中级
 		$($("#notice_way").children("img")[0]).hide();
 		$($("#notice_way").children("img")[1]).show();
-		$($("#notice_way").children("img")[2]).show();
+		$("#no_notice").hide();
+		
 	}else if(grade==3){//低级
 		$($("#notice_way").children("img")[0]).hide();
 		$($("#notice_way").children("img")[1]).hide();
-		$($("#notice_way").children("img")[2]).hide();
+		$("#no_notice").show();
+		
 	}
 	
 }
@@ -641,16 +655,17 @@ function checkfile(){
                             <td>
                                 <select id="grade" name="grade" class="form-control"  style="width: 60%" onchange="showNoticeWay()">
                                   
-                                    <option value="1" selected>高</option>
-                                    <option value="2">中</option>
+                                    <option value="1" >高</option>
+                                    <option value="2" selected>中</option>
                                     <option value="3">低</option>
                                 </select>
+                                <span style="color:red;font-size:smaller">注：高、中、低三个等级的公告均可以在国安社区门店管理系统、国安数据APP、国安数据小程序查看</span>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:12%">通知方式<span style="color:red"></span></td>
                             <td>
-                               <div id="notice_way" style="height:35px"><img id="sms_img" onmouseover="showAlt('sms')"  src="img/sms_invalid.png" height="35" alt="手机短信"/>&nbsp;&nbsp;<img id="app_img" src="img/gasj.png" onmouseover="showAlt('app')" height="35" alt="国安数据APP"/>&nbsp;&nbsp;<img id="mini_img" src="img/mini.png" onmouseover="showAlt('mini_APP')" height="35" alt="国安数据微信小程序"/></div>
+                               <div id="notice_way" style="height:35px"><img style="display:none" id="sms_img" onmouseover="showAlt('sms')"  src="img/sms_invalid.png" height="35" alt="手机短信"/>&nbsp;&nbsp;<img id="app_img" src="img/gasj.png" onmouseover="showAlt('app')" height="35" alt="国安数据APP"/><span id="no_notice" style="display:none">不通知<span></div>
                             </td>
                         </tr>
                          <tr>

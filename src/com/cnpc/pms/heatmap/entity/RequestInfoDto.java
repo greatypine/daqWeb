@@ -11,6 +11,7 @@ public class RequestInfoDto {
 	private String endDate;
 	private String employeeNo;
 	private String isRealtime;
+	private String cityno;
 	public String getIsRealtime() {
 		return isRealtime;
 	}
@@ -46,6 +47,12 @@ public class RequestInfoDto {
 	}
 	public void setEmployeeNo(String employeeNo) {
 		this.employeeNo = employeeNo;
+	}
+	public String getCityno() {
+		return cityno;
+	}
+	public void setCityno(String cityno) {
+		this.cityno = cityno;
 	}
 	
 	
