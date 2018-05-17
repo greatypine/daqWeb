@@ -588,6 +588,28 @@
 //     $('.dataStatistics').dataStatistics({min:1,max:146,time:200000,len:8});
   });
   
+  var screenlogin=getUrlParamByKey("su");
+  function loginShow(){
+		
+		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+		    var callback = function callback(data, textStatus, XMLHttpRequest) {
+		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
+		    	var stateObject = {};
+		    	var newUrl = "/daqWeb/crm/index_K.html?ta=0";
+		    	history.pushState(stateObject,null,newUrl);
+			};
+		    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+				alert("登录信息错误，请确认输入或联系管理员!");
+				return false;
+			}
+		    var url = "../login.do";
+		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+		}
+		
+	}
+  
+  
   autodivheight();
   function autodivheight(){ //函数：获取尺寸
 	//获取浏览器窗口高度
@@ -1331,6 +1353,7 @@ Date.prototype.format=function(fmt) {
   
   
   $(function(){
+	  loginShow();
 	  timerData();
 	  turnoverAndUserData();
 	  initCustomerData();
