@@ -1737,6 +1737,9 @@ Date.prototype.format=function(fmt) {
 		var cityno = $("#citySelect option:selected").val();
 		var timeshow = firstDate.getHours()
 		$("#timeshow").html(timeshow+"时");
+		if(new Date().format("yyyy/MM/dd") != "2018/05/18"){
+			bdate = "2018/05/18 23:59";
+		}
 		doManager("festivalStatManager", "queryOrderHeatInfo",[bdate,cityno], function(data, textStatus,XMLHttpRequest) {
 	        if(data.result){
 	        	jsonData = JSON.parse(data.data);
@@ -1819,12 +1822,19 @@ Date.prototype.format=function(fmt) {
 		map2.clearMap();
 		diverRecodeArray = [];
 		maxlocationIndex = 0;
-		requestInfoDto = {//城市
-				cityno: cur_city,
-		        beginDate:new Date().format('yyyy/MM/dd')+" 00:00",
-		        endDate:new Date().format('yyyy/MM/dd HH:mm')
+		if(new Date().format("yyyy/MM/dd") != "2018/05/18"){
+			requestInfoDto = {//城市
+					cityno: cur_city,
+			        beginDate:"2018/05/18 00:00",
+			        endDate:"2018/05/18 23:59"
+			}
+		}else{
+			requestInfoDto = {//城市
+					cityno: cur_city,
+			        beginDate:new Date().format('yyyy/MM/dd')+" 00:00",
+			        endDate:new Date().format('yyyy/MM/dd HH:mm')
+			}
 		}
-		
 		doManager("festivalStatManager", "empdiver",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
 			
 			if(data.result){
@@ -1903,6 +1913,7 @@ Date.prototype.format=function(fmt) {
 	    		},1000);
 	        }else{
 	        	crm_alert(0,"数据加载异常！");
+	        	getEmployeeDriverRecodeRealtime();
 	        }
 	    });		
 		
