@@ -111,6 +111,9 @@ public class AuthFilter extends OncePerRequestFilter {
 			// 内容页
 		} else if (url.indexOf("content.html") >= 0) {
 			filterChain.doFilter(servletRequest, servletResponse);
+			// 518活动 
+		} else if (url.indexOf("518.html") >= 0) {
+			filterChain.doFilter(servletRequest, servletResponse);
 			// 重要科技活动
 		} else if (url.indexOf("generalEventPublisFindView.html") >= 0) {
 			filterChain.doFilter(servletRequest, servletResponse);
