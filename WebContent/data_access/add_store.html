@@ -420,6 +420,11 @@ function downloadFile(pic_name){
 					alert("请重新选择门店位置坐标!");
 					return;
 				}
+				if(address == "" || address == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写门店地址!");
+					return;
+				}
 				if(superMicro == "" || superMicro == null){
 					$("#submit").removeAttr("disabled");
 					alert("请选择是否微超!");
