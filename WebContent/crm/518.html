@@ -1703,7 +1703,7 @@ Date.prototype.format=function(fmt) {
 	$(function(){
 		getCity();
 		initData();
-		mapTimeTicket = setInterval(nowTimeData, 2000);
+		mapTimeTicket = setInterval(nowTimeData, 5000);
 		getEmployeeDriverRecodeRealtime();
 		$("#citySelect").change(function(){
 			map.clearMap();
@@ -1782,7 +1782,7 @@ Date.prototype.format=function(fmt) {
 			        data: {}
 			    });
 				firstDate.setHours(timeH-timeH);
-				mapTimeTicket = setInterval(nowTimeData, 2000);
+				mapTimeTicket = setInterval(nowTimeData, 5000);
 				initData();
 			},15000);
 			
