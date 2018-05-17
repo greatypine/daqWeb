@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>国安数据518数据大屏</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -34,7 +35,7 @@
     p{margin: 0;}
     .carnival_l,.carnival_r{width: 20%; padding-top: 50px; position: relative;}
     .carnival_c{width: 60%; position: relative;}
-    .carnival_c_bg{ padding-top: 65px;background: url("dist/518img/img4.png") no-repeat top center; background-size:auto 100%;}
+    .carnival_c_bg{ padding-top: 75px; max-height: 529px;background: url("dist/518img/img4.png") no-repeat top center; background-size:auto 100%;}
     .activity-logo img{max-height: 170px; padding-left: 20px;}
     .activity-img  img{max-height: 60px; margin-left: 22%;}
     .sec_bg{position: absolute; top: 0; left: 0;}
@@ -55,7 +56,7 @@
     .conusers{color: #fff; font-size: 18px; margin: 20px auto 0 auto; max-width: 55%;}
     .conusers span{font-size: 34px; color: #f9bf0e; font-family: "Century Gothic";}
     .conusers div p:nth-child(2){text-transform: uppercase; font-size: 24px; color: rgba(255,255,255,0.3); font-family: "Times New Roman"; margin-top: -7px;}
-	.barrage{width:80%;color: #009cff; font-size: 16px; margin-top: 50px; overflow-y: hidden; position: absolute; top: 20px; left: 50px;}
+	.barrage{width:70%; max-height: 300px;color: #009cff; font-size: 16px; margin-top: 50px; overflow-y: hidden;position:absolute;top: 20px; left: 80px;}
     .barrage li{width: 100%; margin-bottom: 30px;}
     .barrage li i{width: 30px; height: 30px; border-radius: 5px; font-size: 16px; text-align: center; line-height: 26px; margin-right: 5px; color: #fff; box-shadow: 0 1px 5px rgba(0,0,0,0.4);-moz-box-shadow: 0 1px 5px rgba(0,0,0,0.4);}
     .barrage li span{padding: 0 5px;}
@@ -307,7 +308,7 @@
     <div class="relitu">
       	<div class="relitu_select">
         <select id="citySelect2"></select>
-        <span class="pull-right" id="timeshow2">0时</span>
+        <!-- <span class="pull-right" id="timeshow2">0时</span> -->
       </div>
       <div id="mapContainer2" style="background-color:rgba(0,0,0,0.5);width: 100%;height:100%;"></div>
     </div>
@@ -589,8 +590,9 @@
   
   autodivheight();
   function autodivheight(){ //函数：获取尺寸
-    //获取浏览器窗口高度
+	//获取浏览器窗口高度
     var winHeight=0;
+    var winWidth=0;
     if (window.innerHeight)
       winHeight = window.innerHeight;
     else if ((document.body) && (document.body.clientHeight))
@@ -614,7 +616,7 @@
     $(".time").css('margin-right','23%');
   }
   if(windowWidth >= 1600){
-    $(".time").css('margin-right','27%');
+    $(".time").css('margin-right','28%');
   }
   
   /*热力图*/
@@ -1460,9 +1462,7 @@ Date.prototype.format=function(fmt) {
 		function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
-				if(Object.keys(jsonData).length!=0){
-					vip_customer = jsonData.vip_customer;
-				}
+				vip_customer = jsonData.length;
 				$("#vip_customer").html(vip_customer);
 			}
 		}); 
@@ -1611,6 +1611,16 @@ Date.prototype.format=function(fmt) {
   
   //滚动信息
   function initRollingInfoData(){
+	  
+	  var vipCustomer = [];
+	  doManager("festivalStatManager","queryNewVipCusUser",[festivalDate],
+		function(data,textStatus,XmlHttpRequest){
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				vipCustomer = jsonData;
+			}
+		},false); 
+	  
 	  doManager("festivalStatManager","queryRecentlyOrder",[festivalDate],
 		function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
@@ -1618,10 +1628,11 @@ Date.prototype.format=function(fmt) {
 				if(jsonData.length!=0){
 					var infoStr = "";
 					$(jsonData).each(function(index,element){
-						if(index%2==0){
-							infoStr = infoStr + "<li class=\"bar_bf\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>的用户在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
+						var indexTemp = jQuery.inArray(element.customer_id,vipCustomer);
+						if(indexTemp >=0 ){
+							infoStr = infoStr + "<li class=\"bar_bf\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>的用户在<span>"+element.city_name+"</span><span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
 						}else{
-							infoStr = infoStr + "<li class=\"bar_order\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>的用户在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
+							infoStr = infoStr + "<li class=\"bar_order\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>的用户在<span>"+element.city_name+"</span><span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
 						}
 					});
 					$("#roll_info").append(infoStr);  
@@ -1641,7 +1652,7 @@ Date.prototype.format=function(fmt) {
 					var jsonData = $.fromJSON(data.data);
 					if(jsonData.length!=0){
 						$(jsonData).each(function(index,element){
-							cityName[index] = element.store_city_name;
+							cityName[index] = element.city_name;
 							cityPrice[index] = element.trading_price;
 						});
 						var total_price = 0;
@@ -1704,12 +1715,9 @@ Date.prototype.format=function(fmt) {
 			initData();
 		});
 		$("#citySelect2").change(function(){
-			map.clearMap();
+			map2.clearMap();
 			var cityname = $("#citySelect2 option:selected").html();
-			map.setCity(cityname);
-			var timeH = firstDate.getHours();
-			firstDate.setHours(timeH-timeH)
-			bdate = firstDate.format('yyyy/MM/dd HH:mm');
+			map2.setCity(cityname);
 			getEmployeeDriverRecodeRealtime();
 			
 		});
@@ -1807,11 +1815,12 @@ Date.prototype.format=function(fmt) {
 	var maxlocationIndex = 0;
 	var diverRecodeArray = new Array();
 	function getEmployeeDriverRecodeRealtime(){
+		var cur_city = $("#citySelect2 option:selected").val();
 		map2.clearMap();
 		diverRecodeArray = [];
 		maxlocationIndex = 0;
 		requestInfoDto = {//城市
-				cityno: $("#citySelect2 option:selected").val(),
+				cityno: cur_city,
 		        beginDate:new Date().format('yyyy/MM/dd')+" 00:00",
 		        endDate:new Date().format('yyyy/MM/dd HH:mm')
 		}
@@ -1854,7 +1863,7 @@ Date.prototype.format=function(fmt) {
 	    					 var x = z;
 	    				 setTimeout(function (){
 	    					 console.log(new Date());
-		    					 if(x%timeIndex == 0){
+		    					 /* if(x%timeIndex == 0){
 		    						 timeshow++;
 		    						 if(timeshow <= new Date().getHours()){
 		    							 $("#timeshow2").html(timeshow+"时"); 
@@ -1862,7 +1871,7 @@ Date.prototype.format=function(fmt) {
 		    							 $("#timeshow2").html(0+"时") 
 		    						 }
 		    						 
-		    					 }
+		    					 } */
 	    						for(var i = 0; i < diverRecodeArray.length; i++){
 	    							var empDiver = diverRecodeArray[i];
 	    							var locations = empDiver.locations;
@@ -1884,8 +1893,9 @@ Date.prototype.format=function(fmt) {
 	    						}
 	    						console.log(x);
 	    						if(x == maxlocationIndex - 1){
-	    							getEmployeeDriverRecodeRealtime();
-	    							//timeout= window.setInterval(refreshEmployeeRrcode,60000);
+	    							if(cur_city == $("#citySelect2 option:selected").val()){
+	    								getEmployeeDriverRecodeRealtime();
+	    							}
 	    					 	}
 	    					},z*100);
 	    				 })();
