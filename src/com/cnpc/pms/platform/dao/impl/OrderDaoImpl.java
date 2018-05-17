@@ -2262,6 +2262,28 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	    return map_r;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> queryNewVipCusUser(String dateTime){
+		String sql = "SELECT count(DISTINCT customer_id) as vip_customer FROM	t_order_receipts torec WHERE torec.type = 'associator_start_2' OR torec.type = 'associator_up_2' "
+				+ "AND DATE_FORMAT(create_time, '%Y-%m-%d') = '"+dateTime+"' ";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+	 	List<Map<String, Object>> lst_data = null;
+	 	Map<String, Object> map_r = null;
+	     try{
+	        SQLQuery query = session.createSQLQuery(sql);
+	        lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	        if(lst_data!=null&&lst_data.size()>0){
+		    	 map_r =  lst_data.get(0);
+		     }
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }finally {
+	         session.close();
+	     }
+	    return map_r;
+	}
+	
 	@Override
 	public List<Map<String, Object>> queryOrderHeatfromDaily(String dateTime,String citycode) {
 		String sql="select COUNT(daily.id) as count,daily.latitude as lat,daily.longitude as lng from df_order_signed_daily daily INNER JOIN t_store store ON daily.store_id = store.id where "
@@ -2282,7 +2304,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryRecentlyOrder(String dateTime){
-		String sql = "SELECT tc.mobilephone, ts. NAME as eshop_name,  toi.quantity,	toi.unit, toi.eshop_pro_name,DATE_FORMAT(toi.create_time, '%H:%i') AS buy_time "
+		String sql = "SELECT IFNULL(INSERT(tc.mobilephone,4,4,'****'),'') AS mobilephone, ts. NAME as eshop_name,  toi.quantity,	toi.unit, toi.eshop_pro_name,DATE_FORMAT(toi.create_time, '%H:%i') AS buy_time "
 				+ "FROM df_order_signed_daily tor JOIN t_order_item toi ON (tor.id = toi.order_id) JOIN t_store ts ON (tor.store_id = ts.id) JOIN t_customer tc "
 				+ "ON (tor.customer_id = tc.id) WHERE DATE_FORMAT(tor.create_time,'%Y-%m-%d')='"+dateTime+"' ORDER BY tor.create_time DESC LIMIT 10 ";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();

@@ -1,6 +1,5 @@
 package com.cnpc.pms.festival.manager.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import com.cnpc.pms.festival.dao.FestivalStatDao;
 import com.cnpc.pms.festival.manager.FestivalStatManager;
 import com.cnpc.pms.heatmap.entity.RequestInfoDto;
 import com.cnpc.pms.mongodb.common.MongoDbUtil;
-import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.dao.PlatformStoreDao;
 import com.gexin.fastjson.JSONArray;
@@ -71,6 +69,13 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 		return order_obj;
 	}
 
+	@Override
+	public Map<String, Object> queryNewVipCusUser(String dateTime){
+		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+		Map<String,Object> order_obj = orderDao.queryNewVipCusUser(dateTime);
+		return order_obj;
+	}
+	
 	@Override
 	public List<Map<String, Object>> cityRanking(String dateTime) {
 		FestivalStatDao festivalStatDao = (FestivalStatDao)SpringHelper.getBean(FestivalStatDao.class.getName());

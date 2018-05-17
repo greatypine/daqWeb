@@ -348,7 +348,7 @@
           <!--<p>Consumer number</p>-->
         </div>
         <div class="pull-right text-right">
-          <p>新用户占比：<span id="new_customer_percent">Loading</span></p>
+          <p>新增社员数：<span id="vip_customer">Loading</span></p>
           <!--<p>New user occupation ratio</p>-->
         </div>
       </div>
@@ -359,8 +359,6 @@
       <div id="main2" style="width: 100%; margin-top: 40px;"></div>
       <div class="barrage" id="show">
         <ul class="no-padding" id="roll_info">
-<!--           <li class="bar_order"><i class="fa fa-file-text-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li> -->
-<!--           <li class="bar_bf"><i class="fa fa-commenting-o"></i><span>10:45</span><span><b>某某某</b></span>在<span>呼家楼门店</span>购买了一袋大米</li> -->
         </ul>
       </div>
     </div>
@@ -711,7 +709,7 @@
       textStyle: {color: '#fff',},
     },
     grid: {
-      left: '-20',
+      left: '-10',
       right: '-30',
       top: '70',
       bottom: '0',
@@ -765,6 +763,16 @@
           }], false)
         }
       },
+      itemStyle: {
+          normal:{
+            label: {
+              show: true,
+              position: 'top',
+              formatter: '{c} ',
+              //color:'#fff'
+            },
+          }
+        },
     },
       {
         name: 'GMV',
@@ -783,7 +791,16 @@
             }], false)
           }
         },
-
+        itemStyle: {
+            normal:{
+              label: {
+                show: true,
+                position: 'top',
+                formatter: '{c} ',
+                //color:'#fff'
+              },
+            }
+          },
 //         markPoint: {
 //           show : true,
 //           data: [
@@ -1450,20 +1467,15 @@ Date.prototype.format=function(fmt) {
 			}
 		},false); 
 	  
-	  var new_customer = '0';
-	  var new_customer_percent = '0';
-	  doManager("festivalStatManager","queryNewCusUser",[festivalDate],
+	  var vip_customer = '0';
+	  doManager("festivalStatManager","queryNewVipCusUser",[festivalDate],
 		function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
 				if(Object.keys(jsonData).length!=0){
-					new_customer = jsonData.new_customer;
-					if(pay_customer!=0){
-						var percent_temp = Math.round(new_customer/pay_customer * 10000) / 100.00;
-						new_customer_percent = percent_temp.toFixed(0);
-					}
+					vip_customer = jsonData.vip_customer;
 				}
-				$("#new_customer_percent").html(new_customer_percent + "%");
+				$("#vip_customer").html(vip_customer);
 			}
 		}); 
   }
@@ -1619,9 +1631,9 @@ Date.prototype.format=function(fmt) {
 					var infoStr = "";
 					$(jsonData).each(function(index,element){
 						if(index%2==0){
-							infoStr = infoStr + "<li class=\"bar_order\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
+							infoStr = infoStr + "<li class=\"bar_bf\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>的用户在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
 						}else{
-							infoStr = infoStr + "<li class=\"bar_order\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
+							infoStr = infoStr + "<li class=\"bar_order\"><i class=\"fa fa-file-text-o\"></i><span>"+element.buy_time+"</span><span><b>"+element.mobilephone+"</b></span>的用户在<span>"+element.eshop_name+"</span>购买了"+(element.quantity)+(element.unit)+(element.eshop_pro_name)+"</li>";
 						}
 					});
 					$("#roll_info").append(infoStr);  

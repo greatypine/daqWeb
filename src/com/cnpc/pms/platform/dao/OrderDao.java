@@ -437,6 +437,11 @@ public interface OrderDao {
 	 public Map<String, Object> queryNewCusUser(String dateTime);
 	 
 	 /**
+	  * 统计新增社员数
+	  */
+	 public Map<String, Object> queryNewVipCusUser(String dateTime);
+	 
+	 /**
 	  * 根据节日日期 统计新用户数
 	  * @param dateTime
 	  * @return
