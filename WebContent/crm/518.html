@@ -907,7 +907,7 @@ var citySeries = function(){
 				  normal: {
 				    formatter: '{b}',
 				    position: 'right',
-				    show: true
+// 				    show: true
 				  }
 				},
 				itemStyle: {
@@ -1181,7 +1181,7 @@ var convertData1 = function (data) {
       mapOption.series.push(item1);
       var item2 = citySeries();
       mapOption.series.push(item2);
-      timer_china_beat = setInterval("nocease()","3000");
+      timer_china_beat = setInterval("nocease()","1000");
       mapChart.setOption(mapOption,true);
   }
   myChart1.setOption(option1);
