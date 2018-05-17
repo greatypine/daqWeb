@@ -154,8 +154,7 @@
                     <div class="progress-bar" id="product_bar_0"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="product_price_0">Loading</span>
-                    <small class="pull-right" id="product_percent_0">Loading</small>
+                    <small class="pull-right" id="product_price_0">Loading</small>
                   </div>
                 </div>
 
@@ -170,8 +169,7 @@
                     <div class="progress-bar" id="product_bar_1"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="product_price_1">Loading</span>
-                    <small class="pull-right" id="product_percent_1">Loading</small>
+                    <small class="pull-right" id="product_price_1">Loading</small>
                   </div>
                 </div>
 
@@ -186,8 +184,7 @@
                     <div class="progress-bar" id="product_bar_2"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="product_price_2">Loading</span>
-                    <small class="pull-right" id="product_percent_2">Loading</small>
+                    <small class="pull-right" id="product_price_2">Loading</small>
                   </div>
                 </div>
 
@@ -202,8 +199,7 @@
                     <div class="progress-bar" id="product_bar_3"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="product_price_3">Loading</span>
-                    <small class="pull-right" id="product_percent_3">Loading</small>
+                    <small class="pull-right" id="product_price_3">Loading</small>
                   </div>
                 </div>
 
@@ -218,8 +214,7 @@
                     <div class="progress-bar" id="product_bar_4"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="product_price_4">Loading</span>
-                    <small class="pull-right" id="product_percent_4">Loading</small>
+                    <small class="pull-right" id="product_price_4">Loading</small>
                   </div>
                 </div>
 
@@ -239,8 +234,7 @@
                     <div class="progress-bar" id="eshop_bar_0"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="eshop_price_0">Loading</span>
-                    <small class="pull-right" id="eshop_percent_0">Loading</small>
+                    <small class="pull-right" id="eshop_price_0">Loading</small>
                   </div>
                 </div>
 
@@ -255,8 +249,7 @@
                     <div class="progress-bar" id="eshop_bar_1"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="eshop_price_1">Loading</span>
-                    <small class="pull-right" id="eshop_percent_1">Loading</small>
+                    <small class="pull-right" id="eshop_price_1">Loading</small>
                   </div>
                 </div>
 
@@ -271,8 +264,7 @@
                     <div class="progress-bar" id="eshop_bar_2"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="eshop_price_2">Loading</span>
-                    <small class="pull-right" id="eshop_percent_2">Loading</small>
+                    <small class="pull-right" id="eshop_price_2">Loading</small>
                   </div>
                 </div>
 
@@ -287,8 +279,7 @@
                     <div class="progress-bar" id="eshop_bar_3"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="eshop_price_3">Loading</span>
-                    <small class="pull-right" id="eshop_percent_3">Loading</small>
+                    <small class="pull-right" id="eshop_price_3">Loading</small>
                   </div>
                 </div>
 
@@ -303,8 +294,7 @@
                     <div class="progress-bar" id="eshop_bar_4"></div>
                   </div>
                   <div class="clearfix">
-                    <span class="pull-left" id="eshop_price_4">Loading</span>
-                    <small class="pull-right" id="eshop_percent_4">Loading</small>
+                    <small class="pull-right" id="eshop_price_4">Loading</small>
                   </div>
                 </div>
 
@@ -366,7 +356,7 @@
   </div>
   <div class="carnival_r pull-right">
     <div class="proportion">
-      <div class="title">营业额城市占比</div>
+      <div class="title">营业额城市贡献占比</div>
       <div class="com_con">
         <div class="sales-volume pull-left">
           <ul class="no-padding">
@@ -1349,7 +1339,7 @@ Date.prototype.format=function(fmt) {
 	  timeTicket = setInterval(timerData, 1000);
 	  timeTicket = setInterval(turnoverAndUserData, 3000);
 	  timeTicket = setInterval(initHourData, 60000);
-	  timeTicket = setInterval(initRollingInfoData, 5000);
+	  timeTicket = setInterval(initRollingInfoData, 60000);
 	  timeTicket = setInterval(initProductRankingData, 300000);
 	  timeTicket = setInterval(initEshopRankingData, 300000);
 	  timeTicket = setInterval(initCityRankingData, 300000);
@@ -1376,7 +1366,6 @@ Date.prototype.format=function(fmt) {
 								$("#product_name_"+i).html(productName[i]);
 								$("#product_price_"+i).html(productPrice[i]);
 								var percent = Math.round(productPrice[i]/productPrice[0] * 10000) / 100.00;
-								$("#product_percent_"+i).html(percent.toFixed(0) + "%");
 								var bar = document.getElementById("product_bar_"+i);
 								bar.style.width=percent.toFixed(0) + "%";
 							}else{
@@ -1407,7 +1396,6 @@ Date.prototype.format=function(fmt) {
 								$("#eshop_name_"+i).html(eshopName[i]);
 								$("#eshop_price_"+i).html("￥"+eshopPrice[i]);
 								var percent = Math.round(eshopPrice[i]/eshopPrice[0] * 10000) / 100.00;
-								$("#eshop_percent_"+i).html(percent.toFixed(0) + "%");
 								var bar = document.getElementById("eshop_bar_"+i);
 								bar.style.width=percent.toFixed(0) + "%";
 							}else{
@@ -1656,11 +1644,14 @@ Date.prototype.format=function(fmt) {
 							cityName[index] = element.store_city_name;
 							cityPrice[index] = element.trading_price;
 						});
-						
+						var total_price = 0;
+						for(var i=0;i<jsonData.length;i++){
+							total_price = total_price + cityPrice[i];
+						}
 						for(var i=0;i<12;i++){
 							if(i<jsonData.length){
 								$("#city_name_"+i).html(cityName[i]);
-								var percent = Math.round(cityPrice[i]/cityPrice[0] * 10000) / 100.00;
+								var percent = Math.round(cityPrice[i]/total_price * 10000) / 100.00;
 								$("#city_percent_"+i).html(percent.toFixed(0) + "%");
 								var bar = document.getElementById("city_bar_"+i);
 								bar.style.width=percent.toFixed(0) + "%";
