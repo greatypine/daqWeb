@@ -1462,7 +1462,7 @@ Date.prototype.format=function(fmt) {
 		function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
-				vip_customer = jsonData.vip_customer;
+				vip_customer = jsonData.length;
 				$("#vip_customer").html(vip_customer);
 			}
 		}); 
