@@ -1,27 +1,7 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-
 import com.cnpc.pms.base.entity.DataEntity;
-import com.cnpc.pms.base.paging.FSP;
-import com.cnpc.pms.base.paging.FilterFactory;
-import com.cnpc.pms.base.paging.IFilter;
-import com.cnpc.pms.base.paging.ISort;
-import com.cnpc.pms.base.paging.SortFactory;
+import com.cnpc.pms.base.paging.*;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -33,27 +13,17 @@ import com.cnpc.pms.bizbase.rbac.usermanage.entity.UserGroup;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserGroupManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.messageModel.manager.MessageNewManager;
-import com.cnpc.pms.personal.entity.Attachment;
-import com.cnpc.pms.personal.entity.DistCity;
-import com.cnpc.pms.personal.entity.DsAbnormalOrder;
-import com.cnpc.pms.personal.entity.FlowConfig;
-import com.cnpc.pms.personal.entity.FlowDetail;
-import com.cnpc.pms.personal.entity.ScoreRecordTotal;
-import com.cnpc.pms.personal.entity.Store;
-import com.cnpc.pms.personal.entity.StoreDocumentInfo;
-import com.cnpc.pms.personal.entity.StoreDynamic;
-import com.cnpc.pms.personal.entity.WorkInfo;
-import com.cnpc.pms.personal.manager.DistCityManager;
-import com.cnpc.pms.personal.manager.DsAbnormalOrderManager;
-import com.cnpc.pms.personal.manager.FlowConfigManager;
-import com.cnpc.pms.personal.manager.FlowDetailManager;
-import com.cnpc.pms.personal.manager.ScoreRecordTotalManager;
-import com.cnpc.pms.personal.manager.StoreDocumentInfoManager;
-import com.cnpc.pms.personal.manager.StoreDynamicManager;
-import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.personal.manager.WorkInfoManager;
+import com.cnpc.pms.personal.entity.*;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import com.cnpc.pms.utils.ValueUtil;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.ss.usermodel.*;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ScoreRecordTotalManagerImpl extends BizBaseCommonManager implements ScoreRecordTotalManager {
 
@@ -1450,4 +1420,26 @@ public class ScoreRecordTotalManagerImpl extends BizBaseCommonManager implements
 		return null;
 	}
 
+	@Override
+	public String findScoreUserName(String order_sn) {
+		try {
+			WorkInfoManager workInfoManager = (WorkInfoManager) SpringHelper.getBean("workInfoManager");
+			WorkInfo workInfo = workInfoManager.queryWorkInfoByOrderSN(order_sn);
+			FlowConfigManager flowConfigManager = (FlowConfigManager) SpringHelper.getBean("flowConfigManager");
+			DistCityManager distCityManager = (DistCityManager) SpringHelper.getBean("distCityManager");
+			UserGroupManager userGroupManager = (UserGroupManager) SpringHelper.getBean("userGroupManager");
+			IFilter first_iFilter = FilterFactory
+					.getSimpleFilter("work_name='门店选址审核'");
+			List<?> lsg_flList = flowConfigManager.getList(first_iFilter);
+			FlowConfig flowConfig = (FlowConfig) lsg_flList.get(0);
+			List<User> users = (List<User>) flowConfigManager
+					.queryUserListByGroupId(flowConfig.getFirst_usergroup_id());
+			String first_ids_names = initApproveNames(workInfo, distCityManager, users, "1");
+			return first_ids_names;
+		}catch (Exception e){
+
+		}
+
+		return null;
+	}
 }

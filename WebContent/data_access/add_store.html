@@ -70,12 +70,30 @@ $(function(){
 	})
 	$("#storetype").change(function(){
 		var stype=$("#storetype option:selected").val();
+		var stynat=$("#nature option:selected").val();
 		if(stype=='V'){
 			$(".bixuan").hide();
+		}else if(stype!='V'&&stynat=='合作店'){
+			$(".bixuan").show();
+			$(".natter").hide();
 		}else{
 			$(".bixuan").show();
 		}
 	})
+	$("#nature").change(function(){
+		var stynat=$("#nature option:selected").val();
+		var stype1=$("#storetype option:selected").val();
+		 if(stynat=='合作店'&&stype1!='V'){
+			$(".bixuan").show();
+			$(".natter").hide();
+		}else if(stynat=='合作店'&&stype1=='V'){
+			 $(".bixuan").hide();
+		}else{
+			 $(".bixuan").show();
+		 }
+	})
+
+
 	initview();
 })
 	
@@ -272,6 +290,7 @@ function downloadFile(pic_name){
 	}
 	function dataCheck() {
 		var flsg=true;
+		var update_user=null;
 		$("#submit").attr("disabled","true");
 		var ver_store_id=$("#store_id").val();
 		if(ver_store_id!=null&&ver_store_id!=""){
@@ -282,13 +301,22 @@ function downloadFile(pic_name){
 						var jsonData = $.fromJSON(data.data);
 						if(jsonData['auditor_status']==1){
 							flsg=false;
+							doManager("ScoreRecordTotalManager", "findScoreUserName", jsonData['work_id'], function(
+									data, textStatus, XMLHttpRequest) {
+								if (data.result) {
+									if(data.data!="null"){
+										update_user=data.data;
+									}
+								}
+
+							},false);
 						}
 					}}},false);
 			
 		}
 		if(!flsg){
 			$("#submit").removeAttr("disabled"); 
-			alert("该门店正在审批中!");
+			alert("该门店待"+update_user+"审批!");
 			return;
 		}
 		
@@ -351,145 +379,208 @@ function downloadFile(pic_name){
 		}
 		
 		if(storetype!='V'){
-			if(county_name == "" || county_name == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择区域!");
-				return;
-			}
-			if(place_town_id == "" || place_town_id == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择门店位置所在街道!");
-				return;
-			}
-			if(nature_value == "" || nature_value == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选门店属性!");
-				return;
-			}
-			if(storetype == "" || storetype == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选门店类型!");
-				return;
-			}
-			if(town_name == "" || town_name == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择门店服务范围覆盖街道!");
-				return;
-			}
-			if(town_name.search(place_town_name)==-1){
-				$("#submit").removeAttr("disabled"); 
-				alert("门店服务范围覆盖街道必须包含门店位置所在街道!");
-				return;
-			}
-			if(store_position == "" || store_position == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择门店位置坐标!");
-				return;
-			}
-			if(citycode == "" || citycode == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请重新选择门店位置坐标!");
-				return;
-			}
-			if(content == "" || content == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请上传合同文件!");
-				return;
-			}
-			if(tenancyTerm_start == "" || tenancyTerm_start == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择租期!");
-				return;
-			}
-			if(tenancyTerm_end == "" || tenancyTerm_end == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择租期!");
-				return;
-			}
-			var startTime = new Date(Date.parse(tenancyTerm_start));
-	  	  	var endTime = new Date(Date.parse(tenancyTerm_end));
-		  	  if(startTime>endTime){
-		  			$("#submit").removeAttr("disabled"); 
-					alert("请选择正确的租赁日期!");
-		  		  	return ;
-		  	  }
-			if(rental == "" || rental == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写租金!");
-				return;
-			}
-			if(payment_method == "" || payment_method == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择付款方式!");
-				return;
-			}
-			if(rent_area == "" || rent_area == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写计租面积!");
-				return;
-			}
-			if(usable_area == "" || usable_area == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写使用面积!");
-				return;
-			}
-			if(increase == "" || increase == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写递增!");
-				return;
-			}
-			if(rent_free_start == "" || rent_free_start == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择免租期!");
-				return;
-			}
-			if(rent_free_end == "" || rent_free_end == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请选择免租期!");
-				return;
-			}
-			var startTime1 = new Date(Date.parse(rent_free_start));
-	  	  	var endTime1 = new Date(Date.parse(rent_free_end));
-		  	  if(startTime1>endTime1){
-		  			$("#submit").removeAttr("disabled"); 
-					alert("请选择正确的免租期!");
-		  		  	return ;
-		  	  }
-		  	if(taxes == "" || taxes == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写税金!");
-				return;
-			}
-		  	if(agency_fee == "" || agency_fee == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写中介费!");
-				return;
-			}
-		  	if(increase_fee == "" || increase_fee == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写增容费!");
-				return;
-			}
-		  	if(address == "" || address == null){
-				$("#submit").removeAttr("disabled"); 
-				alert("请填写门店地址!");
-				return;
-			}
-			  if(superMicro == "" || superMicro == null){
-					$("#submit").removeAttr("disabled"); 
+			if(nature_value=='合租店'){
+				if(county_name == "" || county_name == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择区域!");
+					return;
+				}
+				if(place_town_id == "" || place_town_id == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择门店位置所在街道!");
+					return;
+				}
+				if(nature_value == "" || nature_value == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选门店属性!");
+					return;
+				}
+				if(storetype == "" || storetype == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选门店类型!");
+					return;
+				}
+				if(town_name == "" || town_name == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择门店服务范围覆盖街道!");
+					return;
+				}
+				if(town_name.search(place_town_name)==-1){
+					$("#submit").removeAttr("disabled");
+					alert("门店服务范围覆盖街道必须包含门店位置所在街道!");
+					return;
+				}
+				if(store_position == "" || store_position == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择门店位置坐标!");
+					return;
+				}
+				if(citycode == "" || citycode == null){
+					$("#submit").removeAttr("disabled");
+					alert("请重新选择门店位置坐标!");
+					return;
+				}
+				if(address == "" || address == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写门店地址!");
+					return;
+				}
+				if(superMicro == "" || superMicro == null){
+					$("#submit").removeAttr("disabled");
 					alert("请选择是否微超!");
 					return;
 				}
-			  if(estate == "" || estate == null){
-					$("#submit").removeAttr("disabled"); 
+				if(estate == "" || estate == null){
+					$("#submit").removeAttr("disabled");
 					alert("请填写门店状态!");
 					return;
 				}
-			  if(estate !="筹备中" && estate != "运营中"&&estate !="闭店中" && estate != "待开业"){
-					$("#submit").removeAttr("disabled"); 
+				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店中" && estate != "待开业"){
+					$("#submit").removeAttr("disabled");
 					alert("门店状态必须为：筹备中、待开业、运营中、闭店中!");
 					return;
 				}
+			}else{
+				if(county_name == "" || county_name == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择区域!");
+					return;
+				}
+				if(place_town_id == "" || place_town_id == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择门店位置所在街道!");
+					return;
+				}
+				if(nature_value == "" || nature_value == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选门店属性!");
+					return;
+				}
+				if(storetype == "" || storetype == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选门店类型!");
+					return;
+				}
+				if(town_name == "" || town_name == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择门店服务范围覆盖街道!");
+					return;
+				}
+				if(town_name.search(place_town_name)==-1){
+					$("#submit").removeAttr("disabled");
+					alert("门店服务范围覆盖街道必须包含门店位置所在街道!");
+					return;
+				}
+				if(store_position == "" || store_position == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择门店位置坐标!");
+					return;
+				}
+				if(citycode == "" || citycode == null){
+					$("#submit").removeAttr("disabled");
+					alert("请重新选择门店位置坐标!");
+					return;
+				}
+				if(content == "" || content == null){
+					$("#submit").removeAttr("disabled");
+					alert("请上传合同文件!");
+					return;
+				}
+				if(tenancyTerm_start == "" || tenancyTerm_start == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择租期!");
+					return;
+				}
+				if(tenancyTerm_end == "" || tenancyTerm_end == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择租期!");
+					return;
+				}
+				var startTime = new Date(Date.parse(tenancyTerm_start));
+				var endTime = new Date(Date.parse(tenancyTerm_end));
+				if(startTime>endTime){
+					$("#submit").removeAttr("disabled");
+					alert("请选择正确的租赁日期!");
+					return ;
+				}
+				if(rental == "" || rental == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写租金!");
+					return;
+				}
+				if(payment_method == "" || payment_method == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择付款方式!");
+					return;
+				}
+				if(rent_area == "" || rent_area == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写计租面积!");
+					return;
+				}
+				if(usable_area == "" || usable_area == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写使用面积!");
+					return;
+				}
+				if(increase == "" || increase == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写递增!");
+					return;
+				}
+				if(rent_free_start == "" || rent_free_start == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择免租期!");
+					return;
+				}
+				if(rent_free_end == "" || rent_free_end == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择免租期!");
+					return;
+				}
+				var startTime1 = new Date(Date.parse(rent_free_start));
+				var endTime1 = new Date(Date.parse(rent_free_end));
+				if(startTime1>endTime1){
+					$("#submit").removeAttr("disabled");
+					alert("请选择正确的免租期!");
+					return ;
+				}
+				if(taxes == "" || taxes == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写税金!");
+					return;
+				}
+				if(agency_fee == "" || agency_fee == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写中介费!");
+					return;
+				}
+				if(increase_fee == "" || increase_fee == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写增容费!");
+					return;
+				}
+				if(address == "" || address == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写门店地址!");
+					return;
+				}
+				if(superMicro == "" || superMicro == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择是否微超!");
+					return;
+				}
+				if(estate == "" || estate == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写门店状态!");
+					return;
+				}
+				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店中" && estate != "待开业"){
+					$("#submit").removeAttr("disabled");
+					alert("门店状态必须为：筹备中、待开业、运营中、闭店中!");
+					return;
+				}
+			}
 		}else{
 			if(nature_value == "" || nature_value == null){
 				$("#submit").removeAttr("disabled"); 
@@ -1187,7 +1278,7 @@ function loadhtml(){
 		<table width="100%">
 		<tr>
 			<td>
-				<p class="read" style="position: relative;"><span id="comtractfile" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>合同附件：<span class="bixuan" style="color: red;">*</span>
+				<p class="read" style="position: relative;"><span id="comtractfile" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>合同附件：<span class="bixuan natter" style="color: red;">*</span>
 					<span style="color: #8E8E8E;font-size: 0.1em;">若多个附件打包为ZIP格式上传</span>
 					<span id="fileshow" style="position: absolute;top: -130px;left: 10px;display:none;color:#8E8E8E;background-color: #FFF;">
 					合同上传资料：<br/>
@@ -1201,7 +1292,7 @@ function loadhtml(){
 				</p>
 			</td>
 			<td style="width: 33.3%;">
-				<p class="read">租期：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">租期：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read" style="">
 					<input type="text" class="wicon form-control" id="tenancyTerm_start" name="tenancyTerm_start" style="max-width: 48%;display:inline-block;" placeholder="起租时间" readonly="readonly"/>
 					<span style="display:inline-block;">至</span>
@@ -1209,7 +1300,7 @@ function loadhtml(){
 				</p>
 			</td>
 			<td>
-				<p class="read">租金 ：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">租金 ：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read">
 					<input class="form-control" type="text" onkeyup="clearNoNum(this)" name="rental" id="rental"/>
 				</p>
@@ -1217,7 +1308,7 @@ function loadhtml(){
 		</tr>
 		<tr>
 			<td>
-				<p class="read">付款方式：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">付款方式：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read">
 					<select class="form-control" id="payment_method" name="payment_method">
 						<option></option>
@@ -1229,21 +1320,21 @@ function loadhtml(){
 				</p>
 			</td>
 			<td>
-				<p class="read">计租面积(合同面积)：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">计租面积(合同面积)：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read"><input class="form-control" type="text" id="rent_area" onkeyup="clearNoNum(this)" name="rent_area"/></p>
 			</td>
 			<td>
-				<p class="read">使用面积：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">使用面积：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="usable_area" name="usable_area"/></p>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<p class="read">递增：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">递增：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read"><input class="form-control" type="text" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="increase" name="increase"/></p>
 			</td>
 			<td>
-				<p class="read">免租期：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">免租期：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read">
 				<input type="text" class="wicon form-control" id="rent_free_start" name="rent_free_start" style="max-width: 48%;display:inline-block;" placeholder="免租起时时间" likeOption="false" readonly="readonly"/>
 				<span style="display:inline-block;">至</span>
@@ -1251,17 +1342,17 @@ function loadhtml(){
 				</p>
 			</td>
 			<td>
-				<p class="read">税金：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">税金：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="taxes" name="taxes"/></p>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<p class="read">中介费：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">中介费：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="agency_fee" name="agency_fee"/></p>
 			</td>
 			<td>
-				<p class="read">增容费：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">增容费：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read"><input class="form-control" type="text" id="increase_fee" onkeyup="clearNoNum(this)" name="increase_fee"/></p>
 			</td>
 			<td>
