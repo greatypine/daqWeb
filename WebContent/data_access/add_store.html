@@ -151,10 +151,27 @@ function initview(){
 						$("#"+key).val(va);
 						if(key=="storetype"){
 							storeTypeValue=va;
+							var nature=jsonData.nature;
 							if(va=='V'){
 								$(".bixuan").hide();
 								$("#storetype").attr("disabled","true");
+							}else if(va!='V'&&nature=='合作店'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else{
+								$(".bixuan").show();
 							}
+						}else if(key=="nature"){
+							var stype=jsonData.storetype;
+							if(va=='合作店'&&stype!='V'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else if(va=='合作店'&&stype=='V'){
+								$(".bixuan").hide();
+							}else {
+								$(".bixuan").show();
+							}
+
 						}else if(key=="contract"){
 							if(va!=null&&va!=''){
 								$("#contract").show();
@@ -228,10 +245,27 @@ function initview(){
 						$("#"+key).val(va);
 						if(key=="storetype"){
 							storeTypeValue=va;
+							var nature=jsonData.nature;
 							if(va=='V'){
 								$(".bixuan").hide();
 								$("#storetype").attr("disabled","true");
+							}else if(va!='V'&&nature=='合作店'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else{
+								$(".bixuan").show();
 							}
+						}else if(key=="nature"){
+							var stype=jsonData.storetype;
+							if(va=='合作店'&&stype!='V'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else if(va=='合作店'&&stype=='V'){
+								$(".bixuan").hide();
+							}else {
+								$(".bixuan").show();
+							}
+
 						}else if(key=="contract"){
 							if(va!=null&&va!=''){
 								$("#contract").show();
