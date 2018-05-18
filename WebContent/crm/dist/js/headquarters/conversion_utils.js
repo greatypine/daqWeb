@@ -115,3 +115,55 @@ function isNumber(val){
     }
 
 }
+
+//获得近7日的日期(不包含当日)
+function getSevenTime(index){
+    var s="";
+    var d=new Date();
+    var year=d.getFullYear();
+    var mon1=d.getMonth()+1;
+    var day1=d.getDate();
+    d.setDate(d.getDate()-(index+1));
+    var mon2=d.getMonth()+1;
+    var day2=d.getDate()-1;
+    var vd=new Array();//存储近7天数据
+    if(mon2<mon1){
+        var daycount=getCountDays(year,mon2);
+        for(var i=day2;i<daycount;i++){
+            var days=parseInt(i)+1;
+            vd.push(addzero(mon2)+"-"+addzero(days));
+        }
+        for(var i=1;i<day1;i++){
+            var days=parseInt(i)+1;
+            vd.push(addzero(mon1)+"-"+addzero(days));
+        }
+    }else{
+        for(var i=day2;i<day1;i++){
+            var days=parseInt(i)+1;
+            vd.push(addzero(mon2)+"-"+addzero(days));
+        }
+    }
+    return vd.splice(1,vd.length-2);
+}
+ 
+//判断一个月有多少天
+function getCountDays(year, month) {
+    var curDate = new Date(year, month - 1);
+    /* 获取当前月份 */
+    var curMonth = curDate.getMonth();
+    /* 生成实际的月份: 由于curMonth会比实际月份小1, 故需加1 */
+    curDate.setMonth(curMonth + 1);
+    /* 将日期设置为0, 这里为什么要这样设置, 我不知道原因, 这是从网上学来的 */
+    curDate.setDate(0);
+    /* 返回当月的天数 */
+ 
+    return curDate.getDate();
+}
+//小于10滴天数,前面添加上0
+function addzero(num){
+    if(parseInt(num)<10){
+        return "0"+num;
+    }else{
+        return num;
+    }
+}

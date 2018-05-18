@@ -1813,13 +1813,13 @@ var getCityRankDataGmv = function (pageStatusInfo) {
 };
 // 显示近7天GMV走势
 var showCityRankGmv = function (cityRankDataGmv) {
-  	var data = [];
+  	var data = getSevenTime(7);
     var data1 = [];
     $.each(eval(cityRankDataGmv['lst_data']), function (idx, val) {
-    	data.push(val['week_date']);
+    	//data.push(val['week_date']);
     	data1.push(val['week_gmv']);
     });
-	cityRankGmvOption.xAxis[0].data = data.reverse();
+	cityRankGmvOption.xAxis[0].data = data;
     cityRankGmvOption.series[0].data = data1.reverse();
     cityRankGmvOption.title[0].text = "近7日GMV走势";
     cityRankChartGmv.setOption(cityRankGmvOption,true);
@@ -2470,15 +2470,15 @@ var showCustomerNew = function(customerNewAndConsume){
       }
     ]
   };
-  	var data = [];
+  	var data = getSevenTime(30);
   	var data1 = [];
     var data2 = [];
     $.each(eval(customerNewAndConsume.new_month_userCount['lst_data']), function (idx, val) {
-    	data.push(val['week_date']);
+    	//data.push(val['week_date']);
     	data1.push(val['new_cus_count']);
 		data2.push(val['pay_cus_count']);
     });
-	customerNewChartOption.xAxis[0].data = data.reverse();
+	customerNewChartOption.xAxis[0].data = data;
 	customerNewChartOption.series[0].data = data1.reverse();
 	customerNewChartOption.series[1].data = data2.reverse();
 	customerNewChartOption.title.text="近30天客流趋势";
@@ -2659,7 +2659,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
       },
     ]
   };
-  	var data = [];
+  	var data = getSevenTime(7);
   	var data1 = [];
     var data2 = [];
     var data3 = [];
@@ -2672,12 +2672,12 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     		str = (((parseInt(val['pay_cus_count'])-parseInt(val['new_cus_count']))/parseInt(val['pay_cus_count'])*100)+'');
     		rate = str.substring(0,str.lastIndexOf(".")+2);
     	}
-    	data.push(val['week_date']);
+    	//data.push(val['week_date']);
     	data1.push(val['new_cus_count']);
 		data2.push(val['pay_cus_count']);
 		data3.push(rate);
     });
-	turnoverCustomerOrderOption.xAxis.data = data.reverse();
+	turnoverCustomerOrderOption.xAxis.data = data;
 	turnoverCustomerOrderOption.series[0].data = data3.reverse();
 	turnoverCustomerOrderOption.series[1].data = data1.reverse();
 	turnoverCustomerOrderOption.series[2].data = data2.reverse();

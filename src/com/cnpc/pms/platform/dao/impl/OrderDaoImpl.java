@@ -2265,7 +2265,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryNewVipCusUser(String dateTime){
-		String sql = "SELECT count(DISTINCT customer_id) as vip_customer FROM	t_order_receipts torec WHERE torec.type = 'associator_start_2' OR torec.type = 'associator_up_2' "
+		String sql = "SELECT DISTINCT(customer_id) as vip_customer FROM	t_order_receipts torec WHERE torec.type = 'associator_start_2' OR torec.type = 'associator_up_2' "
 				+ "AND DATE_FORMAT(create_time, '%Y-%m-%d') = '"+dateTime+"' ";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		List<Map<String, Object>> lst_data = null;

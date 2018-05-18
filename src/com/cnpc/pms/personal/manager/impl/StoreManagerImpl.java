@@ -1,41 +1,5 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Pattern;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.bson.Document;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.util.FileCopyUtils;
-
 import com.cnpc.pms.base.manager.impl.BaseManagerImpl;
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
@@ -53,35 +17,10 @@ import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.manager.DynamicManager;
 import com.cnpc.pms.mongodb.common.MongoDbUtil;
-import com.cnpc.pms.personal.dao.CountyDao;
-import com.cnpc.pms.personal.dao.ProvinceDao;
-import com.cnpc.pms.personal.dao.StoreDao;
-import com.cnpc.pms.personal.dao.StoreDynamicDao;
-import com.cnpc.pms.personal.dao.TownDao;
-import com.cnpc.pms.personal.entity.Attachment;
-import com.cnpc.pms.personal.entity.City;
-import com.cnpc.pms.personal.entity.CityDataStatistics;
-import com.cnpc.pms.personal.entity.County;
-import com.cnpc.pms.personal.entity.DistCity;
-import com.cnpc.pms.personal.entity.DistCityCode;
-import com.cnpc.pms.personal.entity.Province;
-import com.cnpc.pms.personal.entity.Store;
-import com.cnpc.pms.personal.entity.StoreDynamic;
-import com.cnpc.pms.personal.entity.StoreKeeper;
-import com.cnpc.pms.personal.entity.Town;
-import com.cnpc.pms.personal.manager.ApprovalManager;
-import com.cnpc.pms.personal.manager.CityDataStatisticsManager;
-import com.cnpc.pms.personal.manager.CityManager;
-import com.cnpc.pms.personal.manager.CountyManager;
-import com.cnpc.pms.personal.manager.DistCityCodeManager;
-import com.cnpc.pms.personal.manager.HumanresourcesManager;
-import com.cnpc.pms.personal.manager.ProvinceManager;
-import com.cnpc.pms.personal.manager.StoreDynamicManager;
-import com.cnpc.pms.personal.manager.StoreHistoryManager;
-import com.cnpc.pms.personal.manager.StoreKeeperManager;
-import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.personal.manager.TownManager;
-import com.cnpc.pms.personal.manager.WorkInfoManager;
+import com.cnpc.pms.mongodb.manager.MongoDBManager;
+import com.cnpc.pms.personal.dao.*;
+import com.cnpc.pms.personal.entity.*;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.personal.util.DataTransfromUtil;
 import com.cnpc.pms.platform.dao.PlatformStoreDao;
 import com.cnpc.pms.platform.entity.PlatformStore;
@@ -96,6 +35,22 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.*;
+import org.bson.Document;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.util.FileCopyUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * 门店业务实现类 Created by liuxiao on 2016/6/6 0006.
@@ -2070,6 +2025,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 		Store store = this.findStore(storeDynamic.getStore_id());
 		if (store != null) {
+			/*try{
+				this.findeTown_idUpdate(store.getTown_id(),storeDynamic.getTown_id(),store.getStoreno());
+			}catch (Exception e){
+				System.out.print("调用街道改变方法错误!");
+				e.printStackTrace();
+			}*/
 			store.setSuperMicro(storeDynamic.getSuperMicro());
 			store.setEstate(storeDynamic.getEstate());
 			store.setStoretype(storeDynamic.getStoretype());
@@ -2661,5 +2622,66 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 
 		return result;
 	}
+	public void findeTown_idUpdate(String old_town_id,String new_town_id,String storeNo){
+		MongoDBManager mongoDBManager=(MongoDBManager)SpringHelper.getBean("mongoDBManager");
+		//判断是否新增街道
+		if(old_town_id!=null&&!"".equals(old_town_id)&&new_town_id!=null&&!"".equals(new_town_id)){
+			String addTown_id="";
+			String delTown_id="";
+			String[] splitnew = new_town_id.split(",");
+			String[] splitold = old_town_id.split(",");
+			//判断是否新增街道
+			for (String str1:splitnew) {
+				Boolean falg=false;
+				for(String str2:splitold){
+					if(str2.equals(str1)){
+						falg=true;
+						continue;
+					}
+				}
+				if(!falg){
+					addTown_id+=str1+",";
+				}
+			}
+			if(addTown_id.length()>0){
+				addTown_id=addTown_id.substring(0,addTown_id.length()-1);
+				mongoDBManager.updateTinyAreaBelong(storeNo,addTown_id,"private");
+			}
+			//减少街道
+			for (String str3:splitold) {
+				Boolean falg=false;
+				for(String str4:splitnew){
+					if(str4.equals(str3)){
+						falg=true;
+						continue;
+					}
+				}
+				if(!falg){
+					delTown_id+=str3+",";
+				}
+			}
+			if(delTown_id.length()>0){
+				delTown_id=delTown_id.substring(0,delTown_id.length()-1);
+				mongoDBManager.updateTinyAreaBelong(storeNo,delTown_id,"public");
+			}
+
+
+
+		}else if(old_town_id==null||old_town_id.length()==0){
+			if(new_town_id!=null&&new_town_id.length()>0){
+				mongoDBManager.updateTinyAreaBelong(storeNo,new_town_id,"private");
+			}
+
+		}else if(new_town_id==null||new_town_id.length()==0){
+			if(new_town_id!=null&&new_town_id.length()>0) {
+				mongoDBManager.updateTinyAreaBelong(storeNo, old_town_id, "public");
+			}
+		}
+
+	}
+
+
+
+
 
 }
