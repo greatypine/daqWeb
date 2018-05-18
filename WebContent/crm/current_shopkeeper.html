@@ -188,8 +188,8 @@
                                     </dl>
                                     <dl class="col-sm-3">
                                         <dt><i></i>档案数据</dt>
-<!--                                         <dd><a href="javascript:goToUserProfileStat()"><span class="fa fa-user"></span>用户档案</a> -->
-<!--                                         <img alt="" src="dist/img/new.gif" style="position:absolute;width:27px;height:24px;margin-top:-10px;margin-left:5px;"></dd> -->
+                                        <dd><a href="javascript:goToUserProfileStat()"><span class="fa fa-user"></span>用户档案</a>
+                                        <img alt="" src="dist/img/new.gif" style="position:absolute;width:27px;height:24px;margin-top:-10px;margin-left:5px;"></dd>
                                         <dd><a href="javascript:searchData()"><span class="fa fa-file-o"></span>订单档案</a></dd>
                                         <dd><a href="javascript:searchArea()"><span class="fa fa-copy"></span>片区档案</a></dd>
                                         <!-- <dd><a href="javascript:
@@ -1887,7 +1887,7 @@ function initStoreHistoryGMV(){
 	
 	//用户档案
 	function goToUserProfileStat(){
-		 var url = "userProfile_view.html?t="+encode64(2)+"&s=&sn=&c=cn=&e=&r=&#ff";
+		 var url = "userProfile_view.html?t="+encode64(2)+"&s=&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName)+"&so="+encode64(currentStore.storeno)+"&e=&r=&#ff";
 		 window.open(url,"userProfile_view"); 
 	}
 	

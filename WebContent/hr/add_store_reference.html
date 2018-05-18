@@ -107,10 +107,27 @@ function initview(){
 					$("#"+key).val(va);
 					if(key=="storetype"){
 						storeTypeValue=va;
+						var nature=jsonData.nature;
 						if(va=='V'){
 							$(".bixuan").hide();
 							$("#storetype").attr("disabled","true");
+						}else if(va!='V'&&nature=='合作店'){
+							$(".bixuan").show();
+							$(".natter").hide();
+						}else{
+							$(".bixuan").show();
 						}
+					}else if(key=="nature"){
+						var stype=jsonData.storetype;
+						if(va=='合作店'&&stype!='V'){
+							$(".bixuan").show();
+							$(".natter").hide();
+						}else if(va=='合作店'&&stype=='V'){
+							$(".bixuan").hide();
+						}else {
+							$(".bixuan").show();
+						}
+
 					}else if(key=="contract"){
 						if(va!=null&&va!=''){
 							$("#contract").show();
@@ -645,229 +662,237 @@ function downloadFile(pic_name){
 	<input type="hidden" name="store_id" id="store_id"/>
 	<input type="hidden" id="skid" name="skid"/>
 	<p style="color: #337ab7;font-size: 18px;font-weight: bolder;">门店基础信息</p>
-	<table width="100%">
-		<tr>
-			<td>
-				<p >城市：<span style="color: red">*</span></p>
-				<p> <input type="text" id="cityName"  class="cityinput form-control" readonly='true' onpropertychange="OnPropChanged (event)" placeholder="请输入城市"/>
-					<!-- <select id="sele" class="form-control" ></select> -->
-				</p>
-			</td>
-			<td>
-				<p>门店名称：<span style="color: red">*</span></p>
-				<p><input type="text" class="form-control" name="name" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="name"/></p>
-			</td>
-			<td>
-				<p class="read">区域：<span class="bixuan" style="color: red">*</span><button  class="btn btn-primary" onclick="showCountyWin(setCountySelect);">选择区域</button></p>
-				<p class="read">
-					<input type="text" class="form-control" name="county_name" readonly="readonly" id="county_name"/>
-				</p>
-			</td>
-			
-		</tr>
-		<tr>
-			<td>
-				<p class="read">门店位置所在街道：<span class="bixuan" style="color: red">*</span><button class="btn btn-primary"  onclick="showStorePlaceWin(setStorePlaceSelect);">选择街道</button></p>
-				<p class="read">
-					<input type="text" class="form-control" name="place_town_name" readonly="readonly" id="place_town_name"/>
-				</p>
-			</td>
-			<td>
-				<p>属性：<span style="color: red">*</span></p>
-				<p>
-					<select class="form-control" id="nature" name="nature">
-						<option></option>
-						<option value="自营店">自营店</option>
-						<option value="合作店">合作店</option>
-					</select>
-				</p>
-			</td>
-			<td>
-				<p class="read" style="position: relative;"><span id="showattention" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>
-				类型：
-				<span style="color: red">*</span>
-				<span id="attention" style="position: absolute;top: -20px;left: -80px;display:none;color: #8E8E8E;">当选择未知时将生成临时编码,修改后编码会发生改变。</span></p>
-				<p class="read">
-					<select class="form-control" id="storetype">
-						<option value="">请选择</option>
-						<option value="S">生活中心店</option>
-						<!-- <option value="Z">中心店</option> -->
-						<option value="Y">街道月店</option>
-						<!-- <option value="X">街道内经营星店</option>
-						<option value="W">未知</option> -->
-						<option value="E">校园月店</option>
-						<option value="C">前置仓</option>
-						<option value="M">药店</option>
-						<option value="B">独立微超店</option>
-						<option value="V">虚拟店</option>
-					</select>
-				</p>
-			</td>
-		</tr>
-		<tr>
-		<td>
-				<p class="read">业态类型：</p>
-				<p class="read">
-					<select class="form-control" id="formattype">
-						<option value="">请选择</option>
-						<option value="药店">药店</option>
-						<option value="数码连锁店">数码连锁店</option>
-						<option value="超市连锁店">超市连锁店</option>
-						<option value="广电营业厅">广电营业厅</option>
-						<option value="其它">其它（待分类）</option>
-					</select>
-				</p>
-			</td>
-			<td>
-				<p class="read">门店服务范围覆盖街道：<span class="bixuan" style="color: red">*</span><button id="mendianfuwu" class="btn btn-primary"  onclick="showStoreWin(setStoreSelect);">选择街道</button></p>
-				<p class="read">
-					<input type="text" class="form-control" name="town_name" readonly="readonly" id="town_name"/>
-				</p>
-			</td>
-			<td>
-				<p>门店位置坐标：<span class="bixuan" style="color: red">*</span><span><button class="btn btn-primary" onclick="showStoreMapWin(setStoreMapSelect)" style="margin-left: 10px;">选择门店位置坐标</button></span></p>
-				<p><input type="text" class="form-control" readonly="readonly" name="store_position" id="store_position"/></p>
-			</td>
-		</tr>
+		<table width="100%">
+			<tr>
+				<td>
+					<p >城市：<span style="color: red">*</span></p>
+					<p> <input type="text" id="cityName"  class="cityinput form-control" readonly='true' onpropertychange="OnPropChanged (event)" placeholder="请输入城市"/>
+						<!-- <select id="sele" class="form-control" ></select> -->
+					</p>
+				</td>
+				<td>
+					<p>门店名称：<span style="color: red">*</span></p>
+					<p><input type="text" class="form-control" name="name" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="name"/></p>
+				</td>
+				<td>
+					<p class="read">区域：<span class="bixuan" style="color: red">*</span><button  class="btn btn-primary" onclick="showCountyWin(setCountySelect);">选择区域</button></p>
+					<p class="read">
+						<input type="text" class="form-control" name="county_name" readonly="readonly" id="county_name"/>
+					</p>
+				</td>
+
+			</tr>
+			<tr>
+				<td>
+					<p class="read">门店位置所在街道：<span class="bixuan" style="color: red">*</span><button class="btn btn-primary"  onclick="showStorePlaceWin(setStorePlaceSelect);">选择街道</button></p>
+					<p class="read">
+						<input type="text" class="form-control" name="place_town_name" readonly="readonly" id="place_town_name"/>
+					</p>
+				</td>
+				<td>
+					<p>属性：<span style="color: red">*</span></p>
+					<p>
+						<select class="form-control" id="nature" name="nature">
+							<option></option>
+							<option value="自营店">自营店</option>
+							<option value="合作店">合作店</option>
+						</select>
+					</p>
+				</td>
+				<td>
+					<p class="read" style="position: relative;"><span id="showattention" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>
+						类型：
+						<span style="color: red">*</span>
+						<span id="attention" style="position: absolute;top: -20px;left: -80px;display:none;color: #8E8E8E;">当选择未知时将生成临时编码,修改后编码会发生改变。</span></p>
+					<p class="read">
+						<select class="form-control" id="storetype">
+							<option value="">请选择</option>
+							<option value="S">生活中心店</option>
+							<!-- <option value="Z">中心店</option> -->
+							<option value="Y">街道月店</option>
+							<option value="X">经营星店</option>
+							<!--<option value="W">未知</option> -->
+							<option value="E">校园月店</option>
+							<option value="C">前置仓</option>
+							<option value="M">药店</option>
+							<option value="B">独立微超店</option>
+							<option value="V">虚拟店</option>
+						</select>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="read">业态类型：</p>
+					<p class="read">
+						<select class="form-control" id="formattype">
+							<option value="">请选择</option>
+							<option value="药店">药店</option>
+							<option value="数码连锁店">数码连锁店</option>
+							<option value="超市连锁店">超市连锁店</option>
+							<option value="广电营业厅">广电营业厅</option>
+							<option value="其它">其它（待分类）</option>
+						</select>
+					</p>
+				</td>
+
+
+				<td>
+					<p class="read">门店服务范围覆盖街道：<span class="bixuan" style="color: red">*</span><button id="mendianfuwu" class="btn btn-primary"  onclick="showStoreWin(setStoreSelect);">选择街道</button></p>
+					<p class="read">
+						<input type="text" class="form-control" name="town_name" readonly="readonly" id="town_name"/>
+					</p>
+				</td>
+				<td>
+					<p>门店位置坐标：<span class="bixuan" style="color: red">*</span><span><button class="btn btn-primary" onclick="showStoreMapWin(setStoreMapSelect)" style="margin-left: 10px;">选择门店位置坐标</button></span></p>
+					<p><input type="text" class="form-control" readonly="readonly" name="store_position" id="store_position"/></p>
+				</td>
+			</tr>
 		</table>
 		<p style="color: #337ab7;font-size: 18px;font-weight: bolder;">门店租赁信息</p>
 		<table width="100%">
-		<tr>
-			<td>
-				<p class="read" style="position: relative;"><span id="comtractfile" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>合同附件：<span class="bixuan" style="color: red;">*</span>
-					<span style="color: #8E8E8E;font-size: 0.1em;">若多个附件打包为ZIP格式上传</span>
+			<tr>
+				<td>
+					<p class="read" style="position: relative;"><span id="comtractfile" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>合同附件：<span class="bixuan natter" style="color: red;">*</span>
+						<span style="color: #8E8E8E;font-size: 0.1em;">若多个附件打包为ZIP格式上传</span>
 					<span id="fileshow" style="position: absolute;top: -130px;left: 10px;display:none;color:#8E8E8E;background-color: #FFF;">
 					合同上传资料：<br/>
 				1、房屋产权证明（应明确标出租赁商铺的<br/>建筑面积和使用面积，若无使用面积请参照下<br/>方第3条要求）、产权方（或授权出租方）<br/>资质/身份证明和收款信息（银行卡复印件或开户许可证）。<br/>以上文件均须产权方（或授权出租方）签字或盖章，并写上日期；<br/>
 				2、如甲方为二房东，需要上传业主确认的转租证明；<br/>
 				3、双方盖章生效的合同与合同相关附件。
 					</span></p>
-				<p class="read">
-					<input name="contract_file" class="form-control"  id="contract_file" type="file" isuploadtable="true"/>
-					<lable id="contract" style="display:none;"></lable>
-				</p>
-			</td>
-			<td style="width: 33.3%;">
-				<p class="read">租期：<span class="bixuan" style="color: red">*</span></p>
-				<p class="read" style="">
-					<input type="text" class="wicon form-control" id="tenancyTerm_start" name="tenancyTerm_start" style="max-width: 48%;display:inline-block;" placeholder="起租时间" readonly="readonly"/>
-					<span style="display:inline-block;">至</span>
-					<input type="text" class="wicon form-control" id="tenancyTerm_end" name="tenancyTerm_end" style="max-width: 48%;display:inline-block;" placeholder="到租时间" readonly="readonly"/>
-				</p>
-			</td>
-			<td>
-				<p class="read">租金 ：<span class="bixuan" style="color: red">*</span></p>
-				<p class="read">
-					<input class="form-control" type="text" onkeyup="clearNoNum(this)" name="rental" id="rental"/>
-				</p>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<p class="read">付款方式：<span class="bixuan" style="color: red">*</span></p>
-				<p class="read">
-					<select class="form-control" id="payment_method" name="payment_method">
-						<option></option>
-						<option>月付</option>
-						<option>季付</option>
-						<option>半年付</option>
-						<option>年付</option>
-					</select>
-				</p>
-			</td>
-			<td>
-				<p class="read">计租面积(合同面积)：<span class="bixuan" style="color: red">*</span></p>
-				<p class="read"><input class="form-control" type="text" id="rent_area" onkeyup="clearNoNum(this)" name="rent_area"/></p>
-			</td>
-			<td>
-				<p class="read">使用面积：</p>
-				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="usable_area" name="usable_area"/></p>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<p class="read">递增：</p>
-				<p class="read"><input class="form-control" type="text" id="increase" name="increase"/></p>
-			</td>
-			<td>
-				<p class="read">免租期：</p>
-				<p class="read">
-				<input type="text" class="wicon form-control" id="rent_free_start" name="rent_free_start" style="max-width: 48%;display:inline-block;" placeholder="免租起时时间" likeOption="false" readonly="readonly"/>
-				<span style="display:inline-block;">至</span>
-				<input type="text" class="wicon form-control" id="rent_free_end" name="rent_free_end" style="max-width: 48%;display:inline-block;" placeholder="免租结束时间" likeOption="false" readonly="readonly"/>
-				</p>
-			</td>
-			<td>
-				<p class="read">税金：</p>
-				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="taxes" name="taxes"/></p>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<p class="read">中介费：</p>
-				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="agency_fee" name="agency_fee"/></p>
-			</td>
-			<td>
-				<p class="read">增容费：</p>
-				<p class="read"><input class="form-control" type="text" id="increase_fee" onkeyup="clearNoNum(this)" name="increase_fee"/></p>
-			</td>
-			<td>
-				<p class="read">地址：</p>
-				<p class="read"><input type="text" class="form-control" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" name="address" id="address"/></p>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<p class="read">门店电话：</p>
-				<p class="read"><input type="text" class="form-control" onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11" name="mobilephone" id="mobilephone"/></p>
-			</td>
-			<td>
-				<p class="read">开店时间：</p>
-				<p class="read">
-                       <input id="open_shop_time" type="text" likeOption="false" placeholder="请选择" name="open_shop_time" class="wicon form-control" readonly="readonly"  style="width: 200px; display: inline;" />
+					<p class="read">
+						<input name="contract_file" class="form-control"  id="contract_file" type="file" isuploadtable="true"/>
+						<lable id="contract" style="display:none;"></lable>
 					</p>
-			</td>
-			<td>
-				<p class="read">门店店长：</p>
-				<p class="read">
-					<input type="text" name="storemanager" id="storemanager" class="form-control" readonly="readonly"/>
-				</p>
-			</td>
-			
-		</tr>
-		<tr>
-		<td>
-				<p class="read">是否有微超：</p>
-				<p class="read">
-					<select class="form-control" id="superMicro">
-						<option value="">请选择</option>
-						<option value="是">是</option>
-						<option value="否">否</option>
-					</select>
-				</p>
-			</td>
-			<td>
-				<p class="read">平台门店名称：</p>
-				<p class="read">
-					<input type="hidden" name="platformid" id="platformid"/>
-					<input type="text" class="form-control" name="platformname" readonly="readonly" id="platformname"/>
-				</p>
-			</td>
-			<td>
-				<p class="read">目前状态：</p>
-				<p class="read">
-					<input name="estate" id="estate" class="form-control" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" list="town-search"/>
-					<datalist id="town-search"></datalist>
-				</p>
-			</td>
-		</tr>
-		<tr>
-			<td id="bianhao">
-				<p class="read">门店编号：</p>
-				<p class="read"><input id="storeno" name="storeno" readonly="readonly" type="text" class="form-control" /></p>
-			</td>
-		</tr>
-	</table>
+				</td>
+				<td style="width: 33.3%;">
+					<p class="read">租期：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read" style="">
+						<input type="text" class="wicon form-control" id="tenancyTerm_start" name="tenancyTerm_start" style="max-width: 48%;display:inline-block;" placeholder="起租时间" readonly="readonly"/>
+						<span style="display:inline-block;">至</span>
+						<input type="text" class="wicon form-control" id="tenancyTerm_end" name="tenancyTerm_end" style="max-width: 48%;display:inline-block;" placeholder="到租时间" readonly="readonly"/>
+					</p>
+				</td>
+				<td>
+					<p class="read">租金 ：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read">
+						<input class="form-control" type="text" onkeyup="clearNoNum(this)" name="rental" id="rental"/>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="read">付款方式：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read">
+						<select class="form-control" id="payment_method" name="payment_method">
+							<option></option>
+							<option>月付</option>
+							<option>季付</option>
+							<option>半年付</option>
+							<option>年付</option>
+						</select>
+					</p>
+				</td>
+				<td>
+					<p class="read">计租面积(合同面积)：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read"><input class="form-control" type="text" id="rent_area" onkeyup="clearNoNum(this)" name="rent_area"/></p>
+				</td>
+				<td>
+					<p class="read">使用面积：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="usable_area" name="usable_area"/></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="read">递增：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read"><input class="form-control" type="text" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="increase" name="increase"/></p>
+				</td>
+				<td>
+					<p class="read">免租期：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read">
+						<input type="text" class="wicon form-control" id="rent_free_start" name="rent_free_start" style="max-width: 48%;display:inline-block;" placeholder="免租起时时间" likeOption="false" readonly="readonly"/>
+						<span style="display:inline-block;">至</span>
+						<input type="text" class="wicon form-control" id="rent_free_end" name="rent_free_end" style="max-width: 48%;display:inline-block;" placeholder="免租结束时间" likeOption="false" readonly="readonly"/>
+					</p>
+				</td>
+				<td>
+					<p class="read">税金：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="taxes" name="taxes"/></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="read">中介费：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="agency_fee" name="agency_fee"/></p>
+				</td>
+				<td>
+					<p class="read">增容费：<span class="bixuan natter" style="color: red">*</span></p>
+					<p class="read"><input class="form-control" type="text" id="increase_fee" onkeyup="clearNoNum(this)" name="increase_fee"/></p>
+				</td>
+				<td>
+					<p class="read">地址：<span class="bixuan" style="color: red">*</span></p>
+					<p class="read"><input type="text" class="form-control" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" name="address" id="address"/></p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="read">门店电话：</p>
+					<p class="read"><input type="text" class="form-control" onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11" name="mobilephone" id="mobilephone"/></p>
+				</td>
+				<td>
+					<p class="read">开店时间：</p>
+					<p class="read">
+						<input id="open_shop_time" type="text" likeOption="false" placeholder="请选择" name="open_shop_time" class="wicon form-control" readonly="readonly"  style="width: 200px; display: inline;" />
+					</p>
+				</td>
+				<td>
+					<p class="read">门店店长：</p>
+					<p class="read">
+						<input type="text" name="storemanager" id="storemanager" class="form-control" readonly="readonly"/>
+					</p>
+				</td>
+
+			</tr>
+			<tr>
+				<td>
+					<p class="read">是否有微超：<span class="bixuan" style="color: red">*</span></p>
+					<p class="read">
+						<select class="form-control" id="superMicro">
+							<option value="">请选择</option>
+							<option value="是">是</option>
+							<option value="否">否</option>
+						</select>
+					</p>
+				</td>
+				<td>
+					<p class="read">平台门店名称：</p>
+					<p class="read">
+						<input type="hidden" name="platformid" id="platformid"/>
+						<input type="text" class="form-control" name="platformname" readonly="readonly" id="platformname"/>
+					</p>
+				</td>
+				<td>
+					<p class="read">目前状态：<span class="bixuan" style="color: red">*</span></p>
+					<p class="read">
+						<!-- <input name="estate" id="estate" class="form-control" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" list="town-search"/>
+                        <datalist id="town-search"></datalist> -->
+						<select class="form-control" name="estate" id="estate">
+							<option ></option>
+							<option >筹备中</option>
+							<option >待开业</option>
+							<option >运营中</option>
+							<option >闭店中</option>
+						</select>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td id="bianhao">
+					<p class="read">门店编号：</p>
+					<p class="read"><input id="storeno" name="storeno" readonly="readonly" type="text" class="form-control" /></p>
+				</td>
+			</tr>
 	</form>
 	<div class="panel-footer" align="right">
         <button id="btn_submit" class="btn btn-primary" onclick="dataCheck();">
