@@ -352,7 +352,6 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 				  +"?fileName="+pic_name.id+"&store_id="+$("#store_id").val());
 	}
 	function doSave(){
-		$("#submit").attr("disabled","true");
 		var arr =["store_id","submit_date","audit_date","enter_date","enter_end_date","card_content"];
 		var o = {};
 		for ( var i in arr) {
@@ -379,6 +378,7 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 				
 			    alert("提交成功");
 			}else{
+				$("#submit").removeAttr("disabled");
 				$$.showMessage("提示",data.message);
 			}
 			$("#submit").removeAttr("disabled");
@@ -386,6 +386,7 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 	}
 	
 	function datacheck(){
+		$("#submit").attr("disabled","true");
 		var name=$("#name").val();
 		var store_id=$("#store_id").val();//门店iD#
 		var audit_pic=$("#audit_pic").text(); //设计审核提交单
@@ -394,26 +395,32 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 		var business_pic=$("#business_pic").text(); //营业执照
 		console.log(audit_pic);
 		if(name == "" || name == null){
+			$("#submit").removeAttr("disabled");
 			alert("门店名称不能为空!");
 			return;
 		}
 		if(store_id == "" || store_id == null){
+			$("#submit").removeAttr("disabled");
 			alert("门店不存在或门店正在审核中!");
 			return;
 		}
 		if(audit_pic == "" || audit_pic == null){
+			$("#submit").removeAttr("disabled");
 			alert("请上传审核提交单!");
 			return;
 		}
 		if(plane_pic == "" || plane_pic == null){
+			$("#submit").removeAttr("disabled");
 			alert("请上传终版平面方案图!");
 			return;
 		}
 		if(record_pic == "" || record_pic == null){
+			$("#submit").removeAttr("disabled");
 			alert("请上传竣工照片!");
 			return;
 		}
 		if(business_pic == "" || business_pic == null){
+			$("#submit").removeAttr("disabled");
 			alert("请上传营业执照!");
 			return;
 		}
@@ -421,13 +428,16 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 	}
 	//当调用保存的时候检验数据
 	function dataSaveCheck(){
+		$("#baocun").attr("disabled","true");
 		var name=$("#name").val();
 		var store_id=$("#store_id").val();
 		if(name == "" || name == null){
+			$("#baocun").removeAttr("disabled");
 			alert("门店名称不能为空!");
 			return;
 		}
 		if(store_id == "" || store_id == null){
+			$("#baocun").removeAttr("disabled");
 			alert("门店不存在或门店正在审核中!");
 			return;
 		}
@@ -436,7 +446,6 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 	
 	//当保存的时候调用此方法
 	function doinsert(){
-		$("#submit").attr("disabled","true");
 		var arr =["store_id","submit_date","audit_date","enter_date","enter_end_date","card_content"];
 		var o = {};
 		for ( var i in arr) {
@@ -455,9 +464,10 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 				    $("#uploadForm").submit();
 			    alert("保存成功");
 			}else{
+				$("#baocun").removeAttr("disabled");
 				$$.showMessage("提示",data.message);
 			}
-			$("#submit").removeAttr("disabled");
+			$("#baocun").removeAttr("disabled");
 		},false)
 	}
 	
