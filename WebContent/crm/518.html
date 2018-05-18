@@ -105,13 +105,13 @@
       background: -o-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); /* Opera 11.1 - 12.0 */
       background: -moz-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); /* Firefox 3.6 - 15 */
       background: linear-gradient(to right, rgba(255,255,255,0), rgba(141,151,70,0.3)); /* 标准的语法（必须放在最后） */
-      color: #f6ba6b; height: 30px; line-height: 30px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;width:80%;}
+      color: #f6ba6b; height: 30px; line-height: 30px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden;}
     .sales-amount .progress{background: -webkit-linear-gradient(rgba(255,255,255,0), rgba(141,151,70,0.3)); background: -o-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); background: -moz-linear-gradient(right, rgba(255,255,255,0), rgba(141,151,70,0.3)); background: linear-gradient(to right, rgba(255,255,255,0), rgba(141,151,70,0.3)); height: 5px;}
     .sales-amount .progress-bar{background-color: #eb9017;}
 
     /*右边*/
     .city_progress{line-height: 30px;}
-    .city_tit{white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; color: #00f0ff;width:80%;}
+    .city_tit{white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow:hidden; color: #00f0ff;width:70%;}
     .proportion li{padding: 10px 1.5%;}
     .proportion .product_num{width: 30px; text-align: center; top: 16px;}
     .proportion .product_nav{margin-left: 30px;}
@@ -1499,13 +1499,14 @@ Date.prototype.format=function(fmt) {
   var fix_time = "2018-05-18 23:59:59";//固定截止时间
   var now_time;
   function timerData(){
-	  if(new Date() > new Date(fix_time)){
-		  now_time = new Date(fix_time);
-		  window.clearInterval(timeTicket);
-		  window.clearInterval(mapTimeTicket);
-	  }else{
-		  now_time = new Date();
-	  }
+// 	  if(new Date() > new Date(fix_time)){
+// 		  now_time = new Date(fix_time);
+// 		  window.clearInterval(timeTicket);
+// 		  window.clearInterval(mapTimeTicket);
+// 	  }else{
+// 		  now_time = new Date();
+// 	  }
+	  now_time = new Date();
 	  $("#now_time").html((now_time.getHours() < 10 ? '0' + now_time.getHours():now_time.getHours())+":"+(now_time.getMinutes() < 10 ? '0' + now_time.getMinutes():now_time.getMinutes())+":"+(now_time.getSeconds() < 10 ? '0' + now_time.getSeconds():now_time.getSeconds()));
   }
   
