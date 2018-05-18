@@ -167,16 +167,22 @@ $(function(){
     var date = nowDate.getDate();
     timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
     var startDateStr = "2015/12/01";
-    $("#regist_date").attr("value",startDateStr +'-'+ timeStr)
-    $("#startDate").attr("value",startDateStr)
+//    $("#regist_date").attr("value",startDateStr +'-'+ timeStr)
+//    $("#startDate").attr("value",startDateStr)
+    $("#regist_date").attr("value",timeStr +'-'+ timeStr)
+    $("#startDate").attr("value",timeStr)
     $("#endDate").attr("value",timeStr)
     
-    $("#first_date").attr("value",startDateStr +'-'+ timeStr)
-    $("#startDateFirst").attr("value",startDateStr)
+//    $("#first_date").attr("value",startDateStr +'-'+ timeStr)
+//    $("#startDateFirst").attr("value",startDateStr)
+    $("#first_date").attr("value",timeStr +'-'+ timeStr)
+    $("#startDateFirst").attr("value",timeStr)
     $("#endDateFirst").attr("value",timeStr)
     
-    $("#last_date").attr("value",startDateStr +'-'+ timeStr)
-    $("#startDateLast").attr("value",startDateStr)
+//    $("#last_date").attr("value",startDateStr +'-'+ timeStr)
+//    $("#startDateLast").attr("value",startDateStr)
+    $("#last_date").attr("value",timeStr +'-'+ timeStr)
+    $("#startDateLast").attr("value",timeStr)
     $("#endDateLast").attr("value",timeStr)
 });
 
