@@ -255,10 +255,24 @@ function toUpdatePwd(){//encode64(target)
     	 isIE = false;
      }
 		
-		
+     String.prototype.endWith=function(endStr){
+         var d=this.length-endStr.length;
+         return (d>=0&&this.lastIndexOf(endStr)==d)
+       }
+     var history_url = "";
+     function documentrefer(){
+     	var tmp_url = document.referrer;
+     	if(tmp_url!=null&&tmp_url.length>0){
+     		var endHtml = tmp_url.endWith(".html");
+         	if(endHtml){
+         		history_url=tmp_url;
+         	}
+     	}
+     }
 		
 		
 	$(function() {
+		documentrefer();
 		if(logincode!=null&&logincode.length>0){
 			$("#textfield").val(logincode);
 		}
@@ -374,6 +388,13 @@ function toUpdatePwd(){//encode64(target)
 					var returnObj = $.fromJSON(data.data);
 					//保存记录
 					saveLoginLog(returnObj);
+					
+					
+					if(history_url!=null&&history_url.length>0){
+	                	  window.parent.location = history_url;
+	                	  return;
+	                }
+					
 					
 					if(returnObj.user.blankPassword==null||returnObj.user.blankPassword.trim()==""){
 						tobecontinue=returnObj;
