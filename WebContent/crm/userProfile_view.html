@@ -1347,18 +1347,24 @@ Date.prototype.format=function(fmt) {
     timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
     nowDate.setDate(nowDate.getDate()+parseInt(-1));
     var startDateStr = "2015/12/01";
-	$("#regist_date").val(startDateStr +"-"+ timeStr);
-	$("#startDate").val(startDateStr);
+// 	$("#regist_date").val(startDateStr +"-"+ timeStr);
+// 	$("#startDate").val(startDateStr);
+	$("#regist_date").val(timeStr +"-"+ timeStr);
+	$("#startDate").val(timeStr);
 	$("#endDate").val(timeStr);
 	$("#data_choice").html("默认时期");
 	
-	$("#first_date").val(startDateStr +"-"+ timeStr);
-	$("#startDateFirst").val(startDateStr);
+// 	$("#first_date").val(startDateStr +"-"+ timeStr);
+// 	$("#startDateFirst").val(startDateStr);
+	$("#first_date").val(timeStr +"-"+ timeStr);
+	$("#startDateFirst").val(timeStr);
 	$("#endDateFirst").val(timeStr);
 	$("#first_data_choice").html("默认时期");
 	
-	$("#last_date").val(startDateStr +"-"+ timeStr);
-	$("#startDateLast").val(startDateStr);
+// 	$("#last_date").val(startDateStr +"-"+ timeStr);
+// 	$("#startDateLast").val(startDateStr);
+	$("#last_date").val(timeStr +"-"+ timeStr);
+	$("#startDateLast").val(timeStr);
 	$("#endDateLast").val(timeStr);
 	$("#last_data_choice").html("默认时期");
   }
