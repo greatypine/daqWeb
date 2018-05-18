@@ -151,10 +151,27 @@ function initview(){
 						$("#"+key).val(va);
 						if(key=="storetype"){
 							storeTypeValue=va;
+							var nature=jsonData.nature;
 							if(va=='V'){
 								$(".bixuan").hide();
 								$("#storetype").attr("disabled","true");
+							}else if(va!='V'&&nature=='合作店'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else{
+								$(".bixuan").show();
 							}
+						}else if(key=="nature"){
+							var stype=jsonData.storetype;
+							if(va=='合作店'&&stype!='V'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else if(va=='合作店'&&stype=='V'){
+								$(".bixuan").hide();
+							}else {
+								$(".bixuan").show();
+							}
+
 						}else if(key=="contract"){
 							if(va!=null&&va!=''){
 								$("#contract").show();
@@ -228,10 +245,27 @@ function initview(){
 						$("#"+key).val(va);
 						if(key=="storetype"){
 							storeTypeValue=va;
+							var nature=jsonData.nature;
 							if(va=='V'){
 								$(".bixuan").hide();
 								$("#storetype").attr("disabled","true");
+							}else if(va!='V'&&nature=='合作店'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else{
+								$(".bixuan").show();
 							}
+						}else if(key=="nature"){
+							var stype=jsonData.storetype;
+							if(va=='合作店'&&stype!='V'){
+								$(".bixuan").show();
+								$(".natter").hide();
+							}else if(va=='合作店'&&stype=='V'){
+								$(".bixuan").hide();
+							}else {
+								$(".bixuan").show();
+							}
+
 						}else if(key=="contract"){
 							if(va!=null&&va!=''){
 								$("#contract").show();
@@ -379,7 +413,7 @@ function downloadFile(pic_name){
 		}
 		
 		if(storetype!='V'){
-			if(nature_value=='合租店'){
+			if(nature_value=='合作店'){
 				if(county_name == "" || county_name == null){
 					$("#submit").removeAttr("disabled");
 					alert("请选择区域!");
@@ -418,6 +452,11 @@ function downloadFile(pic_name){
 				if(citycode == "" || citycode == null){
 					$("#submit").removeAttr("disabled");
 					alert("请重新选择门店位置坐标!");
+					return;
+				}
+				if(address == "" || address == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写门店地址!");
 					return;
 				}
 				if(superMicro == "" || superMicro == null){
