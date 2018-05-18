@@ -256,9 +256,6 @@
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <em><a href="javascript:gotolive()" style="color:#fff">518直播间</a></em>
-                        </li>
                     </ul>
 
 
@@ -650,10 +647,6 @@
 		  showDataCard();//数据卡
 		  $("#process_div").hide();
 		  $("#process_div_pic").hide();
-		  //点击大屏幕数据进入到监控页
-		  $(".data_new").click(function(){
-		  	gotolive();
-		  });
 		  <!-------------------------加载页面展示数据 	结束------------->
   });
 
@@ -1873,12 +1866,6 @@ function initStoreHistoryGMV(){
 		  var url = "searchData_view.html?t="+encode64(2)+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName);
 		  window.open(url,"searchData_view");
 	}
-	
-	//518直播间
-	function gotolive(){
-		window.open("518.html","518");
-	}
-	
 	/* //员工档案 
 	function searchEmployeeData(){
 		  var url = "humanresources_list.html?t="+encode64(2)+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName);
