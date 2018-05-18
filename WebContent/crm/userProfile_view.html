@@ -490,7 +490,6 @@ Date.prototype.format=function(fmt) {
 	var storeNo = decode64(getUrlParamByKey("so"));//门店no
 	var target = decode64(getUrlParamByKey("t"));//执行人级别 
 	var storeName=decode64(getUrlParamByKey("sn"));//门店名称
-	var storeno = decode64(getUrlParamByKey("so"));//门店编号
 	var role = decode64(getUrlParamByKey("r"));//角色 code
 	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
 	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
@@ -1118,7 +1117,8 @@ Date.prototype.format=function(fmt) {
 				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+customercontent+"');\" id=\""+customerid+"\">"+customer_phone_show+"</a></td>"
 				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+paycontent+"');\" id=\""+payid+"\">"+jData[i].order_count+"</a></td>"
 		         	   		+"<td>"+jData[i].slient_time+"</td>"
-		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
+		         	   		+"<td>"+jData[i].tiny_village_code+"</td>"
+// 		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
 		         	   		+"<td>"+jData[i].user_model+"</td>"
 		         	   		+"<td>";
 		         	   		

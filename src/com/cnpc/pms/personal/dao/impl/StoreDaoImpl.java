@@ -1,23 +1,18 @@
 package com.cnpc.pms.personal.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.classic.Session;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.utils.DateUtils;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.classic.Session;
+import org.hibernate.transform.Transformers;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
@@ -924,7 +919,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ (store.getPlatformid() == null ? null : "'" + store.getPlatformid() + "'") + "," + "'"
 				+ store.getCityName() + "'," + (store.getRmid() == null ? null : store.getRmid()) + ","
 				+ (store.getSkid() == null ? null : store.getSkid()) + ","
-				+ (store.getOpen_shop_time() == null ? null : "'" + store.getOpen_shop_time() + "'") + ","
+				+ (store.getOpen_shop_time() == null ? null : "'" + dateFormat.format(store.getOpen_shop_time()) + "'") + ","
 				+ (store.getPlatformname() == null ? null : "'" + store.getPlatformname() + "'") + ","
 				+ (store.getTown_name() == null ? null : "'" + store.getTown_name() + "'") + ",'" + store.getStoreno()
 				+ "','" + store.getStoretype() + "','" + store.getStoretypename() + "',"
