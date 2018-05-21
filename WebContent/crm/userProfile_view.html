@@ -1276,6 +1276,7 @@ Date.prototype.format=function(fmt) {
 	    
 	    $("#process_div").show();
  	 	$("#process_div_pic").show();
+ 	 	document.getElementById("time_flag").style = "width: 325px;z-index: 99999;margin:0 15px;pointer-events: none;"; 
  	 	
  	 	var cityName = $("#citySelect  option:selected").val();
 	    if(cityName!=""){
@@ -1321,6 +1322,7 @@ Date.prototype.format=function(fmt) {
 			        	   crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
 			        	   $("#process_div").hide();
 		        	       $("#process_div_pic").hide();
+		        	       document.getElementById("time_flag").style = "width: 325px;z-index: 99999;margin:0 15px;"; 
 			        	   return;
 			           }else{
 			        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
@@ -1332,6 +1334,9 @@ Date.prototype.format=function(fmt) {
 		          }else{
 		       	   crm_alert(5,"请稍后重新请求！");
 		          }
+		        $("#process_div").hide();
+		    	$("#process_div_pic").hide(); 
+		    	document.getElementById("time_flag").style = "width: 325px;z-index: 99999;margin:0 15px;"; 
 		     });
 	  }
   
@@ -1387,7 +1392,7 @@ Date.prototype.format=function(fmt) {
     var date = nowDate.getDate();
     timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
     nowDate.setDate(nowDate.getDate()+parseInt(-1));
-    var startDateStr = "2015/12/01";
+    var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01';
 // 	$("#regist_date").val(startDateStr +"-"+ timeStr);
 // 	$("#startDate").val(startDateStr);
 // 	$("#regist_date").val(timeStr +"-"+ timeStr);
