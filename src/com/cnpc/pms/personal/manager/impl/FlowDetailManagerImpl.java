@@ -15,6 +15,7 @@ import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.ISort;
 import com.cnpc.pms.base.paging.SortFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.base.paging.impl.Sort;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -162,8 +163,28 @@ public class FlowDetailManagerImpl extends BizBaseCommonManager implements FlowD
     	preSaveObject(flowDetail);
     	flowDetail.setUser_id(flowDetail.getUpdate_user_id());
     	flowDetail.setApprov_time(flowDetail.getUpdate_time());
-    	this.saveObject(flowDetail);
-    	return flowDetail;
+    	
+    	//查 询是否存在重复未提交项 
+    	FSP fsp = new FSP();
+    	fsp.setSort(SortFactory.createSort("id",ISort.DESC));
+		IFilter distFilter = FilterFactory.getSimpleFilter("work_info_id="+flowDetail.getWork_info_id()+" and approv_ret is NULL ");
+		fsp.setUserFilter(distFilter);
+		List<FlowDetail> detail_list = (List<FlowDetail>) this.getList(fsp);
+    	if(detail_list!=null&&detail_list.size()>0){
+    		//如果有重复的(判断第一条是不是null)
+    		FlowDetail flDetail = detail_list.get(0);
+    		if(flDetail.getApprov_ret()==null||flDetail.getApprov_ret().trim()==""){
+    	    	return flDetail;
+    		}else{
+    			this.saveObject(flowDetail);
+    	    	return flowDetail;
+    		}
+    	}else{
+    		this.saveObject(flowDetail);
+	    	return flowDetail;
+    	}
+    	
+    	
     }
 	
 	protected void preSaveObject(Object o) {
