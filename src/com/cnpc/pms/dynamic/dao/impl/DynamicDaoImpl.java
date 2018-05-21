@@ -2984,4 +2984,42 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	    List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 	    return lst_data;
 	}
+
+	@Override
+	public Map<String, Object> getStoreMember(DynamicDto dynamicDto, PageInfo pageInfo) {
+		List<?> list=null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		
+		String sql="select t1.storeno,t1.name,t1.city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
+				+"select store.storeno,store.name,store.city_name,count(member.customer_id) as opencount from df_user_member member INNER JOIN t_store store ON "
+				+"member.regist_storeid = store.platformid where store.storeno in ("+dynamicDto.getStoreNo()+") group by member.regist_storeid"
+				+") t1 LEFT JOIN ( "
+				+"select store.storeno,count(member.customer_id) as nowcount from df_user_member member INNER JOIN t_store store ON "
+				+"member.regist_storeid = store.platformid where member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' and store.storeno in ("+dynamicDto.getStoreNo()+") group by member.regist_storeid) t2 "
+				+"ON t1.storeno = t2.storeno";
+		Query query = this.getHibernateTemplate().getSessionFactory()
+				.getCurrentSession().createSQLQuery(sql);
+		
+		if(pageInfo!=null){
+			String sql_count = "SELECT count(1) from ("+sql+") c ";
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+			
+			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(
+						pageInfo.getRecordsPerPage()
+								* (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+			
+			
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}else{
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}
+		map_result.put("member", list);
+		return map_result;
+	}
 }
