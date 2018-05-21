@@ -1839,13 +1839,16 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		Map<String, Object> maps = new HashMap<String, Object>();
 		if(city_name!=null&&city_name!=""){
+			if(city_name.contains("黔东南")){
+				city_name = city_name.substring(0,3);
+			}
 			cityStr+=" and tpc.city_name like '%"+city_name+"%' ";
 		}else if(province_name!=null&&province_name!=""){
 			provinceStr+=" and tpc.province_name like '%"+province_name+"%' ";
 		}
-		String sql = " select product_name,SUM(product_count) as product_count,city_name from ds_product_city tpc where 1=1 "+
+		String sql = " select product_name,SUM(product_count) as product_count from ds_product_city tpc where 1=1 "+
 					   cityStr+provinceStr +
-					 " GROUP BY city_name,product_name order by product_count desc "  ;
+					 " GROUP BY product_name order by product_count desc "  ;
 		String sql_count = "SELECT count(tdd.product_name) as product_count from ( "+sql+") tdd ";
 		Query query_count = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql_count);
