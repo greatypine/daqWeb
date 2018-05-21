@@ -1,13 +1,5 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONObject;
-
 import com.cnpc.pms.base.manager.impl.BaseManagerImpl;
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
@@ -21,27 +13,20 @@ import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.manager.DynamicManager;
 import com.cnpc.pms.personal.dao.ProvinceDao;
 import com.cnpc.pms.personal.dao.StoreDynamicDao;
-import com.cnpc.pms.personal.entity.Attachment;
-import com.cnpc.pms.personal.entity.County;
-import com.cnpc.pms.personal.entity.DistCity;
-import com.cnpc.pms.personal.entity.DistCityCode;
-import com.cnpc.pms.personal.entity.Province;
-import com.cnpc.pms.personal.entity.StoreDynamic;
-import com.cnpc.pms.personal.entity.Town;
-import com.cnpc.pms.personal.manager.ApprovalManager;
-import com.cnpc.pms.personal.manager.CountyManager;
-import com.cnpc.pms.personal.manager.DistCityCodeManager;
-import com.cnpc.pms.personal.manager.HumanresourcesManager;
-import com.cnpc.pms.personal.manager.StoreDynamicManager;
-import com.cnpc.pms.personal.manager.StoreKeeperManager;
-import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.personal.manager.TownManager;
-import com.cnpc.pms.personal.manager.WorkInfoManager;
+import com.cnpc.pms.personal.entity.*;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.personal.util.DataTransfromUtil;
 import com.cnpc.pms.platform.entity.PlatformStore;
 import com.cnpc.pms.platform.entity.SysArea;
 import com.cnpc.pms.platform.manager.PlatformStoreManager;
 import com.cnpc.pms.platform.manager.SysAreaManager;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDynamicManager {
 
@@ -149,10 +134,6 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 				update_store_dynamic.setStoreno(att3);
 			}
 			User user = null;
-			boolean isupdate = false;
-			if (update_store_dynamic.getName() != null && !update_store_dynamic.equals(storeDynamic.getName())) {
-				isupdate = true;
-			}
 			if (platformStore != null) {
 				update_store_dynamic.setPlatformid(platformStore.getId());
 				update_store_dynamic.setNumber(platformStore.getNumber());
@@ -244,12 +225,7 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			storeDynamicManager.saveObject(update_store_dynamic);
 			// this.updateUserStoreId(update_store_dynamic.getStore_id());//修改用户的门店id
 
-			if (isupdate) {
-				HumanresourcesManager hManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
-				hManager.updateStoreNameById(update_store_dynamic.getStore_id(), update_store_dynamic.getName());
-				ApprovalManager approvalManager = (ApprovalManager) SpringHelper.getBean("approvalManager");
-				approvalManager.updateStoreNameById(update_store_dynamic.getStore_id(), update_store_dynamic.getName());
-			}
+
 			if ("V".equals(storeDynamic.getStoretype())) {
 				storeManager.insertStoresyncDynamicStore(update_store_dynamic);
 			}

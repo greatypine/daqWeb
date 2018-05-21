@@ -192,17 +192,15 @@ $(function(){
     var month = nowDate.getMonth()+1;
     var date = nowDate.getDate();
     timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
-    var startDateStr = "2015/12/01";
+    var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01';
 //    $("#regist_date").attr("value",startDateStr +'-'+ timeStr)
 //    $("#startDate").attr("value",startDateStr)
     $("#regist_date").attr("value",timeStr +'-'+ timeStr)
     $("#startDate").attr("value",timeStr)
     $("#endDate").attr("value",timeStr)
     
-//    $("#first_date").attr("value",startDateStr +'-'+ timeStr)
-//    $("#startDateFirst").attr("value",startDateStr)
-    $("#first_date").attr("value",timeStr +'-'+ timeStr)
-    $("#startDateFirst").attr("value",timeStr)
+    $("#first_date").attr("value",startDateStr +'-'+ timeStr)
+    $("#startDateFirst").attr("value",startDateStr)
     $("#endDateFirst").attr("value",timeStr)
     
 //    $("#last_date").attr("value",startDateStr +'-'+ timeStr)
@@ -263,7 +261,6 @@ function datePickersLast(){
 
 function datePickersOpenCard(){
     //自定义菜单
-	debugger;
     var startDate = $("#startOpenCardDate").val();
     var endDate = $("#endOpenCardDate").val();
     var dateList = startDate +'-'+ endDate;

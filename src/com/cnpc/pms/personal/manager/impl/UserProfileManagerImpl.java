@@ -3,6 +3,8 @@ package com.cnpc.pms.personal.manager.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,7 +96,6 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
   	            cell.setCellStyle(getHeaderStyle());
   	            cell.setCellValue(new XSSFRichTextString(str_headers[i]));
   	        }
-  	        
   	        for(int i = 0;i < list.size();i++){
   	        	 row = sheet.createRow(i+1);
   	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){

@@ -167,7 +167,7 @@ public class FlowDetailManagerImpl extends BizBaseCommonManager implements FlowD
     	//查 询是否存在重复未提交项 
     	FSP fsp = new FSP();
     	fsp.setSort(SortFactory.createSort("id",ISort.DESC));
-		IFilter distFilter = FilterFactory.getSimpleFilter("work_info_id="+flowDetail.getWork_info_id()+" and approv_ret is NULL ");
+		IFilter distFilter = FilterFactory.getSimpleFilter("work_info_id="+flowDetail.getWork_info_id());
 		fsp.setUserFilter(distFilter);
 		List<FlowDetail> detail_list = (List<FlowDetail>) this.getList(fsp);
     	if(detail_list!=null&&detail_list.size()>0){
