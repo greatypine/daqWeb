@@ -839,4 +839,13 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public List<Map<String, Object>> selectAllCitySort(DynamicDto dd);
+
+	/**
+	 * 查询近30日GMV走势图
+	 * 2018年5月21日
+	 * @author gaoll
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> getStoreMember(DynamicDto dynamicDto, PageInfo pageInfo);
 }
