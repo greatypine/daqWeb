@@ -43,16 +43,7 @@
                 $( "#endDateLast" ).datepicker( "option","minDate",dateText );
             },
         });
-        $('#startDateLast').datepicker({
-            dateFormat: "yy/mm/dd",
-            maxDate: "+d",
-            onClose : function(dateText, inst) {
-                $( "#endDateLast" ).datepicker( "show" );
-            },
-			onSelect:function(dateText, inst) {
-                $( "#endDateLast" ).datepicker( "option","minDate",dateText );
-            },
-        });$('#startOpenCardDate').datepicker({
+        $('#startOpenCardDate').datepicker({
             dateFormat: "yy/mm/dd",
             maxDate: "+d",
             onClose : function(dateText, inst) {
