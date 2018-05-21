@@ -43,6 +43,25 @@
                 $( "#endDateLast" ).datepicker( "option","minDate",dateText );
             },
         });
+        $('#startDateLast').datepicker({
+            dateFormat: "yy/mm/dd",
+            maxDate: "+d",
+            onClose : function(dateText, inst) {
+                $( "#endDateLast" ).datepicker( "show" );
+            },
+			onSelect:function(dateText, inst) {
+                $( "#endDateLast" ).datepicker( "option","minDate",dateText );
+            },
+        });$('#startOpenCardDate').datepicker({
+            dateFormat: "yy/mm/dd",
+            maxDate: "+d",
+            onClose : function(dateText, inst) {
+                $( "#endOpenCardDate" ).datepicker( "show" );
+            },
+			onSelect:function(dateText, inst) {
+                $( "#endOpenCardDate" ).datepicker( "option","minDate",dateText );
+            },
+        });
     };
     $.setEndTime = function(){
         $("#endDate").datepicker({
@@ -81,6 +100,18 @@
                 }
             }
         });
+        $("#endOpenCardDate").datepicker({
+            dateFormat: "yy/mm/dd",
+            maxDate: "+d",
+			defaultDate : new Date(),
+            onClose : function(dateText, inst) {
+                if (dateText < $("input[name=startOpenCardDate]").val()){
+                  $( "#endOpenCardDate" ).datepicker( "show" );
+				    alert("结束日期不能小于开始日期！");
+					//$("#endDate").val(newdate)
+                }
+            }
+        });
     };
     $.date = function(){
         $('.date').datepicker(
@@ -102,6 +133,7 @@
             var thisAlt = $(this).attr("alt");
             var dateList = timeConfig(thisAlt);
             $("#regist_date").val(dateList);
+            $("#searchTime").val(dateList);
             $("#ui-datepicker-css").slideUp(500);
 			$("#ui-datepicker-div").css("display","none")
         });
@@ -111,6 +143,9 @@
         });
         $("#startDate").on("click",function(){
             $("#endDate").attr("disabled",false);
+        });
+        $("#startOpenCardDate").on("click",function(){
+            $("#endOpenCardDate").attr("disabled",false);
         });
         
         $("#first_time_endbg").on("click",function(){
@@ -178,6 +213,11 @@ $(function(){
     $("#last_date").attr("value",startDateStr +'-'+ timeStr)
     $("#startDateLast").attr("value",startDateStr)
     $("#endDateLast").attr("value",timeStr)
+    
+    var start_DateStr = "2018/01/01";
+    $("#searchTime").attr("value",start_DateStr +'-'+ timeStr)
+    $("#startOpenCardDate").attr("value",start_DateStr)
+    $("#endOpenCardDate").attr("value",timeStr)
 });
 
 
@@ -222,6 +262,16 @@ function datePickersLast(){
     var dateList = startDate +'-'+ endDate;
     $("#last_date").val(dateList);
     $('#last_data_choice').html("自定义时期");
+}
+
+function datePickersOpenCard(){
+    //自定义菜单
+	debugger;
+    var startDate = $("#startOpenCardDate").val();
+    var endDate = $("#endOpenCardDate").val();
+    var dateList = startDate +'-'+ endDate;
+    $("#searchTime").val(dateList);
+    $('#data_choice').html("自定义时期");
 }
 $(function(){
     $("#Confirm").on("click",function(){
