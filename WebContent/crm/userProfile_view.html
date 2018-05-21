@@ -118,6 +118,7 @@
 	.Confirm{ background: linear-gradient(#83c56a, #63b254); border: 1px solid #46975d!important;; color: #fff!important;}
 	.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
 	.ui-datepicker-quick span{height: 30px; line-height: 35px}
+	.ui-datepicker-time{background-color:transparent}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -182,7 +183,7 @@
                 	<div class="sl-v-list">
                 	<div class="clearfix">
                 		<div class="search-con">
-							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
+							<div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:0 15px;">
 							    <div class="time_endbg" id="first_time_endbg">
 							        <p>首次消费日期选择：<span class="data_choice" id="first_data_choice">默认时期</span></p>
 							        <input type="text" class="ui-datepicker-time" id="first_date" readonly value=""/>
@@ -1036,6 +1037,7 @@ Date.prototype.format=function(fmt) {
 	    
 	    $("#process_div").show();
  	 	$("#process_div_pic").show();
+ 	 	document.getElementById("time_flag").style = "width: 325px;z-index: 99999;margin:0 15px;pointer-events: none;"; 
  	 	
  	 	var cityName = $("#citySelect  option:selected").val();
 	    if(cityName!=""){
@@ -1093,6 +1095,7 @@ Date.prototype.format=function(fmt) {
 	        	 	  	});
 	        		   $("#process_div").hide();
 	        	       $("#process_div_pic").hide();
+	        	       document.getElementById("time_flag").style = "width: 325px;z-index: 99999;margin:0 15px;"; 
 	        		   return;
 	        	   }
 	        	   totalPage_manual = result.total_pages;
@@ -1183,9 +1186,10 @@ Date.prototype.format=function(fmt) {
          }else{
       	   crm_alert(5,"请稍后重新请求！");
          }
+    	$("#process_div").hide();
+  		$("#process_div_pic").hide(); 
+  		document.getElementById("time_flag").style = "width: 325px;z-index: 99999;margin:0 15px;"; 
      });  
-    $("#process_div").hide();
-  	$("#process_div_pic").hide(); 
   }
   
   //用户信息、消费信息、所属区域显示
