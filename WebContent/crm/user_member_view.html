@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>用户档案</title>
-   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <title>合作社社员统计</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
-  <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="plugins/iCheck/all.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -22,8 +22,8 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
   <!-- Select2 -->
   <link rel="stylesheet" href="plugins/select2/select2.min.css">
-  <link href="../scripts/css/auto.css" rel="stylesheet">
   <link rel="stylesheet" href="plugins/date-new/css/jquery-ui-1.9.2.custom.css" type="text/css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -47,16 +47,14 @@
     .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
     .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
     .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
-    .table button{padding: 3px 20px; margin: 0 5px;}
-	
-	.tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+    
+    
+    .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
 	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
 	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
 	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
 	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
-	.audit_process{ overflow-y: auto;  background: #f9f9f9; border-radius: 5px; padding:15px 0 20px 0;}
-    .audit_process .clearfix{ padding:10px 30px;}
-    .audit_margin{margin-right: 15px;}
+ 
 	 #process_div{ 
 			background-color:#292a2b; 
 			display:inline; 
@@ -77,9 +75,16 @@
 			height:32px;
 			color: #fff;
 		}
-	/*搜索框*/
+		
+		/*搜索框*/
     .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
-    /*更多显示*/
+    small span:hover{
+    	color:#337ab7;
+    	}
+    	
+    	
+    	
+    /*时间控件*/
     .show-more-line{width: 100%; height: 40px; border-top: 1px dashed #e6e6e6; position: relative; background-color: #f5f5f5;}
     .how-more{position: absolute; top: -1px; left: 50%; background-color: #fff; border-left: 1px solid #e6e6e6; border-right: 1px solid #e6e6e6; border-bottom: 1px solid #e6e6e6;  padding: 5px 15px; margin: 0 0 0 -40px; color: #888; cursor: pointer; font-size: 12px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
     .how-more i{padding-left: 5px; font-size: 14px;}
@@ -89,7 +94,7 @@
     .selectorLine a:nth-child(1){margin-left: 15px;}
     .selectorLine a:hover{background-color: #ff7701; color: #fff;}
     .search-title{width: 100px; color: #777; white-space: nowrap; overflow: hidden; position: absolute; top: 10px; left: 0; text-align: right;}
-    .search-con{margin-left: 100px; padding-right: 80px; overflow: hidden;}
+    .search-con{margin-left: 0px; padding-right: 80px; overflow: hidden;}
     .sl-ext {position: absolute; top: 10px; right: 10px; width: 60px; height: auto; line-height: 22px; overflow: hidden; zoom: 1;}
     .search-more{width: 60px; height: 25px; line-height: 25px; padding: 0 7px 0 0; background: #fff; color: #333; border: 1px solid #ddd; font-size: 12px; position: relative; right: 0; top: 0;}
     .search-more i{position: absolute; top: 3px; right: 0; display: block; width: 20px; height: 20px; background-position: 4px 7px; font-size: 18px;}
@@ -98,13 +103,9 @@
     .sx_type{margin-top: 5px;}
     .sx_type span{padding-right: 5px;}
     .sx_type span .icheckbox_minimal-blue{margin-right: 2px;}
-    /*筛选导航*/
-    .breadcrumb{background: none;padding: 8px 10px 0 10px; line-height: 22px; position: relative; min-height: 45px; background-color: #fafafa;}
-    .breadcrumb a{position: relative; float: left; margin: 0 10px 10px 0; padding: 0 25px 0 5px; height: 25px; line-height: 25px; overflow: hidden; border: 1px solid #DDD; background-color: #f3f3f3; color: #333; font-size: 12px;}
-    .breadcrumb a span{margin-right: 3px;}
-    .breadcrumb a i{position: absolute; width: 25px; height: 22px; right: 0; top: 0; color: #999; padding: 6px 0 0 9px; height: 25px;}
-    .breadcrumb a:hover{border: 1px solid #e4393c; background-color: #fff;}
-    .breadcrumb a:hover i{background-color: #e4393c; color: #fff;}
+    
+    
+    
     /*类型*/
     .leixing div{display: inline-block; position: relative; cursor: pointer;}
     .type_con{width: 65px; height: 45px; line-height: 45px; color: #fff; display: block; position: absolute; bottom: 20px; left: -20px; display: none;}
@@ -126,9 +127,6 @@
 <div class="wrapper">
 
 
-
-
-
  <header class="main-header">
     <nav class="navbar navbar-static-top">
       <div class="container">
@@ -139,7 +137,7 @@
 					<div class="pull-left">
 						<div class="logo-lg">
 							<ul class="no-margin">
-								<li class="current"><em>用户档案</em></li>
+								<li class="current"><em>合作社社员统计</em></li>
 							</ul>
 						</div>
 					</div>
@@ -147,908 +145,357 @@
     </nav>
   </header>
 
+
   <!-- =============================================== -->
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <div >
+    <div class="container" style="width:1230px">
       <!-- Main content -->
+
       <section class="content-header">
         <div class="box box-default">
           <div class="box-header h4 text-light-blue">
-          	<div class="pull-left "><strong>用户档案查询</strong></div>
+          	<div class="pull-left "><strong>社员查询</strong></div>
           </div>
           <div class="box-body">
-          	<div class="clearfix search-criteria">
-            	<div class="selectorLine clearfix no-border">
-            	<div class="search-title">查询条件：</div>
-            	<div class="search-con" style="overflow:visible;">
-            	<div class="sl-v-list">
-            	<div class="clearfix">
-	                <div class="form-group col-lg-3">
-	                <select class="form-control select2" id="citySelect"> 
-	 	              	</select> 
-	                </div>
-	                <div class="form-group col-lg-3"><input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
-		              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual" />
-		              <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
-		              </div>
-		            </div>
-                </div>
-                </div>
-                </div>
-                <div class="fold-con">
-                	<div class="selectorLine clearfix">
-	                  <div class="pull-left search-title">用户信息：</div>
-	                  <div class="search-con">
-	                    <div class="sl-v-list">
-	                    	<div class="form-group has-error col-lg-3">
-		                        <input type="text" class="form-control" placeholder="用户姓名"  id="customer_name_manual"/></div>
-			                <div class="form-group has-error col-lg-3">
-		                        <input type="text" class="form-control" placeholder="用户电话"  id="customer_phone_manual"/></div>
-		                    <div class="form-group has-error col-lg-3">
-		                    	<div class="pull right" id="phoneDetailDiv" style="display:none"><strong><button type="button" disabled="disabled" style="padding:3px 4px;margin:0 5px"  class="btn btn-danger">申请查看用户电话</button></strong></div>
-		                	</div>
-                     	</div>
-                     </div>
-                    </div>
-                	<div class="selectorLine clearfix">
-	                  <div class="pull-left search-title">消费信息：</div>
-	                  <div class="search-con">
-	                    <div class="sl-v-list">
-	                      <div class="form-group has-success col-lg-3">
-			                <div style="display:block">
-		                      <input type="text" class="form-control"  placeholder="历史消费最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
-		                      <input type="text" class="form-control"  placeholder="历史消费最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
-			                </div>
-		                  </div>
-	                      <div class="form-group has-success col-lg-3">
-			                <div style="display:block">
-		                      <input type="text" class="form-control"  onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="历史消费最小次数"  id="min_count_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
-		                      <input type="text" class="form-control"  onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="历史消费最大次数"  id="max_count_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
-			                </div>  
-	                      </div>
-	                      <div class="form-group has-success col-lg-3">
-			                <div style="display:block">
-		                      <input type="text" class="form-control"  onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="沉默时间最小天数"  id="min_slient_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
-		                      <input type="text" class="form-control"  onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="沉默时间最大天数"  id="max_slient_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
-			                </div>  
-	                      </div>
-                     </div>
-                     </div>
-                    </div>
-                	<div class="selectorLine clearfix">
-                		<div class="pull-left search-title" style="top:25px">注册时间：</div>
-                		<div class="search-con">
-							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
-							    <div class="time_endbg" id="time_endbg">
-							        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
-							        <input type="text" class="ui-datepicker-time" id="regist_date" readonly value=""/>
-							    </div>
-							</div>
-							<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px;">	
-							    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
-							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
-							        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
-							    </div>
-							    <div class="ui-datepicker-choose">
-							        <!--<p>自选日期</p>-->
-							        <div class="ui-datepicker-date">
-								            自定<input name="startDate" id="startDate" class="startDate" readonly value="2017/12/20" type="text">
-								           到
-							            <input name="endDate" id="endDate" class="endDate" readonly  value="2017/12/20" type="text" disabled>
-							        </div>
-							        <div class="opeDiv">
-							            <span class="Confirm" id="Confirm" onclick="datePickers()">确定</span>
-							            <span class="Cancel" id="Cancel">取消</span>
-							        </div>
-							    </div>
-							</div>
-						</div>
-                	</div>
-                	<div class="selectorLine clearfix">
-                		<div class="pull-left search-title" style="top:25px">首次消费时间：</div>
-                		<div class="search-con">
-							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
-							    <div class="time_endbg" id="first_time_endbg">
-							        <p>日期选择：<span class="data_choice" id="first_data_choice">默认时期</span></p>
-							        <input type="text" class="ui-datepicker-time" id="first_date" readonly value=""/>
-							    </div>
-							</div>
-							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin:0 15px;">	
-							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
-							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
-							        <span class="ui-close-date" id="first-ui-close-date" style="cursor:pointer;">X</span>
-							    </div>
-							    <div class="ui-datepicker-choose">
-							        <!--<p>自选日期</p>-->
-							        <div class="ui-datepicker-date">
-								            自定<input name="startDateFirst" id="startDateFirst" class="startDate" readonly value="2017/12/20" type="text">
-								           到
-							            <input name="endDateFirst" id="endDateFirst" class="endDate" readonly  value="2017/12/20" type="text" disabled>
-							        </div>
-							        <div class="opeDiv">
-							            <span class="Confirm" id="ConfirmFirst" onclick="datePickersFirst()">确定</span>
-							            <span class="Cancel" id="CancelFirst">取消</span>
-							        </div>
-							    </div>
-							</div>
-						</div>
-                	</div>
-                	<div class="selectorLine clearfix">
-                		<div class="pull-left search-title" style="top:25px">最后消费时间：</div>
-                		<div class="search-con">
-							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
-							    <div class="time_endbg" id="last_time_endbg">
-							        <p>日期选择：<span class="data_choice" id="last_data_choice">默认时期</span></p>
-							        <input type="text" class="ui-datepicker-time" id="last_date" readonly value=""/>
-							    </div>
-							</div>
-							<div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin:0 15px;">	
-							    <div class="ui-datepicker-quick" id="last-ui-datepicker-quick">
-							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
-							        <span class="ui-close-date" id="last-ui-close-date" style="cursor:pointer;">X</span>
-							    </div>
-							    <div class="ui-datepicker-choose">
-							        <!--<p>自选日期</p>-->
-							        <div class="ui-datepicker-date">
-								            自定<input name="startDateLast" id="startDateLast" class="startDate" readonly value="2017/12/20" type="text">
-								           到
-							            <input name="endDateLast" id="endDateLast" class="endDate" readonly  value="2017/12/20" type="text" disabled>
-							        </div>
-							        <div class="opeDiv">
-							            <span class="Confirm" id="ConfirmLast" onclick="datePickersLast()">确定</span>
-							            <span class="Cancel" id="CancelLast">取消</span>
-							        </div>
-							    </div>
-							</div>
-						</div>
-                	</div>
-		             	<div class="selectorLine clearfix">
-		                  <div class="pull-left search-title">用户标签：</div>
-		                  <div class="search-con">
-		                    <div class="sl-v-list">
-		                      <a onclick="slientSelection('3')" style="cursor:pointer;">沉默超3月</a>
-		                      <a onclick="slientSelection('6')" style="cursor:pointer;">沉默超6月</a>
-		                      <a onclick="slientSelection('B')" style="cursor:pointer;">集采用户</a>
-		                      <input type="text" style="display:none" class="form-control" placeholder="快捷沉默"  id="slient_private_manual" value="0"/>
-		                    </div>
-		                  </div>
-		                </div>
-<!-- 	                <div class="selectorLine clearfix"> -->
-<!-- 		                  <div class="pull-left search-title">用户标签：</div> -->
-<!-- 		                  <div class="search-con"> -->
-<!-- 		                    <div class="sl-v-list-label"> -->
-<!-- 		                      <a id="tag_公海订单" onclick="userTypeSelection('公海订单')" style="cursor:pointer;">标签1</a> -->
-<!-- 		                      <a id="tag_快周边" onclick="userTypeSelection('快周边')" style="cursor:pointer;">标签2</a> -->
-<!-- 		                      <a id="tag_异常订单" onclick="userTypeSelection('异常订单')" style="cursor:pointer;">标签3</a> -->
-<!-- 		                      <a id="tag_已退款" onclick="userTypeSelection('已退款')" style="cursor:pointer;">标签4</a> -->
-<!-- 		                      <a id="tag_小贷" onclick="userTypeSelection('小贷')" style="cursor:pointer;">标签5</a> -->
-<!-- 		                      <a id="tag_汽车订单" onclick="userTypeSelection('汽车订单')" style="cursor:pointer;">标签6</a> -->
-<!-- 		                      <a id="tag_微信礼品卡" onclick="userTypeSelection('微信礼品卡')" style="cursor:pointer;">标签7</a> -->
-<!-- 		                      <input type="text" style="display:none" class="form-control" placeholder="用户标签"  id="label_private_manual"/> -->
-<!-- 		                    </div> -->
-<!-- 		                  </div> -->
-<!-- 		             </div> -->
-<!-- 		             <div class="selectorLine clearfix"> -->
-<!-- 		             	<div class="pull-left search-title">有无用户画像：</div> -->
-<!-- 		                  <div class="search-con"> -->
-<!-- 		                    <div class="sl-v-list-radio" style="margin:0 15px;"> -->
-<!-- 		                    	<input type="radio" name="modeltype" value="-1" id="radio0" checked="checked" />全部 -->
-<!-- 		                      	<input type="radio" name="modeltype" value="1" id="radio1"/>有 -->
-<!-- 								<input type="radio" name="modeltype" value="0" id="radio2" />无 -->
-<!-- 		                    </div> -->
-<!-- 		                  </div> -->
-<!-- 		             </div> -->
-                 </div>
+            <form id="searchform">
+            <div class="form-group col-lg-4">
+              <label>查询时间</label>
+             	<div class="search-con">
+					<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
+					    <div class="time_endbg" id="time_endbg">
+					        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
+					        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
+					    </div>
+					</div>
+					<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px;">	
+					    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
+					        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+					        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
+					        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
+					        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
+					        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
+					        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
+					    </div>
+					    <div class="ui-datepicker-choose">
+					        <!--<p>自选日期</p>-->
+					        <div class="ui-datepicker-date">
+						       	<input name="startDate" id="startOpenCardDate" class="startDate" readonly value="2018/05/21" type="text">
+						           到
+					            <input name="endDate" id="endOpenCardDate" class="endDate" readonly  value="2018/05/21" type="text" disabled>
+					        </div>
+					        <div class="opeDiv">
+					            <span class="Confirm" id="Confirm" onclick="datePickersOpenCard()">确定</span>
+					            <span class="Cancel" id="Cancel">取消</span>
+					        </div>
+					    </div>
+					</div>
+				</div>
             </div>
-			<div class="show-more-line">
-              <div class="how-more"><span>更多搜索选项</span><i class="fa fa-angle-down"></i></div>
-            </div>
-            <div class="breadcrumb no-margin">
-              <span class="pull-left search-title">已选条件：</span>
-              <div class="search-con">
-              	<span class="pull-right" style="display:none" id="clear_all"><a style="cursor:pointer;">清空所有条件</a></span>
+            <div class="form-group col-lg-4">
+              <label>城市</label>
+			  <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
+			  <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
+              <!-- /.input group -->
               </div>
             </div>
-            
-            <div class="clearfix">
-              <!--<div class="col-lg-4" id="tianchong" style="padding-top: 25px;">
-              </div>-->
-                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
-                    <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
-                </div>
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;" id="exportnormal">
-                    <button type="button" id="export_manual_userProfile_button" onclick="export_manual_userProfile('normal')" class="btn btn-block btn-warning">导出</button>
-                </div>
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
-                    <button type="button" id="export_manual_userProfile_button" onclick="export_manual_userProfile('all')" class="btn btn-block btn-warning">完整数据导出</button>
-                </div>
-                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
-                    <button type="button" onclick="search_manual_userProfile(1)" class="btn btn-block btn-primary">查询</button>
-                </div>
+            <div class="form-group col-lg-4">
+              <label>门店</label>
+			  <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
+			  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
+              <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
+              </div>
+              <!-- /.input group -->
             </div>
+            </form>
+            <div class="form-group col-lg-6" style="margin-top: 20px; padding: 0 25px;">
             </div>
-          </section>
+            <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+              <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_tradetype_step1(1)">查询</button>
+            </div>
+            <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+              <button type="button" onclick="export_tradetype()" class="btn btn-block btn-warning">导出</button>
+            </div>
+            <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+                <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+            </div>
+
           </div>
           <div class="box-body">
-            <div class="tab-content">
-              <table class="table table-striped no-margin">
-                <tbody id="manual_tbody">
-                <tr id="manual_title">
-                  <th width="10%">用户信息</th>
-                  <th width="10%">历史消费信息</th>
-                  <th width="10%">沉默时间（天）</th>
-                  <th width="10%">用户所属区域</th>
-                  <th width="10%">用户画像</th>
-                  <th width="10%">用户标签</th>
-                </tr>
-                </tbody>
-                
-              </table>
-            
-              <!-- /.tab-pane -->
+            <div class="nav-tabs-custom">
+              <div class="tab-content">
+                <div>
+                  <table class="table table-striped">
+                    <tbody id="tradeType_tbody">
+	                    <tr>
+	                      <th width="8%">城市</th>
+	                      <th width="10%">门店名称</th>
+	                      <th width="10%">门店编号</th>
+	                      <th width="12%">开卡数</th>
+	                      <th width="12%">累计开卡数</th>
+	                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
             </div>
-            <div style="position:absolute;bottom:6px;left:27px;width:25%">显示 <select id="pageRecords_manual" name="pageRecords_manual" onchange="chnagePageRecords(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_cannot"></span> 条</div>
-            <div class="tcdPageCode" id="page_manual"></div>
+            <div class="tcdPageCode" id="page_tradetype"></div>
           </div>
         </div>
-
       </section>
-
     </div>
   </div>
   <!-- /.content-wrapper -->
-
-
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery 2.2.0 -->
-<!-- <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script> -->
+<!-- ./wrapper -->
 <script src="plugins/date-new/js/jQuery-2.2.0.min.js"></script>
 <script src="plugins/date-new/js/jquery-ui-1.9.2.custom.js" type = "text/javascript"></script>
 <script src="plugins/date-new/js/share.js" type = "text/javascript"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
-<!-- Select2 -->
-<script src="plugins/select2/select2.full.min.js"></script>
-<!-- iCheck 1.0.1 -->
-<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
 <!-- FastClick -->
 <script src="plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
+
 <!-- page script -->
 <script type="text/javascript" src="plugins/jquery.page.js"></script>
 <script type="text/javascript" src="plugins/moment.min.js"></script>
-<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
-<script type="text/javascript" src="../scripts/auto.js"></script>
-<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
-<script tyle="text/javascript">
-<!--target(数据查询层级) 0：总部  1:城市级别 2：门店 3:业务事业群-->
-Date.prototype.format=function(fmt) {        
-    var o = {        
-    "M+" : this.getMonth()+1, //月份        
-    "d+" : this.getDate(), //日        
-    "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
-    "H+" : this.getHours(), //小时        
-    "m+" : this.getMinutes(), //分        
-    "s+" : this.getSeconds(), //秒        
-    "q+" : Math.floor((this.getMonth()+3)/3), //季度        
-    "S" : this.getMilliseconds() //毫秒        
-    };        
-    var week = {        
-    "0" : "\u65e5",        
-    "1" : "\u4e00",        
-    "2" : "\u4e8c",        
-    "3" : "\u4e09",        
-    "4" : "\u56db",        
-    "5" : "\u4e94",        
-    "6" : "\u516d"       
-    };        
-    if(/(y+)/.test(fmt)){        
-        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
-    }        
-    if(/(E+)/.test(fmt)){        
-        fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
-    }        
-    for(var k in o){        
-        if(new RegExp("("+ k +")").test(fmt)){        
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
-        }        
-    }        
-    return fmt;        
-} 
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+<script type="text/javascript">
 
 
- layer.config({
-	
+<!--target(数据查询层级标识) 0：总部  1:城市级别 2：门店-->
+	layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
-	  
 	});
- 
- 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
- 	var initCity = cityId;
-	var employeeId = decode64(getUrlParamByKey("e"));//员工ID
-	var storeId = decode64(getUrlParamByKey("s"));//门店ID
-	var storeNo = decode64(getUrlParamByKey("so"));//门店no
-	var target = decode64(getUrlParamByKey("t"));//执行人级别 
-	var storeName=decode64(getUrlParamByKey("sn"));//门店名称
-	var storeno = decode64(getUrlParamByKey("so"));//门店编号
-	var role = decode64(getUrlParamByKey("r"));//角色 code
-	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
-	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
-	//从门店GMV、国安侠GMV 跳转过来（Editor:gaobaolei）
-	var tag = decode64(getUrlParamByKey("tag"));//订单标签
-	
-  $(function () {
-    $(".logo-lg > ul > li").mouseenter(function(){
-      $(this).children(".nav_dropdown").show();
-    });
-    $(".logo-lg > ul > li").mouseleave(function(){
-      $(this).children(".nav_dropdown").hide();
-    });
-    
-    $("#ui-datepicker-quick input").click(function(){
-        var buttonValue= $(this).val();
-        $('#data_choice').html(buttonValue);
-    });
-    $("#first-ui-datepicker-quick input").click(function(){
-        var buttonValue= $(this).val();
-        $('#first_data_choice').html(buttonValue);
-    });
-    $("#last-ui-datepicker-quick input").click(function(){
-        var buttonValue= $(this).val();
-        $('#last_data_choice').html(buttonValue);
-    });
-    
-    initcurruser();//初始化登录人信息 
-    var isManager = currentUser.usergroup.code;
-    if(isManager=="GLY"){
-    	var exportnormal = document.getElementById("exportnormal");
-    	exportnormal.style.display = "none";
-    	var exportall = document.getElementById("exportall");
-    	exportall.style.display = "block";
-    }
-    
-    if(target==0){//总部
-    	initallcity(); 
-    	initallstore();
-    }else if(target==1){//城市
-    	initcurcity();
-    	$("#citySelect").prop("disabled", true);
-    	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
-    	initStoreSelectcomplate();
-    }else if(target==2) {//门店
-    	initcurcity();
-    	$("#citySelect").prop("disabled", true);
-		$("#citySelect option[value='"+cityname+"']").attr('selected',true);
-    	initStoreSelectcomplate();
-    	$("#store_id_manual").val(storeNo);
-    	$("#store_name_manual").val(storeName);
-		$("#store_name_manual").attr("readonly",true);
-    }
-    
-    var autoComplete = new AutoComplete("store_name_manual","auto",array);
-  	document.getElementById("store_name_manual").onkeyup = function(event){
-  		autoComplete.start(event);
-  		if($("#store_name_manual").val().trim() == ""){
-			$("#store_id_manual").val("");
-		}
-  		for(var key in storeJson){
-  			if(document.getElementById("store_name_manual").value==key){
-  				document.getElementById("store_id_manual").value=storeJson[key];
-  			}
-  		}
-  	}
-  	$("#auto").on("click",function(event){
-		for(var key in storeJson){
-			if(document.getElementById("store_name_manual").value==key){
-				document.getElementById("store_id_manual").value=storeJson[key];
-			}
-		}
-	});
-    
-  	//更多显示
-    $(".how-more").click(function(){
-        var sl_open = $(".fold-con").css("display");
-       if(sl_open == 'none'){
-         $(this).parent().prev().children().next(".fold-con").show();
-         $(this).children("span").html("收起更多选项");
-         $(this).children("span").addClass("search-more-open");
-       } else if(sl_open == 'block'){
-         $(this).parent().prev().children().next(".fold-con").hide();
-         $(this).children("span").html("更多搜索选项");
-         $(this).children("span").removeClass("search-more-open");
-       }
-      });
-      $(".sl-ext").click(function(){
-        var is_open = $(".sl-btns").css("display");
-        if(is_open == 'none'){
-          $(this).prev().children(".sl-btns").show();
-          $(this).children(".search-more").children("span").html("收起");
-          $(".search-more").addClass("search-more-open");
-        }else if(is_open == 'block'){
-          $(this).prev().children(".sl-btns").hide();
-          $(this).children(".search-more").children("span").html("更多");
-          $(this).children(".search-more").removeClass("search-more-open");
-        }
-      });
-      
-      $(".sl-v-list a").click(function(){
-    	  $(".breadcrumb .search-con .condition").remove();
-    	  var screen = $(this).text();
-          var filter = $("<a style='cursor:pointer;' class='condition'><span>" + screen + "</span><i class='fa fa-times'></i></a>");
-          var ui =document.getElementById("clear_all");
-          
-          if($(this).hasClass('bg-orange-active')){
-            $(".breadcrumb .search-con").append();
-            $(this).removeClass('bg-orange-active');
-            
-            $(".breadcrumb .search-con").find('a').each(function(){
-              var selectedcareer_group = $(this);
-              if(selectedcareer_group.text()==screen){
-                   selectedcareer_group.remove();
-              }
-            });
-            
-            var curValue = $(this).text();
-            var name = "";
-         	if(curValue=='集采用户'){
-         		name="B";
-         	}else{
-         		name = curValue.substring(3,curValue.length-1);
-         	}
-    		var deptName = $("#slient_private_manual").val();
-    		$("#slient_private_manual").val(deptName.replace(name,""));
-            var selectObj = $(".breadcrumb .search-con").find('a');
-
-            if(selectObj.length==1){
-              $(".all").addClass("bg-orange-active");
-              ui.style.display="none";
-            }else{
-              ui.style.display="";
-            }
-          }else {
-        	$(".sl-v-list a").removeClass("bg-orange-active");
-        	$("#slient_private_manual").val("");
-            $(this).addClass("bg-orange-active");
-            $(".breadcrumb .search-con").val("");
-            $(".breadcrumb .search-con").append(filter);
-            $(".all").removeClass("bg-orange-active");
-            ui.style.display="";
-         	var curValue = $(this).text();
-         	var name = "";
-         	if(curValue=='集采用户'){
-         		name="B";
-         	}else{
-         		name = curValue.substring(3,curValue.length-1);
-         	}
-	  		$("#slient_private_manual").val(name);
-          }
-
-          var obj=$(this);
-          filter.on("click",function(){
-            obj.removeClass("bg-orange-active");
-            filter.remove();
-            var curValue = $(this).text();
-            var name = "";
-         	if(curValue=='集采用户'){
-         		name="B";
-         	}else{
-         		name = curValue.substring(3,curValue.length-1);
-         	}
-    		var deptName = $("#slient_private_manual").val();
-    		$("#slient_private_manual").val(deptName.replace(name,""));
-            var aobj = $(".breadcrumb .search-con a");
-            if(aobj.length==1){
-              $(".all").addClass("bg-orange-active");
-              ui.style.display="none";
-            }else{
-              ui.style.display="";
-            }
-
-          });
-
-      });
-      
-      $(".sl-v-list-label a").click(function(){
-    	  var screen = $(this).text();
-          var filter = $("<a href='#' class='condition'><span>" + screen + "</span><i class='fa fa-times'></i></a>");
-          var ui =document.getElementById("clear_all");
-
-          if($(this).hasClass('bg-orange-active')){
-            $(".breadcrumb .search-con").append();
-            $(this).removeClass('bg-orange-active');
-            
-            $(".breadcrumb .search-con").find('a').each(function(){
-              var selectedcareer_group = $(this);
-              if(selectedcareer_group.text()==screen){
-                   selectedcareer_group.remove();
-              }
-            });
-
-            var curValue = $(this).text();
-            var name = curValue.substring(0,curValue.length)+",";
-    		var labelName = $("#label_private_manual").val();
-    		$("#label_private_manual").val(labelName.replace(name,""));
-            
-            var selectObj = $(".breadcrumb .search-con").find('a');
-
-            if(selectObj.length==1){
-              $(".sl-v-list-label .all").addClass("bg-orange-active");
-              ui.style.display="none";
-            }else{
-              ui.style.display="";
-            }
-          }else {
-            $(this).addClass("bg-orange-active");
-            $(".breadcrumb .search-con").append(filter);
-            $(".sl-v-list-label .all").removeClass("bg-orange-active");
-            ui.style.display="";
-          }
-          //$(".sl-v-list a").removeClass("bg-orange-active");
-
-
-          var obj=$(this);
-          filter.on("click",function(){
-            obj.removeClass("bg-orange-active");
-            filter.remove();
-            var curValue = $(this).text();
-            var name = curValue.substring(0,curValue.length)+",";
-    		var labelName = $("#label_private_manual").val();
-    		$("#label_private_manual").val(labelName.replace(name,""));
-
-            var aobj = $(".breadcrumb .search-con a");
-            if(aobj.length==1){
-              $(".sl-v-list-label .all").addClass("bg-orange-active");
-              ui.style.display="none";
-            }else{
-            	ui.style.display="";
-            }
-
-          });
-
-        });
-
-      	//清空所有条件
-        $(".breadcrumb .pull-right").click(function(){
-      	  $("#label_private_manual").val("");
-      	  $("#slient_private_manual").val("");
-          $(".breadcrumb .search-con .condition").remove();
-          $(".sl-v-list a").removeClass("bg-orange-active");
-          $(".sl-v-list-label a").removeClass("bg-orange-active");
-          var ui =document.getElementById("clear_all");
-          ui.style.display="none";
-          resetSerachParam(2);
-        });
-      
-      //iCheck for checkbox and radio inputs
-      $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-        checkboxClass: 'icheckbox_minimal-blue',
-        radioClass: 'iradio_minimal-blue'
-      });
-      //Red color scheme for iCheck
-      $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-        checkboxClass: 'icheckbox_minimal-red',
-        radioClass: 'iradio_minimal-red'
-      });
-      //Flat red color scheme for iCheck
-      $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-        checkboxClass: 'icheckbox_flat-green',
-        radioClass: 'iradio_flat-green'
-      });
-  });
-	
-  /**
-   * 访问系统功能统计
-   * @businessType
-   * @modulefunc
-   * @returnCitySN
-   * @usertype
-   * @token
-   */
-  function saveAccessModuleLog(businessType,modulefunc,returnCitySN,usertype,token){
-  		var loguser={};
-  		loguser.citynames=returnCitySN.cname;
-  		loguser.loginip=returnCitySN.cip;
-  		loguser.token=token;
-  		loguser.businessType=businessType;
-  		loguser.modulefunc=modulefunc;
-  		loguser.usertype=usertype;
-  		doManager("UserAccessModuleLogManager","saveAccessModuleLog",[loguser], function(data, textStatus, XMLHttpRequest){
-  		},false); 
-  	}
-     
-  function initallcity(){
-		doManager("DistCityCodeManager","queryAllDistCityList",null,
-		    function(data,textStatus,XmlHttpRequest){
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					$("#citySelect").append("<option value=''>全部城市</option>");
-					$(jsonData).each(function(index,element){
-						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
-                   });
-				}
+	var cityId = decode64(getUrlParamByKey("c"));//城市ID
+	var initCity = cityId;
+	var cityName = decode64(getUrlParamByKey("cn"));//城市名称
+	var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+	var storeId = decode64(getUrlParamByKey("s"));//门店编号
+	var target =0// decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
+	var storeName=decode64(getUrlParamByKey("sn"));
+	var storeNo=decode64(getUrlParamByKey("so"));
+	var role = decode64(getUrlParamByKey("r"));
+	$(function () {
+		$("#ui-datepicker-quick input").click(function(){
+		    var buttonValue= $(this).val();
+		    $('#data_choice').html(buttonValue);
 		});
-	} 
-   
-  var array=new Array();
-	//初始化所有门店 
-	function initallstore() {
-		doManager("StoreManager", "findStoreAll", null,
-			function(data, textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					array = new Array();
-					var storeString = "";
-					for(i=0;i<jsonData.length;i++){
-						array.push(jsonData[i].name);
-						if(i == 0){
-							storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
-						}else if(i == jsonData.length-1){
-							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+"}";
-						}else{
-							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
-						}
-					}
-					storeJson=$.fromJSON(storeString);
-					var autoComplete = new AutoComplete("store_name_manual","auto",array);
-					document.getElementById("store_name_manual").onkeyup = function(event){
-						autoComplete.start(event);
-						if($("#store_name_manual").val().trim() == ""){
-							$("#store_id_manual").val("");
-						}
-						document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-					}
-				}
-			}, false);
-	}
-	
-   function initcurcity(){
-		doManager("userManager","getCurrentUserCity",null,
-		    function(data,textStatus,XmlHttpRequest){
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					$(jsonData).each(function(index,element){
-						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
-                   });
-					
-				}
-		},false);
-	}
-  
-   $("#citySelect").change(function(){
-		$("#store_id_manual").val("");
-		$("#store_name_manual").val("");
-		initStoreSelectcomplate();
-	});
-	
-   var storeJson;
-	function initStoreSelectcomplate(){
-		var citySelect = $("#citySelect  option:selected").val();
-		$("#auto").val("");
-		if(citySelect==""){
-			initallstore();
-		}else{
-			//根据城市查询门店 信息
-			var cityname = "'"+citySelect+"'";
-			doManager("StoreManager","findStoreByCityData",[cityname],
-			    function(data,textStatus,XmlHttpRequest){
-					if (data.result) {
-						var jsonData = $.fromJSON(data.data);
-						array=new Array();
-						var storeString = "";
-						$(jsonData).each(function(index,element){
-							var storeName = element.name;
-							var storeid = element.storeno;
-							array.push(storeName);
-							if(index == 0){
-	 							storeString = "{'"+storeName+"'"+":"+"'"+storeid+"'"+",";
-	 						}else if(index == jsonData.length-1){
-	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+"}";
-	 						}else{
-	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+",";
-	 						}
-						});
-						storeJson=$.fromJSON(storeString);
-						var autoCompleteName = new AutoComplete("store_name_manual","auto",array);
-						document.getElementById("store_name_manual").onkeyup = function(event){
-							autoCompleteName.start(event);
-							if($("#store_name_manual").val().trim() == ""){
-								$("#store_id_manual").val("");
-							}
-							document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-						}
-					}
-			});
+		if(target==0){//总部
+			
+		}else if(target==1){//城市
+			$("#city_name_tradetype").val(cityName);
+			$("#city_name_tradetype").attr("readonly",true);
+		}else if(target==2){//店长
+			$("#city_name_tradetype").val(cityName);
+			$("#city_name_tradetype").attr("readonly",true);
+			$("#store_name_tradetype").val(storeName);
+			$("#store_name_tradetype").attr("readonly",true);
 		}
 		
-	}
-	
-	function isCityStore(sname){
-		var cityStore = false;
-		$(array).each(function(index,element){
-			if(element==sname){
-				cityStore=true;
-			}
-		});
-		return cityStore;
-	}
-  
-  	var currentUser;
-	function initcurruser(){
-		//取得当前登录人的门店
-		doManager("UserManager", "getCurrentUserDTO",null,
-			function(data, textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var curr_user = JSON.parse(data.data);
-					currentUser = curr_user;
-				}
-		},false);
-	}
-  
-	  //沉默标签快速选择
-	  function slientSelection(labelname){
-	  	var labelName = $("#slient_private_manual").val();
-	  	if(labelName.indexOf(labelname)>=0){
-	  		$("#slient_private_manual").val($("#slient_private_manual").val());
-	  	}else{
-	  		$("#slient_private_manual").val($("#slient_private_manual").val()+labelname+",");
-	  	}
-	  }
-  
-    //用户标签快速选择
-    function userTypeSelection(labelname){
-    	var labelName = $("#label_private_manual").val();
-    	if(labelName.indexOf(labelname)>=0){
-    		$("#label_private_manual").val($("#label_private_manual").val());
-    	}else{
-    		$("#label_private_manual").val($("#label_private_manual").val()+labelname+",");
-    	}
-    }
+	    $(".logo-lg > ul > li").hover(function(){
+	      $(this).children(".nav_dropdown").toggle('1000');
+	    });
+  });
+  /**-----------------------------------搜索城市------------------------------------------------------**/
+  var lst_select_city=null;
+  var cityNameArray=new Array();
+  var cityIdMap = {};
+  $('#city_name_tradetype').keyup(function(event){//门店交易额统计
+	  cityNameArray=new Array();
+	   $("#auto_city").empty();
+	   $("#auto_store").empty();
+	   $("#store_id_tradetype").val("");
+	   $("#store_name_tradetype").val("");
+       $('#store_name-search_tradetype').children().remove();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        	$("#city_id_tradetype").val("");
+            //$('#city_name-search_tradetype').children().remove();
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id = null;
+            if(target==1){
+            	city_id = cityId;
+            	
+            }
+            doManager('dynamicManager','selectAllCity',null,function(data){
+                if(data.result){
+                	
+                	lst_select_city = JSON.parse(data.data);
+                	 for(i=0;i<lst_select_city.length;i++){
+                		 cityNameArray.push(lst_select_city[i].cityname);
+                     	 cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
+       			  	 }
+       			  	var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
+       			    autoComplete.start(event);
+                }else{
+                	
+                }
+            });
+        }
+    });
+
+	  $('#auto_city').on("click",function(){
+		  var temp_city = document.getElementById("city_name_tradetype").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+		  $("#city_id_tradetype").val(cityIdMap[temp_city]);
+	  }); 
      
-   var isCreatePage=false;
-   function search_manual_userProfile(cur_page){
-  		isCreatePage=false;
-  		search_manual_userProfile1(cur_page);
-   }
+     
+     
   
-  //查询上
-  var currentPage_manual= 1;
-  var totalPage_manual = 1;
-  function   search_manual_userProfile1(cur_page){
-	    //注册时间
-	    var sdate = $("#regist_date").val();
-	    var regist_begin_end_date=["",""];
+  /**-----------------------------------搜索门店------------------------------------------------------**/
+  var lst_select_store=null;
+  var storeNameArray=new Array();
+  var storeIdMap = {};
+  $('#store_name_tradetype').keyup(function(event){
+	  storeNameArray=new Array();
+	    $("#auto_store").empty();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        	$("#store_id_tradetype").val("");
+            $('#store_name-search_tradetype').children().remove();
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id = null;
+            if(target==0){//总部
+            	 city_id = ($("#city_id_tradetype").val())==""?null:($("#city_id_tradetype").val());
+            	 var city_name =  $("#city_name_tradetype").val();
+                 if(city_id==null&&city_name!=""){
+                 	city_id=-10000;
+                 }
+            }else if(target==1){//城市
+            	city_id = cityId;
+            }
+            
+            doManager('dynamicManager','getStoreByCity',[target,employeeId,city_id,str_name],function(data){
+                if(data.result){
+                	
+                	lst_select_store = JSON.parse(data.data).storelist;
+                    
+                    for(i=0;i<lst_select_store.length;i++){
+                    	storeNameArray.push(lst_select_store[i].name);
+                    	storeIdMap[lst_select_store[i].name] = lst_select_store[i].store_id;
+      			  	}
+      			  	var autoComplete = new AutoComplete("store_name_tradetype","auto_store",storeNameArray);
+      			    autoComplete.start(event);
+                }else{
+                	
+                }
+            });
+        }
+    });
+
+	  $('#auto_store').on("click",function(){
+		  var temp_store = document.getElementById("store_name_tradetype").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+		  $("#store_id_tradetype").val(storeIdMap[temp_store]);
+	 }); 
+     
+     
+    
+ 
+    <!-------------------------------------------------------点击查询----------------------------------------------------------------->  
+   
+    var isCreatePage1=false;
+    function searchInfo_tradetype_step1(cur_page){
+    	isCreatePage1=false;
+  		searchInfo_tradetype_step2(cur_page);
+  	}
+    
+    
+    
+    //查询上
+    var currentPage_tradetype = 1;
+    var totalPage_tradetype = 1;   
+    function searchInfo_tradetype_step2(cur_page){
+    	//注册时间
+	    var sdate = $("#searchTime").val();
+	    var begin_end_date=["",""];
 	  	if(sdate!=""){
-	  		regist_begin_end_date = sdate.split("-");
+	  		begin_end_date = sdate.split("-");
 	   	}
-	  	//首次消费时间
-	  	var fdate = $("#first_date").val();
-	    var first_begin_end_date=["",""];
-	  	if(fdate!=""){
-	  		 first_begin_end_date = fdate.split("-");
-	   	}
-	  	//最后消费时间
-	  	var ldate = $("#last_date").val();
-	    var last_begin_end_date=["",""];
-	  	if(ldate!=""){
-	  		 last_begin_end_date = ldate.split("-");
-	   	}
-  	   
-	    var customer_phone = $("#customer_phone_manual").val();
-	    var customer_name = $("#customer_name_manual").val();
-	    var trading_price_min = $("#min_money_auto").val();
-	    var trading_price_max= $("#max_money_auto").val();
-	    var order_count_min = $("#min_count_auto").val();
-	    var order_count_max = $("#max_count_auto").val();
-	    var slient_time_min = $("#min_slient_auto").val();
-	    var slient_time_max = $("#max_slient_auto").val();
-	    if(slient_time_min==""){
-	    	slient_time_min = 0;
+    	$("#process_div").show();
+   	 	$("#process_div_pic").show();
+ 	    var number_str = $("#store_id_tradetype").val(); 
+ 	    var storeName = $("#store_name_tradetype").val();
+ 	    
+ 	    if(number_str==""&&storeName!=""){
+ 	    	number_str=-10000;
+ 	    }
+ 	   var dynamicDto=null;
+ 	   if(target==0){//总部
+ 		  var cityId = $("#city_id_tradetype").val();
+ 		  var cityName = $("#city_name_tradetype").val();
+ 		  if(cityId==""&&cityName!=""){
+ 			 cityId="-10000";
+ 		  }
+ 		  dynamicDto = {
+ 	  				beginDate:begin_end_date[0].trim(),
+ 	  				endDate:begin_end_date[1].trim(),
+ 	  				storeNumer:number_str,
+ 	  				cityId:cityId,
+ 	  		  		employeeId:employeeId,
+ 	  		  		target:target,
+ 	  		  		storeId:number_str
+ 	  			}
+ 	   }else if(target==1){//城市
+	    	 dynamicDto = {
+	    		beginDate:begin_end_date[0].trim(),
+	 	  		endDate:begin_end_date[1].trim(),
+  				storeNumer:number_str,
+  				cityId:initCity,
+  		  		employeeId:employeeId,
+  		  		target:target,
+  		  		storeId:number_str
+  			}
+	    }else if(target==2){//店长
+	    	dynamicDto = {
+	    		beginDate:begin_end_date[0].trim(),
+ 	  			endDate:begin_end_date[1].trim(),
+  				storeNumer:number_str,
+  		  		employeeNo:employeeId,
+  		  		storeId:storeId,
+  		  		target:target
+  			}
+	    }else if(target==3){//事业部
+	    	dynamicDto = {
+	    			beginDate:begin_end_date[0].trim(),
+ 	  				endDate:begin_end_date[1].trim(),
+	  				storeNumer:number_str,
+	  		  		employeeNo:employeeId,
+	  		  		storeId:number_str,
+	  		  		target:target
+	  			}
 	    }
-	    
-	    var slient_time_quick = $("#slient_private_manual").val(); 
-	    if(slient_time_quick==""){
-	    	slient_time_quick = 0;
-	    }
-	    if(slient_time_quick=="3"){
-	    	slient_time_quick = 90;
-	    }
-	    if(slient_time_quick=="6"){
-	    	slient_time_quick = 180;
-	    }
-	    var slient_time_min_select = "";
-		if(slient_time_min>=slient_time_quick){
-			slient_time_min_select = slient_time_min;
-	   	}else{
-	   		slient_time_min_select = slient_time_quick;
-	   	}
-	    if(slient_time_max!="" && slient_time_min_select>slient_time_max){
-	    	crm_alert(0,"请选择合适的沉默时期！");
-			return;
-	    }
-	    
-	    var number_str = $("#store_id_manual").val(); 
-  	    var storeName = $("#store_name_manual").val();
-  	  	if(storeName!=""){
-	  	  	if($.inArray(storeName, array) == -1){
-				crm_alert(0,"该门店不存在！");
-				return;
-			}
-	    }
-  	    if(number_str==""&&storeName!=""){
-  	    	number_str=-10000;
-  	    }
-	    
-	    $("#process_div").show();
- 	 	$("#process_div_pic").show();
- 	 	
- 	 	var cityName = $("#citySelect  option:selected").val();
-	    if(cityName!=""){
-	    	if(cityName=="黔东南苗族侗族自治州"){
-	    		cityName="黔东南州";
-	    	}else{
-	    		cityName=cityName+"市";
-	    	}
-	    }
-	    
-	    var userLabels = $("#label_private_manual").val();
-		if(userLabels!=null && userLabels!='' && userLabels.indexOf(',') >= 0){
-			userLabels = userLabels.substring(0,userLabels.length-1);
-	    }
-		var user_model = $("input[type='radio']:checked").val();
-	    var userProfileDto=null;
-	    userProfileDto = {
-	    		store_no:number_str,
-	    		city_name:cityName,
-	    		regist_time_begin:regist_begin_end_date[0].trim(),
-	    		regist_time_end:regist_begin_end_date[1].trim(),
-	    		first_order_time_begin:first_begin_end_date[0].trim(),
-	    		first_order_time_end:first_begin_end_date[1].trim(),
-	    		last_order_time_begin:last_begin_end_date[0].trim(),
-	    		last_order_time_end:last_begin_end_date[1].trim(),
-	    		customer_phone:customer_phone,
-	    		customer_name:customer_name,
-	    		trading_price_min:trading_price_min,
-	    		trading_price_max:trading_price_max,
-	    		order_count_min:order_count_min,
-	    		order_count_max:order_count_max,
-	    		slient_time_min:slient_time_min_select,
-	    		slient_time_max:slient_time_max,
-	    		user_label:userLabels,
-	    		user_model:user_model
-			}
-	    var pageInfo = new Object();
-	    pageInfo.currentPage = cur_page;
-	    pageInfo.recordsPerPage = manualPageRecordes;
-	    $("#totalRecord_cannot").html("0");
-	    doManager('userProfileManager','queryUserProfile',[userProfileDto,pageInfo],function(data){
-         if(data.result){
-         	   var result= JSON.parse(data.data);
+ 	    var pageInfo = new Object();
+ 	    pageInfo.currentPage = cur_page;
+	    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
+           if(data.result){
+           	   var result= JSON.parse(data.data);
 	           if(result.status=='success'){
-	        	   $("#manual_tbody").find("tr:gt(0)").remove(); 
-	        	   var jData = result.data;
+	        	   debugger;
+	        	   $("#tradeType_tbody").find("tr:gt(0)").remove(); 
+	        	   var jData = result.member;
 	        	   if(jData==null||jData.length==0){
-	        		   crm_alert(5,"系统查无此条件的数据");
-	        		   $("#page_manual").createPage({
+	        		   crm_alert(5,"没有符合条件的数据！");
+	        		   $("#page_tradetype").createPage({
 	        	 	  	    pageCount:0,
 	        	 	  	    current:0,
 	        	 	  	    backFn:function(p){
@@ -1059,322 +506,161 @@ Date.prototype.format=function(fmt) {
 	        	       $("#process_div_pic").hide();
 	        		   return;
 	        	   }
-	        	   totalPage_manual = result.total_pages;
-	        	   $("#totalRecord_cannot").html(result.pageinfo.totalRecords);
-	        	   if(!isCreatePage){
-	        		   
-	        		   $("#page_manual").createPage({
-	        	 	  	    pageCount:totalPage_manual,
-	        	 	  	    current:1,
-	        	 	  	    backFn:function(p){
-	        	 	  	    	
-	        	 	  	    	search_manual_userProfile1(p);
-	        	 	  	    }
-	        	 	  	});
-	        		   isCreatePage=true;
-	        	   }
+	        	   totalPage_tradetype = result.total_pages;
 	        	  
+	        	   if(!isCreatePage1){
+	        		   $("#page_tradetype").createPage({
+	   	       	  	    pageCount:totalPage_tradetype,
+	   	       	  	    current:cur_page,
+	   	       	  	    backFn:function(p){
+	   	       	  			searchInfo_tradetype_step3(p,begin_end_date);
+	   	       	  	    }
+	   	       	  	  });
+	        		   isCreatePage1=true;
+	        	   }
+	        	   
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-    			       var regist="";
-    			       var first="";
-    			       var last="";
-    			       if(jData[i].regist_time!=null){
-    			    		var d=	new Date();
-    			     		d.setTime(jData[i].regist_time);
-    			     		regist=d.format('yyyy-MM-dd HH:mm:ss')
-    			       }
-    			    	if(jData[i].first_order_time!=null){
-	 			    		var d=	new Date();
-	 			     		d.setTime(jData[i].first_order_time);
-	 			     		first=d.format('yyyy-MM-dd HH:mm:ss')
-			       		}
-    			    	if(jData[i].last_order_time!=null){
-	 			    		var d=	new Date();
-	 			     		d.setTime(jData[i].last_order_time);
-	 			     		last=d.format('yyyy-MM-dd HH:mm:ss')
-			       		}
-       			    
-	       			    var customer_phone = jData[i].customer_phone==null?'':jData[i].customer_phone;
-	       			 	var customer_phone_show=customer_phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
-	       			    
-	       			 	var cname="<strong>用户姓名：</strong>"+jData[i].customer_name+"<br>";
-				       	var cphone="<strong>用户电话：</strong>"+customer_phone_show+"<br>";
-				       	var customercontent =cname+cphone+"@customertips"+i;
-				        var customerid = "customertips"+i;
-				        
-				        var csum="<strong>历史消费金额：</strong>"+jData[i].trading_price_sum+"<br>";
-				        var ccount="<strong>历史消费次数：</strong>"+jData[i].order_count+"<br>";
-				        var cmax="<strong>最大交易金额：</strong>"+jData[i].trading_price_max+"<br>";
-				        var cfirst="<strong>首次消费时间：</strong>"+first+"<br>";
-				        var clast="<strong>最后消费时间：</strong>"+last+"<br>";
-				        var paycontent=csum+ccount+cmax+cfirst+clast+"@paytips"+i;
-				        var payid = "paytips"+i;
-				        
-				        var cbelongid = "cbelongtips"+i;
-	       			 	
-		        		infoStr= "<tr>";
-	       			    infoStr= infoStr
-				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+customercontent+"');\" id=\""+customerid+"\">"+customer_phone_show+"</a></td>"
-				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+paycontent+"');\" id=\""+payid+"\">"+jData[i].order_count+"</a></td>"
-		         	   		+"<td>"+jData[i].slient_time+"</td>"
-		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
-		         	   		+"<td>"+jData[i].user_model+"</td>"
-		         	   		+"<td>";
-		         	   		
-	       			 	if(jData[i].slient_time>='180'){
-							infoStr= infoStr
-								+"<span style=\"background:url('../data_access/imgmouse_files/20180110131512666.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">沉默超6月</span>";
-						}else if(jData[i].slient_time>='90'){
-							infoStr= infoStr
-								+"<span style=\"background:url('../data_access/imgmouse_files/623608966639545324.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">沉默超3月</span>";
-						}
-		         	   		
-		         	   if(jData[i].usertag!=''){
-							infoStr= infoStr
-								+"<span style=\"background:url('../data_access/imgmouse_files/271800839857672654.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">集采用户</span>";
-						}
-			            
-		         	  	infoStr= infoStr +"</td>";
-			            $("#manual_tbody").append(infoStr);     
+	        		   infoStr= "<tr>"
+		                       +"<td>"+jData[i].city_name+"</td>"
+		                       +"<td>"+jData[i].name+"</td>"
+		                       +"<td>"+jData[i].storeno+"</td>"
+		                       +"<td>"+jData[i].nowcount+"</td>"
+		                       +"<td>"+jData[i].opencount+"</td>"
+		                       +"</tr>";
+		                       
+		                  $("#tradeType_tbody").append(infoStr);     
 	        	   }
+	           }else if(result.status=='storefail'){
+	        	   $("#tradeType_tbody").find("tr:gt(0)").remove(); 
+	           	   crm_alert(5,JSON.parse(result.data).message);
+		           	$("#page_tradetype").createPage({
+		   	 	  	    pageCount:0,
+		   	 	  	    current:0,
+		   	 	  	    backFn:function(p){
+		   	 	  	    	
+		   	 	  	    }
+		   	 	  	});
+	        	   $("#process_div").hide();
+	    	       $("#process_div_pic").hide();
+	        	   return;
 	           }else{
 	        	   crm_alert(5,"请稍后重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
 	        	   return;
 	           }
-         
-         }else{
-      	   crm_alert(5,"请稍后重新请求！");
-         }
-     });  
-    $("#process_div").hide();
-  	$("#process_div_pic").hide(); 
-  }
-  
-  //用户信息、消费信息、所属区域显示
-  function showinfo(obj){
-	  var msg = obj.split("@")[0];
-	  var id = obj.split("@")[1];
-	  layer.tips(msg, '#'+id, {
-		  tips: [4, '#0FA6D8'], //还可配置颜色
-		  time:5000
-	  });
-  }  
- 
-  //用户画像
-  function searchUserModel(customerphone){
-	  var url = "user_model.html?mp="+encode64(customerphone);
-	  window.open(url,"humanresources_list");
-  }
-  
-  //导出
-  function export_manual_userProfile(hiddenvalue){
-		//注册时间
-	    var sdate = $("#regist_date").val();
-	    var regist_begin_end_date=["",""];
+           
+           }else{
+        	   crm_alert(5,"请稍后重新请求！");
+           }
+          $("#process_div").hide();
+     	  $("#process_div_pic").hide();
+       }); 
+    }
+    
+    
+    //导出上第二步
+    function export_tradetype(){
+    	//注册时间
+	    var sdate = $("#searchTime").val();
+	    var begin_end_date=["",""];
 	  	if(sdate!=""){
-	  		regist_begin_end_date = sdate.split("-");
+	  		begin_end_date = sdate.split("-");
 	   	}
-	  	//首次消费时间
-	  	var fdate = $("#first_date").val();
-	    var first_begin_end_date=["",""];
-	  	if(fdate!=""){
-	  		 first_begin_end_date = fdate.split("-");
-	   	}
-	  	//最后消费时间
-	  	var ldate = $("#last_date").val();
-	    var last_begin_end_date=["",""];
-	  	if(ldate!=""){
-	  		 last_begin_end_date = ldate.split("-");
-	   	}
-	  	
-	 	var customer_phone = $("#customer_phone_manual").val();
-	    var customer_name = $("#customer_name_manual").val();
-	    var trading_price_min = $("#min_money_auto").val();
-	    var trading_price_max= $("#max_money_auto").val();
-	    var order_count_min = $("#min_count_auto").val();
-	    var order_count_max = $("#max_count_auto").val();
-	    var slient_time_min = $("#min_slient_auto").val();
-	    var slient_time_max = $("#max_slient_auto").val();
-	    if(slient_time_min==""){
-	    	slient_time_min = 0;
-	    }
+    	$("#process_div").show();
+  	 	$("#process_div_pic").show();
+   		
+	    var number_str = $("#store_id_tradetype").val(); 
+	    var storeName = $("#store_name_tradetype").val();
 	    
-	    var slient_time_quick = $("#slient_private_manual").val(); 
-	    if(slient_time_quick==""){
-	    	slient_time_quick = 0;
+ 	    if(number_str==""&&storeName!=""){
+ 	    	number_str=-10000;
+ 	    }
+ 	   var dynamicDto=null;
+ 	   if(target==0){//总部
+ 		  var cityId = $("#city_id_tradetype").val();
+ 		  var cityName = $("#city_name_tradetype").val();
+		  if(cityId==""&&cityName!=""){
+			 cityId="-10000";
+		  }
+ 		  dynamicDto = {
+ 				 	beginDate:begin_end_date[0].trim(),
+ 	 	  			endDate:begin_end_date[1].trim(),
+ 	  				storeNumer:number_str,
+ 	  				cityId:cityId,
+ 	  		  		employeeId:employeeId,
+ 	  		  		target:target,
+ 	  		  		storeId:number_str
+ 	  			}
+ 	   }else if(target==1){//城市
+	    	 dynamicDto = {
+	    		beginDate:begin_end_date[0].trim(),
+	 	 	  	endDate:begin_end_date[1].trim(),
+  				storeNumer:number_str,
+  				cityId:initCity,
+  		  		employeeId:employeeId,
+  		  		target:target,
+  		  		storeId:number_str
+  			}
+	    }else if(target==2){//店长
+	    	dynamicDto = {
+	    		beginDate:begin_end_date[0].trim(),
+		 	  	endDate:begin_end_date[1].trim(),
+  				storeNumer:number_str,
+  		  		employeeNo:employeeId,
+  		  		storeId:storeId,
+  		  		target:target
+  			}
 	    }
-	    if(slient_time_quick=="3"){
-	    	slient_time_quick = 90;
-	    }
-	    if(slient_time_quick=="6"){
-	    	slient_time_quick = 180;
-	    }
-	    var slient_time_min_select = "";
-		if(slient_time_min>=slient_time_quick){
-			slient_time_min_select = slient_time_min;
-	   	}else{
-	   		slient_time_min_select = slient_time_quick;
-	   	}
-	    if(slient_time_max!="" && slient_time_min_select>slient_time_max){
-	    	crm_alert(0,"请选择合适的沉默天数！");
-			return;
-	    }
-	    
-	    var number_str = $("#store_id_manual").val(); 
-  	    var storeName = $("#store_name_manual").val();
-  	  	if(storeName!=""){
-	  	  	if($.inArray(storeName, array) == -1){
-				crm_alert(0,"该门店不存在！");
-				return;
-			}
-	    }
-  	    if(number_str==""&&storeName!=""){
-  	    	number_str=-10000;
-  	    }
-	    
-	    $("#process_div").show();
- 	 	$("#process_div_pic").show();
- 	 	
- 	 	var cityName = $("#citySelect  option:selected").val();
-	    if(cityName!=""){
-	    	if(cityName=="黔东南苗族侗族自治州"){
-	    		cityName="黔东南州";
-	    	}else{
-	    		cityName=cityName+"市";
-	    	}
-	    }
-	    
-	    var userLabels = $("#label_private_manual").val();
-		if(userLabels!=null && userLabels!='' && userLabels.indexOf(',') >= 0){
-			userLabels = userLabels.substring(0,userLabels.length-1);
-	    }
-		var user_model = $("input[type='radio']:checked").val();
-	    var userProfileDto=null;
-	    userProfileDto = {
-	    		regist_time_begin:regist_begin_end_date[0].trim(),
-	    		regist_time_end:regist_begin_end_date[1].trim(),
-	    		first_order_time_begin:first_begin_end_date[0].trim(),
-	    		first_order_time_end:first_begin_end_date[1].trim(),
-	    		last_order_time_begin:last_begin_end_date[0].trim(),
-	    		last_order_time_end:last_begin_end_date[1].trim(),
-	    		customer_phone:customer_phone,
-	    		customer_name:customer_name,
-	    		trading_price_min:trading_price_min,
-	    		trading_price_max:trading_price_max,
-	    		order_count_min:order_count_min,
-	    		order_count_max:order_count_max,
-	    		slient_time_min:slient_time_min_select,
-	    		slient_time_max:slient_time_max,
-	    		user_label:userLabels,
-	    		user_model:user_model,
-	    		hidden_flag:hiddenvalue
-			}
-		    
-		    doManager('userProfileManager','exportUserProfile',[userProfileDto],function(data){
-		          if(data.result){
-		          	   var result= JSON.parse(data.data);
-			           if(result.status=='success'){
-			        	   window.location.href=result.data;
-			           }else if(result.status=='more'){
-			        	   crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
-			        	   $("#process_div").hide();
-		        	       $("#process_div_pic").hide();
-			        	   return;
-			           }else{
-			        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
-			        	   $("#process_div").hide();
-		        	       $("#process_div_pic").hide();
-			        	   return;
-			           }
-		          
-		          }else{
-		       	   crm_alert(5,"请稍后重新请求！");
-		          }
-		     });
-	  }
-  
-  //订单详情
-  function showuserdetail(area_code,village_code,customer_id){
-	  $("#process_div").show();
-  	  $("#process_div_pic").show();
-  	  var storeName = $("#store_name_manual").val();
-  	  var cityName = $("#citySelect  option:selected").val();
-	  var url = "userProfile_detail.html?customer_id="+encode64(customer_id)+"&area_code="+encode64(area_code)+"&village_code="+encode64(village_code);
-		 //window.location.href=url;
-		 layer.open({
-		  type: 2,
-  		  title:  ['详细信息', 'color:#fff'],
-  		  shadeClose: true,
-  		  shade:[0.1, '#393D49'],
-  		  moveOut:false,
-  		  move:false, 
-  		  skin: 'layer-ext-crmskin',
-  		  area: ['90%', '88%'],
-  		  offset: ['2px','65px'],
-  		  content: url,
-  		  success:function(layer,index){
-  			  $("#process_div").hide();
-  		      $("#process_div_pic").hide();
-  		  },
-  		  cancel: function(index, layero){ 
-  			 layer.close(index);
-  			}  
-  		});  
-  }
-  
-  function resetSerachParam(t){
-	 if(target==0){//总部
-	  	var a = document.getElementById("citySelect");
-	  	a.options[0].selected = true;
-	  	$("#store_name_manual").val("");
-	 }else if(target==1){
-	  	$("#store_name_manual").val("");
-	 }  
-	  
- 	$("#customer_phone_manual").val("");
-	$("#customer_name_manual").val("");
-	$("#min_money_auto").val("");
-	$("#max_money_auto").val("");    
-	$("#min_count_auto").val("");
-	$("#max_count_auto").val("");
-	$("#min_slient_auto").val(""); 
-	$("#max_slient_auto").val(""); 
-	$("#slient_private_manual").val("");
-	var nowDate = new Date();
-	var month = nowDate.getMonth()+1;
-    var date = nowDate.getDate();
-    timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
-    nowDate.setDate(nowDate.getDate()+parseInt(-1));
-    var startDateStr = "2015/12/01";
-	$("#regist_date").val(startDateStr +"-"+ timeStr);
-	$("#startDate").val(startDateStr);
-	$("#endDate").val(timeStr);
-	$("#data_choice").html("默认时期");
-	
-	$("#first_date").val(startDateStr +"-"+ timeStr);
-	$("#startDateFirst").val(startDateStr);
-	$("#endDateFirst").val(timeStr);
-	$("#first_data_choice").html("默认时期");
-	
-	$("#last_date").val(startDateStr +"-"+ timeStr);
-	$("#startDateLast").val(startDateStr);
-	$("#endDateLast").val(timeStr);
-	$("#last_data_choice").html("默认时期");
-  }
-  
-  var autoPageRecordes=10;
-  var manualPageRecordes=10;
-  //切换每页显示的数据量
- function chnagePageRecords(t){
-	 $("#page_manual").empty();
-	 manualPageRecordes  = $("#pageRecords_manual").val();
-	 search_manual_userProfile(1);
- }
-</script>
-</body>
+	   
+	    doManager('dynamicManager','exportUserMemberInfo',[dynamicDto],function(data){
+          if(data.result){
+          	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   window.location.href=result.data;
+	           }else if(result.status=='null'){
+	        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	           }
+          
+          }else{
+       	   crm_alert(5,"请稍后重新请求！");
+          }
+         $("#process_div").hide();
+    	 $("#process_div_pic").hide();
+      }); 
+    }
  
- <div id="errorOrder_detail_div" style="height:247px;display:none">
-  
-</div>
+function resetSerachParam(){
+	 $("#auto_store").empty();
+	if(target==0){//总部
+  		$("#store_id_tradetype").val("");
+  		$("#store_name_tradetype").val("");
+    	$("#store_name-search_tradetype").empty();
+		
+    	$("#city_id_tradetype").val("");
+		$("#city_name-search_tradetype").empty();
+		$("#city_name_tradetype").val("");
+    
+  	  }else if(target==1){//城市级别
+    	
+  		$("#store_id_tradetype").val("");
+  		$("#store_name_tradetype").val("");
+    	$("#store_name-search_tradetype").empty();
+  		  
+  	  }else if(target==2){//店长
+  		
+  	  }
+}
+   
+</script>
+
+</body>
 </html>

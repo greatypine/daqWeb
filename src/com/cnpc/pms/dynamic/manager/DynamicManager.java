@@ -1008,4 +1008,20 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public Map<String, Object> getCityGMVRangeForMonth(DynamicDto dd);
+    /**
+     * 获取门店会员信息
+     * 2018年5月21日
+     * @author gaoll
+     * @param dd
+     * @return
+     */
+    public Map<String, Object> getUserMemberInfo(DynamicDto dd,PageInfo pageInfo);
+    /**
+     * 获取门店会员信息
+     * 2018年5月21日
+     * @author gaoll
+     * @param dd
+     * @return
+     */
+    public Map<String, Object> exportUserMemberInfo(DynamicDto dd);
 }
