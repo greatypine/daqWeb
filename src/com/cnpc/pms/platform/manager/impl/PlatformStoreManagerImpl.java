@@ -1,15 +1,5 @@
 package com.cnpc.pms.platform.manager.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.bson.Document;
-import org.json.JSONObject;
-
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
@@ -26,6 +16,11 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 平台门店表查询 Created by liuxiao on 2016/10/25.
@@ -109,7 +104,8 @@ public class PlatformStoreManagerImpl extends BizBaseCommonManager implements Pl
 			org.json.JSONArray jArray = new org.json.JSONArray();
 			BasicDBObject query = new BasicDBObject();
 			query.append("employeeId", new BasicDBObject("$in", list1)).append("updateTime",
-					new Document("$eq", new Date(format2)));
+					new Document("$get", new Date(format2+" 00:00:00"))).append("updateTime",
+					new Document("$lte", new Date(format2+" 23:59:59")));
 			FindIterable<Document> projection = collection.find(query)
 					.projection(new Document("_id", "$employeeId").append("employeeId", 1).append("position", 1));
 			MongoCursor<Document> cursor = projection.iterator();
