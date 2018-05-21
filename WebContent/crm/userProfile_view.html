@@ -1294,6 +1294,8 @@ Date.prototype.format=function(fmt) {
 		var user_model = $("input[type='radio']:checked").val();
 	    var userProfileDto=null;
 	    userProfileDto = {
+	    		store_no:number_str,
+	    		city_name:cityName,
 	    		regist_time_begin:'',
 	    		regist_time_end:'',
 	    		first_order_time_begin:first_begin_end_date[0].trim(),
@@ -1377,7 +1379,7 @@ Date.prototype.format=function(fmt) {
 	 }else if(target==1){
 	  	$("#store_name_manual").val("");
 	 }  
-	  
+	$("#store_id_manual").val("");  
  	$("#customer_phone_manual").val("");
 	$("#customer_name_manual").val("");
 	$("#min_money_auto").val("");
