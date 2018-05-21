@@ -90,6 +90,7 @@
     .selectorLine a:hover{background-color: #ff7701; color: #fff;}
     .search-title{width: 100px; color: #777; white-space: nowrap; overflow: hidden; position: absolute; top: 10px; left: 0; text-align: right;}
     .search-con{margin-left: 100px; padding-right: 80px; overflow: hidden;}
+    .search-time-con{margin-left: 0px; padding-right: 80px; overflow: hidden;}
     .sl-ext {position: absolute; top: 10px; right: 10px; width: 60px; height: auto; line-height: 22px; overflow: hidden; zoom: 1;}
     .search-more{width: 60px; height: 25px; line-height: 25px; padding: 0 7px 0 0; background: #fff; color: #333; border: 1px solid #ddd; font-size: 12px; position: relative; right: 0; top: 0;}
     .search-more i{position: absolute; top: 3px; right: 0; display: block; width: 20px; height: 20px; background-position: 4px 7px; font-size: 18px;}
@@ -163,19 +164,55 @@
             	<div class="selectorLine clearfix no-border">
             	<div class="search-title">查询条件：</div>
             	<div class="search-con" style="overflow:visible;">
-            	<div class="sl-v-list">
-            	<div class="clearfix">
-	                <div class="form-group col-lg-3">
-	                <select class="form-control select2" id="citySelect"> 
-	 	              	</select> 
+	            	<div class="sl-v-list">
+	            	<div class="clearfix">
+		                <div class="form-group col-lg-3">
+		                <select class="form-control select2" id="citySelect"> 
+		 	              	</select> 
+		                </div>
+		                <div class="form-group col-lg-3"><input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+			              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual" />
+			              <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+			              </div>
+			            </div>
 	                </div>
-	                <div class="form-group col-lg-3"><input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
-		              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual" />
-		              <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
-		              </div>
-		            </div>
+	                </div>
                 </div>
-                </div>
+                <div class="search-time-con" style="overflow:visible;">
+                	<div class="sl-v-list">
+                	<div class="clearfix">
+                		<div class="search-con">
+							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
+							    <div class="time_endbg" id="first_time_endbg">
+							        <p>首次消费日期选择：<span class="data_choice" id="first_data_choice">默认时期</span></p>
+							        <input type="text" class="ui-datepicker-time" id="first_date" readonly value=""/>
+							    </div>
+							</div>
+							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin:0 15px;">	
+							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
+							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
+							        <span class="ui-close-date" id="first-ui-close-date" style="cursor:pointer;">X</span>
+							    </div>
+							    <div class="ui-datepicker-choose">
+							        <!--<p>自选日期</p>-->
+							        <div class="ui-datepicker-date">
+								            自定<input name="startDateFirst" id="startDateFirst" class="startDate" readonly value="2017/12/20" type="text">
+								           到
+							            <input name="endDateFirst" id="endDateFirst" class="endDate" readonly  value="2017/12/20" type="text" disabled>
+							        </div>
+							        <div class="opeDiv">
+							            <span class="Confirm" id="ConfirmFirst" onclick="datePickersFirst()">确定</span>
+							            <span class="Cancel" id="CancelFirst">取消</span>
+							        </div>
+							    </div>
+							</div>
+						</div>
+	                </div>
+	                </div>
                 </div>
                 <div class="fold-con">
                 	<div class="selectorLine clearfix">
@@ -217,105 +254,105 @@
                      </div>
                      </div>
                     </div>
-                	<div class="selectorLine clearfix">
-                		<div class="pull-left search-title" style="top:25px">注册时间：</div>
-                		<div class="search-con">
-							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
-							    <div class="time_endbg" id="time_endbg">
-							        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
-							        <input type="text" class="ui-datepicker-time" id="regist_date" readonly value=""/>
-							    </div>
-							</div>
-							<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px;">	
-							    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
-							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
-							        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
-							    </div>
-							    <div class="ui-datepicker-choose">
-							        <!--<p>自选日期</p>-->
-							        <div class="ui-datepicker-date">
-								            自定<input name="startDate" id="startDate" class="startDate" readonly value="2017/12/20" type="text">
-								           到
-							            <input name="endDate" id="endDate" class="endDate" readonly  value="2017/12/20" type="text" disabled>
-							        </div>
-							        <div class="opeDiv">
-							            <span class="Confirm" id="Confirm" onclick="datePickers()">确定</span>
-							            <span class="Cancel" id="Cancel">取消</span>
-							        </div>
-							    </div>
-							</div>
-						</div>
-                	</div>
-                	<div class="selectorLine clearfix">
-                		<div class="pull-left search-title" style="top:25px">首次消费时间：</div>
-                		<div class="search-con">
-							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
-							    <div class="time_endbg" id="first_time_endbg">
-							        <p>日期选择：<span class="data_choice" id="first_data_choice">默认时期</span></p>
-							        <input type="text" class="ui-datepicker-time" id="first_date" readonly value=""/>
-							    </div>
-							</div>
-							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin:0 15px;">	
-							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
-							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
-							        <span class="ui-close-date" id="first-ui-close-date" style="cursor:pointer;">X</span>
-							    </div>
-							    <div class="ui-datepicker-choose">
-							        <!--<p>自选日期</p>-->
-							        <div class="ui-datepicker-date">
-								            自定<input name="startDateFirst" id="startDateFirst" class="startDate" readonly value="2017/12/20" type="text">
-								           到
-							            <input name="endDateFirst" id="endDateFirst" class="endDate" readonly  value="2017/12/20" type="text" disabled>
-							        </div>
-							        <div class="opeDiv">
-							            <span class="Confirm" id="ConfirmFirst" onclick="datePickersFirst()">确定</span>
-							            <span class="Cancel" id="CancelFirst">取消</span>
-							        </div>
-							    </div>
-							</div>
-						</div>
-                	</div>
-                	<div class="selectorLine clearfix">
-                		<div class="pull-left search-title" style="top:25px">最后消费时间：</div>
-                		<div class="search-con">
-							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
-							    <div class="time_endbg" id="last_time_endbg">
-							        <p>日期选择：<span class="data_choice" id="last_data_choice">默认时期</span></p>
-							        <input type="text" class="ui-datepicker-time" id="last_date" readonly value=""/>
-							    </div>
-							</div>
-							<div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin:0 15px;">	
-							    <div class="ui-datepicker-quick" id="last-ui-datepicker-quick">
-							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
-							        <span class="ui-close-date" id="last-ui-close-date" style="cursor:pointer;">X</span>
-							    </div>
-							    <div class="ui-datepicker-choose">
-							        <!--<p>自选日期</p>-->
-							        <div class="ui-datepicker-date">
-								            自定<input name="startDateLast" id="startDateLast" class="startDate" readonly value="2017/12/20" type="text">
-								           到
-							            <input name="endDateLast" id="endDateLast" class="endDate" readonly  value="2017/12/20" type="text" disabled>
-							        </div>
-							        <div class="opeDiv">
-							            <span class="Confirm" id="ConfirmLast" onclick="datePickersLast()">确定</span>
-							            <span class="Cancel" id="CancelLast">取消</span>
-							        </div>
-							    </div>
-							</div>
-						</div>
-                	</div>
+<!--                 	<div class="selectorLine clearfix"> -->
+<!--                 		<div class="pull-left search-title" style="top:25px">注册时间：</div> -->
+<!--                 		<div class="search-con"> -->
+<!-- 							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;"> -->
+<!-- 							    <div class="time_endbg" id="time_endbg"> -->
+<!-- 							        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p> -->
+<!-- 							        <input type="text" class="ui-datepicker-time" id="regist_date" readonly value=""/> -->
+<!-- 							    </div> -->
+<!-- 							</div> -->
+<!-- 							<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px;">	 -->
+<!-- 							    <div class="ui-datepicker-quick" id="ui-datepicker-quick"> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/> -->
+<!-- 							        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span> -->
+<!-- 							    </div> -->
+<!-- 							    <div class="ui-datepicker-choose"> -->
+<!-- 							        <p>自选日期</p> -->
+<!-- 							        <div class="ui-datepicker-date"> -->
+<!-- 								            自定<input name="startDate" id="startDate" class="startDate" readonly value="2017/12/20" type="text"> -->
+<!-- 								           到 -->
+<!-- 							            <input name="endDate" id="endDate" class="endDate" readonly  value="2017/12/20" type="text" disabled> -->
+<!-- 							        </div> -->
+<!-- 							        <div class="opeDiv"> -->
+<!-- 							            <span class="Confirm" id="Confirm" onclick="datePickers()">确定</span> -->
+<!-- 							            <span class="Cancel" id="Cancel">取消</span> -->
+<!-- 							        </div> -->
+<!-- 							    </div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!--                 	</div> -->
+<!--                 	<div class="selectorLine clearfix"> -->
+<!--                 		<div class="pull-left search-title" style="top:25px">首次消费时间：</div> -->
+<!--                 		<div class="search-con"> -->
+<!-- 							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;"> -->
+<!-- 							    <div class="time_endbg" id="first_time_endbg"> -->
+<!-- 							        <p>日期选择：<span class="data_choice" id="first_data_choice">默认时期</span></p> -->
+<!-- 							        <input type="text" class="ui-datepicker-time" id="first_date" readonly value=""/> -->
+<!-- 							    </div> -->
+<!-- 							</div> -->
+<!-- 							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin:0 15px;">	 -->
+<!-- 							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick"> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/> -->
+<!-- 							        <span class="ui-close-date" id="first-ui-close-date" style="cursor:pointer;">X</span> -->
+<!-- 							    </div> -->
+<!-- 							    <div class="ui-datepicker-choose"> -->
+<!-- 							        <p>自选日期</p> -->
+<!-- 							        <div class="ui-datepicker-date"> -->
+<!-- 								            自定<input name="startDateFirst" id="startDateFirst" class="startDate" readonly value="2017/12/20" type="text"> -->
+<!-- 								           到 -->
+<!-- 							            <input name="endDateFirst" id="endDateFirst" class="endDate" readonly  value="2017/12/20" type="text" disabled> -->
+<!-- 							        </div> -->
+<!-- 							        <div class="opeDiv"> -->
+<!-- 							            <span class="Confirm" id="ConfirmFirst" onclick="datePickersFirst()">确定</span> -->
+<!-- 							            <span class="Cancel" id="CancelFirst">取消</span> -->
+<!-- 							        </div> -->
+<!-- 							    </div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!--                 	</div> -->
+<!--                 	<div class="selectorLine clearfix"> -->
+<!--                 		<div class="pull-left search-title" style="top:25px">最后消费时间：</div> -->
+<!--                 		<div class="search-con"> -->
+<!-- 							<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;"> -->
+<!-- 							    <div class="time_endbg" id="last_time_endbg"> -->
+<!-- 							        <p>日期选择：<span class="data_choice" id="last_data_choice">默认时期</span></p> -->
+<!-- 							        <input type="text" class="ui-datepicker-time" id="last_date" readonly value=""/> -->
+<!-- 							    </div> -->
+<!-- 							</div> -->
+<!-- 							<div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin:0 15px;">	 -->
+<!-- 							    <div class="ui-datepicker-quick" id="last-ui-datepicker-quick"> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/> -->
+<!-- 							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/> -->
+<!-- 							        <span class="ui-close-date" id="last-ui-close-date" style="cursor:pointer;">X</span> -->
+<!-- 							    </div> -->
+<!-- 							    <div class="ui-datepicker-choose"> -->
+<!-- 							        <p>自选日期</p> -->
+<!-- 							        <div class="ui-datepicker-date"> -->
+<!-- 								            自定<input name="startDateLast" id="startDateLast" class="startDate" readonly value="2017/12/20" type="text"> -->
+<!-- 								           到 -->
+<!-- 							            <input name="endDateLast" id="endDateLast" class="endDate" readonly  value="2017/12/20" type="text" disabled> -->
+<!-- 							        </div> -->
+<!-- 							        <div class="opeDiv"> -->
+<!-- 							            <span class="Confirm" id="ConfirmLast" onclick="datePickersLast()">确定</span> -->
+<!-- 							            <span class="Cancel" id="CancelLast">取消</span> -->
+<!-- 							        </div> -->
+<!-- 							    </div> -->
+<!-- 							</div> -->
+<!-- 						</div> -->
+<!--                 	</div> -->
 		             	<div class="selectorLine clearfix">
 		                  <div class="pull-left search-title">用户标签：</div>
 		                  <div class="search-con">
@@ -934,11 +971,11 @@ Date.prototype.format=function(fmt) {
   var totalPage_manual = 1;
   function   search_manual_userProfile1(cur_page){
 	    //注册时间
-	    var sdate = $("#regist_date").val();
-	    var regist_begin_end_date=["",""];
-	  	if(sdate!=""){
-	  		regist_begin_end_date = sdate.split("-");
-	   	}
+// 	    var sdate = $("#regist_date").val();
+// 	    var regist_begin_end_date=["",""];
+// 	  	if(sdate!=""){
+// 	  		regist_begin_end_date = sdate.split("-");
+// 	   	}
 	  	//首次消费时间
 	  	var fdate = $("#first_date").val();
 	    var first_begin_end_date=["",""];
@@ -946,11 +983,11 @@ Date.prototype.format=function(fmt) {
 	  		 first_begin_end_date = fdate.split("-");
 	   	}
 	  	//最后消费时间
-	  	var ldate = $("#last_date").val();
-	    var last_begin_end_date=["",""];
-	  	if(ldate!=""){
-	  		 last_begin_end_date = ldate.split("-");
-	   	}
+// 	  	var ldate = $("#last_date").val();
+// 	    var last_begin_end_date=["",""];
+// 	  	if(ldate!=""){
+// 	  		 last_begin_end_date = ldate.split("-");
+// 	   	}
   	   
 	    var customer_phone = $("#customer_phone_manual").val();
 	    var customer_name = $("#customer_name_manual").val();
@@ -1018,12 +1055,12 @@ Date.prototype.format=function(fmt) {
 	    userProfileDto = {
 	    		store_no:number_str,
 	    		city_name:cityName,
-	    		regist_time_begin:regist_begin_end_date[0].trim(),
-	    		regist_time_end:regist_begin_end_date[1].trim(),
+	    		regist_time_begin:'',
+	    		regist_time_end:'',
 	    		first_order_time_begin:first_begin_end_date[0].trim(),
 	    		first_order_time_end:first_begin_end_date[1].trim(),
-	    		last_order_time_begin:last_begin_end_date[0].trim(),
-	    		last_order_time_end:last_begin_end_date[1].trim(),
+	    		last_order_time_begin:'',
+	    		last_order_time_end:'',
 	    		customer_phone:customer_phone,
 	    		customer_name:customer_name,
 	    		trading_price_min:trading_price_min,
@@ -1117,8 +1154,8 @@ Date.prototype.format=function(fmt) {
 				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+customercontent+"');\" id=\""+customerid+"\">"+customer_phone_show+"</a></td>"
 				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+paycontent+"');\" id=\""+payid+"\">"+jData[i].order_count+"</a></td>"
 		         	   		+"<td>"+jData[i].slient_time+"</td>"
-		         	   		+"<td>"+jData[i].tiny_village_code+"</td>"
-// 		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
+// 		         	   		+"<td>"+jData[i].tiny_village_code+"</td>"
+		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
 		         	   		+"<td>"+jData[i].user_model+"</td>"
 		         	   		+"<td>";
 		         	   		
@@ -1170,11 +1207,11 @@ Date.prototype.format=function(fmt) {
   //导出
   function export_manual_userProfile(hiddenvalue){
 		//注册时间
-	    var sdate = $("#regist_date").val();
-	    var regist_begin_end_date=["",""];
-	  	if(sdate!=""){
-	  		regist_begin_end_date = sdate.split("-");
-	   	}
+// 	    var sdate = $("#regist_date").val();
+// 	    var regist_begin_end_date=["",""];
+// 	  	if(sdate!=""){
+// 	  		regist_begin_end_date = sdate.split("-");
+// 	   	}
 	  	//首次消费时间
 	  	var fdate = $("#first_date").val();
 	    var first_begin_end_date=["",""];
@@ -1182,11 +1219,11 @@ Date.prototype.format=function(fmt) {
 	  		 first_begin_end_date = fdate.split("-");
 	   	}
 	  	//最后消费时间
-	  	var ldate = $("#last_date").val();
-	    var last_begin_end_date=["",""];
-	  	if(ldate!=""){
-	  		 last_begin_end_date = ldate.split("-");
-	   	}
+// 	  	var ldate = $("#last_date").val();
+// 	    var last_begin_end_date=["",""];
+// 	  	if(ldate!=""){
+// 	  		 last_begin_end_date = ldate.split("-");
+// 	   	}
 	  	
 	 	var customer_phone = $("#customer_phone_manual").val();
 	    var customer_name = $("#customer_name_manual").val();
@@ -1252,12 +1289,12 @@ Date.prototype.format=function(fmt) {
 		var user_model = $("input[type='radio']:checked").val();
 	    var userProfileDto=null;
 	    userProfileDto = {
-	    		regist_time_begin:regist_begin_end_date[0].trim(),
-	    		regist_time_end:regist_begin_end_date[1].trim(),
+	    		regist_time_begin:'',
+	    		regist_time_end:'',
 	    		first_order_time_begin:first_begin_end_date[0].trim(),
 	    		first_order_time_end:first_begin_end_date[1].trim(),
-	    		last_order_time_begin:last_begin_end_date[0].trim(),
-	    		last_order_time_end:last_begin_end_date[1].trim(),
+	    		last_order_time_begin:'',
+	    		last_order_time_end:'',
 	    		customer_phone:customer_phone,
 	    		customer_name:customer_name,
 	    		trading_price_min:trading_price_min,
@@ -1349,24 +1386,22 @@ Date.prototype.format=function(fmt) {
     var startDateStr = "2015/12/01";
 // 	$("#regist_date").val(startDateStr +"-"+ timeStr);
 // 	$("#startDate").val(startDateStr);
-	$("#regist_date").val(timeStr +"-"+ timeStr);
-	$("#startDate").val(timeStr);
-	$("#endDate").val(timeStr);
-	$("#data_choice").html("默认时期");
+// 	$("#regist_date").val(timeStr +"-"+ timeStr);
+// 	$("#startDate").val(timeStr);
+// 	$("#endDate").val(timeStr);
+// 	$("#data_choice").html("默认时期");
 	
-// 	$("#first_date").val(startDateStr +"-"+ timeStr);
-// 	$("#startDateFirst").val(startDateStr);
-	$("#first_date").val(timeStr +"-"+ timeStr);
-	$("#startDateFirst").val(timeStr);
+	$("#first_date").val(startDateStr +"-"+ timeStr);
+	$("#startDateFirst").val(startDateStr);
 	$("#endDateFirst").val(timeStr);
 	$("#first_data_choice").html("默认时期");
 	
 // 	$("#last_date").val(startDateStr +"-"+ timeStr);
 // 	$("#startDateLast").val(startDateStr);
-	$("#last_date").val(timeStr +"-"+ timeStr);
-	$("#startDateLast").val(timeStr);
-	$("#endDateLast").val(timeStr);
-	$("#last_data_choice").html("默认时期");
+// 	$("#last_date").val(timeStr +"-"+ timeStr);
+// 	$("#startDateLast").val(timeStr);
+// 	$("#endDateLast").val(timeStr);
+// 	$("#last_data_choice").html("默认时期");
   }
   
   var autoPageRecordes=10;
