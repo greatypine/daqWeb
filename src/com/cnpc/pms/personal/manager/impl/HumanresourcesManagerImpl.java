@@ -4102,10 +4102,10 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
      * @return
      */
     @Override
-    public int updateHumanresourceStoreName(String oldstorename,String newstorename){
+    public int updateHumanresourceStoreName(Long store_id,String newstorename){
     	HumanresourcesManager humanresourcesManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
-    	if(oldstorename!=null&&oldstorename.trim().length()>0&&newstorename!=null&&newstorename.trim().length()>0){
-            IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus=1 and storename='"+oldstorename+"'");
+    	if(store_id!=null&&newstorename!=null&&newstorename.trim().length()>0){
+            IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus=1 and store_id="+store_id+"");
             List<Humanresources> human_list = (List<Humanresources>) humanresourcesManager.getList(iFilter);
             if(human_list!=null&&human_list.size()>0){
             	//存在门店进行修改
