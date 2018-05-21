@@ -188,4 +188,14 @@ public interface HumanresourcesManager extends IManager {
     
     public File exportFwzyHumanExcel() throws Exception ;
     
+    
+    
+    
+    
+    /**
+     * 门店名称发生变化 更新员工基础数据表 
+     * @return
+     */
+    public int updateHumanresourceStoreName(Long store_id,String newstorename);
+    
 }

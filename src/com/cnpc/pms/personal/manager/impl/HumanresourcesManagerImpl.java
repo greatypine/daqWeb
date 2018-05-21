@@ -4093,4 +4093,30 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		result.put("queryWeekPoint", queryWeekPoint);
 		return result;
 	}
+	
+	
+	
+	
+	/**
+     * 门店名称发生变化 更新员工基础数据表 
+     * @return
+     */
+    @Override
+    public int updateHumanresourceStoreName(Long store_id,String newstorename){
+    	HumanresourcesManager humanresourcesManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
+    	if(store_id!=null&&newstorename!=null&&newstorename.trim().length()>0){
+            IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus=1 and store_id="+store_id+"");
+            List<Humanresources> human_list = (List<Humanresources>) humanresourcesManager.getList(iFilter);
+            if(human_list!=null&&human_list.size()>0){
+            	//存在门店进行修改
+            	for(Humanresources hr:human_list){
+            		hr.setStorename(newstorename);
+            		preSaveObject(hr);
+            		saveObject(hr);
+            	}
+            	return human_list.size();
+            }
+    	}
+    	return 0;
+    }
 }
