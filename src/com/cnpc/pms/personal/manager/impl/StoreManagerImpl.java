@@ -2034,8 +2034,10 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 
 			try{
 				if(!store.getName().equals(storeDynamic.getName())){
-					HumanresourcesManager humanresourcesManager=(HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
-					humanresourcesManager.updateHumanresourceStoreName(storeDynamic.getStore_id(),storeDynamic.getName());
+					HumanresourcesManager hManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
+					hManager.updateStoreNameById(storeDynamic.getStore_id(), storeDynamic.getName());
+					ApprovalManager approvalManager = (ApprovalManager) SpringHelper.getBean("approvalManager");
+					approvalManager.updateStoreNameById(storeDynamic.getStore_id(), storeDynamic.getName());
 				}
 			}catch (Exception e){
 				e.printStackTrace();
