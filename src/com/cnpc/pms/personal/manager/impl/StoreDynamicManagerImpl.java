@@ -575,10 +575,18 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			if (storeDynamic.getName().contains("办公室")) {// 办公室 不同步
 				sync = false;
 			}
+			String[] split = null;
+			String lay=null;
+			String nat=null;
+			if(storeDynamic.getStore_position()!=null){
+				split = storeDynamic.getStore_position().split(",");
+				lay=split[0];
+				nat=split[1];
+			}
 			if (sync) {
 				JSONObject jsonObject = dynamicManager.insertNewStore(storeDynamic.getStoreno(), storeDynamic.getName(),
 						storeDynamic.getGaode_provinceCode(), storeDynamic.getGaode_cityCode(),
-						storeDynamic.getGaode_adCode(), storeDynamic.getAddress());
+						storeDynamic.getGaode_adCode(), storeDynamic.getAddress(),lay,nat);
 				rt = jsonObject.toString();
 			}
 
