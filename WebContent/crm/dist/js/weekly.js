@@ -4632,9 +4632,9 @@ function oneyearorsixweek(){
 				var business_licenseTotal = 0,double_cardTotal = 0,no_cardTotal = 0,store_countTotal = 0;
 				var storeCountArray = new Array(),double_cardArray = new Array(),business_licenseArray = new Array(),no_cardArray = new Array();
 				var cardCitynameArray = new Array();
-				/*var double_card_rateTotal = 0;
+				var double_card_rateTotal = 0;
 				var business_card_rateTotal = 0;
-				var no_card_rateTotal = 0;*/
+				var no_card_rateTotal = 0;
 				if(storeCardBycity.length > 0){
 					for(var i = 0; i < storeCardBycity.length; i++){
 						var storeCard = storeCardBycity[i];
@@ -4656,9 +4656,9 @@ function oneyearorsixweek(){
 
 						cardString += '<tr><td title="'+cityname+'">'+cityname+'</td><td>'+store_count+'</td><td>'+double_card+'</td><td>'+business_license+'</td><td>'+no_card+'</td><td>'+double_card_rate.toFixed(2)+'%</td></tr>';
 						if(i == storeCardBycity.length-1){
-							/*double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
+							double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
 							business_card_rateTotal = (business_licenseTotal/store_countTotal)*100;
-							no_card_rateTotal = (no_cardTotal/store_countTotal)*100;*/
+							no_card_rateTotal = (no_cardTotal/store_countTotal)*100;
 							cardString += '<tr class="text-red"><td>合计</td><td>'+store_countTotal+'</td><td>'+double_cardTotal+'</td><td>'+business_licenseTotal+'</td><td>'+no_cardTotal+'</td><td>'+double_card_rateTotal.toFixed(2)+'%</td></tr>';
 						}
 					}
