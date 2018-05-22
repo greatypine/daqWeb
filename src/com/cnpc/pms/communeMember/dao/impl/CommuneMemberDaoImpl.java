@@ -511,7 +511,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		StringBuffer sbPro = new StringBuffer();
 		StringBuffer sbCou = new StringBuffer();
-		
+		 
            if(lst_data != null){
         	   
         	   for(Object obj : lst_data){
