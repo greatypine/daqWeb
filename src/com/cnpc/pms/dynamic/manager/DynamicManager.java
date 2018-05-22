@@ -801,7 +801,7 @@ public interface DynamicManager extends IManager{
   	public Map<String, Object> exportData(DynamicDto dd,String str);
   	
     public JSONObject insertNewTest(String storeCode,String storeName);
-    public JSONObject insertNewStore(String storeCode,String storeName,String provinceCode,String cityCode,String adCode,String address);
+    public JSONObject insertNewStore(String storeCode,String storeName,String provinceCode,String cityCode,String adCode,String address,String longitude,String latitude);
     public JSONObject insertNewEmployee(String storeCode,String employeeCode,String employeeName,String telephone);
 
     
