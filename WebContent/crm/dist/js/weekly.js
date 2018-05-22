@@ -52,13 +52,13 @@ var myChart14 = echarts.init(document.getElementById('main14'));
 var myChart15 = echarts.init(document.getElementById('main15'));
 var myChart16 = echarts.init(document.getElementById('main16'));
 var myChart17 = echarts.init(document.getElementById('main17'));
-var myChart18 = echarts.init(document.getElementById('main18'));
-var myChart19 = echarts.init(document.getElementById('main19'));
-var myChart20 = echarts.init(document.getElementById('main20'));
-var myChart21 = echarts.init(document.getElementById('main21'));
+//var myChart18 = echarts.init(document.getElementById('main18'));
+//var myChart19 = echarts.init(document.getElementById('main19'));
+//var myChart20 = echarts.init(document.getElementById('main20'));
+//var myChart21 = echarts.init(document.getElementById('main21'));
 var myChart22 = echarts.init(document.getElementById('main22'));
 var myChart23 = echarts.init(document.getElementById('main23'));
-var myChart24 = echarts.init(document.getElementById('main24'));
+//var myChart24 = echarts.init(document.getElementById('main24'));
 var myChart26 = echarts.init(document.getElementById('main26'));
 
 //城市总的行政区县、已有门店开业的区县数量
@@ -2908,6 +2908,7 @@ option20 = {
   ],
   series : [
     {
+      //name:'直接访问',
       type:'bar',
       barWidth: '40%',
       data:[36, 8, 47, 202, 239, 40, 70,81,44]
@@ -2937,10 +2938,10 @@ option21 = {
       radius : '75%',
       center: ['50%', '55%'],
       data:[
-        {value:0, name:'政府从业人员',itemStyle: {normal:{color: '#EA9294'}}},
-        {value:0, name:'普通居民',itemStyle: {normal:{color: '#949494'}}},
-        {value:0, name:'民间组织人员',itemStyle: {normal:{color: '#A4D2D5'}}},
-        {value:0, name:'社区商户',itemStyle: {normal:{color: '#F1C0B1'}}},
+        {value:1959, name:'政府从业人员',itemStyle: {normal:{color: '#EA9294'}}},
+        {value:1239, name:'普通居民',itemStyle: {normal:{color: '#949494'}}},
+        {value:2844, name:'民间组织人员',itemStyle: {normal:{color: '#A4D2D5'}}},
+        {value:1802, name:'社区商户',itemStyle: {normal:{color: '#F1C0B1'}}},
       ],
       labelLine: {
         normal: {
@@ -3457,13 +3458,13 @@ myChart14.setOption(option14);
 myChart15.setOption(option15);
 myChart16.setOption(option16);
 myChart17.setOption(option17);
-myChart18.setOption(option18);
-myChart19.setOption(option19);
-myChart20.setOption(option20);
-myChart21.setOption(option21);
+//myChart18.setOption(option18);
+//myChart19.setOption(option19);
+//myChart20.setOption(option20);
+//myChart21.setOption(option21);
 myChart22.setOption(option22);
 myChart23.setOption(option23);
-myChart24.setOption(option24);
+//myChart24.setOption(option24);
 myChart26.setOption(option26);
 
 function chartresize2(){
@@ -3993,8 +3994,7 @@ $(function(){
 	customerInfo();
 	areaInfo();
 	GMVInfo();
-	storeActivitiesInfo();
-	getStoreCoverPerson();
+	//storeActivitiesInfo();
 });
 
 function loginShow(){
@@ -4632,9 +4632,9 @@ function oneyearorsixweek(){
 				var business_licenseTotal = 0,double_cardTotal = 0,no_cardTotal = 0,store_countTotal = 0;
 				var storeCountArray = new Array(),double_cardArray = new Array(),business_licenseArray = new Array(),no_cardArray = new Array();
 				var cardCitynameArray = new Array();
-				var double_card_rateTotal = 0;
+				/*var double_card_rateTotal = 0;
 				var business_card_rateTotal = 0;
-				var no_card_rateTotal = 0;
+				var no_card_rateTotal = 0;*/
 				if(storeCardBycity.length > 0){
 					for(var i = 0; i < storeCardBycity.length; i++){
 						var storeCard = storeCardBycity[i];
@@ -4656,9 +4656,9 @@ function oneyearorsixweek(){
 
 						cardString += '<tr><td title="'+cityname+'">'+cityname+'</td><td>'+store_count+'</td><td>'+double_card+'</td><td>'+business_license+'</td><td>'+no_card+'</td><td>'+double_card_rate.toFixed(2)+'%</td></tr>';
 						if(i == storeCardBycity.length-1){
-							double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
+							/*double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
 							business_card_rateTotal = (business_licenseTotal/store_countTotal)*100;
-							no_card_rateTotal = (no_cardTotal/store_countTotal)*100;
+							no_card_rateTotal = (no_cardTotal/store_countTotal)*100;*/
 							cardString += '<tr class="text-red"><td>合计</td><td>'+store_countTotal+'</td><td>'+double_cardTotal+'</td><td>'+business_licenseTotal+'</td><td>'+no_cardTotal+'</td><td>'+double_card_rateTotal.toFixed(2)+'%</td></tr>';
 						}
 					}
@@ -5129,7 +5129,7 @@ function oneyearorsixweek(){
 		    return result;
 		}
 		
-	var storeActivitiesInfo = function(){
+	/*var storeActivitiesInfo = function(){
 		doManager("storeActivitiesManager","getNewStoreActivtiesInfo",null,
 				function(data,textStatus,XmlHttpRequest){
 			if(data.result){
@@ -5231,109 +5231,4 @@ function oneyearorsixweek(){
 				}
 			}
 		},false);
-	}
-	
-	
-	function getStoreCoverPerson(){
-		doManager("storeCoverPersonManager","getNewStoreCoverPerson",null,
-				function(data,textStatus,XmlHttpRequest){
-			if(data.result){
-				var jsonData = $.fromJSON(data.data);
-				var storeCoverPersonInfo = jsonData.storeCoverPersonInfo;
-				console.log(storeCoverPersonInfo);
-				var citynameArray = new Array();
-				//社区关键人数量
-				var community_person_array = new Array();
-				//店均微信群数量
-				var avg_wechant_crowd_array = new Array();
-				//单个微信群人数
-				var crowd_person_count_array = new Array();
-				//活跃人群占比
-				var wechant_accounted_for_crowd_array = new Array();
-				//社区关键人构成分析：饼状图
-				var dataArray = new Array();
-				//合计值存放
-				var shequguanjianren;
-				if(storeCoverPersonInfo.length > 0){
-					var table1 =document.getElementById("pfoperate1");
-			        var table1_1 =document.getElementById("pfoperate1_1");
-			        var cellnumber1 = table1.rows[0].cells.length;
-			        var cellnumber1_1 = table1_1.rows[0].cells.length;
-				    for(var i = 0; i < storeCoverPersonInfo.length; i++){
-						var personInfo = storeCoverPersonInfo[i];
-						//城市
-						var cityname = personInfo.cityname;
-						//社区关键人表
-						var community_person = personInfo.community_person;//社区关键人数量
-						var avg_community_person = personInfo.avg_community_person;//店均社区关键人数量
-						var civil_servants = personInfo.civil_servants;//政府从业人员
-						var general_person = personInfo.general_person;//普通居民
-						var folk_organization = personInfo.folk_organization;//民间组织人员
-						var community_businesses = personInfo.community_businesses;//社区商户
-						//微信群表
-						var wechant_crowd = personInfo.wechant_crowd;//微信群数量
-						var avg_wechant_crowd = personInfo.avg_wechant_crowd;//店均微信群数量
-						var crowd_persons_count = personInfo.crowd_persons_count;//微信群内客户容量
-						var crowd_person_count = personInfo.crowd_person_count;//单个微信群人数
-						var interactive_person_count = personInfo.interactive_person_count;//与门店人员有互动的客户数量
-						var interactive_person_count_store = personInfo.interactive_person_count_store;//单个微信群互动人数
-						var wechant_accounted_for_crowd = personInfo.wechant_accounted_for_crowd;//微信互动活跃人群占比
-						if(cityname == '合计'){
-							option21.series[0].data[0].value = civil_servants;
-							option21.series[0].data[1].value = general_person;
-							option21.series[0].data[2].value = folk_organization;
-							option21.series[0].data[3].value = community_businesses;
-							shequguanjianren = community_person
-						}
-						if(cityname != '环比' && cityname != '合计'){
-							citynameArray.push(cityname);
-							community_person_array.push(community_person);
-							avg_wechant_crowd_array.push(avg_wechant_crowd);
-							crowd_person_count_array.push(crowd_person_count);
-							wechant_accounted_for_crowd_array.push(wechant_accounted_for_crowd);
-						}
-						$("#pfoperate1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1-1)+")").each(function(x,t){
-				    	    var col_index = x;
-				    	    if(cityname == $(t).html()){
-				    	    	$(t).parent().nextAll().each(function(z,t){
-						    	    if(z==0)$(t).find("td:eq("+col_index+")").text(community_person);
-						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(avg_community_person);
-						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(civil_servants);
-						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(general_person);
-						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(folk_organization);
-						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(community_businesses);
-					       		});
-				    	    }
-				       });
-						$("#pfoperate1_1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1_1-1)+")").each(function(x,t){
-				    	    var col_index = x;
-				    	    if(cityname == $(t).html()){
-				    	    	$(t).parent().nextAll().each(function(z,t){
-						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(wechant_crowd);
-						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(avg_wechant_crowd);
-						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(crowd_persons_count);
-						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(crowd_person_count);
-						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(interactive_person_count);
-						    	    if(z==6)$(t).find("td:eq("+col_index+")").text(interactive_person_count_store);
-						    	    if(z==7)$(t).find("td:eq("+col_index+")").text(wechant_accounted_for_crowd);
-					       		});
-				    	    }
-				       });
-						
-					}
-				    citynameArray.push("合计");
-				    community_person_array.push(shequguanjianren);
-				    option20.series[0].data=community_person_array;
-					option20.xAxis[0]["data"] = citynameArray;
-					myChart20.setOption(option20);
-					option24.series[0].data=avg_wechant_crowd_array;
-					option24.series[1].data=crowd_person_count_array;
-					option24.series[2].data=wechant_accounted_for_crowd_array;
-					option24.xAxis[0]["data"] = citynameArray;
-					myChart24.setOption(option24);
-					myChart21.setOption(option21);
-				}
-			}
-		},false);
-		
-	}
+	}*/
