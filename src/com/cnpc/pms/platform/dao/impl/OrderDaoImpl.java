@@ -2265,7 +2265,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryNewVipCusUser(String dateTime){
-		String sql = "SELECT count(id) FROM t_customer tc WHERE tc.associator_level=2 ";
+		String sql = "SELECT id AS vip_customer FROM t_customer tc WHERE tc.associator_level=2 ";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		List<Map<String, Object>> lst_data = null;
 	     try{
