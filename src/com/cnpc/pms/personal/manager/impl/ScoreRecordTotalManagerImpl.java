@@ -1179,12 +1179,7 @@ public class ScoreRecordTotalManagerImpl extends BizBaseCommonManager implements
 							&& !"运营中".equals(storeDynamic.getEstate()) && !"待开业".equals(storeDynamic.getEstate())) {
 						storeDynamic.setEstate("筹备中");
 					}
-					// 调用sync同步门店方法
-					try {
-						storeDynamicManager.syncStore(storeDynamic);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+
 					storeDynamicManager.saveObject(storeDynamic);
 					// 更新t_store
 					storeManager.insertStoresyncDynamicStore(storeDynamic);
