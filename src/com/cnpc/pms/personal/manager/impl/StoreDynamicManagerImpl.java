@@ -535,52 +535,7 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 		return storeDynamic;
 	}
 
-	// 同步门店信息
-	@Override
-	public String syncStore(StoreDynamic storeDynamic) {
-		String rt = "";
-		DynamicManager dynamicManager = (DynamicManager) SpringHelper.getBean("dynamicManager");
-		// JSONObject jsonObject = dynamicManager.insertNewTest("测试测试",
-		// "2017-12-27");
-		// 判断 如果门店编号中含有W（未知门店 ）和储备店 以及测试门店。不推送
-		if (storeDynamic != null && storeDynamic.getStoreno() != null && storeDynamic.getName() != null) {
-			boolean sync = true;
-			if (storeDynamic.getStoreno().contains("W")) {// 未知门店 不同步
-				sync = false;
-			}
-			if (storeDynamic.getStoreno().contains("C")) {// 仓店 不同步
-				sync = false;
-			}
-			if (storeDynamic.getStoreno().contains("V")) {// 虚拟店 不同步
-				sync = false;
-			}
-			if (storeDynamic.getName().contains("储备店")) {// 储备店 不同步
-				sync = false;
-			}
-			if (storeDynamic.getName().contains("测试")) {// 测试店 不同步
-				sync = false;
-			}
-			if (storeDynamic.getName().contains("办公室")) {// 办公室 不同步
-				sync = false;
-			}
-			String[] split = null;
-			String lay=null;
-			String nat=null;
-			if(storeDynamic.getStore_position()!=null){
-				split = storeDynamic.getStore_position().split(",");
-				lay=split[0];
-				nat=split[1];
-			}
-			if (sync) {
-				JSONObject jsonObject = dynamicManager.insertNewStore(storeDynamic.getStoreno(), storeDynamic.getName(),
-						storeDynamic.getGaode_provinceCode(), storeDynamic.getGaode_cityCode(),
-						storeDynamic.getGaode_adCode(), storeDynamic.getAddress(),lay,nat);
-				rt = jsonObject.toString();
-			}
 
-		}
-		return rt;
-	}
 
 	// 根据门店名称查询门店
 	@SuppressWarnings("unchecked")

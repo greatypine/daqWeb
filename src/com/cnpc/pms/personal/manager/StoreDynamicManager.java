@@ -1,11 +1,11 @@
 package com.cnpc.pms.personal.manager;
 
-import java.util.List;
-import java.util.Map;
-
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.personal.entity.StoreDynamic;
+
+import java.util.List;
+import java.util.Map;
 
 public interface StoreDynamicManager extends IManager {
 	// 添加门店
@@ -34,7 +34,7 @@ public interface StoreDynamicManager extends IManager {
 	 * 查询门店是否存在
 	 * 
 	 * @author sunning
-	 * @param store
+	 * @param storeDynamic
 	 * @return
 	 */
 	StoreDynamic getStoreDynamicByCityAndName(StoreDynamic storeDynamic);
@@ -61,9 +61,6 @@ public interface StoreDynamicManager extends IManager {
 	 * @return
 	 */
 	public StoreDynamic saveCityStoreDynamic(StoreDynamic storeDynamic);
-
-	// 同步门店
-	public String syncStore(StoreDynamic storeDynamic);
 
 	public List<StoreDynamic> findStoreDynamicListByName(String store_name);
 
