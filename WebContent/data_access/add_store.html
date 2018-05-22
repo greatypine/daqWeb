@@ -337,7 +337,8 @@ function downloadFile(pic_name){
 		$("#submit").attr("disabled","true");
 		var obj_file = document.getElementById("contract_file");
 		var filesize = 0;
-		if(browserCfg.firefox || browserCfg.chrome ){
+		if(obj_file.value!=""){
+			if(browserCfg.firefox || browserCfg.chrome ){
 			filesize = obj_file.files[0].size;
 		}else{
 			$("#submit").removeAttr("disabled");
@@ -352,7 +353,7 @@ function downloadFile(pic_name){
 			$("#submit").removeAttr("disabled");
 			alert(errMsg);
 			return;
-		}
+		}}
 		var flsg=true;
 		var update_user=null;
 		var ver_store_id=$("#store_id").val();
