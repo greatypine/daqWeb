@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>社员合作中心</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-body img{width: 100%}
+    .report{font-size: 16px;background-color: #a93f31;color: #fff; padding-bottom: 20px;}
+    .report img{margin: 40px 0 0px 0;}
+    .report .box-header{color: #fff;}
+    .report ul{padding: 20px 0 0 0;}
+    .report li{line-height: 50px; color: #f8e7e5;}
+    .report i{margin-right: 5px; opacity: 0.6;}
+    .report span{font-size: 24px; color: #ffb959; font-weight: bold;}
+      #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+    
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div id="process_div" ></div> 
+ <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
+<div class="wrapper">
+<!-- 新header -->
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+			<div class="logo_img pull-left">
+				<img src="dist/img/logo.png" height="30">
+				<img src="dist/img/title.png" height="20">
+			</div>
+			<div class="pull-left">
+				<div class="logo-lg">
+					<ul class="no-margin">
+						<li class="current"><em>安心合作社</em></li>
+					</ul>
+				</div>
+			</div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container" style="width: 1300px;">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box box-default report">
+          <div class="box-header h4">
+          	<strong>安心合作社运营报告</strong>
+          	<a style="float: right;margin-right: 50px;color:#00acee; " href="user_member_view.html">社员信息查询</a> 
+          </div>
+          <div class="box-body">
+            <div class="col-sm-5"><img src="dist/img/member1.png"> </div>
+            <div class="col-sm-7">
+              <div class="col-sm-6" id="main2" style="height: 350px;"></div>
+              <ul class="col-sm-6">
+                 <br/>
+                <li><i class="fa fa-file-text-o"></i>成交量：<span id="cmGoodsDealCount"></span></li>
+                <li><i class="fa fa-database"></i>成交金额：￥<span id="cmGoodsTurnover"></span></li>
+                <li><i class="fa fa-bank"></i>E店：<span id="eShopCount"></span></li>
+                <li><i class="fa fa-cube"></i>SKU：<span id="skuCount"></span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>七日增长趋势</strong></div>
+          <div class="box-body">
+            <div id="main1" style="height: 300px;"></div>
+          </div>
+        </div>
+                 <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
+          <div class="box-body">
+            <div class="col-sm-3 no-padding" id="main3" style="height: 350px;"></div>
+            <div class="col-sm-3 no-padding" id="main4" style="height: 350px;"></div>
+            <div class="col-sm-3 no-padding" id="main5" style="height: 350px;"></div>
+            <div class="col-sm-3 no-padding" id="main6" style="height: 350px;"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</div>
+<!-- ./wrapper -->
+
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/jquery.dataStatistics.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+
+
+<script src="dist/js/jquery.dataStatistics.js"></script>
+
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<!-- AdminLTE App -->
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/nav-scroll.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<script>
+  var showMemberGrow = function (dataServer){
+	  var myChart1 = echarts.init(document.getElementById('main1'));
+	  //社员人数
+	  option1 = {
+	    tooltip: {
+	      trigger: 'axis',
+	      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+	        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+	      }
+	    },
+	    legend: {
+	      data: ['累计社员人数', '新增社员人数'],
+	      right:0,
+	      textStyle: {color: '#404a59'}
+	    },
+	    grid: {
+	      left: '3%',
+	      right: '4%',
+	      bottom: '3%',
+	      containLabel: true
+	    },
+	    xAxis: [{
+	        type: 'category',
+	        data: dataServer.jsonDateX,
+	        axisLabel:{
+	          textStyle:{color:'#404a59',}
+	        },
+	        axisLine:{
+	          lineStyle:{color:'#404a59',}
+	        },
+	      }],
+	      yAxis: [{
+	    	  type: 'value',
+		      name: '新增社员人数',
+	        axisLabel: {
+	          formatter: '{value}',
+	          textStyle:{color:'#404a59',}
+	        },
+	        axisLine:{
+	          lineStyle:{color:'#404a59',}
+	        },
+	      },{
+	    	  type: 'value',
+		      name: '累计社员人数',
+	        axisLabel: {
+	          formatter: '{value}',
+	          textStyle:{color:'#404a59',}
+	        },
+	        axisLine:{
+	          lineStyle:{color:'#404a59',}
+	        },
+	        position: 'right',
+	      }],
+	    series: [ {
+		      name: '新增社员人数',
+		      type: 'bar',
+		      itemStyle:{normal:{color:'#ffae00'},},
+		      data: dataServer.growNewCounts,
+		      label: {
+		        normal: {
+		          show:true,
+		          position: 'top',
+		          textStyle:{
+		            color:'#ffae00',
+		          },
+		        },
+		        emphasis: {
+		          textStyle:{
+		            color:'#ffae00',
+		          },
+		        },
+		      },
+		    },{
+	      name: '累计社员人数',
+	      type: 'line',
+	      itemStyle:{normal:{color:'#01949B'},},
+	      data: dataServer.growAllCounts,
+	      yAxisIndex: 1,
+	      label: {
+	        normal: {
+	          show:true,
+	          position: 'top',
+	          textStyle:{
+	            color:'#01949B',
+	          },
+	        },
+	        emphasis: {
+	          textStyle:{
+	            color:'#01949B',
+	          },
+	        },
+	      },
+	    }]
+	  };
+	  myChart1.setOption(option1);
+  }
+  
+  var showMember = function (dataServer){
+	  var myChart2 = echarts.init(document.getElementById('main2'));
+	  //合作社社员
+	  option2 = {
+	    title: [ {
+	      text: '社员总数：'+dataServer.cmCount,
+	      left: '20%',
+	      top: '0',
+	      textAlign: 'center',
+	      textStyle: {
+	        color: '#fff'
+	      }
+	    }],
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: "{a} <br/>{b} : {c} ({d}%)"
+	    },
+	    series: [{
+	      name: '合作社社员',
+	      type: 'pie',
+	      radius: '70%',
+	      center: ['50%', '50%'],
+	      clockwise: false,
+	      data: [{
+	        value: dataServer.oldCmCount,
+	        name: '老会员升级'
+	      }, {
+	        value: dataServer.newCmCount,
+	        name: '新会员开卡'
+	      }],
+	      label: {
+	        normal: {
+	          textStyle: {
+	            color: '#fff',
+	            fontSize: 14,
+	          },
+	          position: 'inner',
+	          formatter: '{d}%',
+	        }
+	      },
+
+	      labelLine: {
+	        normal: {
+	          show: false
+	        }
+	      },
+	      itemStyle: {
+	        normal: {
+	          borderWidth: 4,
+	          borderColor: '#ffffff',
+	        },
+	        emphasis: {
+	          borderWidth: 0,
+	          shadowBlur: 10,
+	          shadowOffsetX: 0,
+	          shadowColor: 'rgba(0, 0, 0, 0.5)'
+	        }
+	      }
+	    }],
+	    color: [
+	      '#00acee',
+	      '#52cdd5',
+	    ],
+	  };
+	  myChart2.setOption(option2);
+  }
+  
+  var showMemberInfo = function(dataServer){
+	  var myChart3 = echarts.init(document.getElementById('main3'));
+	  var myChart4 = echarts.init(document.getElementById('main4'));
+	  var myChart5 = echarts.init(document.getElementById('main5'));
+	  var myChart6 = echarts.init(document.getElementById('main6'));
+	//性别
+
+	  option3 = {
+	    title: [{
+	      text: '社员性别',
+	      left: '45%',
+	      top: '2%',
+	      textAlign: 'center',
+	      textBaseline: 'middle',
+	      textStyle: {
+	        color: '#666',
+	        fontWeight: 'normal',
+	        fontSize: 16
+	      }
+	    }],
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: "{b}: {c} ({d}%)"
+	    },
+	    series: [{
+	      type: 'pie',
+	      selectedMode: 'single',
+	      radius: ['40%', '90%'],
+	      color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
+
+	      label: {
+	        normal: {
+	          position: 'inside', //标签的位置
+	          formatter: '{b}\n{d}%'
+
+	        }
+	      },
+	      labelLine: {
+	        normal: {
+	          show: false
+	        }
+	      },
+	      data: [{
+	        value:dataServer.fCount,
+	        name: '女'
+	      }, {
+	        value: dataServer.mCount,
+	        name: '男'
+	      }]
+	    }]
+	  };
+
+	  //年龄
+	  var colorList = [
+	    '#66c5d7', '#11c88c', '#989cff', '#ffa55d', '#9c7de1', '#5d9eff', '#ffdb5d', '#ee82ed', '#8fca5f', '#b995f5'
+	  ];
+	  var total = {
+	    value: '24,652',
+	    name: '社员年龄'
+	  }
+	  var originalData = [{
+	    value: dataServer.age60,
+	    name: '1960年之前'
+	  }, {
+	    value: dataServer.age70,
+	    name: '61-70年'
+	  }, {
+	    value: dataServer.age80,
+	    name: "71-80年"
+	  }, {
+	    value: dataServer.age90,
+	    name: "81-90年"
+	  }, {
+	    value: dataServer.age00,
+	    name: "91-00年"
+	  }, {
+	    value: dataServer.ageNow,
+	    name: "01-至今"
+	  }];
+	  echarts.util.each(originalData, function(item, index) {
+	    item.itemStyle = {
+	      normal: {
+	        color: colorList[index]
+	      }
+	    };
+	  });
+	  option4 = {
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: '{b}: {c} ({d}%)'
+	    },
+	    backgroundColor:'#ffffff',
+	    title: [{
+	      text: total.name,
+	      left: '45%',
+	      top: '2%',
+	      textAlign: 'center',
+	      textBaseline: 'middle',
+	      textStyle: {
+	        color: '#666',
+	        fontWeight: 'normal',
+	        fontSize: 16
+	      }
+	    }],
+	    series: [{
+	      hoverAnimation: false, //设置饼图默认的展开样式
+	      radius: ['40%', '90%'],
+	      name: 'pie',
+	      type: 'pie',
+	      selectedMode: 'single',
+	      selectedOffset: 16, //选中是扇区偏移量
+	      clockwise: true,
+	      startAngle: 90,
+	      label: {
+	        normal: {
+	          show: true,
+	          position: 'inside', //标签的位置
+	          formatter: '{b}\n{d}%'
+	        }
+	      },
+	      labelLine: {
+	        normal: {
+	          show: false
+	        }
+	      },
+	      itemStyle: {
+	        normal: {
+	          borderWidth: 3,
+	          borderColor: '#ffffff',
+	        },
+	        emphasis: {
+	          borderWidth: 0,
+	          shadowBlur: 5,
+	          shadowOffsetX: 0,
+	          shadowColor: 'rgba(0, 0, 0, 0.2)'
+	        }
+	      },
+	      data: originalData
+	    }]
+	  };
+
+	  //地区
+	  option5 = {
+	    title: [{
+	      text: '社员户籍分布',
+	      left: '45%',
+	      top: '2%',
+	      textAlign: 'center',
+	      textBaseline: 'middle',
+	      textStyle: {
+	        color: '#666',
+	        fontWeight: 'normal',
+	        fontSize: 16
+	      }
+	    }],
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: "{a} <br/>{b}: {c} ({d}%)",
+	    },
+	    series: [
+	        {
+	            type:'pie',
+	            hoverAnimation: false,
+	            legendHoverLink:false,
+	            radius: ['40%', '42%'],
+	            color: ['#d74e67', '#0092ff', '#eba954', '#21b6b9','#60a900','#01949b',' #f17677','#915872', '#3077b7', '#9a8169', '#3f8797','#5b8144','#307889','#9c6a79'],
+	            label: {
+	              normal: {
+	                position: 'inner'
+	              }
+	            },
+	            labelLine: {
+	              normal: {
+	                show: false
+	              },
+	            }
+	          },
+	      {
+	        type:'pie',
+	        radius: ['42%', '90%'],
+	        color: ['#d74e67', '#0092ff', '#eba954', '#21b6b9','#60a900','#01949b',' #f17677','#915872', '#3077b7', '#9a8169', '#3f8797','#5b8144','#307889','#9c6a79'],
+	        label: {
+	          normal: {
+	            position: 'inside', //标签的位置
+	            formatter: '{b}\n{d}%'
+	          }
+
+	        }
+	      }
+	    ]
+	  };
+	  //月份
+	  option6 = {
+	    title: [{
+	      text: '社员生日',
+	      left: '45%',
+	      top: '2%',
+	      textAlign: 'center',
+	      textBaseline: 'middle',
+	      textStyle: {
+	        color: '#666',
+	        fontWeight: 'normal',
+	        fontSize: 16
+	      }
+	    }],
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: "{a} <br/>{b}: {c} ({d}%)"
+	    },
+	    color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5'],
+	    series: [{
+	      name: '生日礼人数',
+	      type: 'pie',
+	      clockwise: false, //饼图的扇区是否是顺时针排布
+	      minAngle: 20, //最小的扇区角度（0 ~ 360）
+	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
+	      radius: ['40%', '90%'], //饼图的半径
+	      avoidLabelOverlap: true, ////是否启用防止标签重叠
+	      itemStyle: { //图形样式
+	        normal: {
+	          borderColor: '#1e2239',
+	          borderWidth: 1.5,
+	        },
+	      },
+	      label: { //标签的位置
+	        normal: {
+	          show: true,
+	          position: 'inside', //标签的位置
+	          formatter: "{b}\n{d}%",
+	          textStyle: {
+	            color: '#fff',
+	          }
+	        },
+	        emphasis: {
+	          show: true,
+	          textStyle: {
+	            fontWeight: 'bold'
+	          }
+	        }
+	      },
+	      data: [
+	        {value: dataServer.birCount1,name: '1月'},
+	        {value: dataServer.birCount2,name: '2月'},
+	        {value: dataServer.birCount3,name: '3月'},
+	        {value: dataServer.birCount4,name: '4月'},
+	        {value: dataServer.birCount5,name: '5月'},
+	        {value: dataServer.birCount6,name: '6月'},
+	        {value: dataServer.birCount7,name: '7月'},
+	        {value: dataServer.birCount8,name: '8月'},
+	        {value: dataServer.birCount9,name: '9月'},
+	        {value: dataServer.birCount10,name: '10月'},
+	        {value: dataServer.birCount11,name: '11月'},
+	        {value: dataServer.birCount12,name: '12月'}
+	      ]
+	    }, {
+	      name: '',
+	      type: 'pie',
+	      clockwise: false,
+	      silent: true,
+	      minAngle: 20, //最小的扇区角度（0 ~ 360）
+	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
+	      radius: ['0%', '37%'], //饼图的半径
+	      itemStyle: { //图形样式
+	        normal: {
+	          borderColor: '#1e2239',
+	          borderWidth: 1.5,
+	          opacity: 0.21,
+	        }
+	      },
+	      label: { //标签的位置
+	        normal: {
+	          show: false,
+	        }
+	      },
+	      data: [
+	        {value: 335,name: '超速'},
+	        {value: 335,name: '急减速'},
+	        {value: 315,name: '飞站'},
+	        {value: 200,name: '带速开关门'},
+	        {value: 140,name: '急加速'}
+	      ]
+	    }]
+	  };
+  	debugger;
+  	var meData = '[';
+		var meProL = dataServer.mePro.split('-');
+	var meCountL = dataServer.meCount.split('-');
+	var  len = meProL.length-2;
+	for(var i=0;i<len;i++){
+		
+		if(len>0){
+			if((len-1)==i){
+				meData=meData+'{"value":"'+meProL[i]+'","name":"'+meCountL[i]+'"}';
+			}else{
+				meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"},';
+			}
+			
+		}else{
+			meData=meData+'{"value":"'+meProL[i]+'","name":"'+meCountL[i]+'"}';
+		}
+	}	
+	meData+="]";
+    var cityUserDataObject = JSON.parse(meData);
+    option5.series[1].data = cityUserDataObject;
+	  myChart3.setOption(option3);
+	  myChart4.setOption(option4);
+	  myChart5.setOption(option5);
+	  myChart6.setOption(option6);
+	    // 事件绑定
+	    myChart5.on('click', function (params){
+	        //var depName=encode64(businessDepRankGMVOption.legend.data[params.dataIndex]);
+	        window.open("user_member_view.html");
+	    });
+	  
+  }
+</script>
+<script type="text/javascript">
+
+ $(function () {
+	 //获取社员量
+    doManager('communeMember','selectAllCm',"kkl",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+/*          	var dataServer = {'eShopCount':resultJson.eShopCount,'skuCount':resultJson.skuCount,
+                    'cmCount':resultJson.cmCount,'oldCmCount':resultJson.oldCmCount
+                    ,'newCmCount':resultJson.newCmCount,'cmGoodsTurnover':resultJson.cmGoodsTurnover
+                    ,'cmGoodsDealCount':resultJson.cmGoodsDealCount,'growAllCounts':resultJson.growAllCounts
+                    ,'growNewCounts':resultJson.growNewCounts,'growOldCounts':resultJson.growOldCounts
+                    ,'jsonDateX':resultJson.jsonDateX,'fCount':resultJson.fCount,'mCount':resultJson.mCount
+                    ,'age60':resultJson.age60,'age70':resultJson.age70,'age80':resultJson.age80
+                    ,'age90':resultJson.age90,'age00':resultJson.age00,'ageNow':resultJson.ageNow
+         	};
+         	
+         	
+ */        	
+ 			showHistoryData(resultJson);  
+        	showMember(resultJson);
+        	showMemberGrow(resultJson);
+        	showMemberInfo(resultJson);
+        	setLoadingMark(false);
+        	
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    });
+
+}); 
+var showHistoryData = function (dataServer) {
+	//社员量
+	$("#cmCount").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
+    //老用户开通社员量
+	$("#oldCmCount").html(parseInt(dataServer.oldCmCount==null?'0':dataServer.oldCmCount));
+    //新注册社员量
+	$("#newCmCount").html(parseInt(dataServer.newCmCount==null?'0':dataServer.newCmCount));
+   //e店数量
+	$("#eShopCount").html(parseInt(dataServer.eShopCount==null?'0':dataServer.eShopCount));
+    //sku数量
+	$("#skuCount").html(parseInt(dataServer.skuCount==null?'0':dataServer.skuCount));
+    //成交额
+	$("#cmGoodsTurnover").html(changeMoney(parseInt(dataServer.cmGoodsTurnover==null?'0':dataServer.cmGoodsTurnover)));
+    //成交量
+	$("#cmGoodsDealCount").html(parseInt(dataServer.cmGoodsDealCount==null?'0':dataServer.cmGoodsDealCount));
+	
+};
+function changeMoney (x) {
+    var y = '';
+	if(x>10000){
+	    x=x/10000;
+	    if(parseInt(x)/10000<=1){
+	    	y=ForDight(x,2)+"万";
+	    }else if(parseInt(x)/10000>1){
+	    	x=x/10000+'';
+	    	y=ForDight(x,2)+"亿";
+	    }
+	}else{
+		y=x;
+	}
+
+    return y;
+}
+function ForDight(str,How){  
+    Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
+    return Dight;  
+ }
+ 
+//设置加载中图标
+var setLoadingMark = function (bShow) {
+    if (bShow == true) {
+        $("#process_div").show();
+        $("#process_div_pic").show();
+    } else {
+        $("#process_div").hide();
+        $("#process_div_pic").hide();
+    }
+};
+</script>
+</body>
+</html>
