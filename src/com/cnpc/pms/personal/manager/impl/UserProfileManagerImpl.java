@@ -3,8 +3,6 @@ package com.cnpc.pms.personal.manager.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -140,7 +138,15 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
 	
 	public List<Map<String, Object>> queryDetailByCusId(String customer_id){
 		UserProfileDao userProfileDao = (UserProfileDao)SpringHelper.getBean(UserProfileDao.class.getName());
-		return userProfileDao.queryDetailByCusId(customer_id);
+		List<Map<String, Object>> lst_data = userProfileDao.queryDetailByCusId(customer_id);
+		for(Map<String, Object> map : lst_data){
+			String order_sn = (String) map.get("order_sn");
+			Map<String, Object> order_obj = userProfileDao.queryOrderDetailBySn(order_sn);
+			map.put("area_code",order_obj.get("area_code"));
+			map.put("tiny_village_code",order_obj.get("tiny_village_code"));
+			map.put("employee_a_no", order_obj.get("employee_a_no"));
+		}
+		return lst_data;
 	}
 	
 	private XSSFCellStyle getHeaderStyle(){
