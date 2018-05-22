@@ -112,13 +112,6 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			if ("V".equals(storeDynamic.getStoretype())) {
 				storeManager.insertStoresyncDynamicStore(storeDynamic);
 			}
-			// 同步门店
-			try {
-				syncStore(storeDynamic);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
 			return storeDynamic;
 		} else {
 
@@ -247,11 +240,6 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		try {
-			syncStore(update_store_dynamic);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return update_store_dynamic;
 	}

@@ -2158,6 +2158,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setCreate_time(storeDynamic.getCreate_time());
 			storeDao.insertStore(store);
 		}
+		//同步门店方法
+		try {
+			syncStore(store);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return store;
 	}
 
