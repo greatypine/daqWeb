@@ -1891,9 +1891,15 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				sync = false;
 			}
 			if (sync) {
+				String lat=null;
+				String nat=null;
+				if(store.getStore_position()!=null){
+					lat=store.getStore_position().split(",")[0];
+					nat=store.getStore_position().split(",")[1];
+				}
 				JSONObject jsonObject = dynamicManager.insertNewStore(store.getStoreno(), store.getName(),
 						store.getGaode_provinceCode(), store.getGaode_cityCode(), store.getGaode_adCode(),
-						store.getGaode_address());
+						store.getAddress(),lat,nat);
 				rt = jsonObject.toString();
 			}
 
@@ -2151,6 +2157,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setFormattype(storeDynamic.getFormattype());
 			store.setCreate_time(storeDynamic.getCreate_time());
 			storeDao.insertStore(store);
+		}
+		//同步门店方法
+		try {
+			syncStore(store);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return store;
 	}

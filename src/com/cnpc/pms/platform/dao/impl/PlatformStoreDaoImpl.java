@@ -1,8 +1,10 @@
 package com.cnpc.pms.platform.dao.impl;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +14,13 @@ import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.core.impl.DAORootHibernate;
+import com.cnpc.pms.base.paging.FSP;
+import com.cnpc.pms.base.paging.IFilter;
+import com.cnpc.pms.base.paging.IJoin;
+import com.cnpc.pms.base.paging.IPage;
+import com.cnpc.pms.base.paging.ISort;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.base.query.model.PMSQuery;
 import com.cnpc.pms.personal.dto.StoreDTO;
 import com.cnpc.pms.personal.entity.YyStore;
 import com.cnpc.pms.platform.dao.PlatformStoreDao;
@@ -221,5 +229,223 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
         }
 		return lst_result;
 	}
+	
+	//------------------------------------2018-05-18        wuxinxin------------------------------//
+	//------------------------------------------------start---------------------------------------//
+	@Override
+	public List<Map<String, Object>> selectAllCm(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月17日
+		 */
+		
+		String cmSql="select count(*) as cou from t_eshop e where e.super_member = 'yes'";
+		
+		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+	        try{
+	            SQLQuery sqlQuery = session.createSQLQuery(cmSql);
+	            //获得查询数据
+	            List<Map<String, Object>> cm_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	            return cm_data;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return null;
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> selectNewCm(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月17日
+		 */
+		
+		String newCmSql="select count(*) as cou from t_eshop e where e.super_member = 'yes'";
+		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+	        try{
+	            SQLQuery sqlQuery = session.createSQLQuery(newCmSql);
+	            //获得查询数据
+	            List<Map<String, Object>> newCm_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	            return newCm_data;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return null;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOldCm(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月17日
+		 */
+		String oldCmSql="select count(*) as cou from t_eshop e where e.super_member = 'yes'";
+		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+	        try{
+	            SQLQuery sqlQuery = session.createSQLQuery(oldCmSql);
+	            //获得查询数据
+	            List<Map<String, Object>> oldCm_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	            return oldCm_data;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return null;
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> getEshopCount(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月17日
+		 */
+		String sql="select count(*) as cou from t_eshop e where e.super_member = 'yes'";
+		
+		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+	        try{
+	            SQLQuery sqlQuery = session.createSQLQuery(sql);
+	            //获得查询数据
+	            List<Map<String, Object>> eshop_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	            return eshop_data;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> getGoodsTypeCount(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 查询新老用户增长量  按天查10天
+		 * 2018年5月17日
+		 */
+		String skuSql="select count(*) cou from t_product p where p.eshop_id is not null";
+		
+		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+	        try{
+	            SQLQuery sqlQuery = session.createSQLQuery(skuSql);
+	            //获得查询数据
+	            List<Map<String, Object>> sku_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	            return sku_data;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> getCmGoodsDealCount(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月17日
+		 */
+		String dealCouSql="SELECT COUNT(*) cou FROM t_order too WHERE too.customer_id IN ("+dd+")";
+		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+	        try{
+	            SQLQuery sqlQuery = session.createSQLQuery(dealCouSql);
+	            //获得查询数据
+	            List<Map<String, Object>> dealCou_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	            return dealCou_data;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return null;
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> getCmGoodsTurnover(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月17日
+		 */
+		String turnoverSql="SELECT IFNULL(sum(trading_price),0) cou FROM t_order too WHERE too.customer_id IN ("+dd+" )";
+		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+	        try{
+	            SQLQuery sqlQuery = session.createSQLQuery(turnoverSql);
+	            //获得查询数据
+	            List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	            return turnover_data;
+	        }catch (Exception e){
+	            e.printStackTrace();
+	        } finally {
+	            session.close();
+	        }
+	        return null;
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> getCmSexRatios(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月18日
+		 */
+		 return null;
+		
+	}
+
+
+	@Override
+	public List<Map<String, Object>> getCmAgeRatios(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月18日
+		 */
+		 return null;
+		
+	}
+
+
+	@Override
+	public Map<String, Object> getCmBirthday(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月18日
+		 */
+		 return null;
+		
+	}
+
+
+	@Override
+	public Map<String, Object> getCmGrow(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年5月18日
+		 */
+		 return null;
+		
+	}
+
+	//----------------------------------wuxinxin   end------------------------------------//
+	
+	
 
 }

@@ -178,12 +178,26 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> queryDetailByCusId(String customer_id){
-		String sql = "SELECT IFNULL(dus.city_name,'') AS city_name,	IFNULL(ts. NAME,'') AS store_name, IFNULL(dus.area_code,'') AS area_code, IFNULL(dus.tiny_village_code,'') AS tiny_village_code, "
-				+ "IFNULL(dus.employee_a_no,'') AS employee_a_no, IFNULL(dus.first_order_time,'') AS first_order_time FROM df_user_store dus LEFT JOIN t_store ts ON dus.storeno = ts.storeno WHERE dus.customer_id = '"+customer_id+"'";
+		String sql = "SELECT IFNULL(dus.city_name,'') AS city_name,	IFNULL(ts. NAME,'') AS store_name, IFNULL(dus.order_sn,'') AS order_sn, "
+				+ "IFNULL(dus.first_order_time,'') AS first_order_time FROM df_user_store dus LEFT JOIN t_store ts ON dus.storeno = ts.storeno WHERE dus.customer_id = '"+customer_id+"'";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> queryOrderDetailBySn(String order_sn){
+		String sql = "SELECT IFNULL(dot.area_code, '') AS area_code,IFNULL(dot.info_village_code, '') AS tiny_village_code,	IFNULL(dot.info_employee_a_no, '') AS employee_a_no "
+				+ "FROM df_mass_order_total dot WHERE order_sn = '"+order_sn+"' ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		Map<String, Object> order_obj = null;
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if (lst_data != null && lst_data.size() > 0) {
+			order_obj = (Map<String, Object>) lst_data.get(0);
+		}
+		return order_obj;
 	}
 	
 }

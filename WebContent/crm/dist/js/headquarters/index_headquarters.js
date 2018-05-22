@@ -876,7 +876,7 @@ var showStatisticInfo = function (statisticData) {
 };
 // 获取历史数据
 var getHistoryData = function (pageStatusInfo) {
-	/*
+	
     var cacheKey = CACHE_HEADER_HISTORY_DATA + pageStatusInfo.getCacheKey();
     // 从缓存获取数据
     var historyData = JsCache.get(cacheKey);
@@ -884,7 +884,7 @@ var getHistoryData = function (pageStatusInfo) {
         //console.log('show history data base on js cache.')
         showHistoryData(historyData);
     } else {
-    */
+    
         // 准备服务端数据请求参数
         var reqestParameter = {
             month:pageStatusInfo.currentMonth,
@@ -922,13 +922,13 @@ var getHistoryData = function (pageStatusInfo) {
 		                         }
 		                         ,false);
                                 showHistoryData(historyDataFromServer);
-                                //JsCache.set(cacheKey, historyDataFromServer);
+                                JsCache.set(cacheKey, historyDataFromServer);
                             }
                         },false);
                 }
             },false);
         //console.log('request history data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
-    //}
+    }
 };
 // 显示历史数据
 var showHistoryData = function (historyData) {
