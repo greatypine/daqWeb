@@ -578,7 +578,7 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			if (sync) {
 				JSONObject jsonObject = dynamicManager.insertNewStore(storeDynamic.getStoreno(), storeDynamic.getName(),
 						storeDynamic.getGaode_provinceCode(), storeDynamic.getGaode_cityCode(),
-						storeDynamic.getGaode_adCode(), storeDynamic.getGaode_address());
+						storeDynamic.getGaode_adCode(), storeDynamic.getAddress());
 				rt = jsonObject.toString();
 			}
 

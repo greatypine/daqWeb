@@ -1,10 +1,5 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.impl.PageInfo;
@@ -18,23 +13,14 @@ import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.personal.dao.PersonDutyDao;
 import com.cnpc.pms.personal.dao.TownDao;
-import com.cnpc.pms.personal.entity.City;
-import com.cnpc.pms.personal.entity.County;
-import com.cnpc.pms.personal.entity.Customer;
-import com.cnpc.pms.personal.entity.DistCity;
-import com.cnpc.pms.personal.entity.PersonDuty;
-import com.cnpc.pms.personal.entity.Province;
-import com.cnpc.pms.personal.entity.Store;
-import com.cnpc.pms.personal.entity.Town;
-import com.cnpc.pms.personal.manager.AuditManager;
-import com.cnpc.pms.personal.manager.CityManager;
-import com.cnpc.pms.personal.manager.CountyManager;
-import com.cnpc.pms.personal.manager.CustomerManager;
-import com.cnpc.pms.personal.manager.PersonDutyManager;
-import com.cnpc.pms.personal.manager.ProvinceManager;
-import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.personal.manager.TownManager;
+import com.cnpc.pms.personal.entity.*;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.utils.ValueUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TownManagerImpl extends BizBaseCommonManager implements TownManager {
 
@@ -513,7 +499,7 @@ public class TownManagerImpl extends BizBaseCommonManager implements TownManager
 		for (Map<String, Object> map_where : conditions.getConditions()) {
 			if ("name".equals(map_where.get("key")) && null != map_where.get("value")
 					&& !"".equals(map_where.get("value"))) {
-				sb_where.append(" AND town.name like '%").append(map_where.get("value")).append("%'");
+				sb_where.append(" AND town.name like '").append(map_where.get("value")).append("'");
 			}
 			if ("cityName".equals(map_where.get("key")) && null != map_where.get("value")
 					&& !"".equals(map_where.get("value"))) {
