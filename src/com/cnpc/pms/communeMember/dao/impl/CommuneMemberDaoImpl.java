@@ -504,7 +504,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	 * 2018年5月22日
 	 */
 	
-	String birSql = "select dum.born_province as mePro, count(*) as meCount from df_user_member dum  where dum.born_province is not null group by dum.born_province";
+	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode group by dum.born_province";
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(birSql);
