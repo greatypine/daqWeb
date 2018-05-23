@@ -4036,6 +4036,20 @@ var curr_user;
 	  }
 	  window.open(url,"userOperationStat_view"); 
   }
+  
+  //合作社社员统计
+  function goToUserMember(){ 
+	  var role = curr_user.usergroup.code;
+	  var url = "";
+	  var target=pageStatusInfo.targets;
+	  if(target==0){
+	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+	  }else if(target==1){
+	  	url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+	  }
+	  window.open(url,"user_member_view");
+  }
+  
 //线下网络运营
   function goToCityNet(){
   	  var role = curr_user.usergroup.code;
@@ -4400,6 +4414,19 @@ var curr_user;
 	  var url = "../aboutMap/data_index.html?t=1&nav=emp&s=&c=&cn=&e=";
 	  window.open(url,"data_index");  
   }
+  
+//数据模型-社区模型-基础数据模型  //全国
+  function toToMemberAnalysis(){
+  	  var url = "";
+	  var target=pageStatusInfo.targets;
+	  if(target==0){
+	  	url = "member_analysis.html";
+	  }else if(target==1){
+		  url = "member_analysis.html";
+	  }
+	  window.open(url,"member_analysis");  
+  }
+  
   //数据模型-社区模型-基础数据模型  //全国
   function toToBaseDataModule(){
   	  var url = "";
