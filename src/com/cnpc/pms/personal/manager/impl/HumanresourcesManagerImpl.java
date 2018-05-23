@@ -3826,8 +3826,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   	        XSSFRow row = sheet.createRow(0);
   	        
   	      //定义表头 以及 要填入的 字段 
-  	      String[] str_headers = {"员工姓名","员工编号","门店","城市","岗位","事业群","入职日期","门店编号"};
-		  String[] headers_key = {"name","employee_no","storename","citySelect","zw","career_group","topostdate","storeno"};
+  	      String[] str_headers = {"员工姓名","员工编号","社员邀请码","门店","城市","岗位","事业群","入职日期","门店编号"};
+		  String[] headers_key = {"name","employee_no","inviteCode","storename","citySelect","zw","career_group","topostdate","storeno"};
   	       if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
 				//在职
   	    	    str_headers[6]="入职日期";

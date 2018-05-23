@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>选择门店服务街道</title>
+    <script type="text/javascript" src="../../scripts/bidLib.js"></script>
+    <link href="../../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <script>
+        var arr =new Array();
+        var ids;
+        var city;
+        var store_id;
+        var place_town_id;
+        $(function (){
+            //页面加载成功后需要获取数据
+            parent.store_id_parent=getUrlParamByKey("store_id");
+             store_id = getUrlParamByKey("store_id");
+            doManager("storeManager", "findStore",store_id, function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    if (data.data != "null") {
+                        var jsonData = $.fromJSON(data.data);
+                        city=jsonData.county_ids;
+                        $("#store_name").text(jsonData.name);
+                        $("#county_ids").val(jsonData.county_ids);
+                        ids=jsonData.town_id;
+                        place_town_id=jsonData.place_town_id;
+                        parent.county_id_parent=jsonData.county_ids;
+                        parent.place_town_id_parent=jsonData.place_town_id;
+                    }
+                }
+            },false)
+            if(city=null||city==''||city==undefined){
+                alert("请去门店编辑页面添加区域！");
+                return;
+            }
+
+            if(ids!=null){
+                insertSort(ids);
+                var obj = ids.split(",");
+                for(n in obj){
+                    if(obj[n]!=null&&obj[n]!=""){
+                        doManager("townManager", "getTownById", obj[n] , function(data,
+                                                                                  textStatus, XMLHttpRequest) {
+                            if (data.result) {
+                                var jsonData = $.fromJSON(data.data);
+                                var paramObj=new Object();
+                                paramObj.id=jsonData.id;
+                                paramObj.name=jsonData.name;
+                                arr.push(paramObj);
+                            }
+                        },false);
+                    }
+                }
+            }
+            searchList();
+        });
+
+
+        function storecheck(store){
+            if(store.checked){
+                var obj =new Object();
+                obj.id=store.value.split(",")[0];
+                obj.name=store.value.split(",")[1];
+                arr.push(obj);
+            }else{
+                for(n in arr){
+                    if(arr[n].id==store.value.split(",")[0]){
+                        arr.splice(n,1);
+                    }
+                }
+            }
+            parent.parent_arr=arr;
+            if (arr.length > 0) {
+                var idse="";
+                for(i=0;i<arr.length;i++){
+                    idse+=","+arr[i].id;
+                }
+                if(idse.length>0){
+                    idse=idse.substring(1,idse.length);
+                    insertSort(idse);
+                }
+            }
+
+        }
+        //给街道添加排序标示
+        function insertSort(idse){
+            doManager("townManager", "updateTownSortById",idse, function(data, textStatus,
+                                                                         XMLHttpRequest) {
+            },false)
+        }
+        //记载页面时请求数据列表默认的方法
+        function searchList() {
+            $$.executeSearch('selectCheckBoxTownQuery', 'conditionsDiv');
+        }
+        //每次操作街道调用此方法
+        function changetown(){
+
+        }
+
+
+
+        //当添加街道时检测是否街道为空
+        function doSubmit(){
+            var flag=true;
+            if(arr.length==0){
+                flag=false;
+                alert("请选择街道");
+                return ;
+            }
+            var stt="";
+            var town_name="";
+            for (var i=0;i<arr.length;i++){
+                stt+=arr[i].id+",";
+                town_name+=arr[i].name+",";
+            }
+            stt=stt.substring(0,stt.length-1);
+            town_name=town_name.substring(0,town_name.length-1);
+            if(place_town_id==null||place_town_id==undefined||place_town_id==''){
+                flag=false;
+                alert("请去门店编辑页面维护当前门店所在街道！");
+                return ;
+            } if(stt.search(place_town_id)==-1){
+                flag=false;
+                alert("门店服务范围覆盖街道必须包含门店位置所在街道!");
+                return ;
+            }
+            if(flag){
+                var o = {};
+                o['store_id']=store_id;
+                o['town_id']=stt;
+                o['town_name']=town_name;
+                doManager("StoreManager", "updateStoreTown", o, function(data,
+                                                                                       textStatus, XMLHttpRequest) {
+                    if (data.result) {
+                        alert("修改成功！");
+                        parent.location.reload();
+                    }},false)
+            }
+
+
+
+        }
+
+        var COLUMNS = {
+            "id": function(aData, iColumn, sColumnName, map){
+                var id = map[sColumnName];
+                var name = map["name"];
+                var objstr = id+","+name;
+                if(arr!=""&&arr.length>0){
+                    for(n in arr){
+                        if(id==arr[n].id){
+                            //如果有checked放入店名
+                            //arr[n].storename=storename;
+                            return '<input type="checkbox" checked="true" name="chkbox" onclick="storecheck(this)" value="'+objstr+'"/>';
+                        }
+                    }
+                }
+                return '<input type="checkbox" name="chkbox" onclick="storecheck(this)" value="'+objstr+'"/>';
+            }
+        }
+    function doback(){
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);
+    }
+    </script>
+    <style type="text/css">
+        html,body{
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" value="" id="checkedstoreid"/>
+<div id="bodyDiv">
+    <div id="userGroupInfo" class="panel panel-primary">
+        <div class="panel-heading">
+            <a href="#" onclick="toggleBizBiz('conditionsDiv','pic');"><img src="../../scripts/images/22.png" align="absmiddle" id="pic"/></a>&nbsp;搜索条件
+        </div>
+        <div id="conditionsDiv" class="panel-body">
+            <table class="bigteble">
+                <tr>
+                    <td width="30%">当前操作门店：<label id="store_name"></label></td>
+                    <td  width="70%" class="basetext" >
+                        街道名称：			<input type="hidden" name="county_ids" id="county_ids" class="form-control" style="width: 70%"/>
+                        <input type="text" name="name" id="name" class="form-control" style="width: 70%;display:inline" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="panel-footer"  align="right">
+            <input class="btn btn-primary" onClick="searchList()" value="查询" type="button"/>
+        </div>
+    </div>
+    <div id="gridContainer" searchDiv="conditionsDiv" queryid="selectCheckBoxTownQuery" queryformat="simple" class="panel panel-primary"
+         operators="$pmspage.opArr" titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="false"
+         showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="false"
+         checkmode="multi" autoload="false" showno="false">
+    </div>
+</div>
+</body>
+
+
+</html>

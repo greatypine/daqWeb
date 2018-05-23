@@ -332,4 +332,11 @@ public interface StoreManager extends IManager {
 
 	Map<String, Object> exportAboutOfStoreDataInfo(DynamicDto dynamicDto);
 
+	/**
+	 * 修改门店管服务街道
+	 * @param store
+	 * @return
+     */
+	Store updateStoreTown(Store store);
+
 }

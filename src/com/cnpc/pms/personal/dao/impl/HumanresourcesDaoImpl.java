@@ -285,7 +285,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 				sqlwhere +=" and a.employee_no = '"+humanresources.getEmployee_no().trim()+"'";
 			}
 			
-			String sql = "SELECT a.name,a.employee_no,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
+			String sql = "SELECT a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;
