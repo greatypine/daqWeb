@@ -131,8 +131,8 @@
             "inviteCode": function(aData, iColumn, sColumnName, map){
                 var value = map[sColumnName];
                	if(value!=null&&value.length>0){
-               		value="【"+value.substring(0,6)+"】<label class='clickcode' onclick='javascript:copycode("+value+")' style='cursor:pointer;'>复制</label>";
-               		//value="【"+value.substring(0,6)+"】"; 
+               		//value="【"+value.substring(0,6)+"】<label class='clickcode' onclick='javascript:copycode("+value+")' style='cursor:pointer;'>复制</label>";
+               		value=value.substring(0,6); 
                	}
                 return value;
             }
