@@ -166,6 +166,12 @@
                 	ret=value;
                 }
                 return ret;
+            },"inviteCode": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                if(value!=null&&value.length>0){
+                	value="【"+value+"】";
+                }
+                return value;
             }
         }
     
