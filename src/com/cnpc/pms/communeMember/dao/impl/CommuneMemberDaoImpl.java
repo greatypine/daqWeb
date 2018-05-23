@@ -266,7 +266,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		
 		//查询老用户转社员sql
-		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member!=1 and DATE_SUB(CURDATE(), INTERVAL 10 DAY) <= date(dum1.opencard_time) group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
+		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and DATE_SUB(CURDATE(), INTERVAL 10 DAY) <= date(dum1.opencard_time) group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -380,7 +380,7 @@ public List<Map<String, Object>> getOldCount(String dd) {
 			 */
 			
 			//查询老用户转社员sql
-			String sql = "select count(*) as oldcount from  df_user_member dum where dum.isnew_member!=1";
+			String sql = "select count(*) as oldcount from  df_user_member dum where dum.isnew_member=0 or dum.isnew_member is null";
 			List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 			try{
 				Query query = this.getHibernateTemplate().getSessionFactory()
