@@ -2707,8 +2707,21 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 
 	}
 
-
-
-
-
+	@Override
+	public Store updateStoreTown(Store store) {
+		StoreManager storeManager=(StoreManager)SpringHelper.getBean("storeManager");
+		// 获取当前登录人
+		User sessionUser = null;
+		if (null != SessionManager.getUserSession() && null != SessionManager.getUserSession().getSessionData()) {
+			sessionUser = (User) SessionManager.getUserSession().getSessionData().get("user");
+		}
+		//根据门店id查询门店
+		Store updateStore=this.findStore(store.getStore_id());
+		updateStore.setTown_id(store.getTown_id());
+		updateStore.setTown_name(store.getTown_name());
+		updateStore.setUpdate_user(sessionUser.getName());
+		updateStore.setUpdate_time(new Date());
+		storeManager.save(updateStore);
+		return updateStore;
+	}
 }
