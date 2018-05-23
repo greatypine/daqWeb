@@ -4,6 +4,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>门店信息列表</title>
+	<script type="text/javascript" src="../startbootstrap/js/jquery.1.10.2.min.js"></script>
+	<script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
     <script type="text/javascript" src="../scripts/bidLib.js"></script>
     <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
@@ -20,6 +22,21 @@
         text-align: center;
     }
     .but input{background-color:transparent; border:1px solid #fff; border-radius:3px; padding:0 13px; margin-right:30px;}
+
+		/*.layui-layer {
+			top: 25px;
+			left: 9%;
+			margin: 0;
+			padding: 0;
+			background-color: #fff;
+			-webkit-background-clip: content;
+			box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+			border-radius: 2px;
+			-webkit-animation-fill-mode: both;
+			animation-fill-mode: both;
+			-webkit-animation-duration: .3s;
+			animation-duration: .3s;
+		}*/
     </style> 
 </head>
 <script type="text/javascript">
@@ -88,7 +105,11 @@ function addVillage(){
   function getNoFindPlay(){
 	  window.location.href="storelist_brak.html";
   }
-  
+layer.config({
+
+	extend: 'skin/crmskin/style.css' //加载新皮肤
+
+});
   //导出门店数据
   function excelData(fileName){
 	  var path = getRootPath();
@@ -162,8 +183,98 @@ function addVillage(){
 		},false);
 	   
    })
-   
-   var COLUMNS = {
+var store_id_parent=null;
+var place_town_id_parent=null;
+var county_id_parent=null;
+var parent_arr=new Array();
+//当为城市公司和区域经理时调用此方法添加设置管理街道
+function isStoreend(store_id){
+	var update_user="";
+	var  flsgss=true;
+	doManager("StoreDynamicManager", "findStoreDynamic", store_id, function(
+			data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			if(data.data!="null"){
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData['auditor_status']==1){
+					flsgss=false;
+					doManager("ScoreRecordTotalManager", "findScoreUserName", jsonData['work_id'], function(
+							data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							if(data.data!="null"){
+								update_user=data.data;
+							}
+						}
+
+					},false);
+				}else{
+
+						var url = "../data_access/select_view/select_town_manager_checked.html?store_id="+store_id;
+						layer.open({
+							type: 2,
+							title:  ['服务街道', 'color:#fff'],
+							shadeClose: true,
+							shade:[0.1, '#393D49'],
+							moveOut:false,
+							move:false,
+							skin: 'layer-ext-crmskin',
+							area: ['80%', '80%'],
+							offset:  ['10px', '100px'],
+							content: url,
+							btn:['保存街道','关闭'],
+							yes:function(index){
+								var flagss=true;
+								if(parent_arr.length==0){
+									flagss=false;
+									alert("请选择街道");
+									return ;
+								}
+								var stt="";
+								var town_name="";
+								for (var i=0;i<parent_arr.length;i++){
+									stt+=parent_arr[i].id+",";
+									town_name+=parent_arr[i].name+",";
+								}
+								stt=stt.substring(0,stt.length-1);
+								town_name=town_name.substring(0,town_name.length-1);
+								if(place_town_id_parent==null||place_town_id_parent==undefined||place_town_id_parent==''){
+									flagss=false;
+									alert("请去门店编辑页面维护当前门店所在街道！");
+									return ;
+								} if(stt.search(place_town_id_parent)==-1){
+									flagss=false;
+									alert("门店服务范围覆盖街道必须包含门店位置所在街道!");
+									return ;
+								}
+								if(flagss){
+									var o = {};
+									o['store_id']=store_id_parent;
+									o['town_id']=stt;
+									o['town_name']=town_name;
+									doManager("StoreManager", "updateStoreTown", o, function(data,
+																							 textStatus, XMLHttpRequest) {
+										if (data.result) {
+											alert("修改成功！");
+											location.reload();
+										}},false)
+								}
+								alert(store_id_parent);
+							},
+							cancel: function(index){
+								layer.close(index);
+							}
+						});
+				}
+			}}},false);
+	if(!flsgss){
+		alert("该门店待"+update_user+"审批!");
+		return;
+	}
+}
+
+
+
+var COLUMNS = {
 	   "caozuo": function(aData, iColumn, sColumnName, map){
 			 var auditor_status = map['auditor_status'];
 			 var store_id =  map['store_id'];
@@ -174,7 +285,9 @@ function addVillage(){
 			 }
 			  if(JSZ=='MDGLYJSZ'){
 				 return '<a href="add_store.html?store_id='+store_id+'&sp=2&JSZ=MDGLYJSZ">编辑</a>    <a href="add_storedocumentinfo.html?store_id='+store_id+'&JSZ=MDGLYJSZ" >编辑详情</a>';
-			 }else if(JSZ=='CSMDGLZ'||JSZ=='QYJL'||JSZ=='GLY'||GLY){
+			 }else if (JSZ=='QYJL'||JSZ=='CSMDGLZ'){
+				  return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>    <a href="javascript:void(0);" target="myFrameId" onclick="isStoreend(\''+store_id+'\')" >设置管理街道</a>';
+			  }else if(JSZ=='GLY'||GLY){
 					 return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>';
 			 }else if (JSZ=='ZBCSGLBYHGLJSZ'){
 					 return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>    <a href="#" onclick="openstore('+store_id+')">运营门店</a>';
@@ -249,6 +362,7 @@ function addVillage(){
    
 </script>
 <body style="height: 100%">
+<!--<div id="process_div" style="display:none;margin-left: -45%;"></div>-->
 	<div class="panel panel-default" style="margin: 10px">
 	    <div class="panel-heading">
 	        <h4 class="panel-title">
