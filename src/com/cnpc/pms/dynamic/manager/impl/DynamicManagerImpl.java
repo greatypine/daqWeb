@@ -4486,7 +4486,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			Calendar calendar = Calendar.getInstance();
 			Integer day = calendar.get(Calendar.DAY_OF_MONTH);
 			Calendar calendar2 = Calendar.getInstance();
-			if(day==1){//当前日期是当月第一天 
+			if(day==1){//当前日期是当月第一天
 				calendar.set(Calendar.DAY_OF_MONTH,1);
 				calendar.add(Calendar.DAY_OF_MONTH, -1);
 				calendar.set(Calendar.DAY_OF_MONTH,1);
@@ -4494,13 +4494,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else{
 				calendar.set(Calendar.DAY_OF_MONTH,1);
 				calendar2.add(Calendar.DAY_OF_MONTH, 1);
-			} 
-			  
+			}
+			
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			
 	        String first = sdf.format(calendar.getTime());
-		    String endDate = sdf.format(calendar2.getTime()); 
+		     String endDate = sdf.format(calendar2.getTime());
 	       
 			Store store = storeManager.findStore(storeId);
 			
@@ -4640,7 +4640,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			Integer day = calendar1.get(Calendar.DAY_OF_MONTH);
 			Calendar calendar2 = Calendar.getInstance();
 			if(day==1){//当前日期是当月第一天
-				calendar1.set(Calendar.DAY_OF_MONTH,1);  
+				calendar1.set(Calendar.DAY_OF_MONTH,1);
 				calendar1.add(Calendar.DAY_OF_MONTH, -1);
 				calendar1.set(Calendar.DAY_OF_MONTH,1);
 				calendar2.set(Calendar.DAY_OF_MONTH,1);
@@ -5061,11 +5061,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		jsonObject.put("cityCode", cityCode==null?"":cityCode);
 		jsonObject.put("adCode", adCode==null?"":adCode);
 		jsonObject.put("address", address==null?"":address);
+		jsonObject.put("longitude", longitude==null?"":longitude);
+		jsonObject.put("latitude", latitude==null?"":latitude);
 		
-		//------------暂时注释----------
-		//jsonObject.put("longitude", longitude==null?"":longitude);
-		//jsonObject.put("latitude", latitude==null?"":latitude);
-		//------------暂时注释---------- 
 		
 		System.out.println("param -> "+jsonObject.toString());
 		String body = Base64Encoder.encode(jsonObject.toString()).replace("\r", "").replace("\n", "");
