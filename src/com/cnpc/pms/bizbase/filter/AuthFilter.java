@@ -163,6 +163,15 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			/**
+			 * 2018-05-22社员
+			 * 
+			 * @author wuxinxin
+			 */
+			if (url.contains("communeMember?selectAllCm")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			// 跳过是否是初始口令的判断方法
 			if (url.equals("userManager?isInitPassword")) {
 				filterChain.doFilter(servletRequest, servletResponse);

@@ -200,6 +200,7 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
 		    	var stateObject = {};
 		    	var newUrl = "/daqWeb/crm/member_analysis?ta=0";
+		    	target = 0;
 		    	history.pushState(stateObject,null,newUrl);
 			};
 		    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
