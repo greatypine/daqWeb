@@ -157,7 +157,7 @@
       <section class="content-header">
         <div class="box box-default">
           <div class="box-header h4 text-light-blue">
-          	<div class="pull-left "><strong>社员查询</strong></div>
+          	<div class="pull-left "><strong>合作社社员统计</strong></div>
           </div>
           <div class="box-body">
             <form id="searchform" class="clearfix">
@@ -202,14 +202,14 @@
               <!-- /.input group -->
               </div>
             </div>
-            <div class="form-group col-lg-4">
+            <!-- <div class="form-group col-lg-4">
               <label>门店</label>
 			  <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
 			  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
               <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
               </div>
-              <!-- /.input group -->
-            </div>
+              /.input group
+            </div> -->
             </form>
             <div class="form-group col-lg-6" style="margin-top: 20px; padding: 0 25px;">
             </div>
@@ -232,8 +232,8 @@
                     <tbody id="tradeType_tbody">
 	                    <tr>
 	                      <th width="8%">城市</th>
-	                      <th width="10%">门店名称</th>
-	                      <th width="10%">门店编号</th>
+	                      <!-- <th width="10%">门店名称</th> -->
+	                      <!-- <th width="10%">门店编号</th> -->
 	                      <th width="12%">新增社员数</th>
 	                      <th width="12%">成累计社员总数</th>
 	                    </tr>
@@ -514,7 +514,7 @@
 	   	       	  	    pageCount:totalPage_tradetype,
 	   	       	  	    current:cur_page,
 	   	       	  	    backFn:function(p){
-	   	       	  			searchInfo_tradetype_step3(p,begin_end_date);
+	   	       	  			searchInfo_tradetype_step2(p,begin_end_date);
 	   	       	  	    }
 	   	       	  	  });
 	        		   isCreatePage1=true;
@@ -524,8 +524,8 @@
 	        	   for(var i=0;i<jData.length;i++){
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
-		                       +"<td>"+jData[i].name+"</td>"
-		                       +"<td>"+jData[i].storeno+"</td>"
+		                       /* +"<td>"+jData[i].name+"</td>" */
+		                       /* +"<td>"+jData[i].storeno+"</td>" */
 		                       +"<td>"+jData[i].nowcount+"</td>"
 		                       +"<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";

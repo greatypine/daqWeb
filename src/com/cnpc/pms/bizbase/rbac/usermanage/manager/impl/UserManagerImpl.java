@@ -790,7 +790,7 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		DistCityManager distCityManager = (DistCityManager)SpringHelper.getBean("distCityManager");
 		//判断当前登录职位是否为店长
 		List<DistCity> distCityList = null;
-		if(currentUserDTO.getZw()!=null&&currentUserDTO.getZw().equals("店长")){
+		if(currentUserDTO.getZw()!=null&&currentUserDTO.getUsergroup().getCode().equals("DZ")){
 			distCityList = new ArrayList<DistCity>();
 			DistCity distCity = new DistCity();
 			StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");

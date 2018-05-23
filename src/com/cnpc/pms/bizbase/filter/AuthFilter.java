@@ -551,6 +551,15 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			/**
+			 * 2018-05-23 安心合作社
+			 * 
+			 * @author wuxinxin
+			 */
+			if (url.contains("member_analysis.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 
 			/**
 			 * 2018-04-01 周围门店

@@ -6585,8 +6585,19 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
+			String cityNo = "";
 			if(dynamicDto.getTarget()==0){//总部
-				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+				if(dynamicDto.getCityId() == null || "".equals(dynamicDto.getCityId())){
+					
+				}else if(dynamicDto.getCityId()==-10000){
+					dynamicDto.setCityId(Long.valueOf("-10000"));
+					cityNo = "-10000";
+				}else{
+					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+					List<Map<String, Object>> cityNOOfCityById = storeDao.getCityNOOfCityById(dynamicDto.getCityId());
+					cityNo = String.valueOf(cityNOOfCityById.get(0).get("cityno"));
+				}
+				/*if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
@@ -6622,9 +6633,17 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
 					dynamicDto.setStoreNumer(store.getNumber()==null?"-10000":String.valueOf(store.getNumber()));
 					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
-				}
+				}*/
 			}else if(dynamicDto.getTarget()==1){//城市总监
-				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+				if(dynamicDto.getCityId()==-10000){
+					dynamicDto.setCityId(Long.valueOf("-10000"));
+					cityNo = "-10000";
+				}else{
+					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+					List<Map<String, Object>> cityNOOfCityById = storeDao.getCityNOOfCityById(dynamicDto.getCityId());
+					cityNo = String.valueOf(cityNOOfCityById.get(0).get("cityno"));
+				}
+				/*if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
@@ -6660,13 +6679,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
 					dynamicDto.setStoreNumer(store.getNumber()==null?"-10000":String.valueOf(store.getNumber()));
 					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
-				}
+				}*/
 			}else if(dynamicDto.getTarget()==2){//店长
 				Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
 				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
 			}
-			
-			result= dynamicDao.getStoreMember(dynamicDto, pageInfo);
+			result= dynamicDao.getStoreMember(dynamicDto,cityNo, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -6697,10 +6715,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 			setCellStyle_common(wb);
 			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("门店会员");
+			HSSFSheet sheet = wb.createSheet("城市会员");
 			HSSFRow row = sheet.createRow(0);
-			String[] str_headers = {"城市","门店名称","门店编号","开卡数","累计开卡数"};
-			String[] headers_key = {"city_name","name","storeno","nowcount","opencount"};
+			//String[] str_headers = {"城市","门店名称","门店编号","开卡数","累计开卡数"};
+			//String[] headers_key = {"city_name","name","storeno","nowcount","opencount"};
+			String[] str_headers = {"城市","新增社员数","累计社员总数"};
+			String[] headers_key = {"city_name","nowcount","opencount"};
 			for(int i = 0;i < str_headers.length;i++){
 				HSSFCell cell = row.createCell(i);
 				cell.setCellStyle(getHeaderStyle());

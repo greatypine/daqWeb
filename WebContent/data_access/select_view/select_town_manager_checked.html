@@ -56,6 +56,7 @@
                         },false);
                     }
                 }
+                parent.parent_arr=arr;
             }
             searchList();
         });
@@ -97,11 +98,6 @@
         function searchList() {
             $$.executeSearch('selectCheckBoxTownQuery', 'conditionsDiv');
         }
-        //每次操作街道调用此方法
-        function changetown(){
-
-        }
-
 
 
         //当添加街道时检测是否街道为空

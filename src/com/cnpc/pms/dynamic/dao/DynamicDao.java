@@ -847,5 +847,5 @@ public interface DynamicDao extends IDAO{
 	 * @param dd
 	 * @return
 	 */
-	public Map<String, Object> getStoreMember(DynamicDto dynamicDto, PageInfo pageInfo);
+	public Map<String, Object> getStoreMember(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo);
 }
