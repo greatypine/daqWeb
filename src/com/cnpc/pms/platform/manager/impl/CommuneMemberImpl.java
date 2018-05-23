@@ -344,7 +344,6 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 	}
 	
-	
 	//生成X轴坐标
 	 public List reDate(int dd) throws ParseException {
 		 DateFormat f = new SimpleDateFormat("MM-dd");  
