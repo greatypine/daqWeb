@@ -6715,7 +6715,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 			setCellStyle_common(wb);
 			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("门店会员");
+			HSSFSheet sheet = wb.createSheet("城市会员");
 			HSSFRow row = sheet.createRow(0);
 			//String[] str_headers = {"城市","门店名称","门店编号","开卡数","累计开卡数"};
 			//String[] headers_key = {"city_name","name","storeno","nowcount","opencount"};
