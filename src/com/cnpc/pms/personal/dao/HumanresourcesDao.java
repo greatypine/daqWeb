@@ -53,4 +53,8 @@ public interface HumanresourcesDao {
 	 */
 	public List<Map<String,Object>> queryHumanTotal();
 	public List<Map<String,Object>> queryWeekPoint();
+	
+	
+	//取得最大邀请码
+	public String queryMaxInviteCode();
 }

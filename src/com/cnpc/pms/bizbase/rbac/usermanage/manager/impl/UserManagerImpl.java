@@ -41,12 +41,14 @@ import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.RelationDao;
 import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.DistCityCode;
+import com.cnpc.pms.personal.entity.Humanresources;
 import com.cnpc.pms.personal.entity.SendBoxLoginLog;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.StoreKeeper;
 import com.cnpc.pms.personal.entity.SysUserGroupOpera;
 import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.DistCityManager;
+import com.cnpc.pms.personal.manager.HumanresourcesManager;
 import com.cnpc.pms.personal.manager.SendBoxLoginLogManager;
 import com.cnpc.pms.personal.manager.StoreKeeperManager;
 import com.cnpc.pms.personal.manager.StoreManager;
@@ -1555,6 +1557,22 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 					employee2.setClient_id(employee.getClient_id());
 					this.saveObject(employee2);
 				}
+				
+				
+				//登录后取得社员邀请码
+			    HumanresourcesManager humanresourcesManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
+			    Humanresources human = humanresourcesManager.getEmployeeInfoByEmployeeNoExtend(employee2.getEmployeeId());
+				StoreKeeperManager storeKeeperManager = (StoreKeeperManager) SpringHelper.getBean("storeKeeperManager");
+				StoreKeeper sKeeper = storeKeeperManager.findStoreKeeperByEmployeeId(employee2.getEmployeeId());
+			    String group = employee2.getUsergroup().getCode();
+				if(group.equals("DZ")||group.equals("QYJL")){
+					employee2.setInviteCode(sKeeper.getInviteCode());
+				}else{
+					if(human!=null){
+						employee2.setInviteCode(human.getInviteCode());
+					}
+				}
+				
 				result.setCode(CodeEnum.success.getValue());
 				result.setMessage(CodeEnum.success.getDescription());
 				if (employee2 != null) {

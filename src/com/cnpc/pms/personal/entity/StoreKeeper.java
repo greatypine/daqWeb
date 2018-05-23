@@ -474,6 +474,11 @@ public class StoreKeeper extends DataEntity{
 	@Transient
 	public String region;
 	
+	/**
+	 * 邀请码
+	 */
+	@Column(length = 65,name="inviteCode")
+	private String inviteCode;
 	
 
 	public String getDeptname() {
@@ -1074,6 +1079,14 @@ public class StoreKeeper extends DataEntity{
 
 	public void setRegion(String region) {
 		this.region = region;
+	}
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
 	}
 	
 	/***********培训结束********************/
