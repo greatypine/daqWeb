@@ -186,7 +186,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		//查询社员增长sql
-		String sql = "select count(*) as allcount,DATE_FORMAT(dum.create_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.create_time) group by DATE_FORMAT(dum.create_time,\"%Y-%m-%d\")  order by dum.create_time";
+		String sql = "select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.opencard_time) group by DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\")  order by dum.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
 		try{
@@ -228,7 +228,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		
 		
 		//查询新注册社员sql
-		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.create_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.create_time) group by DATE_FORMAT(dum2.create_time,\"%Y-%m-%d\") order by dum2.create_time";
+		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.opencard_time) group by DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") order by dum2.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -266,7 +266,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		
 		//查询老用户转社员sql
-		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.create_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member!=1 and DATE_SUB(CURDATE(), INTERVAL 10 DAY) <= date(dum1.create_time) group by DATE_FORMAT(dum1.create_time,\"%Y-%m-%d\") order by dum1.create_time";
+		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member!=1 and DATE_SUB(CURDATE(), INTERVAL 10 DAY) <= date(dum1.opencard_time) group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -441,13 +441,13 @@ public List<Map<String, Object>> getAllMembers(String dd) {
 	 */
 	int dayCount = 7;
 	String sql = "select DATE_SUB(CURDATE(), INTERVAL 7 DAY)," + 
-			"sum(CASE when  dum.create_time<= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end) as day1," + 
-			"sum(CASE when  dum.create_time<= DATE_SUB(curdate(),INTERVAL 5 DAY)  then  1 else 0 end) as day2," + 
-			"sum(CASE when  dum.create_time<= DATE_SUB(curdate(),INTERVAL 4 DAY)  then  1 else 0 end) as day3," + 
-			"sum(CASE when  dum.create_time<= DATE_SUB(curdate(),INTERVAL 3 DAY)  then  1 else 0 end) as day4," + 
-			"sum(CASE when  dum.create_time<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end) as day5," + 
-			"sum(CASE when  dum.create_time<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end) as day6," + 
-			"sum(CASE when  dum.create_time<= DATE_SUB(curdate(),INTERVAL 0 DAY)  then  1 else 0 end) as day7" + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end) as day1," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 5 DAY)  then  1 else 0 end) as day2," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 4 DAY)  then  1 else 0 end) as day3," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 3 DAY)  then  1 else 0 end) as day4," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end) as day5," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end) as day6," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 0 DAY)  then  1 else 0 end) as day7" + 
 			" from df_user_member dum";
 	
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
