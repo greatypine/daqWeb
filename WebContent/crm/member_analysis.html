@@ -327,12 +327,12 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	      trigger: 'item',
 	      formatter: "{a} <br/>{b} : {c} ({d}%)"
 	    },
-	    series: [{
-	      name: '合作社社员',
+	    series: [
+	    	{
 	      type: 'pie',
 	      radius: '70%',
 	      center: ['50%', '50%'],
-	      clockwise: false,
+	      //clockwise: false,
 	      data: [{
 	        value: dataServer.oldCmCount,
 	        name: '老会员升级'
@@ -341,19 +341,15 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	        name: '新会员开卡'
 	      }],
 	      label: {
-	        normal: {
-	          textStyle: {
-	            color: '#fff',
-	            fontSize: 14,
-	          },
-	          position: 'inner',
-	          formatter: '{d}%',
-	        }
-	      },
+		        normal: {
+		          position: 'inside', //标签的位置
+		          formatter: '{b}\n{d}%'
 
+		        }
+		   },
 	      labelLine: {
 	        normal: {
-	          show: true
+	          show: false
 	        }
 	      },
 	      itemStyle: {
@@ -368,7 +364,7 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	          shadowColor: 'rgba(0, 0, 0, 0.5)'
 	        }
 	      }
-	    }],
+	    }] ,
 	    color: [
 	      '#00acee',
 	      '#52cdd5',
