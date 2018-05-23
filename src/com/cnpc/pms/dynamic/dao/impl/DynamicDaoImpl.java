@@ -1325,7 +1325,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		
 		String  sql="SELECT SUM(IFNULL(a.gmv_price,0)) as amount,a.area_code as area_no,ifnull(b.name,a.area_code) as name "+
 						" FROM df_mass_order_monthly a LEFT JOIN t_area  b on a.area_code = b.area_no " +
-						" where DATE_FORMAT(a.sign_time,'%Y-%m') ='"+dynamicDto.getBeginDate()+"'" +
+						" where a.sign_time >='"+dynamicDto.getBeginDate()+" 00:00:00' and a.sign_time<'"+dynamicDto.getEndDate()+"'" +
 						" and a.area_code is not null and a.store_code='"+dynamicDto.getStoreNo()+"'" +
 						" GROUP BY a.area_code ORDER BY amount desc";
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
