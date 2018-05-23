@@ -4500,7 +4500,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			
 	        String first = sdf.format(calendar.getTime());
-		    String endDate = sdf.format(calendar2.getTime());
+		    String endDate = sdf.format(calendar2.getTime()); 
 	       
 			Store store = storeManager.findStore(storeId);
 			
