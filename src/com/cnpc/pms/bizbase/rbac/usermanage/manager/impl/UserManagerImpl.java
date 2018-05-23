@@ -1528,7 +1528,23 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 				}
 				
 				
+				//登录后取得社员邀请码
+			    HumanresourcesManager humanresourcesManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
+			    Humanresources human = humanresourcesManager.getEmployeeInfoByEmployeeNoExtend(employee2.getEmployeeId());
+				StoreKeeperManager storeKeeperManager = (StoreKeeperManager) SpringHelper.getBean("storeKeeperManager");
+				StoreKeeper sKeeper = storeKeeperManager.findStoreKeeperByEmployeeId(employee2.getEmployeeId());
+			    String group = employee2.getUsergroup().getCode();
+				
 				UserDTO userDTO = buildDTO(employee2);
+				
+				if(group.equals("DZ")||group.equals("QYJL")){
+					userDTO.setInviteCode(sKeeper.getInviteCode());
+				}else{
+					if(human!=null){
+						userDTO.setInviteCode(human.getInviteCode());
+					}
+				}
+				
 				result.setUser(userDTO);
 				//result.setUser(employee2);
 				//如果为店长
@@ -1558,20 +1574,6 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 					this.saveObject(employee2);
 				}
 				
-				
-				//登录后取得社员邀请码
-			    HumanresourcesManager humanresourcesManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
-			    Humanresources human = humanresourcesManager.getEmployeeInfoByEmployeeNoExtend(employee2.getEmployeeId());
-				StoreKeeperManager storeKeeperManager = (StoreKeeperManager) SpringHelper.getBean("storeKeeperManager");
-				StoreKeeper sKeeper = storeKeeperManager.findStoreKeeperByEmployeeId(employee2.getEmployeeId());
-			    String group = employee2.getUsergroup().getCode();
-				if(group.equals("DZ")||group.equals("QYJL")){
-					employee2.setInviteCode(sKeeper.getInviteCode());
-				}else{
-					if(human!=null){
-						employee2.setInviteCode(human.getInviteCode());
-					}
-				}
 				
 				result.setCode(CodeEnum.success.getValue());
 				result.setMessage(CodeEnum.success.getDescription());
