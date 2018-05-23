@@ -84,7 +84,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}
 		//查询成交额
 		List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String,Object>>();
-		cmGoodsTurnoverList = cmDao.getCmGoodsTurnover(dd);
+		//cmGoodsTurnoverList = cmDao.getCmGoodsTurnover(dd);
 		////////////////////////分库查询成交信息//////////////////////////////
 		/*//第一步：查询所有社员ids；
 		StringBuffer ids = new StringBuffer();
@@ -356,7 +356,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 	     c.add(Calendar.DAY_OF_MONTH, -dd);
 	     List dateX=new ArrayList();
 	     dateX.add(f.format(c.getTime()));
-	     for(int i=dd;i>0;i--) {
+	     for(int i=dd;i>1;i--) {
 	    	 c.add(Calendar.DAY_OF_MONTH, 1);
 	    	 dateX.add(f.format(c.getTime()));
 	     }
