@@ -246,6 +246,7 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	      yAxis: [{
 	    	  type: 'value',
 		      name: '新增社员人数',
+		      splitLine: {show: false},
 	        axisLabel: {
 	          formatter: '{value}',
 	          textStyle:{color:'#404a59',}
@@ -255,13 +256,13 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	        },
 	      },{
 	    	  type: 'value',
-		      name: '累计社员人数',
-	        axisLabel: {
+	    	  name: '累计社员人数',
+	          axisLabel: {
 	          formatter: '{value}',
-	          textStyle:{color:'#404a59',}
+	          textStyle:{color:'#404a59'}
 	        },
 	        axisLine:{
-	          lineStyle:{color:'#404a59',}
+	          lineStyle:{color:'#404a59'}
 	        },
 	        position: 'right',
 	      }],
