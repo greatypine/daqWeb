@@ -228,6 +228,9 @@ function timeConfig(time){
     var endDateStr = nowDate.getFullYear() + '/'+  (end_month < 10 ? '0' + end_month : '' + end_month) + '/' + (end_date < 10 ? '0' + end_date : '' + end_date);
     if(time == -1){
         endDateStr += '-' + endDateStr;
+    }else if(time == 1){//全部
+    	endDateStr = '2015/12/22';
+    	endDateStr += timeStr;
     }else{
         endDateStr += timeStr;
     }

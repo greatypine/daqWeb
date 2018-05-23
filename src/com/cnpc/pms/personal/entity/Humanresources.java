@@ -476,6 +476,12 @@ public class Humanresources extends DataEntity{
 	private String career_group;
 	
 	
+	/**
+	 * 邀请码
+	 */
+	@Column(length = 65,name="inviteCode")
+	private String inviteCode;
+	
 	
 	@Transient
 	public List<Humanenteach> humanenteachs;
@@ -1089,6 +1095,14 @@ public class Humanresources extends DataEntity{
 
 	public void setSelectStoreNames(String selectStoreNames) {
 		this.selectStoreNames = selectStoreNames;
+	}
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
 	}
 	
 	/***********培训结束********************/

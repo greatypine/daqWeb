@@ -11,5 +11,8 @@ public interface StoreKeeperDao {
 
 	public String queryMaxNo(String type);
 	
+	//取得最大邀请码
+	public String queryMaxInviteCode();
+	
 	
 }

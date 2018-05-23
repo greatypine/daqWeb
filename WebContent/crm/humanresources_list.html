@@ -192,8 +192,9 @@
               <table class="table table-striped no-margin">
                 <tbody id="auto_tbody">
                 <tr id="auto_title">
-                  <th width="10%">员工姓名</th>
-                  <th width="9%">员工编号</th>
+                  <th width="8%">员工姓名</th>
+                  <th width="6%">员工编号</th>
+                  <th width="5%">社员邀请码</th>
                   <th width="8%">岗位</th>
                   <th width="12%">事业群</th>
                    <th width="10%">门店</th>
@@ -575,6 +576,9 @@ Date.prototype.format=function(fmt) {
 	        	   for(var i=0;i<jData.length;i++){
 	        		   var name = jData[i].name==null?"":jData[i].name;
     			       var employee_no = jData[i].employee_no==null?"":jData[i].employee_no;
+
+    			       var inviteCode = jData[i].inviteCode==null?"":jData[i].inviteCode;
+
     			       var storename=jData[i].storename==null?"":jData[i].storename;
     			       var citySelect=jData[i].citySelect==null?"":jData[i].citySelect;
     			       var zw=jData[i].zw==null?"":jData[i].zw;
@@ -598,6 +602,7 @@ Date.prototype.format=function(fmt) {
 	        			    infoStr = infoStr
 	        			       +"<td>"+name+"</td>"
 		                       +"<td>"+employee_no+"</td>"
+		                       +"<td>"+inviteCode+"</td>"
 		                       +"<td>"+zw+"</td>"
 		                       +"<td>"+career_group+"</td>"
 		                       +"<td>"+storename+"</td>"

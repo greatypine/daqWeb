@@ -221,6 +221,9 @@ public class UserDTO extends PMSDTO {
 	
 	private String token;
 	
+	
+	private String inviteCode;
+	
 	public String getBlankPassword() {
 		return blankPassword;
 	}
@@ -1017,5 +1020,13 @@ public class UserDTO extends PMSDTO {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
 	}
 }

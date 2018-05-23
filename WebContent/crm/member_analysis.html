@@ -113,15 +113,22 @@
             <div id="main1" style="height: 300px;"></div>
           </div>
         </div>
-                 <div class="box box-default">
+        <div class="box box-default">
           <div class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
           <div class="box-body">
-            <div class="col-sm-3 no-padding" id="main3" style="height: 350px;"></div>
-            <div class="col-sm-3 no-padding" id="main4" style="height: 350px;"></div>
-            <div class="col-sm-3 no-padding" id="main5" style="height: 350px;"></div>
-            <div class="col-sm-3 no-padding" id="main6" style="height: 350px;"></div>
+          	<div class="col-sm-6 no-padding" id="main3" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main4" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main5" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main6" style="height: 350px;"></div>
           </div>
-        </div>
+       </div>
+<!--        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>社员分布</strong></div>
+          <div class="box-body">
+            <div class="col-sm-8 no-padding" id="main7" style="height: 350px;"></div>
+            <div class="col-sm-4 no-padding" id="main8" style="height: 350px;"></div>
+          </div>
+      </div> -->
       </section>
 
     </div>
@@ -522,6 +529,9 @@
 	      }
 	    ]
 	  };
+	  
+	  
+	  
 	  //月份
 	  option6 = {
 	    title: [{
@@ -623,13 +633,13 @@
 		
 		if(len>0){
 			if((len-1)==i){
-				meData=meData+'{"value":"'+meProL[i]+'","name":"'+meCountL[i]+'"}';
+				meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
 			}else{
 				meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"},';
 			}
 			
 		}else{
-			meData=meData+'{"value":"'+meProL[i]+'","name":"'+meCountL[i]+'"}';
+			meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
 		}
 	}	
 	meData+="]";
@@ -666,10 +676,18 @@
          	
          	
  */        	
+ 			//运营情况
  			showHistoryData(resultJson);  
-        	showMember(resultJson);
+        	//社员饼图
+ 			showMember(resultJson);
+        	//增长曲线图
         	showMemberGrow(resultJson);
+        	//社员属性信息饼图
         	showMemberInfo(resultJson);
+        	//社员注册信息
+        	//showMemberRegist(resultJson);
+        	//城市注册排名
+        	//showCityMember(resultJson);
         	setLoadingMark(false);
         	
         }else{
@@ -677,7 +695,193 @@
         }
     });
 
-}); 
+});
+ 
+ 
+var showMemberRegist = function (){
+	  var myChart7 = echarts.init(document.getElementById('main7'));
+	  //社员分布
+	  option7 = {
+	    title: [ {
+	      text: '社员分布',
+	      left: '3%',
+	      top: '0',
+	    }],
+	    tooltip: {
+	      trigger: 'axis',
+	      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+	        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+	      }
+	    },
+	    legend: {
+	      data: ['累计人数', '本月新增人数'],
+	      align: 'right',
+	      right: 10
+	    },
+	    grid: {
+	      left: '3%',
+	      right: '4%',
+	      bottom: '3%',
+	      top: '20%',
+	      containLabel: true
+	    },
+	    xAxis: [{
+	      type: 'category',
+	      data: ['新虹桥', '中山公园', '虹桥', '镇宁路', '天山古北','新虹桥', '中山公园', '虹桥', '镇宁路', '天山古北']
+	    }],
+	    yAxis: [{
+	      type: 'value',
+	      name: '人数',
+	      axisLabel: {
+	        formatter: '{value}'
+	      }
+	    }],
+	    series: [{
+	      name: '累计人数',
+	      type: 'bar',
+	      stack:'社员分布',
+	      itemStyle:{
+	        normal:{color:'#EBA954'},
+	      },
+	      data: [20, 12, 31, 34, 31,20, 12, 31, 34, 31]
+	    }, {
+	      name: '本月新增人数',
+	      type: 'bar',
+	      stack:'社员分布',
+	      itemStyle:{
+	        normal:{color:'#C23531'},
+	      },
+	      data: [10, 20, 5, 9, 3,10, 20, 5, 9, 3]
+	    }]
+	  };
+	  myChart7.setOption(option7);
+}
+
+
+var showCityMember = function(dataserver){
+	//城市分布
+	var myChart8 = echarts.init(document.getElementById('main8'));
+	  var scaleData = [{
+	    'name': '工程建设',
+	    'value': 10
+	  },
+	    {
+	      'name': '产权交易',
+	      'value': 20
+	    },
+	    {
+	      'name': '土地交易',
+	      'value': 20
+	    },
+	    {
+	      'name': '其他交易',
+	      'value': 27
+	    },
+	    {
+	      'name': '政府采购',
+	      'value': 23
+	    }
+	  ];
+	  var rich = {
+	    white: {
+	      color: '#04243E',
+	      align: 'center',
+	      padding: [5, 0]
+	    }
+	  };
+	  var placeHolderStyle = {
+	    normal: {
+	      label: {
+	        show: false
+	      },
+	      labelLine: {
+	        show: false
+	      },
+	      color: 'rgba(0, 0, 0, 0)',
+	      borderColor: 'rgba(0, 0, 0, 0)',
+	      borderWidth: 0
+	    }
+	  };
+	  var data = [];
+	  for (var i = 0; i < scaleData.length; i++) {
+	    data.push({
+	      value: scaleData[i].value,
+	      name: scaleData[i].name,
+	      itemStyle: {
+	        normal: {
+	          borderWidth: 5,
+	          shadowBlur: 30,
+	          borderColor: new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+	            offset: 0,
+	            color: '#7777eb'
+	          }, {
+	            offset: 1,
+	            color: '#70ffac'
+	          }]),
+	          shadowColor: 'rgba(142, 152, 241, 0.6)'
+	        }
+	      }
+	    }, {
+	      value: 4,
+	      name: '',
+	      itemStyle: placeHolderStyle
+	    });
+	  }
+	  var seriesObj = [{
+	    name: '',
+	    type: 'pie',
+	    clockWise: false,
+	    radius: [95, 100],
+	    center:['50%','55%'],
+	    hoverAnimation: false,
+	    itemStyle: {
+	      normal: {
+	        label: {
+	          show: true,
+	          position: 'outside',
+	          color: '#04243E',
+	          formatter: function(params) {
+	            var percent = 0;
+	            var total = 0;
+	            for (var i = 0; i < scaleData.length; i++) {
+	              total += scaleData[i].value;
+	            }
+	            percent = ((params.value / total) * 100).toFixed(0);
+	            if(params.name !== '') {
+	              return params.name + '\n{white|' + '占比' + percent + '%}';
+	            }else {
+	              return '';
+	            }
+	          },
+	          rich: rich
+	        },
+	        labelLine: {
+	          show: false
+	        }
+	      }
+	    },
+	    data: data
+	  }];
+	  option8 = {
+	    //backgroundColor: '#04243E',
+	    title: [ {
+	      text: '社员城市分布',
+	      left: '35%',
+	      top: '5%',
+	    }],
+	    tooltip: {
+	      show: false
+	    },
+	    legend: {
+	      show: false
+	    },
+	    toolbox: {
+	      show: false
+	    },
+	    series: seriesObj
+	  }
+	  myChart8.setOption(option8);
+}
 var showHistoryData = function (dataServer) {
 	//社员量
 	$("#cmCount").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));

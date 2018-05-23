@@ -40,6 +40,7 @@ import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.hibernate.dialect.function.VarArgsSQLFunction;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.FileCopyUtils;
@@ -151,6 +152,9 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     		//存待保存的员工
     		List<Humanresources> humanList = new ArrayList<Humanresources>();
     		
+    		//最大邀请码
+    		String inviteCode=queryMaxInviteCode();
+    		
     		for(String i:id){
     			ImportHumanresourcesManager hManager = (ImportHumanresourcesManager)SpringHelper.getBean("importHumanresourcesManager");
     			ImportHumanresources importHumanresources = (ImportHumanresources) hManager.getObject(Long.parseLong(i));
@@ -197,7 +201,14 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     				rcvmsg="身份证号存在空值！ 导入失败！";
     				return rcvmsg;
     			}
+    			
+    			
+    			//添加社员邀请码 
+    			humanresources.setInviteCode(inviteCode);
     			humanList.add(humanresources);
+    			
+    			inviteCode=(Integer.parseInt(inviteCode)+1)+"";
+    			
     		}
     		
     		
@@ -354,6 +365,11 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     			}
     	    	
     			humanresources.setId(null);
+    			
+    			//生成 邀请码
+    			String inviteCode=queryMaxInviteCode();
+    			humanresources.setInviteCode(inviteCode);
+    			
     			preSaveObject(humanresources);
     			saveObject(humanresources);
     			
@@ -398,6 +414,12 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     			rcv = "不存在的城市、人员类别 ，保存失败！ ";
 	    		return rcv;
     		}
+    		
+    		//生成 邀请码
+			String inviteCode=queryMaxInviteCode();
+			humanresources.setInviteCode(inviteCode);
+			
+			
 			preSaveObject(humanresources);
 			saveObject(humanresources);
 			
@@ -2453,6 +2475,10 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		String tmpCompanyName = null; //存临时公司
 		String changeCompany="";
 		boolean isChangeCompany=false;//是否一个excel中有多个不同的外包公司 
+		
+		//最大邀请码
+		String inviteCode=queryMaxInviteCode();
+		
 		for(int nRowIndex = 0;nRowIndex < totalRows.size();nRowIndex++){
 		    Row row_human = totalRows.get(nRowIndex);
 		    int errorrowid = row_human.getRowNum();
@@ -2697,8 +2723,10 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		    	obj_humanresources.setHumanstatus(Long.parseLong("1"));
 		    }
 		    //saveObject(obj_humanresources);
-		    humanList.add(obj_humanresources);
 		    
+		    obj_humanresources.setInviteCode(inviteCode);
+		    humanList.add(obj_humanresources);
+		    inviteCode=(Integer.parseInt(inviteCode)+1)+"";
 		    hsemp_count++;
 		}
 		
@@ -3798,8 +3826,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   	        XSSFRow row = sheet.createRow(0);
   	        
   	      //定义表头 以及 要填入的 字段 
-  	      String[] str_headers = {"员工姓名","员工编号","门店","城市","岗位","事业群","入职日期","门店编号"};
-		  String[] headers_key = {"name","employee_no","storename","citySelect","zw","career_group","topostdate","storeno"};
+  	      String[] str_headers = {"员工姓名","员工编号","社员邀请码","门店","城市","岗位","事业群","入职日期","门店编号"};
+		  String[] headers_key = {"name","employee_no","inviteCode","storename","citySelect","zw","career_group","topostdate","storeno"};
   	       if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
 				//在职
   	    	    str_headers[6]="入职日期";
@@ -4119,4 +4147,26 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	}
     	return 0;
     }
+    
+    
+    
+    
+    
+    
+    //取是最大值，如果没有 则从100001开始 六位数字
+    public String queryMaxInviteCode(){
+    	HumanresourcesDao humanresourcesDao = (HumanresourcesDao) SpringHelper.getBean(HumanresourcesDao.class.getName());
+    	String maxInviteCode = humanresourcesDao.queryMaxInviteCode();
+    	if(maxInviteCode!=null&&maxInviteCode.length()>0){
+    		return maxInviteCode;
+    	}
+    	return null;
+    }
+    
+    
+    
+    
+    
+    
+    
 }
