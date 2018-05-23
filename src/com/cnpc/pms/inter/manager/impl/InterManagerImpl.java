@@ -81,6 +81,7 @@ import com.cnpc.pms.personal.entity.DistCityCode;
 import com.cnpc.pms.personal.entity.SiteSelection;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.StoreAddress;
+import com.cnpc.pms.personal.entity.StoreKeeper;
 import com.cnpc.pms.personal.entity.StoreRequirement;
 import com.cnpc.pms.personal.entity.StoreStandard;
 import com.cnpc.pms.personal.entity.Storexpand;
@@ -98,6 +99,7 @@ import com.cnpc.pms.personal.manager.HumanresourcesManager;
 import com.cnpc.pms.personal.manager.SendMessageManager;
 import com.cnpc.pms.personal.manager.SiteSelectionManager;
 import com.cnpc.pms.personal.manager.StoreAddressManager;
+import com.cnpc.pms.personal.manager.StoreKeeperManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.manager.StoreRequirementManager;
 import com.cnpc.pms.personal.manager.StoreStandardManager;
@@ -3212,6 +3214,9 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				if(lst_wxuserList!=null&&lst_wxuserList.size()>0){
 					result.setCode(CodeEnum.success.getValue());
 			        result.setMessage(CodeEnum.success.getDescription());
+			        //社员邀请码
+					initInviteCode(user);
+					
 			        result.setData(user);
 				}else{
 					result.setCode(CodeEnum.illegalPhone.getValue());
@@ -3334,6 +3339,10 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			if(wxUserAuth!=null&&wxUserAuth.getAuthstatus().equals(1L)){
 				//直接 登录
 				User user = (User) userManager.getObject(wxUserAuth.getUser_id());
+				
+				//社员邀请码
+				initInviteCode(user);
+					
 				user.setUsergroupname(user.getUsergroup().getCode());
 				result.setCode(CodeEnum.success.getValue());
 		        result.setMessage(CodeEnum.success.getDescription());
@@ -3370,6 +3379,10 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 						result.setCode(CodeEnum.success.getValue());
 				        result.setMessage(CodeEnum.success.getDescription());
 				        user.setUsergroupname(user.getUsergroup().getCode());
+				        
+				        //社员邀请码
+						initInviteCode(user);
+						
 				        result.setData(user);
 					}else{//不存在 异常了
 						result.setCode(CodeEnum.error.getValue());
@@ -3384,6 +3397,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 		        result.setMessage("用户名/验证码错误");
 			}
 	   	    return result;
+		}
+
+		private void initInviteCode(User user) {
+			//添加社员邀请码 
+			//登录后取得社员邀请码
+			HumanresourcesManager humanresourcesManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
+			StoreKeeperManager storeKeeperManager = (StoreKeeperManager) SpringHelper.getBean("storeKeeperManager");
+			String group = user.getUsergroup().getCode();
+			if(group.equals("DZ")||group.equals("QYJL")){
+				StoreKeeper sKeeper = storeKeeperManager.findStoreKeeperByEmployeeId(user.getEmployeeId());
+				user.setInviteCode(sKeeper.getInviteCode());
+			}else{
+				Humanresources human = humanresourcesManager.getEmployeeInfoByEmployeeNoExtend(user.getEmployeeId());
+				if(human!=null){
+					user.setInviteCode(human.getInviteCode());
+				}
+			}
 		}
 		
 		
