@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>安心合作社</title>
   <!-- Tell the browser to be responsive to screen width -->
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -91,7 +92,7 @@
         <div class="box box-default report">
           <div class="box-header h4">
           	<strong>安心合作社运营报告</strong>
-          	<a style="float: right;margin-right: 50px;color:#00acee;" href="user_member_view.html"  target="_blank">社员信息查询</a> 
+          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">社员信息查询</a> 
           </div>
           <div class="box-body">
             <div class="col-sm-5"><img src="dist/img/member1.png"> </div>
@@ -174,7 +175,22 @@
 <script src="dist/js/echarts.common.min.js"></script>
 <script src="dist/js/nav-scroll.js"></script>
 <script>
-
+debugger;
+var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
+var cityId = decode64(getUrlParamByKey("c"));//城市ID
+var cityName = decode64(getUrlParamByKey("cn"));//城市名称
+var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+	
+	
+	function doUserMem(){
+		var url = "";
+		if(target==0){
+		  	url = "user_member_view.html?t="+encode64(target)+"&c=&cn=&e="+encode64(employeeId)+"&#fg";
+		  }else if(target==1){
+			  url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&e="+encode64(employeeId)+"&#fg";
+		  }
+		window.open(url,"user_member_view");
+	}
 	var screenlogin=getUrlParamByKey("su");
 	function loginShow(){
 		
@@ -503,55 +519,57 @@
 	  };
 
 	  //地区
-	  option5 = {
-	    title: [{
-	      text: '社员户籍分布',
-	      left: '45%',
-	      top: '2%',
-	      textAlign: 'center',
-	      textBaseline: 'middle',
-	      textStyle: {
-	        color: '#666',
-	        fontWeight: 'normal',
-	        fontSize: 16
-	      }
-	    }],
-	    tooltip: {
-	      trigger: 'item',
-	      formatter: "{a} <br/>{b}: {c} ({d}%)",
-	    },
-	    series: [
-	        {
-	            type:'pie',
-	            hoverAnimation: false,
-	            legendHoverLink:false,
-	            radius: ['40%', '42%'],
-	            color: ['#d74e67', '#0092ff', '#eba954', '#21b6b9','#60a900','#01949b',' #f17677','#915872', '#3077b7', '#9a8169', '#3f8797','#5b8144','#307889','#9c6a79'],
-	            label: {
-	              normal: {
-	                position: 'inner'
-	              }
-	            },
-	            labelLine: {
-	              normal: {
-	                show: false
-	              },
-	            }
-	          },
-	      {
-	        type:'pie',
-	        radius: ['20%', '80%'],
-	        color: ['#d74e67', '#0092ff', '#eba954', '#21b6b9','#60a900','#01949b',' #f17677','#915872', '#3077b7', '#9a8169', '#3f8797','#5b8144','#307889','#9c6a79'],
-	        label: {
-	          normal: {
-	            position: 'inside', //标签的位置
-	            formatter: '{b}\n{d}%'
-	          }
-
+	option5 = {
+			title: [{
+			      text: '社员户籍分布',
+			      left: '45%',
+			      top: '2%',
+			      textAlign: 'center',
+			      textBaseline: 'middle',
+			      textStyle: {
+			        color: '#666',
+			        fontWeight: 'normal',
+			        fontSize: 16
+			      }
+			    }],
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    calculable : true,
+    series : [
+        {
+            name:'省份',
+            type:'pie',
+            center: ['50%', '50%'],
+            radius: ['20%', '80%'], //饼图的半径
+            roseType : 'area',
+            x: '70%',               // for funnel
+            max: 40,                // for funnel
+            sort : 'ascending'     // for funnel
+        },{
+	      name: '',
+	      type: 'pie',
+	      clockwise: false,
+	      silent: true,
+	      minAngle: 20, //最小的扇区角度（0 ~ 360）
+	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
+	      radius: ['0%', '80%'], //饼图的半径
+	      itemStyle: { //图形样式
+	        normal: {
+	          borderColor: '#1e2239',
+	          borderWidth: 1.5,
+	          opacity: 0.21,
+	        }
+	      },
+	      label: { //标签的位置
+	        normal: {
+	          show: false
 	        }
 	      }
-	    ]
-	  };
+	    }
+    ]
+};
 	  
 	  
 	  
@@ -647,7 +665,6 @@
 	      ]
 	    }]
 	  };
-  	debugger;
   	var meData = '[';
 		var meProL = dataServer.mePro.split('-');
 	var meCountL = dataServer.meCount.split('-');
@@ -667,16 +684,17 @@
 	}	
 	meData+="]";
     var cityUserDataObject = JSON.parse(meData);
+    option5.series[0].data = cityUserDataObject;
     option5.series[1].data = cityUserDataObject;
 	  myChart3.setOption(option3);
 	  myChart4.setOption(option4);
 	  myChart5.setOption(option5);
 	  myChart6.setOption(option6);
 	    // 事件绑定
-	    myChart5.on('click', function (params){
+/* 	    myChart5.on('click', function (params){
 	        //var depName=encode64(businessDepRankGMVOption.legend.data[params.dataIndex]);
 	        window.open("user_member_view.html");
-	    });
+	    }); */
 	  
   }
 </script>
