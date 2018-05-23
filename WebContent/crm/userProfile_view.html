@@ -191,11 +191,12 @@
 							</div>
 							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin:0 15px;">	
 							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
-							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+<!-- 							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> -->
 							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
 							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
 							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
 							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="全部" alt="1" name=""/>
 							        <span class="ui-close-date" id="first-ui-close-date" style="cursor:pointer;">X</span>
 							    </div>
 							    <div class="ui-datepicker-choose">
@@ -1157,8 +1158,8 @@ Date.prototype.format=function(fmt) {
 				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+customercontent+"');\" id=\""+customerid+"\">"+customer_phone_show+"</a></td>"
 				   	   		+"<td><a href=\"#\" onmouseover=\"showinfo('"+paycontent+"');\" id=\""+payid+"\">"+jData[i].order_count+"</a></td>"
 		         	   		+"<td>"+jData[i].slient_time+"</td>"
-		         	   		+"<td>"+jData[i].tiny_village_code+"</td>"
-// 		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
+// 		         	   		+"<td>"+jData[i].tiny_village_code+"</td>"
+		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
 		         	   		+"<td>"+jData[i].user_model+"</td>"
 		         	   		+"<td>";
 		         	   		

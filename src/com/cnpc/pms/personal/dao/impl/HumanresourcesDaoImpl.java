@@ -68,7 +68,22 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		}
 		
 	
-		
+		//取得最大邀请码
+				@Override
+				public String queryMaxInviteCode() {
+					StringBuffer sql = new StringBuffer();
+					sql.append("SELECT MAX(inviteCode)+1 as maxInviteCode FROM t_humanresources");
+					SQLQuery query = getHibernateTemplate().getSessionFactory()
+							.getCurrentSession().createSQLQuery(sql.toString());
+					//获得查询数据
+			        List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			        String maxInviteCode = null;
+			        for(Object o:lst_data){
+			        	Map<String, Object> map = (Map<String, Object>)o;
+			        	maxInviteCode=map.get("maxInviteCode")==null?"":map.get("maxInviteCode").toString().substring(0,6);
+			        }
+					return maxInviteCode;
+				}	
 		
 		
 		
@@ -270,7 +285,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 				sqlwhere +=" and a.employee_no = '"+humanresources.getEmployee_no().trim()+"'";
 			}
 			
-			String sql = "SELECT a.name,a.employee_no,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
+			String sql = "SELECT a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;

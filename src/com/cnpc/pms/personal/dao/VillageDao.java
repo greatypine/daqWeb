@@ -88,5 +88,12 @@ public interface VillageDao extends IDAO {
      * @return
      */
     Integer findConVillageCountByStore(String storeno); 
+    /**
+     * 分城市查询已覆盖社区数量
+     * 2018年5月9日
+     * @author gaoll
+     * @return
+     */
+    List<Map<String,Object>> findConVillageCountOfCity();
     
 }

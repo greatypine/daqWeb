@@ -12,6 +12,7 @@
     <link href="../scripts/css/auto.css" rel="stylesheet">
     <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="../scripts/auto.js"></script>
+	<script type="text/javascript" src="../scripts/clipboard.js"></script>
     <style>
         .panel-body{padding-bottom: 0;}
         .panel-body td{padding-top:15px;}
@@ -267,10 +268,27 @@ var p_citySelect = decode64(getUrlParamByKey("citySelect"));
                 
                 
                 return value;
-            } 
+            },
+            "inviteCode": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+               	if(value!=null&&value.length>0){
+               		//value="【"+value.substring(0,6)+"】<label class='clickcode' onclick='javascript:copycode("+value+")' style='cursor:pointer;'>复制</label>";
+               		value=value.substring(0,6);
+               	}
+                return value;
+            }
             
         }
     
+    function copycode(code){
+	    var clipboard = new ClipboardJS('.clickcode', {
+            text: function() {
+                return code;
+            }
+        });
+	    $$.showMessage("系统信息", "复制成功");
+  }
+  
   
   function delHuman(human_id){
     	$$.showConfirm('提示','<font color="red">正在删除未分配门店的员工信息，此操作不可恢复！确定删除？？？</font>',function(){

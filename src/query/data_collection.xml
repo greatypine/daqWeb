@@ -162,6 +162,7 @@
     	<column key="humanstatus" header="状态" type="java.lang.Long" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	
     	<column key="career_group" header="事业群" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="false"/>
+    	<column key="inviteCode" header="社员邀请码" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	
     	<column key="editdelete" header="操作" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	<column key="create_user_id" header="创建人编号" type="java.lang.Long" allowSort="false" allowSearch="true" operator="between" display="false"/>
@@ -182,6 +183,9 @@
     	<column key="humanstatus" header="状态" type="java.lang.Long" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	<column key="selectStoreNames" header="管辖门店" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	<column key="career_group" header="事业群" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="false"/>
+    	
+    	<column key="inviteCode" header="社员邀请码" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
+    	
     	<column key="editdelete" header="操作" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	<column key="create_user_id" header="创建人编号" type="java.lang.Long" allowSort="false" allowSearch="true" operator="between" display="false"/>
     	
@@ -201,6 +205,7 @@
     	<column key="humanstatus" header="状态" type="java.lang.Long" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	
     	<column key="career_group" header="事业群" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="false"/>
+    	<column key="inviteCode" header="社员邀请码" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
     	
     	
     	<column key="editdelete" header="操作" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
@@ -396,8 +401,9 @@
         <column key="citySelect" header="城市" type="java.lang.String" align="left" allowSearch="true" operator="like" display="true"/>
         <column key="storenames" header="门店" type="java.lang.String" align="left" allowSearch="true" operator="eq"  display="true"/>
         <column key="zw" header="职位" type="java.lang.String" align="left" allowSearch="true" operator="like" display="true" width="25%"/>
-        <!-- <column key="cardnumber" header="身份证号" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true"/> -->
     	<column key="humanstatus" header="状态" type="java.lang.Long" align="left" allowSearch="true" operator="eq" display="true" width="25%"/>
+    	<column key="inviteCode" header="社员邀请码" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true"/> -->
+    	
     </query>
 
     <query id="workRecordTotalCheckQuery" header="门店考勤检查" baseclass="com.cnpc.pms.personal.entity.WorkRecordTotal" method="workRecordTotalManager.queryWorkRecordTotalByCheck">

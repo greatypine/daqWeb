@@ -140,6 +140,10 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 			storeKeeper.setRemark(storeKeeper.getRegion());
 		}
 
+		//添加社员邀请码 
+		String inviteCode = storeKeeperDao.queryMaxInviteCode();
+		storeKeeper.setInviteCode(inviteCode);
+		
 		preSaveObject(storeKeeper);
 		saveObject(storeKeeper);
 		// 添加系统

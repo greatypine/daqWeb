@@ -4485,23 +4485,28 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			DynamicDto dynamicDto = new DynamicDto();
 			Calendar calendar = Calendar.getInstance();
 			Integer day = calendar.get(Calendar.DAY_OF_MONTH);
+			Calendar calendar2 = Calendar.getInstance();
 			if(day==1){//当前日期是当月第一天
 				calendar.set(Calendar.DAY_OF_MONTH,1);
 				calendar.add(Calendar.DAY_OF_MONTH, -1);
 				calendar.set(Calendar.DAY_OF_MONTH,1);
+				calendar2.set(Calendar.DAY_OF_MONTH,1);
 			}else{
 				calendar.set(Calendar.DAY_OF_MONTH,1);
+				calendar2.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			
 	        String first = sdf.format(calendar.getTime());
-		        
+		     String endDate = sdf.format(calendar2.getTime());
 	       
 			Store store = storeManager.findStore(storeId);
 			
 			
 			dynamicDto.setBeginDate(first);
+			dynamicDto.setEndDate(endDate);
 			
 			dynamicDto.setStoreNo(store.getStoreno());
 			result = dynamicDao.selectAreaRankingOfStore(dynamicDto,pageInfo);
@@ -4628,23 +4633,30 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result = new HashMap<String,Object>();
 		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			
 			Calendar calendar1 = Calendar.getInstance();
 			Integer day = calendar1.get(Calendar.DAY_OF_MONTH);
+			Calendar calendar2 = Calendar.getInstance();
 			if(day==1){//当前日期是当月第一天
 				calendar1.set(Calendar.DAY_OF_MONTH,1);
 				calendar1.add(Calendar.DAY_OF_MONTH, -1);
 				calendar1.set(Calendar.DAY_OF_MONTH,1);
+				calendar2.set(Calendar.DAY_OF_MONTH,1);
 			}else{
 				calendar1.set(Calendar.DAY_OF_MONTH,1);
+				calendar2.add(Calendar.DAY_OF_MONTH, 1);
 			}
 			
+			
+			
 			String beginDate = sdf.format(calendar1.getTime());  
+			String endDate = sdf.format(calendar2.getTime());
 			Store store = storeManager.findStore(storeId);
 			DynamicDto dynamicDto = new DynamicDto();
 			dynamicDto.setBeginDate(beginDate);
+			dynamicDto.setEndDate(endDate);
 			dynamicDto.setStoreIds(store.getPlatformid());
 			result = orderDao.selectEStoreRankingOfStore(dynamicDto,pageInfo);
 			
@@ -5049,9 +5061,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		jsonObject.put("cityCode", cityCode==null?"":cityCode);
 		jsonObject.put("adCode", adCode==null?"":adCode);
 		jsonObject.put("address", address==null?"":address);
-		jsonObject.put("longitude", longitude==null?"":longitude);
-		jsonObject.put("latitude", latitude==null?"":latitude);
 		
+		//------------暂时注释----------
+		//jsonObject.put("longitude", longitude==null?"":longitude);
+		//jsonObject.put("latitude", latitude==null?"":latitude);
+		//------------暂时注释----------
 		
 		System.out.println("param -> "+jsonObject.toString());
 		String body = Base64Encoder.encode(jsonObject.toString()).replace("\r", "").replace("\n", "");
