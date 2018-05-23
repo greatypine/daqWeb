@@ -118,6 +118,7 @@
 	.Confirm{ background: linear-gradient(#83c56a, #63b254); border: 1px solid #46975d!important;; color: #fff!important;}
 	.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
 	.ui-datepicker-quick span{height: 30px; line-height: 35px}
+	.ui-datepicker-time{background-color:transparent}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -159,17 +160,17 @@
           	<div class="pull-left "><strong>社员查询</strong></div>
           </div>
           <div class="box-body">
-            <form id="searchform">
+            <form id="searchform" class="clearfix">
             <div class="form-group col-lg-4">
-              <label>查询时间</label>
+              <label>开卡时间</label>
              	<div class="search-con">
-					<div class="time" style="width: 325px;z-index: 99999;margin:0 15px;">
+					<div class="time" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
 					    <div class="time_endbg" id="time_endbg">
 					        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
 					        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
 					    </div>
 					</div>
-					<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px;">	
+					<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px 0 0;">	
 					    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
 					        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
 					        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
@@ -287,7 +288,7 @@
 	var cityName = decode64(getUrlParamByKey("cn"));//城市名称
 	var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	var storeId = decode64(getUrlParamByKey("s"));//门店编号
-	var target =0// decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
+	var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
 	var storeName=decode64(getUrlParamByKey("sn"));
 	var storeNo=decode64(getUrlParamByKey("so"));
 	var role = decode64(getUrlParamByKey("r"));
