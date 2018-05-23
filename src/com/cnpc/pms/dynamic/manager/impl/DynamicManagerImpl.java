@@ -4640,7 +4640,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			Integer day = calendar1.get(Calendar.DAY_OF_MONTH);
 			Calendar calendar2 = Calendar.getInstance();
 			if(day==1){//当前日期是当月第一天
-				calendar1.set(Calendar.DAY_OF_MONTH,1);
+				calendar1.set(Calendar.DAY_OF_MONTH,1);  
 				calendar1.add(Calendar.DAY_OF_MONTH, -1);
 				calendar1.set(Calendar.DAY_OF_MONTH,1);
 				calendar2.set(Calendar.DAY_OF_MONTH,1);
