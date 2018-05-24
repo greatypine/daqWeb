@@ -744,4 +744,19 @@
     </query>
     
     
+    <!-- 线上人员列表 -->
+    <query id="onLineHumanresourcesQuery" header="线上人员信息列表" baseclass="com.cnpc.pms.personal.entity.OnLineHumanresources" order="id asc">
+        <column key="id" header="编号ID" type="java.lang.Long" allowSort="true" allowSearch="true" operator="between" display="false"/>
+        <column key="citySelect" header="城市" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="orgname" header="公司" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="deptname" header="部门" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="name" header="姓名" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="phone" header="电话" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
+        <column key="cardnumber" header="身份证号" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="work_no" header="工号" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+    	<column key="employee_no" header="员工编号" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
+    	<column key="inviteCode" header="社员邀请码" type="java.lang.String" align="left" operator="eq" allowSort="false" display="true"/>
+    </query>
+    
+    
 </pmsquery>
