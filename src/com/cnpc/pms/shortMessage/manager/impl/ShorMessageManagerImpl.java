@@ -37,7 +37,7 @@ public class ShorMessageManagerImpl extends BizBaseCommonManager implements Shor
 	public Map<String, Object> StatisticalSMSCost(String userGroupCode) {
 		ShortMessageDao shortMessageDao = (ShortMessageDao)SpringHelper.getBean(ShortMessageDao.class.getName());
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		Map<String,Object> result = new HashMap<>();
+		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
 			list = shortMessageDao.selectSMSUserGroupUser(userGroupCode);
@@ -60,7 +60,7 @@ public class ShorMessageManagerImpl extends BizBaseCommonManager implements Shor
 		InterManager interManager = (InterManager)SpringHelper.getBean("interManager");
 		SendMessageManager sendMessageManager = (SendMessageManager)SpringHelper.getBean("sendMessageManager");
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-		Map<String,Object> result = new HashMap<>();
+		Map<String,Object> result = new HashMap<String,Object>();
 		
 		try {
 			list = shortMessageDao.selectSMSUserGroupUser(shortMessage.getUserGroupCode());
