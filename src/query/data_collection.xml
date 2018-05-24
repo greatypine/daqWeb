@@ -402,7 +402,7 @@
         <column key="storenames" header="门店" type="java.lang.String" align="left" allowSearch="true" operator="eq"  display="true"/>
         <column key="zw" header="职位" type="java.lang.String" align="left" allowSearch="true" operator="like" display="true" width="25%"/>
     	<column key="humanstatus" header="状态" type="java.lang.Long" align="left" allowSearch="true" operator="eq" display="true" width="25%"/>
-    	<column key="inviteCode" header="社员邀请码" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true"/> -->
+    	<column key="inviteCode" header="社员邀请码" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/> -->
     	
     </query>
 

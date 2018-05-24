@@ -4417,12 +4417,13 @@ var curr_user;
   
 //数据模型-社区模型-基础数据模型  //全国
   function toToMemberAnalysis(){
-  	  var url = "";
+	  var role = curr_user.usergroup.code;
+	  var url = "";
 	  var target=pageStatusInfo.targets;
 	  if(target==0){
-	  	url = "member_analysis.html";
+	  	url = "member_analysis.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
 	  }else if(target==1){
-		  url = "member_analysis.html";
+		  url = "member_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 	  }
 	  window.open(url,"member_analysis");  
   }

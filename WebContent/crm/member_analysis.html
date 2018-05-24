@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>社员合作中心</title>
+  <title>安心合作社</title>
   <!-- Tell the browser to be responsive to screen width -->
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -91,7 +92,7 @@
         <div class="box box-default report">
           <div class="box-header h4">
           	<strong>安心合作社运营报告</strong>
-          	<a style="float: right;margin-right: 50px;color:#00acee; " href="user_member_view.html">社员信息查询</a> 
+          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">社员信息查询</a> 
           </div>
           <div class="box-body">
             <div class="col-sm-5"><img src="dist/img/member1.png"> </div>
@@ -99,9 +100,9 @@
               <div class="col-sm-6" id="main2" style="height: 350px;"></div>
               <ul class="col-sm-6">
                  <br/>
-                <li><i class="fa fa-file-text-o"></i>成交量：<span id="cmGoodsDealCount"></span></li>
-                <li><i class="fa fa-database"></i>成交金额：￥<span id="cmGoodsTurnover"></span></li>
-                <li><i class="fa fa-bank"></i>E店：<span id="eShopCount"></span></li>
+                <li><i class="fa fa-file-text-o"></i>订单量：<span id="cmGoodsDealCount"></span></li>
+                <li><i class="fa fa-database"></i>GMV：￥<span id="cmGoodsTurnover"></span></li>
+                <li><i class="fa fa-bank"></i>E店数：<span id="eShopCount"></span></li>
                 <li><i class="fa fa-cube"></i>SKU：<span id="skuCount"></span></li>
               </ul>
             </div>
@@ -174,6 +175,43 @@
 <script src="dist/js/echarts.common.min.js"></script>
 <script src="dist/js/nav-scroll.js"></script>
 <script>
+var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
+var cityId = decode64(getUrlParamByKey("c"));//城市ID
+var cityName = decode64(getUrlParamByKey("cn"));//城市名称
+var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+	
+	
+	function doUserMem(){
+		var url = "";
+		if(target==0){
+		  	url = "user_member_view.html?t="+encode64(target)+"&c=&cn=&e="+encode64(employeeId)+"&#fg";
+		  }else if(target==1){
+			  url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&e="+encode64(employeeId)+"&#fg";
+		  }
+		window.open(url,"user_member_view");
+	}
+	var screenlogin=getUrlParamByKey("su");
+	function loginShow(){
+		
+		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+		    var callback = function callback(data, textStatus, XMLHttpRequest) {
+		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
+		    	var stateObject = {};
+		    	var newUrl = "/daqWeb/crm/member_analysis?ta=0";
+		    	target = 0;
+		    	history.pushState(stateObject,null,newUrl);
+			};
+		    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+				alert("登录信息错误，请确认输入或联系管理员!");
+				return false;
+			}
+		    var url = "../login.do";
+		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+		}
+		
+	}
+
   var showMemberGrow = function (dataServer){
 	  var myChart1 = echarts.init(document.getElementById('main1'));
 	  //社员人数
@@ -185,7 +223,7 @@
 	      }
 	    },
 	    legend: {
-	      data: ['累计社员人数', '新增社员人数'],
+	      data: [ '新增社员人数','累计社员人数'],
 	      right:0,
 	      textStyle: {color: '#404a59'}
 	    },
@@ -208,22 +246,23 @@
 	      yAxis: [{
 	    	  type: 'value',
 		      name: '新增社员人数',
+		      splitLine: {show: false},
 	        axisLabel: {
 	          formatter: '{value}',
-	          textStyle:{color:'#404a59',}
+	          textStyle:{color:'#404a59'}
 	        },
 	        axisLine:{
-	          lineStyle:{color:'#404a59',}
-	        },
+	          lineStyle:{color:'#404a59'}
+	        }
 	      },{
 	    	  type: 'value',
-		      name: '累计社员人数',
-	        axisLabel: {
+	    	  name: '累计社员人数',
+	          axisLabel: {
 	          formatter: '{value}',
-	          textStyle:{color:'#404a59',}
+	          textStyle:{color:'#404a59'}
 	        },
 	        axisLine:{
-	          lineStyle:{color:'#404a59',}
+	          lineStyle:{color:'#404a59'}
 	        },
 	        position: 'right',
 	      }],
@@ -288,12 +327,12 @@
 	      trigger: 'item',
 	      formatter: "{a} <br/>{b} : {c} ({d}%)"
 	    },
-	    series: [{
-	      name: '合作社社员',
+	    series: [
+	    	{
 	      type: 'pie',
 	      radius: '70%',
 	      center: ['50%', '50%'],
-	      clockwise: false,
+	      //clockwise: false,
 	      data: [{
 	        value: dataServer.oldCmCount,
 	        name: '老会员升级'
@@ -302,16 +341,12 @@
 	        name: '新会员开卡'
 	      }],
 	      label: {
-	        normal: {
-	          textStyle: {
-	            color: '#fff',
-	            fontSize: 14,
-	          },
-	          position: 'inner',
-	          formatter: '{d}%',
-	        }
-	      },
+		        normal: {
+		          position: 'inside', //标签的位置
+		          formatter: '{b}\n{d}%'
 
+		        }
+		   },
 	      labelLine: {
 	        normal: {
 	          show: false
@@ -329,7 +364,7 @@
 	          shadowColor: 'rgba(0, 0, 0, 0.5)'
 	        }
 	      }
-	    }],
+	    }] ,
 	    color: [
 	      '#00acee',
 	      '#52cdd5',
@@ -365,7 +400,7 @@
 	    series: [{
 	      type: 'pie',
 	      selectedMode: 'single',
-	      radius: ['40%', '90%'],
+	      radius: ['20%', '80%'],
 	      color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
 
 	      label: {
@@ -424,6 +459,7 @@
 	      }
 	    };
 	  });
+	  
 	  option4 = {
 	    tooltip: {
 	      trigger: 'item',
@@ -444,7 +480,7 @@
 	    }],
 	    series: [{
 	      hoverAnimation: false, //设置饼图默认的展开样式
-	      radius: ['40%', '90%'],
+	      radius: ['20%', '80%'],
 	      name: 'pie',
 	      type: 'pie',
 	      selectedMode: 'single',
@@ -480,55 +516,57 @@
 	  };
 
 	  //地区
-	  option5 = {
-	    title: [{
-	      text: '社员户籍分布',
-	      left: '45%',
-	      top: '2%',
-	      textAlign: 'center',
-	      textBaseline: 'middle',
-	      textStyle: {
-	        color: '#666',
-	        fontWeight: 'normal',
-	        fontSize: 16
-	      }
-	    }],
-	    tooltip: {
-	      trigger: 'item',
-	      formatter: "{a} <br/>{b}: {c} ({d}%)",
-	    },
-	    series: [
-	        {
-	            type:'pie',
-	            hoverAnimation: false,
-	            legendHoverLink:false,
-	            radius: ['40%', '42%'],
-	            color: ['#d74e67', '#0092ff', '#eba954', '#21b6b9','#60a900','#01949b',' #f17677','#915872', '#3077b7', '#9a8169', '#3f8797','#5b8144','#307889','#9c6a79'],
-	            label: {
-	              normal: {
-	                position: 'inner'
-	              }
-	            },
-	            labelLine: {
-	              normal: {
-	                show: false
-	              },
-	            }
-	          },
-	      {
-	        type:'pie',
-	        radius: ['42%', '90%'],
-	        color: ['#d74e67', '#0092ff', '#eba954', '#21b6b9','#60a900','#01949b',' #f17677','#915872', '#3077b7', '#9a8169', '#3f8797','#5b8144','#307889','#9c6a79'],
-	        label: {
-	          normal: {
-	            position: 'inside', //标签的位置
-	            formatter: '{b}\n{d}%'
-	          }
-
+	option5 = {
+			title: [{
+			      text: '出生地分布',
+			      left: '45%',
+			      top: '2%',
+			      textAlign: 'center',
+			      textBaseline: 'middle',
+			      textStyle: {
+			        color: '#666',
+			        fontWeight: 'normal',
+			        fontSize: 16
+			      }
+			    }],
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    calculable : true,
+    series : [
+        {
+            name:'省份',
+            type:'pie',
+            center: ['50%', '50%'],
+            radius: ['20%', '80%'], //饼图的半径
+            roseType : 'area',
+            x: '70%',               // for funnel
+            max: 40,                // for funnel
+            sort : 'ascending'     // for funnel
+        },{
+	      name: '',
+	      type: 'pie',
+	      clockwise: false,
+	      silent: true,
+	      minAngle: 20, //最小的扇区角度（0 ~ 360）
+	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
+	      radius: ['0%', '80%'], //饼图的半径
+	      itemStyle: { //图形样式
+	        normal: {
+	          borderColor: '#1e2239',
+	          borderWidth: 1.5,
+	          opacity: 0.21,
+	        }
+	      },
+	      label: { //标签的位置
+	        normal: {
+	          show: false
 	        }
 	      }
-	    ]
-	  };
+	    }
+    ]
+};
 	  
 	  
 	  
@@ -557,7 +595,7 @@
 	      clockwise: false, //饼图的扇区是否是顺时针排布
 	      minAngle: 20, //最小的扇区角度（0 ~ 360）
 	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
-	      radius: ['40%', '90%'], //饼图的半径
+	      radius: ['20%', '80%'], //饼图的半径
 	      avoidLabelOverlap: true, ////是否启用防止标签重叠
 	      itemStyle: { //图形样式
 	        normal: {
@@ -624,7 +662,6 @@
 	      ]
 	    }]
 	  };
-  	debugger;
   	var meData = '[';
 		var meProL = dataServer.mePro.split('-');
 	var meCountL = dataServer.meCount.split('-');
@@ -644,22 +681,24 @@
 	}	
 	meData+="]";
     var cityUserDataObject = JSON.parse(meData);
+    option5.series[0].data = cityUserDataObject;
     option5.series[1].data = cityUserDataObject;
 	  myChart3.setOption(option3);
 	  myChart4.setOption(option4);
 	  myChart5.setOption(option5);
 	  myChart6.setOption(option6);
 	    // 事件绑定
-	    myChart5.on('click', function (params){
+/* 	    myChart5.on('click', function (params){
 	        //var depName=encode64(businessDepRankGMVOption.legend.data[params.dataIndex]);
 	        window.open("user_member_view.html");
-	    });
+	    }); */
 	  
   }
 </script>
 <script type="text/javascript">
 
  $(function () {
+	 loginShow();
 	 //获取社员量
     doManager('communeMember','selectAllCm',"kkl",function(data){
         if(data.result){

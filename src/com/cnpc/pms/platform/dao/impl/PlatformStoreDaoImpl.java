@@ -335,7 +335,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * 查询新老用户增长量  按天查10天
 		 * 2018年5月17日
 		 */
-		String skuSql="select count(*) cou from t_product p where p.eshop_id is not null";
+		String skuSql="select count(*) cou from t_product p,t_eshop te where  te.super_member = 'yes' and p.eshop_id=te.id";
 		
 		 Session session = getHibernateTemplate().getSessionFactory().openSession();
 	        try{
@@ -358,7 +358,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * @author wuxinxin
 		 * 2018年5月17日
 		 */
-		String dealCouSql="SELECT COUNT(*) cou FROM t_order too WHERE too.customer_id IN ("+dd+")";
+		String dealCouSql="select count(1) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
 		 Session session = getHibernateTemplate().getSessionFactory().openSession();
 	        try{
 	            SQLQuery sqlQuery = session.createSQLQuery(dealCouSql);
@@ -381,7 +381,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * @author wuxinxin
 		 * 2018年5月17日
 		 */
-		String turnoverSql="SELECT IFNULL(sum(trading_price),0) cou FROM t_order too WHERE too.customer_id IN ("+dd+" )";
+		String turnoverSql="select ifnull(sum(tor.trading_price),0) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
 		 Session session = getHibernateTemplate().getSessionFactory().openSession();
 	        try{
 	            SQLQuery sqlQuery = session.createSQLQuery(turnoverSql);

@@ -163,6 +163,15 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			/**
+			 * 2018-05-22社员
+			 * 
+			 * @author wuxinxin
+			 */
+			if (url.contains("communeMember?selectAllCm")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			// 跳过是否是初始口令的判断方法
 			if (url.equals("userManager?isInitPassword")) {
 				filterChain.doFilter(servletRequest, servletResponse);
@@ -548,6 +557,15 @@ public class AuthFilter extends OncePerRequestFilter {
 			 * @author sunning
 			 */
 			if (url.contains("store_round.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			/**
+			 * 2018-05-23 安心合作社
+			 * 
+			 * @author wuxinxin
+			 */
+			if (url.contains("member_analysis.html")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}

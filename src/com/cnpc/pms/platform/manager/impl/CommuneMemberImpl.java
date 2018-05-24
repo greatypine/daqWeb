@@ -84,7 +84,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}
 		//查询成交额
 		List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String,Object>>();
-		cmGoodsTurnoverList = cmDao.getCmGoodsTurnover(dd);
+		//cmGoodsTurnoverList = cmDao.getCmGoodsTurnover(dd);
 		////////////////////////分库查询成交信息//////////////////////////////
 		/*//第一步：查询所有社员ids；
 		StringBuffer ids = new StringBuffer();
@@ -110,14 +110,14 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		////////////////////////分库查询成交信息end//////////////////////////////
 		//查询成交量
 		List<Map<String, Object>> cmGoodsDealCountList = new ArrayList<Map<String,Object>>();
-		cmGoodsDealCountList = commDao.getCmGoodsDealCount("");
+		cmGoodsDealCountList = cmDao.getCmGoodsDealCount("");
 		if(cmGoodsDealCountList!=null&&cmGoodsDealCountList.size()>0){
 			result.put("cmGoodsDealCount", cmGoodsDealCountList.get(0).get("cou"));
 		}else {
 			result.put("cmGoodsDealCount", "99");
 		}
 		//查询成交额
-		cmGoodsTurnoverList = commDao.getCmGoodsTurnover("");
+		cmGoodsTurnoverList = cmDao.getCmGoodsTurnover("");
 		if(cmGoodsTurnoverList!=null&&cmGoodsTurnoverList.size()>0){
 			result.put("cmGoodsTurnover", cmGoodsTurnoverList.get(0).get("cou"));
 		}else {
@@ -344,7 +344,6 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 	}
 	
-	
 	//生成X轴坐标
 	 public List reDate(int dd) throws ParseException {
 		 DateFormat f = new SimpleDateFormat("MM-dd");  
@@ -356,7 +355,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 	     c.add(Calendar.DAY_OF_MONTH, -dd);
 	     List dateX=new ArrayList();
 	     dateX.add(f.format(c.getTime()));
-	     for(int i=dd;i>0;i--) {
+	     for(int i=dd;i>1;i--) {
 	    	 c.add(Calendar.DAY_OF_MONTH, 1);
 	    	 dateX.add(f.format(c.getTime()));
 	     }

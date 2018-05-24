@@ -62,7 +62,7 @@ ul,li{list-style: none;}
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei", 微软雅黑, "Segoe UI", Tahoma, 宋体b8b体, SimSun, sans-serif;;
+    font-family: "Hiragino Sans GB", "Microsoft Yahei UI", "Microsoft Yahei", 寰蒋闆呴粦, "Segoe UI", Tahoma, 瀹嬩綋b8b浣�, SimSun, sans-serif;;
     font-weight: 400;
     overflow-x: hidden;
     overflow-y: auto
@@ -5211,7 +5211,7 @@ table.text-center, table.text-center td, table.text-center th {
     }
 }
 
-/*数据卡*/
+/*鏁版嵁鍗�*/
 .hexagon{border-radius: 50%; font-family: "Trebuchet MS", Arial, Helvetica, sans-serif; font-weight: bold;}
 .real-time h4{ font-weight: bold; font-size: 16px;}
 .real-time .circle:nth-child(1) .hexagon{color: #20d8a2; border: 1px solid #20d8a2;}
@@ -5233,7 +5233,7 @@ table.text-center, table.text-center td, table.text-center th {
 .real-time .circle:nth-child(9) .hexagon{color: #f49002; border: 1px solid #f2920a;}
 .real-time .circle:nth-child(9) h4{color: #c88524;}
 
-/*导航滑动*/
+/*瀵艰埅婊戝姩*/
 /*.logo-lg i{color: #fff;}
 .sidebar-menu li.active > a > .fa-angle-down {
     -webkit-transform: rotate(180deg);
@@ -5254,8 +5254,10 @@ table.text-center, table.text-center td, table.text-center th {
 
 .nav_dropm{position: absolute; top: 0; left: 180px; background-color: #0f1937; padding: 10px 0;display: none;}
 .nav_dropm li{padding: 0 25px;}*/
-.logo-lg ul li {float: left; font-size: 16px; padding: 0 20px;}
-.logo-lg ul li em {display: block; padding: 0 10px; line-height: 60px; color: #dedfe3; font-style: normal; cursor: pointer; font-size: 14px;}
+/* .logo-lg ul li {float: left; font-size: 16px; padding: 0 20px;}
+.logo-lg ul li em {display: block; padding: 0 10px; line-height: 60px; color: #dedfe3; font-style: normal; cursor: pointer; font-size: 14px;} */
+.logo-lg ul li {float: left; font-size: 16px; padding: 0 20px; }
+.logo-lg ul li em {display: block; padding: 0 10px; line-height: 60px; color: #dedfe3; font-style: normal; cursor: pointer; font-size: 14px; position: relative;}
 .logo-lg ul li em i{font-size: 12px; color: #90c31f; border: 2px solid #136fe3; border-radius: 50%; padding: 3px; transform:scale(0.6);}
 .logo-lg ul li em:hover,.menu ul li a:hover{color: #46a3ff;}
 .logo-lg .block {width: 48px; height: 2px; background: #46a3ff; position: absolute; bottom: 0px; left: 0; z-index: 99;}
