@@ -209,7 +209,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByWeek(ChartStatDto csd){
-		String sql = "SELECT YEARWEEK(sign_time) as week_date ,	subdate(sign_time,date_format(sign_time,'%w')-7) as week_time, IFNULL(FLOOR(SUM(trading_price)),0) AS week_amount FROM df_mass_order_total WHERE store_name NOT LIKE '%测试%' ";
+		String sql = "SELECT YEARWEEK(sign_time) as week_date ,	subdate(sign_time,date_format(sign_time,'%w')) as week_time, IFNULL(FLOOR(SUM(trading_price)),0) AS week_amount FROM df_mass_order_total WHERE store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND store_code = '"+csd.getStoreno()+"' ";
 		}
