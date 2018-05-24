@@ -421,7 +421,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryUserByWeek(ChartStatDto csd) {
-		String sql = "SELECT YEARWEEK(sign_time) as week_date ,	subdate(sign_time,date_format(sign_time,'%w')-7) as week_time, COUNT(DISTINCT customer_id) cus_count,"
+		String sql = "SELECT YEARWEEK(sign_time) as week_date ,	subdate(sign_time,date_format(sign_time,'%w')) as week_time, COUNT(DISTINCT customer_id) cus_count,"
 				+ "COUNT(DISTINCT (CASE WHEN customer_isnew_flag != '-1' THEN customer_id END)) AS new_cus_count FROM df_mass_order_total WHERE store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND store_code = '"+csd.getStoreno()+"' ";
