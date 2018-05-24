@@ -1144,9 +1144,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		String joinType = "";
 		if(year != null){
 			append_Stirng = " and DATE_FORMAT(create_time,'%Y') = '"+ year + "'";
-			joinType = "inner join";
-		}else{
 			joinType = "left join";
+		}else{
+			joinType = "inner join";
 		}
 		String sql = "select t1.cityname,DATE_FORMAT(t1.create_time,'%Y') AS create_year,t1.cityno,ifnull(t2.count,0) as ' cooperative_complete',ifnull(t3.count,0) as 'self_complete',"
 				+ "ifnull(t4.cooperative_task,0) as cooperative_task,ifnull(t4.self_support_task,0) as self_support_task from t_dist_citycode t1 "+joinType
