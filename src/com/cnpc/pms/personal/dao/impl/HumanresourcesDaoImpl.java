@@ -343,9 +343,9 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		@Override
 		public List<Map<String, Object>> queryToPostHuman() {
 			String sql = "select sum(count) as count,CONCAT(week_time,'') as week_time from "
-					+"(select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w') - 7) AS week_time from t_storekeeper where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time "
+					+"(select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_storekeeper where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time "
 					+"UNION ALL "
-					+"select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w') - 7) AS week_time from t_humanresources where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time) t "
+					+"select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_humanresources where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time) t "
 					+"where 1=1 GROUP BY t.week_time;";
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -358,9 +358,9 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		@Override
 		public List<Map<String, Object>> queryLeaveHuman() {
 			String sql = "select SUM(count) as count,CONCAT(week_time,'') as week_time from "
-					+"(select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w') - 7) AS week_time from t_storekeeper where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time "
+					+"(select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_storekeeper where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time "
 					+"UNION ALL "
-					+"select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w') - 7) AS week_time from t_humanresources where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time) t3 "
+					+"select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_humanresources where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time) t3 "
 					+"where 1=1 GROUP BY t3.week_time;";
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

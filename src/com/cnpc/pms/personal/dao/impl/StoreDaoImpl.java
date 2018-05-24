@@ -1129,7 +1129,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getOpenStoreByWeek(String nature) {
-		String sql = "select nature,YEARWEEK(create_time) as week_date,count(1) as count,subdate(DATE_FORMAT(create_time,'%Y-%m-%d'),date_format(create_time, '%w') - 7) AS week_time from t_store ts "
+		String sql = "select nature,YEARWEEK(create_time) as week_date,count(1) as count,subdate(DATE_FORMAT(create_time,'%Y-%m-%d'),date_format(create_time, '%w')) AS week_time from t_store ts "
 				+ "WHERE nature is not null and create_time is not null and nature = '" + nature
 				+ "' and ifnull(estate,'')!='闭店中'  AND storetype!='V' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and YEARWEEK(date_format(create_time,'%Y-%m-%d')) > YEARWEEK(now())-6 group by week_date;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
