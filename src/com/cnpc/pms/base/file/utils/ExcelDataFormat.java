@@ -1,21 +1,10 @@
 package com.cnpc.pms.base.file.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.cnpc.pms.personal.entity.Building;
+import com.cnpc.pms.personal.entity.House;
+import com.cnpc.pms.personal.entity.TinyVillage;
+import com.cnpc.pms.personal.entity.Village;
+import com.google.gson.Gson;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,18 +13,14 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
-import org.apache.poi.xssf.usermodel.XSSFCreationHelper;
-import org.apache.poi.xssf.usermodel.XSSFDrawing;
-import org.apache.poi.xssf.usermodel.XSSFPicture;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
-import com.cnpc.pms.personal.entity.Building;
-import com.cnpc.pms.personal.entity.House;
-import com.cnpc.pms.personal.entity.TinyVillage;
-import com.cnpc.pms.personal.entity.Village;
-import com.google.gson.Gson;
+import java.io.*;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //import org.codehaus.plexus.util.StringUtils;
 /*import com.google.common.collect.Lists;
@@ -613,12 +598,7 @@ public class ExcelDataFormat {
 			if (getStringFromCell(cell).indexOf("外复式") != -1) {
 				roomList.add("01外复式");
 
-			} else if (ifLetter(getStringFromCell(cell))) {
-				if (getStringFromCell(cell) != null) {
-					roomList.addAll(getLetter(getStringFromCell(cell), regex, waveRegex));
-				}
-				return roomList;
-			} else if (getStringFromCell(cell).indexOf("内复式") != -1) {
+			}  else if (getStringFromCell(cell).indexOf("内复式") != -1) {
 				roomList.addAll(getLetterNeifushi(getStringFromCell(cell), regex, waveRegex));
 			} else if (getStringFromCell(cell).indexOf("复式") != -1) {
 				roomList.add(cell.toString());
@@ -671,6 +651,11 @@ public class ExcelDataFormat {
 				roomList.add(cell.toString());
 			} else if (getStringFromCell(cell).indexOf("之") != -1) {
 				roomList.addAll(getZHiHouse(getStringFromCell(cell), regex, waveRegex));
+			}else if (ifLetter(getStringFromCell(cell))) {
+				if (getStringFromCell(cell) != null) {
+					roomList.addAll(getLetter(getStringFromCell(cell), regex, waveRegex));
+				}
+				return roomList;
 			} else {
 				String[] strArray = getNumberList(getStringFromCell(cell).replaceAll("\\s", ""), regex);
 				// int r = strArray.length;
@@ -1451,6 +1436,10 @@ public class ExcelDataFormat {
 						floorList.add(i + "内复式");
 						i++;
 					}
+				}
+			}else{
+				for(int i=0;i<split.length-1;i++){
+					floorList.add(split[i]+"内复式");
 				}
 			}
 		}
