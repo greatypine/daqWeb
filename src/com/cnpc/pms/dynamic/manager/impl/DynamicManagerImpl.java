@@ -5198,7 +5198,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				jo.put("product_count", dynamic.get("product_count"));
 				if(sign!=null){
 					for (int j = 0; j < dynamicAllList.size(); j++) {
-						if(dynamic.get("product_name").toString().equals(dynamicAllList.get(j).get("product_name").toString())
+						if(dynamic.get("product_id").toString().equals(dynamicAllList.get(j).get("product_id").toString())
 								&&dynamic.get("city_name").toString().equals(dynamicAllList.get(j).get("city_name").toString())){
 							jo.put("rank", j+1);
 						}
@@ -5210,7 +5210,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					}
 					dynamicByCityList = (List<Map<String, Object>>)dynamicByCityMap.get(dynamic.get("city_name")).get("gmv");
 					for(int k = 0; k < dynamicByCityList.size(); k++){
-						if(dynamic.get("product_name").toString().equals(dynamicByCityList.get(k).get("product_name").toString())
+						if(dynamic.get("product_id").toString().equals(dynamicByCityList.get(k).get("product_id").toString())
 								&&dynamic.get("city_name").toString().equals(dynamicByCityList.get(k).get("city_name").toString())){
 							jo.put("cityrank", k+1);
 						}
