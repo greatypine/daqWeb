@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmsquery>
+    <query id="queryShortMessageList" header="短信列表" baseclass="com.cnpc.pms.shortMessage.entity.ShortMessage" order="id desc" filter="status = 0">
+        <column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
+        <column key="code" header="序号" type="java.lang.String" operator="eq" align="center" allowSort="false" display="false"  width="5%"/>
+        <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="content" header="内容" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="signature" header="签名" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="false" width="1%"/>
+        <column key="create_user" header="发送人" type="java.lang.String" align="center" allowSearch="center" operator="like" allowSort="false" display="true" width="8%"/>
+        <column key="create_time" header="发送日期" type="java.util.Date" format="yyyy-MM-dd" align="center" allowSearch="true" operator="like" allowSort="true" display="true" width="6%"/>
+   		<column key="create_user_id" header="" type="java.lang.Long"  align="center" allowSearch="true" operator="eq"  allowSort="false" display="false" width="1%" />
+    </query>
+    
+    <query id="querySMSUserGroupList" header="短信接收人用户组"  baseclass="com.cnpc.pms.shortMessage.entity.SMSUserGroup" order="id desc" filter="status = 0">
+        <column key="id" header="选择" type="java.lang.Long"  allowSearch="true" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="code" header="编号" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="type" header="类型" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+    </query>
+    
+</pmsquery>
