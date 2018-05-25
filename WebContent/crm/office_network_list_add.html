@@ -135,7 +135,13 @@
 			});
 }
 	$(function(){
-		initallcity();
+		initcurruser();
+		var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+	  	if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
+	  		initcurcity();
+	  	}else{
+			initallcity();
+	  	}
 		initWeekTime();
 		searchWeekTime();
 	});
@@ -155,6 +161,31 @@
  				}
  		});
  	}
+	 function initcurcity(){
+	 		doManager("userManager","getCurrentUserCity",null,
+	 		    function(data,textStatus,XmlHttpRequest){
+	 				if (data.result) {
+	 					var jsonData = $.fromJSON(data.data);
+	 					var IndexSelected = "";
+	 					$(jsonData).each(function(index,element){
+	 						$("#citySelect").append('<option value="'+element.cityid+'">'+element.cityname+'</option>');
+	                     });
+	 					 $("#citySelect")[0].selectedIndex = IndexSelected;
+	 				}
+	 		});
+	 }
+	 var curr_user;
+	  function initcurruser(){
+		    
+	  		//取得当前登录人的门店
+			doManager("UserManager", "getCurrentUserDTO",null,
+	    				function(data, textStatus, XMLHttpRequest) {
+	    					if (data.result) {
+	    						var employeeID="";
+	    						 curr_user = JSON.parse(data.data);
+	    					}
+	    			},false);
+	  	}
 	function initWeekTime(){
 		$("#statistical_time_period").val('1');
 	}
