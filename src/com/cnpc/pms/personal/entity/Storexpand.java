@@ -38,6 +38,11 @@ public class Storexpand extends DataEntity {
 	@Column(name = "self_support_task")
 	private Integer self_support_task;
 	/**
+	 * 前置仓任务目标(每年)
+	 */
+	@Column(name = "preposition_task")
+	private Integer preposition_task;
+	/**
 	 * 城市名称
 	 */
 	@Column(length = 45, name = "cityname")
@@ -119,6 +124,14 @@ public class Storexpand extends DataEntity {
 
 	public void setSelf_support_task(Integer self_support_task) {
 		this.self_support_task = self_support_task;
+	}
+	
+	public Integer getPreposition_task() {
+		return preposition_task;
+	}
+
+	public void setPreposition_task(Integer preposition_task) {
+		this.preposition_task = preposition_task;
 	}
 
 	public String getCityname() {

@@ -44,13 +44,14 @@
     </query>
     <query id="selectStorexpandQuery" header="目标值列表" baseclass="com.cnpc.pms.personal.entity.Storexpand" order="id desc">
         <column key="id" header="编号" type="java.lang.Long" operator="in" align="left" allowSort="true" display="false"/>
-        <column key="statistical_time_period" header="统计时间段" type="java.lang.String" operator="in" align="left" allowSort="true" display="true" width="20%"/>
+        <column key="statistical_time_period" header="统计时间段" type="java.lang.String" operator="in" align="left" allowSort="true" display="true" width="15%"/>
         <column key="cityname" header="城市名称" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="15%"/>
         <column key="survey_quantity" header="勘察商铺数量" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="15%"/>
-        <column key="contract_quantity" header="完成签约数量" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="15%"/>
+        <column key="contract_quantity" header="完成签约数量" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="10%"/>
         <column key="through_quantity" header="总部上会通过数量" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="15%"/>
         <column key="cooperative_task" header="合作店任务目标" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="10%"/>
         <column key="self_support_task" header="自营店任务目标" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="10%"/>
+        <column key="preposition_task" header="前置仓任务目标" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="10%"/>
     </query>
 
     <query id="selectVillageQuery" header="社区列表" baseclass="com.cnpc.pms.personal.entity.Village" order="id desc">

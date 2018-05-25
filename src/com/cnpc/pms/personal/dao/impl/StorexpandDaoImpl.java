@@ -41,7 +41,7 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 				System.out.println(str_count_sql);
 				// sql查询列，用于页面展示所有的数据
 				String find_sql = "select st.id,st.survey_quantity,st.contract_quantity,st.through_quantity,st.cooperative_task" +
-						",st.self_support_task,st.cityname,st.cityno,st.create_user,st.create_time," +
+						",st.self_support_task,st.preposition_task,st.cityname,st.cityno,st.create_user,st.create_time," +
 						"st.update_user,st.update_time,st.statistical_time_period from di_storexpand st  WHERE 1=1  ";
 				StringBuilder sb_sql = new StringBuilder();
 				sb_sql.append(find_sql);
