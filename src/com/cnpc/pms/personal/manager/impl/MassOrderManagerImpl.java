@@ -187,11 +187,11 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
 			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
+				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
 			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
+				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
 			}else{
-				list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
+				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
 			}
   		} catch (Exception e) {
   			e.printStackTrace();
