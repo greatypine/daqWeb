@@ -8,8 +8,7 @@ import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.inter.common.CodeEnum;
-import com.cnpc.pms.notice.entity.NoticeApply;
-import com.cnpc.pms.notice.manager.NoticeManager;
+
 import com.cnpc.pms.shortMessage.dto.UserGroupUserDto;
 import com.cnpc.pms.shortMessage.entity.SMSUserGroup;
 import com.cnpc.pms.shortMessage.entity.SMSUserGroupUser;
