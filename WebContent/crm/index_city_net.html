@@ -82,6 +82,8 @@
   .pframe .box{margin-top: 100px;}
   .pframe .table > tbody > tr > td{line-height: 34px;}
   .pf-frequency,.pf-operate{display: none;}
+    .box-body .alert-warning{font-size: 16px; border-bottom: 1px dashed #f39c12; padding: 0 0 3px 3px; margin: 0 10px 10px 10px; display: inline-block; line-height: 24px;}
+
   
   
     #process_div{ 
@@ -155,14 +157,21 @@
         <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>网络业态分布</strong></div>
           <div class="box-body">
+           
+            <div class="clearfix" style="text-indent: 2em;line-height:26px;">
             <div class="clearfix">
+              <p class="col-sm-6">截止目前门店开业情况<span id="storeInfoOfCity"></span></p><p class="col-sm-6">截止目前,全国门店数量共计<span id="china_store_count" class="text-red"></span>家，其中合作店<span id="cooperative_count" class="text-red"></span>家</p>
+              </div>
               <div class="col-sm-6" id="main2" style="height: 500px;"></div>
               <div class="col-sm-6" id="main10" style="height: 500px;"></div>
+              <div class="col-sm-6" id="mainstoreType" style="height: 500px;"></div>
+              <div class="col-sm-6" id="mainCooperative" style="height: 500px;"></div>
               <table class="table table-striped table-bordered" id="storenet">
                 <tr>
                   <th width="180"></th>
                   <th colspan="8">门店业态分类</th>
                   <th colspan="2">前置仓</th>
+                  <th colspan="2">合作店</th>
                 </tr>
                 <tr>
                   <th></th>
@@ -174,6 +183,8 @@
                   <th>独立微超店</th>
                   <th>药店</th>
                   <th>其它</th>
+                  <th class="text-red">18年累计目标</th>
+                  <th>现有数量</th>
                   <th class="text-red">18年累计目标</th>
                   <th>现有数量</th>
                 </tr>
@@ -431,8 +442,10 @@
             <div class="col-sm-6" id="main4" style="height: 350px;"></div>
             <div class="col-sm-6" id="main5" style="height: 350px;"></div>
             <div class="col-sm-12" id="main6" style="height: 350px;"></div>
-            
-            <div class="col-sm-11">
+            <div class="col-sm-12" id="maincard" style="height: 350px;"></div>
+            <div class="col-sm-12">
+              <h4 style="margin-top: 0">门店分析</h4>
+              <p>全国已签约门店<span id="signedCount">?</span>家，处于筹备中的<b class="text-red" id="preStoreCount">?</b>家，已开业<b class="text-red" id="openCount">?</b>家，双证齐全数量占比<b class="text-red" id="doubleCardCount">?</b>%，仅有营业执照的<b class="text-red" id="businessCardCount">？</b>%，无证照<b class="text-red" id="noCardCount">?</b>%</p>
               <table class="table table-striped table-bordered" id="storecard">
                 <tr>
                   <th width="50">城市</th>
@@ -442,39 +455,7 @@
                   <th>无证照</th>
                   <th>双证持有率</th>
                 </tr>
-                <!-- <tr>
-                  <td>全国</td>
-                  <td>216</td>
-                  <td>16</td>
-                  <td>7.4%</td>
-                  <td>&nbsp;</td>
-                  <td>388</td>
-                </tr>
-                <tr>
-                  <td>北京</td>
-                  <td>60</td>
-                  <td>1</td>
-                  <td>1.7%</td>
-                  <td>0</td>
-                  <td>40</td>
-                </tr>
-                <tr>
-                  <td>上海</td>
-                  <td>50</td>
-                  <td>3</td>
-                  <td>6.00%</td>
-                  <td>0</td>
-                  <td>45</td>
-                </tr>
-                <tr>
-                  <td>天津</td>
-                  <td>40</td>
-                  <td>40</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>100%</td>
-                </tr>
-                <tr class="text-red">
+                <!-- <tr class="text-red">
                   <th>合计</th>
                   <th>285</th>
                   <th>259</th>
@@ -484,14 +465,23 @@
                 </tr> -->
               </table>
             </div>
-            <div class="col-sm-12" id="maincard" style="height: 350px;"></div>
           </div>
         </div>
         <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue"><strong>公司人员体系</strong></div>
           <div class="box-body">
+          <div><span class="alert-warning">线下人员总体（店长、国安侠、综合管理、专员、副店长等）</span></div>
             <div class="col-sm-6" id="main7" style="height: 350px;"></div>
             <div class="col-sm-6" id="mainemp" style="height: 350px;"></div>
+            <div><span class="alert-warning">店长&nbsp;</span></div>
+            <div class="col-sm-6" id="maindianzhang" style="height: 350px;"></div>
+            <div class="col-sm-6" id="mainempdianzhang" style="height: 350px;"></div>
+            <div><span class="alert-warning">国安侠&nbsp;</span></div>
+            <div class="col-sm-6" id="mainguoanxia" style="height: 350px;"></div>
+            <div class="col-sm-6" id="mainempguoanxia" style="height: 350px;"></div>
+            <div><span class="alert-warning">专员（服务专员，线上服务专员）</span></div>
+            <div class="col-sm-6" id="mainzhuanyuan" style="height: 350px;"></div>
+            <div class="col-sm-6" id="mainempzhuanyuan" style="height: 350px;"></div>
             <!-- <div id="main8" style="height: 350px;"></div> -->
             <div class="col-sm-12">
               <table class="table table-bordered" id="weekcount">
@@ -701,110 +691,6 @@
                   <td>1069</td>
                   <td>125</td>
                 </tr>
-                <tr>
-                  <td>广州</td>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
-                  <td>110</td>
-                </tr>
-                <tr>
-                  <td>贵阳</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>314</td>
-                </tr>
-                <tr>
-                  <td>昆明</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>314</td>
-                </tr>
-                <tr>
-                  <td>上海</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>314</td>
-                </tr>
-                <tr>
-                  <td>深圳</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>314</td>
-                </tr>
-                <tr>
-                  <td>沈阳</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>314</td>
-                </tr>
-                <tr>
-                  <td>天津</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>314</td>
-                </tr>
-                <tr>
-                  <td>长沙</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>314</td>
-                </tr>
                 <tr class="text-red">
                   <th>合计</th>
                   <th>295</th>
@@ -825,7 +711,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="box box-default" >
+        <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——社区活动举办场次</strong><a class="pull-right btn btn-default btn-sm pfedit">编辑</a></div>
           <div class="box-body">
             <div class="col-sm-12">
@@ -837,13 +723,21 @@
                   <th>天津</th>
                   <th>广州</th>
                   <th>深圳</th>
-                  <th>云南</th>
-                  <th>贵州</th>
-                  <th>辽宁</th>
+                  <th>昆明</th>
+                  <th>沈阳</th>
+                  <th>贵阳</th>
+                  <th>长沙</th>
+                  <th>武汉</th>
+                  <th>乌兰察布</th>
+                  <th>黔东南苗族侗族自治州</th>
                   <th>全国</th>
                 </tr>
                 <tr>
                   <th colspan="2">覆盖社区</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -866,9 +760,17 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>公益类活动</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -890,9 +792,17 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>活动小计</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -914,9 +824,17 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th colspan="2">单场活动人数</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -932,8 +850,8 @@
               <div class="col-sm-6" id="main19" style="height: 350px;"></div>
             </div>
           </div>
-        </div> -->
-        <!-- <div class="box box-default" style="margin-top: 50px;">
+        </div>
+        <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue"><strong>混片儿情况——社区关键人及微信群运营情况</strong><a class="pull-right btn btn-default btn-sm pfoperate">编辑</a></div>
           <div class="box-body">
             <div class="col-sm-12">
@@ -945,84 +863,119 @@
                   <th>天津</th>
                   <th>广州</th>
                   <th>深圳</th>
-                  <th>云南</th>
-                  <th>贵州</th>
+                  <th>昆明</th>
+                  <th>沈阳</th>
+                  <th>贵阳</th>
+                  <th>长沙</th>
+                  <th>武汉</th>
+                  <th>乌兰察布</th>
+                  <th>黔东南苗族侗族自治州</th>
                   <th>合计</th>
-                  <th>环比</th>
+                  <th>环比（%）</th>
                 </tr>
                 <tr>
                   <th rowspan="2" style="table-layout:fixed; white-space: normal; overflow: auto;">社区关键人数量</th>
                   <th>社区关键人数量</th>
-                  <td>125</td>
-                  <td>1333</td>
-                  <td>1069</td>
-                  <td>125</td>
-                  <td>1333</td>
-                  <td>1069</td>
-                  <td>125</td>
-                  <td>1333</td>
-                  <td>1069</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>店均数量</th>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th rowspan="5">店均数量</th>
-                  <th>政府从业人员</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <th>政府从业人员（%）</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
-                  <th>普通居民</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <th>普通居民（%）</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
-                  <th>民间组织人员</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <th>民间组织人员（%）</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
-                  <th>社区商户</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <th>社区商户（%）</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </table>
               <div class="clearfix">
@@ -1037,10 +990,15 @@
                   <th>天津</th>
                   <th>广州</th>
                   <th>深圳</th>
-                  <th>云南</th>
-                  <th>贵州</th>
+                  <th>昆明</th>
+                  <th>沈阳</th>
+                  <th>贵阳</th>
+                  <th>长沙</th>
+                  <th>武汉</th>
+                  <th>乌兰察布</th>
+                  <th>黔东南苗族侗族自治州</th>
                   <th>合计</th>
-                  <th>环比</th>
+                  <th>环比（%）</th>
                 </tr>
                 <tr>
                   <th>门店数量</th>
@@ -1053,96 +1011,136 @@
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群数量</th>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
-                  <td>10</td>
-                  <td>110</td>
-                  <td>100</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th style="table-layout:fixed; white-space: normal; overflow: auto;">店均微信群数量</th>
-                  <td>34</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群内客户数量</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群人数</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th style="table-layout:fixed; white-space: normal; overflow: auto;">与门店人员有互动的客户数量</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群互动人数</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
                 <tr>
-                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信互动活跃人群占比</th>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
-                  <td>24</td>
-                  <td>314</td>
-                  <td>163</td>
+                  <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信互动活跃人群占比（%）</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </table>
               <div  id="main24" style="height: 350px;"></div>
             </div>
           </div>
-        </div> -->
+        </div>
         <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue"><strong>GMV</strong></div>
           <div class="box-body">
@@ -1201,13 +1199,21 @@
                 <th>天津</th>
                 <th>广州</th>
                 <th>深圳</th>
-                <th>云南</th>
-                <th>贵州</th>
-                <th>辽宁</th>
+                <th>昆明</th>
+                <th>沈阳</th>
+                <th>贵阳</th>
+                <th>长沙</th>
+                <th>武汉</th>
+                <th>乌兰察布</th>
+                <th>黔东南苗族侗族自治州</th>
                 <th>全国</th>
               </tr>
               <tr>
                 <td colspan="2">覆盖社区</td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
                 <td><input type="text" readonly="readonly" class="form-control"></td>
                 <td><input type="text" readonly="readonly" class="form-control"></td>
                 <td><input type="text" readonly="readonly" class="form-control"></td>
@@ -1229,10 +1235,18 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" readonly="readonly" class="form-control"></td>
               </tr>
               <tr>
                 <th>公益类活动</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1253,10 +1267,18 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" readonly="readonly" class="form-control"></td>
               </tr>
               <tr>
                 <th>活动小计</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1277,10 +1299,18 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" readonly="readonly" class="form-control"></td>
               </tr>
               <tr>
                 <th colspan="2">单场活动人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1311,84 +1341,119 @@
                 <th>天津</th>
                 <th>广州</th>
                 <th>深圳</th>
-                <th>云南</th>
-                <th>贵州</th>
+                <th>昆明</th>
+                <th>沈阳</th>
+                <th>贵阳</th>
+                <th>长沙</th>
+                <th>武汉</th>
+                <th>乌兰察布</th>
+                <th>黔东南苗族侗族自治州</th>
                 <th>合计</th>
-                <th>环比</th>
+                <th>环比（%）</th>
               </tr>
               <tr>
                 <th rowspan="2" style="table-layout:fixed; white-space: normal; overflow: auto;">社区关键人数量</td>
                 <th>社区关键人数量</th>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
                 <th>店均数量</th>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
                 <th rowspan="5">店均数量</th>
-                <th>政府从业人员</th>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
+                <th>政府从业人员（%）</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
-                <th>普通居民</th>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
+                <th>普通居民（%）</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
-                <th>民间组织人员</th>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
+                <th>民间组织人员（%）</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
-                <th>社区商户</th>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
+                <th>社区商户（%）</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
             </table>
             <table class="table table-striped table-bordered" id="pfoperate2_2" style="margin-top: 15px;">
@@ -1399,24 +1464,34 @@
                 <th>天津</th>
                 <th>广州</th>
                 <th>深圳</th>
-                <th>云南</th>
-                <th>贵州</th>
+                <th>昆明</th>
+                <th>沈阳</th>
+                <th>贵阳</th>
+                <th>长沙</th>
+                <th>武汉</th>
+                <th>乌兰察布</th>
+                <th>黔东南苗族侗族自治州</th>
                 <th>合计</th>
-                <th>环比</th>
+                <th>环比（%）</th>
               </tr>
-              <tr>
+              <tr id="storeid">
                 <th>门店数量</th>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
               </tr>
-              <tr>
+              <tr id="weixincount">
                 <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群数量</th>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1427,20 +1502,30 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
-              <tr>
+              <tr id="avgweixincount">
                 <th style="table-layout:fixed; white-space: normal; overflow: auto;">店均微信群数量</th>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
-              <tr>
+              <tr id="personcounts">
                 <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信群内客户数量</th>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1451,20 +1536,30 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
-              <tr>
+              <tr id="personcount">
                 <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群人数</th>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
-              <tr>
+              <tr id="interactivecounts">
                 <th style="table-layout:fixed; white-space: normal; overflow: auto;">与门店人员有互动的客户数量</th>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1475,29 +1570,44 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
               </tr>
-              <tr>
+              <tr id="interactivecount">
                 <th style="table-layout:fixed; white-space: normal; overflow: auto;">单个微信群互动人数</th>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text"  readonly="readonly" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
-              <tr>
-                <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信互动活跃人群占比</th>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="text" class="form-control"></td>
+              <tr id="interactiverate" >
+                <th style="table-layout:fixed; white-space: normal; overflow: auto;">微信互动活跃人群占比（%）</th>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" readonly="readonly" readonly="readonly" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
             </table>
@@ -1630,18 +1740,63 @@ $(function(){
        $('#pf-fre1 tr td').each(function(i){
            $(this).text(updateNumArr1[i]);
        });
+       var secondTr = $("#pf-fre2 tr").eq(1);
+       var table =document.getElementById("pf-fre2");
+       var cellnumber = table.rows[0].cells.length;
+		var isnull = false;
+       
+       var objectList = new Array();
+       $("#pf-fre2").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(i,t){
+    	    var col_index = i;
+    	    var activitie = {};
+    	    activitie["cityname"] = $(t).html();
+       		$(t).parent().nextAll().not(secondTr).each(function(z,t){
+	    	    var value = $(t).find("input:eq("+col_index+")").val();
+	    	    if(isNaN(parseInt(value)) ||　value.trim() == ''){
+   	    	 		isnull=true;
+   	    	 	}
+	    	    if(z==0)activitie["recreational_activities"] = value;
+	    	    if(z==1)activitie["public_welfare_activities"] = value;
+	    	    if(z==2)activitie["volunteer_activity"] = value;
+	    	    if(z==3)activitie["avtivities_count"] = value;
+	    	    if(z==4)activitie["numbers_of_activities"] = value;
+	    	    if(z==5)activitie["numbers_of_single_activitie"] = value;
+       		}); 
+       		objectList.push(activitie);
+      });
+       if(isnull){
+     	  crm_alert(5,"数据不能为空！");
+     	  return;
+       }
+      console.log(objectList);
+      doManager("storeActivitiesManager","saveStoreActivities",[objectList],
+				function(data,textStatus,XmlHttpRequest){
+    	  if(data.result){
+			var jsonData = $.fromJSON(data.data);
+			if(jsonData.code == 1){
+				storeActivitiesInfo();
+				crm_alert(1,"保存成功！");
+			}else if(jsonData.code == -1){
+				crm_alert(5,"保存失败！");
+			}else{
+				crm_alert(5,"请求失败！");
+			}
+		  }
+	  });
       $(this).parents(".pf-frequency").hide();
       $(this).parents("body").css("overflow","auto");
+      
+      
     });
     
     $('#pf-fre2 tr input').keyup(function(i){
+    	$(this).val($(this).val().replace(/[^\d]/g,''));
     	var sum=0;
     	var lastInput = $(this).parent().parent().find("input").last();
     	$($(this).parent().parent()).find("input").not(lastInput).each(function(i,t){
     		
     		 sum+= isNaN(parseInt($(t).val())) ? 0 : parseInt($(t).val());
-    	})
-    	
+    	});
     	$(lastInput).val(sum);
      });
      
@@ -1666,12 +1821,13 @@ $(function(){
         $('#pfoperate2_2 tr input').each(function(i){
             $(this).val(numArr3[i]);
         });
-        
       });
+      
       $(".pf-operate .btn-default").click(function(){
         $(this).parents(".pf-operate").hide();
         $(this).parents("body").css("overflow","auto");
       });
+      
       $(".pf-operate .btn-warning").click(function(){
     	  var updateNumArr2=[];
     	  var updateNumArr3=[];
@@ -1687,848 +1843,236 @@ $(function(){
           $('#pfoperate1_1 tr td').each(function(i){
               $(this).text(updateNumArr3[i]);
           });
-        $(this).parents(".pf-operate").hide();
-        $(this).parents("body").css("overflow","auto");
+          
+          var isnull = false;
+         // var secondTr1 = $("#pfoperate2 tr").eq(1);
+         // var secondTr2 = $("#pfoperate2_2 tr").eq(1);
+          var table2_2 =document.getElementById("pfoperate2_2");
+          var table1_1 =document.getElementById("pfoperate2");
+          var cellnumber1 = table1_1.rows[0].cells.length;
+          var cellnumber2 = table2_2.rows[0].cells.length;
+          
+          var objectList_1 = new Array();
+          $("#pfoperate2").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1-1)+")").each(function(i,t){
+       	    var col_index = i;
+       	    var coverPerson = {};
+       	 	coverPerson["cityname"] = $(t).html();
+          		$(t).parent().nextAll().each(function(z,t){
+	   	    	    var value = $(t).find("input:eq("+col_index+")").val();
+	   	    	 	if(isNaN(parseInt(value)) ||　value.trim() == ''){
+	   	    	 		isnull = true;
+	   	    	 	}
+	   	    	    if(z==0)coverPerson["community_person"] = value;
+	   	    	    if(z==1)coverPerson["avg_community_person"] = value;
+	   	    	    if(z==2)coverPerson["civil_servants"] = value;
+	   	    	    if(z==3)coverPerson["general_person"] = value;
+	   	    	    if(z==4)coverPerson["folk_organization"] = value;
+	   	    	    if(z==5)coverPerson["community_businesses"] = value;
+          		}); 
+          		objectList_1.push(coverPerson);
+         });
+          var objectList_2 = new Array();
+          $("#pfoperate2_2").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber2-1)+")").each(function(i,t){
+         	    var col_index = i;
+         	    var coverPerson = {};
+         	   	coverPerson["cityname"] = $(t).html();
+            		$(t).parent().nextAll().each(function(z,t){
+	     	    	    var value = $(t).find("input:eq("+col_index+")").val();
+	     	    	   if(isNaN(parseInt(value)) ||　value.trim() == ''){
+	     	    		  isnull = true;
+		   	    	 	}
+	     	    	    if(z==1)coverPerson["wechant_crowd"] = value;
+	     	    	    if(z==2)coverPerson["avg_wechant_crowd"] = value;
+	     	    	    if(z==3)coverPerson["crowd_persons_count"] = value;
+	     	    	    if(z==4)coverPerson["crowd_person_count"] = value;
+	     	    	    if(z==5)coverPerson["interactive_person_count"] = value;
+	     	    	    if(z==6)coverPerson["interactive_person_count_store"] = value;
+	     	    	   	if(z==7)coverPerson["wechant_accounted_for_crowd"] = value;
+            		}); 
+            		objectList_2.push(coverPerson);
+           });
+          if(isnull){
+        	  crm_alert(5,"数据不能为空！");
+        	  return;
+          }
+          console.log(objectList_1);
+          console.log(objectList_2);
+          doManager("storeCoverPersonManager","saveStoreCoverPerson",[objectList_1,objectList_2],
+  				function(data,textStatus,XmlHttpRequest){
+        	  if(data.result){
+      			var jsonData = $.fromJSON(data.data);
+      			if(jsonData.code == 1){
+      				getStoreCoverPerson();
+      				crm_alert(0,"保存成功！");
+      			}else if(jsonData.code == -1){
+      				crm_alert(5,"保存失败！");
+      			}else{
+      				crm_alert(5,"请求失败！");
+      			}
+      		  }
+  	  	  });
+	        $(this).parents(".pf-operate").hide();
+	        $(this).parents("body").css("overflow","auto");
       });
+      
       $('#pfoperate2 tr input').keyup(function(i){
+    	$(this).val($(this).val().replace(/[^\d]/g,''));
     	var sum=0;
     	var lastTD = $(this).parent().parent().find("td").last();
-      	var lastTD_index = $(lastTD).index();
+      	var lastTD_index = lastTD.prevObject.length;
       	
       	$($(this).parent().parent()).find("input:lt("+(lastTD_index-2)+")").each(function(i,t){
-      		 sum+=parseInt($(t).val());
+      		
+      		sum+=isNaN(parseInt($(t).val())) ? 0 : parseInt($(t).val());
       	})
       	
       	$($(lastTD).prev()).find("input").val(sum);
       });
-      $('#pfoperate2_2 tr input').keyup(function(i){
+      
+      /* $('#pfoperate2_2 tr input').keyup(function(i){
+    	  $(this).val($(this).val().replace(/[^\d.?%$]/g,''));
    	  	var sum=0;
      		var lastTD = $(this).parent().parent().find("td").last();
        	var lastTD_index = $(lastTD).index();
        	
        	$($(this).parent().parent()).find("input:lt("+(lastTD_index-2)+")").each(function(i,t){
-       		 sum+=parseInt($(t).val());
+       		 sum+=isNaN(parseInt($(t).val())) ? 0 : parseInt($(t).val());
        	})
        	
        	$($(lastTD).prev()).find("input").val(sum);
+      }); */
+      //第二张表格的所有事件
+      $('#pfoperate2_2 tr input').keyup(function(i){
+    	  $(this).val($(this).val().replace(/[^\d]/g,''));
       });
+      $('#weixincount input').keyup(function(i){
+ 	  	var sum=0;
+		var lastTD = $(this).parent().parent().find("td").last();
+		//合计index
+    	var lastTD_index = $(lastTD).index();
+    	$($(this).parent().parent()).find("input:lt("+(lastTD_index-2)+")").each(function(i,t){
+    		 sum+=isNaN(parseInt($(t).val())) ? 0 : parseInt($(t).val());
+    	})
+    	//当前的index
+    	var thisIndex = $(this).parent().index();
+    	//店均微信群数量
+    	var storecount = isNaN($($("#storeid").find("input:eq("+(thisIndex-1)+")")).val())?0:$($("#storeid").find("input:eq("+(thisIndex-1)+")")).val();
+    	if(storecount != 0 && storecount != ''){
+			 var avgcount = Math.round($(this).val()/storecount);
+			 $($("#avgweixincount").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
+		 }
+    	//单个微信群人数
+    	var weixinpersoncounts = isNaN($($("#personcounts").find("input:eq("+(thisIndex-1)+")")).val())?0:$($("#personcounts").find("input:eq("+(thisIndex-1)+")")).val();
+    	if(weixinpersoncounts != 0 &&　weixinpersoncounts != '' &&　$(this).val() != 0){
+    		var avgcount = Math.round(weixinpersoncounts/$(this).val());
+			 $($("#personcount").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
+    	}
+    	//单个微信群互动人数
+    	var weixininteractivecounts = isNaN($($("#interactivecounts").find("input:eq("+(thisIndex-1)+")")).val())?0:$($("#interactivecounts").find("input:eq("+(thisIndex-1)+")")).val();
+    	if(weixininteractivecounts != 0 &&　weixininteractivecounts != '' &&　$(this).val() != 0){
+    		var avgcount = Math.round(weixininteractivecounts/$(this).val());
+			 $($("#interactivecount").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
+    	}
+    	
+    	$($(lastTD).prev()).find("input").val(sum);
+    	//合计店均微信群数量
+    	var storecountsum = isNaN($($("#storeid").find("input:eq("+(lastTD_index-2)+")")).val())?0:$($("#storeid").find("input:eq("+(lastTD_index-2)+")")).val();
+			if(storecountsum != 0){
+   			 var avgcount = Math.round(sum/storecountsum);
+   			 $($("#avgweixincount").find("input:eq("+(lastTD_index-2)+")")).val(avgcount);
+		}
+		//合计单个微信群人数
+		var weixinpersoncountssum = isNaN($($("#personcounts").find("input:eq("+(lastTD_index-2)+")")).val())?0:$($("#personcounts").find("input:eq("+(lastTD_index-2)+")")).val();
+		if(weixinpersoncountssum != 0 &&　weixinpersoncountssum　!= '' &&　sum != 0){
+			var avgcount = Math.round(weixinpersoncountssum/sum);
+  			 $($("#personcount").find("input:eq("+(lastTD_index-2)+")")).val(avgcount);
+		}
+		//合计单个微信群互动人数
+		var weixininteractivecountssum = isNaN($($("#interactivecounts").find("input:eq("+(lastTD_index-2)+")")).val())?0:$($("#interactivecounts").find("input:eq("+(lastTD_index-2)+")")).val();
+		if(weixininteractivecountssum != 0 &&　weixininteractivecountssum　!= '' &&　sum != 0){
+			var avgcount = Math.round(weixininteractivecountssum/sum);
+  			 $($("#interactivecounts").find("input:eq("+(lastTD_index-2)+")")).val(avgcount);
+		}
+      });
+      
+      $('#personcounts input').keyup(function(i){
+   	  	var sum=0;
+  		var lastTD = $(this).parent().parent().find("td").last();
+  		//合计的index
+      	var lastTD_index = $(lastTD).index();
+      	$($(this).parent().parent()).find("input:lt("+(lastTD_index-2)+")").each(function(i,t){
+      		 sum+=isNaN(parseInt($(t).val())) ? 0 : parseInt($(t).val());
+      	})
+      	//当前的index
+      	var thisIndex = $(this).parent().index();     	
+      	//单个微信群人数
+    	var weixincounts = isNaN($($("#weixincount").find("input:eq("+(thisIndex-1)+")")).val())?0:$($("#weixincount").find("input:eq("+(thisIndex-1)+")")).val();
+    	if(weixincounts != 0 &&　weixincounts != '' &&　$(this).val() != 0){
+    		var avgcount = Math.round($(this).val()/weixincounts);
+			 $($("#personcount").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
+    	}
+    	//微信互动活跃人群占比interactiverate
+    	var weixininteractivecounts = isNaN($($("#interactivecounts").find("input:eq("+(thisIndex-1)+")")).val())?0:$($("#interactivecounts").find("input:eq("+(thisIndex-1)+")")).val();
+    	if(weixininteractivecounts != 0 &&　weixininteractivecounts != '' &&　$(this).val() != 0){
+    		var avgcount = Math.round(weixininteractivecounts/$(this).val()*100);
+			 $($("#interactiverate").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
+    	}
+    	
+    	$($(lastTD).prev()).find("input").val(sum);
+
+		//合计单个微信群人数
+		var weixincountssum = isNaN($($("#weixincount").find("input:eq("+(lastTD_index-2)+")")).val())?0:$($("#weixincount").find("input:eq("+(lastTD_index-2)+")")).val();
+		if(weixincountssum != 0 &&　weixincountssum　!= '' &&　sum != 0){
+			var avgcount = Math.round(sum/weixincountssum);
+  			 $($("#personcount").find("input:eq("+(lastTD_index-2)+")")).val(avgcount);
+		}
+		//合计微信互动活跃人群占比
+		var weixininteractivecountssum = isNaN($($("#interactivecounts").find("input:eq("+(lastTD_index-2)+")")).val())?0:$($("#interactivecounts").find("input:eq("+(lastTD_index-2)+")")).val();
+		if(weixininteractivecountssum != 0 &&　weixininteractivecountssum　!= '' &&　sum != 0){
+			var avgcount = Math.round(weixininteractivecountssum/sum*100);
+  			$($("#interactiverate").find("input:eq("+(lastTD_index-2)+")")).val(avgcount);
+		}
+		
+      });
+      $('#interactivecounts input').keyup(function(i){
+     	  	var sum=0;
+    		var lastTD = $(this).parent().parent().find("td").last();
+        	var lastTD_index = $(lastTD).index();
+        	$($(this).parent().parent()).find("input:lt("+(lastTD_index-2)+")").each(function(i,t){
+        		 sum+=isNaN(parseInt($(t).val())) ? 0 : parseInt($(t).val());
+        	})
+        	//单个微信群互动人数
+        	var thisIndex = $(this).parent().index();
+        	var weixincounts = isNaN($($("#weixincount").find("input:eq("+(thisIndex-1)+")")).val())?0:$($("#weixincount").find("input:eq("+(thisIndex-1)+")")).val();
+        	if(weixincounts != 0 &&　weixincounts != '' &&　$(this).val() != 0){
+        		var avgcount = Math.round($(this).val()/weixincounts);
+    			 $($("#interactivecount").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
+        	}
+        	//微信互动活跃人群占比
+        	var weixinpersoncounts = isNaN($($("#personcounts").find("input:eq("+(thisIndex-1)+")")).val())?0:$($("#personcounts").find("input:eq("+(thisIndex-1)+")")).val();
+        	if(weixinpersoncounts != 0 &&　weixinpersoncounts != '' &&　$(this).val() != 0){
+        		var avgcount = Math.round($(this).val()/weixinpersoncounts*100);
+    			 $($("#interactiverate").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
+        	}
+        	
+        	$($(lastTD).prev()).find("input").val(sum);
+        	//合计单个微信群互动人数
+    		var weixincountssum = isNaN($($("#weixincount").find("input:eq("+(lastTD_index-2)+")")).val())?0:$($("#weixincount").find("input:eq("+(lastTD_index-2)+")")).val();
+    		if(weixincountssum != 0 &&　weixincountssum　!= '' &&　sum != 0){
+    			var avgcount = Math.round(sum/weixincountssum);
+      			 $($("#interactivecount").find("input:eq("+(lastTD_index-2)+")")).val(avgcount);
+    		}
+        	//合计微信互动活跃人群占比
+    		var weixinpersoncountssum = isNaN($($("#personcounts").find("input:eq("+(lastTD_index-2)+")")).val())?0:$($("#personcounts").find("input:eq("+(lastTD_index-2)+")")).val();
+    		if(weixinpersoncountssum != 0 &&　weixinpersoncountssum　!= '' &&　sum != 0){
+    			var avgcount = Math.round(sum/weixinpersoncountssum*100);
+      			 $($("#interactiverate").find("input:eq("+(lastTD_index-2)+")")).val(avgcount);
+    		}
+      });
+      
 
 
   });
-/* var citycover2017= new Array();//2017年覆盖城市
-var citycover2018=new Array();//2018年覆盖城市
-$(function(){
-	getCityNet();
-	findStoreNetDate();
-	oneyearorsixweek();
-	storeDevelopmentProgress();
-	progressOfNetworkConstruction();
-	humanresourseInfo();
-})
-
-//获取城市城市网络体系概况
-function getCityNet(){
-	  doManager("storeManager","findStoreCityDynamic",null,function(data,textStatus,XmlHttpRequest){
-		if (data.result) {  
-			var province = [];
-			doManager("storeManager", "getAllOpenProvinces",[],
-		            function(data, textStatus, XMLHttpRequest) {
-		                if (data.result) {
-		                    var resultJson= JSON.parse(data.data);
-		                    $.each(eval(resultJson['province']), function (idx, val) {
-			    				var object = new Object();
-			    				object['name'] = val['name'].replace("市","").replace("省","").replace("自治区","");
-			    				if(val['selected']=='true'){
-			    				object['value']=1000;
-			    				}
-			    				province.push(object);
-			     			});
-		                }
-		            },false);
-			var jsonData = $.fromJSON(data.data);
-			$("#city").text(jsonData.coverCity);
-			$("#county").text(jsonData.coverProvincecounty);
-			$("#town").text(jsonData.coverProvincetown);
-			if(jsonData.townsize==0){
-				$("#weekupdate").text("本周暂无变化");
-			}else{
-				$("#weekupdate").text("新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"），新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）")
-			}
-			var list2017=jsonData.list2017;
-			for(var i=0;i<list2017.length;i++){
-				citycover2017[i]={name:list2017[i].city_name,value:100};
-			}
-			option1.series[0].data=convertData(citycover2017);
-			var list2018=jsonData.list2018;
-			for(var j=0;j<list2018.length;j++){
-				citycover2018[j]={name:list2018[j].city_name,value:190};
-			}
-			option1.series[0].data=convertData(citycover2017);
-			option1.series[1].data=province;
-			option1.series[2].data=convertData(citycover2018);
-			myChart1.setOption(option1);
-			//区域覆盖情况
-			var citydata=jsonData.cityDataqingkuang;
-			var dataBeast=new Array();//已覆盖区域
-			var dataBeauty=new Array();//未覆盖区域
-			var xAxisData=new Array();//城市横坐标
-			var xData=new Array();//覆盖率(区域)
-			var dataBeastTown=new Array();//已覆盖街道
-			var dataBeautyTown=new Array();//未覆盖街道
-			var xDataTown=new Array();//覆盖率(街道)
-			for(var m=0;m<citydata.length;m++){
-				 xAxisData[m]=citydata[m].cityName.length>4?citydata[m].cityName.substring(0,4)+'..':citydata[m].cityName;
-				dataBeast[m]=citydata[m].coverCountyCounty;
-				dataBeauty[m]=citydata[m].notcoverCountyCounty;
-				xData[m]=parseFloat(((parseInt(citydata[m].coverCountyCounty)/parseInt(citydata[m].countytotal))*100).toFixed(2));
-				dataBeastTown[m]=citydata[m].coverTownCount;
-				dataBeautyTown[m]=citydata[m].notcoverTownCount;
-				xDataTown[m]=parseFloat(((parseInt(citydata[m].coverTownCount)/parseInt(citydata[m].towntotal))*100).toFixed(2));
-			}
-			option9.xAxis.data=xAxisData;
-			option9.series[0].data=dataBeast;
-			option9.series[1].data=dataBeauty;
-			option9.series[2].data=xData;
-			myChart9.setOption(option9);
-			option15.xAxis.data=xAxisData;
-			option15.series[0].data=dataBeastTown;
-			option15.series[1].data=dataBeautyTown;
-			option15.series[2].data=xDataTown;
-			myChart15.setOption(option15);
-		}}) 
-		}
-//获取网络业态分布数据
-function findStoreNetDate(){
-	doManager("storeManager","findStoreCityOnline",null,function(data,textStatus,XmlHttpRequest){
-		if (data.result) {
-			var jsonData = $.fromJSON(data.data);
-			var ziyings=jsonData.ziyingdian;
-			if(ziyings.length>0){
-				var xdataArray = ['生活中心店','街道月店','经营星店','校园店','独立微超店','药店','前置仓','数码连锁店','超市连锁店','广店营业厅'];
-				var legendArray = new Array();
-				option2.xAxis[0]["data"] = xdataArray;
-				for(var i = 0; i < ziyings.length; i++){
-					var ziying = ziyings[i];
-					var dataArray = new Array();
-					var cityname = ziying.city_name;
-					legendArray.push(cityname);
-					var shenghuozhongxindian = ziying.生活中心店;
-					var jiedaoyuedian = ziying.街道月店;
-					var jingyingxingdian = ziying.经营星店;
-					var xiaoyuandian = ziying.校园店;
-					var duliweichao = ziying.独立微超;
-					var yaodian = ziying.药店;
-					var qianzhicang = ziying.前置仓;
-					var shumaliansuodian = ziying.数码连锁店;
-					var chaoshiliansuodian = ziying.超市连锁店;
-					var guangdianyingyedian = ziying.广店营业厅;
-					dataArray.push(shenghuozhongxindian);
-					dataArray.push(jiedaoyuedian);
-					dataArray.push(jingyingxingdian);
-					dataArray.push(xiaoyuandian);
-					dataArray.push(duliweichao);
-					dataArray.push(yaodian);
-					dataArray.push(qianzhicang);
-					dataArray.push(shumaliansuodian);
-					dataArray.push(chaoshiliansuodian);
-					dataArray.push(guangdianyingyedian);
-					option2.series.push({
-					      name:cityname,
-					      type: 'bar',
-					      stack: "总量",
-					      symbol:"circle",
-					      symbolSize:10,
-					      data: dataArray,
-					      itemStyle: {
-					            normal: {
-					              label: {
-					                show: true,
-					                formatter: function(p) {
-					                  return p.value > 0 ? (p.value) : '';
-					                }
-					              }
-					            }
-					        },
-					      
-					});
-				}
-				option2.legend.data = legendArray;
-			}
-			
-			myChart2.setOption(option2);
-			//合作店数据
-			var hezuo=jsonData.hezuodian;
-			if(hezuo.length>0){
-				var xdataArray = ['生活中心店','街道月店','经营星店','校园店','独立微超店','药店','前置仓','数码连锁店','超市连锁店','广店营业厅'];
-				var legendArray = new Array();
-				option10.xAxis[0]["data"] = xdataArray;
-				var flag=0;
-				for(var i = 0; i < hezuo.length; i++){
-					var ziying = hezuo[i];
-					var dataArray = new Array();
-					var cityname = ziying.city_name;
-					legendArray.push(cityname);
-					var shenghuozhongxindian = ziying.生活中心店;
-					var jiedaoyuedian = ziying.街道月店;
-					var jingyingxingdian = ziying.经营星店;
-					var xiaoyuandian = ziying.校园店;
-					var duliweichao = ziying.独立微超;
-					var yaodian = ziying.药店;
-					var qianzhicang = ziying.前置仓;
-					var shumaliansuodian = ziying.数码连锁店;
-					var chaoshiliansuodian = ziying.超市连锁店;
-					var guangdianyingyedian = ziying.广店营业厅;
-					dataArray.push(shenghuozhongxindian);
-					dataArray.push(jiedaoyuedian);
-					dataArray.push(jingyingxingdian);
-					dataArray.push(xiaoyuandian);
-					dataArray.push(duliweichao);
-					dataArray.push(yaodian);
-					dataArray.push(qianzhicang);
-					dataArray.push(shumaliansuodian);
-					dataArray.push(chaoshiliansuodian);
-					dataArray.push(guangdianyingyedian);
-					option10.series.push({
-					      name:cityname,
-					      type: 'bar',
-					      stack: "总量",
-					      symbol:"circle",
-					      symbolSize:10,
-					      data: dataArray,
-					      itemStyle: {
-					            normal: {
-					              label: {
-					                show: true,
-					                formatter: function(p) {
-					                  return p.value > 0 ? (p.value) : '';
-					                }
-					              }
-					            }
-					        },
-					      
-					});
-					flag+=Math.max.apply(null, dataArray);
-				}
-				if(flag<5){
-					option10.yAxis[0].max = 5;
-				}
-				option10.legend.data = legendArray;
-			}
-			
-			myChart10.setOption(option10);
-			//门店业态表数据（table）
-			var biaodata=jsonData.biao;
-			var storeString='';
-			var quguoziying=0;
-			var quanguoshenghuo=0;
-			var quanguoyuedian=0;
-			var quanguoxingdian=0;
-			var quanguoxiaoyuan=0;
-			var quanguoweichao=0;
-			var quanguoyaodian=0;
-			var quanguoqita=0;
-			var quanguo2018mubiao=0;
-			var quanguonewstore=0;
-			
-			for(var i=0;i<biaodata.length;i++){
-				var citystore=biaodata[i].shenghuo+biaodata[i].yuedian+biaodata[i].xingdian+biaodata[i].xiaoyuan+biaodata[i].weichao+biaodata[i].yaodian+biaodata[i].qita;
-				quguoziying+=citystore;
-				  quanguoshenghuo+=biaodata[i].shenghuo;
-		          quanguoyuedian+=biaodata[i].yuedian;
-		          quanguoxingdian+=biaodata[i].xingdian;
-		          quanguoxiaoyuan+=biaodata[i].xiaoyuan;
-		          quanguoweichao+=biaodata[i].weichao;
-		          quanguoyaodian+=biaodata[i].yaodian;
-		          quanguoqita+=biaodata[i].qita;
-		          quanguo2018mubiao+=biaodata[i].mubiao2018;
-		          quanguonewstore+=biaodata[i].newstore;
-				storeString+='<tr><td>'+biaodata[i].city_name+'</td><td class="text-red">'+citystore+'</td><td>'+biaodata[i].shenghuo+'</td>'+
-                '<td>'+biaodata[i].yuedian+'</td><td>'+biaodata[i].xingdian+'</td><td>'+biaodata[i].xiaoyuan+'</td><td>'+biaodata[i].weichao+'</td><td>'+biaodata[i].yaodian+'</td><td>'+biaodata[i].qita+'</td>'+
-                '<td class="text-red">'+biaodata[i].mubiao2018+'</td><td>'+biaodata[i].newstore+'</td></tr>';
-			}
-			$("#storenet tr:eq(1)").after('<tr class="text-red"><th>全国</th><th>'+quguoziying+'</th><th>'+quanguoshenghuo+'</th><th>'+quanguoyuedian+'</th><th>'+quanguoxingdian+'</th>'+
-	                  '<th>'+quanguoxiaoyuan+'</th><th>'+quanguoweichao+'</th><th>'+quanguoyaodian+'</th><th>'+quanguoqita+'</th><th>'+quanguo2018mubiao+'</th><th>'+quanguonewstore+'</th></tr>'+storeString);
-				
-		}})
-}
-
-function oneyearorsixweek(){
-	doManager("storeManager","findStoreNetTozhan",null,function(data,textStatus,XmlHttpRequest){
-		if (data.result) {
-			var jsonData = $.fromJSON(data.data);
-			var oneyear=jsonData.oneyear;
-			var yeardataonle=new Array();//年拓展
-			var yeardataother=new Array();
-			var yeardatadate=new Array();
-			var yeartotal=new Array();
-			yeardataonle[0]=oneyear[0].month01;
-	        yeardataonle[1]=oneyear[0].month02;
-	        yeardataonle[2]=oneyear[0].month03;
-	        yeardataonle[3]=oneyear[0].month04;
-	        yeardataonle[4]=oneyear[0].month05;
-	        yeardataonle[5]=oneyear[0].month06;
-	        yeardataonle[6]=oneyear[0].month07;
-	        yeardataonle[7]=oneyear[0].month08;
-	        yeardataonle[8]=oneyear[0].month09;
-	        yeardataonle[9]=oneyear[0].month10;
-	        yeardataonle[10]=oneyear[0].month11;
-	        yeardataonle[11]=oneyear[0].month12;
-	        yeardataother[0]=oneyear[1].month01;
-	        yeardataother[1]=oneyear[1].month02;
-	        yeardataother[2]=oneyear[1].month03;
-	        yeardataother[3]=oneyear[1].month04;
-	        yeardataother[4]=oneyear[1].month05;
-	        yeardataother[5]=oneyear[1].month06;
-	        yeardataother[6]=oneyear[1].month07;
-	        yeardataother[7]=oneyear[1].month08;
-	        yeardataother[8]=oneyear[1].month09;
-	        yeardataother[9]=oneyear[1].month10;
-	        yeardataother[10]=oneyear[1].month11;
-	        yeardataother[11]=oneyear[1].month12;
-	        yeardatadate[0]=oneyear[2].month01;
-	        yeardatadate[1]=oneyear[2].month02;
-	        yeardatadate[2]=oneyear[2].month03;
-	        yeardatadate[3]=oneyear[2].month04;
-	        yeardatadate[4]=oneyear[2].month05;
-	        yeardatadate[5]=oneyear[2].month06;
-	        yeardatadate[6]=oneyear[2].month07;
-	        yeardatadate[7]=oneyear[2].month08;
-	        yeardatadate[8]=oneyear[2].month09;
-	        yeardatadate[9]=oneyear[2].month10;
-	        yeardatadate[10]=oneyear[2].month11;
-	        yeardatadate[11]=oneyear[2].month12;
-	        yeartotal[0]=parseInt(oneyear[1].month01)+parseInt(oneyear[0].month01);
-	        yeartotal[1]=parseInt(oneyear[1].month02)+parseInt(oneyear[0].month02);
-	        yeartotal[2]=parseInt(oneyear[1].month03)+parseInt(oneyear[0].month03);
-	        yeartotal[3]=parseInt(oneyear[1].month04)+parseInt(oneyear[0].month04);
-	        yeartotal[4]=parseInt(oneyear[1].month05)+parseInt(oneyear[0].month05);
-	        yeartotal[5]=parseInt(oneyear[1].month06)+parseInt(oneyear[0].month06);
-	        yeartotal[6]=parseInt(oneyear[1].month07)+parseInt(oneyear[0].month07);
-	        yeartotal[7]=parseInt(oneyear[1].month08)+parseInt(oneyear[0].month08);
-	        yeartotal[8]=parseInt(oneyear[1].month09)+parseInt(oneyear[0].month09);
-	        yeartotal[9]=parseInt(oneyear[1].month10)+parseInt(oneyear[0].month10);
-	        yeartotal[10]=parseInt(oneyear[1].month11)+parseInt(oneyear[0].month11);
-	        yeartotal[11]=parseInt(oneyear[1].month12)+parseInt(oneyear[0].month12);
-	        option3.series[0].data=yeartotal;
-	        option3.series[1].data=yeardataonle;
-	        option3.series[2].data=yeardataother;
-	        option3.xAxis[0].data=yeardatadate;
-	        myChart3.setOption(option3);
-	        var sixweek=jsonData.sixweek;
-			var weekonle=new Array();//周情况
-			var weekother=new Array();
-			var weektotal=new Array();
-			var weekdate=new Array();
-			weekonle[0]=sixweek[0].week1;
-			weekonle[1]=sixweek[0].week2;
-			weekonle[2]=sixweek[0].week3;
-			weekonle[3]=sixweek[0].week4;
-			weekonle[4]=sixweek[0].week5;
-			weekonle[5]=sixweek[0].week6;
-			weekother[0]=sixweek[1].week1;
-			weekother[1]=sixweek[1].week2;
-			weekother[2]=sixweek[1].week3;
-			weekother[3]=sixweek[1].week4;
-			weekother[4]=sixweek[1].week5;
-			weekother[5]=sixweek[1].week6;
-			weektotal[0]=parseInt(sixweek[1].week1)+parseInt(sixweek[0].week1);
-			weektotal[1]=parseInt(sixweek[1].week2)+parseInt(sixweek[0].week2);
-			weektotal[2]=parseInt(sixweek[1].week3)+parseInt(sixweek[0].week3);
-			weektotal[3]=parseInt(sixweek[1].week4)+parseInt(sixweek[0].week4);
-			weektotal[4]=parseInt(sixweek[1].week5)+parseInt(sixweek[0].week5);
-			weektotal[5]=parseInt(sixweek[1].week6)+parseInt(sixweek[0].week6);
-			weekdate[0]=sixweek[2].week1;
-			weekdate[1]=sixweek[2].week2;
-			weekdate[2]=sixweek[2].week3;
-			weekdate[3]=sixweek[2].week4;
-			weekdate[4]=sixweek[2].week5;
-			weekdate[5]=sixweek[2].week6;
-			 option11.series[0].data=weektotal;
-		        option11.series[1].data=weekonle;
-		        option11.series[2].data=weekother;
-		        option11.xAxis[0].data=weekdate;
-		        myChart11.setOption(option11);
-	        
-	        
-			
-		}})
-	
-	
-	
-} */
-
-</script>
-<script type="text/javascript">
-
-	
-	/* var storeDevelopmentProgress = function(){
-		
-		var dateArray = new Array();
-		var citynameArray = new Array();
-		var cooperative_completeArray = new Array();
-		var cooperative_taskArray = new Array();
-		var cooperative_rateArray = new Array();
-		var self_completeArray = new Array();
-		var self_support_taskArry = new Array();
-		var self_rateArray = new Array();
-		var cooperativeStoreArray = [0,0,0,0,0,0];
-		var selfStoreArray = [0,0,0,0,0,0];
-		doManager("storeManager","finyStoreCountOfCity",null,function(data,textStatus,XmlHttpRequest){
-			if (data.result) {
-				var jsonData = $.fromJSON(data.data);
-				//六周时间轴
-				var dateArray = new Array();
-				var dateAndWeek = jsonData.dateAndWeek;
-				for(i = dateAndWeek.length - 1; i >=0 ; i--){
-					var dateOne = dateAndWeek[i];
-					var datetimes = dateOne.date;
-					dateArray.push(datetimes);
-				}
-				//合作店近六周
-				var cooperativeStore=jsonData.cooperativeStore;
-				//自营店近六周
-				var selfStore = jsonData.selfStore;
-				if(selfStore.length>0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
-					for(var z = 0; z < selfStore.length; z++){
-						var self_store =  selfStore[z];
-						var weektime = self_store.week_time;
-						var storeCount = self_store.count;					
-						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = storeCount;
-					}
-					
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var index = weektimeArray[i]+"";
-							var replace = selfStoreArray.splice(weektimeArray[i],1,vauleParam[index]);
-						}
-					}
-				}
-				option12.series[0].data=selfStoreArray;
-				if(cooperativeStore.length>0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
-					for(var z = 0; z < cooperativeStore.length; z++){
-						var cooperative_store =  cooperativeStore[z];
-						var weektime = cooperative_store.week_time;
-						var storeCount = cooperative_store.count;
-						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = storeCount;
-					}
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var aa = weektimeArray[i]+"";
-							var replace = cooperativeStoreArray.splice(weektimeArray[i],1,vauleParam[aa]);
-						}
-					}
-				}
-				option12.series[1].data=cooperativeStoreArray;
-				if(Math.max.apply(null, selfStoreArray)<4&&Math.max.apply(null, cooperativeStoreArray)<4){
-					option12.yAxis[0].max = 4;
-				}
-				
-				var preString = "";
-				var nowString = "";
-				//全国门店的数据2017
-				var cooperative_task2017 = 0,cooperative2017 = 0, self_task2017 = 0,self2017 = 0,after2017 = 0;
-				var cooperative_task2018 = 0,cooperative2018 = 0, self_task2018 = 0,self2018 = 0,after2018 = 0;
-				//当年内门店拓展进度
-				var storeNatureOfCityByYear = jsonData.storeNatureByYear;
-				for(var i = 0; i < storeNatureOfCityByYear.length; i++){
-					var storeNatureByYear = storeNatureOfCityByYear[i];
-					var cityname = storeNatureByYear.cityname;
-					citynameArray.push(cityname);
-					//合作店
-					var cooperative_complete = storeNatureByYear.cooperative_complete;
-					cooperative_completeArray.push(cooperative_complete);
-					var cooperative_task = storeNatureByYear.cooperative_task;
-					cooperative_taskArray.push(cooperative_task);
-					var cooperative_rate = 0;
-					if(cooperative_task > 0){
-						cooperative_rate = (cooperative_complete/cooperative_task)*100;
-						cooperative_rateArray.push(cooperative_rate.toFixed(2));
-					}else{
-						cooperative_rateArray.push(cooperative_rate.toFixed(2));
-					}
-					//自营店
-					var self_complete = storeNatureByYear.self_complete;
-					self_completeArray.push(self_complete);
-					var self_support_task = storeNatureByYear.self_support_task;
-					self_support_taskArry.push(self_support_task);
-					var self_rate = 0;
-					if(self_support_task > 0){
-						self_rate = (self_complete/cooperative_task)*100;
-						self_rateArray.push(self_rate.toFixed(2));
-					}else{
-						self_rateArray.push(self_rate.toFixed(2));
-					}
-					if(storeNatureByYear.create_year == '2017'){
-						cooperative_task2017 += cooperative_task;
-						cooperative2017 += cooperative_complete;
-						self2017 += self_complete;
-						self_task2017 += self_support_task;
-						preString += '<tr><td title="'+cityname+'">'+cityname+'</td><td class="text-red">'+self_support_task+'</td><td>'+self_complete+'</td><td>'+self_rate.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task+'</td><td>'+cooperative_complete+'</td><td>'+cooperative_rate.toFixed(2)+'%</td></tr>';
-						
-					}else{
-						cooperative_task2018 += cooperative_task;
-						cooperative2018 += cooperative_complete;
-						self2018 += self_complete;
-						self_task2018 += self_support_task;
-						nowString += '<tr><td title="'+cityname+'">'+cityname+'</td><td class="text-red">'+self_support_task+'</td><td>'+self_complete+'</td><td>'+self_rate.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task+'</td><td>'+cooperative_complete+'</td><td>'+cooperative_rate.toFixed(2)+'%</td></tr>';
-					}
-					if(i == storeNatureOfCityByYear.length - 1 ){
-						var rate1_2017 = 0;
-						var rate2_2017 = 0;
-						var rate1_2018 = 0;
-						var rate2_2018 = 0;
-						if(self_task2017 != 0){
-							rate1_2017 = (self2017/self_task2017)*100
-						}
-						if(cooperative_task2017 != 0){
-							rate2_2017 = (cooperative2017/cooperative_task2017)*100
-						}
-						if(self_task2018 != 0){
-							rate1_2018 = (self2018/self_task2018)*100
-						}
-						if(cooperative_task2018 != 0){
-							rate2_2018 = (cooperative2018/cooperative_task2018)*100
-						}
-						preString += '<tr class="text-red"><td>全国</td><td>'+self_task2017+'</td><td>'+self2017+'</td><td>'+rate1_2017.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task2017+'</td><td>'+cooperative2017+'</td><td>'+rate2_2017.toFixed(2)+'%</td></tr>';
-						nowString += '<tr class="text-red"><td>全国</td><td>'+self_task2018+'</td><td>'+self2018+'</td><td>'+rate1_2018.toFixed(2)+'%</td>'
-								+'<td class="text-red">'+cooperative_task2018+'</td><td>'+cooperative2018+'</td><td>'+rate2_2018.toFixed(2)+'%</td></tr>';
-					}
-				}
-				
-				
-				option12.xAxis[0]["data"] = dateArray;
-				
-				if(Math.max.apply(null, self_support_taskArry)<10||self_support_taskArry.length==0){
-					option13.yAxis[0].max = 10;
-				}else{
-					option13.yAxis[0].max = parseInt(Math.max.apply(null, self_support_taskArry)/0.7);
-				} 
-				if(Math.max.apply(null, self_rateArray)<10||self_rateArray.length==0){
-					option13.yAxis[1].max = 10;
-				}else{
-					option13.yAxis[1].max = parseInt(Math.max.apply(null, self_rateArray)/0.7);
-				} 
-				if(Math.max.apply(null, cooperative_taskArray)<10||cooperative_taskArray.length==0){
-					option14.yAxis[0].max = 10;
-				}else{
-					option14.yAxis[0].max = parseInt(Math.max.apply(null, cooperative_taskArray)/0.7);
-				} 
-				if(Math.max.apply(null, cooperative_rateArray)<10||cooperative_rateArray.length==0){
-					option14.yAxis[1].max = 10;
-				}else{
-					option14.yAxis[1].max = parseInt(Math.max.apply(null, cooperative_rateArray)/0.7);
-				} 
-				
-				option13.series[0].data=self_rateArray;
-				option13.series[1].data=self_support_taskArry;
-				option13.series[2].data=self_completeArray;
-				option13.xAxis[0]["data"] = citynameArray;
-				
-				option14.series[0].data=cooperative_rateArray;
-				option14.series[1].data=cooperative_taskArray;
-				option14.series[2].data=cooperative_completeArray;
-				option14.xAxis[0]["data"] = citynameArray;
-				
-				myChart12.setOption(option12);
-				myChart13.setOption(option13);
-				myChart14.setOption(option14);
-				
-				$("#preopenstore").append(preString);
-				$("#newopenstore").append(nowString);
-
-			}
-		});
-	}
-	var progressOfNetworkConstruction = function(){
-		doManager("storexpandManager","progressOfNetworkConstruction",null,function(data,textStatus,XmlHttpRequest){
-			if (data.result) {
-				var jsonData = $.fromJSON(data.data);
-				var contractAndthroughByYear = jsonData.contractAndthroughByYear;
-				var cityArray = new Array();
-				var contractQuantityArray = new Array();
-				var throughQuantityArray = new Array();
-				var dateArray = new Array();
-				if(contractAndthroughByYear.length > 0){
-					for(var i = 0; i < contractAndthroughByYear.length; i++){
-						var cityData = contractAndthroughByYear[i];
-						var cityname = cityData.cityname;
-						cityArray.push(cityname);
-						var contractQuantity = cityData.contract_quantity;
-						contractQuantityArray.push(contractQuantity);
-						var throughQuantity = cityData.through_quantity;
-						throughQuantityArray.push(throughQuantity);
-					}
-				}else{
-					
-				}
-				option4.series[0].data=throughQuantityArray;
-				option4.series[1].data=contractQuantityArray;
-				option4.xAxis[0]["data"] = cityArray;
-				myChart4.setOption(option4);
-				var dateAndWeek = jsonData.dateAndWeek;
-				for(i = dateAndWeek.length - 1; i >=0 ; i--){
-					var dateOne = dateAndWeek[i];
-					var datetimes = dateOne.date;
-					dateArray.push(datetimes);
-				}
-				option5.xAxis[0]["data"] = dateArray;
-				var citynameArray = new Array();
-				var throughByWeek = jsonData.throughByWeek;
-				if(throughByWeek.length > 0){
-					for(var i = 0; i < throughByWeek.length; i++){
-						var cityweekArray = new Array();
-						var cityname = throughByWeek[i].cityname;
-						citynameArray.push(cityname);
-						cityweekArray.push(throughByWeek[i].week1);
-						cityweekArray.push(throughByWeek[i].week2);
-						cityweekArray.push(throughByWeek[i].week3);
-						cityweekArray.push(throughByWeek[i].week4);
-						cityweekArray.push(throughByWeek[i].week5);
-						cityweekArray.push(throughByWeek[i].week6);
-						option5.series.push({
-						      name:cityname,
-						      type: 'line',
-						      symbol:"circle",
-						      symbolSize:10,
-						      data: cityweekArray,
-						      itemStyle: {
-						            normal: {
-						              label: {
-						                show: true,
-						                formatter: function(p) {
-						                  return p.value > 0 ? (p.value) : '';
-						                }
-						              }
-						            }
-						        },
-						      
-						});
-					}
-					option5.legend.data = citynameArray;
-				}
-				myChart5.setOption(option5);
-				//筹备中门店
-				var storeStateCount = jsonData.storeStateCount;
-				var main6CitynameArray = new Array();
-				var main6DataArray = new Array();
-				if(storeStateCount.length > 0){
-					for(var i = 0; i < storeStateCount.length; i++){
-						main6CitynameArray.push(storeStateCount[i].city_name);
-						main6DataArray.push(storeStateCount[i].count);
-					}
-				}
-				if(Math.max.apply(null, main6DataArray)<10||main6DataArray.length==0){
-					option6.yAxis[0].max = 10;
-				}else{
-					option6.yAxis[0].max = parseInt(Math.max.apply(null, main6DataArray)/0.7);
-				}
-				option6.series[0].data=main6DataArray;
-				option6.xAxis[0]["data"] = main6CitynameArray;
-				myChart6.setOption(option6);
-				var cardString = "";
-				var storeCardBycity = jsonData.storeCardBycity;
-				var business_licenseTotal = 0,double_cardTotal = 0,no_cardTotal = 0,store_countTotal = 0;
-				var storeCountArray = new Array(),double_cardArray = new Array(),business_licenseArray = new Array(),no_cardArray = new Array();
-				var cardCitynameArray = new Array();
-				if(storeCardBycity.length > 0){
-					for(var i = 0; i < storeCardBycity.length; i++){
-						var storeCard = storeCardBycity[i];
-						var business_license =  storeCard.business_license;
-						business_licenseArray.push(business_license);
-						var cityname = storeCard.city_name;
-						cardCitynameArray.push(cityname);
-						var double_card = storeCard.double_card;
-						double_cardArray.push(double_card);
-						var no_card = storeCard.no_card;
-						no_cardArray.push(no_card);
-						var store_count = storeCard.store_count;
-						storeCountArray.push(store_count);
-						var double_card_rate = (double_card/store_count)*100;
-						business_licenseTotal += business_license;
-						double_cardTotal += double_card;
-						no_cardTotal += no_card;
-						store_countTotal += store_count;
-
-						cardString += '<tr><td title="'+cityname+'">'+cityname+'</td><td>'+store_count+'</td><td>'+double_card+'</td><td>'+business_license+'</td><td>'+no_card+'</td><td>'+double_card_rate.toFixed(2)+'%</td></tr>';
-						if(i == storeCardBycity.length-1){
-							var double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
-							cardString += '<tr class="text-red"><td>合计</td><td>'+store_countTotal+'</td><td>'+double_cardTotal+'</td><td>'+business_licenseTotal+'</td><td>'+no_cardTotal+'</td><td>'+double_card_rateTotal.toFixed(2)+'%</td></tr>';
-						}
-					}
-					$("#storecard").append(cardString);
-					 optionCard.series[0].data=storeCountArray;
-					 optionCard.series[1].data=double_cardArray;
-					 optionCard.series[2].data=business_licenseArray;
-					 optionCard.series[3].data=no_cardArray; 
-					optionCard.xAxis[0]["data"] = cardCitynameArray;
-					myChartCard.setOption(optionCard);
-				}
-			}
-		});
-	}
-	var humanresourseInfo = function(){
-		doManager("humanresourcesManager","getEmployeeInfoByWeek",null,function(data,textStatus,XmlHttpRequest){
-			if (data.result) {
-				var jsonData = $.fromJSON(data.data);
-				//六周时间轴
-				var dateArray = new Array();
-				var dateAndWeek = jsonData.dateAndWeek;
-				for(i = dateAndWeek.length - 1; i >=0 ; i--){
-					var dateOne = dateAndWeek[i];
-					var datetimes = dateOne.date;
-					dateArray.push(datetimes);
-				}
-				option7.xAxis[0]["data"] = dateArray;
-				optionEmp.xAxis[0]["data"] = dateArray;
-				var queryHumanTotal = jsonData.queryHumanTotal;
-				var humanTotalArray = new Array();
-				if(queryHumanTotal.length >0){
-					humanTotalArray.push(queryHumanTotal[0].week1);
-					humanTotalArray.push(queryHumanTotal[0].week2);
-					humanTotalArray.push(queryHumanTotal[0].week3);
-					humanTotalArray.push(queryHumanTotal[0].week4);
-					humanTotalArray.push(queryHumanTotal[0].week5);
-					humanTotalArray.push(queryHumanTotal[0].week6);
-				}
-				optionEmp.series[0].data=humanTotalArray;
-				optionEmp.yAxis.min = (queryHumanTotal[0].week1*1).toFixed(0);
-				myChartEmp.setOption(optionEmp);
-				
-				var queryLeaveHuman = jsonData.queryLeaveHuman;
-				var leaveHumanArray = [0,0,0,0,0,0];
-				if(queryLeaveHuman.length > 0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
-					for(var z = 0; z < queryLeaveHuman.length; z++){
-						var humanInfo =  queryLeaveHuman[z];
-						var weektime = humanInfo.week_time;
-						var humancount = humanInfo.count;	
-						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = humancount;
-					}
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var aa = weektimeArray[i]+"";
-							var replace = leaveHumanArray.splice(weektimeArray[i],1,vauleParam[aa]);
-						}
-					}
-				}
-				option7.series[0].data=leaveHumanArray;
-				var queryToPostHuman = jsonData.queryToPostHuman;
-				var toPostHumanArray = [0,0,0,0,0,0];
-				if(queryToPostHuman.length > 0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
-					for(var z = 0; z < queryToPostHuman.length; z++){
-						var humanInfo =  queryToPostHuman[z];
-						var weektime = humanInfo.week_time;
-						var humancount = humanInfo.count;
-						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = humancount;
-					}
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var aa = weektimeArray[i]+"";
-							var replace = toPostHumanArray.splice(weektimeArray[i],1,vauleParam[aa]);
-						}
-					}
-				}
-				option7.series[1].data=toPostHumanArray;
-				myChart7.setOption(option7);
-			}
-		});
-		doManager("humanresourcesManager","getWeekPoint",null,function(data,textStatus,XmlHttpRequest){
-			if (data.result) {
-				var jsonData = $.fromJSON(data.data);
-				var queryWeekPoint = jsonData.queryWeekPoint;
-				if(queryWeekPoint.length > 0){
-					var stringdata = "";
-					for (var i = 0; i < queryWeekPoint.length; i++){
-						var weekdata = queryWeekPoint[i];
-						var chouyunhezuo = weekdata.chouyunhezuo;
-						var chouziying = weekdata.chouziying;
-						var cityname = weekdata.cityname;
-						var dianzhang = weekdata.dianzhang;
-						var fudianzhang = weekdata.fudianzhang;
-						var fuwu = weekdata.fuwu;
-						var guoanxia = weekdata.guoanxia;
-						var leavecount = weekdata.leavecount;
-						var topostcount = weekdata.topostcount;
-						var yunhezuo = weekdata.yunhezuo;
-						var yunziying = weekdata.yunziying;
-						var zonghe = weekdata.zonghe;
-						var personCount = dianzhang+fudianzhang+guoanxia+zonghe;
-						var storeCount = yunziying+yunhezuo;
-						var avgPerson = 0;
-						if(storeCount != 0){
-							avgPerson = personCount/storeCount;
-						}
-						stringdata += '<tr><td title="'+cityname+'">'+cityname+'</td><td>'+yunziying+'</td><td>'+yunhezuo+'</td><td>'+chouziying+'</td><td>'+chouyunhezuo+'</td><td>'+dianzhang+'</td><td>'+fudianzhang+'</td>'+
-						'<td>'+guoanxia+'</td><td>'+fuwu+'</td><td>'+zonghe+'</td><td  class="text-red">'+personCount+'</td><td>'+avgPerson.toFixed(2)+'</td><td>'+topostcount+'</td><td>'+leavecount+'</td></tr>';
-					}
-					$("#weekcount").append(stringdata);
-				}
-			}
-		});
-	} */
-	
-	/* var customerInfo = function(){
-		var reqestParameter = {
-	        }
-		//7天
-        doManager("dynamicManager", "getWeekCustomerOrderRate",[reqestParameter],
-            function(data, textStatus, XMLHttpRequest) {
-                if (data.result) {
-                    var resultJson = JSON.parse(data.data);
-                    console.log(resultJson);
-                    var data = [];
-                  	var data1 = [];
-                    var data2 = [];
-                    var data3 = [];
-                    $.each(eval(resultJson['lst_data']), function (idx, val) {
-                    	var rate = "";
-                    	var str = "";
-                    	if(parseInt(val['pay_cus_count'])==0){
-                    		rate = 0;
-                    	}else{
-                    		str = (((parseInt(val['pay_cus_count'])-parseInt(val['new_cus_count']))/parseInt(val['pay_cus_count'])*100)+'');
-                    		rate = str.substring(0,str.lastIndexOf(".")+2);
-                    	}
-                    	data.push(val['week_date']);
-                    	data1.push(val['new_cus_count']);
-                		data2.push(val['pay_cus_count']);
-                		data3.push(rate);
-                    });
-                    option23.xAxis.data = data.reverse();
-                    option23.series[0].data = data3.reverse();
-                    option23.series[1].data = data1.reverse();
-                    option23.series[2].data = data2.reverse();
-                	//customerNewChartOption.title.text="近7天客流趋势";
-                	option23.yAxis[1].min = 0;
-                	if(Math.max.apply(null, data3)<10||data3.length==0){
-                		option23.yAxis[1].max = 10;
-                	}else{
-                		option23.yAxis[1].max = parseInt(Math.max.apply(null, data3)/0.7);
-                	}
-                	myChart23.setOption(option23);
-                    
-                }
-         });
-        //console.log('request turnover customer data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
-     } */
 </script>
 </body>
 </html>

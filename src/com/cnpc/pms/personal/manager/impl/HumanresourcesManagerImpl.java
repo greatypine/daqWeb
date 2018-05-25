@@ -4098,17 +4098,46 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 	public Map<String, Object> getEmployeeInfoByWeek() {
 		Map<String,Object> result = new HashMap<String,Object>();
 		HumanresourcesDao humanresourcesDao = (HumanresourcesDao)SpringHelper.getBean(HumanresourcesDao.class.getName());
-		List<Map<String,Object>> queryToPostHuman = humanresourcesDao.queryToPostHuman();
-		List<Map<String,Object>> queryLeaveHuman = humanresourcesDao.queryLeaveHuman();
-		List<Map<String,Object>> queryHumanTotal = humanresourcesDao.queryHumanTotal();
+		//总人数信息
+		List<Map<String,Object>> queryToPostHuman = humanresourcesDao.queryToPostHuman(null);
+		List<Map<String,Object>> queryLeaveHuman = humanresourcesDao.queryLeaveHuman(null);
+		List<Map<String,Object>> queryHumanTotal = humanresourcesDao.queryHumanTotal(null);
 		List<Map<String, Object>> dateAndWeek = DateUtils.getDateBeforesix();
 		List<Map<String,Object>> queryWeekPoint = humanresourcesDao.queryWeekPoint();
+		//店长信息
+		List<Map<String,Object>> queryToPostDianzhang = humanresourcesDao.queryToPostHuman("店长");
+		List<Map<String,Object>> queryLeaveDianzhang = humanresourcesDao.queryLeaveHuman("店长");
+		List<Map<String,Object>> queryDianzhangTotal = humanresourcesDao.queryHumanTotal("店长");
+		//国安侠信息
+		List<Map<String,Object>> queryToPostGuoanxia = humanresourcesDao.queryToPostHuman("国安侠");
+		List<Map<String,Object>> queryLeaveGuoanxia = humanresourcesDao.queryLeaveHuman("国安侠");
+		List<Map<String,Object>> queryGuoanxiaTotal = humanresourcesDao.queryHumanTotal("国安侠");
+		
+		//专员信息
+		List<Map<String,Object>> queryToPostZhuanyuan = humanresourcesDao.queryToPostHuman("专员");
+		List<Map<String,Object>> queryLeaveZhuanyuan = humanresourcesDao.queryLeaveHuman("专员");
+		List<Map<String,Object>> queryZhuanyuanTotal = humanresourcesDao.queryHumanTotal("专员");
 		
 		result.put("queryToPostHuman", queryToPostHuman);
 		result.put("queryLeaveHuman", queryLeaveHuman);
 		result.put("queryHumanTotal", queryHumanTotal);
+		
+		result.put("queryToPostDianzhang", queryToPostDianzhang);
+		result.put("queryLeaveDianzhang", queryLeaveDianzhang);
+		result.put("queryDianzhangTotal", queryDianzhangTotal);
+		
+		result.put("queryToPostGuoanxia", queryToPostGuoanxia);
+		result.put("queryLeaveGuoanxia", queryLeaveGuoanxia);
+		result.put("queryGuoanxiaTotal", queryGuoanxiaTotal);
+		
+		result.put("queryToPostZhuanyuan", queryToPostZhuanyuan);
+		result.put("queryLeaveZhuanyuan", queryLeaveZhuanyuan);
+		result.put("queryZhuanyuanTotal", queryZhuanyuanTotal);
+		
+		
 		result.put("dateAndWeek", dateAndWeek);
 		result.put("queryWeekPoint", queryWeekPoint);
+		
 		return result;
 	}
 

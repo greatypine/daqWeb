@@ -42,9 +42,17 @@ var myChart6 = echarts.init(document.getElementById('main6'));
 var myChartCard = echarts.init(document.getElementById('maincard'));
 var myChart7 = echarts.init(document.getElementById('main7'));
 var myChartEmp = echarts.init(document.getElementById('mainemp'));
+var myChartDianzhang = echarts.init(document.getElementById('maindianzhang'));
+var myChartEmpDianzhang = echarts.init(document.getElementById('mainempdianzhang'));
+var myChartGuoanxia = echarts.init(document.getElementById('mainguoanxia'));
+var myChartEmpGuoanxia = echarts.init(document.getElementById('mainempguoanxia'));
+var myChartZhuanyuan = echarts.init(document.getElementById('mainzhuanyuan'));
+var myChartEmpZhuanyuan = echarts.init(document.getElementById('mainempzhuanyuan'));
 //var myChart8 = echarts.init(document.getElementById('main8'));
 var myChart9 = echarts.init(document.getElementById('main9'));
 var myChart10 = echarts.init(document.getElementById('main10'));
+var myChartMainstoreType = echarts.init(document.getElementById('mainstoreType'));
+var myChartMainCooperative = echarts.init(document.getElementById('mainCooperative'));
 var myChart11 = echarts.init(document.getElementById('main11'));
 var myChart12 = echarts.init(document.getElementById('main12'));
 var myChart13 = echarts.init(document.getElementById('main13'));
@@ -52,14 +60,17 @@ var myChart14 = echarts.init(document.getElementById('main14'));
 var myChart15 = echarts.init(document.getElementById('main15'));
 var myChart16 = echarts.init(document.getElementById('main16'));
 var myChart17 = echarts.init(document.getElementById('main17'));
-//var myChart18 = echarts.init(document.getElementById('main18'));
-//var myChart19 = echarts.init(document.getElementById('main19'));
-//var myChart20 = echarts.init(document.getElementById('main20'));
-//var myChart21 = echarts.init(document.getElementById('main21'));
+var myChart18 = echarts.init(document.getElementById('main18'));
+var myChart19 = echarts.init(document.getElementById('main19'));
+var myChart20 = echarts.init(document.getElementById('main20'));
+var myChart21 = echarts.init(document.getElementById('main21'));
 var myChart22 = echarts.init(document.getElementById('main22'));
 var myChart23 = echarts.init(document.getElementById('main23'));
-//var myChart24 = echarts.init(document.getElementById('main24'));
+var myChart24 = echarts.init(document.getElementById('main24'));
 var myChart26 = echarts.init(document.getElementById('main26'));
+
+//x轴近六周时间轴
+var six_week_data_array = new Array();
 
 //城市总的行政区县、已有门店开业的区县数量
 /*var data = [
@@ -1483,9 +1494,9 @@ option1 = {
 				    ]
 				  };
 
-				  //网络业态分布--自营店
+				  //网络业态分布--城市公司门店数量
 				  option2 = {
-				    title: {text: '自营店',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
+				    title: {text: '城市公司门店数量',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
 				    tooltip: {
 				      trigger: 'axis',
 				      axisPointer: {
@@ -1501,9 +1512,8 @@ option1 = {
 				      textStyle: {color: '#fff'}
 				    },
 				    legend: {
-				      top: '30',
-				      textStyle: {color: '#90979c',},
-				      data: []
+				      right:0,
+				      data: ["自营店","合作店"]
 				    },
 				    calculable: true,
 				    xAxis: [{
@@ -1538,31 +1548,43 @@ option1 = {
 				      axisLabel: {interval: 0,},
 				      splitArea: {show: false},
 				    }],
-				    /*dataZoom: [{
-				      show: true,
-				      height: 20,
-				      xAxisIndex: [0],
-				      bottom: 30,
-				      start: 0,
-				      end: 50,
-				      handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
-				      handleSize: '110%',
-				      handleStyle:{color:'#d3dee5',},
-				      textStyle:{color:'#fff'},
-				      borderColor:'#90979c'
-				    }, {
-				      type: 'inside',
-				      show: true,
-				      height: 15,
-				      start: 1,
-				      end: 35
-				    }],*/
-				    series: []
+				    series: [{
+				        name:'自营店',
+				        type:'bar',
+				        data:[],
+				        itemStyle: {
+				        	normal: {
+				                label: {
+				                  show: true,
+				                  formatter: function(p) {
+				                    return p.value > 0 ? (p.value) : '';
+				                  }
+				                }
+				              }
+				        },
+				        smooth: true
+				      },
+				      {
+				        name:'合作店',
+				        type:'bar',
+				        data:[],
+				        itemStyle: {
+				        	normal: {
+				                label: {
+				                  show: true,
+				                  formatter: function(p) {
+				                    return p.value > 0 ? (p.value) : '';
+				                  }
+				                }
+				              }
+				        },
+				        smooth: true
+				      }]
 				  }
 
-				  //网络业态分布--合作店
+				  //网络业态分布--全国门店数量
 				  option10 = {
-						  title: {text: '合作店',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
+						  title: {text: '全国门店数量',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
 						    tooltip: {
 						      trigger: 'axis',
 						      axisPointer: {
@@ -1584,7 +1606,82 @@ option1 = {
 						      itemWidth:18,
 						      itemHeight:12,
 						      textStyle: {color: '#90979c',fontSize:14},
-						      data: []
+						    },
+						    calculable: true,
+						    xAxis: [{
+						      type: 'category',
+						      axisLine: {
+						        lineStyle: {
+						          color: '#90979c'
+						        }
+						      },
+						      splitLine: {
+						        show: false
+						      },
+						      axisTick: {
+						        show: false
+						      },
+						      splitArea: {
+						        show: false
+						      },
+						      axisLabel: {
+						        interval: 0,
+						        rotate:-20
+						      },
+						      data: ["校园店","生活中心店","街道月店","经营星店","药店","独立微超","合作店","前置仓","城市仓"],
+						    }],
+						    yAxis: [{
+						      type: 'value',
+						      splitLine: {show: false},
+						      axisLine: {
+						        lineStyle: {color: '#90979c'}
+						      },
+						      axisTick: {show: false},
+						      axisLabel: {interval: 0,},
+						      splitArea: {show: false},
+						    }],
+						    series: [{
+						        name:'门店数量',
+						        type:'bar',
+						        data:[],
+						        itemStyle: {
+						        	normal: {
+						                label: {
+						                  show: true,
+						                  formatter: function(p) {
+						                    return p.value > 0 ? (p.value) : '';
+						                  }
+						                }
+						              }
+						        },
+						        smooth: true
+						      },]
+				  }
+				  
+				//网络业态分布--全国门店数量
+				  optionMainstoreType = {
+						  title: {text: '各城市自营月店数量',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
+						    tooltip: {
+						      trigger: 'axis',
+						      axisPointer: {
+						        type: 'shadow',
+						        textStyle: {color: '#fff'}
+						      },
+						    },
+						    grid: {
+						      borderWidth: 0,
+						      right:30,
+						      top: 100,
+						      bottom: 40,
+						      textStyle: {color: '#fff'}
+						    },
+						    legend: {
+						      top: '30',
+						      left:"left",
+						      y:"8%",
+						      itemWidth:18,
+						      itemHeight:12,
+						      textStyle: {color: '#90979c',fontSize:14},
 						    },
 						    calculable: true,
 						    xAxis: [{
@@ -1619,29 +1716,101 @@ option1 = {
 						      axisLabel: {interval: 0,},
 						      splitArea: {show: false},
 						    }],
-						    /*dataZoom: [{
-						      show: true,
-						      height: 20,
-						      xAxisIndex: [0],
-						      bottom: 30,
-						      start: 0,
-						      end: 50,
-						      handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
-						      handleSize: '110%',
-						      handleStyle:{color:'#d3dee5',},
-						      textStyle:{color:'#fff'},
-						      borderColor:'#90979c'
-						    }, {
-						      type: 'inside',
-						      show: true,
-						      height: 15,
-						      start: 1,
-						      end: 35
-						    }],*/
-						    series: []
+						    series: [{
+						        name:'门店数量',
+						        type:'bar',
+						        data:[],
+						        itemStyle: {
+						        	normal: {
+						                label: {
+						                  show: true,
+						                  formatter: function(p) {
+						                    return p.value > 0 ? (p.value) : '';
+						                  }
+						                }
+						              }
+						        },
+						        smooth: true
+						      },]
+				  }
+				  
+				//网络业态分布--全国门店数量
+				  optionMainCooperative = {
+						  title: {text: '合作店业态分布',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
+						    tooltip: {
+						      trigger: 'axis',
+						      axisPointer: {
+						        type: 'shadow',
+						        textStyle: {color: '#fff'}
+						      },
+						    },
+						    grid: {
+						      borderWidth: 0,
+						      right:30,
+						      top: 100,
+						      bottom: 40,
+						      textStyle: {color: '#fff'}
+						    },
+						    legend: {
+						      top: '30',
+						      left:"left",
+						      y:"8%",
+						      itemWidth:18,
+						      itemHeight:12,
+						      textStyle: {color: '#90979c',fontSize:14},
+						    },
+						    calculable: true,
+						    xAxis: [{
+						      type: 'category',
+						      axisLine: {
+						        lineStyle: {
+						          color: '#90979c'
+						        }
+						      },
+						      splitLine: {
+						        show: false
+						      },
+						      axisTick: {
+						        show: false
+						      },
+						      splitArea: {
+						        show: false
+						      },
+						      axisLabel: {
+						        interval: 0,
+						        rotate:-20
+						      },
+						      data: ["数码连锁店","超市连锁店","广店营业厅"],
+						    }],
+						    yAxis: [{
+						      type: 'value',
+						      splitLine: {show: false},
+						      axisLine: {
+						        lineStyle: {color: '#90979c'}
+						      },
+						      axisTick: {show: false},
+						      axisLabel: {interval: 0,},
+						      splitArea: {show: false},
+						    }],
+						    series: [{
+						        name:'门店数量',
+						        type:'bar',
+						        data:[],
+						        itemStyle: {
+						        	normal: {
+						                label: {
+						                  show: true,
+						                  formatter: function(p) {
+						                    return p.value > 0 ? (p.value) : '';
+						                  }
+						                }
+						              }
+						        },
+						        smooth: true
+						      },]
 				  }
 
-//网路拓展趋势--近一年
+
 //网路拓展趋势--近一年
 var option3 = {
   title: {text: '近一年情况走势',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
@@ -2171,7 +2340,7 @@ optionCard = {
 //人员动态
 option7 = {
   title: {
-    text: '近六周人员动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+    text: '近六周总人员动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
   },
   tooltip: {trigger: 'axis'},
   legend: {
@@ -2182,12 +2351,13 @@ option7 = {
     left: '3%',
     right: '5.6%',
     bottom: '3%',
+    top:'20%',
     containLabel: true
   },
   xAxis: [{
     type: 'category',
     boundaryGap: false,
-    data: []
+    data: six_week_data_array
   }],
   yAxis: 
   	{
@@ -2244,12 +2414,343 @@ optionEmp = {
     left: '3%',
     right: '5.6%',
     bottom: '3%',
+    top:'20%',
     containLabel: true
   },
   xAxis: [{
     type: 'category',
     boundaryGap: false,
-    data: []
+    data: six_week_data_array
+  }],
+  yAxis: {
+    type: 'value',
+    splitLine: {show:false},
+    //interval: 10,
+  },
+  series: [
+    {
+      name:'总人数',
+      type:'line',
+      stack: '总量',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+  ]
+};
+
+//人员动态
+optiondianzhang = {
+  title: {
+    text: '近六周店长动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+  },
+  tooltip: {trigger: 'axis'},
+  legend: {
+    data:['离职数量','入职数量'],left:"right",y:"8%",
+    itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+  },
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: 
+  	{
+          axisTick : {show: false},
+          splitLine: {show:false},
+          axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+          axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+        },
+  series: [
+    {
+      name:'离职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+    {
+      name:'入职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    }
+  ]
+};
+	//人员动态：总数
+optionEmpdianzhang = {
+  title: {
+    text: '近六周店长数统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+  },
+  legend: {
+      data:['总人数'],left:"right",y:"8%",
+      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+    },
+    color:["#036BC8"],
+  tooltip: {trigger: 'axis'},
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: {
+    type: 'value',
+    splitLine: {show:false},
+    //interval: 10,
+  },
+  series: [
+    {
+      name:'总人数',
+      type:'line',
+      stack: '总量',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+  ]
+};
+
+//人员动态
+optionguoanxia = {
+  title: {
+    text: '近六周国安侠动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+  },
+  tooltip: {trigger: 'axis'},
+  legend: {
+    data:['离职数量','入职数量'],left:"right",y:"8%",
+    itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+  },
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: 
+  	{
+          axisTick : {show: false},
+          splitLine: {show:false},
+          axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+          axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+        },
+  series: [
+    {
+      name:'离职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+    {
+      name:'入职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    }
+  ]
+};
+	//人员动态：总数
+optionEmpguoanxia = {
+  title: {
+    text: '近六周国安侠数统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+  },
+  legend: {
+      data:['总人数'],left:"right",y:"8%",
+      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+    },
+    color:["#036BC8"],
+  tooltip: {trigger: 'axis'},
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: {
+    type: 'value',
+    splitLine: {show:false},
+    //interval: 10,
+  },
+  series: [
+    {
+      name:'总人数',
+      type:'line',
+      stack: '总量',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+  ]
+};
+
+//人员动态
+optionzhuanyuan = {
+  title: {
+    text: '近六周专员动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+  },
+  tooltip: {trigger: 'axis'},
+  legend: {
+    data:['离职数量','入职数量'],left:"right",y:"8%",
+    itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+  },
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: 
+  	{
+          axisTick : {show: false},
+          splitLine: {show:false},
+          axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+          axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+        },
+  series: [
+    {
+      name:'离职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+    {
+      name:'入职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    }
+  ]
+};
+	//人员动态：总数
+optionEmpzhuanyuan = {
+  title: {
+    text: '近六周专员数统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+  },
+  legend: {
+      data:['总人数'],left:"right",y:"8%",
+      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+    },
+    color:["#036BC8"],
+  tooltip: {trigger: 'axis'},
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
   }],
   yAxis: {
     type: 'value',
@@ -2893,7 +3394,8 @@ option20 = {
   xAxis : [
     {
       type : 'category',
-      data: ['北京\n36', '上海\n8', '天津\n47', '广州\n202', '深圳\n239', '云南\n40', '贵州\n70', '辽宁\n81', '合计\n44'],
+      //data: ['北京\n36', '上海\n8', '天津\n47', '广州\n202', '深圳\n239', '云南\n40', '贵州\n70', '辽宁\n81', '合计\n44'],
+      data:[],
       axisTick: {
         alignWithLabel: true
       }
@@ -2908,10 +3410,9 @@ option20 = {
   ],
   series : [
     {
-      //name:'直接访问',
       type:'bar',
       barWidth: '40%',
-      data:[36, 8, 47, 202, 239, 40, 70,81,44]
+      data:[]
     },
 
   ],
@@ -2938,10 +3439,10 @@ option21 = {
       radius : '75%',
       center: ['50%', '55%'],
       data:[
-        {value:1959, name:'政府从业人员',itemStyle: {normal:{color: '#EA9294'}}},
-        {value:1239, name:'普通居民',itemStyle: {normal:{color: '#949494'}}},
-        {value:2844, name:'民间组织人员',itemStyle: {normal:{color: '#A4D2D5'}}},
-        {value:1802, name:'社区商户',itemStyle: {normal:{color: '#F1C0B1'}}},
+        {value:0, name:'政府从业人员',itemStyle: {normal:{color: '#EA9294'}}},
+        {value:0, name:'普通居民',itemStyle: {normal:{color: '#949494'}}},
+        {value:0, name:'民间组织人员',itemStyle: {normal:{color: '#A4D2D5'}}},
+        {value:0, name:'社区商户',itemStyle: {normal:{color: '#F1C0B1'}}},
       ],
       labelLine: {
         normal: {
@@ -3240,7 +3741,8 @@ option24 = {
   xAxis: [
     {
       type: 'category',
-      data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+      //data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+      data:[]
     }
   ],
   yAxis: [
@@ -3280,19 +3782,19 @@ option24 = {
     {
       name:'店均微信群数量',
       type:'bar',
-      data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+      data:[]
     },
     {
       name:'单个微信群人数',
       type:'bar',
       yAxisIndex: 1,
-      data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+      data:[]
     },
     {
       name:'活跃人群占比',
       type:'line',
       yAxisIndex: 2,
-      data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+      data:[]
     }
   ]
 };
@@ -3448,9 +3950,17 @@ myChart6.setOption(option6);
 myChartCard.setOption(optionCard);
 myChart7.setOption(option7);
 myChartEmp.setOption(optionEmp);
+myChartDianzhang.setOption(optiondianzhang);
+myChartEmpDianzhang.setOption(optionEmpdianzhang);
+myChartGuoanxia.setOption(optionguoanxia);
+myChartEmpGuoanxia.setOption(optionEmpguoanxia);
+myChartZhuanyuan.setOption(optionzhuanyuan);
+myChartEmpZhuanyuan.setOption(optionEmpzhuanyuan);
 // myChart8.setOption(option8);
 myChart9.setOption(option9);
 myChart10.setOption(option10);
+myChartMainstoreType.setOption(optionMainstoreType);
+myChartMainCooperative.setOption(optionMainCooperative);
 myChart11.setOption(option11);
 myChart12.setOption(option12);
 myChart13.setOption(option13);
@@ -3458,17 +3968,16 @@ myChart14.setOption(option14);
 myChart15.setOption(option15);
 myChart16.setOption(option16);
 myChart17.setOption(option17);
-//myChart18.setOption(option18);
-//myChart19.setOption(option19);
-//myChart20.setOption(option20);
-//myChart21.setOption(option21);
+myChart18.setOption(option18);
+myChart19.setOption(option19);
+myChart20.setOption(option20);
+myChart21.setOption(option21);
 myChart22.setOption(option22);
 myChart23.setOption(option23);
-//myChart24.setOption(option24);
+myChart24.setOption(option24);
 myChart26.setOption(option26);
 
 function chartresize2(){
-  //console.log("chartresize");
   var temp2 = new initchart2();
   temp2.resize();
 }
@@ -3625,7 +4134,6 @@ var initchart2 = function(){
 
 
 function chartresize4(){
-    //console.log("chartresize");
     var temp4 = new initchart4();
     temp4.resize();
   }
@@ -3782,7 +4290,6 @@ var initchart4 = function(){
 
 
 function chartresize3(){
-  //console.log("chartresize");
   var temp3 = new initchart3();
   temp3.resize();
 }
@@ -3994,7 +4501,8 @@ $(function(){
 	customerInfo();
 	areaInfo();
 	GMVInfo();
-	//storeActivitiesInfo();
+	storeActivitiesInfo();
+	getStoreCoverPerson();
 });
 
 function loginShow(){
@@ -4094,153 +4602,114 @@ function findStoreNetDate(){
 	doManager("storeManager","findStoreCityOnline",null,function(data,textStatus,XmlHttpRequest){
 		if (data.result) {
 			var jsonData = $.fromJSON(data.data);
-			var ziyings=jsonData.ziyingdian;
-			if(ziyings.length>0){
-				var xdataArray = ['生活中心店','街道月店','经营星店','校园店','独立微超店','药店','前置仓','数码连锁店','超市连锁店','广店营业厅'];
-				var legendArray = new Array();
-				option2.xAxis[0]["data"] = xdataArray;
-				for(var i = 0; i < ziyings.length; i++){
-					var ziying = ziyings[i];
-					var dataArray = new Array();
-					var cityname = ziying.city_name;
-					legendArray.push(cityname);
-					var shenghuozhongxindian = ziying.生活中心店;
-					var jiedaoyuedian = ziying.街道月店;
-					var jingyingxingdian = ziying.经营星店;
-					var xiaoyuandian = ziying.校园店;
-					var duliweichao = ziying.独立微超;
-					var yaodian = ziying.药店;
-					var qianzhicang = ziying.前置仓;
-					var shumaliansuodian = ziying.数码连锁店;
-					var chaoshiliansuodian = ziying.超市连锁店;
-					var guangdianyingyedian = ziying.广店营业厅;
-					dataArray.push(shenghuozhongxindian);
-					dataArray.push(jiedaoyuedian);
-					dataArray.push(jingyingxingdian);
-					dataArray.push(xiaoyuandian);
-					dataArray.push(duliweichao);
-					dataArray.push(yaodian);
-					dataArray.push(qianzhicang);
-					dataArray.push(shumaliansuodian);
-					dataArray.push(chaoshiliansuodian);
-					dataArray.push(guangdianyingyedian);
-					option2.series.push({
-					      name:cityname,
-					      type: 'bar',
-					      stack: "总量",
-					      symbol:"circle",
-					      symbolSize:10,
-					      data: dataArray,
-					      itemStyle: {
-					            normal: {
-					              label: {
-					                show: true,
-					                formatter: function(p) {
-					                  return p.value > 0 ? (p.value) : '';
-					                }
-					              }
-					            }
-					        },
-					      
-					});
-				}
-				option2.legend.data = legendArray;
+			var storeNature = jsonData.storeNature;
+			var storeTypeInfo = jsonData.storeTypeInfo;
+			var storeTypeNatureOfCity = jsonData.storeTypeNatureOfCity;
+			var hezuodian = jsonData.hezuodian;
+			var biaodata = jsonData.biao;
+			console.log(storeNature);
+			if(storeNature.length > 0){
+				var citynameArray = new Array();
+				var cooperative_count_array = new Array();
+				var self_count_array = new Array();
+				var  natureInfo = "";
+				 for(var i = 0; i < storeNature.length; i++){
+					var cityInfo = storeNature[i];
+					var cityname = cityInfo.city_name;
+					var self_count = cityInfo.self_count;
+					var cooperative_count = cityInfo.cooperative_count;
+					citynameArray.push(cityname);
+					cooperative_count_array.push(cooperative_count);
+					self_count_array.push(self_count);
+					var str_info = cityname+"共计"+(cooperative_count+self_count)+"家；"
+					natureInfo += str_info;
+				 }
+				 $("#storeInfoOfCity").append(natureInfo);
+				 option2.series[0].data=self_count_array;
+			     option2.series[1].data=cooperative_count_array;
+			     option2.xAxis[0].data=citynameArray;
+			     myChart2.setOption(option2);
 			}
-			
-			myChart2.setOption(option2);
-			//合作店数据
-			var hezuo=jsonData.hezuodian;
-			if(hezuo.length>0){
-				var xdataArray = ['生活中心店','街道月店','经营星店','校园店','独立微超店','药店','前置仓','数码连锁店','超市连锁店','广店营业厅'];
-				var legendArray = new Array();
-				option10.xAxis[0]["data"] = xdataArray;
-				var flag=0;
-				for(var i = 0; i < hezuo.length; i++){
-					var ziying = hezuo[i];
-					var dataArray = new Array();
-					var cityname = ziying.city_name;
-					legendArray.push(cityname);
-					var shenghuozhongxindian = ziying.生活中心店;
-					var jiedaoyuedian = ziying.街道月店;
-					var jingyingxingdian = ziying.经营星店;
-					var xiaoyuandian = ziying.校园店;
-					var duliweichao = ziying.独立微超;
-					var yaodian = ziying.药店;
-					var qianzhicang = ziying.前置仓;
-					var shumaliansuodian = ziying.数码连锁店;
-					var chaoshiliansuodian = ziying.超市连锁店;
-					var guangdianyingyedian = ziying.广店营业厅;
-					dataArray.push(shenghuozhongxindian);
-					dataArray.push(jiedaoyuedian);
-					dataArray.push(jingyingxingdian);
-					dataArray.push(xiaoyuandian);
-					dataArray.push(duliweichao);
-					dataArray.push(yaodian);
-					dataArray.push(qianzhicang);
-					dataArray.push(shumaliansuodian);
-					dataArray.push(chaoshiliansuodian);
-					dataArray.push(guangdianyingyedian);
-					option10.series.push({
-					      name:cityname,
-					      type: 'bar',
-					      stack: "总量",
-					      symbol:"circle",
-					      symbolSize:10,
-					      data: dataArray,
-					      itemStyle: {
-					            normal: {
-					              label: {
-					                show: true,
-					                formatter: function(p) {
-					                  return p.value > 0 ? (p.value) : '';
-					                }
-					              }
-					            }
-					        },
-					      
-					});
-					flag+=Math.max.apply(null, dataArray);
-				}
-				if(flag<5){
-					option10.yAxis[0].max = 5;
-				}
-				option10.legend.data = legendArray;
+			if(storeTypeInfo.length > 0){
+				var main10_data = new Array();
+				var storeType = storeTypeInfo[0];
+				main10_data.push(storeType.校园店);
+				main10_data.push(storeType.生活中心店);
+				main10_data.push(storeType.街道月店);
+				main10_data.push(storeType.经营星店);
+				main10_data.push(storeType.药店);
+				main10_data.push(storeType.独立微超);
+				main10_data.push(storeType.合作店);
+				main10_data.push(storeType.前置仓);
+				main10_data.push(storeType.城市仓);
+				var china_store_count = storeType.校园店+storeType.生活中心店+storeType.街道月店+storeType.经营星店+storeType.药店+storeType.独立微超+storeType.合作店+storeType.前置仓+storeType.城市仓;
+				$("#china_store_count").html(china_store_count);
+				$("#cooperative_count").html(storeType.合作店);
+				 option10.series[0].data=main10_data;
+			     myChart10.setOption(option10);
 			}
-			
-			myChart10.setOption(option10);
-			//门店业态表数据（table）
-			var biaodata=jsonData.biao;
-			var storeString='';
-			var quguoziying=0;
-			var quanguoshenghuo=0;
-			var quanguoyuedian=0;
-			var quanguoxingdian=0;
-			var quanguoxiaoyuan=0;
-			var quanguoweichao=0;
-			var quanguoyaodian=0;
-			var quanguoqita=0;
-			var quanguo2018mubiao=0;
-			var quanguonewstore=0;
-			
-			for(var i=0;i<biaodata.length;i++){
-				var citystore=biaodata[i].shenghuo+biaodata[i].yuedian+biaodata[i].xingdian+biaodata[i].xiaoyuan+biaodata[i].weichao+biaodata[i].yaodian+biaodata[i].qita;
-				quguoziying+=citystore;
-				  quanguoshenghuo+=biaodata[i].shenghuo;
-		          quanguoyuedian+=biaodata[i].yuedian;
-		          quanguoxingdian+=biaodata[i].xingdian;
-		          quanguoxiaoyuan+=biaodata[i].xiaoyuan;
-		          quanguoweichao+=biaodata[i].weichao;
-		          quanguoyaodian+=biaodata[i].yaodian;
-		          quanguoqita+=biaodata[i].qita;
-		          quanguo2018mubiao+=biaodata[i].mubiao2018;
-		          quanguonewstore+=biaodata[i].newstore;
-				storeString+='<tr><td>'+biaodata[i].city_name+'</td><td class="text-red">'+citystore+'</td><td>'+biaodata[i].shenghuo+'</td>'+
-                '<td>'+biaodata[i].yuedian+'</td><td>'+biaodata[i].xingdian+'</td><td>'+biaodata[i].xiaoyuan+'</td><td>'+biaodata[i].weichao+'</td><td>'+biaodata[i].yaodian+'</td><td>'+biaodata[i].qita+'</td>'+
-                '<td class="text-red">'+biaodata[i].mubiao2018+'</td><td>'+biaodata[i].newstore+'</td></tr>';
+			if(storeTypeNatureOfCity.length > 0){
+				var mainstoreType_x = new Array();
+				var mainstoreType_data = new Array();
+				for(var i = 0; i < storeTypeNatureOfCity.length; i++){
+					var storeType = storeTypeNatureOfCity[i];
+					var cityname = storeType.city_name;
+					var count = storeType.count;
+					mainstoreType_x.push(cityname);
+					mainstoreType_data.push(count);
+				}
+				optionMainstoreType.series[0].data=mainstoreType_data;
+				optionMainstoreType.xAxis[0].data=mainstoreType_x;
+				myChartMainstoreType.setOption(optionMainstoreType);
 			}
-			$("#storenet tr:eq(1)").after('<tr class="text-red"><th>全国</th><th>'+quguoziying+'</th><th>'+quanguoshenghuo+'</th><th>'+quanguoyuedian+'</th><th>'+quanguoxingdian+'</th>'+
-	                  '<th>'+quanguoxiaoyuan+'</th><th>'+quanguoweichao+'</th><th>'+quanguoyaodian+'</th><th>'+quanguoqita+'</th><th>'+quanguo2018mubiao+'</th><th>'+quanguonewstore+'</th></tr>'+storeString);
+			if(hezuodian.length > 0){
+				var mainCooperative_data = new Array();
+				var storeType = storeTypeInfo[0];
+				mainCooperative_data.push(storeType.数码连锁店);
+				mainCooperative_data.push(storeType.超市连锁店);
+				mainCooperative_data.push(storeType.广店营业厅);
+				optionMainCooperative.series[0].data=mainCooperative_data;
+				myChartMainCooperative.setOption(optionMainCooperative);
+			}
+			if(biaodata.length > 0){
+				//门店业态表数据（table）
+				var storeString='';
+				var quguoziying=0;
+				var quanguoshenghuo=0;
+				var quanguoyuedian=0;
+				var quanguoxingdian=0;
+				var quanguoxiaoyuan=0;
+				var quanguoweichao=0;
+				var quanguoyaodian=0;
+				var quanguoqita=0;
+				var quanguo2018qianzhicangmubiao=0;
+				var quanguo2018hezuomubiao=0;
+				var quanguonewqianzhicangstore=0;
+				var quanguonewhezuostore=0;
 				
+				for(var i=0;i<biaodata.length;i++){
+					var citystore=biaodata[i].shenghuo+biaodata[i].yuedian+biaodata[i].xingdian+biaodata[i].xiaoyuan+biaodata[i].weichao+biaodata[i].yaodian+biaodata[i].qita;
+					quguoziying+=citystore;
+					  quanguoshenghuo+=biaodata[i].shenghuo;
+			          quanguoyuedian+=biaodata[i].yuedian;
+			          quanguoxingdian+=biaodata[i].xingdian;
+			          quanguoxiaoyuan+=biaodata[i].xiaoyuan;
+			          quanguoweichao+=biaodata[i].weichao;
+			          quanguoyaodian+=biaodata[i].yaodian;
+			          quanguoqita+=biaodata[i].qita;
+			          quanguo2018qianzhicangmubiao+=biaodata[i].qianzhicangmubiao;
+			          quanguo2018hezuomubiao+=biaodata[i].hezuomubiao;
+			          quanguonewhezuostore+=biaodata[i].hezuocount;
+			          quanguonewqianzhicangstore+=biaodata[i].qianzhicangcount;
+					storeString+='<tr><td>'+biaodata[i].city_name+'</td><td class="text-red">'+citystore+'</td><td>'+biaodata[i].shenghuo+'</td>'+
+	                '<td>'+biaodata[i].yuedian+'</td><td>'+biaodata[i].xingdian+'</td><td>'+biaodata[i].xiaoyuan+'</td><td>'+biaodata[i].weichao+'</td><td>'+biaodata[i].yaodian+'</td><td>'+biaodata[i].qita+'</td>'+
+	                '<td class="text-red">'+biaodata[i].qianzhicangmubiao+'</td><td>'+biaodata[i].qianzhicangcount+'</td><td class="text-red">'+biaodata[i].hezuomubiao+'</td><td>'+biaodata[i].hezuocount+'</td></tr>';
+				}
+				$("#storenet tr:eq(1)").after('<tr class="text-red"><th>全国</th><th>'+quguoziying+'</th><th>'+quanguoshenghuo+'</th><th>'+quanguoyuedian+'</th><th>'+quanguoxingdian+'</th>'+
+		                  '<th>'+quanguoxiaoyuan+'</th><th>'+quanguoweichao+'</th><th>'+quanguoyaodian+'</th><th>'+quanguoqita+'</th><th>'+quanguo2018qianzhicangmubiao+'</th><th>'+quanguonewqianzhicangstore+'</th><th>'+quanguo2018hezuomubiao+'</th><th>'+quanguonewhezuostore+'</th></tr>'+storeString);
+			}	
+			
+			
 		}},false);
 }
 
@@ -4546,7 +5015,7 @@ function oneyearorsixweek(){
 				var contractQuantityArray = new Array();
 				var throughQuantityArray = new Array();
 				var dateArray = new Array();
-				//var contractQuantitySum = 0;
+				var contractQuantitySum = 0;
 				if(contractAndthroughByYear.length > 0){
 					for(var i = 0; i < contractAndthroughByYear.length; i++){
 						var cityData = contractAndthroughByYear[i];
@@ -4554,7 +5023,7 @@ function oneyearorsixweek(){
 						cityArray.push(cityname);
 						var contractQuantity = cityData.contract_quantity;
 						contractQuantityArray.push(contractQuantity);
-						//contractQuantitySum += contractQuantity;
+						contractQuantitySum += contractQuantity;
 						var throughQuantity = cityData.through_quantity;
 						throughQuantityArray.push(throughQuantity);
 					}
@@ -4611,12 +5080,12 @@ function oneyearorsixweek(){
 				var storeStateCount = jsonData.storeStateCount;
 				var main6CitynameArray = new Array();
 				var main6DataArray = new Array();
-				//var preStoreSum = 0;
+				var preStoreSum = 0;
 				if(storeStateCount.length > 0){
 					for(var i = 0; i < storeStateCount.length; i++){
 						main6CitynameArray.push(storeStateCount[i].city_name);
 						main6DataArray.push(storeStateCount[i].count);
-						//preStoreSum += storeStateCount[i].count;
+						preStoreSum += storeStateCount[i].count;
 					}
 				}
 				if(Math.max.apply(null, main6DataArray)<10||main6DataArray.length==0){
@@ -4654,7 +5123,7 @@ function oneyearorsixweek(){
 						no_cardTotal += no_card;
 						store_countTotal += store_count;
 
-						cardString += '<tr><td title="'+cityname+'">'+cityname+'</td><td>'+store_count+'</td><td>'+double_card+'</td><td>'+business_license+'</td><td>'+no_card+'</td><td>'+double_card_rate.toFixed(2)+'%</td></tr>';
+						//cardString += '<tr><td title="'+cityname+'">'+cityname+'</td><td>'+store_count+'</td><td>'+double_card+'</td><td>'+business_license+'</td><td>'+no_card+'</td><td>'+double_card_rate.toFixed(2)+'%</td></tr>';
 						if(i == storeCardBycity.length-1){
 							double_card_rateTotal = (double_cardTotal/store_countTotal)*100;
 							business_card_rateTotal = (business_licenseTotal/store_countTotal)*100;
@@ -4670,12 +5139,12 @@ function oneyearorsixweek(){
 					optionCard.xAxis[0]["data"] = cardCitynameArray;
 					myChartCard.setOption(optionCard);
 				}
-				/*$("#signedCount").html(contractQuantitySum);
+				$("#signedCount").html(contractQuantitySum);
 				$("#preStoreCount").html(preStoreSum);
 				$("#openCount").html(store_countTotal);
 				$("#doubleCardCount").html(double_card_rateTotal.toFixed(2));
 				$("#businessCardCount").html(business_card_rateTotal.toFixed(2));
-				$("#noCardCount").html(no_card_rateTotal.toFixed(2));*/
+				$("#noCardCount").html(no_card_rateTotal.toFixed(2));
 			}
 		},false);
 	}
@@ -4693,6 +5162,14 @@ function oneyearorsixweek(){
 				}
 				option7.xAxis[0]["data"] = dateArray;
 				optionEmp.xAxis[0]["data"] = dateArray;
+				optiondianzhang.xAxis[0]["data"] = dateArray;
+				optionEmpdianzhang.xAxis[0]["data"] = dateArray;
+				optionguoanxia.xAxis[0]["data"] = dateArray;
+				optionEmpguoanxia.xAxis[0]["data"] = dateArray;
+				optionzhuanyuan.xAxis[0]["data"] = dateArray;
+				optionEmpzhuanyuan.xAxis[0]["data"] = dateArray;
+				six_week_data_array = dateArray;
+				//总人数
 				var queryHumanTotal = jsonData.queryHumanTotal;
 				var humanTotalArray = new Array();
 				if(queryHumanTotal.length >0){
@@ -4710,46 +5187,151 @@ function oneyearorsixweek(){
 				var queryLeaveHuman = jsonData.queryLeaveHuman;
 				var leaveHumanArray = [0,0,0,0,0,0];
 				if(queryLeaveHuman.length > 0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
 					for(var z = 0; z < queryLeaveHuman.length; z++){
 						var humanInfo =  queryLeaveHuman[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;	
 						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = humancount;
-					}
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var aa = weektimeArray[i]+"";
-							var replace = leaveHumanArray.splice(weektimeArray[i],1,vauleParam[aa]);
-						}
+						leaveHumanArray[index] = humancount;
 					}
 				}
 				option7.series[0].data=leaveHumanArray;
 				var queryToPostHuman = jsonData.queryToPostHuman;
 				var toPostHumanArray = [0,0,0,0,0,0];
 				if(queryToPostHuman.length > 0){
-					var weektimeArray = new Array();
-					var vauleParam = {};
 					for(var z = 0; z < queryToPostHuman.length; z++){
 						var humanInfo =  queryToPostHuman[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;
 						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = humancount;
-					}
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var aa = weektimeArray[i]+"";
-							var replace = toPostHumanArray.splice(weektimeArray[i],1,vauleParam[aa]);
-						}
+						toPostHumanArray[index] = humancount;
 					}
 				}
 				option7.series[1].data=toPostHumanArray;
 				myChart7.setOption(option7);
+				
+				//店长
+				var queryDianzhangTotal = jsonData.queryDianzhangTotal;
+				var dianzhangTotalArray = new Array();
+				if(queryHumanTotal.length >0){
+					dianzhangTotalArray.push(queryDianzhangTotal[0].a);
+					dianzhangTotalArray.push(queryDianzhangTotal[0].b);
+					dianzhangTotalArray.push(queryDianzhangTotal[0].c);
+					dianzhangTotalArray.push(queryDianzhangTotal[0].d);
+					dianzhangTotalArray.push(queryDianzhangTotal[0].e);
+					dianzhangTotalArray.push(queryDianzhangTotal[0].f);
+				}
+				optionEmpdianzhang.series[0].data=dianzhangTotalArray;
+				optionEmpdianzhang.yAxis.min = (queryDianzhangTotal[0].a*1).toFixed(0);
+				myChartEmpDianzhang.setOption(optionEmpdianzhang);
+				
+				var queryLeaveDianzhang = jsonData.queryLeaveDianzhang;
+				var leaveDianzhangArray = [0,0,0,0,0,0];
+				if(queryLeaveDianzhang.length > 0){
+					for(var z = 0; z < queryLeaveDianzhang.length; z++){
+						var humanInfo =  queryLeaveDianzhang[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;	
+						var index = jQuery.inArray(weektime,dateArray);
+						leaveDianzhangArray[index] = humancount;
+					}
+				}
+				optiondianzhang.series[0].data=leaveDianzhangArray;
+				var queryToPostDianzhang = jsonData.queryToPostDianzhang;
+				var toPostDianzhangArray = [0,0,0,0,0,0];
+				if(queryToPostDianzhang.length > 0){
+					for(var z = 0; z < queryToPostDianzhang.length; z++){
+						var humanInfo =  queryToPostDianzhang[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;
+						var index = jQuery.inArray(weektime,dateArray);
+						toPostDianzhangArray[index] = humancount;
+					}
+				}
+				optiondianzhang.series[1].data=toPostDianzhangArray;
+				myChartDianzhang.setOption(optiondianzhang);
+				
+				//国安侠
+				var queryGuoanxiaTotal = jsonData.queryGuoanxiaTotal;
+				var guoanxiaTotalArray = new Array();
+				if(queryGuoanxiaTotal.length >0){
+					guoanxiaTotalArray.push(queryGuoanxiaTotal[0].a);
+					guoanxiaTotalArray.push(queryGuoanxiaTotal[0].b);
+					guoanxiaTotalArray.push(queryGuoanxiaTotal[0].c);
+					guoanxiaTotalArray.push(queryGuoanxiaTotal[0].d);
+					guoanxiaTotalArray.push(queryGuoanxiaTotal[0].e);
+					guoanxiaTotalArray.push(queryGuoanxiaTotal[0].f);
+				}
+				optionEmpguoanxia.series[0].data=guoanxiaTotalArray;
+				optionEmpguoanxia.yAxis.min = (queryGuoanxiaTotal[0].a*1).toFixed(0);
+				myChartEmpGuoanxia.setOption(optionEmpguoanxia);
+				
+				var queryLeaveGuoanxia = jsonData.queryLeaveGuoanxia;
+				var leaveGuoanxiaArray = [0,0,0,0,0,0];
+				if(queryLeaveGuoanxia.length > 0){
+					for(var z = 0; z < queryLeaveGuoanxia.length; z++){
+						var humanInfo =  queryLeaveGuoanxia[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;	
+						var index = jQuery.inArray(weektime,dateArray);
+						leaveGuoanxiaArray[index] = humancount;
+					}
+				}
+				optionguoanxia.series[0].data=leaveGuoanxiaArray;
+				var queryToPostGuoanxia = jsonData.queryToPostGuoanxia;
+				var toPostGuoanxiaArray = [0,0,0,0,0,0];
+				if(queryToPostGuoanxia.length > 0){
+					for(var z = 0; z < queryToPostGuoanxia.length; z++){
+						var humanInfo =  queryToPostGuoanxia[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;
+						var index = jQuery.inArray(weektime,dateArray);
+						toPostGuoanxiaArray[index] = humancount;
+					}
+				}
+				optionguoanxia.series[1].data=toPostGuoanxiaArray;
+				myChartGuoanxia.setOption(optionguoanxia);
+				
+				//专员
+				var queryZhuanyuanTotal = jsonData.queryZhuanyuanTotal;
+				var zhuanyuanTotalArray = new Array();
+				if(queryZhuanyuanTotal.length >0){
+					zhuanyuanTotalArray.push(queryZhuanyuanTotal[0].a);
+					zhuanyuanTotalArray.push(queryZhuanyuanTotal[0].b);
+					zhuanyuanTotalArray.push(queryZhuanyuanTotal[0].c);
+					zhuanyuanTotalArray.push(queryZhuanyuanTotal[0].d);
+					zhuanyuanTotalArray.push(queryZhuanyuanTotal[0].e);
+					zhuanyuanTotalArray.push(queryZhuanyuanTotal[0].f);
+				}
+				optionEmpzhuanyuan.series[0].data=zhuanyuanTotalArray;
+				optionEmpzhuanyuan.yAxis.min = (queryZhuanyuanTotal[0].a*1).toFixed(0);
+				myChartEmpZhuanyuan.setOption(optionEmpzhuanyuan);
+				
+				var queryLeaveZhuanyuan = jsonData.queryLeaveZhuanyuan;
+				var leaveZhuanyuanArray = [0,0,0,0,0,0];
+				if(queryLeaveZhuanyuan.length > 0){
+					for(var z = 0; z < queryLeaveZhuanyuan.length; z++){
+						var humanInfo =  queryLeaveZhuanyuan[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;	
+						var index = jQuery.inArray(weektime,dateArray);
+						leaveZhuanyuanArray[index] = humancount;
+					}
+				}
+				optionzhuanyuan.series[0].data=leaveZhuanyuanArray;
+				var queryToPostZhuanyuan = jsonData.queryToPostZhuanyuan;
+				var toPostZhuanyuanArray = [0,0,0,0,0,0];
+				if(queryToPostZhuanyuan.length > 0){
+					for(var z = 0; z < queryToPostZhuanyuan.length; z++){
+						var humanInfo =  queryToPostZhuanyuan[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;
+						var index = jQuery.inArray(weektime,dateArray);
+						toPostZhuanyuanArray[index] = humancount;
+					}
+				}
+				optionzhuanyuan.series[1].data=toPostZhuanyuanArray;
+				myChartZhuanyuan.setOption(optionzhuanyuan);
 			}
 		});
 		doManager("humanresourcesManager","getWeekPoint",null,function(data,textStatus,XmlHttpRequest){
@@ -4792,7 +5374,6 @@ function oneyearorsixweek(){
 		            function(data, textStatus, XMLHttpRequest) {
 		                if (data.result) {
 		                    var resultJson = JSON.parse(data.data);
-		                    console.log(resultJson);
 		                    var storeArray = new Array();
 		                    var cityAreaArray = new Array();
 		                    var xDataArray16 = new Array();
@@ -4849,7 +5430,6 @@ function oneyearorsixweek(){
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
-                 //   console.log(resultJson);
                     var data = [];
                   	var data1 = [];
                     var data2 = [];
@@ -4904,7 +5484,6 @@ function oneyearorsixweek(){
                     myChart22.setOption(option22);
                 }
             });
-        //console.log('request turnover customer data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
      }
 	
 	var GMVInfo = function(){
@@ -5129,15 +5708,13 @@ function oneyearorsixweek(){
 		    return result;
 		}
 		
-	/*var storeActivitiesInfo = function(){
+	var storeActivitiesInfo = function(){
 		doManager("storeActivitiesManager","getNewStoreActivtiesInfo",null,
 				function(data,textStatus,XmlHttpRequest){
 			if(data.result){
 				var jsonData = $.fromJSON(data.data);
 				var newActivitiesInfo = jsonData.newActivitiesInfo;
 				var findConVillageCountOfCity = jsonData.findConVillageCountOfCity;
-				console.log(findConVillageCountOfCity);
-				console.log(newActivitiesInfo);
 				var citynameArray = new Array();
 				var number_of_activitiy_array = new Array();
 				var x_data_option18 = new Array();
@@ -5231,4 +5808,143 @@ function oneyearorsixweek(){
 				}
 			}
 		},false);
-	}*/
+	}
+	
+	
+	function getStoreCoverPerson(){
+		doManager("storeCoverPersonManager","getNewStoreCoverPerson",null,
+				function(data,textStatus,XmlHttpRequest){
+			if(data.result){
+				var jsonData = $.fromJSON(data.data);
+				var storeCoverPersonInfo = jsonData.storeCoverPersonInfo;
+				var storeCountOfcity = jsonData.storeCountOfcity;
+				var storeCountOfArea = jsonData.storeCountOfArea;
+				var areacount = 0
+				if(storeCountOfArea.length >0){
+					var areacountInfo = storeCountOfcity[0];
+					areacount = areacountInfo.count;
+				}
+				
+				var count_sum = 0;
+				if(storeCountOfcity.length > 0){
+					for(var i = 0;i < storeCountOfcity.length; i++){
+						var cityinfo = storeCountOfcity[i];
+						var count = cityinfo.count;
+						var cityname = cityinfo.city_name;
+						$('#pfoperate1_1 tr').eq(0).find("th").each(function(z,t){
+							if(cityname == $(t).html()){
+								var m = z-1;
+								count_sum += count;
+								$('#pfoperate1_1 tr').eq(1).find("td:eq("+m+")").text(count);
+							}
+						});
+					}
+				}
+				$('#pfoperate1_1 tr').eq(1).find("td:eq(12)").text(count_sum);
+				var arearate = (areacount/count_sum)*100
+				$('#pfoperate1_1 tr').eq(1).find("td:last").text(arearate.toFixed(2));
+				var citynameArray = new Array();
+				//社区关键人数量
+				var community_person_array = new Array();
+				//店均微信群数量
+				var avg_wechant_crowd_array = new Array();
+				//单个微信群人数
+				var crowd_person_count_array = new Array();
+				//活跃人群占比
+				var wechant_accounted_for_crowd_array = new Array();
+				//社区关键人构成分析：饼状图
+				var dataArray = new Array();
+				//合计值存放
+				var shequguanjianren;
+				var dianjunwexinqun;
+				var dangeweixinqun;
+				var huoyuerenqun;
+				if(storeCoverPersonInfo.length > 0){
+					var table1 =document.getElementById("pfoperate1");
+			        var table1_1 =document.getElementById("pfoperate1_1");
+			        var cellnumber1 = table1.rows[0].cells.length;
+			        var cellnumber1_1 = table1_1.rows[0].cells.length;
+				    for(var i = 0; i < storeCoverPersonInfo.length; i++){
+						var personInfo = storeCoverPersonInfo[i];
+						//城市
+						var cityname = personInfo.cityname;
+						//社区关键人表
+						var community_person = personInfo.community_person;//社区关键人数量
+						var avg_community_person = personInfo.avg_community_person;//店均社区关键人数量
+						var civil_servants = personInfo.civil_servants;//政府从业人员
+						var general_person = personInfo.general_person;//普通居民
+						var folk_organization = personInfo.folk_organization;//民间组织人员
+						var community_businesses = personInfo.community_businesses;//社区商户
+						//微信群表
+						var wechant_crowd = personInfo.wechant_crowd;//微信群数量
+						var avg_wechant_crowd = personInfo.avg_wechant_crowd;//店均微信群数量
+						var crowd_persons_count = personInfo.crowd_persons_count;//微信群内客户容量
+						var crowd_person_count = personInfo.crowd_person_count;//单个微信群人数
+						var interactive_person_count = personInfo.interactive_person_count;//与门店人员有互动的客户数量
+						var interactive_person_count_store = personInfo.interactive_person_count_store;//单个微信群互动人数
+						var wechant_accounted_for_crowd = personInfo.wechant_accounted_for_crowd;//微信互动活跃人群占比
+						if(cityname == '合计'){
+							option21.series[0].data[0].value = civil_servants;
+							option21.series[0].data[1].value = general_person;
+							option21.series[0].data[2].value = folk_organization;
+							option21.series[0].data[3].value = community_businesses;
+							shequguanjianren = community_person;
+							dianjunwexinqun = avg_wechant_crowd;
+							dangeweixinqun = crowd_person_count;
+							huoyuerenqun = wechant_accounted_for_crowd;
+						}
+						if(cityname != '环比（%）' && cityname != '合计'){
+							citynameArray.push(cityname);
+							community_person_array.push(community_person);
+							avg_wechant_crowd_array.push(avg_wechant_crowd);
+							crowd_person_count_array.push(crowd_person_count);
+							wechant_accounted_for_crowd_array.push(wechant_accounted_for_crowd);
+						}
+						$("#pfoperate1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1-1)+")").each(function(x,t){
+				    	    var col_index = x;
+				    	    if(cityname == $(t).html()){
+				    	    	$(t).parent().nextAll().each(function(z,t){
+						    	    if(z==0)$(t).find("td:eq("+col_index+")").text(community_person);
+						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(avg_community_person);
+						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(civil_servants);
+						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(general_person);
+						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(folk_organization);
+						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(community_businesses);
+					       		});
+				    	    }
+				       });
+						$("#pfoperate1_1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1_1-1)+")").each(function(x,t){
+				    	    var col_index = x;
+				    	    if(cityname == $(t).html()){
+				    	    	$(t).parent().nextAll().each(function(z,t){
+						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(wechant_crowd);
+						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(avg_wechant_crowd);
+						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(crowd_persons_count);
+						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(crowd_person_count);
+						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(interactive_person_count);
+						    	    if(z==6)$(t).find("td:eq("+col_index+")").text(interactive_person_count_store);
+						    	    if(z==7)$(t).find("td:eq("+col_index+")").text(wechant_accounted_for_crowd);
+					       		});
+				    	    }
+				       });
+						
+					}
+				    citynameArray.push("合计");
+				    community_person_array.push(shequguanjianren);
+				    avg_wechant_crowd_array.push(dianjunwexinqun);
+				    crowd_person_count_array.push(dangeweixinqun);
+				    wechant_accounted_for_crowd_array.push(huoyuerenqun);
+				    option20.series[0].data=community_person_array;
+					option20.xAxis[0]["data"] = citynameArray;
+					myChart20.setOption(option20);
+					option24.series[0].data=avg_wechant_crowd_array;
+					option24.series[1].data=crowd_person_count_array;
+					option24.series[2].data=wechant_accounted_for_crowd_array;
+					option24.xAxis[0]["data"] = citynameArray;
+					myChart24.setOption(option24);
+					myChart21.setOption(option21);
+				}
+			}
+		},false);
+		
+	}

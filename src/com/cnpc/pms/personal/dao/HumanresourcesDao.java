@@ -34,7 +34,9 @@ public interface HumanresourcesDao {
 	 * @author gaoll
 	 * @return
 	 */
-	public List<Map<String,Object>> queryToPostHuman();
+	public List<Map<String,Object>> queryToPostHuman(String zw);
+	
+	
 	
 	/**
 	 * 
@@ -43,7 +45,7 @@ public interface HumanresourcesDao {
 	 * @author gaoll
 	 * @return
 	 */
-	public List<Map<String,Object>> queryLeaveHuman();
+	public List<Map<String,Object>> queryLeaveHuman(String zw);
 	/**
 	 * 
 	 * TODO  查询近六周总人数
@@ -51,7 +53,13 @@ public interface HumanresourcesDao {
 	 * @author gaoll
 	 * @return
 	 */
-	public List<Map<String,Object>> queryHumanTotal();
+	public List<Map<String,Object>> queryHumanTotal(String zw);
+	/**
+	 * 
+	 * TODO  查询人员信息
+	 * @author gaoll
+	 * @return
+	 */
 	public List<Map<String,Object>> queryWeekPoint();
 	
 	

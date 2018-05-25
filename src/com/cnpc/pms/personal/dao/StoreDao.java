@@ -384,4 +384,42 @@ public interface StoreDao extends IDAO {
 	Map<String, Object> queryAboutStoreInfo(String where, PageInfo pageInfo);
 
 	Map<String, Object> exportAboutStore(String where);
+	
+	/**
+	 * 查询各城市门店数量
+	 * TODO 
+	 *  2018年5月22日
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String, Object>> getStoreCountOfcity();
+	
+	/**
+	 * 
+	 * TODO 查询已覆盖片区门店数量
+	 *  2018年5月22日
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String, Object>> getStoreCountOfArea();
+	
+	/**
+	 * 
+	 * TODO 查询各城市自营店合作店门店数量
+	 *  2018年5月23日
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String, Object>> getStoreNature();
+	
+	/**
+	 * 
+	 * TODO 查询各城市自营或合作门店的某种类型
+	 *  2018年5月23日
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String, Object>> getStoreTypeNatureOfCity(String nature,String storetype);
+	
+	
 }

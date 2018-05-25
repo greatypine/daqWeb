@@ -8,6 +8,7 @@ import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.personal.dao.StoreActivitiesDao;
 import com.cnpc.pms.personal.dao.StoreCoverPersonDao;
+import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.dao.VillageDao;
 import com.cnpc.pms.personal.entity.StoreActivities;
 import com.cnpc.pms.personal.entity.StoreCoverPerson;
@@ -66,8 +67,12 @@ public class StoreCoverPersonManagerImpl extends BizBaseCommonManager implements
 	public Map<String, Object> getNewStoreCoverPerson() {
 		Map<String,Object> result = new HashMap<String,Object>();
 		StoreCoverPersonDao storeCoverPersonDao = (StoreCoverPersonDao)SpringHelper.getBean(StoreCoverPersonDao.class.getName());
-		//VillageDao villageDao = (VillageDao)SpringHelper.getBean(VillageDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		List<Map<String,Object>> storeCoverPersonInfo = storeCoverPersonDao.getStoreCoverPerson();
+		List<Map<String,Object>> storeCountOfcity = storeDao.getStoreCountOfcity();
+		List<Map<String,Object>> storeCountOfArea = storeDao.getStoreCountOfArea();
+		result.put("storeCountOfcity", storeCountOfcity);
+		result.put("storeCountOfArea", storeCountOfArea);
 		//List<Map<String,Object>> findConVillageCountOfCity = villageDao.findConVillageCountOfCity();
 		result.put("storeCoverPersonInfo", storeCoverPersonInfo);
 		//result.put("findConVillageCountOfCity", findConVillageCountOfCity);

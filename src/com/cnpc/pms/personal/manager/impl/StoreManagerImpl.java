@@ -2301,12 +2301,15 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 	public Map<String, Object> findStoreCityOnline() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
-		//List<Map<String, Object>> storeNature = storeDao.getStoreNatureByYear(null);
-		//map.put("storeNature", storeNature);
-		List<Map<String, Object>> byNature = storeDao.findStoreByNature("自营店");
-		List<Map<String, Object>> byNaturehezuo = storeDao.findStoreByNature("合作店");
-		map.put("ziyingdian", byNature);
-		map.put("hezuodian", byNaturehezuo);
+		List<Map<String, Object>> storeNature = storeDao.getStoreNature();
+		map.put("storeNature", storeNature);
+		List<Map<String, Object>> storeTypeInfo = storeDao.findStoreByNature(null);
+		List<Map<String, Object>> hezuodian = storeDao.findStoreByNature("合作店");
+		List<Map<String, Object>> storeTypeNatureOfCity = storeDao.getStoreTypeNatureOfCity("自营店","Y");
+		//List<Map<String, Object>> byNaturehezuo = storeDao.findStoreByNature("合作店");
+		map.put("storeTypeInfo", storeTypeInfo);
+		map.put("storeTypeNatureOfCity", storeTypeNatureOfCity);
+		map.put("hezuodian", hezuodian);
 		List<Map<String, Object>> list = storeDao.findStoreGroupByStoretype();
 		map.put("biao", list);
 		return map;

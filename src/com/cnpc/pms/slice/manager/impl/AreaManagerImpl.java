@@ -988,7 +988,8 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			// 先查询门店服务范围
 
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
-			FindIterable<Document> dIterable = collection.find(Filters.eq("storeId", store.getPlatformid()));
+			//Filters.eq("storeId", store.getPlatformid())
+			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
 			Document document = dIterable.first();
 
 			if (document == null) {
@@ -1155,7 +1156,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			Store store = storeManager.findStore(storeId);
 			System.out.println(">>>>>>>>>>>>>>>>>>>>>>storeid:"+store.getPlatformid()+"   platformid:"+store.getPlatformid());
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
-			FindIterable<Document> dIterable = collection.find(Filters.eq("storeId", store.getPlatformid()));
+			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
 			Document document = dIterable.first();
            
 			if (document == null) {
@@ -1168,7 +1169,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			}
 
 			MongoCollection<Document> collection2 = database.getCollection("store_position");
-			FindIterable<Document> dIterable2 = collection2.find(Filters.eq("_id", store.getPlatformid()));
+			FindIterable<Document> dIterable2 = collection2.find(new Document("_id", store.getPlatformid()).append("status", 0));
 			Document document2 = dIterable2.first();
 
 			if (document2 == null) {
@@ -1466,7 +1467,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 
 			
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
-			FindIterable<Document> dIterable = collection.find(Filters.eq("storeId", store.getPlatformid()));
+			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
 			Document document = dIterable.first();
 
 			
