@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>选择组员</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <script>
+       
+        $(function () {
+        	
+        	
+        	getAllOnlineEmployee();
+            //页面加载成功后需要获取数据
+            searchList();
+        });
+        
+        
+        var allUser = new Array();
+//         var alluserArray = new Array();
+        function getAllOnlineEmployee(){
+         	
+        	doManager('shortMessageManager','getAllOnlineEmployee',null,function(data){
+                if(data.result){
+                    var result = JSON.parse(data.data).data;
+                    allUser = result;
+      				
+//       					if(result!=null&&result.length>0){
+//                         	for(var i=0;i<result.length;i++){
+//                         		userArray.push(result[i].code);
+//                         	}
+//                         }
+      				
+                    	
+                   
+                    
+                }else{
+                    $$.showMessage('提示',data.message);
+                }
+            },false); 
+        }
+        
+       
+        var COLUMNS = {
+                "id": function(aData, iColumn, sColumnName, map){
+                    var employeeNo=map["employee_no"];
+                    var name=map["name"];
+                    var checkStatus = $("#checkStatus").val();
+                    var phone =map["mobilephone"];
+                    var inviteCode  = map["inviteCode"];
+                    var en = employeeNo+"_"+name+"_"+phone+"_"+inviteCode;
+                    if(checkStatus=="0"){
+                    	return '<input type="checkbox" name="chkbox" onclick="userCheck(this)" id=""  value="'+en+'" />';
+                    }else if(checkStatus=="1"){
+                    	return '<input type="checkbox" name="chkbox" checked="true" onclick="userCheck(this)"  value="'+en+'" />';
+
+                    }
+	           		
+                }
+            }
+        
+        
+        function isInArray(arr,value){
+            for(var i = 0; i < arr.length; i++){
+                if(value === arr[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        
+        function isSelected(arr,value){
+        	for(n in selectUserArray){
+    			if(selectUserArray[n].employee_no==ug.value.split("_")[0]){
+    				return true;
+    			}
+    		}
+            return false;
+        }
+        
+        
+      //name,phone,employee_no,storename
+        function userCheck(ug){
+        	if(ug.checked){
+        		var user = {
+        				name:ug.value.split("_")[1],
+        				employee_no:ug.value.split("_")[0],
+        				mobilephone:ug.value.split("_")[2],
+        				inviteCode:ug.value.split("_")[3]
+        		}
+//         		for(n in selectUserArray){
+//         			if(selectUserArray[n].employee_no==ug.value.split("_")[0]){
+//         				selectUserArray.splice(n,1);
+//         			}
+//         		}
+        		selectUserArray.push(user);
+        		
+        	}else{
+        	
+        		for(n in selectUserArray){
+        			if(selectUserArray[n].employee_no==ug.value.split("_")[0]){
+        				selectUserArray.splice(n,1);
+        			}
+        		}
+        	}
+        	
+        }
+        
+        var selectUserArray= new Array();
+        function checkCheckbox(){
+        		$("input:checkbox").attr("checked", true);
+        		$("#checkStatus").val(1);
+        		selectUserArray.splice(0,selectUserArray.length);
+        		selectUserArray = allUser.slice(0);
+        }
+        
+        function clearCheckbox(){
+        	$("input:checkbox").removeAttr("checked");
+        	$("#checkStatus").val(0);
+    		selectUserArray.splice(0,selectUserArray.length);
+        }
+        //记载页面时请求数据列表默认的方法
+        function searchList() {
+        		 $$.executeSearch('querySMSUserGroupUserOnLine', 'conditionsDiv');
+        }
+
+        function doSubmit(){
+            var jsons=new Array();
+            var checkStatus = $("#checkStatus").val();
+            if (selectUserArray.length != 0) {
+            	
+            	parent.win.callBack(selectUserArray);
+                parent.win.hide();
+                parent.win.win.remove();
+            }else{
+            	parent.win.hide();
+                parent.win.win.remove();
+            }
+            
+        }
+      
+
+    </script>
+    <style type="text/css">
+        html,body{
+            height: 100%;
+        }
+        .display{
+        width:100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="bodyDiv">
+        <div id="userGroupInfo" class="panel panel-primary">
+            <div class="panel-heading">
+                <a href="#" onclick="toggleBizBiz('conditionsDiv','pic');"><img src="../scripts/images/22.png" align="absmiddle" id="pic"/></a>&nbsp;搜索条件
+            </div>
+            <div id="conditionsDiv" class="panel-body">
+                    <table class="bigteble">
+                        <tr>
+                            <td align="left" width="4%" class="basetext">
+                              名称:				
+                            </td>
+                            <td class="baseform" align="left" width="25%">
+                                <input type="text" name="name" id="name" class="form-control" style="width: 40%" onkeyup="value=this.value.replace(/\s+/g,'')"/>
+                            </td>
+                          
+<!--                             <td align="left" width="4%" class="basetext"> -->
+<!--                               门店:				 -->
+<!--                             </td> -->
+<!--                             <td class="baseform" align="left" width="25%"> -->
+<!--                                 <input type="text" name="storename" id="storename" class="form-control" style="width: 40%" onkeyup="value=this.value.replace(/\s+/g,'')"/> -->
+<!--                             </td> -->
+                        </tr>
+                        
+                    </table>
+                </div>
+                <div class="panel-footer"  align="right">
+                    
+                    <input class="btn btn-primary" id="checkBtn" onClick="checkCheckbox()" value="全选" type="button"/>
+                    <input class="btn btn-primary" id="checkBtn" onClick="clearCheckbox()" value="取消选中" type="button"/>
+                    <input class="btn btn-primary" onClick="searchList()" value="查询" type="button"/>
+                    <input type="hidden" id="checkStatus" value="0"/>
+                </div>
+            </div>
+            <div id="gridContainer" searchDiv="conditionsDiv" queryid="querySMSUserGroupUserOnLine" class="panel panel-primary" 
+                  titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="false"
+                 showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="false"
+                 checkmode="multiple" autoload="false" showno="false">
+            </div>
+        </div>
+    </body>
+    
+   

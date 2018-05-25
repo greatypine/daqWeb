@@ -1846,9 +1846,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if(province_name!=null&&province_name!=""){
 			provinceStr+=" and tpc.province_name like '%"+province_name+"%' ";
 		}
-		String sql = " select product_name,SUM(product_count) as product_count,city_name from ds_product_city tpc where 1=1 "+
+		String sql = " select product_name,SUM(product_count) as product_count,city_name,product_id,cityno from ds_product_city tpc where 1=1 "+
 					   cityStr+provinceStr +
-					 " GROUP BY product_name order by product_count desc "  ;
+					 " GROUP BY product_id,cityno order by product_count desc "  ;
 		String sql_count = "SELECT count(tdd.product_name) as product_count from ( "+sql+") tdd ";
 		Query query_count = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql_count);
@@ -3038,5 +3038,22 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		map_result.put("member", list);
 		return map_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryDistCityListByUserId(long userId) {
+		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+		String sql = "SELECT t.*,d.cityno FROM t_dist_city t LEFT JOIN t_dist_citycode d ON t.citycode=d.citycode WHERE pk_userid='"+userId+"'";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_data = query
+                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
 	}
 }

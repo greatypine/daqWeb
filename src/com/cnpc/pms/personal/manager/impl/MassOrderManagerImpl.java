@@ -45,6 +45,15 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
      * excel单元格公共样式
      */
     CellStyle cellStyle_common = null;
+    
+    @Override
+    public Map<String, Object> queryCitynoByCode(String cityCode){
+    	MassOrderDao massOrderDao = (MassOrderDao)SpringHelper.getBean(MassOrderDao.class.getName());
+    	Map<String,Object> order_obj = massOrderDao.queryCitynoByCode(cityCode);
+    	order_obj.put("cityno", order_obj.get("cityno"));
+    	
+    	return order_obj;
+    }
 	
 	@Override
 	public Map<String, Object> queryMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo) {
@@ -125,6 +134,113 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	        }
 
   			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_orderlist.xlsx");
+  			if(file_xls.exists()){
+  				file_xls.delete();
+  			}
+  			FileOutputStream os = null;
+  			try {
+  				os = new FileOutputStream(file_xls.getAbsoluteFile());
+  				wb.write(os);
+  			}catch (Exception e) {
+  				e.printStackTrace();
+  			} finally {
+  				if(os != null){
+  					try {
+  						os.close();
+  					} catch (IOException e) {
+  						e.printStackTrace();
+  					}
+  				}
+  			}
+
+  			result.put("message","导出成功！");
+  			result.put("status","success");
+  			result.put("data", str_web_path.concat(file_xls.getName()));
+  		}else{
+  			result.put("message","请重新操作！");
+  			result.put("status","fail");
+  		}
+  		return result;
+  	}
+	
+	@Override
+	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo) {
+		MassOrderDao massOrderDao = (MassOrderDao)SpringHelper.getBean(MassOrderDao.class.getName());
+
+		Map<String, Object> result =new HashMap<String,Object>();
+		try {
+			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
+			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
+				result = massOrderDao.queryReturnMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
+			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
+				result = massOrderDao.queryReturnMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
+			}else{
+				result = massOrderDao.queryReturnMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
+			}
+			result.put("status","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status","fail");
+		}
+		return result;
+	}
+	
+	@Override
+  	public Map<String, Object> exportReturnOrder(MassOrderDto massOrderDto) {
+		MassOrderDao massOrderDao = (MassOrderDao)SpringHelper.getBean(MassOrderDao.class.getName());
+		
+  		Map<String, Object> result = new HashMap<String,Object>();
+  		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+  		try {
+  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
+			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
+				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
+			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
+				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
+			}else{
+				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
+			}
+  		} catch (Exception e) {
+  			e.printStackTrace();
+  			return null;
+  		}
+  		if(list!=null&&list.size()>0){//成功返回数据
+  			if(list.size()>50000){
+  				result.put("message","导出条目过多，请重新筛选条件导出！");
+  	  			result.put("status","more");
+  	  			return result;
+  			}
+  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			String str_web_path = PropertiesUtil.getValue("file.web.root");
+
+  	        XSSFWorkbook wb = new XSSFWorkbook();   
+  	        setCellStyle_common(wb);
+  	        setHeaderStyle(wb);
+  	        XSSFSheet sheet = wb.createSheet("退货订单数据");
+  	        XSSFRow row = sheet.createRow(0);
+  	        
+  	        //定义表头 以及 要填入的 字段 
+  	        String[] str_headers = {"订单号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","退款金额","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称","门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单"};
+  	        String[] headers_key = {"order_sn","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","returned_amount","sign_time","return_time",
+  	        		"employee_name","employee_mobile","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label",
+  	        		"return_label","loan_label","quick_label","gift_label","customer_isnew_flag","order_tag1"};
+  	       
+  	        for(int i = 0;i < str_headers.length;i++){
+  	            XSSFCell cell = row.createCell(i);
+  	            cell.setCellStyle(getHeaderStyle());
+  	            cell.setCellValue(new XSSFRichTextString(str_headers[i]));
+  	        }
+  	        
+  	        for(int i = 0;i < list.size();i++){
+  	        	 row = sheet.createRow(i+1);
+  	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+  	            	setCellValueall(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+  	             }
+  	        }
+
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_returnorderlist.xlsx");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}

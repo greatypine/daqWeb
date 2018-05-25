@@ -548,4 +548,10 @@ public interface InterManager extends IManager {
 	 * @return
 	 */
     public Result saveOrUpdateOfficeNetwork(Storexpand storexpand);
+    /**
+     * 根据用户id查询所管理的城市
+     * @param userId
+     * @return
+     */
+    public Result getCurrentUserCity(String userId);
 }

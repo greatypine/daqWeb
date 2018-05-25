@@ -14,7 +14,13 @@
 	var id = getUrlParamByKey("id");
 	$(function(){
 		$("#id").val(id);
-		initallcity();
+		initcurruser();
+		var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+	  	if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
+	  		initcurcity();
+	  	}else{
+			initallcity();
+	  	}
 		getEditInfo();
 	});
 /* 	function queryTaskQuantity(cityname,cityno){
@@ -142,6 +148,13 @@
 				return;
 			}
 		}
+		var preposition_task = $("#preposition_task").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(preposition_task!=""){
+			if(!isNumber(preposition_task)){
+				alert("前置仓任务目标必须为数字");
+				return;
+			}
+		}
 		var citySelect = $("#citySelect").val();
 		if(citySelect == null||citySelect == "0"){
 			alert("城市不能为空");
@@ -152,7 +165,7 @@
 	
 	function doSave(){
 		var arr = [ "statistical_time_period", "survey_quantity","contract_quantity","through_quantity","self_support_task",
-		            "cooperative_task","cityname","start_time","end_time","cityno","id"];
+		            "cooperative_task","preposition_task","cityname","start_time","end_time","cityno","id"];
 			var o = {};
 			for ( var i in arr) {
 				var v = arr[i];
@@ -183,6 +196,31 @@
  				}
  		},false);
  	}
+	 function initcurcity(){
+	 		doManager("userManager","getCurrentUserCity",null,
+	 		    function(data,textStatus,XmlHttpRequest){
+	 				if (data.result) {
+	 					var jsonData = $.fromJSON(data.data);
+	 					var IndexSelected = "";
+	 					$(jsonData).each(function(index,element){
+	 						$("#citySelect").append('<option value="'+element.cityid+'">'+element.cityname+'</option>');
+	                     });
+	 					 $("#citySelect")[0].selectedIndex = IndexSelected;
+	 				}
+	 		});
+	 }
+	 var curr_user;
+	  function initcurruser(){
+		    
+	  		//取得当前登录人的门店
+			doManager("UserManager", "getCurrentUserDTO",null,
+	    				function(data, textStatus, XMLHttpRequest) {
+	    					if (data.result) {
+	    						var employeeID="";
+	    						 curr_user = JSON.parse(data.data);
+	    					}
+	    			},false);
+	  	}
 	function searchWeekTime(){
 		var searchWeekType = $("#statistical_time_period").val();
 		if(searchWeekType=="1"){//上周
@@ -281,6 +319,10 @@
 			</td>
 		</tr>
 		<tr>
+			<td>
+				<p>前置仓任务目标：(2018年)</p>
+				<p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="preposition_task" id="preposition_task"/></p>
+			</td>
 			<td>
 				<p class="read">城市名称：<span style="color: red">*</span></p>
 				<p class="read"><select id="citySelect" style="width: 38%;background-color: #EEEEEE;" onchange="select_data();" disabled="disabled"></select><input type="hidden" id="cityname" name="cityname"><input type="hidden" id="cityno" name="cityno"> </p>

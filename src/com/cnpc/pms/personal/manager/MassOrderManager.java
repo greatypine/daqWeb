@@ -14,6 +14,12 @@ import com.cnpc.pms.dynamic.entity.MassOrderDto;
  * @version V1.0
  */
 public interface MassOrderManager extends IManager {
+	
+	/**
+	 * 通过城市code查询城市No
+	 * @return
+	 */
+	public Map<String, Object> queryCitynoByCode(String cityCode);
 
 	/**
 	 * 查询订单信息
@@ -29,6 +35,21 @@ public interface MassOrderManager extends IManager {
 	 * @return
 	 */
 	public Map<String, Object> exportOrder(MassOrderDto massOrderDto);
+	
+	/**
+	 * 查询退货订单信息
+	 * @param massOrderDto
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto,PageInfo pageInfo);
+	
+	/**
+	 * 导出退货订单信息
+	 * @param massOrderDto
+	 * @return
+	 */
+	public Map<String, Object> exportReturnOrder(MassOrderDto massOrderDto);
 	
 	/**
 	 * 根据订单号查询订单

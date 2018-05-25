@@ -187,6 +187,8 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 		  	url = "user_member_view.html?t="+encode64(target)+"&c=&cn=&e="+encode64(employeeId)+"&#fg";
 		  }else if(target==1){
 			  url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&e="+encode64(employeeId)+"&#fg";
+		  }else{
+			  url = "user_member_view.html?t="+encode64(0);
 		  }
 		window.open(url,"user_member_view");
 	}
@@ -199,7 +201,7 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
 		    	var stateObject = {};
 		    	var newUrl = "/daqWeb/crm/member_analysis?ta=0";
-		    	target = 0;
+		    	target = null;
 		    	history.pushState(stateObject,null,newUrl);
 			};
 		    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
