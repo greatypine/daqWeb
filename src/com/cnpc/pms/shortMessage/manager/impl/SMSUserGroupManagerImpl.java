@@ -15,7 +15,7 @@ import com.cnpc.pms.shortMessage.entity.SMSUserGroupUser;
 import com.cnpc.pms.shortMessage.manager.SMSUserGroupManager;
 import com.cnpc.pms.shortMessage.manager.SMSUserGroupUserManager;
 
-public class SMSUserGroupManagerImpl extends BizBaseCommonManager implements SMSUserGroupManager{
+public class SMSUserGroupManagerImpl extends BizBaseCommonManager implements SMSUserGroupManager{ 
 
 	@Override
 	public Map<String, Object> saveUserGroup(SMSUserGroup sMSUserGroup) {
