@@ -44,12 +44,12 @@ public class SendShortMessageTask implements Runnable{
 			sendMessage.setRcvmessage(resultString);
 			sendMessage.setMsgstatus(1L);//未使用 
 			sendMessageManager.saveSendMessage(sendMessage);
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				Thread.sleep(2000);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			System.out.println("sending short message >>>>>>");
 		}
 		
