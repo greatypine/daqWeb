@@ -32,6 +32,22 @@ public interface MassOrderDao extends IDAO{
 	public List<Map<String, Object>> exportOrder(MassOrderDto massOrderDto,String timeFlag);
 	
 	/**
+	 * 查询退货订单数据列表
+	 * @param massOrderDto
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto,PageInfo pageInfo,String timeFlag);
+	
+	/**
+	 * 导出退货订单数据列表
+	 * @param massOrderDto
+	 * @param timeFlag
+	 * @return
+	 */
+	public List<Map<String, Object>> exportReturnOrder(MassOrderDto massOrderDto,String timeFlag);
+	
+	/**
 	 * 根据订单号查询订单
 	 * @param order_sn
 	 * @return

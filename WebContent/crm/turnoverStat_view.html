@@ -181,7 +181,8 @@
 		              	<div class="box-body">
 				          	<div class="clearfix search-criteria">
 				            	<div class="selectorLine clearfix no-border">
-				            	<div class="search-title pull-left">统计范围：</br>（签收时间）</div>
+				            	<div class="search-title pull-left"><font id="showattention" style="top:7px;right:75px;color:#ffcc00;font-size:16px;font-weight:normal;">! </font>统计范围：</div>
+				            	<font id="attention" style="font-size: 12px; color:#ffcc00;white-space: nowrap; position: absolute; top: -3px; z-index: 1000; left: 12px; display: none;">签收时间</font>
 				            	<div class="search-con" style="overflow:visible;">
 				            	<div class="sl-v-list">
 				            	<div class="clearfix">
@@ -242,7 +243,8 @@
 		                	<div class="box-body">
 				          	<div class="clearfix search-criteria">
 				            	<div class="selectorLine clearfix no-border">
-				            	<div class="search-title">统计范围：</br>（签收时间）</div>
+				            	<div class="search-title"><font id="showattention_area" style="top:7px;right:75px;color:#ffcc00;font-size:16px;font-weight:normal;">! </font>统计范围：</div>
+				            	<font id="attention_area" style="font-size: 12px; color:#ffcc00;white-space: nowrap; position: absolute; top: -3px; z-index: 1000; left: 12px; display: none;">签收时间</font>
 				            	<div class="search-con" style="overflow:visible;">
 				            	<div class="sl-v-list">
 				            	<div class="clearfix">
@@ -305,7 +307,8 @@
 		                <div class="box-body">
 				          	<div class="clearfix search-criteria">
 				            	<div class="selectorLine clearfix no-border">
-				            	<div class="search-title">统计范围：</br>（签收时间）</div>
+				            	<div class="search-title"><font id="showattention_dept" style="top:7px;right:75px;color:#ffcc00;font-size:16px;font-weight:normal;">! </font>统计范围：</div>
+				            	<font id="attention_dept" style="font-size: 12px; color:#ffcc00;white-space: nowrap; position: absolute; top: -3px; z-index: 1000; left: 12px; display: none;">签收时间</font>
 				            	<div class="search-con" style="overflow:visible;">
 				            	<div class="sl-v-list">
 				            	<div class="clearfix">
@@ -363,7 +366,8 @@
 				            <div class="box-body">
 				          	<div class="clearfix search-criteria">
 				            	<div class="selectorLine clearfix no-border">
-				            	<div class="search-title">统计范围：</br>（签收时间）</div>
+				            	<div class="search-title"><font id="showattention_channel" style="top:7px;right:75px;color:#ffcc00;font-size:16px;font-weight:normal;">! </font>统计范围：</div>
+				            	<font id="attention_channel" style="font-size: 12px; color:#ffcc00;white-space: nowrap; position: absolute; top: -3px; z-index: 1000; left: 12px; display: none;">签收时间</font>
 				            	<div class="search-con" style="overflow:visible;">
 				            	<div class="sl-v-list">
 				            	<div class="clearfix">
@@ -421,7 +425,8 @@
 		                <div class="box-body">
 				          	<div class="clearfix search-criteria">
 				            	<div class="selectorLine clearfix no-border">
-				            	<div class="search-title">统计范围：</br>（签收时间）</div>
+				            	<div class="search-title"><font id="showattention_eshop" style="top:7px;right:75px;color:#ffcc00;font-size:16px;font-weight:normal;">! </font>统计范围：</br></div>
+				            	<font id="attention_eshop" style="font-size: 12px; color:#ffcc00;white-space: nowrap; position: absolute; top: -3px; z-index: 1000; left: 12px; display: none;">签收时间</font>
 				            	<div class="search-con" style="overflow:visible;">
 				            	<div class="sl-v-list">
 				            	<div class="clearfix">
@@ -787,7 +792,40 @@ Date.prototype.format=function(fmt) {
 			}
 		}
 	});
+  	$("#showattention").on("mouseover",function(event){
+  		$("#attention").show();
+  	});
+  	$("#showattention").on("mouseout",function(event){
+  		$("#attention").hide();
+  	});
   	
+  	$("#showattention_area").on("mouseover",function(event){
+  		$("#attention_area").show();
+  	});
+  	$("#showattention_area").on("mouseout",function(event){
+  		$("#attention_area").hide();
+  	});
+  	
+  	$("#showattention_dept").on("mouseover",function(event){
+  		$("#attention_dept").show();
+  	});
+  	$("#showattention_dept").on("mouseout",function(event){
+  		$("#attention_dept").hide();
+  	});
+  	
+  	$("#showattention_channel").on("mouseover",function(event){
+  		$("#attention_channel").show();
+  	});
+  	$("#showattention_channel").on("mouseout",function(event){
+  		$("#attention_channel").hide();
+  	});
+  	
+  	$("#showattention_eshop").on("mouseover",function(event){
+  		$("#attention_eshop").show();
+  	});
+  	$("#showattention_eshop").on("mouseout",function(event){
+  		$("#attention_eshop").hide();
+  	});
   });
 	
   /**

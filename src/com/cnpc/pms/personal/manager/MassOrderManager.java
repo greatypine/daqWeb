@@ -31,6 +31,21 @@ public interface MassOrderManager extends IManager {
 	public Map<String, Object> exportOrder(MassOrderDto massOrderDto);
 	
 	/**
+	 * 查询退货订单信息
+	 * @param massOrderDto
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto,PageInfo pageInfo);
+	
+	/**
+	 * 导出退货订单信息
+	 * @param massOrderDto
+	 * @return
+	 */
+	public Map<String, Object> exportReturnOrder(MassOrderDto massOrderDto);
+	
+	/**
 	 * 根据订单号查询订单
 	 * @param order_sn
 	 * @return
