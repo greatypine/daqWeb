@@ -1023,7 +1023,7 @@ Date.prototype.format=function(fmt) {
 	    		department_names:departmentNames
 			}
 		    
-		    doManager('massOrderManager','exportOrder',[massOrderDto],function(data){
+		    doManager('massOrderManager','exportReturnOrder',[massOrderDto],function(data){
 		          if(data.result){
 		          	   var result= JSON.parse(data.data);
 			           if(result.status=='success'){
