@@ -1481,7 +1481,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	
 	@Override
 	public Map<String, Object> selectEStoreRankingOfStore(DynamicDto dynamicDto,PageInfo pageInfo) {
-		String  sql ="select SUM(IFNULL(trading_price,0)) as amount,eshop_name as name,eshop_id from df_order_signed_monthly a where store_id='"+dynamicDto.getStoreIds()+"'  and DATE_FORMAT(df_signed_time,'%Y-%m')='"+dynamicDto.getBeginDate()+"'  GROUP BY eshop_id order by amount desc ";
+		String  sql ="select SUM(IFNULL(trading_price,0)) as amount,eshop_name as name,eshop_id from df_order_signed_monthly a where store_id='"+dynamicDto.getStoreIds()+"'  and df_signed_time>='"+dynamicDto.getBeginDate()+" 00:00:00' and  df_signed_time<'"+dynamicDto.getEndDate()+"' GROUP BY eshop_id order by amount desc ";
 		//String sql ="select SUM(IFNULL(trading_price,0)) as amount,eshop_name as name,eshop_id from df_order_signed_monthly a where store_id='"+dynamicDto.getStoreIds()+"'  and DATE_FORMAT(df_signed_time,'%Y-%m')='2017-12'  GROUP BY eshop_id order by amount desc ";
 
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
