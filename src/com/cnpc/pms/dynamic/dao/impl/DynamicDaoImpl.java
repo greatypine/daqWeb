@@ -3039,4 +3039,21 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		map_result.put("member", list);
 		return map_result;
 	}
+
+	@Override
+	public List<Map<String, Object>> queryDistCityListByUserId(long userId) {
+		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+		String sql = "SELECT t.*,d.cityno FROM t_dist_city t LEFT JOIN t_dist_citycode d ON t.citycode=d.citycode WHERE pk_userid='"+userId+"'";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_data = query
+                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
+	}
 }

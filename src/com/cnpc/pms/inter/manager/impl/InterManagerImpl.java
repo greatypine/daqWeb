@@ -3598,4 +3598,21 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			result = storexpandDao.getStatisticsExist(statistics,cityname);
 			return result;
 		}
+		@Override
+		public Result getCurrentUserCity(String userId) {
+			Result result = new Result();
+			DynamicDao dynamicDao = (DynamicDao) SpringHelper.getBean(DynamicDao.class.getName());
+			List<Map<String, Object>> distCityList = new ArrayList<Map<String, Object>>();
+			try{
+				distCityList = dynamicDao.queryDistCityListByUserId(Long.parseLong(userId));
+				result.setCode(CodeEnum.success.getValue());
+				result.setData(distCityList);
+			}catch (Exception e) {
+				result.setCode(CodeEnum.error.getValue());
+				result.setMessage(CodeEnum.error.getDescription());
+				result.setData(null);
+				e.printStackTrace();
+			}
+			return result;
+		}
 }

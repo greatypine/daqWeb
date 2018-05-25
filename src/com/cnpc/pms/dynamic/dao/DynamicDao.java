@@ -848,4 +848,10 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> getStoreMember(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo);
+	/**
+	 * 根据用户id查询用户所管理的城市
+	 * @param parseLong
+	 * @return
+	 */
+	public List<Map<String, Object>> queryDistCityListByUserId(long parseLong);
 }
