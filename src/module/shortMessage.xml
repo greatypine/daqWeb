@@ -8,5 +8,6 @@
             <daopackage interfacePackage="com.cnpc.pms.shortMessage.dao"
                         implementPackage="com.cnpc.pms.shortMessage.dao.impl"/>
         </package>
+
     </module>
 </application>

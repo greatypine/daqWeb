@@ -3,7 +3,7 @@
     <query id="queryShortMessageList" header="短信列表" baseclass="com.cnpc.pms.shortMessage.entity.ShortMessage" order="id desc" filter="status = 0">
         <column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
         <column key="code" header="序号" type="java.lang.String" operator="eq" align="center" allowSort="false" display="false"  width="5%"/>
-        <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="false" width="15%"/>
         <column key="content" header="内容" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
         <column key="signature" header="签名" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="false" width="1%"/>
         <column key="create_user" header="发送人" type="java.lang.String" align="center" allowSearch="center" operator="like" allowSort="false" display="true" width="8%"/>
@@ -14,8 +14,47 @@
     <query id="querySMSUserGroupList" header="短信接收人用户组"  baseclass="com.cnpc.pms.shortMessage.entity.SMSUserGroup" order="id desc" filter="status = 0">
         <column key="id" header="选择" type="java.lang.Long"  allowSearch="true" align="center" allowSort="false" display="true"  width="5%"/>
         <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
-        <column key="code" header="编号" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
-        <column key="type" header="类型" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="code" header="编号" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="type" header="类型" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+    </query>
+    
+    <query id="querySMSUserGroupList_copy" header="短信接收人用户组"  baseclass="com.cnpc.pms.shortMessage.entity.SMSUserGroup" order="id desc" filter="status = 0">
+        <column key="id" header="id" type="java.lang.Long"  allowSearch="true" align="center" allowSort="false" display="false"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="code" header="编号" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="type" header="类型" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+    </query>
+    
+   <query id="querySMSUserGroupUserOffLine" header="线下员工"  method="shortMessageManager.getOfflineEmployee">
+        <column key="id" header="选择" type="java.lang.Long" operator="in" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="mobilephone" header="手机" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+<!--         <column key="storename" header="门店" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/> -->
+        <column key="employee_no" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
+   		<column key="inviteCode" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
+    </query>
+    
+     <query id="querySMSUserGroupUserStorekeeper" header="店长"  method="shortMessageManager.getStoreKeeperEmployee">
+        <column key="id" header="选择" type="java.lang.Long" operator="in" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="mobilephone" header="手机" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+<!--         <column key="storename" header="门店" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/> -->
+        <column key="employee_no" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
+   		<column key="inviteCode" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
+    </query>
+    
+    <query id="querySMSUserGroupUserOnLine" header="线上员工"  method="shortMessageManager.getOnlineEmployee">
+        <column key="id" header="选择" type="java.lang.Long" operator="in" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="mobilephone" header="手机" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+    	<column key="employee_no" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
+        <column key="inviteCode" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
+    </query>
+    <query id="querySMSUserGroupUserCustomer" header="用户" method="shortMessageManager.getCustomer">
+        <column key="id" header="选择" type="java.lang.Long" operator="in" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="mobilephone" header="手机" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+  		<column key="employee_no" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
     </query>
     
 </pmsquery>
