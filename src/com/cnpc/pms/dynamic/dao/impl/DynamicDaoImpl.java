@@ -3000,16 +3000,16 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String sql= "";
 		if(cityNo.equals("")){
 			sql="select city.cityname as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
-					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member where member.regist_cityno is not null  GROUP BY  member.regist_cityno "
+					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member GROUP BY  member.regist_cityno "
 					+") t1 LEFT JOIN ( "
-					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where member.regist_cityno is not null "
+					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where "
 					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
 					+"ON t1.regist_cityno = t2.regist_cityno INNER JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
 		}else{
 			sql="select city.cityname as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
-					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member where member.regist_cityno is not null and lpad(member.regist_cityno,4,'0') = '"+cityNo+"'  GROUP BY  member.regist_cityno "
+					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'  GROUP BY  member.regist_cityno "
 					+") t1 LEFT JOIN ( "
-					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where member.regist_cityno is not null and lpad(member.regist_cityno,4,'0') = '"+cityNo+"'"
+					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'"
 					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
 					+"ON t1.regist_cityno = t2.regist_cityno INNER JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
 		}
