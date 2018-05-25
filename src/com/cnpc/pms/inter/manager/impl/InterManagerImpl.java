@@ -3535,6 +3535,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				saveStorexpand.setContract_quantity(storexpand.getContract_quantity());
 				saveStorexpand.setCooperative_task(storexpand.getCooperative_task());
 				saveStorexpand.setSelf_support_task(storexpand.getSelf_support_task());
+				saveStorexpand.setPreposition_task(storexpand.getPreposition_task());
 				saveStorexpand.setThrough_quantity(storexpand.getThrough_quantity());
 				saveStorexpand.setStart_time(storexpand.getStart_time());
 				saveStorexpand.setEnd_time(storexpand.getEnd_time());
@@ -3571,6 +3572,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			storexpand.setContract_quantity(saveStorexpand.getContract_quantity());
 			storexpand.setSelf_support_task(saveStorexpand.getSelf_support_task());
 			storexpand.setCooperative_task(saveStorexpand.getCooperative_task());
+			storexpand.setPreposition_task(saveStorexpand.getPreposition_task());
 			storexpand.setSurvey_quantity(saveStorexpand.getSurvey_quantity());
 			storexpand.setThrough_quantity(saveStorexpand.getThrough_quantity());
 			if(saveStorexpand.getStatistical_time_period()!=null&&!"".equals(saveStorexpand.getStatistical_time_period())){
