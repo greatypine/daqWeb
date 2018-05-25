@@ -13,4 +13,18 @@ import com.cnpc.pms.base.manager.IManager;
  */
 public interface UtilityManager extends IManager {
 	String getSuggestion(ClientSuggestObject suggestObj);
+	
+	/**
+	 * 
+	* @Title: getPYIndexStr  
+	* @Description: TODO 中文首字母 
+	* 2018年5月24日
+	* @param @param strChinese
+	* @param @param bUpCase
+	* @param @return      
+	* @return String 
+	* @throws
+	* @author gbl
+	 */
+	public String getPYIndexStr(String strChinese, boolean bUpCase);
 }
