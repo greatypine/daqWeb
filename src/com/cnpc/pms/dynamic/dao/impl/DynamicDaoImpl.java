@@ -1846,9 +1846,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if(province_name!=null&&province_name!=""){
 			provinceStr+=" and tpc.province_name like '%"+province_name+"%' ";
 		}
-		String sql = " select product_name,SUM(product_count) as product_count,city_name,product_id from ds_product_city tpc where 1=1 "+
+		String sql = " select product_name,SUM(product_count) as product_count,city_name,product_id,cityno from ds_product_city tpc where 1=1 "+
 					   cityStr+provinceStr +
-					 " GROUP BY product_id order by product_count desc "  ;
+					 " GROUP BY product_id,cityno order by product_count desc "  ;
 		String sql_count = "SELECT count(tdd.product_name) as product_count from ( "+sql+") tdd ";
 		Query query_count = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql_count);
