@@ -1,10 +1,14 @@
 package com.cnpc.pms.shortMessage.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.cnpc.pms.base.entity.DataEntity;
+import com.cnpc.pms.shortMessage.dto.UserGroupUserDto;
 @Entity
 @Table(name="t_sms_usergroup")
 public class SMSUserGroup extends DataEntity{
@@ -16,7 +20,9 @@ public class SMSUserGroup extends DataEntity{
 	
 	@Column(name="type",length=20)
 	private String type;//用户组类型 ：线下员工用户组 offline  线上员工用户组online  客户用户组customer
-
+    
+	@Transient
+	private List<UserGroupUserDto> list;
 	public String getName() {
 		return name;
 	}
@@ -39,6 +45,14 @@ public class SMSUserGroup extends DataEntity{
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	public List<UserGroupUserDto> getList() {
+		return list;
+	}
+
+	public void setList(List<UserGroupUserDto> list) {
+		this.list = list;
 	}
 	
 	

@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="renderer" content="webkit">
-    <title>公告发送</title>
+    <title>短信用户组-add</title>
     <script type="text/javascript" src="../startbootstrap/js/jquery.1.10.2.min.js"></script>
     <script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
     <script type="text/javascript" src="../scripts/bidLib.js"></script>
@@ -60,16 +60,17 @@
     
     .tag{
 	    	border-radius:8px;
-	    	cursor:pointer;
-	   	    width: 110px;
-		    height: 40px;
-		    color:#f4f4f4;
-		    background-color:#3a8fcbc9;
+	    	cursor:default;
+	   	    width: 70px;
+		    height: 26px;
+		    color:#3c3939;
+		    background-color:#3a8fcb66;
 		    text-align: center;
 		    vertical-align: middle;
-		    line-height: 40px;
+		    line-height: 26px;
 		    float:left;
-		    margin-left:5px;
+		    margin-left:7px;
+		    margin-bottom:2px;
     	}
     	
     	
@@ -189,9 +190,28 @@
 	}
     
 
-    function getUserGroup(fun){
-    	var page="SMSUserGroup.html?selectUserGroup="+selectUserGroup;
-   	    win = new checkWin(fun,page,"选择收信人");
+    function getUser(fun){
+    	var type=$("#type").val();
+    	var page="";
+    	if(""==type){
+    		$$.showMessage('提示',"请选择用户组类别！");
+    		return;
+    	}else{
+    		if("offline"==type){
+        		page="SMSUserGroupUser_offline.html";
+        	}else if("online"==type){
+        		page="SMSUserGroupUser_online.html";
+        	}else if("storekeeper"==type){
+        		page="SMSUserGroupUser_storekeeper.html";
+        	}else if("customer"==type){
+        		$$.showMessage('提示',"暂不提供,敬请期待!");
+        		return;
+        		//page="SMSUserGroupUser_customer.html";
+        	}
+    	}
+    	
+    	
+   	    win = new checkWin(fun,page,"选择组员");
         win.show();
     }
     
@@ -199,31 +219,34 @@
     
     var selectUserGroup = null;
     var saveUserGroup = null;
-    function receiveUserGroup(data){
+    var userArray = null
+    function receiveUser(data){
     	selectUserGroup = new Array();
     	saveUserGroup = new Array();
+    	userArray = data.slice(0);
     	var userGroupDiv="";
     	for(var i=0;i<data.length;i++){
-    		if(i==14){
-    			userGroupDiv=userGroupDiv+'<div class="tag" >...</div>';
-    		}else if(i<7){
+    		if(i==18){
+    			userGroupDiv=userGroupDiv+'<span style="position:relative;left:4px;float:left">......</span>';
+    			break;
+    		}else if(i<17){
     			var name = data[i].name;
     			if(name!=null&&name.length>6){
     				name = name.substring(0,5)+"...";
     			}
-    			userGroupDiv=userGroupDiv+'<div class="tag" id="'+data[i].code+'"+>'+name+'</div>';
+    			userGroupDiv=userGroupDiv+'<div class="tag" id="'+data[i].employee_no+'"+>'+name+'</div>';
     		}
     		selectUserGroup[i] = data[i].code;
     		saveUserGroup[i] = data[i].name;
     	}
     	if(userGroupDiv!=""){
-    		userGroupDiv+='<img src="img/add_1.png" onclick="getUserGroup(receiveUserGroup)" style="width:39px;position:relative;left:3px;top:2px;cursor:pointer;"/>';
-    		$("#receive_userGroup").html(userGroupDiv);
+    		userGroupDiv+='<img src="img/add_1.png" onclick="getUser(receiveUser)" style="float:left;width:26px;position:relative;left:15px;cursor:pointer;"/>';
+    		$("#userGroup_user").html(userGroupDiv);
         	
     	}else{
     		
-    		$("#receive_userGroup").empty();
-    		$("#receive_userGroup").html('<img src="img/add_1.png" onclick="getUserGroup(receiveUserGroup)" style="width:90px;position:relative;left:40%;cursor:pointer;"/>');
+    		$("#userGroup_user").empty();
+    		$("#userGroup_user").html('<img src="img/add_1.png" onclick="getUser(receiveUser)" style="width:90px;position:relative;left:40%;cursor:pointer;"/>');
     	}
     }
     
@@ -254,57 +277,88 @@
     	//$("#receive_employee").html('<div class="tag" id="allEmployee">全部</div>');
     }
   
-  var userGroupArray =  new Array();;
+  
   function doSave(){
 	  
 	  
-	    var userGroupes = $("#receive_userGroup").find(".tag");
 	   
-	    if(userGroupes.length==0){
-		    $$.showMessage('提示',"请选择收信人!");
-			return;
-	    }
 	  
-	    var signature=$("#signature").val();
-		if(signature==""){
-			$$.showMessage('提示',"请选择短信签名!");
+	    var type=$("#type").val();
+		if(type==""){
+			$$.showMessage('提示',"请选择用户组类别!");
 			return;
 		}
 		
 		
-		var content = $("#content").val();
-		if(content.replace(/^\s+|\s+$/g, '')==""){
-			$$.showMessage('提示',"信息内容不能为空!");
+		var name = $("#name").val();
+		if(name.replace(/^\s+|\s+$/g, '')==""){
+			$$.showMessage('提示',"用户组名称不能为空!");
 			return;
 		}
 		
-		if(content.length>200){
-			$$.showMessage('提示',"信息内容字数不得多于200!");
+		if(name.length>20){
+			$$.showMessage('提示',"用户组名称字数不得多于20!");
 			return;
 		}
-		userGroupArray.splice(0,userGroupArray.length);
-	    for(var i=0;i<userGroupes.length;i++){
-	    	userGroupArray.push("'"+$(userGroupes[i]).attr("id")+"'");
+		
+		var code = $("#code").val();
+		if(code.replace(/^\s+|\s+$/g, '')==""){
+			$$.showMessage('提示',"用户组编号不能为空!");
+			return;
+		}
+		
+		if(code.length>20){
+			$$.showMessage('提示',"用户组编号字数不得多于20!");
+			return;
+		}
+		
+		var SMSUserGroup  = {
+	    		type:type,
+	    		name:name,
+	    		code:code
 	    }
-	    
-	 	doManager('shortMessageManager','StatisticalSMSCost',[userGroupArray.join(",")],function(data){
+	 	doManager('SMSUserGroupManager','selectUserGroup',[SMSUserGroup],function(data){
 	        if(data.result){
-	            var result = JSON.parse(data.data).cost;
-	            $("#userGroup_s").val(saveUserGroup.join(","));
-	            $("#signature_s").html("【"+$("#signature").val()+"】");
-	            $("#content_s").val( $("#content").val());
-	            $("#cost_s").html(result+" 元");
-	            $('#shortMessage_preview_div').dialog({
-                    bgiframe : true,
-                    title : "当前短信概况",
-                    width : 420,
-                    height : 400,
-                    modal : true
-                });
+	            
+	        	 var result = JSON.parse(data.data);
+	        	 if(result!=null&&result.length>0){
+	        		 $$.showMessage('提示',"用户组名重复！");
+	        		 return;
+	        	 }else{
+	        		 
+	        		 
+	        		    var userGroupes = $("#userGroup_user").find(".tag");
+	      		   
+	        		    if(userGroupes.length==0){
+	        			    $$.showMessage('提示',"请选择用户组组员!");
+	        				return;
+	        		    }
+	        			var useres =[];
+	        		    for(var i=0;i<userArray.length;i++){
+	        		    	useres.push(userArray[i]);
+	        		    }
+	        		    
+	        		    SMSUserGroup  = {
+	        		    		type:type,
+	        		    		name:name,
+	        		    		code:code,
+	        		    		list:useres
+	        		    }
+	        		 	doManager('SMSUserGroupManager','saveUserGroup',[SMSUserGroup],function(data){
+	        		        if(data.result){
+	        		        	 doBack();
+	        		        }else{
+	        		            $$.showMessage('提示',data.message);
+	        		        }
+	        		    },false); 
+	        		 
+	        	 }
 	        }else{
 	            $$.showMessage('提示',data.message);
 	        }
 	    },false); 
+		
+		
 		
   }  
   
@@ -365,28 +419,31 @@ function isInArray(arr,value){
     return false;
 }
 
+function getCode(){
+	var name =$("#name").val();
+	if(name==""){
+		 $("#code").val("");
+	}else{
+		doManager('utilityManager','getPYIndexStr',[name,true],function(data){
+	        if(data.result){
+	            var result = JSON.parse(data.data);
+	            $("#code").val(result);
+	        }else{
+	            $$.showMessage('提示',data.message);
+	        }
+	    },false); 
+	}
 
+}
 </script>
 <body style="height: 100%">
     <div class="rightcont clear">
-    
-         <div class="panel panel-primary"  id="approvers_list">
-            <div class="panel-heading">收信人
-            	<span class="but">
-                 <input type="button"  id="btnReset" onclick="resetReceive()" style="display:none" value="重置"/>
-            	</span>
-            </div>
-            <div class="panel-body">
-                   <table id="reciveUser" cellpadding="0" cellspacing="0" style="width:100%">
-                   		<tr id="userGroup_tr" style="height:60%"><td style="width:auto"><div id="receive_userGroup" class="form-control" style="position:relative;top:6px;width:100%;height:100px;margin-bottom:10px;"><img src="img/add_1.png" onclick='getUserGroup(receiveUserGroup)' style="width:90px;position:relative;left:40%;cursor:pointer;"/></div></td></tr>
-                   </table>
-            </div>
-        </div>
+
         <div class="panel panel-primary" style="margin-bottom:0px">
             <div class="panel-heading">
                 	基本信息
                 <span class="but">
-                    <input type="button" id="btnSave" onclick="doSave()" style="display:none" value="预览"/>
+                    <input type="button" id="btnSave" onclick="doSave()" style="display:none" value="保存"/>
                     <input type="button" onclick="doBack();" value="返回"/>
                     
                 </span>
@@ -395,20 +452,32 @@ function isInArray(arr,value){
             <div class="panel-body" style="height: 90%;padding:10px">
                     <table id="tiny_village_table" cellpadding="0" cellspacing="0" style="position:relative;left:26%;margin: 10px; width:60%">
                         <tr>
-                            <td style="width:12%">短信签名<span style="color:red">*</span></td>
+                            <td style="width:12%">用户组类别<span style="color:red">*</span></td>
                             <td>
-                                <select id="signature" name="signature" class="form-control"  style="width: 60%" >
+                                <select id="type" name="type" class="form-control"  style="width: 60%" >
                                     <option value="">请选择</option>
-                                    <option value="国安管家">国安管家</option>
+                                    <option value="online">线上用户组</option>
+                                    <option value="offline">线下用户组</option>
+                                     <option value="storekeeper">店长组</option>
+                                    <option value="customer">客户用户组</option>
                                 </select>
                             </td>
                         </tr>
-                        
                         <tr>
-                            <td>短信内容<span style="color:red">*</span></td>
+                            <td style="width:12%">用户组名称<span style="color:red">*</span></td>
                             <td>
-                            	<textarea id="content" name="content" class="form-control" style="width:60%;height:80px"></textarea>
+                               <input type="text"  id="name" name="name" style="width:60%"   class="form-control" onkeyup="getCode()"/>
                             </td>
+                        </tr>
+                        <tr>
+                            <td style="width:12%">用户组编码<span style="color:red">*</span></td>
+                            <td>
+                               <input type="text"  id="code" name="code" style="width:60%"   class="form-control" readonly="readonly"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>组员<span style="color:red">*</span></td>
+                            <td style="width:auto"><div id="userGroup_user" class="form-control" style="position:relative;top:6px;width:60%;height:100px;margin-bottom:10px;"><img src="img/add_1.png" onclick='getUser(receiveUser)' style="width:90px;position:relative;left:40%;cursor:pointer;"/></div></td>
                         </tr>
                        
 		           </table>
@@ -422,40 +491,3 @@ function isInArray(arr,value){
 </body>
 </html>
 
-<div id="shortMessage_preview_div" style="display:none;height:300px">
-    <div>
-       	<table id="notice_show" style="min-width: 100%;width: auto;border-collapse:separate; border-spacing:0px 5px;" >
-       		
-       		
-       		
-       		<tr>
-       			<td width="8px"><span>收信人：</span></td>
-        		<td>
-        			<textarea id="userGroup_s" cols="40" style="height:120px;resize:none;background-color:#d3d3d3c7;border-radius:8px;" readonly="readonly"></textarea>
-        		</td>
-        	</tr>
-        	<tr>
-       			<td width="8px"><span>短信签名：</span></td>
-       			<td>
-        			<span id="signature_s"></span>
-       			</td>
-       		</tr> 
-        	<tr>
-       			<td width="8px"><span>短信内容：</span></td>
-        		<td>
-        			<textarea id="content_s" cols="40" style="height:100px;resize:none;background-color:#d3d3d3c7;border-radius:8px;" readonly="readonly"></textarea>
-        		</td>
-        	</tr>
-       		<tr>
-       			<td width="8px"><span>花费：</span></td>
-       			<td>
-        			<span id="cost_s"></span>
-       			</td>
-       		</tr> 
-        	
-        	<tr>
-       			<td colspan="2" style="text-align:center"><button id="btnSave" class="btn btn-primary" onclick="submitShortMessage()">发送</button></td>
-        	</tr>
-       	 </table>
-      </div>	
-</div> 

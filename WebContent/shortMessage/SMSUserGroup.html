@@ -55,17 +55,27 @@
         var COLUMNS = {
                 "id": function(aData, iColumn, sColumnName, map){
                      var code = map["code"];
-                    
+                     var type= map["type"];
 	           		 if(selectUserGroup.length==0){
-	           			
-	           		    	 return '<input type="checkbox" name="chkbox" onclick="userGroupcheck(this)" value="'+code+'" />';
+	           			     if("customer"==type){//用户
+	           			    	 return '<input type="checkbox" name="chkbox" disabled="disabled" onclick="userGroupcheck(this)" value="'+code+'" />';
+	           			     }else{
+	           			    	 return '<input type="checkbox" name="chkbox" onclick="userGroupcheck(this)" value="'+code+'" />';
+	           			     }
+	           		    	
 	           			
 	           		 }else if(selectUserGroup.length>0){
-	           			 if(isInArray(selectUserGroup,code)&&checkstatus){
-	           		    	 return '<input type="checkbox" name="chkbox" onclick="userGroupcheck(this)" value="'+code+'" checked="true"/>';
-	           			 }else{
-	                         return '<input type="checkbox" name="chkbox"  onclick="userGroupcheck(this)" value="'+code+'"/>';
-	           			 }
+	           			 
+	           			 if("customer"==type){//用户
+           			    	 return '<input type="checkbox" name="chkbox" disabled="disabled" onclick="userGroupcheck(this)" value="'+code+'" />';
+           			     }else{
+           			    	 if(isInArray(selectUserGroup,code)&&checkstatus){
+   	           		    	     return '<input type="checkbox" name="chkbox" onclick="userGroupcheck(this)" value="'+code+'" checked="true"/>';
+	   	           			 }else{
+	   	                         return '<input type="checkbox" name="chkbox"  onclick="userGroupcheck(this)" value="'+code+'"/>';
+	   	           			 }
+           			     }
+	           			 
 	           		 }
                  
                 }

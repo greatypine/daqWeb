@@ -21,6 +21,8 @@ public class SMSUserGroupUser extends  DataEntity{
 	
 	@Column(name="mobilePhone")
 	private String mobilePhone;//电话
+	@Column(name="inviteCode")
+	private String inviteCode;//社区邀请码
 
 	public String getUserName() {
 		return userName;
@@ -52,6 +54,14 @@ public class SMSUserGroupUser extends  DataEntity{
 
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
+	}
+
+	public String getInviteCode() {
+		return inviteCode;
+	}
+
+	public void setInviteCode(String inviteCode) {
+		this.inviteCode = inviteCode;
 	}
 	
 	

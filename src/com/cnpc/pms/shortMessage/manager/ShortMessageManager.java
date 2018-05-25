@@ -51,5 +51,90 @@ public interface ShortMessageManager extends IManager{
 	* @author gbl
 	 */
 	public Map<String,Object> saveShortMessage(ShortMessage shortMessage);
-
+	
+	/**
+	 * 
+	* @Title: getOfflineEmployee  
+	* @Description: TODO 线下员工
+	* 2018年5月24日
+	* @param @param queryConditions
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	* @author gbl
+	 */
+	public Map<String, Object> getOfflineEmployee(QueryConditions queryConditions);
+	/**
+	 * 
+	* @Title: getAllOfflineEmployee  
+	* @Description: TODO 全部线下员工 
+	* 2018年5月24日
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String, Object> getAllOfflineEmployee();
+	
+	/**
+	 * 
+	* @Title: getOnlineEmployee  
+	* @Description: TODO 线上员工
+	* 2018年5月24日
+	* @param @param queryConditions
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	* @author gbl
+	 */
+	public Map<String, Object> getOnlineEmployee(QueryConditions queryConditions);
+	
+	/**
+	 * 
+	* @Title: getAllOnlineEmployee  
+	* @Description: TODO 全部线上员工
+	* 2018年5月24日
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String, Object> getAllOnlineEmployee();
+	
+	/**
+	 * 
+	* @Title: getCusotmer  
+	* @Description: TODO 用户
+	* 2018年5月24日
+	* @param @param queryConditions
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	* @author gbl
+	 */
+	public Map<String, Object> getCustomer(QueryConditions queryConditions);
+	
+	/**
+	 * 
+	* @Title: getAllCusotmer  
+	* @Description: TODO 全部用户
+	* 2018年5月24日
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String, Object> getAllCustomer();
+	
+	/**
+	 * 
+	* @Title: getStoreKeeperEmployee  
+	* @Description: TODO 查询店长
+	* 2018年5月25日
+	* @param @param queryConditions
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String, Object> getStoreKeeperEmployee(QueryConditions queryConditions);
+	
+	public Map<String, Object> getAllStoreKeeperEmployee();
+	
 }
