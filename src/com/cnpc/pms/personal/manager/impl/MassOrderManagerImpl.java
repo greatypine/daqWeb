@@ -45,6 +45,15 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
      * excel单元格公共样式
      */
     CellStyle cellStyle_common = null;
+    
+    @Override
+    public Map<String, Object> queryCitynoByCode(String cityCode){
+    	MassOrderDao massOrderDao = (MassOrderDao)SpringHelper.getBean(MassOrderDao.class.getName());
+    	Map<String,Object> order_obj = massOrderDao.queryCitynoByCode(cityCode);
+    	order_obj.put("cityno", order_obj.get("cityno"));
+    	
+    	return order_obj;
+    }
 	
 	@Override
 	public Map<String, Object> queryMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo) {

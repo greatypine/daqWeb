@@ -111,7 +111,7 @@
     .yichang .type_con{background: url("dist/img/gonghai(2).png") no-repeat; background-size: 100% 100%;}
     .gonghai:hover .type_con,.yichang:hover .type_con{display: block;}
     .fold-con{display: none;}
-    .auto{max-height:200px; overflow-y:scroll;}
+    .auto{max-height:200px; overflow-y:scroll;border: 0px solid #dedede;}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -119,10 +119,6 @@
 <div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
 <!-- Site wrapper -->
 <div class="wrapper">
-
-
-
-
 
  <header class="main-header">
     <nav class="navbar navbar-static-top">
@@ -141,32 +137,6 @@
       </div>
     </nav>
   </header>
-  
-
-
-
-
-
-<!--   <header class="main-header">
-    <nav class="navbar navbar-static-top">
-      <div class="container" >
-        <div class="pull-left">
-           <nav class="navbar navbar-static-top no-margin">
-            <div class="logo-lg clearfix">
-              <div class="logo-lg clearfix">
-	            <ul>
-	              <li><a href="javascript:parent.location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
-	              <li class="nav-mark"><a href="#">订单档案</a> </li>
-	              <li></li>
-	            </ul>
-	          </div>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </nav>
-  </header> -->
-
 
   <!-- =============================================== -->
 
@@ -178,6 +148,7 @@
         <div class="box box-default">
           <div class="box-header h4 text-light-blue">
           	<div class="pull-left "><strong>订单档案查询</strong></div>
+          	<div class="pull-right "><button type="button" onclick="query_return_massOrder()"  style="border-color:#EE9A00;background-color:#EE9A00;" class="btn btn-block btn-primary">退货订单查询</button></div>
           </div>
           <div class="box-body">
           	<div class="clearfix search-criteria">
@@ -198,7 +169,7 @@
                 </div>
                 <div class="clearfix">
                 <div class="form-group col-lg-3"><input type="text" class="form-control" maxlength="24" placeholder="订单号（例：20180121xxxxxxxxxxxx）" id="ordersn_manual"/></div>
-                <div class="form-group col-lg-3"><input type="text" class="form-control pull-right" id="auto_date"  placeholder="点击选择日期" readonly="readonly"></div>
+                <div class="form-group col-lg-3" title="签收时间"><input type="text" class="form-control pull-right" id="auto_date"  placeholder="点击选择日期" readonly="readonly"></div>
                 </div>
                 </div>
                 </div>
@@ -317,6 +288,9 @@
                 </div>
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                     <button type="button" onclick="search_manual_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
+                </div>
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;display: none" id="export_sensitive_button">
+                    <button type="button" onclick="export_sensitive_massOrder()"  style="border-color:#FF6EB4;background-color:#FF6EB4;" class="btn btn-block btn-primary">敏感信息下载</button>
                 </div>
             </div>
             </div>
@@ -465,11 +439,12 @@ Date.prototype.format=function(fmt) {
     	initallcity(); 
     	initallstore();
     	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+//     	document.getElementById("export_sensitive_button").style.display="";
     }else if(target==1){//城市
     	initcurcity();
-    	$("#citySelect").prop("disabled", true);
     	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
     	initStoreSelectcomplate();
+//     	document.getElementById("export_sensitive_button").style.display="";
     }else if(target==2) {//门店
     	initcurcity();
     	$("#citySelect").prop("disabled", true);
@@ -742,7 +717,7 @@ Date.prototype.format=function(fmt) {
  					var jsonData = $.fromJSON(data.data);
  					$("#citySelect").append("<option value=''>全部城市</option>");
  					$(jsonData).each(function(index,element){
- 						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+ 						$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
                      });
  				}
  		},false);
@@ -786,9 +761,14 @@ Date.prototype.format=function(fmt) {
  				if (data.result) {
  					var jsonData = $.fromJSON(data.data);
  					$(jsonData).each(function(index,element){
- 						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+ 						doManager("massOrderManager","queryCitynoByCode",element.citycode,
+ 					 		    function(data2,textStatus,XmlHttpRequest){
+ 							if (data2.result) {
+ 								var jsonData2 = $.fromJSON(data2.data);
+ 								$("#citySelect").append('<option value="'+jsonData2.cityno+'">'+element.cityname+'</option>');
+ 							}
+ 						},false);
                      });
- 					
  				}
  		},false);
  	}
@@ -801,9 +781,9 @@ Date.prototype.format=function(fmt) {
  	
      var storeJson;
  	function initStoreSelectcomplate(){
- 		var citySelect = $("#citySelect  option:selected").val();
+ 		var citySelect = $("#citySelect").find("option:selected").text();  
  		$("#auto").val("");
- 		if(citySelect==""){
+ 		if(citySelect=="" || citySelect=="全部城市"){
  			initallstore();
  		}else{
  			//根据城市查询门店 信息
@@ -952,13 +932,6 @@ Date.prototype.format=function(fmt) {
 	    	ordersn = ordersn.replace(/\s+/g,"");  
 	    }
 	    var cityName = $("#citySelect  option:selected").val();
-	    if(cityName!=""){
-	    	if(cityName=="黔东南苗族侗族自治州"){
-	    		cityName="黔东南州";
-	    	}else{
-	    		cityName=cityName+"市";
-	    	}
-	    }
 	    var dept = $("#dept_manual").val();
 	    var eshopId = $("#eshop_id_manual").val();
 	    var eshopName= $("#eshop_name_manual").val();
@@ -1355,13 +1328,6 @@ Date.prototype.format=function(fmt) {
 	    	ordersn = ordersn.replace(/\s+/g,"");  
 	    }
 	    var cityName = $("#citySelect  option:selected").val();
-	    if(cityName!=""){
-	    	if(cityName=="黔东南苗族侗族自治州"){
-	    		cityName="黔东南州";
-	    	}else{
-	    		cityName=cityName+"市";
-	    	}
-	    }
 	    var dept = $("#dept_manual").val();
 	    var eshopId = $("#eshop_id_manual").val();
 	    var eshopName= $("#eshop_name_manual").val();
@@ -1464,6 +1430,137 @@ Date.prototype.format=function(fmt) {
   			 layer.close(index);
   			}  
   		});  
+  }
+  
+  //退货信息查询
+  function query_return_massOrder(){
+	var url = "searchData_return_order.html?t="+encode64(target)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storeName);
+	window.open(url,"searchDataReturnOrder");  
+  }
+  
+  var shareSearchDataDto=null; //全局参数变量	
+  function getShareParam(){
+	  	var sdate = $("#auto_date").val();
+	    var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		 begin_end_date = sdate.split("-");
+	   	}
+	  	
+	 	var number_str = $("#store_id_manual").val(); 
+	    var storeName = $("#store_name_manual").val();
+	  	if(storeName!=""){
+	  	  	if($.inArray(storeName, array) == -1){
+				crm_alert(0,"该门店不存在！");
+				return;
+			}
+	    }
+	    if(number_str==""&&storeName!=""){
+	    	number_str=-10000;
+	    }
+	   
+	    $("#process_div").show();
+	 	$("#process_div_pic").show();
+		var orderLabels = $("#label_private_manual").val();
+		if(orderLabels!=null && orderLabels!='' && orderLabels.indexOf(',') >= 0){
+	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
+	    }
+	    var ordersn = $("#ordersn_manual").val();
+	    if(ordersn!=""){
+	    	ordersn = ordersn.replace(/\s+/g,"");  
+	    }
+	    var cityName = $("#citySelect  option:selected").val();
+	    if(cityName!=""){
+	    	if(cityName=="黔东南苗族侗族自治州"){
+	    		cityName="黔东南州";
+	    	}else{
+	    		cityName=cityName+"市";
+	    	}
+	    }
+	    var dept = $("#dept_manual").val();
+	    var eshopId = $("#eshop_id_manual").val();
+	    var eshopName= $("#eshop_name_manual").val();
+	    var channel = $("#channel_manual").val();
+	    var customerIsnew = $("#customer_isnew").val();
+	    var areaName = $("#area_name_manual").val();
+	    var areaCode = $("#area_code_manual").val();
+	    var customerName = $("#customer_name_manual").val();
+	    var customerPhone = $("#customer_phone_manual").val();
+	    var addrName = $("#addr_name_manual").val();
+	    var addrPhone = $("#addr_phone_manual").val();
+	    var villageName = $("#village_name_manual").val();
+	    var employeeAphone = $("#employee_a_phone").val();
+	    var employeeAno = $("#employee_a_no").val();
+	    var employeeAphoneA = $("#employee_a_phone_a").val();
+	    var employeeAnoA = $("#employee_a_no_a").val();
+	    var employeeNo = $("#employee_no_manual").val();
+	    var employeeMobile = $("#employee_mobile_manual").val();
+	    var departmentNames = $("#dept_private_manual").val();
+	    if(departmentNames!=null && departmentNames!='' && departmentNames.indexOf(',') >= 0){
+	    	departmentNames = departmentNames.substring(0,departmentNames.length-1);
+	    }
+	  	return shareSearchDataDto = {				
+ 			beginDate:begin_end_date[0].trim(),
+			endDate:begin_end_date[1].trim(),
+			order_sn:ordersn,
+			store_no:number_str,
+			store_name:storeName,
+			order_labels:orderLabels,
+			status:"0",
+			city_name:cityName,
+	  		department_name:dept,
+	  		channel_name:channel,
+	  		customer_name:customerName,
+	  		customer_phone:customerPhone,	
+		    addr_customer_name:addrName,
+		    addr_customer_phone:addrPhone,
+	  		area_name:areaName,
+	  		area_code:areaCode,
+	  		eshop_id:eshopId,
+	  		eshop_name:eshopName,
+	   		village_name:villageName,
+	  		customer_isnew:customerIsnew,
+	   		employee_a_phone:employeeAphone,
+	   		employee_a_no:employeeAno,
+	   		employee_a_phone_a:employeeAphoneA,
+	   		employee_a_no_a:employeeAnoA,
+	   		employee_no:employeeNo,
+	   		employee_mobile:employeeMobile,
+	   		department_names:departmentNames
+		}
+  }
+  
+  //敏感信息下载
+  function export_sensitive_massOrder(){
+	 $("#process_div").show();
+	 $("#process_div_pic").show();
+	 shareSearchDataDto = getShareParam();
+	 doManager('massOrderManager','exportOrder',[shareSearchDataDto],function(data){
+         if(data.result){
+        	var result= JSON.parse(data.data);
+           	if(result.status=='success'){
+        	   	$("#process_div").hide();
+          	 	$("#process_div_pic").hide();
+          	 	
+          	 	var jsonObj =  JSON.stringify(shareSearchDataDto);//转换为json对象
+        	   	var url = "searchData_sensitive_detail.html?query_str="+encode64(jsonObj);
+        		window.open(url,"searchDataSensitive");
+           	}else if(result.status=='more'){
+        	   crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+        	   $("#process_div").hide();
+      	       $("#process_div_pic").hide();
+        	   return;
+           	}else{
+        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+        	   $("#process_div").hide();
+      	       $("#process_div_pic").hide();
+        	   return;
+           	}
+         }else{
+      	   	crm_alert(5,"请稍后重新请求！");
+      	  	$("#process_div").hide();
+     	 	$("#process_div_pic").hide();
+         }
+    });
   }
   
   function resetSerachParam(t){

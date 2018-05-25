@@ -21,6 +21,22 @@ import com.cnpc.pms.personal.dao.MassOrderDao;
  * @version V1.0
  */
 public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
+	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> queryCitynoByCode(String cityCode){
+		String sql = "SELECT cityno FROM t_dist_citycode WHERE 1=1 ";
+		if(StringUtils.isNotEmpty(cityCode)){
+			sql = sql + " AND citycode='"+cityCode+"' ";
+		}
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		Map<String, Object> order_obj = null;
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if (lst_data != null && lst_data.size() > 0) {
+			order_obj = (Map<String, Object>) lst_data.get(0);
+		}
+		return order_obj;
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map<String, Object> queryMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo, String timeFlag) {
@@ -111,7 +127,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql = sql + " and a.customer_isnew_flag in (" + massOrderDto.getCustomer_isnew() + ")";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and a.store_city_name = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getDepartment_name())) {
 			sql = sql + " and a.department_name = '" + massOrderDto.getDepartment_name().trim() + "'";
@@ -289,7 +305,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql = sql + " and a.customer_isnew_flag in (" + massOrderDto.getCustomer_isnew() + ")";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and a.store_city_name = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getDepartment_name())) {
 			sql = sql + " and a.department_name = '" + massOrderDto.getDepartment_name().trim() + "'";
@@ -412,7 +428,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			}
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and a.store_city_name = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 
 		sqlA = sqlA + sql + " ORDER BY a.return_time desc ";
@@ -489,7 +505,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			}
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and a.store_city_name = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 		sql = sql + " ORDER BY a.return_time desc";
 

@@ -111,7 +111,7 @@
     .yichang .type_con{background: url("dist/img/gonghai(2).png") no-repeat; background-size: 100% 100%;}
     .gonghai:hover .type_con,.yichang:hover .type_con{display: block;}
     .fold-con{display: none;}
-    .auto{max-height:200px; overflow-y:scroll;}
+    .auto{max-height:200px; overflow-y:scroll;border: 0px solid #dedede;}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -339,7 +339,6 @@ Date.prototype.format=function(fmt) {
     	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
     }else if(target==1){//城市
     	initcurcity();
-    	$("#citySelect").prop("disabled", true);
     	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
     	initStoreSelectcomplate();
     }else if(target==2) {//门店
@@ -415,7 +414,7 @@ Date.prototype.format=function(fmt) {
  					var jsonData = $.fromJSON(data.data);
  					$("#citySelect").append("<option value=''>全部城市</option>");
  					$(jsonData).each(function(index,element){
- 						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+ 						$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
                      });
  				}
  		},false);
@@ -459,9 +458,14 @@ Date.prototype.format=function(fmt) {
  				if (data.result) {
  					var jsonData = $.fromJSON(data.data);
  					$(jsonData).each(function(index,element){
- 						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+ 						doManager("massOrderManager","queryCitynoByCode",element.citycode,
+ 					 		    function(data2,textStatus,XmlHttpRequest){
+ 							if (data2.result) {
+ 								var jsonData2 = $.fromJSON(data2.data);
+ 								$("#citySelect").append('<option value="'+jsonData2.cityno+'">'+element.cityname+'</option>');
+ 							}
+ 						},false);
                      });
- 					
  				}
  		},false);
  	}
@@ -474,9 +478,9 @@ Date.prototype.format=function(fmt) {
  	
      var storeJson;
  	function initStoreSelectcomplate(){
- 		var citySelect = $("#citySelect  option:selected").val();
+ 		var citySelect = $("#citySelect").find("option:selected").text();  
  		$("#auto").val("");
- 		if(citySelect==""){
+ 		if(citySelect=="" || citySelect=="全部城市"){
  			initallstore();
  		}else{
  			//根据城市查询门店 信息
@@ -604,13 +608,6 @@ Date.prototype.format=function(fmt) {
 	    	ordersn = ordersn.replace(/\s+/g,"");  
 	    }
 	    var cityName = $("#citySelect  option:selected").val();
-	    if(cityName!=""){
-	    	if(cityName=="黔东南苗族侗族自治州"){
-	    		cityName="黔东南州";
-	    	}else{
-	    		cityName=cityName+"市";
-	    	}
-	    }
 	    var dept = $("#dept_manual").val();
 	    var eshopId = $("#eshop_id_manual").val();
 	    var eshopName= $("#eshop_name_manual").val();
@@ -964,13 +961,6 @@ Date.prototype.format=function(fmt) {
 	    	ordersn = ordersn.replace(/\s+/g,"");  
 	    }
 	    var cityName = $("#citySelect  option:selected").val();
-	    if(cityName!=""){
-	    	if(cityName=="黔东南苗族侗族自治州"){
-	    		cityName="黔东南州";
-	    	}else{
-	    		cityName=cityName+"市";
-	    	}
-	    }
 	    var dept = $("#dept_manual").val();
 	    var eshopId = $("#eshop_id_manual").val();
 	    var eshopName= $("#eshop_name_manual").val();

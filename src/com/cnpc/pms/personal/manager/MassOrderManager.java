@@ -14,6 +14,12 @@ import com.cnpc.pms.dynamic.entity.MassOrderDto;
  * @version V1.0
  */
 public interface MassOrderManager extends IManager {
+	
+	/**
+	 * 通过城市code查询城市No
+	 * @return
+	 */
+	public Map<String, Object> queryCitynoByCode(String cityCode);
 
 	/**
 	 * 查询订单信息
