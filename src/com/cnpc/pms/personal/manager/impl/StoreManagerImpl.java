@@ -2158,7 +2158,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setCreate_time(storeDynamic.getCreate_time());
 			storeDao.insertStore(store);
 		}
-		if(store.getGaode_cityCode()!=null&&!"".equals(store.getGaode_cityCode())){
+		if(store.getGaode_cityCode()!=null&&!"".equals(store.getGaode_cityCode()) ){
 			//同步门店方法
 			try {
 				syncStore(store);
