@@ -237,8 +237,42 @@ Date.prototype.format=function(fmt) {
 		}
 		
 		
+		var cardnumber = $("#cardnumber").val();
+		if(cardnumber==null||cardnumber==""){
+			$("#cardnumber").focus();
+			$$.showMessage("系统信息","请填写身份证号!");
+			return;
+		}
+		if(cardnumber.length!=15&&cardnumber.length!=18){
+			$("#cardnumber").focus();
+			$$.showMessage("系统信息","身份证号格式错误!");
+			return;
+		}
+		
+		var cart_ret = isCardID(cardnumber);
+		if(cart_ret!="true"){
+			$$.showMessage("系统信息",cart_ret);
+			return;
+		}
+		
+		
 		return true;
 	}
+	
+	
+	function isCardID(sId){
+		 var iSum=0 ;
+		 var info="" ;
+		 if(!/^\d{17}(\d|x)$/i.test(sId)) return "你输入的身份证长度或格式错误";
+		 sId=sId.replace(/x$/i,"a");
+		 sBirthday=sId.substr(6,4)+"-"+Number(sId.substr(10,2))+"-"+Number(sId.substr(12,2));
+		 var d=new Date(sBirthday.replace(/-/g,"/")) ;
+		 if(sBirthday!=(d.getFullYear()+"-"+ (d.getMonth()+1) + "-" + d.getDate()))return "身份证上的出生日期非法";
+		 for(var i = 17;i>=0;i --) iSum += (Math.pow(2,i) % 11) * parseInt(sId.charAt(17 - i),11) ;
+		 if(iSum%11!=1) return "你输入的身份证号非法";
+		 return "true";
+	}
+	
 	
 	//初始化快递公司 
 	function initExpressCompany() {
@@ -302,6 +336,7 @@ Date.prototype.format=function(fmt) {
 				$("#name").val(jsonData.name);
 				$("#phone").val(jsonData.phone);
 				$("#topostdate").val(jsonData.topostdate);
+				$("#cardnumber").val(jsonData.cardnumber);
 				srcphone=jsonData.phone;
 				tmpCitySelect=jsonData.citySelect;
 				$("#citySelect").val(jsonData.citySelect);
@@ -383,7 +418,7 @@ Date.prototype.format=function(fmt) {
 			}
 		}
 		//var arr = ["id","name","employee_no","orgname","deptlevel1","deptlevel2","deptlevel3","reporthigher","store_id","storename","zw","jobchannel","offername","citySelect","interndate","cardnumber","birthday","nation","censusregister","education","school","profession","marriage","phone","relationname","tel","relationtype","isofficial","topostdate","contractdate","contractdatestart","contractdateend"];
-		var arr =["id","name","phone","citySelect","employee_no","region","topostdate"];
+		var arr =["id","name","phone","citySelect","employee_no","region","topostdate","cardnumber"];
 		var o = {};
 		for ( var i in arr) {
 			var v = arr[i];
@@ -769,14 +804,36 @@ Date.prototype.format=function(fmt) {
 				
 			</tr>
 			
+			
+		    <tr>
+				<td>
+					<p>
+						<font color="red">*</font>身份证号：<input type="text" id="cardnumber" isautotab="true"  style="width: 48%;"  onkeyup="value=value.replace(/[\W]/g,'') " onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"  maxlength="18"  />
+					</p>
+				</td>
+				
+				<td>
+					<p>
+					</p>
+				</td>
+			</tr>
+			
+			
+			
 			<tr>
 				<td>
 					<p class="region">
-						<font color="red">*</font>区域名称：<input type="text" id="region" isautotab="true"  style="width: 39%;" />
+						<font color="red">*</font>区域名称：<input type="text" id="region" isautotab="true"  style="width: 48%;" />
+					</p>
+				</td>
+				<td>
+					<p>
 					</p>
 				</td>
 			</tr>
                
+               
+            
                        
 		</table>
 	</form>
