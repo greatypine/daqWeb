@@ -3565,7 +3565,12 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		Map<String, Object> returnMap = null;
 		try {
 			returnMap =new HashMap<String,Object>();
-			returnMap = humanresourcesDao.queryHumanresourcesList(humanresources, pageInfo);
+			if(humanresources.getOnlinestartstr()!=null&&humanresources.getOnlinestartstr().equals("Y")){
+				returnMap = humanresourcesDao.queryOnLineHumanresourcesList(humanresources, pageInfo);
+			}else{
+				returnMap = humanresourcesDao.queryHumanresourcesList(humanresources, pageInfo);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -3800,8 +3805,17 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   		Map<String, Object> result = new HashMap<String,Object>();
 		HumanresourcesDao humanresourcesDao = (HumanresourcesDao)SpringHelper.getBean(HumanresourcesDao.class.getName());
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+  		boolean online = false;
+  		if(humanresources.getOnlinestartstr()!=null&&humanresources.getOnlinestartstr().equals("Y")){
+  			online=true;
+  		}
   		try {
-  			list=humanresourcesDao.exportHuman(humanresources);
+  			if(online){
+  				list=humanresourcesDao.exportOnLineHuman(humanresources);
+  			}else{
+  				list=humanresourcesDao.exportHuman(humanresources);
+  			}
+  			
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
@@ -3825,31 +3839,50 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   	        XSSFSheet sheet = wb.createSheet("员工数据");
   	        XSSFRow row = sheet.createRow(0);
   	        
-  	      //定义表头 以及 要填入的 字段 
-  	      String[] str_headers = {"员工姓名","员工编号","社员邀请码","门店","城市","岗位","事业群","入职日期","门店编号"};
-		  String[] headers_key = {"name","employee_no","inviteCode","storename","citySelect","zw","career_group","topostdate","storeno"};
-  	       if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
-				//在职
-  	    	    str_headers[6]="入职日期";
-  	    	    headers_key[6]="topostdate";
-			}else if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(2L)){
-				//离职
-				str_headers[6]="离职日期";
-				headers_key[6]="leavedate";
-			}
+  	      //如果是线上人员 
+  	     if(online){
+  	    	  String[] str_headers = {"城市","部门","员工姓名","员工编号","身份证号","社员邀请码","工号"};
+  			  String[] headers_key = {"citySelect","deptname","name","employee_no","cardnumber","inviteCode","work_no"};
+  	  	       
+  			  
+  			 for(int i = 0;i < str_headers.length;i++){
+   	            XSSFCell cell = row.createCell(i);
+   	            cell.setCellStyle(getHeaderStyle());
+   	            cell.setCellValue(new XSSFRichTextString(str_headers[i]));
+   	        }
+   	        for(int i = 0;i < list.size();i++){
+   	        	 row = sheet.createRow(i+1);
+   	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+   	            	setCellValueall(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+   	             }
+   	        }
+   	        
+  	      }else{
+  	    	 String[] str_headers = {"员工姓名","员工编号","社员邀请码","门店","城市","岗位","事业群","入职日期","门店编号"};
+  			  String[] headers_key = {"name","employee_no","inviteCode","storename","citySelect","zw","career_group","topostdate","storeno"};
+  			 if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
+ 				//在职
+   	    	    str_headers[6]="入职日期";
+   	    	    headers_key[6]="topostdate";
+ 			}else if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(2L)){
+ 				//离职
+ 				str_headers[6]="离职日期";
+ 				headers_key[6]="leavedate";
+ 			}
+  			 
+  			 for(int i = 0;i < str_headers.length;i++){
+   	            XSSFCell cell = row.createCell(i);
+   	            cell.setCellStyle(getHeaderStyle());
+   	            cell.setCellValue(new XSSFRichTextString(str_headers[i]));
+   	        }
+   	        for(int i = 0;i < list.size();i++){
+   	        	 row = sheet.createRow(i+1);
+   	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+   	            	setCellValueall(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+   	             }
+   	        }
+  	      }
   	       
-  	        for(int i = 0;i < str_headers.length;i++){
-  	            XSSFCell cell = row.createCell(i);
-  	            cell.setCellStyle(getHeaderStyle());
-  	            cell.setCellValue(new XSSFRichTextString(str_headers[i]));
-  	        }
-  	        
-  	        for(int i = 0;i < list.size();i++){
-  	        	 row = sheet.createRow(i+1);
-  	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-  	            	setCellValueall(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-  	             }
-  	        }
 
   			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_humanlist.xlsx");
   			if(file_xls.exists()){

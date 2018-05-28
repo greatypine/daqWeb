@@ -65,4 +65,10 @@ public interface HumanresourcesDao {
 	
 	//取得最大邀请码
 	public String queryMaxInviteCode();
+	
+	
+	//员工档案查 询线上人员 列表 
+	public Map<String, Object> queryOnLineHumanresourcesList(Humanresources humanresources, PageInfo pageInfo);
+	//线上人员导出 
+	public List<Map<String, Object>> exportOnLineHuman(Humanresources humanresources);
 }

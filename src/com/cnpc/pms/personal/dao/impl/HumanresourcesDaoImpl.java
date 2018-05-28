@@ -157,6 +157,66 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		}
 		
 		
+		
+		
+		
+		//线上员工档案查询 
+		@Override
+		public Map<String, Object> queryOnLineHumanresourcesList(Humanresources humanresources, PageInfo pageInfo) {
+			String sqlwhere = " 1=1 ";
+			
+			/*String sql = "SELECT * FROM (SELECT ol.citySelect,ol.deptname,ol.name,ol.employee_no,ol.inviteCode,ol.cardnumber,ol.orgname,ol.phone,ol.work_no FROM t_online_humanresources ol "+
+						" UNION ALL "+
+						" SELECT ts.citySelect,ts.deptname,ts.name,ts.employee_no,ts.inviteCode,ts.cardnumber,ts.orgname,ts.phone,ts.cardnumber FROM t_storekeeper ts) a ";
+			sql+=" where "+sqlwhere;*/
+			
+			
+			if(humanresources!=null&&humanresources.getCitySelect()!=null&&humanresources.getCitySelect().length()>0){
+				if(!humanresources.getCitySelect().equals("全部")){
+					sqlwhere +=" and citySelect = '"+humanresources.getCitySelect()+"'";
+				}
+			}
+			
+			if(humanresources!=null&&humanresources.getName()!=null&&humanresources.getName().length()>0){
+				sqlwhere +=" and name like '%"+humanresources.getName().trim()+"%'";
+			}
+			if(humanresources!=null&&humanresources.getPhone()!=null&&humanresources.getPhone().length()>0){
+				sqlwhere +=" and phone = '"+humanresources.getPhone().trim()+"'";
+			}
+			if(humanresources!=null&&humanresources.getEmployee_no()!=null&&humanresources.getEmployee_no().length()>0){
+				sqlwhere +=" and employee_no = '"+humanresources.getEmployee_no().trim()+"'";
+			}
+			
+			String sql = "SELECT * FROM t_online_humanresources a where "+sqlwhere ;
+			
+			String sql_count="SELECT count(*) as total FROM ("+sql+") b";
+
+			Query query_count = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql_count);
+			List<?> total = query_count
+					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			Map<String, Object> maps = (Map<String, Object>) total.get(0);
+			
+			pageInfo.setTotalRecords(Integer.valueOf(maps.get("total").toString()));
+
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+
+			List<?> list = query
+					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+					.setFirstResult(
+							pageInfo.getRecordsPerPage()
+									* (pageInfo.getCurrentPage() - 1))
+					.setMaxResults(pageInfo.getRecordsPerPage()).list();
+			Map<String, Object> map_result = new HashMap<String, Object>();
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("data", list);
+			map_result.put("total_pages", total_pages);
+			return map_result;
+		}
+				
+		
 		@Override
 		public Map<String, Object> queryStoreOperationLeaveList(){
 			String sql = "SELECT human.storename,count(human.id) as leavesum "+
@@ -286,6 +346,35 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}
 			
 			String sql = "SELECT a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return list;
+		}
+		
+		
+		//线上 员工档案导出
+		@Override
+		public List<Map<String, Object>> exportOnLineHuman(Humanresources humanresources){
+			String sqlwhere = " 1=1 ";
+			if(humanresources!=null&&humanresources.getCitySelect()!=null&&humanresources.getCitySelect().length()>0){
+				if(!humanresources.getCitySelect().equals("全部")){
+					sqlwhere +=" and citySelect = '"+humanresources.getCitySelect()+"'";
+				}
+			}
+			
+			if(humanresources!=null&&humanresources.getName()!=null&&humanresources.getName().length()>0){
+				sqlwhere +=" and name like '%"+humanresources.getName().trim()+"%'";
+			}
+			if(humanresources!=null&&humanresources.getPhone()!=null&&humanresources.getPhone().length()>0){
+				sqlwhere +=" and phone = '"+humanresources.getPhone().trim()+"'";
+			}
+			if(humanresources!=null&&humanresources.getEmployee_no()!=null&&humanresources.getEmployee_no().length()>0){
+				sqlwhere +=" and employee_no = '"+humanresources.getEmployee_no().trim()+"'";
+			}
+			
+			String sql = "SELECT citySelect,deptname,name,employee_no,inviteCode,phone,work_no,cardnumber FROM t_online_humanresources where "+sqlwhere ;
+			
+			//String sql = "SELECT a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;
