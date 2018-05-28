@@ -1,17 +1,24 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.util.Date;
-
+import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.personal.entity.StoreDynamic;
 import com.cnpc.pms.personal.entity.StoreHistory;
 import com.cnpc.pms.personal.manager.StoreHistoryManager;
+
+import java.util.Date;
 
 public class StoreHistoryManagerImpl extends BizBaseCommonManager implements StoreHistoryManager {
 
 	@Override
 	public void insertStoreHistory(StoreDynamic storeDynamic) {
+		//获取修改的用户
+		User sessionUser = null;
+		if (null != SessionManager.getUserSession() && null != SessionManager.getUserSession().getSessionData()) {
+			sessionUser = (User) SessionManager.getUserSession().getSessionData().get("user");
+		}
 		StoreHistoryManager storeHistoryManager = (StoreHistoryManager) SpringHelper.getBean("storeHistoryManager");
 		StoreHistory storeHistory = new StoreHistory();
 		storeHistory.setSuperMicro(storeDynamic.getSuperMicro());
@@ -55,7 +62,8 @@ public class StoreHistoryManagerImpl extends BizBaseCommonManager implements Sto
 		storeHistory.setCity_id(storeDynamic.getCity_id());
 		storeHistory.setProvince_id(storeDynamic.getProvince_id());
 		storeHistory.setCityName(storeDynamic.getCityName());
-		storeHistory.setUpdate_user(storeDynamic.getUpdate_user());
+		storeHistory.setUpdate_user(sessionUser.getName());
+		storeHistory.setUpdate_user_id(sessionUser.getId());
 		storeHistory.setUpdate_time(new Date());
 		storeHistory.setCityNo(storeDynamic.getCityNo());
 		storeHistory.setStoreno(storeDynamic.getStoreno());
