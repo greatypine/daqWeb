@@ -5857,8 +5857,8 @@ function oneyearorsixweek(){
 				var arearate = (areacount/count_sum)*100
 				$('#pfoperate1_1 tr').eq(1).find("td:last").text(arearate.toFixed(2));
 				var citynameArray = new Array();
-				//社区关键人数量
-				var community_person_array = new Array();
+				//店均社区关键人数量
+				var avg_community_person_array = new Array();
 				//店均微信群数量
 				var avg_wechant_crowd_array = new Array();
 				//单个微信群人数
@@ -5868,7 +5868,7 @@ function oneyearorsixweek(){
 				//社区关键人构成分析：饼状图
 				var dataArray = new Array();
 				//合计值存放
-				var shequguanjianren;
+				var shequguanjianren;//店均社区关键人
 				var dianjunwexinqun;
 				var dangeweixinqun;
 				var huoyuerenqun;
@@ -5901,14 +5901,15 @@ function oneyearorsixweek(){
 							option21.series[0].data[1].value = general_person;
 							option21.series[0].data[2].value = folk_organization;
 							option21.series[0].data[3].value = community_businesses;
-							shequguanjianren = community_person;
+							//店均社区关键人数量
+							shequguanjianren = avg_community_person;
 							dianjunwexinqun = avg_wechant_crowd;
 							dangeweixinqun = crowd_person_count;
 							huoyuerenqun = wechant_accounted_for_crowd;
 						}
 						if(cityname != '环比（%）' && cityname != '合计'){
 							citynameArray.push(cityname);
-							community_person_array.push(community_person);
+							avg_community_person_array.push(avg_community_person);
 							avg_wechant_crowd_array.push(avg_wechant_crowd);
 							crowd_person_count_array.push(crowd_person_count);
 							wechant_accounted_for_crowd_array.push(wechant_accounted_for_crowd);
@@ -5943,11 +5944,11 @@ function oneyearorsixweek(){
 						
 					}
 				    citynameArray.push("合计");
-				    community_person_array.push(shequguanjianren);
+				    avg_community_person_array.push(shequguanjianren);
 				    avg_wechant_crowd_array.push(dianjunwexinqun);
 				    crowd_person_count_array.push(dangeweixinqun);
 				    wechant_accounted_for_crowd_array.push(huoyuerenqun);
-				    option20.series[0].data=community_person_array;
+				    option20.series[0].data=avg_community_person_array;
 					option20.xAxis[0]["data"] = citynameArray;
 					myChart20.setOption(option20);
 					option24.series[0].data=avg_wechant_crowd_array;
