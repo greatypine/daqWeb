@@ -88,5 +88,35 @@ public interface CommuneMemberDao extends IDAO{
     */
    public List<Map<String, Object>> getCmGoodsDealCount(String string);
    
+   /**************************************************************
+    ******************** 第二版：社员注册信息统计*************************
+    **************************************************************/
+   /**
+    * TODO 获取当月之前注册城市人数
+    * @author wuxinxin
+    */
+   public List<Map<String, Object>> getCmRegistCity(String string);
+   /**
+    * TODO 获取注册城市当月新增情况
+    * @author wuxinxin
+    */
+   public List<Map<String, Object>> getCmRegistMonthCity(String string);
+   /**
+    * TODO 获取总注册城市情况
+    * @author wuxinxin
+    */
+   public List<Map<String, Object>> getAllCmRegistCity(String string);
+   /**
+    * TODO 获取最受欢迎商品
+    * @author wuxinxin
+    */
+   public List<Map<String, Object>> getHotProduct(String string);
+   /**
+    * TODO 获取无人问津商品
+    * @author wuxinxin
+    */
+   public List<Map<String, Object>> getCoolProduct(String string);
+   
+   
    
 }
