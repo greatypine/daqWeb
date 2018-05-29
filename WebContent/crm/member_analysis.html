@@ -91,7 +91,7 @@
       <section class="content-header">
         <div class="box box-default report">
           <div class="box-header h4">
-          	<strong>安心合作社运营简报</strong>
+          	<strong>安心合作社运营报告</strong>
           	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">社员信息查询</a> 
           </div>
           <div class="box-body">
@@ -123,42 +123,13 @@
             <div class="col-sm-6 no-padding" id="main6" style="height: 350px;"></div>
           </div>
        </div>
-       <div class="box box-default">
+<!--        <div class="box box-default">
           <div class="box-header h4 text-light-blue"><strong>社员分布</strong></div>
           <div class="box-body">
             <div class="col-sm-8 no-padding" id="main7" style="height: 350px;"></div>
             <div class="col-sm-4 no-padding" id="main8" style="height: 350px;"></div>
           </div>
-      </div>
-      <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-6">
-              <h4 class="text-red">最受欢迎商品</h4>
-              <table class="table table-bordered">
-                <tbody id="hotPro_data">
-                <tr>
-                  <th>商品名称</th>
-                  <th>卖出数量</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="text-light-blue">无人问津商品</h4>
-              <table class="table table-bordered">
-                <tbody id="coolPro_data">
-                <tr>
-                  <th>商品名称</th>
-                  <th>卖出数量</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      
+      </div> -->
       </section>
 
     </div>
@@ -373,24 +344,20 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	      }],
 	      label: {
 		        normal: {
-		          position: 'out', //标签的位置
-		          formatter: '{b}\n{d}%',
-		          color: '#ffffff'
+		          position: 'inside', //标签的位置
+		          formatter: '{b}\n{d}%'
 
 		        }
 		   },
 	      labelLine: {
 	        normal: {
-	          show: true
+	          show: false
 	        }
 	      },
 	      itemStyle: {
 	        normal: {
 	          borderWidth: 4,
 	          borderColor: '#ffffff',
-	          labelLine: {
-		          show: true
-		        }
 	        },
 	        emphasis: {
 	          borderWidth: 0,
@@ -759,14 +726,11 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
         	//社员属性信息饼图
         	showMemberInfo(resultJson);
         	//社员注册信息
-        	showMemberRegist(resultJson);
+        	//showMemberRegist(resultJson);
         	//城市注册排名
-        	showCityMember(resultJson);
-        	//最受欢迎商品、无人问津商品
-        	showProduct(resultJson);
+        	//showCityMember(resultJson);
         	setLoadingMark(false);
-        	//设置10秒刷新页面
-        	//setInterval("window.location.reload()",10000);
+        	
         }else{
         	alert("暂无社员相关信息");
         }
@@ -775,102 +739,90 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 });
  
  
-var showMemberRegist = function (dataServer){
+var showMemberRegist = function (){
 	  var myChart7 = echarts.init(document.getElementById('main7'));
 	  //社员分布
-	  
 	  option7 = {
-	    title : {
-	        text: '社员分布',
-	    },
-	    tooltip : {
-	        trigger: 'axis',
-	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-	        },
-	        formatter: function (params){
-	            return params[0].name + '<br/>'
-	                   + params[0].seriesName + ' : ' + params[0].value + '<br/>'
-	                   + params[1].seriesName + ' : ' + (params[1].value + params[0].value);
-	        }
+	    title: [ {
+	      text: '社员分布',
+	      left: '3%',
+	      top: '0',
+	    }],
+	    tooltip: {
+	      trigger: 'axis',
+	      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+	        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+	      }
 	    },
 	    legend: {
-	        selectedMode:false,
-	        data:['累计人数', '本月新增人数']
+	      data: ['累计人数', '本月新增人数'],
+	      align: 'right',
+	      right: 10
 	    },
-	    calculable : true,
-	    xAxis : [
-	        {
-	            type : 'category',
-	            axisLabel: {
-	                interval: 0,
-	              },
-	            data: dataServer.reCityname
-	        }
-	    ],
-	    yAxis : [
-	        {
-	            type : 'value',
-	            boundaryGap: [0, 0.1]
-	        }
-	    ],
-	    series : [
-	        {
-	            name:'本月新增人数',
-	            type:'bar',
-	            stack: 'sum',
-	            barCategoryGap: '50%',
-	            itemStyle: {
-	                normal: {
-	                    color: '#4ac7f5',
-	                    barBorderColor: '#4ac7f5',
-	                    barBorderWidth: 6,
-	                    barBorderRadius:0,
-	                    label : {
-	                        show: true, position: 'insideTop'
-	                    }
-	                }
-	            },
-	            data:dataServer.reCityMonCou
-	        },
-	        {
-	            name:'累计人数',
-	            type:'bar',
-	            stack: 'sum',
-	            itemStyle: {
-	                normal: {
-	                    color: 'tomato',
-	                    barBorderColor: 'tomato',
-	                    barBorderWidth: 6,
-	                    barBorderRadius:0,
-	                    label : {
-	                        show: true, 
-	                        position: 'top',
-	                        formatter: function (params) {
-	                            for (var i = 0, l = option7.xAxis[0].data.length; i < l; i++) {
-	                                if (option7.xAxis[0].data[i] == params.name) {
-	                                    return option7.series[0].data[i] + params.value;
-	                                }
-	                            }
-	                        },
-	                        textStyle: {
-	                            color: 'tomato'
-	                        }
-	                    }
-	                }
-	            },
-	            data: dataServer.reCityCou
-	        }
-	    ]
-	};
+	    grid: {
+	      left: '3%',
+	      right: '4%',
+	      bottom: '3%',
+	      top: '20%',
+	      containLabel: true
+	    },
+	    xAxis: [{
+	      type: 'category',
+	      data: ['新虹桥', '中山公园', '虹桥', '镇宁路', '天山古北','新虹桥', '中山公园', '虹桥', '镇宁路', '天山古北']
+	    }],
+	    yAxis: [{
+	      type: 'value',
+	      name: '人数',
+	      axisLabel: {
+	        formatter: '{value}'
+	      }
+	    }],
+	    series: [{
+	      name: '累计人数',
+	      type: 'bar',
+	      stack:'社员分布',
+	      itemStyle:{
+	        normal:{color:'#EBA954'},
+	      },
+	      data: [20, 12, 31, 34, 31,20, 12, 31, 34, 31]
+	    }, {
+	      name: '本月新增人数',
+	      type: 'bar',
+	      stack:'社员分布',
+	      itemStyle:{
+	        normal:{color:'#C23531'},
+	      },
+	      data: [10, 20, 5, 9, 3,10, 20, 5, 9, 3]
+	    }]
+	  };
 	  myChart7.setOption(option7);
-};
+}
+
+
 var showCityMember = function(dataserver){
 	//城市分布
 	var myChart8 = echarts.init(document.getElementById('main8'));
-	var jsc = dataserver.jsonCityC;
-	var len = jsc.length;
-
+	  var scaleData = [{
+	    'name': '工程建设',
+	    'value': 10
+	  },
+	    {
+	      'name': '产权交易',
+	      'value': 20
+	    },
+	    {
+	      'name': '土地交易',
+	      'value': 20
+	    },
+	    {
+	      'name': '其他交易',
+	      'value': 27
+	    },
+	    {
+	      'name': '政府采购',
+	      'value': 23
+	    }
+	  ];
 	  var rich = {
 	    white: {
 	      color: '#04243E',
@@ -892,13 +844,13 @@ var showCityMember = function(dataserver){
 	    }
 	  };
 	  var data = [];
-	  for (var i = 0; i < len; i++) {
+	  for (var i = 0; i < scaleData.length; i++) {
 	    data.push({
-	      value: dataserver.jsonCityAllCou[i],
-	      name: dataserver.jsonCityC[i],
+	      value: scaleData[i].value,
+	      name: scaleData[i].name,
 	      itemStyle: {
 	        normal: {
-	          borderWidth: 3,
+	          borderWidth: 5,
 	          shadowBlur: 30,
 	          borderColor: new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
 	            offset: 0,
@@ -920,7 +872,7 @@ var showCityMember = function(dataserver){
 	    name: '',
 	    type: 'pie',
 	    clockWise: false,
-	    radius: [50, 110],
+	    radius: [95, 100],
 	    center:['50%','55%'],
 	    hoverAnimation: false,
 	    itemStyle: {
@@ -930,11 +882,14 @@ var showCityMember = function(dataserver){
 	          position: 'outside',
 	          color: '#04243E',
 	          formatter: function(params) {
+	            var percent = 0;
+	            var total = 0;
+	            for (var i = 0; i < scaleData.length; i++) {
+	              total += scaleData[i].value;
+	            }
+	            percent = ((params.value / total) * 100).toFixed(0);
 	            if(params.name !== '') {
-	            	if(params.name=='黔东南苗族侗族自治州'){
-	            		return "黔东南苗       \n族侗族自治州  :"+params.value;
-	            	}
-	              return params.name + ":"+params.value;
+	              return params.name + '\n{white|' + '占比' + percent + '%}';
 	            }else {
 	              return '';
 	            }
@@ -942,7 +897,7 @@ var showCityMember = function(dataserver){
 	          rich: rich
 	        },
 	        labelLine: {
-	          show: true
+	          show: false
 	        }
 	      }
 	    },
@@ -951,8 +906,8 @@ var showCityMember = function(dataserver){
 	  option8 = {
 	    //backgroundColor: '#04243E',
 	    title: [ {
-	      text: '城市分布',
-	      right: '15%',
+	      text: '社员城市分布',
+	      left: '35%',
 	      top: '5%',
 	    }],
 	    tooltip: {
@@ -965,83 +920,9 @@ var showCityMember = function(dataserver){
 	      show: false
 	    },
 	    series: seriesObj
-	    ,color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5']
 	  }
 	  myChart8.setOption(option8);
-};
-
-var showProduct = function (dataServer){
-	var hotProName = dataServer.hotProName;
-	var hotProCount = dataServer.hotProCount;
-	   var hotStr="";
-	   if(hotProCount==null||hotProCount.length==0){
-		   hotStr = "<tr>没有符合条件的数据</tr>"
-		   return;
-	   }
-	   for(var i=0;i<hotProName.length;i++){
-			   hotStr= "<tr>"
-                   +"<td>"+hotProName[i]+"</td>"
-                   +"<td>"+hotProCount[i]+"</td>";
-                   
-                   switch(i)
-                   {
-                   case 0:
-                	 hotStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
-                     break;
-                   case 1:
-                	   hotStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
-                     break;
-                   case 2:
-                	   hotStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
-                     break;
-                   case 3:
-                	   hotStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
-                     break;
-                   case 4:
-                	   hotStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
-                     break;
-                   default:
-                	   hotStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
-                   }
-                   hotStr += "</tr>";
-              $("#hotPro_data").append(hotStr);     
-	   }
-	   var coolProName = dataServer.coolProName;
-	   var coolProCount = dataServer.coolProCount;
-	   var coolStr="";
-	   if(coolProCount==null||coolProCount.length==0){
-		   coolStr = "<tr>没有符合条件的数据</tr>"
-		   return;
-	   }
-	   for(var j=0;j<coolProCount.length;j++){
-		   coolStr= "<tr>"
-                   +"<td>"+coolProName[j]+"</td>"
-                   +"<td>"+coolProCount[j]+"</td>";
-                   switch(j)
-                   {
-                   case 0:
-                	   coolStr += "<td><span class='badge bg-red'>"+(j+1)+"</span></td>";
-                     break;
-                   case 1:
-                	   coolStr += "<td><span class='badge bg-yellow'>"+(j+1)+"</span></td>";
-                     break;
-                   case 2:
-                	   coolStr += "<td><span class='badge bg-blue'>"+(j+1)+"</span></td>";
-                     break;
-                   case 3:
-                	   coolStr += "<td><span class='badge bg-green'>"+(j+1)+"</span></td>";
-                     break;
-                   case 4:
-                	   coolStr += "<td><span class='badge bg-purple'>"+(j+1)+"</span></td>";
-                     break;
-                   default:
-                	   coolStr += "<td><span class='badge bg-brown'>"+(j+1)+"</span></td>";
-                   }      
-                   coolStr += "</tr>";
-              $("#coolPro_data").append(coolStr);     
-	   }
-};
-
+}
 var showHistoryData = function (dataServer) {
 	//社员量
 	$("#cmCount").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));

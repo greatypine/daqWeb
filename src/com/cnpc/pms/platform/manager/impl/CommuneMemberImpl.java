@@ -82,6 +82,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}else {
 			result.put("newCmCount", "99");
 		}
+		//查询成交额
+		List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String,Object>>();
 		//cmGoodsTurnoverList = cmDao.getCmGoodsTurnover(dd);
 		////////////////////////分库查询成交信息//////////////////////////////
 		/*//第一步：查询所有社员ids；
@@ -108,19 +110,18 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		////////////////////////分库查询成交信息end//////////////////////////////
 		//查询成交量
 		List<Map<String, Object>> cmGoodsDealCountList = new ArrayList<Map<String,Object>>();
-		cmGoodsDealCountList = commDao.getCmGoodsDealCount("");
+		cmGoodsDealCountList = cmDao.getCmGoodsDealCount("");
 		if(cmGoodsDealCountList!=null&&cmGoodsDealCountList.size()>0){
 			result.put("cmGoodsDealCount", cmGoodsDealCountList.get(0).get("cou"));
 		}else {
-			result.put("cmGoodsDealCount", "0");
+			result.put("cmGoodsDealCount", "99");
 		}
 		//查询成交额
-		List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String,Object>>();
-		cmGoodsTurnoverList = commDao.getCmGoodsTurnover("");
+		cmGoodsTurnoverList = cmDao.getCmGoodsTurnover("");
 		if(cmGoodsTurnoverList!=null&&cmGoodsTurnoverList.size()>0){
 			result.put("cmGoodsTurnover", cmGoodsTurnoverList.get(0).get("cou"));
 		}else {
-			result.put("cmGoodsTurnover", "0");
+			result.put("cmGoodsTurnover", "99");
 		}
 
 		
@@ -207,104 +208,6 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				result.put("meCount", areaList.get(1).get("meCount").toString());
 				
 			}
-			
-			/**************************************************************
-			 ******************** 第二版：社员注册信息统计*************************
-			 **************************************************************/
-			
-			
-			
-			List cityCounts=new ArrayList();
-			List cityCouCounts=new ArrayList();
-			List cityMonCouCounts=new ArrayList();
-			//查询本月之前注册城市分布
-			List<Map<String, Object>> cityList = commDao.getCmRegistCity(dd);
-			//查询当月注册城市分布
-			List<Map<String, Object>> cityMonthList = commDao.getCmRegistMonthCity(dd);
-			if(cityList!=null) {
-				
-				for(int i=0;i<cityList.size();i++) {
-					if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
-						cityCounts.add("黔东南苗族\n侗族自治州 ");
-					}else {
-						cityCounts.add(cityList.get(i).get("cityname").toString());
-					}
-					cityCouCounts.add(Integer.parseInt(cityList.get(i).get("cou").toString()));
-					cityMonCouCounts.add(Integer.parseInt(cityMonthList.get(i).get("cou").toString()));
-				}
-				JSONArray jsonCity=(JSONArray)JSONArray.fromObject(cityCounts);
-				 JSONArray jsonCityCou=(JSONArray)JSONArray.fromObject(cityCouCounts);
-				 JSONArray jsonCityMonCou=(JSONArray)JSONArray.fromObject(cityMonCouCounts);
-				
-				result.put("reCityname", jsonCity);
-				result.put("reCityCou", jsonCityCou);
-				result.put("reCityMonCou", jsonCityMonCou);
-			}
-			//按城市查询总分布量
-			List<Map<String, Object>> cityAllList = commDao.getAllCmRegistCity(dd);
-			List cityAllCounts=new ArrayList();
-			List cityCountsList=new ArrayList();
-			if(cityAllList!=null) {
-				
-				for(int i=0;i<cityAllList.size();i++) {
-				/*	if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
-						cityAllCounts.add("黔东南");
-					}else {
-					}*/
-					cityAllCounts.add(cityAllList.get(i).get("cityname").toString());
-					cityCountsList.add(Integer.parseInt(cityAllList.get(i).get("cou").toString()));
-				}
-				JSONArray jsonCityC=(JSONArray)JSONArray.fromObject(cityAllCounts);
-				 JSONArray jsonCityAllCou=(JSONArray)JSONArray.fromObject(cityCountsList);
-				
-				result.put("jsonCityC", jsonCityC);
-				result.put("jsonCityAllCou", jsonCityAllCou);
-			}
-			
-			
-			//查询最受欢迎商品
-			
-			
-			List<Map<String, Object>> hotProList = commDao.getHotProduct(dd);
-			List hotCounts=new ArrayList();
-			List hotName=new ArrayList();
-			if(hotProList!=null&&hotProList.size()>0) {
-				
-				for(int i=0;i<hotProList.size();i++) {
-				/*	if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
-						cityAllCounts.add("黔东南");
-					}else {
-					}*/
-					hotName.add(hotProList.get(i).get("pname").toString());
-					hotCounts.add(Integer.parseInt(hotProList.get(i).get("cou").toString()));
-				}
-				JSONArray hotProName=(JSONArray)JSONArray.fromObject(hotName);
-				 JSONArray hotProCount=(JSONArray)JSONArray.fromObject(hotCounts);
-				
-				result.put("hotProName", hotProName);
-				result.put("hotProCount", hotProCount);
-			}
-			//查询无人问津商品
-			List<Map<String, Object>> coolProList = commDao.getCoolProduct(dd);
-			List coolCounts=new ArrayList();
-			List coolName=new ArrayList();
-			if(coolProList!=null&&coolProList.size()>0) {
-				
-				for(int i=0;i<hotProList.size();i++) {
-				/*	if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
-						cityAllCounts.add("黔东南");
-					}else {
-					}*/
-					coolName.add(coolProList.get(i).get("pname").toString());
-					coolCounts.add(Integer.parseInt(coolProList.get(i).get("cou").toString()));
-				}
-				JSONArray coolProName=(JSONArray)JSONArray.fromObject(coolName);
-				 JSONArray coolProCount=(JSONArray)JSONArray.fromObject(coolCounts);
-				
-				result.put("coolProName", coolProName);
-				result.put("coolProCount", coolProCount);
-			}
-			
 		 return result;
 		
 	}

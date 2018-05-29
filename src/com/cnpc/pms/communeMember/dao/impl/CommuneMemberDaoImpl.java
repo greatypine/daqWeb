@@ -31,7 +31,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * @author wuxinxin
 		 * 2018年5月22日
 		 */
-		String sql = "select member_count cou from ds_member_statistics where  member_type='1'";
+		String sql = "select count(*) as cou from df_user_member as nnu left join df_mass_order_total as dot on nnu.customer_id=dot.customer_id ";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -51,7 +51,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * @author wuxinxin
 		 * 2018年5月18日
 		 */
-		String sql = "select member_count cou from ds_member_statistics where  member_type='2' ";
+		String sql = "select sum(dot.trading_price) as cou from df_user_member as nnu left join df_mass_order_total as dot on nnu.customer_id=dot.customer_id ";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql);
@@ -114,12 +114,12 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		String ageSql = "select " + 
 				
-				"COUNT(case when birthday<'19600101' then 1 else null end) as age60, " + 
-				"COUNT(case when birthday>'19591231' and birthday<'19700101' then 1 else null end) as age70, " + 
-				"COUNT(case when birthday>'19691231' and birthday<'19800101' then 1 else null end) as age80, " + 
-				"COUNT(case when birthday>'19791231' and birthday<'19900101' then 1 else null end) as age90, " + 
-				"COUNT(case when birthday>'19891231' and birthday<'20000101' then 1 else null end) as age00, " + 
-				"COUNT(case when birthday>'19991231'  then 1 else null end) as ageNow " + 
+				"COUNT(case when birthday<'19611231' then 1 else null end) as age60, " + 
+				"COUNT(case when birthday>'19601231' and birthday<'19710101' then 1 else null end) as age70, " + 
+				"COUNT(case when birthday>'19701231' and birthday<'19810101' then 1 else null end) as age80, " + 
+				"COUNT(case when birthday>'19801231' and birthday<'19910101' then 1 else null end) as age90, " + 
+				"COUNT(case when birthday>'19901231' and birthday<'20010101' then 1 else null end) as age00, " + 
+				"COUNT(case when birthday>'20001231'  then 1 else null end) as ageNow " + 
 				" from df_user_member duuf";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
@@ -528,111 +528,6 @@ public List<Map<String, Object>> getMembersArea(String dd) {
            }
 			return lst_result;
 	
-	}
-
-	/**************************************************************
-	 ******************** 第二版：社员注册信息统计*************************
-	 **************************************************************/
-	@Override
-	public List<Map<String, Object>> getCmRegistCity(String string) {
-		// TODO Auto-generated method stub
-		/**
-		 * @author wuxinxin 2018年5月24日
-		 */
-		// 获取上月最后一天
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		// 按格式输出
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		// 查询社员注册城市sql
-		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where opencard_time<"
-				+ sdf.format(calendar.getTime())
-				+ " and regist_cityno is not null group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
-		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
-
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(citySql);
-		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		return lst_data;
-
-	}
-
-	@Override
-	public List<Map<String, Object>> getCmRegistMonthCity(String string) {
-		// TODO Auto-generated method stub
-		/**
-		 * @author wuxinxin 2018年5月24日
-		 */
-		// 获取上月最后一天
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		calendar.add(Calendar.DATE, -1);
-		// 按格式输出
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		// 查询当月新注册社员注册城市sql
-		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where opencard_time>"
-				+ sdf.format(calendar.getTime())
-				+ " and regist_cityno is not null group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
-		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
-
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(citySql);
-		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		return lst_data;
-
-	}
-	@Override
-	public List<Map<String, Object>> getAllCmRegistCity(String string) {
-		// TODO Auto-generated method stub
-		/**
-		 * @author wuxinxin
-		 * 2018年5月24日
-		 */
-		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
-
-		String citySql = "SELECT tdc.cityname cityname, count(*) cou FROM df_user_member dfum, t_dist_citycode tdc WHERE dfum.regist_cityno IS NOT NULL AND LPAD(dfum.regist_cityno, 4, '0') = tdc.cityno  GROUP BY dfum.regist_cityno order by cou  asc ";
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(citySql);
-		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		return lst_data;
-		
-	}
-	@Override
-	public List<Map<String, Object>> getHotProduct(String string) {
-		// TODO Auto-generated method stub
-		/**
-		 * @author wuxinxin
-		 * 2018年5月28日
-		 */
-		String sql = "select member_count cou,member_name pname from ds_member_statistics where  member_type='3' limit 5";
-		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
-		try{
-			Query query = this.getHibernateTemplate().getSessionFactory()
-					.getCurrentSession().createSQLQuery(sql);
-			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			return lst_data;
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-		
-	}
-	@Override
-	public List<Map<String, Object>> getCoolProduct(String string) {
-		// TODO Auto-generated method stub
-		/**
-		 * @author wuxinxin
-		 * 2018年5月28日
-		 */
-		String sql = "select member_count cou,member_name pname from ds_member_statistics where  member_type='4' limit 5";
-		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
-		try{
-			Query query = this.getHibernateTemplate().getSessionFactory()
-					.getCurrentSession().createSQLQuery(sql);
-			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			return lst_data;
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-		
 	}
 
 
