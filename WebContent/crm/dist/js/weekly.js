@@ -5749,7 +5749,7 @@ function oneyearorsixweek(){
 				}
 				$('#pf-fre1 tr').eq(1).find("td:last").text(count_sum);
 				activities_sum_array.push(count_sum);
-				x_data_option18.push('\n'+count_sum);
+				x_data_option18.push('覆盖社区\n'+count_sum);
 				if(newActivitiesInfo.length > 0){
 					var secondTr = $("#pf-fre1 tr").eq(1);
 					var table =document.getElementById("pf-fre1");
