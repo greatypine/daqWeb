@@ -1505,10 +1505,10 @@ option1 = {
 				      },
 				    },
 				    grid: {
-				      borderWidth: 0,
-				      right:30,
-				      top: 100,
-				      bottom: 40,
+				    	borderWidth: 0,
+					      right:30,
+					      top: 100,
+					      bottom: 40,
 				      textStyle: {color: '#fff'}
 				    },
 				    legend: {
@@ -1523,18 +1523,10 @@ option1 = {
 				          color: '#90979c'
 				        }
 				      },
-				      splitLine: {
-				        show: false
-				      },
-				      axisTick: {
-				        show: false
-				      },
-				      splitArea: {
-				        show: false
-				      },
 				      axisLabel: {
-				        interval: 0,
-				        rotate:-20
+				        interval: 1,
+				       // rotate:-10,
+				        margin: 15,
 				      },
 				      data: [],
 				    }],
@@ -1626,7 +1618,8 @@ option1 = {
 						      },
 						      axisLabel: {
 						        interval: 0,
-						        rotate:-20
+						        rotate:-20,
+						        margin: 15,
 						      },
 						      data: ["校园店","生活中心店","街道月店","经营星店","药店","独立微超","合作店","前置仓","城市仓"],
 						    }],
@@ -1670,9 +1663,9 @@ option1 = {
 						    },
 						    grid: {
 						      borderWidth: 0,
-						      right:30,
+						      right:40,
 						      top: 100,
-						      bottom: 40,
+						      bottom: 50,
 						      textStyle: {color: '#fff'}
 						    },
 						    legend: {
@@ -1702,7 +1695,8 @@ option1 = {
 						      },
 						      axisLabel: {
 						        interval: 0,
-						        rotate:-20
+						        rotate:-20,
+						        margin: 15,
 						      },
 						      data: [],
 						    }],
@@ -1748,7 +1742,7 @@ option1 = {
 						      borderWidth: 0,
 						      right:30,
 						      top: 100,
-						      bottom: 40,
+						      bottom: 50,
 						      textStyle: {color: '#fff'}
 						    },
 						    legend: {
@@ -1778,7 +1772,8 @@ option1 = {
 						      },
 						      axisLabel: {
 						        interval: 0,
-						        rotate:-20
+						        rotate:-20,
+						        margin: 15,
 						      },
 						      data: ["数码连锁店","超市连锁店","广店营业厅"],
 						    }],
@@ -4490,8 +4485,12 @@ var initchart3 = function(){
 var citycover2017= new Array();//2017年覆盖城市
 var citycover2018=new Array();//2018年覆盖城市
 var screenlogin=getUrlParamByKey("su");
+var target = 0;
 $(function(){	 
 	loginShow();
+	if(target != 1){
+		getUser();
+	}
 	getCityNet();
 	findStoreNetDate();
 	oneyearorsixweek();
@@ -4505,6 +4504,19 @@ $(function(){
 	getStoreCoverPerson();
 });
 
+function getUser(){
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			curr_user = JSON.parse(data.data);
+		    if(curr_user.usergroup.code == "ZBXXWLBJJSZ"){
+		    	$("#pfedit_button").show();
+		    	$("#pfoperate_buttoon").show();
+		    }
+		}
+  	},false);
+}
+
 function loginShow(){
 	
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
@@ -4513,6 +4525,7 @@ function loginShow(){
 	    	//window.parent.location=getRootPath() + "/crm/index_city_net.html";
 	    	var stateObject = {};
 	    	var newUrl = "/daqWeb/crm/index_city_net.html";
+	    	target = 1;
 	    	history.replaceState(stateObject,null,newUrl);
 		};
 	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
@@ -4615,7 +4628,7 @@ function findStoreNetDate(){
 				var  natureInfo = "";
 				 for(var i = 0; i < storeNature.length; i++){
 					var cityInfo = storeNature[i];
-					var cityname = cityInfo.city_name;
+					var cityname = cityInfo.city_name.length>4?cityInfo.city_name.substring(0,5)+'\n'+cityInfo.city_name.substring(5,cityInfo.city_name.length):cityInfo.city_name;
 					var self_count = cityInfo.self_count;
 					var cooperative_count = cityInfo.cooperative_count;
 					citynameArray.push(cityname);
@@ -4653,7 +4666,7 @@ function findStoreNetDate(){
 				var mainstoreType_data = new Array();
 				for(var i = 0; i < storeTypeNatureOfCity.length; i++){
 					var storeType = storeTypeNatureOfCity[i];
-					var cityname = storeType.city_name;
+					var cityname =storeType.city_name.length>4?storeType.city_name.substring(0,5)+'\n'+storeType.city_name.substring(5,storeType.city_name.length):storeType.city_name;;
 					var count = storeType.count;
 					mainstoreType_x.push(cityname);
 					mainstoreType_data.push(count);

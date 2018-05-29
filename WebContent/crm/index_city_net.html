@@ -712,7 +712,7 @@
           </div>
         </div>
         <div class="box box-default" style="margin-top: 50px;">
-          <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——社区活动举办场次</strong><a class="pull-right btn btn-default btn-sm pfedit">编辑</a></div>
+          <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——社区活动举办场次</strong><a id="pfedit_button" style="display:none" class="pull-right btn btn-default btn-sm pfedit">编辑</a></div>
           <div class="box-body">
             <div class="col-sm-12">
               <table class="table table-striped table-bordered" id="pf-fre1">
@@ -852,7 +852,7 @@
           </div>
         </div>
         <div class="box box-default" style="margin-top: 50px;">
-          <div class="box-header h1 text-light-blue"><strong>混片儿情况——社区关键人及微信群运营情况</strong><a class="pull-right btn btn-default btn-sm pfoperate">编辑</a></div>
+          <div class="box-header h1 text-light-blue"><strong>混片儿情况——社区关键人及微信群运营情况</strong><a id="pfoperate_buttoon" style="display:none" class="pull-right btn btn-default btn-sm pfoperate">编辑</a></div>
           <div class="box-body">
             <div class="col-sm-12">
                <table class="table table-striped table-bordered " id="pfoperate1" style="margin-top: 15px;">
@@ -1401,7 +1401,7 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
@@ -1418,7 +1418,7 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
@@ -1435,7 +1435,7 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
               <tr>
@@ -1452,7 +1452,7 @@
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
               </tr>
             </table>
@@ -1790,7 +1790,7 @@ $(function(){
     });
     
     $('#pf-fre2 tr input').keyup(function(i){
-    	$(this).val($(this).val().replace(/[^\d]/g,''));
+    	$(this).val($(this).val().replace(/[^\d.-]/g,''));
     	var sum=0;
     	var lastInput = $(this).parent().parent().find("input").last();
     	$($(this).parent().parent()).find("input").not(lastInput).each(function(i,t){
@@ -1915,8 +1915,8 @@ $(function(){
 	        $(this).parents("body").css("overflow","auto");
       });
       
-      $('#pfoperate2 tr input').keyup(function(i){
-    	$(this).val($(this).val().replace(/[^\d]/g,''));
+      $('#pfoperate2 tr:lt(3) input').keyup(function(i){
+    	$(this).val($(this).val().replace(/[^\d.-]/g,''));
     	var sum=0;
     	var lastTD = $(this).parent().parent().find("td").last();
       	var lastTD_index = lastTD.prevObject.length;
@@ -1943,7 +1943,7 @@ $(function(){
       }); */
       //第二张表格的所有事件
       $('#pfoperate2_2 tr input').keyup(function(i){
-    	  $(this).val($(this).val().replace(/[^\d]/g,''));
+    	  $(this).val($(this).val().replace(/[^\d.-]/g,''));
       });
       $('#weixincount input').keyup(function(i){
  	  	var sum=0;
