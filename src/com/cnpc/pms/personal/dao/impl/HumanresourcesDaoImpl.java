@@ -175,6 +175,10 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 						" SELECT ts.citySelect,ts.deptname,ts.name,ts.employee_no,ts.inviteCode,ts.cardnumber,ts.orgname,ts.phone,ts.cardnumber FROM t_storekeeper ts) a ";
 			sql+=" where "+sqlwhere;*/
 			
+			if(humanresources!=null&&humanresources.getHumanstatus().equals(2L)){
+				sqlwhere +=" and 1=0 ";
+			}
+			
 			
 			if(humanresources!=null&&humanresources.getCitySelect()!=null&&humanresources.getCitySelect().length()>0){
 				if(!humanresources.getCitySelect().equals("全部")){
@@ -370,6 +374,10 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		@Override
 		public List<Map<String, Object>> exportOnLineHuman(Humanresources humanresources){
 			String sqlwhere = " 1=1 ";
+			if(humanresources!=null&&humanresources.getHumanstatus().equals(2L)){
+				sqlwhere +=" and 1=0 ";
+			}
+			
 			if(humanresources!=null&&humanresources.getCitySelect()!=null&&humanresources.getCitySelect().length()>0){
 				if(!humanresources.getCitySelect().equals("全部")){
 					sqlwhere +=" and citySelect = '"+humanresources.getCitySelect()+"'";
