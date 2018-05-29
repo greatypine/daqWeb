@@ -4634,7 +4634,7 @@ function findStoreNetDate(){
 					citynameArray.push(cityname);
 					cooperative_count_array.push(cooperative_count);
 					self_count_array.push(self_count);
-					var str_info = cityname+"共计"+(cooperative_count+self_count)+"家；"
+					var str_info = cityname+"共计<span class='text-red'>"+(cooperative_count+self_count)+"</span>家；"
 					natureInfo += str_info;
 				 }
 				 $("#storeInfoOfCity").append(natureInfo);
