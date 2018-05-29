@@ -10,7 +10,6 @@ import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bid.manager.AttachmentManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
-import com.cnpc.pms.dynamic.manager.DynamicManager;
 import com.cnpc.pms.personal.dao.ProvinceDao;
 import com.cnpc.pms.personal.dao.StoreDynamicDao;
 import com.cnpc.pms.personal.entity.*;
@@ -20,7 +19,6 @@ import com.cnpc.pms.platform.entity.PlatformStore;
 import com.cnpc.pms.platform.entity.SysArea;
 import com.cnpc.pms.platform.manager.PlatformStoreManager;
 import com.cnpc.pms.platform.manager.SysAreaManager;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -472,11 +470,23 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 	@Override
 	public StoreDynamic getStoreDynamicByCityAndName(StoreDynamic storeDynamic) {
 		StoreDynamicManager storeDynamicManager = (StoreDynamicManager) SpringHelper.getBean("storeDynamicManager");
-		IFilter filter = FilterFactory.getSimpleFilter("name like '%" + storeDynamic.getName()
-				+ "%' and city_name like '%" + storeDynamic.getCityName() + "%'");
+		IFilter filter = FilterFactory.getSimpleFilter("name = '" + storeDynamic.getName()
+				+ "' and city_name like '%" + storeDynamic.getCityName() + "%' and (auditor_status=1 or auditor_status=3)");
 		List<StoreDynamic> list = (List<StoreDynamic>) storeDynamicManager.getList(filter);
 		if (list != null && list.size() > 0) {
 			return list.get(0);
+		}else{
+			StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+			IFilter filter1 = FilterFactory.getSimpleFilter("name = '" + storeDynamic.getName()
+					+ "' and city_name like '%" + storeDynamic.getCityName() + "%'");
+			List<Store> list1 = (List<Store>) storeManager.getList(filter1);
+			if(list1!=null&&list1.size()>0){
+				Store store = list1.get(0);
+				StoreDynamic storeDynamic1 = new StoreDynamic();
+				storeDynamic1.setStore_id(store.getStore_id());
+				storeDynamic1.setName(store.getName());
+				return storeDynamic1;
+			}
 		}
 		return null;
 	}
