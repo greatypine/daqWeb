@@ -1035,7 +1035,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+"FROM t_store WHERE flag=0 and nature='自营店' AND `name` NOT  LIKE '%测试%' and storetype!='V' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' "
 				+"GROUP BY city_name ) s LEFT JOIN ( "
 				+"SELECT city_name,COUNT((storetype='C' and nature='自营店') or null) as qianzhicangcount,COUNT(nature='合作店' or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')!='闭店中' AND `name` NOT  LIKE '%测试%' "
-				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND DATE_FORMAT(create_time,'%Y')='2018' "
+				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' "
 				+"GROUP BY city_name ) l ON s.city_name=l.city_name LEFT JOIN ( "
 				+"SELECT cityname,IFNULL(preposition_task,0) as 2018qianzhicangmubiao,IFNULL(cooperative_task,0) as 2018hezuomubiao FROM di_storexpand WHERE  YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname "
 				+") c ON c.cityname=s.city_name";
