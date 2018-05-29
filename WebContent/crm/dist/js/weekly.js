@@ -3767,9 +3767,6 @@ option24 = {
       axisLine: {
         show: true
       },
-      axisLabel: {
-        formatter: '{value} %'
-      },
       splitLine:{show: false}
     }
   ],
@@ -3789,6 +3786,16 @@ option24 = {
       name:'活跃人群占比',
       type:'line',
       yAxisIndex: 2,
+      itemStyle: {
+          normal: {
+            barBorderRadius: 0,
+            label: {
+              show:true,
+              position: "top",
+              formatter: '{c}% '
+            }
+          }
+        },
       data:[]
     }
   ]
