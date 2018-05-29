@@ -900,8 +900,9 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 		if (user != null && user.getEmployeeId() != null) {
 			storeKeeper.setEmployee_no(user.getEmployeeId());
 			// 修改user密码
-			user.setPassword(MD5Utils.getMD5Str(confstorepassword));
-			Result r = userManager.updatePwd(user);
+			user.setPassword(confstorepassword);
+			user.setBlankPassword(null);
+			userManager.resetUserPassword(user);
 			return storeKeeper;
 		} else {
 			return null;
