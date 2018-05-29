@@ -2031,7 +2031,7 @@ option4 = {
       show: false
     },
     axisLabel: {
-      interval: 0,
+      interval: 1,
     },
     data: [],
   }],
