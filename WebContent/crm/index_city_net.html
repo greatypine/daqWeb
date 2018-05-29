@@ -1915,8 +1915,11 @@ $(function(){
 	        $(this).parents("body").css("overflow","auto");
       });
       
+      $('#pfoperate2 tr input').keyup(function(i){
+    	  $(this).val($(this).val().replace(/[^\d.-]/g,''));
+      })
+      
       $('#pfoperate2 tr:lt(3) input').keyup(function(i){
-    	$(this).val($(this).val().replace(/[^\d.-]/g,''));
     	var sum=0;
     	var lastTD = $(this).parent().parent().find("td").last();
       	var lastTD_index = lastTD.prevObject.length;
