@@ -3868,12 +3868,12 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   			  String[] headers_key = {"name","employee_no","inviteCode","storename","citySelect","zw","career_group","topostdate","storeno"};
   			 if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(1L)){
  				//在职
-   	    	    str_headers[6]="入职日期";
-   	    	    headers_key[6]="topostdate";
+   	    	    str_headers[7]="入职日期";
+   	    	    headers_key[7]="topostdate";
  			}else if(humanresources!=null&&humanresources.getHumanstatus()!=null&&humanresources.getHumanstatus().equals(2L)){
  				//离职
- 				str_headers[6]="离职日期";
- 				headers_key[6]="leavedate";
+ 				str_headers[7]="离职日期";
+ 				headers_key[7]="leavedate";
  			}
   			 
   			 for(int i = 0;i < str_headers.length;i++){

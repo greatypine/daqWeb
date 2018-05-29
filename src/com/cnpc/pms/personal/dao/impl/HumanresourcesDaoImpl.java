@@ -128,8 +128,13 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 				sqlwhere +=" and employee_no = '"+humanresources.getEmployee_no().trim()+"'";
 			}
 			
-			String sql = "SELECT * FROM t_humanresources a where "+sqlwhere ;
-			String sql_count="SELECT count(*) as total FROM t_humanresources a where "+sqlwhere ;
+			//String sql = "SELECT * FROM t_humanresources a where "+sqlwhere ;
+			String sql = "SELECT * FROM (SELECT leavedate,zw,inviteCode,humanstatus,topostdate,citySelect,storename,name,phone,employee_no,career_group FROM t_humanresources "+
+					" UNION ALL "+
+					" SELECT leavedate,zw,inviteCode,humanstatus,topostdate,citySelect,(SELECT name from t_store WHERE store_id=(SELECT store_id from tb_bizbase_user where disabledFlag=1 and employeeId=employee_no limit 1))as storename,name,phone,employee_no,''as career_group "+ 
+					" FROM t_storekeeper) a where "+sqlwhere;
+			
+			String sql_count="SELECT count(*) as total FROM ("+sql+") b";
 
 			Query query_count = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql_count);
@@ -345,7 +350,16 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 				sqlwhere +=" and a.employee_no = '"+humanresources.getEmployee_no().trim()+"'";
 			}
 			
-			String sql = "SELECT a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
+			//String sql = "SELECT a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
+			
+			String sql = "SELECT a.leavedate,a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,t_store.storeno FROM (SELECT leavedate,store_id,zw,inviteCode,humanstatus,topostdate,citySelect,storename,name,phone,employee_no,career_group FROM t_humanresources "+
+					" UNION ALL "+
+					" SELECT leavedate,store_id,zw,inviteCode,humanstatus,topostdate,citySelect,(SELECT name from t_store WHERE store_id=(SELECT store_id from tb_bizbase_user where disabledFlag=1 and employeeId=employee_no limit 1))as storename,name,phone,employee_no,''as career_group "+ 
+					" FROM t_storekeeper) a left join t_store on t_store.store_id=a.store_id where "+sqlwhere;
+			
+			
+			
+			
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;
