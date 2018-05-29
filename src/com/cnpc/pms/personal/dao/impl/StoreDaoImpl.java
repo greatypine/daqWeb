@@ -991,7 +991,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> findStoreByNature(String nature) {
 		String sql_str = "";
 		if("自营店".equals(nature)){
-			sql_str = "SELECT city_name," + "sum(case WHEN storetype='E'  and nature = '自营店' then 1 else 0 END) as '校园店',"
+			sql_str = "SELECT city_name," + "sum(case WHEN storetype='E' and nature = '自营店' then 1 else 0 END) as '校园店',"
 					+ "sum(case WHEN storetype='S' and nature = '自营店'  then 1 else 0 END) as '生活中心店',"
 					+ "sum(case WHEN storetype='Y' and nature = '自营店' then 1 else 0 END) as '街道月店',"
 					+ "sum(case WHEN storetype='C' and nature = '自营店' then 1 else 0 END) as '前置仓',"
@@ -1004,7 +1004,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "sum(case WHEN formattype = '超市连锁店' and nature = '合作店' then 1 else 0 END) as '超市连锁店', "
 					+ "sum(case WHEN formattype = '广店营业厅' and nature = '合作店' then 1 else 0 END) as '广店营业厅' ";
 		}else if(nature == null){
-			sql_str = "SELECT city_name," + "sum(case WHEN storetype='E' and storetype!='V'  then 1 else 0 END) as '校园店',"
+			sql_str = "SELECT city_name," + "sum(case WHEN storetype='E' and nature = '自营店'  then 1 else 0 END) as '校园店',"
 					+ "sum(case WHEN storetype='S' and nature = '自营店' then 1 else 0 END) as '生活中心店',"
 					+ "sum(case WHEN storetype='Y' and nature = '自营店' then 1 else 0 END) as '街道月店',"
 					+ "sum(case WHEN storetype='X' and nature = '自营店' then 1 else 0 END) as '经营星店', "
