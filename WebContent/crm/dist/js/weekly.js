@@ -1308,7 +1308,7 @@ option1 = {
 
 				  //城市总的街道、已有门店开业的街道数量
 				   option15 = {
-				    color:['#019aba','#eba954','#11565d'],
+				    color:['#01949b','#eba954','#e71010'],
 				    title: {
 				      text: '已开城市覆盖情况(街道)',
 				      textStyle: {
@@ -1474,7 +1474,7 @@ option1 = {
 				        symbolSize:8,
 				        itemStyle: {
 				          normal: {
-				             "color": "#01B3D7",
+				             "color": "#e71010",
 				            barBorderRadius: 0,
 				            label: {
 				              show:true,
@@ -1485,8 +1485,8 @@ option1 = {
 				        },
 				        lineStyle: {
 				          normal: {
-				            color: '#01B3D7',
-				            width: 1,
+				            color: '#e71010',
+				            width: 0.8,
 
 				          },
 				        },
@@ -1584,6 +1584,7 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
+						    color:['#536299'],
 						    grid: {
 						      borderWidth: 0,
 						      right:30,
@@ -1661,6 +1662,7 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
+						    color:['#c65454'],
 						    grid: {
 						      borderWidth: 0,
 						      right:40,
