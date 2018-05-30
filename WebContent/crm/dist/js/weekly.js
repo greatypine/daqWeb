@@ -1662,7 +1662,7 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
-						    color:['#c65454'],
+						    color:['#dc7272'],
 						    grid: {
 						      borderWidth: 0,
 						      right:40,
