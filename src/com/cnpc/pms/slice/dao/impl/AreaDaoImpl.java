@@ -686,8 +686,11 @@ public class AreaDaoImpl extends BaseDAOHibernate implements AreaDao {
 
 	@Override
 	public List<Map<String, Object>> queryAllAreaCount() {
-		String sql = "select COUNT(DISTINCT store_id) as store_count,count(DISTINCT id) as area_count,count(DISTINCT employee_a_no) as emp_count, "
-				+"sum(case WHEN WEEKOFYEAR(DATE_FORMAT(create_time,'%Y-%m-%d')) = WEEKOFYEAR(NOW()) THEN 1 else 0 END) as week_count  from t_area where status = 0";
+		String sql = "select a.*,b.* from(select COUNT(DISTINCT store_id) as store_count,count(DISTINCT id) as area_count,count(DISTINCT employee_a_no) as emp_count from t_area where status = 0) a "
+				+"LEFT JOIN ((select count(thisweek_count != 0 or null) as thisweek_count,count(preweek_count != 0 or null) as preweek_count from (select "
+				+"sum(case WHEN create_time < subdate(DATE_FORMAT(NOW(),'%Y-%m-%d 12:00:00'),date_format(NOW(), '%w') - 3) THEN 1 else 0 END) as thisweek_count, "
+				+"sum(case WHEN create_time < subdate(DATE_FORMAT(NOW(),'%Y-%m-%d 12:00:00'),date_format(NOW(), '%w') + 4) THEN 1 else 0 END) as preweek_count  "
+				+"from t_area where status = 0 GROUP BY store_id) t))b ON 1=1";
 
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

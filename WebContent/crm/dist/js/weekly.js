@@ -1308,7 +1308,7 @@ option1 = {
 
 				  //城市总的街道、已有门店开业的街道数量
 				   option15 = {
-				    //color:['#019aba','#7a201f','#11565d'],
+				    color:['#019aba','#eba954','#11565d'],
 				    title: {
 				      text: '已开城市覆盖情况(街道)',
 				      textStyle: {
@@ -5402,7 +5402,7 @@ function oneyearorsixweek(){
 		                    var areaAllInfo = resultJson.queryAllAreaCount;
 		                    var areaData = areaAllInfo[0];
 		                    var storeCount = areaData.store_count;
-		                    var weekCount = areaData.week_count;
+		                    var weekCount = areaData.thisweek_count-areaData.preweek_count < 0 ? 0 : areaData.thisweek_count-areaData.preweek_count;
 		                    var empCount = areaData.emp_count;
 		                    var areaCount = areaData.area_count;
 		                    var date = new Date();
