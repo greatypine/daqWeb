@@ -4746,12 +4746,12 @@ function goToDeptConsumer(){
 
 function findArray(array, feature, all) {
     var all = arguments[2] ? arguments[2] : true;
-    for(let index in array){
-        let cur = array[index];
+    for(var index in array){
+        var cur = array[index];
         if(feature instanceof Object){
-            let allRight = true;
-            for(let key in feature){
-                let value = feature[key];
+            var allRight = true;
+            for(var key in feature){
+                var value = feature[key];
                 if(cur[key].indexOf(value)>-1) return index;
                 if(all && cur[key] != value){
                     allRight = false;
