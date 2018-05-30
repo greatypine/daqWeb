@@ -1010,7 +1010,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "sum(case WHEN storetype='X' then 1 else 0 END) as '经营星店', "
 					+ "sum(case WHEN storetype='M' then 1 else 0 END) as '药店',"
 					+ "sum(case WHEN storetype='B' then 1 else 0 END) as '独立微超',"
-					+ "sum(case WHEN nature = '合作店' then 1 else 0 END) as '合作店',"
+					+ "sum(case WHEN nature = '合作店' and storetype !='V' then 1 else 0 END) as '合作店',"
 					+ "sum(case WHEN storetype='C' then 1 else 0 END) as '前置仓',"
 					+ "sum(case WHEN storetype='H' then 1 else 0 END) as '城市仓'";
 			
@@ -1034,7 +1034,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+"sum(case WHEN storetype='Z'or storetype='W'  or storetype='C' or storetype='H' then 1 else 0 END) as 'qita' "
 				+"FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and storetype!='V' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' "
 				+"GROUP BY city_name ) s LEFT JOIN ( "
-				+"SELECT city_name,COUNT((storetype='C') or null) as qianzhicangcount,COUNT(nature='合作店' or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')!='闭店中' AND `name` NOT  LIKE '%测试%' "
+				+"SELECT city_name,COUNT((storetype='C') or null) as qianzhicangcount,COUNT((nature='合作店' and storetype !='V') or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')!='闭店中' AND `name` NOT  LIKE '%测试%' "
 				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' "
 				+"GROUP BY city_name ) l ON s.city_name=l.city_name LEFT JOIN ( "
 				+"SELECT cityname,IFNULL(preposition_task,0) as 2018qianzhicangmubiao,IFNULL(cooperative_task,0) as 2018hezuomubiao FROM di_storexpand WHERE  YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname "
