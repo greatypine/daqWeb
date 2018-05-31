@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../crm/bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="../crm/bootstrap/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../crm/dist/css/AdminLTE.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="../crm/bootstrap/css/ionicons.min.css">
     <link rel="stylesheet" href="../data_access/dist/css/skins/_all-skins.min.css">
@@ -63,7 +64,7 @@
         p{margin: 0;}
         .menu_list li a{color: #999; display: inline-block; width: 100%; text-decoration: none; padding-top: 5px;}
         .menu_list li:hover,.menu_list li:visited,.menu_mark{background-color: rgba(0,0,0,0.05);}
-        .btn{padding: 0 12px; font-size: 20px; color: #808499;}
+        .btn-flat{padding: 0 12px; font-size: 20px; color: #808499;}
         .form-control{font-size: 16px; padding: 0 8px!important;}
         .result_hide{padding: 15px 0 10px 0;margin: 55px 0 0 0; width: 349px; background-color: #fff; color: #3385ff; text-align: center; font-size: 14px; padding: 10px 0 10px 0; -webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out}
         .btn-style-blue{height: 28px;line-height: 28px;color: #FFF;border: 0;outline: none;padding-left: 5px;padding-right: 5px;border-radius: 3px;margin-bottom: 4px;cursor: pointer;background-color: #0D9BF2;}
@@ -124,8 +125,11 @@
 <div id="editarea" style="display:none;overflow-x:hidden;margin-bottom:0; height:auto;" class="panel panel-primary" >
     <ul class="vill" id="village">
     </ul>
-    <span>不同小区地理坐标有交叉，请修改后进行保存!</span>
+    <span id="intersectionId"></span>
 </div>
+<!-- <div id="business" style="position:fixed;left:50%;top:50%;margin:-300px 0 0 -350px;z-index:16;display: none;">
+	<iframe name="leftFrame" id="leftFrame"  src="map_tinyVillage_add.html" width="900px" height="410px" scrolling="yes"  frameborder="0" ></iframe>	
+</div> -->
 
 <script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 <script type="text/javascript" src="../scripts/bidLib.js"></script>
@@ -151,11 +155,12 @@
 </script>
 <script type="text/javascript">
     //保存时存放area的数组
-    var x = getUrlParamByKey("x");
+    //var x = getUrlParamByKey("x");
     var storeId = getUrlParamByKey("storeno");
     var id = getUrlParamByKey("id");
-    var a = x.split(",");
-    var position=[Number(a[0]),Number(a[1])];
+    //var a = x.split(",");
+    //var position=[Number(a[0]),Number(a[1])];
+    var position = "";
     //已存在的小区id
     id=decodeURIComponent(id);
     //该数组用于该小区操作坐标错误时，撤销操作
@@ -175,6 +180,13 @@
 
 
     $(function(){
+    	document.oncontextmenu=function(){return false;}
+    	getServicePosition();
+    	/* var iframe = document.querySelector("#leftFrame");
+        var bot = iframe.contentWindow.document.querySelector("#bot");
+        var top = iframe.contentWindow.document.querySelector("#top");
+        document.body.scrollTop = document.body.offsetHeight;
+        document.body.scrollTop = 100; */
         doManager("TinyVillageManager", "findTinyvillageByTownId",storeId, function(data, textStatus, XMLHttpRequest) {
             if(data.result){
                 var aaa = data.data;
@@ -202,6 +214,7 @@
                                         areaAry[i]['area'] = arrCoordinates[x].data[0];
                                         areaAry[i]['store_no'] = arrCoordinates[x].storeNo;
                                         areaAry[i]['storeName'] = arrCoordinates[x].storeName;
+                                        areaAry[i]['belong'] = arrCoordinates[x].belong;
                                         break;
                                     }
                                 }
@@ -267,6 +280,10 @@
                                     }
                                 }
                             }
+                            /* if(i == areaAry.length-1){
+                            	$("#namelist").append("<div class='btn col-sm-3 btn-default pull-right btn-sm' style='margin:5px 0 7px 0;' onclick='addArea();'>添加小区</div>")
+                            } */
+                            
                             
                         }
                         initArea(areaAry,polygonArea);
@@ -300,11 +317,28 @@
             eventHandleNavList(parseInt($($("#"+id).find("span")[0]).html().split(".")[0]) - 1);
         }
     })
+    
+    var getServicePosition = function(){
+    	doManager("MongoDBManager", "getStorePosition", "1", function(
+					data, textStatus, XMLHttpRequest) {
+			if (data.result) {
+				if(eval('('+data.data+')').code == 200){
+					var positions = eval('('+data.data+')').data;
+					var x= positions[0];
+					var y= positions[1];
+					position= x+","+y;
+				}else if(eval('('+data.data+')').code == 9000003){
+					$$.showMessage("系统信息", "该门店服务范围不存在！");
+					position = "";
+				}
+			}
+		},false);
+    }
 
     //初始化地图对象，加载地图
     var map = new AMap.Map("mapContainer", {
         resizeEnable : true,
-        center :position,//创建中心点坐标
+       // center :position,//创建中心点坐标
         zoom : 15,
         //zooms : [ 4, 16 ],
         doubleClickZoom : false
@@ -359,19 +393,23 @@
 
     function initArea(areaAry, polygonArea) {
         map.clearMap();
-        //服务区域多边形
-        serviceRange = new AMap.Polygon({
-            path: polygonArea,//设置多边形边界路径
-            strokeColor: "#F00", //线颜色
-            strokeOpacity: 0.9, //线透明度
-            strokeWeight: 2,    //线宽
-            fillColor: "#00DD00", //填充色
-            fillOpacity: 0//填充透明度
-        });
-        serviceRange.setMap(map);
-        serviceRange.on("click", function () {
-            setNavListVisible(false);
-        });
+        if(position != ""){
+        	//服务区域多边形
+            serviceRange = new AMap.Polygon({
+                path: polygonArea,//设置多边形边界路径
+                strokeColor: "#F00", //线颜色
+                strokeOpacity: 0.9, //线透明度
+                strokeWeight: 2,    //线宽
+                fillColor: "#00DD00", //填充色
+                fillOpacity: 0//填充透明度
+            });
+            serviceRange.setMap(map);
+            map.setCenter(serviceRange.getBounds().getCenter());
+            serviceRange.on("click", function () {
+                setNavListVisible(false);
+            });
+        }
+        
 
         var polygon;
         for(var i=0;i<areaAry.length;i++){
@@ -437,7 +475,7 @@
         var hasMenu = true;
 
         // 初次选择对象,设置被选择对象的状态
-        if (typeof(lastIdx) == "undefined") {
+        if (typeof(lastIdx) == "undefined" ||　lastIdx == null) {
             setPageStyle(areaAry, lastIdx, idx, true);
         } else {
             // 两次选择一个对象，什么都不做
@@ -489,7 +527,7 @@
                 lmap = areaAry[onIdx].polygon.getMap();
             }
         }
-        if (typeof(offIdx) != "undefined") {
+        if (typeof(offIdx) != "undefined" && offIdx != null) {
             if (typeof(areaAry[offIdx].polygon) != "undefined") {
                 lmap = areaAry[offIdx].polygon.getMap();
             }
@@ -541,7 +579,7 @@
             fillColor: "#1791fc", //填充色
             fillOpacity: 0.45//填充透明度
         };
-        if (typeof(offIdx) != "undefined") {
+        if (typeof(offIdx) != "undefined" && offIdx != null) {
             if(typeof(areaAry[offIdx].polygon) != "undefined") {
                 areaAry[offIdx].polygon.setOptions(offOption);
             }
@@ -609,10 +647,12 @@
 
         var destArea = areaAry[idx];
         // 初次点击导航列表,设置被选择对象的状态
-        if (typeof(lastIdx) == "undefined") {
+        if (typeof(lastIdx) == "undefined" || lastIdx == null) {
             // 选择未录入的区域
             if (typeof(destArea.polygon) == "undefined") {
-                drawPolygon(map, areaAry, idx);
+            	if(position != ""){
+            		drawPolygon(map, areaAry, idx);
+            	}
                 setPageStyle(areaAry, lastIdx, idx, false);
 //                setNavListStyle(areaAry, idx, false);
             } else {
@@ -632,9 +672,13 @@
                 var descArea = areaAry[idx].polygon;
                 // 没有多边形
                 if (typeof(orgArea.polygon) == "undefined") {
-                    mouseTool.close();
+                	if(position != ""){
+                		mouseTool.close();
+                	}
                     if (typeof(descArea) == "undefined") {
-                        drawPolygon(map, areaAry, idx);
+                    	if(position != ""){
+                    		drawPolygon(map, areaAry, idx);
+                    	}
                     }
                     // 多边形状态
                     setPageStyle(areaAry, lastIdx, idx, false);
@@ -646,7 +690,9 @@
                         if (confirm("录入\\编辑中的坐标信息未保存，是否继续？")) {
                             // 选择未录入多边形
                             if (typeof(descArea) == "undefined") {
-                                drawPolygon(map, areaAry, idx);
+                            	if(position != ""){
+                            		drawPolygon(map, areaAry, idx);
+                            	}
                             }
                             // 同步数据状态
                             setDataState(areaAry, lastIdx, idx);
@@ -659,7 +705,9 @@
                     } else if (orgState == POLYGON_STATE_RECORDED) {
                         // 选择未录入多边形
                         if (typeof(descArea) == "undefined") {
-                            drawPolygon(map, areaAry, idx);
+                        	if(position != ""){
+                        		drawPolygon(map, areaAry, idx);
+                        	}
                         }
                         // 多边形状态
                         setPageStyle(areaAry, lastIdx, idx, false);
@@ -702,6 +750,7 @@
                     areaAry[idx].area = getAryFromObj(areaAry[idx].polygon.getPath());
                     $$.showMessage("坐标录入",valliage_name + '坐标,保存成功！');
                 }else if(jsonData.code==9000033){ //坐标交叉保存失败
+                	$("#intersectionId").html(jsonData.message);
                     $("#editarea").dialog({
                         bgiframe: true,
                         title: '坐标录入',
@@ -754,7 +803,11 @@
                                 var labelEml = $($($("li[name='"+areaAry[idx].id+"']").find("p")[1]).children());
                                 labelEml.attr("class","font-color-red")
                                 labelEml.html("未录入坐标,&nbsp;");
-                                drawPolygon(map, areaAry, idx);
+                                if(position != ""){
+                                	drawPolygon(map, areaAry, idx);
+                                }else{
+                                	lastIdx = null;
+                                }
                             }else{
                                 $$.showMessage("坐标录入", jsonData.message+",删除失败!");
                             }
@@ -867,20 +920,22 @@
                 },
                 1);
         } else if (state == POLYGON_STATE_RECORDED) {
-            contextMenu.addItem("编辑",function () {
+        	if(position != "" && areaAry[idx].belong == "private"){
+        		contextMenu.addItem("编辑",function () {
                     areaAry[idx].editor.open();
                     areaAry[idx].polygon.getExtData().state = POLYGON_STATE_UPDATE_EDIT;
                 },
                 0);
+        	}
             contextMenu.addItem("删除", function () {
                     deletePolygon(areaAry, idx);
                 },
                 1);
         }
         contextMenu.open(map, e.lnglat);
-        if (areaAry[idx].store_no != storeno) {
+       	if (areaAry[idx].store_no != storeno &&　areaAry[idx].belong == "private") {
             contextMenu.close();
-        }
+       	}
     };
 
     // 根据多边形获取后端请求坐标串
@@ -893,6 +948,11 @@
         }
         return points.join(";");
     };
+    
+    //点击添加小区按钮后
+    /* function addArea(){
+    	$("#business").show();
+    } */
 
 </script>
 </body>
