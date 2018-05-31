@@ -340,7 +340,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						tArea.setTiny_village_id(tinyVillageCode.getTiny_village_id());
 						tArea.setVallage_area(tCoordDto.getVallage_area());
 						tArea.setStatus(0);
-						tArea.setBelong("private");
+						tArea.setBelong("private"); 
 						Map<String, Object> saveTinyArea = tinyAreaManager.updateTinyAreaOfCoord(tArea);//更新小区范围
 						if("-1".equals(saveTinyArea.get("code"))){//保存失败
 							//collection.deleteMany(Filters.eq("code",tinyVillageCode.getCode()));//删除之前的坐标记录
