@@ -431,6 +431,7 @@
                   <th width="10%">历史消费信息</th>
                   <th width="10%">沉默时间（天）</th>
                   <th width="10%">用户所属区域</th>
+                  <th width="10%">用户最近订单</th>
                   <th width="10%">用户画像</th>
                   <th width="10%">用户标签</th>
                 </tr>
@@ -1152,6 +1153,8 @@ Date.prototype.format=function(fmt) {
 				        var payid = "paytips"+i;
 				        
 				        var cbelongid = "cbelongtips"+i;
+				        
+				        var recentlyid = "recentlys"+i;
 	       			 	
 		        		infoStr= "<tr>";
 	       			    infoStr= infoStr
@@ -1160,6 +1163,7 @@ Date.prototype.format=function(fmt) {
 		         	   		+"<td>"+jData[i].slient_time+"</td>"
 // 		         	   		+"<td>"+jData[i].tiny_village_code+"</td>"
 		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onclick=\"showuserdetail('"+jData[i].area_code+"','"+jData[i].tiny_village_code+"','"+jData[i].customer_id+"','"+cbelongid+"');\" id=\""+cbelongid+"\">"+jData[i].tiny_village_code+"</a></td>"
+		         	   		+"<td><a href=\"#\" style=\"color:#0FA6D8\" onmouseover=\"showrecently('"+jData[i].customer_id+"','"+recentlyid+"');\" id=\""+recentlyid+"\">查看</a></td>"
 		         	   		+"<td>"+jData[i].user_model+"</td>"
 		         	   		+"<td>";
 		         	   		
@@ -1343,7 +1347,7 @@ Date.prototype.format=function(fmt) {
 		     });
 	  }
   
-  //订单详情
+  //订单消费详情
   function showuserdetail(area_code,village_code,customer_id){
 	  $("#process_div").show();
   	  $("#process_div_pic").show();
@@ -1371,6 +1375,60 @@ Date.prototype.format=function(fmt) {
   			}  
   		});  
   }
+  
+  //最近订单
+  function showrecently(customer_id,recentlyid){
+	  doManager('userProfileManager','queryRecentlyOrder',[customer_id],function(data){
+		  if(data.result){
+		   	  var result= JSON.parse(data.data);
+		   	  if(result!=null){
+		   		var jData = result.data;
+		   		var flowStr="";
+		   		var ordercontent="";
+		   		if(jData!=null && jData.length>0){
+		   			for(var i=0;i<jData.length;i++){
+			   			var order_sn = "<strong>订单号：</strong><a style=\"color:#4169E1\" href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a><br>";
+			   			ordercontent += order_sn;
+			   		}
+		   		}else{
+		   			ordercontent = "<strong>订单号：</strong>无";
+		   		}
+		   		
+		   		layer.tips(ordercontent, '#'+recentlyid, {
+		 		   tips: [4, '#0FA6D8'], //还可配置颜色
+		 		   time:5000
+		 	    });
+		   	  }
+		  }
+	  });
+  }
+  
+	//订单详情
+	function showorderdetail(order_sn){
+	 $("#process_div").show();
+		  $("#process_div_pic").show();
+	 var url = "order_detail_alert.html?order_sn="+encode64(order_sn);
+	 //window.location.href=url;
+	 layer.open({
+	  type: 2,
+			  title:  ['订单信息', 'color:#fff'],
+			  shadeClose: true,
+			  shade:[0.1, '#393D49'],
+			  moveOut:false,
+			  move:false, 
+			  skin: 'layer-ext-crmskin',
+			  area: ['90%', '88%'],
+			  offset: ['2px','65px'],
+			  content: url,
+			  success:function(layer,index){
+				  $("#process_div").hide();
+			      $("#process_div_pic").hide();
+			  },
+			  cancel: function(index, layero){ 
+				 layer.close(index);
+				}  
+			});  
+	}
   
   function resetSerachParam(t){
 	 if(target==0){//总部

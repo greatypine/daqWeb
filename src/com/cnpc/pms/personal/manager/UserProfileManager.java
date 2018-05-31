@@ -21,4 +21,6 @@ public interface UserProfileManager extends IManager {
 	public Map<String, Object> exportUserProfile(UserProfileDto userProfile);
 	
 	public List<Map<String, Object>> queryDetailByCusId(String customer_id);
+	
+	public Map<String, Object> queryRecentlyOrder(String customer_id);
 }
