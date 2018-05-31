@@ -321,7 +321,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						coordinate_range.put("type", "Polygon");
 						coordinate_range.put("coordinates", new Object[]{coordinateArray});
 						doc.put("coordinate_range", coordinate_range);
-						
+						doc.put("belong","private");
 						//FindIterable<Document> findIterable =  collection.find(Filters.eq("code",tArea.getCode()));
 						collection.deleteMany(Filters.eq("code",tinyVillageCode.getCode()));//删除之前的坐标记录
 						collection.insertOne(doc);//保存新坐标纪录
