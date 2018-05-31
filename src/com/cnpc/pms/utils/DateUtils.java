@@ -426,19 +426,11 @@ public class DateUtils {
 		return MaxDay;
 	}
 	public static String getLastMaxDate(){
-		// 获取当前时间
-		Calendar cal = Calendar.getInstance();
-		// 下面可以设置月份，注：月份设置要减1，所以设置1月就是1-1，设置2月就是2-1，如此类推
-		cal.set(Calendar.MONTH, 1 - 1);
-		// 调到上个月
-		cal.add(Calendar.MONTH, -1);
-		// 得到一个月最最后一天日期(31/30/29/28)
-		int MaxDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-		// 按你的要求设置时间
-		cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), MaxDay);
-		// 按格式输出
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.format(cal.getTime());
+		SimpleDateFormat sf=new SimpleDateFormat("yyyy-MM-dd");
+		Calendar calendar=Calendar.getInstance();
+		calendar.set(Calendar.DAY_OF_MONTH, 1); 
+		calendar.add(Calendar.DATE, -1);
+		return sf.format(calendar.getTime());
 	}
 	/**
 	 * 获得上个月当天日期
