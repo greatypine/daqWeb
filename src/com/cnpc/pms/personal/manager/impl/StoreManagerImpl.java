@@ -2031,12 +2031,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 		Store store = this.findStore(storeDynamic.getStore_id());
 		if (store != null) {
-			/*try{
+			try{
 				this.findeTown_idUpdate(store.getTown_id(),storeDynamic.getTown_id(),store.getStoreno());
 			}catch (Exception e){
 				System.out.print("调用街道改变方法错误!");
 				e.printStackTrace();
-			}*/
+			}
 
 			try{
 				if(!store.getName().equals(storeDynamic.getName())){
@@ -2158,7 +2158,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setCreate_time(storeDynamic.getCreate_time());
 			storeDao.insertStore(store);
 		}
-		if(store.getGaode_cityCode()!=null&&!"".equals(store.getGaode_cityCode())){
+		if(store.getGaode_cityCode()!=null&&!"".equals(store.getGaode_cityCode()) ){
 			//同步门店方法
 			try {
 				syncStore(store);
@@ -2722,6 +2722,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		}
 		//根据门店id查询门店
 		Store updateStore=this.findStore(store.getStore_id());
+		try{
+			this.findeTown_idUpdate(updateStore.getTown_id(),store.getTown_id(),updateStore.getStoreno());
+		}catch (Exception e){
+			System.out.print("调用街道改变方法错误!");
+			e.printStackTrace();
+		}
 		updateStore.setTown_id(store.getTown_id());
 		updateStore.setTown_name(store.getTown_name());
 		updateStore.setUpdate_user(sessionUser.getName());

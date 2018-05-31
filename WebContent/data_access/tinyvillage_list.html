@@ -615,15 +615,16 @@ var editObj = {
 			resourceId: "tinyvillage_List_edit",
 			func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {	
 				var id = allColumnsDataMap.id;
-				if(isExistServiceArea){
+				//if(isExistServiceArea){
 					if(isPrivilege){
-						window.open("map_coordinates_input.html?id="+id+"&x="+position+"&storeno="+store_id,"_blank");
+						//window.open("map_coordinates_input.html?id="+id+"&x="+position+"&storeno="+store_id,"_blank");
+						window.open("map_coordinates_input.html?id="+id+"&storeno="+store_id,"_blank");
 					}else{
 						$$.showMessage("系统信息", "用户没有该权限!");
 					}
-				}else{
-					$$.showMessage("系统信息", "该门店服务范围不存在！");
-				}
+				//}else{
+				//	$$.showMessage("系统信息", "该门店服务范围不存在！");
+				//}
 			}
 		}
  
@@ -912,15 +913,16 @@ function deleteList(){
 	}
 	//地图坐标录入
 	function addCoordinates(){
-		if(isExistServiceArea){
+		//if(isExistServiceArea){
 			if(isPrivilege){
-				window.open("map_coordinates_input.html?x="+position+"&storeno="+store_id,"tiny_area");
+				//window.open("map_coordinates_input.html?x="+position+"&storeno="+store_id,"tiny_area");
+				window.open("map_coordinates_input.html?storeno="+store_id,"tiny_area");
 			}else{
 				$$.showMessage("系统信息", "用户没有该权限!");
 			}
-		}else{
-			$$.showMessage("系统信息", "该门店服务范围不存在！");
-		}
+		//}else{
+			//$$.showMessage("系统信息", "该门店服务范围不存在！");
+		//}
 	}
 	var curr_user;
 	function getServicePosition(){
@@ -933,7 +935,10 @@ function deleteList(){
   						getTownByStore();
   						if(curr_user.usergroup.code=="DZ" ||curr_user.usergroup.code=="GAX"){
   							isPrivilege=true;
-  							doManager("MongoDBManager", "getStorePosition", "1", function(
+  							if(sourceFlag==2){
+  								addCoordinates();
+						    }
+  							/* doManager("MongoDBManager", "getStorePosition", "1", function(
   									data, textStatus, XMLHttpRequest) {
   								if (data.result) {
   									if(eval('('+data.data+')').code == 200){
@@ -953,7 +958,7 @@ function deleteList(){
 	  	  						    	}
   									}
   								}
-  							});
+  							}); */
 						}
   					}
   		},false);

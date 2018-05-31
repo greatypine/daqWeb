@@ -854,4 +854,19 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public List<Map<String, Object>> queryDistCityListByUserId(long parseLong);
+	
+	/**
+	 * 
+	* @Title: queryMemberInvitation  
+	* @Description: TODO 查询社员邀请情况
+	* 2018年5月28日
+	* @param @param dynamicDto
+	* @param @param pageInfo
+	* @param @return      
+	* @return List<Map<String,Object>> 
+	* @throws
+	* @author gbl
+	 */
+	public Map<String,Object> queryMemberInvitation(DynamicDto dynamicDto,PageInfo pageInfo);
+	
 }

@@ -722,15 +722,15 @@ public class MessageNewManagerImpl extends BizBaseCommonManager implements Messa
 			user = (User)usermanager.getObject(Long.parseLong(receiveUser));//根据员工ID
 		}
 		if("abnormal_order_apply".equals(model)){//异常订单申请
-			message.setTitle("异常订单");
+			message.setTitle("异常订单申请处理");
 			Order order = (Order)obj;
 			message.setContent("订单编号 "+obj+" 的订单，申请处理");
 		}else if("abnormal_order_approve".equals(model)){//异常订单审批
 			
 			if(obj!=null){
 				List<WorkInfo> list = (List<WorkInfo>)obj;
-				message.setTitle("异常订单");
-				message.setContent("订单编号 "+list.get(0).getOrder_sn()+" 的订单已经处理完毕");
+				message.setTitle("异常订单申请通过");
+				message.setContent("订单编号为 "+list.get(0).getOrder_sn()+" 的订单已经审批通过");
 			}
 			
 		}

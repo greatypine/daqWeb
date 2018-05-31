@@ -2211,6 +2211,32 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		}
 		return ret_msg;
 	}
+	
+	
+	
+	@Override
+	public String resetUserPassword(User user) {
+		User userEntity = (User) this.getObject(user.getId());
+		String ret_msg="";
+		if (userEntity!=null&&userEntity.getPassword()!=null) {
+			//可以修改
+			userEntity.setPassword(MD5Utils.getMD5Str(user.getPassword()));
+			userEntity.setBlankPassword(null);
+			// 添加最后修改人和修改时间
+			userEntity.setLastModifyUserID(""+user.getId());
+			java.util.Date date = new java.util.Date();
+			java.sql.Date sdate = new java.sql.Date(date.getTime());
+			userEntity.setLastModifyDate(sdate);
+			// 检查开关
+			this.saveObject(userEntity);
+			ret_msg="修改成功！";
+		}else{
+			ret_msg="原密码不符，修改失败！ ";
+		}
+		return ret_msg;
+	}
+	
+	
 	@Override
 	public String modifyUserInitPassword(User user) {
 		User userEntity = (User) this.getObject(user.getId());

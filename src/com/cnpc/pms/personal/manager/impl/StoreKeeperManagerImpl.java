@@ -315,6 +315,7 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 			sKeeper.setLeavercvlistdate(storeKeeper.getLeavercvlistdate());
 			sKeeper.setLeavereason(storeKeeper.getLeavereason());
 			sKeeper.setLeavetype(storeKeeper.getLeavetype());
+			sKeeper.setCardnumber(storeKeeper.getCardnumber());
 			// start 2017-09-08 by litianyu
 			// sKeeper.setStorenames(storeKeeper.getStorenames());
 			// end 2017-09-08 by litianyu
@@ -449,7 +450,13 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 								if (store.getStoreno().contains("C")) {// 仓店 不同步
 									sync = false;
 								}
+								if (store.getStoreno().contains("V")) {// 虚拟店 不同步
+									sync = false;
+								}
 								if (store.getName().contains("储备店")) {// 储备店 不同步
+									sync = false;
+								}
+								if (store.getName().contains("测试")) {// 测试店 不同步
 									sync = false;
 								}
 								if (store.getName().contains("办公室")) {// 办公室 不同步
@@ -893,8 +900,9 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 		if (user != null && user.getEmployeeId() != null) {
 			storeKeeper.setEmployee_no(user.getEmployeeId());
 			// 修改user密码
-			user.setPassword(MD5Utils.getMD5Str(confstorepassword));
-			Result r = userManager.updatePwd(user);
+			user.setPassword(confstorepassword);
+			user.setBlankPassword(null);
+			userManager.resetUserPassword(user);
 			return storeKeeper;
 		} else {
 			return null;

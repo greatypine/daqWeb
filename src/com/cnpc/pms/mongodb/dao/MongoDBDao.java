@@ -75,5 +75,16 @@ public interface MongoDBDao {
 	 */
 	public List<Map<String, Object>> getAllTinyVillageOdAreaNo(String area_no); 
 	
-	
+	/**
+	 * 
+	* @Title: selectTinyVillageCode  
+	* @Description: TODO 根据小区code查询小区 
+	* 2018年5月29日
+	* @param @param code
+	* @param @return      
+	* @return List<Map<String,Object>> 
+	* @throws
+	* @author gbl
+	 */
+	public List<Map<String,Object>> selectTinyVillageCode(String code);
 }

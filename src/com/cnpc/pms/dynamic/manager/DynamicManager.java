@@ -1024,4 +1024,31 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public Map<String, Object> exportUserMemberInfo(DynamicDto dd);
+    
+   /**
+    * 
+   * @Title: selectMemberInvitation  
+   * @Description: TODO 查询社员统计
+   * 2018年5月28日
+   * @param @param dd
+   * @param @param pageInfo
+   * @param @return      
+   * @return Map<String,Object> 
+   * @throws
+   * @author gbl
+    */
+    public Map<String,Object> selectMemberInvitation(DynamicDto dd,PageInfo pageInfo);
+    
+    /**
+     * 
+    * @Title: exportMemberInvitation  
+    * @Description: TODO 导出社员统计
+    * 2018年5月28日
+    * @param @param dd
+    * @param @return      
+    * @return Map<String,Object> 
+    * @throws
+    * @author gbl
+     */
+    public Map<String, Object> exportMemberInvitation(DynamicDto dd);
 }

@@ -2008,14 +2008,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0) as cusnum_ten,ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum ,cusnum_ten "+
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
-					" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
+					//" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
 					" ) a right join (select username as name,employeeno as employee_no,storeid as store_id from ds_topdata where   year ="+dynamicDto.getYear()+" and month ="+dynamicDto.getMonth()+" and zw ='国安侠' and (humanstatus =1 or (humanstatus=2 and YEAR(DATE(leavedate)) =YEAR(DATE_ADD(NOW(),INTERVAL -1 MONTH)) and MONTH(DATE(leavedate))=MONTH(DATE_ADD(NOW(),INTERVAL -1 MONTH)))) and storeid IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
 		}else if("cur".equals(dynamicDto.getSearchstr())){//当前月
-			
+			 
 			sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0)  as cusnum_ten,ts.city_name as cityname,ts.name as storename,ts.storeno, th.name,th.employee_no as employeeno  from (select employeeno,new_cusnum_ten ,cusnum,cusnum_ten "+
 					" from ds_pes_customer_employee_month tor "+
 					" where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+
-					" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
+					//" and tor.storeno in ("+dynamicDto.getStoreNo()+")"+
 					" ) a  right join (select name,employee_no,store_id from t_humanresources where (humanstatus = 1 or (humanstatus=2 and YEAR(DATE(leavedate)) =YEAR(NOW()) and MONTH(DATE(leavedate))=MONTH(NOW()))) and  zw = '国安侠' and store_id IN ("+dynamicDto.getStoreIds()+")) th   on a.employeeno = th.employee_no   left join t_store ts on th.store_id = ts.store_id ";
 		}
 		
@@ -3003,7 +3003,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member GROUP BY  member.regist_cityno "
 					+") t1 LEFT JOIN ( "
 					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where "
-					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
+					+"member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
 					+"ON t1.regist_cityno = t2.regist_cityno INNER JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
 		}else{
 			sql="select city.cityname as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
@@ -3055,5 +3055,52 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
             e.printStackTrace();
         }
 		return lst_result;
+	}
+
+	@Override
+	public Map<String, Object> queryMemberInvitation(DynamicDto dynamicDto, PageInfo pageInfo) {
+		String sql=" select a.inviteCode,a.total,b.employee_no,CONCAT('*******',SUBSTR(b.mobilephone,8,11)) as mobilephone,b.name from "
+				   +" (select inviteCode,COUNT(1) as total from df_user_member where opencard_time>='"+dynamicDto.getBeginDate()+"' and opencard_time<'"+dynamicDto.getEndDate()+"' GROUP BY inviteCode) a" 
+				   +" INNER JOIN" 
+				   +" (select name,phone as mobilephone,employee_no,inviteCode from t_humanresources where humanstatus=1 and phone is not null and phone!='' and cardnumber is not null and cardnumber!='' and inviteCode is not null and inviteCode!=''" 
+				   +" UNION" 
+				   +" select name,phone as mobilephone,employee_no,inviteCode from t_online_humanresources where phone is not null and phone!='' and cardnumber is not null and cardnumber!='' and inviteCode is not null and inviteCode!=''" 
+				   +" UNION" 
+				   +" select name,phone as mobilephone,employee_no,inviteCode from t_storekeeper where humanstatus=1 and phone is not null and phone!='' and cardnumber is not null and cardnumber!='' and inviteCode is not null and inviteCode!='') b" 
+				   +" on a.inviteCode = b.inviteCode where a.inviteCode is not null ";
+		if(dynamicDto.getEmployeeName()!=null&&!"".equals(dynamicDto.getEmployeeName())){
+			sql =sql+" and b.name like '%"+dynamicDto.getEmployeeName()+"%'";
+		}
+		
+		if(dynamicDto.getEmployeeNo()!=null&&!"".equals(dynamicDto.getEmployeeNo())){
+			sql =sql+" and b.employee_no like '%"+dynamicDto.getEmployeeNo()+"%'";
+		}
+					
+		List<?> list=null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+				
+		
+		if(pageInfo!=null){
+			String sql_count = "SELECT count(1) from ("+sql+") c ";
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+			
+			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(
+						pageInfo.getRecordsPerPage()
+								* (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+			
+			
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}else{
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}
+		map_result.put("member", list);
+		return map_result;
 	}
 }

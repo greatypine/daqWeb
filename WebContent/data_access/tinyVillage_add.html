@@ -131,6 +131,7 @@ $(function(){
     });
 })
 function dataCheck() {
+	$("#submit").attr("disabled","true");
 	var name=$("#name").val().replace(/(^\s*)|(\s*$)/g, "");
 	var address=$("#address").val().replace(/(^\s*)|(\s*$)/g, "");
 	var town_name=$("#town_name").val().replace(/(^\s*)|(\s*$)/g, "");
@@ -138,32 +139,39 @@ function dataCheck() {
 	var village_name=$("#village_name").val().replace(/(^\s*)|(\s*$)/g, "");
 	var village_id=$("#village_id").val();
 	if(town_name == "" || town_name == null){
+		$("#submit").removeAttr("disabled");
 		alert("请输入街道名称!");
 		return;
 	}
 	if(town_id == "" || town_id == null){
+		$("#submit").removeAttr("disabled");
 		alert("请输入正确的街道名称!");
 		return;
 	}
 	if(village_name == "" || village_name == null){
+		$("#submit").removeAttr("disabled");
 		alert("请输入社区名称!");
 		return;
 	}
 	if(village_id == "" || village_id == null){
+		$("#submit").removeAttr("disabled");
 		alert("请输入正确的社区名称!");
 		return;
 	}
 	var val_payPlatform = $('#tinyvillage_ty option:checked').val();
 	if(name == "" || name == null){
+		$("#submit").removeAttr("disabled");
 		alert("请输入小区名称!");
 		return;
 	}
 	 
 	if(address == "" || address == null){
+		$("#submit").removeAttr("disabled");
 		alert("请输入小区地址!");
 		return;
 	}
 	if(val_payPlatform=="" || val_payPlatform == "undefined" || val_payPlatform == null ){
+		$("#submit").removeAttr("disabled");
 		alert("请选择小区类别!");
 		return;
 	} 
@@ -180,6 +188,7 @@ function yanzhengshifou(){
 			textStatus, XMLHttpRequest) {
 		if (data.result) {
 			if(data.data!="null"){
+				$("#submit").removeAttr("disabled");
 				alert("小区已存在!");
 				return false;
 			}else{
@@ -187,6 +196,7 @@ function yanzhengshifou(){
 			}
 			
 		} else {
+			$("#submit").removeAttr("disabled");
 			$$.showMessage("系统信息", "信息加载异常");
 			return false;
 		}
@@ -211,6 +221,7 @@ function doSave(){
 				alert("添加成功！");
 				window.location.href = 'tinyvillage_list.html';
 			} else {
+				$("#submit").removeAttr("disabled");
 				$$.showMessage("系统信息", "添加失败!");
 			}
 		});
@@ -407,7 +418,7 @@ function doSave(){
 <div class="panel panel-primary" style="margin: 10px 5px 0 5px">
     <div class="panel-heading">小区信息添加
         <span class="but">
-			<input name="" type="submit" onclick="dataCheck();" value="保存">
+			<input name="" type="submit" id="submit" onclick="dataCheck();" value="保存">
 			<input name="" type="button" onclick="doback();" value="返回">
 		</span>
     </div>

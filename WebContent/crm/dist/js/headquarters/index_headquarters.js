@@ -4746,12 +4746,12 @@ function goToDeptConsumer(){
 
 function findArray(array, feature, all) {
     var all = arguments[2] ? arguments[2] : true;
-    for(let index in array){
-        let cur = array[index];
+    for(var index in array){
+        var cur = array[index];
         if(feature instanceof Object){
-            let allRight = true;
-            for(let key in feature){
-                let value = feature[key];
+            var allRight = true;
+            for(var key in feature){
+                var value = feature[key];
                 if(cur[key].indexOf(value)>-1) return index;
                 if(all && cur[key] != value){
                     allRight = false;
@@ -4811,4 +4811,17 @@ function menuShowByRole(){
 function  clearCache(){
 	localStorage.clear();
 	window.parent.location=getRootPath() + "/crm/index_headquarters.html";
+}
+
+//社员邀请统计
+function goToMemberInvitation(){
+	  var role = curr_user.usergroup.code;
+      var url = "";
+	  var target=pageStatusInfo.targets;
+	  if(target==0){
+	  	url = "dynamicData_member_invitation.html?t="+encode64('0')+"&s=&cn=&r="+encode64(role)+"&c=&e="+encode64(curr_user.id);
+	  }else if(target==1){ 
+	  	url  = "dynamicData_member_invitation.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);
+	  }
+      window.open(url,"dynamicData_member_invitation");
 }

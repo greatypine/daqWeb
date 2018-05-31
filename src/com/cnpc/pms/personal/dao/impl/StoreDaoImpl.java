@@ -1000,7 +1000,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "sum(case WHEN storetype='H' then 1 else 0 END) as '城市仓',"
 					+ "sum(case WHEN storetype='X' then 1 else 0 END) as '经营星店' ";
 		}else if("合作店".equals(nature)){
-			sql_str = "SELECT city_name,sum(case WHEN formattype = '数码连锁店' and nature = '合作店' then 1 else 0 END) as '数码连锁店', "
+			sql_str = "SELECT city_name,sum(case WHEN formattype = '数码连锁店' and nature = '合作店'  then 1 else 0 END) as '数码连锁店', "
 					+ "sum(case WHEN formattype = '超市连锁店' and nature = '合作店' then 1 else 0 END) as '超市连锁店', "
 					+ "sum(case WHEN formattype = '广店营业厅' and nature = '合作店' then 1 else 0 END) as '广店营业厅' ";
 		}else if(nature == null){
@@ -1010,12 +1010,12 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "sum(case WHEN storetype='X' then 1 else 0 END) as '经营星店', "
 					+ "sum(case WHEN storetype='M' then 1 else 0 END) as '药店',"
 					+ "sum(case WHEN storetype='B' then 1 else 0 END) as '独立微超',"
-					+ "sum(case WHEN nature = '合作店' then 1 else 0 END) as '合作店',"
+					+ "sum(case WHEN nature = '合作店' and storetype !='V' then 1 else 0 END) as '合作店',"
 					+ "sum(case WHEN storetype='C' then 1 else 0 END) as '前置仓',"
 					+ "sum(case WHEN storetype='H' then 1 else 0 END) as '城市仓'";
 			
 		}
-		String sql = sql_str+ "FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' AND storetype!='V'";
+		String sql = sql_str+ "FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND ifnull(estate,'')!='闭店中'";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1034,8 +1034,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+"sum(case WHEN storetype='Z'or storetype='W'  or storetype='C' or storetype='H' then 1 else 0 END) as 'qita' "
 				+"FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and storetype!='V' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' "
 				+"GROUP BY city_name ) s LEFT JOIN ( "
-				+"SELECT city_name,COUNT(storetype='C' or null) as qianzhicangcount,COUNT(nature='合作店' or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')!='闭店中' AND `name` NOT  LIKE '%测试%' "
-				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND DATE_FORMAT(create_time,'%Y')='2018' "
+				+"SELECT city_name,COUNT((storetype='C') or null) as qianzhicangcount,COUNT((nature='合作店' and storetype !='V') or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')!='闭店中' AND `name` NOT  LIKE '%测试%' "
+				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' "
 				+"GROUP BY city_name ) l ON s.city_name=l.city_name LEFT JOIN ( "
 				+"SELECT cityname,IFNULL(preposition_task,0) as 2018qianzhicangmubiao,IFNULL(cooperative_task,0) as 2018hezuomubiao FROM di_storexpand WHERE  YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname "
 				+") c ON c.cityname=s.city_name";
@@ -1164,10 +1164,10 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		}else{
 			joinType = "inner join";
 		}
-		String sql = "select t1.cityname,DATE_FORMAT(t1.create_time,'%Y') AS create_year,t1.cityno,ifnull(t2.count,0) as ' cooperative_complete',ifnull(t3.count,0) as 'self_complete',"
-				+ "ifnull(t4.cooperative_task,0) as cooperative_task,ifnull(t4.self_support_task,0) as self_support_task from t_dist_citycode t1 "+joinType
+		String sql = "select DISTINCT t1.cityname,DATE_FORMAT(t1.create_time,'%Y') AS create_year,t1.cityno,ifnull(t2.count,0) as ' cooperative_complete',ifnull(t3.count,0) as 'self_complete',"
+				+ "ifnull(t4.cooperative_task,0) as cooperative_task,ifnull(t4.self_support_task,0) as self_support_task from t_dist_citycode t1 INNER JOIN t_store s on (t1.cityname = s.city_name and s.flag = 0 and s.name not like '%储备店%' and s.name not like '%测试%')"+joinType
 				+ " (select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')!='闭店中' and nature = '合作店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t2 " + "ON t1.cityname = t2.city_name LEFT JOIN "
-				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')!='闭店中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name LEFT JOIN "
+				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')!='闭店中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name INNER JOIN "
 				+ "(select cooperative_task,self_support_task,cityname,cityno from di_storexpand  where 1=1 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname) t4 "
 				+ "ON t1.cityname = t4.cityname;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -1284,7 +1284,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' GROUP BY city_name) "
 			+"t1 ON (s.city_name = t1.city_name) LEFT JOIN ( "
 			+"select count(store_id) as cooperative_count,city_name from t_store where nature = '合作店' and flag=0 AND `name` NOT  LIKE '%测试%' "
-			+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' GROUP BY city_name) "
+			+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND ifnull(estate,'')!='闭店中' GROUP BY city_name) "
 			+"t2 ON (t2.city_name = s.city_name) where s.flag=0 AND s.`name` NOT  LIKE '%测试%' and s.`name` NOT  LIKE '%储备%' and s.`name` NOT  LIKE '%办公室%' and s.storetype!='V' AND ifnull(s.estate,'')!='闭店中'";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据

@@ -205,6 +205,7 @@ public class SysUserGroupOperaManagerImpl extends BizBaseCommonManager implement
 			//判断密码
 			if(user.getPassword()!=null&&user.getPassword().trim().length()>0){
 				String savepassword = MD5Utils.getMD5Str(user.getPassword());
+				saveUser.setBlankPassword(null);
 				saveUser.setPassword(savepassword);
 			}
 			preSaveObject(saveUser);
@@ -218,6 +219,7 @@ public class SysUserGroupOperaManagerImpl extends BizBaseCommonManager implement
 			saveUser.setEmail("123@123.com");
 			saveUser.setEnablestate(1);
 			String savepassword = MD5Utils.getMD5Str(user.getPassword());
+			saveUser.setBlankPassword(null);
 			saveUser.setPassword(savepassword);
 			saveUser.setPk_org(Long.parseLong("40284"));
 			saveUser.setMobilephone(user.getMobilephone());

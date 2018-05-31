@@ -1308,7 +1308,7 @@ option1 = {
 
 				  //城市总的街道、已有门店开业的街道数量
 				   option15 = {
-				    //color:['#019aba','#7a201f','#11565d'],
+				    color:['#01949b','#eba954','#e71010'],
 				    title: {
 				      text: '已开城市覆盖情况(街道)',
 				      textStyle: {
@@ -1474,7 +1474,7 @@ option1 = {
 				        symbolSize:8,
 				        itemStyle: {
 				          normal: {
-				             "color": "#01B3D7",
+				             "color": "#e71010",
 				            barBorderRadius: 0,
 				            label: {
 				              show:true,
@@ -1485,8 +1485,8 @@ option1 = {
 				        },
 				        lineStyle: {
 				          normal: {
-				            color: '#01B3D7',
-				            width: 1,
+				            color: '#e71010',
+				            width: 0.8,
 
 				          },
 				        },
@@ -1505,10 +1505,10 @@ option1 = {
 				      },
 				    },
 				    grid: {
-				      borderWidth: 0,
-				      right:30,
-				      top: 100,
-				      bottom: 40,
+				    	borderWidth: 0,
+					      right:30,
+					      top: 100,
+					      bottom: 40,
 				      textStyle: {color: '#fff'}
 				    },
 				    legend: {
@@ -1523,18 +1523,10 @@ option1 = {
 				          color: '#90979c'
 				        }
 				      },
-				      splitLine: {
-				        show: false
-				      },
-				      axisTick: {
-				        show: false
-				      },
-				      splitArea: {
-				        show: false
-				      },
 				      axisLabel: {
-				        interval: 0,
-				        rotate:-20
+				        interval: 1,
+				       // rotate:-10,
+				        margin: 15,
 				      },
 				      data: [],
 				    }],
@@ -1592,6 +1584,7 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
+						    color:['#5f6b97'],
 						    grid: {
 						      borderWidth: 0,
 						      right:30,
@@ -1626,7 +1619,8 @@ option1 = {
 						      },
 						      axisLabel: {
 						        interval: 0,
-						        rotate:-20
+						        rotate:-20,
+						        margin: 15,
 						      },
 						      data: ["校园店","生活中心店","街道月店","经营星店","药店","独立微超","合作店","前置仓","城市仓"],
 						    }],
@@ -1668,11 +1662,12 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
+						    color:['#dc7272'],
 						    grid: {
 						      borderWidth: 0,
-						      right:30,
+						      right:40,
 						      top: 100,
-						      bottom: 40,
+						      bottom: 50,
 						      textStyle: {color: '#fff'}
 						    },
 						    legend: {
@@ -1702,7 +1697,8 @@ option1 = {
 						      },
 						      axisLabel: {
 						        interval: 0,
-						        rotate:-20
+						        rotate:-20,
+						        margin: 15,
 						      },
 						      data: [],
 						    }],
@@ -1748,7 +1744,7 @@ option1 = {
 						      borderWidth: 0,
 						      right:30,
 						      top: 100,
-						      bottom: 40,
+						      bottom: 50,
 						      textStyle: {color: '#fff'}
 						    },
 						    legend: {
@@ -1778,7 +1774,8 @@ option1 = {
 						      },
 						      axisLabel: {
 						        interval: 0,
-						        rotate:-20
+						        rotate:-20,
+						        margin: 15,
 						      },
 						      data: ["数码连锁店","超市连锁店","广店营业厅"],
 						    }],
@@ -2036,7 +2033,7 @@ option4 = {
       show: false
     },
     axisLabel: {
-      interval: 0,
+      interval: 1,
     },
     data: [],
   }],
@@ -3772,9 +3769,6 @@ option24 = {
       axisLine: {
         show: true
       },
-      axisLabel: {
-        formatter: '{value} %'
-      },
       splitLine:{show: false}
     }
   ],
@@ -3794,6 +3788,16 @@ option24 = {
       name:'活跃人群占比',
       type:'line',
       yAxisIndex: 2,
+      itemStyle: {
+          normal: {
+            barBorderRadius: 0,
+            label: {
+              show:true,
+              position: "top",
+              formatter: '{c}% '
+            }
+          }
+        },
       data:[]
     }
   ]
@@ -4490,8 +4494,12 @@ var initchart3 = function(){
 var citycover2017= new Array();//2017年覆盖城市
 var citycover2018=new Array();//2018年覆盖城市
 var screenlogin=getUrlParamByKey("su");
+var target = 0;
 $(function(){	 
 	loginShow();
+	if(target != 1){
+		getUser();
+	}
 	getCityNet();
 	findStoreNetDate();
 	oneyearorsixweek();
@@ -4505,6 +4513,19 @@ $(function(){
 	getStoreCoverPerson();
 });
 
+function getUser(){
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			curr_user = JSON.parse(data.data);
+		    if(curr_user.usergroup.code == "ZBXXWLBJJSZ"){
+		    	$("#pfedit_button").show();
+		    	$("#pfoperate_buttoon").show();
+		    }
+		}
+  	},false);
+}
+
 function loginShow(){
 	
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
@@ -4513,6 +4534,7 @@ function loginShow(){
 	    	//window.parent.location=getRootPath() + "/crm/index_city_net.html";
 	    	var stateObject = {};
 	    	var newUrl = "/daqWeb/crm/index_city_net.html";
+	    	target = 1;
 	    	history.replaceState(stateObject,null,newUrl);
 		};
 	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
@@ -4615,13 +4637,13 @@ function findStoreNetDate(){
 				var  natureInfo = "";
 				 for(var i = 0; i < storeNature.length; i++){
 					var cityInfo = storeNature[i];
-					var cityname = cityInfo.city_name;
+					var cityname = cityInfo.city_name.length>4?cityInfo.city_name.substring(0,5)+'\n'+cityInfo.city_name.substring(5,cityInfo.city_name.length):cityInfo.city_name;
 					var self_count = cityInfo.self_count;
 					var cooperative_count = cityInfo.cooperative_count;
 					citynameArray.push(cityname);
 					cooperative_count_array.push(cooperative_count);
 					self_count_array.push(self_count);
-					var str_info = cityname+"共计"+(cooperative_count+self_count)+"家；"
+					var str_info = cityname+"共计<span class='text-red'>"+(cooperative_count+self_count)+"</span>家；"
 					natureInfo += str_info;
 				 }
 				 $("#storeInfoOfCity").append(natureInfo);
@@ -4653,7 +4675,7 @@ function findStoreNetDate(){
 				var mainstoreType_data = new Array();
 				for(var i = 0; i < storeTypeNatureOfCity.length; i++){
 					var storeType = storeTypeNatureOfCity[i];
-					var cityname = storeType.city_name;
+					var cityname =storeType.city_name.length>4?storeType.city_name.substring(0,5)+'\n'+storeType.city_name.substring(5,storeType.city_name.length):storeType.city_name;;
 					var count = storeType.count;
 					mainstoreType_x.push(cityname);
 					mainstoreType_data.push(count);
@@ -5382,7 +5404,7 @@ function oneyearorsixweek(){
 		                    var areaAllInfo = resultJson.queryAllAreaCount;
 		                    var areaData = areaAllInfo[0];
 		                    var storeCount = areaData.store_count;
-		                    var weekCount = areaData.week_count;
+		                    var weekCount = areaData.thisweek_count-areaData.preweek_count < 0 ? 0 : areaData.thisweek_count-areaData.preweek_count;
 		                    var empCount = areaData.emp_count;
 		                    var areaCount = areaData.area_count;
 		                    var date = new Date();
@@ -5736,7 +5758,7 @@ function oneyearorsixweek(){
 				}
 				$('#pf-fre1 tr').eq(1).find("td:last").text(count_sum);
 				activities_sum_array.push(count_sum);
-				x_data_option18.push('\n'+count_sum);
+				x_data_option18.push('覆盖社区\n'+count_sum);
 				if(newActivitiesInfo.length > 0){
 					var secondTr = $("#pf-fre1 tr").eq(1);
 					var table =document.getElementById("pf-fre1");
@@ -5844,8 +5866,8 @@ function oneyearorsixweek(){
 				var arearate = (areacount/count_sum)*100
 				$('#pfoperate1_1 tr').eq(1).find("td:last").text(arearate.toFixed(2));
 				var citynameArray = new Array();
-				//社区关键人数量
-				var community_person_array = new Array();
+				//店均社区关键人数量
+				var avg_community_person_array = new Array();
 				//店均微信群数量
 				var avg_wechant_crowd_array = new Array();
 				//单个微信群人数
@@ -5855,7 +5877,7 @@ function oneyearorsixweek(){
 				//社区关键人构成分析：饼状图
 				var dataArray = new Array();
 				//合计值存放
-				var shequguanjianren;
+				var shequguanjianren;//店均社区关键人
 				var dianjunwexinqun;
 				var dangeweixinqun;
 				var huoyuerenqun;
@@ -5888,14 +5910,15 @@ function oneyearorsixweek(){
 							option21.series[0].data[1].value = general_person;
 							option21.series[0].data[2].value = folk_organization;
 							option21.series[0].data[3].value = community_businesses;
-							shequguanjianren = community_person;
+							//店均社区关键人数量
+							shequguanjianren = avg_community_person;
 							dianjunwexinqun = avg_wechant_crowd;
 							dangeweixinqun = crowd_person_count;
 							huoyuerenqun = wechant_accounted_for_crowd;
 						}
 						if(cityname != '环比（%）' && cityname != '合计'){
 							citynameArray.push(cityname);
-							community_person_array.push(community_person);
+							avg_community_person_array.push(avg_community_person);
 							avg_wechant_crowd_array.push(avg_wechant_crowd);
 							crowd_person_count_array.push(crowd_person_count);
 							wechant_accounted_for_crowd_array.push(wechant_accounted_for_crowd);
@@ -5903,38 +5926,61 @@ function oneyearorsixweek(){
 						$("#pfoperate1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1-1)+")").each(function(x,t){
 				    	    var col_index = x;
 				    	    if(cityname == $(t).html()){
-				    	    	$(t).parent().nextAll().each(function(z,t){
-						    	    if(z==0)$(t).find("td:eq("+col_index+")").text(community_person);
-						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(avg_community_person);
-						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(civil_servants);
-						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(general_person);
-						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(folk_organization);
-						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(community_businesses);
-					       		});
+				    	    	if(cityname == '环比（%）'){
+				    	    		$(t).parent().nextAll().each(function(z,t){
+							    	    if(z==0)$(t).find("td:eq("+col_index+")").text(community_person/100);
+							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(avg_community_person/100);
+							    	    if(z==2)$(t).find("td:eq("+col_index+")").text(civil_servants/100);
+							    	    if(z==3)$(t).find("td:eq("+col_index+")").text(general_person/100);
+							    	    if(z==4)$(t).find("td:eq("+col_index+")").text(folk_organization/100);
+							    	    if(z==5)$(t).find("td:eq("+col_index+")").text(community_businesses/100);
+						       		});
+				    	    	}else{
+				    	    		$(t).parent().nextAll().each(function(z,t){
+							    	    if(z==0)$(t).find("td:eq("+col_index+")").text(community_person);
+							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(avg_community_person);
+							    	    if(z==2)$(t).find("td:eq("+col_index+")").text(civil_servants);
+							    	    if(z==3)$(t).find("td:eq("+col_index+")").text(general_person);
+							    	    if(z==4)$(t).find("td:eq("+col_index+")").text(folk_organization);
+							    	    if(z==5)$(t).find("td:eq("+col_index+")").text(community_businesses);
+						       		});
+				    	    	}
 				    	    }
 				       });
 						$("#pfoperate1_1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1_1-1)+")").each(function(x,t){
 				    	    var col_index = x;
 				    	    if(cityname == $(t).html()){
-				    	    	$(t).parent().nextAll().each(function(z,t){
-						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(wechant_crowd);
-						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(avg_wechant_crowd);
-						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(crowd_persons_count);
-						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(crowd_person_count);
-						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(interactive_person_count);
-						    	    if(z==6)$(t).find("td:eq("+col_index+")").text(interactive_person_count_store);
-						    	    if(z==7)$(t).find("td:eq("+col_index+")").text(wechant_accounted_for_crowd);
-					       		});
+				    	    	if(cityname == '环比（%）'){
+				    	    		$(t).parent().nextAll().each(function(z,t){
+							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(wechant_crowd/100);
+							    	    if(z==2)$(t).find("td:eq("+col_index+")").text(avg_wechant_crowd/100);
+							    	    if(z==3)$(t).find("td:eq("+col_index+")").text(crowd_persons_count/100);
+							    	    if(z==4)$(t).find("td:eq("+col_index+")").text(crowd_person_count/100);
+							    	    if(z==5)$(t).find("td:eq("+col_index+")").text(interactive_person_count/100);
+							    	    if(z==6)$(t).find("td:eq("+col_index+")").text(interactive_person_count_store/100);
+							    	    if(z==7)$(t).find("td:eq("+col_index+")").text(wechant_accounted_for_crowd/100);
+						       		});
+				    	    	}else{
+				    	    		$(t).parent().nextAll().each(function(z,t){
+							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(wechant_crowd);
+							    	    if(z==2)$(t).find("td:eq("+col_index+")").text(avg_wechant_crowd);
+							    	    if(z==3)$(t).find("td:eq("+col_index+")").text(crowd_persons_count);
+							    	    if(z==4)$(t).find("td:eq("+col_index+")").text(crowd_person_count);
+							    	    if(z==5)$(t).find("td:eq("+col_index+")").text(interactive_person_count);
+							    	    if(z==6)$(t).find("td:eq("+col_index+")").text(interactive_person_count_store);
+							    	    if(z==7)$(t).find("td:eq("+col_index+")").text(wechant_accounted_for_crowd);
+						       		});
+				    	    	}
 				    	    }
 				       });
 						
 					}
 				    citynameArray.push("合计");
-				    community_person_array.push(shequguanjianren);
+				    avg_community_person_array.push(shequguanjianren);
 				    avg_wechant_crowd_array.push(dianjunwexinqun);
 				    crowd_person_count_array.push(dangeweixinqun);
 				    wechant_accounted_for_crowd_array.push(huoyuerenqun);
-				    option20.series[0].data=community_person_array;
+				    option20.series[0].data=avg_community_person_array;
 					option20.xAxis[0]["data"] = citynameArray;
 					myChart20.setOption(option20);
 					option24.series[0].data=avg_wechant_crowd_array;

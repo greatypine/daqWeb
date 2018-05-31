@@ -1008,7 +1008,7 @@ public class ScoreRecordTotalManagerImpl extends BizBaseCommonManager implements
 					// 调用sync同步门店方法
 					try {
 						Store store = storeManager.insertStoresyncDynamicStore(storeDynamic);
-						storeManager.syncStore(store);
+						//storeManager.syncStore(store);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -1040,7 +1040,13 @@ public class ScoreRecordTotalManagerImpl extends BizBaseCommonManager implements
 						if (storeDynamic != null && !"运营中".equals(storeDynamic.getEstate())) {
 							storeDynamic.setEstate("待开业");
 							storeDynamicManager.saveObject(storeDynamic);
-							storeManager.insertStoresyncDynamicStore(storeDynamic);
+							//当筹备中时不走同步门店方法
+							Store store = storeManager.findStore(storeDynamic.getStore_id());
+							if(store!=null){
+								store.setEstate("待开业");
+								storeManager.saveObject(store);
+							}
+							//storeManager.insertStoresyncDynamicStore(storeDynamic);
 						}
 						/*
 						 * Store store =
@@ -1209,7 +1215,13 @@ public class ScoreRecordTotalManagerImpl extends BizBaseCommonManager implements
 								storeDynamic.setEstate("待开业");
 							}
 							storeDynamicManager.saveObject(storeDynamic);
-							storeManager.insertStoresyncDynamicStore(storeDynamic);
+							Store store = storeManager.findStore(storeDynamic.getStore_id());
+							if(store!=null){
+								store.setEstate("待开业");
+								storeManager.saveObject(store);
+							}
+
+							//storeManager.insertStoresyncDynamicStore(storeDynamic);
 						}
 					}
 				}

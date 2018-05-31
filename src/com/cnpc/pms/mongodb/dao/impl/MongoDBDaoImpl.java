@@ -102,6 +102,15 @@ public class MongoDBDaoImpl extends BaseDAOHibernate implements MongoDBDao {
         List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 	}
+
+
+	@Override
+	public List<Map<String, Object>> selectTinyVillageCode(String code) {
+		String sql= "select tiny_village_id,tiny_village_name,code from tiny_village_code where code='"+code+"'";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
 	
 
 }

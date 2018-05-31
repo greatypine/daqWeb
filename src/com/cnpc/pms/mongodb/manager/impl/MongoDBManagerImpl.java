@@ -168,6 +168,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		TinyVillageManager tinyVillageManager = (TinyVillageManager)SpringHelper.getBean("tinyVillageManager");
 		TinyVillageCodeManager tinyVillageCodeManager = (TinyVillageCodeManager)SpringHelper.getBean("tinyVillageCodeManager");
 		AreaDao areaDao = (AreaDao)SpringHelper.getBean(AreaDao.class.getName());
+		MongoDBDao mongoDBDao = (MongoDBDao)SpringHelper.getBean(MongoDBDao.class.getName());
 		String coord = tCoordDto.getCoord();
 		StringBuilder coordSb = new StringBuilder();
 		List<Double[]> coordList = new ArrayList<Double[]>();
@@ -257,9 +258,33 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						Object codeVal = checkresult.get("code");
 						if(CodeEnum.success.getValue()==Integer.parseInt(codeVal.toString())){
 							if("Y".equals(checkresult.get("intersection"))){//有
-								result.put("code",CodeEnum.repeatData.getValue());
-								result.put("message","不同小区地理坐标有交叉");
-								return result;
+								
+								
+								Object storeNo = checkresult.get("storeNo");
+								Object tinyVillageNo = checkresult.get("tinyVillageCode");
+								if(storeNo!=null&&tinyVillageNo!=null){
+									Store temp_store = storeManager.findStoreByStoreNo(String.valueOf(storeNo));
+									List<Map<String,Object>> list = mongoDBDao.selectTinyVillageCode(String.valueOf(tinyVillageNo));
+									StringBuilder sb = new StringBuilder("");
+									if(list!=null){
+										for(Map<String,Object> map:list){
+											sb.append("、"+map.get("tiny_village_name"));
+										}
+										sb = sb.deleteCharAt(0);
+									}
+									
+									result.put("code",CodeEnum.repeatData.getValue());
+									result.put("message","当前区域已经被 "+store.getName()+" 所画的 "+sb.toString()+" 占用");
+									return result;
+									
+								}else{
+									result.put("code",CodeEnum.repeatData.getValue());
+									result.put("message","不同小区地理坐标有交叉");
+									return result;
+								}
+								
+								
+								
 							}
 						}else{
 							result.put("code",CodeEnum.error.getValue());
@@ -296,12 +321,12 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						coordinate_range.put("type", "Polygon");
 						coordinate_range.put("coordinates", new Object[]{coordinateArray});
 						doc.put("coordinate_range", coordinate_range);
-						
+						doc.put("belong","private");
 						//FindIterable<Document> findIterable =  collection.find(Filters.eq("code",tArea.getCode()));
 						collection.deleteMany(Filters.eq("code",tinyVillageCode.getCode()));//删除之前的坐标记录
 						collection.insertOne(doc);//保存新坐标纪录
 						
-						TinyArea tArea = new TinyArea();
+						TinyArea tArea = new  TinyArea();
 						tArea.setStoreNo(store.getStoreno());
 						tArea.setName(tinyVillageCode.getTiny_village_name());
 						if(storeId != null && storeId.equals(tCoordDto.getStore_id())){
@@ -315,7 +340,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						tArea.setTiny_village_id(tinyVillageCode.getTiny_village_id());
 						tArea.setVallage_area(tCoordDto.getVallage_area());
 						tArea.setStatus(0);
-						tArea.setBelong("private");
+						tArea.setBelong("private"); 
 						Map<String, Object> saveTinyArea = tinyAreaManager.updateTinyAreaOfCoord(tArea);//更新小区范围
 						if("-1".equals(saveTinyArea.get("code"))){//保存失败
 							//collection.deleteMany(Filters.eq("code",tinyVillageCode.getCode()));//删除之前的坐标记录
@@ -551,9 +576,12 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	        if(document==null){
 	        	result.put("code",CodeEnum.success.getValue());
 	        	result.put("intersection","N");
+	        	
 	        }else{
 	        	result.put("code",CodeEnum.success.getValue());
 	        	result.put("intersection","Y");
+	        	result.put("tinyVillageCode", document.get("code"));
+	        	result.put("storeNo", document.get("storeNo"));
 	        }
 	        
 		}catch(MongoQueryException e){
