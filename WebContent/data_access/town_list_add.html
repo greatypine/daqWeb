@@ -88,9 +88,10 @@ $(function(){
 
 
 	function yanzhen(){
-		
+		$("#submit").attr("disabled","true");
 		var county_name=$("#county_name").val().replace(/(^\s*)|(\s*$)/g, "");
 		if(county_name==null||county_name==""){
+			$("#submit").removeAttr("disabled");
 			alert("区名称不能为空");
 			return;
 		}/* 
@@ -107,21 +108,25 @@ $(function(){
 		} */
 		var county_id=$("#county_id").val();
 		if(county_id == "" || county_id == null){
+			$("#submit").removeAttr("disabled");
 			alert("区名称不能为空或区不正确!");
 			return;
 		}
 		var name=$("#name").val().replace(/(^\s*)|(\s*$)/g, "");
 		if(name==null||name==""){
+			$("#submit").removeAttr("disabled");
 			alert("街道名称不能为空");
 			return;
 		}
 		var gb_code=$("#gb_code").val();
 		if(gb_code==null||gb_code==""){
+			$("#submit").removeAttr("disabled");
 			alert("街道国标码不能为空");
 			return;
 		}else{
 			var  c=gb_code.length;
 			if(c!=12){
+				$("#submit").removeAttr("disabled");
 				alert("街道国标码必须为12位的数字!");
 				return;
 			}
@@ -136,13 +141,15 @@ $(function(){
 				textStatus, XMLHttpRequest) {
 			if (data.result) {
 				if(data.data!="null"){
+					$("#submit").removeAttr("disabled");
 					alert("街道已存在!");
 					return;
 				}
 				doSave();
 			} else {
+				$("#submit").removeAttr("disabled");
 				$$.showMessage("系统信息", "信息加载异常");
-				return;;
+				return;
 			}
 		});
 	}
@@ -161,6 +168,7 @@ $(function(){
 					alert("添加成功！");
 					window.location.href = 'town_list.html';
 				} else {
+					$("#submit").removeAttr("disabled");
 					$$.showMessage("系统信息", "添加失败!");
 				}
 			});
@@ -305,7 +313,7 @@ var checkWin = function(callback){
 	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
     <div class="panel-heading">街道信息添加
         <span class="but">
-			<input name="" type="submit" onclick="yanzhen();" value="保存">
+			<input name="" type="submit" id="submit" onclick="yanzhen();" value="保存">
 			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
 		</span>
     </div>

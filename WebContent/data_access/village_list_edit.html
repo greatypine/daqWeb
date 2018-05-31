@@ -92,6 +92,7 @@
 			
 		});
 		function dataCheck() {
+			$("#submit").attr("disabled","true");
 			var name=$("#name").val().replace(/(^\s*)|(\s*$)/g, "");
 			var gb_code=$("#gb_code").val();
 			var town_id=$("#town_id").val();
@@ -103,6 +104,7 @@
 					for(i=0;i<oo.length;i++){
 						var zwse=oo[i].split("-");
 						if(zwse[1]=="请选择"){
+							$("#submit").removeAttr("disabled");
 							alert("请选择职务!");
 							return;
 						}
@@ -110,23 +112,28 @@
 				}
 			}
 			if(town_name == "" || town_name == null){
+				$("#submit").removeAttr("disabled");
 				alert("请输入街道名称!");
 				return;
 			}
 			if(town_id == "" || town_id == null){
+				$("#submit").removeAttr("disabled");
 				alert("请输入正确的街道名称!");
 				return;
 			}
 			if(name == "" || name == null){
+				$("#submit").removeAttr("disabled");
 				alert("请输入社区名称!");
 				return;
 			}
 			if(gb_code == "" || gb_code == null){
+				$("#submit").removeAttr("disabled");
 				alert("请输入社区国标码!");
 				return;
 			}else{
 				var  c=gb_code.length;
 				if(c!=12){
+					$("#submit").removeAttr("disabled");
 					alert("社区国标码必须为12位的数字!");
 					return;
 				}
@@ -143,11 +150,13 @@
 					textStatus, XMLHttpRequest) {
 				if (data.result) {
 					if(data.data!="null"){
+						$("#submit").removeAttr("disabled");
 						alert("社区已存在!");
 						return false;
 					}
 					doUpdate();
 				} else {
+					$("#submit").removeAttr("disabled");
 					$$.showMessage("系统信息", "信息加载异常");
 					return false;
 				}
@@ -174,6 +183,7 @@
 						alert("修改成功");
 						window.location.href = 'village_list.html';
 					} else {
+						$("#submit").removeAttr("disabled");
 						$$.showMessage("系统信息", "修改失败!");
 					}
 				});
@@ -320,7 +330,7 @@
 <div class="panel panel-primary" style="margin: 10px 5px 0 5px">
  <div class="panel-heading">社区信息修改
         <span class="but">
-			<input name="" type="submit" onclick="dataCheck();" value="保存">
+			<input name="" type="submit" id="submit" onclick="dataCheck();" value="保存">
 			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
 		</span>
     </div>
