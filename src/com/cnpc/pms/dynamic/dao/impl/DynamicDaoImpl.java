@@ -2449,7 +2449,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String monthArr[] = dd.getBeginDate().split("-");
 		int month = Integer.parseInt(monthArr[1]);
 		monthStr = monthArr[0]+(month<10?("0"+month):month);
-		String sql = "select count(distinct customer_id) as customer_count from df_customer_order_month_trade_new where order_ym ='"+monthStr+"'";
+		//String sql = "select count(distinct customer_id) as customer_count from df_customer_order_month_trade_new where order_ym ='"+monthStr+"'";
+		String sql = "select cusnum_month as customer_count from ds_ope_gmvorcus_all_total ";
 		try{
 			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<?> lst_data = query
@@ -2475,7 +2476,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	@Override
 	public List<Map<String, Object>> queryHistoryZbCustomerCount(DynamicDto dd) {
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
-		String sql = "select count(1) as customer_count from df_user_profile ";
+		String sql = "select cusnum_history as customer_count from ds_ope_gmvorcus_all_total ";
 		try{
 			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<?> lst_data = query
