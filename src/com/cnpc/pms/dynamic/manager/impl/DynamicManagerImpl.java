@@ -4510,7 +4510,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			dynamicDto.setEndDate(endDate);
 			
 			dynamicDto.setStoreNo(store.getStoreno());
-			dynamicDto.setStoreId(storeId);
+			dynamicDto.setStoreId(storeId); 
 			result = dynamicDao.selectAreaRankingOfStore(dynamicDto,pageInfo);
 			
 		} catch (Exception e) {
