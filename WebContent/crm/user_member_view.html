@@ -232,9 +232,10 @@
                     <tbody id="tradeType_tbody">
 	                    <tr>
 	                      <th width="8%">城市</th>
-	                      <!-- <th width="10%">门店名称</th> -->
-	                      <!-- <th width="10%">门店编号</th> -->
+	                      <th width="10%">门店名称</th>
+	                      <th width="10%">门店编号</th>
 	                      <th width="12%">新增社员数</th>
+	                      <th width="12%">199新增开卡数</th>
 	                      <th width="12%">累计社员总数</th>
 	                    </tr>
                     </tbody>
@@ -491,7 +492,6 @@
            if(data.result){
            	   var result= JSON.parse(data.data);
 	           if(result.status=='success'){
-	        	   debugger;
 	        	   $("#tradeType_tbody").find("tr:gt(0)").remove(); 
 	        	   var jData = result.member;
 	        	   if(jData==null||jData.length==0){
@@ -524,9 +524,10 @@
 	        	   for(var i=0;i<jData.length;i++){
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
-		                       /* +"<td>"+jData[i].name+"</td>" */
-		                       /* +"<td>"+jData[i].storeno+"</td>" */
+		                       +"<td>"+jData[i].name+"</td>"
+		                       +"<td>"+jData[i].storeno+"</td>"
 		                       +"<td>"+jData[i].nowcount+"</td>"
+		                       +"<td>"+jData[i].count199+"</td>"
 		                       +"<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
 		                       
