@@ -38,6 +38,7 @@ function loginShow(){
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
 		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
 	    var callback = function callback(data, textStatus, XMLHttpRequest) {
+	    	localStorage.clear();
 	    	window.parent.location=getRootPath() + "/crm/index_headquarters.html";
 		};
 	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
