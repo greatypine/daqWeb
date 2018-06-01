@@ -200,4 +200,13 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		return order_obj;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> queryRecentlyOrder(String customer_id){
+		String sql = "SELECT order_sn FROM df_mass_order_total dot WHERE dot.customer_id = '"+customer_id+"' ORDER BY sign_time DESC LIMIT 5 ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	
 }

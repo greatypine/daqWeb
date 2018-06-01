@@ -274,7 +274,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 									}
 									
 									result.put("code",CodeEnum.repeatData.getValue());
-									result.put("message","当前区域已经被"+store.getName()+"所画的"+sb.toString()+"占用");
+									result.put("message","当前区域已经被 "+store.getName()+" 所画的 "+sb.toString()+" 占用");
 									return result;
 									
 								}else{
@@ -326,7 +326,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						collection.deleteMany(Filters.eq("code",tinyVillageCode.getCode()));//删除之前的坐标记录
 						collection.insertOne(doc);//保存新坐标纪录
 						
-						TinyArea tArea = new TinyArea();
+						TinyArea tArea = new  TinyArea();
 						tArea.setStoreNo(store.getStoreno());
 						tArea.setName(tinyVillageCode.getTiny_village_name());
 						if(storeId != null && storeId.equals(tCoordDto.getStore_id())){

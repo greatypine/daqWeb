@@ -21,6 +21,7 @@ public class MassOrderDto {
 	private String eshop_id;
 	private String eshop_name;
 	private String store_no;
+	private String store_name;
 	private String city_name;
 	private String department_name;
 	private String channel_name;
@@ -114,6 +115,12 @@ public class MassOrderDto {
 	}
 	public void setStore_no(String store_no) {
 		this.store_no = store_no;
+	}
+	public String getStore_name() {
+		return store_name;
+	}
+	public void setStore_name(String store_name) {
+		this.store_name = store_name;
 	}
 	public void setCity_name(String city_name) {
 		this.city_name = city_name;

@@ -23,4 +23,6 @@ public interface UserProfileDao {
 	
 	public Map<String, Object> queryOrderDetailBySn(String order_sn);
 	
+	public List<Map<String, Object>> queryRecentlyOrder(String customer_id);
+	
 }

@@ -212,6 +212,8 @@
 			                	<option value="20">拉新超20元</option>
 			              	</select>
 			           	</div>
+			           	<font id="showattention" style="top:7px;right:75px;color:#ffcc00;font-size:16px;font-weight:normal;">!</font>
+			           	<font id="attention" style="font-size: 12px; color:#ffcc00;white-space: nowrap; position: absolute; top: -10px; z-index: 1000; right: 330px; display: none;">拉新标识</font>
                      </div>
                      </div>
                     </div>
@@ -687,6 +689,13 @@ Date.prototype.format=function(fmt) {
   		
           orderTypeSelection(tag);
   	}
+  	
+  	$("#showattention").on("mouseover",function(event){
+  		$("#attention").show();
+  	});
+  	$("#showattention").on("mouseout",function(event){
+  		$("#attention").hide();
+  	});
   	
   });
 	

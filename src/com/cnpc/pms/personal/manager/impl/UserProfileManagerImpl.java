@@ -157,6 +157,14 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
 		return lst_data;
 	}
 	
+	public Map<String, Object> queryRecentlyOrder(String customer_id){
+		UserProfileDao userProfileDao = (UserProfileDao)SpringHelper.getBean(UserProfileDao.class.getName());
+		List<Map<String, Object>> lst_data = userProfileDao.queryRecentlyOrder(customer_id);
+		Map<String,Object> map_result = new HashMap<String,Object>();
+		map_result.put("data", lst_data);
+		return map_result;
+	}
+	
 	private XSSFCellStyle getHeaderStyle(){
 		return style_header;
 	}
