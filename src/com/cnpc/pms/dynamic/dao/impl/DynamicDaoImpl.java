@@ -3013,7 +3013,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					+") mem_store GROUP BY mem_store.storeno) t3 "
 					+"ON t1.storeno = t3.storeno";
 		}else{
-			sql = "select t1.storeno,t1.name as name,t1.city_name as city_name,t1.opencount as opencount,t2.nowcount as nowcount,t3.199count as count199 from ( "
+			sql = "select ifnull(t1.storeno,''),ifnull(t1.name,'') as name,ifnull(t1.city_name,'') as city_name,ifnull(t1.opencount,0) as opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
 					+"select store.storeno,store.name,store.city_name,count(member.customer_id) as opencount from df_user_member member LEFT  JOIN t_store store ON "
 					+"(member.regist_storeid = store.platformid) where 1=1 and store.storeno = '"+dynamicDto.getStoreNo()+"' group by member.regist_storeid ) t1 LEFT JOIN ( "
 					+"select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_member member LEFT JOIN t_store store ON "
