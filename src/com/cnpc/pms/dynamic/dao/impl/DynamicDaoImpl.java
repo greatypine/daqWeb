@@ -2989,15 +2989,25 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public Map<String, Object> getStoreMember(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo) {
 		List<?> list=null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
-		
-		/*String sql="select t1.storeno,t1.name,t1.city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
-				+"select store.storeno,store.name,store.city_name,count(member.customer_id) as opencount from df_user_member member INNER JOIN t_store store ON "
-				+"member.regist_storeid = store.platformid where store.storeno in ("+dynamicDto.getStoreNo()+") group by member.regist_storeid"
-				+") t1 LEFT JOIN ( "
-				+"select store.storeno,count(member.customer_id) as nowcount from df_user_member member INNER JOIN t_store store ON "
-				+"member.regist_storeid = store.platformid where member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' and store.storeno in ("+dynamicDto.getStoreNo()+") group by member.regist_storeid) t2 "
-				+"ON t1.storeno = t2.storeno";*/
-		String sql= "";
+		String join_sql = "";
+		String condition_sql = "";
+		if(!cityNo.equals("")){
+			join_sql = " INNER JOIN t_dist_citycode city ON (lpad(member.regist_cityno,4,'0') = city.cityno) ";
+			condition_sql = " and city.cityno = '"+cityNo+"' ";
+		}
+		String sql = "select t1.storeno,ifnull(t1.name,'') as name,ifnull(t1.city_name,'') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
+				+"select ifnull(storeno,'') as storeno,name,city_name,sum(opencount) as opencount from (select store.storeno,store.name,store.city_name,member.regist_storeid,count(member.customer_id) as opencount from df_user_member member LEFT  JOIN t_store store ON "
+				+"(member.regist_storeid = store.platformid) "+join_sql+" where 1=1 "+condition_sql+" group by member.regist_storeid "
+				+") mem_store GROUP BY mem_store.storeno) t1 LEFT JOIN ( "
+				+"select ifnull(storeno,'') as storeno,sum(nowcount) as nowcount from (select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_member member LEFT JOIN t_store store ON "
+				+"(member.regist_storeid = store.platformid) "+join_sql+" where member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' "+condition_sql+" group by member.regist_storeid "
+				+") mem_store GROUP BY mem_store.storeno) t2 "
+				+"ON t1.storeno = t2.storeno LEFT JOIN ( "
+				+"select ifnull(storeno,'') as storeno,sum(199count) as 199count from (select store.storeno,member.regist_storeid,count(member.customer_id) as 199count from df_user_member member LEFT JOIN t_store store ON "
+				+"(member.regist_storeid = store.platformid) "+join_sql+" where member_type = 'associator_start_2' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' "+condition_sql+" group by member.regist_storeid "
+				+") mem_store GROUP BY mem_store.storeno) t3 "
+				+"ON t1.storeno = t3.storeno";
+		/*String sql= "";
 		if(cityNo.equals("")){
 			sql="select city.cityname as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
 					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member GROUP BY  member.regist_cityno "
@@ -3012,7 +3022,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'"
 					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
 					+"ON t1.regist_cityno = t2.regist_cityno INNER JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
-		}
+		}*/
 		
 		Query query = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql);
