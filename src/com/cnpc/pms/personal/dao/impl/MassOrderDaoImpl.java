@@ -97,7 +97,11 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				} else if ("微信礼品卡".equals(names[i].trim())) {
 					sql = sql + " a.loan_label='5' ";
 				} else if ("集采订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag1 is not null  ";
+					sql = sql + " a.order_tag1 like '%B%'  ";
+				} else if ("开卡礼订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%K%'  ";
+				} else if ("试用礼订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%S%'  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";
@@ -240,7 +244,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE WHEN a.loan_label='1' THEN '是'  ELSE '否' END AS loan_label,CASE WHEN a.loan_label='3' THEN '是'  ELSE '否' END AS car_label,"
 				+ "CASE WHEN a.loan_label='4' THEN '是'  ELSE '否' END AS quick_label,CASE WHEN a.loan_label='5' THEN '是'  ELSE '否' END AS gift_label,"
 				+ "CASE WHEN a.customer_isnew_flag='20' THEN '拉新20元' WHEN a.customer_isnew_flag='10' THEN '拉新10元' WHEN a.customer_isnew_flag='0' THEN '拉新'  ELSE '否' END AS customer_isnew_flag,"
-				+ "CASE WHEN a.order_tag1 is not null THEN '是'  ELSE '否' END AS order_tag1 from ";
+				+ "CASE WHEN a.order_tag1 like '%B%' THEN '是'  ELSE '否' END AS order_tag_b,CASE WHEN a.order_tag1 like '%K%' THEN '是'  ELSE '否' END AS order_tag_k,"
+				+ "CASE WHEN a.order_tag1 like '%S%' THEN '是'  ELSE '否' END AS order_tag_s from ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
 			sql = sql + " df_mass_order_daily ";
@@ -275,7 +280,11 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				} else if ("微信礼品卡".equals(names[i].trim())) {
 					sql = sql + " a.loan_label='5' ";
 				} else if ("集采订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag1 is not null  ";
+					sql = sql + " a.order_tag1 like '%B%'  ";
+				} else if ("开卡礼订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%K%'  ";
+				} else if ("试用礼订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%S%'  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";
@@ -479,7 +488,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE WHEN a.return_label='1' THEN '是'  ELSE '否' END AS return_label,CASE WHEN a.loan_label='1' THEN '是'  ELSE '否' END AS loan_label,"
 				+ "CASE WHEN a.loan_label='3' THEN '是'  ELSE '否' END AS car_label,CASE WHEN a.loan_label='4' THEN '是'  ELSE '否' END AS quick_label,"
 				+ "CASE WHEN a.loan_label='5' THEN '是'  ELSE '否' END AS gift_label,CASE WHEN a.customer_isnew_flag='20' THEN '拉新20元' WHEN a.customer_isnew_flag='10' "
-				+ "THEN '拉新10元' WHEN a.customer_isnew_flag='0' THEN '拉新'  ELSE '否' END AS customer_isnew_flag,CASE WHEN a.order_tag1 is not null THEN '是'  ELSE '否' END AS order_tag1 from ";
+				+ "THEN '拉新10元' WHEN a.customer_isnew_flag='0' THEN '拉新'  ELSE '否' END AS customer_isnew_flag,CASE WHEN a.order_tag1 like '%B%' THEN '是'  ELSE '否' END AS order_tag_b,"
+				+ "CASE WHEN a.order_tag1 like '%K%' THEN '是'  ELSE '否' END AS order_tag_k,CASE WHEN a.order_tag1 like '%S%' THEN '是'  ELSE '否' END AS order_tag_s from ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
 			sql = sql + " df_mass_order_daily ";

@@ -115,10 +115,11 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称","门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单"};
+  	        String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
+  	        		"门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是否开卡礼订单","是否试用礼订单"};
   	        String[] headers_key = {"order_sn","area_code","village_code","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","sign_time","return_time",
   	        		"employee_name","employee_phone","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label",
-  	        		"return_label","loan_label","quick_label","gift_label","customer_isnew_flag","order_tag1"};
+  	        		"return_label","loan_label","quick_label","gift_label","customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s"};
   	       
   	        for(int i = 0;i < str_headers.length;i++){
   	            XSSFCell cell = row.createCell(i);
@@ -222,10 +223,11 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"订单号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","退款金额","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称","门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单"};
+  	        String[] str_headers = {"订单号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","退款金额","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称","门店编号",
+  	        		"事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是开卡礼采订单","是否试用礼订单"};
   	        String[] headers_key = {"order_sn","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","returned_amount","sign_time","return_time",
   	        		"employee_name","employee_phone","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label",
-  	        		"return_label","loan_label","quick_label","gift_label","customer_isnew_flag","order_tag1"};
+  	        		"return_label","loan_label","quick_label","gift_label","customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s"};
   	       
   	        for(int i = 0;i < str_headers.length;i++){
   	            XSSFCell cell = row.createCell(i);

@@ -188,6 +188,8 @@
 	                      <a id="tag_汽车订单" onclick="orderTypeSelection('汽车订单')" style="cursor:pointer;">汽车订单</a>
 	                      <a id="tag_微信礼品卡" onclick="orderTypeSelection('微信礼品卡')" style="cursor:pointer;">微信礼品卡</a>
 	                      <a id="tag_集采订单" onclick="orderTypeSelection('集采订单')" style="cursor:pointer;">集采订单</a>
+	                      <a id="tag_开卡礼订单" onclick="orderTypeSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
+	                      <a id="tag_试用礼订单" onclick="orderTypeSelection('试用礼订单')" style="cursor:pointer;">试用礼订单</a>
 	                      <input type="text" style="display:none" class="form-control" placeholder="订单标签"  id="label_private_manual"/>
 	                    </div>
 	                  </div>
@@ -1145,9 +1147,17 @@ Date.prototype.format=function(fmt) {
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/20180110134311888.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">拉新</span>";
 						}
-						if(jData[i].order_tag1!=''){
+						if(jData[i].order_tag1.indexOf("B") != -1){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/271800839857672654.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">集采订单</span>";
+						}
+						if(jData[i].order_tag1.indexOf("K") != -1){
+							infoStr= infoStr
+								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180228.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">开卡礼订单</span>";
+						}
+						if(jData[i].order_tag1.indexOf("S") != -1){
+							infoStr= infoStr
+								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180147.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">试用礼订单</span>";
 						}
 						infoStr= infoStr
 	                       	+"</td>"

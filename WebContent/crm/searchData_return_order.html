@@ -806,9 +806,17 @@ Date.prototype.format=function(fmt) {
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/20180110134311888.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">拉新</span>";
 						}
-						if(jData[i].order_tag1!=''){
+						if(jData[i].order_tag1.indexOf("B") != -1){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/271800839857672654.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">集采订单</span>";
+						}
+						if(jData[i].order_tag1.indexOf("K") != -1){
+							infoStr= infoStr
+								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180228.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">开卡礼订单</span>";
+						}
+						if(jData[i].order_tag1.indexOf("S") != -1){
+							infoStr= infoStr
+								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180147.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">试用礼订单</span>";
 						}
 						infoStr= infoStr
 	                       	+"</td>"
