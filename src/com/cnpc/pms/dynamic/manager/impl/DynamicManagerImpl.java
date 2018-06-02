@@ -56,6 +56,7 @@ import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.inter.dao.InterDao;
 import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.DsAbnormalOrder;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.SyncDataLog;
@@ -4509,6 +4510,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			dynamicDto.setEndDate(endDate);
 			
 			dynamicDto.setStoreNo(store.getStoreno());
+			dynamicDto.setStoreId(storeId); 
 			result = dynamicDao.selectAreaRankingOfStore(dynamicDto,pageInfo);
 			
 		} catch (Exception e) {
@@ -6588,99 +6590,43 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		try {
 			String cityNo = "";
 			if(dynamicDto.getTarget()==0){//总部
-				if(dynamicDto.getCityId() == null || "".equals(dynamicDto.getCityId())){
-					
-				}else if(dynamicDto.getCityId()==-10000){
-					dynamicDto.setCityId(Long.valueOf("-10000"));
-					cityNo = "-10000";
-				}else{
-					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String, Object>> cityNOOfCityById = storeDao.getCityNOOfCityById(dynamicDto.getCityId());
-					cityNo = String.valueOf(cityNOOfCityById.get(0).get("cityno"));
-				}
-				/*if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
-
-					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
-					
-					StringBuilder storeNO = new StringBuilder();
-					for(Map<String, Object> map:storeList){
-						
-						if(map.get("storeno")==null||"".equals(map.get("storeno"))){
-							continue;
-						}
-						
-						storeNO.append(",'"+map.get("storeno")+"'");
-					}
-					if(storeNO.length()>0){
-					
-						storeNO = storeNO.deleteCharAt(0);
-
+				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+					if(dynamicDto.getCityId() == null || "".equals(dynamicDto.getCityId())){
+						cityNo = "";
+					}else if(dynamicDto.getCityId()==-10000){
+						dynamicDto.setCityId(Long.valueOf("-10000"));
+						cityNo = "-10000";
 					}else{
-						JSONObject temp = new JSONObject();
-						temp.put("data", "");
-						temp.put("message", "系统查无此条件的数据！");
-						result.put("status","storefail");
-						result.put("data",temp.toString());
-						return result;
+						StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+						List<Map<String, Object>> cityNOOfCityById = storeDao.getCityNOOfCityById(dynamicDto.getCityId());
+						cityNo = String.valueOf(cityNOOfCityById.get(0).get("cityno"));
 					}
-
-					
-					dynamicDto.setStoreNo(storeNO.toString());
 				}else  if(dynamicDto.getStoreId()==-10000){
 					dynamicDto.setStoreNo("-10000");
 				}else{
 					
 					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
 					dynamicDto.setStoreNumer(store.getNumber()==null?"-10000":String.valueOf(store.getNumber()));
-					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
-				}*/
-			}else if(dynamicDto.getTarget()==1){//城市总监
-				if(dynamicDto.getCityId()==-10000){
-					dynamicDto.setCityId(Long.valueOf("-10000"));
-					cityNo = "-10000";
-				}else{
-					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String, Object>> cityNOOfCityById = storeDao.getCityNOOfCityById(dynamicDto.getCityId());
-					cityNo = String.valueOf(cityNOOfCityById.get(0).get("cityno"));
+					dynamicDto.setStoreNo(String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno()));
 				}
-				/*if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
-
-					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
-					
-					StringBuilder storeNO = new StringBuilder();
-					for(Map<String, Object> map:storeList){
-						
-						if(map.get("storeno")==null||"".equals(map.get("storeno"))){
-							continue;
-						}
-						
-						storeNO.append(",'"+map.get("storeno")+"'");
-					}
-					if(storeNO.length()>0){
-						
-						storeNO = storeNO.deleteCharAt(0);
-
+			}else if(dynamicDto.getTarget()==1){//城市总监
+				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+					if(dynamicDto.getCityId()==-10000){
+						dynamicDto.setCityId(Long.valueOf("-10000"));
+						cityNo = "-10000";
 					}else{
-						JSONObject temp = new JSONObject();
-						temp.put("data", "");
-						temp.put("message", "系统查无此条件的数据！");
-						result.put("status","storefail");
-						result.put("data",temp.toString());
-						return result;
+						StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+						List<Map<String, Object>> cityNOOfCityById = storeDao.getCityNOOfCityById(dynamicDto.getCityId());
+						cityNo = String.valueOf(cityNOOfCityById.get(0).get("cityno"));
 					}
-
-					dynamicDto.setStoreNo(storeNO.toString());
 				}else  if(dynamicDto.getStoreId()==-10000){
 					dynamicDto.setStoreNumer("-10000");
 					dynamicDto.setStoreNo("-10000");
 				}else{
-					
 					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
 					dynamicDto.setStoreNumer(store.getNumber()==null?"-10000":String.valueOf(store.getNumber()));
-					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
-				}*/
+					dynamicDto.setStoreNo(String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno()));
+				}
 			}else if(dynamicDto.getTarget()==2){//店长
 				Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
 				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
@@ -6716,12 +6662,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 			setCellStyle_common(wb);
 			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("城市会员");
+			HSSFSheet sheet = wb.createSheet("门店会员");
 			HSSFRow row = sheet.createRow(0);
-			//String[] str_headers = {"城市","门店名称","门店编号","开卡数","累计开卡数"};
-			//String[] headers_key = {"city_name","name","storeno","nowcount","opencount"};
-			String[] str_headers = {"城市","新增社员数","累计社员总数"};
-			String[] headers_key = {"city_name","nowcount","opencount"};
+			String[] str_headers = {"城市","门店名称","门店编号","新增社员数","199新增开卡数","累计社员总数"};
+			String[] headers_key = {"city_name","name","storeno","nowcount","count199","opencount"};
+//			String[] str_headers = {"城市","新增社员数","累计社员总数"};
+//			String[] headers_key = {"city_name","nowcount","opencount"};
 			for(int i = 0;i < str_headers.length;i++){
 				HSSFCell cell = row.createCell(i);
 				cell.setCellStyle(getHeaderStyle());
