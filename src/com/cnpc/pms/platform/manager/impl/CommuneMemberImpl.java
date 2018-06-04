@@ -2,7 +2,10 @@ package com.cnpc.pms.platform.manager.impl;
 
 
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,8 +85,6 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}else {
 			result.put("newCmCount", "99");
 		}
-		//查询成交额
-		List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String,Object>>();
 		//cmGoodsTurnoverList = cmDao.getCmGoodsTurnover(dd);
 		////////////////////////分库查询成交信息//////////////////////////////
 		/*//第一步：查询所有社员ids；
@@ -108,25 +109,57 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 			result.put("cmGoodsTurnover", "99");
 		}*/
 		////////////////////////分库查询成交信息end//////////////////////////////
-		//查询成交量
+		//查询成交量、查询成交额
 		List<Map<String, Object>> cmGoodsDealCountList = new ArrayList<Map<String,Object>>();
-		cmGoodsDealCountList = cmDao.getCmGoodsDealCount("");
+		cmGoodsDealCountList = commDao.getCmGoodsDealCount("");
 		if(cmGoodsDealCountList!=null&&cmGoodsDealCountList.size()>0){
 			result.put("cmGoodsDealCount", cmGoodsDealCountList.get(0).get("cou"));
+			result.put("cmGoodsTurnover", cmGoodsDealCountList.get(1).get("cou"));
 		}else {
-			result.put("cmGoodsDealCount", "99");
+			result.put("cmGoodsDealCount", "0");
+			result.put("cmGoodsTurnover", "0");
 		}
 		//查询成交额
-		cmGoodsTurnoverList = cmDao.getCmGoodsTurnover("");
+/*		List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String,Object>>();
+		cmGoodsTurnoverList = commDao.getCmGoodsTurnover("");
 		if(cmGoodsTurnoverList!=null&&cmGoodsTurnoverList.size()>0){
 			result.put("cmGoodsTurnover", cmGoodsTurnoverList.get(0).get("cou"));
 		}else {
-			result.put("cmGoodsTurnover", "99");
+			result.put("cmGoodsTurnover", "0");
+		}*/
+		//查询动销商品movingPinCount
+		List<Map<String, Object>> movingPinCountList = new ArrayList<Map<String,Object>>();
+		movingPinCountList = commDao.getMovingPinCount("");
+		if(movingPinCountList!=null&&movingPinCountList.size()>0){
+			result.put("movingPinCount", movingPinCountList.get(0).get("cou"));
+		}else {
+			result.put("movingPinCount", "0");
+		}
+		//查询动销商品movingPinCount
+		List<Map<String, Object>> allEshopSumList = new ArrayList<Map<String,Object>>();
+		allEshopSumList = commDao.getAllEshopSum("");
+		if(allEshopSumList!=null&&allEshopSumList.size()>0){
+			result.put("allEshopSum", allEshopSumList.get(0).get("cou"));
+		}else {
+			result.put("allEshopSum", "0");
+		}
+		//查询动销商品movingPinCount
+		List<Map<String, Object>> yesEshopSumList = new ArrayList<Map<String,Object>>();
+		yesEshopSumList = commDao.getYesEshopSum("");
+		if(yesEshopSumList!=null&&yesEshopSumList.size()>0){
+			result.put("yesEshopSum", yesEshopSumList.get(0).get("cou"));
+		}else {
+			result.put("yesEshopSum", "0");
+		}
+		//查询动销商品movingPinCount
+		List<Map<String, Object>> noEshopSumList = new ArrayList<Map<String,Object>>();
+		noEshopSumList = commDao.getNoEshopSum("");
+		if(noEshopSumList!=null&&noEshopSumList.size()>0){
+			result.put("noEshopSum", noEshopSumList.get(0).get("cou"));
+		}else {
+			result.put("noEshopSum", "0");
 		}
 
-		
-		
-		
 		//-------------------查询新增量start----------------//
 		List newCounts=new ArrayList();
 		List allCounts=new ArrayList();
@@ -208,6 +241,153 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				result.put("meCount", areaList.get(1).get("meCount").toString());
 				
 			}
+			
+			/**************************************************************
+			 ******************** 第二版：社员注册信息统计*************************
+			 **************************************************************/
+			
+			
+			
+			List cityCounts=new ArrayList();
+			List cityCouCounts=new ArrayList();
+			List cityMonCouCounts=new ArrayList();
+			//查询本月之前注册城市分布
+			List<Map<String, Object>> cityList = commDao.getCmRegistCity(dd);
+			//查询当月注册城市分布
+			List<Map<String, Object>> cityMonthList = commDao.getCmRegistMonthCity(dd);
+			if(cityList!=null) {
+				
+				for(int i=0;i<cityList.size();i++) {
+					if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
+						cityCounts.add("黔东南苗族\n侗族自治州 ");
+					}else {
+						cityCounts.add(cityList.get(i).get("cityname").toString());
+					}
+					cityCouCounts.add(Integer.parseInt(cityList.get(i).get("cou").toString()));
+					cityMonCouCounts.add(Integer.parseInt(cityMonthList.get(i).get("cou").toString()));
+				}
+				JSONArray jsonCity=(JSONArray)JSONArray.fromObject(cityCounts);
+				 JSONArray jsonCityCou=(JSONArray)JSONArray.fromObject(cityCouCounts);
+				 JSONArray jsonCityMonCou=(JSONArray)JSONArray.fromObject(cityMonCouCounts);
+				
+				result.put("reCityname", jsonCity);
+				result.put("reCityCou", jsonCityCou);
+				result.put("reCityMonCou", jsonCityMonCou);
+			}
+			//按城市查询总分布量
+			List<Map<String, Object>> cityAllList = commDao.getAllCmRegistCity(dd);
+			List cityAllCounts=new ArrayList();
+			List cityCountsList=new ArrayList();
+			if(cityAllList!=null) {
+				
+				for(int i=0;i<cityAllList.size();i++) {
+				/*	if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
+						cityAllCounts.add("黔东南");
+					}else {
+					}*/
+					cityAllCounts.add(cityAllList.get(i).get("cityname").toString());
+					cityCountsList.add(Integer.parseInt(cityAllList.get(i).get("cou").toString()));
+				}
+				JSONArray jsonCityC=(JSONArray)JSONArray.fromObject(cityAllCounts);
+				 JSONArray jsonCityAllCou=(JSONArray)JSONArray.fromObject(cityCountsList);
+				
+				result.put("jsonCityC", jsonCityC);
+				result.put("jsonCityAllCou", jsonCityAllCou);
+			}
+			
+			
+			//查询最受欢迎商品
+			
+			
+			List<Map<String, Object>> hotProList = commDao.getHotProduct(dd);
+			List hotCounts=new ArrayList();
+			List hotSellDur=new ArrayList();
+			List hotName=new ArrayList();
+			if(hotProList!=null&&hotProList.size()>0) {
+				
+				for(int i=0;i<hotProList.size();i++) {
+				/*	if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
+						cityAllCounts.add("黔东南");
+					}else {
+					}*/
+					hotName.add(hotProList.get(i).get("pname").toString());
+					hotCounts.add(Integer.parseInt(hotProList.get(i).get("cou").toString()));
+					if(Integer.parseInt(hotProList.get(i).get("selldur").toString())>100) {
+						hotSellDur.add(Integer.parseInt(hotProList.get(i).get("selldur").toString())/30+"个月+");
+					}else {
+						hotSellDur.add(Integer.parseInt(hotProList.get(i).get("selldur").toString())+"天");
+					}
+				}
+				JSONArray hotProName=(JSONArray)JSONArray.fromObject(hotName);
+				 JSONArray hotProCount=(JSONArray)JSONArray.fromObject(hotCounts);
+				 JSONArray hotProSellDur=(JSONArray)JSONArray.fromObject(hotSellDur);
+				
+				result.put("hotProName", hotProName);
+				result.put("hotProCount", hotProCount);
+				result.put("hotProSellDur", hotProSellDur);
+			}
+			//查询无人问津商品
+			List<Map<String, Object>> coolProList = commDao.getCoolProduct(dd);
+			List coolCounts=new ArrayList();
+			List coolSellDur=new ArrayList();
+			List coolName=new ArrayList();
+			if(coolProList!=null&&coolProList.size()>0) {
+				
+				for(int i=0;i<coolProList.size();i++) {
+				/*	if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
+						cityAllCounts.add("黔东南");
+					}else {
+					}*/
+					coolName.add(coolProList.get(i).get("pname").toString());
+					coolCounts.add(Integer.parseInt(coolProList.get(i).get("cou").toString()));
+					if(Integer.parseInt(coolProList.get(i).get("selldur").toString())>100) {
+						coolSellDur.add(Integer.parseInt(coolProList.get(i).get("selldur").toString())/30+"个月+");
+					}else {
+						coolSellDur.add(Integer.parseInt(coolProList.get(i).get("selldur").toString())+"天");
+					}
+					
+				}
+				JSONArray coolProName=(JSONArray)JSONArray.fromObject(coolName);
+				JSONArray coolProSellDur=(JSONArray)JSONArray.fromObject(coolSellDur);
+				 JSONArray coolProCount=(JSONArray)JSONArray.fromObject(coolCounts);
+				
+				result.put("coolProName", coolProName);
+				result.put("coolProCount", coolProCount);
+				result.put("coolProSellDur", coolProSellDur);
+			}
+			//查询e店情况
+			List<Map<String, Object>> eshopList = commDao.getEshopSell(dd);
+			List eCounts=new ArrayList();
+			List eSums=new ArrayList();
+			List eNames=new ArrayList();
+			if(eshopList!=null&&eshopList.size()>0) {
+				
+				for(int i=0;i<eshopList.size();i++) {
+					eNames.add(eshopList.get(i).get("ename").toString());
+					eCounts.add(Integer.parseInt(eshopList.get(i).get("sellcou").toString()));
+					//转换订单量
+					if(Double.parseDouble(eshopList.get(i).get("sellcou").toString())>10000) {
+						eCounts.add(toBigMoney(eshopList.get(i).get("sellcou").toString()));
+					}else {
+						eCounts.add(Double.parseDouble(eshopList.get(i).get("sellcou").toString()));
+					}
+					//转换成交额
+					if(Double.parseDouble(eshopList.get(i).get("sellsum").toString())>10000) {
+						eSums.add(toBigMoney(eshopList.get(i).get("sellsum").toString()));
+					}else {
+						eSums.add(Double.parseDouble(eshopList.get(i).get("sellsum").toString()));
+					}
+					
+				}
+				JSONArray eshopName=(JSONArray)JSONArray.fromObject(eNames);
+				JSONArray eshopCount=(JSONArray)JSONArray.fromObject(eCounts);
+				JSONArray eshopSum=(JSONArray)JSONArray.fromObject(eSums);
+				
+				result.put("eshopName", eshopName);
+				result.put("eshopCount", eshopCount);
+				result.put("eshopSum", eshopSum);
+			}
+			
 		 return result;
 		
 	}
@@ -361,5 +541,33 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 	     }
 			return dateX;
 	 }
+	 
+		/**
+		 * 成交额、订单量单位转换
+		 * TODO 
+		 * @author wuxinxin
+		 */
+		public static String toBigMoney(String money) {
+			BigDecimal bigDecimal = new BigDecimal(money);
+			String pic = "万";
+			// 转换为万元（除以10000）
+			BigDecimal decimal = bigDecimal.divide(new BigDecimal("10000"));
+			//转换为亿元
+			if(decimal.compareTo(new BigDecimal("10000"))>0) {
+				decimal = bigDecimal.divide(new BigDecimal("10000"));
+				pic = "亿";
+			}
+			// 保留两位小数
+			DecimalFormat formater = new DecimalFormat("0.00");
+			// 四舍五入
+			// formater.setRoundingMode(RoundingMode.HALF_UP); // 5000008.89
+			// formater.setRoundingMode(RoundingMode.HALF_DOWN);// 5000008.89
+			// formater.setRoundingMode(RoundingMode.HALF_EVEN);
+			formater.setRoundingMode(RoundingMode.DOWN);
+
+			// 格式化完成之后得出结果
+			String remoney = formater.format(decimal)+pic;
+			return remoney;
+		}
 
 }
