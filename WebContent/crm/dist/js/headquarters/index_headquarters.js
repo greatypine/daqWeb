@@ -2996,7 +2996,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     	data.push(val['crtime']);
     	data1.push(val['newcount']);
     });
-    for(var i=1;i<8;i++){
+    for(var i=1;i<7;i++){
     	var key = 'day'+i;
     	data2.push(turnoverCustomer["growAllCounts"][0][key]);
     }
