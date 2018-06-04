@@ -2996,14 +2996,14 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     	data.push(val['crtime']);
     	data1.push(val['newcount']);
     });
-    for(var i=1;i<7;i++){
-    	var key = 'day'+i;
-    	data2.push(turnoverCustomer["growAllCounts"][0][key]);
+    for(var i=0;i<7;i++){
+    	var key = 'day'+(i+1);
+    	data2.push(turnoverCustomer["growAllCounts"][0][key]==null?'0':turnoverCustomer["growAllCounts"][0][key]);
     }
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
 	turnoverCustomerOrderOption.series[0].data = data1.reverse();
 	turnoverCustomerOrderOption.series[1].data = data2;
-	//customerNewChartOption.title.text="近7天客流趋势";
+	//customerNewChartOption.title.text="近7天新增社员趋势";
   	turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
 }
 // 获取城市用户量分布数据
