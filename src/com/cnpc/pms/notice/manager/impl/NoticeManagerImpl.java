@@ -195,6 +195,7 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 		Integer grade = notice.getGrade();//等级
 		String timestamp = String.valueOf(System.currentTimeMillis());
 		notice.setNoticeNo(timestamp);
+		notice.setTouchRate(0f);
 		preObject(notice);
 		saveObject(notice);
 		
@@ -429,6 +430,37 @@ public class NoticeManagerImpl extends BizBaseCommonManager implements NoticeMan
 			return (Notice) lst_data.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public Map<String, Object> updateTouchRateOfNotice(Notice  notice) {
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		NoticeManager noticeManager = (NoticeManager) SpringHelper.getBean("noticeManager");
+		
+		List<Notice> nelist=null;
+		try {
+			
+			
+			    nelist = (List<Notice>)this.getObjects(FilterFactory.getSimpleFilter("noticeNo", notice.getNoticeNo()));
+			    if(nelist!=null&&nelist.size()>0){
+			    	Notice ne = nelist.get(0);
+			    	ne.setTouchRate(notice.getTouchRate());
+					preObject(ne);
+					noticeManager.saveObject(ne);
+					result.put("code", CodeEnum.success.getValue());
+					result.put("message","修改成功");
+			    }
+				
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code", CodeEnum.error.getValue());
+			result.put("message","修改失败");
+			return result;
+		}
+		
+		return result;
 	}
 
 }

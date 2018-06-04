@@ -4,13 +4,22 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>公告列表</title>
+    <title>公告申请列表</title>
     <script type="text/javascript" src="../scripts/bidLib.js"></script>
     <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
     <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
     <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
+<style type="text/css">
+	.ui-dialog-buttonset button:hover{
+	    border: 1px solid #c0d0e8;
+	    background: #ffffff url(../scripts/images/ui-bg_glass_100_fdf5ce_1x400.png) 50% 50% repeat-x;
+	    font-weight: bold;
+	    color: #c77405;
+	}
+
+</style>
 <script>
     var win;
     var array=new Array();
@@ -32,7 +41,7 @@
     					if (data.result) {
     						 var employeeID="";
     						 curr_user = JSON.parse(data.data);
-    					     console.log(curr_user.usergroup.code);
+    					     
     					     $("#create_user_id").val(curr_user.id);
     					}
     			},false);
@@ -40,7 +49,7 @@
 	
     //记载页面时请求数据列表默认的方法
     function searchList() {
-        $$.executeSearch('queryNoticeList', 'conditionsDiv');
+        $$.executeSearch('queryNoticeApplyList', 'conditionsDiv');
     }
 
     
@@ -55,24 +64,20 @@
     }
 
     function doAdd(){
-    	 window.location.href = 'notice_send.html';
+    	 window.location.href = 'notice_send.html?actionType=add';
     }
 
     var editNoticeID="";
-    var filepath1= "";
-    var fileName1="";
-    var filepath2= "";
-    var fileName2="";
-    var filepath3= "";
-    var fileName3="";
+    var filepath= "";
+    var fileName="";
     var detailObj = {
             html: '<a href="#"  class="blue">详情</a>',
-            resourceId: "",
+            resourceId: "detail",
             func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
             	
             		 var noticeNo = allColumnsDataMap.noticeNo;
             		 editNoticeID = allColumnsDataMap["id"];
-                     doManager('noticeManager','selectNoticeByNoticeNo',[noticeNo],function(data){
+                     doManager('noticeApplyManager','selectNoticeByNoticeNo',[noticeNo],function(data){
                         if(data.result){
                            var result = JSON.parse(data.data);
                            var detailInfo = result.data;
@@ -128,44 +133,22 @@
                             	   $("#zw_s").val(detailInfo[0].zw);
                                }
                                
-                               filePath1 = detailInfo[0].filePath;
-                               if(filePath1!=null&&filePath1!=""){
-                            	   filepath1 = detailInfo[0].filePath;
-                            	   fileName1 = detailInfo[0].fileName;
+                               var filePath = detailInfo[0].filePath;
+                               if(filePath!=null&&filePath!=""){
+                            	   filepath = detailInfo[0].filePath;
+                            	   fileName = detailInfo[0].fileName;
                             	   //$("#notice_file_td").html('<a onclick="javascript:loadNoticeFile()" style="text-decoration:underline;color:#277ce8" href="#">'+detailInfo[0].fileName+'</a>')
-                            	 $("#notice_file_td1").html('<a  style="text-decoration:underline;color:#277ce8" download="'+fileName1+'" href="'+filepath1+'">'+fileName1+'</a>')
+                            	 $("#notice_file_td").html('<a  style="text-decoration:underline;color:#277ce8" download="'+detailInfo[0].fileName+'" href="'+filepath+'">'+detailInfo[0].fileName+'</a>')
                                
                                }else{
-                            	   $("#notice_file_td1").html("无");
-                               }
-                               
-                               filePath2 = detailInfo[0].filePath2;
-                               if(filePath2!=null&&filePath2!=""){
-                            	   filepath2 = detailInfo[0].filePath2;
-                            	   fileName2 = detailInfo[0].fileName2;
-                            	   //$("#notice_file_td").html('<a onclick="javascript:loadNoticeFile()" style="text-decoration:underline;color:#277ce8" href="#">'+detailInfo[0].fileName+'</a>')
-                            	 $("#notice_file_td2").html('<a  style="text-decoration:underline;color:#277ce8" download="'+fileName2+'" href="'+filepath2+'">'+fileName2+'</a>')
-                               
-                               }else{
-                            	   $("#notice_file_td2").html("无");
-                               }
-                               
-                               filePath3 = detailInfo[0].filePath3;
-                               if(filePath3!=null&&filePath3!=""){
-                            	   filepath3 = detailInfo[0].filePath3;
-                            	   fileName3 = detailInfo[0].fileName3;
-                            	   //$("#notice_file_td").html('<a onclick="javascript:loadNoticeFile()" style="text-decoration:underline;color:#277ce8" href="#">'+detailInfo[0].fileName+'</a>')
-                            	   $("#notice_file_td3").html('<a  style="text-decoration:underline;color:#277ce8" download="'+fileName3+'" href="'+filepath3+'">'+fileName3+'</a>')
-                               
-                               }else{
-                            	   $("#notice_file_td3").html("无");
+                            	   $("#notice_file_td").html("无");
                                }
                                
                                $('#noticeDetail_div').dialog({
                                    bgiframe : true,
                                    title : "提示",
                                    width : 450,
-                                   height : 570,
+                                   height : 540,
                                    modal : true
                                });
                            }else{
@@ -195,31 +178,7 @@
          //提交表单，实现下载
          $eleForm.submit(); */
     }
-    function editNotice(){
-    	 $$.showConfirm("提示","是否继续提交？",function () {
-    		 
-    		 var title = $("#title_s").val();
-    		 var content = $("#content_s").val();
-    		 var notice = {
-    				 title:title,
-    				 content:content,
-    				 id:editNoticeID
-    		 }
-             doManager('noticeManager','editNotice',[notice],function(data){
-                if(data.result){
-                    var result = JSON.parse(data.data).code
-                    if(result=="200"){
-                    	searchList();
-                    	$('#noticeDetail_div').dialog("close");
-                    }else{
-                    	$$.showMessage('提示',"修改失败");
-                    }
-                }else{
-                    $$.showMessage('提示',"修改失败");
-                }
-             });
-         });
-    }
+   
     
      var deleteObj = {
             html: '<a href="#"  class="blue">撤销</a>',
@@ -228,9 +187,9 @@
             
             		 $$.showConfirm("提示","是否继续撤销当前公告？",function () {
                 		 var noticeNo = allColumnsDataMap["noticeNo"];
-                         doManager('noticeManager','deleteNotice',[noticeNo],function(data){
+                         doManager('noticeApplyManager','deleteNotice',[noticeNo],function(data){
                             if(data.result){
-                                var result = JSON.parse(data.data).code
+                                var result = JSON.parse(data.data).code;
                                 if(result=="200"){
                                 	searchList();
                                 }else{
@@ -246,10 +205,16 @@
             
             }
         };
-    
-
-        
-        $pmspage.opArr = [detailObj,deleteObj];
+     
+     var eitObj = {
+    	        html: '<a href="#"  class="blue">编辑</a>',
+    	        resourceId: "edit",
+    	        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+    	        	var noticeNo = allColumnsDataMap[noticeNo];
+    	        	window.location.href = "notice_send.html?noticeNo=" + noticeNo+"&actionType=edit";
+    	        }
+         };
+        $pmspage.opArr = [detailObj,deleteObj,];
     
     
     var COLUMNS = {
@@ -298,11 +263,6 @@
                 }
                 return value;
             },
-            "touchRate": function(aData, iColumn, sColumnName, map){
-                var value = map[sColumnName];
-                value=value+"%";
-                return value;
-            },
             "filePath":function(aData, iColumn, sColumnName, map){
                 var filepath = map[sColumnName];
                 var filename = map["fileName"];
@@ -313,33 +273,186 @@
                 }
                 return value;
             },
-            "filePath2":function(aData, iColumn, sColumnName, map){
-                var filepath = map[sColumnName];
-                var filename = map["fileName2"];
-                value="无";
-                if(filename!=null&&filename!=""){
-                     value="<a href='"+filepath+"' style='text-decoration:underline;color:#277ce8' download='"+filename+"'>"+filename+"</a>"
-
+            "checkStatus":function(aData, iColumn, sColumnName, map){
+                var checkStatus = map[sColumnName];
+                var noticeNO = map["noticeNo"];
+                var checkSelect = "<select style='border-color:#E7E9E8' onchange='checkNotice(\""+noticeNO+"\",this)'><option value='0'>审核中</option><option value='1'>审核通过</option><option value='2'>审核不通过</option><option value='-1'>驳回</option></select>";
+                var showStr="审核中";
+                if(checkStatus==1){
+                	showStr="审核通过";
+                    checkSelect = "<select style='border-color:#E7E9E8' ><option value='1' selected>审核通过</option></select>";
+                }else if(checkStatus==2){
+                	showStr="审核不通过";
+                    checkSelect = "<select style='border-color:#E7E9E8' ><option value='2' selected>审核不通过</option></select>";
+                }else if(checkStatus==-1){
+                	showStr="驳回";
+                    checkSelect = "<select style='border-color:#E7E9E8' ><option value='-1' selected>驳回</option></select>";
                 }
-                return value;
-            },
-            "filePath3":function(aData, iColumn, sColumnName, map){
-                var filepath = map[sColumnName];
-                var filename = map["fileName3"];
-                value="无";
-                if(filename!=null&&filename!=""){
-                     value="<a href='"+filepath+"' style='text-decoration:underline;color:#277ce8' download='"+filename+"'>"+filename+"</a>"
-
+                if(curr_user.usergroup.code=="GGSPZ"){
+                	return checkSelect;
+                }else{
+                	return showStr;
                 }
-                return value;
+                
             }
         }
     
-
-
+	//审批
+	var selObj=null;
+    function checkNotice(NO,t){
+    	 selObj = t;
+    	 var checkStatus = $(t).val();
+    	 var showMessage="";
+    	 if(checkStatus=="1"){//审核通过
+    		 showMessage="是否继续确认通过此公告的申请？";
+    		 $$.showConfirm("提示",showMessage,function () {
+        		 var noticeNo = allColumnsDataMap["noticeNo"];
+//                  doManager('noticeManager','deleteNotice',[noticeNo],function(data){
+//                     if(data.result){
+//                         var result = JSON.parse(data.data).code
+//                         if(result=="200"){
+//                         	searchList();
+//                         }else{
+//                         	$$.showMessage('提示',"撤销失败");
+//                         }
+//                     }else{
+//                         $$.showMessage('提示',"撤销失败");
+//                     }
+//                  });
+             });
+    	 }else if(checkStatus=="2"){//审核不通过
+    		 showMessage = "为方便申请人修改后，再次申请，请点击'下一步'输入审批意见，完成审核。"
+   			 $$.showConfirm_self("提示",showMessage,function () {
+           		 $("#notice_no").val(NO);
+           		 $("#notice_checkstatus").val(2);
+           		 $('#noticeRemark_div').dialog({
+                     bgiframe : true,
+                     title : "提示",
+                     width : 315,
+                     height : 215,
+                     modal : true
+                 });
+             },function(){
+            	 $(t).val(0);
+             });
+    	 }else if(checkStatus=="-1"){//驳回
+    		 showMessage = "驳回后当前公告不能再次申请，请点击'下一步'输入驳回原因，完成审核。";
+    		 $$.showConfirm_self("提示",showMessage,function () {
+           		 $("#notice_no").val(NO);
+           		 $("#notice_checkstatus").val(-1);
+           		 $('#noticeRemark_div').dialog({
+                     bgiframe : true,
+                     title : "提示",
+                     width : 315,
+                     height : 215,
+                     modal : true
+                 });
+             },function(){
+            	 $(t).val(0);
+             });
+    	 }
+    	 
     
-  
+    	
+    }
     
+    /**************************自定义confirm***********************************/
+    PMSApplication.prototype.showConfirm_self = function(title, message, callback,cancel) {
+    	if (this.dialog == null){
+    		this.dialog = new PMSDialog(title, message);
+    	}
+    	this.dialog.confirm_self(title, message, callback,cancel);
+    }   
+    
+    
+    PMSDialog.prototype.confirm_self = function(title, content, callback,cancel) {
+    	if (title != null && this.title != title)
+    		this.setTitle(title);
+    	if (content != null && this.content != content)
+    		this.setContent(content);
+    	this.uiElement.dialog("destroy");
+    	this.uiElement.dialog({
+    		modal : true,
+    		resizable : false,
+    		title : this.title,
+    		buttons : {
+    			'下一步' : function() {
+    				$(this).dialog("close");
+    				$(this).dialog("destroy");
+    				if(callback && typeof callback == 'function') {
+    					callback();
+    				}
+    			},
+    			'取消' : function() {
+    				$(this).dialog("close");
+    				$(this).dialog("destroy");
+    				if(cancel && typeof cancel == 'function') {
+    					cancel();
+    				}
+    			}
+    		}
+    	});
+
+    }
+    /**************************************************************/
+    //提交审批意见
+    function submitNoticeRemark(){
+    	var no = $("#notice_no").val();
+    	var remark= $("#notice_remark").val();
+    	var checkStatus = $("#notice_checkstatus").val();
+    	if("2"==checkStatus){
+    		if(remark.replace(/^\s+|\s+$/g, '')==""){
+    			$$.showMessage('提示',"请输入审批意见！");
+        		return;
+    		}
+    		
+    		
+    		if(remark.length>200){
+        		$$.showMessage('提示',"审批意见的字数在200以内！");
+        		return;
+        	}
+    	}
+    	
+    	
+        if("-1"==checkStatus){
+        	if(remark.replace(/^\s+|\s+$/g, '')==""){
+        		$$.showMessage('提示',"请输入驳回原因！");
+            	return;
+        	}
+        	
+        	if(remark.length>200){
+          		$$.showMessage('提示',"驳回原因的字数在200以内！");
+          		return;
+          	}
+        	
+    	}
+        
+      
+    	var noticeApply = {
+    			noticeNo:no,
+    			remark:remark,
+    			checkStatus:checkStatus
+    	}
+    	
+	  doManager('noticeApplyManager','checkNoticeApply',[noticeApply],function(data){
+	     if(data.result){
+	         var result = JSON.parse(data.data).code
+	         if(result=="200"){
+	         	searchList();
+	         }else{
+	         	$$.showMessage('提示',"审核失败");
+	         }
+	     }else{
+	         $$.showMessage('提示',"审核失败");
+	     }
+	  });
+    	$('#noticeRemark_div').dialog("close");
+    }
+    //取消提交审批意见
+    function cancelNoticeRemark(){
+    	$(selObj).val(0);
+    	$('#noticeRemark_div').dialog("close");
+    }
 </script>
 <style type="text/css">
     .but {
@@ -386,7 +499,7 @@
             <button class="btn btn-primary" onclick="doAdd();">新增</button>
         </div>
     </div>
-    <div id="centerQueryGridContainer" class="panel panel-primary" queryid="queryNoticeList" operators="$pmspage.opArr"
+    <div id="centerQueryGridContainer" class="panel panel-primary" queryid="queryNoticeApplyList" operators="$pmspage.opArr"
          titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="true"
          showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
          showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
@@ -394,6 +507,25 @@
 </div>
 </body>
 </html>
+
+<div id="noticeRemark_div" style="display:none;height:360px">
+    <div>
+       	<table id="noticeRemark_show" style="min-width: 100%;border-collapse:separate; border-spacing:0px 5px;" >
+       		
+       		<tr>
+       			
+        		<td>
+        			<textarea id="notice_remark" cols="37" style="height:100px;resize:none;" ></textarea>
+        		</td>
+        	</tr>
+        	<tr>
+       			<td  style="text-align:center"><div class="ui-dialog-buttonset"><button type="button" id="submitBtn" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="submitNoticeRemark()"><span class="ui-button-text">提交</span></button><button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onclick="cancelNoticeRemark()"><span class="ui-button-text">取消</span></button></div></td>
+        	</tr>
+       	 </table>
+       	 <input type="hidden" id="notice_no" />
+       	 <input type="hidden" id="notice_checkstatus" />
+      </div>	
+</div> 
 
 
 <div id="noticeDetail_div" style="display:none;height:360px">
@@ -420,13 +552,13 @@
        		<tr>
        			<td width="8px"><span>标&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;题：</span></td>
        			<td>
-        			<textarea id="title_s" cols="40" style="height:40px;resize:none;" ></textarea>
+        			<textarea id="title_s" cols="40" style="height:40px;resize:none;background-color:#d3d3d3c7" readonly="readonly"></textarea>
        			</td>
        		</tr> 
        		<tr>
        			<td width="8px"><span>内&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容：</span></td>
         		<td>
-        			<textarea id="content_s" cols="40" style="height:100px;resize:none;" ></textarea>
+        			<textarea id="content_s" cols="40" style="height:100px;resize:none;background-color:#d3d3d3c7" readonly="readonly"></textarea>
         		</td>
         	</tr>
         	<tr>
@@ -448,27 +580,15 @@
         		</td>
         	</tr>
         	<tr>
-       			<td width="8px"><span>附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件一：</span></td>
-        		<td id="notice_file_td1">
-        			
-        		</td>
-        	</tr>
-        	<tr>
-       			<td width="8px"><span>附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件二：</span></td>
-        		<td id="notice_file_td2">
-        			
-        		</td>
-        	</tr>
-        	<tr>
-       			<td width="8px"><span>附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件三：</span></td>
-        		<td id="notice_file_td3">
+       			<td width="8px"><span>附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件：</span></td>
+        		<td id="notice_file_td">
         			
         		</td>
         	</tr>
         	
-        	<tr>
-       			<td colspan="2" style="text-align:center"><button id="eidtBtn" class="btn btn-primary" onclick="editNotice()">提交</button></td>
-        	</tr>
+<!--         	<tr> -->
+<!--        			<td colspan="2" style="text-align:center"><button id="eidtBtn" class="btn btn-primary" onclick="editNotice()">提交</button></td> -->
+<!--         	</tr> -->
        	 </table>
       </div>	
 </div> 

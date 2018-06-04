@@ -171,4 +171,16 @@ public interface NoticeManager extends IManager{
 	public Map<String,Object> editNotice(Notice notice);
 	
 	public Notice getNoticeById(Long id);
+	
+	/**
+	 * 
+	* @Title: updateTouchRateOfNotice  
+	* @Description: TODO 更新公告触达率 
+	* 2018年5月16日
+	* @param @param id
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	 */
+	public Map<String,Object> updateTouchRateOfNotice(Notice notice);
 }

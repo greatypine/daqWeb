@@ -89,10 +89,11 @@
 	
 </style>
 <script type="text/javascript">
+    var noticeNo = getUrlParamByKey("noticeNo");
+    var actionType = getUrlParamByKey("actionType");
+    
     $(function(){
     	initcurruser();
-    	
-    	
     });
     
     var loginUser = null;
@@ -396,10 +397,15 @@
   }  
   
   //上传附件
-  function uploadFile(){
+  function uploadFile(t){
+	  var fileID = "noticefile"+t;
+	  var fileName = $("#"+fileID).val();
+	  fileName = fileName.substring(fileName.lastIndexOf("\\")+1);
+	  var fileNameID = "fileName"+t;
+	  $('#fileName'+t).val(fileName);
 	  var lay_index = layer.load("2");
 	  var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=notice_file";
-      var elementsId = ['noticefile'];
+      var elementsId = [fileID];
       $.ajaxFileUpload({
           url: url,
           type: 'post',
@@ -409,10 +415,11 @@
           success: function(data, status){
               data = JSON.parse(data);
               if(data.result){
-                  var pmsFile = JSON.parse(data.data);
+                  var pmsFile = JSON.parse(data.data); 
+                $('#filePath'+t).attr('src',getRootPath().replace("daqWeb","file_manager")+"/"+pmsFile.filePath);  
                 //$('#filePath').attr('src',getFilePath()+pmsFile.filePath);
-                $('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
-                $('#fileName').val(pmsFile.name+"."+pmsFile.fileSuffix);
+                //$('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
+                
                  layer.close(lay_index);
               }else{
                   $$.showMessage('提示',data.message);
@@ -494,8 +501,14 @@
 	}
 	
 	var grade = $("#grade").val();
-	var filepath = $("#filePath").attr("src");
-	var fileName = $("#fileName").val();
+	var filepath1 = $("#filePath1").attr("src");
+	var fileName1 = $("#fileName1").val();
+	
+	var filepath2 = $("#filePath2").attr("src");
+	var fileName2 = $("#fileName2").val();
+	
+	var filepath3 = $("#filePath3").attr("src");
+	var fileName3 = $("#fileName3").val();
 	$("#btnSave").val("发送中...");
 	var index = layer.load(2, {
 		  shade: [0.2,'#0a0a0a'] //0.1透明度的白色背景
@@ -517,11 +530,16 @@
 			cityes:cityes,
 			stores:stores,
 			zw:jobs,
-			filePath:filepath,
-			fileName:fileName
+			filePath:filepath1,
+			fileName:fileName1,
+			filePath2:filepath2,
+			fileName2:fileName2,
+			filePath3:filepath3,
+			fileName3:fileName3
+			
 	}
 	
- 	doManager('noticeManager','saveNotice',[notice],function(data){
+ 	doManager('NoticeManager','saveNotice',[notice],function(data){
         if(data.result){
             var result = JSON.parse(data.data);
             layer.close(index);
@@ -559,9 +577,9 @@ function showNoticeWay(){
 	
 }
 
-var maxsize = 100*1024*1024;//2M  
-var errMsg = "上传的附件文件不能超过100M！！！";  
-var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过100M，建议使用IE、FireFox、Chrome浏览器。";  
+var maxsize = 70*1024*1024;// 
+var errMsg = "上传的附件文件不能超过70M！！！";  
+var tipMsg = "您的浏览器暂不支持计算上传文件的大小，确保上传文件不要超过70M，建议使用IE、FireFox、Chrome浏览器。";  
 var  browserCfg = {};  
 var ua = window.navigator.userAgent;  
 if (ua.indexOf("MSIE")>=1){  
@@ -582,9 +600,10 @@ function isInArray(arr,value){
 }
 
 //var fileTypeArray = ["doc","docx","xls","xlsx","jpg","png","jpeg","bmp","gif","zip"];
-function checkfile(){  
+function checkfile(t){  
     try{  
-        var obj_file = document.getElementById("noticefile");  
+    	var ID = "noticefile"+t;
+        var obj_file = document.getElementById(ID);  
         if(obj_file.value==""){  
             $$.showMessage('提示',"请先选择上传文件");
             return;  
@@ -602,8 +621,9 @@ function checkfile(){
         var filesize = 0;  
         if(browserCfg.firefox || browserCfg.chrome ){  
             filesize = obj_file.files[0].size;  //如果用jquery是obj_file[0]
-        }else if(browserCfg.ie){  
-            var obj_img = document.getElementById('tempimg');  
+        }else if(browserCfg.ie){
+        	var tempID = 'tempimg'+t;
+            var obj_img = document.getElementById(tempID);  
             obj_img.dynsrc=obj_file.value;  
             filesize = obj_img.fileSize;  
         }else{  
@@ -618,7 +638,7 @@ function checkfile(){
             $$.showMessage('提示',errMsg);
             return;  
         }else{  
-        	uploadFile();
+        	uploadFile(t);
             return;  
         }  
     }catch(e){  
@@ -687,13 +707,35 @@ function checkfile(){
                             </td>
                         </tr>
                         <tr>
-                            <td style="width:15%">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件</td>
+                            <td style="width:15%">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件一</td>
                             <td>
                                 <form id="noticeFile_form" action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadNoticeForm" target="t_f_a_o" style="width:110%; float:left;">
-                                 <img id="tempimg" dynsrc="" src="" style="display:none" />  
-                                 <input type="file" isuploadtable="true" id="noticefile" name="noticefile" class="form-control" style="width:60%;"  onchange="checkfile()">
-                            	 <input type="hidden"  id="filePath" name="filePath">
-                            	  <input type="hidden"  id="fileName" name="fileName">
+                                 <img id="tempimg1" dynsrc="" src="" style="display:none" />  
+                                 <input type="file" isuploadtable="true" id="noticefile1" name="noticefile1" class="form-control" style="width:60%;"  onchange="checkfile(1)" >
+                            	 <input type="hidden"  id="filePath1" name="filePath1">
+                            	  <input type="hidden"  id="fileName1" name="fileName1">
+                            	</form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:15%">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件二</td>
+                            <td>
+                                <form id="noticeFile_form" action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadNoticeForm" target="t_f_a_o" style="width:110%; float:left;">
+                                 <img id="tempimg2" dynsrc="" src="" style="display:none" />  
+                                 <input type="file" isuploadtable="true" id="noticefile2" name="noticefile2" class="form-control" style="width:54.6%;"  onchange="checkfile(2)" >
+                            	 <input type="hidden"  id="filePath2" name="filePath2">
+                            	  <input type="hidden"  id="fileName2" name="fileName2">
+                            	</form>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:15%">附&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件三</td>
+                            <td>
+                                <form id="noticeFile_form" action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadNoticeForm" target="t_f_a_o" style="width:110%; float:left;">
+                                 <img id="tempimg3" dynsrc="" src="" style="display:none" />  
+                                 <input type="file" isuploadtable="true" id="noticefile3" name="noticefile3" class="form-control" style="width:54.8%;"  onchange="checkfile(3)" >
+                            	 <input type="hidden"  id="filePath3" name="filePath3">
+                            	  <input type="hidden"  id="fileName3" name="fileName3">
                             	</form>
                             </td>
                         </tr>

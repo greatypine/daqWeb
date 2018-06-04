@@ -1,5 +1,7 @@
 package com.cnpc.pms.notice.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -7,16 +9,17 @@ import javax.persistence.Transient;
 
 import com.cnpc.pms.base.entity.DataEntity;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
+
 /**
- * 
+ * 公告申请表
  * @author gbl
- * 公告
+ *
  */
 @Entity
-@Table(name = "t_notice")
-public class Notice extends DataEntity{
+@Table(name = "t_notice_apply")
+public class NoticeApply extends DataEntity{
 	
-
+	
 	@Column(name = "title",length=255)
 	private String title;//标题
 	
@@ -38,6 +41,9 @@ public class Notice extends DataEntity{
 	@Transient
 	private User receiveUser;
 	
+	@Column(name="checkStatus",length=2)
+	private int checkStatus;//审核状态 0：待审批 1：审批通过 2：驳回重新编辑 -1：审批不通过（不准发布）
+	
 	@Column(name="cityes")
 	private String cityes;
 	
@@ -53,21 +59,18 @@ public class Notice extends DataEntity{
 	@Column(name="fileName",length=50)
 	private String fileName;
 	
-	@Column(name="filePath2",length=200)
-	private String filePath2;
+	@Column(name="remark",length=200)
+	private String remark;//备注
+
+	@Column(name="checkDate")
+	private Date checkDate;
 	
-	@Column(name="fileName2",length=50)
-	private String fileName2;
+	@Column(name="checkUserId")
+	private Long checkUserId;
 	
-	@Column(name="filePath3",length=200)
-	private String filePath3;
-	
-	@Column(name="fileName3",length=50)
-	private String fileName3;
-	
-	@Column(name="touchRate")
-	private float touchRate;//触达率
-	
+	@Column(name="checkUserName")
+	private String checkUserName;
+
 	public String getTitle() {
 		return title;
 	}
@@ -92,12 +95,12 @@ public class Notice extends DataEntity{
 		this.noticeNo = noticeNo;
 	}
 
-	public Integer getGrade() {
-		return grade;
+	public String getReleaseUnit() {
+		return releaseUnit;
 	}
 
-	public void setGrade(Integer grade) {
-		this.grade = grade;
+	public void setReleaseUnit(String releaseUnit) {
+		this.releaseUnit = releaseUnit;
 	}
 
 	public Integer getType() {
@@ -108,6 +111,14 @@ public class Notice extends DataEntity{
 		this.type = type;
 	}
 
+	public Integer getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Integer grade) {
+		this.grade = grade;
+	}
+
 	public User getReceiveUser() {
 		return receiveUser;
 	}
@@ -116,12 +127,12 @@ public class Notice extends DataEntity{
 		this.receiveUser = receiveUser;
 	}
 
-	public String getReleaseUnit() {
-		return releaseUnit;
+	public int getCheckStatus() {
+		return checkStatus;
 	}
 
-	public void setReleaseUnit(String releaseUnit) {
-		this.releaseUnit = releaseUnit;
+	public void setCheckStatus(int checkStatus) {
+		this.checkStatus = checkStatus;
 	}
 
 	public String getCityes() {
@@ -164,47 +175,37 @@ public class Notice extends DataEntity{
 		this.fileName = fileName;
 	}
 
-	public float getTouchRate() {
-		return touchRate;
+	public String getRemark() {
+		return remark;
 	}
 
-	public void setTouchRate(float touchRate) {
-		this.touchRate = touchRate;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
-	public String getFilePath2() {
-		return filePath2;
+	public Date getCheckDate() {
+		return checkDate;
 	}
 
-	public void setFilePath2(String filePath2) {
-		this.filePath2 = filePath2;
+	public void setCheckDate(Date checkDate) {
+		this.checkDate = checkDate;
 	}
 
-	public String getFileName2() {
-		return fileName2;
+	public Long getCheckUserId() {
+		return checkUserId;
 	}
 
-	public void setFileName2(String fileName2) {
-		this.fileName2 = fileName2;
+	public void setCheckUserId(Long checkUserId) {
+		this.checkUserId = checkUserId;
 	}
 
-	public String getFilePath3() {
-		return filePath3;
+	public String getCheckUserName() {
+		return checkUserName;
 	}
 
-	public void setFilePath3(String filePath3) {
-		this.filePath3 = filePath3;
+	public void setCheckUserName(String checkUserName) {
+		this.checkUserName = checkUserName;
 	}
-
-	public String getFileName3() {
-		return fileName3;
-	}
-
-	public void setFileName3(String fileName3) {
-		this.fileName3 = fileName3;
-	}
-
-	
 	
 	
 }

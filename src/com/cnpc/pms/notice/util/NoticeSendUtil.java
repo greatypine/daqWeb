@@ -2,6 +2,7 @@ package com.cnpc.pms.notice.util;
 
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.notice.entity.Notice;
+import com.cnpc.pms.notice.entity.NoticeApply;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import com.gexin.rp.sdk.base.IPushResult;
 import com.gexin.rp.sdk.base.impl.SingleMessage;
@@ -16,15 +17,15 @@ import com.gexin.rp.sdk.template.TransmissionTemplate;
  * @author gbl
  * 公告发送器
  */
-public class NoticeSebdUtil {
+public class NoticeSendUtil {
 	
-	private NoticeSebdUtil(){}
+	private NoticeSendUtil(){}
 	 
 	 private static class ClassLazyLoader{
-		 private static final NoticeSebdUtil singleton = new NoticeSebdUtil();
+		 private static final NoticeSendUtil singleton = new NoticeSendUtil();
 	 }
 	 
-	 public static final NoticeSebdUtil getInstance(){
+	 public static final NoticeSendUtil getInstance(){
 		 return ClassLazyLoader.singleton;
 	 }
 	/**

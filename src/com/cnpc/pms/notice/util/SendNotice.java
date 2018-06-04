@@ -7,7 +7,9 @@ import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.inter.manager.InterManager;
 import com.cnpc.pms.notice.entity.Notice;
+import com.cnpc.pms.notice.entity.NoticeApply;
 import com.cnpc.pms.notice.entity.NoticeReciver;
+import com.cnpc.pms.notice.entity.NoticeReciverApply;
 import com.cnpc.pms.notice.manager.NoticeReciverManager;
 import com.cnpc.pms.personal.manager.SendMessageManager; 
 
@@ -83,7 +85,7 @@ public class SendNotice implements Runnable {
 					user.setClient_id(client_id.toString());
 					user.setToken(token.toString());
 					//发送app通知
-					NoticeSebdUtil.getInstance().pushNotice(user, notice);
+					NoticeSendUtil.getInstance().pushNotice(user, notice);
 					
 					//发送短信
 //					if(mobilePhone!=null&&!"".equals(mobilePhone)){
@@ -103,7 +105,7 @@ public class SendNotice implements Runnable {
 					user.setClient_id(client_id.toString());
 					user.setToken(token.toString());
 					//发送app通知
-					NoticeSebdUtil.getInstance().pushNotice(user, notice);
+					NoticeSendUtil.getInstance().pushNotice(user, notice);
 				}
 				
 			}

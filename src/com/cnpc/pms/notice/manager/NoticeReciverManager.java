@@ -6,6 +6,7 @@ import java.util.Map;
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.inter.common.Result;
+import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.entity.NoticeReciver;
 
 /**
@@ -64,5 +65,21 @@ public interface NoticeReciverManager extends IManager {
 	* @throws
 	 */
 	public int getUnReadNotice(String  employeeNo);
+	
+	/**
+	 * 
+	* @Title: getAllNotice  
+	* @Description: TODO 根据公告编号查询已发送的公告
+	* 2018年5月16日
+	* @param @param ntoice
+	* @param @return      
+	* @return List<Map<String,Object>> 
+	* @throws
+	 */
+	public List<NoticeReciver> getAllNotice(NoticeReciver noticeReciver);
+	
+	 
+	
+	
 	
 }

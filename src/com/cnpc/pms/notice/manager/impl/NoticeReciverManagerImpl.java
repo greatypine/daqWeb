@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.dao.core.IDAORoot;
@@ -20,8 +21,11 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.notice.dao.NoticeReciverDao;
+import com.cnpc.pms.notice.entity.Notice;
 import com.cnpc.pms.notice.entity.NoticeReciver;
 import com.cnpc.pms.notice.manager.NoticeReciverManager;
+import com.cnpc.pms.notice.util.NoticeTouchTask;
+import com.cnpc.pms.notice.util.SingleThreadPool;
 import com.cnpc.pms.slice.entity.AreaInfo;
 
 public class NoticeReciverManagerImpl extends BizBaseCommonManager implements NoticeReciverManager {
@@ -49,8 +53,21 @@ public class NoticeReciverManagerImpl extends BizBaseCommonManager implements No
 	@Override
 	public int updateNoticeReciverIsRead(String noticeNo, String employeeNo) {
 		NoticeReciverDao noticeReciverDao = (NoticeReciverDao)SpringHelper.getBean(NoticeReciverDao.class.getName());
+		int result= 0;
+		try {
+			
+			result = noticeReciverDao.updateNoticeReciverIsRead(noticeNo, employeeNo);
+			
+				
+			ExecutorService exe = SingleThreadPool.getInstance().getExe();
+			exe.execute(new NoticeTouchTask(noticeNo));//更新公告触达率
 		
-		return noticeReciverDao.updateNoticeReciverIsRead(noticeNo, employeeNo);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -58,7 +75,11 @@ public class NoticeReciverManagerImpl extends BizBaseCommonManager implements No
 		NoticeReciverManager nrm = (NoticeReciverManager)SpringHelper.getBean("noticeReciverManager");
 		List<NoticeReciver> lst_areaInfos = new ArrayList<NoticeReciver>();
 		try {
-			lst_areaInfos = (List<NoticeReciver>) nrm.getList(FilterFactory.getSimpleFilter("employeeNo", employeeNo).appendAnd(FilterFactory.getSimpleFilter("status", 0)).appendAnd(FilterFactory.getSimpleFilter("isRead", 0)));
+			IFilter filter = FilterFactory.getSimpleFilter("status", 0).appendAnd(FilterFactory.getSimpleFilter("isRead", 0));
+			if(employeeNo!=null&&!"".equals(employeeNo)){
+				filter = FilterFactory.getSimpleFilter("status", 0).appendAnd(FilterFactory.getSimpleFilter("isRead", 0)).appendAnd(FilterFactory.getSimpleFilter("employeeNo", employeeNo));
+			}
+			lst_areaInfos = (List<NoticeReciver>) nrm.getList(filter);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return lst_areaInfos;
@@ -72,7 +93,25 @@ public class NoticeReciverManagerImpl extends BizBaseCommonManager implements No
 		return  lst_areaInfos.size();
 	}
 
-	
+	@Override
+	public List<NoticeReciver> getAllNotice(NoticeReciver noticeReciver) {
+		NoticeReciverManager nrm = (NoticeReciverManager)SpringHelper.getBean("noticeReciverManager");
+		List<NoticeReciver> lst_areaInfos = new ArrayList<NoticeReciver>();
+		try {
+			
+			IFilter filter = FilterFactory.getSimpleFilter("status", 0).appendAnd(FilterFactory.getSimpleFilter("noticeNo",noticeReciver.getNoticeNo()));
+			if(noticeReciver.getIsRead()!=null){
+				filter = FilterFactory.getSimpleFilter("status", 0).appendAnd(FilterFactory.getSimpleFilter("noticeNo",noticeReciver.getNoticeNo())).appendAnd(FilterFactory.getSimpleFilter("isRead",noticeReciver.getIsRead()));
+			}
+			lst_areaInfos = (List<NoticeReciver>) nrm.getList(filter);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return lst_areaInfos;
+		}
+		return lst_areaInfos;
+	}
 
+	
+    
 
 }

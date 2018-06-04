@@ -143,4 +143,5 @@ public interface NoticeDao {
 	* @throws
 	 */
 	public int deleteNotice(String noticeNo);
+	
 }

@@ -21,12 +21,38 @@
     <query id="queryNoticeList" header="公告列表" baseclass="com.cnpc.pms.notice.entity.Notice" order="id desc" filter="status = 0">
         <column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
         <column key="noticeNo" header="序号" type="java.lang.String" operator="eq" align="center" allowSort="false" display="false"  width="5%"/>
-        <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="20%"/>
-        <column key="content" header="内容" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="25%"/>
+        <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="content" header="内容" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="filePath" header="附件一" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="10%"/>
+        <column key="fileName" header="" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="false" width="1%"/>
+        <column key="filePath2" header="附件二" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="10%"/>
+        <column key="fileName2" header="" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="false" width="1%"/>
+        <column key="filePath3" header="附件三" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="10%"/>
+        <column key="fileName3" header="" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="false" width="1%"/>
+        
         <column key="releaseUnit" header="发布单位" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="8%"/>
         <column key="type" header="公告类型" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="false" display="true" width="3%"/>
         <column key="grade" header="公告等级" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="false" display="true" width="3%"/>
         <column key="create_user" header="创建人" type="java.lang.String" align="center" allowSearch="center" operator="like" allowSort="false" display="true" width="8%"/>
-        <column key="create_time" header="发布日期" type="java.util.Date" format="yyyy-MM-dd" align="center" allowSearch="true" operator="like" allowSort="true" display="true" width="15%"/>
+        <column key="create_time" header="发布日期" type="java.util.Date" format="yyyy-MM-dd" align="center" allowSearch="true" operator="like" allowSort="true" display="true" width="6%"/>
+   		<column key="touchRate" header="触达率" type="java.lang.float"  align="center" allowSearch="false"  allowSort="false" display="true" width="8%"/>
+   		<column key="create_user_id" header="" type="java.lang.Long"  align="center" allowSearch="true" operator="eq"  allowSort="false" display="false" width="1%" />
+    </query>
+    
+    
+    <query id="queryNoticeApplyList" header="公告申请列表" baseclass="com.cnpc.pms.notice.entity.NoticeApply" order="id desc" filter="status = 0">
+        <column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
+        <column key="noticeNo" header="序号" type="java.lang.String" operator="eq" align="center" allowSort="false" display="false"  width="5%"/>
+        <column key="title" header="标题" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="content" header="内容" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+        <column key="filePath" header="附件" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="true" width="10%"/>
+        <column key="fileName" header="" type="java.lang.String" align="left" allowSearch="false" operator="like" allowSort="false" display="false" width="1%"/>
+        <column key="releaseUnit" header="发布单位" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true" width="8%"/>
+        <column key="type" header="公告类型" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="false" display="true" width="3%"/>
+        <column key="grade" header="公告等级" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="false" display="true" width="3%"/>
+        <column key="create_user" header="申请人" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="8%"/>
+        <column key="create_time" header="申请日期" type="java.util.Date" format="yyyy-MM-dd" align="center" allowSearch="false" operator="like" allowSort="true" display="true" width="6%"/>
+        <column key="checkStatus" header="审批状态" type="java.lang.int" align="center" allowSearch="true"  operator="like" allowSort="false" display="true" width="8%"/>
+    
     </query>
 </pmsquery>
