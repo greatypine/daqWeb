@@ -1,6 +1,7 @@
 	.dl-horizontal dt{width: 30%;}
     .dl-horizontal dd{margin-left: 38%;}
     .info_head{width: 25%; float:left; position: absolute;}
+    .info_bottom{width: 25%; float:right;}
     .info_head_dl{display: none;}
     .info_head,.info_bottom{min-height: 180px;}
     .info_head:hover,.info_bottom:hover{height: auto;}
@@ -136,4 +137,7 @@
       .gengduo{position:absolute;right:20px;top:5px;}
 	  .gengduo a {color: #747474;font-size: 12px;}
 	  .gengduo:hover{cursor:pointer}
+      .gengduo2{position:absolute;right:20px;top:300px;}
+	  .gengduo2 a {color: #747474;font-size: 12px;}
+	  .gengduo2:hover{cursor:pointer}
 	  #main9 canvas{top:-55px!important;}
