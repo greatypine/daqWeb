@@ -1000,8 +1000,9 @@ var showCityMember = function(dataserver){
 	      top: '5%',
 	    }],
 	    tooltip: {
-	      show: false
-	    },
+		      trigger: 'item',
+		      formatter: "{b} : {c} ({d}%)"
+		    },
 	    legend: {
 	      show: false
 	    },
@@ -1175,6 +1176,7 @@ var showEshop = function (dataServer) {
 	    },
 	    series: [
 	    	{
+	      name:'成交量',	
 	      type: 'pie',
 	      radius: '70%',
 	      center: ['50%', '60%'],
