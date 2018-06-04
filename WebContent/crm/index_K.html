@@ -412,6 +412,8 @@ Date.prototype.format = function() {
 			}
 		    var url = "../login.do";
 		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+		}else{
+			getUser();
 		}
 		
 	}
@@ -1815,6 +1817,19 @@ Date.prototype.format = function() {
 	  });
 	  
   })
+  
+  function getUser(){
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			var curr_user = JSON.parse(data.data);
+			if(curr_user == null){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}
+		}
+  	},false);
+}
   
   //初始化实时图数据
 //   var real_value;

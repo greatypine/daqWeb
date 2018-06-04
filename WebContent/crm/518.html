@@ -605,6 +605,8 @@
 			}
 		    var url = "../login.do";
 		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+		}else{
+			getUser();
 		}
 		
 	}
@@ -1432,6 +1434,19 @@ Date.prototype.format=function(fmt) {
 	  timeTicket = setInterval(initEshopRankingData, 300000);
 	  timeTicket = setInterval(initCityRankingData, 300000);
   });
+  
+  function getUser(){
+		doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var employeeID="";
+				var curr_user = JSON.parse(data.data);
+				if(curr_user == null){
+					urlStr = "../logout.do";
+					window.location.href = urlStr;
+				}
+			}
+	  	},false);
+	}
   
   var festivalDate = new Date().format("yyyy-MM-dd");
   
