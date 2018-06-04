@@ -88,6 +88,7 @@ $(document).ready(function () {
 
 const CACHE_HEADER_STATISTIC = 'statistic_';
 const CACHE_HEADER_HISTORY_DATA = 'historyData_';
+const CACHE_HEADER_OPEN_CARD_USER = 'openCardUser_';
 const CACHE_HEADER_CUSTOMER_COUNT_DATA = 'customerData_';
 const CACHE_HEADER_CITY_RANK_GVM = 'cityRankGmv_';
 const CACHE_HEADER_STORE_RANK_GMV = 'storeRankGmv_';
@@ -114,6 +115,8 @@ var showPageContent = function (pageStatusInfo) {
     getLastMonthOrderCustomerCount(pageStatusInfo);
     // 显示历史数据
     getHistoryData(pageStatusInfo);
+    // 显示本月新增开卡用户和历史总社员数
+    getOpenCardUser(pageStatusInfo);
     getDailyData();
 
     // 显示统计概要
@@ -948,6 +951,47 @@ var showHistoryData = function (historyData) {
     $("#tradesumofcurmonths").html(changeMoney(parseInt(historyData.curMonthTurnover)));
     $("#tradesumofCurYears").html(changeMoney(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum)));
     $("#tradesumofhistorys").html(changeMoney(parseInt(historyData.historyTurnover)+(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum))));
+};
+// 获取历史数据
+var getOpenCardUser = function (pageStatusInfo) {
+	
+    var cacheKey = CACHE_HEADER_OPEN_CARD_USER + pageStatusInfo.getCacheKey();
+    // 从缓存获取数据
+    var openCardData = JsCache.get(cacheKey);
+    if (openCardData) {
+        //console.log('show open card base on js cache.')
+        showOpenCardUser(openCardData);
+    } else {
+    
+        // 准备服务端数据请求参数
+        var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+
+        }
+        //console.log('\trequest: open card ');
+        //console.log(reqestParameter);
+        var startTime = new Date().getTime();
+        // 查询当月新增社员数和历史总社员数
+        doManager("communityMembersManager", "getNewMembersCount",[reqestParameter],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var resultJson= JSON.parse(data.data);
+                    showOpenCardUser(resultJson);
+                    JsCache.set(cacheKey, resultJson);
+                }
+            },false);
+        //console.log('request open card from server in ' + (new Date().getTime() - startTime) + ' millisecond');
+    }
+};
+// 显示历史数据
+var showOpenCardUser = function (openCardData) {
+	$("#openCardUserMonthcountHid").html(openCardData['newMemberCount']);
+	$("#openCardUserHistorycountHid").html(openCardData['historyCount']);
+	$("#openCardUserMonthcount").html(openCardData['newMemberCount']);
+	$("#openCardUserHistorycount").html(openCardData['historyCount']);
 };
 var getLastMonthOrderCustomerCount = function(pageStatusInfo){
 	var cacheKey = CACHE_HEADER_CUSTOMER_COUNT_DATA + pageStatusInfo.getCacheKey();
@@ -1980,7 +2024,7 @@ var getStoreRankDataOrder = function (pageStatusInfo) {
         //console.log('\trequest: store rank order. ');
         //console.log(reqestParameter);
         var startTime = new Date().getTime();
-        // 全国门店(订单量)排名
+        // 门店排名(用户量)
         //doManager("dynamicManager", "queryCityOrderRankingTop10",[reqestParameter,pageStatusInfo.pageInfo,null],
         doManager("OrderManager", "queryCustomerCount",[reqestParameter,pageStatusInfo.pageInfo,null],
             function(data, textStatus, XMLHttpRequest) {
@@ -2279,7 +2323,7 @@ var getChannelRankGmvData = function (pageStatusInfo) {
         }
         //console.log('\trequest: channel rank gmv . ');
         //console.log(reqestParameter);
-        // 全国门店(订单量)排名
+        // 频道排名(GMV)排名
         var startTime = new Date().getTime();
         doManager("dynamicManager", "queryTradeByChannelName",[reqestParameter,pageStatusInfo.pageInfo,null],
             function(data, textStatus, XMLHttpRequest) {
@@ -2590,7 +2634,7 @@ var getBusinessDepRankDataGmv = function (pageStatusInfo) {
         //console.log('\trequest: business dep gmv. ');
         //console.log(reqestParameter);
         var startTime = new Date().getTime();
-        // 全国门店(订单量)排名
+        // 事业群排名
         doManager("dynamicManager", "queryTradeByDepName",[reqestParameter,null,null],
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
@@ -2784,8 +2828,8 @@ var getTurnoverCustomerOrder = function(pageStatusInfo){
         //console.log('\trequest: turnover customer. ');
         //console.log(reqestParameter);
         var startTime = new Date().getTime();
-        // 全国门店(订单量)排名
-        doManager("dynamicManager", "getWeekCustomerOrderRate",[reqestParameter],
+        //近7日新增社员趋势
+        doManager("communityMembersManager", "getMembersWeekCount",[reqestParameter],
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
@@ -2802,30 +2846,29 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	// 客流分析
   turnoverCustomerOrderOption = {
     title: {
-      text:"近7日客流分析",x: '5%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"},
+      text:"近7日新增社员趋势",x: '5%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"},
     },
     tooltip : {
       trigger: 'axis',
       formatter:function(params)//数据格式
             {
             var relVal = params[0]['name']+"<br/>";
-            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
-	        relVal+="<br/>";
-            relVal += params[2]['marker']+params[2]['seriesName']+ ' : ' + String(params[2]['value']);
-	        relVal+="<br/>";
             relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
+	        relVal+="<br/>";
+            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
 	        relVal+="<br/>";
              return relVal;
         }
     },
     legend: {
-      data:['复购率','消费用户量','新增用户量'],
+      data:['累计社员人数','新增社员人数'],
       textStyle:{color:"#efefef",fontSize:"12"},
       right:0,
       orient:'vertical',
+      padding: 20
     },
     grid: {
-      top: '25%',
+      top: '28%',
       left: '3%',
       right: '2%',
       bottom: '3%',
@@ -2887,28 +2930,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     ],
     series: [
       {
-        name:'复购率',
-        cursor: 'default',
-        type: 'line',
-        yAxisIndex: 1,
-        lineStyle: {
-          color:'#ffc203'
-        },
-        itemStyle: {
-          normal:{
-            color:'#ffc203',
-            label: {
-              show: true,
-              position: 'top',
-              formatter: '{c}% ',
-            },
-          }
-
-        },
-
-      },
-      {
-        name:'新增用户量',
+        name:'新增社员人数',
         cursor: 'default',
         type: 'bar',
         yAxis: 1,
@@ -2937,7 +2959,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 
       },
 	  {
-        name:'消费用户量',
+        name:'累计社员人数',
         cursor: 'default',
         type: 'bar',
         yAxis: 1,
@@ -2970,32 +2992,18 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
   	var data = [];
   	var data1 = [];
     var data2 = [];
-    var data3 = [];
-    $.each(eval(turnoverCustomer['lst_data']), function (idx, val) {
-    	var rate = "";
-    	var str = "";
-    	if(parseInt(val['pay_cus_count'])==0){
-    		rate = 0;
-    	}else{
-    		str = (((parseInt(val['pay_cus_count'])-parseInt(val['new_cus_count']))/parseInt(val['pay_cus_count'])*100)+'');
-    		rate = str.substring(0,str.lastIndexOf(".")+2);
-    	}
-    	data.push(val['week_date']);
-    	data1.push(val['new_cus_count']);
-		data2.push(val['pay_cus_count']);
-		data3.push(rate);
+    $.each(eval(turnoverCustomer['week_new_data']), function (idx, val) {
+    	data.push(val['crtime']);
+    	data1.push(val['newcount']);
     });
+    for(var i=1;i<8;i++){
+    	var key = 'day'+i;
+    	data2.push(turnoverCustomer["growAllCounts"][0][key]);
+    }
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
-	turnoverCustomerOrderOption.series[0].data = data3.reverse();
-	turnoverCustomerOrderOption.series[1].data = data1.reverse();
-	turnoverCustomerOrderOption.series[2].data = data2.reverse();
+	turnoverCustomerOrderOption.series[0].data = data1.reverse();
+	turnoverCustomerOrderOption.series[1].data = data2;
 	//customerNewChartOption.title.text="近7天客流趋势";
-	turnoverCustomerOrderOption.yAxis[1].min = 0;
-	if(Math.max.apply(null, data3)<10||data3.length==0){
-		turnoverCustomerOrderOption.yAxis[1].max = 10;
-	}else{
-		turnoverCustomerOrderOption.yAxis[1].max = parseInt(Math.max.apply(null, data3)/0.7);
-	}
   	turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
 }
 // 获取城市用户量分布数据
@@ -3078,8 +3086,6 @@ var getDailyData = function(){
         timerId = setInterval(chonfu,3000);
 }
  function chonfu(){
- 		// 设置系统时间
-    	setCurrentDate(pageStatusInfo);
  		var currentDateInfo = pageStatusInfo['currentYear']+"-"+pageStatusInfo['currentMonth_']+"-"+pageStatusInfo['currentDay'];
     	 //查询当日累计营业额
     	var dynamicDto = {
@@ -3114,7 +3120,6 @@ var getDailyData = function(){
   						dojob(totalprice.substring(totalprice.length-9,totalprice.length)); 
   					}
   					
-  					//var tradesumofcurmonth = $("#tradesumofcurmonthHid").text();//本月营业额
   					//var tradesumofhistory = $("#tradesumofhistoryHid").text();//历史营业额
   					var tradesumofcustomerMonth = $("#tradesumofmonthCustmomerHid").text();//本月用户量
   					var tradesumoflastmonthCustmomer = $("#tradesumoflastmonthCustmomerHid").text();//上月今天用户量
@@ -3123,6 +3128,8 @@ var getDailyData = function(){
   					var tradesumofmonthOrder = $("#tradesumofmonthOrderHid").text();//本月订单量
   					var tradesumofhistoryOrder = $("#tradesumofhistoryOrderHid").text();//历史订单量
   					var tradesumoflastmonthOrder = $("#tradesumoflastmonthOrderHid").text();//上月今天订单量
+  					var openCardUserMonthcountHid = $("#openCardUserMonthcountHid").text();
+					var openCardUserHistorycountHid = $("#openCardUserHistorycountHid").text();
   					//var tradesumofyear = $("#tradesumofyearHid").text();//上月订单
   					//$("#tradesumofcurmonths").html(changeMoney(parseInt(tradesumofcurmonth)+parseInt(totalprice)));
   					//$("#tradesumofhistorys").html(changeMoney(parseInt(tradesumofhistory)+parseInt(totalprice)));
@@ -3131,6 +3138,8 @@ var getDailyData = function(){
   					//$("#tradesumofhistoryCustmomer").html(parseInt(1630694));
   					$("#tradesumofmonthOrder").html(parseInt(tradesumofmonthOrder)+parseInt(daily_order_count));
   					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder)+parseInt(daily_order_count));
+  					//$("#openCardUserMonthcount").html(openCardUserMonthcountHid);
+  					//$("#openCardUserHistorycount").html(openCardUserHistorycountHid);
   					var order_count_rate;
   					if(parseInt(tradesumoflastmonthOrder)==0){
   						order_count_rate = 0;
@@ -4594,6 +4603,12 @@ var initClick = function(){
         var url = "index_city_net.html";
         window.open(url);
     });
+    $("#turnover_customer_more").on('click',function(){
+       toToMemberAnalysis();  
+    });
+    $("#customer_analysis_more").on('click',function(){
+        goToUserMember();
+    });
 }
 function outputcents(amount) {//小数部分(两位)
     amount = Math.round(((amount) - Math.floor(amount)) * 100);
@@ -4774,12 +4789,22 @@ function showMoreSummaryStatistics(){
 	  $(".info_head").mouseover(function(){
 	    $(this).css('width','35%');
 	    $(this).find("dl").css('width','50%');
-	    $("#info_head_dl").show();
+	    $("#info_head_dl").hide();
 	  });
 	  $(".info_head").mouseleave(function(){
 	    $(this).css('width','25%');
 	    $(this).find("dl:first").css('width','100%');
 	    $("#info_head_dl").hide();
+	  });
+	  $(".info_bottom").mouseover(function(){
+	    $(this).css('width','40%');
+	    $(this).find(".info_bottom_left").show();
+	    $(this).find(".info_bottom_dl").removeClass("col-sm-6").addClass("col-sm-4");
+	  });
+	  $(".info_bottom").mouseleave(function(){
+	    $(this).css('width','25%');
+	    $(this).find(".info_bottom_right").removeClass("col-sm-4").addClass("col-sm-6");
+	    $(this).find(".info_bottom_left").hide();
 	  });
 }
 function getStoreKindsNumber(){
