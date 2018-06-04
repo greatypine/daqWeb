@@ -835,8 +835,8 @@ var showMemberRegist = function (dataServer){
 	        formatter: function (params)
 	        {
 	            return params[0].name + '<br/>'
-	                   + params[0].marker+params[0].seriesName + ' : ' + params[0].value + '<br/>'
-	                   + params[1].marker+params[1].seriesName + ' : ' + (params[1].value + params[0].value);
+	                   + params[1].marker+params[1].seriesName + ' : ' + (params[1].value + params[0].value) + '<br/>'
+	                   + params[0].marker+params[0].seriesName + ' : ' + params[0].value;
 	        }
 	    },
 	    legend: {
