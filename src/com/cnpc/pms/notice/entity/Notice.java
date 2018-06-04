@@ -29,7 +29,7 @@ public class Notice extends DataEntity{
 	@Column(name="releaseUnit")
 	private String releaseUnit;//发布单位
 	
-	@Column(name="type",length=1)
+	@Column(name="type",length=1) 
 	private Integer type;//公告类型 1：事务 2：业务
 	
 	@Column(name="grade",length=1)
