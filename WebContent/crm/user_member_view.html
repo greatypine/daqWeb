@@ -660,6 +660,14 @@ function resetSerachParam(){
   	  }else if(target==2){//店长
   		
   	  }
+	var nowDate = new Date();
+	var month = nowDate.getMonth()+1;
+    var date = nowDate.getDate();
+    timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
+    nowDate.setDate(nowDate.getDate()+parseInt(-1));
+    var startDateStr = nowDate.getFullYear() + '/' + "01" + '/01'; 
+	$("#searchTime").val(startDateStr +"-"+ timeStr);
+
 }
    
 </script>
