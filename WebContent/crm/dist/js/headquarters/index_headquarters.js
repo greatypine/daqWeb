@@ -954,7 +954,7 @@ var showHistoryData = function (historyData) {
 };
 // 获取历史数据
 var getOpenCardUser = function (pageStatusInfo) {
-	
+	/*
     var cacheKey = CACHE_HEADER_OPEN_CARD_USER + pageStatusInfo.getCacheKey();
     // 从缓存获取数据
     var openCardData = JsCache.get(cacheKey);
@@ -962,7 +962,7 @@ var getOpenCardUser = function (pageStatusInfo) {
         //console.log('show open card base on js cache.')
         showOpenCardUser(openCardData);
     } else {
-    
+    */
         // 准备服务端数据请求参数
         var reqestParameter = {
             month:pageStatusInfo.currentMonth,
@@ -980,11 +980,11 @@ var getOpenCardUser = function (pageStatusInfo) {
                 if (data.result) {
                     var resultJson= JSON.parse(data.data);
                     showOpenCardUser(resultJson);
-                    JsCache.set(cacheKey, resultJson);
+                    //JsCache.set(cacheKey, resultJson);
                 }
             },false);
         //console.log('request open card from server in ' + (new Date().getTime() - startTime) + ' millisecond');
-    }
+    //}
 };
 // 显示历史数据
 var showOpenCardUser = function (openCardData) {
