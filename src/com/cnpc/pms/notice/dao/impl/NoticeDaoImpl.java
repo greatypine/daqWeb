@@ -193,7 +193,7 @@ public class NoticeDaoImpl extends BaseDAOHibernate implements NoticeDao{
 
 	@Override
 	public List<Map<String, Object>> selectNoticeByNoticeNo(String noticeNo) {
-		String sql = "select create_time,create_user,title,content,type,grade,releaseUnit,cityes,stores,zw,noticeNo,id,filePath,fileName from t_notice where status=0 and noticeNo='"+noticeNo+"'";
+		String sql = "select create_time,create_user,title,content,type,grade,releaseUnit,cityes,stores,zw,noticeNo,id,filePath,fileName,filePath2,fileName2,filePath3,fileName3 from t_notice where status=0 and noticeNo='"+noticeNo+"'";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		//获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
