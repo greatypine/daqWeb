@@ -3153,7 +3153,7 @@ var getDailyData = function(){
 	  						$("#order_count_ratio").html(order_count_rate+'%');
   						}
   					}
-  					if(order_count_rate<0){
+  					/*if(order_count_rate<0){
   						$("#sign_4").attr("class","fa fa-long-arrow-down");
 						$("#sing_id4").attr("class","col-sm-2 decline");
 						$("#order_count_ratio").attr("class","decline");
@@ -3166,6 +3166,7 @@ var getDailyData = function(){
 						$("#tradesumofmonthOrder").removeClass("gaugetb3").addClass("gaugetb2");
 						$("#sing_id_4").removeClass("gaugetb3").addClass("gaugetb2");
   					}
+  					*/
   					var customer_month_rate;
   					if(parseInt(tradesumoflastmonthCustmomer)==0){
   						customer_month_rate = 0;
@@ -3179,6 +3180,7 @@ var getDailyData = function(){
   							$("#customer_month_ratio").html(customer_month_rate+'%');
   						}
   					}
+  					/*
   					if(customer_month_rate<0){
   							$("#sign_1").attr("class","fa fa-long-arrow-down");
   							$("#sing_id").attr("class","col-sm-2 decline");
@@ -3192,6 +3194,7 @@ var getDailyData = function(){
   							$("#tradesumofmonthCustmomer").removeClass("gaugetb3").addClass("gaugetb2");
   							$("#sing_id_1").removeClass("gaugetb3").addClass("gaugetb2");
   					}
+  					*/
   					var order_historey_rate;
   					if(parseInt(tradesumoflastmonthOrder)==0){
   						order_historey_rate = 0;
@@ -4789,7 +4792,7 @@ function showMoreSummaryStatistics(){
 	  $(".info_head").mouseover(function(){
 	    $(this).css('width','35%');
 	    $(this).find("dl").css('width','50%');
-	    $("#info_head_dl").hide();
+	    $("#info_head_dl").show();
 	  });
 	  $(".info_head").mouseleave(function(){
 	    $(this).css('width','25%');
