@@ -2846,7 +2846,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	// 客流分析
   turnoverCustomerOrderOption = {
     title: {
-      text:"近7日新增社员趋势",x: '5%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"},
+      text:"社员7日走势",x: '5%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"},
     },
     tooltip : {
       trigger: 'axis',
@@ -2936,7 +2936,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
         yAxis: 1,
         stack: '总量',
         label: {
-          show: true,
+          show: false,
           position: 'top',
           formatter: '{c} ',
           textStyle:{
@@ -2947,7 +2947,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
           normal: {
             color: "#ff3064",
             label: {
-              show: true,
+              show: false,
               textStyle: {
                 color: "#fff"
               },
@@ -2976,7 +2976,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
           normal: {
             color: "#30d7c7",
             label: {
-              show: true,
+              show: false,
               textStyle: {
                 color: "#30d7c7"
               },
@@ -3003,7 +3003,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
 	turnoverCustomerOrderOption.series[0].data = data1.reverse();
 	turnoverCustomerOrderOption.series[1].data = data2;
-	//customerNewChartOption.title.text="近7天新增社员趋势";
+	//customerNewChartOption.title.text="社员7日走势";
   	turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
 }
 // 获取城市用户量分布数据

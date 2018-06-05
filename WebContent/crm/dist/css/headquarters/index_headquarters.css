@@ -68,7 +68,7 @@
     .info_bottom{color: #fff; font-size: 20px;}
     .info_bottom h4{border-bottom: 2px solid; padding-bottom: 5px; font-size: 16px;}
     .info_bottom i{font-size: 30px;}
-    .info_bottom .col-sm-6{margin-bottom: 20px;}
+    .info_bottom .col-sm-6{margin-bottom: 20px;min-height: 80px;}
     .gaugetb2{color: #ffc203;}
     .gaugetb3{color: #f88962}
     .info_bottom .col-sm-5{font-size: 12px;}

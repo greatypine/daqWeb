@@ -322,56 +322,51 @@
         
       </div>
         <!--历史数据-->
-      <div class="info_bottom" style="width: 25%; float:right; position: relative;">
-      <div class="box no-border">
-      <div class="box-header h4 text-right" style="margin-bottom: -20px; margin-top:0;font-size: 12px;color: #747474;cursor: pointer;" id="customer_analysis_more">更多</div>
+		<div class="info_bottom" style="width: 25%; float: right; position: relative;">
+        <div class="box no-border">
+          <div class="box-header h4 text-right" style="margin-bottom: -20px; margin-top:0;font-size: 12px;cursor: pointer;" id="customer_analysis_more">更多</div>
           <div class="box-body no-padding">
-          <div class="info_bottom_dl info_bottom_right col-sm-6 pull-right ">
-            <h4 class="gaugetb2" id="sing_id_1">本月用户量</h4>
-            <input type="hidden" id="tradesumofmonthCustmomerHid">
-            <input type="hidden" id="tradesumoflastmonthCustmomerHid">
-            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofmonthCustmomer"></div>
-            <div class="col-sm-2 increase" id="sing_id"><i class="fa fa-long-arrow-up" id="sign_1"></i></div>
-            <div class="col-sm-5 no-padding text-center"><p class="increase" id="customer_month_ratio"></p>环比</div>
-          </div>
-          <div class="info_bottom_dl info_bottom_right col-sm-6 pull-right">
-            <h4 class="gaugetb2" id="sing_id_4">本月订单量</h4>
-            <input type="hidden" id="tradesumofmonthOrderHid">
-            <input type="hidden" id="tradesumoflastmonthOrderHid">
-            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofmonthOrder"></div>
-            <div class="col-sm-2 increase" id="sing_id4"><i class="fa  fa-long-arrow-up" id="sign_4"></i></div>
-            <div class="col-sm-5 no-padding text-center"><p class="increase" id="order_count_ratio"></p>环比</div>
-          </div>
-          <div class="info_bottom_dl info_bottom_right col-sm-6 pull-right">
-          	<h4 class="gaugetb2">历史开卡用户量</h4>
-               <input type="hidden" id="openCardUserHistorycountHid">
-              <div class="col-sm-4 no-padding gaugetb2" id="openCardUserHistorycount"></div>
-          </div>
-          <div class="info_bottom_dl info_bottom_right col-sm-6 pull-right-left">
-           	<h4 class="gaugetb2">本月新增开卡用户量</h4>
-              <input type="hidden" id="openCardUserMonthcountHid">
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6">
+              <h4 class="gaugetb2">本月消费用户数</h4>
+			  <input type="hidden" id="tradesumofmonthCustmomerHid">
+              <input type="hidden" id="tradesumoflastmonthCustmomerHid">
+              <div class="col-sm-4 no-padding gaugetb2" id="tradesumofmonthCustmomer"></div>
+              <div class="col-sm-2 increase" id="sing_id"><i class="fa fa-long-arrow-up" id="sign_1"></i></div>
+              <div class="col-sm-5 no-padding text-center"><p class="increase" id="customer_month_ratio"></p>环比</div>
+            </div>
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6">
+              <h4 class="gaugetb2">本月新增社员</h4>
+			  <input type="hidden" id="openCardUserMonthcountHid">
               <div class="col-sm-4 no-padding gaugetb2" id="openCardUserMonthcount"></div>
-          </div>
-		  <div class="info_bottom_dl info_bottom_left pull-right" style="display: none;">
-		  	    <h4 class="gaugetb2" id="sing_id_2">历史总用户量</h4>
-	            <input type="hidden" id="tradesumofhistoryCustmomerHid">
-	            <input type="hidden" id="tradesumoflasthistoryCustmomerHid">
-	            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofhistoryCustmomer"></div>
-	            <!-- <div class="col-sm-2 decline" id="sing_id2"><i class="fa fa-long-arrow-down" id="sign_2"></i></div>
-	            <div class="col-sm-5 no-padding text-center"><p class="decline" id="customer_history_ratio"></p>环比</div>
-	             -->
             </div>
-            <div class="info_bottom_dl info_bottom_left pull-right" style="display: none;">
-               <h4 class="gaugetb2" id="sing_id_3">历史总订单量</h4>
-	            <input type="hidden" id="tradesumofhistoryOrderHid">
-	            <div class="col-sm-4 no-padding gaugetb2" id="tradesumofhistoryOrder"></div>
-	            <!-- <div class="col-sm-2 increase" id="sing_id3"><i class="fa fa-long-arrow-up" id="sign_3"></i></div>
-	            <div class="col-sm-5 no-padding text-center"><p class="increase" id="order_history_ratio"></p>环比</div>
-	             -->
+            <div class="info_bottom_dl info_bottom_left pull-right col-sm-4" style="display: none;">
+              <h4 class="gaugetb3">本月成交单量</h4>
+			  <input type="hidden" id="tradesumofmonthOrderHid">
+              <input type="hidden" id="tradesumoflastmonthOrderHid">
+              <div class="col-sm-4 no-padding gaugetb3" id="tradesumofmonthOrder"></div>
+              <div class="col-sm-2 decline" id="sing_id4"><i class="fa fa-long-arrow-down" id="sign_4"></i></div>
+              <div class="col-sm-5 no-padding text-center"><p class="decline" id="order_count_ratio"></p>环比</div>
+            </div>
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6">
+            <h4 class="gaugetb3">历史累计社员</h4>
+			  <input type="hidden" id="openCardUserHistorycountHid">
+              <div class="col-sm-4 no-padding gaugetb3" id="openCardUserHistorycount"></div>
+            </div>
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6">
+              <h4 class="gaugetb3">历史累计消费用户数</h4>
+			  <input type="hidden" id="tradesumofhistoryCustmomerHid"/>
+	          <input type="hidden" id="tradesumoflasthistoryCustmomerHid"/>
+              <div class="col-sm-4 no-padding gaugetb3" id="tradesumofhistoryCustmomer"></div>
+            </div>
+            <div class="info_bottom_dl info_bottom_left pull-right col-sm-4" style="display: none;">
+              <h4 class="gaugetb3">历史累计成交单量</h4>
+			  <input type="hidden" id="tradesumofhistoryOrderHid">
+              <div class="col-sm-4 no-padding gaugetb3" id="tradesumofhistoryOrder"></div>
             </div>
           </div>
         </div>
-        </div>
+
+      </div>
       </section>
       <section class="content-header clearfix" style="margin-top: 15px;">
         <div class="col-sm-3 no-padding">
