@@ -426,6 +426,7 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			map.put("town_id", storeDynamic.getTown_id());
 			map.put("remark", storeDynamic.getRemark());
 			map.put("storetype", storeDynamic.getStoretype());
+			map.put("storetypename", storeDynamic.getStoretypename());
 			map.put("storeno", storeDynamic.getStoreno());
 			map.put("superMicro", storeDynamic.getSuperMicro());
 			map.put("estate", storeDynamic.getEstate());

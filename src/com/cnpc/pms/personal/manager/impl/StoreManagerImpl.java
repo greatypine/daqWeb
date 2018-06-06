@@ -597,6 +597,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			map.put("town_id", store.getTown_id());
 			map.put("remark", store.getRemark());
 			map.put("storetype", store.getStoretype());
+			map.put("storetypename", store.getStoretypename());
 			map.put("storeno", store.getStoreno());
 			map.put("superMicro", store.getSuperMicro());
 			map.put("estate", store.getEstate());

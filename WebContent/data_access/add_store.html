@@ -83,11 +83,11 @@ $(function(){
 	$("#nature").change(function(){
 		var stynat=$("#nature option:selected").val();
 		var stype1=$("#storetype option:selected").val();
-		 if(stynat=='合作店'&&stype1!='V'){
-			$(".bixuan").show();
-			$(".natter").hide();
-		}else if(stynat=='合作店'&&stype1=='V'){
+		 if(stype1=='V'){
 			 $(".bixuan").hide();
+		}else if(stynat=='合作店'&&stype1!='V'){
+			 $(".bixuan").show();
+			 $(".natter").hide();
 		}else{
 			 $(".bixuan").show();
 		 }
@@ -108,7 +108,7 @@ function initview(){
 					if(jsonData.usergroup.code=='GLY'){
 						$(".bixuan").hide();
 						var a = document.getElementById("storetype");//mySelect是select 的Id
-						  a.options[8].selected = true;
+						  a.options[9].selected = true;
 						  a.disabled=true;
 						//JSZ=jsonData.usergroup.code;
 					}
@@ -152,9 +152,17 @@ function initview(){
 						if(key=="storetype"){
 							storeTypeValue=va;
 							var nature=jsonData.nature;
+							var storetypename=jsonData.storetypename;
 							if(va=='V'){
+								if(storetypename=='虚拟店(仓店)'){
+									var a = document.getElementById("storetype");//mySelect是select 的Id
+									a.options[10].selected = true;
+								}else if(storetypename=='虚拟店'){
+									var a = document.getElementById("storetype");//mySelect是select 的Id
+									a.options[9].selected = true;
+								}
 								$(".bixuan").hide();
-								$("#storetype").attr("disabled","true");
+								//$("#storetype").attr("disabled","true");
 							}else if(va!='V'&&nature=='合作店'){
 								$(".bixuan").show();
 								$(".natter").hide();
@@ -163,12 +171,12 @@ function initview(){
 							}
 						}else if(key=="nature"){
 							var stype=jsonData.storetype;
-							if(va=='合作店'&&stype!='V'){
+							if(stype=='V'){
+								$(".bixuan").hide();
+							}else if(va=='合作店'&&stype!='V'){
 								$(".bixuan").show();
 								$(".natter").hide();
-							}else if(va=='合作店'&&stype=='V'){
-								$(".bixuan").hide();
-							}else {
+							} else {
 								$(".bixuan").show();
 							}
 
@@ -245,10 +253,18 @@ function initview(){
 						$("#"+key).val(va);
 						if(key=="storetype"){
 							storeTypeValue=va;
+							var storetypename=jsonData.storetypename;
 							var nature=jsonData.nature;
 							if(va=='V'){
+								if(storetypename=='虚拟店(仓店)'){
+									var a = document.getElementById("storetype");//mySelect是select 的Id
+									a.options[10].selected = true;
+								}else if(storetypename=='虚拟店'){
+									var a = document.getElementById("storetype");//mySelect是select 的Id
+									a.options[9].selected = true;
+								}
 								$(".bixuan").hide();
-								$("#storetype").attr("disabled","true");
+								//$("#storetype").attr("disabled","true");
 							}else if(va!='V'&&nature=='合作店'){
 								$(".bixuan").show();
 								$(".natter").hide();
@@ -257,12 +273,12 @@ function initview(){
 							}
 						}else if(key=="nature"){
 							var stype=jsonData.storetype;
-							if(va=='合作店'&&stype!='V'){
+							if(stype=='V'){
+								$(".bixuan").hide();
+							}else if(va=='合作店'&&stype!='V'){
 								$(".bixuan").show();
 								$(".natter").hide();
-							}else if(va=='合作店'&&stype=='V'){
-								$(".bixuan").hide();
-							}else {
+							} else {
 								$(".bixuan").show();
 							}
 
@@ -1307,6 +1323,7 @@ function loadhtml(){
 						<option value="B">独立微超店</option>
 						<option value="H">城市仓</option>
 						<option value="V">虚拟店</option>
+						<option value="V">虚拟店(仓店)</option>
 					</select>
 				</p>
 			</td>
