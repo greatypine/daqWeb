@@ -1623,7 +1623,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select dsch.id as channel_id,channel_name,ifnull(sum(order_count),0) as order_count from ds_ope_gmv_storechannel_month dsch "+
+		String sql ="select dsch.channel_id as channel_id,channel_name,ifnull(sum(order_count),0) as order_count from ds_ope_gmv_storechannel_month dsch "+
 				"left join t_store ts on (dsch.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name  "+
 				"where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and channel_name is not null "+
 				 provinceStr + cityStr +
