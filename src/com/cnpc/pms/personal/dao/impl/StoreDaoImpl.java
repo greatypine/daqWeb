@@ -1211,7 +1211,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ " ,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins "
 				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
 				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id "
-				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0 AND store.storetype!='V' AND IFNULL(store.estate,'')!='闭店中' "
+				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0 AND store.storetype!='V' AND store.storetype!='W' AND IFNULL(store.estate,'')!='闭店中' "
 				+ where + " order by store.city_name desc,store.ordnumber";
 
 		Map<String, Object> map_result = new HashMap<String, Object>();
@@ -1244,7 +1244,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ " ,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins "
 				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
 				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id "
-				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0 AND store.storetype!='V' AND IFNULL(store.estate,'')!='闭店中' "
+				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0 AND store.storetype!='V' AND store.storetype!='W' AND IFNULL(store.estate,'')!='闭店中' "
 				+ where + " order by store.city_name desc,store.ordnumber";
 
 		Map<String, Object> map_result = new HashMap<String, Object>();
