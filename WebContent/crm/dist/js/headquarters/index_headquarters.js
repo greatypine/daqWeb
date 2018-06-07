@@ -3086,6 +3086,7 @@ var getDailyData = function(){
         timerId = setInterval(chonfu,3000);
 }
  function chonfu(){
+ 		setCurrentDate(pageStatusInfo);
  		var currentDateInfo = pageStatusInfo['currentYear']+"-"+pageStatusInfo['currentMonth_']+"-"+pageStatusInfo['currentDay'];
     	 //查询当日累计营业额
     	var dynamicDto = {
