@@ -444,4 +444,7 @@ public interface UserManager extends IManager {
 	 
 	 public String resetUserPassword(User user);
 	 
+	 
+	 public String modifyStoreUserPassword(User user);
+	 
 }

@@ -42,6 +42,7 @@ import com.cnpc.pms.personal.dao.RelationDao;
 import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.DistCityCode;
 import com.cnpc.pms.personal.entity.Humanresources;
+import com.cnpc.pms.personal.entity.OnLineHumanresources;
 import com.cnpc.pms.personal.entity.SendBoxLoginLog;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.StoreKeeper;
@@ -49,6 +50,7 @@ import com.cnpc.pms.personal.entity.SysUserGroupOpera;
 import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.DistCityManager;
 import com.cnpc.pms.personal.manager.HumanresourcesManager;
+import com.cnpc.pms.personal.manager.OnLineHumanresourcesManager;
 import com.cnpc.pms.personal.manager.SendBoxLoginLogManager;
 import com.cnpc.pms.personal.manager.StoreKeeperManager;
 import com.cnpc.pms.personal.manager.StoreManager;
@@ -1542,6 +1544,15 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 				}else{
 					if(human!=null){
 						userDTO.setInviteCode(human.getInviteCode());
+					}else{
+					    OnLineHumanresourcesManager onLineHumanresourcesManager = (OnLineHumanresourcesManager) SpringHelper.getBean("onLineHumanresourcesManager");
+					    IFilter onLineFilter = FilterFactory.getSimpleFilter("phone",employee2.getMobilephone());
+					    List<OnLineHumanresources> onlines = (List<OnLineHumanresources>) onLineHumanresourcesManager.getList(onLineFilter);
+					    
+					    if(onlines!=null&&onlines.size()>0){
+					    	userDTO.setInviteCode(onlines.get(0).getInviteCode());
+					    }
+					    
 					}
 				}
 				
@@ -2537,5 +2548,26 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 	
 	
 	
+	@Override
+	public String modifyStoreUserPassword(User user) {
+		User userEntity = (User) this.getObject(user.getId());
+		String ret_msg="";
+		if (userEntity!=null&&userEntity.getPassword()!=null) {
+			//可以修改
+			userEntity.setPassword(MD5Utils.getMD5Str(user.getPassword()));
+			userEntity.setBlankPassword("已修改");
+			// 添加最后修改人和修改时间
+			userEntity.setLastModifyUserID(""+user.getId());
+			java.util.Date date = new java.util.Date();
+			java.sql.Date sdate = new java.sql.Date(date.getTime());
+			userEntity.setLastModifyDate(sdate);
+			// 检查开关
+			this.saveObject(userEntity);
+			ret_msg="修改成功！";
+		}else{
+			ret_msg="原密码不符，修改失败！ ";
+		}
+		return ret_msg;
+	}
 	
 }
