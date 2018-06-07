@@ -2951,7 +2951,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
               textStyle: {
                 color: "#fff"
               },
-              position: "insideTop",
+              position: "top",
 
             }
           }
