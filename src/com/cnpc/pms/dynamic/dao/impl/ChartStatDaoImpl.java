@@ -310,7 +310,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartStatDto csd){
-		String sql = "SELECT IFNULL(SUM(dsc.order_count),0) AS order_count,	IFNULL(FLOOR(SUM(dsc.order_amount)),0) AS order_amount, dsc.city_name, dsc.store_name,CONCAT(dsc.year,'-',dsc.month) as time "
+		String sql = "SELECT IFNULL(SUM(dsc.order_count),0) AS order_count,	IFNULL(FLOOR(SUM(dsc.order_amount)),0) AS order_amount, dsc.city_name,dsc.cityno, dsc.store_name,CONCAT(dsc.year,'-',dsc.month) as time,dsc.storeno "
 				+ "FROM ds_ope_gmv_storechannel_month dsc WHERE 1=1 ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dsc.storeno = '"+csd.getStoreno()+"' ";

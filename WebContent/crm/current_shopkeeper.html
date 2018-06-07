@@ -1862,7 +1862,7 @@ function initStoreHistoryGMV(){
 		  try{
 			  saveAccessModuleLog("数据动态系统","订单档案",returnCitySN,0,"");
 		  }catch(error){}
-		  var url = "searchData_view.html?t="+encode64(2)+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName);
+		  var url = "searchData_view.html?t="+encode64(2)+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName)+"&co="+encode64(currentStore.cityNo);
 		  window.open(url,"searchData_view");
 	}
 	/* //员工档案 

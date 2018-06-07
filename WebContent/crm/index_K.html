@@ -800,7 +800,26 @@ Date.prototype.format = function() {
     ]
   };
 
-
+  myChart3.on('click', function (params) {
+	  	var dataArr = [];
+	  	dataArr = params.data;
+	  	var dataParam = getShareParam();
+	  	var storename = dataArr[3];
+	  	var deptname = dataParam.deptname==null?"":dataParam.deptname;
+	  	var cityname = dataArr[2];
+	  	var dayTime = dataArr[4];
+	  	var storeno = dataArr[5];
+	  	var cityno = dataArr[6];
+	  	var redirectTag = "scatterplot";
+	  	var channelname = dataParam.channelname==null?"":dataParam.channelname;
+	    if(target==0){
+			url = "searchData_view.html?t="+encode64('0')+"&s=&c=&e=&r=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64(redirectTag);
+		}else if(target==1){
+			url = "searchData_view.html?t="+encode64(1)+"&e=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64(redirectTag);
+		}
+		window.open(url,"searchData_view");
+	});
+  
 //   myChart1.setOption(option1,true);
   myChart2.setOption(option2,true);
   myChart3.setOption(option3,true);
@@ -1100,10 +1119,11 @@ Date.prototype.format = function() {
 	  	var cityname = dataParam.cityname==null?"":dataParam.cityname;
 	  	var storeno = dataParam.storeno==null?"":dataParam.storeno;
 	  	var channelname = dataParam.channelname==null?"":dataParam.channelname;
+	  	var redirectTag = "day";
 	    if(target==0){
-			url = "searchData_view.html?t="+encode64('0')+"&s=&c=&e=&r=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime);
+			url = "searchData_view.html?t="+encode64('0')+"&s=&c=&e=&r=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime)+"&rt="+encode64(redirectTag);
 		}else if(target==1){
-			url = "searchData_view.html?t="+encode64(1)+"&e=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime);
+			url = "searchData_view.html?t="+encode64(1)+"&e=&dn="+encode64(deptname)+"&channel="+encode64(channelname)+"&cn="+encode64(cityname)+"&so="+encode64(storeno)+"&sn="+encode64(storename)+"&time="+encode64(dayTime)+"&rt="+encode64(redirectTag);
 		}
 		window.open(url,"searchData_view");
 	});
@@ -2059,6 +2079,8 @@ Date.prototype.format = function() {
 							temp.push(element.city_name);
 							temp.push(element.store_name);
 							temp.push(element.time);
+							temp.push(element.storeno);
+							temp.push(element.cityno);
 							dataBJ.push(temp);
 	                 	});
 						option3.series[0].data = dataBJ;
