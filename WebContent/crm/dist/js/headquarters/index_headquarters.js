@@ -2696,7 +2696,7 @@ var getCustomerNewAndConsumeMonthUser = function(pageStatusInfo){
        }
 }
 var showCustomerNew = function(customerNewAndConsume){
-  customerNewChart = echarts.init(document.getElementById('main2'));
+  customerNewChart = echarts.init(document.getElementById('main11'));
 	// 客流趋势
   customerNewChartOption = {
     title: {
@@ -2842,7 +2842,7 @@ var getTurnoverCustomerOrder = function(pageStatusInfo){
        }
 }
 var showTurnoverCustomerOrder = function(turnoverCustomer){
-  turnoverCustomerOrderChart = echarts.init(document.getElementById('main11'));
+  turnoverCustomerOrderChart = echarts.init(document.getElementById('main2'));
 	// 客流分析
   turnoverCustomerOrderOption = {
     title: {
@@ -2853,15 +2853,15 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
       formatter:function(params)//数据格式
             {
             var relVal = params[0]['name']+"<br/>";
-            relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
-	        relVal+="<br/>";
+            //relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
+	        //relVal+="<br/>";
             relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
 	        relVal+="<br/>";
              return relVal;
         }
     },
     legend: {
-      data:['累计社员人数','新增社员人数'],
+      data:[/*'累计社员人数',*/'新增社员人数'],
       textStyle:{color:"#efefef",fontSize:"12"},
       right:0,
       orient:'vertical',
@@ -2951,13 +2951,14 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
               textStyle: {
                 color: "#fff"
               },
-              position: "insideTop",
+              position: "top",
 
             }
           }
         },
 
       },
+      /*
 	  {
         name:'累计社员人数',
         cursor: 'default',
@@ -2985,8 +2986,8 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
             }
           }
         },
-
       },
+		*/
     ]
   };
   	var data = [];
@@ -3002,7 +3003,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
     }
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
 	turnoverCustomerOrderOption.series[0].data = data1.reverse();
-	turnoverCustomerOrderOption.series[1].data = data2;
+	//turnoverCustomerOrderOption.series[1].data = data2;
 	//customerNewChartOption.title.text="社员7日走势";
   	turnoverCustomerOrderChart.setOption(turnoverCustomerOrderOption,true);
 }
