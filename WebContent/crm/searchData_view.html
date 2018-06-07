@@ -408,10 +408,12 @@ Date.prototype.format=function(fmt) {
 	var storeno = decode64(getUrlParamByKey("so"));//门店编号
 	var role = decode64(getUrlParamByKey("r"));//角色 code
 	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
+	var cityno = decode64(getUrlParamByKey("co"));//城市编号
 	//从营业额分析页面 跳转过来
 	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
 	var channelname = decode64(getUrlParamByKey("channel"));//频道名称
 	var time = decode64(getUrlParamByKey("time"));//查询时间
+	var redirectTag = decode64(getUrlParamByKey("rt"));//分析图标识
 	//从门店GMV、国安侠GMV 跳转过来（Editor:gaobaolei）
 	var tag = decode64(getUrlParamByKey("tag"));//订单标签
 	
@@ -442,17 +444,17 @@ Date.prototype.format=function(fmt) {
     if(target==0){//总部
     	initallcity(); 
     	initallstore();
-    	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+    	$("#citySelect option[value='"+cityno+"']").attr('selected',true);
 //     	document.getElementById("export_sensitive_button").style.display="";
     }else if(target==1){//城市
     	initcurcity();
-    	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+    	$("#citySelect option[value='"+cityno+"']").attr('selected',true);
     	initStoreSelectcomplate();
 //     	document.getElementById("export_sensitive_button").style.display="";
     }else if(target==2) {//门店
     	initcurcity();
     	$("#citySelect").prop("disabled", true);
-		$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+    	$("#citySelect").append('<option value="'+cityno+'">'+cityname+'</option>');
     	initStoreSelectcomplate();
     	$("#store_id_manual").val(storeNo);
     	$("#store_name_manual").val(storeName);
@@ -466,8 +468,13 @@ Date.prototype.format=function(fmt) {
 	$("#dept_private_manual").val(deptname);
 	$("#channel_manual").val(channelname);
 	if(time!=null){
-		$('#auto_date').data('daterangepicker').setStartDate(time);
-		$('#auto_date').data('daterangepicker').setEndDate(time);
+		if(redirectTag=='day'){
+			$('#auto_date').data('daterangepicker').setStartDate(time);
+			$('#auto_date').data('daterangepicker').setEndDate(time);
+		}else if(redirectTag=='scatterplot'){
+			$('#auto_date').data('daterangepicker').setStartDate(time+"-01");
+			$('#auto_date').data('daterangepicker').setEndDate(time+"-"+getLastDay(time.split('-')[0],time.split('-')[1]));
+		}
 	}
     
   	//更多显示
@@ -512,7 +519,7 @@ Date.prototype.format=function(fmt) {
             });
             
             var curValue = $(this).text();
-          	var name = curValue.substring(0,curValue.length-3)+",";
+          	var name = curValue.substring(0,curValue.length)+",";
     		var deptName = $("#dept_private_manual").val();
     		$("#dept_private_manual").val(deptName.replace(name,""));
 
@@ -536,7 +543,7 @@ Date.prototype.format=function(fmt) {
             obj.removeClass("bg-orange-active");
             filter.remove();
             var curValue = $(this).text();
-          	var name = curValue.substring(0,curValue.length-3)+",";
+          	var name = curValue.substring(0,curValue.length)+",";
     		var deptName = $("#dept_private_manual").val();
     		$("#dept_private_manual").val(deptName.replace(name,""));
 
@@ -1623,6 +1630,18 @@ Date.prototype.format=function(fmt) {
 	 manualPageRecordes  = $("#pageRecords_manual").val();
 	 search_manual_abnormalOrder(1);
  }
+ 
+ function getLastDay(year,month){   
+	  var new_year = year;  //取当前的年份   
+	  var new_month = month++;//取下一个月的第一天，方便计算（最后一天不固定）   
+	  if(month>12){       //如果当前大于12月，则年份转到下一年   
+	  	new_month -=12;    //月份减   
+	  	new_year++;      //年份增   
+	  }   
+	  var new_date = new Date(new_year,new_month,1);        //取当年当月中的第一天   
+	  return (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月最后一天日期   
+ } 
+  
 </script>
 </body>
 
