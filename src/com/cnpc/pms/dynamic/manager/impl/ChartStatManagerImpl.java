@@ -8,7 +8,6 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.dynamic.dao.ChartStatDao;
 import com.cnpc.pms.dynamic.entity.ChartStatDto;
 import com.cnpc.pms.dynamic.manager.ChartStatManager;
-import com.cnpc.pms.personal.entity.DistCityCode;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.DateUtils;
 
