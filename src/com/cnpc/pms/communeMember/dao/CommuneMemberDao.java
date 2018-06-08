@@ -179,5 +179,18 @@ public interface CommuneMemberDao extends IDAO {
 	 * @author wuxinxin
 	 */
 	public List<Map<String, Object>> getNoEshopSum(String string);
+	/**
+	 * TODO  获取当日订单量、成交额
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayDealCount(String string);
+	/**
+	 * TODO  查询7日订单量、成交额
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDay7DealCount(String string);
+   
 
 }
