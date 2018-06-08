@@ -1422,6 +1422,16 @@ Date.prototype.format=function(fmt) {
 	    if(departmentNames!=null && departmentNames!='' && departmentNames.indexOf(',') >= 0){
 	    	departmentNames = departmentNames.substring(0,departmentNames.length-1);
 	    }
+	    var sort_tag = "";
+	    var sort_type = "";
+	    if(sort_tag_type=="price_sort"){
+	    	sort_type = "price";
+	    }
+	    if(sort_tag_value == "up"){
+	    	sort_tag = "ASC";
+	    }else{
+	    	sort_tag = "DESC";
+	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
 				beginDate:begin_end_date[0].trim(),
@@ -1449,7 +1459,9 @@ Date.prototype.format=function(fmt) {
 	    		employee_a_no_a:employeeAnoA,
 	    		employee_no:employeeNo,
 	    		employee_mobile:employeeMobile,
-	    		department_names:departmentNames
+	    		department_names:departmentNames,
+	    		sort_tag:sort_tag,
+	    		sort_type:sort_type
 			}
 		    
 		    doManager('massOrderManager','exportOrder',[massOrderDto],function(data){

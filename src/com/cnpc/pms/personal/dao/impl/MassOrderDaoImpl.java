@@ -384,7 +384,12 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					+ " and a.info_village_code in (select vc.code from tiny_village_code vc where vc.tiny_village_name like '%"
 					+ massOrderDto.getVillage_name().trim() + "%') ";
 		}
-		sql = sql + " ORDER BY a.sign_time desc";
+		
+		if(StringUtils.isNotEmpty(massOrderDto.getSort_tag()) && StringUtils.isNotEmpty(massOrderDto.getSort_type())){
+			sql =  sql + " ORDER BY a.trading_price "+massOrderDto.getSort_tag()+" ";
+		}else{
+			sql =  sql + " ORDER BY a.sign_time "+massOrderDto.getSort_tag()+" ";
+		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
