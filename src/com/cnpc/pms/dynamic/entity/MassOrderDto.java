@@ -43,6 +43,8 @@ public class MassOrderDto {
 	private String order_labels;
 	private String addr_customer_name;
 	private String addr_customer_phone;
+	private String sort_tag;
+	private String sort_type;
 	
 	public enum TimeFlag{
 		CUR_DAY("0", "当天"),
@@ -244,6 +246,18 @@ public class MassOrderDto {
 	}
 	public void setAddr_customer_phone(String addr_customer_phone) {
 		this.addr_customer_phone = addr_customer_phone;
+	}
+	public String getSort_tag() {
+		return sort_tag;
+	}
+	public void setSort_tag(String sort_tag) {
+		this.sort_tag = sort_tag;
+	}
+	public String getSort_type() {
+		return sort_type;
+	}
+	public void setSort_type(String sort_type) {
+		this.sort_type = sort_type;
 	}
 	
 }

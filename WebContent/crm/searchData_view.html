@@ -305,14 +305,14 @@
               <table class="table table-striped no-margin">
                 <tbody id="manual_tbody">
                 <tr id="manual_title">
-                  <th width="9%">订单号</th>
-                  <th width="9%">客户信息</th>
-                  <th width="9%">金额（元）</th>
-                  <th width="10%">片区信息</th>
-                  <th width="10%">签收时间</th>
-                  <th width="9%">业务信息</th>
-                  <th width="10%">人员信息</th>
-                  <th width="10%">订单标签</th>
+                  <td width="9%">订单号</td>
+                  <td width="9%">客户信息</td>
+                  <td width="9%" id="price_sort">金额（元）<i class="fa fa-angle-up" id="price_sort_label"></i></td>
+                  <td width="10%">片区信息</td>
+                  <td width="10%" id="time_sort">签收时间 <i class="fa fa-angle-up" id="time_sort_label"></i></td>
+                  <td width="9%">业务信息</td>
+                  <td width="10%">人员信息</td>
+                  <td width="10%">订单标签</td>
                 </tr>
                 </tbody>
               </table>
@@ -699,6 +699,34 @@ Date.prototype.format=function(fmt) {
           orderTypeSelection(tag);
   	}
   	
+  	$("#price_sort").click(function(){
+  		if($("#price_sort_label").hasClass('fa fa-angle-down')){
+  			$("#price_sort_label").removeClass("fa fa-angle-down");
+	  		$("#price_sort_label").addClass("fa fa-angle-up");
+	  		sort_tag_value = "up";
+  		}else {
+  			$("#price_sort_label").removeClass("fa fa-angle-up");
+	  	   	$("#price_sort_label").addClass("fa fa-angle-down");
+	  	  	sort_tag_value = "down";
+  	    }
+  		sort_tag_type = "price_sort";
+  		search_manual_abnormalOrder(1);
+  	});
+  	
+  	$("#time_sort").click(function(){
+  		if($("#time_sort_label").hasClass('fa fa-angle-down')){
+  			$("#time_sort_label").removeClass("fa fa-angle-down");
+	  		$("#time_sort_label").addClass("fa fa-angle-up");
+	  		sort_tag_value = "up";
+  		}else {
+  			$("#time_sort_label").removeClass("fa fa-angle-up");
+	  	   	$("#time_sort_label").addClass("fa fa-angle-down");
+	  	  	sort_tag_value = "down";
+  	    }
+  		sort_tag_type = "";
+	  	search_manual_abnormalOrder(1);
+  	});
+  	
   	$("#showattention").on("mouseover",function(event){
   		$("#attention").show();
   	});
@@ -706,6 +734,10 @@ Date.prototype.format=function(fmt) {
   		$("#attention").hide();
   	});
   	
+  	//从数据分析页跳转过来直接查询
+  	if(time!=null && redirectTag!=null){
+  		search_manual_abnormalOrder(1);
+  	}
   });
 	
   /**
@@ -834,7 +866,7 @@ Date.prototype.format=function(fmt) {
 							document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 						}
  					}
- 			});
+ 			},false);
  		}
  		
  	}
@@ -917,6 +949,8 @@ Date.prototype.format=function(fmt) {
    }
   
   //查询上
+  var sort_tag_type = "";
+  var sort_tag_value = "";
   var currentPage_manual= 1;
   var totalPage_manual = 1;
   function   search_manual_abnormalOrder1(cur_page){
@@ -972,6 +1006,16 @@ Date.prototype.format=function(fmt) {
 	    if(departmentNames!=null && departmentNames!='' && departmentNames.indexOf(',') >= 0){
 	    	departmentNames = departmentNames.substring(0,departmentNames.length-1);
 	    }
+	    var sort_tag = "";
+	    var sort_type = "";
+	    if(sort_tag_type=="price_sort"){
+	    	sort_type = "price";
+	    }
+	    if(sort_tag_value == "up"){
+	    	sort_tag = "ASC";
+	    }else{
+	    	sort_tag = "DESC";
+	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
 				beginDate:begin_end_date[0].trim(),
@@ -999,7 +1043,9 @@ Date.prototype.format=function(fmt) {
 	    		employee_a_no_a:employeeAnoA,
 	    		employee_no:employeeNo,
 	    		employee_mobile:employeeMobile,
-	    		department_names:departmentNames
+	    		department_names:departmentNames,
+	    		sort_tag:sort_tag,
+	    		sort_type:sort_type
 			}
 	   
 	    var pageInfo = new Object();

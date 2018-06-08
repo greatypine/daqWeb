@@ -197,7 +197,12 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					+ massOrderDto.getVillage_name().trim() + "%') ";
 		}
 
-		sqlA = sqlA + sql + " ORDER BY a.sign_time desc ";
+		if(StringUtils.isNotEmpty(massOrderDto.getSort_tag()) && StringUtils.isNotEmpty(massOrderDto.getSort_type())){
+			sqlA = sqlA + sql + " ORDER BY a.trading_price "+massOrderDto.getSort_tag()+" ";
+		}else{
+			sqlA = sqlA + sql + " ORDER BY a.sign_time "+massOrderDto.getSort_tag()+" ";
+		}
+		
 		sqlB = sqlB + sql;
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sqlB + ") T";
