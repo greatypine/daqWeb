@@ -196,11 +196,11 @@
        <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-7 no-padding">
-              <h4 class="box-header h4 text-light-blue"><strong>e店排行榜</strong></h4>
+              <h4 class="box-header h4 text-light-blue"><strong>E店排行榜</strong></h4>
               <table class="table table-bordered">
                 <tbody id="eshop_data">
                 <tr>
-                  <th >e店名称</th>
+                  <th >E店名称</th>
                   <th>成交额</th>
                   <th>订单量</th>
                   <th>排名</th>
@@ -884,7 +884,7 @@ function doMemberSum(){
         	showCityMember(resultJson);
         	//最受欢迎商品、无人问津商品
         	showProduct(resultJson);
-        	//e店情况
+        	//E店情况
         	showEshop(resultJson);
         	
         	//粮票
@@ -1179,7 +1179,7 @@ var showHistoryData = function (dataServer) {
 	$("#oldCmCount").html(parseInt(dataServer.oldCmCount==null?'0':dataServer.oldCmCount));
     //新注册社员量
 	$("#newCmCount").html(parseInt(dataServer.newCmCount==null?'0':dataServer.newCmCount));
-   //e店数量
+   //E店数量
 	$("#eShopCount").html(parseInt(dataServer.eShopCount==null?'0':dataServer.eShopCount));
     //sku数量
 	$("#skuCount").html(parseInt(dataServer.skuCount==null?'0':dataServer.skuCount));
@@ -1239,7 +1239,7 @@ var showEshop = function (dataServer) {
 		  //社员人数
 	  option9 = {
 	    title: [ {
-	      text: 'e店GMV：'+eMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)),
+	      text: 'E店GMV：'+eMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)),
 	      left: '30%',
 	      top: '3%',
 	      textAlign: 'center',
