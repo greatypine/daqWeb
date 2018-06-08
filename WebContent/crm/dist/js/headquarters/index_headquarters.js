@@ -2947,7 +2947,7 @@ var showTurnoverCustomerOrder = function(turnoverCustomer){
           normal: {
             color: "#ff3064",
             label: {
-              show: false,
+              show: true,
               textStyle: {
                 color: "#fff"
               },
