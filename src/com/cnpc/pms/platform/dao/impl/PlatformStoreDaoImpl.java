@@ -1,6 +1,5 @@
 package com.cnpc.pms.platform.dao.impl;
 
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ import com.cnpc.pms.personal.entity.YyStore;
 import com.cnpc.pms.platform.dao.PlatformStoreDao;
 import com.cnpc.pms.platform.entity.PlatformStore;
 
-public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformStoreDao{
+public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformStoreDao {
 
 	@Override
 	public List<PlatformStore> getPlatformStoreList(String where, PageInfo pageInfo) {
@@ -264,20 +263,19 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * @author wuxinxin
 		 * 2018年5月17日
 		 */
-		
-		String newCmSql="select count(*) as cou from t_eshop e where e.super_member = 'yes'";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-	        try{
-	            SQLQuery sqlQuery = session.createSQLQuery(newCmSql);
-	            //获得查询数据
-	            List<Map<String, Object>> newCm_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	            return newCm_data;
-	        }catch (Exception e){
-	            e.printStackTrace();
-	        } finally {
-	            session.close();
-	        }
-	        return null;
+		String newCmSql = "select count(*) as cou from t_eshop e where e.super_member = 'yes'";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(newCmSql);
+			// 获得查询数据
+			List<Map<String, Object>> newCm_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return newCm_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
 
 	}
 
@@ -285,167 +283,246 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 	public List<Map<String, Object>> selectOldCm(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 2018年5月17日
+		 * @author wuxinxin 2018年5月17日
 		 */
-		String oldCmSql="select count(*) as cou from t_eshop e where e.super_member = 'yes'";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-	        try{
-	            SQLQuery sqlQuery = session.createSQLQuery(oldCmSql);
-	            //获得查询数据
-	            List<Map<String, Object>> oldCm_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	            return oldCm_data;
-	        }catch (Exception e){
-	            e.printStackTrace();
-	        } finally {
-	            session.close();
-	        }
-	        return null;
-		
+		String oldCmSql = "select count(*) as cou from t_eshop e where e.super_member = 'yes'";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(oldCmSql);
+			// 获得查询数据
+			List<Map<String, Object>> oldCm_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return oldCm_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+
 	}
 
 	@Override
 	public List<Map<String, Object>> getEshopCount(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 2018年5月17日
+		 * @author wuxinxin 2018年5月17日
 		 */
-		String sql="select count(*) as cou from t_eshop e where e.super_member = 'yes'";
-		
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-	        try{
-	            SQLQuery sqlQuery = session.createSQLQuery(sql);
-	            //获得查询数据
-	            List<Map<String, Object>> eshop_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	            return eshop_data;
-	        }catch (Exception e){
-	            e.printStackTrace();
-	        } finally {
-	            session.close();
-	        }
-	        return null;
+		String sql = "select count(*) as cou from t_eshop e where e.super_member = 'yes'";
+
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(sql);
+			// 获得查询数据
+			List<Map<String, Object>> eshop_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return eshop_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
 	}
 
 	@Override
 	public List<Map<String, Object>> getGoodsTypeCount(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 查询新老用户增长量  按天查10天
-		 * 2018年5月17日
+		 * @author wuxinxin 
 		 */
-		String skuSql="select count(*) cou from t_product p,t_eshop te where  te.super_member = 'yes' and p.eshop_id=te.id";
-		
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-	        try{
-	            SQLQuery sqlQuery = session.createSQLQuery(skuSql);
-	            //获得查询数据
-	            List<Map<String, Object>> sku_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	            return sku_data;
-	        }catch (Exception e){
-	            e.printStackTrace();
-	        } finally {
-	            session.close();
-	        }
-	        return null;
+		String skuSql = "select count(*) cou from t_product p,t_eshop te where  te.super_member = 'yes' and p.eshop_id=te.id";
+
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(skuSql);
+			// 获得查询数据
+			List<Map<String, Object>> sku_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return sku_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
 	}
 
 	@Override
 	public List<Map<String, Object>> getCmGoodsDealCount(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 2018年5月17日
+		 * @author wuxinxin 2018年5月17日
 		 */
-		String dealCouSql="select count(1) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-	        try{
-	            SQLQuery sqlQuery = session.createSQLQuery(dealCouSql);
-	            //获得查询数据
-	            List<Map<String, Object>> dealCou_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	            return dealCou_data;
-	        }catch (Exception e){
-	            e.printStackTrace();
-	        } finally {
-	            session.close();
-	        }
-	        return null;
-		
+		String dealCouSql = "select count(1) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(dealCouSql);
+			// 获得查询数据
+			List<Map<String, Object>> dealCou_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return dealCou_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+
 	}
 
 	@Override
 	public List<Map<String, Object>> getCmGoodsTurnover(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 2018年5月17日
+		 * @author wuxinxin 2018年5月17日
 		 */
-		String turnoverSql="select ifnull(sum(tor.trading_price),0) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-	        try{
-	            SQLQuery sqlQuery = session.createSQLQuery(turnoverSql);
-	            //获得查询数据
-	            List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	            return turnover_data;
-	        }catch (Exception e){
-	            e.printStackTrace();
-	        } finally {
-	            session.close();
-	        }
-	        return null;
-		
+		String turnoverSql = "select ifnull(sum(tor.trading_price),0) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(turnoverSql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return turnover_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+
 	}
 
 	@Override
-	public List<Map<String, Object>> getCmSexRatios(String dd) {
+	public List<Map<String, Object>> getRetrenchMoney(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 2018年5月18日
+		 * @author wuxinxin 2018年6月6日
 		 */
-		 return null;
-		
-	}
+		String retrenchMoneySql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_retrench_money cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id  order by tmi.sum_retrench_money desc limit 5";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(retrenchMoneySql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return turnover_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
 
+	}
 
 	@Override
-	public List<Map<String, Object>> getCmAgeRatios(String dd) {
+	public List<Map<String, Object>> getHaveRebate(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 2018年5月18日
+		 * @author wuxinxin 2018年6月6日
 		 */
-		 return null;
-		
-	}
+		String haveRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id  order by tmi.remain_rebate desc limit 5";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(haveRebateSql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return turnover_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
 
+	}
 
 	@Override
-	public Map<String, Object> getCmBirthday(String dd) {
+	public List<Map<String, Object>> getUsedRebate(String dd) {
 		// TODO Auto-generated method stub
 		/**
-		 * @author wuxinxin
-		 * 2018年5月18日
+		 * @author wuxinxin 2018年6月6日
 		 */
-		 return null;
-		
-	}
+		String usedRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate-tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id order by tmi.sum_rebate-tmi.remain_rebate desc limit 5";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(usedRebateSql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return turnover_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
 
+	}
 
 	@Override
-	public Map<String, Object> getCmGrow(String dd) {
+	public List<Map<String, Object>> getSumRebate(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin 2018年6月6日
+		 */
+		String sumRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id order by tmi.sum_rebate desc limit 5";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(sumRebateSql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return turnover_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllRetrench(String dd) {
 		// TODO Auto-generated method stub
 		/**
 		 * @author wuxinxin
-		 * 2018年5月18日
+		 * 2018年6月6日
 		 */
-		 return null;
+		
+		String sumRetrenchSql = "select sum(tmi.sum_retrench_money)  sumall,sum(tmi.sum_retrench_money)-(sum(tmi.sum_rebate)-sum(tmi.remain_rebate)) subprice,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) usedrebate from t_mebmer_info tmi";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(sumRetrenchSql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return turnover_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllRebate(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月6日
+		 */
+		String sumRebateSql = "select sum(tmi.sum_rebate)  sumreall,sum(tmi.remain_rebate) sumhavere,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) sumused from t_mebmer_info tmi";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(sumRebateSql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return turnover_data;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
 		
 	}
 
-	//----------------------------------wuxinxin   end------------------------------------//
-	
-	
+	// ----------------------------------wuxinxin end------------------------------------//
 
 }

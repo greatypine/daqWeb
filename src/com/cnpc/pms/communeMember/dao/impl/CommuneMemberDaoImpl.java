@@ -726,7 +726,43 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 return null;
 		
 	}
-
-
+	@Override
+	public List<Map<String, Object>> getDayDealCount(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月7日
+		 */
+		String daySumSql = "select sum(dmod.trading_price) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum where dmod.customer_id=dum.customer_id";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getDay7DealCount(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月7日
+		 */
+		String daySumSql = "SELECT count(dmod.customer_id) alldealcount, sum(dmod.trading_price) alldealsum, DATE_FORMAT(dmod.sign_time, '%Y-%m-%d') dealtime from df_mass_order_monthly dmod,df_user_member  dum where date(dmod.sign_time) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(dmod.sign_time) < CURDATE() and dmod.customer_id=dum.customer_id group by DATE_FORMAT(dmod.sign_time, '%Y-%m-%d')";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
 
 }

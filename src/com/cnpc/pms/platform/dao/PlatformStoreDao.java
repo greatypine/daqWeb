@@ -92,25 +92,35 @@ public interface PlatformStoreDao {
    public List<Map<String, Object>> getCmGoodsTurnover(String dd);
    
    /**
-    * TODO 获取男女比例
+    * TODO 获取省钱排名前十的社员
     * @author wuxinxin
     */
-   public List<Map<String, Object>> getCmSexRatios(String dd);
+   public List<Map<String, Object>> getRetrenchMoney(String dd);
    /**
-    * TODO 获取年龄段情况
+    * TODO 查询粮票持有排行
     * @author wuxinxin
     */
-   public List<Map<String, Object>> getCmAgeRatios(String dd);
+   public List<Map<String, Object>> getHaveRebate(String dd);
    /**
-    * TODO 获取生日礼信息
+    * TODO 查询粮票使用排行
     * @author wuxinxin
     */
-   public Map<String,Object> getCmBirthday(String dd);
+   public List<Map<String, Object>> getUsedRebate(String dd);
    /**
-    * TODO 获取社员增长情况
+    * TODO 查询粮票累计持有排行
     * @author wuxinxin
     */
-   public Map<String,Object> getCmGrow(String dd);
+   public List<Map<String, Object>> getSumRebate(String dd);
+   /**
+    * TODO 查询累计省钱情况
+    * @author wuxinxin
+    */
+   public List<Map<String, Object>> getAllRetrench(String dd);
+   /**
+    * TODO 查询粮票累计、已使用、剩余情况
+    * @author wuxinxin
+    */
+   public List<Map<String, Object>> getAllRebate(String dd);
    //-------------------wuxinxin         end------------------------//
 	
 	

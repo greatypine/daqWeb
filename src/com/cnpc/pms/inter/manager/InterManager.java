@@ -554,4 +554,16 @@ public interface InterManager extends IManager {
      * @return
      */
     public Result getCurrentUserCity(String userId);
+    
+    
+    
+    //****************找回密码相关***************//
+  	public Result validateUserPhone(String phone);
+  	public Result codeValidation(String phone,String code);
+  	public Result queryUserByPhoneCode(String phone,String code);
+  	public String updatePassword(User user);
+  	public Result createCode();
+  	public Result initReset(String inputcode);
+  	public Result queryuserbyid(String id);
+  	
 }
