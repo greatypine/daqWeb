@@ -100,7 +100,7 @@
         <div class="box box-default report">
           <div class="box-header h4">
           	<strong>安心合作社运营简报</strong>
-          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">社员信息查询</a> 
+          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a> 
           </div>
           <div class="box-body">
             <div class="col-sm-5 col-xs-12 text-center"><img src="dist/img/member1.png"></div>
@@ -126,11 +126,11 @@
               <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6">
-              <h4 class="text-red">社员成交额走势</h4>
+              <h4 class="text-light-blue"><strong>社员成交额走势</strong></h4>
               <div class="col-sm-12 no-padding" id="main12" style="height: 260px;"></div>
             </div>
             <div class="col-sm-6">
-              <h4 class="text-light-blue">社员订单量走势</h4>
+              <h4 class="text-light-blue"><strong>社员订单量走势</strong></h4>
               <div class="col-sm-12 no-padding" id="main13" style="height: 260px;"></div>
             </div>
           </div>
@@ -1592,7 +1592,7 @@ var showDeal = function (dataServer){
 	option12 = {
 		    tooltip : {
 		        show: true,
-		        trigger: 'item'
+		        trigger: 'axis'
 		    },
 		    legend: {
 		        data:['成交额']
@@ -1665,7 +1665,7 @@ var showDeal = function (dataServer){
 	option13 = {
 		    tooltip : {
 		        show: true,
-		        trigger: 'item'
+		        trigger: 'axis'
 		    },
 		    legend: {
 		        data:['订单量']

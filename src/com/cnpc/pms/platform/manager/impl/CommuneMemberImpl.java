@@ -189,7 +189,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List alldealsums = new ArrayList();
 		List alldealcounts = new ArrayList();	
 		for (int i = 0; i < day7List.size(); i++) {
-				alldealsums.add(String.valueOf(Math.floor(Double.parseDouble(day7List.get(i).get("alldealsum").toString()))));
+				alldealsums.add(Double.valueOf(day7List.get(i).get("alldealsum").toString()).intValue());
 				alldealcounts.add(day7List.get(i).get("alldealcount").toString());
 		}
 
