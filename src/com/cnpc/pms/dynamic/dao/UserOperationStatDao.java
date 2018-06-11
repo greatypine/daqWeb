@@ -31,4 +31,7 @@ public interface UserOperationStatDao extends IDAO{
 	
 	public Map<String, Object> queryPayBasicStat(UserOperationStatDto userOperationStatDto);
 	
+	public Map<String, Object> queryEffectCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo,String timeFlag);
+	
+	public List<Map<String, Object>> exportEffectCusStat(UserOperationStatDto userOperationStatDto,String timeFlag);
 }

@@ -40,4 +40,8 @@ public interface UserOperationStatManager extends IManager {
 	
 	public Map<String, Object> exportPayBasicStat(UserOperationStatDto userOperationStatDto);
 	
+	public Map<String, Object> queryEffectCusStat(UserOperationStatDto userOperationStatDto, PageInfo pageInfo);
+	
+	public Map<String, Object> exportEffectCusStat(UserOperationStatDto userOperationStatDto);
+	
 }

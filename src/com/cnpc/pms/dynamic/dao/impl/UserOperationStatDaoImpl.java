@@ -507,4 +507,95 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> queryEffectCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo,String timeFlag){
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,count(DISTINCT customer_id) pay_count FROM ";
+		
+		if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
+			sql = sql + " df_mass_order_monthly a ";
+		} else {
+			sql = sql + " df_mass_order_total a ";
+		}
+		
+		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
+		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
+			sql = sql + " and DATE_FORMAT(a.sign_time,'%Y-%m') = '" + userOperationStatDto.getBeginDate() + "'";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
+			sql = sql + " and a.store_city_name like '%" + userOperationStatDto.getCityName().trim() + "%'";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
+			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
+		}
+		sql = sql + " and a.customer_id in  (select customer_id from ";
+		if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
+			sql = sql + " df_mass_order_monthly a ";
+		} else {
+			sql = sql + " df_mass_order_total a ";
+		}
+		sql = sql + " where customer_id not like 'fakecustomer%' ";
+		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
+			sql = sql + " and DATE_FORMAT(sign_time,'%Y-%m') = '" + userOperationStatDto.getBeginDate() + "'";
+		}
+		sql = sql +  "group by customer_id HAVING count(1)>=2) GROUP BY a.store_id,a.area_code ";
+		
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+		
+		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession()
+				.createSQLQuery(sql_count);
+		Object total = query_count.uniqueResult();
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+
+		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+		int recordsPerPage = pageInfo.getRecordsPerPage();
+		sql = sql + " LIMIT " + startData + "," + recordsPerPage;
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+		map_result.put("pageinfo", pageInfo);
+		map_result.put("data", list);
+		map_result.put("total_pages", total_pages);
+		return map_result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Map<String, Object>> exportEffectCusStat(UserOperationStatDto userOperationStatDto,String timeFlag){
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,count(DISTINCT customer_id) pay_count FROM ";
+		
+		if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
+			sql = sql + " df_mass_order_monthly a ";
+		} else {
+			sql = sql + " df_mass_order_total a ";
+		}
+		
+		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
+		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
+			sql = sql + " and DATE_FORMAT(a.sign_time,'%Y-%m') = '" + userOperationStatDto.getBeginDate() + "'";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
+			sql = sql + " and a.store_city_name like '%" + userOperationStatDto.getCityName().trim() + "%'";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
+			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
+		}
+		sql = sql + " and a.customer_id in  (select customer_id from ";
+		if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
+			sql = sql + " df_mass_order_monthly a ";
+		} else {
+			sql = sql + " df_mass_order_total a ";
+		}
+		sql = sql + " where customer_id not like 'fakecustomer%' ";
+		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
+			sql = sql + " and DATE_FORMAT(sign_time,'%Y-%m') = '" + userOperationStatDto.getBeginDate() + "'";
+		}
+		sql = sql +  "group by customer_id HAVING count(1)>=2) GROUP BY a.store_id,a.area_code ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+	
 }
