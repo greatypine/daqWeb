@@ -1,18 +1,11 @@
 package com.cnpc.pms.personal.entity;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
+import com.cnpc.pms.base.entity.OptLockEntity;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
-import com.cnpc.pms.base.entity.OptLockEntity;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "t_store")
@@ -481,6 +474,19 @@ public class Store extends OptLockEntity {
 	 */
 	@Column(length = 255, name = "remark")
 	private String remark;
+	/**
+	 * 支付方式备注
+	 */
+	@Column(length = 255, name = "payment_remark")
+	private String payment_remark;
+
+	public String getPayment_remark() {
+		return payment_remark;
+	}
+
+	public void setPayment_remark(String payment_remark) {
+		this.payment_remark = payment_remark;
+	}
 
 	public String getRemark() {
 		return remark;

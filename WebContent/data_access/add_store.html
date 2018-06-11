@@ -61,16 +61,36 @@ var JSZ='';
 var citycode="";
 var adcode="";
 var gaodeaddress="";
+var change_flag=true;
 $(function(){
 	$("#store_id").val(id);
+	$(".changess").change(function(){
+		change_flag=false;
+	})
 	$("#contract_file").change(function(){
 		$("#contract").show();
 		var content = $('#contract_file')[0].files;
 		$("#contract").text(content[0].name.substring(0,25));
 	})
+	$("#payment_method").change(function(){
+		$("#payment_remark").val("");
+	})
 	$("#storetype").change(function(){
 		var stype=$("#storetype option:selected").val();
 		var stynat=$("#nature option:selected").val();
+		if(stype=='O'){
+			if(stynat=='合作店'){
+				$("#typeid").show();
+			}else{
+				$("#typeid").hide();
+			}
+		}else{
+			if(stynat=='合作店'){
+				$("#typeid").hide();
+			}else{
+				$("#typeid").hide();
+			}
+		}
 		if(stype=='V'){
 			$(".bixuan").hide();
 		}else if(stype!='V'&&stynat=='合作店'){
@@ -82,7 +102,38 @@ $(function(){
 	})
 	$("#nature").change(function(){
 		var stynat=$("#nature option:selected").val();
-		var stype1=$("#storetype option:selected").val();
+		$("#storetype").empty();
+		$("#typeid").hide();
+		$(".bixuan").show();
+		$("#hezuo").show();
+		$("#hezuo1").show();
+		$("#remark").val("");
+		if(stynat=='仓'){
+			$('#storetype').append('<option value="">请选择</option><option value="C">前置仓</option><option value="H">城市仓</option><option value="V">虚拟店(仓店)</option><option value="O">其它</option>');
+		}else if(stynat=='合作店'){
+			$(".bixuan").show();
+			$(".natter").hide();
+			$('#storetype').append('<option value="">请选择</option>');
+			$('#storetype').append('<option value="T">合作店</option>');
+			$('#storetype').append('<option value="J">合作点</option>');
+			$('#storetype').append('<option value="O">其它</option>');
+			$("#typeid").show();
+			$("#hezuo").hide();
+			$("#hezuo1").hide();
+		}else if(stynat=='自营店'){
+			$('#storetype').append('<option value="">请选择</option>');
+			$('#storetype').append('<option value="S">生活中心店</option>');
+			$('#storetype').append('<option value="Y">街道月店</option>');
+			$('#storetype').append('<option value="X">经营星店</option>');
+			$('#storetype').append('<option value="E">校园月店</option>');
+			$('#storetype').append('<option value="M">药店</option>');
+			$('#storetype').append('<option value="B">独立微超店</option>');
+			$('#storetype').append('<option value="V">虚拟店</option>');
+			$('#storetype').append('<option value="O">其它</option>');
+		}else{
+			$('#storetype').append('<option value="">请选择</option>');
+		}
+		/*var stype1=$("#storetype option:selected").val();
 		 if(stype1=='V'){
 			 $(".bixuan").hide();
 		}else if(stynat=='合作店'&&stype1!='V'){
@@ -90,7 +141,7 @@ $(function(){
 			 $(".natter").hide();
 		}else{
 			 $(".bixuan").show();
-		 }
+		 }*/
 	})
 
 
@@ -141,6 +192,8 @@ function initview(){
 	$("#store_id").val(id);
 	$("#cityName").unbind();
 	if(sp==1){
+		$("#hezuo").show();
+		$("#hezuo1").show();
 		doManager("storeDynamicManager", "getStoreDynamicById",id, function(data, textStatus,
 				XMLHttpRequest) {
 			if(data.result){
@@ -149,20 +202,22 @@ function initview(){
 					for ( var key in jsonData) {
 						var va = jsonData[key];
 						$("#"+key).val(va);
+						$("#hezuo").show();
+						$("#hezuo1").show();
 						if(key=="storetype"){
 							storeTypeValue=va;
 							var nature=jsonData.nature;
 							var storetypename=jsonData.storetypename;
 							if(va=='V'){
-								if(storetypename=='虚拟店(仓店)'){
+								/*if(storetypename=='虚拟店(仓店)'){
 									var a = document.getElementById("storetype");//mySelect是select 的Id
 									a.options[10].selected = true;
 								}else if(storetypename=='虚拟店'){
 									var a = document.getElementById("storetype");//mySelect是select 的Id
 									a.options[9].selected = true;
-								}
+								}*/
 								$(".bixuan").hide();
-								$("#storetype").attr("disabled","true");
+								//$("#storetype").attr("disabled","true");
 							}else if(va!='V'&&nature=='合作店'){
 								$(".bixuan").show();
 								$(".natter").hide();
@@ -170,6 +225,32 @@ function initview(){
 								$(".bixuan").show();
 							}
 						}else if(key=="nature"){
+							if(va=="合作店"){
+								$("#hezuo").hide();
+								$("#hezuo1").hide();
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option>');
+								$('#storetype').append('<option value="T">合作店</option>');
+								$('#storetype').append('<option value="J">合作点</option>');
+								$('#storetype').append('<option value="O">其它</option>');
+							}else if(va=="自营店"){
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option>');
+								$('#storetype').append('<option value="S">生活中心店</option>');
+								$('#storetype').append('<option value="Y">街道月店</option>');
+								$('#storetype').append('<option value="X">经营星店</option>');
+								$('#storetype').append('<option value="E">校园月店</option>');
+								$('#storetype').append('<option value="M">药店</option>');
+								$('#storetype').append('<option value="B">独立微超店</option>');
+								$('#storetype').append('<option value="V">虚拟店</option>');
+								$('#storetype').append('<option value="O">其它</option>');
+							}else if(va=="仓"){
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option><option value="C">前置仓</option><option value="H">城市仓</option><option value="V">虚拟店(仓店)</option><option value="O">其它</option>');
+							}else{
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option>');
+							}
 							var stype=jsonData.storetype;
 							if(stype=='V'){
 								$(".bixuan").hide();
@@ -243,6 +324,8 @@ function initview(){
 			}
 		})
 	}else if (sp==2){
+		$("#hezuo").show();
+		$("#hezuo1").show();
 		doManager("storeManager", "getStoreById",id, function(data, textStatus,
 				XMLHttpRequest) {
 			if(data.result){
@@ -256,15 +339,15 @@ function initview(){
 							var storetypename=jsonData.storetypename;
 							var nature=jsonData.nature;
 							if(va=='V'){
-								if(storetypename=='虚拟店(仓店)'){
+								/*if(storetypename=='虚拟店(仓店)'){
 									var a = document.getElementById("storetype");//mySelect是select 的Id
 									a.options[10].selected = true;
 								}else if(storetypename=='虚拟店'){
 									var a = document.getElementById("storetype");//mySelect是select 的Id
 									a.options[9].selected = true;
-								}
+								}*/
 								$(".bixuan").hide();
-								$("#storetype").attr("disabled","true");
+								//$("#storetype").attr("disabled","true");
 							}else if(va!='V'&&nature=='合作店'){
 								$(".bixuan").show();
 								$(".natter").hide();
@@ -272,6 +355,32 @@ function initview(){
 								$(".bixuan").show();
 							}
 						}else if(key=="nature"){
+							if(va=="合作店"){
+								$("#hezuo").hide();
+								$("#hezuo1").hide();
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option>');
+								$('#storetype').append('<option value="T">合作店</option>');
+								$('#storetype').append('<option value="J">合作点</option>');
+								$('#storetype').append('<option value="O">其它</option>');
+							}else if(va=="自营店"){
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option>');
+								$('#storetype').append('<option value="S">生活中心店</option>');
+								$('#storetype').append('<option value="Y">街道月店</option>');
+								$('#storetype').append('<option value="X">经营星店</option>');
+								$('#storetype').append('<option value="E">校园月店</option>');
+								$('#storetype').append('<option value="M">药店</option>');
+								$('#storetype').append('<option value="B">独立微超店</option>');
+								$('#storetype').append('<option value="V">虚拟店</option>');
+								$('#storetype').append('<option value="O">其它</option>');
+							}else if(va=="仓"){
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option><option value="C">前置仓</option><option value="H">城市仓</option><option value="V">虚拟店(仓店)</option><option value="O">其它</option>');
+							}else{
+								$("#storetype").empty();
+								$('#storetype').append('<option value="">请选择</option>');
+							}
 							var stype=jsonData.storetype;
 							if(stype=='V'){
 								$(".bixuan").hide();
@@ -515,9 +624,9 @@ function downloadFile(pic_name){
 					alert("请填写门店状态!");
 					return;
 				}
-				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店中" && estate != "待开业"){
+				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店" && estate != "待开业"){
 					$("#submit").removeAttr("disabled");
-					alert("门店状态必须为：筹备中、待开业、运营中、闭店中!");
+					alert("门店状态必须为：筹备中、待开业、运营中、闭店!");
 					return;
 				}
 			}else{
@@ -655,9 +764,9 @@ function downloadFile(pic_name){
 					alert("请填写门店状态!");
 					return;
 				}
-				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店中" && estate != "待开业"){
+				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店" && estate != "待开业"){
 					$("#submit").removeAttr("disabled");
-					alert("门店状态必须为：筹备中、待开业、运营中、闭店中!");
+					alert("门店状态必须为：筹备中、待开业、运营中、闭店!");
 					return;
 				}
 			}
@@ -788,8 +897,9 @@ function downloadFile(pic_name){
 	}
 	var path = getRootPath();
 	function doSave(){
+		console.log(change_flag);
 			var arr = [ "cityName","name",  "town_id",
-						"mobilephone", "address", "skid","store_id","open_shop_time","town_name","platformid","platformname","superMicro","estate","county_ids","nature","tenancyTerm","rental","payment_method","rent_area","usable_area","increase","rent_free","taxes","agency_fee","increase_fee","store_position","place_town_id","formattype" ];
+						"mobilephone", "address", "skid","store_id","open_shop_time","town_name","platformid","platformname","superMicro","estate","county_ids","nature","tenancyTerm","rental","payment_method","rent_area","usable_area","increase","rent_free","taxes","agency_fee","increase_fee","store_position","place_town_id","formattype","remark","payment_remark","changeflag" ];
 				var o = {};
 				for ( var i in arr) {
 					var v = arr[i];
@@ -808,7 +918,13 @@ function downloadFile(pic_name){
 				}else{
 					o['rent_free']=null;
 				}
-				
+				o['sp']=sp;
+				if(change_flag){
+					o['changeflag']=1;
+				}else{
+					o['changeflag']=2;
+				}
+
 				o['store_id'] = id;
 				o['storetype']=$('#storetype  option:selected').val();
 				o['storetypename']=$('#storetype option:selected').text();
@@ -1301,35 +1417,34 @@ function loadhtml(){
 						<option></option>
 						<option value="自营店">自营店</option>
 						<option value="合作店">合作店</option>
+						<option value="仓">仓</option>
 					</select>
 				</p>
 			</td>
 			<td>
 				<p class="read" style="position: relative;"><span id="showattention" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>
-				类型：
-				<span style="color: red">*</span>
-				<span id="attention" style="position: absolute;top: -20px;left: -80px;display:none;color: #8E8E8E;">当选择未知时将生成临时编码,修改后编码会发生改变。</span></p>
+					类型：
+					<span style="color: red">*</span>
+					<span id="attention" style="position: absolute;top: -20px;left: -80px;display:none;color: #8E8E8E;">当选择未知时将生成临时编码,修改后编码会发生改变。</span></p>
 				<p class="read">
-					<select class="form-control" id="storetype">
+					<select class="form-control" id="storetype"  style="display: inline-block;width: 50%;">
 						<option value="">请选择</option>
-						<option value="S">生活中心店</option>
-						<!-- <option value="Z">中心店</option> -->
-						<option value="Y">街道月店</option>
-						<option value="X">经营星店</option>
-						<!--<option value="W">未知</option> -->
-						<option value="E">校园月店</option>
-						<option value="C">前置仓</option>
-						<option value="M">药店</option>
-						<option value="B">独立微超店</option>
-						<option value="H">城市仓</option>
-						<option value="V">虚拟店</option>
-						<option value="V">虚拟店(仓店)</option>
-					</select>
+					</select><span>备注：</span><input type="text" id="remark" placeholder="选择其它时请填写" name="remark" class="form-control" style="width:50%;display: inline-block">
 				</p>
 			</td>
 		</tr>
 		<tr>
-		<td>
+			<td>
+				<p class="read">门店服务范围覆盖街道：<span class="bixuan" style="color: red">*</span><button id="mendianfuwu" class="btn btn-primary"  onclick="showStoreWin(setStoreSelect);">选择街道</button></p>
+				<p class="read">
+					<input type="text" class="form-control" name="town_name" readonly="readonly" id="town_name"/>
+				</p>
+			</td>
+			<td>
+				<p>门店位置坐标：<span class="bixuan" style="color: red">*</span><span><button class="btn btn-primary" onclick="showStoreMapWin(setStoreMapSelect)" style="margin-left: 10px;">选择门店位置坐标</button></span></p>
+				<p><input type="text" class="form-control" readonly="readonly" name="store_position" id="store_position"/></p>
+			</td>
+			<td id="typeid" style="display: none">
 				<p class="read">业态类型：</p>
 				<p class="read">
 					<select class="form-control" id="formattype">
@@ -1342,25 +1457,13 @@ function loadhtml(){
 					</select>
 				</p>
 			</td>
-		
-		
-			<td>
-				<p class="read">门店服务范围覆盖街道：<span class="bixuan" style="color: red">*</span><button id="mendianfuwu" class="btn btn-primary"  onclick="showStoreWin(setStoreSelect);">选择街道</button></p>
-				<p class="read">
-					<input type="text" class="form-control" name="town_name" readonly="readonly" id="town_name"/>
-				</p>
-			</td>
-			<td>
-				<p>门店位置坐标：<span class="bixuan" style="color: red">*</span><span><button class="btn btn-primary" onclick="showStoreMapWin(setStoreMapSelect)" style="margin-left: 10px;">选择门店位置坐标</button></span></p>
-				<p><input type="text" class="form-control" readonly="readonly" name="store_position" id="store_position"/></p>
-			</td>
 		</tr>
 		</table>
 		<p style="color: #337ab7;font-size: 18px;font-weight: bolder;">门店租赁信息</p>
 		<table width="100%">
 		<tr>
 			<td>
-				<p class="read" style="position: relative;"><span id="comtractfile" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>合同附件：<span class="bixuan natter" style="color: red;">*</span>
+				<p class="read" style="position: relative;"><span id="comtractfile" style="color:#ffcc00;font-size:16px;font-weight:bold;padding-right: 5px;">!</span>合同附件/合作附件：<span class="bixuan natter" style="color: red;">*</span>
 					<span style="color: #8E8E8E;font-size: 0.1em;">若多个附件打包为ZIP格式上传</span>
 					<span id="fileshow" style="position: absolute;top: -130px;left: 10px;display:none;color:#8E8E8E;background-color: #FFF;">
 					合同上传资料：<br/>
@@ -1369,22 +1472,22 @@ function loadhtml(){
 				3、双方盖章生效的合同与合同相关附件。
 					</span></p>
 				<p class="read">
-					<input name="contract_file" class="form-control"  id="contract_file" type="file" isuploadtable="true"/>
+					<input name="contract_file" class="form-control changess"  id="contract_file" type="file" isuploadtable="true"/>
 					<lable id="contract" style="display:none;"></lable>
 				</p>
 			</td>
 			<td style="width: 33.3%;">
-				<p class="read">租期：<span class="bixuan natter" style="color: red">*</span></p>
+				<p class="read">租期/合作期：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read" style="">
-					<input type="text" class="wicon form-control" id="tenancyTerm_start" name="tenancyTerm_start" style="max-width: 48%;display:inline-block;" placeholder="起租时间" readonly="readonly"/>
+					<input type="text" class="wicon form-control changess" id="tenancyTerm_start" name="tenancyTerm_start" style="max-width: 48%;display:inline-block;" placeholder="起租时间" readonly="readonly"/>
 					<span style="display:inline-block;">至</span>
-					<input type="text" class="wicon form-control" id="tenancyTerm_end" name="tenancyTerm_end" style="max-width: 48%;display:inline-block;" placeholder="到租时间" readonly="readonly"/>
+					<input type="text" class="wicon form-control changess" id="tenancyTerm_end" name="tenancyTerm_end" style="max-width: 48%;display:inline-block;" placeholder="到租时间" readonly="readonly"/>
 				</p>
 			</td>
 			<td>
-				<p class="read">租金 ：<span class="bixuan natter" style="color: red">*</span></p>
+				<p class="read">租金/合作费用(单位：元/m&sup2·天) ：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read">
-					<input class="form-control" type="text" onkeyup="clearNoNum(this)" name="rental" id="rental"/>
+					<input class="form-control changess" type="text" onkeyup="clearNoNum(this)" name="rental" id="rental"/>
 				</p>
 			</td>
 		</tr>
@@ -1392,54 +1495,55 @@ function loadhtml(){
 			<td>
 				<p class="read">付款方式：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read">
-					<select class="form-control" id="payment_method" name="payment_method">
+					<select class="form-control changess" style="width: 40%;display:inline-block;" id="payment_method" name="payment_method" >
 						<option></option>
 						<option>月付</option>
 						<option>季付</option>
 						<option>半年付</option>
 						<option>年付</option>
-					</select>
+						<option>其它</option>
+					</select>备注:<input type="text" id="payment_remark" placeholder="选择其它时请填写" name="payment_remark" class="form-control" style="width:60%;display: inline-block">
 				</p>
 			</td>
 			<td>
-				<p class="read">计租面积(合同面积)：<span class="bixuan natter" style="color: red">*</span></p>
-				<p class="read"><input class="form-control" type="text" id="rent_area" onkeyup="clearNoNum(this)" name="rent_area"/></p>
+				<p class="read">计租面积(合同面积)/合作面积：<span class="bixuan natter" style="color: red">*</span></p>
+				<p class="read"><input class="form-control changess" type="text" id="rent_area" onkeyup="clearNoNum(this)" name="rent_area"/></p>
 			</td>
 			<td>
 				<p class="read">使用面积：<span class="bixuan natter" style="color: red">*</span></p>
-				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="usable_area" name="usable_area"/></p>
+				<p class="read"><input class="form-control changess" onkeyup="clearNoNum(this)" type="text" id="usable_area" name="usable_area"/></p>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				<p class="read">递增：<span class="bixuan natter" style="color: red">*</span></p>
-				<p class="read"><input class="form-control" type="text" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="increase" name="increase"/></p>
+				<p class="read"><input class="form-control changess" type="text" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="increase" name="increase"/></p>
+			</td>
+			<td>
+				<p class="read">地址：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read"><input type="text" class="form-control changess" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" name="address" id="address"/></p>
+			</td>
+			<td id="hezuo1">
+				<p class="read">税金(%)：<span class="bixuan natter" style="color: red">*</span></p>
+				<p class="read"><input class="form-control changess" onkeyup="clearNoNum(this)" type="text" id="taxes" name="taxes"/></p>
+			</td>
+		</tr>
+		<tr id="hezuo">
+			<td>
+				<p class="read">中介费：<span class="bixuan natter" style="color: red">*</span></p>
+				<p class="read"><input class="form-control changess" onkeyup="clearNoNum(this)" type="text" id="agency_fee" name="agency_fee"/></p>
+			</td>
+			<td>
+				<p class="read">增容费：<span class="bixuan natter" style="color: red">*</span></p>
+				<p class="read"><input class="form-control changess" type="text" id="increase_fee" onkeyup="clearNoNum(this)" name="increase_fee"/></p>
 			</td>
 			<td>
 				<p class="read">免租期：<span class="bixuan natter" style="color: red">*</span></p>
 				<p class="read">
-				<input type="text" class="wicon form-control" id="rent_free_start" name="rent_free_start" style="max-width: 48%;display:inline-block;" placeholder="免租起时时间" likeOption="false" readonly="readonly"/>
-				<span style="display:inline-block;">至</span>
-				<input type="text" class="wicon form-control" id="rent_free_end" name="rent_free_end" style="max-width: 48%;display:inline-block;" placeholder="免租结束时间" likeOption="false" readonly="readonly"/>
+					<input type="text" class="wicon form-control changess" id="rent_free_start" name="rent_free_start" style="max-width: 48%;display:inline-block;" placeholder="免租起时时间" likeOption="false" readonly="readonly"/>
+					<span style="display:inline-block;">至</span>
+					<input type="text" class="wicon form-control changess" id="rent_free_end" name="rent_free_end" style="max-width: 48%;display:inline-block;" placeholder="免租结束时间" likeOption="false" readonly="readonly"/>
 				</p>
-			</td>
-			<td>
-				<p class="read">税金：<span class="bixuan natter" style="color: red">*</span></p>
-				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="taxes" name="taxes"/></p>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<p class="read">中介费：<span class="bixuan natter" style="color: red">*</span></p>
-				<p class="read"><input class="form-control" onkeyup="clearNoNum(this)" type="text" id="agency_fee" name="agency_fee"/></p>
-			</td>
-			<td>
-				<p class="read">增容费：<span class="bixuan natter" style="color: red">*</span></p>
-				<p class="read"><input class="form-control" type="text" id="increase_fee" onkeyup="clearNoNum(this)" name="increase_fee"/></p>
-			</td>
-			<td>
-				<p class="read">地址：<span class="bixuan" style="color: red">*</span></p>
-				<p class="read"><input type="text" class="form-control" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" name="address" id="address"/></p>
 			</td>
 		</tr>
 		<tr>
@@ -1482,14 +1586,12 @@ function loadhtml(){
 			<td>
 				<p class="read">目前状态：<span class="bixuan" style="color: red">*</span></p>
 				<p class="read">
-					<!-- <input name="estate" id="estate" class="form-control" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" list="town-search"/>
-					<datalist id="town-search"></datalist> -->
 					<select class="form-control" name="estate" id="estate">
 						<option ></option>
 						<option >筹备中</option>
 						<option >待开业</option>
 						<option >运营中</option>
-						<option >闭店中</option>
+						<option >闭店</option>
 					</select>
 				</p>
 			</td>

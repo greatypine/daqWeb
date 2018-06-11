@@ -596,6 +596,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			map.put("place_town_id", store.getPlace_town_id());
 			map.put("town_id", store.getTown_id());
 			map.put("remark", store.getRemark());
+			map.put("payment_remark", store.getPayment_remark());
 			map.put("storetype", store.getStoretype());
 			map.put("storetypename", store.getStoretypename());
 			map.put("storeno", store.getStoreno());
@@ -2102,6 +2103,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setOrdnumber(storeDynamic.getOrdnumber());
 			store.setFormattype(storeDynamic.getFormattype());
 			store.setCreate_time(storeDynamic.getCreate_time());
+			store.setPayment_remark(storeDynamic.getPayment_remark());
 			storeManager.saveObject(store);
 		} else {
 			store = new Store();
@@ -2143,6 +2145,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			store.setPlatformname(storeDynamic.getPlatformname());
 			store.setGaode_provinceCode(storeDynamic.getGaode_provinceCode());
 			store.setRemark(storeDynamic.getRemark());
+			store.setPayment_remark(storeDynamic.getPayment_remark());
 			store.setSkid(storeDynamic.getSkid());
 			store.setCounty_id(storeDynamic.getCounty_id());
 			store.setCity_id(storeDynamic.getCity_id());
