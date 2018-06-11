@@ -1485,7 +1485,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		try {
 			setCellStyle_common(wb_humaninfo);
 			Sheet sh_job = wb_humaninfo.getSheetAt(0);
-			int nJobIndex = 1;
+			int nJobIndex = 2;
 			StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 			StringBuffer sb_where = new StringBuffer();
 			// 获取当前登录人
@@ -1519,7 +1519,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				int cellIndex = 0;
 				sh_job.createRow(nJobIndex);
 				obj_row = sh_job.getRow(nJobIndex);
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue((nJobIndex)));// 序号
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue((nJobIndex-1)));// 序号
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("storeno")));// 门店编号
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("name")));// 店名
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("city_name")));// 城市
