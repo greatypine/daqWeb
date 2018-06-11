@@ -153,7 +153,7 @@
 		<div class="pull-left">
 			<div class="logo-lg">
 				<ul class="no-margin">
-					<li class="current"><em>营业额分析</em></li>
+					<li class="current" onclick="excuteRefresh()"><em>营业额分析</em></li>
 				</ul>
 			</div>
 		</div>
@@ -2705,6 +2705,10 @@ Date.prototype.format = function() {
       }  
       return result;
   } 
+  
+  function excuteRefresh(){
+	  location.reload();
+  }
 </script>
 
 </body>
