@@ -33,16 +33,16 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 				}
 
 				if (cityssql != "" && cityssql.length() > 0) {
-					sb_where.append(" and st.cityname in (" + cityssql + ") ");
+					sb_where.append(" and st.city_name in (" + cityssql + ") ");
 				}
 		// sql查询列，用于分页计算数据总数
 				String str_count_sql = "select COUNT(DISTINCT st.id) "
-						+ "from di_storexpand st WHERE 1=1  " + where;
+						+ "from df_bussiness_target st WHERE 1=1  and type='store' and period_type='week' " + where;
 				System.out.println(str_count_sql);
 				// sql查询列，用于页面展示所有的数据
-				String find_sql = "select st.id,st.survey_quantity,st.contract_quantity,st.through_quantity,st.cooperative_task" +
-						",st.self_support_task,st.preposition_task,st.cityname,st.cityno,st.create_user,st.create_time," +
-						"st.update_user,st.update_time,st.statistical_time_period from di_storexpand st  WHERE 1=1  ";
+				String find_sql = "select st.id,st.param_first,st.param_second,st.param_third" +
+						",st.city_name,st.city_no,st.create_user,st.create_time," +
+						"st.update_user,st.update_time,st.time_period from df_bussiness_target st  WHERE 1=1  and type='store' and period_type='week' ";
 				StringBuilder sb_sql = new StringBuilder();
 				sb_sql.append(find_sql);
 				sb_sql.append(where +sb_where.toString()+ " order by st.id desc");
@@ -73,7 +73,7 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Map<String, Object> getTaskQuantityExist(String cityname) {
-		String sql ="SELECT count(*) as task_quantity_count FROM di_storexpand WHERE 1=1 ";
+		String sql ="SELECT count(*) as task_quantity_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week' ";
 		if(cityname!=null&&!"".equals(cityname)){
 			sql += "AND cityname='"+cityname+"'";
 		}
@@ -88,12 +88,12 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Map<String, Object> getStatisticsExist(String statistics,String cityname) {
-		String sql ="SELECT count(*) as statistics_count FROM di_storexpand WHERE 1=1 ";
+		String sql ="SELECT count(*) as statistics_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week'";
 		if(cityname!=null&&!"".equals(cityname)){
 			sql += " AND cityname='"+cityname+"' ";
 		}
 		if(statistics!=null&&!"".equals(statistics)){
-			sql += " AND statistical_time_period='"+statistics+"'";
+			sql += " AND time_period='"+statistics+"'";
 		}
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -108,7 +108,7 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Storexpand getStorexpandById(Long id) {
-		String findSql = "select * from di_storexpand where id=" + id;
+		String findSql = "select * from df_bussiness_target where id=" + id;
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(findSql);
 		query.addEntity(Storexpand.class);
 		List<Storexpand> list = query.list();
@@ -120,8 +120,8 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 
 	@Override
 	public List<Map<String, Object>> getContractAndthroughByYear(String year) {
-		String sql = "select cityname,cityno,sum(contract_quantity) as contract_quantity,sum(through_quantity) as through_quantity from di_storexpand "
-				+"where DATE_FORMAT(start_time,'%Y') = '"+year+"' GROUP BY cityname;";
+		String sql = "select cityname,cityno,sum(param_second) as contract_quantity,sum(param_third) as through_quantity from df_bussiness_target "
+				+"where DATE_FORMAT(start_time,'%Y') = '"+year+"' and type='store' and period_type='week' GROUP BY cityname;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -130,13 +130,13 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 
 	@Override
 	public List<Map<String, Object>> getThroughByWeek() {
-		String sql = "select cityname,sum(CASE when flag = 0 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-5 then contract_quantity else 0 end) as week1,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-4 then contract_quantity else 0 end) as week2,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-3 then contract_quantity else 0 end) as week3,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-2 then contract_quantity else 0 end) as week4,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-1 then contract_quantity else 0 end) as week5,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) then contract_quantity else 0 end) as week6 "
-				+"from di_storexpand GROUP BY cityname;";
+		String sql = "select cityname,sum(CASE when flag = 0 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-5 then param_second else 0 end) as week1,"
+				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-4 then param_second else 0 end) as week2,"
+				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-3 then param_second else 0 end) as week3,"
+				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-2 then param_second else 0 end) as week4,"
+				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-1 then param_second else 0 end) as week5,"
+				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) then param_second else 0 end) as week6 "
+				+"from df_bussiness_target where 1=1 and type='store' and period_type='week' GROUP BY cityname;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

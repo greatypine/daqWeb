@@ -134,7 +134,7 @@
 			alert("总部上会通过数量必须为数字");
 			return;
 		}
-		var cooperative_task = $("#cooperative_task").val().replace(/(^\s*)|(\s*$)/g, "");
+/* 		var cooperative_task = $("#cooperative_task").val().replace(/(^\s*)|(\s*$)/g, "");
 		if(cooperative_task!=""){
 			if(!isNumber(cooperative_task)){
 				alert("合作店任务目标必须为数字");
@@ -154,7 +154,7 @@
 				alert("前置仓任务目标必须为数字");
 				return;
 			}
-		}
+		} */
 		var citySelect = $("#citySelect").val();
 		if(citySelect == null||citySelect == "0"){
 			alert("城市不能为空");
@@ -164,8 +164,8 @@
 	}
 	
 	function doSave(){
-		var arr = [ "statistical_time_period", "survey_quantity","contract_quantity","through_quantity","self_support_task",
-		            "cooperative_task","preposition_task","cityname","start_time","end_time","cityno","id"];
+		var arr = [ "statistical_time_period", "survey_quantity","contract_quantity","through_quantity",/* "self_support_task",
+		            "cooperative_task","preposition_task" */,"cityname","start_time","end_time","cityno","id"];
 			var o = {};
 			for ( var i in arr) {
 				var v = arr[i];
@@ -304,11 +304,12 @@
 				<p class="read"><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="12" name="contract_quantity" id="contract_quantity"/></p>
 			</td>
 		</tr>
-		<tr>
+ 		<tr>
 			<td width="33.33%">
 				<p>总部上会通过数量：<span style="color: red">*</span></p>
 				<p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="through_quantity" id="through_quantity"/></p>
 			</td>
+			<!--
 			<td>
 				<p class="read">合作店任务目标：(2018年)</p>
 				<p class="read"><input type="text" name="cooperative_task" onkeyup="value=value.replace(/[^\d.]/g,'')" id="cooperative_task"/></p>
@@ -317,12 +318,11 @@
 				<p>自营店任务目标：(2018年)</p>
 				<p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="self_support_task" id="self_support_task"/></p>
 			</td>
-		</tr>
-		<tr>
-			<td>
+		</tr> -->
+			<!-- <td>
 				<p>前置仓任务目标：(2018年)</p>
 				<p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="preposition_task" id="preposition_task"/></p>
-			</td>
+			</td> -->
 			<td>
 				<p class="read">城市名称：<span style="color: red">*</span></p>
 				<p class="read"><select id="citySelect" style="width: 38%;background-color: #EEEEEE;" onchange="select_data();" disabled="disabled"></select><input type="hidden" id="cityname" name="cityname"><input type="hidden" id="cityno" name="cityno"> </p>

@@ -67,8 +67,8 @@ var editObj = {
 var COLUMNS = {
 		   "caozuo": function(aData, iColumn, sColumnName, map){
 				 var id = map['id'];
-				 var start_time = map['statistical_time_period'].split("~")[0];
-				 var end_time = map['statistical_time_period'].split("~")[1];
+				 var start_time = map['time_period'].split("~")[0];
+				 var end_time = map['time_period'].split("~")[1];
 				 var myDate = new Date();
 				 var date = myDate.toLocaleDateString(); //获取当前日期
 				 if(Date.parse(date) < Date.parse(end_time)) {//时间戳对比  
@@ -98,7 +98,7 @@ var COLUMNS = {
                         <tr>
                             <td width="7%">统计时间段:</td>
                             <td>
-                                <input id="statistical_time_period" name="statistical_time_period" type="text" style="width:60%" class="form-control"/>
+                                <input id="period_type" name="period_type" type="text" style="width:60%" class="form-control"/>
                             </td>
                             <td width="7%">城市:</td>
                             <td>
