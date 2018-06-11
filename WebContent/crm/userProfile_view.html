@@ -362,6 +362,7 @@
 		                      <a onclick="slientSelection('3')" style="cursor:pointer;">沉默超3月</a>
 		                      <a onclick="slientSelection('6')" style="cursor:pointer;">沉默超6月</a>
 		                      <a onclick="slientSelection('B')" style="cursor:pointer;">集采用户</a>
+		                      <a onclick="slientSelection('V')" style="cursor:pointer;">合作社社员</a>
 		                      <input type="text" style="display:none" class="form-control" placeholder="快捷沉默"  id="slient_private_manual" value="0"/>
 		                    </div>
 		                  </div>
@@ -651,6 +652,8 @@ Date.prototype.format=function(fmt) {
             var name = "";
          	if(curValue=='集采用户'){
          		name="B";
+         	}else if(curValue=='合作社社员'){
+         		name="V";
          	}else{
          		name = curValue.substring(3,curValue.length-1);
          	}
@@ -676,6 +679,8 @@ Date.prototype.format=function(fmt) {
          	var name = "";
          	if(curValue=='集采用户'){
          		name="B";
+         	}else if(curValue=='合作社社员'){
+         		name="V";
          	}else{
          		name = curValue.substring(3,curValue.length-1);
          	}
@@ -690,6 +695,8 @@ Date.prototype.format=function(fmt) {
             var name = "";
          	if(curValue=='集采用户'){
          		name="B";
+         	}else if(curValue=='合作社社员'){
+         		name="V";
          	}else{
          		name = curValue.substring(3,curValue.length-1);
          	}
@@ -1175,11 +1182,15 @@ Date.prototype.format=function(fmt) {
 								+"<span style=\"background:url('../data_access/imgmouse_files/623608966639545324.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">沉默超3月</span>";
 						}
 		         	   		
-		         	   if(jData[i].usertag!=''){
+		         	   if(jData[i].usertag_b!=''){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/271800839857672654.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">集采用户</span>";
 						}
-			            
+		         	  if(jData[i].usertag_v!=''){
+							infoStr= infoStr
+								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180228.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">合作社社员</span>";
+						} 
+		         	   
 		         	  	infoStr= infoStr +"</td>";
 			            $("#manual_tbody").append(infoStr);     
 	        	   }
