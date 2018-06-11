@@ -86,8 +86,8 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"用户姓名","用户电话","历史消费金额","历史消费次数","最大交易金额","首次消费时间","最后消费时间","注册时间","沉默时间（天）","消费片区","有无画像","是否集采用户","是否沉默超30","是否沉默超60"};
-  	        String[] headers_key = {"customer_name","customer_phone","trading_price_sum","order_count","trading_price_max","first_order_time","last_order_time","regist_time","slient_time","area_code","user_model","is_b_tag","is_thirty_tag","is_sixty_tag"};
+  	        String[] str_headers = {"用户姓名","用户电话","历史消费金额","历史消费次数","最大交易金额","首次消费时间","最后消费时间","注册时间","沉默时间（天）","消费片区","有无画像","是否集采用户","是否合作社社员","是否沉默超30","是否沉默超60"};
+  	        String[] headers_key = {"customer_name","customer_phone","trading_price_sum","order_count","trading_price_max","first_order_time","last_order_time","regist_time","slient_time","area_code","user_model","is_b_tag","is_v_tag","is_thirty_tag","is_sixty_tag"};
   	       
   	        for(int i = 0;i < str_headers.length;i++){
   	            XSSFCell cell = row.createCell(i);

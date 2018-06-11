@@ -72,7 +72,13 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		} else {
 			result.put("cmCount", "0");
 		}
-
+		//查询当日新增社员数量
+		List<Map<String, Object>> dayAddMemList = commDao.getDayaddMemCount(dd);
+		if (dayAddMemList != null && dayAddMemList.size() > 0) {
+			result.put("dayAddMem", dayAddMemList.get(0).get("cou"));
+		} else {
+			result.put("dayAddMem", "0");
+		}
 		// 查询老用户转社员总量
 		List<Map<String, Object>> oldCmCountList = new ArrayList<Map<String, Object>>();
 		oldCmCountList = commDao.getOldCount(dd);
@@ -141,7 +147,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List dateXCounts = new ArrayList();
 		List<Map<String, Object>> cmAllGrowList = commDao.getCmAllGrow(dd);
 		try {
-			dateXCounts = reDate(7);
+			//生成X轴坐标
+			dateXCounts = reDate(6);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -189,7 +196,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List alldealsums = new ArrayList();
 		List alldealcounts = new ArrayList();	
 		for (int i = 0; i < day7List.size(); i++) {
-				alldealsums.add(String.valueOf(Math.floor(Double.parseDouble(day7List.get(i).get("alldealsum").toString()))));
+				alldealsums.add(Double.valueOf(day7List.get(i).get("alldealsum").toString()).intValue());
 				alldealcounts.add(day7List.get(i).get("alldealcount").toString());
 		}
 
@@ -524,7 +531,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		c.add(Calendar.DAY_OF_MONTH, -dd);
 		List dateX = new ArrayList();
 		dateX.add(f.format(c.getTime()));
-		for (int i = dd; i > 1; i--) {
+		for (int i = dd; i > 0; i--) {
 			c.add(Calendar.DAY_OF_MONTH, 1);
 			dateX.add(f.format(c.getTime()));
 		}

@@ -51,10 +51,10 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 		if ("year".equals(weidu_where.get("key")) && null != weidu_where.get("value")
 				&& !"".equals(weidu_where.get("value"))) {
 			String str = (String) weidu_where.get("value");
-			if ("statistical_time_period".equals(statistical_time_period_where.get("key")) && null != statistical_time_period_where.get("value")
+			if ("period_type".equals(statistical_time_period_where.get("key")) && null != statistical_time_period_where.get("value")
 					&& !"".equals(statistical_time_period_where.get("value"))) {
 				if("0".equals(str)){
-					sb_where.append(" AND st.statistical_time_period like '").append(statistical_time_period_where.get("value")).append("'");
+					sb_where.append(" AND st.time_period like '").append(statistical_time_period_where.get("value")).append("'");
 				}else if("1".equals(str)){
 					sb_where.append(" AND st.year = '").append(String.valueOf(statistical_time_period_where.get("value")).replace("%", "")).append("'");
 				}
@@ -62,7 +62,7 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 		}
 		if ("cityname".equals(city_where.get("key")) && null != city_where.get("value")
 					&& !"".equals(city_where.get("value"))) {
-				sb_where.append(" AND st.cityname like '").append(city_where.get("value")).append("'");
+				sb_where.append(" AND st.city_name like '").append(city_where.get("value")).append("'");
 		}
 
 		System.out.println(sb_where);
@@ -84,13 +84,12 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 		saveStorexpand.setCityno(storexpand.getCityno());
 		saveStorexpand.setSurvey_quantity(storexpand.getSurvey_quantity());
 		saveStorexpand.setContract_quantity(storexpand.getContract_quantity());
-		saveStorexpand.setCooperative_task(storexpand.getCooperative_task());
-		saveStorexpand.setSelf_support_task(storexpand.getSelf_support_task());
-		saveStorexpand.setPreposition_task(storexpand.getPreposition_task());
 		saveStorexpand.setThrough_quantity(storexpand.getThrough_quantity());
 		saveStorexpand.setStart_time(storexpand.getStart_time());
 		saveStorexpand.setEnd_time(storexpand.getEnd_time());
 		saveStorexpand.setStatistical_time_period(storexpand.getStart_time()+"~"+storexpand.getEnd_time());
+		saveStorexpand.setType("store");
+		saveStorexpand.setPeriod_type("week");
 		preObject(saveStorexpand);
 		StorexpandManager officeNetworkManager = (StorexpandManager) SpringHelper.getBean("storexpandManager");
 		if (storexpand.getId() == null) {
@@ -117,11 +116,10 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 		storexpand.setCityname(saveStorexpand.getCityname());
 		storexpand.setCityno(saveStorexpand.getCityno());
 		storexpand.setContract_quantity(saveStorexpand.getContract_quantity());
-		storexpand.setSelf_support_task(saveStorexpand.getSelf_support_task());
-		storexpand.setCooperative_task(saveStorexpand.getCooperative_task());
-		storexpand.setPreposition_task(saveStorexpand.getPreposition_task());
 		storexpand.setSurvey_quantity(saveStorexpand.getSurvey_quantity());
 		storexpand.setThrough_quantity(saveStorexpand.getThrough_quantity());
+		storexpand.setType(saveStorexpand.getType());
+		storexpand.setPeriod_type(saveStorexpand.getPeriod_type());
 		if(saveStorexpand.getStatistical_time_period()!=null&&!"".equals(saveStorexpand.getStatistical_time_period())){
 			storexpand.setStart_time(saveStorexpand.getStart_time());
 			storexpand.setEnd_time(saveStorexpand.getEnd_time());

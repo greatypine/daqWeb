@@ -24,11 +24,13 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 
 	@Override
 	public Map<String, Object> queryUserProfile(UserProfileDto userProfile, PageInfo pageInfo) {
-		String sql = "SELECT IFNULL(dup.customer_name,'未填写') as customer_name, dup.customer_phone, CONCAT(dup.customer_id,'') as customer_id, IFNULL(dup.trading_price_sum,0) as trading_price_sum,"
-				+ "IFNULL(dup.order_count,0) as order_count,dup.first_order_time, dup.last_order_time, IFNULL(dup.area_code,'') as area_code, IFNULL(dup.tiny_village_code,'') "
-				+ "as tiny_village_code, dup.regist_time,DATEDIFF(now(), dup.last_order_time) as slient_time,CASE WHEN dup.user_model='1' THEN '有'  ELSE '无' END AS user_model,"
-				+ "CASE WHEN tag.usertag='B' THEN '集采用户' ELSE '' END usertag,IFNULL(dup.trading_price_max,0) as trading_price_max FROM df_user_profile dup "
-				+ "LEFT JOIN df_userprofile_tag tag ON dup.customer_id=tag.customer_id where 1=1 ";
+		String sql = "select customer_name,customer_phone,customer_id,trading_price_sum,order_count,first_order_time,last_order_time,area_code,tiny_village_code,regist_time,"
+				+ "slient_time,user_model,trading_price_max,max(IFNULL(usertag_b ,'')) usertag_b,max(IFNULL(usertag_v,'')) usertag_v from (SELECT IFNULL(dup.customer_name,'未填写') as customer_name, "
+				+ "dup.customer_phone, CONCAT(dup.customer_id,'') as customer_id, IFNULL(dup.trading_price_sum,0) as trading_price_sum,IFNULL(dup.order_count,0) as order_count,"
+				+ "dup.first_order_time, dup.last_order_time, IFNULL(dup.area_code,'') as area_code, IFNULL(dup.tiny_village_code,'') as tiny_village_code, dup.regist_time,"
+				+ "DATEDIFF(now(), dup.last_order_time) as slient_time,CASE WHEN dup.user_model='1' THEN '有'  ELSE '无' END AS user_model,CASE WHEN tag.usertag='B' THEN '集采用户' ELSE '' END usertag_b,"
+				+ "CASE WHEN tag.usertag = 'V' THEN '合作社社员' ELSE '' END usertag_v,IFNULL(dup.trading_price_max,0) as trading_price_max "
+				+ "FROM df_user_profile dup LEFT JOIN df_userprofile_tag tag ON dup.customer_id=tag.customer_id where 1=1 ";
 		if(StringUtils.isNotEmpty(userProfile.getCity_name()) || StringUtils.isNotEmpty(userProfile.getStore_no())){
 			sql = sql + " AND dup.customer_id IN (SELECT dus.customer_id FROM df_user_store dus WHERE 1=1 ";
 			if(StringUtils.isNotEmpty(userProfile.getCity_name())){
@@ -72,12 +74,14 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getUser_model())){
 			sql=sql+" AND dup.user_model >="+userProfile.getUser_model();
 		}
-		if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) && "B".equals(userProfile.getSlient_time_min())){
+		if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) 
+				&& ("B".equals(userProfile.getSlient_time_min()) || "V".equals(userProfile.getSlient_time_min()))){
 			sql=sql+" AND tag.usertag ='"+userProfile.getSlient_time_min()+"'";
 		}
 		if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) || StringUtils.isNotEmpty(userProfile.getSlient_time_max())){
 			sql=sql+" HAVING ";
-			if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) && !"B".equals(userProfile.getSlient_time_min())){
+			if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) && !"B".equals(userProfile.getSlient_time_min()) 
+					&& !"V".equals(userProfile.getSlient_time_min())){
 				sql=sql+" slient_time >= " + userProfile.getSlient_time_min() ;
 			}else{
 				sql=sql+" slient_time >= 0" ;
@@ -86,7 +90,7 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 				sql=sql+" AND slient_time <= " + userProfile.getSlient_time_max() ;
 			}
 		}
-		sql = sql + " ORDER BY dup.last_order_time desc ";
+		sql = sql + " ) aa GROUP BY customer_id ORDER BY last_order_time DESC ";
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
 
 		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
@@ -109,11 +113,14 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportUserProfile(UserProfileDto userProfile){
-		String sql = "SELECT IFNULL(dup.customer_name,'未填写') as customer_name, dup.customer_phone, dup.customer_id, IFNULL(dup.trading_price_sum,0) as trading_price_sum,"
-				+ "IFNULL(dup.trading_price_max,0) as trading_price_max,IFNULL(dup.order_count,0) as order_count,"
-				+ "DATE_FORMAT(dup.first_order_time,'%Y-%m-%d %H:%i:%S') as first_order_time, DATE_FORMAT(dup.last_order_time,'%Y-%m-%d %H:%i:%S') as last_order_time, "
-				+ "IFNULL(dup.area_code,'') as area_code, IFNULL(dup.tiny_village_code,'') as tiny_village_code, DATE_FORMAT(dup.regist_time,'%Y-%m-%d %H:%i:%S') as regist_time,DATEDIFF(now(), dup.last_order_time) as slient_time,CASE WHEN dup.user_model='1' THEN '有'  ELSE '无' END AS user_model,"
-				+ "CASE WHEN tag.usertag = 'B' THEN	'是' ELSE '否' END is_b_tag,CASE WHEN DATEDIFF(now(), dup.last_order_time)>=60 THEN '是' ELSE '否' END is_sixty_tag,"
+		String sql = "select customer_name,customer_phone,customer_id,trading_price_sum,trading_price_max,order_count,first_order_time,last_order_time,area_code,"
+				+ "tiny_village_code,regist_time,slient_time,user_model,max(IFNULL(is_b_tag,'')) is_b_tag,max(IFNULL(is_v_tag,'')) is_v_tag,is_sixty_tag,"
+				+ "is_thirty_tag from (SELECT IFNULL(dup.customer_name,'未填写') as customer_name, dup.customer_phone, dup.customer_id, IFNULL(dup.trading_price_sum,0) as trading_price_sum,"
+				+ "IFNULL(dup.trading_price_max,0) as trading_price_max,IFNULL(dup.order_count,0) as order_count,DATE_FORMAT(dup.first_order_time,'%Y-%m-%d %H:%i:%S') as first_order_time, "
+				+ "DATE_FORMAT(dup.last_order_time,'%Y-%m-%d %H:%i:%S') as last_order_time, IFNULL(dup.area_code,'') as area_code, IFNULL(dup.tiny_village_code,'') as tiny_village_code, "
+				+ "DATE_FORMAT(dup.regist_time,'%Y-%m-%d %H:%i:%S') as regist_time,DATEDIFF(now(), dup.last_order_time) as slient_time,CASE WHEN dup.user_model='1' THEN '有'  ELSE '无' END AS user_model,"
+				+ "CASE WHEN tag.usertag = 'B' THEN	'是' ELSE '否' END is_b_tag,CASE WHEN tag.usertag = 'V' THEN	'是' ELSE '否' END is_v_tag,"
+				+ "CASE WHEN DATEDIFF(now(), dup.last_order_time)>=60 THEN '是' ELSE '否' END is_sixty_tag,"
 				+ "CASE WHEN DATEDIFF(now(), dup.last_order_time)>=30 THEN '是' ELSE '否' END is_thirty_tag FROM df_user_profile dup LEFT JOIN df_userprofile_tag tag "
 				+ "ON dup.customer_id=tag.customer_id where 1=1 ";
 		if(StringUtils.isNotEmpty(userProfile.getCity_name()) || StringUtils.isNotEmpty(userProfile.getStore_no())){
@@ -159,16 +166,23 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getUser_model())){
 			sql=sql+" AND dup.user_model >="+userProfile.getUser_model();
 		}
+		if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) 
+				&& ("B".equals(userProfile.getSlient_time_min()) || "V".equals(userProfile.getSlient_time_min()))){
+			sql=sql+" AND tag.usertag ='"+userProfile.getSlient_time_min()+"'";
+		}
 		if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) || StringUtils.isNotEmpty(userProfile.getSlient_time_max())){
 			sql=sql+" HAVING ";
-			if(StringUtils.isNotEmpty(userProfile.getSlient_time_min())){
+			if(StringUtils.isNotEmpty(userProfile.getSlient_time_min()) && !"B".equals(userProfile.getSlient_time_min()) 
+					&& !"V".equals(userProfile.getSlient_time_min())){
 				sql=sql+" slient_time >= " + userProfile.getSlient_time_min() ;
+			}else{
+				sql=sql+" slient_time >= 0" ;
 			}
 			if(StringUtils.isNotEmpty(userProfile.getSlient_time_max())){
 				sql=sql+" AND slient_time <= " + userProfile.getSlient_time_max() ;
 			}
 		}
-		sql = sql + " ORDER BY dup.last_order_time desc ";
+		sql = sql + " ) aa GROUP BY customer_id ORDER BY last_order_time DESC ";
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 

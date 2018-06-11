@@ -67,7 +67,7 @@ function formatDate(date) {
 
 //获得本周的开始日期
 function getWeekStartDate() {
-    var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek);
+    var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek+4);
     return formatDate(weekStartDate);
 }
 
@@ -75,33 +75,33 @@ function getWeekStartDate() {
 
 //获得本周的结束日期
 function getWeekEndDate() {
-    var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek));
+    var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)+4);
     return formatDate(weekEndDate);
 }
 
 
 //获得上周的开始日期
 function getLastWeekStartDate() {
-    var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 7);
+    var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 7+4);
     return formatDate(weekStartDate);
 }
 
 
 //获得上周的结束日期
 function getLastWeekEndDate() {
-    var weekEndDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 1);
+    var weekEndDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek - 1+4);
     return formatDate(weekEndDate);
 }
 
 //获得下周开始时间
 function getNextWeekStartDate(){
-	var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek+7);
+	var weekStartDate = new Date(nowYear, nowMonth, nowDay - nowDayOfWeek+7+4);
     return formatDate(weekStartDate);
 }
 
 //获得下周结束时间
 function getNextWeekEndDate(){
-	var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)+7);
+	var weekEndDate = new Date(nowYear, nowMonth, nowDay + (6 - nowDayOfWeek)+7+4);
     return formatDate(weekEndDate);
 }
 //判断是否为数字

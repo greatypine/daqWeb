@@ -387,7 +387,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> getStoreListDate(String where) {
 		String find_sql = "SELECT store.city_name,store.`name`,IF(store.storetype='W','',store.storeno)as storeno,IF(store.storetype='W','',store.storetypename) as storetypename,store.superMicro,store.estate,DATE_FORMAT(store.open_shop_time,'%Y/%c/%e') as open_shop_time,town.`name` as townname,IFNULL(store.address,store.detail_address) as detail_address,store.ordnumber,IFNULL(usee.mobilephone,usee.phone) as mobilephone,  usee.`name` as shopmanager, "
 				+ " coun.`name` as countname,IFNULL(store.nature,'') as nature,IFNULL(store.tenancy_term,'') as tenancyTerm,IFNULL(store.rental,'') as rental,IFNULL(store.payment_method,'') as payment_method "
-				+ " ,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins"
+				+ " ,if(store.formattype='请选择','',store.formattype) as formattype,store.usable_area,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins"
 				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
 				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id	"
 				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%') AND store.storetype!='V' AND ifnull(store.estate,null)!='闭店中'  AND store.storeno is not NULL and store.flag=0  "
@@ -906,7 +906,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		// java.sql.Date sdate = new java.sql.Date(date.getTime());
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String format = dateFormat.format(date);
-		String sql = "INSERT INTO t_store (`store_id`,`name`,`type`,`version`,`town_id`,`county_id`,`city_id`,`province_id`,`status`,  `create_user`, `create_time`, `update_user`, `update_time`,  `address`, `detail_address`, `mobilephone`,`id`,`platformid`,`city_name`, `rmid`, `skid`, `open_shop_time`, `platformname`, `town_name`, `storeno`, `storetype`, `storetypename`,  `estate`, `ordnumber`, `superMicro`, `cityno`, `agency_fee`, `county_ids`, `increase`, `increase_fee`, `nature`, `payment_method`, `rent_area`, `rent_free`, `rental`, `taxes`, `tenancy_term`, `usable_area`, `work_id`, `place_town_id`, `store_position`, `gaode_adcode`, `gaode_address`, `gaode_citycode`, `gaode_provincecode`,`formattype`) VALUES ("
+		String sql = "INSERT INTO t_store (`store_id`,`name`,`type`,`version`,`town_id`,`county_id`,`city_id`,`province_id`,`status`,  `create_user`, `create_time`, `update_user`, `update_time`,  `address`, `detail_address`, `mobilephone`,`id`,`platformid`,`city_name`, `rmid`, `skid`, `open_shop_time`, `platformname`, `town_name`, `storeno`, `storetype`, `storetypename`,  `estate`, `ordnumber`, `superMicro`, `cityno`, `agency_fee`, `county_ids`, `increase`, `increase_fee`, `nature`, `payment_method`, `rent_area`, `rent_free`, `rental`, `taxes`, `tenancy_term`, `usable_area`, `work_id`, `place_town_id`, `store_position`,`remark`,`payment_remark`, `gaode_adcode`, `gaode_address`, `gaode_citycode`, `gaode_provincecode`,`formattype`) VALUES ("
 				+ store.getStore_id() + ",'" + store.getName() + "'," + store.getType() + "," + store.getVersion() + ","
 				+ (store.getTown_id() == null ? null : "'" + store.getTown_id() + "'") + "," + store.getCounty_id()
 				+ "," + store.getCity_id() + "," + store.getProvince_id() + "," + store.getStatus() + ","
@@ -942,6 +942,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ (store.getWork_id() == null ? null : "'" + store.getWork_id() + "'") + ","
 				+ (store.getPlace_town_id() == null ? null : "'" + store.getPlace_town_id() + "'") + ","
 				+ (store.getStore_position() == null ? null : "'" + store.getStore_position() + "'") + ","
+				+ (store.getRemark() == null ? null : "'" + store.getRemark() + "'") + ","
+				+ (store.getPayment_remark() == null ? null : "'" + store.getPayment_remark() + "'") + ","
 				+ (store.getGaode_adCode() == null ? null : "'" + store.getGaode_adCode() + "'") + ","
 				+ (store.getGaode_address() == null ? null : "'" + store.getGaode_address() + "'") + ","
 				+ (store.getGaode_cityCode() == null ? null : "'" + store.getGaode_cityCode() + "'") + ","
