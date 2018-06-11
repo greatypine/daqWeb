@@ -1552,8 +1552,6 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("mobilephone")));// 门店电话
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("ordnumber")));// 开店序号
 
-
-
 				nJobIndex++;
 			}
 			fis_out_excel = new FileOutputStream(file_new);
