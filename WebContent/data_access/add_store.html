@@ -1429,7 +1429,7 @@ function loadhtml(){
 				<p class="read">
 					<select class="form-control" id="storetype"  style="display: inline-block;width: 50%;">
 						<option value="">请选择</option>
-					</select><span>备注：</span><input type="text" id="remark" placeholder="选择其它时请填写" name="remark" class="form-control" style="width:50%;display: inline-block">
+					</select><span>备注：</span><input type="text" id="remark" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" placeholder="选择其它时请填写" name="remark" class="form-control" style="width:50%;display: inline-block">
 				</p>
 			</td>
 		</tr>
@@ -1502,7 +1502,7 @@ function loadhtml(){
 						<option>半年付</option>
 						<option>年付</option>
 						<option>其它</option>
-					</select>备注:<input type="text" id="payment_remark" placeholder="选择其它时请填写" name="payment_remark" class="form-control" style="width:60%;display: inline-block">
+					</select>备注:<input type="text" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="payment_remark" placeholder="选择其它时请填写" name="payment_remark" class="form-control" style="width:60%;display: inline-block">
 				</p>
 			</td>
 			<td>

@@ -1520,36 +1520,40 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				sh_job.createRow(nJobIndex);
 				obj_row = sh_job.getRow(nJobIndex);
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue((nJobIndex)));// 序号
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("storeno")));// 门店编号
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("name")));// 店名
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("city_name")));// 城市
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("countname")));// 区域
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("townname")));// 街道
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("storetypename")));// 属性
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("detail_address")));// 位置
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("nature")));// 门店属性
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("storetypename")));// 类型
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("formattype")));// 业态类型
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("superMicro")));// 微超
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("estate")));// 状态
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("open_shop_time")));// 开业时间
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("nature")));// 门店属性
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("tenancyTerm")));// 租期
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("rental")));// 租金
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("payment_method")));// 支付方式
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("detail_address")));// 位置
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("name")));// 店名
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("shopmanager")));// 店长
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("mobilephone")));// 门店电话
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("storeno")));// 门店编号
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("ordnumber")));// 开店序号
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("city_name")));// 城市
-
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("rent_area")));// 计租面积
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("agency_fee")));// 中介费
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("rent_area")));// 合同面积
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("usable_area")));// 使用面积
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("increase")));// 递增
-				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("increase_fee")));// 增容费
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("rent_free")));// 免租期
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("taxes")));// 税金
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("agency_fee")));// 中介费
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("increase_fee")));// 增容费
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("submit_date")));// 功能方案提交日期
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("audit_date")));// 功能方案通过日期
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("enter_date")));// 装修进场日期
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("enter_end_date")));// 装修竣工日期
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("card_content")));// 证照内容
 				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("if_bussins")));// 有无营业执照
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("shopmanager")));// 店长
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("mobilephone")));// 门店电话
+				setCellValue(obj_row, cellIndex++, ValueUtil.getStringValue(map.get("ordnumber")));// 开店序号
+
+
+
 				nJobIndex++;
 			}
 			fis_out_excel = new FileOutputStream(file_new);
