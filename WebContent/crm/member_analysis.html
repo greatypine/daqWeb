@@ -33,13 +33,13 @@
     .report{font-size: 16px;background-color: #a93f31;color: #fff; padding-bottom: 20px;}
     .report img{margin: 10px 0 0 0;}
     .report .box-header{color: #fff;}
-    .report li{line-height: 50px; color: #f8e7e5;}
+    .report li{line-height: 35px; color: #f8e7e5;}
     .report i{margin-right: 5px; opacity: 0.6;}
     .report span{font-size: 24px; color: #ffb959; font-weight: bold;}
     .report p i{color: #fff;}
     .report p small{font-size: 16px;}
-    .report p:nth-child(2),.report p:nth-child(2n){font-size: 18px; margin: 10px 0 5px 0; color: rgba(255,255,255,0.7);}
-    .report p:nth-child(2n+1){font-size: 34px; padding-left: 20px;}
+    .report p:nth-child(2),.report p:nth-child(2n){font-size: 18px; margin: 5px 0 5px 0; color: rgba(255,255,255,0.7);}
+    .report p:nth-child(2n+1){font-size: 18px; margin: 5px 0 5px 0; color: rgba(255,255,255,0.7);}
     .report-tit{height: 35px; line-height: 35px; padding-left:10px;background: -webkit-linear-gradient(left, rgba(145,60,48,1) , rgba(145,60,48,0.2));
       /* Safari 5.1 - 6.0 */
       background: -o-linear-gradient(right, rgba(145,60,48,1), rgba(145,60,48,0.2)); /* Opera 11.1 - 12.0 */
@@ -107,15 +107,18 @@
             <div class="col-sm-7 col-xs-12">
               <div class="col-sm-6 col-xs-12">
                 <div class="report-tit">社员今日信息</div>
-                <p><i class="fa fa-money"></i>成交额</p>
-                <p><small>￥</small><span id="dayDealSum" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p><i class="fa fa-file-text"></i>订单量</p>
-                <p><small></small><span id="dayDealCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
+                <p title="当日累计成交额"><i class="fa fa-money"></i>成交额:<small>&nbsp;&nbsp;￥</small><span id="dayDealSum" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
+                <p title="当日累计订单量"><i class="fa fa-file-text"></i>订单量:<small>&nbsp;&nbsp;</small><span id="dayDealCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
+                <p title="客单价=成交额÷订单量"><i class="fa fa-empire"></i>客单价：<small>&nbsp;&nbsp;￥</small><span id="dayOneSum" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
+                <p title="客单量=订单量÷社员数"><i class="fa fa-sticky-note"></i>客单量:<small>&nbsp;&nbsp;</small><span id="dayOneCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
+                <p title="当日新增社员"><i class="fa fa-pagelines"></i>新增社员:<small>&nbsp;&nbsp;</small><span id="dayNewMem" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
               </div>
               <ul class="col-sm-6 col-xs-12">
                 <div class="report-tit">社员累计数据</div>
+                <li><i class="fa fa-fire"></i>社员总数：<span id="memAll"></span></li>
                 <li><i class="fa fa-file-text-o"></i>订单量：<span id="cmGoodsDealCount"></span></li>
                 <li><i class="fa fa-database"></i>GMV：￥<span id="cmGoodsTurnover"></span></li>
+                <li><i class="fa fa-git-square"></i>订单均价：￥<span id="oneDeal"></span></li>
                 <li><i class="fa fa-bank"></i>E店总数：<span id="eShopCount"></span></li>
                 <li><i class="fa fa-cube"></i>SKU总数：<span id="skuCount"></span></li>
                 <li><i class="fa fa-delicious"></i>SKU动销：<span id="movingPinCount"></span></li>
@@ -905,7 +908,7 @@ var showMemberRegist = function (dataServer){
 	  var myChart7 = echarts.init(document.getElementById('main7'));
 	  //社员分布
 	  
-	  option7 = {
+/* 	  option7 = {
 	    title : {
 	        text: '社员分布',
 	    },
@@ -989,7 +992,92 @@ var showMemberRegist = function (dataServer){
 	            data: dataServer.reCityCou
 	        }
 	    ]
-	};
+	}; */
+	  option7 = {
+			    title : {
+			        text: '社员分布'
+			    },
+			    tooltip : {
+			        trigger: 'axis',
+			        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+			            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+			        },
+			        formatter: function (params){
+			            return params[0].name + '<br/>'
+			                   + params[1].marker + params[1].seriesName + ' : ' + params[1].value + '<br/>'
+			                   + params[0].marker + params[0].seriesName + ' : ' + (params[1].value + params[0].value) ;
+			        }
+			    },
+			    legend: {
+			        selectedMode:false,
+			        data:['本月新增人数','累计人数']
+			    },
+			    calculable : true,
+			    xAxis : [
+			        {
+			            type : 'category',
+			            axisLabel: {
+			                interval: 0,
+			              },
+			            data: dataServer.reCityname
+			        }
+			    ],
+			    yAxis : [
+			        {
+			            type : 'value',
+			            boundaryGap: [0, 0.1]
+			        }
+			    ],
+			    series : [
+			        {
+			            name:'累计人数',
+			            type:'bar',
+			            stack: 'sum',
+			            barCategoryGap: '50%',
+			            itemStyle: {
+			                normal: {
+			                	color: '#4ac7f5',
+			                    barBorderColor: '#4ac7f5',
+			                    barBorderWidth: 6,
+			                    barBorderRadius:0,
+			                    label : {
+			                        show: true, position: 'insideTop',
+			                          formatter: function (params) {
+			                            for (var i = 0, l = option7.xAxis[0].data.length; i < l; i++) {
+			                                if (option7.xAxis[0].data[i] == params.name) {
+			                                    return option7.series[0].data[i] +  option7.series[1].data[i];
+			                                }
+			                            }
+			                        }
+			                    }
+			                }
+			            },
+			            data:dataServer.reCityCou
+			        },
+			        {
+			            name:'本月新增人数',
+			            type:'bar',
+			            stack: 'sum',
+			            itemStyle: {
+			                normal: {
+			                    color: '#ff0000',
+			                    barBorderColor: '#ff0000',
+			                    barBorderWidth: 6,
+			                    barBorderRadius:0,
+			                    label : {
+			                        show: true, 
+			                        position: 'insideBottom',
+			                        textStyle: {
+			                            color: 'tomato'
+			                        }
+			                    }
+			                }
+			            },
+			            data: dataServer.reCityMonCou
+			        }
+			    ]
+			}; 
+	  
 	  myChart7.setOption(option7);
 };
 var showCityMember = function(dataserver){
@@ -1174,6 +1262,7 @@ var showProduct = function (dataServer){
 
 var showHistoryData = function (dataServer) {
 	//社员量
+	$("#memAll").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
 	$("#cmCount").html("社员总数："+parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
     //老用户开通社员量
 	$("#oldCmCount").html(parseInt(dataServer.oldCmCount==null?'0':dataServer.oldCmCount));
@@ -1193,7 +1282,13 @@ var showHistoryData = function (dataServer) {
 	$("#dayDealCount").html(parseInt(dataServer.dayDealCount==null?'0':dataServer.dayDealCount));
     //当日成交额
 	$("#dayDealSum").html(changeMoney(parseInt(dataServer.dayDealSum==null?'0':dataServer.dayDealSum)));
-	
+    //客单价
+	$("#dayOneSum").html(dataServer.dayDealSum/dataServer.dayDealCount==null?'0':(dataServer.dayDealSum/dataServer.dayDealCount).toFixed(2));
+    //客单量
+	$("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
+    //新增社员
+	$("#dayNewMem").html(parseInt(dataServer.dayAddMem==null?'0':dataServer.dayAddMem));
+	$("#oneDeal").html(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount==null?'0':(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount).toFixed(2));
 };
 var showEshop = function (dataServer) {
 	//社员量
