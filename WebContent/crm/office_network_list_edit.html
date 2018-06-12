@@ -211,7 +211,8 @@
 	 					var jsonData = $.fromJSON(data.data);
 	 					var IndexSelected = "";
 	 					$(jsonData).each(function(index,element){
-	 						$("#citySelect").append('<option value="'+element.cityid+'">'+element.cityname+'</option>');
+	 						var index = findArray(datas, {value: element.cityname});
+	 						$("#citySelect").append('<option value="'+datas[index].name+'">'+element.cityname+'</option>');
 	                     });
 	 					 $("#citySelect")[0].selectedIndex = IndexSelected;
 	 				}
