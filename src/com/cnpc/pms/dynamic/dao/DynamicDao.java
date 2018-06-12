@@ -868,5 +868,13 @@ public interface DynamicDao extends IDAO{
 	* @author gbl
 	 */
 	public Map<String,Object> queryMemberInvitation(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * 以周三为节点，获得近六周时间轴
+	 * 2018年6月8日
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String,Object>> getsixWeekDate();
 	
 }

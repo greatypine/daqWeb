@@ -5,6 +5,7 @@ package com.cnpc.pms.dynamic.dao.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -3129,5 +3130,30 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		map_result.put("member", list);
 		return map_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getsixWeekDate() {
+		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+		int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int settime = 0;
+		if(i<5){
+			settime = 3;
+		}else{
+			settime = 10;
+		}
+		String sql = "select CONCAT(DATE_SUB(t.week_time, INTERVAL 35 DAY),'') as week1,CONCAT(DATE_SUB(t.week_time, INTERVAL 28 DAY),'') as week2,CONCAT(DATE_SUB(t.week_time, INTERVAL 21 DAY),'') as week3,"
+				+"CONCAT(DATE_SUB(t.week_time, INTERVAL 14 DAY),'') as week4,CONCAT(DATE_SUB(t.week_time, INTERVAL 7 DAY),'') as week5,t.week_time as week6 from (select subdate( "
+				+"DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') -"+settime+") AS week_time ) t";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
 	}
 }
