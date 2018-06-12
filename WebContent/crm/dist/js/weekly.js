@@ -5421,23 +5421,6 @@ function oneyearorsixweek(){
 		doManager("humanresourcesManager","getEmployeeInfoByWeek",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
-				//六周时间轴
-				var dateArray = new Array();
-				var dateAndWeek = jsonData.dateAndWeek;
-				for(i = dateAndWeek.length - 1; i >=0 ; i--){
-					var dateOne = dateAndWeek[i];
-					var datetimes = dateOne.date;
-					dateArray.push(datetimes);
-				}
-				option7.xAxis[0]["data"] = dateArray;
-				optionEmp.xAxis[0]["data"] = dateArray;
-				optiondianzhang.xAxis[0]["data"] = dateArray;
-				optionEmpdianzhang.xAxis[0]["data"] = dateArray;
-				optionguoanxia.xAxis[0]["data"] = dateArray;
-				optionEmpguoanxia.xAxis[0]["data"] = dateArray;
-				optionzhuanyuan.xAxis[0]["data"] = dateArray;
-				optionEmpzhuanyuan.xAxis[0]["data"] = dateArray;
-				six_week_data_array = dateArray;
 				//总人数
 				var queryHumanTotal = jsonData.queryHumanTotal;
 				var humanTotalArray = new Array();
@@ -5460,7 +5443,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryLeaveHuman[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;	
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						leaveHumanArray[index] = humancount;
 					}
 				}
@@ -5472,7 +5455,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryToPostHuman[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						toPostHumanArray[index] = humancount;
 					}
 				}
@@ -5501,7 +5484,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryLeaveDianzhang[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;	
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						leaveDianzhangArray[index] = humancount;
 					}
 				}
@@ -5513,7 +5496,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryToPostDianzhang[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						toPostDianzhangArray[index] = humancount;
 					}
 				}
@@ -5542,7 +5525,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryLeaveGuoanxia[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;	
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						leaveGuoanxiaArray[index] = humancount;
 					}
 				}
@@ -5554,7 +5537,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryToPostGuoanxia[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						toPostGuoanxiaArray[index] = humancount;
 					}
 				}
@@ -5583,7 +5566,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryLeaveZhuanyuan[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;	
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						leaveZhuanyuanArray[index] = humancount;
 					}
 				}
@@ -5595,7 +5578,7 @@ function oneyearorsixweek(){
 						var humanInfo =  queryToPostZhuanyuan[z];
 						var weektime = humanInfo.week_time;
 						var humancount = humanInfo.count;
-						var index = jQuery.inArray(weektime,dateArray);
+						var index = jQuery.inArray(weektime,six_week_data_array);
 						toPostZhuanyuanArray[index] = humancount;
 					}
 				}
