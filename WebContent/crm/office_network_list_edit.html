@@ -227,29 +227,6 @@
           });
 		 
 	 }
-	 function findArray(array, feature, all) {
-		    var all = arguments[2] ? arguments[2] : true;
-		    for(var index in array){
-		        var cur = array[index];
-		        if(feature instanceof Object){
-		            var allRight = true;
-		            for(var key in feature){
-		                var value = feature[key];
-		                if(cur[key].indexOf(value)>-1) return index;
-		                if(all && cur[key] != value){
-		                    allRight = false;
-		                    break;
-		                }
-		            }
-		            if(allRight) return index;
-		        }else{
-		            if(cur == feature){
-		                return index;
-		            }
-		        }
-		    }
-		    return -1;
-		}
 	 var curr_user;
 	  function initcurruser(){
 		    

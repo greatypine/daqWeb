@@ -167,3 +167,28 @@ function addzero(num){
         return num;
     }
 }
+//从对象数组中查询某元素的位置
+//用法:var index = findArray(datas, {value: element.cityname}); datas[index].name
+	 function findArray(array, feature, all) {
+		    var all = arguments[2] ? arguments[2] : true;
+		    for(var index in array){
+		        var cur = array[index];
+		        if(feature instanceof Object){
+		            var allRight = true;
+		            for(var key in feature){
+		                var value = feature[key];
+		                if(cur[key].indexOf(value)>-1) return index;
+		                if(all && cur[key] != value){
+		                    allRight = false;
+		                    break;
+		                }
+		            }
+		            if(allRight) return index;
+		        }else{
+		            if(cur == feature){
+		                return index;
+		            }
+		        }
+		    }
+		    return -1;
+		}
