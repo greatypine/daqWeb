@@ -757,4 +757,20 @@
     </query>
     
     
+    <!-- 同步线上人员列表 -->
+    <query id="onLineSyncHumanresourcesQuery" header="同步线上人员信息列表" baseclass="com.cnpc.pms.personal.entity.SyncRecord" order="updatetime desc">
+        <column key="id" header="编号ID" type="java.lang.Long" allowSort="true" allowSearch="true" operator="between" display="false"/>
+        <column key="name" header="员工姓名" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="updatetime" header="更新日期" type="java.lang.String" align="left" operator="eq" allowSort="false" display="true"/>
+        <column key="org" header="单位名称" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="dept" header="部门" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="post" header="职位名称" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
+        <column key="edu" header="员工学历" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="cardid" header="身份证号" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+    	<column key="phone" header="移动电话" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
+    	<column key="num" header="员工编号" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+    </query>
+    
+    
+    
 </pmsquery>
