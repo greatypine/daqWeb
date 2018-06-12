@@ -11,7 +11,7 @@
 <script type="text/javascript" src="../scripts/bidLib.js"></script>
 <script src="dist/js/headquarters/conversion_utils.js"></script>
 <script type="text/javascript">
-
+var datas = [];
 /* 	function queryTaskQuantity(cityname,cityno){
 		if(cityno!='0'){
 			doManager("storexpandManager", "getTaskQuantityExist",[cityname],
@@ -163,22 +163,62 @@
  		});
  	}
 	 function initcurcity(){
+		 doManager("DistCityCodeManager","queryAllDistCityList",null,
+		 		    function(data,textStatus,XmlHttpRequest){
+		 				if (data.result) {
+		 					var jsonData = $.fromJSON(data.data);
+		 					giveCityNo(datas,jsonData);
+		 				}
+		 });
 	 		doManager("userManager","getCurrentUserCity",null,
 	 		    function(data,textStatus,XmlHttpRequest){
 	 				if (data.result) {
 	 					var jsonData = $.fromJSON(data.data);
 	 					var IndexSelected = "";
 	 					$(jsonData).each(function(index,element){
-	 						$("#citySelect").append('<option value="'+element.cityid+'">'+element.cityname+'</option>');
+	 		 				var index = findArray(datas, {value: element.cityname});
+	 						$("#citySelect").append('<option value="'+datas[index].name+'">'+element.cityname+'</option>');
 	 						if(index==0){
 	 		 					$("#cityname").val(element.cityname);
- 					 			$("#cityno").val(element.cityno);
+ 					 			$("#cityno").val(datas[index].name);
 	 						}
 	                     });
 	 					 $("#citySelect")[0].selectedIndex = IndexSelected;
 	 				}
 	 		});
 	 }
+	 function giveCityNo(datas,jsonData){
+			$(jsonData).each(function(index,element){
+				var object = new Object();
+				object.name = jsonData[index]['cityno'];
+				object.value = jsonData[index]['cityname'];
+				datas.push(object);
+             });
+		 
+	 }
+	 function findArray(array, feature, all) {
+		    var all = arguments[2] ? arguments[2] : true;
+		    for(var index in array){
+		        var cur = array[index];
+		        if(feature instanceof Object){
+		            var allRight = true;
+		            for(var key in feature){
+		                var value = feature[key];
+		                if(cur[key].indexOf(value)>-1) return index;
+		                if(all && cur[key] != value){
+		                    allRight = false;
+		                    break;
+		                }
+		            }
+		            if(allRight) return index;
+		        }else{
+		            if(cur == feature){
+		                return index;
+		            }
+		        }
+		    }
+		    return -1;
+		}
 	 var curr_user;
 	  function initcurruser(){
 		    
