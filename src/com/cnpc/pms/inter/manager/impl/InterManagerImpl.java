@@ -3570,6 +3570,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			storexpand.setContract_quantity(saveStorexpand.getContract_quantity());
 			storexpand.setSurvey_quantity(saveStorexpand.getSurvey_quantity());
 			storexpand.setThrough_quantity(saveStorexpand.getThrough_quantity());
+			storexpand.setType("store");
+			storexpand.setPeriod_type("week");
 			if(saveStorexpand.getStatistical_time_period()!=null&&!"".equals(saveStorexpand.getStatistical_time_period())){
 				storexpand.setStart_time(saveStorexpand.getStart_time());
 				storexpand.setEnd_time(saveStorexpand.getEnd_time());
