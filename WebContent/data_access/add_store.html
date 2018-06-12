@@ -75,6 +75,20 @@ $(function(){
 	$("#payment_method").change(function(){
 		$("#payment_remark").val("");
 	})
+	$("#tenancyTerm_start").bind("click",function(){
+		change_flag=false;
+	})
+	$("#tenancyTerm_end").bind("click",function(){
+		change_flag=false;
+	})
+	$("#rent_free_start").bind("click",function(){
+		change_flag=false;
+	})
+	$("#rent_free_end").bind("click",function(){
+		change_flag=false;
+	})
+
+
 	$("#storetype").change(function(){
 		var stype=$("#storetype option:selected").val();
 		var stynat=$("#nature option:selected").val();
