@@ -5,6 +5,7 @@ package com.cnpc.pms.dynamic.dao.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -1324,10 +1325,10 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		//String sql = "select SUM(IFNULL(pesgmv,0)) as amount,area_no,area_name as name  from ds_areatrade where storeno='"+dynamicDto.getStoreNo()+"' and year=2017 and month=11 group by area_no ORDER BY amount desc";
 		
 		String  sql="SELECT SUM(IFNULL(a.gmv_price,0)) as amount,a.area_code as area_no,ifnull(b.name,a.area_code) as name "+
-						" FROM df_mass_order_monthly a LEFT JOIN t_area  b on a.area_code = b.area_no " +
-						" where a.sign_time >='"+dynamicDto.getBeginDate()+" 00:00:00' and a.sign_time<'"+dynamicDto.getEndDate()+"'" +
-						" and a.area_code is not null and a.store_code='"+dynamicDto.getStoreNo()+"'"+
-						" and a.store_id=" +dynamicDto.getStoreId()+
+						" FROM (select * from df_mass_order_monthly  " +
+						" where sign_time >='"+dynamicDto.getBeginDate()+" 00:00:00' and sign_time<'"+dynamicDto.getEndDate()+"'" +
+						" and area_code is not null and store_code='"+dynamicDto.getStoreNo()+"'"+
+						" and store_id=" +dynamicDto.getStoreId()+" ) a LEFT JOIN t_area  b on a.area_code = b.area_no"+
 						" and b.status=0"+ 
 						" GROUP BY a.area_code ORDER BY amount desc";
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
@@ -3129,5 +3130,30 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		map_result.put("member", list);
 		return map_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> getsixWeekDate() {
+		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+		int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int settime = 0;
+		if(i<5){
+			settime = 3;
+		}else{
+			settime = 10;
+		}
+		String sql = "select CONCAT(DATE_SUB(t.week_time, INTERVAL 35 DAY),'') as week1,CONCAT(DATE_SUB(t.week_time, INTERVAL 28 DAY),'') as week2,CONCAT(DATE_SUB(t.week_time, INTERVAL 21 DAY),'') as week3,"
+				+"CONCAT(DATE_SUB(t.week_time, INTERVAL 14 DAY),'') as week4,CONCAT(DATE_SUB(t.week_time, INTERVAL 7 DAY),'') as week5,t.week_time as week6 from (select subdate( "
+				+"DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') -"+settime+") AS week_time ) t";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
 	}
 }

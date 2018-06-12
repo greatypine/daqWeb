@@ -19,7 +19,7 @@ import com.cnpc.pms.shortMessage.entity.ShortMessage;
 import com.cnpc.pms.shortMessage.manager.ShortMessageManager;
 import com.cnpc.pms.shortMessage.utility.SendShortMessageTask;
 
-public class ShorMessageManagerImpl extends BizBaseCommonManager implements ShortMessageManager{
+public class ShortMessageManagerImpl extends BizBaseCommonManager implements ShortMessageManager{
 
 	@Override
 	public List<Map<String, Object>> getSMSUserGroup() {

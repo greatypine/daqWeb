@@ -1,6 +1,7 @@
 package com.cnpc.pms.personal.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,9 +89,9 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Map<String, Object> getStatisticsExist(String statistics,String cityname) {
-		String sql ="SELECT count(*) as statistics_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week'";
+		String sql ="SELECT count(*) as statistics_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week' ";
 		if(cityname!=null&&!"".equals(cityname)){
-			sql += " AND cityname='"+cityname+"' ";
+			sql += " AND city_name='"+cityname+"' ";
 		}
 		if(statistics!=null&&!"".equals(statistics)){
 			sql += " AND time_period='"+statistics+"'";
@@ -120,8 +121,8 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 
 	@Override
 	public List<Map<String, Object>> getContractAndthroughByYear(String year) {
-		String sql = "select cityname,cityno,sum(param_second) as contract_quantity,sum(param_third) as through_quantity from df_bussiness_target "
-				+"where DATE_FORMAT(start_time,'%Y') = '"+year+"' and type='store' and period_type='week' GROUP BY cityname;";
+		String sql = "select city_name,cityno,sum(param_second) as contract_quantity,sum(param_third) as through_quantity from df_bussiness_target where type = 'store' and period_type = 'week' "
+				+"and DATE_FORMAT(start_time,'%Y') = '"+year+"' GROUP BY city_name;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -130,13 +131,21 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 
 	@Override
 	public List<Map<String, Object>> getThroughByWeek() {
-		String sql = "select cityname,sum(CASE when flag = 0 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-5 then param_second else 0 end) as week1,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-4 then param_second else 0 end) as week2,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-3 then param_second else 0 end) as week3,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-2 then param_second else 0 end) as week4,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now())-1 then param_second else 0 end) as week5,"
-				+"sum(CASE when YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) then param_second else 0 end) as week6 "
-				+"from df_bussiness_target where 1=1 and type='store' and period_type='week' GROUP BY cityname;";
+		int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int settime = 0;
+		if(i<5){
+			settime = 3;
+		}else{
+			settime = 10;
+		}
+		String sql = "select city_name,"
+				+"sum(CASE when DATE_ADD(DATE_FORMAT(start_time,'%Y-%m-%d'), INTERVAL 6 DAY) = date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') then param_second else 0 end) as week1,"
+				+"sum(CASE when DATE_ADD(DATE_FORMAT(start_time,'%Y-%m-%d'), INTERVAL 6 DAY) = date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') then param_second else 0 end) as week2,"
+				+"sum(CASE when DATE_ADD(DATE_FORMAT(start_time,'%Y-%m-%d'), INTERVAL 6 DAY) = date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') then param_second else 0 end) as week3,"
+				+"sum(CASE when DATE_ADD(DATE_FORMAT(start_time,'%Y-%m-%d'), INTERVAL 6 DAY) = date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then param_second else 0 end) as week4,"
+				+"sum(CASE when DATE_ADD(DATE_FORMAT(start_time,'%Y-%m-%d'), INTERVAL 6 DAY) = date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') then param_second else 0 end) as week5,"
+				+"sum(CASE when DATE_ADD(DATE_FORMAT(start_time,'%Y-%m-%d'), INTERVAL 6 DAY) = date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then param_second else 0 end) as week6 "
+				+"from df_bussiness_target where type = 'store' and period_type = 'week' GROUP BY city_name;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

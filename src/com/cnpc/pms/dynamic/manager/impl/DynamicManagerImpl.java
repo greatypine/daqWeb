@@ -6901,4 +6901,22 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 		return result;
 	}
+
+
+
+
+
+
+
+	@Override
+	public Map<String, Object> getsixWeekDate() {
+		Map<String,Object> map = new HashMap<String,Object>();
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		List<Map<String,Object>> getsixWeekDate = dynamicDao.getsixWeekDate();
+		if(getsixWeekDate != null && getsixWeekDate.size() > 0){
+			Map<String, Object> map2 = getsixWeekDate.get(0);
+			map = map2;
+		}
+		return map;
+	}
 }

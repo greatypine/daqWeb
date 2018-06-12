@@ -174,9 +174,9 @@
 <!-- 		              <li class=""><a href="#tab_2" data-toggle="tab" aria-expanded="false">按月统计消费用户</a></li> -->
 		              <li class="active"><a href="#tab_3" data-toggle="tab" aria-expanded="true">1人500户（国安侠）</a></li>
 		              <li class=""><a href="#tab_7" data-toggle="tab" aria-expanded="false">1人500户（片区）</a></li>
-		              <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">拉新用户</a></li>
-		              <li class=""><a href="#tab_5" data-toggle="tab" aria-expanded="false">消费用户</a></li>
-		              <li class=""><a href="#tab_9" data-toggle="tab" aria-expanded="false">有效用户</a></li>
+		              <li class=""><a href="#tab_4" onclick="inint_newcus()" data-toggle="tab" aria-expanded="false">拉新用户</a></li>
+		              <li class=""><a href="#tab_5" onclick="inint_paycus()" data-toggle="tab" aria-expanded="false">消费用户</a></li>
+		              <li class=""><a href="#tab_9" onclick="init_effect()" data-toggle="tab" aria-expanded="false">有效用户</a></li>
 					  <li class="" id="li_tab_8" style="display:none"><a href="#tab_8" data-toggle="tab" aria-expanded="false">用户留存分析</a></li>
 <!--  		              <li class=""><a href="#tab_6" data-toggle="tab" aria-expanded="false">1人500户（历史数据）</a></li> -->
 		            </ul>
@@ -913,41 +913,23 @@ Date.prototype.format=function(fmt) {
     	initallstorePay();
     	initallstoreMore();
     	initallstoreAreamore();
-    	initallstoreDaynewcus();
-    	initallstoreDaypay();
      	initallstoreDaymore();
-     	initallstoreEffect();
     }else if(target==1){//城市级别
     	var liTab=document.getElementById("li_tab_8");
     	liTab.style.display="block";
     	
     	initcurcity();
-//     	$("#citySelect").prop("disabled", true);
-//     	$("#citySelectPay").prop("disabled", true);
-//     	$("#citySelectBasic").prop("disabled", true);
-//     	$("#citySelectMore").prop("disabled", true);
-//     	$("#citySelectAreamore").prop("disabled", true);
-//     	$("#citySelectDaynewcus").prop("disabled", true);
-//     	$("#citySelectDaypay").prop("disabled", true);
-//     	$("#citySelectDaymore").prop("disabled", true);
-//     	$("#citySelectEffect").prop("disabled", true);
     	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectPay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectBasic option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectMore option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectAreamore option[value='"+cityname+"']").attr('selected',true);
-		$("#citySelectDaynewcus option[value='"+cityname+"']").attr('selected',true);
-		$("#citySelectDaypay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectDaymore option[value='"+cityname+"']").attr('selected',true);
-		$("#citySelectEffect option[value='"+cityname+"']").attr('selected',true);
     	initStoreSelectcomplate();
     	initStoreSelectcomplatePay();
     	initStoreSelectcomplateMore();
     	initStoreSelectcomplateAreamore();
-    	initStoreSelectcomplateDaynewcus();
-    	initStoreSelectcomplateDaypay();
      	initStoreSelectcomplateDaymore();
-     	initStoreSelectcomplateEffect();
     }else if(target==2) {//门店
     	var tab=document.getElementById("tab_8");
     	tab.style.display="none";	
@@ -957,49 +939,31 @@ Date.prototype.format=function(fmt) {
     	$("#citySelectPay").prop("disabled", true);
     	$("#citySelectMore").prop("disabled", true);
     	$("#citySelectAreamore").prop("disabled", true);
-    	$("#citySelectDaynewcus").prop("disabled", true);
-    	$("#citySelectDaypay").prop("disabled", true);
     	$("#citySelectDaymore").prop("disabled", true);
-    	$("#citySelectEffect").prop("disabled", true);
 		$("#citySelect option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectPay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectMore option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectAreamore option[value='"+cityname+"']").attr('selected',true);
-		$("#citySelectDaynewcus option[value='"+cityname+"']").attr('selected',true);
-		$("#citySelectDaypay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectDaymore option[value='"+cityname+"']").attr('selected',true);
-		$("#citySelectEffect option[value='"+cityname+"']").attr('selected',true);
 		initStoreSelectcomplate();
     	initStoreSelectcomplatePay();
     	initStoreSelectcomplateMore();
     	initStoreSelectcomplateAreamore();
-    	initStoreSelectcomplateDaynewcus();
-    	initStoreSelectcomplateDaypay();
      	initStoreSelectcomplateDaymore();
-     	initStoreSelectcomplateEffect();
     	$("#store_id_manual").val(storeNo);
     	$("#store_id_manual_pay").val(storeNo);
     	$("#store_id_manual_more").val(storeNo);
     	$("#store_id_manual_areamore").val(storeNo);
-    	$("#store_id_manual_daynewcus").val(storeNo);
-    	$("#store_id_manual_daypay").val(storeNo);
-    	$("#store_id_manual_effect").val(storeNo);
     	$("#store_name_manual").val(storeName);
     	$("#store_name_manual_pay").val(storeName);
     	$("#store_name_manual_more").val(storeName);
     	$("#store_name_manual_areamore").val(storeName);
-    	$("#store_name_manual_daynewcus").val(storeName);
-    	$("#store_name_manual_daypay").val(storeName);
     	$("#store_name_manual_daymore").val(storeName);
-    	$("#store_name_manual_effect").val(storeName);
 		$("#store_name_manual").attr("readonly",true);
 		$("#store_name_manual_pay").attr("readonly",true);
 		$("#store_name_manual_more").attr("readonly",true);
 		$("#store_name_manual_areamore").attr("readonly",true);
-		$("#store_name_manual_daynewcus").attr("readonly",true);
-		$("#store_name_manual_daypay").attr("readonly",true);
 		$("#store_name_manual_daymore").attr("readonly",true);
-		$("#store_name_manual_effect").attr("readonly",true);
     }
     
       //iCheck for checkbox and radio inputs
@@ -1093,66 +1057,6 @@ Date.prototype.format=function(fmt) {
 		for(var key in storeJsonAreamore){
 			if(document.getElementById("store_name_manual_areamore").value==key){
 				document.getElementById("store_id_manual_areamore").value=storeJsonAreamore[key];
-			}
-		}
-	});
-  	
-  	var autoCompleteDaynewcus = new AutoComplete("store_name_manual_daynewcus","auto_daynewcus",array_daynewcus);
-  	document.getElementById("store_name_manual_daynewcus").onkeyup = function(event){
-  		autoCompleteDaynewcus.start(event);
-  		if($("#store_name_manual_daynewcus").val().trim() == ""){
-			$("#store_id_manual_daynewcus").val("");
-		}
-  		for(var key in storeJsonDaynewcus){
-  			if(document.getElementById("store_name_manual_daynewcus").value==key){
-  				document.getElementById("store_id_manual_daynewcus").value=storeJsonDaynewcus[key];
-  			}
-  		}
-  	}
-  	$("#auto_daynewcus").on("click",function(event){
-		for(var key in storeJsonDaynewcus){
-			if(document.getElementById("store_name_manual_daynewcus").value==key){
-				document.getElementById("store_id_manual_daynewcus").value=storeJsonDaynewcus[key];
-			}
-		}
-	});
-  	
-  	var autoCompleteDaypay = new AutoComplete("store_name_manual_daypay","auto_daypay",array_daypay);
-  	document.getElementById("store_name_manual_daypay").onkeyup = function(event){
-  		autoCompleteDaypay.start(event);
-  		if($("#store_name_manual_daypay").val().trim() == ""){
-			$("#store_id_manual_daypay").val("");
-		}
-  		for(var key in storeJsonDaypay){
-  			if(document.getElementById("store_name_manual_daypay").value==key){
-  				document.getElementById("store_id_manual_daypay").value=storeJsonDaypay[key];
-  			}
-  		}
-  	}
-  	$("#auto_daypay").on("click",function(event){
-		for(var key in storeJsonDaypay){
-			if(document.getElementById("store_name_manual_daypay").value==key){
-				document.getElementById("store_id_manual_daypay").value=storeJsonDaypay[key];
-			}
-		}
-	});
-  	
-  	var autoCompleteEffect = new AutoComplete("store_name_manual_effect","auto_effect",array_effect);
-  	document.getElementById("store_name_manual_effect").onkeyup = function(event){
-  		autoCompleteEffect.start(event);
-  		if($("#store_name_manual_effect").val().trim() == ""){
-			$("#store_id_manual_effect").val("");
-		}
-  		for(var key in storeJsonEffect){
-  			if(document.getElementById("store_name_manual_effect").value==key){
-  				document.getElementById("store_id_manual_effect").value=storeJsonEffect[key];
-  			}
-  		}
-  	}
-  	$("#auto_effect").on("click",function(event){
-		for(var key in storeJsonEffect){
-			if(document.getElementById("store_name_manual_effect").value==key){
-				document.getElementById("store_id_manual_effect").value=storeJsonEffect[key];
 			}
 		}
 	});
@@ -3699,6 +3603,127 @@ function chnageEffectPageRecords(t){
 	 $("#page_manual_effect").empty();
 	 manualPageRecordesEffect  = $("#pageRecords_manual_effect").val();
 	 search_manual_effect(1);
+}
+ 
+ 
+//[拉新用户]切换初始化
+function inint_newcus(){
+	if(target==0){//总部
+    	
+    	initallstoreDaynewcus();
+    }else if(target==1){//城市级别
+    	
+		$("#citySelectDaynewcus option[value='"+cityname+"']").attr('selected',true);
+    	initStoreSelectcomplateDaynewcus();
+    }else if(target==2) {//门店
+    
+    	$("#citySelectDaynewcus").prop("disabled", true);
+		$("#citySelectDaynewcus option[value='"+cityname+"']").attr('selected',true);
+    	initStoreSelectcomplateDaynewcus();
+    	$("#store_id_manual_daynewcus").val(storeNo);
+    	$("#store_name_manual_daynewcus").val(storeName);
+		$("#store_name_manual_daynewcus").attr("readonly",true);
+    }
+	
+	var autoCompleteDaynewcus = new AutoComplete("store_name_manual_daynewcus","auto_daynewcus",array_daynewcus);
+  	document.getElementById("store_name_manual_daynewcus").onkeyup = function(event){
+  		autoCompleteDaynewcus.start(event);
+  		if($("#store_name_manual_daynewcus").val().trim() == ""){
+			$("#store_id_manual_daynewcus").val("");
+		}
+  		for(var key in storeJsonDaynewcus){
+  			if(document.getElementById("store_name_manual_daynewcus").value==key){
+  				document.getElementById("store_id_manual_daynewcus").value=storeJsonDaynewcus[key];
+  			}
+  		}
+  	}
+  	$("#auto_daynewcus").on("click",function(event){
+		for(var key in storeJsonDaynewcus){
+			if(document.getElementById("store_name_manual_daynewcus").value==key){
+				document.getElementById("store_id_manual_daynewcus").value=storeJsonDaynewcus[key];
+			}
+		}
+	});
+}
+ 
+//[消费用户]切换初始化
+function inint_paycus(){
+	if(target==0){//总部
+    	
+    	initallstoreDaypay();
+    }else if(target==1){//城市级别
+    	
+		$("#citySelectDaypay option[value='"+cityname+"']").attr('selected',true);
+    	initStoreSelectcomplateDaypay();
+    }else if(target==2) {//门店
+    
+    	$("#citySelectDaypay").prop("disabled", true);
+		$("#citySelectDaypay option[value='"+cityname+"']").attr('selected',true);
+    	initStoreSelectcomplateDaypay();
+    	$("#store_id_manual_daypay").val(storeNo);
+    	$("#store_name_manual_daypay").val(storeName);
+		$("#store_name_manual_daypay").attr("readonly",true);
+    }
+	
+	var autoCompleteDaypay = new AutoComplete("store_name_manual_daypay","auto_daypay",array_daypay);
+  	document.getElementById("store_name_manual_daypay").onkeyup = function(event){
+  		autoCompleteDaypay.start(event);
+  		if($("#store_name_manual_daypay").val().trim() == ""){
+			$("#store_id_manual_daypay").val("");
+		}
+  		for(var key in storeJsonDaypay){
+  			if(document.getElementById("store_name_manual_daypay").value==key){
+  				document.getElementById("store_id_manual_daypay").value=storeJsonDaypay[key];
+  			}
+  		}
+  	}
+  	$("#auto_daypay").on("click",function(event){
+		for(var key in storeJsonDaypay){
+			if(document.getElementById("store_name_manual_daypay").value==key){
+				document.getElementById("store_id_manual_daypay").value=storeJsonDaypay[key];
+			}
+		}
+	});
+}
+ 
+//[有效用户]切换初始化
+function init_effect(){
+	if(target==0){//总部
+    	
+     	initallstoreEffect();
+    }else if(target==1){//城市级别
+    	
+		$("#citySelectEffect option[value='"+cityname+"']").attr('selected',true);
+     	initStoreSelectcomplateEffect();
+    }else if(target==2) {//门店
+    
+    	$("#citySelectEffect").prop("disabled", true);
+		$("#citySelectEffect option[value='"+cityname+"']").attr('selected',true);
+     	initStoreSelectcomplateEffect();
+    	$("#store_id_manual_effect").val(storeNo);
+    	$("#store_name_manual_effect").val(storeName);
+		$("#store_name_manual_effect").attr("readonly",true);
+    }
+	
+	var autoCompleteEffect = new AutoComplete("store_name_manual_effect","auto_effect",array_effect);
+  	document.getElementById("store_name_manual_effect").onkeyup = function(event){
+  		autoCompleteEffect.start(event);
+  		if($("#store_name_manual_effect").val().trim() == ""){
+			$("#store_id_manual_effect").val("");
+		}
+  		for(var key in storeJsonEffect){
+  			if(document.getElementById("store_name_manual_effect").value==key){
+  				document.getElementById("store_id_manual_effect").value=storeJsonEffect[key];
+  			}
+  		}
+  	}
+  	$("#auto_effect").on("click",function(event){
+		for(var key in storeJsonEffect){
+			if(document.getElementById("store_name_manual_effect").value==key){
+				document.getElementById("store_id_manual_effect").value=storeJsonEffect[key];
+			}
+		}
+	});
 }
  
 </script>

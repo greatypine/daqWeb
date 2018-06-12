@@ -453,15 +453,22 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 
 		@Override
 		public List<Map<String, Object>> queryToPostHuman(String zw) {
+			int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+			int settime = 0;
+			if(i<5){
+				settime = 3;
+			}else{
+				settime = 10;
+			}
 			String sql = "";
-			String sql_storekeeps = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_storekeeper where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
-			String sql_humanresources = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_humanresources where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
+			String sql_storekeeps = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')-if(date_format(topostdate, '%w')<4,3,10)) AS week_time from t_storekeeper where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
+			String sql_humanresources = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')-if(date_format(topostdate, '%w')<4,3,10)) AS week_time from t_humanresources where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
 			if("店长".equals(zw)){
 				sql = sql_storekeeps;
 			}else if("国安侠".equals(zw)){
-				sql = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_humanresources where zw = '国安侠' and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
+				sql = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')-if(date_format(topostdate, '%w')<4,3,10)) AS week_time from t_humanresources where zw = '国安侠' and date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
 			}else if("专员".equals(zw)){
-				sql = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_humanresources where (zw = '服务专员' or zw = '线上服务专员') and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
+				sql = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')-if(date_format(topostdate, '%w')<4,3,10)) AS week_time from t_humanresources where (zw = '服务专员' or zw = '线上服务专员') and date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
 			}else if(zw == null){//总人数
 				sql = "select sum(count) as count,CONCAT(week_time,'') as week_time from (" + sql_humanresources +" UNION ALL "+ sql_storekeeps + " ) t where 1=1 GROUP BY t.week_time;";
 			}else {
@@ -481,15 +488,22 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 
 		@Override
 		public List<Map<String, Object>> queryLeaveHuman(String zw) {
+			int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+			int settime = 0;
+			if(i<5){
+				settime = 3;
+			}else{
+				settime = 10;
+			}
 			String sql = "";
-			String sql_humanresources = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_humanresources where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time";
-			String sql_storekeeps = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_storekeeper where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
+			String sql_humanresources = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')-if(date_format(leavedate, '%w')<4,3,10)) AS week_time from t_humanresources where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time";
+			String sql_storekeeps = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')-if(date_format(leavedate, '%w')<4,3,10)) AS week_time from t_storekeeper where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
 			if("店长".equals(zw)){
 				sql = sql_storekeeps;
 			}else if("国安侠".equals(zw)){
-				sql = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_humanresources where zw = '国安侠' and humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time";
+				sql = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')-if(date_format(leavedate, '%w')<4,3,10)) AS week_time from t_humanresources where zw = '国安侠' and humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time";
 			}else if("专员".equals(zw)){
-				sql = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_humanresources where (zw = '服务专员' or zw= '线上服务专员') and humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time";
+				sql = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')-if(date_format(leavedate, '%w')<4,3,10)) AS week_time from t_humanresources where (zw = '服务专员' or zw= '线上服务专员') and humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time";
 			}else if(zw == null){//总人数
 				sql = "select sum(count) as count,CONCAT(week_time,'') as week_time from (" + sql_humanresources +" UNION ALL "+ sql_storekeeps + " ) t where 1=1 GROUP BY t.week_time;";
 			}else {
@@ -510,37 +524,43 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 
 		@Override
 		public List<Map<String, Object>> queryHumanTotal(String zw) {
-			
+			int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+			int settime = 0;
+			if(i<5){
+				settime = 3;
+			}else{
+				settime = 10;
+			}
 			String sql = "";
-			String sql_humanresources = "select sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-4 then 1 else 0 end) as b,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-3 then 1 else 0 end) as c,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-2 then 1 else 0 end) as d,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-1 then 1 else 0 end) as e,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) then 1 else 0 end) as f from t_humanresources ";
-			String sql_storekeeps = "select sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-4 then 1 else 0 end) as b,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-3 then 1 else 0 end) as c,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-2 then 1 else 0 end) as d,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-1 then 1 else 0 end) as e,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) then 1 else 0 end) as f from t_storekeeper ";
+			String sql_humanresources = "select sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') then 1 else 0 end) as a,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') then 1 else 0 end) as b,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') then 1 else 0 end) as c,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then 1 else 0 end) as d,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') then 1 else 0 end) as e,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then 1 else 0 end) as f from t_humanresources ";
+			String sql_storekeeps = "select sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') then 1 else 0 end) as b,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') then 1 else 0 end) as c,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then 1 else 0 end) as d,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') then 1 else 0 end) as e,"
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then 1 else 0 end) as f from t_storekeeper ";
 						
 			if("店长".equals(zw)){
 				sql = sql_storekeeps;
 			}else if("国安侠".equals(zw)){
-				sql = "select sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-4 then 1 else 0 end) as b,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-3 then 1 else 0 end) as c,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-2 then 1 else 0 end) as d,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-1 then 1 else 0 end) as e,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) then 1 else 0 end) as f from t_humanresources where zw = '国安侠'";
+				sql = "select sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') then 1 else 0 end) as a,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') then 1 else 0 end) as b,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') then 1 else 0 end) as c,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then 1 else 0 end) as d,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') then 1 else 0 end) as e,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then 1 else 0 end) as f from t_humanresources where zw = '国安侠'";
 			}else if("专员".equals(zw)){
-				sql = "select sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-4 then 1 else 0 end) as b,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-3 then 1 else 0 end) as c,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-2 then 1 else 0 end) as d,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-1 then 1 else 0 end) as e,"
-						+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) then 1 else 0 end) as f from t_humanresources where zw = '服务专员' or zw = '线上服务专员'";
+				sql = "select sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') then 1 else 0 end) as a,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') then 1 else 0 end) as b,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') then 1 else 0 end) as c,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then 1 else 0 end) as d,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') then 1 else 0 end) as e,"
+						+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then 1 else 0 end) as f from t_humanresources where zw = '服务专员' or zw = '线上服务专员'";
 			}else if(zw == null){//总人数
 				sql = "select SUM(a) as week1,SUM(b) as week2,SUM(c) as week3,SUM(d) as week4,SUM(e) as week5,SUM(f) as week6 from ( " + sql_humanresources +" UNION ALL "+ sql_storekeeps + " ) t";
 			}else {

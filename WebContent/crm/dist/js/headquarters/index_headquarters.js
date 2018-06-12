@@ -3169,6 +3169,15 @@ var getDailyData = function(){
 						$("#sing_id_4").removeClass("gaugetb3").addClass("gaugetb2");
   					}
   					*/
+  					if(order_count_rate<0){
+  						$("#sign_4").attr("class","fa fa-long-arrow-down");
+  						$("#sing_id4").attr("class","col-sm-2 decline");
+  						$("#order_count_ratio").attr("class","decline");
+  					}else{
+  						$("#sign_4").attr("class","fa fa-long-arrow-up");
+  						$("#sing_id4").attr("class","col-sm-2 increase");
+  						$("#order_count_ratio").attr("class","increase");
+  					}
   					var customer_month_rate;
   					if(parseInt(tradesumoflastmonthCustmomer)==0){
   						customer_month_rate = 0;
@@ -3197,6 +3206,15 @@ var getDailyData = function(){
   							$("#sing_id_1").removeClass("gaugetb3").addClass("gaugetb2");
   					}
   					*/
+  					if(customer_month_rate<0){
+  							$("#sign_1").attr("class","fa fa-long-arrow-down");
+  							$("#sing_id").attr("class","col-sm-2 decline");
+  							$("#customer_month_ratio").attr("class","decline");
+  					}else{
+  							$("#sign_1").attr("class","fa fa-long-arrow-up");
+  							$("#sing_id").attr("class","col-sm-2 increase");
+  							$("#customer_month_ratio").attr("class","increase");
+  					}
   					var order_historey_rate;
   					if(parseInt(tradesumoflastmonthOrder)==0){
   						order_historey_rate = 0;

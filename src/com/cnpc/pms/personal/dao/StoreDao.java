@@ -342,7 +342,7 @@ public interface StoreDao extends IDAO {
 	List<Map<String, Object>> getStoreCity();
 
 	/**
-	 * 获取最近一周新开门店
+	 * 获取周四到下周三一周新开门店，
 	 * 
 	 * @return
 	 */

@@ -1051,4 +1051,12 @@ public interface DynamicManager extends IManager{
     * @author gbl
      */
     public Map<String, Object> exportMemberInvitation(DynamicDto dd);
+    
+    /**
+    * 
+    * @Description: TODO 以周三为节点，获得近六周时间轴
+    * 2018年6月8日
+    * @author gaoll
+    */
+    public Map<String,Object> getsixWeekDate();
 }

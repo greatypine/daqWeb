@@ -71,6 +71,7 @@ var myChart26 = echarts.init(document.getElementById('main26'));
 
 //x轴近六周时间轴
 var six_week_data_array = new Array();
+var self_obj={};
 
 //城市总的行政区县、已有门店开业的区县数量
 /*var data = [
@@ -1504,10 +1505,11 @@ option1 = {
 				        textStyle: {color: '#fff'}
 				      },
 				    },
+				    color:["#317fcc","#805acc"],
 				    grid: {
 				    	borderWidth: 0,
 					      right:30,
-					      top: 100,
+					      top: 35,
 					      bottom: 40,
 				      textStyle: {color: '#fff'}
 				    },
@@ -1518,6 +1520,7 @@ option1 = {
 				    calculable: true,
 				    xAxis: [{
 				      type: 'category',
+				      axisTick: {show: true},
 				      axisLine: {
 				        lineStyle: {
 				          color: '#90979c'
@@ -1532,7 +1535,7 @@ option1 = {
 				    }],
 				    yAxis: [{
 				      type: 'value',
-				      splitLine: {show: false},
+				      splitLine: {show: true},
 				      axisLine: {
 				        lineStyle: {color: '#90979c'}
 				      },
@@ -1545,7 +1548,9 @@ option1 = {
 				        type:'bar',
 				        data:[],
 				        itemStyle: {
+				        	emphasis: { barBorderRadius: 30 },
 				        	normal: {
+				        		 barBorderRadius: [3,3,3,3],
 				                label: {
 				                  show: true,
 				                  formatter: function(p) {
@@ -1562,6 +1567,7 @@ option1 = {
 				        data:[],
 				        itemStyle: {
 				        	normal: {
+				        		barBorderRadius: [3,3,3,3],
 				                label: {
 				                  show: true,
 				                  formatter: function(p) {
@@ -1584,11 +1590,11 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
-						    color:['#5f6b97'],
+						    color:['#c27cbf'],
 						    grid: {
 						      borderWidth: 0,
 						      right:30,
-						      top: 100,
+						      top: 35,
 						      bottom: 40,
 						      textStyle: {color: '#fff'}
 						    },
@@ -1622,11 +1628,12 @@ option1 = {
 						        rotate:-20,
 						        margin: 15,
 						      },
-						      data: ["校园店","生活中心店","街道月店","经营星店","药店","独立微超","合作店","前置仓","城市仓"],
+						      data: ["校园店","生活中心店","街道月店","经营星店","药店","独立微超","合作店","合作点","前置仓","城市仓"],
 						    }],
 						    yAxis: [{
 						      type: 'value',
-						      splitLine: {show: false},
+						      splitLine: {show: true},
+						      boundaryGap: [0, 0.1],
 						      axisLine: {
 						        lineStyle: {color: '#90979c'}
 						      },
@@ -1640,6 +1647,7 @@ option1 = {
 						        data:[],
 						        itemStyle: {
 						        	normal: {
+						        		barBorderRadius: [3,3,3,3],
 						                label: {
 						                  show: true,
 						                  formatter: function(p) {
@@ -1662,11 +1670,11 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
-						    color:['#dc7272'],
+						    color:['#df416d'],
 						    grid: {
 						      borderWidth: 0,
 						      right:40,
-						      top: 100,
+						      top: 40,
 						      bottom: 50,
 						      textStyle: {color: '#fff'}
 						    },
@@ -1704,7 +1712,7 @@ option1 = {
 						    }],
 						    yAxis: [{
 						      type: 'value',
-						      splitLine: {show: false},
+						      splitLine: {show: true},
 						      axisLine: {
 						        lineStyle: {color: '#90979c'}
 						      },
@@ -1718,6 +1726,7 @@ option1 = {
 						        data:[],
 						        itemStyle: {
 						        	normal: {
+						        		barBorderRadius: [3,3,3,3],
 						                label: {
 						                  show: true,
 						                  formatter: function(p) {
@@ -1740,20 +1749,17 @@ option1 = {
 						        textStyle: {color: '#fff'}
 						      },
 						    },
+						    color:["#488850","#d2802b","#393b99"],
+						    legend: {
+						        data:['数码连锁店','超市连锁店','广电营业厅'],
+						        right:0
+						      },
 						    grid: {
 						      borderWidth: 0,
 						      right:30,
-						      top: 100,
+						      top: 40,
 						      bottom: 50,
 						      textStyle: {color: '#fff'}
-						    },
-						    legend: {
-						      top: '30',
-						      left:"left",
-						      y:"8%",
-						      itemWidth:18,
-						      itemHeight:12,
-						      textStyle: {color: '#90979c',fontSize:14},
 						    },
 						    calculable: true,
 						    xAxis: [{
@@ -1777,11 +1783,11 @@ option1 = {
 						        rotate:-20,
 						        margin: 15,
 						      },
-						      data: ["数码连锁店","超市连锁店","广店营业厅"],
+						      data: [],
 						    }],
 						    yAxis: [{
 						      type: 'value',
-						      splitLine: {show: false},
+						      splitLine: {show: true},
 						      axisLine: {
 						        lineStyle: {color: '#90979c'}
 						      },
@@ -1790,11 +1796,14 @@ option1 = {
 						      splitArea: {show: false},
 						    }],
 						    series: [{
-						        name:'门店数量',
+						        name:'数码连锁店',
 						        type:'bar',
+						        stack: 'sum',
+						        barWidth : 50,
 						        data:[],
 						        itemStyle: {
 						        	normal: {
+						        		barBorderRadius: [3,3,3,3],
 						                label: {
 						                  show: true,
 						                  formatter: function(p) {
@@ -1804,7 +1813,45 @@ option1 = {
 						              }
 						        },
 						        smooth: true
-						      },]
+						      },
+						      {
+							        name:'超市连锁店',
+							        type:'bar',
+							        stack: 'sum',
+							        barWidth : 50,
+							        data:[],
+							        itemStyle: {
+							        	normal: {
+							        		barBorderRadius: [3,3,3,3],
+							                label: {
+							                  show: true,
+							                  formatter: function(p) {
+							                    return p.value > 0 ? (p.value) : '';
+							                  }
+							                }
+							              }
+							        },
+							        smooth: true
+							      },
+							      {
+								        name:'广电营业厅',
+								        type:'bar',
+								        stack: 'sum',
+								        barWidth : 50,
+								        data:[],
+								        itemStyle: {
+								        	normal: {
+								        		barBorderRadius: [3,3,3,3],
+								                label: {
+								                  show: true,
+								                  formatter: function(p) {
+								                    return p.value > 0 ? (p.value) : '';
+								                  }
+								                }
+								              }
+								        },
+								        smooth: true
+								      },]
 				  }
 
 
@@ -1911,7 +1958,7 @@ var option11 = {
     {
       type : 'category',
       boundaryGap : false,
-      data : [],
+      data : six_week_data_array,
       splitLine: {show: false},
       axisTick:{show: false},
     }
@@ -2001,7 +2048,7 @@ option4 = {
   },
   grid: {
     borderWidth: 0,
-    top: 70,
+    top: 105,
     bottom: 42,
     textStyle: {
       color: '#fff'
@@ -2040,7 +2087,7 @@ option4 = {
   yAxis: [{
     type: 'value',
     splitLine: {
-      show: false
+      show: true
     },
     axisLine: {
       lineStyle: {
@@ -2147,7 +2194,7 @@ var option5 = {
     itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
   },
   //color:colors,
-  grid: {left: '2%',top:"20%",bottom: "7%",right:"5%",containLabel: true},
+  grid: {left: '2%',top:"30%",bottom: "7%",right:"5%",containLabel: true},
   tooltip : { trigger: 'axis',axisPointer : { type : 'shadow'}},
   xAxis: [
     {
@@ -2155,13 +2202,13 @@ var option5 = {
       axisLine: { show: true,lineStyle:{ color:'#6173A3' }},
       axisLabel:{interval:1,textStyle:{color:'#9ea7c4',fontSize:12} },
       axisTick : {show: false},
-      data:[],
+      data:six_week_data_array,
     },
   ],
   yAxis: [
     {
       axisTick : {show: false},
-      splitLine: {show:false},
+      splitLine: {show:true},
       axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
       axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
     },
@@ -2196,10 +2243,11 @@ option6 = {
     }
   ],
   yAxis : [
-    {max:0,
+    {
   	  name:'门店数量',
+  	  boundaryGap: [0, 0.2],
       axisTick : {show: false},
-      splitLine: {show:false},
+      splitLine: {show:true},
       axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
       axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
     }
@@ -2286,49 +2334,69 @@ optionCard = {
 		            name: '门店数量',
 		            type: 'bar',
 		            barGap: 0,
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
+		            itemStyle: {
+			        	normal: {
+			        		 barBorderRadius: [3,3,3,3],
+			        		 label: {
+					                normal: {
+					                  show: true,
+					                  position: 'top',
+					                  formatter: '{c}'
+					                }
+					         },
+			              }
+			        },
 		            data: []
 		        },
 		        {
 		            name: '双证齐全',
 		            type: 'bar',
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
+		            itemStyle: {
+			        	normal: {
+			        		 barBorderRadius: [3,3,3,3],
+			        		 label: {
+					                normal: {
+					                  show: true,
+					                  position: 'top',
+					                  formatter: '{c}'
+					                }
+					         },
+			              }
+			        },
 		            data: []
 		        },
 		        {
 		            name: '仅营业照',
 		            type: 'bar',
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
+		            itemStyle: {
+			        	normal: {
+			        		 barBorderRadius: [3,3,3,3],
+			        		 label: {
+					                normal: {
+					                  show: true,
+					                  position: 'top',
+					                  formatter: '{c}'
+					                }
+					         },
+			              }
+			        },
 		            data: []
 		        },
 		        {
 		            name: '无证照',
 		            type: 'bar',
-		            label: {
-		                normal: {
-		                  show: true,
-		                  position: 'top',
-		                  formatter: '{c}'
-		                }
-		              },
+		            itemStyle: {
+			        	normal: {
+			        		 barBorderRadius: [3,3,3,3],
+			        		 label: {
+					                normal: {
+					                  show: true,
+					                  position: 'top',
+					                  formatter: '{c}'
+					                }
+					         },
+			              }
+			        },
 		            data: []
 		        }
 		    ]
@@ -2359,7 +2427,7 @@ option7 = {
   yAxis: 
   	{
           axisTick : {show: false},
-          splitLine: {show:false},
+          splitLine: {show:true},
           axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
           axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
         },
@@ -2370,6 +2438,13 @@ option7 = {
       data:[],
       itemStyle: {
           normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+	            offset: 0,
+	            color: "#e99998"
+	          }, {
+	            offset: 1,
+	            color: '#c5403d'
+	          }]),
             label: {
               show: true,
               formatter: function(p) {
@@ -2385,6 +2460,13 @@ option7 = {
       data:[],
       itemStyle: {
           normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+  	            offset: 0,
+  	            color: "#646a6d"
+  	          }, {
+  	            offset: 1,
+  	            color: '#256c9d'
+  	          }]),
             label: {
               show: true,
               formatter: function(p) {
@@ -2405,7 +2487,7 @@ optionEmp = {
       data:['总人数'],left:"right",y:"8%",
       itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
     },
-    color:["#036BC8"],
+    color:["#8780a9"],
   tooltip: {trigger: 'axis'},
   grid: {
     left: '3%',
@@ -2421,7 +2503,8 @@ optionEmp = {
   }],
   yAxis: {
     type: 'value',
-    splitLine: {show:false},
+    boundaryGap: [0, 0.1],
+    splitLine: {show:true},
     //interval: 10,
   },
   series: [
@@ -2432,12 +2515,19 @@ optionEmp = {
       data:[],
       itemStyle: {
           normal: {
-            label: {
-              show: true,
-              formatter: function(p) {
-                return p.value > 0 ? (p.value) : '';
-              }
-            }
+	    	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+	            offset: 0,
+	            color: "#8780a9"
+	          }, {
+	            offset: 1,
+	            color: 'rgba(138,43,226,0.8)'
+	          }]),
+	          label: {
+	              show: true,
+	              formatter: function(p) {
+	                return p.value > 0 ? (p.value) : '';
+	              }
+	          }
           }
       }
     },
@@ -2449,6 +2539,7 @@ optiondianzhang = {
   title: {
     text: '近六周店长动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
   },
+  color:["#e78888","#555a76"],
   tooltip: {trigger: 'axis'},
   legend: {
     data:['离职数量','入职数量'],left:"right",y:"8%",
@@ -2469,7 +2560,7 @@ optiondianzhang = {
   yAxis: 
   	{
           axisTick : {show: false},
-          splitLine: {show:false},
+          splitLine: {show:true},
           axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
           axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
         },
@@ -2531,7 +2622,8 @@ optionEmpdianzhang = {
   }],
   yAxis: {
     type: 'value',
-    splitLine: {show:false},
+    boundaryGap: [0, 0.1],
+    splitLine: {show:true},
     //interval: 10,
   },
   series: [
@@ -2542,6 +2634,13 @@ optionEmpdianzhang = {
       data:[],
       itemStyle: {
           normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+  	            offset: 0,
+  	            color: "#8780a9"
+  	          }, {
+  	            offset: 1,
+  	            color: '#036BC8'
+  	          }]),
             label: {
               show: true,
               formatter: function(p) {
@@ -2559,6 +2658,7 @@ optionguoanxia = {
   title: {
     text: '近六周国安侠动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
   },
+  color:["#d06e92","#639d92"],
   tooltip: {trigger: 'axis'},
   legend: {
     data:['离职数量','入职数量'],left:"right",y:"8%",
@@ -2579,7 +2679,7 @@ optionguoanxia = {
   yAxis: 
   	{
           axisTick : {show: false},
-          splitLine: {show:false},
+          splitLine: {show:true},
           axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
           axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
         },
@@ -2641,7 +2741,8 @@ optionEmpguoanxia = {
   }],
   yAxis: {
     type: 'value',
-    splitLine: {show:false},
+    boundaryGap: [0, 0.1],
+    splitLine: {show:true},
     //interval: 10,
   },
   series: [
@@ -2652,6 +2753,13 @@ optionEmpguoanxia = {
       data:[],
       itemStyle: {
           normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+  	            offset: 0,
+  	            color: "#036BC8"
+  	          }, {
+  	            offset: 1,
+  	            color: 'rgba(138,43,226,0.8)'
+  	          }]),
             label: {
               show: true,
               formatter: function(p) {
@@ -2689,7 +2797,7 @@ optionzhuanyuan = {
   yAxis: 
   	{
           axisTick : {show: false},
-          splitLine: {show:false},
+          splitLine: {show:true},
           axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
           axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
         },
@@ -2735,7 +2843,7 @@ optionEmpzhuanyuan = {
       data:['总人数'],left:"right",y:"8%",
       itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
     },
-    color:["#036BC8"],
+    color:["#91bee9"],
   tooltip: {trigger: 'axis'},
   grid: {
     left: '3%',
@@ -2751,7 +2859,8 @@ optionEmpzhuanyuan = {
   }],
   yAxis: {
     type: 'value',
-    splitLine: {show:false},
+    boundaryGap: [0, 0.1],
+    splitLine: {show:true},
     //interval: 10,
   },
   series: [
@@ -2762,6 +2871,13 @@ optionEmpzhuanyuan = {
       data:[],
       itemStyle: {
           normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+  	            offset: 0,
+  	            color: "#91bee9"
+  	          }, {
+  	            offset: 1,
+  	            color: 'rgba(138,43,226,0.8)'
+  	          }]),
             label: {
               show: true,
               formatter: function(p) {
@@ -2889,7 +3005,7 @@ option12 = {
   xAxis: [{
     type: 'category',
     //data: ['00:00','2:00','4:00','6:00','8:00','10:00','12:00','14:00','16:00','18:00','20:00',"22:00"],
-    data:[],
+    data:six_week_data_array,
     boundaryGap: false,
     splitLine: {
       show: true,
@@ -2903,6 +3019,7 @@ option12 = {
   yAxis: [{
     type: 'value',
     name: '门店数量',
+    boundaryGap: [0, 0.1],
     splitLine: {lineStyle: {color: ['#D4DFF5']}},
     axisTick: {show: false},
     axisLine: {lineStyle: {color: '#609ee9'}},
@@ -2979,9 +3096,23 @@ option13 = {
   title: {
     text: '18年自营店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
   },
-  color:["#f00","#61a0a8","#2f4554"],
-  tooltip: {
-    trigger: 'axis'
+  color:["#f72929","#529ea8","#9bbcc8"],
+  tooltip : {
+      trigger: 'axis',
+      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+          type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+      },
+      formatter: function (params)
+      {
+    	  var value_param = 0;
+    	  if(params[2].value == 0){
+    		  value_param = typeof(self_obj[params[2].name]) != 'undefined' ? self_obj[params[2].name] : params[2].value
+    	  }
+          return params[2].name + '<br/>'
+          		 + params[0].marker+params[0].seriesName + ' : ' +  params[0].value + '<br/>'
+                 + params[2].marker+params[2].seriesName + ' : ' + (params[1].value + (params[2].value == 0 ? value_param : params[2].value)) + '<br/>'
+                 + params[1].marker+params[1].seriesName + ' : ' + params[1].value;
+      }
   },
   grid: {
     left: '1%',
@@ -2991,7 +3122,7 @@ option13 = {
   },
   legend: {
     right:'0',
-    data: ['达标率', '已完成', '任务目标']
+    data: ['达标率', '任务目标', '已完成']
   },
   xAxis: [{
     type: 'category',
@@ -3004,6 +3135,7 @@ option13 = {
   yAxis: [{
     type: 'value',
     name: '门店数量',
+    boundaryGap: [0, 0.1],
     min: 0,
     position: 'left',
     axisLabel: {
@@ -3036,8 +3168,8 @@ option13 = {
     yAxisIndex: 1,
     lineStyle: {
       normal: {
-        width: 3,
-        shadowColor: 'rgba(0,0,0,0.4)',
+        width: 1.5,
+        //shadowColor: 'rgba(0,0,0,0.4)',
         shadowBlur: 10,
         shadowOffsetY: 10
       }
@@ -3053,37 +3185,56 @@ option13 = {
 
       },
     data: []
-  }, {
-      name: '任务目标',
-      type: 'bar',
-      stack: "总量",
-      yAxisIndex: 0,
-      label: {
-        normal: {
-          show: true,
-          position: 'insideTop'
-        }
-      },
-      data: []
-    },
+  }, 
     {
     name: '已完成',
     type: 'bar',
-    stack: "总量",
+    stack: 'sum',
+    barCategoryGap: '50%',
     yAxisIndex: 0,
+    itemStyle: {
+        normal: {
+            color: '#9bbcc8',
+            barBorderColor: '#9bbcc8'
+        }
+    },
     label: {
-  	 
-      normal: {/* 
-      	textStyle: {
-              color: '#f00',
-             	distance:"1px"
-            }, */
-            position: 'top',
-        show: true
+      normal: {
+        show: true,
+        position:"insideTop"
       }
     },
     data: []
-  }]
+  },
+  {
+      name: '任务目标',
+      type: 'bar',
+      stack: 'sum',
+      yAxisIndex: 0,
+      itemStyle: {
+          normal: {
+        	  //barBorderRadius: [5,5,5,5]
+          }
+      },
+      label: {
+        normal: {
+          show: true,
+          position: 'top',
+          formatter: function (params) {
+        	  var value_param = 0;
+        	  if(params.value == 0){
+        		  value_param = typeof(self_obj[params.name]) != 'undefined' ? self_obj[params.name] : params.value;
+        	  }
+              for (var i = 0, l = option13.xAxis[0].data.length; i < l; i++) {
+                  if (option13.xAxis[0].data[i] == params.name) {
+                      return option13.series[1].data[i] + (params.value == 0 ? value_param : params.value);
+                  }
+              }
+          },
+        }
+      },
+      data: []
+    },]
 };
 
 //18年合作店拓展进度
@@ -3091,8 +3242,20 @@ option14 = {
   title: {
     text: '18年合作店拓展进度',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
   },
-  color:["#f00","#61a0a8","#2f4554"],
-  tooltip: {trigger: 'axis'},
+  color:["#f72929","#529ea8","#9bbcc8"],
+  tooltip : {
+      trigger: 'axis',
+      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+          type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+      },
+      formatter: function (params)
+      {
+          return params[2].name + '<br/>'
+          		 + params[0].marker+params[0].seriesName + ' : ' +  params[0].value + '<br/>'
+                 + params[2].marker+params[2].seriesName + ' : ' + (params[1].value + params[2].value) + '<br/>'
+                 + params[1].marker+params[1].seriesName + ' : ' + params[1].value;
+      }
+  },
   grid: {
     left: '1%',
     right: '2%',
@@ -3101,7 +3264,7 @@ option14 = {
   },
   legend: {
     right:'0',
-    data: ['达标率', '已完成', '任务目标']
+    data: ['达标率', '任务目标', '已完成']
   },
   xAxis: [{
     type: 'category',
@@ -3114,6 +3277,7 @@ option14 = {
   yAxis: [{
     type: 'value',
     name: '门店数量',
+    boundaryGap: [0, 0.1],
     min: 0,
     position: 'left',
     axisLabel: {
@@ -3145,7 +3309,7 @@ option14 = {
     },
     lineStyle: {
       normal: {
-        width: 3,
+        width: 1.5,
         shadowColor: 'rgba(0,0,0,0.4)',
         shadowBlur: 10,
         shadowOffsetY: 10
@@ -3164,31 +3328,44 @@ option14 = {
       },
     data: []
   }, {
-    name: '任务目标',
-    stack: "总量",
-    type: 'bar',
-    yAxisIndex: 0,
-    label: {
-      normal: {
-        show: true,
-        position: 'insideTop'
-      }
-    },
-    itemStyle:{normal:{}},
-    data: []
-  }, {
       name: '已完成',
-      stack: "总量",
+      stack: 'sum',
+      barCategoryGap: '50%',
       type: 'bar',
       yAxisIndex: 0,
+      itemStyle: {
+          normal: {
+              color: '#9bbcc8',
+              barBorderColor: '#9bbcc8'
+          }
+      },
       label: {
         normal: {
           show: true,
-          position: 'top'
+          position: 'insideTop'
         }
       },
       data: []
-    }]
+    }, {
+        name: '任务目标',
+        stack: 'sum',
+        type: 'bar',
+        yAxisIndex: 0,
+        label: {
+          normal: {
+            show: true,
+            position: 'top',
+            formatter: function (params) {
+                for (var i = 0, l = option14.xAxis[0].data.length; i < l; i++) {
+                    if (option14.xAxis[0].data[i] == params.name) {
+                        return option14.series[1].data[i] + params.value;
+                    }
+                }
+            },
+          }
+        },
+        data: []
+      }]
 };
 
 //全国门店划片情况
@@ -3341,7 +3518,7 @@ option19 = {
   tooltip : {trigger: 'axis',},
   grid: {
     left: '1%',
-    right: '2%',
+    right: '1%',
     bottom: '3%',
     top: '18%',
     containLabel: true
@@ -3350,7 +3527,20 @@ option19 = {
     type: 'category',
     data:[],
     //data: ['北京\n36', '上海\n8', '天津\n47', '广州\n202', '深圳\n239', '云南\n40', '贵州\n70', '辽宁\n81', '全国\n44'],
-    axisTick: {show: false}
+    axisTick: {show: false},
+  	axisLabel: {
+      interval: 0,
+      formatter:function(value,index)  
+      {  
+          debugger  
+          if (index % 2 != 0) {  
+              return '\n\n' + value;  
+          }  
+          else {  
+              return value;  
+          }  
+      }  
+    },
   }],
   yAxis: {
     type: 'value',
@@ -3610,6 +3800,7 @@ option23 = {
 	    splitLine: {
 	      show: false
 	    },
+        boundaryGap: [0, 0.1],
 	    axisTick:{
 	      show: false
 	    },
@@ -4495,11 +4686,13 @@ var citycover2017= new Array();//2017年覆盖城市
 var citycover2018=new Array();//2018年覆盖城市
 var screenlogin=getUrlParamByKey("su");
 var target = 0;
-$(function(){	 
+$(function(){	
 	loginShow();
-	if(target != 1){
-		getUser();
-	}
+});
+
+function showData(){
+	getsixweek();
+	getUser();
 	getCityNet();
 	findStoreNetDate();
 	oneyearorsixweek();
@@ -4511,13 +4704,31 @@ $(function(){
 	GMVInfo();
 	storeActivitiesInfo();
 	getStoreCoverPerson();
-});
+}
+
+function getsixweek(){
+	doManager("dynamicManager", "getsixWeekDate",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var data_time = JSON.parse(data.data);
+			six_week_data_array.push(data_time.week1);
+			six_week_data_array.push(data_time.week2);
+			six_week_data_array.push(data_time.week3);
+			six_week_data_array.push(data_time.week4);
+			six_week_data_array.push(data_time.week5);
+			six_week_data_array.push(data_time.week6);
+		}
+  	},false);
+}
 
 function getUser(){
 	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
 		if (data.result) {
 			var employeeID="";
-			curr_user = JSON.parse(data.data);
+			var curr_user = JSON.parse(data.data);
+			if(curr_user == null){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}
 		    if(curr_user.usergroup.code == "ZBXXWLBJJSZ"){
 		    	$("#pfedit_button").show();
 		    	$("#pfoperate_buttoon").show();
@@ -4529,13 +4740,15 @@ function getUser(){
 function loginShow(){
 	
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+		debugger;
 		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
 	    var callback = function callback(data, textStatus, XMLHttpRequest) {
 	    	//window.parent.location=getRootPath() + "/crm/index_city_net.html";
 	    	var stateObject = {};
 	    	var newUrl = "/daqWeb/crm/index_city_net.html";
-	    	target = 1;
+	    	//target = 1;
 	    	history.replaceState(stateObject,null,newUrl);
+	    	showData();
 		};
 	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
 			alert("登录信息错误，请确认输入或联系管理员!");
@@ -4543,8 +4756,9 @@ function loginShow(){
 		}
 	    var url = "../login.do";
 	    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+	}else{
+		showData();
 	}
-	
 }
 
 //获取城市城市网络体系概况
@@ -4662,11 +4876,12 @@ function findStoreNetDate(){
 				main10_data.push(storeType.药店);
 				main10_data.push(storeType.独立微超);
 				main10_data.push(storeType.合作店);
+				main10_data.push(storeType.合作点);
 				main10_data.push(storeType.前置仓);
 				main10_data.push(storeType.城市仓);
-				var china_store_count = storeType.校园店+storeType.生活中心店+storeType.街道月店+storeType.经营星店+storeType.药店+storeType.独立微超+storeType.合作店+storeType.前置仓+storeType.城市仓;
+				var china_store_count = storeType.校园店+storeType.生活中心店+storeType.街道月店+storeType.经营星店+storeType.药店+storeType.独立微超+storeType.合作店+storeType.合作点;
 				$("#china_store_count").html(china_store_count);
-				$("#cooperative_count").html(storeType.合作店);
+				$("#cooperative_count").html(storeType.合作店+storeType.合作点);
 				 option10.series[0].data=main10_data;
 			     myChart10.setOption(option10);
 			}
@@ -4684,13 +4899,26 @@ function findStoreNetDate(){
 				optionMainstoreType.xAxis[0].data=mainstoreType_x;
 				myChartMainstoreType.setOption(optionMainstoreType);
 			}
+			var mainCooperative_data1 = new Array();//数码连锁店
+			var mainCooperative_data2 = new Array();//超市连锁店
+			var mainCooperative_data3 = new Array();//广店营业厅
+			var mainCooperative_datax = new Array();//广店营业厅
 			if(hezuodian.length > 0){
-				var mainCooperative_data = new Array();
-				var storeType = storeTypeInfo[0];
-				mainCooperative_data.push(storeType.数码连锁店);
-				mainCooperative_data.push(storeType.超市连锁店);
-				mainCooperative_data.push(storeType.广店营业厅);
-				optionMainCooperative.series[0].data=mainCooperative_data;
+				for(var i = 0;i<hezuodian.length;i++){
+					debugger;
+					var mainCooperative = hezuodian[i];
+					var cityname = mainCooperative.city_name;
+					if(mainCooperative.数码连锁店 !=0 || mainCooperative.超市连锁店 != 0 || mainCooperative.广电营业厅 != 0){
+						mainCooperative_datax.push(cityname);
+						mainCooperative_data1.push(mainCooperative.数码连锁店);
+						mainCooperative_data2.push(mainCooperative.超市连锁店);
+						mainCooperative_data3.push(mainCooperative.广电营业厅);
+					}
+				}
+				optionMainCooperative.xAxis[0].data=mainCooperative_datax;
+				optionMainCooperative.series[0].data=mainCooperative_data1;
+				optionMainCooperative.series[1].data=mainCooperative_data2;
+				optionMainCooperative.series[2].data=mainCooperative_data3;
 				myChartMainCooperative.setOption(optionMainCooperative);
 			}
 			if(biaodata.length > 0){
@@ -4732,7 +4960,7 @@ function findStoreNetDate(){
 			}	
 			
 			
-		}},false);
+		}});
 }
 
 function oneyearorsixweek(){
@@ -4820,21 +5048,14 @@ function oneyearorsixweek(){
 			weektotal[3]=parseInt(sixweek[1].week4)+parseInt(sixweek[0].week4);
 			weektotal[4]=parseInt(sixweek[1].week5)+parseInt(sixweek[0].week5);
 			weektotal[5]=parseInt(sixweek[1].week6)+parseInt(sixweek[0].week6);
-			weekdate[0]=sixweek[2].week1;
-			weekdate[1]=sixweek[2].week2;
-			weekdate[2]=sixweek[2].week3;
-			weekdate[3]=sixweek[2].week4;
-			weekdate[4]=sixweek[2].week5;
-			weekdate[5]=sixweek[2].week6;
 			 option11.series[0].data=weektotal;
 		        option11.series[1].data=weekonle;
 		        option11.series[2].data=weekother;
-		        option11.xAxis[0].data=weekdate;
 		        myChart11.setOption(option11);
 	        
 	        
 			
-		}},false);
+		}});
 	
 }
 
@@ -4854,14 +5075,6 @@ function oneyearorsixweek(){
 		doManager("storeManager","finyStoreCountOfCity",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
-				//六周时间轴
-				var dateArray = new Array();
-				var dateAndWeek = jsonData.dateAndWeek;
-				for(i = dateAndWeek.length - 1; i >=0 ; i--){
-					var dateOne = dateAndWeek[i];
-					var datetimes = dateOne.date;
-					dateArray.push(datetimes);
-				}
 				//合作店近六周
 				var cooperativeStore=jsonData.cooperativeStore;
 				//自营店近六周
@@ -4873,16 +5086,8 @@ function oneyearorsixweek(){
 						var self_store =  selfStore[z];
 						var weektime = self_store.week_time;
 						var storeCount = self_store.count;					
-						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = storeCount;
-					}
-					
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var index = weektimeArray[i]+"";
-							var replace = selfStoreArray.splice(weektimeArray[i],1,vauleParam[index]);
-						}
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						selfStoreArray[index] = storeCount;
 					}
 				}
 				option12.series[0].data=selfStoreArray;
@@ -4893,21 +5098,11 @@ function oneyearorsixweek(){
 						var cooperative_store =  cooperativeStore[z];
 						var weektime = cooperative_store.week_time;
 						var storeCount = cooperative_store.count;
-						var index = jQuery.inArray(weektime,dateArray);
-						weektimeArray.push(index);
-						vauleParam[index+""] = storeCount;
-					}
-					if(weektimeArray.length>0){
-						for(var i = 0; i < weektimeArray.length;i++){
-							var aa = weektimeArray[i]+"";
-							var replace = cooperativeStoreArray.splice(weektimeArray[i],1,vauleParam[aa]);
-						}
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						cooperativeStoreArray[index] = storeCount;
 					}
 				}
 				option12.series[1].data=cooperativeStoreArray;
-				if(Math.max.apply(null, selfStoreArray)<4&&Math.max.apply(null, cooperativeStoreArray)<4){
-					option12.yAxis[0].max = 4;
-				}
 				
 				var preString = "";
 				var nowString = "";
@@ -4923,8 +5118,13 @@ function oneyearorsixweek(){
 					//合作店
 					var cooperative_complete = storeNatureByYear.cooperative_complete;
 					cooperative_completeArray.push(cooperative_complete);
+					//包含展示合作店目标值
+					var cooperative_task_content = 0;
 					var cooperative_task = storeNatureByYear.cooperative_task;
-					cooperative_taskArray.push(cooperative_task);
+					if(cooperative_task != 0){
+						cooperative_task_content = cooperative_task - cooperative_complete;
+					}
+					cooperative_taskArray.push(cooperative_task_content);
 					var cooperative_rate = 0;
 					if(cooperative_task > 0){
 						cooperative_rate = (cooperative_complete/cooperative_task)*100;
@@ -4935,11 +5135,21 @@ function oneyearorsixweek(){
 					//自营店
 					var self_complete = storeNatureByYear.self_complete;
 					self_completeArray.push(self_complete);
+					//包含展示自营店目标值
+					var self_support_task_content = 0;
 					var self_support_task = storeNatureByYear.self_support_task;
-					self_support_taskArry.push(self_support_task);
+					if(self_support_task !=0){
+						self_support_task_content = self_support_task-self_complete;
+						if(self_support_task_content < 0){
+							self_obj[cityname]=self_support_task_content;
+							self_support_task_content = 0;
+							
+						}
+					}
+					self_support_taskArry.push(self_support_task_content);
 					var self_rate = 0;
 					if(self_support_task > 0){
-						self_rate = (self_complete/cooperative_task)*100;
+						self_rate = (self_complete/self_support_task)*100;
 						self_rateArray.push(self_rate.toFixed(2));
 					}else{
 						self_rateArray.push(self_rate.toFixed(2));
@@ -4984,38 +5194,14 @@ function oneyearorsixweek(){
 					}
 				}
 				
-				
-				option12.xAxis[0]["data"] = dateArray;
-				
-				if(Math.max.apply(null, self_support_taskArry)<10||self_support_taskArry.length==0){
-					option13.yAxis[0].max = 10;
-				}else{
-					option13.yAxis[0].max = parseInt(Math.max.apply(null, self_support_taskArry)/0.7);
-				} 
-				if(Math.max.apply(null, self_rateArray)<10||self_rateArray.length==0){
-					option13.yAxis[1].max = 10;
-				}else{
-					option13.yAxis[1].max = parseInt(Math.max.apply(null, self_rateArray)/0.7);
-				} 
-				if(Math.max.apply(null, cooperative_taskArray)<10||cooperative_taskArray.length==0){
-					option14.yAxis[0].max = 10;
-				}else{
-					option14.yAxis[0].max = parseInt(Math.max.apply(null, cooperative_taskArray)/0.7);
-				} 
-				if(Math.max.apply(null, cooperative_rateArray)<10||cooperative_rateArray.length==0){
-					option14.yAxis[1].max = 10;
-				}else{
-					option14.yAxis[1].max = parseInt(Math.max.apply(null, cooperative_rateArray)/0.7);
-				} 
-				
 				option13.series[0].data=self_rateArray;
-				option13.series[1].data=self_support_taskArry;
-				option13.series[2].data=self_completeArray;
+				option13.series[2].data=self_support_taskArry;
+				option13.series[1].data=self_completeArray;
 				option13.xAxis[0]["data"] = citynameArray;
 				
 				option14.series[0].data=cooperative_rateArray;
-				option14.series[1].data=cooperative_taskArray;
-				option14.series[2].data=cooperative_completeArray;
+				option14.series[2].data=cooperative_taskArray;
+				option14.series[1].data=cooperative_completeArray;
 				option14.xAxis[0]["data"] = citynameArray;
 				
 				myChart12.setOption(option12);
@@ -5026,7 +5212,7 @@ function oneyearorsixweek(){
 				$("#newopenstore").append(nowString);
 
 			}
-		},false);
+		});
 	}
 	var progressOfNetworkConstruction = function(){
 		doManager("storexpandManager","progressOfNetworkConstruction",null,function(data,textStatus,XmlHttpRequest){
@@ -5036,12 +5222,11 @@ function oneyearorsixweek(){
 				var cityArray = new Array();
 				var contractQuantityArray = new Array();
 				var throughQuantityArray = new Array();
-				var dateArray = new Array();
 				var contractQuantitySum = 0;
 				if(contractAndthroughByYear.length > 0){
 					for(var i = 0; i < contractAndthroughByYear.length; i++){
 						var cityData = contractAndthroughByYear[i];
-						var cityname = cityData.cityname;
+						var cityname = cityData.city_name;
 						cityArray.push(cityname);
 						var contractQuantity = cityData.contract_quantity;
 						contractQuantityArray.push(contractQuantity);
@@ -5056,19 +5241,12 @@ function oneyearorsixweek(){
 				option4.series[1].data=contractQuantityArray;
 				option4.xAxis[0]["data"] = cityArray;
 				myChart4.setOption(option4);
-				var dateAndWeek = jsonData.dateAndWeek;
-				for(i = dateAndWeek.length - 1; i >=0 ; i--){
-					var dateOne = dateAndWeek[i];
-					var datetimes = dateOne.date;
-					dateArray.push(datetimes);
-				}
-				option5.xAxis[0]["data"] = dateArray;
 				var citynameArray = new Array();
 				var throughByWeek = jsonData.throughByWeek;
 				if(throughByWeek.length > 0){
 					for(var i = 0; i < throughByWeek.length; i++){
 						var cityweekArray = new Array();
-						var cityname = throughByWeek[i].cityname;
+						var cityname = throughByWeek[i].city_name;
 						citynameArray.push(cityname);
 						cityweekArray.push(throughByWeek[i].week1);
 						cityweekArray.push(throughByWeek[i].week2);
@@ -5109,11 +5287,6 @@ function oneyearorsixweek(){
 						main6DataArray.push(storeStateCount[i].count);
 						preStoreSum += storeStateCount[i].count;
 					}
-				}
-				if(Math.max.apply(null, main6DataArray)<10||main6DataArray.length==0){
-					option6.yAxis[0].max = 10;
-				}else{
-					option6.yAxis[0].max = parseInt(Math.max.apply(null, main6DataArray)/0.7);
 				}
 				option6.series[0].data=main6DataArray;
 				option6.xAxis[0]["data"] = main6CitynameArray;
@@ -5168,7 +5341,7 @@ function oneyearorsixweek(){
 				$("#businessCardCount").html(business_card_rateTotal.toFixed(2));
 				$("#noCardCount").html(no_card_rateTotal.toFixed(2));
 			}
-		},false);
+		});
 	}
 	var humanresourseInfo = function(){
 		doManager("humanresourcesManager","getEmployeeInfoByWeek",null,function(data,textStatus,XmlHttpRequest){
@@ -5203,7 +5376,7 @@ function oneyearorsixweek(){
 					humanTotalArray.push(queryHumanTotal[0].week6);
 				}
 				optionEmp.series[0].data=humanTotalArray;
-				optionEmp.yAxis.min = (queryHumanTotal[0].week1*1).toFixed(0);
+				optionEmp.yAxis.min = (queryHumanTotal[0].week1*0.98).toFixed(0);
 				myChartEmp.setOption(optionEmp);
 				
 				var queryLeaveHuman = jsonData.queryLeaveHuman;
@@ -5244,7 +5417,7 @@ function oneyearorsixweek(){
 					dianzhangTotalArray.push(queryDianzhangTotal[0].f);
 				}
 				optionEmpdianzhang.series[0].data=dianzhangTotalArray;
-				optionEmpdianzhang.yAxis.min = (queryDianzhangTotal[0].a*1).toFixed(0);
+				optionEmpdianzhang.yAxis.min = (queryDianzhangTotal[0].a*0.98).toFixed(0);
 				myChartEmpDianzhang.setOption(optionEmpdianzhang);
 				
 				var queryLeaveDianzhang = jsonData.queryLeaveDianzhang;
@@ -5285,7 +5458,7 @@ function oneyearorsixweek(){
 					guoanxiaTotalArray.push(queryGuoanxiaTotal[0].f);
 				}
 				optionEmpguoanxia.series[0].data=guoanxiaTotalArray;
-				optionEmpguoanxia.yAxis.min = (queryGuoanxiaTotal[0].a*1).toFixed(0);
+				optionEmpguoanxia.yAxis.min = (queryGuoanxiaTotal[0].a*0.98).toFixed(0);
 				myChartEmpGuoanxia.setOption(optionEmpguoanxia);
 				
 				var queryLeaveGuoanxia = jsonData.queryLeaveGuoanxia;
@@ -5326,7 +5499,7 @@ function oneyearorsixweek(){
 					zhuanyuanTotalArray.push(queryZhuanyuanTotal[0].f);
 				}
 				optionEmpzhuanyuan.series[0].data=zhuanyuanTotalArray;
-				optionEmpzhuanyuan.yAxis.min = (queryZhuanyuanTotal[0].a*1).toFixed(0);
+				optionEmpzhuanyuan.yAxis.min = (queryZhuanyuanTotal[0].a*0.98).toFixed(0);
 				myChartEmpZhuanyuan.setOption(optionEmpzhuanyuan);
 				
 				var queryLeaveZhuanyuan = jsonData.queryLeaveZhuanyuan;
@@ -5476,11 +5649,6 @@ function oneyearorsixweek(){
                     option23.series[2].data = data2.reverse();
                 	//customerNewChartOption.title.text="近7天客流趋势";
                 	option23.yAxis[1].min = 0;
-                	if(Math.max.apply(null, data3)<10||data3.length==0){
-                		option23.yAxis[1].max = 10;
-                	}else{
-                		option23.yAxis[1].max = parseInt(Math.max.apply(null, data3)/0.7);
-                	}
                 	myChart23.setOption(option23);
                     
                 }
@@ -5758,7 +5926,7 @@ function oneyearorsixweek(){
 				}
 				$('#pf-fre1 tr').eq(1).find("td:last").text(count_sum);
 				activities_sum_array.push(count_sum);
-				x_data_option18.push('覆盖社区\n'+count_sum);
+				x_data_option18.push('覆盖社区');
 				if(newActivitiesInfo.length > 0){
 					var secondTr = $("#pf-fre1 tr").eq(1);
 					var table =document.getElementById("pf-fre1");
@@ -5784,7 +5952,7 @@ function oneyearorsixweek(){
 						var avtivities_count = avtivities.avtivities_count;
 						avtivities_count_sum += avtivities_count;
 						var cityname = avtivities.cityname;
-						citynameArray.push(cityname+"\n"+numbers_of_single_activitie);
+						citynameArray.push(cityname.length >4?cityname.substring(0,5)+'\n'+cityname.substring(5,cityname.length):cityname);
 						number_of_activitiy_array.push(numbers_of_single_activitie);
 						$("#pf-fre1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(x,t){
 				    	    var col_index = x;
@@ -5815,17 +5983,17 @@ function oneyearorsixweek(){
 							  activities_sum_array.push(public_welfare_activities_sum);
 							  activities_sum_array.push(volunteer_activity_sum);
 							  activities_sum_array.push(avtivities_count_sum);
-							  x_data_option18.push('文娱类活动\n'+recreational_activities_sum);
-							  x_data_option18.push('公益类活动\n'+public_welfare_activities_sum);
-							  x_data_option18.push('志愿者活动\n'+volunteer_activity_sum);
-							  x_data_option18.push('活动小计\n'+avtivities_count_sum);
+							  x_data_option18.push('文娱类活动');
+							  x_data_option18.push('公益类活动');
+							  x_data_option18.push('志愿者活动');
+							  x_data_option18.push('活动小计');
 						}
 					}
 				    option18.series[0].data=activities_sum_array;
 					option18.xAxis[0]["data"] = x_data_option18;
 					myChart18.setOption(option18);
-					option19.series[0].data=number_of_activitiy_array;
-					option19.xAxis[0]["data"] = citynameArray;
+					option19.series[0].data=number_of_activitiy_array.reverse();
+					option19.xAxis[0]["data"] = citynameArray.reverse();
 					myChart19.setOption(option19);
 				}
 			}
@@ -5862,7 +6030,7 @@ function oneyearorsixweek(){
 						});
 					}
 				}
-				$('#pfoperate1_1 tr').eq(1).find("td:eq(12)").text(count_sum);
+				$('#pfoperate1_1 tr').eq(1).find("td:eq(13)").text(count_sum);
 				var arearate = (areacount/count_sum)*100
 				$('#pfoperate1_1 tr').eq(1).find("td:last").text(arearate.toFixed(2));
 				var citynameArray = new Array();
