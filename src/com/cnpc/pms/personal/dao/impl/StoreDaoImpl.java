@@ -1051,10 +1051,10 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+"sum(case WHEN storetype='M' then 1 else 0 END) as 'yaodian', "
 				+"sum(case WHEN storetype='B' then 1 else 0 END) as 'weichao', "
 				+"sum(case WHEN storetype='X' then 1 else 0 END) as 'xingdian'," 
-				+"sum(case WHEN storetype='Z'or storetype='W'  or storetype='C' or storetype='H' then 1 else 0 END) as 'qita' "
-				+"FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and storetype!='V' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' "
+				+"sum(case WHEN storetype='O' and nature = '自营店'  then 1 else 0 END) as 'qita' "
+				+"FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' AND ifnull(estate,'')='运营中' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' "
 				+"GROUP BY city_name ) s LEFT JOIN ( "
-				+"SELECT city_name,COUNT((storetype='C') or null) as qianzhicangcount,COUNT((nature='合作店' and storetype !='V') or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')!='闭店中' AND `name` NOT  LIKE '%测试%' "
+				+"SELECT city_name,COUNT((storetype='C') or null) as qianzhicangcount,COUNT((nature='合作店' and storetype !='V') or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')='运营中' AND `name` NOT  LIKE '%测试%' "
 				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' "
 				+"GROUP BY city_name ) l ON s.city_name=l.city_name LEFT JOIN ( "
 				+"select city_name as cityname,sum(case when store_type = 'cooperative' and year = '2018' then target_value else 0 end) as 2018hezuomubiao,"
@@ -1330,7 +1330,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public List<Map<String, Object>> getStoreTypeNatureOfCity(String nature, String storetype) {
 		String sql = "select count(store_id) as count,city_name from t_store where nature = '"+nature+"' and storetype = '"+storetype+"' and flag=0 AND `name` NOT  LIKE '%测试%' "
-				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' GROUP BY city_name";
+				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')='运营中' GROUP BY city_name";
 			SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			// 获得查询数据
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
