@@ -368,4 +368,14 @@
     <servlet-name>abnormalOrderUpload</servlet-name>
     <url-pattern>/uploadOrderExcel.action</url-pattern>
   </servlet-mapping>
+  
+  
+  <servlet>
+    <servlet-name>reciveMessageReply</servlet-name>
+    <servlet-class>com.cnpc.pms.shortMessage.action.ReciveMessageAction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>reciveMessageReply</servlet-name>
+    <url-pattern>/replyMessage.action</url-pattern>
+  </servlet-mapping>
 </web-app>

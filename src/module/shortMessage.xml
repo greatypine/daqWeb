@@ -9,5 +9,11 @@
                         implementPackage="com.cnpc.pms.shortMessage.dao.impl"/>
         </package>
 
+		<package id="replyMessage">
+            <managerpackage interfacePackage="com.cnpc.pms.shortMessage.manager"
+                            implementPackage="com.cnpc.pms.shortMessage.manager.impl"/>
+            <daopackage interfacePackage="com.cnpc.pms.shortMessage.dao"
+                        implementPackage="com.cnpc.pms.shortMessage.dao.impl"/>
+        </package>
     </module>
 </application>

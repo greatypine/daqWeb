@@ -53,6 +53,8 @@ public class AuthFilter extends OncePerRequestFilter {
 
 	/** The Constant DISPATCHER_URL. */
 	private static final String DISPATCHER_URL = "dispatcher.action";
+	
+	private static final String REPLYMESSAGE_URL = "replyMessage.action";
 
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory.getLogger(AuthFilter.class);
@@ -676,6 +678,11 @@ public class AuthFilter extends OncePerRequestFilter {
 			}
 			
 			if (url.contains("NoticeReciverManager")) {//公告通知
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			
+			if (url.indexOf(REPLYMESSAGE_URL)>=0) {//短信回复
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}

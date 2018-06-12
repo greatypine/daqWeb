@@ -35,7 +35,11 @@ public class ShortMessage extends DataEntity{
 	
 	@Column(name="checkStatus",length=2)
 	private int checkStatus;//预留审批状态
-
+   
+	@Column(name="type",length=10)
+	private String type;//短信类型(数据字典维护)
+    
+    
 	public String getTitle() {
 		return title;
 	}
@@ -90,6 +94,14 @@ public class ShortMessage extends DataEntity{
 
 	public void setUserGroupCode(String userGroupCode) {
 		this.userGroupCode = userGroupCode;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	
