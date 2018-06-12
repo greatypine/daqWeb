@@ -447,6 +447,11 @@
 		return;
 	}
 	
+	if(releaseUnit.length>30){
+		$$.showMessage('提示',"发布单位长度不能大于30!");
+		return;
+	}
+	
 	var title= $("#title").val();
 	if(title.replace(/^\s+|\s+$/g, '')==""){
 		$$.showMessage('提示',"信息标题不能为空!");
@@ -466,6 +471,30 @@
 	
 	if(content.length>800){
 		$$.showMessage('提示',"信息内容字数不得多于800!");
+		return;
+	}
+	
+	var filepath1 = $("#filePath1").attr("src");
+	var fileName1 = $("#fileName1").val();
+	
+	var filepath2 = $("#filePath2").attr("src");
+	var fileName2 = $("#fileName2").val();
+	
+	var filepath3 = $("#filePath3").attr("src");
+	var fileName3 = $("#fileName3").val();
+	
+	if(fileName1.length>20){
+		$$.showMessage('提示',"附件一文件名不能长度大于20");
+		return;
+	}
+	
+	if(fileName2.length>20){
+		$$.showMessage('提示',"附件二文件名不能长度大于20");
+		return;
+	}
+	
+	if(fileName3.length>20){
+		$$.showMessage('提示',"附件三文件名不能长度大于20");
 		return;
 	}
 	
@@ -501,14 +530,7 @@
 	}
 	
 	var grade = $("#grade").val();
-	var filepath1 = $("#filePath1").attr("src");
-	var fileName1 = $("#fileName1").val();
 	
-	var filepath2 = $("#filePath2").attr("src");
-	var fileName2 = $("#fileName2").val();
-	
-	var filepath3 = $("#filePath3").attr("src");
-	var fileName3 = $("#fileName3").val();
 	$("#btnSave").val("发送中...");
 	var index = layer.load(2, {
 		  shade: [0.2,'#0a0a0a'] //0.1透明度的白色背景
@@ -530,12 +552,12 @@
 			cityes:cityes,
 			stores:stores,
 			zw:jobs,
-			filePath:filepath1,
-			fileName:fileName1,
-			filePath2:filepath2,
-			fileName2:fileName2,
-			filePath3:filepath3,
-			fileName3:fileName3
+			filePath:(filepath1==null?"":filepath1),
+			fileName:(fileName1==null?"":fileName1),
+			filePath2:(filepath2==null?"":filepath2),
+			fileName2:(fileName2==null?"":fileName2),
+			filePath3:(filepath3==null?"":filepath3),
+			fileName3:(fileName3==null?"":fileName3)
 			
 	}
 	
@@ -588,7 +610,7 @@ if (ua.indexOf("MSIE")>=1){
     browserCfg.firefox = true;  
 }else if(ua.indexOf("Chrome")>=1){  
     browserCfg.chrome = true;  
-}  
+} 
 
 function isInArray(arr,value){
     for(var i = 0; i < arr.length; i++){
@@ -619,7 +641,7 @@ function checkfile(t){
 //         	}
 //         }  
         var filesize = 0;  
-        if(browserCfg.firefox || browserCfg.chrome ){  
+        if(browserCfg.firefox || browserCfg.chrome){  
             filesize = obj_file.files[0].size;  //如果用jquery是obj_file[0]
         }else if(browserCfg.ie){
         	var tempID = 'tempimg'+t;
@@ -639,7 +661,7 @@ function checkfile(t){
             return;  
         }else{  
         	uploadFile(t);
-            return;  
+            return;    
         }  
     }catch(e){  
     	$$.showMessage('提示',e);
