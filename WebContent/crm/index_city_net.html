@@ -1839,7 +1839,7 @@ $(function(){
     });
     
     $('#pf-fre2 tr input').keyup(function(i){
-    	$(this).val($(this).val().replace(/[^\d-]/g,''));
+    	$(this).val($(this).val().replace(/[^\d]/g,''));
     	var sum=0;
     	var lastInput = $(this).parent().parent().find("input").last();
     	$($(this).parent().parent()).find("input").not(lastInput).each(function(i,t){
@@ -2003,7 +2003,7 @@ $(function(){
       $('#pfoperate2 tr input').keyup(function(i){
     	  var id = $(this).attr("id");
     	  if(typeof(id)=='undefined'){
-    		  $(this).val($(this).val().replace(/[^\d-]/g,''));
+    		  $(this).val($(this).val().replace(/[^\d]/g,''));
     	  }else{
         	  $(this).val($(this).val().replace(/[^\d-.]/g,''));
           }
@@ -2039,7 +2039,7 @@ $(function(){
       $('#pfoperate2_2 tr input').keyup(function(i){
     	  var id = $(this).attr("id");
     	  if(typeof(id)=='undefined'){
-    		  $(this).val($(this).val().replace(/[^\d-]/g,''));
+    		  $(this).val($(this).val().replace(/[^\d]/g,''));
     	  }else{
         	  $(this).val($(this).val().replace(/[^\d-.]/g,''));
           }

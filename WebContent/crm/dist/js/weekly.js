@@ -79,6 +79,7 @@ var myChart26 = echarts.init(document.getElementById('main26'));
 //x轴近六周时间轴
 var six_week_data_array = new Array();
 var self_obj={};
+var cooperative_obj = {};
 
 //城市总的行政区县、已有门店开业的区县数量
 /*var data = [
@@ -3257,9 +3258,13 @@ option14 = {
       },
       formatter: function (params)
       {
+    	  var value_param = 0;
+		  if(params[2].value == 0){
+			  value_param = typeof(cooperative_obj[params[2].name]) != 'undefined' ? cooperative_obj[params[2].name] : params[2].value
+		  }
           return params[2].name + '<br/>'
           		 + params[0].marker+params[0].seriesName + ' : ' +  params[0].value + '%<br/>'
-                 + params[2].marker+params[2].seriesName + ' : ' + (params[1].value + params[2].value) + '<br/>'
+                 + params[2].marker+params[2].seriesName + ' : ' + (params[1].value + (params[2].value == 0 ? value_param : params[2].value)) + '<br/>'
                  + params[1].marker+params[1].seriesName + ' : ' + params[1].value;
       }
   },
@@ -3364,9 +3369,13 @@ option14 = {
             show: true,
             position: 'top',
             formatter: function (params) {
+            	var value_param = 0;
+	          	  if(params.value == 0){
+	          		  value_param = typeof(cooperative_obj[params.name]) != 'undefined' ? cooperative_obj[params.name] : params.value;
+	          	  }
                 for (var i = 0, l = option14.xAxis[0].data.length; i < l; i++) {
                     if (option14.xAxis[0].data[i] == params.name) {
-                        return option14.series[1].data[i] + params.value;
+                        return option14.series[1].data[i] + (params.value == 0 ? value_param : params.value);
                     }
                 }
             },
@@ -5170,10 +5179,13 @@ function oneyearorsixweek(){
 					var cooperative_complete = storeNatureByYear.cooperative_complete;
 					cooperative_completeArray.push(cooperative_complete);
 					//包含展示合作店目标值
+					debugger;
 					var cooperative_task_content = 0;
 					var cooperative_task = storeNatureByYear.cooperative_task;
-					if(cooperative_task != 0){
-						cooperative_task_content = cooperative_task - cooperative_complete;
+					cooperative_task_content = cooperative_task - cooperative_complete;
+					if(cooperative_task_content < 0){
+						cooperative_obj[cityname]=cooperative_task_content;
+						cooperative_task_content = 0;				
 					}
 					cooperative_taskArray.push(cooperative_task_content);
 					var cooperative_rate = 0;
@@ -5189,13 +5201,10 @@ function oneyearorsixweek(){
 					//包含展示自营店目标值
 					var self_support_task_content = 0;
 					var self_support_task = storeNatureByYear.self_support_task;
-					if(self_support_task !=0){
-						self_support_task_content = self_support_task-self_complete;
-						if(self_support_task_content < 0){
-							self_obj[cityname]=self_support_task_content;
-							self_support_task_content = 0;
-							
-						}
+					self_support_task_content = self_support_task-self_complete;
+					if(self_support_task_content < 0){
+						self_obj[cityname]=self_support_task_content;
+						self_support_task_content = 0;				
 					}
 					self_support_taskArry.push(self_support_task_content);
 					var self_rate = 0;
