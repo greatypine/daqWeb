@@ -10,50 +10,45 @@ import javax.persistence.Transient;
 import com.cnpc.pms.base.entity.DataEntity;
 
 @Entity
-@Table(name = "di_storexpand")
+@Table(name = "df_bussiness_target")
 public class Storexpand extends DataEntity {
 	/**
 	 * 每周，勘察商铺数量
 	 */
-	@Column(name = "survey_quantity")
+	@Column(name = "param_first")
 	private Integer survey_quantity;
 	/**
 	 * 每周，完成签约数量
 	 */
-	@Column(name = "contract_quantity")
+	@Column(name = "param_second")
 	private Integer contract_quantity;
 	/**
 	 * 每周，总部上会通过数量
 	 */
-	@Column(name = "through_quantity")
+	@Column(name = "param_third")
 	private Integer through_quantity;
 	/**
-	 * 合作店任务目标(每年)
+	 * 指标类型
 	 */
-	@Column(name = "cooperative_task")
-	private Integer cooperative_task;
+	@Column(name = "type")
+	private String type;
 	/**
-	 * 自营店任务目标(每年)
+	 * 统计周期
 	 */
-	@Column(name = "self_support_task")
-	private Integer self_support_task;
-	/**
-	 * 前置仓任务目标(每年)
-	 */
-	@Column(name = "preposition_task")
-	private Integer preposition_task;
+	@Column(name = "period_type")
+	private String period_type;
 	/**
 	 * 城市名称
 	 */
-	@Column(length = 45, name = "cityname")
+	@Column(length = 45, name = "city_name")
 	private String cityname;
 	/**
 	 * 城市编号
 	 */
-	@Column(length = 45, name = "cityno")
+	@Column(length = 45, name = "city_no")
 	private String cityno;
 
-	@Column(length = 255, name = "statistical_time_period")
+	@Column(length = 255, name = "time_period")
 	private String statistical_time_period;
 	@Column(name = "start_time")
 	private Date start_time;
@@ -105,33 +100,25 @@ public class Storexpand extends DataEntity {
 	public Integer getThrough_quantity() {
 		return through_quantity;
 	}
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getPeriod_type() {
+		return period_type;
+	}
+
+	public void setPeriod_type(String period_type) {
+		this.period_type = period_type;
+	}
 
 	public void setThrough_quantity(Integer through_quantity) {
 		this.through_quantity = through_quantity;
-	}
-
-	public Integer getCooperative_task() {
-		return cooperative_task;
-	}
-
-	public void setCooperative_task(Integer cooperative_task) {
-		this.cooperative_task = cooperative_task;
-	}
-
-	public Integer getSelf_support_task() {
-		return self_support_task;
-	}
-
-	public void setSelf_support_task(Integer self_support_task) {
-		this.self_support_task = self_support_task;
-	}
-	
-	public Integer getPreposition_task() {
-		return preposition_task;
-	}
-
-	public void setPreposition_task(Integer preposition_task) {
-		this.preposition_task = preposition_task;
 	}
 
 	public String getCityname() {

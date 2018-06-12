@@ -191,6 +191,12 @@ public interface CommuneMemberDao extends IDAO {
 	 * @author wuxinxin
 	 */
 	public List<Map<String, Object>> getDay7DealCount(String string);
+	/**
+	 * TODO  查询当日注册社员数量
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayaddMemCount(String string);
    
 
 }

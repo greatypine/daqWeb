@@ -176,6 +176,7 @@
 		              <li class=""><a href="#tab_7" data-toggle="tab" aria-expanded="false">1人500户（片区）</a></li>
 		              <li class=""><a href="#tab_4" data-toggle="tab" aria-expanded="false">拉新用户</a></li>
 		              <li class=""><a href="#tab_5" data-toggle="tab" aria-expanded="false">消费用户</a></li>
+		              <li class=""><a href="#tab_9" data-toggle="tab" aria-expanded="false">有效用户</a></li>
 					  <li class="" id="li_tab_8" style="display:none"><a href="#tab_8" data-toggle="tab" aria-expanded="false">用户留存分析</a></li>
 <!--  		              <li class=""><a href="#tab_6" data-toggle="tab" aria-expanded="false">1人500户（历史数据）</a></li> -->
 		            </ul>
@@ -301,6 +302,62 @@
 					       	</div>
 		             	</div>
 		              </div>
+					<div class="tab-pane" id="tab_9">
+		             	<div class="box-body">
+				          	<div class="clearfix search-criteria">
+				            	<div class="selectorLine clearfix no-border">
+				            	<div class="search-title">统计范围：</div>
+				            	<div class="search-con" style="overflow:visible;">
+				            	<div class="sl-v-list">
+				            	<div class="clearfix">
+				            		<div class="form-group col-lg-3">
+					                	<input id="auto_date_start_effect" type="text" likeOption="false" name="start_date_effect" class="wicon form-control"  style="width: 70%; display: inline;" />
+					                </div>
+					                <div class="form-group col-lg-3">
+					                <select class="form-control select2" id="citySelectEffect"> 
+					 	              	</select> 
+					                </div>
+					                <div class="form-group col-lg-3"><input id="store_id_manual_effect" name="store_id_manual_effect" type="hidden" bidTableFlag="true" value=""/>
+						              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual_effect" />
+						              <div class="auto hidden" id="auto_effect" style="width: 94%;z-index: 99999;">
+						              </div>
+						            </div>
+				                </div>
+			              		</div>
+			             		</div>
+			            		</div>
+			            	</div>
+			            	<div class="clearfix">
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="resetEffectSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
+				                </div>
+				                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" id="export_manual_effect_button" onclick="export_manual_effect()" class="btn btn-block btn-warning">导出</button>
+				                </div>
+				                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+				                    <button type="button" onclick="search_manual_effect(1)" class="btn btn-block btn-primary">查询</button>
+				                </div>
+				            </div>
+				            <div class="box-body">
+					            <div class="tab-content">
+					              <table class="table table-striped no-margin">
+					                <tbody id="manual_tbody_effect">
+					                <tr id="manual_title">
+					                  <th width="9%">城市</th>
+					                  <th width="9%">门店</th>
+					                  <th width="9%">片区编号</th>
+					                  <th width="9%">有效用户</th>
+					                </tr>
+					                </tbody>
+					              </table>
+					            
+					              <!-- /.tab-pane -->
+					            </div>
+					            <div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_manual_effect" name="pageRecords_manual_effect" onchange="chnageEffectPageRecords(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_cannot_effect"></span> 条</div>
+					            <div class="tcdPageCode" id="page_manual_effect"></div>
+					       	</div>
+		             	</div>
+		             </div>		              
 		              <div class="tab-pane" id="tab_8">
 		              	<div class="box-body">
 				          	<div class="clearfix search-criteria">
@@ -830,6 +887,13 @@ Date.prototype.format=function(fmt) {
         isTime:false
     });
     
+    jeDate({
+        dateCell:"#auto_date_start_effect",//isinitVal:true,
+        format:"YYYY-MM",
+        isinitVal:true,
+        isTime:false
+    });
+    
     var firstDate = new Date();
  	var curDate = new Date();
  	var bdate = firstDate.format('yyyy/MM/dd');
@@ -852,19 +916,21 @@ Date.prototype.format=function(fmt) {
     	initallstoreDaynewcus();
     	initallstoreDaypay();
      	initallstoreDaymore();
+     	initallstoreEffect();
     }else if(target==1){//城市级别
     	var liTab=document.getElementById("li_tab_8");
     	liTab.style.display="block";
     	
     	initcurcity();
-    	$("#citySelect").prop("disabled", true);
-    	$("#citySelectPay").prop("disabled", true);
-    	$("#citySelectBasic").prop("disabled", true);
-    	$("#citySelectMore").prop("disabled", true);
-    	$("#citySelectAreamore").prop("disabled", true);
-    	$("#citySelectDaynewcus").prop("disabled", true);
-    	$("#citySelectDaypay").prop("disabled", true);
-    	$("#citySelectDaymore").prop("disabled", true);
+//     	$("#citySelect").prop("disabled", true);
+//     	$("#citySelectPay").prop("disabled", true);
+//     	$("#citySelectBasic").prop("disabled", true);
+//     	$("#citySelectMore").prop("disabled", true);
+//     	$("#citySelectAreamore").prop("disabled", true);
+//     	$("#citySelectDaynewcus").prop("disabled", true);
+//     	$("#citySelectDaypay").prop("disabled", true);
+//     	$("#citySelectDaymore").prop("disabled", true);
+//     	$("#citySelectEffect").prop("disabled", true);
     	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectPay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectBasic option[value='"+cityname+"']").attr('selected',true);
@@ -873,6 +939,7 @@ Date.prototype.format=function(fmt) {
 		$("#citySelectDaynewcus option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectDaypay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectDaymore option[value='"+cityname+"']").attr('selected',true);
+		$("#citySelectEffect option[value='"+cityname+"']").attr('selected',true);
     	initStoreSelectcomplate();
     	initStoreSelectcomplatePay();
     	initStoreSelectcomplateMore();
@@ -880,6 +947,7 @@ Date.prototype.format=function(fmt) {
     	initStoreSelectcomplateDaynewcus();
     	initStoreSelectcomplateDaypay();
      	initStoreSelectcomplateDaymore();
+     	initStoreSelectcomplateEffect();
     }else if(target==2) {//门店
     	var tab=document.getElementById("tab_8");
     	tab.style.display="none";	
@@ -892,6 +960,7 @@ Date.prototype.format=function(fmt) {
     	$("#citySelectDaynewcus").prop("disabled", true);
     	$("#citySelectDaypay").prop("disabled", true);
     	$("#citySelectDaymore").prop("disabled", true);
+    	$("#citySelectEffect").prop("disabled", true);
 		$("#citySelect option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectPay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectMore option[value='"+cityname+"']").attr('selected',true);
@@ -899,6 +968,7 @@ Date.prototype.format=function(fmt) {
 		$("#citySelectDaynewcus option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectDaypay option[value='"+cityname+"']").attr('selected',true);
 		$("#citySelectDaymore option[value='"+cityname+"']").attr('selected',true);
+		$("#citySelectEffect option[value='"+cityname+"']").attr('selected',true);
 		initStoreSelectcomplate();
     	initStoreSelectcomplatePay();
     	initStoreSelectcomplateMore();
@@ -906,12 +976,14 @@ Date.prototype.format=function(fmt) {
     	initStoreSelectcomplateDaynewcus();
     	initStoreSelectcomplateDaypay();
      	initStoreSelectcomplateDaymore();
+     	initStoreSelectcomplateEffect();
     	$("#store_id_manual").val(storeNo);
     	$("#store_id_manual_pay").val(storeNo);
     	$("#store_id_manual_more").val(storeNo);
     	$("#store_id_manual_areamore").val(storeNo);
     	$("#store_id_manual_daynewcus").val(storeNo);
     	$("#store_id_manual_daypay").val(storeNo);
+    	$("#store_id_manual_effect").val(storeNo);
     	$("#store_name_manual").val(storeName);
     	$("#store_name_manual_pay").val(storeName);
     	$("#store_name_manual_more").val(storeName);
@@ -919,6 +991,7 @@ Date.prototype.format=function(fmt) {
     	$("#store_name_manual_daynewcus").val(storeName);
     	$("#store_name_manual_daypay").val(storeName);
     	$("#store_name_manual_daymore").val(storeName);
+    	$("#store_name_manual_effect").val(storeName);
 		$("#store_name_manual").attr("readonly",true);
 		$("#store_name_manual_pay").attr("readonly",true);
 		$("#store_name_manual_more").attr("readonly",true);
@@ -926,6 +999,7 @@ Date.prototype.format=function(fmt) {
 		$("#store_name_manual_daynewcus").attr("readonly",true);
 		$("#store_name_manual_daypay").attr("readonly",true);
 		$("#store_name_manual_daymore").attr("readonly",true);
+		$("#store_name_manual_effect").attr("readonly",true);
     }
     
       //iCheck for checkbox and radio inputs
@@ -1063,6 +1137,26 @@ Date.prototype.format=function(fmt) {
 		}
 	});
   	
+  	var autoCompleteEffect = new AutoComplete("store_name_manual_effect","auto_effect",array_effect);
+  	document.getElementById("store_name_manual_effect").onkeyup = function(event){
+  		autoCompleteEffect.start(event);
+  		if($("#store_name_manual_effect").val().trim() == ""){
+			$("#store_id_manual_effect").val("");
+		}
+  		for(var key in storeJsonEffect){
+  			if(document.getElementById("store_name_manual_effect").value==key){
+  				document.getElementById("store_id_manual_effect").value=storeJsonEffect[key];
+  			}
+  		}
+  	}
+  	$("#auto_effect").on("click",function(event){
+		for(var key in storeJsonEffect){
+			if(document.getElementById("store_name_manual_effect").value==key){
+				document.getElementById("store_id_manual_effect").value=storeJsonEffect[key];
+			}
+		}
+	});
+  	
 //    	var autoCompleteDaymore = new AutoComplete("store_name_manual_daymore","auto_daymore",array_daymore);
 //    	document.getElementById("store_name_manual_daymore").onkeyup = function(event){
 //    		autoCompleteDaymore.start(event);
@@ -1135,6 +1229,7 @@ Date.prototype.format=function(fmt) {
  					$("#citySelectDaynewcus").append("<option value=''>全部城市</option>");
  					$("#citySelectDaypay").append("<option value=''>全部城市</option>");
  					$("#citySelectDaymore").append("<option value=''>全部城市</option>");
+ 					$("#citySelectEffect").append("<option value=''>全部城市</option>");
  					$(jsonData).each(function(index,element){
  						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
  						$("#citySelectPay").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
@@ -1144,6 +1239,7 @@ Date.prototype.format=function(fmt) {
  						$("#citySelectDaynewcus").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
  						$("#citySelectDaypay").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
  						$("#citySelectDaymore").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+ 						$("#citySelectEffect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
                      });
  				}
  		});
@@ -1156,6 +1252,7 @@ Date.prototype.format=function(fmt) {
     var array_daynewcus=new Array();
     var array_daypay=new Array();
     var array_daymore=new Array();
+    var array_effect=new Array();
  	//初始化所有门店 
  	function initallstore() {
  		doManager("StoreManager", "findStoreAll", null,
@@ -1367,6 +1464,36 @@ Date.prototype.format=function(fmt) {
   			}, false);
   	}
  	
+  	function initallstoreEffect() {
+ 		doManager("StoreManager", "findStoreAll", null,
+ 			function(data, textStatus, XMLHttpRequest) {
+ 				if (data.result) {
+ 					var jsonData = $.fromJSON(data.data);
+ 					array_effect = new Array();
+ 					var storeString = "";
+ 					for(i=0;i<jsonData.length;i++){
+ 						array_effect.push(jsonData[i].name);
+ 						if(i == 0){
+ 							storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
+ 						}else if(i == jsonData.length-1){
+ 							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+"}";
+ 						}else{
+ 							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].storeno+"'"+",";
+ 						}
+ 					}
+ 					storeJsonEffect=$.fromJSON(storeString);
+ 					var autoCompleteEffect = new AutoComplete("store_name_manual_effect","auto_effect",array_effect);
+					document.getElementById("store_name_manual_effect").onkeyup = function(event){
+						autoCompleteEffect.start(event);
+						if($("#store_name_manual_effect").val().trim() == ""){
+							$("#store_id_manual_effect").val("");
+						}
+						document.getElementById("store_name_manual_effect").value=document.getElementById("store_name_manual_effect").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+					}
+ 				}
+ 			}, false);
+ 	}
+  	
      function initcurcity(){
  		doManager("userManager","getCurrentUserCity",null,
  		    function(data,textStatus,XmlHttpRequest){
@@ -1381,6 +1508,7 @@ Date.prototype.format=function(fmt) {
  						$("#citySelectDaynewcus").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
  						$("#citySelectDaypay").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
  						$("#citySelectDaymore").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+ 						$("#citySelectEffect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
                      });
  					
  				}
@@ -1428,6 +1556,12 @@ Date.prototype.format=function(fmt) {
  		$("#store_name_manual_daymore").val("");
  		initStoreSelectcomplateDaymore();
   	 });
+     
+     $("#citySelectEffect").change(function(){
+ 		$("#store_id_manual_effect").val("");
+ 		$("#store_name_manual_effect").val("");
+ 		initStoreSelectcomplateEffect();
+     });
      
      var storeJson;
  	function initStoreSelectcomplate(){
@@ -1709,6 +1843,46 @@ Date.prototype.format=function(fmt) {
   		}
   	}
  	
+  	var storeJsonEffect;
+ 	function initStoreSelectcomplateEffect(){
+ 		var citySelect = $("#citySelectEffect  option:selected").val();
+ 		if(citySelect==""){
+ 			initallstoreEffect();
+ 		}else{
+ 			//根据城市查询门店 信息
+ 			var cityname = "'"+citySelect+"'";
+ 			doManager("StoreManager","findStoreByCityData",[cityname],
+ 			    function(data,textStatus,XmlHttpRequest){
+ 					if (data.result) {
+ 						var jsonData = $.fromJSON(data.data);
+ 						array_effect=new Array();
+ 						var storeString = "";
+ 						$(jsonData).each(function(index,element){
+ 							var storeName = element.name;
+ 							var storeid = element.storeno;
+ 							array_effect.push(storeName);
+ 							if(index == 0){
+	 							storeString = "{'"+storeName+"'"+":"+"'"+storeid+"'"+",";
+	 						}else if(index == jsonData.length-1){
+	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+"}";
+	 						}else{
+	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+",";
+	 						}
+ 						});
+ 						storeJsonEffect=$.fromJSON(storeString);
+ 						var autoCompleteEffect = new AutoComplete("store_name_manual_effect","auto_effect",array_effect);
+						document.getElementById("store_name_manual_effect").onkeyup = function(event){
+							autoCompleteEffect.start(event);
+							if($("#store_name_manual_effect").val().trim() == ""){
+								$("#store_id_manual_effect").val("");
+							}
+							document.getElementById("store_name_manual_effect").value=document.getElementById("store_name_manual_effect").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+						}
+ 					}
+ 			});
+ 		}
+ 	}
+  	
  	function isCityStore(sname){
 		var cityStore = false;
 		$(array).each(function(index,element){
@@ -3156,6 +3330,184 @@ function export_manual_daypay(){
 	     });
 	}
 
+	var isCreatePageEffect=false;
+	function search_manual_effect(cur_page){
+			isCreatePageEffect=false;
+			search_manual_effect1(cur_page);
+	}
+
+	//查询上
+	var currentPage_manual_effect= 1;
+	var totalPage_manual_effect = 1;
+	function   search_manual_effect1(cur_page){
+		  	
+			var begin_month = $('#auto_date_start_effect').val();
+		    if(begin_month==""){
+		    	crm_alert(5,"日期不能为空 ！请重新选择！");
+	         	return;
+		    }
+		 	var number_str = $("#store_id_manual_effect").val(); 
+		    var storeName = $("#store_name_manual_effect").val();
+		    if(storeName!=""){
+		  	  	if($.inArray(storeName, array_effect) == -1){
+					crm_alert(0,"该门店不存在！");
+					return;
+				}
+		    }
+		    if(number_str==""&&storeName!=""){
+		    	number_str=-10000;
+		    }
+		   
+		    $("#process_div").show();
+		 	$("#process_div_pic").show();
+		    var cityName = $("#citySelectEffect  option:selected").val();
+		    if(cityName!=""){
+		    	if(cityName=="黔东南苗族侗族自治州"){
+		    		cityName="黔东南州";
+		    	}
+		    }
+		    var userOperationStatDto=null;
+		    userOperationStatDto = {
+		    		beginDate:begin_month,
+					storeNo:number_str,
+					cityName:cityName
+				}
+		   
+		    var pageInfo = new Object();
+		    pageInfo.currentPage = cur_page;
+		    pageInfo.recordsPerPage = manualPageRecordesEffect;
+		    $("#totalRecord_cannot_effect").html("0");
+		    doManager('userOperationStatManager','queryEffectCusStat',[userOperationStatDto,pageInfo],function(data){
+	      if(data.result){
+	      	   var result= JSON.parse(data.data);
+		           if(result.status=='success'){
+		        	   $("#manual_tbody_effect").find("tr:gt(0)").remove(); 
+		        	   var jData = result.data;
+		        	   if(jData==null||jData.length==0){
+		        		   crm_alert(5,"系统查无此条件的数据");
+		        		   $("#page_manual_effect").createPage({
+		        	 	  	    pageCount:0,
+		        	 	  	    current:0,
+		        	 	  	    backFn:function(p){
+		        	 	  	    	
+		        	 	  	    }
+		        	 	  	});
+		        		   $("#process_div").hide();
+		        	       $("#process_div_pic").hide();
+		        		   return;
+		        	   }
+		        	   totalPage_manual_effect = result.total_pages;
+		        	   $("#totalRecord_cannot_effect").html(result.pageinfo.totalRecords);
+		        	   if(!isCreatePageEffect){
+		        		   
+		        		   $("#page_manual_effect").createPage({
+		        	 	  	    pageCount:totalPage_manual_effect,
+		        	 	  	    current:1,
+		        	 	  	    backFn:function(p){
+		        	 	  	    	
+		        	 	  	    	search_manual_effect1(p);
+		        	 	  	    }
+		        	 	  	});
+		        		   isCreatePageEffect=true;
+		        	   }
+		        	  
+		        	   var infoStr="";
+		        	   for(var i=0;i<jData.length;i++){
+	    			    var city_name = jData[i].city_name==null?'':jData[i].city_name;
+	    			    var store_name = jData[i].store_name==null?'':jData[i].store_name;
+	    			    
+	    			    var areaid = "areatips"+i;
+	    			    
+		        		infoStr= "<tr>";
+	    			    infoStr= infoStr
+	                 	+"<td>"+city_name+"</td>"
+	                 	+"<td>"+store_name+"</td>";
+	                 	if(jData[i].area_code==null || jData[i].area_code==''){
+	                 		infoStr= infoStr
+	                     	+"<td>无</td>"
+	                 	}else{
+	                 		infoStr= infoStr
+	                 		+"<td><a href=\"#\" onmouseover=\"showarea('"+jData[i].area_code+"','"+areaid+"');\" id=\""+areaid+"\">"+jData[i].area_code+"</a></td>"
+	                 	}
+	                 	infoStr= infoStr
+	                 	+"<td>"+jData[i].pay_count+"</td>"
+		                +"</tr>";
+			                       
+			            $("#manual_tbody_effect").append(infoStr);     
+		        	   }
+		           }else{
+		        	   crm_alert(5,"请稍后重新请求！");
+		        	   return;
+		           }
+	      
+	      }else{
+	   	   crm_alert(5,"请稍后重新请求！");
+	      }
+	     $("#process_div").hide();
+		 $("#process_div_pic").hide();
+	  }); 
+	}
+	
+	//导出
+	function export_manual_effect(){
+		var begin_month = $('#auto_date_start_effect').val();
+	    if(begin_month==""){
+	    	crm_alert(5,"日期不能为空 ！请重新选择！");
+         	return;
+	    }
+	  	
+	 	var number_str = $("#store_id_manual_effect").val(); 
+	    var storeName = $("#store_name_manual_effect").val();
+	    if(storeName!=""){
+	  	  	if($.inArray(storeName, array_effect) == -1){
+				crm_alert(0,"该门店不存在！");
+				return;
+			}
+	    }
+	    if(number_str==""&&storeName!=""){
+	    	number_str=-10000;
+	    }
+	   
+	    $("#process_div").show();
+	 	$("#process_div_pic").show();
+	 	var cityName = $("#citySelectEffect  option:selected").val();
+	    if(cityName!=""){
+	    	if(cityName=="黔东南苗族侗族自治州"){
+	    		cityName="黔东南州";
+	    	}
+	    }
+	    var userOperationStatDto=null;
+	    userOperationStatDto = {
+	    	beginDate:begin_month,
+			storeNo:number_str,
+			cityName:cityName
+		}
+	    
+	    doManager('userOperationStatManager','exportEffectCusStat',[userOperationStatDto],function(data){
+	          if(data.result){
+	          	   var result= JSON.parse(data.data);
+		           if(result.status=='success'){
+		        	   window.location.href=result.data;
+		           }else if(result.status=='more'){
+		        	   crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+		        	   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+		        	   return;
+		           }else{
+		        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+		        	   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+		        	   return;
+		           }
+	          
+	          }else{
+	       	   crm_alert(5,"请稍后重新请求！");
+	          }
+	         $("#process_div").hide();
+	    	 $("#process_div_pic").hide();
+	     });
+	}
+	
 	//片区信息显示
 	function showarea(code,areaid){
 	  doManager('userOperationStatManager','queryAreaInfoByCode',[code],function(data){
@@ -3265,6 +3617,17 @@ function export_manual_daypay(){
 	  	$('#auto_date_daymore_start').val(new Date().format('yyyy-MM'));
    	    $('#auto_date_daymore_end').val(new Date().format('yyyy-MM'));
  }
+ 
+  function resetEffectSerachParam(t){
+	  	if(target==0){
+	  		$("#store_name_manual_effect").val("");
+			var a = document.getElementById("citySelectEffect");
+		  	a.options[0].selected = true;
+	  	}else if(target==1){
+	  		$("#store_name_manual_effect").val("");
+	  	}	
+	  	$('#auto_date_start_effect').val(new Date().format('yyyy-MM'));
+ }
   
   var autoPageRecordes=10;
   var manualPageRecordes=10;
@@ -3327,6 +3690,15 @@ function chnageDaymorePageRecords(t){
 	 $("#page_manual_daymore").empty();
 	 manualPageRecordesDaymore  = $("#pageRecords_manual_daymore").val();
 	 search_manual_daymore(1);
+}
+ 
+var autoPageRecordesEffect=10;
+var manualPageRecordesEffect=10;
+//切换每页显示的数据量
+function chnageEffectPageRecords(t){
+	 $("#page_manual_effect").empty();
+	 manualPageRecordesEffect  = $("#pageRecords_manual_effect").val();
+	 search_manual_effect(1);
 }
  
 </script>

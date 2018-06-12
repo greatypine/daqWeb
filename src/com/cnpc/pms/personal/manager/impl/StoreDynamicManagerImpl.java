@@ -85,6 +85,8 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			}
 			if (!"V".equals(storeDynamic.getStoretype())) {
 				storeDynamic.setAuditor_status(1);
+			}else{
+				storeDynamic.setAuditor_status(3);
 			}
 			storeDynamic.setWork_id(millis + "");
 			if (storeDynamic.getGaode_cityCode() != null && !"".equals(storeDynamic.getGaode_cityCode())) {
@@ -167,6 +169,8 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			update_store_dynamic.setPlace_town_id(storeDynamic.getPlace_town_id());
 			update_store_dynamic.setGaode_adCode(storeDynamic.getGaode_adCode());
 			update_store_dynamic.setGaode_address(storeDynamic.getGaode_address());
+			update_store_dynamic.setRemark(storeDynamic.getRemark());
+			update_store_dynamic.setPayment_remark(storeDynamic.getPayment_remark());
 			update_store_dynamic.setGaode_cityCode(storeDynamic.getGaode_cityCode());
 			update_store_dynamic.setFormattype(storeDynamic.getFormattype());
 			if (storeDynamic.getGaode_cityCode() != null && !"".equals(storeDynamic.getGaode_cityCode())) {
@@ -212,7 +216,11 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 				storeManager.insertStoresyncDynamicStore(update_store_dynamic);
 				return update_store_dynamic;
 			}
-
+			if(storeDynamic.getSp()==2&&storeDynamic.getChangeflag()==1){
+				update_store_dynamic.setAuditor_status(3);
+				storeManager.insertStoresyncDynamicStore(update_store_dynamic);
+				return update_store_dynamic;
+			}
 			storeDynamicManager.saveObject(update_store_dynamic);
 			// this.updateUserStoreId(update_store_dynamic.getStore_id());//修改用户的门店id
 
@@ -425,6 +433,7 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			map.put("place_town_id", storeDynamic.getPlace_town_id());
 			map.put("town_id", storeDynamic.getTown_id());
 			map.put("remark", storeDynamic.getRemark());
+			map.put("payment_remark", storeDynamic.getPayment_remark());
 			map.put("storetype", storeDynamic.getStoretype());
 			map.put("storetypename", storeDynamic.getStoretypename());
 			map.put("storeno", storeDynamic.getStoreno());

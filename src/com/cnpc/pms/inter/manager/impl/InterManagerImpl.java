@@ -3463,8 +3463,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				HttpHost proxy = new HttpHost(proxyip, proxyport, "http");
 				RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
 				/** 上线时，添加代理设置 **/
-				CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();;
-				//CloseableHttpClient httpclient = HttpClients.createDefault();
+				//CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();;
+				CloseableHttpClient httpclient = HttpClients.createDefault();
 				HttpGet httpGet = new HttpGet(String.format(url, new Object[]{mobilephone,sendcode_gb2312}));
 				CloseableHttpResponse response = httpclient.execute(httpGet);
 				resultString = EntityUtils.toString(response.getEntity(), "utf-8");
@@ -3534,9 +3534,6 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				saveStorexpand.setCityno(storexpand.getCityno());
 				saveStorexpand.setSurvey_quantity(storexpand.getSurvey_quantity());
 				saveStorexpand.setContract_quantity(storexpand.getContract_quantity());
-				saveStorexpand.setCooperative_task(storexpand.getCooperative_task());
-				saveStorexpand.setSelf_support_task(storexpand.getSelf_support_task());
-				saveStorexpand.setPreposition_task(storexpand.getPreposition_task());
 				saveStorexpand.setThrough_quantity(storexpand.getThrough_quantity());
 				saveStorexpand.setStart_time(storexpand.getStart_time());
 				saveStorexpand.setEnd_time(storexpand.getEnd_time());
@@ -3571,9 +3568,6 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			storexpand.setCityname(saveStorexpand.getCityname());
 			storexpand.setCityno(saveStorexpand.getCityno());
 			storexpand.setContract_quantity(saveStorexpand.getContract_quantity());
-			storexpand.setSelf_support_task(saveStorexpand.getSelf_support_task());
-			storexpand.setCooperative_task(saveStorexpand.getCooperative_task());
-			storexpand.setPreposition_task(saveStorexpand.getPreposition_task());
 			storexpand.setSurvey_quantity(saveStorexpand.getSurvey_quantity());
 			storexpand.setThrough_quantity(saveStorexpand.getThrough_quantity());
 			if(saveStorexpand.getStatistical_time_period()!=null&&!"".equals(saveStorexpand.getStatistical_time_period())){

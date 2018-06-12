@@ -532,13 +532,13 @@
     	        	var current_village_id=$(tr).find('select[name="village"] option:selected').val();//社区
     	        	var current_tinVillage_id=$(tr).find('select[name="tinVillage"] option:selected').val();//小区
     	        	var all_tinVillage = $(tr).find('select[name="tinVillage"] option');//小区
-    	        	if(current_village_id==""&&all_village.length==1){
+    	        	if(all_village.length==0){
     	        		village_null="Y";
     	        		$$.showMessage('提示','某些街道下没有社区不能分片！');
     	        		return;
     	        	}
     	        	
-    	        	if(current_tinVillage_id==""&&all_tinVillage.length==1){
+    	        	if(all_tinVillage.length==0){
     	        		tinyvillage_null="Y";
     	        		$$.showMessage('提示','某些社区下没有小区不能分片！');
     	        		return;

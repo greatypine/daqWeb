@@ -34,16 +34,16 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 				}
 
 				if (cityssql != "" && cityssql.length() > 0) {
-					sb_where.append(" and st.cityname in (" + cityssql + ") ");
+					sb_where.append(" and st.city_name in (" + cityssql + ") ");
 				}
 		// sql查询列，用于分页计算数据总数
 				String str_count_sql = "select COUNT(DISTINCT st.id) "
-						+ "from di_storexpand st WHERE 1=1  " + where;
+						+ "from df_bussiness_target st WHERE 1=1  and type='store' and period_type='week' " + where;
 				System.out.println(str_count_sql);
 				// sql查询列，用于页面展示所有的数据
-				String find_sql = "select st.id,st.survey_quantity,st.contract_quantity,st.through_quantity,st.cooperative_task" +
-						",st.self_support_task,st.preposition_task,st.cityname,st.cityno,st.create_user,st.create_time," +
-						"st.update_user,st.update_time,st.statistical_time_period from di_storexpand st  WHERE 1=1  ";
+				String find_sql = "select st.id,st.param_first,st.param_second,st.param_third" +
+						",st.city_name,st.city_no,st.create_user,st.create_time," +
+						"st.update_user,st.update_time,st.time_period from df_bussiness_target st  WHERE 1=1  and type='store' and period_type='week' ";
 				StringBuilder sb_sql = new StringBuilder();
 				sb_sql.append(find_sql);
 				sb_sql.append(where +sb_where.toString()+ " order by st.id desc");
@@ -74,7 +74,7 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Map<String, Object> getTaskQuantityExist(String cityname) {
-		String sql ="SELECT count(*) as task_quantity_count FROM di_storexpand WHERE 1=1 ";
+		String sql ="SELECT count(*) as task_quantity_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week' ";
 		if(cityname!=null&&!"".equals(cityname)){
 			sql += "AND cityname='"+cityname+"'";
 		}
@@ -89,12 +89,12 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Map<String, Object> getStatisticsExist(String statistics,String cityname) {
-		String sql ="SELECT count(*) as statistics_count FROM di_storexpand WHERE 1=1 ";
+		String sql ="SELECT count(*) as statistics_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week'";
 		if(cityname!=null&&!"".equals(cityname)){
 			sql += " AND cityname='"+cityname+"' ";
 		}
 		if(statistics!=null&&!"".equals(statistics)){
-			sql += " AND statistical_time_period='"+statistics+"'";
+			sql += " AND time_period='"+statistics+"'";
 		}
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -109,7 +109,7 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Storexpand getStorexpandById(Long id) {
-		String findSql = "select * from di_storexpand where id=" + id;
+		String findSql = "select * from df_bussiness_target where id=" + id;
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(findSql);
 		query.addEntity(Storexpand.class);
 		List<Storexpand> list = query.list();
