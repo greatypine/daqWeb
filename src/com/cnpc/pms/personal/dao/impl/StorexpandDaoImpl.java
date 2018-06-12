@@ -89,9 +89,9 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 	}
 	@Override
 	public Map<String, Object> getStatisticsExist(String statistics,String cityname) {
-		String sql ="SELECT count(*) as statistics_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week'";
+		String sql ="SELECT count(*) as statistics_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week' ";
 		if(cityname!=null&&!"".equals(cityname)){
-			sql += " AND cityname='"+cityname+"' ";
+			sql += " AND city_name='"+cityname+"' ";
 		}
 		if(statistics!=null&&!"".equals(statistics)){
 			sql += " AND time_period='"+statistics+"'";
