@@ -522,8 +522,13 @@
 	        	   
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
+	        		   var cityname = jData[i].city_name;
+	        		   if(cityname == '无'){
+	        			   cityname = $("#city_name_tradetype").val() == "" ? cityname : $("#city_name_tradetype").val();
+	        		   }
+	        		   
 	        		   infoStr= "<tr>"
-		                       +"<td>"+jData[i].city_name+"</td>"
+		                       +"<td>"+cityname+"</td>"
 		                       +"<td>"+jData[i].name+"</td>"
 		                       +"<td>"+jData[i].storeno+"</td>"
 		                       +"<td>"+jData[i].nowcount+"</td>"

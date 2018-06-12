@@ -1162,8 +1162,8 @@ option1 = {
 				    xAxis: {
 				      show:true,
 				      axisLabel:{
-				        interval:1,
-				        rotate:-20,
+				        interval:0,
+				        rotate:-30,
 				        margin: 30,
 				        textStyle:{
 				          color:'#666',
@@ -1350,8 +1350,8 @@ option1 = {
 				    xAxis: {
 				      show:true,
 				      axisLabel:{
-				        interval:1,
-				        rotate:-20,
+				        interval:0,
+				        rotate:-30,
 				        margin: 30,
 				        textStyle:{
 				          color:'#666',
@@ -1515,9 +1515,9 @@ option1 = {
 				    color:["#317fcc","#805acc"],
 				    grid: {
 				    	borderWidth: 0,
-					      right:30,
+					      right:40,
 					      top: 35,
-					      bottom: 40,
+					      bottom: 50,
 				      textStyle: {color: '#fff'}
 				    },
 				    legend: {
@@ -1534,8 +1534,8 @@ option1 = {
 				        }
 				      },
 				      axisLabel: {
-				        interval: 1,
-				       // rotate:-10,
+				        interval: 0,
+				        rotate:-20,
 				        margin: 15,
 				      },
 				      data: [],
@@ -1602,7 +1602,7 @@ option1 = {
 						      borderWidth: 0,
 						      right:30,
 						      top: 35,
-						      bottom: 40,
+						      bottom: 50,
 						      textStyle: {color: '#fff'}
 						    },
 						    legend: {
@@ -2087,7 +2087,7 @@ option4 = {
       show: false
     },
     axisLabel: {
-      interval: 1,
+      interval: 0,
     },
     data: [],
   }],
@@ -2207,7 +2207,7 @@ var option5 = {
     {
       type: 'category',
       axisLine: { show: true,lineStyle:{ color:'#6173A3' }},
-      axisLabel:{interval:1,textStyle:{color:'#9ea7c4',fontSize:12} },
+      axisLabel:{interval:0,textStyle:{color:'#9ea7c4',fontSize:12} },
       axisTick : {show: false},
       data:six_week_data_array,
     },
@@ -3116,7 +3116,7 @@ option13 = {
     		  value_param = typeof(self_obj[params[2].name]) != 'undefined' ? self_obj[params[2].name] : params[2].value
     	  }
           return params[2].name + '<br/>'
-          		 + params[0].marker+params[0].seriesName + ' : ' +  params[0].value + '<br/>'
+          		 + params[0].marker+params[0].seriesName + ' : ' +  params[0].value + '%<br/>'
                  + params[2].marker+params[2].seriesName + ' : ' + (params[1].value + (params[2].value == 0 ? value_param : params[2].value)) + '<br/>'
                  + params[1].marker+params[1].seriesName + ' : ' + params[1].value;
       }
@@ -3258,7 +3258,7 @@ option14 = {
       formatter: function (params)
       {
           return params[2].name + '<br/>'
-          		 + params[0].marker+params[0].seriesName + ' : ' +  params[0].value + '<br/>'
+          		 + params[0].marker+params[0].seriesName + ' : ' +  params[0].value + '%<br/>'
                  + params[2].marker+params[2].seriesName + ' : ' + (params[1].value + params[2].value) + '<br/>'
                  + params[1].marker+params[1].seriesName + ' : ' + params[1].value;
       }
@@ -3295,6 +3295,7 @@ option14 = {
     }
   }, {
     type: 'value',
+    boundaryGap: [0, 0.1],
     name: '百分比',
     min: 0,
     position: 'right',
@@ -3772,7 +3773,7 @@ option23 = {
             {
             var relVal = params[0]['name']+"<br/>";
             relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
-	        relVal+="<br/>";
+	        relVal+="%<br/>";
             relVal += params[2]['marker']+params[2]['seriesName']+ ' : ' + String(params[2]['value']);
 	        relVal+="<br/>";
             relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
@@ -4077,7 +4078,7 @@ option26 = {
       show: false
     },
     axisLabel: {
-      interval: 1,
+      interval: 0,
 
     },
     splitArea: {
@@ -4411,7 +4412,7 @@ var initchart4 = function(){
         show: false
       },
       axisLabel: {
-        interval: 1,
+        interval: 0,
 
       },
       data: xData_week,
@@ -5000,7 +5001,7 @@ function findStoreNetDate(){
 			}	
 			
 			
-		}},false);
+		}});
 }
 
 function oneyearorsixweek(){
@@ -5837,7 +5838,7 @@ function oneyearorsixweek(){
 						chart29_option.xAxis[0].data=xData_month;
 						chart29_option.series[0].data=yData_month;
 					}
-			},false);
+			});
 			
 			doManager("chartStatManager","queryTargetByMonth",[shareChartStatDto],
 				function(data,textStatus,XmlHttpRequest){
@@ -5851,7 +5852,7 @@ function oneyearorsixweek(){
 						chart29_option.series[1].data=yData_month_target;
 						chart29.setOption(chart29_option);
 					}
-			},false);
+			});
 		} 
 	  
 	  
@@ -6063,7 +6064,7 @@ function oneyearorsixweek(){
 					myChart19.setOption(option19);
 				}
 			}
-		},false);
+		});
 	}
 	
 	
@@ -6225,6 +6226,6 @@ function oneyearorsixweek(){
 					myChart21.setOption(option21);
 				}
 			}
-		},false);
+		});
 		
 	}

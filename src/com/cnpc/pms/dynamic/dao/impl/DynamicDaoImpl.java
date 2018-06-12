@@ -3001,20 +3001,20 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				join_sql = " INNER JOIN t_dist_citycode city ON (lpad(member.regist_cityno,4,'0') = city.cityno) ";
 				condition_sql = " and city.cityno = '"+cityNo+"' ";
 			}
-			sql = "select t1.storeno,ifnull(t1.name,'') as name,ifnull(t1.city_name,'') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
-					+"select ifnull(storeno,'') as storeno,name,city_name,sum(opencount) as opencount from (select store.storeno,store.name,store.city_name,member.regist_storeid,count(member.customer_id) as opencount from df_user_member member LEFT  JOIN t_store store ON "
+			sql = "select t1.storeno,ifnull(t1.name,'无') as name,ifnull(t1.city_name,'无') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
+					+"select ifnull(storeno,'无') as storeno,name,city_name,sum(opencount) as opencount from (select store.storeno,store.name,store.city_name,member.regist_storeid,count(member.customer_id) as opencount from df_user_member member LEFT  JOIN t_store store ON "
 					+"(member.regist_storeid = store.platformid) "+join_sql+" where 1=1 "+condition_sql+" group by member.regist_storeid "
 					+") mem_store GROUP BY mem_store.storeno) t1 LEFT JOIN ( "
-					+"select ifnull(storeno,'') as storeno,sum(nowcount) as nowcount from (select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_member member LEFT JOIN t_store store ON "
+					+"select ifnull(storeno,'无') as storeno,sum(nowcount) as nowcount from (select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_member member LEFT JOIN t_store store ON "
 					+"(member.regist_storeid = store.platformid) "+join_sql+" where member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' "+condition_sql+" group by member.regist_storeid "
 					+") mem_store GROUP BY mem_store.storeno) t2 "
 					+"ON t1.storeno = t2.storeno LEFT JOIN ( "
-					+"select ifnull(storeno,'') as storeno,sum(199count) as 199count from (select store.storeno,member.regist_storeid,count(member.customer_id) as 199count from df_user_member member LEFT JOIN t_store store ON "
+					+"select ifnull(storeno,'无') as storeno,sum(199count) as 199count from (select store.storeno,member.regist_storeid,count(member.customer_id) as 199count from df_user_member member LEFT JOIN t_store store ON "
 					+"(member.regist_storeid = store.platformid) "+join_sql+" where member_type = 'associator_start_2' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' "+condition_sql+" group by member.regist_storeid "
 					+") mem_store GROUP BY mem_store.storeno) t3 "
 					+"ON t1.storeno = t3.storeno";
 		}else{
-			sql = "select t1.storeno,t1.name,ifnull(t1.city_name,'') as city_name,ifnull(t1.opencount,0) as opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
+			sql = "select t1.storeno,t1.name,ifnull(t1.city_name,'无') as city_name,ifnull(t1.opencount,0) as opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
 					+"select store.storeno,store.name,store.city_name,count(member.customer_id) as opencount from df_user_member member LEFT  JOIN t_store store ON "
 					+"(member.regist_storeid = store.platformid) where 1=1 and store.storeno = '"+dynamicDto.getStoreNo()+"' group by member.regist_storeid ) t1 LEFT JOIN ( "
 					+"select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_member member LEFT JOIN t_store store ON "
