@@ -33,7 +33,8 @@ Date.prototype.format=function(fmt) {
     return fmt;        
 } 
 
-var myChart1 = echarts.init(document.getElementById('main1'));
+
+/*var myChart1 = echarts.init(document.getElementById('main1'));
 var myChart2 = echarts.init(document.getElementById('main2'));
 var myChart3 = echarts.init(document.getElementById('main3'));
 var myChart4 = echarts.init(document.getElementById('main4'));
@@ -66,6 +67,12 @@ var myChart20 = echarts.init(document.getElementById('main20'));
 var myChart21 = echarts.init(document.getElementById('main21'));
 var myChart22 = echarts.init(document.getElementById('main22'));
 var myChart23 = echarts.init(document.getElementById('main23'));
+var myChart24 = echarts.init(document.getElementById('main24'));
+var myChart26 = echarts.init(document.getElementById('main26'));*/
+var myChart18 = echarts.init(document.getElementById('main18'));
+var myChart19 = echarts.init(document.getElementById('main19'));
+var myChart20 = echarts.init(document.getElementById('main20'));
+var myChart21 = echarts.init(document.getElementById('main21'));
 var myChart24 = echarts.init(document.getElementById('main24'));
 var myChart26 = echarts.init(document.getElementById('main26'));
 
@@ -3472,7 +3479,7 @@ option18 = {
   },
   grid: {
     left: '1%',
-    right: '2%',
+    right: '1%',
     bottom: '3%',
     top: '18%',
     containLabel: true
@@ -3480,7 +3487,11 @@ option18 = {
   xAxis: [{
     //data: ['\n1333', '文娱类活动\n110', '公益类活动\n314', '志愿者活动\n208', '活动小计\n652'],
 	data:[],
-    axisTick: {show: false}
+    axisTick: {show: false},
+    axisLabel: {
+        interval: 0,
+        rotate:40
+      },
   }],
   yAxis: {
     axisTick: {show: false}
@@ -3530,7 +3541,8 @@ option19 = {
     axisTick: {show: false},
   	axisLabel: {
       interval: 0,
-      formatter:function(value,index)  
+      rotate:40
+      /*formatter:function(value,index)  
       {  
           debugger  
           if (index % 2 != 0) {  
@@ -3539,7 +3551,7 @@ option19 = {
           else {  
               return value;  
           }  
-      }  
+      }  */
     },
   }],
   yAxis: {
@@ -3929,6 +3941,9 @@ option24 = {
   xAxis: [
     {
       type: 'category',
+      axisLabel: {  
+    	     interval:0 
+    	  }  ,
       //data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
       data:[]
     }
@@ -3941,11 +3956,13 @@ option24 = {
       axisLabel: {
         formatter: '{value}'
       },
+      boundaryGap: [0, 0.1],
       splitLine:{show: false}
     },
     {
       type: 'value',
       name: '个数',
+      boundaryGap: [0, 0.1],
       position: 'right',
       axisLabel: {
         formatter: '{value}'
@@ -4136,7 +4153,8 @@ option26 = {
   ]
 }
 
-myChart1.setOption(option1);
+
+/*myChart1.setOption(option1);
 myChart2.setOption(option2);
 myChart3.setOption(option3);
 myChart4.setOption(option4);
@@ -4170,7 +4188,14 @@ myChart21.setOption(option21);
 myChart22.setOption(option22);
 myChart23.setOption(option23);
 myChart24.setOption(option24);
+myChart26.setOption(option26);*/
+myChart18.setOption(option18);
+myChart19.setOption(option19);
+myChart20.setOption(option20);
+myChart21.setOption(option21);
+myChart24.setOption(option24);
 myChart26.setOption(option26);
+
 
 function chartresize2(){
   var temp2 = new initchart2();
@@ -4763,6 +4788,13 @@ function loginShow(){
 
 //获取城市城市网络体系概况
 function getCityNet(){
+	var myChart1 = echarts.init(document.getElementById('main1'));
+	var myChart9 = echarts.init(document.getElementById('main9'));
+	var myChart15 = echarts.init(document.getElementById('main15'));
+	myChart1.setOption(option1);
+	myChart9.setOption(option9);
+	myChart15.setOption(option15);
+	
 	  doManager("storeManager","findStoreCityDynamic",null,function(data,textStatus,XmlHttpRequest){
 		if (data.result) {  
 			var province = [];
@@ -4835,6 +4867,14 @@ function getCityNet(){
 
 //获取网络业态分布数据
 function findStoreNetDate(){
+	var myChart2 = echarts.init(document.getElementById('main2'));
+	var myChart10 = echarts.init(document.getElementById('main10'));
+	var myChartMainstoreType = echarts.init(document.getElementById('mainstoreType'));
+	var myChartMainCooperative = echarts.init(document.getElementById('mainCooperative'));
+	myChart2.setOption(option2);
+	myChart10.setOption(option10);
+	myChartMainstoreType.setOption(optionMainstoreType);
+	myChartMainCooperative.setOption(optionMainCooperative);
 	doManager("storeManager","findStoreCityOnline",null,function(data,textStatus,XmlHttpRequest){
 		if (data.result) {
 			var jsonData = $.fromJSON(data.data);
@@ -4960,10 +5000,14 @@ function findStoreNetDate(){
 			}	
 			
 			
-		}});
+		}},false);
 }
 
 function oneyearorsixweek(){
+	var myChart3 = echarts.init(document.getElementById('main3'));
+	var myChart11 = echarts.init(document.getElementById('main11'));
+	myChart3.setOption(option3);
+	myChart11.setOption(option11);
 	doManager("storeManager","findStoreNetTozhan",null,function(data,textStatus,XmlHttpRequest){
 		if (data.result) {
 			var jsonData = $.fromJSON(data.data);
@@ -5061,6 +5105,12 @@ function oneyearorsixweek(){
 
 	
 	var storeDevelopmentProgress = function(){
+		var myChart12 = echarts.init(document.getElementById('main12'));
+		var myChart13 = echarts.init(document.getElementById('main13'));
+		var myChart14 = echarts.init(document.getElementById('main14'));
+		myChart12.setOption(option12);
+		myChart13.setOption(option13);
+		myChart14.setOption(option14);
 		
 		var dateArray = new Array();
 		var citynameArray = new Array();
@@ -5215,6 +5265,14 @@ function oneyearorsixweek(){
 		});
 	}
 	var progressOfNetworkConstruction = function(){
+		var myChart4 = echarts.init(document.getElementById('main4'));
+		var myChart5 = echarts.init(document.getElementById('main5'));
+		var myChart6 = echarts.init(document.getElementById('main6'));
+		var myChartCard = echarts.init(document.getElementById('maincard'));
+		myChart4.setOption(option4);
+		myChart5.setOption(option5);
+		myChart6.setOption(option6);
+		myChartCard.setOption(optionCard);
 		doManager("storexpandManager","progressOfNetworkConstruction",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
@@ -5344,6 +5402,22 @@ function oneyearorsixweek(){
 		});
 	}
 	var humanresourseInfo = function(){
+		var myChart7 = echarts.init(document.getElementById('main7'));
+		var myChartEmp = echarts.init(document.getElementById('mainemp'));
+		var myChartDianzhang = echarts.init(document.getElementById('maindianzhang'));
+		var myChartEmpDianzhang = echarts.init(document.getElementById('mainempdianzhang'));
+		var myChartGuoanxia = echarts.init(document.getElementById('mainguoanxia'));
+		var myChartEmpGuoanxia = echarts.init(document.getElementById('mainempguoanxia'));
+		var myChartZhuanyuan = echarts.init(document.getElementById('mainzhuanyuan'));
+		var myChartEmpZhuanyuan = echarts.init(document.getElementById('mainempzhuanyuan'));
+		myChart7.setOption(option7);
+		myChartEmp.setOption(optionEmp);
+		myChartDianzhang.setOption(optiondianzhang);
+		myChartEmpDianzhang.setOption(optionEmpdianzhang);
+		myChartGuoanxia.setOption(optionguoanxia);
+		myChartEmpGuoanxia.setOption(optionEmpguoanxia);
+		myChartZhuanyuan.setOption(optionzhuanyuan);
+		myChartEmpZhuanyuan.setOption(optionEmpzhuanyuan);
 		doManager("humanresourcesManager","getEmployeeInfoByWeek",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
@@ -5565,6 +5639,10 @@ function oneyearorsixweek(){
 	}
 	
 	var areaInfo = function(){
+		var myChart16 = echarts.init(document.getElementById('main16'));
+		var myChart17 = echarts.init(document.getElementById('main17'));
+		myChart16.setOption(option16);
+		myChart17.setOption(option17);
 		 doManager("AreaManager", "selectAllArea",null,
 		            function(data, textStatus, XMLHttpRequest) {
 		                if (data.result) {
@@ -5618,6 +5696,11 @@ function oneyearorsixweek(){
 	}
 	
 	var customerInfo = function(){
+
+		var myChart22 = echarts.init(document.getElementById('main22'));
+		var myChart23 = echarts.init(document.getElementById('main23'));
+		myChart22.setOption(option22);
+		myChart23.setOption(option23);
 		var reqestParameter = {
 	        }
 		//7天
@@ -6085,7 +6168,7 @@ function oneyearorsixweek(){
 							huoyuerenqun = wechant_accounted_for_crowd;
 						}
 						if(cityname != '环比（%）' && cityname != '合计'){
-							citynameArray.push(cityname);
+							citynameArray.push(cityname.length >4?cityname.substring(0,5)+'\n'+cityname.substring(5,cityname.length):cityname);
 							avg_community_person_array.push(avg_community_person);
 							avg_wechant_crowd_array.push(avg_wechant_crowd);
 							crowd_person_count_array.push(crowd_person_count);
