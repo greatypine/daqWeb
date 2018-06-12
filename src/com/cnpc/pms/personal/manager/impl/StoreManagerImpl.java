@@ -2337,14 +2337,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		List<Map<String, Object>> cooperativeStore = storeDao.getOpenStoreByWeek("合作店");
 		// 近六周自营店开业情况
 		List<Map<String, Object>> selfStore = storeDao.getOpenStoreByWeek("自营店");
-		List<Map<String, Object>> dateAndWeek = DateUtils.getDateBeforesix();
 		// 查询当年门店开业情况
 		System.out.println(Calendar.YEAR);
 		List<Map<String, Object>> storeNatureByYear = storeDao
 				.getStoreNatureByYear(Calendar.getInstance().get(Calendar.YEAR) + "");
 		result.put("cooperativeStore", cooperativeStore);
 		result.put("selfStore", selfStore);
-		result.put("dateAndWeek", dateAndWeek);
 		result.put("storeNatureByYear", storeNatureByYear);
 		return result;
 	}
