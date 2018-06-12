@@ -981,15 +981,29 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Store> findStore() {
-		String sql = "SELECT * FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and storetype!='V' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%办公室%' and YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now())";
+		int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int settime = 0;
+		int presettime = 0;
+		if(i<5){
+			settime = 3;
+			presettime = -1;
+		}else{
+			settime = 10;
+			presettime = 4;
+		}
+		String sql = "SELECT * FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%办公室%' and create_time between subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+settime+")";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Store> list = query.addEntity(Store.class).list();
 		return list;
 	}
 
+	/**
+	 * 该查询查询的是运营中门店，所有查询已去除虚拟门店
+	 */
 	@Override
 	public List<Map<String, Object>> findStoreByNature(String nature) {
 		String sql_str = "";
+		String str_group = "";
 		if("自营店".equals(nature)){
 			sql_str = "SELECT city_name," + "sum(case WHEN storetype='E' then 1 else 0 END) as '校园店',"
 					+ "sum(case WHEN storetype='S' then 1 else 0 END) as '生活中心店',"
@@ -1000,9 +1014,11 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "sum(case WHEN storetype='H' then 1 else 0 END) as '城市仓',"
 					+ "sum(case WHEN storetype='X' then 1 else 0 END) as '经营星店' ";
 		}else if("合作店".equals(nature)){
-			sql_str = "SELECT city_name,sum(case WHEN formattype = '数码连锁店' and nature = '合作店'  then 1 else 0 END) as '数码连锁店', "
-					+ "sum(case WHEN formattype = '超市连锁店' and nature = '合作店' then 1 else 0 END) as '超市连锁店', "
-					+ "sum(case WHEN formattype = '广店营业厅' and nature = '合作店' then 1 else 0 END) as '广店营业厅' ";
+			sql_str = "SELECT city_name,"
+				+"sum(case WHEN formattype = '数码连锁店' and nature = '合作店' then 1 else 0 END) as '数码连锁店', "
+				+"sum(case WHEN formattype = '超市连锁店' and nature = '合作店' then 1 else 0 END) as '超市连锁店', "
+				+"sum(case WHEN formattype = '广电营业厅' and nature = '合作店' then 1 else 0 END) as '广电营业厅' ";
+			str_group = "GROUP BY city_name";
 		}else if(nature == null){
 			sql_str = "SELECT city_name," + "sum(case WHEN storetype='E' then 1 else 0 END) as '校园店',"
 					+ "sum(case WHEN storetype='S' then 1 else 0 END) as '生活中心店',"
@@ -1011,11 +1027,13 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "sum(case WHEN storetype='M' then 1 else 0 END) as '药店',"
 					+ "sum(case WHEN storetype='B' then 1 else 0 END) as '独立微超',"
 					+ "sum(case WHEN nature = '合作店' and storetype !='V' then 1 else 0 END) as '合作店',"
+					+ "sum(case WHEN storetype='T' then 1 else 0 END) as '合作点',"
 					+ "sum(case WHEN storetype='C' then 1 else 0 END) as '前置仓',"
 					+ "sum(case WHEN storetype='H' then 1 else 0 END) as '城市仓'";
+					
 			
 		}
-		String sql = sql_str+ "FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND ifnull(estate,'')!='闭店中'";
+		String sql = sql_str+ "FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='W' and storetype!='V' AND ifnull(estate,'')='运营中'"+str_group;
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1037,7 +1055,10 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+"SELECT city_name,COUNT((storetype='C') or null) as qianzhicangcount,COUNT((nature='合作店' and storetype !='V') or null) as hezuocount FROM t_store WHERE flag=0 AND ifnull(estate,'')!='闭店中' AND `name` NOT  LIKE '%测试%' "
 				+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' "
 				+"GROUP BY city_name ) l ON s.city_name=l.city_name LEFT JOIN ( "
-				+"SELECT cityname,IFNULL(preposition_task,0) as 2018qianzhicangmubiao,IFNULL(cooperative_task,0) as 2018hezuomubiao FROM di_storexpand WHERE  YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname "
+				+"select city_name as cityname,sum(case when store_type = 'cooperative' and year = '2018' then target_value else 0 end) as 2018hezuomubiao,"
+				+"sum(case when store_type = 'preposition' and year = '2018' then target_value else 0 end) as 2018qianzhicangmubiao "
+				+"from df_bussiness_target where type = 'store' "
+				+"GROUP BY city_name"
 				+") c ON c.cityname=s.city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -1110,31 +1131,31 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> findSixWeekStoreData() {
+		int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int settime = 0;
+		if(i<5){
+			settime = 3;
+		}else{
+			settime = 10;
+		}
 		String sql = "SELECT CONCAT(cc.week1,'') as week1,CONCAT(cc.week2,'') as week2,CONCAT(cc.week3,'') as week3,CONCAT(cc.week4,'') as week4,CONCAT(cc.week5,'') as week5,CONCAT(cc.week6,'') as week6 FROM (SELECT "
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*2 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*3 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*4 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
 				+ " FROM t_store "
 				+ "WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND ifnull(estate,'')!='闭店中' AND nature='自营店' "
 				+ "UNION ALL " + "SELECT "
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*2 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*3 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*4 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) - 5+7*5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
+				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
 				+ "  FROM t_store "
-				+ "WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND ifnull(estate,'')!='闭店中' AND nature='合作店' "
-				+ "UNION ALL "
-				+ "SELECT DATE_FORMAT(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) +1 DAY),'%Y-%m-%d') as 'week6',"
-				+ "DATE_FORMAT(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) +7+1 DAY),'%Y-%m-%d') as 'week5',"
-				+ "DATE_FORMAT(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) +7*2+1 DAY),'%Y-%m-%d') as 'week4',"
-				+ "DATE_FORMAT(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) +7*3+1 DAY),'%Y-%m-%d') as 'week3',"
-				+ "DATE_FORMAT(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) +7*4+1 DAY),'%Y-%m-%d') as 'week2',"
-				+ "DATE_FORMAT(date_sub(curdate(),INTERVAL WEEKDAY(curdate()) +7*5+1 DAY),'%Y-%m-%d') as 'week1') cc";
+				+ "WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND ifnull(estate,'')!='闭店中' AND nature='合作店') cc";
 		System.out.println(sql);
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -1145,9 +1166,16 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getOpenStoreByWeek(String nature) {
-		String sql = "select nature,YEARWEEK(create_time) as week_date,count(1) as count,subdate(DATE_FORMAT(create_time,'%Y-%m-%d'),date_format(create_time, '%w')) AS week_time from t_store ts "
+		int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int settime = 0;
+		if(i<5){
+			settime = 3;
+		}else{
+			settime = 10;
+		}
+		String sql = "select nature,count(1) as count,subdate(DATE_FORMAT(create_time,'%Y-%m-%d'),date_format(create_time, '%w')-if(date_format(create_time, '%w')<4,3,10)) AS week_time from t_store ts "
 				+ "WHERE nature is not null and create_time is not null and nature = '" + nature
-				+ "' and ifnull(estate,'')!='闭店中'  AND storetype!='V' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and YEARWEEK(date_format(create_time,'%Y-%m-%d')) > YEARWEEK(now())-6 group by week_date;";
+				+ "' and ifnull(estate,'')!='闭店中'  AND storetype!='V' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and date_format(create_time,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) group by week_time;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1168,7 +1196,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ "ifnull(t4.cooperative_task,0) as cooperative_task,ifnull(t4.self_support_task,0) as self_support_task from t_dist_citycode t1 INNER JOIN t_store s on (t1.cityname = s.city_name and s.flag = 0 and s.name not like '%储备店%' and s.name not like '%测试%')"+joinType
 				+ " (select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')!='闭店中' and nature = '合作店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t2 " + "ON t1.cityname = t2.city_name LEFT JOIN "
 				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')!='闭店中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name INNER JOIN "
-				+ "(select cooperative_task,self_support_task,cityname,cityno from di_storexpand  where 1=1 and YEARWEEK(date_format(start_time,'%Y-%m-%d')) = YEARWEEK(now()) GROUP BY cityname) t4 "
+				+ "(select city_name as cityname,sum(case when store_type = 'cooperative' and year = '"+year+"' then target_value else 0 end) as cooperative_task,"
+				+"sum(case when store_type = 'self_support' and year = '"+year+"' then target_value else 0 end) as self_support_task "
+				+"from df_bussiness_target where type = 'store' GROUP BY city_name) t4 "
 				+ "ON t1.cityname = t4.cityname;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -1277,15 +1307,18 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		return lst_data;
 	}
 
+	/**
+	 * 该查询去除了虚拟店，未知门店，查询的是运营中的门店
+	 */
 	@Override
 	public List<Map<String, Object>> getStoreNature() {
 		String sql = "select DISTINCT s.city_name,ifnull(t1.self_count,0) as self_count,ifnull(t2.cooperative_count,0) as cooperative_count from t_store s left join ( "
 			+"select count(store_id) as self_count,city_name from t_store where nature = '自营店' and flag=0 AND `name` NOT  LIKE '%测试%' "
-			+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' GROUP BY city_name) "
+			+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')='运营中' GROUP BY city_name) "
 			+"t1 ON (s.city_name = t1.city_name) LEFT JOIN ( "
 			+"select count(store_id) as cooperative_count,city_name from t_store where nature = '合作店' and flag=0 AND `name` NOT  LIKE '%测试%' "
-			+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND ifnull(estate,'')!='闭店中' GROUP BY city_name) "
-			+"t2 ON (t2.city_name = s.city_name) where s.flag=0 AND s.`name` NOT  LIKE '%测试%' and s.`name` NOT  LIKE '%储备%' and s.`name` NOT  LIKE '%办公室%' and s.storetype!='V' AND ifnull(s.estate,'')!='闭店中'";
+			+"and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='W' and storetype!='V' AND ifnull(estate,'')='运营中' GROUP BY city_name) "
+			+"t2 ON (t2.city_name = s.city_name) where s.flag=0 AND s.`name` NOT  LIKE '%测试%' and s.`name` NOT  LIKE '%储备%' and s.`name` NOT  LIKE '%办公室%' and s.storetype!='V' and s.storetype!='W' AND ifnull(s.estate,'')='运营中'";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
