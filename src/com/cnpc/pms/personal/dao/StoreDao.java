@@ -347,6 +347,13 @@ public interface StoreDao extends IDAO {
 	 * @return
 	 */
 	List<Store> findStore();
+	
+	/**
+	 * 获取周四到下周三一周新开门店新增覆盖区域，
+	 * 
+	 * @return
+	 */
+	List<Map<String, Object>> findnewStore(String where);
 
 	/**
 	 * @author sunning 获取自营店和合作店的分类数据

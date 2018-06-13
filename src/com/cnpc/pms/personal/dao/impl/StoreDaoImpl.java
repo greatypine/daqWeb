@@ -988,7 +988,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		int presettime = 0;
 		if(i<5){
 			settime = 3;
-			presettime = -1;
+			presettime = -3;
 		}else{
 			settime = 10;
 			presettime = 4;
@@ -997,6 +997,25 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Store> list = query.addEntity(Store.class).list();
 		return list;
+	}
+	
+	@Override
+	public List<Map<String, Object>> findnewStore(String where) {
+		int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		int settime = 0;
+		int presettime = 0;
+		if(i<5){
+			settime = 3;
+			presettime = -3;
+		}else{
+			settime = 10;
+			presettime = 4;
+		}
+		String sql = "SELECT "+where+" FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%办公室%' and create_time between subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+settime+")"
+				+"and not EXISTS (SELECT s."+where+" FROM t_store s WHERE s.flag=0 AND s.`name` NOT  LIKE '%测试%' and s.`name` NOT  LIKE '%储备%' and s.storetype!='V' and s.storetype!='W' AND ifnull(s.estate,'')!='闭店中' and s.`name` NOT  LIKE '%办公室%' and s.create_time < subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and s."+where+" = t_store."+where+")";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
 	}
 
 	/**

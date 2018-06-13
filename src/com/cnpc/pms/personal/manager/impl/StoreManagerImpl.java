@@ -2266,10 +2266,50 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		map.put("coverProvincetown", TowncoverTotal);
 		map.put("coverProvincecounty", Countycovertotal);
 		// 获取门店本周的区域变化
+		List<Map<String, Object>> citylist = storeDao.findnewStore("city_name");
+		if(citylist != null && citylist.size() > 0){
+			String cityNames = "";
+			for(int i = 0; i < citylist.size(); i++){
+				cityNames += "，" + citylist.get(i).get("city_name").toString();
+			}
+			map.put("citysize", citylist.size());
+			map.put("cityNames", cityNames.subSequence(1, cityNames.length()));
+		}else{
+			map.put("citysize", 0);
+			map.put("cityNames", "无");
+		}
+		// 获取门店本周的区域变化
+		List<Map<String, Object>> countylist = storeDao.findnewStore("county_id");
+		StringBuilder sb = new StringBuilder();
+		if(countylist != null && countylist.size() >0){
+			for(int i = 0; i < countylist.size(); i++){
+				String county = countylist.get(i).get("county_id").toString();
+				if(i != 0 || i != countylist.size() - 1){
+					sb.append(",");
+				}
+				sb.append("'"+county+"'");
+			}
+			CountyManager countyManager = (CountyManager) SpringHelper.getBean("countyManager");
+			List<County> findCountyByIds = countyManager
+					.findCountyByIds(sb.toString());
+			String countyNames = "";
+			for (County county : findCountyByIds) {
+				countyNames += "，" + county.getName();
+			}
+			map.put("countysize", findCountyByIds.size());
+			map.put("countyNames", countyNames.subSequence(1, countyNames.length()));
+		}else{
+			map.put("countysize", 0);
+			map.put("countyNames", "无");
+		}
+		
+		//获得本周街道变化
 		List<Store> findStore = storeDao.findStore();
 		if (findStore != null && findStore.size() > 0) {
 			String townids = "";
 			for (Store store : findStore) {
+				String cityName = store.getCityName();
+				
 				if (store.getTown_id() != null && !"".equals(store.getTown_id())) {
 					townids += "," + store.getTown_id();
 				}
@@ -2282,25 +2322,13 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				String countyids = "";
 				String townNames = "";
 				for (Town town : findlistTown) {
-					countyids += "," + town.getCounty_id();
-					townNames += "," + town.getName();
+					townNames += "，" + town.getName();
 				}
-				CountyManager countyManager = (CountyManager) SpringHelper.getBean("countyManager");
-				List<County> findCountyByIds = countyManager
-						.findCountyByIds(countyids.substring(1, countyids.length()));
-				String countyNames = "";
-				for (County county : findCountyByIds) {
-					countyNames += "," + county.getName();
-				}
-				map.put("countysize", findCountyByIds.size());
 				map.put("townNames", townNames.subSequence(1, townNames.length()));
-				map.put("countyNames", countyNames.subSequence(1, countyNames.length()));
 			}
 		} else {
 			map.put("townsize", 0);
-			map.put("countysize", 0);
 			map.put("townNames", "无");
-			map.put("countyNames", "无");
 		}
 		return map;
 	}

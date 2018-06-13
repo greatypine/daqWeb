@@ -4826,10 +4826,20 @@ function getCityNet(){
 			$("#city").text(jsonData.coverCity);
 			$("#county").text(jsonData.coverProvincecounty);
 			$("#town").text(jsonData.coverProvincetown);
-			if(jsonData.townsize==0){
+			
+			/*if(jsonData.townsize==0){
 				$("#weekupdate").text("本周暂无变化");
 			}else{
 				$("#weekupdate").text("新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"），新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）")
+			}*/
+			if(jsonData.townsize==0 && jsonData.countysize==0 && jsonData.citysize==0){
+				$("#weekupdate").text("本周暂无变化");
+			}else{
+				var appendStr = "";
+				jsonData.citysize!=0 ?appendStr += "新增覆盖"+jsonData.citysize+"城市（"+jsonData.countyNames+"）；": appendStr += "新增覆盖"+0+"城市；";
+				jsonData.countysize!=0?appendStr += "新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"）；" : appendStr += "新增覆盖"+0+"个区域；";
+				jsonData.townsize!=0?appendStr += "新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）；":appendStr += "新增覆盖"+0+"个街道；"
+				$("#weekupdate").text(appendStr);
 			}
 			var list2017=jsonData.list2017;
 			for(var i=0;i<list2017.length;i++){
