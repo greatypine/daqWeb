@@ -195,7 +195,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
             if(!lst_data.isEmpty()){
             	//获取是否前多少天时候发有增长数据
         		Long growDate = breakDate(lst_data.get(0).get("crtime").toString());
-        		if(growDate>0) {
+        		if(growDate>1) {
         			for(int i=0;i<growDate;i++) {
         				Map<String,Object> nullMap = new HashMap<String, Object>();
         				nullMap.put("allcount","0");
@@ -265,7 +265,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		
 		//查询老用户转社员sql
-		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and DATE_SUB(CURDATE(), INTERVAL 10 DAY) <= date(dum1.opencard_time) group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
+		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and '2018-04-29' <= date(dum1.opencard_time) group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -440,13 +440,13 @@ public List<Map<String, Object>> getAllMembers(String dd) {
 	 */
 	int dayCount = 7;
 	String sql = "select DATE_SUB(CURDATE(), INTERVAL 6 DAY)," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 5 DAY)  then 1 else 0 end) as day1," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 4 DAY)  then  1 else 0 end) as day2," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 3 DAY)  then  1 else 0 end) as day3," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end) as day4," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end) as day5," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 0 DAY)  then  1 else 0 end) as day6," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL -1 DAY)  then  1 else 0 end) as day7" + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end) as day1," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 5 DAY)  then  1 else 0 end) as day2," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 4 DAY)  then  1 else 0 end) as day3," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 3 DAY)  then  1 else 0 end) as day4," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end) as day5," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end) as day6," + 
+			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 0 DAY)  then  1 else 0 end) as day7" + 
 			" from df_user_member dum";
 	
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
@@ -779,7 +779,318 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	@Override
+	public List<Map<String, Object>> getDayOfEshopMemCount(String string) {
+		/**
+		 * @author wuxinxin 2018年6月12日
+		 */
+		int dayCount = 7;
+		String sql = "select DATE_SUB(CURDATE(), INTERVAL 6 DAY)," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end),0) as day1," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 5 DAY)   then 1 else 0 end),0) as day2," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 4 DAY)  then 1 else 0 end),0) as day3," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then 1 else 0 end),0) as day4," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then 1 else 0 end),0) as day5," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)   then 1 else 0 end),0) as day6," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 0 DAY)  then 1 else 0 end),0) as day7" + 
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 like '%K%'";
 
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+		try {
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (!lst_data.isEmpty()) {
+
+				Map<String, Object> map_data = (Map<String, Object>) lst_data.get(0);
+				for (int i = 1; i <= dayCount; i++) {
+					Map<String, Object> map_content = new HashMap<String, Object>();
+					map_content.put("dayOfEshopMemCount", map_data.get("day" + i).toString());
+					lst_result.add(map_content);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+	@Override
+	public List<Map<String, Object>> getDayOfEshopMemSum(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		int dayCount = 7;
+		String sql = "select DATE_SUB(CURDATE(), INTERVAL 6 DAY)," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 6 DAY)  then dmod.trading_price else 0 end),0) as day1," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 5 DAY)   then dmod.trading_price else 0 end),0) as day2," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 4 DAY)  then dmod.trading_price else 0 end),0) as day3," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then dmod.trading_price else 0 end),0) as day4," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then dmod.trading_price else 0 end),0) as day5," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)   then dmod.trading_price else 0 end),0) as day6," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 0 DAY)  then dmod.trading_price else 0 end),0) as day7" + 
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 like '%K%'";
+
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+		try {
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (!lst_data.isEmpty()) {
+
+				Map<String, Object> map_data = (Map<String, Object>) lst_data.get(0);
+				for (int i = 1; i <= dayCount; i++) {
+					Map<String, Object> map_content = new HashMap<String, Object>();
+					map_content.put("dayOfEshopMemSum", map_data.get("day" + i));
+					lst_result.add(map_content);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getDayOfEshopNmemCount(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		int dayCount = 7;
+		String sql = "select DATE_SUB(CURDATE(), INTERVAL 6 DAY)," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end),0) as day1," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 5 DAY)   then 1 else 0 end),0) as day2," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 4 DAY)  then 1 else 0 end),0) as day3," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then 1 else 0 end),0) as day4," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then 1 else 0 end),0) as day5," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)   then 1 else 0 end),0) as day6," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 0 DAY)  then 1 else 0 end),0) as day7" + 
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 not like '%K%'";
+
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+		try {
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (!lst_data.isEmpty()) {
+
+				Map<String, Object> map_data = (Map<String, Object>) lst_data.get(0);
+				for (int i = 1; i <= dayCount; i++) {
+					Map<String, Object> map_content = new HashMap<String, Object>();
+					map_content.put("dayOfEshopNmemCount", map_data.get("day" + i));
+					lst_result.add(map_content);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getDayOfEshopNmemSum(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		int dayCount = 7;
+		String sql = "select DATE_SUB(CURDATE(), INTERVAL 6 DAY)," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 6 DAY)  then dmod.trading_price else 0 end),0) as day1," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 5 DAY)   then dmod.trading_price else 0 end),0) as day2," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 4 DAY)  then dmod.trading_price else 0 end),0) as day3," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then dmod.trading_price else 0 end),0) as day4," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then dmod.trading_price else 0 end),0) as day5," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)   then dmod.trading_price else 0 end),0) as day6," + 
+				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 0 DAY)  then dmod.trading_price else 0 end),0) as day7" + 
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1  not like '%K%'";
+
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+		try {
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (!lst_data.isEmpty()) {
+
+				Map<String, Object> map_data = (Map<String, Object>) lst_data.get(0);
+				for (int i = 1; i <= dayCount; i++) {
+					Map<String, Object> map_content = new HashMap<String, Object>();
+					map_content.put("dayOfEshopNmemSum", map_data.get("day" + i));
+					lst_result.add(map_content);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getDayOfEshopMemSumCity(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then dmod.trading_price else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getDayOfEshopMemCouCity(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then 1 else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getDayOfEshopNmemSumCity(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then dmod.trading_price else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 not like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getDayOfEshopNmemCouCity(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then 1 else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 not like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getEshopMemCount(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+		String daySumSql = "select domcd.date,sum(domcd.mem_count) memcount,sum(domcd.mem_gmv) memgmv,sum(domcd.non_mem_count) nmemcount,sum(domcd.non_mem_gmv) nmemgmv,sum(domcd.eshop_count) eshopcou,sum(domcd.eshop_gmv) eshopgmv from ds_ope_member_city_day domcd where date(domcd.date)>DATE_SUB(curdate(),INTERVAL 7 DAY)  GROUP BY domcd.date";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getEshopNmemCouCity(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月12日
+		 */
+			String daySumSql = "select domcd.city_name cname,sum(domcd.eshop_count) eshopcou,sum(domcd.eshop_gmv) eshopgmv from ds_ope_member_city_day domcd GROUP BY domcd.city_name order by domcd.city_code";
+			try{
+				Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+				List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+				return lst_data;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getEshopWeekCount(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月13日
+		 */
+		String daySumSql = "select sum(domcd.eshop_count) eweekcou,sum(domcd.eshop_gmv) eweekgmv from ds_ope_member_city_day domcd where domcd.date >DATE_SUB(curdate(),INTERVAL 7 DAY)";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getEshopQuitCount(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月13日
+		 */
+		String daySumSql = "select domcd.canceldate,sum(domcd.cancelcount) memcount from ds_ope_member_cancel_city_day domcd where date(domcd.canceldate)>DATE_SUB(curdate(),INTERVAL 7 DAY) GROUP BY domcd.canceldate";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getMemweekCount(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月13日
+		 */
+		 String daySumSql = "select count(distinct dmod.customer_id) from df_mass_order_monthly dmod  where date(dmod.sign_time)>DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
+			try{
+				Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+				List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+				return lst_data;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			 return null;
+		
 	}
 
 }

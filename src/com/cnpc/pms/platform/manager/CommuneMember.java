@@ -27,5 +27,14 @@ public interface CommuneMember extends IManager{
 	 * @return
 	 */
 	public Map<String, Object> selectMeSum(String dd);
+	/**
+	 * 查询社员订单信息
+	 * @return
+	 */
+	public Map<String, Object> selectMeOrder(String dd);
+	/**
+	 * 按城市查询社员信息
+	 */
+	public Map<String, Object> selectMeCityOrder(String cityCode);
 	
 }
