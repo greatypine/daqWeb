@@ -18,4 +18,16 @@ public interface CommunityMembersManager extends IManager{
 	 * @return
 	 */
 	Map<String, Object> getMembersWeekCount(DynamicDto dynamicDto);
+	/**
+	 * 获取城市中门店当月每天GMV
+	 * @param dynamicDto
+	 * @return
+	 */
+	Map<String, Object> getDayGMVOfMonthForCityStore(DynamicDto dynamicDto);
+	/**
+	 * 通过storeId查询店事业群对应的GMV(每日)
+	 * @param storeId
+	 * @return
+	 */
+	Map<String, Object> getDepDayGMVOfMonthForStore(String storeId);
 }

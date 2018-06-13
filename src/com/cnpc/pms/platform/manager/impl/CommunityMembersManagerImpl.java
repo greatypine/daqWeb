@@ -110,4 +110,19 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 	     }
 			return dateX;
 	 }
+
+	@Override
+	public Map<String, Object> getDayGMVOfMonthForCityStore(
+			DynamicDto dynamicDto) {
+		
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> getDepDayGMVOfMonthForStore(String storeId) {
+		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
+		List<Map<String, Object>> depGMVList = new ArrayList<Map<String,Object>>();
+		depGMVList =communityMembersDao.getDeptMonthDayGMV(storeId);
+		return null;
+	}
 }

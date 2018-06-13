@@ -27,4 +27,10 @@ public interface CommunityMembersDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String, Object>> getWeekTotalMembersCount(DynamicDto dynamicDto);
+	/**
+	 * 根据门店id获得该门店中事业群每月GMV
+	 * @param storeId
+	 * @return
+	 */
+	public List<Map<String, Object>> getDeptMonthDayGMV(String storeId);
 }

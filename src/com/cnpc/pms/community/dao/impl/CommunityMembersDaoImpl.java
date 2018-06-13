@@ -26,9 +26,9 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 			isNewSql = " and dum.isnew_member=1 ";
 		}
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			sql = "select count(*) as newCount from  df_user_member dum LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
 				"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
@@ -75,9 +75,9 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
 		String likeSql = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			likeSql=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -119,9 +119,9 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
 		String likeSql = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			likeSql=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -147,5 +147,10 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 			e.printStackTrace();
 		}
 		return lst_result;
+	}
+	@Override
+	public List<Map<String, Object>> getDeptMonthDayGMV(String storeId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

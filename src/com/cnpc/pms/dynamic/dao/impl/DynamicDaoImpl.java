@@ -922,9 +922,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String zx = "no";
 		Map<String, Object> maps = new HashMap<String, Object>();
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND t.province_id='"+province_id+"' ";
 		}
@@ -982,9 +982,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String zx = "no";
 		Map<String, Object> maps = new HashMap<String, Object>();
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND t.province_id='"+province_id+"' ";
 		}
@@ -1061,9 +1061,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String zx = "no";
 		Map<String, Object> maps = new HashMap<String, Object>();
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -1130,9 +1130,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String zx = "no";
 		Map<String, Object> maps = new HashMap<String, Object>();
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -1419,9 +1419,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String zx = "no";
 		Map<String, Object> maps = new HashMap<String, Object>();
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND t.province_id='"+province_id+"' ";
 		}
@@ -1613,9 +1613,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String zx = "no";
 		Map<String, Object> maps = new HashMap<String, Object>();
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -1675,9 +1675,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -1707,9 +1707,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String zx = "no";
 		Map<String, Object> maps = new HashMap<String, Object>();
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -1767,9 +1767,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" where ts.province_id='"+province_id+"' ";
 		}
@@ -1798,9 +1798,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -2126,9 +2126,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String cityStr = "";
 		String lastMonthSqlStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
 		}
@@ -2223,9 +2223,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ts.province_id='"+province_id+"' ";
 		}
@@ -2265,9 +2265,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
 		}
@@ -2342,9 +2342,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
 		}
@@ -2376,9 +2376,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
 		}
@@ -2407,9 +2407,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND ds_cus.province_id='"+province_id+"' ";
 		}
@@ -2708,9 +2708,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND t.province_id='"+province_id+"' ";
 		}
@@ -2766,9 +2766,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND t.province_id='"+province_id+"' ";
 		}
@@ -2811,9 +2811,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String provinceStr = "";
 		String cityStr = "";
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND t.province_id='"+province_id+"' ";
 		}
@@ -2899,9 +2899,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
 		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
 		String zx = "no";
-		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-			zx = "yes";
-		}
+//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//			zx = "yes";
+//		}
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			provinceStr+=" AND t.province_id='"+province_id+"' ";
 		}
@@ -2969,9 +2969,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			String provinceStr = "";
 			String cityStr = "";
 			String zx = "no";
-			if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
-				zx = "yes";
-			}
+//			if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+//				zx = "yes";
+//			}
 			if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 				provinceStr+=" AND province_id='"+province_id+"' ";
 			}
