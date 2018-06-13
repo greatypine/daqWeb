@@ -5494,7 +5494,7 @@ function oneyearorsixweek(){
 					dianzhangTotalArray.push(queryDianzhangTotal[0].f);
 				}
 				optionEmpdianzhang.series[0].data=dianzhangTotalArray;
-				optionEmpdianzhang.yAxis.min = (queryDianzhangTotal[0].a*0.98).toFixed(0);
+				optionEmpdianzhang.yAxis.min = (queryDianzhangTotal[0].a*0.9).toFixed(0);
 				myChartEmpDianzhang.setOption(optionEmpdianzhang);
 				
 				var queryLeaveDianzhang = jsonData.queryLeaveDianzhang;
