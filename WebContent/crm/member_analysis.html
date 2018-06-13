@@ -183,7 +183,7 @@
               <div class="col-sm-12 no-padding" id="main18" style="height: 260px;"></div>
             </div>
             <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>客单价走势</strong></h4>
+              <h4 class="text-light-blue"><strong>订单均价走势</strong></h4>
               <div class="col-sm-12 no-padding" id="main19" style="height: 260px;"></div>
             </div>
           </div>
@@ -242,6 +242,24 @@
             </div>
           </div>
         </div>
+              <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-7 no-padding">
+              <h4 class="box-header h4 text-light-blue"><strong>E店排行榜</strong></h4>
+              <table class="table table-bordered">
+                <tbody id="eshop_data">
+                <tr>
+                  <th >E店名称</th>
+                  <th>成交额</th>
+                  <th>订单量</th>
+                  <th>排名</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-5" id="main9" style="height: 480px;"></div>
+          </div>
+      </div>
       <div class="box box-default">
           <div class="box-body">
           <div class="col-sm-7">
@@ -266,24 +284,6 @@
             </div>
           </div>
         </div>
-       <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-7 no-padding">
-              <h4 class="box-header h4 text-light-blue"><strong>E店排行榜</strong></h4>
-              <table class="table table-bordered">
-                <tbody id="eshop_data">
-                <tr>
-                  <th >E店名称</th>
-                  <th>成交额</th>
-                  <th>订单量</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-5" id="main9" style="height: 480px;"></div>
-          </div>
-      </div>
         <div class="box box-default">
           <div class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
           <div class="box-body">
@@ -2557,7 +2557,7 @@ var showEshopMemSum = function (dataServer){
 		        	            color: '#27727B'
 		        	          }]),
 		                    label : {
-		                        show : true,
+		                        show : false,
 	                            position: 'top',
 		                        textStyle : {
 		                            fontSize : '14',

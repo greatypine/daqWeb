@@ -283,6 +283,12 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		//平均客单价=周成交额/周订单量
 		List eshopWeekDeal = new ArrayList();
 		//周消费频次=周订单量/社员总数
+		//1.查询活跃社员数
+		int memWeek = 10;
+		List<Map<String, Object>> memWeekList = commDao.getMemweekCount(dd);
+		if(!memWeekList.isEmpty()) {
+			memWeek = Integer.parseInt(memWeekList.get(0).get("memcou").toString());
+		}
 		List eshopWeekCount = new ArrayList();
 		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
 		if (!noMemCityList.isEmpty()) {

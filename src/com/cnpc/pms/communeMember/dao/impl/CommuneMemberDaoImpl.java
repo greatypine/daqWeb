@@ -1081,7 +1081,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月13日
 		 */
-		 String daySumSql = "select count(distinct dmod.customer_id) from df_mass_order_monthly dmod  where date(dmod.sign_time)>DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
+		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where date(dmod.sign_time)>DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
 			try{
 				Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 				List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
