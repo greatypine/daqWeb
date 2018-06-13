@@ -538,7 +538,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then 1 else 0 end) as d,"
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') then 1 else 0 end) as e,"
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then 1 else 0 end) as f from t_humanresources ";
-			String sql_storekeeps = "select sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
+			String sql_storekeeps = "select sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') then 1 else 0 end) as a,"
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') then 1 else 0 end) as b,"
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') then 1 else 0 end) as c,"
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then 1 else 0 end) as d,"
