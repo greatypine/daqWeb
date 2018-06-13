@@ -82,7 +82,12 @@ $(function(){
 			}
 		}
 		if(stype=='V'){
-			$(".bixuan").hide();
+			if(stynat=='仓'){
+				$(".bixuan").hide();
+				$(".xunicang").show();
+			}else{
+				$(".bixuan").hide();
+			}
 		}else if(stype!='V'&&stynat=='合作店'){
 			$(".bixuan").show();
 			$(".natter").hide();
@@ -193,7 +198,13 @@ function initview(){
 							 var a = document.getElementById("storetype");//mySelect是select 的Id
 							 a.options[9].selected = true;
 							 }*/
-							$(".bixuan").hide();
+							var nature=jsonData.nature;
+							if(nature=='仓'){
+								$(".bixuan").hide();
+								$(".xunicang").show();
+							}else{
+								$(".bixuan").hide();
+							}
 							//$("#storetype").attr("disabled","true");
 						}else if(va!='V'&&nature=='合作店'){
 							$(".bixuan").show();

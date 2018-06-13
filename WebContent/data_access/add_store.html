@@ -106,7 +106,13 @@ $(function(){
 			}
 		}
 		if(stype=='V'){
-			$(".bixuan").hide();
+			if(stynat=='仓'){
+				$(".bixuan").hide();
+				$(".xunicang").show();
+			}else{
+				$(".bixuan").hide();
+			}
+
 		}else if(stype!='V'&&stynat=='合作店'){
 			$(".bixuan").show();
 			$(".natter").hide();
@@ -230,7 +236,13 @@ function initview(){
 									var a = document.getElementById("storetype");//mySelect是select 的Id
 									a.options[9].selected = true;
 								}*/
-								$(".bixuan").hide();
+								var nature=jsonData.nature;
+								if(nature=='仓'){
+									$(".bixuan").hide();
+									$(".xunicang").show();
+								}else{
+									$(".bixuan").hide();
+								}
 								//$("#storetype").attr("disabled","true");
 							}else if(va!='V'&&nature=='合作店'){
 								$(".bixuan").show();
@@ -360,7 +372,14 @@ function initview(){
 									var a = document.getElementById("storetype");//mySelect是select 的Id
 									a.options[9].selected = true;
 								}*/
-								$(".bixuan").hide();
+								var nature=jsonData.nature;
+								if(nature=='仓'){
+									$(".bixuan").hide();
+									$(".xunicang").show();
+								}else{
+									$(".bixuan").hide();
+								}
+
 								//$("#storetype").attr("disabled","true");
 							}else if(va!='V'&&nature=='合作店'){
 								$(".bixuan").show();
@@ -794,6 +813,24 @@ function downloadFile(pic_name){
 				$("#submit").removeAttr("disabled"); 
 				alert("请选门店类型!");
 				return;
+			}
+
+			if(nature_value=='仓'){
+				if(store_position == "" || store_position == null){
+					$("#submit").removeAttr("disabled");
+					alert("请选择门店位置坐标!");
+					return;
+				}
+				if(citycode == "" || citycode == null){
+					$("#submit").removeAttr("disabled");
+					alert("请重新选择门店位置坐标!");
+					return;
+				}
+				if(address == "" || address == null){
+					$("#submit").removeAttr("disabled");
+					alert("请填写门店地址!");
+					return;
+				}
 			}
 			if(tenancyTerm_start != "" && tenancyTerm_start != null&&tenancyTerm_end != "" && tenancyTerm_end != null){
 				  var startTime = new Date(Date.parse(tenancyTerm_start));
@@ -1455,7 +1492,7 @@ function loadhtml(){
 				</p>
 			</td>
 			<td>
-				<p>门店位置坐标：<span class="bixuan" style="color: red">*</span><span><button class="btn btn-primary" onclick="showStoreMapWin(setStoreMapSelect)" style="margin-left: 10px;">选择门店位置坐标</button></span></p>
+				<p>门店位置坐标：<span class="bixuan xunicang" style="color: red">*</span><span><button class="btn btn-primary" onclick="showStoreMapWin(setStoreMapSelect)" style="margin-left: 10px;">选择门店位置坐标</button></span></p>
 				<p><input type="text" class="form-control" readonly="readonly" name="store_position" id="store_position"/></p>
 			</td>
 			<td id="typeid" style="display: none">
@@ -1534,7 +1571,7 @@ function loadhtml(){
 				<p class="read"><input class="form-control changess" type="text" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" id="increase" name="increase"/></p>
 			</td>
 			<td>
-				<p class="read">地址：<span class="bixuan" style="color: red">*</span></p>
+				<p class="read">地址：<span class="bixuan xunicang" style="color: red">*</span></p>
 				<p class="read"><input type="text" class="form-control changess" onkeyup="value=this.value.replace(/(^\s+)|(\s+$)/g,'')" name="address" id="address"/></p>
 			</td>
 			<td id="hezuo1">
