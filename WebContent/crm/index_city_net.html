@@ -2135,7 +2135,7 @@ $(function(){
 	    		var avgcount = Math.round(weixininteractivecounts/$(this).val()*100);
 				 $($("#interactiverate").find("input:eq("+(thisIndex-1)+")")).val(avgcount);
 	    	}else{
-				 $($("#personcount").find("input:eq("+(thisIndex-1)+")")).val(0);
+				 $($("#interactiverate").find("input:eq("+(thisIndex-1)+")")).val(0);
 	    	}
 	    	
 	    	$($(lastTD).prev()).find("input").val(sum);
