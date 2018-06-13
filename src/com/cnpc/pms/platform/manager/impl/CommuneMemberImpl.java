@@ -163,11 +163,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		if (!eshopMemList.isEmpty()) {
 			for (int i = 0; i < eshopMemList.size(); i++) {
 				memCounts.add(Integer.parseInt(eshopMemList.get(i).get("memcount").toString()));
-				memSums.add(eshopMemList.get(i).get("memgmv").toString());
+				memSums.add(eshopMemList.get(i).get("memgmv").toString().split("\\.")[0]);
 				noMemCounts.add(Integer.parseInt(eshopMemList.get(i).get("nmemcount").toString()));
-				noMemSums.add(eshopMemList.get(i).get("nmemgmv").toString());
+				noMemSums.add(eshopMemList.get(i).get("nmemgmv").toString().split("\\.")[0]);
 				eshopCounts.add(Integer.parseInt(eshopMemList.get(i).get("eshopcou").toString()));
-				eshopSums.add(eshopMemList.get(i).get("eshopgmv").toString());
+				eshopSums.add(eshopMemList.get(i).get("eshopgmv").toString().split("\\.")[0]);
 				int eshopCou = Integer.parseInt(eshopMemList.get(i).get("eshopcou").toString());
 				Double eshopGmv = Double.parseDouble(eshopMemList.get(i).get("eshopgmv").toString());
 				if(eshopCou!=0) {

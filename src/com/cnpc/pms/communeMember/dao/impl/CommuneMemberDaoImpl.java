@@ -440,14 +440,14 @@ public List<Map<String, Object>> getAllMembers(String dd) {
 	 */
 	int dayCount = 7;
 	String sql = "select DATE_SUB(CURDATE(), INTERVAL 6 DAY)," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end) as day1," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 5 DAY)  then  1 else 0 end) as day2," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 4 DAY)  then  1 else 0 end) as day3," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 3 DAY)  then  1 else 0 end) as day4," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end) as day5," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end) as day6," + 
-			"sum(CASE when  dum.opencard_time<= DATE_SUB(curdate(),INTERVAL 0 DAY)  then  1 else 0 end) as day7" + 
-			" from df_user_member dum";
+			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 6 DAY)  then 1 else 0 end) as day1," + 
+			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 5 DAY)  then  1 else 0 end) as day2," + 
+			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 4 DAY)  then  1 else 0 end) as day3," + 
+			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 3 DAY)  then  1 else 0 end) as day4," + 
+			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end) as day5," + 
+			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end) as day6," + 
+			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 0 DAY)  then  1 else 0 end) as day7" + 
+			"			 from df_user_member dum";
 	
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	try{
@@ -544,7 +544,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		// 按格式输出
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		// 查询社员注册城市sql
-		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where opencard_time<'"
+		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where date(opencard_time)<'"
 				+ sdf.format(calendar.getTime())
 				+ "' and regist_cityno is not null group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
 
@@ -567,7 +567,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		// 按格式输出
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		// 查询当月新注册社员注册城市sql
-		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where opencard_time>'"
+		String citySql = "select tdc.cityname cityname, duuf.usedCount cou from (SELECT DISTINCT uw.regist_cityno uwci, IFNULL( tb.count, 0) usedCount from df_user_member uw  left join (select regist_cityno , count( *) count   from df_user_member  where date(opencard_time)>'"
 				+ sdf.format(calendar.getTime())
 				+ "' and regist_cityno is not null group by regist_cityno) AS tb  on uw.regist_cityno = tb.regist_cityno  where uw.regist_cityno is not null) as duuf,t_dist_citycode tdc where LPAD(duuf.uwci, 4, '0') = tdc.cityno";
 

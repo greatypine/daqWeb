@@ -578,7 +578,14 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	      trigger: 'item',
 	      formatter: "{b} : {c} ({d}%)"
 	    },
-	    series: [
+	    legend: {
+	        selectedMode:false,
+	        right:10,
+	        top: 10,
+	        orient:'vertical',
+	        data:['老会员升级', '新会员开卡']
+	    }
+	    ,series: [
 	    	{
 	      type: 'pie',
 	      radius: '75%',
@@ -2346,8 +2353,7 @@ var showEshopCount = function (dataServer){
 		            data:dataServer.jsonQuitCounts,
 		            markLine : {
 		                data : [
-		                    {type : 'max',name:'最大值'},
-		                    {type : 'min',name:'最小值'}
+		                    {type : 'max',name:'最大值'}
 		                ]
 		            }
 		        }
@@ -2361,7 +2367,7 @@ var showEshopCount = function (dataServer){
 		        trigger: 'axis'
 		    },
 		    legend: {
-		        data:['成交订单量','取消订单量']
+		        data:['订单均价']
 		    },
 		    toolbox: {
 		        show : false,
@@ -2383,7 +2389,7 @@ var showEshopCount = function (dataServer){
 		    yAxis : [
 		    	{
 			    	  type: 'value',
-				      name: '客单价',
+				      name: '订单均价',
 			        axisLabel: {
 			          textStyle:{color:'#404a59'}
 			        }
@@ -2391,7 +2397,7 @@ var showEshopCount = function (dataServer){
 		    ],
 		    series : [
 		        {
-		            name:'客单价',
+		            name:'订单均价',
 		            type:'line',
 		            barWidth: 40,                   // 系列级个性化，柱形宽度
 		            itemStyle: {
@@ -2417,6 +2423,7 @@ var showEshopCount = function (dataServer){
 		            data:dataServer.jsonEshopOneDeal,
 		            markLine : {
 		                data : [
+		                	{type : 'average', name: '平均值'},
 		                    {type : 'max',name:'最大值'},
 		                    {type : 'min',name:'最小值'}
 		                ]
@@ -2509,7 +2516,7 @@ var showEshopMemSum = function (dataServer){
 		        data:['成交额']
 		    },
 		    toolbox: {
-		        show : false,
+		        show : true,
 		        feature : {
 		            mark : {show: true},
 		            dataView : {show: true, readOnly: false},
