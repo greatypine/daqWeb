@@ -1879,10 +1879,10 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			if (store.getStoreno().contains("W")) {// 未知门店 不同步
 				sync = false;
 			}
-			if (store.getStoreno().contains("C")) {// 仓店 不同步
+			/*if (store.getStoreno().contains("C")) {// 仓店 不同步
 				sync = false;
-			}
-			if (store.getStoreno().contains("V")) {// 虚拟店 不同步
+			}*/
+			if (store.getStoreno().contains("V")&&store.getStoretypename().equals("虚拟店")) {// 虚拟店 不同步
 				sync = false;
 			}
 			if (store.getName().contains("储备店")) {// 储备店 不同步
@@ -1901,9 +1901,20 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 					lat=store.getStore_position().split(",")[0];
 					nat=store.getStore_position().split(",")[1];
 				}
+				
+				String type="normal";
+				String storetypename=store.getStoretypename();
+				if(storetypename!=null&&storetypename.equals("前置仓")){
+					type="front";
+				}else if(storetypename!=null&&storetypename.equals("城市仓")){
+					type="city";
+				}else{
+					type="normal";
+				}
+				
 				JSONObject jsonObject = dynamicManager.insertNewStore(store.getStoreno(), store.getName(),
 						store.getGaode_provinceCode(), store.getGaode_cityCode(), store.getGaode_adCode(),
-						store.getAddress(),lat,nat);
+						store.getAddress(),lat,nat,type);
 				rt = jsonObject.toString();
 			}
 

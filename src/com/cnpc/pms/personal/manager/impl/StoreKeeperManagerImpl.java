@@ -447,10 +447,10 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 																		// 不同步
 									sync = false;
 								}
-								if (store.getStoreno().contains("C")) {// 仓店 不同步
-									sync = false;
-								}
-								if (store.getStoreno().contains("V")) {// 虚拟店 不同步
+								/*if (store.getStoreno().contains("C")) {// 仓店 不同步
+								sync = false;
+								}*/
+								if (store.getStoreno().contains("V")&&store.getStoretypename().equals("虚拟店")) {// 虚拟店 不同步
 									sync = false;
 								}
 								if (store.getName().contains("储备店")) {// 储备店 不同步
@@ -488,7 +488,10 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 							if (store.getStoreno().contains("W")) {// 未知门店 不同步
 								sync = false;
 							}
-							if (store.getStoreno().contains("C")) {// 仓店 不同步
+							/*if (store.getStoreno().contains("C")) {// 仓店 不同步
+							    sync = false;
+							}*/
+							if (store.getStoreno().contains("V")&&store.getStoretypename().equals("虚拟店")) {// 虚拟店 不同步
 								sync = false;
 							}
 							if (store.getName().contains("储备店")) {// 储备店 不同步
@@ -524,7 +527,10 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 						if (store.getStoreno().contains("W")) {// 未知门店 不同步
 							sync = false;
 						}
-						if (store.getStoreno().contains("C")) {// 仓店 不同步
+						/*if (store.getStoreno().contains("C")) {// 仓店 不同步
+						    sync = false;
+						}*/
+						if (store.getStoreno().contains("V")&&store.getStoretypename().equals("虚拟店")) {// 虚拟店 不同步
 							sync = false;
 						}
 						if (store.getName().contains("储备店")) {// 储备店 不同步

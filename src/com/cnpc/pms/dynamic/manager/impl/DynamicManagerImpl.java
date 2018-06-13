@@ -5053,7 +5053,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	 * 同步门店的方法
 	 */
 	@Override
-	public JSONObject insertNewStore(String storeCode,String storeName,String provinceCode,String cityCode,String adCode,String address,String longitude,String latitude){
+	public JSONObject insertNewStore(String storeCode,String storeName,String provinceCode,String cityCode,String adCode,String address,String longitude,String latitude,String type){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		HttpClientUtil hClientUtil = null;
 		JSONObject jsonObject = new JSONObject();
@@ -5063,6 +5063,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		jsonObject.put("cityCode", cityCode==null?"":cityCode);
 		jsonObject.put("adCode", adCode==null?"":adCode);
 		jsonObject.put("address", address==null?"":address);
+		jsonObject.put("type", type);
 		
 		//------------暂时注释----------
 		//jsonObject.put("longitude", longitude==null?"":longitude);
@@ -5116,7 +5117,18 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				longitude=positon.split(",")[0];
 				latitude=positon.split(",")[1];
 			}
-			insertNewStore(storeCode, store.getName(),store.getGaode_provinceCode(),store.getGaode_cityCode(),store.getGaode_adCode(),store.getAddress(),longitude,latitude);
+			
+			String type="normal";
+			String storetypename=store.getStoretypename();
+			if(storetypename!=null&&storetypename.equals("前置仓")){
+				type="front";
+			}else if(storetypename!=null&&storetypename.equals("城市仓")){
+				type="city";
+			}else{
+				type="normal";
+			}
+			
+			insertNewStore(storeCode, store.getName(),store.getGaode_provinceCode(),store.getGaode_cityCode(),store.getGaode_adCode(),store.getAddress(),longitude,latitude,type);
 			String newRtObj = hClientUtil.insRemoteData(THIRD_PART_EMP_URL, md5code, body);
 			savesynclog(employeeCode,storeCode,"",telephone,store.getGaode_provinceCode(),store.getGaode_cityCode(),store.getGaode_adCode(),store.getAddress(),jsonObject.toString(), newRtObj);
 		}
