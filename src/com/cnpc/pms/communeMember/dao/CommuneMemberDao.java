@@ -197,6 +197,84 @@ public interface CommuneMemberDao extends IDAO {
 	 * @author wuxinxin
 	 */
 	public List<Map<String, Object>> getDayaddMemCount(String string);
+	/**
+	 * TODO  查询E店社员7日订单量走势
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopMemCount(String string);
+	/**
+	 * TODO  查询E店社员7日成交额走势
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopMemSum(String string);
+	/**
+	 * TODO  查询E店非社员7日订单量走势
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopNmemCount(String string);
+	/**
+	 * TODO  查询E店非社员7日成交额走势
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopNmemSum(String string);
+	/**
+	 * TODO  按城市查询E店社员当日成交额
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopMemSumCity(String string);
+	/**
+	 * TODO  按城市查询E店社员当日订单量
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopMemCouCity(String string);
+	/**
+	 * TODO  按城市查询E店非社员当日成交额
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopNmemSumCity(String string);
+	/**
+	 * TODO  按城市查询E店非社员当日订单量
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getDayOfEshopNmemCouCity(String string);
+	/**
+	 * TODO  按城市查询E店成交额、订单量
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getEshopNmemCouCity(String string);
+	/**
+	 * TODO  按城市查询E店成交信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getEshopMemCount(String string);
+	/**
+	 * TODO  按城市查询E店成交信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getEshopWeekCount(String string);
+	/**
+	 * TODO  按城市查询E店取消订单信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getEshopQuitCount(String string);
+	/**
+	 * TODO  查询周社员活跃数
+	 * 
+	 * @author wuxinxin
+	 */
+	public List<Map<String, Object>> getMemweekCount(String string);
    
 
 }
