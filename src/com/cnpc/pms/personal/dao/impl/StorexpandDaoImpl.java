@@ -121,7 +121,7 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 
 	@Override
 	public List<Map<String, Object>> getContractAndthroughByYear(String year) {
-		String sql = "select city_name,cityno,sum(param_second) as contract_quantity,sum(param_third) as through_quantity from df_bussiness_target where type = 'store' and period_type = 'week' "
+		String sql = "select city_name,city_no,sum(param_second) as contract_quantity,sum(param_third) as through_quantity from df_bussiness_target where type = 'store' and period_type = 'week' "
 				+"and DATE_FORMAT(start_time,'%Y') = '"+year+"' GROUP BY city_name;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
