@@ -5063,7 +5063,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		jsonObject.put("cityCode", cityCode==null?"":cityCode);
 		jsonObject.put("adCode", adCode==null?"":adCode);
 		jsonObject.put("address", address==null?"":address);
-		jsonObject.put("type", type);
+		
+		//jsonObject.put("type", type);
 		
 		//------------暂时注释----------
 		//jsonObject.put("longitude", longitude==null?"":longitude);
