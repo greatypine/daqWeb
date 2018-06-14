@@ -211,7 +211,7 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			if (auditorbefore != null && auditorbefore == 3) {
 				update_store_dynamic.setWork_id(millis + "");
 			}
-			if ("MDGLYJSZ".equals(storeDynamic.getJsz())) {
+			if ("ZBCSGLBYHGLJSZ".equals(storeDynamic.getJsz())) {
 				update_store_dynamic.setAuditor_status(3);
 				storeManager.insertStoresyncDynamicStore(update_store_dynamic);
 				return update_store_dynamic;

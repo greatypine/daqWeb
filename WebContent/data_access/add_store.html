@@ -100,7 +100,7 @@ $(function(){
 			}
 		}else{
 			if(stynat=='合作店'){
-				$("#typeid").hide();
+				$("#typeid").show();
 			}else{
 				$("#typeid").hide();
 			}
@@ -254,6 +254,7 @@ function initview(){
 							if(va=="合作店"){
 								$("#hezuo").hide();
 								$("#hezuo1").hide();
+								$("#typeid").show();
 								$("#storetype").empty();
 								$('#storetype').append('<option value="">请选择</option>');
 								$('#storetype').append('<option value="T">合作店</option>');
@@ -391,11 +392,13 @@ function initview(){
 							if(va=="合作店"){
 								$("#hezuo").hide();
 								$("#hezuo1").hide();
+								$("#typeid").show();
 								$("#storetype").empty();
 								$('#storetype').append('<option value="">请选择</option>');
 								$('#storetype').append('<option value="T">合作店</option>');
 								$('#storetype').append('<option value="J">合作点</option>');
 								$('#storetype').append('<option value="O">其它</option>');
+
 							}else if(va=="自营店"){
 								$("#storetype").empty();
 								$('#storetype').append('<option value="">请选择</option>');
@@ -986,8 +989,8 @@ function downloadFile(pic_name){
 				o['gaode_cityCode']=citycode;
 				o['gaode_adCode']=adcode;
 				o['gaode_address']=gaodeaddress;
-				if(store_JSZ=='MDGLYJSZ'){
-					o['jsz']='MDGLYJSZ';
+				if(store_JSZ=='ZBCSGLBYHGLJSZ'){
+					o['jsz']='ZBCSGLBYHGLJSZ';
 				}
 				var ttt=$('#open_shop_time').val();
 				if(ttt!=null&&ttt!=''){
@@ -998,7 +1001,7 @@ function downloadFile(pic_name){
 						textStatus, XMLHttpRequest) {
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
-						if(store_JSZ=='MDGLYJSZ'){
+						if(store_JSZ=='ZBCSGLBYHGLJSZ'){
 							if(jsonData.store_id == null || jsonData.store_id == ''){
 								/* var model="contract";
 								$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id);
@@ -1006,7 +1009,7 @@ function downloadFile(pic_name){
 								alert("提交失败！");
 							}else{
 								var model="contract";
-								$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id+"&JSZ=MDGLYJSZ");
+								$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+jsonData.store_id+"&JSZ=ZBCSGLBYHGLJSZ");
 							   $("#uploadForm").submit();
 							    alert("提交成功！");
 							}

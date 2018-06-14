@@ -133,7 +133,7 @@ layer.config({
    //导出门店台账
    
    function exportExcel(){
-	   if(JSZ=='MDXZTXJSZ'||JSZ=='MDCBTXJSZ'||JSZ=='GLY'||JSZ=='MDCBSHJSZ'||JSZ=='MDXZSHJSZ'||JSZ=='CSMDGLZ'||JSZ=='QYJL'||JSZ=='ZBCSGLBYHGLJSZ'||JSZ=='ZBCSGLB'||JSZ=='CSMDGLZ'||JSZ=='MDGLYJSZ'||JSZ=='ZBXXWLBJJSZ'){
+	   if(JSZ=='MDXZTXJSZ'||JSZ=='MDCBTXJSZ'||JSZ=='GLY'||JSZ=='MDCBSHJSZ'||JSZ=='MDXZSHJSZ'||JSZ=='CSMDGLZ'||JSZ=='QYJL'||JSZ=='ZBCSGLBYHGLJSZ'||JSZ=='ZBCSGLB'||JSZ=='CSMDGLZ'||JSZ=='ZBXXWLBJJSZ'){
 		   var path = getRootPath();
 		   window.open(path + "/downloadExcel.action"
 					  +"?fileName="+"store_list_info"); 
@@ -282,14 +282,14 @@ var COLUMNS = {
 			 if(name.substring(name.length-3, name.length)=='储备店'||name=='办公室'){
 				 return '';
 			 }
-			  if(JSZ=='MDGLYJSZ'){
+			  /*if(JSZ=='MDGLYJSZ'){
 				 return '<a href="add_store.html?store_id='+store_id+'&sp=2&JSZ=MDGLYJSZ">编辑</a>    <a href="add_storedocumentinfo.html?store_id='+store_id+'&JSZ=MDGLYJSZ" >编辑详情</a>';
-			 }else if (JSZ=='QYJL'||JSZ=='CSMDGLZ'){
+			 }else*/ if (JSZ=='QYJL'||JSZ=='CSMDGLZ'){
 				  return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>    <a href="javascript:void(0);" target="myFrameId" onclick="isStoreend(\''+store_id+'\')" >设置管理街道</a>';
 			  }else if(JSZ=='GLY'||GLY){
 					 return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>';
 			 }else if (JSZ=='ZBCSGLBYHGLJSZ'){
-					 return '<a href="add_store.html?store_id='+store_id+'&sp=2">编辑</a>    <a href="#" onclick="openstore('+store_id+')">运营门店</a>';
+					 return '<a href="add_store.html?store_id='+store_id+'&sp=2&JSZ=ZBCSGLBYHGLJSZ">编辑</a>    <a href="#" onclick="openstore('+store_id+')">运营门店</a> <a href="add_storedocumentinfo.html?store_id='+store_id+'&JSZ=ZBCSGLBYHGLJSZ" >编辑详情</a>';
 			 }
 	            return '';
 	        },
