@@ -23,7 +23,7 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		String isNewSql = "";
 		if("0".equals(flag)){
 			dateSql = " and date_format(dum.opencard_time,'%Y-%m')=date_format(now(),'%Y-%m') ";
-			isNewSql = " and dum.isnew_member=1 ";
+			//isNewSql = " and dum.isnew_member=1 ";
 		}
 		String zx = "no";
 //		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
