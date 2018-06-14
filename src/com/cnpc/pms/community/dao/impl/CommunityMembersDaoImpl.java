@@ -70,7 +70,7 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 				"LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
 				"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name where 1=1 AND DATE_SUB(CURDATE(), INTERVAL 7 DAY) " +
 				"<= date(dum.opencard_time) ";
-		String groupOrderBySql = " GROUP BY DATE_FORMAT(dum.opencard_time,'%Y-%m-%d') ORDER BY dum.opencard_time limit 1,8 ";
+		String groupOrderBySql = " GROUP BY DATE_FORMAT(dum.opencard_time,'%Y-%m-%d') ORDER BY dum.opencard_time limit 0,7 ";
 		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
 		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
 		String likeSql = "";
