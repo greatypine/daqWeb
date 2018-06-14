@@ -2723,7 +2723,7 @@ var showCustomerNew = function(customerNewAndConsume){
     grid: {
       top: '20%',
       left: '3%',
-      right: '0',
+      right: '3%',
       bottom: '3%',
       containLabel: true
     },

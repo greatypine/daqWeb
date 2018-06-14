@@ -281,7 +281,16 @@ public class DateUtils {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		return formatter.format(date);
 	}
-
+	// 获得当天的日期
+	public static String curDate() {
+		Calendar calendar = new GregorianCalendar();
+		Date date = new Date();
+		calendar.setTime(date);
+		calendar.add(calendar.DATE, 0);
+		date = calendar.getTime();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		return formatter.format(date);
+	}
 	// 获得当前日期前几天的日期(不包含当天)
 	public static String getBeforeDate(String dateStr, int count) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

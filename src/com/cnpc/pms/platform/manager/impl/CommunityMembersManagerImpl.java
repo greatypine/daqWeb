@@ -56,7 +56,7 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 			newWeekCountList = communityMembersDao.getWeekMembersCount(dynamicDto);//查询近7日每日新开社员数
 			totalWeekCountList = communityMembersDao.getWeekTotalMembersCount(dynamicDto);//查询近7日每日累计社员总数
 			dateXCounts = reDate(7);
-			String curDate = DateUtils.lastDate();
+			String curDate = DateUtils.curDate();
 			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
 			String maxDateStr = curDate;    
 		    String minDateStr = "";    
