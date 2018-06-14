@@ -12,7 +12,7 @@ import java.net.URLStreamHandler;
 
 public class SearchDataServiceUtils {
     private Logger logger = Logger.getLogger("sync");
-    static String webserviceUrl = "http://111.207.11.227:9001/services/SearchDataService";
+    static String webserviceUrl = "http://111.207.11.227:9000/services/SearchDataService";
     //http://111.207.11.227:9001/services/SearchDataService?wsdl
     public static void main(String[] args) {
 		//测试
