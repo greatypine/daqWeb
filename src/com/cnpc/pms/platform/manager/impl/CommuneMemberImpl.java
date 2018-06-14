@@ -349,7 +349,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List dateXCounts = new ArrayList();
 		try {
 			//生成X轴坐标
-			dateXCounts = reDate(6);
+			dateXCounts = reDate(7);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -392,7 +392,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List<Map<String, Object>> cmAllGrowList = commDao.getCmAllGrow(dd);
 		try {
 			//生成X轴坐标
-			dateMemCounts = reDate(6);
+			dateMemCounts = reDate(7);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -773,7 +773,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		JSONArray jsonDayNoMemSums = (JSONArray) JSONArray.fromObject(noMemSums);
 		List dateXCounts = new ArrayList();
 		try {
-			dateXCounts = reDate(6);
+			dateXCounts = reDate(7);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -826,7 +826,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		c.add(Calendar.DAY_OF_MONTH, -dd);
 		List dateX = new ArrayList();
 		dateX.add(f.format(c.getTime()));
-		for (int i = dd; i > 0; i--) {
+		for (int i = dd; i > 1; i--) {
 			c.add(Calendar.DAY_OF_MONTH, 1);
 			dateX.add(f.format(c.getTime()));
 		}
