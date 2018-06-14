@@ -32,18 +32,18 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
 			sql = "select count(*) as newCount from  df_user_member dum LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
 				"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
-					"where ts.province_id='"+province_id+"' "+dateSql;
+					"where ts.province_id='"+province_id+"' ";
 		}
 		if(city_id!=null&&city_id!=""){
 			sql = "select count(*) as newCount from  df_user_member dum LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
 				"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
-					"where d.id='"+city_id+"' "+dateSql;
+					"where d.id='"+city_id+"' ";
 		}else if("yes".equals(zx)){
 			sql = "select count(*) as newCount from  df_user_member dum LEFT JOIN (select province_id,cityno,city_name from t_store t WHERE t.province_id IS NOT NULL GROUP BY cityno) ts ON LPAD(dum.regist_cityno,4,'0') = " +
 					"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
-						"where d.id='"+province_id+"' "+dateSql;
+						"where d.id='"+province_id+"' ";
 		}
-		sql+=isNewSql;
+		sql+=isNewSql+dateSql;
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
