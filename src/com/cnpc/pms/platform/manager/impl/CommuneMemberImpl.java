@@ -244,7 +244,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 			for (int i = 0; i < cityshopList.size(); i++) {
 				cityShopSums.add(cityshopList.get(i).get("eshopgmv").toString().split("\\.")[0]);
 				cityShopCounts.add(cityshopList.get(i).get("eshopcou").toString());
-				cityShopNames.add(cityshopList.get(i).get("cname").toString());
+				if("乌兰察布市".equals(cityshopList.get(i).get("cname").toString())) {
+					cityShopNames.add("乌兰察布");
+				}else {
+					cityShopNames.add(cityshopList.get(i).get("cname").toString());
+				}
 			}
 		}
 		JSONArray jsonCityShopSums = (JSONArray) JSONArray.fromObject(cityShopSums);

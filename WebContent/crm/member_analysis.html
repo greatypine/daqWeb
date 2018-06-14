@@ -471,7 +471,6 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	}
 
   var showMemberGrow = function (dataServer){
-	  debugger;
 	  var myChart1 = echarts.init(document.getElementById('main1'));
 	  //社员人数
 	  option1 = {
@@ -2516,7 +2515,7 @@ var showEshopMemSum = function (dataServer){
 		        data:['成交额']
 		    },
 		    toolbox: {
-		        show : true,
+		        show : false,
 		        feature : {
 		            mark : {show: true},
 		            dataView : {show: true, readOnly: false},
