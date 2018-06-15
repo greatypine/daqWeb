@@ -1241,12 +1241,12 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			sql = "select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t2.name as storeName,t2.city_name from (select t.skid,t.name,t.city_name " +
 					" from t_store t  inner join  (select tdc.id,tdc.cityname from" +
 					" t_dist_citycode tdc  "+whereStr+") t1	on t.city_name  = t1.cityname 		WHERE t. NAME NOT LIKE '%测试%' " +
-							"AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' " +
+							"AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') != '闭店中' " +
 							"AND t.storetype != 'V' AND t.storetype != 'W' ) t2  " +
 					" INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id";
 		}else if(dd.getTarget()==1){//省
 			sql="select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t.name as storeName,t.city_name from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname left JOIN tb_bizbase_user as tbu on t.skid = tbu.id  where  " +
-					"	t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' " +
+					"	t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') != '闭店中' " +
 					"AND t.storetype != 'V' AND t.storetype != 'W' and tbu.employeeId is not null";
 		}
 		
@@ -1266,7 +1266,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					"`t_humanresources` a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t  " +
 					" inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc "+whereStr+")"+
 					" t1 on t.city_name  = t1.cityname AND t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' " +
-					"AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
+					"AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') != '闭店中' ) b " +
 					" on a.store_id = b.store_id and  a.humanstatus =1 where a.name not like '%测试%' ";
 			
 		}else if(dd.getTarget()==1){//省
@@ -1274,7 +1274,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					"`t_humanresources` a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t  " +
 					" inner join  (select id from t_city where province_id="+dd.getProvinceId()+")"+
 					" t1 on t.city_id = t1.id AND t. NAME NOT LIKE '%测试%' " +
-					"AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
+					"AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') != '闭店中' ) b " +
 					" on a.store_id = b.store_id and  a.humanstatus =1 where a.name not like '%测试%' ";
 		}
 		
