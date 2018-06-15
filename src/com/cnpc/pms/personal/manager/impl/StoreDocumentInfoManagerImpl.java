@@ -70,7 +70,7 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 		documentInfo.setAudit_date(storeDocumentInfo.getAudit_date());
 		if (storeDocumentInfo.getAudit_status() != null && storeDocumentInfo.getAudit_status() == 0) {
 			documentInfo.setAudit_status(0);
-		} else if ("MDGLYJSZ".equals(storeDocumentInfo.getJsz())) {
+		} else if ("ZBCSGLBYHGLJSZ".equals(storeDocumentInfo.getJsz())) {
 			documentInfo.setAudit_status(3);
 		} else {
 			documentInfo.setAudit_status(1);
@@ -86,7 +86,7 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 		storeDocumentInfoHistoryManager.InsertStoreDocumentInfoHistory(documentInfo);
 		this.saveObject(documentInfo);
 		if ((storeDocumentInfo.getAudit_status() != null && storeDocumentInfo.getAudit_status() == 0)
-				|| "MDGLYJSZ".equals(storeDocumentInfo.getJsz())) {
+				|| "ZBCSGLBYHGLJSZ".equals(storeDocumentInfo.getJsz())) {
 
 		} else {
 			// 添加审核任务

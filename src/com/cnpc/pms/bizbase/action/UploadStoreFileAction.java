@@ -168,7 +168,7 @@ public class UploadStoreFileAction extends HttpServlet {
 
 				}
 			}
-			if ("MDGLYJSZ".equals(jsz)) {
+			if ("ZBCSGLBYHGLJSZ".equals(jsz)) {
 				writer.write(
 						"<script type='text/javascript'>window.location.href = 'data_access/store_list.html';</script>");
 			}

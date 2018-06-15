@@ -90,7 +90,7 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 	})
 	
 	function initview(){
-		if(JSZ_MD=='MDGLYJSZ'){
+		if(JSZ_MD=='ZBCSGLBYHGLJSZ'){
 			$("#name").attr("readOnly","true");
 			$("#baocun").hide();
 			findstoreDocumentByStoreId(store_id_md);
@@ -360,16 +360,16 @@ var JSZ_MD = getUrlParamByKey("JSZ");
 			o[v] = va;
 		}
 		o['card_content']=$("#card_content option:selected").val();
-		if(JSZ_MD=='MDGLYJSZ'){
-			o['jsz']='MDGLYJSZ';
+		if(JSZ_MD=='ZBCSGLBYHGLJSZ'){
+			o['jsz']='ZBCSGLBYHGLJSZ';
 		}
 		doManager("StoreDocumentInfoManager", "saveOrUpdateStoreDocumentInfo", o, function(data,
 				textStatus, XMLHttpRequest) {
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
 				var model="card";
-				if(JSZ_MD=='MDGLYJSZ'){
-					$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val()+"&JSZ=MDGLYJSZ");
+				if(JSZ_MD=='ZBCSGLBYHGLJSZ'){
+					$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val()+"&JSZ=ZBCSGLBYHGLJSZ");
 				    $("#uploadForm").submit();
 				}else{
 					$("#uploadForm").attr("action", path + "/uploadStoreFileAction.action?model="+model+"&store_id="+$("#store_id").val());
