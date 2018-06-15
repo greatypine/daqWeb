@@ -1240,10 +1240,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			
 			sql = "select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t2.name as storeName,t2.city_name from (select t.skid,t.name,t.city_name " +
 					" from t_store t  inner join  (select tdc.id,tdc.cityname from" +
-					" t_dist_citycode tdc  "+whereStr+") t1	on t.city_name  = t1.cityname ) t2  " +
+					" t_dist_citycode tdc  "+whereStr+") t1	on t.city_name  = t1.cityname 		WHERE t. NAME NOT LIKE '%测试%' " +
+							"AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' " +
+							"AND t.storetype != 'V' AND t.storetype != 'W' ) t2  " +
 					" INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id";
 		}else if(dd.getTarget()==1){//省
-			sql="select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t.name as storeName,t.city_name from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname left JOIN tb_bizbase_user as tbu on t.skid = tbu.id  where  t.name not like '%测试%' and tbu.employeeId is not null";
+			sql="select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id,t.name as storeName,t.city_name from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id left join t_dist_citycode t1  on t.city_name  = t1.cityname left JOIN tb_bizbase_user as tbu on t.skid = tbu.id  where  " +
+					"	t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' " +
+					"AND t.storetype != 'V' AND t.storetype != 'W' and tbu.employeeId is not null";
 		}
 		
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -1261,14 +1265,16 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			sql = "SELECT a.name,a.employee_no,b.storeName,a.sex,a.authorizedtype,a.topostdate,b.city_name FROM " +
 					"`t_humanresources` a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t  " +
 					" inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc "+whereStr+")"+
-					" t1 on t.city_name  = t1.cityname and ifnull(t.estate,'')!='闭店中') b " +
+					" t1 on t.city_name  = t1.cityname AND t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' " +
+					"AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
 					" on a.store_id = b.store_id and  a.humanstatus =1 where a.name not like '%测试%' ";
 			
 		}else if(dd.getTarget()==1){//省
 			sql = "SELECT a.name,a.employee_no,b.storeName,a.sex,a.authorizedtype,a.topostdate,b.city_name FROM " +
 					"`t_humanresources` a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t  " +
 					" inner join  (select id from t_city where province_id="+dd.getProvinceId()+")"+
-					" t1 on t.city_id = t1.id and ifnull(t.estate,'')!='闭店中') b " +
+					" t1 on t.city_id = t1.id AND t. NAME NOT LIKE '%测试%' " +
+					"AND t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
 					" on a.store_id = b.store_id and  a.humanstatus =1 where a.name not like '%测试%' ";
 		}
 		
@@ -2914,7 +2920,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		sqlStr="SELECT CASE WHEN t.storetype = 'X' THEN '经营星店' WHEN t.storetype = 'E' THEN '校园店' " +
 				"ELSE t.storetypename END AS storetypename,count(storetypename) AS store_kind_count " +
 				"FROM t_store t LEFT JOIN t_dist_citycode d ON t.cityno=d.cityno  WHERE t.storetype !='V' AND " +
-				"t.storetype !='W' AND t.storetypename IS NOT NULL and t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' AND ifnull(t.estate,'')!='闭店中' "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
+				"t.storetype !='W' AND t.storetypename IS NOT NULL and t.flag=0 AND t.`name` NOT  LIKE '%测试%' and t.`name` NOT  LIKE '%储备%' and t.`name` NOT  LIKE '%办公室%' AND ifnull(t.estate,'')='运营中' "+provinceStr+cityStr+"  GROUP BY t.storetype ORDER BY store_kind_count DESC";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
 		try{ 
