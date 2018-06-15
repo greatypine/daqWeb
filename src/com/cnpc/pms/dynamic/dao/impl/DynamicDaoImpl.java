@@ -1209,7 +1209,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		if(dd.getTarget()==1){//省
 			sql="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t INNER JOIN (select id from t_city where province_id="+dd.getProvinceId()+") t2 on t.city_id = t2.id " +
 					"left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%' and " +
-					"t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and ifnull(t.estate,'') !='闭店中' and t.storetype!='V' and t.storetype!='W' ";
+					"t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and ifnull(t.estate,'') ='运营中' and t.storetype!='V' and t.storetype!='W' ";
 		}else if(dd.getTarget()==0||dd.getTarget()==3){//全国
 			
 			String whereStr = "";
@@ -1218,7 +1218,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			}
 			
 			sql ="select t.store_id,t.name,t.storeno,t.city_name,t1.id as cityId from t_store t left join t_dist_citycode t1  on t.city_name  = t1.cityname where  t.name not like '%测试%' " +
-					"and t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and ifnull(t.estate,'') !='闭店中' and t.storetype!='V' and t.storetype!='W' "+ whereStr+"";
+					"and t.name not like '%储备%' and t.name not like '%办公室%' and t.flag='0' and ifnull(t.estate,'') ='运营中' and t.storetype!='V' and t.storetype!='W' "+ whereStr+"";
 		}
 		
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
