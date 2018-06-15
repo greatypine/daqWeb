@@ -190,6 +190,7 @@
 	                      <a id="tag_集采订单" onclick="orderTypeSelection('集采订单')" style="cursor:pointer;">集采订单</a>
 	                      <a id="tag_开卡礼订单" onclick="orderTypeSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
 	                      <a id="tag_试用礼订单" onclick="orderTypeSelection('试用礼订单')" style="cursor:pointer;">试用礼订单</a>
+	                      <a id="tag_积分订单" onclick="orderTypeSelection('积分订单')" style="cursor:pointer;">积分订单</a>
 	                      <input type="text" style="display:none" class="form-control" placeholder="订单标签"  id="label_private_manual"/>
 	                    </div>
 	                  </div>
@@ -1211,6 +1212,10 @@ Date.prototype.format=function(fmt) {
 						if(jData[i].order_tag1.indexOf("S") != -1){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180147.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">试用礼订单</span>";
+						}
+						if(jData[i].score !=''){
+							infoStr= infoStr
+								+"<span style=\"background:url('../data_access/imgmouse_files/20180615171805.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">积分订单</span>";
 						}
 						infoStr= infoStr
 	                       	+"</td>"
