@@ -617,7 +617,9 @@ $(document).ready(function(){
   						if(regex_zb.test(curr_user.usergroup.code)){
   							iscrmzbjs = true;
   						}
-  						
+  						if(curr_user.usergroup.code=="GLY"){
+  							iscrmzbjs = true;
+  						}
   						if(curr_user.usergroup.code=="DZ"){
 							iscrmdz = true;
 						}
