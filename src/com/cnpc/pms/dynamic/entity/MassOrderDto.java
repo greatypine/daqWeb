@@ -45,6 +45,7 @@ public class MassOrderDto {
 	private String addr_customer_phone;
 	private String sort_tag;
 	private String sort_type;
+	private String hidden_flag;
 	
 	public enum TimeFlag{
 		CUR_DAY("0", "当天"),
@@ -258,6 +259,12 @@ public class MassOrderDto {
 	}
 	public void setSort_type(String sort_type) {
 		this.sort_type = sort_type;
+	}
+	public String getHidden_flag() {
+		return hidden_flag;
+	}
+	public void setHidden_flag(String hidden_flag) {
+		this.hidden_flag = hidden_flag;
 	}
 	
 }

@@ -130,7 +130,12 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	        for(int i = 0;i < list.size();i++){
   	        	 row = sheet.createRow(i+1);
   	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-  	            	setCellValueall(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+  	            	String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+  	            	if(cellIndex==1 && "normal".equals(massOrderDto.getHidden_flag())){
+  	  	            	setCellValueall(row, cellIndex, value.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+  	  	            }else{
+  	  	            	setCellValueall(row, cellIndex, value);
+  	  	            } 
   	             }
   	        }
 
@@ -238,7 +243,12 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	        for(int i = 0;i < list.size();i++){
   	        	 row = sheet.createRow(i+1);
   	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-  	            	setCellValueall(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+  	            	String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+  	            	if(cellIndex==1 && "normal".equals(massOrderDto.getHidden_flag())){
+  	  	            	setCellValueall(row, cellIndex, value.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+  	  	            }else{
+  	  	            	setCellValueall(row, cellIndex, value);
+  	  	            } 
   	             }
   	        }
 

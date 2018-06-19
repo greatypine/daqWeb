@@ -244,7 +244,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> exportOrder(MassOrderDto massOrderDto, String timeFlag) {
-		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,a.info_employee_a_no,IFNULL(INSERT(a.customer_mobile_phone,4,4,'****'),'') as customer_mobile_phone,"
+		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,a.info_employee_a_no,IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,"
 				+ "IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.sign_time,a.return_time,a.employee_name,a.employee_phone,"
 				+ "a.eshop_name,a.store_name,a.store_code,a.channel_name,a.department_name,a.store_city_name,CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,"
 				+ "CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,CASE WHEN a.return_label='1' THEN '是'  ELSE '否' END AS return_label,"
@@ -495,7 +495,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@Override
 	public List<Map<String, Object>> exportReturnOrder(MassOrderDto massOrderDto, String timeFlag) {
 		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,a.info_employee_a_no,"
-				+ "IFNULL(INSERT(a.customer_mobile_phone,4,4,'****'),'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,"
+				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(ROUND(a.returned_amount,2),0) as returned_amount,"
 				+ "a.sign_time,a.return_time,a.employee_name,a.employee_phone,a.eshop_name,a.store_name,a.store_code,a.channel_name,a.department_name,a.store_city_name,"
 				+ "CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,"

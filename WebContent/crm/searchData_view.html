@@ -288,8 +288,11 @@
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                     <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
                 </div>
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
-                    <button type="button" id="export_manual_massOrder_button" onclick="export_manual_massOrder()" class="btn btn-block btn-warning">导出</button>
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;" id="exportnormal">
+                    <button type="button" id="export_manual_massOrder_button" onclick="export_manual_massOrder('normal')" class="btn btn-block btn-warning">导出</button>
+                </div>
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
+                    <button type="button" id="export_manual_massOrder_button" onclick="export_manual_massOrder('all')" class="btn btn-block btn-warning">完整数据导出</button>
                 </div>
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                     <button type="button" onclick="search_manual_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
@@ -441,6 +444,15 @@ Date.prototype.format=function(fmt) {
         this.value =this.value.replace(/\s/g,'').replace(/\D/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");;
   	};
     
+  	initcurruser();//初始化登录人信息 
+    var isManager = currentUser.usergroup.code;
+    if(isManager=="GLY"){
+    	var exportnormal = document.getElementById("exportnormal");
+    	exportnormal.style.display = "none";
+    	var exportall = document.getElementById("exportall");
+    	exportall.style.display = "block";
+    }
+  	
     var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
     if(target==0){//总部
     	initallcity(); 
@@ -880,6 +892,18 @@ Date.prototype.format=function(fmt) {
 			}
 		});
 		return cityStore;
+	}
+ 	
+ 	var currentUser;
+	function initcurruser(){
+		//取得当前登录人的门店
+		doManager("UserManager", "getCurrentUserDTO",null,
+			function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var curr_user = JSON.parse(data.data);
+					currentUser = curr_user;
+				}
+		},false);
 	}
      
     //订单标签快速选择
@@ -1381,7 +1405,7 @@ Date.prototype.format=function(fmt) {
   }
   
   //导出
-  function export_manual_massOrder(){
+  function export_manual_massOrder(hiddenvalue){
 	  	var sdate = $("#auto_date").val();
 	    var begin_end_date=["",""];
 	  	if(sdate!=""){
@@ -1466,7 +1490,8 @@ Date.prototype.format=function(fmt) {
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
 	    		sort_tag:sort_tag,
-	    		sort_type:sort_type
+	    		sort_type:sort_type,
+	    		hidden_flag:hiddenvalue
 			}
 		    
 		    doManager('massOrderManager','exportOrder',[massOrderDto],function(data){
