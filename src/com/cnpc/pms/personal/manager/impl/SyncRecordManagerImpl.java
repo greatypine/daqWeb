@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Transient;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cnpc.pms.base.entity.DataEntity;
 import com.cnpc.pms.base.paging.FSP;
@@ -54,6 +57,7 @@ public class SyncRecordManagerImpl extends BizBaseCommonManager implements SyncR
 	
 	//查询差量数据
 	@Override
+	@Transactional
 	public void saveSearchWebServiceData(){
 		CityHumanresourcesManager cityHumanresourcesManager=(CityHumanresourcesManager) SpringHelper.getBean("cityHumanresourcesManager");
 		SyncRecordLogManager syncRecordLogManager = (SyncRecordLogManager) SpringHelper.getBean("syncRecordLogManager");
