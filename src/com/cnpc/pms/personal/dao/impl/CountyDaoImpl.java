@@ -1,29 +1,28 @@
 package com.cnpc.pms.personal.dao.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
+import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.personal.dao.CountyDao;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.hibernate.transform.Transformers;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
-import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
-import com.cnpc.pms.base.paging.impl.PageInfo;
-import com.cnpc.pms.personal.dao.CountyDao;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CountyDaoImpl extends BaseDAOHibernate implements CountyDao {
 
 	@Override
 	public List<Map<String, Object>> getCountyListByCityName(String where, PageInfo pageInfo) {
 		// sql查询列，用于分页计算数据总数
-		String str_count_sql = "SELECT count(1) from t_county county LEFT JOIN t_city city ON county.city_id=city.id WHERE 1=1 "
+		String str_count_sql = "SELECT count(1) from t_county county LEFT JOIN t_city city ON county.city_id=city.id WHERE 1=1 and county.status=0 "
 				+ where;
 		System.out.println(str_count_sql);
 		// sql查询列，用于页面展示所有的数据
-		String find_sql = "SELECT county.id,county.`name` from t_county county LEFT JOIN t_city city ON county.city_id=city.id WHERE 1=1 ";
+		String find_sql = "SELECT county.id,county.`name` from t_county county LEFT JOIN t_city city ON county.city_id=city.id WHERE 1=1 and county.status=0 ";
 		StringBuilder sb_sql = new StringBuilder();
 		sb_sql.append(find_sql);
 		sb_sql.append(where + " order by county.sort desc");
