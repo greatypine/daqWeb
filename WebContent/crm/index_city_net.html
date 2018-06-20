@@ -79,9 +79,22 @@
   #pf-operate::-webkit-scrollbar{width: 8px; background-color: #fff;}
   #pf-operate::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
   #pf-operate::-webkit-scrollbar-track{background-color: #fff;}
+  
+  #pf-frequency{overflow-y: auto;}
+  #pf-frequency::-webkit-scrollbar{width: 8px; background-color: #fff;}
+  #pf-frequency::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+  #pf-frequency::-webkit-scrollbar-track{background-color: #fff;}
+  
+  #pf-resource{overflow-y: auto;}
+  #pf-resource::-webkit-scrollbar{width: 8px; background-color: #fff;}
+  #pf-resource::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+  #pf-resource::-webkit-scrollbar-track{background-color: #fff;}
+  
   .pframe .box{margin-top: 100px;}
   .pframe .table > tbody > tr > td{line-height: 34px;}
-  .pf-frequency,.pf-operate{display: none;}
+  /* .pf-frequency,.pf-operate{display: none;} */
+  .pf-frequency,.pf-operate,.pf-resource,.pf-field{display: none;}
+  
     .box-body .alert-warning{font-size: 16px; border-bottom: 1px dashed #f39c12; padding: 0 0 3px 3px; margin: 0 10px 10px 10px; display: inline-block; line-height: 24px;}
 
   
@@ -166,7 +179,8 @@
               <div class="col-sm-6" id="main2" style="height: 400px;"></div>   
               <div class="col-sm-6" id="mainstoreType" style="height: 400px;"></div>
               <div class="col-sm-6" id="mainCooperative" style="height: 400px;"></div>
-              <table class="table table-striped table-bordered" id="storenet">
+              	<input type="button" value="详情展示" onclick="storenetshow();">
+              <table class="table table-striped table-bordered" style="display:none;" id="storenet">
                 <tr>
                   <th width="180"></th>
                   <th colspan="8">门店业态分类</th>
@@ -188,110 +202,7 @@
                   <th class="text-red">18年累计目标</th>
                   <th>现有数量</th>
                 </tr>
-                <!-- <tr class="text-red">
-                  <th>全国</th>
-                  <th>299</th>
-                  <th>1</th>
-                  <th>250</th>
-                  <th>27</th>
-                  <th>9（乌兰察布）</th>
-                  <th>3</th>
-                  <th>9</th>
-                  <th>0</th>
-                  <th>30</th>
-                  <th>5</th>
-                </tr>
-                <tr>
-                  <td>北京</td>
-                  <td class="text-red">142</td>
-                  <td>1</td>
-                  <td>98</td>
-                  <td>24</td>
-                  <td>7</td>
-                  <td>3</td>
-                  <td>9</td>
-                  <td>-</td>
-                  <td class="text-red">30</td>
-                  <td>5</td>
-                </tr>
-                <tr>
-                  <td>上海</td>
-                  <td class="text-red">52</td>
-                  <td>&nbsp;</td>
-                  <td>52</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td class="text-red">6</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>天津</td>
-                  <td class="text-red">40</td>
-                  <td>&nbsp;</td>
-                  <td>39</td>
-                  <td>1</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td class="text-red">4</td>
-                  <td>0</td>
-                </tr> -->
               </table>
-             <!--  <table class="table table-condensed table-bordered">
-                <tr>
-                  <th width="50"></th>
-                  <th colspan="5">门店业态分类</th>
-                  <th rowspan="2">合作备注</th>
-                </tr>
-                <tr>
-                  <th></th>
-                  <th class="text-red">合计数量</th>
-                  <th>数码连锁店</th>
-                  <th>超市连锁店</th>
-                  <th>广电营业厅</th>
-                  <th>其它</th>
-                </tr>
-                <tr class="text-red">
-                  <th>全国</th>
-                  <th>47</th>
-                  <th>22</th>
-                  <th>24</th>
-                  <th>1</th>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-                </tr>
-                <tr>
-                  <td>北京</td>
-                  <td class="text-red">22</td>
-                  <td>22</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>贵阳</td>
-                  <td class="text-red">24</td>
-                  <td>&nbsp;</td>
-                  <td>24（3惠民生鲜+21植入）</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>长沙</td>
-                  <td class="text-red">1</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>1</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-              </table> -->
             </div>
           </div>
         </div>
@@ -308,7 +219,8 @@
             <div class="col-sm-12" id="main12" style="height: 400px;"></div>
             <div class="col-sm-6" id="main13" style="height: 400px;"></div>
             <div class="col-sm-6" id="main14" style="height: 400px;"></div>
-            <div class="col-sm-6">
+            <input type="button" value="详情展示" onclick="penstoreshow();">
+            <div class="col-sm-6" style="display:none;" id="showview_1">
               <h4 style="margin-top: 0">各城市门店拓展任务完成情况（17年已开城市）</h4>
               <table class="table table-striped table-bordered" id="preopenstore">
                 <tr>
@@ -325,53 +237,10 @@
                   <td>已开业数量</td>
                   <td>完成率</td>
                 </tr>
-                <!-- <tr class="text-red">
-                  <th>全国</th>
-                  <th>216</th>
-                  <th>16</th>
-                  <th>7.4%</th>
-                  <th>&nbsp;</th>
-                  <th>388</th>
-                  <th>3</th>
-                  <th>1%</th>
-                  <th>&nbsp;</th>
-                </tr>
-                <tr>
-                  <td>北京</td>
-                  <td class="text-red">60</td>
-                  <td>1</td>
-                  <td>1.7%</td>
-                  <td>0</td>
-                  <td class="text-red">40</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>上海</td>
-                  <td class="text-red">50</td>
-                  <td>3</td>
-                  <td>6.00%</td>
-                  <td>0</td>
-                  <td class="text-red">45</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>天津</td>
-                  <td class="text-red">47</td>
-                  <td>6</td>
-                  <td>12.8%</td>
-                  <td>0</td>
-                  <td class="text-red">45</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr> -->
+               
               </table>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" style="display:none;" id="showview_2">
               <h4 style="margin-top: 0">各城市门店拓展任务完成情况（18年新开城市）</h4>
               <table class="table table-striped table-bordered" id="newopenstore">
                 <tr>
@@ -388,50 +257,6 @@
                   <td>已开业数量</td>
                   <td>完成率</td>
                 </tr>
-                <!-- <tr class="text-red">
-                  <th>全国</th>
-                  <th>52</th>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-                  <th class="text-red">450</th>
-                  <th class="text-red">1</th>
-                  <th class="text-red">0.20%</th>
-                  <th>&nbsp;</th>
-                </tr>
-                <tr>
-                  <td>成都</td>
-                  <td class="text-red">6</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td class="text-red">45</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>重庆</td>
-                  <td class="text-red">6</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td class="text-red">45</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td>南宁</td>
-                  <td class="text-red">5</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td class="text-red">45</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                  <td>&nbsp;</td>
-                </tr> -->
               </table>
             </div>
           </div>
@@ -482,6 +307,9 @@
             <div><span class="alert-warning">专员（服务专员，线上服务专员）</span></div>
             <div class="col-sm-6" id="mainzhuanyuan" style="height: 300px;"></div>
             <div class="col-sm-6" id="mainempzhuanyuan" style="height: 300px;"></div>
+            <div><span class="alert-warning">专员（综合管理，副店长）</span></div>
+            <div class="col-sm-6" id="mainzongguan" style="height: 300px;"></div>
+            <div class="col-sm-6" id="mainempzongguan" style="height: 300px;"></div>
             <!-- <div id="main8" style="height: 350px;"></div> -->
             <div class="col-sm-12">
               <table class="table table-bordered" id="weekcount">
@@ -656,55 +484,51 @@
             </div>
           </div>
         </div>
+		<!-- <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>国安侠人均消费用户数</strong></div>
+          <div class="box-body">
+            <p><b>2018年6月国安侠人均消费用户数分析</b></p>
+            <p>与历史对比，6月消费用户相对5月整体减少，与4月保持相当，其中<b class="text-red">广州</b>、<b class="text-red">沈阳</b>增长明显</p>
+            <p>从新老用户占比来看，6月全国拉新占比<b class="text-red">63%</b>，<b class="text-red">沈阳</b>拉新增长明显，<b class="text-red">广州</b>复购用户增长明显</p>
+            <div id="main40" style="height: 350px;"></div>
+            <table class="table table-striped table-bordered" >
+             <tr class="bg-light-blue" id="empcustomertotal" >
+                <th>城市</th>
+                <th><span id="month_1"></span>月人均消费用户</th>
+                <th><span id="month_2"></span>月人均消费用户</th>
+                <th><span id="month_3"></span>月人均消费用户</th>
+                <th><span id="month_4"></span>月人均消费用户</th>
+                <th><span id="month_5"></span>月人均消费用户</th>
+                <th><span id="month_6"></span>月人均消费用户</th>
+                <th><span id="month_6_1"></span>月新消费用户</th>
+                <th>拉新占比</th>
+                <th><span id="one"></span></th>
+                <th><span id="two"></span></th>
+                <th><span id="three"></span></th>
+                <th><span id="four"></span></th>
+              </tr> 
+              <tr>
+                <td bgcolor="#ff0">北京</td>
+                <td>125</td>
+                <td>1333</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+                <td>1069</td>
+              </tr>
+            </table>
+          </div>
+        </div> -->
         <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue"><strong>用户分析</strong></div>
           <div class="box-body">
             <div class="col-sm-12">
-              <!-- <p><b>2018年4月国安侠人均消费用户数分析</b></p>
-              <p>1、4月消费用户，<span class="text-red">天津、沈阳、北京高于平均水平</span>，其余城市低于平均水平；</p>
-              <p>2、与3月第二周对比，4月消费用户保持增长趋势，<span class="text-red">北京、沈阳、天津、深圳</span>消费用户有增长趋势；</p>
-              <p>3、从新老用户占比来看，1月、2月、3月新用户占比分别是<span class="text-red">80%、79%和84%</span>， 4月第二周拉新<span class="text-red">69%</span> ，4月第二周拉新<span class="text-red">74%</span>，本周<span class="text-red">沈阳</span>公司拉新超出所有公司。</p>
-              <table class="table table-striped table-bordered">
-                <tr class="bg-light-blue">
-                  <th>城市</th>
-                  <th>1月消费用户</th>
-                  <th>2月消费用户</th>
-                  <th>3月消费用户</th>
-                  <th>4月截止18号人均消费用户数</th>
-                  <th>4月新消费用户</th>
-                  <th>拉新占比</th>
-                  <th>3月第一周</th>
-                  <th>4月第一周</th>
-                  <th>3月第二周</th>
-                  <th>4月第二周</th>
-                </tr>
-                <tr>
-                  <td>北京</td>
-                  <td>125</td>
-                  <td>1333</td>
-                  <td>1069</td>
-                  <td>125</td>
-                  <td>1333</td>
-                  <td>1069</td>
-                  <td>125</td>
-                  <td>1333</td>
-                  <td>1069</td>
-                  <td>125</td>
-                </tr>
-                <tr class="text-red">
-                  <th>合计</th>
-                  <th>295</th>
-                  <th>3366</th>
-                  <th>2512</th>
-                  <th>295</th>
-                  <th>3366</th>
-                  <th>2512</th>
-                  <th>295</th>
-                  <th>3366</th>
-                  <th>2512</th>
-                  <th>3366</th>
-                </tr>
-              </table> -->
               <div class="col-sm-6 no-padding" id="main22" style="height: 350px;"></div>
               <div class="col-sm-6 no-padding" id="main23" style="height: 350px;"></div>
               <!-- <small class="pull-right">数据来源：国安数据<br>取数时间段：20180401-20180418</small> -->
@@ -734,24 +558,7 @@
                   <th>全国</th>
                 </tr>
                 <tr>
-                  <th colspan="2">覆盖社区</th>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                  <td>0</td>
-                </tr>
-                <tr>
-                  <th rowspan="4" style="table-layout:fixed; white-space: normal; overflow: auto;">社区活动举办场次</th>
+                  <th rowspan="6" style="table-layout:fixed; white-space: normal; overflow: auto;">非常营销类活动</th>
                   <th>文娱类活动</th>
                   <td></td>
                   <td></td>
@@ -820,7 +627,7 @@
                   <td></td>
                 </tr>
                 <tr>
-                  <th colspan="2">活动参与人数</th>
+                  <th>活动参与人数</th>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -837,7 +644,93 @@
                   <td></td>
                 </tr>
                 <tr>
-                  <th colspan="2">单场活动人数</th>
+                  <th>单场活动人数</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th rowspan="4" style="table-layout:fixed; white-space: normal; overflow: auto;">营销类（非总部、城市公司整体活动）</th>
+                  <th>门店自主营销活动</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>活动参与人数</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>单场活动人数</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>门店自主营销活动金额小计</th>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th colspan=2>合计总活动数量</th>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -1166,6 +1059,57 @@
           </div>
         </div>
         <div class="box box-default" style="margin-top: 50px;">
+          <div class="box-header h1 text-light-blue"><strong>混片儿情况——资源统计</strong><a class="pull-right btn btn-default btn-sm pfresource">编辑</a></div>
+          <div class="box-body">
+            <div class="col-sm-12">
+            <h4><strong>店内资源统计表</strong></h4>
+              <table class="table table-striped table-bordered" id="storeresources">
+                <tr class="bg-light-blue">
+                  <th>序号</th>
+                  <th>城市名称</th>
+                  <th>门店数量</th>
+                  <th>室内主屏幕</th>
+                  <th>室内辅屏</th>
+                  <th>室外电子竖屏幕</th>
+                  <th>易拉宝</th>
+                  <th>海报</th>
+                  <th>中央堆头</th>
+                  <th>地面堆头</th>
+                  <th>室内互动面积（平米）</th>
+                </tr>
+              </table>
+            </div>
+            <div class="col-sm-12">
+            <h4><strong>户外点位场地资源表</strong><!-- <a class="pull-right btn btn-default btn-sm pfresource">编辑</a> --></h4>
+              <table class="table table-striped table-bordered" id="outstoreresources">
+                <tr class="bg-light-blue">
+                  <th rowspan="2">序号</th>
+                  <th rowspan="2">城市公司名称</th>
+                  <th rowspan="2">门店名称数量</th>
+                  <th colspan="4">点位框架</th>
+                  <th colspan="5">活动场地</th>
+                </tr>
+                <tr class="bg-light-blue">
+                  <th>框架数量</th>
+                  <th>关联社区数量</th>
+                  <th>开放社区数量</th>
+                  <th>封闭社区数量</th>
+                  <th>社区活动区数量或物业活动区数</th>
+                  <th>收费场地数量</th>
+                  <th>免费场地数量</th>
+                  <th>场地合计面积（平米）</th>
+                  <th>关联社区街道数量</th>
+                </tr>
+              </table>
+          <!-- <div class="box-header h4 text-light-blue"><strong>户外点位场地资源表</strong><a class="pull-right btn btn-default btn-sm pffield">编辑</a></div>
+          <div class="box-body"> -->
+            
+            <!-- </div> -->
+          </div>
+        </div>
+        </div>
+        
+        <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue"><strong>GMV</strong></div>
           <div class="box-body">
             <div class="col-sm-12">
@@ -1211,7 +1155,7 @@
   <!-- /.content-wrapper -->
   <div class="pframe pf-frequency">
     <div class="container" style="width: 1300px;">
-      <div class="box box-default">
+      <div class="box box-default" id="pf-frequency">
         <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——社区活动举办场次</strong><a class="pull-right btn btn-warning btn-sm">保存</a><a class="pull-right btn btn-default btn-sm margin-r-5">取消</a></div>
         <div class="box-body">
           <div class="col-sm-12">
@@ -1234,24 +1178,7 @@
                 <th>全国</th>
               </tr>
               <tr>
-                <td colspan="2">覆盖社区</td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-                <td><input type="text" readonly="readonly" class="form-control"></td>
-              </tr>
-              <tr>
-                <th rowspan="4" style="table-layout:fixed; white-space: normal; overflow: auto;">社区活动举办场次</th>
+                <th rowspan="6" style="table-layout:fixed; white-space: normal; overflow: auto;">非常营销类活动</th>
                 <th>文娱类活动</th>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1320,7 +1247,7 @@
                 <td><input type="text" readonly="readonly" class="form-control"></td>
               </tr>
               <tr>
-                <th colspan="2">活动参与人数</th>
+                <th>活动参与人数</th>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1337,7 +1264,93 @@
                 <td><input type="text" readonly="readonly" class="form-control"></td>
               </tr>
               <tr>
-                <th colspan="2">单场活动人数</th>
+                <th>单场活动人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+               <tr>
+                <th rowspan="4" style="table-layout:fixed; white-space: normal; overflow: auto;">营销类（非总部、城市公司整体活动）</th>
+                <th>门店自主营销活动</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>活动参与人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>单场活动人数</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th>门店自主营销活动金额小计</th>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control"></td>
+                <td><input type="text" readonly="readonly" class="form-control"></td>
+              </tr>
+              <tr>
+                <th colspan="2">合计总活动数量</th>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
                 <td><input type="text" class="form-control"></td>
@@ -1664,6 +1677,66 @@
       </div>
     </div>
   </div>
+  <div class="pframe pf-resource">
+    <div class="container" style="width: 1300px;">
+      <div class="box box-default" id="pf-resource">
+        <div class="box-header h1 text-light-blue" style="margin-bottom: 0;"><strong>混片儿情况——资源统计</strong><a class="pull-right btn btn-warning btn-sm">保存</a><a class="pull-right btn btn-default btn-sm margin-r-5">取消</a></div>
+        <div class="box-body">
+          <div class="col-sm-12">
+           	<h4><strong>店内资源统计表</strong></h4>
+            <table class="table table-striped table-bordered" id="storeresources_1">
+              <tr class="bg-light-blue">
+                <th>序号</th>
+                <th>城市公司名称</th>
+                <th>门店名称数量</th>
+                <th>室内主屏幕</th>
+                <th>室内辅屏</th>
+                <th>室外电子竖屏幕</th>
+                <th>易拉宝</th>
+                <th>海报</th>
+                <th>中央堆头</th>
+                <th>地面堆头</th>
+                <th>室内互动面积（平米）</th>
+              </tr>
+            </table>
+          </div>
+          <div class="col-sm-12">
+          <h4><strong>户外点位场地资源表</strong></h4>
+            <table class="table table-striped table-bordered" id="outstoreresources_1">
+              <tr class="bg-light-blue">
+                <th rowspan="2">序号</th>
+                <th rowspan="2">城市公司名称</th>
+                <th rowspan="2">门店名称数量</th>
+                <th colspan="4">点位框架</th>
+                <th colspan="5">活动场地</th>
+              </tr>
+              <tr class="bg-light-blue">
+                <th>框架数量</th>
+                <th>关联社区数量</th>
+                <th>开放社区数量</th>
+                <th>封闭社区数量</th>
+                <th>社区活动区数量或物业活动区数</th>
+                <th>收费场地数量</th>
+                <th>收费场地数量</th>
+                <th>场地合计面积（平米）</th>
+                <th>关联社区街道数量</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="pframe pf-field">
+    <div class="container" style="width: 1300px;">
+      <div class="box box-default">
+        <div class="box-body">
+          
+        </div>
+      </div>
+    </div>
+  </div> -->
+  
   
 
 </div>
@@ -1710,6 +1783,9 @@ function autodivheight(){ //函数：获取尺寸
   //document.getElementById("test").style.height= winHeight +"px";
   //DIV高度为浏览器窗口高度的一半
   document.getElementById("pf-operate").style.maxHeight= winHeight - 200 +"px";
+  document.getElementById("pf-frequency").style.maxHeight= winHeight - 200 +"px";
+  document.getElementById("pf-resource").style.maxHeight= winHeight - 200 +"px";
+  
 }
 window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
   //pdf下载
@@ -1765,7 +1841,7 @@ window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV�
 
 <script type="text/javascript">
 $(function(){
-
+	//门店活动
     $(".pfedit").click(function(){
       $(this).parents("body").css("overflow","hidden");
       var numArr1 = [];
@@ -1783,23 +1859,24 @@ $(function(){
     });
     $(".pf-frequency .btn-warning").click(function(){
   	 	var updateNumArr1=[];
-       $('#pf-fre2 tr input').each(function(i){
+       /* $('#pf-fre2 tr input').each(function(i){
          updateNumArr1.push($(this).val());
        });
        $('#pf-fre1 tr td').each(function(i){
            $(this).text(updateNumArr1[i]);
-       });
-       var secondTr = $("#pf-fre2 tr").eq(1);
+       }); */
+       //var secondTr = $("#pf-fre2 tr").eq(1);
        var table =document.getElementById("pf-fre2");
        var cellnumber = table.rows[0].cells.length;
 		var isnull = false;
        
        var objectList = new Array();
-       $("#pf-fre2").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(i,t){
+       $("#pf-fre2").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-1)+")").each(function(i,t){
     	    var col_index = i;
     	    var activitie = {};
     	    activitie["cityname"] = $(t).html();
-       		$(t).parent().nextAll().not(secondTr).each(function(z,t){
+    	    //.not(secondTr)
+       		$(t).parent().nextAll().each(function(z,t){
 	    	    var value = $(t).find("input:eq("+col_index+")").val();
 	    	    if(isNaN(parseInt(value)) ||　value.trim() == ''){
    	    	 		isnull=true;
@@ -1810,6 +1887,12 @@ $(function(){
 	    	    if(z==3)activitie["avtivities_count"] = value;
 	    	    if(z==4)activitie["numbers_of_activities"] = value;
 	    	    if(z==5)activitie["numbers_of_single_activitie"] = value;
+	    	    
+	    	    if(z==6)activitie["store_independent_activitie"] = value;
+	    	    if(z==7)activitie["store_numbers_of_activities"] = value;
+	    	    if(z==8)activitie["store_numbers_of_single_activitie"] = value;
+	    	    if(z==9)activitie["store_independent_activitie_price"] = value;
+	    	    if(z==10)activitie["total_activities_count"] = value;
        		}); 
        		objectList.push(activitie);
       });
@@ -1880,7 +1963,7 @@ $(function(){
       $(".pf-operate .btn-warning").click(function(){
     	  var updateNumArr2=[];
     	  var updateNumArr3=[];
-    	  $('#pfoperate2 tr input').each(function(i){
+    	  /* $('#pfoperate2 tr input').each(function(i){
     		  updateNumArr2.push($(this).val());
             });
             $('#pfoperate1 tr td').each(function(i){
@@ -1891,7 +1974,7 @@ $(function(){
           });
           $('#pfoperate1_1 tr td').each(function(i){
               $(this).text(updateNumArr3[i]);
-          });
+          }); */
           
           var isnull = false;
          // var secondTr1 = $("#pfoperate2 tr").eq(1);
@@ -2206,9 +2289,126 @@ $(function(){
 	   	  }
       });
       
+      //资源统计
+      $(".pfresource").click(function(){
+          $(this).parents("body").css("overflow","hidden");
+          $(this).parents().children(".pf-resource").show();
+      });
+        $(".pf-resource .btn-default").click(function(){
+          $(this).parents(".pf-resource").hide();
+          $(this).parents("body").css("overflow","auto");
+        });
+        $(".pf-resource .btn-warning").click(function(){
+        	var isnull = false;
+             var storeresources =document.getElementById("storeresources_1");
+             var outstoreresources =document.getElementById("outstoreresources_1");
+             var cellnumber1 = storeresources.rows[0].cells.length;
+             var cellnumber2 = outstoreresources.rows[0].cells.length;
+             
+             var objectList_1 = new Array();
+             $("#storeresources_1").find("tr:gt(0)").each(function(i,t){
+          	    var storeresources = {};
+   	       	 	$(t).find("td").each(function(z,t){
+   	   	    	    var value = $(t).find("input").val();
+   	   	    	    if(z > 2){
+	   	   	    	  if(isNaN(parseInt(value)) ||　value.trim() == ''){
+	 	   	    	 		isnull = true;
+	 	   	    	 	}
+   	   	    	    }
+   	   	    	 	if(z==1)storeresources["cityname"] = $(t).html();
+   	   	    	    if(z==3)storeresources["home_screen"] = value;
+   	   	    	    if(z==4)storeresources["home_auxiliary_screen"] = value;
+   	   	    	    if(z==5)storeresources["outdoor_electronic_screen"] = value;
+   	   	    	    if(z==6)storeresources["roll_up"] = value;
+   	   	    	    if(z==7)storeresources["posters"] = value;
+   	   	    		if(z==8)storeresources["central_pile_head"] = value;
+   	   	  			if(z==9)storeresources["floor_pile_head"] = value;
+   	   				if(z==10)storeresources["indoor_interactive_area"] = value;
+   	      		});
+             	objectList_1.push(storeresources);
+            });
+             var objectList_2 = new Array();
+             $("#outstoreresources_1").find("tr:gt(1)").each(function(i,t){
+            	    var outstoreresources = {};
+   	         	   	$(t).find("td").each(function(z,t){
+   	     	    	    var value = $(t).find("input").val();
+   	     	    	    if(z > 2){
+	   	     	    	   if(isNaN(parseInt(value)) ||　value.trim() == ''){
+	   	     	    		  isnull = true;
+	   		   	    	 	}
+   	         	   		}
+   	     	    		if(z==1)outstoreresources["cityname"] = $(t).html();
+   	     	    	    if(z==3)outstoreresources["frame_number"] = value;
+   	     	    	    if(z==4)outstoreresources["associated_community_count"] = value;
+   	     	    	    if(z==5)outstoreresources["open_community_count"] = value;
+   	     	    	    if(z==6)outstoreresources["closed_community_count"] = value;
+   	     	    	    if(z==7)outstoreresources["activity_area_count"] = value;
+   	     	    	   	if(z==8)outstoreresources["charge_for_site_count"] = value;
+   	     	    		if(z==9)outstoreresources["free_for_site_count"] = value;
+   	     	    		if(z==10)outstoreresources["site_area"] = value;
+   	     				if(z==11)outstoreresources["associated_community_town_count"] = value;
+   	        		});
+               	objectList_2.push(outstoreresources);
+              });
+             if(isnull){
+           	  crm_alert(5,"数据不能为空！");
+           	  return;
+             }
+             console.log(objectList_1);
+             console.log(objectList_2);
+             doManager("storeResourcesManager","saveStoreResource",[objectList_1,objectList_2],
+     				function(data,textStatus,XmlHttpRequest){
+           	  if(data.result){
+         			var jsonData = $.fromJSON(data.data);
+         			if(jsonData.code == 1){
+         				getStoreResources();
+         				crm_alert(0,"保存成功！");
+         			}else if(jsonData.code == -1){
+         				crm_alert(5,"保存失败！");
+         			}else{
+         				crm_alert(5,"请求失败！");
+         			}
+         		  }
+     	  	  });
+          $(this).parents(".pf-resource").hide();
+          $(this).parents("body").css("overflow","auto");
+        });
+      
+ 
+      /*  $(".pffield").click(function(){
+          $(this).parents("body").css("overflow","hidden");
+          var numArr2=[];
+          $(this).parents().children(".pf-field").show();
+        });
+        $(".pf-field .btn-default").click(function(){
+          $(this).parents(".pf-field").hide();
+          $(this).parents("body").css("overflow","auto");
+        });
+        $(".pf-field .btn-warning").click(function(){
+          $(this).parents(".pf-field").hide();
+          $(this).parents("body").css("overflow","auto");
+        }); */
 
 
   });
+  
+  function storenetshow(){
+	  if($("#storenet").css('display') == 'none'){
+		  $("#storenet").show();
+	  }else{
+		  $("#storenet").hide();
+	  }
+  }
+  
+  function penstoreshow(){
+	  if($("#showview_1").css('display') == 'none'){
+		  $("#showview_1").show();
+		  $("#showview_2").show();
+	  }else{
+		  $("#showview_1").hide();
+		  $("#showview_2").hide();
+	  }
+  }
 </script>
 </body>
 </html>

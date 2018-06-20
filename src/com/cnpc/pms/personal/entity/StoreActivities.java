@@ -55,6 +55,40 @@ public class StoreActivities extends DataEntity {
 	@Column(name = "numbers_of_single_activitie", length = 12)
 	private Integer numbers_of_single_activitie;
 	
+	/**
+	 * 门店自主营销活动
+	 */
+	@Column(name = "store_independent_activitie", length = 12)
+	private Integer store_independent_activitie;
+	
+	/**
+	 * 活动参与人数
+	 */
+	@Column(name = "store_numbers_of_activities", length = 12)
+	private Integer store_numbers_of_activities;
+	
+	
+	/**
+	 * 单场活动人数
+	 */
+	@Column(name = "store_numbers_of_single_activitie", length = 12)
+	private Integer store_numbers_of_single_activitie;
+	
+	
+	/**
+	 * 门店自主营销活动金额小计
+	 */
+	@Column(name = "store_independent_activitie_price", length = 12)
+	private Integer store_independent_activitie_price;
+	
+	/**
+	 * 合计活动数量
+	 */
+	@Column(name = "total_activities_count", length = 12)
+	private Integer total_activities_count;
+	
+	
+	
 	public String getCityname() {
 		return cityname;
 	}
@@ -110,6 +144,48 @@ public class StoreActivities extends DataEntity {
 	public void setNumbers_of_single_activitie(Integer numbers_of_single_activitie) {
 		this.numbers_of_single_activitie = numbers_of_single_activitie;
 	}
+
+	public Integer getStore_independent_activitie() {
+		return store_independent_activitie;
+	}
+
+	public void setStore_independent_activitie(Integer store_independent_activitie) {
+		this.store_independent_activitie = store_independent_activitie;
+	}
+
+	public Integer getStore_numbers_of_activities() {
+		return store_numbers_of_activities;
+	}
+
+	public void setStore_numbers_of_activities(Integer store_numbers_of_activities) {
+		this.store_numbers_of_activities = store_numbers_of_activities;
+	}
+
+	public Integer getStore_numbers_of_single_activitie() {
+		return store_numbers_of_single_activitie;
+	}
+
+	public void setStore_numbers_of_single_activitie(Integer store_numbers_of_single_activitie) {
+		this.store_numbers_of_single_activitie = store_numbers_of_single_activitie;
+	}
+
+	public Integer getStore_independent_activitie_price() {
+		return store_independent_activitie_price;
+	}
+
+	public void setStore_independent_activitie_price(Integer store_independent_activitie_price) {
+		this.store_independent_activitie_price = store_independent_activitie_price;
+	}
+
+	public Integer getTotal_activities_count() {
+		return total_activities_count;
+	}
+
+	public void setTotal_activities_count(Integer total_activities_count) {
+		this.total_activities_count = total_activities_count;
+	}
+	
+	
 	
 	
 }

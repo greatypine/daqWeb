@@ -2318,28 +2318,32 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		List<Store> findStore = storeDao.findStore();
 		if (findStore != null && findStore.size() > 0) {
 			String townids = "";
+			String storenames = "";
 			for (Store store : findStore) {
-				String cityName = store.getCityName();
-				
-				if (store.getTown_id() != null && !"".equals(store.getTown_id())) {
-					townids += "," + store.getTown_id();
+				String storename = store.getName();
+				if(storename != null && !"".equals(storename)){
+					storenames = ","+storename;
 				}
+				/*if (store.getTown_id() != null && !"".equals(store.getTown_id())) {
+					townids += "," + store.getTown_id();
+				}*/
 			}
-			if (townids.length() > 0) {
+			/*if (townids.length() > 0) {
 				String substring = townids.substring(1, townids.length());
 				TownManager townManager = (TownManager) SpringHelper.getBean("townManager");
 				List<Town> findlistTown = townManager.findlistTown(substring);
 				map.put("townsize", findlistTown.size());// 本周街道变化数量
-				String countyids = "";
 				String townNames = "";
 				for (Town town : findlistTown) {
 					townNames += "，" + town.getName();
 				}
 				map.put("townNames", townNames.subSequence(1, townNames.length()));
-			}
+			}*/
+			map.put("storesize", findStore.size());
+			map.put("storenames", storenames.subSequence(1, storenames.length()));
 		} else {
-			map.put("townsize", 0);
-			map.put("townNames", "无");
+			map.put("storesize", 0);
+			map.put("storenames", "无");
 		}
 		return map;
 	}

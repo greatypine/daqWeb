@@ -877,4 +877,12 @@ public interface DynamicDao extends IDAO{
 	 */
 	public List<Map<String,Object>> getsixWeekDate();
 	
+	/**
+	 * 近六个月消费用户数
+	 * 2018年6月14日
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String,Object>> getsixMonthCustomer();
+	
 }

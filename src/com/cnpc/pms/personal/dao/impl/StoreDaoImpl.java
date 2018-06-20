@@ -956,7 +956,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getCityBY2017() {
-		String sql = "select city_name from t_store WHERE (DATE_FORMAT(create_time,'%Y')<'2018' or create_time is NULL) AND flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' GROUP BY city_name";
+		String sql = "select city_name from t_store WHERE (DATE_FORMAT(create_time,'%Y')<'2018' or create_time is NULL) AND flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')='运营中' GROUP BY city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -965,7 +965,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getCityBY2018() {
-		String sql = "SELECT  city_name FROM t_store WHERE DATE_FORMAT(create_time,'%Y')='2018' AND  city_name not in (select city_name from t_store WHERE DATE_FORMAT(create_time,'%Y')<'2018' or create_time is NULL GROUP BY city_name) AND flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' GROUP BY city_name";
+		String sql = "SELECT  city_name FROM t_store WHERE DATE_FORMAT(create_time,'%Y')='2018' AND  city_name not in (select city_name from t_store WHERE DATE_FORMAT(create_time,'%Y')<'2018' or create_time is NULL GROUP BY city_name) AND flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')='运营中' GROUP BY city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -974,7 +974,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getStoreCity() {
-		String sql = "SELECT city_name FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' GROUP BY city_name";
+		String sql = "SELECT city_name,count(id) as storecount FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')='运营中' GROUP BY city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -993,7 +993,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			settime = 10;
 			presettime = 4;
 		}
-		String sql = "SELECT * FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%办公室%' and create_time between subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+settime+")";
+		String sql = "SELECT * FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')='运营中' and `name` NOT  LIKE '%办公室%' and open_shop_time between subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+settime+")";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Store> list = query.addEntity(Store.class).list();
 		return list;
@@ -1011,8 +1011,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			settime = 10;
 			presettime = 4;
 		}
-		String sql = "SELECT "+where+" FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')!='闭店中' and `name` NOT  LIKE '%办公室%' and create_time between subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+settime+")"
-				+"and not EXISTS (SELECT s."+where+" FROM t_store s WHERE s.flag=0 AND s.`name` NOT  LIKE '%测试%' and s.`name` NOT  LIKE '%储备%' and s.storetype!='V' and s.storetype!='W' AND ifnull(s.estate,'')!='闭店中' and s.`name` NOT  LIKE '%办公室%' and s.create_time < subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and s."+where+" = t_store."+where+")";
+		String sql = "SELECT "+where+" FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')='运营中' and `name` NOT  LIKE '%办公室%' and open_shop_time between subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+settime+")"
+				+"and not EXISTS (SELECT s."+where+" FROM t_store s WHERE s.flag=0 AND s.`name` NOT  LIKE '%测试%' and s.`name` NOT  LIKE '%储备%' and s.storetype!='V' and s.storetype!='W' AND ifnull(s.estate,'')='运营中' and s.`name` NOT  LIKE '%办公室%' and s.open_shop_time < subdate(DATE_FORMAT(NOW(),'%Y-%m-%d'),date_format(NOW(), '%w') - "+presettime+") and s."+where+" = t_store."+where+")";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
@@ -1047,8 +1047,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "sum(case WHEN storetype='X' then 1 else 0 END) as '经营星店', "
 					+ "sum(case WHEN storetype='M' then 1 else 0 END) as '药店',"
 					+ "sum(case WHEN storetype='B' then 1 else 0 END) as '独立微超',"
-					+ "sum(case WHEN nature = '合作店' and storetype !='V' then 1 else 0 END) as '合作店',"
-					+ "sum(case WHEN storetype='T' then 1 else 0 END) as '合作点',"
+					+ "sum(case WHEN storetype='T' then 1 else 0 END) as '合作店',"
+					+ "sum(case WHEN storetype='J' then 1 else 0 END) as '合作点',"
 					+ "sum(case WHEN storetype='C' then 1 else 0 END) as '前置仓',"
 					+ "sum(case WHEN storetype='H' then 1 else 0 END) as '城市仓'";
 					
@@ -1100,36 +1100,36 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public List<Map<String, Object>> findOneYearStoreData() {
 		String sql = " SELECT                                                                                                                                                                      "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(NOW(),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month12',			       "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 1 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as month11,   "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 2 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as month10,   "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 3 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month09', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 4 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month08', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 5 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month07', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 6 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month06', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 7 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month05', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 8 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month04', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 9 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month03', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 10 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month02',"
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 11 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month01' "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(NOW(),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month12',			       "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 1 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as month11,   "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 2 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as month10,   "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 3 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month09', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 4 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month08', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 5 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month07', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 6 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month06', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 7 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month05', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 8 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month04', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 9 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month03', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 10 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month02',"
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 11 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month01' "
 				+ "   FROM t_store 																			       "
-				+ " WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND ifnull(estate,'')!='闭店中' AND nature='自营店'			       "
+				+ " WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' and storetype!='W' AND ifnull(estate,'')='运营中' AND nature='自营店'			       "
 				+ " UNION ALL																				       "
 				+ " SELECT 																				       "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(NOW(),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month12',			       "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 1 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month11', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 2 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month10', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 3 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month09', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 4 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month08', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 5 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month07', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 6 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month06', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 7 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month05', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 8 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month04', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 9 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month03', "
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 10 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month02',"
-				+ " cast(SUM(case WHEN date_format(create_time,'%Y-%m')<=date_format(date_sub(now(),interval 11 month),'%Y-%m') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'month01' "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(NOW(),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month12',			       "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 1 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month11', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 2 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month10', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 3 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month09', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 4 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month08', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 5 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month07', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 6 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month06', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 7 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month05', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 8 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month04', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 9 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month03', "
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 10 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month02',"
+				+ " cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m')<=date_format(date_sub(now(),interval 11 month),'%Y-%m') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'month01' "
 				+ " FROM t_store 																			       "
-				+ " WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND ifnull(estate,'')!='闭店中' AND nature='合作店'			       "
+				+ " WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' and storetype!='W' AND ifnull(estate,'')='运营中' AND nature='合作店'			       "
 				+ " UNION ALL																				       "
 				+ " SELECT date_format(NOW(),'%Y-%m') as 'month12',															       "
 				+ " date_format(date_sub(now(),interval 1 month),'%Y-%m') as 'month11',													       "
@@ -1160,23 +1160,23 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			settime = 10;
 		}
 		String sql = "SELECT CONCAT(cc.week1,'') as week1,CONCAT(cc.week2,'') as week2,CONCAT(cc.week3,'') as week3,CONCAT(cc.week4,'') as week4,CONCAT(cc.week5,'') as week5,CONCAT(cc.week6,'') as week6 FROM (SELECT "
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
 				+ " FROM t_store "
-				+ "WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND ifnull(estate,'')!='闭店中' AND nature='自营店' "
+				+ "WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND storetype!='W' AND ifnull(estate,'')='运营中' AND nature='自营店' "
 				+ "UNION ALL " + "SELECT "
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
-				+ "cast(SUM(case WHEN date_format(create_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') OR create_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week6',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week5',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week4',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week3',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*4 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week2',"
+				+ "cast(SUM(case WHEN date_format(open_shop_time,'%Y-%m-%d')<=date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY),'%Y-%m-%d') OR open_shop_time is NULL THEN 1 ELSE 0 END) as char) as 'week1' "
 				+ "  FROM t_store "
-				+ "WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND ifnull(estate,'')!='闭店中' AND nature='合作店') cc";
+				+ "WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' AND storetype!='V' AND storetype!='W' AND ifnull(estate,'')='运营中' AND nature='合作店') cc";
 		System.out.println(sql);
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -1194,9 +1194,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		}else{
 			settime = 10;
 		}
-		String sql = "select nature,count(1) as count,subdate(DATE_FORMAT(create_time,'%Y-%m-%d'),date_format(create_time, '%w')-if(date_format(create_time, '%w')<4,3,10)) AS week_time from t_store ts "
+		String sql = "select nature,count(1) as count,subdate(DATE_FORMAT(open_shop_time,'%Y-%m-%d'),date_format(open_shop_time, '%w')-if(date_format(open_shop_time, '%w')<4,3,10)) AS week_time from t_store ts "
 				+ "WHERE nature is not null and create_time is not null and nature = '" + nature
-				+ "' and ifnull(estate,'')!='闭店中'  AND storetype!='V' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and date_format(create_time,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) group by week_time;";
+				+ "' and ifnull(estate,'')='运营中'  AND storetype!='V'  AND storetype!='W' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' and date_format(open_shop_time,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) group by week_time;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1215,8 +1215,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		}
 		String sql = "select DISTINCT t1.cityname,DATE_FORMAT(t1.create_time,'%Y') AS create_year,t1.cityno,ifnull(t2.count,0) as ' cooperative_complete',ifnull(t3.count,0) as 'self_complete',"
 				+ "ifnull(t4.cooperative_task,0) as cooperative_task,ifnull(t4.self_support_task,0) as self_support_task from t_dist_citycode t1 INNER JOIN t_store s on (t1.cityname = s.city_name and s.flag = 0 and s.name not like '%储备店%' and s.name not like '%测试%')"+joinType
-				+ " (select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')!='闭店中' and nature = '合作店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='H' AND storetype!='C' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t2 " + "ON t1.cityname = t2.city_name LEFT JOIN "
-				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')!='闭店中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='H' AND storetype!='C' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name INNER JOIN "
+				+ " (select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')='运营中' and nature = '合作店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='H' and storetype!='W' AND storetype!='C' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t2 " + "ON t1.cityname = t2.city_name LEFT JOIN "
+				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')='运营中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='H' and storetype!='W' AND storetype!='C' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name INNER JOIN "
 				+ "(select city_name as cityname,sum(case when store_type = 'cooperative' and year = '"+year+"' then target_value else 0 end) as cooperative_task,"
 				+"sum(case when store_type = 'self_support' and year = '"+year+"' then target_value else 0 end) as self_support_task "
 				+"from df_bussiness_target where type = 'store' GROUP BY city_name) t4 "
@@ -1312,7 +1312,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getStoreCountOfcity() {
-		String sql = "SELECT city_name,count(store_id) as count FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')!='闭店中' GROUP BY city_name";
+		String sql = "SELECT city_name,count(store_id) as count FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and storetype!='W' AND ifnull(estate,'')='运营中' GROUP BY city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

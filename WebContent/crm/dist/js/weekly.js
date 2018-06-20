@@ -2898,6 +2898,125 @@ optionEmpzhuanyuan = {
   ]
 };
 
+//人员动态
+optionzongguan = {
+  title: {
+    text: '近六周专员动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+  },
+  tooltip: {trigger: 'axis'},
+  legend: {
+    data:['离职数量','入职数量'],left:"right",y:"8%",
+    itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+  },
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: 
+  	{
+          axisTick : {show: false},
+          splitLine: {show:true},
+          axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+          axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+        },
+  series: [
+    {
+      name:'离职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+    {
+      name:'入职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    }
+  ]
+};
+	//人员动态：总数
+optionEmpzongguan = {
+  title: {
+    text: '近六周专员数统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+  },
+  legend: {
+      data:['总人数'],left:"right",y:"8%",
+      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+    },
+    color:["#91bee9"],
+  tooltip: {trigger: 'axis'},
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: {
+    type: 'value',
+    boundaryGap: [0, 0.1],
+    splitLine: {show:true},
+    //interval: 10,
+  },
+  series: [
+    {
+      name:'总人数',
+      type:'line',
+      stack: '总量',
+      data:[],
+      itemStyle: {
+          normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+  	            offset: 0,
+  	            color: "#91bee9"
+  	          }, {
+  	            offset: 1,
+  	            color: 'rgba(138,43,226,0.8)'
+  	          }]),
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+  ]
+};
+
+
 //人员编制动态
 /* option8 = {
   title: {
@@ -4739,6 +4858,8 @@ function showData(){
 	GMVInfo();
 	storeActivitiesInfo();
 	getStoreCoverPerson();
+	//employeeCustomer();
+	getStoreResources();
 }
 
 function getsixweek(){
@@ -4775,7 +4896,6 @@ function getUser(){
 function loginShow(){
 	
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
-		debugger;
 		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
 	    var callback = function callback(data, textStatus, XMLHttpRequest) {
 	    	//window.parent.location=getRootPath() + "/crm/index_city_net.html";
@@ -4832,13 +4952,15 @@ function getCityNet(){
 			}else{
 				$("#weekupdate").text("新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"），新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）")
 			}*/
-			if(jsonData.townsize==0 && jsonData.countysize==0 && jsonData.citysize==0){
+			//jsonData.townsize==0 && 
+			if(jsonData.countysize==0 && jsonData.citysize==0 && jsonData.storesize==0){
 				$("#weekupdate").text("本周暂无变化");
 			}else{
 				var appendStr = "";
-				jsonData.citysize!=0 ?appendStr += "新增覆盖"+jsonData.citysize+"城市（"+jsonData.countyNames+"）；": appendStr += "新增覆盖"+0+"城市；";
-				jsonData.countysize!=0?appendStr += "新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"）；" : appendStr += "新增覆盖"+0+"个区域；";
-				jsonData.townsize!=0?appendStr += "新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）；":appendStr += "新增覆盖"+0+"个街道；"
+				if(jsonData.citysize!=0)appendStr += "新增覆盖"+jsonData.citysize+"城市（"+jsonData.countyNames+"）；";
+				if(jsonData.countysize!=0)appendStr += "新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"）；";
+				if(jsonData.storesize!=0)appendStr += "新增覆盖"+jsonData.storesize+"个门店（"+(jsonData.storenames.length>6?jsonData.storenames.substring(0,6)+"..":jsonData.storenames)+"）；";
+				//if(jsonData.townsize!=0)appendStr += "新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）；";
 				$("#weekupdate").text(appendStr);
 			}
 			var list2017=jsonData.list2017;
@@ -4903,7 +5025,6 @@ function findStoreNetDate(){
 			var storeTypeNatureOfCity = jsonData.storeTypeNatureOfCity;
 			var hezuodian = jsonData.hezuodian;
 			var biaodata = jsonData.biao;
-			console.log(storeNature);
 			if(storeNature.length > 0){
 				var citynameArray = new Array();
 				var cooperative_count_array = new Array();
@@ -4965,7 +5086,6 @@ function findStoreNetDate(){
 			var mainCooperative_datax = new Array();//广店营业厅
 			if(hezuodian.length > 0){
 				for(var i = 0;i<hezuodian.length;i++){
-					debugger;
 					var mainCooperative = hezuodian[i];
 					var cityname = mainCooperative.city_name;
 					if(mainCooperative.数码连锁店 !=0 || mainCooperative.超市连锁店 != 0 || mainCooperative.广电营业厅 != 0){
@@ -5116,9 +5236,6 @@ function oneyearorsixweek(){
 		        option11.series[1].data=weekonle;
 		        option11.series[2].data=weekother;
 		        myChart11.setOption(option11);
-	        
-	        
-			
 		}});
 	
 }
@@ -5133,7 +5250,8 @@ function oneyearorsixweek(){
 		myChart14.setOption(option14);
 		
 		var dateArray = new Array();
-		var citynameArray = new Array();
+		var citynameArrayx1 = new Array();
+		var citynameArrayx2 = new Array();
 		var cooperative_completeArray = new Array();
 		var cooperative_taskArray = new Array();
 		var cooperative_rateArray = new Array();
@@ -5184,12 +5302,10 @@ function oneyearorsixweek(){
 				for(var i = 0; i < storeNatureOfCityByYear.length; i++){
 					var storeNatureByYear = storeNatureOfCityByYear[i];
 					var cityname = storeNatureByYear.cityname;
-					citynameArray.push(cityname);
+
 					//合作店
 					var cooperative_complete = storeNatureByYear.cooperative_complete;
-					cooperative_completeArray.push(cooperative_complete);
 					//包含展示合作店目标值
-					debugger;
 					var cooperative_task_content = 0;
 					var cooperative_task = storeNatureByYear.cooperative_task;
 					cooperative_task_content = cooperative_task - cooperative_complete;
@@ -5197,17 +5313,19 @@ function oneyearorsixweek(){
 						cooperative_obj[cityname]=cooperative_task_content;
 						cooperative_task_content = 0;				
 					}
-					cooperative_taskArray.push(cooperative_task_content);
 					var cooperative_rate = 0;
 					if(cooperative_task > 0){
 						cooperative_rate = (cooperative_complete/cooperative_task)*100;
-						cooperative_rateArray.push(cooperative_rate.toFixed(2));
-					}else{
-						cooperative_rateArray.push(cooperative_rate.toFixed(2));
 					}
+					//if(cooperative_complete != 0){
+						citynameArrayx2.push(cityname);
+						cooperative_completeArray.push(cooperative_complete);
+						cooperative_taskArray.push(cooperative_task_content);
+						cooperative_rateArray.push(cooperative_rate.toFixed(2));
+					//}
 					//自营店
 					var self_complete = storeNatureByYear.self_complete;
-					self_completeArray.push(self_complete);
+					
 					//包含展示自营店目标值
 					var self_support_task_content = 0;
 					var self_support_task = storeNatureByYear.self_support_task;
@@ -5216,14 +5334,17 @@ function oneyearorsixweek(){
 						self_obj[cityname]=self_support_task_content;
 						self_support_task_content = 0;				
 					}
-					self_support_taskArry.push(self_support_task_content);
 					var self_rate = 0;
 					if(self_support_task > 0){
 						self_rate = (self_complete/self_support_task)*100;
 						self_rateArray.push(self_rate.toFixed(2));
-					}else{
-						self_rateArray.push(self_rate.toFixed(2));
 					}
+					//if(self_complete != 0){
+						self_completeArray.push(self_complete);
+						citynameArrayx1.push(cityname);
+						self_support_taskArry.push(self_support_task_content);
+						self_rateArray.push(self_rate.toFixed(2));
+					//}
 					if(storeNatureByYear.create_year == '2017'){
 						cooperative_task2017 += cooperative_task;
 						cooperative2017 += cooperative_complete;
@@ -5267,12 +5388,12 @@ function oneyearorsixweek(){
 				option13.series[0].data=self_rateArray;
 				option13.series[2].data=self_support_taskArry;
 				option13.series[1].data=self_completeArray;
-				option13.xAxis[0]["data"] = citynameArray;
+				option13.xAxis[0]["data"] = citynameArrayx1;
 				
 				option14.series[0].data=cooperative_rateArray;
 				option14.series[2].data=cooperative_taskArray;
 				option14.series[1].data=cooperative_completeArray;
-				option14.xAxis[0]["data"] = citynameArray;
+				option14.xAxis[0]["data"] = citynameArrayx2;
 				
 				myChart12.setOption(option12);
 				myChart13.setOption(option13);
@@ -5430,6 +5551,8 @@ function oneyearorsixweek(){
 		var myChartEmpGuoanxia = echarts.init(document.getElementById('mainempguoanxia'));
 		var myChartZhuanyuan = echarts.init(document.getElementById('mainzhuanyuan'));
 		var myChartEmpZhuanyuan = echarts.init(document.getElementById('mainempzhuanyuan'));
+		var myChartZongguan = echarts.init(document.getElementById('mainzongguan'));
+		var myChartEmpZongguan = echarts.init(document.getElementById('mainempzongguan'));
 		myChart7.setOption(option7);
 		myChartEmp.setOption(optionEmp);
 		myChartDianzhang.setOption(optiondianzhang);
@@ -5438,6 +5561,8 @@ function oneyearorsixweek(){
 		myChartEmpGuoanxia.setOption(optionEmpguoanxia);
 		myChartZhuanyuan.setOption(optionzhuanyuan);
 		myChartEmpZhuanyuan.setOption(optionEmpzhuanyuan);
+		myChartZongguan.setOption(optionzongguan);
+		myChartEmpZongguan.setOption(optionEmpzongguan);
 		doManager("humanresourcesManager","getEmployeeInfoByWeek",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
@@ -5604,6 +5729,49 @@ function oneyearorsixweek(){
 				}
 				optionzhuanyuan.series[1].data=toPostZhuanyuanArray;
 				myChartZhuanyuan.setOption(optionzhuanyuan);
+				
+				
+				
+				//综合管理副店长
+				var queryZongguanTotal = jsonData.queryZongguanTotal;
+				var zongguanTotalArray = new Array();
+				if(queryZongguanTotal.length >0){
+					zongguanTotalArray.push(queryZongguanTotal[0].a);
+					zongguanTotalArray.push(queryZongguanTotal[0].b);
+					zongguanTotalArray.push(queryZongguanTotal[0].c);
+					zongguanTotalArray.push(queryZongguanTotal[0].d);
+					zongguanTotalArray.push(queryZongguanTotal[0].e);
+					zongguanTotalArray.push(queryZongguanTotal[0].f);
+				}
+				optionEmpzongguan.series[0].data=zongguanTotalArray;
+				optionEmpzongguan.yAxis.min = (queryZongguanTotal[0].a*0.98).toFixed(0);
+				myChartEmpZongguan.setOption(optionEmpzongguan);
+				
+				var queryLeaveZongguan = jsonData.queryLeaveZongguan;
+				var leaveZongguanrray = [0,0,0,0,0,0];
+				if(queryLeaveZongguan.length > 0){
+					for(var z = 0; z < queryLeaveZongguan.length; z++){
+						var humanInfo =  queryLeaveZongguan[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;	
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						leaveZongguanrray[index] = humancount;
+					}
+				}
+				optionzongguan.series[0].data=leaveZongguanrray;
+				var queryToPostZongguan = jsonData.queryToPostZongguan;
+				var toPostZongguanArray = [0,0,0,0,0,0];
+				if(queryToPostZongguan.length > 0){
+					for(var z = 0; z < queryToPostZongguan.length; z++){
+						var humanInfo =  queryToPostZongguan[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						toPostZongguanArray[index] = humancount;
+					}
+				}
+				optionzongguan.series[1].data=toPostZongguanArray;
+				myChartZongguan.setOption(optionzongguan);
 			}
 		});
 		doManager("humanresourcesManager","getWeekPoint",null,function(data,textStatus,XmlHttpRequest){
@@ -5996,7 +6164,8 @@ function oneyearorsixweek(){
 				var x_data_option18 = new Array();
 				var activities_sum_array = new Array();
 				var count_sum = 0;
-				if(findConVillageCountOfCity.length > 0){
+				//去掉覆盖社区
+				/*if(findConVillageCountOfCity.length > 0){
 					for(var i = 0;i < findConVillageCountOfCity.length; i++){
 						var villageInfo = findConVillageCountOfCity[i];
 						var count = villageInfo.count;
@@ -6011,8 +6180,8 @@ function oneyearorsixweek(){
 					}
 				}
 				$('#pf-fre1 tr').eq(1).find("td:last").text(count_sum);
-				activities_sum_array.push(count_sum);
-				x_data_option18.push('覆盖社区');
+				activities_sum_array.push(count_sum);*/
+				//x_data_option18.push('覆盖社区');
 				if(newActivitiesInfo.length > 0){
 					var secondTr = $("#pf-fre1 tr").eq(1);
 					var table =document.getElementById("pf-fre1");
@@ -6023,6 +6192,8 @@ function oneyearorsixweek(){
 				    var recreational_activities_sum = 0;
 				    var volunteer_activity_sum = 0;
 				    var avtivities_count_sum = 0;
+				    var store_independent_activitie_sum = 0,store_numbers_of_activities_sum=0,
+					store_numbers_of_single_activitie_sum=0,store_independent_activitie_price_sum=0,total_activities_count_sum=0;
 				    for(var i = 0; i < newActivitiesInfo.length; i++){
 						var avtivities = newActivitiesInfo[i];
 						var numbers_of_activities = avtivities.numbers_of_activities;
@@ -6037,32 +6208,54 @@ function oneyearorsixweek(){
 						volunteer_activity_sum += volunteer_activity;
 						var avtivities_count = avtivities.avtivities_count;
 						avtivities_count_sum += avtivities_count;
+						
+						
+						var store_independent_activitie = avtivities.store_independent_activitie;
+						store_independent_activitie_sum += store_independent_activitie;
+						var store_numbers_of_activities = avtivities.store_numbers_of_activities;
+						var store_numbers_of_single_activitie = avtivities.store_numbers_of_single_activitie;
+						var store_independent_activitie_price = avtivities.store_independent_activitie_price;
+						var total_activities_count = avtivities.total_activities_count;
+						store_numbers_of_activities_sum += store_numbers_of_activities;
+						store_numbers_of_single_activitie_sum += store_numbers_of_single_activitie;
+						store_independent_activitie_price_sum += store_independent_activitie_price;
+						total_activities_count_sum += total_activities_count;
 						var cityname = avtivities.cityname;
 						citynameArray.push(cityname.length >4?cityname.substring(0,5)+'\n'+cityname.substring(5,cityname.length):cityname);
 						number_of_activitiy_array.push(numbers_of_single_activitie);
 						$("#pf-fre1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(x,t){
 				    	    var col_index = x;
 				    	    if(cityname == $(t).html()){
-				    	    	$(t).parent().nextAll().not(secondTr).each(function(z,t){
+				    	    	$(t).parent().nextAll().each(function(z,t){
 						    	    if(z==0)$(t).find("td:eq("+col_index+")").text(recreational_activities);
 						    	    if(z==1)$(t).find("td:eq("+col_index+")").text(public_welfare_activities);
 						    	    if(z==2)$(t).find("td:eq("+col_index+")").text(volunteer_activity);
 						    	    if(z==3)$(t).find("td:eq("+col_index+")").text(avtivities_count);
 						    	    if(z==4)$(t).find("td:eq("+col_index+")").text(numbers_of_activities);
 						    	    if(z==5)$(t).find("td:eq("+col_index+")").text(numbers_of_single_activitie);
+						    	    if(z==6)$(t).find("td:eq("+col_index+")").text(store_independent_activitie);
+						    	    if(z==7)$(t).find("td:eq("+col_index+")").text(store_numbers_of_activities);
+						    	    if(z==8)$(t).find("td:eq("+col_index+")").text(store_numbers_of_single_activitie);
+						    	    if(z==9)$(t).find("td:eq("+col_index+")").text(store_independent_activitie_price);
+						    	    if(z==10)$(t).find("td:eq("+col_index+")").text(total_activities_count);
 					       		});
 				    	    }
 				       });
 						if(i == newActivitiesInfo.length - 1){
 							
 							 $('#pf-fre1 tr').each(function(x,t){
-								  //if(x == 1)$(t).find("td:last").text(count_sum);
-								  if(x == 2)$(t).find("td:last").text(recreational_activities_sum);
-								  if(x == 3)$(t).find("td:last").text(public_welfare_activities_sum);
-								  if(x == 4)$(t).find("td:last").text(volunteer_activity_sum);
-								  if(x == 5)$(t).find("td:last").text(avtivities_count_sum);
-								  if(x == 6)$(t).find("td:last").text(numbers_of_activities_sum);
-								  if(x == 7)$(t).find("td:last").text(numbers_of_single_activitie_sum);
+								  if(x == 1)$(t).find("td:last").text(recreational_activities_sum);
+								  if(x == 2)$(t).find("td:last").text(public_welfare_activities_sum);
+								  if(x == 3)$(t).find("td:last").text(volunteer_activity_sum);
+								  if(x == 4)$(t).find("td:last").text(avtivities_count_sum);
+								  if(x == 5)$(t).find("td:last").text(numbers_of_activities_sum);
+								  if(x == 6)$(t).find("td:last").text(numbers_of_single_activitie_sum);
+								  if(x == 7)$(t).find("td:last").text(store_independent_activitie_sum);
+								  if(x == 8)$(t).find("td:last").text(store_numbers_of_activities_sum);
+								  if(x == 9)$(t).find("td:last").text(store_numbers_of_single_activitie_sum);
+								  if(x == 10)$(t).find("td:last").text(store_independent_activitie_price_sum);
+								  if(x == 11)$(t).find("td:last").text(total_activities_count_sum);
+								  
 							 });
 							 
 							  activities_sum_array.push(recreational_activities_sum);
@@ -6245,6 +6438,232 @@ function oneyearorsixweek(){
 					myChart21.setOption(option21);
 				}
 			}
+		});		
+	}
+	
+	function employeeCustomer(){
+		var myChart40 = echarts.init(document.getElementById('main40'));
+		var citynameArray = new Array();
+		var option40 = {
+		  title : {text: "国安侠人均消费人数周结",textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}},
+		  legend: {
+		        type: 'scroll',
+		        orient: 'vertical',
+		        right: 30,
+		        top: 30,
+		        bottom: 20,
+		        data:citynameArray
+		  },
+		  //color:colors,
+		  grid: {left: '2%',top:"12%",bottom: "15%",right:"20%",containLabel: true},
+		  tooltip : { trigger: 'axis',axisPointer : { type : 'shadow'}},
+		  xAxis: [
+		    {
+		      type: 'category',
+		      axisLine: { show: true,lineStyle:{ color:'#6173A3' }},
+		      axisLabel:{interval:0,textStyle:{color:'#9ea7c4',fontSize:12} },
+		      axisTick : {show: false},
+		      data:[],
+		    },
+		  ],
+		  yAxis: [
+		    {
+		      axisTick : {show: false},
+		      splitLine: {show:true},
+		      axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+		      axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+		    },
+		  ],
+		  series:[]
+		};
+		myChart40.setOption(option40);
+		doManager("dynamicManager","getsixMonthCustomer",null,
+				function(data,textStatus,XmlHttpRequest){
+			if(data.result){
+				var cityDataArray = new Array();
+				var month = new Date().getMonth()+1;
+				var datetime = new Date().getDate();
+				var monthArray = getmonthArray();
+				var yearmonth = new Date().format("yyyyMM");
+				var jsonData = $.fromJSON(data.data).sixMonthCustomer;
+				var appendstr = "";
+				$("#month_1").html(month-5);$("#month_2").html(month-4);$("#month_3").html(month-3);$("#month_4").html(month-2);$("#month_5").html(month-1);$("#month_6").html(month);
+				$("#month_6_1").html(month);$("#one").html(month-3+'月第'+Math.ceil(datetime/7)+'周');$("#two").html(month-2+'月第'+Math.ceil(datetime/7)+'周');$("#three").html(month-1+'月第'+Math.ceil(datetime/7)+'周');
+				$("#four").html(month+'月第'+Math.ceil(datetime/7)+'周');
+				var xdata = [month-3+'月第'+Math.ceil(datetime/7)+'周',month-2+'月第'+Math.ceil(datetime/7)+'周',month-1+'月第'+Math.ceil(datetime/7)+'周',month+'月第'+Math.ceil(datetime/7)+'周'];
+				ydate = [];
+				if(jsonData != null &&jsonData.length >0){
+					for (var i = 0; i <jsonData.length; i++){
+						var index = jQuery.inArray(jsonData[i].cityname,citynameArray);
+						if(index == -1){
+							var cityDate = {
+									"cityname":jsonData[i].cityname,
+									"rate":""
+								};
+							var weekDate = { name:jsonData[i].cityname,
+								      type:'line'};
+							citynameArray.push(jsonData[i].cityname);
+							ydate.push(weekDate);
+							cityDataArray.push(cityDate);
+						}
+					}
+					for(var i = 0; i <jsonData.length; i++){
+						var empCustomer = jsonData[i];
+						var cityname = empCustomer.cityname;
+						var index = jQuery.inArray(jsonData[i].cityname,citynameArray);
+						var cityData = cityDataArray[index];
+						var weekData = ydate[index];
+						cityData[empCustomer.month] = empCustomer.customer_count;
+						if(empCustomer.week_cus_count != null){
+							cityData[empCustomer.month+"_week"] = empCustomer.week_cus_count;
+						}
+						if(yearmonth == empCustomer.month){
+							cityData[empCustomer.month+"_new"] = empCustomer.customer_new_count;
+							cityData["rate"] = empCustomer.customer_new_count/empCustomer.customer_count*100;
+						}
+						
+					}
+					for(var i = 0; i <cityDataArray.length; i++){
+						var cityData = cityDataArray[i];
+						appendstr += '<tr><td bgcolor="#ff0">'+cityData.cityname+'</td><td>'
+						+(typeof(cityData[monthArray[0]]) == "undefined" ? '' : cityData[monthArray[0]])+'</td><td>'
+						+(typeof(cityData[monthArray[1]]) == "undefined" ? '' : cityData[monthArray[1]])+'</td><td>'
+						+(typeof(cityData[monthArray[2]]) == "undefined" ? '' : cityData[monthArray[2]])+'</td><td>'
+						+(typeof(cityData[monthArray[3]]) == "undefined" ? '' : cityData[monthArray[3]])+'</td><td>'
+						+(typeof(cityData[monthArray[4]]) == "undefined" ? '' : cityData[monthArray[4]])+'</td><td>'
+						+(typeof(cityData[monthArray[5]]) == "undefined" ? '' : cityData[monthArray[5]])+'</td><td>'
+						+(typeof(cityData[monthArray[6]]) == "undefined" ? '' : cityData[monthArray[6]])+'</td><td>'+cityData["rate"].toFixed(2)+'</td><td>'
+						+(typeof(cityData[monthArray[7]]) == "undefined" ? '' : cityData[monthArray[7]])+'</td><td>'
+						+(typeof(cityData[monthArray[8]]) == "undefined" ? '' : cityData[monthArray[8]])+'</td><td>'
+						+(typeof(cityData[monthArray[9]]) == "undefined" ? '' : cityData[monthArray[9]])+'</td><td>'
+						+(typeof(cityData[monthArray[10]]) == "undefined" ? '' : cityData[monthArray[10]])+'</td></tr>'
+						var weekdate = ydate[i];
+						weekdate.data = [(typeof(cityData[monthArray[7]]) == "undefined" ? 0 : cityData[monthArray[7]]),(typeof(cityData[monthArray[8]]) == "undefined" ? 0 : cityData[monthArray[8]]),(typeof(cityData[monthArray[9]]) == "undefined" ? 0 : cityData[monthArray[9]]),(typeof(cityData[monthArray[10]]) == "undefined" ? 0 : cityData[monthArray[10]])];
+					}
+					$("#empcustomertotal").after(appendstr);
+					option40.xAxis[0].data = xdata;
+					option40.series = ydate;
+					myChart40.setOption(option40);
+				}
+			}
 		});
 		
 	}
+	
+	function getmonthArray (){
+		var monthArray = new Array();
+		var date1 = new Date();
+		date1.setMonth(date1.getMonth()-5);
+		var month1 = date1.format("yyyyMM");
+		var date2 = new Date();
+		date2.setMonth(date2.getMonth()-4);
+		var month2 = date2.format("yyyyMM");
+		var date3 = new Date();
+		date3.setMonth(date3.getMonth()-3);
+		var month3 = date3.format("yyyyMM");
+		var date4 = new Date();
+		date4.setMonth(date4.getMonth()-2);
+		var month4 = date4.format("yyyyMM");
+		var date5 = new Date();
+		date5.setMonth(date5.getMonth()-1);
+		var month5 = date5.format("yyyyMM");
+		var date6 = new Date();
+		date6.setMonth(date6.getMonth());
+		var month6 = date6.format("yyyyMM");
+		monthArray.push(month1+"");
+		monthArray.push(month2+"");
+		monthArray.push(month3+"");
+		monthArray.push(month4+"");
+		monthArray.push(month5+"");
+		monthArray.push(month6+"");
+		monthArray.push(month6+"_new");
+		monthArray.push(month3+"_week");
+		monthArray.push(month4+"_week");
+		monthArray.push(month5+"_week");
+		monthArray.push(month6+"_week");
+		return monthArray;
+	}
+	
+	function deleteRow(id,index){
+		var snapinfo_table = document.getElementById(id); 
+		var snapinfo_tr_num = snapinfo_table.rows.length;  
+	      for(var i=snapinfo_tr_num-1;i>index;i--){  
+	    	  snapinfo_table.deleteRow(i);  
+	      }
+	}
+	
+//门店资源统计
+	function getStoreResources(){
+		doManager("storeResourcesManager","findStoreResourcesByType",null,
+				function(data,textStatus,XmlHttpRequest){
+			if(data.result){
+				/* var snapinfo_table = document.getElementById("storeresources");  
+			      var snapinfo_tr_num = snapinfo_table.rows.length;  
+			      for(var i=snapinfo_tr_num-1;i>0;i--){  
+			    	  snapinfo_table.deleteRow(i);  
+			      }*/
+				deleteRow("storeresources",0);
+				deleteRow("outstoreresources",1);
+				deleteRow("storeresources_1",0);
+				deleteRow("outstoreresources_1",1);
+				var jsonData = $.fromJSON(data.data);
+				var storeStr = "";
+				var storeinputStr = "";
+				var outStoreStr = "";
+				var outStoreinputStr = "";
+				if(typeof(jsonData.storeResource) != 'undefined'){
+					var storeResource = jsonData.storeResource;
+					for(var i = 0; i < storeResource.length; i++){
+						var info = storeResource[i];
+						storeStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td>'+info.storecount+'</td><td>'+info.home_screen+'</td><td>'+info.home_auxiliary_screen+'</td>'
+							+'<td>'+info.outdoor_electronic_screen+'</td><td>'+info.roll_up+'</td><td>'+info.posters+'</td><td>'+info.central_pile_head+'</td>'
+							+'<td>'+info.floor_pile_head+'</td><td>'+info.indoor_interactive_area+'</td></tr>';
+						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input type="text" value="'+info.storecount+'" class="form-control"></td><td><input type="text" value="'+info.home_screen+'" class="form-control"></td>'
+							+'<td><input type="text" value="'+info.home_auxiliary_screen+'" class="form-control"></td><td><input type="text" value="'+info.outdoor_electronic_screen+'" class="form-control"></td><td><input type="text" value="'+info.roll_up+'" class="form-control"></td>'
+							+'<td><input type="text" value="'+info.posters+'" class="form-control"></td><td><input type="text" value="'+info.central_pile_head+'" class="form-control"></td><td><input type="text" value="'+info.floor_pile_head+'" class="form-control"></td>'
+							+'<td><input type="text" value="'+info.indoor_interactive_area+'" class="form-control"></td></tr>';
+					}
+				}else{
+					var storeResourceCity = jsonData.storeResourceCity;
+					for(var i = 0; i < storeResourceCity.length; i ++){
+						var cityname = storeResourceCity[i].city_name;
+						var storecount = storeResourceCity[i].storecount;
+						storeStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input type="text" value="'+storecount+'" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+							+'<td><input type="text" value="0" class="form-control"></td><td><input value="0" type="text" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+							+'<td><input type="text" value="0" class="form-control"></td><td><input value="0" type="text" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+							+'<td><input type="text" value="0" class="form-control"></td></tr>';
+					}
+				}
+				if(typeof(jsonData.outStoreResource) != 'undefined'){
+					var outStoreResource = jsonData.outStoreResource;
+					for(var i = 0; i < outStoreResource.length; i++){
+						var info = outStoreResource[i];
+						outStoreStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td>'+info.storecount+'</td><td>'+info.frame_number+'</td><td>'+info.associated_community_count+'</td><td>'+info.open_community_count+'</td>'
+						+'<td>'+info.closed_community_count+'</td><td>'+info.activity_area_count+'</td><td>'+info.charge_for_site_count+'</td><td>'+info.free_for_site_count+'</td><td>'+info.site_area+'</td>'
+						+'<td>'+info.associated_community_town_count+'</td></tr>';
+						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input type="text" value="'+info.storecount+'" class="form-control"></td><td><input type="text" value="'+info.frame_number+'" class="form-control"></td>'
+						+'<td><input value="'+info.associated_community_count+'" type="text" class="form-control"></td><td><input type="text" value="'+info.open_community_count+'" class="form-control"></td><td><input type="text" value="'+info.closed_community_count+'" class="form-control"></td>'
+						+'<td><input type="text" value="'+info.activity_area_count+'" class="form-control"></td><td><input type="text" value="'+info.charge_for_site_count+'" class="form-control"></td><td><input type="text" value="'+info.free_for_site_count+'" class="form-control"></td>'
+						+'<td><input type="text" value="'+info.site_area+'" class="form-control"></td><td><input type="text" value="'+info.associated_community_town_count+'" class="form-control"></td></tr>';
+					}
+				}else{
+					var outStoreResourceCity = jsonData.outStoreResourceCity;
+					for(var i = 0; i < outStoreResourceCity.length; i ++){
+						var cityname = outStoreResourceCity[i].city_name;
+						var storecount = outStoreResourceCity[i].storecount;
+						outStoreStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input type="text" value="'+storecount+'" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td></tr>';
+					}
+				}
+				$("#storeresources").append(storeStr);
+				$("#outstoreresources").append(outStoreStr);
+				$("#storeresources_1").append(storeinputStr);
+				$("#outstoreresources_1").append(outStoreinputStr);
+			}
+		});
+	}
+	

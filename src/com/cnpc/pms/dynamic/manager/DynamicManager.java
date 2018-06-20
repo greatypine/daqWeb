@@ -1059,4 +1059,12 @@ public interface DynamicManager extends IManager{
     * @author gaoll
     */
     public Map<String,Object> getsixWeekDate();
+    
+    /**
+	 * 近六个月消费用户数
+	 * 2018年6月14日
+	 * @author gaoll
+	 * @return
+	 */
+	public Map<String,Object> getsixMonthCustomer();
 }

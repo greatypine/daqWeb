@@ -29,6 +29,12 @@ public class StoreActivitiesManagerImpl extends BizBaseCommonManager implements 
 					storeActivities.setPublic_welfare_activities(Integer.parseInt(map.get("public_welfare_activities").toString()));
 					storeActivities.setRecreational_activities(Integer.parseInt(map.get("recreational_activities").toString()));
 					storeActivities.setVolunteer_activity(Integer.parseInt(map.get("volunteer_activity").toString()));
+					//
+					storeActivities.setStore_independent_activitie(Integer.parseInt(map.get("store_independent_activitie").toString()));
+					storeActivities.setStore_numbers_of_activities(Integer.parseInt(map.get("store_numbers_of_activities").toString()));
+					storeActivities.setStore_numbers_of_single_activitie(Integer.parseInt(map.get("store_numbers_of_single_activitie").toString()));
+					storeActivities.setStore_independent_activitie_price(Integer.parseInt(map.get("store_independent_activitie_price").toString()));
+					storeActivities.setTotal_activities_count(Integer.parseInt(map.get("total_activities_count").toString()));
 					preObject(storeActivities);
 					this.saveObject(storeActivities);
 				}
@@ -51,9 +57,9 @@ public class StoreActivitiesManagerImpl extends BizBaseCommonManager implements 
 		StoreActivitiesDao storeActivitiesDao = (StoreActivitiesDao)SpringHelper.getBean(StoreActivitiesDao.class.getName());
 		VillageDao villageDao = (VillageDao)SpringHelper.getBean(VillageDao.class.getName());
 		List<Map<String,Object>> newActivitiesInfo = storeActivitiesDao.getNewActivitiesInfo();
-		List<Map<String,Object>> findConVillageCountOfCity = villageDao.findConVillageCountOfCity();
+		//List<Map<String,Object>> findConVillageCountOfCity = villageDao.findConVillageCountOfCity();
 		result.put("newActivitiesInfo", newActivitiesInfo);
-		result.put("findConVillageCountOfCity", findConVillageCountOfCity);
+		//result.put("findConVillageCountOfCity", findConVillageCountOfCity);
 		return result;
 	}
 

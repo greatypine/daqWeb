@@ -4157,6 +4157,11 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		List<Map<String,Object>> queryLeaveZhuanyuan = humanresourcesDao.queryLeaveHuman("专员");
 		List<Map<String,Object>> queryZhuanyuanTotal = humanresourcesDao.queryHumanTotal("专员");
 		
+		//综合管理信息
+		List<Map<String,Object>> queryToPostZongguan = humanresourcesDao.queryToPostHuman("综合管理");
+		List<Map<String,Object>> queryLeaveZongguan = humanresourcesDao.queryLeaveHuman("综合管理");
+		List<Map<String,Object>> queryZongguanTotal = humanresourcesDao.queryHumanTotal("综合管理");
+		
 		result.put("queryToPostHuman", queryToPostHuman);
 		result.put("queryLeaveHuman", queryLeaveHuman);
 		result.put("queryHumanTotal", queryHumanTotal);
@@ -4172,6 +4177,10 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		result.put("queryToPostZhuanyuan", queryToPostZhuanyuan);
 		result.put("queryLeaveZhuanyuan", queryLeaveZhuanyuan);
 		result.put("queryZhuanyuanTotal", queryZhuanyuanTotal);
+		
+		result.put("queryToPostZongguan", queryToPostZongguan);
+		result.put("queryLeaveZongguan", queryLeaveZongguan);
+		result.put("queryZongguanTotal", queryZongguanTotal);
 		
 		
 		result.put("dateAndWeek", dateAndWeek);

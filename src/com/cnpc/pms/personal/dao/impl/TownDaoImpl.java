@@ -274,7 +274,8 @@ public class TownDaoImpl extends BaseDAOHibernate implements TownDao {
 
 	@Override
 	public Integer findConTownCountByCityId(Long city_id) {
-		String sql = "select count(*) from (SELECT town.id FROM t_store store INNER JOIN t_town town ON FIND_IN_SET(store.town_id,town.id) and store.flag = 0 and ifnull(store.estate,'')!='闭店中' "
+		String sql = "select count(*) from (SELECT town.id FROM t_store store INNER JOIN t_town town ON FIND_IN_SET(store.town_id,town.id) and store.flag = 0 "
+				+ "and store.`name` NOT  LIKE '%测试%' and store.`name` NOT  LIKE '%储备%' and store.`name` NOT  LIKE '%办公室%' and store.storetype!='V' and store.storetype!='W' and ifnull(store.estate,'')='运营中' "
 				+ " INNER JOIN t_dist_citycode citycode ON store.city_name = citycode.cityname  WHERE town.id is not NULL and citycode.id = "
 				+ city_id + " GROUP BY town.id) t";
 		HibernateTemplate template = getHibernateTemplate();
