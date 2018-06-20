@@ -2322,7 +2322,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			for (Store store : findStore) {
 				String storename = store.getName();
 				if(storename != null && !"".equals(storename)){
-					storenames = ","+storename;
+					storenames += ","+storename;
 				}
 				/*if (store.getTown_id() != null && !"".equals(store.getTown_id())) {
 					townids += "," + store.getTown_id();

@@ -4959,7 +4959,7 @@ function getCityNet(){
 				var appendStr = "";
 				//if(jsonData.citysize!=0)appendStr += "新增覆盖"+jsonData.citysize+"城市（"+jsonData.countyNames+"）；";
 				//if(jsonData.countysize!=0)appendStr += "新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"）；";
-				if(jsonData.storesize!=0)appendStr += "新增覆盖"+jsonData.storesize+"个门店（"+(jsonData.storenames.length>6?jsonData.storenames.substring(0,6)+"..":jsonData.storenames)+"）；";
+				if(jsonData.storesize!=0)appendStr += "新增覆盖"+jsonData.storesize+"个门店（"+(jsonData.storenames)+"）；";
 				//if(jsonData.townsize!=0)appendStr += "新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）；";
 				$("#weekupdate").text(appendStr);
 			}
@@ -5337,7 +5337,6 @@ function oneyearorsixweek(){
 					var self_rate = 0;
 					if(self_support_task > 0){
 						self_rate = (self_complete/self_support_task)*100;
-						self_rateArray.push(self_rate.toFixed(2));
 					}
 					//if(self_complete != 0){
 						self_completeArray.push(self_complete);
