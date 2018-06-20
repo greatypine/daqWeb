@@ -1232,7 +1232,7 @@ var showMemberRegist = function (dataServer){
 			            itemStyle: {
 			                normal: {
 			                    color: '#ff0000',
-			                    barBorderColor: '#4ac7f5',
+			                    barBorderColor: '#ff0000',
 			                    barBorderWidth: 5,
 			                    barBorderRadius:0,
 			                    label : {
@@ -2672,6 +2672,9 @@ var showTimeOrder = function(dataServer){
 	        boundaryGap : false,
 	        axisLine: {onZero: false},
 	        splitLine: {show: false},
+	        axisLabel :{  
+	            interval:0   
+	        },
 	        splitNumber: 20,
 	        min: 'dataMin',
 	        max: 'dataMax'
