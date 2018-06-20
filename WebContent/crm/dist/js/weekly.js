@@ -3653,7 +3653,7 @@ option18 = {
 //单场活动人数
 option19 = {
   title: {
-    text: '非常营销类活动单场活动人数',textAlign:'left',textStyle:{fontSize:"16"}
+    text: '覆盖社区数量',textAlign:'left',textStyle:{fontSize:"16"}
   },
   tooltip : {trigger: 'axis',},
   grid: {
