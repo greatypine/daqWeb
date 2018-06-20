@@ -606,7 +606,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 					+"IFNULL(emplo.fuwu,0) as fuwu,IFNULL(emplo.guoanxia,0) as guoanxia,IFNULL(emplo.zonghe,0) as zonghe,ifnull(keeper.dianzhang,0) as dianzhang,ifnull(aa.total,0) as topostcount,ifnull(bb.total,0) as leavecount "
 					+"FROM t_dist_citycode dist LEFT JOIN "
 					+"(SELECT city_name,sum(CASE WHEN nature='自营店' then 1 else 0 end ) as yunziying,sum(CASE WHEN nature='合作店' then 1 else 0 end ) as yunhezuo FROM	t_store WHERE flag = 0 AND `name` NOT LIKE '%测试%' "
-					+"AND `name` NOT LIKE '%储备%' AND `name` NOT LIKE '%办公室%' AND storetype != 'V' AND (nature='自营店' or nature='合作店') AND (estate='运营中' or estate='试运营') GROUP BY city_name) c "
+					+"AND `name` NOT LIKE '%储备%' AND `name` NOT LIKE '%办公室%' AND storetype != 'V' AND (nature='自营店' or nature='合作店') AND (estate='运营中') GROUP BY city_name) c "
 					+"ON c.city_name=dist.cityname LEFT JOIN "
 					+"(SELECT city_name,sum(CASE WHEN nature='自营店' then 1 else 0 end ) as yunziying,sum(CASE WHEN nature='合作店' then 1 else 0 end ) as yunhezuo FROM t_store WHERE flag = 0 AND `name` NOT LIKE '%测试%' "
 					+"AND `name` NOT LIKE '%储备%' AND `name` NOT LIKE '%办公室%' AND storetype != 'V' AND (nature='自营店' or nature='合作店') AND (estate='筹备中') GROUP BY city_name) n "

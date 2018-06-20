@@ -72,7 +72,7 @@ public class CountyDaoImpl extends BaseDAOHibernate implements CountyDao {
 
 	@Override
 	public Integer getCountyCountByCityId(Long city_id) {
-		String sql = "SELECT count(*) FROM t_county WHERE t_county.city_id in(SELECT t_city.id FROM t_city WHERE t_city.name like "
+		String sql = "SELECT count(*) FROM t_county WHERE t_county.status = 0 and  t_county.city_id in(SELECT t_city.id FROM t_city WHERE t_city.name like "
 				+"CONCAT('%',(SELECT t_dist_citycode.cityname FROM t_dist_citycode WHERE t_dist_citycode.id="+city_id+"),'%'))";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();

@@ -4953,12 +4953,12 @@ function getCityNet(){
 				$("#weekupdate").text("新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"），新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）")
 			}*/
 			//jsonData.townsize==0 && 
-			if(jsonData.countysize==0 && jsonData.citysize==0 && jsonData.storesize==0){
+			if(jsonData.storesize==0){
 				$("#weekupdate").text("本周暂无变化");
 			}else{
 				var appendStr = "";
-				if(jsonData.citysize!=0)appendStr += "新增覆盖"+jsonData.citysize+"城市（"+jsonData.countyNames+"）；";
-				if(jsonData.countysize!=0)appendStr += "新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"）；";
+				//if(jsonData.citysize!=0)appendStr += "新增覆盖"+jsonData.citysize+"城市（"+jsonData.countyNames+"）；";
+				//if(jsonData.countysize!=0)appendStr += "新增覆盖"+jsonData.countysize+"个区域（"+(jsonData.countyNames.length>6?jsonData.countyNames.substring(0,6)+"..":jsonData.countyNames)+"）；";
 				if(jsonData.storesize!=0)appendStr += "新增覆盖"+jsonData.storesize+"个门店（"+(jsonData.storenames.length>6?jsonData.storenames.substring(0,6)+"..":jsonData.storenames)+"）；";
 				//if(jsonData.townsize!=0)appendStr += "新增覆盖"+jsonData.townsize+"个街道（"+(jsonData.townNames.length>8?jsonData.townNames.substring(0,8)+"..":jsonData.townNames)+"）；";
 				$("#weekupdate").text(appendStr);
