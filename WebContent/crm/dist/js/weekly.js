@@ -4888,6 +4888,7 @@ function getUser(){
 		    if(curr_user.usergroup.code == "ZBXXWLBJJSZ"){
 		    	$("#pfedit_button").show();
 		    	$("#pfoperate_buttoon").show();
+		    	$("#resources_edit").show();
 		    }
 		}
   	},false);
@@ -5532,12 +5533,12 @@ function oneyearorsixweek(){
 					optionCard.xAxis[0]["data"] = cardCitynameArray;
 					myChartCard.setOption(optionCard);
 				}
-				$("#signedCount").html(contractQuantitySum);
+				/*$("#signedCount").html(contractQuantitySum);
 				$("#preStoreCount").html(preStoreSum);
 				$("#openCount").html(store_countTotal);
 				$("#doubleCardCount").html(double_card_rateTotal.toFixed(2));
 				$("#businessCardCount").html(business_card_rateTotal.toFixed(2));
-				$("#noCardCount").html(no_card_rateTotal.toFixed(2));
+				$("#noCardCount").html(no_card_rateTotal.toFixed(2));*/
 			}
 		});
 	}

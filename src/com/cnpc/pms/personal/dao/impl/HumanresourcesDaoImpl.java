@@ -462,7 +462,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}
 			String sql = "";
 			String sql_storekeeps = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')-if(date_format(topostdate, '%w')<4,3,10)) AS week_time from t_storekeeper where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
-			String sql_humanresources = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')-if(date_format(topostdate, '%w')<4,3,10)) AS week_time from t_humanresources where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
+			String sql_humanresources = "select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')-if(date_format(topostdate, '%w')<4,3,10)) AS week_time from t_humanresources where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) and zw = '店长' GROUP BY week_time ";
 			if("店长".equals(zw)){
 				sql = sql_storekeeps;
 			}else if("国安侠".equals(zw)){
@@ -499,7 +499,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}
 			String sql = "";
 			String sql_humanresources = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')-if(date_format(leavedate, '%w')<4,3,10)) AS week_time from t_humanresources where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time";
-			String sql_storekeeps = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')-if(date_format(leavedate, '%w')<4,3,10)) AS week_time from t_storekeeper where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time ";
+			String sql_storekeeps = "select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')-if(date_format(leavedate, '%w')<4,3,10)) AS week_time from t_storekeeper where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) and zw = '店长' GROUP BY week_time ";
 			if("店长".equals(zw)){
 				sql = sql_storekeeps;
 			}else if("国安侠".equals(zw)){
@@ -547,7 +547,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*3 DAY),'%Y-%m-%d') then 1 else 0 end) as c,"
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*2 DAY),'%Y-%m-%d') then 1 else 0 end) as d,"
 					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7 DAY),'%Y-%m-%d') then 1 else 0 end) as e,"
-					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then 1 else 0 end) as f from t_storekeeper ";
+					+"sum(CASE when humanstatus != 2 and date_format(topostdate,'%Y-%m-%d') <= date_format(date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY),'%Y-%m-%d') then 1 else 0 end) as f from t_storekeeper where zw = '店长'";
 						
 			if("店长".equals(zw)){
 				sql = sql_storekeeps;
