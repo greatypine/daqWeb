@@ -307,7 +307,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年5月17日
 		 */
-		String sql = "select  e.city_code,e.name from t_eshop e where e.super_member='yes' and e.name not like '%测试%' and e.city_code <>'' and e.city_code  is not null";
+		String sql = "select  count(*) as cou  from t_eshop e where e.super_member='yes' and e.name not like '%测试%' and e.city_code <>'' and e.city_code  is not null";
 		if("0000".equals(dd)) {
 			sql = sql+" and e.city_code='"+dd+"'";
 		}
