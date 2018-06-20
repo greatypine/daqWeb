@@ -3653,7 +3653,7 @@ option18 = {
 //单场活动人数
 option19 = {
   title: {
-    text: '单场活动人数',textAlign:'left',textStyle:{fontSize:"16"}
+    text: '非常营销类活动单场活动人数',textAlign:'left',textStyle:{fontSize:"16"}
   },
   tooltip : {trigger: 'axis',},
   grid: {
@@ -6618,7 +6618,7 @@ function oneyearorsixweek(){
 						storeStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td>'+info.storecount+'</td><td>'+info.home_screen+'</td><td>'+info.home_auxiliary_screen+'</td>'
 							+'<td>'+info.outdoor_electronic_screen+'</td><td>'+info.roll_up+'</td><td>'+info.posters+'</td><td>'+info.central_pile_head+'</td>'
 							+'<td>'+info.floor_pile_head+'</td><td>'+info.indoor_interactive_area+'</td></tr>';
-						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input type="text" value="'+info.storecount+'" class="form-control"></td><td><input type="text" value="'+info.home_screen+'" class="form-control"></td>'
+						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input readonly="readonly" type="text" value="'+info.storecount+'" class="form-control"></td><td><input  type="text" value="'+info.home_screen+'" class="form-control"></td>'
 							+'<td><input type="text" value="'+info.home_auxiliary_screen+'" class="form-control"></td><td><input type="text" value="'+info.outdoor_electronic_screen+'" class="form-control"></td><td><input type="text" value="'+info.roll_up+'" class="form-control"></td>'
 							+'<td><input type="text" value="'+info.posters+'" class="form-control"></td><td><input type="text" value="'+info.central_pile_head+'" class="form-control"></td><td><input type="text" value="'+info.floor_pile_head+'" class="form-control"></td>'
 							+'<td><input type="text" value="'+info.indoor_interactive_area+'" class="form-control"></td></tr>';
@@ -6629,7 +6629,7 @@ function oneyearorsixweek(){
 						var cityname = storeResourceCity[i].city_name;
 						var storecount = storeResourceCity[i].storecount;
 						storeStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input type="text" value="'+storecount+'" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input readonly="readonly" type="text" value="'+storecount+'" class="form-control"></td><td><input type="text"  value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input value="0" type="text" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input value="0" type="text" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td></tr>';
@@ -6642,7 +6642,7 @@ function oneyearorsixweek(){
 						outStoreStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td>'+info.storecount+'</td><td>'+info.frame_number+'</td><td>'+info.associated_community_count+'</td><td>'+info.open_community_count+'</td>'
 						+'<td>'+info.closed_community_count+'</td><td>'+info.activity_area_count+'</td><td>'+info.charge_for_site_count+'</td><td>'+info.free_for_site_count+'</td><td>'+info.site_area+'</td>'
 						+'<td>'+info.associated_community_town_count+'</td></tr>';
-						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input type="text" value="'+info.storecount+'" class="form-control"></td><td><input type="text" value="'+info.frame_number+'" class="form-control"></td>'
+						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input type="text" readonly="readonly" value="'+info.storecount+'" class="form-control"></td><td><input type="text" value="'+info.frame_number+'" class="form-control"></td>'
 						+'<td><input value="'+info.associated_community_count+'" type="text" class="form-control"></td><td><input type="text" value="'+info.open_community_count+'" class="form-control"></td><td><input type="text" value="'+info.closed_community_count+'" class="form-control"></td>'
 						+'<td><input type="text" value="'+info.activity_area_count+'" class="form-control"></td><td><input type="text" value="'+info.charge_for_site_count+'" class="form-control"></td><td><input type="text" value="'+info.free_for_site_count+'" class="form-control"></td>'
 						+'<td><input type="text" value="'+info.site_area+'" class="form-control"></td><td><input type="text" value="'+info.associated_community_town_count+'" class="form-control"></td></tr>';
@@ -6653,17 +6653,27 @@ function oneyearorsixweek(){
 						var cityname = outStoreResourceCity[i].city_name;
 						var storecount = outStoreResourceCity[i].storecount;
 						outStoreStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
-						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input type="text" value="'+storecount+'" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
+						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input type="text" readonly="readonly" value="'+storecount+'" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td></tr>';
 					}
 				}
 				$("#storeresources").append(storeStr);
+				
 				$("#outstoreresources").append(outStoreStr);
 				$("#storeresources_1").append(storeinputStr);
+				$("#storeresources_1").find("input").each(function(i){
+					$(this).attr("onkeyup","this.value=this.value.replace(/[^\\d]/g,\'\')");
+				});
 				$("#outstoreresources_1").append(outStoreinputStr);
+				$("#outstoreresources_1").find("input").each(function(i){
+					$(this).attr("onkeyup","this.value=this.value.replace(/[^\\d]/g,\'\')");
+				})
+				
 			}
 		});
 	}
+	
+
 	

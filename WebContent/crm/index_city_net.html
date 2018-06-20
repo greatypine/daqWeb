@@ -1841,6 +1841,8 @@ window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV�
 
 <script type="text/javascript">
 $(function(){
+	
+	
 	//门店活动
     $(".pfedit").click(function(){
       $(this).parents("body").css("overflow","hidden");
@@ -2374,14 +2376,6 @@ $(function(){
           $(this).parents("body").css("overflow","auto");
         });
         
-        $('#outstoreresources_1 tr input').keyup(function(i){
-        	$(this).val($(this).val().replace(/[^\d]/g,''));
-        });
-        
-        $('#storeresources tr input').keyup(function(i){
-        	$(this).val($(this).val().replace(/[^\d]/g,''));
-        });
-      
  
       /*  $(".pffield").click(function(){
           $(this).parents("body").css("overflow","hidden");
