@@ -276,5 +276,13 @@ public interface CommuneMemberDao extends IDAO {
 	 */
 	public List<Map<String, Object>> getMemweekCount(String string);
    
+	/**
+	 * 查询24小时内订单走势
+	 */
+	public List<Map<String,Object>>  getHourCount(String string);
+	/**
+	 * 查询订单时间差
+	 */
+	public List<Map<String,Object>>  getTimeDiff(String string);
 
 }

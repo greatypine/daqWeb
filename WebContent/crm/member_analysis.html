@@ -178,8 +178,20 @@
         </div> -->
       <div class="box box-default">
           <div class="box-body">
+            <div class="col-sm-8">
+              <h4 class="text-light-blue"><strong>全部订单时段性分布</strong></h4>
+              <div class="col-sm-12 no-padding" id="main20" style="height: 360px;"></div>
+            </div>
+            <div class="col-sm-4">
+              <h4 class="text-light-blue"><strong>订单配送时效分布</strong></h4>
+              <div class="col-sm-12 no-padding" id="main21" style="height: 360px;"></div>
+            </div>
+          </div>
+        </div>
+      <div class="box box-default">
+          <div class="box-body">
             <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>安心合作社订单走势</strong></h4>
+              <h4 class="text-light-blue"><strong>完成订单/取消订单走势</strong></h4>
               <div class="col-sm-12 no-padding" id="main18" style="height: 260px;"></div>
             </div>
             <div class="col-sm-6">
@@ -974,12 +986,11 @@ function doMemberInfo(){
     doManager('communeMember','selectAllCm',"kkl",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
+        	//订单时段性分布
+        	showTimeOrder(resultJson);
  			//运营情况
  			showHistoryData(resultJson);  
-        	//成交量、成交额走势
-        	showDeal(resultJson);
-        	showEshopCount(resultJson);
-        	showEshopMemSum(resultJson);
+
         	setLoadingMark(false);
         	//设置10秒刷新页面
         	//setInterval("window.location.reload()",10000);
@@ -992,6 +1003,11 @@ function doMemberSum(){
     doManager('communeMember','selectMeSum',"kkl",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
+        	//完成订单/取消订单走势，订单均价走势
+        	showEshopCount(resultJson);
+        	showEshopMemSum(resultJson);
+        	//成交量、成交额走势
+        	showDeal(resultJson);
         	//社员属性信息饼图
         	showMemberInfo(resultJson);
         	//社员饼图
@@ -1216,8 +1232,8 @@ var showMemberRegist = function (dataServer){
 			            itemStyle: {
 			                normal: {
 			                    color: '#ff0000',
-			                    barBorderColor: '#ff0000',
-			                    barBorderWidth: 6,
+			                    barBorderColor: '#4ac7f5',
+			                    barBorderWidth: 5,
 			                    barBorderRadius:0,
 			                    label : {
 			                        show: true, 
@@ -1872,7 +1888,7 @@ var showDeal = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateX
+		            data: dataServer.jsonDateMem
 		        }
 		    ],
 		    yAxis : [
@@ -1949,7 +1965,7 @@ var showDeal = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateX
+		            data: dataServer.jsonDateMem
 		        }
 		    ],
 		    yAxis : [
@@ -2288,7 +2304,7 @@ var showEshopCount = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateX
+		            data: dataServer.jsonDateMem
 		        }
 		    ],
 		    yAxis : [
@@ -2392,7 +2408,7 @@ var showEshopCount = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateX
+		            data: dataServer.jsonDateMem
 		        }
 		    ],
 		    yAxis : [
@@ -2466,7 +2482,7 @@ var showEshopMemSum = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateX
+		            data: dataServer.jsonDateMem
 		        }
 		    ],
 		    yAxis : [
@@ -2594,6 +2610,181 @@ var showEshopMemSum = function (dataServer){
 		    ]
 		};
 	myChart17.setOption(option17);
+}
+var showTimeOrder = function(dataServer){
+	
+	var myChart20= echarts.init(document.getElementById('main20'));
+
+
+	var data0 = dataServer.jsonSelHours;
+
+
+	function splitData(rawData) {
+	    var categoryData = [];
+	    var values = []
+	    for (var i = 0; i < rawData.length; i++) {
+	        categoryData.push(rawData[i].splice(0, 1)[0]);
+	        values.push(rawData[i])
+	    }
+	    return {
+	        categoryData: categoryData,
+	        values: values
+	    };
+	}
+
+	function calculateMA(dayCount) {
+	    var result = [];
+	    for (var i = 0, len = data0.values.length; i < len; i++) {
+	        if (i < dayCount) {
+	            result.push('-');
+	            continue;
+	        }
+	        var sum = 0;
+	        for (var j = 0; j < dayCount; j++) {
+	            sum += data0.values[i - j][1];
+	        }
+	        result.push(sum / dayCount);
+	    }
+	    return result;
+	}
+
+
+
+	option20 = {
+	    tooltip: {
+	        trigger: 'axis',
+	        axisPointer: {
+	            type: 'cross'
+	        }
+	    },
+	    legend: {
+	        data: ['订单量']
+	    },
+	    grid: {
+	        left: '10%',
+	        right: '10%',
+	        bottom: '25%'
+	    },
+	    xAxis: {
+	        type: 'category',
+	        data: data0,
+	        scale: true,
+	        boundaryGap : false,
+	        axisLine: {onZero: false},
+	        splitLine: {show: false},
+	        splitNumber: 20,
+	        min: 'dataMin',
+	        max: 'dataMax'
+	    },
+	    yAxis: {
+	        scale: true,
+	        splitArea: {
+	            show: true
+	        }
+	    },
+	    dataZoom: [
+	        {
+	            type: 'inside',
+	            start:0,
+	            end: 100
+	        },
+	        {
+	            show: true,
+	            type: 'slider',
+	            y: '90%',
+	            start: 0,
+	            end: 100
+	        }
+	    ],
+	    series: [
+	        {
+	            name: '订单量',
+	            type: 'line',
+	            data: dataServer.jsonHourCounts
+	        }
+	    ]
+	};
+	myChart20.setOption(option20);
+	
+	var myChart21= echarts.init(document.getElementById('main21'));
+	  //年龄
+	  option21 = {
+			    tooltip: {
+				      trigger: 'item',
+				      formatter: '{a}<br/>{b}: {c} ({d}%)'
+				},
+			    calculable : true,
+			    series : [
+			    	{
+			            name:'配送时效',
+			            type:'pie',
+			            radius : [30, 110],
+			            center : ['50%', '50%'],
+			           // roseType : 'radius',
+			            width: '40%',       // for funnel
+			            max: 40,            // for funnel
+			            itemStyle : {
+			                normal : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                },
+			                emphasis : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                }
+			            },
+			            data:[
+			            	{
+			            	    value: dataServer.jsonSelCount[0],
+			            	    name: '提前送达'
+			            	  },{
+			            		value: dataServer.jsonSelCount[1],
+			            		name: '半小时内'
+			            	  },{
+				            		value: dataServer.jsonSelCount[2],
+				            		name: '0.5-1小时内'
+				              }, {
+			            	    value: dataServer.jsonSelCount[3],
+			            	    name: '1—2小时'
+			            	  }, {
+			            	    value: dataServer.jsonSelCount[4],
+			            	    name: "2—4小时"
+			            	  }, {
+			            	    value: dataServer.jsonSelCount[5],
+			            	    name: "4—12小时"
+			            	  }, {
+			            	    value: dataServer.jsonSelCount[6],
+			            	    name: "12—24小时"
+			            	  }, {
+			            	    value: dataServer.jsonSelCount[7],
+			            	    name: "大于1天"
+			            	  }
+			            ]
+			  	      ,label: {
+					        normal: {
+					          position: 'out', //标签的位置
+					          formatter: '{b}\n{d}%',
+					          color: '#59ADF3'
+
+					        }
+					   }
+			        }
+			    ]
+			};
+	  
+	  myChart21.setOption(option21);
+}
+
+var showTimeOrder1 = function(){
+	
 }
  
 //设置加载中图标

@@ -319,6 +319,9 @@ public List<Map<String, Object>> getAllCount(String dd) {
 	
 	//查询社员总量sql
 	String sql = "select count(*) as allCount from  df_user_member dum";
+	if("0000".equals(dd)) {
+		sql = sql+ " where regist_cityno='"+dd+"'";
+	}
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	try{
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -733,7 +736,12 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月7日
 		 */
+		
 		String daySumSql = "select ifnull(sum(dmod.trading_price),0) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum where CURDATE()=date(dmod.sign_time) and dmod.customer_id=dum.customer_id";
+		
+		if("0000".equals(string)) {
+			daySumSql = daySumSql+" and dmod.city_code='"+string+"'";
+		}
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(daySumSql);
@@ -771,6 +779,9 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin 2018年6月11日
 		 */
 		String daySumSql = "select count(1) as cou from df_user_member dum where CURDATE() = date(dum.opencard_time)";
+		if("0000".equals(string)) {
+			daySumSql = daySumSql+ " dum.regist_cityno='"+string+"'";
+		}
 		try {
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1090,6 +1101,41 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				e.printStackTrace();
 			}
 			 return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getHourCount(String string) {
+		/**
+		 * @author wuxinxin
+		 * 2018年6月20日
+		 */
+		String daySumSql = "select date_format(dmom.sign_time, '%H时') seltime, count(1) prisum from df_mass_order_monthly dmom where date(dmom.sign_time) > '2018-05-17' and dmom.order_tag1 like '%E%' group by date_format(dmom.sign_time, '%H') order by date_format(dmom.sign_time, '%H') ";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getTimeDiff(String string) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年6月20日
+		 */
+		 String daySumSql = "select sum(dood.order_count) selcount,dood.order_times seltimes from ds_ope_order_distribution dood group by dood.order_times order by dood.order_times";
+			try{
+				Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+				List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+				return lst_data;
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
 		
 	}
 
