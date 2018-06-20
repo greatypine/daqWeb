@@ -3156,4 +3156,62 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }
 		return lst_result;
 	}
+
+	@Override
+	public List<Map<String, Object>> getsixMonthCustomer() {
+		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+		int i = Calendar.getInstance().get(Calendar.DATE);
+		int begindate = 0;
+		int enddate = 0;
+		if(i>= 1 && i<=7){
+			begindate = 1;
+			enddate = 7;
+		}else if (i>= 8 && i<=14){
+			begindate = 8;
+			enddate = 14;
+		}else if (i>= 15 && i<=21){
+			begindate = 15;
+			enddate = 21;
+		}else if (i>= 22 && i<=28){
+			begindate = 22;
+			enddate = 28;
+		}else if (i>= 29 && i<=31){
+			begindate = 29;
+			enddate = 31;
+		}
+		String sql = "select t1.cityname,t1.`month`,if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts) as customer_count,"
+				+"if(t2.humancounts is null,t1.customer_new_count,t1.customer_new_count/t2.humancounts) as customer_new_count,"
+				+"if(t2.humancounts is null,t3.week_cus_count,t3.week_cus_count/t2.humancounts) as week_cus_count from ( "
+				+"SELECT cityname,SUM(ds_cus.pay_count) AS  customer_count,SUM(ds_cus.new_count) AS  customer_new_count,ds_cus.order_ym as month FROM  ds_cusum_month_city ds_cus LEFT JOIN t_dist_citycode d ON d.id = ds_cus.city_id "
+				+"WHERE ds_cus.order_ym >=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +5 MONTH),'%Y%m') GROUP BY ds_cus.order_ym,cityname ) t1 LEFT JOIN ( "
+				+"select citySelect,COUNT(id) AS humancounts,DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +5 MONTH),'%Y%m') as `month` from t_humanresources where "
+					+"zw = '国安侠' and humanstatus = 1 and DATE_FORMAT(topostdate,'%Y%m') < DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +5 MONTH),'%Y%m') GROUP BY citySelect UNION "
+				+"select citySelect,COUNT(id) AS humancounts,DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +4 MONTH),'%Y%m') as `month` from t_humanresources where "
+					+"zw = '国安侠' and humanstatus = 1 and DATE_FORMAT(topostdate,'%Y%m') < DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +4 MONTH),'%Y%m') GROUP BY citySelect UNION "
+				+"select citySelect,COUNT(id) AS humancounts,DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +3 MONTH),'%Y%m') as `month` from t_humanresources where "
+					+"zw = '国安侠' and humanstatus = 1 and DATE_FORMAT(topostdate,'%Y%m') < DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +3 MONTH),'%Y%m') GROUP BY citySelect UNION "
+				+"select citySelect,COUNT(id) AS humancounts,DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +2 MONTH),'%Y%m') as `month` from t_humanresources where "
+					+"zw = '国安侠' and humanstatus = 1 and DATE_FORMAT(topostdate,'%Y%m') < DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +2 MONTH),'%Y%m') GROUP BY citySelect UNION "
+				+"select citySelect,COUNT(id) AS humancounts,DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +1 MONTH),'%Y%m') as `month` from t_humanresources where "
+					+"zw = '国安侠' and humanstatus = 1 and DATE_FORMAT(topostdate,'%Y%m') < DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +1 MONTH),'%Y%m') GROUP BY citySelect UNION "
+				+"select citySelect,COUNT(id) AS humancounts,DATE_FORMAT(NOW(),'%Y%m') as `month` from t_humanresources where "
+					+"zw = '国安侠' and humanstatus = 1 and DATE_FORMAT(topostdate,'%Y%m') < DATE_FORMAT(NOW(),'%Y%m') GROUP BY citySelect "
+				+") t2 ON (t1.cityname = t2.citySelect and t1.month = t2.month) LEFT JOIN ( "
+				+"SELECT SUM(ds_cus.pay_count) AS week_cus_count, d.cityname as cityname, DATE_FORMAT(ds_cus.sign_date,'%Y%m') as `month` FROM ds_cusum_day_city ds_cus left join  t_dist_citycode d on (d.id=ds_cus.city_id) WHERE "
+				+"(ds_cus.sign_date>=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +3 MONTH),'%Y-%m-"+begindate+"') and ds_cus.sign_date <=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +3 MONTH),'%Y-%m-"+enddate+"')) or "
+				+"(ds_cus.sign_date>=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +2 MONTH),'%Y-%m-"+begindate+"') and ds_cus.sign_date <=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +2 MONTH),'%Y-%m-"+enddate+"')) or "
+				+"(ds_cus.sign_date>=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +1 MONTH),'%Y-%m-"+begindate+"') and ds_cus.sign_date <=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +1 MONTH),'%Y-%m-"+enddate+"')) or "
+				+"(ds_cus.sign_date>=DATE_FORMAT(NOW(),'%Y-%m-"+begindate+"') and ds_cus.sign_date <=DATE_FORMAT(NOW(),'%Y-%m-"+enddate+"')) GROUP BY city_id ,month "
+				+") t3 ON (t1.cityname = t3.cityname and t1.month = t3.month) ORDER BY CONVERT(t1.cityname USING gbk),t1.`month`";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_data;
+		}catch (Exception e){
+            e.printStackTrace();
+        }
+		return lst_result;
+	}
 }
