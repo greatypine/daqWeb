@@ -164,7 +164,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}
 		List eshopWeekCount = new ArrayList();
 		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
-		if (noMemCityList!=null&&!noMemCityList.isEmpty()) {
+		if (eshopWeekList!=null&&!eshopWeekList.isEmpty()) {
 			for (int i = 0; i < eshopWeekList.size(); i++) {
 				int eshopCou = Integer.parseInt(eshopWeekList.get(i).get("eweekcou").toString());
 				Double eshopGmv = Double.parseDouble(eshopWeekList.get(i).get("eweekgmv").toString());

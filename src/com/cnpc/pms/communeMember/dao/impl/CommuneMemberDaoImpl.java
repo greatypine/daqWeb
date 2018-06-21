@@ -1056,7 +1056,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月13日
 		 */
-		String daySumSql = "select sum(domcd.eshop_count) eweekcou,sum(domcd.eshop_gmv) eweekgmv from ds_ope_member_city_day domcd where domcd.date >=DATE_SUB(curdate(),INTERVAL 7 DAY) and domcd.date <curdate()";
+		String daySumSql = "select ifnull(sum(domcd.eshop_count),0) eweekcou,ifnull(sum(domcd.eshop_gmv),0) eweekgmv from ds_ope_member_city_day domcd where domcd.date >=DATE_SUB(curdate(),INTERVAL 7 DAY) and domcd.date <curdate()";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

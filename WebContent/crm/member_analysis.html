@@ -987,7 +987,7 @@ function doMemberInfo(){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
         	//订单时段性分布
-        	//showTimeOrder(resultJson);
+        	showTimeOrder(resultJson);
  			//运营情况
  			showHistoryData(resultJson);  
 
@@ -1069,7 +1069,7 @@ function doEshopMemberSum(){
         hover: "#68d099"
       });
     // $('#citySelect').css('display','block');
-    //localStorage.clear();
+     localStorage.clear();
 	 loginShow();
 	 //获取社员量
 
