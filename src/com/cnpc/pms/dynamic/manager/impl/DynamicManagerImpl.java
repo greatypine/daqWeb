@@ -6070,9 +6070,17 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}
 
 			
-			String[] dateArr = dynamicDto.getBeginDate().split("-");
-            dynamicDto.setYear(Integer.parseInt(dateArr[0]));
-            dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			if("prev_month".equals(dynamicDto.getBeginDate())){
+				Calendar calendar = Calendar.getInstance();
+	            calendar.add(Calendar.MONTH, -1);
+	            dynamicDto.setYear(calendar.get(Calendar.YEAR));
+	            dynamicDto.setMonth(calendar.get(Calendar.MONTH)+1);
+			}else if("cur_month".equals(dynamicDto.getBeginDate())){
+				Calendar c = Calendar.getInstance();    
+				dynamicDto.setYear(c.get(Calendar.YEAR));
+		        dynamicDto.setMonth(c.get(Calendar.MONTH)+1);
+			}
 			
 			result= dynamicDao.queryEmployeeSendorders(dynamicDto, pageInfo);
 			result.put("status","success");
