@@ -134,7 +134,7 @@
             <section class="content-header">
                 <div class="box box-default">
                     <div class="box-header h4 text-light-blue" id="ff"><strong>国安侠送单量</strong>
-                    <small class="text-red" style="padding-left: 10px;">注意：1.本月数据截止到昨天24点。</small></br>
+<!--                     <small class="text-red" style="padding-left: 10px;">注意：1.拉新用户量是指当月首次在国安社区某个门店消费，且当月累计消费超过10元的客户。</small></br> -->
 <!-- 		         	<small class="text-red" style="padding-left: 147px;">2.如果作为绩效数据使用，请确保于每月2号上午8点以后，下载上月数据。</small></br> -->
 		         	
                     </div>
@@ -147,13 +147,11 @@
                                </div>
                                <input type="text" class="form-control pull-right" id="be_date1">
                              </div> -->
-<!--                             <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width:90%"> -->
-<!--                                 <option value="prev_month" >上月</option> -->
-<!--                                 <option value="cur_month" selected>本月（截止到昨天24点）</option> -->
-<!--                                 <option value="cur_day">当日（实时数据）</option> -->
-<!--                             </select> -->
-							<input type="text" class="form-control" id="be_date1" name="be_date1" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
-
+                            <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width:90%">
+                                <option value="prev_month" >上月</option>
+                                <option value="cur_month" selected>本月（截止到昨天24点）</option>
+                                <!--<option value="cur_day">当日（实时数据）</option>-->
+                            </select>
                             <!-- /.input group -->
                         </div>
                         <div class="form-group col-lg-4"  id="store_fg">
@@ -247,7 +245,6 @@
 <!-- ./wrapper -->
 <!-- jQuery 2.2.0 -->
 <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
-<script type="text/javascript" src="laydate/laydate.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
@@ -273,17 +270,7 @@
         extend: 'skin/crmskin/style.css' /**加载新皮肤*/
     });
 
-    laydate.render({//月份控件
-		elem:'#be_date1',
-		value:new Date(),
-		type:"month",
-		btns: ['now', 'confirm'],
-		theme: '#11214e',
-		min: '2018-1-1',
-		
-		
-		
-	});
+
     var cityId = decode64(getUrlParamByKey("c"));//**城市ID*/
     var initCity = cityId;
     var cityName = decode64(getUrlParamByKey("cn"));//城市名称
@@ -467,9 +454,9 @@
             crm_alert(0,"请选择时间！");
             return;
         }
-       
+        if(begin_end_date=="prev_month"||begin_end_date=="cur_month"){
             searchInfo_ff2(cur_page,begin_end_date);
-        
+        }
     }
 
     function searchInfo_ff2(cur_page,begin_end_date){
