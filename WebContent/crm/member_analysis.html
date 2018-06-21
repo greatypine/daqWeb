@@ -987,7 +987,7 @@ function doMemberInfo(){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
         	//订单时段性分布
-        	showTimeOrder(resultJson);
+        	//showTimeOrder(resultJson);
  			//运营情况
  			showHistoryData(resultJson);  
 
@@ -1069,6 +1069,7 @@ function doEshopMemberSum(){
         hover: "#68d099"
       });
     // $('#citySelect').css('display','block');
+    //localStorage.clear();
 	 loginShow();
 	 //获取社员量
 
@@ -2710,7 +2711,62 @@ var showTimeOrder = function(dataServer){
 	myChart20.setOption(option20);
 	
 	var myChart21= echarts.init(document.getElementById('main21'));
-	  //年龄
+	
+	
+	  //订单配送时效分布
+  	  var datatimes = [{
+		            	    value: dataServer.jsonSelCount[7],
+		            	    name: "大于1天"
+		            	}, {
+			            	    value: dataServer.jsonSelCount[6],
+			            	    name: "12-24小时"
+			            }, {
+		            	    value: dataServer.jsonSelCount[5],
+		            	    name: "4-12小时"
+		            	}, {
+		            	    value: dataServer.jsonSelCount[4],
+		            	    name: "2-4小时"
+		            	}, {
+		            	    value: dataServer.jsonSelCount[3],
+		            	    name: '1-2小时'
+		            	},{
+		            		value: dataServer.jsonSelCount[2],
+		            		name: '0.5-1小时'
+		              	},{
+		            		value: dataServer.jsonSelCount[1],
+		            		name: '半小时内'
+		            	},{
+		            	    value: dataServer.jsonSelCount[0],
+		            	    name: '提前送达'
+		            	}
+		            ];
+	  if(dataServer.jsonSelCount[0]==0){
+		  datatimes = [
+          	{
+          		value: dataServer.jsonSelCount[1],
+          		name: '半小时内'
+          	  },{
+	            		value: dataServer.jsonSelCount[2],
+	            		name: '0.5-1小时'
+	              }, {
+          	    value: dataServer.jsonSelCount[3],
+          	    name: '1-2小时'
+          	  }, {
+          	    value: dataServer.jsonSelCount[4],
+          	    name: "2-4小时"
+          	  }, {
+          	    value: dataServer.jsonSelCount[5],
+          	    name: "4-12小时"
+          	  }, {
+          	    value: dataServer.jsonSelCount[6],
+          	    name: "12-24小时"
+          	  }, {
+          	    value: dataServer.jsonSelCount[7],
+          	    name: "大于1天"
+          	  }
+          ]; 
+	  }
+
 	  option21 = {
 			    tooltip: {
 				      trigger: 'item',
@@ -2744,33 +2800,7 @@ var showTimeOrder = function(dataServer){
 			                    }
 			                }
 			            },
-			            data:[
-			            	{
-			            	    value: dataServer.jsonSelCount[0],
-			            	    name: '提前送达'
-			            	  },{
-			            		value: dataServer.jsonSelCount[1],
-			            		name: '半小时内'
-			            	  },{
-				            		value: dataServer.jsonSelCount[2],
-				            		name: '0.5-1小时内'
-				              }, {
-			            	    value: dataServer.jsonSelCount[3],
-			            	    name: '1-2小时'
-			            	  }, {
-			            	    value: dataServer.jsonSelCount[4],
-			            	    name: "2-4小时"
-			            	  }, {
-			            	    value: dataServer.jsonSelCount[5],
-			            	    name: "4-12小时"
-			            	  }, {
-			            	    value: dataServer.jsonSelCount[6],
-			            	    name: "12-24小时"
-			            	  }, {
-			            	    value: dataServer.jsonSelCount[7],
-			            	    name: "大于1天"
-			            	  }
-			            ]
+			            data:datatimes
 			  	      ,label: {
 					        normal: {
 					          position: 'out', //标签的位置
