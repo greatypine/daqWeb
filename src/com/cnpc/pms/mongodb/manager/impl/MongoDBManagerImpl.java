@@ -274,7 +274,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 									}
 									
 									result.put("code",CodeEnum.repeatData.getValue());
-									result.put("message","当前区域已经被 "+store.getName()+" 所画的 "+sb.toString()+" 占用");
+									result.put("message","当前区域已经被 "+temp_store.getName()+" 所画的 "+sb.toString()+" 占用");
 									return result;
 									
 								}else{
