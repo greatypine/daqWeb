@@ -137,4 +137,17 @@ public interface ShortMessageManager extends IManager{
 	
 	public Map<String, Object> getAllStoreKeeperEmployee();
 	
+	/**
+	 * 
+	* @Title: sendShortMessage  
+	* @Description: TODO 根据不同类型短信类型发送短信 
+	* 2018年6月20日
+	* @param @param shortMessage
+	* @param @return      
+	* @return Map<String,Object> 
+	* @throws
+	* @author gbl
+	 */
+	public Map<String,Object> sendShortMessage(ShortMessage shortMessage);
+	
 }

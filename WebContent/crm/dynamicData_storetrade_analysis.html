@@ -76,10 +76,14 @@
 		}
 		
 		/*搜索框*/
-    .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
-    small span:hover{
+       .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
+       small span:hover{
     	color:#337ab7;
     	}
+    	
+    .demo-input{padding-left: 10px; height: 38px; min-width: 262px; line-height: 38px; border: 1px solid #e6e6e6;  background-color: #fff;  border-radius: 2px;}
+  	.demo-footer{padding: 50px 0; color: #999; font-size: 14px;}
+  	.demo-footer a{padding: 0 5px; color: #01AAED;}	
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -148,7 +152,8 @@
 			          4.绩效GMV已去除<a  href="javascript:gotoAbnormalOrder(3)" >异常订单</a>统计。
 <!--  4.绩效GMV已去除异常订单统计。 -->
 			          </br>
-					  5.如果作为绩效数据使用，请确保于每月3号上午8点以后，下载上月数据。
+					  5.如果作为绩效数据使用，请确保于每月3号上午8点以后，下载上月数据。<br>
+					  6.本月数据截止到昨天24点。
 					  
 			</div>
           </div>
@@ -162,11 +167,12 @@
                 </div>
                 <input type="text" class="form-control pull-right" id="be_date1">
               </div> -->
-                <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
-               		<option value="prev_month" >上月</option>
-                	<option value="cur_month" selected>本月（截止到昨天24点）</option>
+<!--                 <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"> -->
+<!--                		<option value="prev_month" >上月</option> -->
+<!--                 	<option value="cur_month" selected>本月（截止到昨天24点）</option> -->
                 	
-                </select>
+<!--                 </select> -->
+ 			  <input type="text" class="form-control" id="be_date1" name="be_date1" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
               <!-- /.input group -->
             </div>
             <div class="form-group col-lg-4">
@@ -239,6 +245,7 @@
 <!-- ./wrapper -->
 <!-- jQuery 2.2.0 -->
 <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="laydate/laydate.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
@@ -258,6 +265,8 @@
 
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script> 
+ 
+
 <script type="text/javascript">
 <!--target(数据查询层级标识) 0：总部  1:城市级别 2：门店-->
 	layer.config({
@@ -265,6 +274,17 @@
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
 	  
 	});
+	
+	laydate.render({//月份控件
+		elem:'#be_date1',
+		value:new Date(),
+		type:"month",
+		btns: ['now', 'confirm'],
+		theme: '#11214e',
+		min: '2018-1-1'
+		
+	});
+	
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
 	var initCity = cityId;
 	var cityName = decode64(getUrlParamByKey("cn"));//城市名称
@@ -301,7 +321,10 @@
     //Date range picker
     /* $('#be_date1').daterangepicker();
 	$('#be_date2').daterangepicker(); */
+	
   });
+	
+
   /**-----------------------------------搜索城市------------------------------------------------------**/
   var lst_select_city=null;
   var cityNameArray=new Array();
@@ -449,9 +472,9 @@
       		 return;
       	}	
     	
-    	if(begin_end_date=="prev_month"||begin_end_date=="cur_month"){
+    	
     		searchInfo_tradetype_step3(cur_page,begin_end_date);
-    	}
+    	
     }
       
     function searchInfo_tradetype_step3(cur_page,begin_end_date){
@@ -586,9 +609,9 @@
      	}
 		var cur_page;
 
-        if(begin_end_date=="prev_month"||begin_end_date=="cur_month"){
-        	export_tradetype1(begin_end_date);
-        }
+        
+      export_tradetype1(begin_end_date);
+     
 
    }
     //导出上第二步

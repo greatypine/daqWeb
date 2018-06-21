@@ -51,5 +51,15 @@ public class SMSUserGroupManagerImpl extends BizBaseCommonManager implements SMS
 		}
 		return null;
 	}
+    
+	@Override
+	public List<Map<String, Object>> selectUserGroup(String code) {
+		List<?> lst_data = this.getList(FilterFactory.getSimpleFilter(" LOWER(code) like '"+code.toLowerCase()+"%'"));
+		
+		if (lst_data != null && lst_data.size() > 0) {    
+			return (List<Map<String, Object>>)lst_data;
+		}
+		return null;
+	}
 
 }

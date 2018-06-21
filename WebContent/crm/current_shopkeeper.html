@@ -468,6 +468,8 @@
           </div>
           <span class="pull-right" onclick="fullscreen()" style="z-index:200px"><img src="dist/img/fullscreen.png"> </span>
           <input id="fscreen" hidden="hidden">
+<!--           <a href="" target="_blank" id="areaData">22222</a> -->
+          <a href="" id="areaData"  style="display:none"></a>
           <div class="box-body" style="position:relative;top:22px;height:350px;" id="mapHeight">
           <div id="mapContainer" style="background-color:rgba(0,0,0,0.5);border-radius:20px;z-index:120"></div>
           <div class="menu" id="TULI" style="display:none;z-index:120">
@@ -1390,7 +1392,9 @@ function initStoreHistoryGMV(){
 	        		var area_no =   e.target.getExtData().areaNo;
 	        		var area_name =  e.target.getExtData().areaName;
 	                var url = "index_area.html?ao=" + encode64(area_no);
-	                window.open(url);
+// 	                $("#areaData").attr("href",url);
+// 	                $("#areaData").click();
+	                window.open(url,"_blank");
 	        	}); 
 	        	var tmp_tinyVillageCoordinate={
 	        			area_no:coordinate[i].areaNo,

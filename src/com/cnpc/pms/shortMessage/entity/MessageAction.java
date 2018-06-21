@@ -10,27 +10,25 @@ import com.cnpc.pms.base.entity.DataEntity;
 @Table(name="t_message_action")
 public class MessageAction extends DataEntity{
 	
-	@Column(name="messageType")
-	private String messgeType;
+	@Column(name="messageTypeCode")
+	private String messageTypeCode;
 	
 	@Column(name="actionCode")
 	private String actionCode;
 	
-	@Column(name="managerName")
-	private String managerName;
-	
-	@Column(name="methodName")
-	private String methodName;
+
 	
 	@Column(name="remark")
 	private String remark;
 
-	public String getMessgeType() {
-		return messgeType;
+	
+
+	public String getMessageTypeCode() {
+		return messageTypeCode;
 	}
 
-	public void setMessgeType(String messgeType) {
-		this.messgeType = messgeType;
+	public void setMessageTypeCode(String messageTypeCode) {
+		this.messageTypeCode = messageTypeCode;
 	}
 
 	public String getActionCode() {
@@ -49,21 +47,6 @@ public class MessageAction extends DataEntity{
 		this.remark = remark;
 	}
 
-	public String getManagerName() {
-		return managerName;
-	}
-
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
-	}
-
-	public String getMethodName() {
-		return methodName;
-	}
-
-	public void setMethodName(String methodName) {
-		this.methodName = methodName;
-	}
 	
 	
 }

@@ -56,5 +56,12 @@
         <column key="mobilephone" header="手机" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
   		<column key="employee_no" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
     </query>
-    
+    <query id="queryMessageTypeList" header="短信类型列表" method="messageTypeManager.queryMessageType" order="type" filter="status = 0">
+        <column key="id" header="" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="code" header="编码" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+  		<column key="remark" header="备注" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+  		<column key="actionCode" header="回复内容" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+  		<column key="description" header="回复内容说明" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+    </query>
 </pmsquery>

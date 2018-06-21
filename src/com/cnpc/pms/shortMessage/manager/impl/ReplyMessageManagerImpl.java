@@ -3,6 +3,7 @@ package com.cnpc.pms.shortMessage.manager.impl;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
@@ -25,12 +26,12 @@ public class ReplyMessageManagerImpl extends BizBaseCommonManager implements Rep
 		ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");
 		MessageActionManager messageActionManager = (MessageActionManager) SpringHelper.getBean("messageActionManager");
 		try {
-			MessageAction ma = messageActionManager.selectMessageAction(reDto.getContent());//根据回复内容查询短信类型
+			List<MessageAction> ma = messageActionManager.selectMessageActionByActionCode(reDto.getContent());//根据回复内容查询短信类型
 			if(ma==null){
 				//此处发短信告知正确的回复内容
 				return result; 
 			}
-			reDto.setMessageType(ma.getMessgeType());
+			reDto.setMessageType(ma.get(0).getMessageTypeCode());
 			reDto.setActionCode(reDto.getActionCode());
 			this.saveReplyMessage(reDto);
 			ReplyMessageExecuteAction.executeAction(reDto);

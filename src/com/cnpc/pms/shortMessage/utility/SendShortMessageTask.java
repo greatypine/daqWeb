@@ -29,14 +29,21 @@ public class SendShortMessageTask implements Runnable{
 			Object InvitationCode = useres.get(i).get("inviteCode");
 			Object mobilephone = useres.get(i).get("mobilePhone");
 			Object name  =  useres.get(i).get("userName");
-			if(InvitationCode==null){
-				continue;
+			String content = "";
+			
+			if("SYYQM".equals(shortMessage.getType())){//社员邀请码短信
+				if(InvitationCode==null){
+					continue;
+				}
+				content = shortMessage.getContent().replaceAll("XXXXXX",String.valueOf(InvitationCode));
+				content =content.replaceAll("XXX",String.valueOf(name));
+			}else if("YBD".equals(shortMessage.getType())){//云表单
+				
+			}else{
+				//其他业务逻辑
 			}
 			
-			
-			String newContent = shortMessage.getContent().replaceAll("XXXXXX",String.valueOf(InvitationCode));
-			newContent = newContent.replaceAll("XXX",String.valueOf(name));
-			String resultString = interManager.commonSendMessage(String.valueOf(mobilephone),newContent, null);
+			String resultString = interManager.commonSendMessage(String.valueOf(mobilephone),content, null);
 			SendMessage sendMessage = new SendMessage();
 			sendMessage.setFunctionname(shortMessage.getTitle());
 			sendMessage.setMobilephone(String.valueOf(mobilephone));
