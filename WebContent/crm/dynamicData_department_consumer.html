@@ -143,7 +143,7 @@
           	
          	<div class="pull-left text-red" style="font-size:75%">
          			  
-			          注意：1.本月数据截止到昨天24点。</br>
+			          &nbsp;&nbsp;注意：1.本月数据截止到昨天24点。</br>
 			</div>
           </div>
           <div class="box-body">
@@ -274,14 +274,16 @@
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
 	  
 	});
-	
+	var cur_date = new Date();
+	var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
 	laydate.render({//月份控件
 		elem:'#be_date1',
 		value:new Date(),
 		type:"month",
 		btns: ['now', 'confirm'],
 		theme: '#11214e',
-		min: '2018-1-1'
+		min: '2018-1-1',
+		max:year_month
 		
 	});
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
