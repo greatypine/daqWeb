@@ -417,7 +417,7 @@ function toUpdatePwd(){//encode64(target)
 					//保存记录
 					saveLoginLog(returnObj);
 					if(survey_id!=null){
-						window.location.href='http:\/\/10.16.31.56:8080/GAform/user/loginActionDaqWeb?survey_id='+survey_id+'&code='+returnObj.user.code+'&user_id='+returnObj.user.id;
+						window.location.href='http:\/\/10.16.31.242:8090/GAform/user/loginActionDaqWeb?survey_id='+survey_id+'&code='+returnObj.user.code+'&user_id='+returnObj.user.id;
 						return;
 					}
 					
