@@ -268,6 +268,7 @@
 	var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
 	var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
 	var regex_dz = new RegExp("^(DZ|dz)\w*");//店长角色
+	var regex_gly = new RegExp("^(GLY|gly)\w*");//管理员角色
 	var target;
 	var storeId;
 	$(function () {
@@ -276,7 +277,7 @@
 			$("#tinyvillageCode").val(code);
 			$("#tinyvillageCode").attr("readonly",true);
 		}
-		if(regex_zb.test(curr_user.usergroup.code)){//总部
+		if(regex_zb.test(curr_user.usergroup.code)||regex_gly.test(curr_user.usergroup.code)){//总部
 			 target = 0;
 			}else if(regex_cs.test(curr_user.usergroup.code)){//城市
 				target = 1;
