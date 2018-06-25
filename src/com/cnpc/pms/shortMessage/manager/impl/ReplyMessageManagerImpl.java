@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.inter.common.CodeEnum;
+import com.cnpc.pms.shortMessage.dao.ReplyMessageDao;
+import com.cnpc.pms.shortMessage.dao.ShortMessageDao;
 import com.cnpc.pms.shortMessage.dto.ReplyMessageDto;
 import com.cnpc.pms.shortMessage.entity.MessageAction;
 import com.cnpc.pms.shortMessage.entity.MessageType;
@@ -63,5 +67,30 @@ public class ReplyMessageManagerImpl extends BizBaseCommonManager implements Rep
 	}
 
 	
-	
+	public Map<String,Object> queryReplyMessage(QueryConditions queryConditions){
+		ReplyMessageDao reDao = (ReplyMessageDao)SpringHelper.getBean(ReplyMessageDao.class.getName());
+		//查询的数据条件
+        StringBuilder sb_where = new StringBuilder();
+        //分页对象
+        PageInfo obj_page = queryConditions.getPageinfo();
+        //返回的对象，包含数据集合、分页对象等
+        Map<String, Object> map_result = new HashMap<String, Object>();
+        StringBuilder citySb = new StringBuilder(); 
+        for (Map<String, Object> map_where : queryConditions.getConditions()) {
+        	if("messageType".equals(map_where.get("key"))
+                    && null != map_where.get("value") && !"".equals(map_where.get("value"))){
+            	sb_where.append(" and b.name like '"+map_where.get("value")+"'");
+            }else if("phone".equals(map_where.get("key"))&& null != map_where.get("value") && !"".equals(map_where.get("value"))){
+            	sb_where.append(" and a.phone like '"+map_where.get("value")+"'");
+            }
+        }
+		try {
+			 map_result.put("data",reDao.selectReplyMessage(sb_where.toString(), obj_page));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map_result.put("pageinfo", obj_page);
+        
+        return map_result;
+	}
 }

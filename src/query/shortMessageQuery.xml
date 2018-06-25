@@ -64,4 +64,12 @@
   		<column key="actionCode" header="回复内容" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
   		<column key="description" header="回复内容说明" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
     </query>
+    
+        <query id="queryReplyMessageList" header="短信回复列表" method="replyMessageManager.queryReplyMessage" order="id desc" filter="status = 0">
+        <column key="id" header="" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>
+        <column key="phone" header="手机号" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="content" header="回复内容" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+  		<column key="messageType" header="短信类型" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
+  		<column key="create_time" header="回复时间" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+    </query>
 </pmsquery>
