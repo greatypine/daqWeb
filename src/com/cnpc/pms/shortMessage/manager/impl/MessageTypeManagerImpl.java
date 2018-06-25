@@ -118,7 +118,7 @@ public class MessageTypeManagerImpl extends BizBaseCommonManager implements Mess
 	}
 
 	@Override
-	public List<Map<String, Object>> selectMessageType() {
+	public List<Map<String, Object>> selectAllMessageType() {
 		
 		List<?> lst_data = this.getList(FilterFactory.getSimpleFilter("status=0"));
 		

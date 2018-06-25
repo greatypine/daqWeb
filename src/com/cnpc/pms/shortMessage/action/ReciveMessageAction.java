@@ -27,6 +27,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
+import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.shortMessage.dto.ReplyMessageDto;
 import com.cnpc.pms.shortMessage.entity.ReplyMessage;
 import com.cnpc.pms.shortMessage.manager.ReplyMessageManager;
@@ -83,7 +84,16 @@ public class ReciveMessageAction extends HttpServlet{
 	    			 re.setContent(msgContent);
 	    			 re.setSpNumber(spNumber);
 	    			 Map<String,Object> result= reManager.reciveMessageReply(re);//接收短信以后的逻辑
-	    			 out.println("success");
+	    			 Object status = result.get("status");
+	    			 
+	    			 if(status==CodeEnum.nullData.getValue()){//没有对应的短信类型
+	    				 out.println("The value '"+msgContent+"' of the parameter 'msgContent' is invalid");
+	    			 }else if(status==CodeEnum.success.getValue()){//回复成功
+	    				 out.println("success");
+	    			 }else {//回复失败
+	    				 out.println("Error:"+status);
+	    			 }
+	    			 
 	    			  
 				} catch (Exception e) {
 					e.printStackTrace();

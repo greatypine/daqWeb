@@ -68,6 +68,6 @@ public interface MessageTypeManager extends IManager{
 	* @throws
 	* @author gbl
 	 */
-	public List<Map<String,Object>> selectMessageType();
+	public List<Map<String,Object>> selectAllMessageType();
 	
 }
