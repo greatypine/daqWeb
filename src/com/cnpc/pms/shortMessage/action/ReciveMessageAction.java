@@ -68,17 +68,17 @@ public class ReciveMessageAction extends HttpServlet{
 	    			 String msgContent = req.getParameter("msgContent");
 	    			 String spNumber = req.getParameter("spNumber");
 	    			 if(phone==null||"".equals(phone)){
-	    				 out.println("Phone is requested but  not found");
+	    				 out.println("Error:Phone is requested but  not found");
 	    				 return;
 	    			 }
 	    			 
 	    			 if(msgContent==null||"".equals(msgContent)){
-	    				 out.println("msgContent is requested but  not found");
+	    				 out.println("Error:msgContent is requested but  not found");
 	    				 return;
 	    			 }
 	    			 
 	    			 if(spNumber==null||"".equals(spNumber)){
-	    				 out.println("spNumber is requested but  not found");
+	    				 out.println("Error:spNumber is requested but  not found");
 	    				 return;
 	    			 }
 	    			 
@@ -86,7 +86,7 @@ public class ReciveMessageAction extends HttpServlet{
 	    			  
 	    			 Matcher m = p.matcher(phone);  
 	    			 if(!m.matches()){
-	    				 out.println("Phone format is wrong");
+	    				 out.println("Error:Phone format is wrong");
 	    				 return;
 	    			 } 
 	    			
@@ -98,7 +98,7 @@ public class ReciveMessageAction extends HttpServlet{
 	    			 Object status = result.get("status");
 	    			 
 	    			 if(status==CodeEnum.nullData.getValue()){//没有对应的短信类型
-	    				 out.println("The value '"+msgContent+"' of the parameter 'msgContent' is invalid");
+	    				 out.println("Error:the value '"+msgContent+"' of the parameter 'msgContent' is invalid");
 	    			 }else if(status==CodeEnum.success.getValue()){//回复成功
 	    				 out.println("success");
 	    			 }else {//回复失败
@@ -111,7 +111,7 @@ public class ReciveMessageAction extends HttpServlet{
 					out.print("Error:" + e.getMessage()); 
 				}
 			} else {
-				out.println("access forbidden");
+				out.println("Error:access forbidden");
 			}
 
 	    }
