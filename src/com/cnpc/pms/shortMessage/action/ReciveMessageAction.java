@@ -43,7 +43,18 @@ public class ReciveMessageAction extends HttpServlet{
 	    @Override
 	    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    	ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");
-	    	String remoteAddress = req.getRemoteAddr();
+	    	 String remoteAddress = req.getHeader("x-forwarded-for");  
+	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
+	        	 remoteAddress = req.getHeader("Proxy-Client-IP");  
+	         }  
+	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
+	        	 remoteAddress = req.getHeader("WL-Proxy-Client-IP");  
+	         }  
+	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
+	        	 remoteAddress = req.getRemoteAddr();  
+	        }  
+	    	
+	    	System.out.println("短信远程IP>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+remoteAddress);
 	    	String permitAddress = PropertiesUtil.getValue("permitAddress");
 	    	String[] permitAddArray  = permitAddress.split(",");
 	    	
