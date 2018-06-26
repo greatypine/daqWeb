@@ -178,13 +178,21 @@
         </div> -->
       <div class="box box-default">
           <div class="box-body">
-            <div class="col-sm-8">
+            <div class="col-sm-12">
               <h4 class="text-light-blue"><strong>全部订单时段性分布</strong></h4>
-              <div class="col-sm-12 no-padding" id="main20" style="height: 360px;"></div>
+              <div class="col-sm-12 no-padding" id="main20" style="height: 260px;"></div>
             </div>
-            <div class="col-sm-4">
+          </div>
+        </div>
+      <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-6">
               <h4 class="text-light-blue"><strong>订单配送时效分布</strong></h4>
               <div class="col-sm-12 no-padding" id="main21" style="height: 360px;"></div>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="text-light-blue"><strong>订单商品种类分布</strong></h4>
+              <div class="col-sm-12 no-padding" id="main22" style="height: 360px;"></div>
             </div>
           </div>
         </div>
@@ -312,7 +320,7 @@
             <div class="col-sm-4 no-padding" id="main8" style="height: 350px;"></div>
           </div>
       </div>
- <!--      <div class="box box-default">
+<!--      <div class="box box-default">
         <div class="box-header h4 text-light-blue"><strong>优惠情况</strong></div>
           <div class="box-body">
             <div class="col-sm-6 no-padding" id="main10" style="height: 350px;"></div>
@@ -983,11 +991,13 @@ function getUser(){
   	},false);
 }
 function doMemberInfo(){
-    doManager('communeMember','selectAllCm',"kkl",function(data){
+    doManager('communeMember','selectAllCm',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
         	//订单时段性分布
         	showTimeOrder(resultJson);
+        	//订单商品分类统计
+        	showOrderType(resultJson);
  			//运营情况
  			showHistoryData(resultJson);  
 
@@ -1000,7 +1010,7 @@ function doMemberInfo(){
     },false);
 }
 function doMemberSum(){
-    doManager('communeMember','selectMeSum',"kkl",function(data){
+    doManager('communeMember','selectMeSum',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
         	//完成订单/取消订单走势，订单均价走势
@@ -1031,7 +1041,7 @@ function doMemberSum(){
     });
 }
 function doEshopMemberSum(){
-    doManager('communeMember','selectMeOrder',"kkl",function(data){
+    doManager('communeMember','selectMeOrder',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
         	
@@ -2704,7 +2714,13 @@ var showTimeOrder = function(dataServer){
 	        {
 	            name: '订单量',
 	            type: 'line',
-	            data: dataServer.jsonHourCounts
+	            data: dataServer.jsonHourCounts,
+	            markPoint: {
+	                data: [
+	                    {type: 'max', name: '最大值'},
+	                    {type: 'min', name: '最小值'}
+	                ]
+	            }
 	        }
 	    ]
 	};
@@ -2816,8 +2832,76 @@ var showTimeOrder = function(dataServer){
 	  myChart21.setOption(option21);
 }
 
-var showTimeOrder1 = function(){
-	
+var showOrderType = function(dataServer){
+	var myChart22= echarts.init(document.getElementById('main22'));
+	debugger;
+	  option22 = {
+			    tooltip: {
+				      trigger: 'item',
+				      formatter: '{a}<br/>{b}: {c} ({d}%)'
+				},
+			    calculable : true,
+			    series : [
+			    	{
+			            name:'配送时效',
+			            type:'pie',
+			            radius : [30, 110],
+			            center : ['50%', '50%'],
+			           // roseType : 'radius',
+			            width: '40%',       // for funnel
+			            max: 40,            // for funnel
+			            itemStyle : {
+			                normal : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                },
+			                emphasis : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                }
+			            }
+			  	      ,label: {
+					        normal: {
+					          position: 'out', //标签的位置
+					          formatter: '{b}\n{d}%',
+					          color: '#59ADF3'
+
+					        }
+					   }
+			        }
+			    ]
+			};
+	var typeData = '[';
+	var ordTypeName = dataServer.jsonOrderTypeNames;
+	var ordTypeSum = dataServer.jsonOrderTypeSums;
+	var  len = ordTypeName.length;
+	for(var i=0;i<len;i++){
+		
+		if(len>0){
+			if((len-1)==i){
+				typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
+			}else{
+				typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"},';
+			}
+			
+		}else{
+			typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
+		}
+	}	
+	typeData+="]";
+	var cityUserDataObject = JSON.parse(typeData);
+	option22.series[0].data = cityUserDataObject;
+
+	  
+	  myChart22.setOption(option22);
 }
  
 //设置加载中图标

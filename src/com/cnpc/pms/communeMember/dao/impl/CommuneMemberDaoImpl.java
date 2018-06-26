@@ -319,8 +319,8 @@ public List<Map<String, Object>> getAllCount(String dd) {
 	
 	//查询社员总量sql
 	String sql = "select count(*) as allCount from  df_user_member dum";
-	if("0000".equals(dd)) {
-		sql = sql+ " where regist_cityno='"+dd+"'";
+	if(!"0000".equals(dd)) {
+		sql = sql+ " where dum.regist_cityno='"+dd+"'";
 	}
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	try{
@@ -352,6 +352,9 @@ public List<Map<String, Object>> getNewCount(String dd) {
 	
 	//查询新用户注册社员sql
 	String sql = "select count(*) as newCount from  df_user_member dum where dum.isnew_member=1";
+	if(!"0000".equals(dd)) {
+		sql = sql+ " and dum.regist_cityno='"+dd+"'";
+	}
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	try{
 		Query query = this.getHibernateTemplate().getSessionFactory()
@@ -383,6 +386,9 @@ public List<Map<String, Object>> getOldCount(String dd) {
 			
 			//查询老用户转社员sql
 			String sql = "select count(*) as oldcount from  df_user_member dum where dum.isnew_member=0 or dum.isnew_member is null";
+			if(!"0000".equals(dd)) {
+				sql = sql+ " and dum.regist_cityno='"+dd+"'";
+			}
 			List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 			try{
 				Query query = this.getHibernateTemplate().getSessionFactory()
@@ -451,7 +457,9 @@ public List<Map<String, Object>> getAllMembers(String dd) {
 			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 2 DAY)  then  1 else 0 end) as day6," + 
 			"			sum(CASE when  date(dum.opencard_time)<= DATE_SUB(curdate(),INTERVAL 1 DAY)  then  1 else 0 end) as day7" + 
 			"			 from df_user_member dum";
-	
+	if(!"0000".equals(dd)) {
+		sql = sql+ " where dum.regist_cityno='"+dd+"'";
+	}
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	try{
 		Query query = this.getHibernateTemplate().getSessionFactory()
@@ -507,6 +515,9 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	 */
 	
 	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode group by dum.born_province";
+	if(!"0000".equals(dd)) {
+		birSql = birSql+ " and dum.regist_cityno='"+dd+"'";
+	}
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(birSql);
@@ -737,7 +748,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * 2018年6月7日
 		 */
 		
-		String daySumSql = "select ifnull(sum(dmod.trading_price),0) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum where CURDATE()=date(dmod.sign_time) and dmod.customer_id=dum.customer_id";
+		String daySumSql = "select ifnull(sum(dmod.trading_price),0) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum,ds_member_eshop dme where CURDATE()=date(dmod.sign_time) and dmod.customer_id=dum.customer_id and dmod.eshop_id=dme.eshop_id";
 		
 		if("0000".equals(string)) {
 			daySumSql = daySumSql+" and dmod.city_code='"+string+"'";
@@ -1109,7 +1120,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月20日
 		 */
-		String daySumSql = "select date_format(dmom.sign_time, '%H时') seltime, count(1) prisum from df_mass_order_monthly dmom where date(dmom.sign_time) > '2018-05-17' and dmom.order_tag1 like '%E%' group by date_format(dmom.sign_time, '%H') order by date_format(dmom.sign_time, '%H') ";
+		String daySumSql = "select date_format(dmom.sign_time, '%H时') seltime, count(1) prisum from df_mass_order_total dmom where dmom.sign_time > '2018-05-17 23:59:59' and dmom.order_tag1 like '%E%' group by date_format(dmom.sign_time, '%H') order by date_format(dmom.sign_time, '%H') ";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1136,6 +1147,23 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				e.printStackTrace();
 			}
 			return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getOrderType(String string) {
+		/**
+		 * @author wuxinxin
+		 * 2018年6月21日
+		 */
+		String daySumSql = "select sum(dompad.ordercount) ordertypecou ,dompad.ordertype ordertypename from ds_ope_memberproduct_all_day dompad group by dompad.ordertype";
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return lst_data;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 		
 	}
 
