@@ -308,7 +308,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * @author wuxinxin 2018年5月17日
 		 */
 		String sql = "select  count(*) as cou  from t_eshop e where e.super_member='yes' and e.name not like '%测试%' and e.city_code <>'' and e.city_code  is not null";
-		if("0000".equals(dd)) {
+		if(!"0000".equals(dd)) {
 			sql = sql+" and e.city_code='"+dd+"'";
 		}
 
@@ -333,7 +333,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * @author wuxinxin 
 		 */
 		String skuSql = "select count(*) cou from t_product p,t_eshop te where  te.super_member = 'yes' and p.eshop_id=te.id";
-		if("0000".equals(dd)) {
+		if(!"0000".equals(dd)) {
 			skuSql = skuSql+" and te.city_code='"+dd+"'";
 		}
 

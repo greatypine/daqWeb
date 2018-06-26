@@ -14,6 +14,8 @@ public class ReplyMessageDto {
 	
 	private String actionCode;//短信执行动作
 	
+	private String error;
+	
 	public String getContent() {
 		return content;
 	}
@@ -52,6 +54,14 @@ public class ReplyMessageDto {
 
 	public void setActionCode(String actionCode) {
 		this.actionCode = actionCode;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
 	}
 	
 	
