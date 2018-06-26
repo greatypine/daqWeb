@@ -27,6 +27,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
+import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.shortMessage.dto.ReplyMessageDto;
 import com.cnpc.pms.shortMessage.entity.ReplyMessage;
 import com.cnpc.pms.shortMessage.manager.ReplyMessageManager;
@@ -42,7 +43,18 @@ public class ReciveMessageAction extends HttpServlet{
 	    @Override
 	    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	    	ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");
-	    	String remoteAddress = req.getRemoteAddr();
+	    	 String remoteAddress = req.getHeader("x-forwarded-for");  
+	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
+	        	 remoteAddress = req.getHeader("Proxy-Client-IP");  
+	         }  
+	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
+	        	 remoteAddress = req.getHeader("WL-Proxy-Client-IP");  
+	         }  
+	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
+	        	 remoteAddress = req.getRemoteAddr();  
+	        }  
+	    	
+	    	System.out.println("短信远程IP>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+remoteAddress);
 	    	String permitAddress = PropertiesUtil.getValue("permitAddress");
 	    	String[] permitAddArray  = permitAddress.split(",");
 	    	
@@ -56,17 +68,17 @@ public class ReciveMessageAction extends HttpServlet{
 	    			 String msgContent = req.getParameter("msgContent");
 	    			 String spNumber = req.getParameter("spNumber");
 	    			 if(phone==null||"".equals(phone)){
-	    				 out.println("Phone is requested but  not found");
+	    				 out.println("Error:Phone is requested but  not found");
 	    				 return;
 	    			 }
 	    			 
 	    			 if(msgContent==null||"".equals(msgContent)){
-	    				 out.println("msgContent is requested but  not found");
+	    				 out.println("Error:msgContent is requested but  not found");
 	    				 return;
 	    			 }
 	    			 
 	    			 if(spNumber==null||"".equals(spNumber)){
-	    				 out.println("spNumber is requested but  not found");
+	    				 out.println("Error:spNumber is requested but  not found");
 	    				 return;
 	    			 }
 	    			 
@@ -74,7 +86,7 @@ public class ReciveMessageAction extends HttpServlet{
 	    			  
 	    			 Matcher m = p.matcher(phone);  
 	    			 if(!m.matches()){
-	    				 out.println("Phone format is wrong");
+	    				 out.println("Error:Phone format is wrong");
 	    				 return;
 	    			 } 
 	    			
@@ -83,14 +95,23 @@ public class ReciveMessageAction extends HttpServlet{
 	    			 re.setContent(msgContent);
 	    			 re.setSpNumber(spNumber);
 	    			 Map<String,Object> result= reManager.reciveMessageReply(re);//接收短信以后的逻辑
-	    			 out.println("success");
+	    			 Object status = result.get("status");
+	    			 
+	    			 if(status==CodeEnum.nullData.getValue()){//没有对应的短信类型
+	    				 out.println("Error:the value '"+msgContent+"' of the parameter 'msgContent' is invalid");
+	    			 }else if(status==CodeEnum.success.getValue()){//回复成功
+	    				 out.println("success");
+	    			 }else {//回复失败
+	    				 out.println("Error:"+status);
+	    			 }
+	    			 
 	    			  
 				} catch (Exception e) {
 					e.printStackTrace();
 					out.print("Error:" + e.getMessage()); 
 				}
 			} else {
-				out.println("access forbidden");
+				out.println("Error:access forbidden");
 			}
 
 	    }

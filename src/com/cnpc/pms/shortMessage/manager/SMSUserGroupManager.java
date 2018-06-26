@@ -36,4 +36,17 @@ public interface SMSUserGroupManager extends IManager{
 	* @throws
 	 */
 	public List<Map<String,Object>> selectUserGroup(SMSUserGroup smsUserGroup);
+	
+	/**
+	 * 
+	* @Title: selectUserGroup  
+	* @Description: TODO 根据编码查询用户组
+	* 2018年6月20日
+	* @param @param code
+	* @param @return      
+	* @return List<Map<String,Object>> 
+	* @throws
+	* @author gbl
+	 */
+	public List<Map<String,Object>> selectUserGroup(String code);
 }

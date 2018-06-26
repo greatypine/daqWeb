@@ -224,16 +224,21 @@
 <script language="javascript" src="../scripts/lib/jquery/ui/jquery-ui-1.8.9.custom.min.js"></script>
 <script language="javascript" src="../forecast/js/scripts/bidCommon.js"></script>
 <script src="js/lib.js" type="text/javascript"></script>
+<!--	<script type="text/javascript">
+		var localHandler = function(data){
+			alert('我是本地函数，可以被跨域的remote.js文件调用，远程js带来的数据是：' + data.result);
+		};
+	</script>
+	<script type="text/javascript" src="http://10.16.31.253:8080/GAform/remote.js"></script>-->
 <script src="js/refDialog.js" type="text/javascript"></script>
 
 
 <script src="../scripts/iCheck/icheck.min.js"></script>
 
 <script>
-
 var logincode = decode64(getUrlParamByKey("logincode"));
 var screenlogin = getUrlParamByKey("su");//大屏用户 
-
+var survey_id = getUrlParamByKey("survey_id");
 var issu = false;
 var tobecontinue;
 
@@ -411,7 +416,10 @@ function toUpdatePwd(){//encode64(target)
 					var returnObj = $.fromJSON(data.data);
 					//保存记录
 					saveLoginLog(returnObj);
-					
+					if(survey_id!=null){
+						window.location.href='http:\/\/10.16.31.242:8090/GAform/user/loginActionDaqWeb?survey_id='+survey_id+'&code='+returnObj.user.code+'&user_id='+returnObj.user.id;
+						return;
+					}
 					
 					if(history_url!=null&&history_url.length>0){
 	                	  window.parent.location = history_url;
@@ -434,7 +442,9 @@ function toUpdatePwd(){//encode64(target)
 							function(data, textStatus, XMLHttpRequest) {
 								if (data.result) {
 									var defaultInfo = $.fromJSON(data.data);
-									
+									if(defaultInfo){
+
+									}
 									if(defaultInfo==null||defaultInfo.default_system==-1){
 										window.parent.location=getRootPath() + "/crm/loginplatform.html";
 									}else{

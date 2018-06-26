@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>编辑划片信息</title>
+    <!-- jQuery 2.2.0 -->
+	<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+	<!-- Morris.js charts -->
+	<script src="../crm/bootstrap/js/raphael-min.js"></script>
+	<!-- FastClick -->
+	<script src="../crm/plugins/fastclick/fastclick.js"></script>
+	
+	<!-- AdminLTE for demo purposes -->
+	<script src="../crm/dist/js/demo.js"></script>
+	<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+	<script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <!-- 引入css和js即可 -->
+    
+    <script type="text/javascript" src="./select_option.js"></script>
+    <script type="text/javascript" src="../bizbase/js/common-validation-bizbase.js"></script>
+    <style type="text/css">
+        .display {
+            width: 100%
+        }
+
+        .display tr td {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        fieldset{
+            margin-bottom: 20px;
+        }
+
+		/*全屏按钮*/
+	    .pull-right-fullscreen {
+	    	position:absolute;
+	    	z-index:10;
+	    	right:20px;
+	    }
+	    
+	    /*全屏样式*/
+	   #mask{width:100%; height:100%; position:fixed; top:0; left:0; display: none; z-index:9999999; background-color: rgba(0,0,0,0.7);}
+	   #mask-body{ position: absolute; top: 50px; left: 50px; height: 600px; opacity: 1; z-index: 99; }
+	   #mask-header{ position: absolute; top: 50px; left: 0px; height: 50px; opacity: 1; z-index: 999; }
+	   #mask-header>button{ padding: 3px 5px;  position: absolute; left: 15px; top: -45px; cursor: pointer; }
+
+    </style>
+</head>
+<script type="text/javascript">
+  
+  
+	var id = getUrlParamByKey("id");//短信类型
+	
+	var manageType = getUrlParamByKey("manageType");//操作类型 新增、编辑
+	
+	$(function(){
+		
+        doManager('messageTypeManager','selectMessageTypeById',[id],function(data){
+           if(data.result){
+               var messageType = JSON.parse(data.data);
+              
+               $("#name").val(messageType[0]["name"]);
+               $("#type").val(messageType[0]["code"]);
+               $("#remark").val(messageType[0]["remark"]);
+               for(var i=0;i<messageType.length;i++){
+            	   var $tbody = $('.table-striped').find('tbody');
+                   $tbody.append('<tr>' +
+                   	'<td><input id="actioncode" name="actionCode"  class="form-control" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,\'\')" value="'+messageType[i].actionCode+'"></input></td>'+
+                       '<td><input id="describe" name="describe" class="form-control" value="'+messageType[i].description+'"></input></td>' +
+                       '<td style="text-align: center"><img src="../images/minus_16px.png" onclick="imgClickDelete(this)"></td></tr>');
+            	   
+               }
+           }else{
+               $$.showMessage('提示',"撤销失败");
+           }
+        });
+ 
+	})
+	
+    function addRow(areaInfo,flag){
+        var $tbody = $('.table-striped').find('tbody');
+        $tbody.append('<tr>' +
+        	'<td><input id="actioncode" name="actionCode"  class="form-control" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,\'\')"></input></td>'+
+            '<td><input id="describe" name="describe" class="form-control" ></input></td>' +
+            '<td style="text-align: center"><img src="../images/minus_16px.png" onclick="imgClickDelete(this)"></td></tr>');
+    }
+
+    
+	
+	/*
+     * 保存
+	*/
+    function doSave(){
+    		    var name = $('#name').val();
+    	    	var type = $("#type").val();
+    	    	var remark = $("#remark").val();
+    	        var childs = [];
+    			
+    			var actionCodeArray = new Array();
+    	        $('.table-striped tbody tr').each(function(index,tr){
+    	        	var actionCode=$(tr).find('input[name="actionCode"]').val();
+    	        	var describe = $(tr).find('input[name="describe"]').val();
+    	        	var messageAction = {
+    	        			actionCode:actionCode,
+    	        			remark:describe,
+    	        			messageTypeCode:type
+    	        			
+    	        	}
+    	        	childs.push(messageAction);
+    	        	actionCodeArray.push("'"+actionCode+"'");
+    	        });
+    			
+    	        
+    			var messageType = {
+    					id:id,
+    					name:name,
+    					code:type,
+    					remark:remark,
+    					childrens:childs
+    			}
+    		            	
+            	 $("#saveButton").html("正在保存...");
+                 $("#saveButton").attr("disabled","disabled");
+                 
+                 doManager('messageTypeManager','selectMessageType',[type],function(data){
+                	 if(data.result){
+     	            	var acJson = JSON.parse(data.data);
+     	            	if(acJson==null||acJson.length==0||(acJson!=null&&parseInt(acJson["id"])==id)){//不重复
+     	            		
+	     	       			doManager('messageActionManager','checkActionCodeIsRepeat',[type,actionCodeArray.join()],function(data){
+	     	    	            if(data.result){
+	     	    	            	var acJson = JSON.parse(data.data);
+	     	    	            	if(acJson==null||acJson.length==0){//不重复
+	     	    	            		
+	     	    	            		doManager('messageTypeManager','saveMessageType',messageType,function(data){
+	     	    	        	            if(data.result){
+	     	    	        	            	$("#saveButton").html("保存");
+     	    	       		                 	$("#saveButton").removeAttr("disabled");
+     	    	       		                doBack();
+	     	    	        	            }	
+	     	    	        	        },false); 	
+	     	    	            		
+	     	    	            	}else if(acJson.length>0){//有重复
+	     	    	            		$("#saveButton").html("保存");
+	     	   		                 	$("#saveButton").removeAttr("disabled");
+	     	   		                    $$.showMessage('提示',"短信回复内容重复！");
+	     	    	            	}
+	     	    	            }	
+	     	    	        },false); 
+     	            		
+     	            	}else if(acJson!=null&&parseInt(acJson["id"])!=id){//有重复
+     	            		$("#saveButton").html("保存");
+    		                $("#saveButton").removeAttr("disabled");
+    		                $$.showMessage('提示',"短信类型编码重复！");
+     	            	}
+     	            }	
+                 },false);
+	
+    		    		
+    }
+	
+    //点击"+"添加项目
+    function imgAddClick(){
+        
+        addRow(null,"add");
+    }
+
+    function imgClickDelete(_this){
+        $(_this).parent().parent().remove()
+    }
+
+    function doBack(){
+        history.go(-1);
+    }
+    
+   
+   function getCode(){
+		var name =$("#name").val();
+		if(name==""){
+			 $("#type").val("");
+		}else{
+			doManager('utilityManager','getPYIndexStr',[name,true],function(data){
+		        if(data.result){
+		            var result = JSON.parse(data.data);
+		            $("#type").val(result);
+		        }else{
+		            $$.showMessage('提示',data.message);
+		        }
+		    },false); 
+		}
+
+	}
+</script>
+<body style="height: 100%">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="panel panel-primary">
+                <div class="panel-heading">短信类型基础信息</div>
+                <div class="panel-body">
+                    <div style="margin-top: 10px">
+                        <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                              displaynumber="7">
+                            <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                                <tr>
+                                    <td width="50%">
+                                        名称<span style="color: red">*</span>:
+                                        <input id="name" name="name" type="text" style="width:80%" class="form-control" onkeyup="getCode()" validate="required:true,maxlength:25" />
+                                    </td>
+                                    <td width="50%">
+                                       编码:
+                                        <input id="type" name="type" type="text" style="width:80%" class="form-control" readonly="readonly"/>
+                                    </td>
+                                    
+                                    
+                                </tr>
+                                <tr>
+									
+                                    <td width="50%">
+				备注:
+                                         <input id="remark" name="remark" type="text" style="width:80%" class="form-control" validate="required:true,maxlength:25" />
+                                    </td>
+                                    <td width="50%">
+                                      
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading" style="height:42px">
+                	<div style="width:100px;position:absolute;cursor:pointer;border-radius:4px;padding:3px;">短信回复内容</div>
+                	
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th width="30%">编码</th>
+                                <th width="30%">说明</th>
+                                <th width="10%" style="text-align: center"><img src="../images/badge_plus_16px.png" onclick="imgAddClick()"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer" style="text-align: right">
+            <button id="saveButton" class="btn btn-primary" onclick="doSave()">保存</button>
+            <button class="btn btn-primary" onclick="doBack()">返回</button>
+        </div>
+    </div>
+</body>
+ <div id="buildingDetail_div" style="display:none;height:160px">
+    <div>
+       	<table cellpadding="0" cellspacing="0" id="new_address" style="min-width: 100%;width: auto;">
+       		
+       		<tr>
+       			
+        		<td>
+        			<textarea id="building_detailInfo" cols="50" style="height:150px;resize:none;" readonly="readonly"></textarea>
+        		</td>
+        	</tr>
+       		
+       	 </table>
+      </div>	
+</div> 
+</html>

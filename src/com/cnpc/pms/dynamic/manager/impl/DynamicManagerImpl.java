@@ -597,20 +597,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
 			}
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
 			
-			if("prev_month".equals(dynamicDto.getBeginDate())){
-				Calendar calendar = Calendar.getInstance();
-	            calendar.add(Calendar.MONTH, -1);
-	            dynamicDto.setYear(calendar.get(Calendar.YEAR));
-	            dynamicDto.setMonth(calendar.get(Calendar.MONTH)+1);
-	           
-			}else if("cur_month".equals(dynamicDto.getBeginDate())){
-				Calendar c = Calendar.getInstance();    
-				 dynamicDto.setYear(c.get(Calendar.YEAR));
-		         dynamicDto.setMonth(c.get(Calendar.MONTH)+1);
-			}
-			
+			String[] dateArr = dynamicDto.getBeginDate().split("-");
+            dynamicDto.setYear(Integer.parseInt(dateArr[0]));
+            dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
 			result= dynamicDao.storeNewaddcus(dynamicDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
@@ -727,16 +718,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
 			}
 
-			Calendar calendar = Calendar.getInstance();
-			System.out.println(dynamicDto.getBeginDate());
-			if("prev_month".equals(dynamicDto.getBeginDate())){
-	            calendar.add(Calendar.MONTH, -1);
-	            dynamicDto.setYear(calendar.get(Calendar.YEAR));
-	            dynamicDto.setMonth(calendar.get(Calendar.MONTH)+1);
-			}else if("cur_month".equals(dynamicDto.getBeginDate())){
-	            dynamicDto.setYear(calendar.get(Calendar.YEAR));
-	            dynamicDto.setMonth(calendar.get(Calendar.MONTH)+1);
-			}
+			    
+            String[] dateArr = dynamicDto.getBeginDate().split("-");
+            dynamicDto.setYear(Integer.parseInt(dateArr[0]));
+            dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
 			
 			result= dynamicDao.storeGmv(dynamicDto, pageInfo);
 			result.put("status","success");
@@ -3448,17 +3433,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
 			}
 
-			Calendar calendar = Calendar.getInstance();
-			System.out.println(dynamicDto.getBeginDate());
-			if("prev_month".equals(dynamicDto.getBeginDate())){
-	            calendar.add(Calendar.MONTH, -1);
-	            dynamicDto.setYear(calendar.get(Calendar.YEAR));
-	            dynamicDto.setMonth(calendar.get(Calendar.MONTH)+1);
-			}else if("cur_month".equals(dynamicDto.getBeginDate())){
-	            dynamicDto.setYear(calendar.get(Calendar.YEAR));
-	            dynamicDto.setMonth(calendar.get(Calendar.MONTH)+1);
-			}
 			
+			String[] dateArr = dynamicDto.getBeginDate().split("-");
+            dynamicDto.setYear(Integer.parseInt(dateArr[0]));
+            dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
 			result= dynamicDao.employeeOfAreaGmv(dynamicDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
@@ -3578,18 +3556,27 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}
 
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			if("prev_month".equals(dynamicDto.getBeginDate())){
-				Calendar calendar1 = Calendar.getInstance();
-	            calendar1.add(Calendar.MONTH, -1);
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
+			Date bt=sdf.parse(dynamicDto.getBeginDate()); 
+			Calendar c = Calendar.getInstance();  
+			Integer cur_year = c.get(Calendar.YEAR);
+			Integer cur_month=c.get(Calendar.MONTH)+1;
+			String month = cur_month<10?("0"+cur_month):String.valueOf(cur_month);
+			
+			String cur_date = cur_year+"-"+month;
+	      
+			
+			String[] dateArr = dynamicDto.getBeginDate().split("-");
+			if(dynamicDto.getBeginDate().compareTo(cur_date)<0){
+				
 	            dynamicDto.setSearchstr("pre");//暂时表示上个月
-	            dynamicDto.setYear(calendar1.get(Calendar.YEAR));
-	            dynamicDto.setMonth(calendar1.get(Calendar.MONTH)+1);
-			}else if("cur_month".equals(dynamicDto.getBeginDate())){
-				Calendar c = Calendar.getInstance();    
+	            dynamicDto.setYear(Integer.parseInt(dateArr[0]));
+	            dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
+			}else{
+				 
 	            dynamicDto.setSearchstr("cur");
-	            dynamicDto.setYear(c.get(Calendar.YEAR));
-	            dynamicDto.setMonth(c.get(Calendar.MONTH)+1);
+	            dynamicDto.setYear(Integer.parseInt(dateArr[0]));
+	            dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
 			}
 			
 			result= dynamicDao.employeeOfAreaNewaddcus(dynamicDto, pageInfo);
@@ -6203,17 +6190,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
-			if("prev_month".equals(dd.getBeginDate())){
-				Calendar calendar = Calendar.getInstance();
-	            calendar.add(Calendar.MONTH, -1);
-	            dd.setYear(calendar.get(Calendar.YEAR));
-	            dd.setMonth(calendar.get(Calendar.MONTH)+1);
-			}else if("cur_month".equals(dd.getBeginDate())){
-				Calendar c = Calendar.getInstance();    
-				dd.setYear(c.get(Calendar.YEAR));
-		        dd.setMonth(c.get(Calendar.MONTH)+1);
-			}
 			
+			String[] dateArr = dd.getBeginDate().split("-");
+	        dd.setYear(Integer.parseInt(dateArr[0]));
+	        dd.setMonth(Integer.parseInt(dateArr[1]));
 			result= dynamicDao.queryDeptGmv(dd, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
@@ -6234,17 +6214,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
-			if("prev_month".equals(dd.getBeginDate())){
-				Calendar calendar = Calendar.getInstance();
-	            calendar.add(Calendar.MONTH, -1);
-	            dd.setYear(calendar.get(Calendar.YEAR));
-	            dd.setMonth(calendar.get(Calendar.MONTH)+1);
-			}else if("cur_month".equals(dd.getBeginDate())){
-				Calendar c = Calendar.getInstance();    
-				dd.setYear(c.get(Calendar.YEAR));
-		        dd.setMonth(c.get(Calendar.MONTH)+1);
-			}
-			
+			String[] dateArr = dd.getBeginDate().split("-");
+            dd.setYear(Integer.parseInt(dateArr[0]));
+            dd.setMonth(Integer.parseInt(dateArr[1]));
 			result= dynamicDao.queryDeptConsumer(dd, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {

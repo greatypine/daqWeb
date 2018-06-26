@@ -147,7 +147,8 @@
 <!-- 						4.绩效GMV已去除异常订单统计。<br> -->
 				        5.手动分配GMV统计<a  href="javascript:gotoPubSreaOrder(0)" >详情</a>。<br>
 			          	6.人均分配GMV统计<a  href="javascript:gotoPubSreaOrder(1)" >详情</a>。<br>
-			          	7.如果作为绩效数据使用，请确保于每月3号上午8点以后，下载上月数据。
+			          	7.如果作为绩效数据使用，请确保于每月3号上午8点以后，下载上月数据。<br>
+			          	8.本月数据截止到昨天24点。
 			          	
 			</div>
           </div>
@@ -161,10 +162,11 @@
                             <!--<input type="text" class="form-control pull-right" id="be_date1">-->
                             <!--</div>-->
                             <!-- /.input group -->
-                            <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
-                                <option value="prev_month" >上月</option>
-                                <option value="cur_month" selected>本月（截止到昨天24点）</option>
-                            </select>
+<!--                             <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"> -->
+<!--                                 <option value="prev_month" >上月</option> -->
+<!--                                 <option value="cur_month" selected>本月（截止到昨天24点）</option> -->
+<!--                             </select> -->
+						<input type="text" class="form-control" id="be_date1" name="be_date1" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
                         </div>
                         <div class="form-group col-lg-4">
                             <label>城市</label>
@@ -249,6 +251,7 @@
 <!-- ./wrapper -->
 <!-- jQuery 2.2.0 -->
 <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="laydate/laydate.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
@@ -274,6 +277,18 @@
         extend: 'skin/crmskin/style.css' //加载新皮肤
 
     });
+    var cur_date = new Date();
+	var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
+    laydate.render({//月份控件
+		elem:'#be_date1',
+		value:new Date(),
+		type:"month",
+		btns: ['now', 'confirm'],
+		theme: '#11214e',
+		min: '2018-1-1',
+		max:year_month
+		
+	});
     var cityId = decode64(getUrlParamByKey("c"));//城市ID
     var cityName = decode64(getUrlParamByKey("cn"));//城市名称
     var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
@@ -431,9 +446,9 @@
      		 return;
      	}
 
-        if(begin_end_date=="prev_month"||begin_end_date=="cur_month"){
-        	 search_customer1(cur_page,begin_end_date);
-        }
+       
+        search_customer1(cur_page,begin_end_date);
+       
     }
 
     //查询上

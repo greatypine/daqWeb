@@ -94,27 +94,29 @@
     
     $(function(){
     	initcurruser();
+    	getMessageType();
     });
     
     var loginUser = null;
     var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
 	var regex_cs = new RegExp("^(CS|cs)\w*");//城市角色
 	
-	
-	function showAlt(tag){
-		if(tag=="sms"){
-			layer.tips('通过手机短信通知,稍后开放！！！', '#sms_img', {
-				  tips: [1, '#b6bcc1'], //还可配置颜色
-				  time: 2000
-				});
-		}else if(tag=="app"){
-			layer.tips('通过国安数据APP通知', '#app_img', {
-				  tips: [1, '#b7333f'], //还可配置颜色
-				  time: 2000
-				});
-		}
-		
+	function getMessageType(){
+	 	doManager('messageTypeManager','selectAllMessageType',null,function(data){
+	        if(data.result){
+	            var result = JSON.parse(data.data);
+	            if(result!=null){
+	            	for(var i=0;i<result.length;i++){
+	            		var typeStr = "<option value='"+result[i]["code"]+"'>"+result[i]["name"]+"</option>";
+	            		$("#type").append(typeStr);
+	            	}
+	            }
+	        }else{
+	            $$.showMessage('提示',data.message);
+	        }
+	    }); 
 	}
+	
     function initcurruser(){
   		//取得当前登录人的门店
 		doManager("UserManager", "getCurrentUserDTO",null,
@@ -323,10 +325,19 @@
 			
 			var signature=$("#signature").val();
 		    var content = $("#content").val();
+		    var type = $("#type").val();
+		    var title = $("#type").find("option:selected").text();
+		    if(type==""){
+		    	 $$.showMessage('提示',"请选择短信类型！");
+		    	 return;
+		    }
 			var shortMessage = {
 					userGroupCode:userGroupArray.join(","),
 					signature:signature,
-					content:content
+					content:content,
+					type:type,
+					title:title
+					
 			}
 
 			
@@ -403,7 +414,14 @@ function isInArray(arr,value){
                                 </select>
                             </td>
                         </tr>
-                        
+                        <tr>
+                            <td style="width:12%">短信类型<span style="color:red">*</span></td>
+                            <td>
+                                <select id="type" name="type" class="form-control"  style="width: 60%" >
+                                    <option value="">请选择</option>
+                                </select>
+                            </td>
+                        </tr>
                         <tr>
                             <td>短信内容<span style="color:red">*</span></td>
                             <td>
@@ -438,6 +456,12 @@ function isInArray(arr,value){
        			<td width="8px"><span>短信签名：</span></td>
        			<td>
         			<span id="signature_s"></span>
+       			</td>
+       		</tr> 
+       		<tr>
+       			<td width="8px"><span>短信类型：</span></td>
+       			<td>
+        			<span id="type_s"></span>
        			</td>
        		</tr> 
         	<tr>

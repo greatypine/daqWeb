@@ -1,31 +1,6 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.BeanUtils;
-
-import com.cnpc.pms.base.paging.FSP;
-import com.cnpc.pms.base.paging.FilterFactory;
-import com.cnpc.pms.base.paging.IFilter;
-import com.cnpc.pms.base.paging.ISort;
-import com.cnpc.pms.base.paging.SortFactory;
+import com.cnpc.pms.base.paging.*;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
@@ -41,42 +16,28 @@ import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.mongodb.dto.TinyVillageCoordDto;
 import com.cnpc.pms.mongodb.manager.MongoDBManager;
-import com.cnpc.pms.personal.dao.BuildingDao;
-import com.cnpc.pms.personal.dao.HouseDao;
-import com.cnpc.pms.personal.dao.NewsDao;
-import com.cnpc.pms.personal.dao.PersonDutyDao;
-import com.cnpc.pms.personal.dao.ProvinceDao;
-import com.cnpc.pms.personal.dao.TinyAreaDao;
-import com.cnpc.pms.personal.dao.TinyVillageDao;
-import com.cnpc.pms.personal.entity.Building;
-import com.cnpc.pms.personal.entity.City;
-import com.cnpc.pms.personal.entity.Customer;
-import com.cnpc.pms.personal.entity.DistCity;
-import com.cnpc.pms.personal.entity.House;
-import com.cnpc.pms.personal.entity.HouseBuilding;
-import com.cnpc.pms.personal.entity.PersonDuty;
-import com.cnpc.pms.personal.entity.Store;
-import com.cnpc.pms.personal.entity.TinyCoordinate;
-import com.cnpc.pms.personal.entity.TinyVillage;
-import com.cnpc.pms.personal.entity.TinyVillageCode;
-import com.cnpc.pms.personal.entity.Town;
-import com.cnpc.pms.personal.entity.Village;
-import com.cnpc.pms.personal.manager.BuildingManager;
-import com.cnpc.pms.personal.manager.CityManager;
-import com.cnpc.pms.personal.manager.CustomerManager;
-import com.cnpc.pms.personal.manager.HouseBuildingManager;
-import com.cnpc.pms.personal.manager.HouseManager;
-import com.cnpc.pms.personal.manager.PersonDutyManager;
-import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.personal.manager.TinyCoordinateManager;
-import com.cnpc.pms.personal.manager.TinyVillageCodeManager;
-import com.cnpc.pms.personal.manager.TinyVillageManager;
-import com.cnpc.pms.personal.manager.TownManager;
-import com.cnpc.pms.personal.manager.VillageManager;
+import com.cnpc.pms.personal.dao.*;
+import com.cnpc.pms.personal.entity.*;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.slice.entity.AreaInfo;
 import com.cnpc.pms.slice.manager.AreaInfoManager;
 import com.cnpc.pms.utils.ValueUtil;
 import com.gexin.fastjson.JSONObject;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.BeanUtils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 小区相关业务实现类 Created by liu on 2016/5/25 0025.
@@ -1387,6 +1348,7 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 			temp.put("data", "");
 			temp.put("message", "系统错误！");
 			result.put("status", "storefail");
+			result.put("data", "{\"message\":\"该用户无权限\"}");
 			return result;
 		}
 		return result;
