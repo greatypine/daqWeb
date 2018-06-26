@@ -3220,8 +3220,6 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }
 		return lst_result;
 	}
-<<<<<<< HEAD
-=======
 
 	@Override
 	public List<Map<String, Object>> getsixMonthAllCustomer() {
@@ -3280,5 +3278,4 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }
 		return lst_result;
 	}
->>>>>>> develop
 }
