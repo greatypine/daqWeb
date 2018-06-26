@@ -278,8 +278,8 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTargetByMonth(ChartStatDto csd){
-		String sql = "SELECT IFNULL(FLOOR(SUM(dt.gmv)),0) AS month_amount,CONCAT(dt. YEAR, '-', dt. MONTH) AS month_time FROM df_gmv_target dt "
-				+ "WHERE dt.year = YEAR(curdate()) ";
+		String sql = "SELECT IFNULL(FLOOR(SUM(dt.target_value)), 0) AS month_amount,CONCAT(dt. YEAR, '-', dt. MONTH) AS month_time "
+				+ "FROM	df_bussiness_target dt WHERE dt.type = 'gmv' AND dt.period_type = 'month' AND dt. YEAR = YEAR (curdate()) ";
 		if(StringUtils.isEmpty(csd.getCityname()) && StringUtils.isEmpty(csd.getDeptname()) && StringUtils.isEmpty(csd.getChannelname())){
 			sql = sql + " AND dt.city_name!='' ";
 		}else{
@@ -297,10 +297,10 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 			sql = sql + " AND dt.store_no = '"+csd.getStoreno()+"' ";
 		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getSmallBLabel())){
-			sql = sql + " AND dt.c_label=" + csd.getcLabel() +" AND dt.min_b_label="+csd.getSmallBLabel();
+			sql = sql + " AND dt.param_first=" + csd.getcLabel() +" AND dt.param_second="+csd.getSmallBLabel();
 		}
 		if(StringUtils.isNotEmpty(csd.getMaxBLabel())){
-			sql = sql + " AND dt.max_b_label=" + csd.getMaxBLabel();
+			sql = sql + " AND dt.param_third=" + csd.getMaxBLabel();
 		}
 		sql = sql + " GROUP BY dt.year,dt.month ";
 		

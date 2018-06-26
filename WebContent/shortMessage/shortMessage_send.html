@@ -102,7 +102,7 @@
 	var regex_cs = new RegExp("^(CS|cs)\w*");//城市角色
 	
 	function getMessageType(){
-	 	doManager('messageTypeManager','selectMessageType',null,function(data){
+	 	doManager('messageTypeManager','selectAllMessageType',null,function(data){
 	        if(data.result){
 	            var result = JSON.parse(data.data);
 	            if(result!=null){

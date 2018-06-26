@@ -3185,9 +3185,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			begindate = 29;
 			enddate = 31;
 		}
-		String sql = "select t1.cityname,t1.`month`,if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts) as customer_count,"
-				+"if(t2.humancounts is null,t1.customer_new_count,t1.customer_new_count/t2.humancounts) as customer_new_count,"
-				+"if(t2.humancounts is null,t3.week_cus_count,t3.week_cus_count/t2.humancounts) as week_cus_count from ( "
+		String sql = "select t1.cityname,t1.`month`,round(if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts),0) as customer_count,"
+				+"round(if(t2.humancounts is null,t1.customer_new_count,t1.customer_new_count/t2.humancounts),0) as customer_new_count,"
+				+"round(if(t2.humancounts is null,t3.week_cus_count,t3.week_cus_count/t2.humancounts),0) as week_cus_count from ( "
 				+"SELECT cityname,SUM(ds_cus.pay_count) AS  customer_count,SUM(ds_cus.new_count) AS  customer_new_count,ds_cus.order_ym as month FROM  ds_cusum_month_city ds_cus LEFT JOIN t_dist_citycode d ON d.id = ds_cus.city_id "
 				+"WHERE ds_cus.order_ym >=DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +5 MONTH),'%Y%m') GROUP BY ds_cus.order_ym,cityname ) t1 LEFT JOIN ( "
 				+"select citySelect,COUNT(id) AS humancounts,DATE_FORMAT(DATE_SUB(NOW(), INTERVAL +5 MONTH),'%Y%m') as `month` from t_humanresources where "

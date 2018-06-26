@@ -67,7 +67,7 @@ public class ReciveMessageAction extends HttpServlet{
 			if(Arrays.asList(permitAddArray).contains(remoteAddress)){
 	    		try {
 	    			 
-	    			 String phone = req.getParameter("Phone");
+	    			 String phone = req.getParameter("phone");
 	    			 String msgContent = req.getParameter("msgContent");
 	    			 String spNumber = req.getParameter("spNumber");
 //	    			 if(phone==null||"".equals(phone)){
