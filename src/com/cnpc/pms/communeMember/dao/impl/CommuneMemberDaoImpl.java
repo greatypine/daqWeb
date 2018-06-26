@@ -750,7 +750,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		
 		String daySumSql = "select ifnull(sum(dmod.trading_price),0) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum,ds_member_eshop dme where CURDATE()=date(dmod.sign_time) and dmod.customer_id=dum.customer_id and dmod.eshop_id=dme.eshop_id";
 		
-		if("0000".equals(string)) {
+		if(!"0000".equals(string)) {
 			daySumSql = daySumSql+" and dmod.city_code='"+string+"'";
 		}
 		try{
@@ -790,7 +790,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin 2018年6月11日
 		 */
 		String daySumSql = "select count(1) as cou from df_user_member dum where CURDATE() = date(dum.opencard_time)";
-		if("0000".equals(string)) {
+		if(!"0000".equals(string)) {
 			daySumSql = daySumSql+ " dum.regist_cityno='"+string+"'";
 		}
 		try {
