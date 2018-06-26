@@ -284,6 +284,24 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		result.put("jsonSelHours", jsonSelHours);
 		result.put("jsonHourCounts", jsonHourCounts);
 		
+		
+		
+		//查询订单商品分类
+		List<Map<String, Object>> orderTypeList = new ArrayList<Map<String, Object>>();
+		orderTypeList = commDao.getOrderType("");
+		List orderTypeNames = new ArrayList();
+		List orderTypeSums = new ArrayList();
+		if (orderTypeList != null && orderTypeList.size() > 0) {
+			for (Map<String, Object> orderType : orderTypeList) {
+				orderTypeSums.add(orderType.get("ordertypecou"));
+				orderTypeNames.add(orderType.get("ordertypename"));
+			}
+		} 
+		JSONArray jsonOrderTypeNames = (JSONArray) JSONArray.fromObject(orderTypeNames);
+		JSONArray jsonOrderTypeSums = (JSONArray) JSONArray.fromObject(orderTypeSums);
+		result.put("jsonOrderTypeNames", jsonOrderTypeNames);
+		result.put("jsonOrderTypeSums", jsonOrderTypeSums);
+		
 		List dateXCounts = new ArrayList();
 		try {
 			//生成X轴坐标

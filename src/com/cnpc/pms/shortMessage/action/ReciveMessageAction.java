@@ -30,6 +30,7 @@ import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.shortMessage.dto.ReplyMessageDto;
 import com.cnpc.pms.shortMessage.entity.ReplyMessage;
+import com.cnpc.pms.shortMessage.manager.ReplyMessageBackupsManager;
 import com.cnpc.pms.shortMessage.manager.ReplyMessageManager;
 import com.cnpc.pms.utils.DownloadUtil;
 
@@ -42,7 +43,9 @@ public class ReciveMessageAction extends HttpServlet{
 
 	    @Override
 	    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	    	ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");
+	    	ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");		
+	    	ReplyMessageBackupsManager reBackupsManager = (ReplyMessageBackupsManager)SpringHelper.getBean("replyMessageBackupsManager");
+
 	    	 String remoteAddress = req.getHeader("x-forwarded-for");  
 	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
 	        	 remoteAddress = req.getHeader("Proxy-Client-IP");  
@@ -67,33 +70,34 @@ public class ReciveMessageAction extends HttpServlet{
 	    			 String phone = req.getParameter("phone");
 	    			 String msgContent = req.getParameter("msgContent");
 	    			 String spNumber = req.getParameter("spNumber");
-	    			 if(phone==null||"".equals(phone)){
-	    				 out.println("Error:Phone is requested but  not found");
-	    				 return;
-	    			 }
-	    			 
-	    			 if(msgContent==null||"".equals(msgContent)){
-	    				 out.println("Error:msgContent is requested but  not found");
-	    				 return;
-	    			 }
-	    			 
-	    			 if(spNumber==null||"".equals(spNumber)){
-	    				 out.println("Error:spNumber is requested but  not found");
-	    				 return;
-	    			 }
-	    			 
-	    			 Pattern p = Pattern.compile("^1[0-9]{10}$");  
-	    			  
-	    			 Matcher m = p.matcher(phone);  
-	    			 if(!m.matches()){
-	    				 out.println("Error:Phone format is wrong");
-	    				 return;
-	    			 } 
+//	    			 if(phone==null||"".equals(phone)){
+//	    				 out.println("Error:Phone is requested but  not found");
+//	    				 return;
+//	    			 }
+//	    			 
+//	    			 if(msgContent==null||"".equals(msgContent)){
+//	    				 out.println("Error:msgContent is requested but  not found");
+//	    				 return;
+//	    			 }
+//	    			 
+//	    			 if(spNumber==null||"".equals(spNumber)){
+//	    				 out.println("Error:spNumber is requested but  not found");
+//	    				 return;
+//	    			 }
+//	    			 
+//	    			 Pattern p = Pattern.compile("^1[0-9]{10}$");  
+//	    			  
+//	    			 Matcher m = p.matcher(phone);  
+//	    			 if(!m.matches()){
+//	    				 out.println("Error:Phone format is wrong");
+//	    				 return;
+//	    			 } 
 	    			
 	    			 ReplyMessageDto re = new ReplyMessageDto();
 	    			 re.setPhone(phone);
 	    			 re.setContent(msgContent);
 	    			 re.setSpNumber(spNumber);
+	    			 re.setError("");
 	    			 Map<String,Object> result= reManager.reciveMessageReply(re);//接收短信以后的逻辑
 	    			 Object status = result.get("status");
 	    			 
@@ -111,7 +115,16 @@ public class ReciveMessageAction extends HttpServlet{
 					out.print("Error:" + e.getMessage()); 
 				}
 			} else {
-				out.println("Error:access forbidden");
+				 String phone = req.getParameter("phone");
+    			 String msgContent = req.getParameter("msgContent");
+    			 String spNumber = req.getParameter("spNumber");
+    			
+    			 ReplyMessageDto re = new ReplyMessageDto();
+    			 re.setPhone(phone);
+    			 re.setContent(msgContent);
+    			 re.setSpNumber(spNumber);
+    			 re.setError("access forbidden");
+    			 reBackupsManager.saveReplyMessageBackups(re);
 			}
 
 	    }

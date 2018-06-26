@@ -293,6 +293,9 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 		if(StringUtils.isNotEmpty(csd.getChannelname())){
 			sql = sql + " AND dt.channel_name like '%"+csd.getChannelname()+"%' ";
 		}
+		if(StringUtils.isNotEmpty(csd.getStoreno())){
+			sql = sql + " AND dt.store_no = '"+csd.getStoreno()+"' ";
+		}
 		if(StringUtils.isNotEmpty(csd.getcLabel()) && StringUtils.isNotEmpty(csd.getSmallBLabel())){
 			sql = sql + " AND dt.param_first=" + csd.getcLabel() +" AND dt.param_second="+csd.getSmallBLabel();
 		}

@@ -284,5 +284,9 @@ public interface CommuneMemberDao extends IDAO {
 	 * 查询订单时间差
 	 */
 	public List<Map<String,Object>>  getTimeDiff(String string);
+	/**
+	 * 查询订单商品分类
+	 */
+	public List<Map<String, Object>> getOrderType(String string);
 
 }
