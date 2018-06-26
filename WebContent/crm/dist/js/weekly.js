@@ -6310,8 +6310,8 @@ function oneyearorsixweek(){
 					}
 				}
 				$('#pfoperate1_1 tr').eq(1).find("td:eq(13)").text(count_sum);
-				var arearate = (areacount/count_sum)*100
-				$('#pfoperate1_1 tr').eq(1).find("td:last").text(arearate.toFixed(2));
+				//var arearate = (areacount/count_sum)*100
+				//$('#pfoperate1_1 tr').eq(1).find("td:last").text(arearate.toFixed(2));
 				var citynameArray = new Array();
 				//店均社区关键人数量
 				var avg_community_person_array = new Array();
@@ -6373,7 +6373,7 @@ function oneyearorsixweek(){
 						$("#pfoperate1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1-1)+")").each(function(x,t){
 				    	    var col_index = x;
 				    	    if(cityname == $(t).html()){
-				    	    	if(cityname == '环比（%）'){
+				    	    	/*if(cityname == '环比（%）'){
 				    	    		$(t).parent().nextAll().each(function(z,t){
 							    	    if(z==0)$(t).find("td:eq("+col_index+")").text(community_person/100);
 							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(avg_community_person/100);
@@ -6382,7 +6382,7 @@ function oneyearorsixweek(){
 							    	    if(z==4)$(t).find("td:eq("+col_index+")").text(folk_organization/100);
 							    	    if(z==5)$(t).find("td:eq("+col_index+")").text(community_businesses/100);
 						       		});
-				    	    	}else{
+				    	    	}else{*/
 				    	    		$(t).parent().nextAll().each(function(z,t){
 							    	    if(z==0)$(t).find("td:eq("+col_index+")").text(community_person);
 							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(avg_community_person);
@@ -6391,13 +6391,13 @@ function oneyearorsixweek(){
 							    	    if(z==4)$(t).find("td:eq("+col_index+")").text(folk_organization);
 							    	    if(z==5)$(t).find("td:eq("+col_index+")").text(community_businesses);
 						       		});
-				    	    	}
+				    	    	//}
 				    	    }
 				       });
 						$("#pfoperate1_1").find("tr:eq(0)").children("th:gt(0):lt("+(cellnumber1_1-1)+")").each(function(x,t){
 				    	    var col_index = x;
 				    	    if(cityname == $(t).html()){
-				    	    	if(cityname == '环比（%）'){
+				    	    	/*if(cityname == '环比（%）'){
 				    	    		$(t).parent().nextAll().each(function(z,t){
 							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(wechant_crowd/100);
 							    	    if(z==2)$(t).find("td:eq("+col_index+")").text(avg_wechant_crowd/100);
@@ -6407,7 +6407,7 @@ function oneyearorsixweek(){
 							    	    if(z==6)$(t).find("td:eq("+col_index+")").text(interactive_person_count_store/100);
 							    	    if(z==7)$(t).find("td:eq("+col_index+")").text(wechant_accounted_for_crowd/100);
 						       		});
-				    	    	}else{
+				    	    	}else{*/
 				    	    		$(t).parent().nextAll().each(function(z,t){
 							    	    if(z==1)$(t).find("td:eq("+col_index+")").text(wechant_crowd);
 							    	    if(z==2)$(t).find("td:eq("+col_index+")").text(avg_wechant_crowd);
@@ -6417,7 +6417,7 @@ function oneyearorsixweek(){
 							    	    if(z==6)$(t).find("td:eq("+col_index+")").text(interactive_person_count_store);
 							    	    if(z==7)$(t).find("td:eq("+col_index+")").text(wechant_accounted_for_crowd);
 						       		});
-				    	    	}
+				    	    	//}
 				    	    }
 				       });
 						
