@@ -20,6 +20,7 @@ import com.cnpc.pms.shortMessage.entity.MessageType;
 import com.cnpc.pms.shortMessage.entity.ReplyMessage;
 import com.cnpc.pms.shortMessage.manager.MessageActionManager;
 import com.cnpc.pms.shortMessage.manager.MessageTypeManager;
+import com.cnpc.pms.shortMessage.manager.ReplyMessageBackupsManager;
 import com.cnpc.pms.shortMessage.manager.ReplyMessageManager;
 import com.cnpc.pms.shortMessage.utility.ReplyMessageExecuteAction;
 
@@ -30,16 +31,17 @@ public class ReplyMessageManagerImpl extends BizBaseCommonManager implements Rep
 		Map<String,Object> result = new HashMap<String,Object>();
 		ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");
 		MessageActionManager messageActionManager = (MessageActionManager) SpringHelper.getBean("messageActionManager");
+		ReplyMessageBackupsManager reBackupsManager = (ReplyMessageBackupsManager)SpringHelper.getBean("replyMessageBackupsManager");
 		try {
 			List<MessageAction> ma = messageActionManager.selectMessageActionByActionCode(reDto.getContent());//根据回复内容查询短信类型
 			if(ma==null){
-				//此处发短信告知正确的回复内容
-				result.put("status",CodeEnum.nullData.getValue());
-				return result; 
+				reDto.setMessageType("unknown");
+			}else{
+				reDto.setMessageType(ma.get(0).getMessageTypeCode());
 			}
-			reDto.setMessageType(ma.get(0).getMessageTypeCode());
-			reDto.setActionCode(reDto.getActionCode());
+
 			this.saveReplyMessage(reDto);
+			reBackupsManager.saveReplyMessageBackups(reDto);
 			ReplyMessageExecuteAction.executeAction(reDto);//根据返回值执行具体逻辑业务
 			result.put("status",CodeEnum.success.getValue());
 		} catch (Exception e) {
@@ -55,14 +57,20 @@ public class ReplyMessageManagerImpl extends BizBaseCommonManager implements Rep
 		Map<String,Object> result = new HashMap<String,Object>();
 		
 		ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");
+		ReplyMessageBackupsManager reBackupsManager = (ReplyMessageBackupsManager)SpringHelper.getBean("replyMessageBackupsManager");
+
+		try {
+			ReplyMessage re = new ReplyMessage();
+			re.setPhone(reDto.getPhone());
+			re.setContent(reDto.getContent());
+			re.setSpNumber(reDto.getSpNumber());
+			re.setMessageType(reDto.getMessageType());
+			preObject(re);
+			reManager.saveObject(re);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		ReplyMessage re = new ReplyMessage();
-		re.setPhone(reDto.getPhone());
-		re.setContent(reDto.getContent());
-		re.setSpNumber(reDto.getSpNumber());
-		re.setMessageType(reDto.getMessageType());
-		preObject(re);
-		reManager.saveObject(re);
 		return result;
 	}
 
