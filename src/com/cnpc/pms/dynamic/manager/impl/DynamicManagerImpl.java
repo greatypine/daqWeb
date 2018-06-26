@@ -5051,7 +5051,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		jsonObject.put("adCode", adCode==null?"":adCode);
 		jsonObject.put("address", address==null?"":address);
 		
-		//jsonObject.put("type", type);
+		jsonObject.put("type", type);
 		
 		//------------暂时注释----------
 		//jsonObject.put("longitude", longitude==null?"":longitude);
@@ -6904,8 +6904,6 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result = new HashMap<String,Object>();
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		List<Map<String, Object>> getsixMonthCustomer = dynamicDao.getsixMonthCustomer();
-		List<Map<String, Object>> getsixMonthAllCustomer = dynamicDao.getsixMonthAllCustomer();
-		getsixMonthCustomer.addAll(getsixMonthAllCustomer);
 		result.put("sixMonthCustomer",getsixMonthCustomer);
 		return result;
 	}
