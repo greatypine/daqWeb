@@ -3715,7 +3715,7 @@ option20 = {
   grid: {
     left: '1%',
     right: '2%',
-    bottom: '2%',
+    bottom: '3%',
     top: '14%',
     containLabel: true
   },
@@ -3726,11 +3726,7 @@ option20 = {
       data:[],
       axisTick: {
         alignWithLabel: true
-      },
-      axisLabel: {
-          interval: 0,
-          rotate:35
-        },
+      }
     }
   ],
   yAxis : [
@@ -4862,7 +4858,7 @@ function showData(){
 	GMVInfo();
 	storeActivitiesInfo();
 	getStoreCoverPerson();
-	employeeCustomer();
+	//employeeCustomer();
 	getStoreResources();
 }
 
@@ -6459,7 +6455,7 @@ function oneyearorsixweek(){
 		        data:citynameArray
 		  },
 		  //color:colors,
-		  grid: {left: '2%',top:"12%",bottom: "10%",right:"20%",containLabel: true},
+		  grid: {left: '2%',top:"12%",bottom: "15%",right:"20%",containLabel: true},
 		  tooltip : { trigger: 'axis',axisPointer : { type : 'shadow'}},
 		  xAxis: [
 		    {
@@ -6523,12 +6519,7 @@ function oneyearorsixweek(){
 						}
 						if(yearmonth == empCustomer.month){
 							cityData[empCustomer.month+"_new"] = empCustomer.customer_new_count;
-							if(empCustomer.customer_count != 0){
-								cityData["rate"] = empCustomer.customer_new_count/empCustomer.customer_count*100;
-							}else{
-								cityData["rate"] = 0;
-							}
-							
+							cityData["rate"] = empCustomer.customer_new_count/empCustomer.customer_count*100;
 						}
 						
 					}
@@ -6541,7 +6532,7 @@ function oneyearorsixweek(){
 						+(typeof(cityData[monthArray[3]]) == "undefined" ? '' : cityData[monthArray[3]])+'</td><td>'
 						+(typeof(cityData[monthArray[4]]) == "undefined" ? '' : cityData[monthArray[4]])+'</td><td>'
 						+(typeof(cityData[monthArray[5]]) == "undefined" ? '' : cityData[monthArray[5]])+'</td><td>'
-						+(typeof(cityData[monthArray[6]]) == "undefined" ? '' : cityData[monthArray[6]])+'</td><td>'+cityData["rate"].toFixed(2)+'%</td><td>'
+						+(typeof(cityData[monthArray[6]]) == "undefined" ? '' : cityData[monthArray[6]])+'</td><td>'+cityData["rate"].toFixed(2)+'</td><td>'
 						+(typeof(cityData[monthArray[7]]) == "undefined" ? '' : cityData[monthArray[7]])+'</td><td>'
 						+(typeof(cityData[monthArray[8]]) == "undefined" ? '' : cityData[monthArray[8]])+'</td><td>'
 						+(typeof(cityData[monthArray[9]]) == "undefined" ? '' : cityData[monthArray[9]])+'</td><td>'
