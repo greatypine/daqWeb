@@ -63,13 +63,13 @@ public class ReciveMessageAction extends HttpServlet{
 	    	
 	    	String permitAddress = PropertiesUtil.getValue("permitAddress");
 	    	String[] permitAddArray  = permitAddress.split(",");
-	    	
+	    	req.setCharacterEncoding("UTF-8");
 	    	resp.setContentType("text/plain; charset=utf-8");
 			PrintWriter out = resp.getWriter();
 			
-			String phone = req.getParameter("phone");
+			String phone = req.getParameter("phone"); 
 			String msgContent = req.getParameter("msgContent");
-			String spNumber = req.getParameter("spNumber");
+			String spNumber =req.getParameter("spNumber"); 
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			StringBuilder replysb = new StringBuilder();
