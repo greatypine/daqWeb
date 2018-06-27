@@ -894,7 +894,7 @@ Date.prototype.format=function(fmt) {
 //                     });
                 	for(i=0;i<lst_select_store1.length;i++){
                     	storeNameArray1.push(lst_select_store1[i].name);
-                    	storeIdMap1[lst_select_store1[i].name] = lst_select_store1[i].storeno;
+                    	storeIdMap1[lst_select_store1[i].name] = lst_select_store1[i].platformid;
       			  	}
                 	
       			  	var autoComplete = new AutoComplete("store_name_autoOrder","auto_store_autoOrder",storeNameArray1);
@@ -964,7 +964,7 @@ Date.prototype.format=function(fmt) {
 //                        });
                    	for(i=0;i<lst_select_store2.length;i++){
                     	storeNameArray2.push(lst_select_store2[i].name);
-                    	storeIdMap2[lst_select_store2[i].name] = lst_select_store2[i].storeno;
+                    	storeIdMap2[lst_select_store2[i].name] = lst_select_store2[i].platformid;
       			  	}
       			  	var autoComplete = new AutoComplete("store_name_handOrder","auto_store_handOrder",storeNameArray2);
       			    autoComplete.start(event);

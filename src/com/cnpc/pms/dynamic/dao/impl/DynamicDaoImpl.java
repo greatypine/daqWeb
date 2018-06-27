@@ -721,7 +721,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		
 		if(abnormalOrderDto.getStoreno()!=null&&!"".equals(abnormalOrderDto.getStoreno())){
-			sql=sql+" and a.storeno ='"+abnormalOrderDto.getStoreno()+"'";
+			sql=sql+" and (b.store_id ='"+abnormalOrderDto.getStoreno()+"' or b.normal_store_id='"+abnormalOrderDto.getStoreno()+"')";
 		}
 		
 		if(abnormalOrderDto.getCityname()!=null&&!"".equals(abnormalOrderDto.getCityname())){
@@ -822,7 +822,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		
 		if(abnormalOrderDto.getStoreno()!=null&&!"".equals(abnormalOrderDto.getStoreno())){
-			sql=sql+" and a.storeno ='"+abnormalOrderDto.getStoreno()+"'";
+			sql=sql+" and (b.store_id ='"+abnormalOrderDto.getStoreno()+"' or b.normal_store_id='"+abnormalOrderDto.getStoreno()+"')";
+
 		}
 		
 		if(abnormalOrderDto.getCityname()!=null&&!"".equals(abnormalOrderDto.getCityname())){
