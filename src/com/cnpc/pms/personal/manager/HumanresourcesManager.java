@@ -198,4 +198,15 @@ public interface HumanresourcesManager extends IManager {
      */
     public int updateHumanresourceStoreName(Long store_id,String newstorename);
     
+    
+    /**
+     * 根据身份证  查询系统中是否存在相同的信息 
+     */
+    public List<Humanresources> queryHumanresourceListByCardId(String cardId);
+    
+    /**
+     * 根据身份证号  查询系统中是否存在离职的相同的身份证信息 
+     */
+    public List<Humanresources> queryHumanresourceListByCardNumber(String cardnumber);
+    
 }

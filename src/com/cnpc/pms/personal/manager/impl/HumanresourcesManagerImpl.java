@@ -231,6 +231,17 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     				rcvmsg="存在相同数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber();
             		return rcvmsg;
     			}
+    			
+    			
+    			IFilter repleaveFilter =FilterFactory.getSimpleFilter(" humanstatus in(2) and (employee_no in("+sbf.toString().substring(0,sbf.toString().length()-1)+") or cardnumber in("+cardnos.toString().substring(0,cardnos.toString().length()-1)+"))");
+            	List<?> repleave_list = this.getList(repleaveFilter);
+    			if(repleave_list!=null&&repleave_list.size()>0){
+    				Humanresources repHuman = (Humanresources) repleave_list.get(0);
+    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
+            		return rcvmsg;
+    			}
+    			
+    			
     			UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
     			for(Humanresources h:humanList){
     				preSaveObject(h);
@@ -2759,6 +2770,16 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 					rcvmsg="存在相同数据！<br> 姓名:"+repHuman.getName()+" <br> 身份证:"+repHuman.getCardnumber();
 		    		return rcvmsg;
 				}
+				
+				
+				IFilter repleaveFilter =FilterFactory.getSimpleFilter(" humanstatus in(2) and (employee_no in("+sbf.toString().substring(0,sbf.toString().length()-1)+") or cardnumber in("+cardnos.toString().substring(0,cardnos.toString().length()-1)+"))");
+            	List<?> repleave_list = this.getList(repleaveFilter);
+    			if(repleave_list!=null&&repleave_list.size()>0){
+    				Humanresources repHuman = (Humanresources) repleave_list.get(0);
+    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
+            		return rcvmsg;
+    			}
+				
 		    	
 				IFilter iFilter =FilterFactory.getSimpleFilter(" employee_no in("+sbf.toString().substring(0,sbf.toString().length()-1)+")");
 		    	List<?> lst_list = this.getList(iFilter);
@@ -4132,6 +4153,40 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
         }
     	return null;
     }
+    
+    
+    
+    /**
+     * 根据身份证号  查询系统中是否存在离职的相同的身份证信息 
+     */
+    @Override
+    public List<Humanresources> queryHumanresourceListByCardNumber(String cardnumber){
+    	HumanresourcesManager hManager = (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
+        IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus=2 and cardnumber='"+cardnumber+"'");
+        List<Humanresources> lst_humanList = (List<Humanresources>)hManager.getList(iFilter);
+        if(lst_humanList!=null&&lst_humanList.size()>0){
+        	return lst_humanList;
+        }
+    	return null;
+    }
+    
+    
+    
+    
+    /**
+     * 根据身份证  查询系统中是否存在相同的信息 
+     */
+    @Override
+    public List<Humanresources> queryHumanresourceListByCardId(String cardId){
+    	HumanresourcesManager hManager = (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
+        IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus=1 and cardnumber='"+cardId+"'");
+        List<Humanresources> lst_humanList = (List<Humanresources>)hManager.getList(iFilter);
+        if(lst_humanList!=null&&lst_humanList.size()>0){
+        	return lst_humanList;
+        }
+    	return null;
+    }
+    
 
 	@Override
 	public Map<String, Object> getEmployeeInfoByWeek() {
