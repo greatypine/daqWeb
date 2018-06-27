@@ -73,7 +73,7 @@ public class ReciveMessageAction extends HttpServlet{
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			StringBuilder replysb = new StringBuilder();
-			replysb.append("\r\n").append(sdf.format(new Date())).append("   ").append(phone).append("&&&").append(msgContent).append("&&&").append(spNumber);
+			replysb.append("\r\n").append(sdf.format(new Date())).append("&&&").append(phone).append("&&&").append(msgContent).append("&&&").append(spNumber);
 			new Thread(new Runnable() {
 				
 				@Override
