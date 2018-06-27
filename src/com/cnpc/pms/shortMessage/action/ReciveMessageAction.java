@@ -1,6 +1,7 @@
 package com.cnpc.pms.shortMessage.action;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
@@ -24,6 +25,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.tools.ant.taskdefs.Sleep;
 
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -43,8 +45,8 @@ public class ReciveMessageAction extends HttpServlet{
 
 	    @Override
 	    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	    	ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");		
-	    	ReplyMessageBackupsManager reBackupsManager = (ReplyMessageBackupsManager)SpringHelper.getBean("replyMessageBackupsManager");
+	    	 ReplyMessageManager reManager = (ReplyMessageManager)SpringHelper.getBean("replyMessageManager");		
+	    	 ReplyMessageBackupsManager reBackupsManager = (ReplyMessageBackupsManager)SpringHelper.getBean("replyMessageBackupsManager");
 
 	    	 String remoteAddress = req.getHeader("x-forwarded-for");  
 	         if(remoteAddress == null || remoteAddress.length() == 0 || "unknown".equalsIgnoreCase(remoteAddress)) {  
@@ -58,18 +60,33 @@ public class ReciveMessageAction extends HttpServlet{
 	        }  
 	    	
 	    	System.out.println("短信远程IP>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+remoteAddress);
+	    	
 	    	String permitAddress = PropertiesUtil.getValue("permitAddress");
 	    	String[] permitAddArray  = permitAddress.split(",");
 	    	
 	    	resp.setContentType("text/plain; charset=utf-8");
 			PrintWriter out = resp.getWriter();
-	    	
+			
+			String phone = req.getParameter("phone");
+			String msgContent = req.getParameter("msgContent");
+			String spNumber = req.getParameter("spNumber");
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			StringBuilder replysb = new StringBuilder();
+			replysb.append("\r\n").append(sdf.format(new Date())).append("   ").append(phone).append("&&&").append(msgContent).append("&&&").append(spNumber);
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					saveReplyMessageAsFile(replysb.toString());//返回记录保存文件中
+				}
+			}).start();
+			
 			if(Arrays.asList(permitAddArray).contains(remoteAddress)){
 	    		try {
 	    			 
-	    			 String phone = req.getParameter("phone");
-	    			 String msgContent = req.getParameter("msgContent");
-	    			 String spNumber = req.getParameter("spNumber");
+	    			
 //	    			 if(phone==null||"".equals(phone)){
 //	    				 out.println("Error:Phone is requested but  not found");
 //	    				 return;
@@ -115,9 +132,6 @@ public class ReciveMessageAction extends HttpServlet{
 					out.print("Error:" + e.getMessage()); 
 				}
 			} else {
-				 String phone = req.getParameter("phone");
-    			 String msgContent = req.getParameter("msgContent");
-    			 String spNumber = req.getParameter("spNumber");
     			
     			 ReplyMessageDto re = new ReplyMessageDto();
     			 re.setPhone(phone);
@@ -127,6 +141,50 @@ public class ReciveMessageAction extends HttpServlet{
     			 reBackupsManager.saveReplyMessageBackups(re);
 			}
 
+	    }
+	    
+	    
+	    
+	    public synchronized void  saveReplyMessageAsFile(String content){
+	    	
+	    	String path = PropertiesUtil.getValue("replyMessageFilePath");
+	    	
+	    	  
+	    	          
+            //要保存文件的绝对路径
+            String buildPath = path;
+            //目标目录不存在的话就自动创建
+            File f = new File(buildPath);
+            if (!f.exists()) {
+              f.mkdirs();//建立目录
+            }
+            
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+	    	String fileName = df.format(new Date())+".txt";
+            
+	    	
+	    	
+	    	FileWriter writer=null;
+	    	try {
+	    		 File f1 = new File(buildPath+fileName);
+	    		 if(!f1.exists()){
+	 	    		f1.createNewFile();
+	 	    	 }
+	    		 writer = new FileWriter(buildPath+fileName, true);
+		         writer.write(content);
+		         writer.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally{
+				if(writer!=null){
+					try {
+						writer.close();
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				}
+			}
+	    	
 	    }
 
 }
