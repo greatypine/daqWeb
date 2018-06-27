@@ -98,7 +98,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		//////////////////////// 分库查询成交信息end//////////////////////////////
 		// 查询成交量、查询成交额--必须
 		List<Map<String, Object>> cmGoodsDealCountList = new ArrayList<Map<String, Object>>();
-		cmGoodsDealCountList = commDao.getCmGoodsDealCount("");
+		cmGoodsDealCountList = commDao.getCmGoodsDealCount(dd);
 		if (cmGoodsDealCountList != null && cmGoodsDealCountList.size() > 0) {
 			result.put("cmGoodsDealCount", cmGoodsDealCountList.get(0).get("cou"));
 			result.put("cmGoodsTurnover", cmGoodsDealCountList.get(1).get("cou"));

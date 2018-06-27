@@ -74,6 +74,9 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 				"COUNT(case when duuf.sex = '男' then sex end  ) as mCount," + 
 				"COUNT(case when duuf.sex = '女' then sex end  ) as fCount" + 
 				" from df_user_member duuf";
+		if(!"0000".equals(dd)) {
+			mfSql = mfSql+" where duuf.regist_cityno='"+dd+"'";
+		}
 			//查询新注册社员sql
 			List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 			try{
@@ -120,6 +123,9 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 				"COUNT(case when birthday>'19891231' and birthday<'20000101' then 1 else null end) as age00, " + 
 				"COUNT(case when birthday>'19991231'  then 1 else null end) as ageNow " + 
 				" from df_user_member duuf";
+		if(!"0000".equals(dd)) {
+			ageSql = ageSql+" where duuf.regist_cityno='"+dd+"'";
+		}
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -161,7 +167,11 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		//查询社员增长sql
-				String birSql = "select t.monthNo as memMonth,count(1) as birCount from(select month(duuf.birthday) as monthNo,year(duuf.birthday) as myYear from df_user_member duuf where duuf.birthday is not null) as t  group by t.monthNo";
+				String birSql = "select t.monthNo as memMonth,count(1) as birCount from(select month(duuf.birthday) as monthNo,year(duuf.birthday) as myYear from df_user_member duuf where duuf.birthday is not null ";
+				if(!"0000".equals(dd)) {
+					birSql = birSql+" and duuf.regist_cityno='"+dd+"'";
+				}
+				birSql = birSql+"  ) as t group by t.monthNo";
 				List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 				
 					Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(birSql);
@@ -185,7 +195,11 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		//查询社员增长sql
-		String sql = "select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) group by DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\")  order by dum.opencard_time";
+		String sql = "select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) ";
+		if(!"0000".equals(dd)) {
+			sql = sql+" and dum.regist_cityno='"+dd+"'";
+		}
+		sql = sql+" group by DATE_FORMAT(dum.opencard_time,\\\"%Y-%m-%d\\\")  order by dum.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
 		try{
@@ -225,9 +239,12 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		
-		
 		//查询新注册社员sql
-		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.opencard_time) group by DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") order by dum2.opencard_time";
+		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.opencard_time) ";
+		if(!"0000".equals(dd)) {
+			sql = sql+" and dum2.regist_cityno='"+dd+"'";
+		}
+		sql = sql +" group by DATE_FORMAT(dum2.opencard_time,\\\"%Y-%m-%d\\\") order by dum2.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -265,7 +282,11 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		
 		//查询老用户转社员sql
-		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and '2018-04-29' <= date(dum1.opencard_time) group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
+		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and '2018-04-29' <= date(dum1.opencard_time) ";
+		if(!"0000".equals(dd)) {
+			sql = sql+" and dum1.regist_cityno='"+dd+"'";
+		}
+		sql = sql +" group by DATE_FORMAT(dum1.opencard_time,\\\"%Y-%m-%d\\\") order by dum1.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()

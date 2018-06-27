@@ -357,7 +357,12 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年5月17日
 		 */
-		String dealCouSql = "select count(1) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
+		String dealCouSql = "select count(1) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes'";
+		
+		if(!"0000".equals(dd)) {
+			dealCouSql = dealCouSql+" and te.city_code='"+dd+"'";
+		}
+		dealCouSql = dealCouSql+")";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(dealCouSql);
@@ -401,7 +406,12 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年6月6日
 		 */
-		String retrenchMoneySql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_retrench_money cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id  order by tmi.sum_retrench_money desc limit 5";
+		String retrenchMoneySql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_retrench_money cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id ";
+		if(!"0000".equals(dd)) {
+			retrenchMoneySql = retrenchMoneySql+" and tc.city_code='"+dd+"'";
+		}
+		
+		retrenchMoneySql = retrenchMoneySql + " order by tmi.sum_retrench_money desc limit 5";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(retrenchMoneySql);
@@ -423,7 +433,12 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年6月6日
 		 */
-		String haveRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id  order by tmi.remain_rebate desc limit 5";
+		String haveRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id ";
+		if(!"0000".equals(dd)) {
+			haveRebateSql = haveRebateSql+" and tc.city_code='"+dd+"'";
+		}
+		
+		haveRebateSql = haveRebateSql + "  order by tmi.remain_rebate desc limit 5";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(haveRebateSql);
@@ -445,7 +460,11 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年6月6日
 		 */
-		String usedRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate-tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id order by tmi.sum_rebate-tmi.remain_rebate desc limit 5";
+		String usedRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate-tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id ";
+		if(!"0000".equals(dd)) {
+			usedRebateSql = usedRebateSql+" and tc.city_code='"+dd+"'";
+		}
+		usedRebateSql = usedRebateSql + " order by tmi.sum_rebate-tmi.remain_rebate desc limit 5";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(usedRebateSql);
@@ -467,7 +486,12 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年6月6日
 		 */
-		String sumRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id order by tmi.sum_rebate desc limit 5";
+		String sumRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id ";
+		if(!"0000".equals(dd)) {
+			sumRebateSql = sumRebateSql+" and tc.city_code='"+dd+"'";
+		}
+		
+		sumRebateSql = sumRebateSql + " order by tmi.sum_rebate desc limit 5";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(sumRebateSql);
@@ -491,7 +515,10 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * 2018年6月6日
 		 */
 		
-		String sumRetrenchSql = "select sum(tmi.sum_retrench_money)  sumall,sum(tmi.sum_retrench_money)-(sum(tmi.sum_rebate)-sum(tmi.remain_rebate)) subprice,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) usedrebate from t_mebmer_info tmi";
+		String sumRetrenchSql = "select sum(tmi.sum_retrench_money)  sumall,sum(tmi.sum_retrench_money)-(sum(tmi.sum_rebate)-sum(tmi.remain_rebate)) subprice,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) usedrebate from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id ";
+		if(!"0000".equals(dd)) {
+			sumRetrenchSql = sumRetrenchSql+" and tc.city_code='"+dd+"'";
+		}
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(sumRetrenchSql);
@@ -513,7 +540,10 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * @author wuxinxin
 		 * 2018年6月6日
 		 */
-		String sumRebateSql = "select sum(tmi.sum_rebate)  sumreall,sum(tmi.remain_rebate) sumhavere,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) sumused from t_mebmer_info tmi";
+		String sumRebateSql = "select sum(tmi.sum_rebate)  sumreall,sum(tmi.remain_rebate) sumhavere,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) sumused from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id";
+		if(!"0000".equals(dd)) {
+			sumRebateSql = sumRebateSql+" and tc.city_code='"+dd+"'";
+		}
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(sumRebateSql);
