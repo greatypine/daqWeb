@@ -1146,7 +1146,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月20日
 		 */
-		String daySumSql = "select date_format(dmom.sign_time, '%H时') seltime, count(1) prisum from df_mass_order_total dmom where dmom.sign_time > '2018-05-17 23:59:59' and dmom.order_tag1 like '%E%' group by date_format(dmom.sign_time, '%H') order by date_format(dmom.sign_time, '%H') ";
+		String daySumSql = "select  seltime, sum(prisum) cou from ds_member_ordercount dmoc ";
+		if(!"0000".equals(string)) {
+			daySumSql = daySumSql+" where dmoc.city_code='"+string+"'";
+		}
+		daySumSql = daySumSql+" group by seltime order by seltime";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

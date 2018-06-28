@@ -274,7 +274,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		if (hourCountList != null && !hourCountList.isEmpty()) {
 			for (Map<String, Object> hourCount : hourCountList) {
 				selHours.add(hourCount.get("seltime").toString());
-				hourCounts.add(hourCount.get("prisum").toString());
+				hourCounts.add(hourCount.get("cou").toString());
 			}
 		}
 		JSONArray jsonSelHours = (JSONArray) JSONArray.fromObject(selHours);
