@@ -15,7 +15,8 @@ public class ReplyMessageDaoImpl extends BaseDAOHibernate implements ReplyMessag
 
 	@Override
 	public List<Map<String, Object>> selectReplyMessage(String whereStr, PageInfo pageInfo) {
-		String sql="SELECT concat(a.create_time,'') as create_time,a.content,a.phone,IFNULL(b.name,'') as messageType FROM t_reply_message  a LEFT JOIN t_message_type b on a.messageType = b.code where a.status=0 "+whereStr;
+		String sql="SELECT a.id,concat(a.create_time,'') as create_time,a.content,a.phone,IFNULL(b.name,'') as messageType FROM t_reply_message  a LEFT JOIN t_message_type b on a.messageType = b.code where a.status=0 "+whereStr;
+		sql= sql+" order by a.id desc";
 		//SQL查询对象
         SQLQuery query = getHibernateTemplate().getSessionFactory()
                 .getCurrentSession().createSQLQuery(sql);
