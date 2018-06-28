@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>安心合作社</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min.css">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+ .box-body img{width: 100%}
+.report{font-size: 16px;background-color: #a93f31;color: #fff; padding-bottom: 20px;}
+    .report .box-header{color: #fff;}
+    .report em{width: 70px; position: absolute; right: 0; bottom: 0;}
+    .report img{height: 100%;}
+    .report li{float:left; line-height: 28px; color: #f8e7e5; margin-top: 5px;}
+    .report i{margin-right: 5px; opacity: 0.6;}
+    .report span{font-size: 24px; color: #ffb959; font-weight: bold;}
+    .report p i{color: #fff;}
+    .report p small{font-size: 16px;}
+    .report p:nth-child(2),.report p:nth-child(2n){font-size: 18px; margin: 10px 0 5px 0; color: rgba(255,255,255,0.7);}
+    .report p:nth-child(2n+1){font-size: 34px; padding-left: 20px;}
+    .report dt{border-bottom: 1px dashed rgba(255,255,255,1); padding: 0 5px 5px 5px; position: relative; margin: 0 10px;}
+    .report dt:after{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; left: -7px;}
+    .report dt:before{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; right: -7px;}
+    .report_jr li{width: 31%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
+    .report_jr li i{font-size: 70px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
+    .report_jr li span{font-size: 30px; color: #ffde00;}
+
+    .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
+    .navimenu{min-height: 800px; padding-top: 0;}
+    #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
+      #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+    
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div id="process_div" ></div> 
+ <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
+<div class="wrapper">
+<!-- 新header -->
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+			<div class="logo_img pull-left">
+				<img src="dist/img/logo.png" height="30">
+				<img src="dist/img/title.png" height="20">
+			</div>
+			<div class="pull-left">
+				<div class="logo-lg">
+					<ul class="no-margin">
+						<li class="current"><em>安心合作社</em></li>
+					</ul>
+				</div>
+			</div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container" style="width: 1300px;">
+      <!-- Main content -->
+      <section class="content-header">
+         <div class="box box-default report">
+           <div class="box-header h4"><strong>安心合作社</strong><span id="cityname"></span><strong>运营简报</strong><a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a></div>
+          <div class="box-body">
+          	<div class="col-sm-12">
+              <dt style="margin-top: 20px;">安心合作社<em><img src="dist/img/member1.png"></em></dt>
+              <ul class="clearfix">
+                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-home"></i>E店数量：<span id="eShopCount"></span></li>
+                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-equalizer"></i>SKU总数：<span id="skuCount"></span></li>
+                <li class="col-sm-4 no-padding"><i class="fa fa-hourglass-half"></i>SKU动销：<span id="movingPinCount"></span></li>
+              </ul>
+              <ul class="clearfix">
+                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-yen"></i>GMV：<small>￥</small> <span id="cmEshopGmv"></span></li>
+                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-list-alt"></i>累计订单量：<span id="cmGoodsDealCount"></span></li>
+                <li class="col-sm-4 no-padding"><i class="fa fa-database"></i>订单均价：<small>￥</small> <span id="oneDeal"></span></li>
+              </ul>
+            </div>
+            <div class="col-sm-12">
+              <dt>社员<em><img src="dist/img/member1.png"></em></dt>
+              <ul class="clearfix report_jr no-padding">
+                <li>
+                  <div class="col-sm-8">今日成交额：<br><small>￥</small> <span id="dayDealSum"></span></div>
+                  <div class="col-sm-4"><i class="fa fa-shopping-cart"></i></div>
+                </li>
+                <li>
+                  <div class="col-sm-8">今日订单量：<br><span id="dayDealCount" ></span><small></small></div>
+                  <div class="col-sm-4"><i class="fa  fa-bar-chart"></i></div>
+                  </li>
+                <li>
+                  <div class="col-sm-8">今日新增社员：<br><span  id="dayNewMem"></span><small></small></div>
+                  <div class="col-sm-4"><i class="fa fa-user-plus"></i></div>
+                  </li>
+              </ul>
+              <ul class="clearfix no-padding">
+                <li class="col-sm-3"><i class="fa fa-group"></i>社员总数：<br><span id="memAll"></span></li>
+                <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
+                <li class="col-sm-3"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></li>
+                <li class="col-sm-3"><i class="fa fa-fire"></i>周消费频次：<br><span id="jsonEshopWeekCou"></span></li>
+              </ul>
+            </div>
+        </div>
+    </div>
+      
+      <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-6">
+              <h4 class="text-light-blue"><strong>安心合作社订单走势</strong></h4>
+              <div class="col-sm-12 no-padding" id="main18" style="height: 260px;"></div>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="text-light-blue"><strong>订单均价走势</strong></h4>
+              <div class="col-sm-12 no-padding" id="main19" style="height: 260px;"></div>
+            </div>
+          </div>
+        </div>
+      <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-7">
+              <h4 class="text-light-blue"><strong>安心合作社成交额</strong></h4>
+              <div class="col-sm-12 no-padding" id="main16" style="height: 260px;"></div>
+            </div>
+             <div class="col-sm-5" id="main9" style="height: 260px;"></div>
+          </div>
+        </div>
+      <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-6">
+              <h4 class="text-red">最受欢迎商品</h4>
+              <table class="table table-bordered">
+                <tbody id="hotPro_data">
+                <tr>
+                  <th>商品名称</th>
+                  <th>卖出数量</th>
+                  <!-- <th>售卖时长</th> -->
+                  <th>排名</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="text-light-blue">无人问津商品</h4>
+              <table class="table table-bordered">
+                <tbody id="coolPro_data">
+                <tr>
+                  <th>商品名称</th>
+                  <th>卖出数量</th>
+                  <!-- <th>售卖时长</th> -->
+                  <th>排名</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <div class="box box-default">
+          <div class="box-body">
+          <div class="col-sm-7">
+          <div class="box-header h4 text-light-blue"><strong>社员增长趋势</strong></div>
+            <div class="col-sm-12 no-padding" id="main1" style="height: 350px;"></div>
+          </div>
+          <div class="col-sm-5">
+          <div class="box-header h4 text-light-blue"><strong id="cmCount">社员总数：</strong></div>
+            <div class="col-sm-12 no-padding" id="main2" style="height: 350px;"></div>
+          </div>
+          </div>
+     </div>
+     <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-6">
+              <h4 class="text-light-blue"><strong>社员成交额走势</strong></h4>
+              <div class="col-sm-12 no-padding" id="main12" style="height: 260px;"></div>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="text-light-blue"><strong>社员订单量走势</strong></h4>
+              <div class="col-sm-12 no-padding" id="main13" style="height: 260px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
+          <div class="box-body">
+          	<div class="col-sm-6 no-padding" id="main3" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main4" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main5" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main6" style="height: 350px;"></div>
+          </div>
+       </div>
+      </section>
+
+    </div>
+    <div class="vertical-example" id="citySelect" style="display:none">
+      <nav id="gooey-v">
+        <input type="checkbox" class="menu-open" name="menu-open4" id="menu-open4"/>
+        <label class="open-button" for="menu-open4"><span style="font-size: 16px;font-weight: normal;">城市</span></label>
+        <a href="#" class="gooey-menu-item"> 北京 </a>
+        <a href="#" class="gooey-menu-item"> 上海 </a>
+        <a href="#" class="gooey-menu-item"> 天津 </a>
+        <a href="#" class="gooey-menu-item"> 沈阳 </a>
+        <a href="#" class="gooey-menu-item"> 北京 </a>
+        <a href="#" class="gooey-menu-item"> 上海 </a>
+        <a href="#" class="gooey-menu-item"> 天津 </a>
+        <a href="#" class="gooey-menu-item"> 沈阳 </a>
+        <a href="#" class="gooey-menu-item"> 北京 </a>
+        <a href="#" class="gooey-menu-item"> 上海 </a>
+        <a href="#" class="gooey-menu-item"> 天津 </a>
+        <a href="#" class="gooey-menu-item"> 沈阳 </a>
+      </nav>
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/jquery.dataStatistics.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+
+
+<script src="dist/js/jquery.dataStatistics.js"></script>
+
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<!-- AdminLTE App -->
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/nav-scroll.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+
+<script src="plugins/gooey_menu/gooey.min.js"></script>
+<script>
+var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
+var cityId = decode64(getUrlParamByKey("c"));//城市ID
+var cityName = decode64(getUrlParamByKey("cn"));//城市名称
+var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+	
+	
+	function doUserMem(){
+		var url = "";
+		if(target==0){
+		  	url = "user_member_view.html?t="+encode64(target)+"&c=&cn=&e="+encode64(employeeId)+"&#fg";
+		  }else if(target==1){
+			  url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&e="+encode64(employeeId)+"&#fg";
+		  }else{
+			  url = "user_member_view.html?t="+encode64(0);
+		  }
+		window.open(url,"user_member_view");
+	}
+	var screenlogin=getUrlParamByKey("su");
+	
+	function loginShow(){
+		
+		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+			var cityName = getUrlParamByKey("cname");
+		    var callback = function callback(data, textStatus, XMLHttpRequest) {
+		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
+		    	var stateObject = {};
+		    	var newUrl = "/daqWeb/crm/member_analysis?ta=0";
+		    	target = null;
+		    	getUser();
+		    	doMemberInfo();
+		    	doMemberSum();
+		    	//doEshopMemberSum();
+		    	history.pushState(stateObject,null,newUrl);
+			};
+		    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+				alert("登录信息错误，请确认输入或联系管理员!");
+				return false;
+			}
+		    var url = "../login.do";
+		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+		}else{
+			getUser();
+			doMemberInfo();
+			doMemberSum();
+			//doEshopMemberSum();
+		}
+		
+	}
+
+  var showMemberGrow = function (dataServer){
+	  var myChart1 = echarts.init(document.getElementById('main1'));
+	  //社员人数
+	  option1 = {
+	    tooltip: {
+	      trigger: 'axis',
+	      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+	        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+	      }
+	    },
+	    legend: {
+	      data: [ '新增社员人数','累计社员人数'],
+	      right:'35%',
+	      selectedMode:false,
+	      textStyle: {color: '#404a59'}
+	    },
+	    grid: {
+	      left: '3%',
+	      right: '4%',
+	      bottom: '3%',
+	      containLabel: true
+	    },
+	    xAxis: [{
+	        type: 'category',
+	        data: dataServer.jsonDateMem,
+	        axisLabel:{
+	          textStyle:{color:'#404a59',}
+	        },
+	        axisLine:{
+	          lineStyle:{color:'#404a59',}
+	        },
+	      }],
+	      yAxis: [{
+	    	  type: 'value',
+		      name: '新增社员人数',
+		      splitLine: {show: false},
+	        axisLabel: {
+	          formatter: '{value}',
+	          textStyle:{color:'#404a59'}
+	        },
+	        axisLine:{
+	          lineStyle:{color:'#404a59'}
+	        }
+	      },{
+	    	  type: 'value',
+	    	  name: '累计社员人数',
+	          axisLabel: {
+	          formatter: '{value}',
+	          textStyle:{color:'#404a59'}
+	        },
+	        axisLine:{
+	          lineStyle:{color:'#404a59'}
+	        },
+	        position: 'right',
+	      }],
+	    series: [ {
+		      name: '新增社员人数',
+		      type: 'bar',
+		      itemStyle:{normal:{color:'#ffae00'},},
+		      data: dataServer.growNewCounts,
+		      label: {
+		        normal: {
+		          show:true,
+		          position: 'top',
+		          textStyle:{
+		            color:'#ffae00',
+		          },
+		        },
+		        emphasis: {
+		          textStyle:{
+		            color:'#ffae00',
+		          },
+		        },
+		      },
+		    },{
+	      name: '累计社员人数',
+	      type: 'line',
+	      itemStyle:{normal:{color:'#01949B'},},
+	      data: dataServer.growAllCounts,
+	      yAxisIndex: 1,
+	      label: {
+	        normal: {
+	          show:true,
+	          position: 'top',
+	          textStyle:{
+	            color:'#01949B',
+	          },
+	        },
+	        emphasis: {
+	          textStyle:{
+	            color:'#01949B',
+	          },
+	        },
+	      },
+	    }]
+	  };
+	  myChart1.setOption(option1);
+  }
+  
+  var showMember = function (dataServer){
+	  var myChart2 = echarts.init(document.getElementById('main2'));
+	  //合作社社员
+	  option2 = {
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: "{b} : {c} ({d}%)"
+	    },
+	    legend: {
+	        selectedMode:false,
+	        right:10,
+	        top: 10,
+	        orient:'vertical',
+	        data:['老会员升级', '新会员开卡']
+	    }
+	    ,series: [
+	    	{
+	      type: 'pie',
+	      radius: '75%',
+	      center: ['50%', '50%'],
+	      //clockwise: false,
+	      data: [{
+	        value: dataServer.oldCmCount,
+	        name: '老会员升级'
+	      }, {
+	        value: dataServer.newCmCount,
+	        name: '新会员开卡'
+	      }],
+	      label: {
+		        normal: {
+		          position: 'out', //标签的位置
+		          formatter: '{b}\n{d}%',
+		          color: '#59ADF3'
+
+		        }
+		   },
+	      labelLine: {
+	        normal: {
+	          show: true
+	        }
+	      },
+	      itemStyle: {
+	        normal: {
+	          borderWidth: 4,
+	          borderColor: '#FFCC67',
+	          labelLine: {
+		          show: true
+		        }
+	        },
+	        emphasis: {
+	          borderWidth: 0,
+	          shadowBlur: 10,
+	          shadowOffsetX: 0,
+	          shadowColor: 'rgba(0, 0, 0, 0.5)'
+	        }
+	      }
+	    }] ,
+	    color: [
+	      '#00acee',
+	      '#52cdd5',
+	    ],
+	  };
+	  myChart2.setOption(option2);
+  }
+  
+  var showMemberInfo = function(dataServer){
+	  var myChart3 = echarts.init(document.getElementById('main3'));
+	  var myChart4 = echarts.init(document.getElementById('main4'));
+	  var myChart5 = echarts.init(document.getElementById('main5'));
+	  var myChart6 = echarts.init(document.getElementById('main6'));
+	//性别
+
+	  option3 = {
+	    title: [{
+	      text: '社员性别',
+	      left: '45%',
+	      top: '2%',
+	      textAlign: 'center',
+	      textBaseline: 'middle',
+	      textStyle: {
+	        color: '#666',
+	        fontWeight: 'normal',
+	        fontSize: 16
+	      }
+	    }],
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: "{b}: {c} ({d}%)"
+	    },
+	    series: [{
+	      type: 'pie',
+	      selectedMode: 'single',
+	      radius: ['20%', '80%'],
+	      color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
+
+	      label: {
+	        normal: {
+	          position: 'inside', //标签的位置
+	          formatter: '{b}\n{d}%'
+
+	        }
+	      },
+	      labelLine: {
+	        normal: {
+	          show: false
+	        }
+	      },
+	      data: [{
+	        value:dataServer.fCount,
+	        name: '女'
+	      }, {
+	        value: dataServer.mCount,
+	        name: '男'
+	      }]
+	    }]
+	  };
+
+	  //年龄
+	  var colorList = [
+	    '#66c5d7', '#11c88c', '#989cff', '#ffa55d', '#9c7de1', '#5d9eff', '#ffdb5d', '#ee82ed', '#8fca5f', '#b995f5'
+	  ];
+	  var total = {
+	    value: '24,652',
+	    name: '社员年龄'
+	  }
+	  var originalData = [{
+	    value: dataServer.age60,
+	    name: '1960年之前'
+	  }, {
+	    value: dataServer.age70,
+	    name: '60后'
+	  }, {
+	    value: dataServer.age80,
+	    name: "70后"
+	  }, {
+	    value: dataServer.age90,
+	    name: "80后"
+	  }, {
+	    value: dataServer.age00,
+	    name: "90后"
+	  }, {
+	    value: dataServer.ageNow,
+	    name: "00后-至今"
+	  }];
+	  echarts.util.each(originalData, function(item, index) {
+	    item.itemStyle = {
+	      normal: {
+	        color: colorList[index]
+	      }
+	    };
+	  });
+	  
+	  option4 = {
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: '{b}: {c} ({d}%)'
+	    },
+	    backgroundColor:'#ffffff',
+	    title: [{
+	      text: total.name,
+	      left: '45%',
+	      top: '2%',
+	      textAlign: 'center',
+	      textBaseline: 'middle',
+	      textStyle: {
+	        color: '#666',
+	        fontWeight: 'normal',
+	        fontSize: 16
+	      }
+	    }],
+	    series: [{
+	      hoverAnimation: false, //设置饼图默认的展开样式
+	      radius: ['20%', '80%'],
+	      name: 'pie',
+	      type: 'pie',
+	      selectedMode: 'single',
+	      selectedOffset: 16, //选中是扇区偏移量
+	      clockwise: true,
+	      startAngle: 90,
+	      label: {
+	        normal: {
+	          show: true,
+	          position: 'inside', //标签的位置
+	          formatter: '{b}\n{d}%'
+	        }
+	      },
+	      labelLine: {
+	        normal: {
+	          show: false
+	        }
+	      },
+	      itemStyle: {
+	        normal: {
+	          borderWidth: 3,
+	          borderColor: '#ffffff',
+	        },
+	        emphasis: {
+	          borderWidth: 0,
+	          shadowBlur: 5,
+	          shadowOffsetX: 0,
+	          shadowColor: 'rgba(0, 0, 0, 0.2)'
+	        }
+	      },
+	      data: originalData
+	    }]
+	  };
+
+	  //地区
+	option5 = {
+			title: [{
+			      text: '出生地分布',
+			      left: '50%',
+			      top: '1%',
+			      textAlign: 'center',
+			      textBaseline: 'middle',
+			      textStyle: {
+			        color: '#666',
+			        fontWeight: 'normal',
+			        fontSize: 16
+			      }
+			    }],
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    calculable : true,
+    series : [
+        {
+            name:'省份',
+            type:'pie',
+            center: ['50%', '50%'],
+            radius: ['20%', '80%'], //饼图的半径
+            roseType : 'area',
+            x: '70%',               // for funnel
+            max: 40,                // for funnel
+            sort : 'ascending'     // for funnel
+        },{
+	      name: '',
+	      type: 'pie',
+	      clockwise: false,
+	      silent: true,
+	      minAngle: 20, //最小的扇区角度（0 ~ 360）
+	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
+	      radius: ['0%', '80%'], //饼图的半径
+	      itemStyle: { //图形样式
+	        normal: {
+	          borderColor: '#1e2239',
+	          borderWidth: 1.5,
+	          opacity: 0.21,
+	        }
+	      },
+	      label: { //标签的位置
+	        normal: {
+	          show: false
+	        }
+	      }
+	    }
+    ]
+};
+	  
+	  
+	  
+	  //月份
+	  option6 = {
+	    title: [{
+	      text: '社员生日',
+	      left: '45%',
+	      top: '2%',
+	      textAlign: 'center',
+	      textBaseline: 'middle',
+	      textStyle: {
+	        color: '#666',
+	        fontWeight: 'normal',
+	        fontSize: 16
+	      }
+	    }],
+	    tooltip: {
+	      trigger: 'item',
+	      formatter: "{a} <br/>{b}: {c} ({d}%)"
+	    },
+	    color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5'],
+	    series: [{
+	      name: '生日礼人数',
+	      type: 'pie',
+	      clockwise: false, //饼图的扇区是否是顺时针排布
+	      minAngle: 20, //最小的扇区角度（0 ~ 360）
+	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
+	      radius: ['20%', '80%'], //饼图的半径
+	      avoidLabelOverlap: true, ////是否启用防止标签重叠
+	      itemStyle: { //图形样式
+	        normal: {
+	          borderColor: '#1e2239',
+	          borderWidth: 1.5,
+	        },
+	      },
+	      label: { //标签的位置
+	        normal: {
+	          show: true,
+	          position: 'inside', //标签的位置
+	          formatter: "{b}\n{d}%",
+	          textStyle: {
+	            color: '#fff',
+	          }
+	        },
+	        emphasis: {
+	          show: true,
+	          textStyle: {
+	            fontWeight: 'bold'
+	          }
+	        }
+	      },
+	      data: [
+	        {value: dataServer.birCount1,name: '1月'},
+	        {value: dataServer.birCount2,name: '2月'},
+	        {value: dataServer.birCount3,name: '3月'},
+	        {value: dataServer.birCount4,name: '4月'},
+	        {value: dataServer.birCount5,name: '5月'},
+	        {value: dataServer.birCount6,name: '6月'},
+	        {value: dataServer.birCount7,name: '7月'},
+	        {value: dataServer.birCount8,name: '8月'},
+	        {value: dataServer.birCount9,name: '9月'},
+	        {value: dataServer.birCount10,name: '10月'},
+	        {value: dataServer.birCount11,name: '11月'},
+	        {value: dataServer.birCount12,name: '12月'}
+	      ]
+	    }, {
+	      name: '',
+	      type: 'pie',
+	      clockwise: false,
+	      silent: true,
+	      minAngle: 20, //最小的扇区角度（0 ~ 360）
+	      center: ['50%', '50%'], //饼图的中心（圆心）坐标
+	      radius: ['0%', '37%'], //饼图的半径
+	      itemStyle: { //图形样式
+	        normal: {
+	          borderColor: '#1e2239',
+	          borderWidth: 1.5,
+	          opacity: 0.21,
+	        }
+	      },
+	      label: { //标签的位置
+	        normal: {
+	          show: false,
+	        }
+	      },
+	      data: [
+	        {value: 335,name: '超速'},
+	        {value: 335,name: '急减速'},
+	        {value: 315,name: '飞站'},
+	        {value: 200,name: '带速开关门'},
+	        {value: 140,name: '急加速'}
+	      ]
+	    }]
+	  };
+  	var meData = '[';
+		var meProL = dataServer.mePro.split('-');
+	var meCountL = dataServer.meCount.split('-');
+	var  len = meProL.length-2;
+	for(var i=0;i<len;i++){
+		
+		if(len>0){
+			if((len-1)==i){
+				meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
+			}else{
+				meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"},';
+			}
+			
+		}else{
+			meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
+		}
+	}	
+	meData+="]";
+    var cityUserDataObject = JSON.parse(meData);
+    option5.series[0].data = cityUserDataObject;
+    option5.series[1].data = cityUserDataObject;
+	  myChart3.setOption(option3);
+	  myChart4.setOption(option4);
+	  myChart5.setOption(option5);
+	  myChart6.setOption(option6);
+	    // 事件绑定
+/* 	    myChart5.on('click', function (params){
+	        //var depName=encode64(businessDepRankGMVOption.legend.data[params.dataIndex]);
+	        window.open("user_member_view.html");
+	    }); */
+	  
+  }
+</script>
+<script type="text/javascript">
+
+function getUser(){
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			var curr_user = JSON.parse(data.data);
+			if(curr_user == null){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}
+		}
+  	},false);
+}
+function doMemberInfo(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+ 			//运营情况
+ 			showHistoryData(resultJson);  
+        	//成交量、成交额走势
+        	showDeal(resultJson);
+        	showEshopCount(resultJson);
+        	showEshopMemSum(resultJson);
+        	setLoadingMark(false);
+        	//设置10秒刷新页面
+        	//setInterval("window.location.reload()",10000);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberSum(){
+    doManager('communeMember','selectMeSum',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//社员属性信息饼图
+        	showMemberInfo(resultJson);
+        	//最受欢迎商品、无人问津商品
+        	showProduct(resultJson);
+        	//社员饼图
+ 			showMember(resultJson);
+ 			//增长曲线图
+        	showMemberGrow(resultJson);
+        	
+        	//E店情况
+        	showEshop(resultJson);
+        	
+        	//粮票
+        	//showRebateMoney(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    });
+}
+function doEshopMemberSum(){
+    doManager('communeMember','selectMeOrder',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	
+        	showEshopCount(resultJson);
+        	//社员、非社员订单走势
+        	
+        	showEshopMemCount(resultJson);
+        	//社员、非社员成交额走势
+        	showEshopMemSum(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    });
+}
+ $(function () {
+    $("#gooey-v").gooeymenu({
+        bgColor: "#68d099",
+        contentColor: "white",
+        style: "vertical",
+        horizontal: {
+          menuItemPosition: "glue"
+        },
+        vertical: {
+          menuItemPosition: "glue",
+          direction: "down"
+        },
+        circle: {
+          radius: 90
+        },
+        margin: "small",
+        size: 60,
+        bounce: true,
+        bounceLength: "small",
+        transitionStep: 100,
+        hover: "#68d099"
+      });
+    // $('#citySelect').css('display','block');
+	 loginShow();
+	 //获取社员量
+
+});
+
+var showProduct = function (dataServer){
+	var hotProName = dataServer.hotProName;
+	var hotProCount = dataServer.hotProCount;
+	var hotProSellDur = dataServer.hotProSellDur;
+	   var hotStr="";
+	   if(hotProCount==null||hotProCount.length==0){
+		   hotStr = "<tr>没有符合条件的数据</tr>"
+		   return;
+	   }
+	   for(var i=0;i<hotProName.length;i++){
+			   hotStr= "<tr>"
+                   +"<td>"+hotProName[i]+"</td>"
+                   +"<td>"+hotProCount[i]+"</td>";//+"<td>"+hotProSellDur[i]+"</td>"        //售卖时长
+                   
+                   switch(i)
+                   {
+                   case 0:
+                	 hotStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+                     break;
+                   case 1:
+                	   hotStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+                     break;
+                   case 2:
+                	   hotStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+                     break;
+                   case 3:
+                	   hotStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+                     break;
+                   case 4:
+                	   hotStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+                     break;
+                   default:
+                	   hotStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+                   }
+                   hotStr += "</tr>";
+              $("#hotPro_data").append(hotStr);     
+	   }
+	   var coolProName = dataServer.coolProName;
+	   var coolProCount = dataServer.coolProCount;
+	   var coolProSellDur = dataServer.coolProSellDur;
+	   var coolStr="";
+	   if(coolProCount==null||coolProCount.length==0){
+		   coolStr = "<tr>没有符合条件的数据</tr>"
+		   return;
+	   }
+	   for(var j=0;j<coolProCount.length;j++){
+		   coolStr= "<tr>"
+                   +"<td>"+coolProName[j]+"</td>"
+                   +"<td>"+coolProCount[j]+"</td>";// +"<td>"+coolProSellDur[j]+"</td>"  //售卖时长
+                   switch(j)
+                   {
+                   case 0:
+                	   coolStr += "<td><span class='badge bg-red'>"+(j+1)+"</span></td>";
+                     break;
+                   case 1:
+                	   coolStr += "<td><span class='badge bg-yellow'>"+(j+1)+"</span></td>";
+                     break;
+                   case 2:
+                	   coolStr += "<td><span class='badge bg-blue'>"+(j+1)+"</span></td>";
+                     break;
+                   case 3:
+                	   coolStr += "<td><span class='badge bg-green'>"+(j+1)+"</span></td>";
+                     break;
+                   case 4:
+                	   coolStr += "<td><span class='badge bg-purple'>"+(j+1)+"</span></td>";
+                     break;
+                   default:
+                	   coolStr += "<td><span class='badge bg-brown'>"+(j+1)+"</span></td>";
+                   }      
+                   coolStr += "</tr>";
+              $("#coolPro_data").append(coolStr);     
+	   }
+};
+
+var showHistoryData = function (dataServer) {
+	//社员量
+	$("#memAll").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
+	$("#cmCount").html("社员总数："+parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
+    //老用户开通社员量
+	$("#oldCmCount").html(parseInt(dataServer.oldCmCount==null?'0':dataServer.oldCmCount));
+    //新注册社员量
+	$("#newCmCount").html(parseInt(dataServer.newCmCount==null?'0':dataServer.newCmCount));
+   //E店数量
+	$("#eShopCount").html(parseInt(dataServer.eShopCount==null?'0':dataServer.eShopCount));
+    //sku数量
+	$("#skuCount").html(parseInt(dataServer.skuCount==null?'0':dataServer.skuCount));
+    //社员累计成交额
+	$("#cmGoodsTurnover").html(changeMoney(parseInt(dataServer.yesEshopSum==null?'0':dataServer.yesEshopSum)));
+    //成交量
+	$("#cmGoodsDealCount").html(parseInt(dataServer.cmGoodsDealCount==null?'0':dataServer.cmGoodsDealCount));
+    //动销数
+	$("#movingPinCount").html(parseInt(dataServer.movingPinCount==null?'0':dataServer.movingPinCount));
+    //当日订单量
+	$("#dayDealCount").html(parseInt(dataServer.dayDealCount==null?'0':dataServer.dayDealCount));
+    //当日成交额
+	$("#dayDealSum").html(changeMoney(parseInt(dataServer.dayDealSum==null?'0':dataServer.dayDealSum)));
+    //客单价
+    if(dataServer.dayDealCount==null||dataServer.dayDealCount==0){
+    	$("#dayOneSum").html("0");
+    }else{
+    	$("#dayOneSum").html(dataServer.dayDealSum/dataServer.dayDealCount==null?'0':(dataServer.dayDealSum/dataServer.dayDealCount).toFixed(2));
+    }
+    //客单量
+	$("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
+    //新增社员
+	$("#dayNewMem").html(parseInt(dataServer.dayAddMem==null?'0':dataServer.dayAddMem));
+	$("#oneDeal").html(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount==null?'0':(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount).toFixed(2));
+	//周消费频次
+	$("#jsonEshopWeekCou").html(parseInt(dataServer.jsonEshopWeekCou==null?'0':dataServer.jsonEshopWeekCou));
+	//E店累计成交额
+	$("#cmEshopGmv").html(changeMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)));
+	
+	   
+	  var myChart9 = echarts.init(document.getElementById('main9'));
+	  //社员人数
+option9 = {
+  title: [ {
+    text: 'E店GMV：'+eMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)),
+    left: '30%',
+    top: '3%',
+    textAlign: 'center',
+    textStyle: {
+      color: '#3c8dbc'
+    }
+  }],
+  tooltip: {
+    trigger: 'item',
+    formatter: "{a} <br/>{b} : {c} ({d}%)"
+  },
+  legend: {
+      selectedMode:false,
+      right:0,
+      top: 40,
+      orient:'vertical',
+      data:['社员', '非社员']
+  },
+  series: [
+  	{
+    name:'成交量',	
+    type: 'pie',
+    radius: '70%',
+    center: ['50%', '60%'],
+    //clockwise: false,
+    data: [{
+      value: rebateMoney(parseInt(dataServer.yesEshopSum==null?'0':dataServer.yesEshopSum)),
+      name: '社员'
+    }, {
+      value: rebateMoney(parseInt(dataServer.noEshopSum==null?'0':dataServer.noEshopSum)),
+      name: '非社员'
+    }],
+    label: {
+	        normal: {
+	          position: 'out', //标签的位置
+	          formatter: '{b}\n{c}({d}%)',
+	          fontSize: 16,
+	          color: '#27727B'
+
+	        }
+	   },
+      labelLine: {
+	        normal: {
+	          show: true
+	        }
+	},
+    itemStyle: {
+      normal: {
+        borderWidth: 4,
+        borderColor: '#3c8dbc',
+        labelLine: {
+	          show: true
+	        }
+      },
+      emphasis: {
+        borderWidth: 0,
+        shadowBlur: 10,
+        shadowOffsetX: 0,
+        shadowColor: 'rgba(0, 0, 0, 0.5)'
+      }
+    }
+  }] ,
+  color: [
+  	'#59ADF3','#AF89D6'
+  ],
+};
+	  myChart9.setOption(option9);
+	
+};
+var showEshop = function (dataServer) {
+	//社员量
+	var eshopName = dataServer.eshopName;
+	var eshopCount = dataServer.eshopCount;
+	var eshopSum = dataServer.eshopSum;
+	   var eshopStr="";
+	   if(eshopName==null||eshopName.length==0){
+		   eshopStr = "<tr>没有符合条件的数据</tr>"
+		   return;
+	   }
+	   for(var i=0;i<eshopName.length;i++){
+		   eshopStr= "<tr>"
+                   +"<td>"+eshopName[i]+"</td>"
+                   +"<td>"+eshopSum[i]+"</td>"
+                   +"<td>"+eshopCount[i]+"</td>";
+                   
+                   switch(i)
+                   {
+                   case 0:
+                	   eshopStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+                     break;
+                   case 1:
+                	   eshopStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+                     break;
+                   case 2:
+                	   eshopStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+                     break;
+                   case 3:
+                	   eshopStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+                     break;
+                   case 4:
+                	   eshopStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+                     break;
+                   default:
+                	   eshopStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+                   }
+                   eshopStr += "</tr>";
+              $("#eshop_data").append(eshopStr);     
+	   }
+};
+
+var showDeal = function (dataServer){
+	var myChart12= echarts.init(document.getElementById('main12'));
+	option12 = {
+		    tooltip : {
+		        show: true,
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:['成交额']
+		    },
+		    toolbox: {
+		        show : false,
+		        feature : {
+		            mark : {show: true},
+		            dataView : {show: true, readOnly: false},
+		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    calculable : true,
+		    xAxis : [
+		        {
+		            type : 'category',
+		            data: dataServer.jsonDateX
+		        }
+		    ],
+		    yAxis : [
+		    	{
+		    	  type: 'value',
+			      name: '成交额',
+		        axisLabel: {
+		          textStyle:{color:'#404a59'}
+		        }
+		     }
+		    ],
+		    series : [
+		        {
+		            name:'成交额',
+		            type:'line',
+		            barWidth: 40,                   // 系列级个性化，柱形宽度
+		            itemStyle: {
+		                normal: {                   // 系列级个性化，横向渐变填充
+		                    borderRadius: 5,
+		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+		        	            offset: 0,
+		        	            color: '#ffae00'
+		        	          }, {
+		        	            offset: 1,
+		        	            color: '#7777eb'
+		        	          }]),
+		                    label : {
+		                        show : false,
+		                        textStyle : {
+		                            fontSize : '14',
+		                            fontFamily : '微软雅黑',
+		                            fontWeight : 'bold',
+		                            color:'#ffae00',
+		                        }
+		                    }
+		                }
+		            },
+		            data:dataServer.jsonAllDealsums,
+		            markLine : {
+		                data : [
+		                    {type : 'max',name:'最大值'},
+		                    {type : 'min',name:'最小值'}
+		                ]
+		            }
+		        }
+		    ]
+		};
+	myChart12.setOption(option12);
+	var myChart13= echarts.init(document.getElementById('main13'));
+	option13 = {
+		    tooltip : {
+		        show: true,
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:['订单量']
+		    },
+		    toolbox: {
+		        show : false,
+		        feature : {
+		            mark : {show: true},
+		            dataView : {show: true, readOnly: false},
+		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    calculable : true,
+		    xAxis : [
+		        {
+		            type : 'category',
+		            data: dataServer.jsonDateX
+		        }
+		    ],
+		    yAxis : [
+		    	{
+			    	  type: 'value',
+				      name: '订单量',
+			        axisLabel: {
+			          textStyle:{color:'#404a59'}
+			        }
+				}
+		    ],
+		    series : [
+		        {
+		            name:'订单量',
+		            type:'line',
+		            barWidth: 40,                   // 系列级个性化，柱形宽度
+		            itemStyle: {
+		                normal: {                   // 系列级个性化，横向渐变填充
+		                    borderRadius: 5,
+		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+		        	            offset: 0,
+		        	            color: 'rgba(30,144,255,0.8)'
+		        	          }, {
+		        	            offset: 1,
+		        	            color: 'rgba(138,43,226,0.8)'
+		        	          }]),
+		                    label : {
+		                        show : false,
+		                        textStyle : {
+		                            fontSize : '14',
+		                            fontFamily : '微软雅黑',
+		                            fontWeight : 'bold'
+		                        }
+		                    }
+		                }
+		            },
+		            data:dataServer.jsonAllDealCounts,
+		            markLine : {
+		                data : [
+		                    {type : 'max',name:'最大值'},
+		                    {type : 'min',name:'最小值'}
+		                ]
+		            }
+		        }
+		    ]
+		};
+	myChart13.setOption(option13);
+}
+
+function changeMoney (x) {
+    var y = '';
+	if(x>10000){
+	    x=x/10000;
+	    if(parseInt(x)/10000<=1){
+	    	y=ForDight(x,2)+"万";
+	    }else if(parseInt(x)/10000>1){
+	    	x=x/10000+'';
+	    	y=ForDight(x,2)+"亿";
+	    }
+	}else{
+		y=x;
+	}
+
+    return y;
+}
+function eMoney (x) {
+    var y = '';
+    var eMoneyType = "元";
+	if(x>10000){
+	    x=x/10000;
+	    if(parseInt(x)/10000<=1){
+	    	y=ForDight(x,2);
+	    	eMoneyType = "(单位:万)";
+	    }else if(parseInt(x)/10000>1){
+	    	x=x/10000+'';
+	    	y=ForDight(x,2);
+	    	eMoneyType = "(单位:亿)";
+	    }
+	}else{
+		y=x;
+	}
+    return y+eMoneyType;
+}
+function rebateMoney(x) {
+    var y = '';
+	if(x>10000){
+	    x=x/10000;
+	    if(parseInt(x)/10000<=1){
+	    	y=ForDight(x,2);
+	    }else if(parseInt(x)/10000>1){
+	    	x=x/10000+'';
+	    	y=ForDight(x,2);
+	    }
+	}else{
+		y=x;
+	}
+    return y;
+}
+function ForDight(str,How){  
+    Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
+    return Dight;  
+ }
+var showEshopCount = function (dataServer){
+	var myChart18= echarts.init(document.getElementById('main18'));
+	option18 = {
+		    tooltip : {
+		        show: true,
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:['成交订单量','取消订单量']
+		    },
+		    toolbox: {
+		        show : false,
+		        feature : {
+		            mark : {show: true},
+		            dataView : {show: true, readOnly: false},
+		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    calculable : true,
+		    xAxis : [
+		        {
+		            type : 'category',
+		            data: dataServer.jsonDateX
+		        }
+		    ],
+		    yAxis : [
+		    	{
+		    	  type: 'value',
+			      name: '订单量',
+		        axisLabel: {
+		          textStyle:{color:'#404a59'}
+		        }
+		     }
+		    ],
+		    series : [
+		        {
+		            name:'成交订单量',
+		            type:'line',
+		            barWidth: 40,                   // 系列级个性化，柱形宽度
+		            itemStyle: {
+		                normal: {                   // 系列级个性化，横向渐变填充
+		                    borderRadius: 5,
+		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+		        	            offset: 0,
+		        	            color: '#ffae00'
+		        	          }, {
+		        	            offset: 1,
+		        	            color: '#7777eb'
+		        	          }]),
+		                    label : {
+		                        show : false,
+		                        textStyle : {
+		                            fontSize : '14',
+		                            fontFamily : '微软雅黑',
+		                            fontWeight : 'bold',
+		                            color:'#ffae00',
+		                        }
+		                    }
+		                }
+		            },
+		            data:dataServer.jsonEshopCounts,
+		            markLine : {
+		                data : [
+		                    {type : 'max',name:'最大值'},
+		                    {type : 'min',name:'最小值'}
+		                ]
+		            }
+		        }
+		        , {
+		            name:'取消订单量',
+		            type:'line',
+		            barWidth: 40,                   // 系列级个性化，柱形宽度
+		            itemStyle: {
+		                normal: {                   // 系列级个性化，横向渐变填充
+		                    borderRadius: 5,
+		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+		        	            offset: 0,
+		        	            color: '#00ffae'
+		        	          }, {
+		        	            offset: 1,
+		        	            color: '#eb7777'
+		        	          }]),
+		                    label : {
+		                        show : false,
+		                        textStyle : {
+		                            fontSize : '14',
+		                            fontFamily : '微软雅黑',
+		                            fontWeight : 'bold',
+		                            color:'#ffae00',
+		                        }
+		                    }
+		                }
+		            },
+		            data:dataServer.jsonQuitCounts,
+		            markLine : {
+		                data : [
+		                    {type : 'max',name:'最大值'}
+		                ]
+		            }
+		        }
+		    ]
+		};
+	myChart18.setOption(option18);
+	var myChart19= echarts.init(document.getElementById('main19'));
+	option19 = {
+		    tooltip : {
+		        show: true,
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:['订单均价']
+		    },
+		    toolbox: {
+		        show : false,
+		        feature : {
+		            mark : {show: true},
+		            dataView : {show: true, readOnly: false},
+		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    calculable : true,
+		    xAxis : [
+		        {
+		            type : 'category',
+		            data: dataServer.jsonDateX
+		        }
+		    ],
+		    yAxis : [
+		    	{
+			    	  type: 'value',
+				      name: '订单均价',
+			        axisLabel: {
+			          textStyle:{color:'#404a59'}
+			        }
+				}
+		    ],
+		    series : [
+		        {
+		            name:'订单均价',
+		            type:'line',
+		            barWidth: 40,                   // 系列级个性化，柱形宽度
+		            itemStyle: {
+		                normal: {                   // 系列级个性化，横向渐变填充
+		                    borderRadius: 5,
+		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+		        	            offset: 0,
+		        	            color: 'rgba(30,144,255,0.8)'
+		        	          }, {
+		        	            offset: 1,
+		        	            color: 'rgba(138,43,226,0.8)'
+		        	          }]),
+		                    label : {
+		                        show : false,
+		                        textStyle : {
+		                            fontSize : '14',
+		                            fontFamily : '微软雅黑',
+		                            fontWeight : 'bold'
+		                        }
+		                    }
+		                }
+		            },
+		            data:dataServer.jsonEshopOneDeal,
+		            markLine : {
+		                data : [
+		                	{type : 'average', name: '平均值'},
+		                    {type : 'max',name:'最大值'},
+		                    {type : 'min',name:'最小值'}
+		                ]
+		            }
+		        }
+		    ]
+		};
+	myChart19.setOption(option19);
+}
+var showEshopMemSum = function (dataServer){
+	var myChart16= echarts.init(document.getElementById('main16'));
+	option16 = {
+		    tooltip : {
+		        show: true,
+		        trigger: 'axis'
+		    },
+		    legend: {
+		        data:['成交额']
+		    },
+		    toolbox: {
+		        show : false,
+		        feature : {
+		            mark : {show: true},
+		            dataView : {show: true, readOnly: false},
+		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+		            restore : {show: true},
+		            saveAsImage : {show: true}
+		        }
+		    },
+		    calculable : true,
+		    xAxis : [
+		        {
+		            type : 'category',
+		            data: dataServer.jsonDateX
+		        }
+		    ],
+		    yAxis : [
+		    	{
+		    	  type: 'value',
+			      name: '成交额',
+		        axisLabel: {
+		          textStyle:{color:'#404a59'}
+		        }
+		     }
+		    ],
+		    series : [
+		       {
+		            name:'成交额',
+		            type:'line',
+		            barWidth: 40,                   // 系列级个性化，柱形宽度
+		            itemStyle: {
+		                normal: {                   // 系列级个性化，横向渐变填充
+		                    borderRadius: 5,
+		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+		        	            offset: 0,
+		        	            color: '#B5C334'
+		        	          }, {
+		        	            offset: 1,
+		        	            color: '#27727B'
+		        	          }]),
+		                    label : {
+		                        show : false,
+		                        textStyle : {
+		                            fontSize : '14',
+		                            fontFamily : '微软雅黑',
+		                            fontWeight : 'bold',
+		                            color:'#ffae00',
+		                        }
+		                    }
+		                }
+		            },
+		            data:dataServer.jsonEshopSums,//['101','521','453','42','568','125','120'],//dataServer.jsonDayNoMemSums,
+		            markLine : {
+		                data : [
+		                    {type : 'max',name:'最大值'},
+		                    {type : 'min',name:'最小值'}
+		                ]
+		            }
+		        }
+		    ]
+		};
+	myChart16.setOption(option16);
+}
+ 
+//设置加载中图标
+var setLoadingMark = function (bShow) {
+    if (bShow == true) {
+        $("#process_div").show();
+        $("#process_div_pic").show();
+    } else {
+        $("#process_div").hide();
+        $("#process_div_pic").hide();
+    }
+};
+</script>
+</body>
+</html>
