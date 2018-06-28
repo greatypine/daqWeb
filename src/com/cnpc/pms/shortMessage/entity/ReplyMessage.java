@@ -26,6 +26,8 @@ public class ReplyMessage extends DataEntity{
 	@Column(name="messageType")
 	private String messageType;//短信类型
 	
+	@Column(name="remoteIP")
+	private String remoteIP;
 
 	public String getContent() {
 		return content;
@@ -57,6 +59,14 @@ public class ReplyMessage extends DataEntity{
 
 	public void setMessageType(String messageType) {
 		this.messageType = messageType;
+	}
+
+	public String getRemoteIP() {
+		return remoteIP;
+	}
+
+	public void setRemoteIP(String remoteIP) {
+		this.remoteIP = remoteIP;
 	}
 	
 	

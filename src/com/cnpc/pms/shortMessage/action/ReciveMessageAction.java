@@ -73,7 +73,7 @@ public class ReciveMessageAction extends HttpServlet{
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			StringBuilder replysb = new StringBuilder();
-			replysb.append("\r\n").append(sdf.format(new Date())).append("&&&").append(phone).append("&&&").append(msgContent).append("&&&").append(spNumber);
+			replysb.append("\r\n").append(sdf.format(new Date())).append("&&&").append(remoteAddress).append("&&&").append(phone).append("&&&").append(msgContent).append("&&&").append(spNumber);
 			new Thread(new Runnable() {
 				
 				@Override
@@ -83,7 +83,7 @@ public class ReciveMessageAction extends HttpServlet{
 				}
 			}).start();
 			
-			if(Arrays.asList(permitAddArray).contains(remoteAddress)){
+//			if(Arrays.asList(permitAddArray).contains(remoteAddress)){
 	    		try {
 	    			 
 	    			
@@ -114,6 +114,7 @@ public class ReciveMessageAction extends HttpServlet{
 	    			 re.setPhone(phone);
 	    			 re.setContent(msgContent);
 	    			 re.setSpNumber(spNumber);
+	    			 re.setRemoteIP(remoteAddress);
 	    			 re.setError("");
 	    			 Map<String,Object> result= reManager.reciveMessageReply(re);//接收短信以后的逻辑
 	    			 Object status = result.get("status");
@@ -131,15 +132,16 @@ public class ReciveMessageAction extends HttpServlet{
 					e.printStackTrace();
 					out.print("Error:" + e.getMessage()); 
 				}
-			} else {
-    			
-    			 ReplyMessageDto re = new ReplyMessageDto();
-    			 re.setPhone(phone);
-    			 re.setContent(msgContent);
-    			 re.setSpNumber(spNumber);
-    			 re.setError("access forbidden");
-    			 reBackupsManager.saveReplyMessageBackups(re);
-			}
+//			} else {
+//    			
+//    			 ReplyMessageDto re = new ReplyMessageDto();
+//    			 re.setPhone(phone);
+//    			 re.setContent(msgContent);
+//    			 re.setSpNumber(spNumber);
+//    			 re.setError("access forbidden");
+//    			 reBackupsManager.saveReplyMessageBackups(re);
+//    			 out.println("access forbidden");
+//			}
 
 	    }
 	    

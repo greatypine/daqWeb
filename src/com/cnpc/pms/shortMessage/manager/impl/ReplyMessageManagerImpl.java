@@ -65,6 +65,7 @@ public class ReplyMessageManagerImpl extends BizBaseCommonManager implements Rep
 			re.setContent(reDto.getContent());
 			re.setSpNumber(reDto.getSpNumber());
 			re.setMessageType(reDto.getMessageType());
+			re.setRemoteIP(reDto.getRemoteIP());
 			preObject(re);
 			reManager.saveObject(re);
 		} catch (Exception e) {
