@@ -680,6 +680,25 @@ Date.prototype.format=function(fmt) {
 		}
 		
 	});
+	
+	
+	
+	function leavecheck(){
+		var cardnumber = $("#cardnumber").val();
+		var notexist=false;
+		doManager("HumanresourcesManager", "queryHumanresourceListByCardNumber", cardnumber,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData==null){
+							notexist=true;
+						}
+					}
+				}, false);
+		
+		return notexist;
+	}
+	
 
 	function doSave() {
 		$("#btnSave").attr("disabled","disabled");
@@ -687,6 +706,23 @@ Date.prototype.format=function(fmt) {
 			$("#btnSave").attr("disabled",""); 
 			return;
 		}
+		
+		//如果离职中存在
+		if(!leavecheck()){
+			var flag = false;
+			$$.showConfirm("提示","包含离职的员工信息，是否保存？",function () {
+				todosave();
+            });
+			$("#btnSave").attr("disabled",""); 
+		}else{//离中不存在 
+			todosave();
+		}
+		
+	}
+	
+	
+	
+	function todosave(){
 		var arr = ["id","isofficial","relationtype","tel","relationname","nation","education","school","profession","remark","cardnumber","birthday","censusregister","marriage","phone","topostdate","name","orgname","deptlevel1","deptlevel2","deptlevel3","reporthigher","store_id","storename","zw","jobchannel","offername","citySelect","interndate","contractdatestart","contractdateend"];
 		var o = {};
 		for ( var i in arr) {
