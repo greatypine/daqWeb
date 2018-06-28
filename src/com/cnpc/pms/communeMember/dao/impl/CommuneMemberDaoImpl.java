@@ -535,10 +535,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	 * 2018年5月22日
 	 */
 	
-	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode group by dum.born_province";
+	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode ";
 	if(!"0000".equals(dd)) {
 		birSql = birSql+ " and dum.regist_cityno='"+dd+"'";
 	}
+	birSql = birSql+" group by dum.born_province";
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(birSql);
@@ -636,7 +637,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年5月28日
 		 */
-		String sql = "select member_count cou,member_name pname,sell_duration selldur from ds_member_statistics where  member_type='3' order by CAST(member_count as SIGNED) desc limit 10";
+		String sql = "select member_count cou,member_name pname,sell_duration selldur from ds_member_statistics where  member_type='3'";
+		if(!"0000".equals(string)) {
+			sql = sql+ " and remark='"+string+"'";
+		}
+		sql = sql+" order by CAST(member_count as SIGNED) desc limit 10";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1124,7 +1129,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月13日
 		 */
-		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where date(dmod.sign_time)>=DATE_SUB(curdate(),INTERVAL 7 DAY) and date(dmod.sign_time)<curdate() and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
+		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where dmod.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.sign_time<curdate() and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
 			try{
 				Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 				List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
