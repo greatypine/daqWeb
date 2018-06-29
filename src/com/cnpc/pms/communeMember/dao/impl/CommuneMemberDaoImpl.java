@@ -199,7 +199,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		if(!"0000".equals(dd)) {
 			sql = sql+" and dum.regist_cityno='"+dd+"'";
 		}
-		sql = sql+" group by DATE_FORMAT(dum.opencard_time,\\\"%Y-%m-%d\\\")  order by dum.opencard_time";
+		sql = sql+" group by DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\")  order by dum.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
 		try{
@@ -244,7 +244,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		if(!"0000".equals(dd)) {
 			sql = sql+" and dum2.regist_cityno='"+dd+"'";
 		}
-		sql = sql +" group by DATE_FORMAT(dum2.opencard_time,\\\"%Y-%m-%d\\\") order by dum2.opencard_time";
+		sql = sql +" group by DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") order by dum2.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -286,7 +286,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		if(!"0000".equals(dd)) {
 			sql = sql+" and dum1.regist_cityno='"+dd+"'";
 		}
-		sql = sql +" group by DATE_FORMAT(dum1.opencard_time,\\\"%Y-%m-%d\\\") order by dum1.opencard_time";
+		sql = sql +" group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
