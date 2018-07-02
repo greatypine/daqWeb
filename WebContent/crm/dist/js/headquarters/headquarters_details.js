@@ -39,7 +39,7 @@ var pageStatusInfo = {};
 	// 获取请求参数
 	var getReauestParameters = function () {
 	    // 城市ID
-	    var cityId = (decode64(getUrlParamByKey("c")) == 'null'||decode64(getUrlParamByKey("c")) == null) ? '' : decode64(getUrlParamByKey("c"));
+	    var cityId = (decode64(getUrlParamByKey("cs")) == 'null'||decode64(getUrlParamByKey("cs")) == null) ? '' : decode64(getUrlParamByKey("cs"));
 	    // 省份ID
 	    var provinceId = (decode64(getUrlParamByKey("p"))=='null'||decode64(getUrlParamByKey("p"))==null) ? '' : decode64(getUrlParamByKey("p"));
 	    var typeOfRank = (decode64(getUrlParamByKey("tps"))=='null'||decode64(getUrlParamByKey("tps"))==null) ? '' : decode64(getUrlParamByKey("tps"));
