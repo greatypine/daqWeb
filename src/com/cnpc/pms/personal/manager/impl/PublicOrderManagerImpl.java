@@ -78,7 +78,7 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 				List<Store> lst_store = storeManager.findStoreByCityData(cityssql);
 				if(lst_store!=null&&lst_store.size()>0){
 					for(Store s:lst_store){
-						storenos+="'"+s.getStoreno()+"',";
+						storenos+="'"+s.getPlatformid()+"',";
 					}
 					storenos=storenos.substring(0, storenos.length()-1);
 				}
@@ -88,7 +88,7 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 			if(publicOrder.getStorename()!=null&&publicOrder.getStorename().length()>0){
 				Store store = storeManager.getStoreByName(publicOrder.getStorename());
 				if(store!=null){
-					publicOrder.setStoreno(store.getStoreno());
+					publicOrder.setStoreno(store.getPlatformid());
 				}
 			}
 			
@@ -237,7 +237,7 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 				List<Store> lst_store = storeManager.findStoreByCityData(cityssql);
 				if(lst_store!=null&&lst_store.size()>0){
 					for(Store s:lst_store){
-						storenos+="'"+s.getStoreno()+"',";
+						storenos+="'"+s.getPlatformid()+"',";
 					}
 					storenos=storenos.substring(0, storenos.length()-1);
 				}
@@ -247,7 +247,7 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 			if(publicOrder.getStorename()!=null&&publicOrder.getStorename().length()>0){
 				Store store = storeManager.getStoreByName(publicOrder.getStorename());
 				if(store!=null){
-					publicOrder.setStoreno(store.getStoreno());
+					publicOrder.setStoreno(store.getPlatformid());
 				}
 			}
 			list = publicOrderDao.exportPublicOrder(publicOrder);

@@ -37,11 +37,12 @@ public class PublicOrderDaoImpl extends BaseDAOHibernate implements
 			sqlwhere += " and a.df_order_sn = '"+publicOrder.getOrdersn()+"'";
 		}
 		if(publicOrder.getStoreno()!=null&&publicOrder.getStoreno().length()>0){
-			sqlwhere += " and a.df_storeno = '"+publicOrder.getStoreno()+"'";
+			//sqlwhere += " and a.df_storeno = '"+publicOrder.getStoreno()+"'";
+			sqlwhere += " and (b.store_id='"+publicOrder.getStoreno()+"' OR b.normal_store_id='"+publicOrder.getStoreno()+"') ";
 		}else{
 			//查询当前登录人所管理城的城市的所有门店 
 			if(publicOrder.getStorenos()!=null&&publicOrder.getStorenos().length()>0){
-				sqlwhere +=" and a.df_storeno in("+publicOrder.getStorenos()+")";
+				sqlwhere +=" and (b.store_id in("+publicOrder.getStorenos()+") OR b.normal_store_id in("+publicOrder.getStorenos()+")) ";
 			}else{
 				sqlwhere +=" and 1=0 ";
 			}
@@ -82,8 +83,8 @@ public class PublicOrderDaoImpl extends BaseDAOHibernate implements
 		// TODO Auto-generated method stub
 		//String sql = " SELECT * FROM ((SELECT *,'1' as order_num FROM df_order_pubseas_monthly WHERE (df_customer_id NOT like '%fakecustomerformicromarket%' or df_customer_id is NULL) ) UNION ALL (SELECT *,'0' as order_num FROM df_order_pubseas_monthly WHERE df_customer_id like '%fakecustomerformicromarket%')) a   where "+sqlwhere;
 		//String sql = " select * from (SELECT df_order_pubseas_monthly.*,(case when df_order_pubseas_monthly.df_customer_id like 'fakecustomerformicromarket%' then '0' ELSE '1' END) as  order_num FROM df_order_pubseas_monthly WHERE df_order_pubseas_monthly.df_ispubseas=1) a   where "+sqlwhere + " ORDER BY a.order_num DESC,a.update_time ";
-		String sql = "SELECT * FROM df_order_pubseas_monthly a where "+sqlwhere + " ORDER BY a.update_time";
-		String sql_count="select COUNT(1) as total,sum(df_trading_price) as totalprice from df_order_pubseas_monthly a where "+sqlwhere;
+		String sql = "SELECT * FROM df_order_pubseas_monthly a LEFT JOIN df_mass_order_monthly b ON a.df_order_id=b.id where "+sqlwhere + " ORDER BY a.update_time";
+		String sql_count="select COUNT(1) as total,sum(df_trading_price) as totalprice from df_order_pubseas_monthly a LEFT JOIN df_mass_order_monthly b ON a.df_order_id=b.id where "+sqlwhere;
 		
 		//String sql_count = "SELECT COUNT(1) as total FROM (" + sqlcount + ") T";
 
@@ -169,11 +170,13 @@ public class PublicOrderDaoImpl extends BaseDAOHibernate implements
 			sqlwhere += " and a.df_order_sn = '"+publicOrder.getOrdersn()+"'";
 		}
 		if(publicOrder.getStoreno()!=null&&publicOrder.getStoreno().length()>0){
-			sqlwhere += " and a.df_storeno = '"+publicOrder.getStoreno()+"'";
+			//sqlwhere += " and a.df_storeno = '"+publicOrder.getStoreno()+"'";
+			sqlwhere += " and (b.store_id='"+publicOrder.getStoreno()+"' OR b.normal_store_id='"+publicOrder.getStoreno()+"') ";
 		}else{
 			//查询当前登录人所管理城的城市的所有门店
 			if(publicOrder.getStorenos()!=null&&publicOrder.getStorenos().length()>0){
-				sqlwhere +=" and a.df_storeno in("+publicOrder.getStorenos()+")";
+				//sqlwhere +=" and a.df_storeno in("+publicOrder.getStorenos()+")";
+				sqlwhere +=" and (b.store_id in("+publicOrder.getStorenos()+") OR b.normal_store_id in("+publicOrder.getStorenos()+")) ";
 			}else{
 				sqlwhere +=" and 1=0 ";
 			}
@@ -213,8 +216,8 @@ public class PublicOrderDaoImpl extends BaseDAOHibernate implements
 		//TODO Auto-generated method stub
 		//String sql = " SELECT * FROM ((SELECT *,'1' as order_num FROM df_order_pubseas_monthly WHERE (df_customer_id NOT like '%fakecustomerformicromarket%' or df_customer_id is NULL) ) UNION ALL (SELECT *,'0' as order_num FROM df_order_pubseas_monthly WHERE df_customer_id like '%fakecustomerformicromarket%')) a   where "+sqlwhere;
 		//String sql = " select * from (SELECT df_order_pubseas_monthly.*,(case when df_order_pubseas_monthly.df_customer_id like 'fakecustomerformicromarket%' then '0' ELSE '1' END) as  order_num FROM df_order_pubseas_monthly WHERE df_order_pubseas_monthly.df_ispubseas=1) a   where "+sqlwhere;
-		String sql = "SELECT * FROM df_order_pubseas_monthly a where "+sqlwhere + " ORDER BY a.update_time";
-		
+		//String sql = "SELECT * FROM df_order_pubseas_monthly a where "+sqlwhere + " ORDER BY a.update_time";
+		String sql = "SELECT * FROM df_order_pubseas_monthly a LEFT JOIN df_mass_order_monthly b ON a.df_order_id=b.id where "+sqlwhere + " ORDER BY a.update_time";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return list;
