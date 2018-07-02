@@ -4,6 +4,8 @@ var pageStatusInfo = {};
 	    var requestParameters = getReauestParameters();
 		pageStatusInfo = initPageStatusInfo(requestParameters);
 		getPageRankData();
+		//设置查询口径(城市/省/全国)
+		setCityType();
 	});
 	// 设置系统时间
 	var setCurrentDate = function (pageStatusInfo) {
@@ -54,6 +56,21 @@ var pageStatusInfo = {};
 	    };
 	    return rtnData;
 	};
+	var setCityType = function(){
+		var cityId = pageStatusInfo.cityId;
+		var provinceId = pageStatusInfo.provinceId;
+		var provinceName = pageStatusInfo.provinceName;
+		var cityName = pageStatusInfo.cityName;
+		if(provinceId!=''&&cityId==''){
+			$("#cityType").html(provinceName);
+		}else if(cityId!=''&&provinceId==''){
+			$("#cityType").html(cityName);
+		}else if(provinceId==''&&cityId==''){
+			$("#cityType").html('全国');
+		}else if(provinceId!=''&&cityId!=''){
+			$("#cityType").html(cityName);
+		}
+	}
 	var initPageStatusInfo = function (reqData) {
 	    // 复制请求参数
 	    var pageStatusInfo = jQuery.extend(true, {}, reqData);
