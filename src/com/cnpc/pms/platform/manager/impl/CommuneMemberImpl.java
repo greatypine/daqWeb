@@ -98,7 +98,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		//////////////////////// 分库查询成交信息end//////////////////////////////
 		// 查询成交量、查询成交额--必须
 		List<Map<String, Object>> cmGoodsDealCountList = new ArrayList<Map<String, Object>>();
-		cmGoodsDealCountList = commDao.getCmGoodsDealCount("");
+		cmGoodsDealCountList = commDao.getCmGoodsDealCount(dd);
 		if (cmGoodsDealCountList != null && cmGoodsDealCountList.size() > 0) {
 			result.put("cmGoodsDealCount", cmGoodsDealCountList.get(0).get("cou"));
 			result.put("cmGoodsTurnover", cmGoodsDealCountList.get(1).get("cou"));
@@ -117,7 +117,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		 */
 		// 查询动销商品--必须
 		List<Map<String, Object>> movingPinCountList = new ArrayList<Map<String, Object>>();
-		movingPinCountList = commDao.getMovingPinCount("");
+		movingPinCountList = commDao.getMovingPinCount(dd);
 		if (movingPinCountList != null && movingPinCountList.size() > 0) {
 			result.put("movingPinCount", movingPinCountList.get(0).get("cou"));
 		} else {
@@ -157,11 +157,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List eshopWeekDeal = new ArrayList();
 		//周消费频次=周订单量/社员总数
 		//1.查询活跃社员数
-		int memWeek = 10;
+/*		int memWeek = 10;
 		List<Map<String, Object>> memWeekList = commDao.getMemweekCount(dd);
 		if(memWeekList!=null&&!memWeekList.isEmpty()) { 
 			memWeek = Integer.parseInt(memWeekList.get(0).get("memcou").toString());
-		}
+		}*/
 		List eshopWeekCount = new ArrayList();
 		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
 		if (eshopWeekList!=null&&!eshopWeekList.isEmpty()) {
@@ -187,7 +187,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		// 获取e店社员、非社员总成交额
 		List<Map<String, Object>> allEshopSumList = new ArrayList<Map<String, Object>>();
-		allEshopSumList = commDao.getAllEshopSum("");
+		allEshopSumList = commDao.getAllEshopSum(dd);
 		if (allEshopSumList != null && allEshopSumList.size() > 0) {
 			result.put("allEshopSum", allEshopSumList.get(0).get("cou"));
 		} else {
@@ -195,7 +195,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}
 		// 获取e店社员成交额
 		List<Map<String, Object>> yesEshopSumList = new ArrayList<Map<String, Object>>();
-		yesEshopSumList = commDao.getYesEshopSum("");
+		yesEshopSumList = commDao.getYesEshopSum(dd);
 		if (yesEshopSumList != null && yesEshopSumList.size() > 0) {
 			result.put("yesEshopSum", yesEshopSumList.get(0).get("cou"));
 		} else {
@@ -203,7 +203,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}
 		// 获取e店非社员成交额
 		List<Map<String, Object>> noEshopSumList = new ArrayList<Map<String, Object>>();
-		noEshopSumList = commDao.getNoEshopSum("");
+		noEshopSumList = commDao.getNoEshopSum(dd);
 		if (noEshopSumList != null && noEshopSumList.size() > 0) {
 			result.put("noEshopSum", noEshopSumList.get(0).get("cou"));
 		} else {
@@ -215,8 +215,6 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		List selcount = new ArrayList();
 		List seltimes = new ArrayList();
-		//周消费频次=周订单量/社员总数
-		//1.查询活跃社员数
 		List<Map<String, Object>> orderTimesList = commDao.getTimeDiff(dd);
 		long scount0 =0;//提前配送
 		long scounthalf =0;//半小时送达
@@ -270,13 +268,13 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		//查询24小时内订单成交量
 		List<Map<String, Object>> hourCountList = new ArrayList<Map<String, Object>>();
-		hourCountList = commDao.getHourCount("");
+		hourCountList = commDao.getHourCount(dd);
 		List hourCounts = new ArrayList();
 		List selHours = new ArrayList();
 		if (hourCountList != null && !hourCountList.isEmpty()) {
 			for (Map<String, Object> hourCount : hourCountList) {
 				selHours.add(hourCount.get("seltime").toString());
-				hourCounts.add(hourCount.get("prisum").toString());
+				hourCounts.add(hourCount.get("cou").toString());
 			}
 		}
 		JSONArray jsonSelHours = (JSONArray) JSONArray.fromObject(selHours);
@@ -288,7 +286,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		//查询订单商品分类
 		List<Map<String, Object>> orderTypeList = new ArrayList<Map<String, Object>>();
-		orderTypeList = commDao.getOrderType("");
+		orderTypeList = commDao.getOrderType(dd);
 		List orderTypeNames = new ArrayList();
 		List orderTypeSums = new ArrayList();
 		if (orderTypeList != null && orderTypeList.size() > 0) {
@@ -537,7 +535,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		// 查询男女比例
 				List<Map<String, Object>> cmSexList = new ArrayList<Map<String, Object>>();
-				cmSexList = commDao.getCmSexRatios("");
+				cmSexList = commDao.getCmSexRatios(dd);
 
 				if (cmSexList != null && cmSexList.size() > 0) {
 					result.put("mCount", cmSexList.get(0).get("mCount"));
@@ -547,7 +545,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				}
 				// 查询男女比例
 				List<Map<String, Object>> cmAgeList = new ArrayList<Map<String, Object>>();
-				cmAgeList = commDao.getCmAgeRatios("");
+				cmAgeList = commDao.getCmAgeRatios(dd);
 
 				if (cmAgeList != null && cmAgeList.size() > 0) {
 

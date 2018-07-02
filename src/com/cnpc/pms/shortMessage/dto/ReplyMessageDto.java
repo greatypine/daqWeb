@@ -16,6 +16,8 @@ public class ReplyMessageDto {
 	
 	private String error;
 	
+	private String remoteIP;
+	
 	public String getContent() {
 		return content;
 	}
@@ -62,6 +64,14 @@ public class ReplyMessageDto {
 
 	public void setError(String error) {
 		this.error = error;
+	}
+
+	public String getRemoteIP() {
+		return remoteIP;
+	}
+
+	public void setRemoteIP(String remoteIP) {
+		this.remoteIP = remoteIP;
 	}
 	
 	

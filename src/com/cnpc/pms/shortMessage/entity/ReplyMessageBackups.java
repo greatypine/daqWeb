@@ -1,5 +1,6 @@
 package com.cnpc.pms.shortMessage.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -8,10 +9,21 @@ import com.cnpc.pms.base.entity.DataEntity;
 @Entity
 public class ReplyMessageBackups extends DataEntity{
 	
+	@Column(name="phone")
 	private String phone;
+	
+	@Column(name="msgContent")
 	private String msgContent;
+	
+	@Column(name="spNumber")
 	private String spNumber;
+	
+	@Column(name="error")
 	private String error;
+	
+	@Column(name="remoteIP")
+	private String remoteIP;
+	
 	public String getPhone() {
 		return phone;
 	}
@@ -35,6 +47,12 @@ public class ReplyMessageBackups extends DataEntity{
 	}
 	public void setError(String error) {
 		this.error = error;
+	}
+	public String getRemoteIP() {
+		return remoteIP;
+	}
+	public void setRemoteIP(String remoteIP) {
+		this.remoteIP = remoteIP;
 	}
 	
 	

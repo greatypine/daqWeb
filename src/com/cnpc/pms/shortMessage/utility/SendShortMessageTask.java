@@ -41,6 +41,7 @@ public class SendShortMessageTask implements Runnable{
 				
 			}else{
 				//其他业务逻辑
+				content = shortMessage.getContent();
 			}
 			
 			String resultString = interManager.commonSendMessage(String.valueOf(mobilephone),content, null);

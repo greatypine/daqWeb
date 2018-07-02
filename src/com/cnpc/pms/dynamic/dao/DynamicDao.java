@@ -888,7 +888,7 @@ public interface DynamicDao extends IDAO{
 	/**
 	 * 近六个月全国消费用户数
 	 * 2018年6月14日
-	 * @author gaoll
+	 * @author  gaoll
 	 * @return
 	 */
 	public List<Map<String,Object>> getsixMonthAllCustomer();

@@ -139,6 +139,7 @@ Date.prototype.format=function(fmt) {
 	var p_zw = decode64(getUrlParamByKey("zw"));
 	var p_citySelect = decode64(getUrlParamByKey("citySelect"));
 	var tmpphone = "";
+	var tmpcardnumber = "";
 	function dataCheck() {
 		var name = $("#name").val();
 		if(name==null||name.trim()==""){
@@ -274,8 +275,44 @@ Date.prototype.format=function(fmt) {
 					return ;
 				}
 			}
-			
 		}
+		
+		
+		//身份证号是否重复 
+			if(tmpcardnumber!=""&&tmpcardnumber.length>0&&tmpcardnumber!=cardnumber){
+				var existhuman=false;
+				doManager("HumanresourcesManager", "queryHumanresourceListByCardId", cardnumber,
+						function(data, textStatus, XMLHttpRequest) {
+							if (data.result) {
+								var jsonData = $.fromJSON(data.data);
+								if(jsonData!=null&&jsonData.length>0){
+									existhuman=true;
+								}
+							}
+						}, false);
+				
+				if(existhuman){
+					$$.showMessage("系统信息","系统中存在相同的身份证号码！ ");
+					return ;
+				}
+			}else{//存在2个以上的也是重复的 
+				var existhuman=false;
+				doManager("HumanresourcesManager", "queryHumanresourceListByCardId", cardnumber,
+						function(data, textStatus, XMLHttpRequest) {
+							if (data.result) {
+								var jsonData = $.fromJSON(data.data);
+								if(jsonData!=null&&jsonData.length>1){
+									existhuman=true;
+								}
+							}
+						}, false);
+				
+				if(existhuman){
+					$$.showMessage("系统信息","系统中存在相同的身份证号码！ ");
+					return ;
+				}
+		}
+		
 		
 		var topostdate = $("#topostdate").val();
 		if(topostdate==null||topostdate==""){
@@ -419,6 +456,7 @@ Date.prototype.format=function(fmt) {
 							}
 						}
 						tmpphone=$("#phone").val();
+						tmpcardnumber=$("#cardnumber").val();
 						
 						//..................................
 						if(va=="线上服务专员"){
@@ -642,6 +680,25 @@ Date.prototype.format=function(fmt) {
 		}
 		
 	});
+	
+	
+	
+	function leavecheck(){
+		var cardnumber = $("#cardnumber").val();
+		var notexist=false;
+		doManager("HumanresourcesManager", "queryHumanresourceListByCardNumber", cardnumber,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData==null){
+							notexist=true;
+						}
+					}
+				}, false);
+		
+		return notexist;
+	}
+	
 
 	function doSave() {
 		$("#btnSave").attr("disabled","disabled");
@@ -649,6 +706,23 @@ Date.prototype.format=function(fmt) {
 			$("#btnSave").attr("disabled",""); 
 			return;
 		}
+		
+		//如果离职中存在
+		if(!leavecheck()){
+			var flag = false;
+			$$.showConfirm("提示","包含离职的员工信息，是否保存？",function () {
+				todosave();
+            });
+			$("#btnSave").attr("disabled",""); 
+		}else{//离中不存在 
+			todosave();
+		}
+		
+	}
+	
+	
+	
+	function todosave(){
 		var arr = ["id","isofficial","relationtype","tel","relationname","nation","education","school","profession","remark","cardnumber","birthday","censusregister","marriage","phone","topostdate","name","orgname","deptlevel1","deptlevel2","deptlevel3","reporthigher","store_id","storename","zw","jobchannel","offername","citySelect","interndate","contractdatestart","contractdateend"];
 		var o = {};
 		for ( var i in arr) {

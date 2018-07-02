@@ -18,6 +18,7 @@ public class ReplyMessageBackupsImpl extends BizBaseCommonManager implements Rep
 			rmb.setPhone(rdto.getPhone());
 			rmb.setSpNumber(rdto.getSpNumber());
 			rmb.setError(rdto.getError());
+			rmb.setRemoteIP(rdto.getRemoteIP());
 			preObject(rmb);
 			saveObject(rmb);
 		} catch (Exception e) {

@@ -105,7 +105,7 @@
       <!-- Main content -->
       <section class="content-header">
          <div class="box box-default report">
-           <div class="box-header h4"><strong>安心合作社运营简报</strong><a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a></div>
+           <div class="box-header h4"><strong>安心合作社</strong><span id="cityname"></span><strong>运营简报</strong><a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a></div>
           <div class="box-body">
           	<div class="col-sm-12">
               <dt style="margin-top: 20px;">安心合作社<em><img src="dist/img/member1.png"></em></dt>
@@ -146,60 +146,10 @@
         </div>
     </div>
       
-<!--         <div class="box box-default report">
-          <div class="box-header h4">
-          	<strong>安心合作社运营简报</strong>
-          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a> 
-          </div>
-          <div class="box-body">
-            <div class="col-sm-5 col-xs-12 text-center"><img src="dist/img/member1.png"></div>
-            <div class="col-sm-7 col-xs-12">
-              <div class="col-sm-6 col-xs-12">
-                <div class="report-tit">社员今日信息</div>
-                <p title="当日累计成交额"><i class="fa fa-money"></i>成交额:<small>&nbsp;&nbsp;￥</small><span id="dayDealSum" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="当日累计订单量"><i class="fa fa-file-text"></i>完成订单量:<small>&nbsp;&nbsp;</small><span id="dayDealCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="当日取消订单量"><i class="fa fa-file-text"></i>取消订单量:<small>&nbsp;&nbsp;</small><span id="dayReDealCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="客单价=成交额÷订单量"><i class="fa fa-empire"></i>客单价：<small>&nbsp;&nbsp;￥</small><span id="dayOneSum" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="客单量=订单量÷社员数"><i class="fa fa-sticky-note"></i>客单量:<small>&nbsp;&nbsp;</small><span id="dayOneCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="当日新增社员"><i class="fa fa-pagelines"></i>新增社员:<small>&nbsp;&nbsp;</small><span id="dayNewMem" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-              </div>
-              <ul class="col-sm-6 col-xs-12">
-                <div class="report-tit">社员累计数据</div>
-                <li title="累计社员总数"><i class="fa fa-fire"></i>社员总数：<span id="memAll"></span></li>
-                <li title="累计订单量"><i class="fa fa-file-text-o"></i>订单量：<span id="cmGoodsDealCount"></span></li>
-                <li title="累计GMV"><i class="fa fa-database"></i>GMV：￥<span id="cmGoodsTurnover"></span></li>
-                <li title="订单均价=GMV÷订单量"><i class="fa fa-git-square"></i>订单均价：￥<span id="oneDeal"></span></li>
-                <li title="安心合作社总数"><i class="fa fa-bank"></i>E店总数：<span id="eShopCount"></span></li>
-                <li title="安心合作社商品总数"><i class="fa fa-cube"></i>SKU总数：<span id="skuCount"></span></li>
-                <li title="安心合作社动销商品数"><i class="fa fa-delicious"></i>SKU动销：<span id="movingPinCount"></span></li>
-              </ul>
-            </div>
-          </div>
-        </div> -->
-      <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-12">
-              <h4 class="text-light-blue"><strong>全部订单时段性分布</strong></h4>
-              <div class="col-sm-12 no-padding" id="main20" style="height: 260px;"></div>
-            </div>
-          </div>
-        </div>
       <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>订单配送时效分布</strong></h4>
-              <div class="col-sm-12 no-padding" id="main21" style="height: 360px;"></div>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>7大场景订单分布</strong></h4>
-              <div class="col-sm-12 no-padding" id="main22" style="height: 360px;"></div>
-            </div>
-          </div>
-        </div>
-      <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>完成订单/取消订单走势</strong></h4>
+              <h4 class="text-light-blue"><strong>安心合作社订单走势</strong></h4>
               <div class="col-sm-12 no-padding" id="main18" style="height: 260px;"></div>
             </div>
             <div class="col-sm-6">
@@ -208,28 +158,13 @@
             </div>
           </div>
         </div>
-<!--       <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>社员订单</strong></h4>
-              <div class="col-sm-12 no-padding" id="main14" style="height: 260px;"></div>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>非社员订单</strong></h4>
-              <div class="col-sm-12 no-padding" id="main15" style="height: 260px;"></div>
-            </div>
-          </div>
-        </div> -->
       <div class="box box-default">
           <div class="box-body">
-            <div class="col-sm-5">
+            <div class="col-sm-7">
               <h4 class="text-light-blue"><strong>安心合作社成交额</strong></h4>
               <div class="col-sm-12 no-padding" id="main16" style="height: 260px;"></div>
             </div>
-            <div class="col-sm-7">
-              <h4 class="text-light-blue"><strong>城市成交额</strong></h4>
-              <div class="col-sm-12 no-padding" id="main17" style="height: 260px;"></div>
-            </div>
+             <div class="col-sm-5" id="main9" style="height: 260px;"></div>
           </div>
         </div>
       <div class="box box-default">
@@ -262,24 +197,6 @@
             </div>
           </div>
         </div>
-              <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-7 no-padding">
-              <h4 class="box-header h4 text-light-blue"><strong>E店排行榜</strong></h4>
-              <table class="table table-bordered">
-                <tbody id="eshop_data">
-                <tr>
-                  <th >E店名称</th>
-                  <th>成交额</th>
-                  <th>订单量</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-5" id="main9" style="height: 480px;"></div>
-          </div>
-      </div>
       <div class="box box-default">
           <div class="box-body">
           <div class="col-sm-7">
@@ -291,7 +208,7 @@
             <div class="col-sm-12 no-padding" id="main2" style="height: 350px;"></div>
           </div>
           </div>
-        </div>
+     </div>
      <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6">
@@ -313,68 +230,6 @@
             <div class="col-sm-6 no-padding" id="main6" style="height: 350px;"></div>
           </div>
        </div>
-       <div class="box box-default">
-          <div class="box-header h4 text-light-blue"><strong>社员城市分布</strong></div>
-          <div class="box-body">
-            <div class="col-sm-8 no-padding" id="main7" style="height: 350px;"></div>
-            <div class="col-sm-4 no-padding" id="main8" style="height: 350px;"></div>
-          </div>
-      </div>
-<!--      <div class="box box-default">
-        <div class="box-header h4 text-light-blue"><strong>优惠情况</strong></div>
-          <div class="box-body">
-            <div class="col-sm-6 no-padding" id="main10" style="height: 350px;"></div>
-            <div class="col-sm-6 no-padding" id="main11" style="height: 350px;"></div>
-             <div class="col-sm-6 no-padding">
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">社员省钱榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="retrench_money">
-                <tr>
-                  <th >社员</th>
-                  <th>累计省钱</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票累计榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="sum_rebate">
-                <tr>
-                  <th>社员</th>
-                  <th>累计粮票数</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票持有榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="have_rebate">
-                <tr>
-                  <th>社员</th>
-                  <th>粮票持有数</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6" >
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票使用榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="used_rebate">
-                <tr>
-                  <th>社员</th>
-                  <th>粮票已使用</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div> 
-          </div>
-      </div> -->
       </section>
 
     </div>
@@ -464,6 +319,7 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 		
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
 			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+			var cityName = getUrlParamByKey("cname");
 		    var callback = function callback(data, textStatus, XMLHttpRequest) {
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
 		    	var stateObject = {};
@@ -994,13 +850,12 @@ function doMemberInfo(){
     doManager('communeMember','selectAllCm',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//订单时段性分布
-        	showTimeOrder(resultJson);
-        	//订单商品分类统计
-        	showOrderType(resultJson);
  			//运营情况
  			showHistoryData(resultJson);  
-
+        	//成交量、成交额走势
+        	showDeal(resultJson);
+        	showEshopCount(resultJson);
+        	showEshopMemSum(resultJson);
         	setLoadingMark(false);
         	//设置10秒刷新页面
         	//setInterval("window.location.reload()",10000);
@@ -1013,23 +868,15 @@ function doMemberSum(){
     doManager('communeMember','selectMeSum',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//完成订单/取消订单走势，订单均价走势
-        	showEshopCount(resultJson);
-        	showEshopMemSum(resultJson);
-        	//成交量、成交额走势
-        	showDeal(resultJson);
         	//社员属性信息饼图
         	showMemberInfo(resultJson);
+        	//最受欢迎商品、无人问津商品
+        	showProduct(resultJson);
         	//社员饼图
  			showMember(resultJson);
  			//增长曲线图
         	showMemberGrow(resultJson);
-        	//社员注册信息
-        	showMemberRegist(resultJson);
-        	//城市注册排名
-        	showCityMember(resultJson);
-        	//最受欢迎商品、无人问津商品
-        	showProduct(resultJson);
+        	
         	//E店情况
         	showEshop(resultJson);
         	
@@ -1079,291 +926,10 @@ function doEshopMemberSum(){
         hover: "#68d099"
       });
     // $('#citySelect').css('display','block');
-    	localStorage.clear();
-	 	loginShow();
+	 loginShow();
 	 //获取社员量
 
 });
- 
- 
-var showMemberRegist = function (dataServer){
-	  var myChart7 = echarts.init(document.getElementById('main7'));
-	  //社员分布
-	  
-/* 	  option7 = {
-	    title : {
-	        text: '社员分布',
-	    },
-	    tooltip : {
-	        trigger: 'axis',
-	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-	        },
-	        formatter: function (params)
-	        {
-	            return params[0].name + '<br/>'
-	                   + params[1].marker+params[1].seriesName + ' : ' + (params[1].value + params[0].value) + '<br/>'
-	                   + params[0].marker+params[0].seriesName + ' : ' + params[0].value;
-	        }
-	    },
-	    legend: {
-	        selectedMode:false,
-	        data:['累计人数', '本月新增人数']
-	    },
-	    calculable : true,
-	    xAxis : [
-	        {
-	            type : 'category',
-	            axisLabel: {
-	                interval: 0,
-	              },
-	            data: dataServer.reCityname
-	        }
-	    ],
-	    yAxis : [
-	        {
-	            type : 'value',
-	            boundaryGap: [0, 0.1]
-	        }
-	    ],
-	    series : [
-	        {
-	            name:'本月新增人数',
-	            type:'bar',
-	            stack: 'sum',
-	            barCategoryGap: '50%',
-	            itemStyle: {
-	                normal: {
-	                    color: '#4ac7f5',
-	                    barBorderColor: '#4ac7f5',
-	                    barBorderWidth: 6,
-	                    barBorderRadius:0,
-	                    label : {
-	                        show: true, position: 'insideTop'
-	                    }
-	                }
-	            },
-	            data:dataServer.reCityMonCou
-	        },
-	        {
-	            name:'累计人数',
-	            type:'bar',
-	            stack: 'sum',
-	            itemStyle: {
-	                normal: {
-	                    color: 'tomato',
-	                    barBorderColor: 'tomato',
-	                    barBorderWidth: 6,
-	                    barBorderRadius:0,
-	                    label : {
-	                        show: true, 
-	                        position: 'top',
-	                        formatter: function (params) {
-	                            for (var i = 0, l = option7.xAxis[0].data.length; i < l; i++) {
-	                                if (option7.xAxis[0].data[i] == params.name) {
-	                                    return option7.series[0].data[i] + params.value;
-	                                }
-	                            }
-	                        },
-	                        textStyle: {
-	                            color: 'tomato'
-	                        }
-	                    }
-	                }
-	            },
-	            data: dataServer.reCityCou
-	        }
-	    ]
-	}; */
-	  option7 = {
-/* 			    title : {
-			        text: '社员分布'
-			    }, */
-			    tooltip : {
-			        trigger: 'axis',
-			        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-			            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-			        },
-			        formatter: function (params){
-			            return params[0].name + '<br/>'
-			                   + params[1].marker + params[1].seriesName + ' : ' + params[1].value + '<br/>'
-			                   + params[0].marker + params[0].seriesName + ' : ' + (params[1].value + params[0].value) ;
-			        }
-			    },
-			    legend: {
-			        selectedMode:false,
-			        data:['本月新增人数','累计人数']
-			    },
-			    calculable : true,
-			    xAxis : [
-			        {
-			            type : 'category',
-			            axisLabel: {
-			                interval: 0,
-			              },
-			            data: dataServer.reCityname
-			        }
-			    ],
-			    yAxis : [
-			        {
-			            type : 'value',
-			            boundaryGap: [0, 0.1]
-			        }
-			    ],
-			    series : [
-			        {
-			            name:'累计人数',
-			            type:'bar',
-			            stack: 'sum',
-			            barCategoryGap: '50%',
-			            itemStyle: {
-			                normal: {
-			                	color: '#4ac7f5',
-			                    barBorderColor: '#4ac7f5',
-			                    barBorderWidth: 6,
-			                    barBorderRadius:0,
-			                    label : {
-			                        show: true, position: 'insideTop',
-			                          formatter: function (params) {
-			                            for (var i = 0, l = option7.xAxis[0].data.length; i < l; i++) {
-			                                if (option7.xAxis[0].data[i] == params.name) {
-			                                    return option7.series[0].data[i] +  option7.series[1].data[i];
-			                                }
-			                            }
-			                        }
-			                    }
-			                }
-			            },
-			            data:dataServer.reCityCou
-			        },
-			        {
-			            name:'本月新增人数',
-			            type:'bar',
-			            stack: 'sum',
-			            itemStyle: {
-			                normal: {
-			                    color: '#ff0000',
-			                    barBorderColor: '#ff0000',
-			                    barBorderWidth: 5,
-			                    barBorderRadius:0,
-			                    label : {
-			                        show: true, 
-			                        position: 'insideBottom'
-			                    }
-			                }
-			            },
-			            data: dataServer.reCityMonCou
-			        }
-			    ]
-			}; 
-	  
-	  myChart7.setOption(option7);
-};
-var showCityMember = function(dataserver){
-	//城市分布
-	var myChart8 = echarts.init(document.getElementById('main8'));
-	var jsc = dataserver.jsonCityC;
-	var len = jsc.length;
-
-	  var rich = {
-	    white: {
-	      color: '#04243E',
-	      align: 'center',
-	      padding: [5, 0]
-	    }
-	  };
-	  var placeHolderStyle = {
-	    normal: {
-	      label: {
-	        show: false
-	      },
-	      labelLine: {
-	        show: false
-	      },
-	      color: 'rgba(0, 0, 0, 0)',
-	      borderColor: 'rgba(0, 0, 0, 0)',
-	      borderWidth: 0
-	    }
-	  };
-	  var data = [];
-	  for (var i = 0; i < len; i++) {
-	    data.push({
-	      value: dataserver.jsonCityAllCou[i],
-	      name: dataserver.jsonCityC[i],
-	      itemStyle: {
-	        normal: {
-	          borderWidth: 3,
-	          shadowBlur: 30,
-	          borderColor: new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-	            offset: 0,
-	            color: '#7777eb'
-	          }, {
-	            offset: 1,
-	            color: '#70ffac'
-	          }]),
-	          shadowColor: 'rgba(142, 152, 241, 0.6)'
-	        }
-	      }
-	    }, {
-	      value: 4,
-	      name: '',
-	      itemStyle: placeHolderStyle
-	    });
-	  }
-	  var seriesObj = [{
-	    name: '',
-	    type: 'pie',
-	    clockWise: false,
-	    radius: [50, 110],
-	    center:['50%','55%'],
-	    hoverAnimation: false,
-	    itemStyle: {
-	      normal: {
-	        label: {
-	          show: true,
-	          position: 'outside',
-	          color: '#04243E',
-	          formatter: function(params) {
-	            if(params.name !== '') {
-	            	if(params.name=='黔东南苗族侗族自治州'){
-	            		return "黔东南苗             \n族侗族自治州  :"+params.value;
-	            	}
-	              return params.name + ":"+params.value;
-	            }else {
-	              return '';
-	            }
-	          },
-	          rich: rich
-	        },
-	        labelLine: {
-	          show: true
-	        }
-	      }
-	    },
-	    data: data
-	  }];
-	  option8 = {
-	    //backgroundColor: '#04243E',
-	   /* title: [  {
-	      text: '城市分布',
-	      right: '15%',
-	      top: '5%',
-	    }], */
-	    tooltip: {
-		      trigger: 'item',
-		      formatter: "{b} : {c} ({d}%)"
-		    },
-	    legend: {
-	      show: false
-	    },
-	    toolbox: {
-	      show: false
-	    },
-	    series: seriesObj
-	    ,color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5']
-	  }
-	  myChart8.setOption(option8);
-};
 
 var showProduct = function (dataServer){
 	var hotProName = dataServer.hotProName;
@@ -1499,7 +1065,7 @@ option9 = {
       right:0,
       top: 40,
       orient:'vertical',
-      data:['社员GMV', '非社员GMV']
+      data:['社员', '非社员']
   },
   series: [
   	{
@@ -1510,25 +1076,25 @@ option9 = {
     //clockwise: false,
     data: [{
       value: rebateMoney(parseInt(dataServer.yesEshopSum==null?'0':dataServer.yesEshopSum)),
-      name: '社员GMV'
+      name: '社员'
     }, {
       value: rebateMoney(parseInt(dataServer.noEshopSum==null?'0':dataServer.noEshopSum)),
-      name: '非社员GMV'
+      name: '非社员'
     }],
     label: {
 	        normal: {
-	          position: 'inside', //标签的位置
+	          position: 'out', //标签的位置
 	          formatter: '{b}\n{c}({d}%)',
 	          fontSize: 16,
-	          color: '#ffffff'
+	          color: '#27727B'
 
 	        }
 	   },
-    labelLine: {
-      normal: {
-        show: false
-      }
-    },
+      labelLine: {
+	        normal: {
+	          show: true
+	        }
+	},
     itemStyle: {
       normal: {
         borderWidth: 4,
@@ -1592,283 +1158,6 @@ var showEshop = function (dataServer) {
               $("#eshop_data").append(eshopStr);     
 	   }
 };
-var showRebateMoney = function (dataServer) {
-	//社员量
-	var retrenchPhones = dataServer.retrenchPhones;
-	var retrenchCous = dataServer.retrenchCous;
-	   var retrenchmoney="";
-	   if(retrenchPhones==null||retrenchPhones.length==0){
-		   retrenchmoney = "<tr>没有符合条件的数据</tr>"
-	   }else{
-		   for(var i=0;i<retrenchPhones.length;i++){
-			   retrenchmoney= "<tr>"
-	                   +"<td>"+retrenchPhones[i]+"</td>"
-	                   +"<td>"+retrenchCous[i]+"</td>";
-	                   
-	                   switch(i)
-	                   {
-	                   case 0:
-	                	   retrenchmoney += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 1:
-	                	   retrenchmoney += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 2:
-	                	   retrenchmoney += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 3:
-	                	   retrenchmoney += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 4:
-	                	   retrenchmoney += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
-	                     break;
-	                   default:
-	                	   retrenchmoney += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
-	                   }
-	                   retrenchmoney += "</tr>";
-	              $("#retrench_money").append(retrenchmoney);     
-		   }
-	   }
-
-	var haveRebatePhones = dataServer.haveRebatePhones;
-	var haveRebateCous = dataServer.haveRebateCous;
-	   var haverebate="";
-	   if(haveRebatePhones==null||haveRebatePhones.length==0){
-		   haverebate = "<tr>没有符合条件的数据</tr>"
-	   }else{
-		   for(var i=0;i<haveRebatePhones.length;i++){
-			   haverebate= "<tr>"
-	                   +"<td>"+haveRebatePhones[i]+"</td>"
-	                   +"<td>"+haveRebateCous[i]+"</td>";
-	                   
-	                   switch(i)
-	                   {
-	                   case 0:
-	                	   haverebate += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 1:
-	                	   haverebate += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 2:
-	                	   haverebate += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 3:
-	                	   haverebate += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 4:
-	                	   haverebate += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
-	                     break;
-	                   default:
-	                	   haverebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
-	                   }
-	                   haverebate += "</tr>";
-	              $("#have_rebate").append(haverebate);     
-		   }
-	   }
-
-	var usedRebatePhones = dataServer.usedRebatePhones;
-	var usedRebateCous = dataServer.usedRebateCous;
-	   var usedrebate="";
-	   if(usedRebatePhones==null||usedRebatePhones.length==0){
-		   usedrebate = "<tr>没有符合条件的数据</tr>"
-	   }else{
-		   for(var i=0;i<usedRebatePhones.length;i++){
-			   usedrebate= "<tr>"
-	                   +"<td>"+usedRebatePhones[i]+"</td>"
-	                   +"<td>"+usedRebateCous[i]+"</td>";
-	                   
-	                   switch(i)
-	                   {
-	                   case 0:
-	                	   usedrebate += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 1:
-	                	   usedrebate += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 2:
-	                	   usedrebate += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 3:
-	                	   usedrebate += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 4:
-	                	   usedrebate += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
-	                     break;
-	                   default:
-	                	   usedrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
-	                   }
-	                   usedrebate += "</tr>";
-	              $("#used_rebate").append(usedrebate);     
-		   }
-	   }
-
-	var rebatePhones = dataServer.rebatePhones;
-	var rebateCous = dataServer.rebateCous;
-	   var sumrebate="";
-	   if(rebatePhones==null||rebatePhones.length==0){
-		   sumrebate = "<tr>没有符合条件的数据</tr>"
-	   }else{
-		   for(var i=0;i<rebatePhones.length;i++){
-			   sumrebate= "<tr>"
-	                   +"<td>"+rebatePhones[i]+"</td>"
-	                   +"<td>"+rebateCous[i]+"</td>";
-	                   
-	                   switch(i)
-	                   {
-	                   case 0:
-	                	   sumrebate += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 1:
-	                	   sumrebate += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 2:
-	                	   sumrebate += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 3:
-	                	   sumrebate += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 4:
-	                	   sumrebate += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
-	                     break;
-	                   default:
-	                	   sumrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
-	                   }
-	                   sumrebate += "</tr>";
-	   				   $("#sum_rebate").append(sumrebate);     
-		   }
-	   }
-	   
-	  var myChart10 = echarts.init(document.getElementById('main10'));
-	  
-	  	option10 = {
-			    tooltip: {
-			      trigger: 'item',
-			      formatter: '{b}: {c} ({d}%)'
-			    },
-			    backgroundColor:'#ffffff',
-			    title: [{
-				      text: '累计省钱：'+eMoney(parseInt(dataServer.sumall==null?'0':dataServer.sumall)),
-				      left: '5%',
-				      top: '2%',
-				      textAlign: 'left',
-				      textBaseline: 'middle',
-				      textStyle: {
-				        color: '#666',
-				        fontWeight: 'normal',
-				        fontSize: 16
-				      }
-				}],
-			    series: [{
-			      hoverAnimation: false, //设置饼图默认的展开样式
-			      radius: ['20%', '80%'],
-			      name: 'pie',
-			      radius: '80%',
-			      type: 'pie',
-			      selectedMode: 'single',
-			      selectedOffset: 16, //选中是扇区偏移量
-			      clockwise: true,
-			      startAngle: 90,
-			      label: {
-			        normal: {
-			          show: true,
-			          position: 'inside', //标签的位置
-			          formatter: '{b}\n{d}%'
-			        }
-			      },
-			      labelLine: {
-			        normal: {
-			          show: false
-			        }
-			      },
-			      itemStyle: {
-			        normal: {
-			          borderWidth: 3,
-			          borderColor: '#ffffff',
-			        },
-			        emphasis: {
-			          borderWidth: 0,
-			          shadowBlur: 5,
-			          shadowOffsetX: 0,
-			          shadowColor: 'rgba(0, 0, 0, 0.2)'
-			        }
-			      },
-		      	data: [{
-			        value: rebateMoney(parseInt(dataServer.subprice==null?'0':dataServer.subprice)),
-			        name: '商品差价'
-			      }, {
-			        value: rebateMoney(parseInt(dataServer.usedrebate==null?'0':dataServer.usedrebate)),
-			        name: '粮票抵扣'
-			      }]
-			    }],
-			    color: ['#f36f8a', '#5f71d2']
-			  };
-		myChart10.setOption(option10);
-	  var myChart11 = echarts.init(document.getElementById('main11'));
-	  
-	  	option11 = {
-			    tooltip: {
-			      trigger: 'item',
-			      formatter: '{b}: {c} ({d}%)'
-			    },
-			    backgroundColor:'#ffffff',
-			    title: [{
-				      text: '累计粮票：'+eMoney(parseInt(dataServer.sumreall==null?'0':dataServer.sumreall)),
-				      left: '5%',
-				      top: '2%',
-				      textAlign: 'left',
-				      textBaseline: 'middle',
-				      textStyle: {
-				        color: '#666',
-				        fontWeight: 'normal',
-				        fontSize: 16
-				      }
-				}],
-			    series: [{
-			      hoverAnimation: false, //设置饼图默认的展开样式
-			      radius: ['20%', '80%'],
-			      name: 'pie',
-			      radius: '80%',
-			      type: 'pie',
-			      selectedMode: 'single',
-			      selectedOffset: 16, //选中是扇区偏移量
-			      clockwise: true,
-			      startAngle: 90,
-			      label: {
-			        normal: {
-			          show: true,
-			          position: 'inside', //标签的位置
-			          formatter: '{b}\n{d}%'
-			        }
-			      },
-			      labelLine: {
-			        normal: {
-			          show: false
-			        }
-			      },
-			      itemStyle: {
-			        normal: {
-			          borderWidth: 3,
-			          borderColor: '#ffffff',
-			        },
-			        emphasis: {
-			          borderWidth: 0,
-			          shadowBlur: 5,
-			          shadowOffsetX: 0,
-			          shadowColor: 'rgba(0, 0, 0, 0.2)'
-			        }
-			      },
-		      	data: [{
-			        value: rebateMoney(parseInt(dataServer.sumhavere==null?'0':dataServer.sumhavere)),
-			        name: '剩余粮票'
-			      }, {
-			        value: rebateMoney(parseInt(dataServer.sumused==null?'0':dataServer.sumused)),
-			        name: '已用粮票'
-			      }]
-			    }]
-			  };
-		myChart11.setOption(option11);
-	
-};
 
 var showDeal = function (dataServer){
 	var myChart12= echarts.init(document.getElementById('main12'));
@@ -1880,11 +1169,6 @@ var showDeal = function (dataServer){
 		    legend: {
 		        data:['成交额']
 		    },
-		    grid: {
-			      left: '10%',
-			      right: '10%',
-			      containLabel: true
-			},
 		    toolbox: {
 		        show : false,
 		        feature : {
@@ -1899,7 +1183,7 @@ var showDeal = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -1957,11 +1241,6 @@ var showDeal = function (dataServer){
 		    legend: {
 		        data:['订单量']
 		    },
-		    grid: {
-			      left: '10%',
-			      right: '10%',
-			      containLabel: true
-			},
 		    toolbox: {
 		        show : false,
 		        feature : {
@@ -1976,7 +1255,7 @@ var showDeal = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -2079,218 +1358,6 @@ function ForDight(str,How){
     Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
     return Dight;  
  }
- 
-var showEshopMemCount = function (dataServer){
-	var myChart14= echarts.init(document.getElementById('main14'));
-	option14 = {
-		    tooltip : {
-		        show: true,
-		        trigger: 'axis'
-		    },
-		    legend: {
-		        data:['成交订单量','取消订单量']
-		    },
-		    toolbox: {
-		        show : false,
-		        feature : {
-		            mark : {show: true},
-		            dataView : {show: true, readOnly: false},
-		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-		            restore : {show: true},
-		            saveAsImage : {show: true}
-		        }
-		    },
-		    calculable : true,
-		    xAxis : [
-		        {
-		            type : 'category',
-		            data: dataServer.jsonDateX
-		        }
-		    ],
-		    yAxis : [
-		    	{
-		    	  type: 'value',
-			      name: '订单量',
-		        axisLabel: {
-		          textStyle:{color:'#404a59'}
-		        }
-		     }
-		    ],
-		    series : [
-		        {
-		            name:'成交订单量',
-		            type:'line',
-		            barWidth: 40,                   // 系列级个性化，柱形宽度
-		            itemStyle: {
-		                normal: {                   // 系列级个性化，横向渐变填充
-		                    borderRadius: 5,
-		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-		        	            offset: 0,
-		        	            color: '#ffae00'
-		        	          }, {
-		        	            offset: 1,
-		        	            color: '#7777eb'
-		        	          }]),
-		                    label : {
-		                        show : false,
-		                        textStyle : {
-		                            fontSize : '14',
-		                            fontFamily : '微软雅黑',
-		                            fontWeight : 'bold',
-		                            color:'#ffae00',
-		                        }
-		                    }
-		                }
-		            },
-		            data:dataServer.jsonDayMemCounts,
-		            markLine : {
-		                data : [
-		                    {type : 'max',name:'最大值'},
-		                    {type : 'min',name:'最小值'}
-		                ]
-		            }
-		        }
-		        , {
-		            name:'取消订单量',
-		            type:'line',
-		            barWidth: 40,                   // 系列级个性化，柱形宽度
-		            itemStyle: {
-		                normal: {                   // 系列级个性化，横向渐变填充
-		                    borderRadius: 5,
-		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-		        	            offset: 0,
-		        	            color: '#00ffae'
-		        	          }, {
-		        	            offset: 1,
-		        	            color: '#eb7777'
-		        	          }]),
-		                    label : {
-		                        show : false,
-		                        textStyle : {
-		                            fontSize : '14',
-		                            fontFamily : '微软雅黑',
-		                            fontWeight : 'bold',
-		                            color:'#ffae00',
-		                        }
-		                    }
-		                }
-		            },
-		            data:['15','35','5','44','3','45','33'],
-		            markLine : {
-		                data : [
-		                    {type : 'max',name:'最大值'},
-		                    {type : 'min',name:'最小值'}
-		                ]
-		            }
-		        }
-		    ]
-		};
-	myChart14.setOption(option14);
-	var myChart15= echarts.init(document.getElementById('main15'));
-	option15 = {
-		    tooltip : {
-		        show: true,
-		        trigger: 'axis'
-		    },
-		    legend: {
-		        data:['成交订单量','取消订单量']
-		    },
-		    toolbox: {
-		        show : false,
-		        feature : {
-		            mark : {show: true},
-		            dataView : {show: true, readOnly: false},
-		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-		            restore : {show: true},
-		            saveAsImage : {show: true}
-		        }
-		    },
-		    calculable : true,
-		    xAxis : [
-		        {
-		            type : 'category',
-		            data: dataServer.jsonDateX
-		        }
-		    ],
-		    yAxis : [
-		    	{
-			    	  type: 'value',
-				      name: '订单量',
-			        axisLabel: {
-			          textStyle:{color:'#404a59'}
-			        }
-				}
-		    ],
-		    series : [
-		        {
-		            name:'成交订单量',
-		            type:'line',
-		            barWidth: 40,                   // 系列级个性化，柱形宽度
-		            itemStyle: {
-		                normal: {                   // 系列级个性化，横向渐变填充
-		                    borderRadius: 5,
-		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-		        	            offset: 0,
-		        	            color: 'rgba(30,144,255,0.8)'
-		        	          }, {
-		        	            offset: 1,
-		        	            color: 'rgba(138,43,226,0.8)'
-		        	          }]),
-		                    label : {
-		                        show : false,
-		                        textStyle : {
-		                            fontSize : '14',
-		                            fontFamily : '微软雅黑',
-		                            fontWeight : 'bold'
-		                        }
-		                    }
-		                }
-		            },
-		            data:dataServer.jsonDayNoMemCounts,
-		            markLine : {
-		                data : [
-		                    {type : 'max',name:'最大值'},
-		                    {type : 'min',name:'最小值'}
-		                ]
-		            }
-		        }
-		        , {
-		            name:'取消订单量',
-		            type:'bar',
-		            barWidth: 40,                   // 系列级个性化，柱形宽度
-		            itemStyle: {
-		                normal: {                   // 系列级个性化，横向渐变填充
-		                    borderRadius: 5,
-		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-		        	            offset: 0,
-		        	            color: '#00ffae'
-		        	          }, {
-		        	            offset: 1,
-		        	            color: '#eb7777'
-		        	          }]),
-		                    label : {
-		                        show : false,
-		                        textStyle : {
-		                            fontSize : '14',
-		                            fontFamily : '微软雅黑',
-		                            fontWeight : 'bold',
-		                            color:'#ffae00',
-		                        }
-		                    }
-		                }
-		            },
-		            data:dataServer.jsonQuitCounts,
-		            markLine : {
-		                data : [
-		                    {type : 'max',name:'最大值'},
-		                    {type : 'min',name:'最小值'}
-		                ]
-		            }
-		        }
-		    ]
-		};
-	myChart15.setOption(option15);
-}
 var showEshopCount = function (dataServer){
 	var myChart18= echarts.init(document.getElementById('main18'));
 	option18 = {
@@ -2315,7 +1382,7 @@ var showEshopCount = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -2419,7 +1486,7 @@ var showEshopCount = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -2493,7 +1560,7 @@ var showEshopMemSum = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -2542,366 +1609,6 @@ var showEshopMemSum = function (dataServer){
 		    ]
 		};
 	myChart16.setOption(option16);
-	var myChart17= echarts.init(document.getElementById('main17'));
-	option17 = {
-		    tooltip : {
-		        show: true,
-		        trigger: 'axis'
-		    },
-		    legend: {
-		        data:['成交额']
-		    },
-		    toolbox: {
-		        show : false,
-		        feature : {
-		            mark : {show: true},
-		            dataView : {show: true, readOnly: false},
-		            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-		            restore : {show: true},
-		            saveAsImage : {show: true}
-		        }
-		    },
-		    calculable : true,
-		    xAxis : [
-		        {
-		            type : 'category',
-		            data: dataServer.jsonCityShopNames,
-		            axisLabel: {  
-                        interval: 0,  
-                        formatter:function(value)  
-                        {  
-                            return value.split("").join("\n");  
-                        }  
-                    } 
-		        }
-		    ],
-		    yAxis : [
-		    {
-		    	  type: 'value',
-			      name: '成交额',
-		        axisLabel: {
-		          textStyle:{color:'#404a59'}
-		        }
-		     }
-		    ],
-		    series : [
-		        {
-		            name:'成交额',
-		            type:'bar',
-		            barWidth: 40,                   // 系列级个性化，柱形宽度
-		            itemStyle: {
-		                normal: {                   // 系列级个性化，横向渐变填充
-		                    borderRadius: 5,
-		                    color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-		        	            offset: 0,
-		        	            color: '#B5C334'
-		        	          }, {
-		        	            offset: 1,
-		        	            color: '#27727B'
-		        	          }]),
-		                    label : {
-		                        show : false,
-	                            position: 'top',
-		                        textStyle : {
-		                            fontSize : '14',
-		                            fontFamily : '微软雅黑',
-		                            color:'#ffae00',
-		                        }
-		                    }
-		                }
-		            },
-		            data:dataServer.jsonCityShopSums,
-		            markLine : {
-		                data : [
-		                    {type : 'max',name:'最大值'},
-		                    {type : 'min',name:'最小值'}
-		                ]
-		            }
-		        }
-		    ]
-		};
-	myChart17.setOption(option17);
-}
-var showTimeOrder = function(dataServer){
-	
-	var myChart20= echarts.init(document.getElementById('main20'));
-
-
-	var data0 = dataServer.jsonSelHours;
-
-
-	function splitData(rawData) {
-	    var categoryData = [];
-	    var values = []
-	    for (var i = 0; i < rawData.length; i++) {
-	        categoryData.push(rawData[i].splice(0, 1)[0]);
-	        values.push(rawData[i])
-	    }
-	    return {
-	        categoryData: categoryData,
-	        values: values
-	    };
-	}
-
-	function calculateMA(dayCount) {
-	    var result = [];
-	    for (var i = 0, len = data0.values.length; i < len; i++) {
-	        if (i < dayCount) {
-	            result.push('-');
-	            continue;
-	        }
-	        var sum = 0;
-	        for (var j = 0; j < dayCount; j++) {
-	            sum += data0.values[i - j][1];
-	        }
-	        result.push(sum / dayCount);
-	    }
-	    return result;
-	}
-
-
-
-	option20 = {
-	    tooltip: {
-	        trigger: 'axis',
-	        axisPointer: {
-	            type: 'cross'
-	        }
-	    },
-	    legend: {
-	        data: ['订单量']
-	    },
-	    grid: {
-	        left: '10%',
-	        right: '10%',
-	        bottom: '25%'
-	    },
-	    xAxis: {
-	        type: 'category',
-	        data: data0,
-	        scale: true,
-	        boundaryGap : false,
-	        axisLine: {onZero: false},
-	        splitLine: {show: false},
-	        axisLabel :{  
-	            interval:0   
-	        },
-	        splitNumber: 20,
-	        min: 'dataMin',
-	        max: 'dataMax'
-	    },
-	    yAxis: {
-	        scale: true,
-	        splitArea: {
-	            show: true
-	        }
-	    },
-	    dataZoom: [
-	        {
-	            type: 'inside',
-	            start:0,
-	            end: 100
-	        },
-	        {
-	            show: true,
-	            type: 'slider',
-	            y: '90%',
-	            start: 0,
-	            end: 100
-	        }
-	    ],
-	    series: [
-	        {
-	            name: '订单量',
-	            type: 'line',
-	            data: dataServer.jsonHourCounts,
-	            markPoint: {
-	                data: [
-	                    {type: 'max', name: '最大值'},
-	                    {type: 'min', name: '最小值'}
-	                ]
-	            }
-	        }
-	    ]
-	};
-	myChart20.setOption(option20);
-	
-	var myChart21= echarts.init(document.getElementById('main21'));
-	
-	
-	  //订单配送时效分布
-  	  var datatimes = [{
-		            	    value: dataServer.jsonSelCount[7],
-		            	    name: "大于1天"
-		            	}, {
-			            	    value: dataServer.jsonSelCount[6],
-			            	    name: "12-24小时"
-			            }, {
-		            	    value: dataServer.jsonSelCount[5],
-		            	    name: "4-12小时"
-		            	}, {
-		            	    value: dataServer.jsonSelCount[4],
-		            	    name: "2-4小时"
-		            	}, {
-		            	    value: dataServer.jsonSelCount[3],
-		            	    name: '1-2小时'
-		            	},{
-		            		value: dataServer.jsonSelCount[2],
-		            		name: '0.5-1小时'
-		              	},{
-		            		value: dataServer.jsonSelCount[1],
-		            		name: '半小时内'
-		            	},{
-		            	    value: dataServer.jsonSelCount[0],
-		            	    name: '提前送达'
-		            	}
-		            ];
-	  if(dataServer.jsonSelCount[0]==0){
-		  datatimes = [
-          	{
-          		value: dataServer.jsonSelCount[1],
-          		name: '半小时内'
-          	  },{
-	            		value: dataServer.jsonSelCount[2],
-	            		name: '0.5-1小时'
-	              }, {
-          	    value: dataServer.jsonSelCount[3],
-          	    name: '1-2小时'
-          	  }, {
-          	    value: dataServer.jsonSelCount[4],
-          	    name: "2-4小时"
-          	  }, {
-          	    value: dataServer.jsonSelCount[5],
-          	    name: "4-12小时"
-          	  }, {
-          	    value: dataServer.jsonSelCount[6],
-          	    name: "12-24小时"
-          	  }, {
-          	    value: dataServer.jsonSelCount[7],
-          	    name: "大于1天"
-          	  }
-          ]; 
-	  }
-
-	  option21 = {
-			    tooltip: {
-				      trigger: 'item',
-				      formatter: '{a}<br/>{b}: {c} ({d}%)'
-				},
-			    calculable : true,
-			    series : [
-			    	{
-			            name:'配送时效',
-			            type:'pie',
-			            radius : [30, 110],
-			            center : ['50%', '50%'],
-			           // roseType : 'radius',
-			            width: '40%',       // for funnel
-			            max: 40,            // for funnel
-			            itemStyle : {
-			                normal : {
-			                    label : {
-			                        show : true
-			                    },
-			                    labelLine : {
-			                        show : true
-			                    }
-			                },
-			                emphasis : {
-			                    label : {
-			                        show : true
-			                    },
-			                    labelLine : {
-			                        show : true
-			                    }
-			                }
-			            },
-			            data:datatimes
-			  	      ,label: {
-					        normal: {
-					          position: 'out', //标签的位置
-					          formatter: '{b}\n{d}%',
-					          color: '#59ADF3'
-
-					        }
-					   }
-			        }
-			    ]
-			};
-	  
-	  myChart21.setOption(option21);
-}
-
-var showOrderType = function(dataServer){
-	var myChart22= echarts.init(document.getElementById('main22'));
-	debugger;
-	  option22 = {
-			    tooltip: {
-				      trigger: 'item',
-				      formatter: '{a}<br/>{b}: {c} ({d}%)'
-				},
-			    calculable : true,
-			    series : [
-			    	{
-			            name:'7大场景订单分布',
-			            type:'pie',
-			            radius : [30, 110],
-			            center : ['50%', '50%'],
-			           // roseType : 'radius',
-			            width: '40%',       // for funnel
-			            max: 40,            // for funnel
-			            itemStyle : {
-			                normal : {
-			                    label : {
-			                        show : true
-			                    },
-			                    labelLine : {
-			                        show : true
-			                    }
-			                },
-			                emphasis : {
-			                    label : {
-			                        show : true
-			                    },
-			                    labelLine : {
-			                        show : true
-			                    }
-			                }
-			            }
-			  	      ,label: {
-					        normal: {
-					          position: 'out', //标签的位置
-					          formatter: '{b}\n{d}%',
-					          color: '#59ADF3'
-
-					        }
-					   }
-			        }
-			    ]
-			};
-	var typeData = '[';
-	var ordTypeName = dataServer.jsonOrderTypeNames;
-	var ordTypeSum = dataServer.jsonOrderTypeSums;
-	var  len = ordTypeName.length;
-	for(var i=0;i<len;i++){
-		
-		if(len>0){
-			if((len-1)==i){
-				typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
-			}else{
-				typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"},';
-			}
-			
-		}else{
-			typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
-		}
-	}	
-	typeData+="]";
-	var cityUserDataObject = JSON.parse(typeData);
-	option22.series[0].data = cityUserDataObject;
-
-	  
-	  myChart22.setOption(option22);
 }
  
 //设置加载中图标

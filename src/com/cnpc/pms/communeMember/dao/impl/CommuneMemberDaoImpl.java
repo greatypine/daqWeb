@@ -74,6 +74,9 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 				"COUNT(case when duuf.sex = '男' then sex end  ) as mCount," + 
 				"COUNT(case when duuf.sex = '女' then sex end  ) as fCount" + 
 				" from df_user_member duuf";
+		if(!"0000".equals(dd)) {
+			mfSql = mfSql+" where duuf.regist_cityno='"+dd+"'";
+		}
 			//查询新注册社员sql
 			List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 			try{
@@ -120,6 +123,9 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 				"COUNT(case when birthday>'19891231' and birthday<'20000101' then 1 else null end) as age00, " + 
 				"COUNT(case when birthday>'19991231'  then 1 else null end) as ageNow " + 
 				" from df_user_member duuf";
+		if(!"0000".equals(dd)) {
+			ageSql = ageSql+" where duuf.regist_cityno='"+dd+"'";
+		}
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -161,7 +167,11 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		//查询社员增长sql
-				String birSql = "select t.monthNo as memMonth,count(1) as birCount from(select month(duuf.birthday) as monthNo,year(duuf.birthday) as myYear from df_user_member duuf where duuf.birthday is not null) as t  group by t.monthNo";
+				String birSql = "select t.monthNo as memMonth,count(1) as birCount from(select month(duuf.birthday) as monthNo,year(duuf.birthday) as myYear from df_user_member duuf where duuf.birthday is not null ";
+				if(!"0000".equals(dd)) {
+					birSql = birSql+" and duuf.regist_cityno='"+dd+"'";
+				}
+				birSql = birSql+"  ) as t group by t.monthNo";
 				List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 				
 					Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(birSql);
@@ -185,7 +195,11 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		//查询社员增长sql
-		String sql = "select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) group by DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\")  order by dum.opencard_time";
+		String sql = "select count(*) as allcount,DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\") as crtime from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum.opencard_time) and CURDATE()> date(dum.opencard_time) ";
+		if(!"0000".equals(dd)) {
+			sql = sql+" and dum.regist_cityno='"+dd+"'";
+		}
+		sql = sql+" group by DATE_FORMAT(dum.opencard_time,\"%Y-%m-%d\")  order by dum.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		
 		try{
@@ -225,9 +239,12 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 * 2018年5月18日
 		 */
 		
-		
 		//查询新注册社员sql
-		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.opencard_time) group by DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") order by dum2.opencard_time";
+		String sql = "select count(*) as newcount,DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") as crtime   from df_user_member dum2 where dum2.isnew_member=1 and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dum2.opencard_time) ";
+		if(!"0000".equals(dd)) {
+			sql = sql+" and dum2.regist_cityno='"+dd+"'";
+		}
+		sql = sql +" group by DATE_FORMAT(dum2.opencard_time,\"%Y-%m-%d\") order by dum2.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -265,7 +282,11 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 		 */
 		
 		//查询老用户转社员sql
-		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and '2018-04-29' <= date(dum1.opencard_time) group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
+		String sql = "select count(*) as oldcount,DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") as crtime  from  df_user_member dum1 where dum1.isnew_member=0 or dum.isnew_member is null and '2018-04-29' <= date(dum1.opencard_time) ";
+		if(!"0000".equals(dd)) {
+			sql = sql+" and dum1.regist_cityno='"+dd+"'";
+		}
+		sql = sql +" group by DATE_FORMAT(dum1.opencard_time,\"%Y-%m-%d\") order by dum1.opencard_time";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
@@ -514,10 +535,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	 * 2018年5月22日
 	 */
 	
-	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode group by dum.born_province";
+	String birSql = "select dii.placename as mePro, count(*) as meCount from df_user_member dum,ds_idcard_item dii  where dum.born_province is not null and dum.born_province=dii.placecode ";
 	if(!"0000".equals(dd)) {
 		birSql = birSql+ " and dum.regist_cityno='"+dd+"'";
 	}
+	birSql = birSql+" group by dum.born_province";
 	List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(birSql);
@@ -615,7 +637,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年5月28日
 		 */
-		String sql = "select member_count cou,member_name pname,sell_duration selldur from ds_member_statistics where  member_type='3' order by CAST(member_count as SIGNED) desc limit 10";
+		String sql = "select member_count cou,member_name pname,sell_duration selldur from ds_member_statistics where  member_type='3'";
+		if(!"0000".equals(string)) {
+			sql = sql+ " and remark='"+string+"'";
+		}
+		sql = sql+" order by CAST(member_count as SIGNED) desc limit 10";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -750,7 +776,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		
 		String daySumSql = "select ifnull(sum(dmod.trading_price),0) dealsum,count(1) cou from df_mass_order_daily dmod,df_user_member dum,ds_member_eshop dme where CURDATE()=date(dmod.sign_time) and dmod.customer_id=dum.customer_id and dmod.eshop_id=dme.eshop_id";
 		
-		if("0000".equals(string)) {
+		if(!"0000".equals(string)) {
 			daySumSql = daySumSql+" and dmod.city_code='"+string+"'";
 		}
 		try{
@@ -790,7 +816,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin 2018年6月11日
 		 */
 		String daySumSql = "select count(1) as cou from df_user_member dum where CURDATE() = date(dum.opencard_time)";
-		if("0000".equals(string)) {
+		if(!"0000".equals(string)) {
 			daySumSql = daySumSql+ " dum.regist_cityno='"+string+"'";
 		}
 		try {
@@ -1103,7 +1129,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月13日
 		 */
-		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where date(dmod.sign_time)>=DATE_SUB(curdate(),INTERVAL 7 DAY) and date(dmod.sign_time)<curdate() and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
+		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where dmod.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.sign_time<curdate() and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
 			try{
 				Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 				List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1120,7 +1146,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月20日
 		 */
-		String daySumSql = "select date_format(dmom.sign_time, '%H时') seltime, count(1) prisum from df_mass_order_total dmom where dmom.sign_time > '2018-05-17 23:59:59' and dmom.order_tag1 like '%E%' group by date_format(dmom.sign_time, '%H') order by date_format(dmom.sign_time, '%H') ";
+		String daySumSql = "select  seltime, sum(prisum) cou from ds_member_ordercount dmoc ";
+		if(!"0000".equals(string)) {
+			daySumSql = daySumSql+" where dmoc.city_code='"+string+"'";
+		}
+		daySumSql = daySumSql+" group by seltime order by seltime";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

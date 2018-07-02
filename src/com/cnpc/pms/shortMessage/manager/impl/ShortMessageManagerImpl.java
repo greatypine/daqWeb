@@ -87,8 +87,8 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 			
 			
 			list = shortMessageDao.selectSMSUserGroupUser(shortMessage.getUserGroupCode());
-			//Thread thread = new Thread(new SendShortMessageTask(list, shortMessage));
-			//thread.start();
+			Thread thread = new Thread(new SendShortMessageTask(list, shortMessage));
+			thread.start();
 //			StringBuilder[] mobilePhoneArr = new StringBuilder[list.size()/50+1];
 //			for(int i=0;i<mobilePhoneArr.length;i++){//50个号码一组
 //				int begin_index = i*50;
