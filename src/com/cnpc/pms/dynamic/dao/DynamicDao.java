@@ -892,5 +892,44 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public List<Map<String,Object>> getsixMonthAllCustomer();
-	
+
+	/**
+	 * 查询国安侠负责片区的交易各个频道占比
+	 * @author gbl
+	 * @param beginDate
+	 * @param endDate
+	 * @param areaCode
+	 * @return
+	 */
+	public List<Map<String,Object>> selectAreaDealOfEmployeeByChannel(String beginDate,String endDate,String areaCode);
+
+	/**
+	 * 查询国安侠负责片区的交易客户消费次数
+	 * @author gbl
+	 * @param beginDate
+	 * @param endDate
+	 * @param areaCode
+	 * @return
+	 */
+	public List<Map<String,Object>> selectAreaDealOfEmployeeByConsum(String beginDate,String endDate,String areaCode);
+
+	/**
+	 * 查询国安侠的GMV
+	 * @author gbl
+	 * @param year
+	 * @param month
+	 * @param employeeNo
+	 * @return
+	 */
+	public List<Map<String,Object>> selectGMVOfEmployee(Integer year,Integer month,String employeeNo);
+
+
+
+	/**
+	 * @Description 查询国安侠用户
+	 * @author gbl
+	 * @date 2018/7/3 10:16
+	 **/
+
+	public List<Map<String,Object>> selectCustomerOfEmployee(Integer year,Integer month,String employeeNo);
 }

@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.cnpc.pms.base.paging.IFilter;
+import com.cnpc.pms.personal.entity.*;
+import com.cnpc.pms.personal.manager.*;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -56,13 +59,6 @@ import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.inter.dao.InterDao;
 import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.StoreDao;
-import com.cnpc.pms.personal.entity.DistCity;
-import com.cnpc.pms.personal.entity.DsAbnormalOrder;
-import com.cnpc.pms.personal.entity.Store;
-import com.cnpc.pms.personal.entity.SyncDataLog;
-import com.cnpc.pms.personal.manager.DsAbnormalOrderManager;
-import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.personal.manager.SyncDataLogManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.slice.dao.AreaDao;
 import com.cnpc.pms.utils.Base64Encoder;
@@ -4178,9 +4174,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				JSONObject jo = new JSONObject();
 				Map<String,Object> dynamic = (Map<String,Object>)dynamicList.get(i);
 				for (int j = 0; j < dynamicAllList.size(); j++) {
-					if("product_id".equals(keyName)){
+					if("product_name".equals(keyName)){
 						if(dynamic.get(keyName).toString().equals(dynamicAllList.get(j).get(keyName).toString())
-								&&dynamic.get("cityno").toString().equals(dynamicAllList.get(j).get("cityno").toString())){
+								&&dynamic.get("city_name").toString().equals(dynamicAllList.get(j).get("city_name").toString())){
 							dynamic.put("rank", j+1);;
 						}
 					}else{
@@ -5301,10 +5297,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else if(target==4){
 				dynamicList = dynamicDao.queryProductCityOrder(dynamicDto,null);
 				dynamicAllList = dynamicDao.queryProductCityOrder(dynamicDto2,null);
-				list = this.getRankList(dynamicList, dynamicAllList,"product_id",dynamicDto,"5");
-				tableName = "商品(本月销售量)排名";
+				list = this.getRankList(dynamicList, dynamicAllList,"product_name",dynamicDto,"5");
+				tableName = "商品(本月GMV)排名";
 				str_headers[2]="商品名称";
-				str_headers[3]="销售量(个)";
+				str_headers[3]="GMV(元)";
 				headers_key[1]="rank";
 				headers_key[2]="product_name";
 				headers_key[3]="product_count";
@@ -6908,5 +6904,121 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		getsixMonthCustomer.addAll(getsixMonthAllCustomer);
 		result.put("sixMonthCustomer",getsixMonthCustomer);
 		return result;
+	}
+
+	private static int getMonthDiff(Date d1, Date d2) {
+		Calendar c1 = Calendar.getInstance();
+		Calendar c2 = Calendar.getInstance();
+		c1.setTime(d1);
+		c2.setTime(d2);
+		if(c1.getTimeInMillis() < c2.getTimeInMillis()) return 0;
+		int year1 = c1.get(Calendar.YEAR);
+		int year2 = c2.get(Calendar.YEAR);
+		int month1 = c1.get(Calendar.MONTH);
+		int month2 = c2.get(Calendar.MONTH);
+		int day1 = c1.get(Calendar.DAY_OF_MONTH);
+		int day2 = c2.get(Calendar.DAY_OF_MONTH);
+		// 获取年的差值 假设 d1 = 2015-8-16  d2 = 2011-9-30
+		int yearInterval = year1 - year2;
+		// 如果 d1的 月-日 小于 d2的 月-日 那么 yearInterval-- 这样就得到了相差的年数
+		if(month1 < month2 || month1 == month2 && day1 < day2) yearInterval --;
+		// 获取月数差值
+		int monthInterval =  (month1 + 12) - month2  ;
+		if(day1 < day2) monthInterval --;
+		monthInterval %= 12;
+		return yearInterval * 12 + monthInterval;
+	}
+
+
+
+
+	@Override
+	public Map<String, Object> getEmployeeInfo(String employeeNo) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			HumanresourcesManager hManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
+			OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+			CustomerManager customerManager = (CustomerManager) SpringHelper.getBean("customerManager");
+			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+			/* 获取国安侠基本信息*/
+			IFilter iFilter =FilterFactory.getSimpleFilter("employee_no='"+employeeNo+"' AND humanstatus=1 ");
+			List<Humanresources> lst_humanList = (List<Humanresources>)hManager.getList(iFilter);
+			Humanresources humanresources = new Humanresources();
+			int month = 0;
+			if(lst_humanList!=null&&lst_humanList.size()>0){
+				humanresources = lst_humanList.get(0);
+				//计算工作时间
+				if(humanresources.getTopostdate()!=null&&humanresources.getTopostdate().length()>0){
+					String topost = humanresources.getTopostdate();
+					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+					try {
+						month = getMonthDiff(new Date(), sdf.parse(topost));
+					} catch (ParseException e) {
+						try {
+							month = getMonthDiff(new Date(), df.parse(topost));
+						} catch (ParseException e1) {
+							month = 999;
+						}
+
+					}
+				}
+			}
+			if(month==999){
+				humanresources.setRemark("暂无");
+			}else{
+				int ret = month/12;
+				if(ret==0){
+					humanresources.setRemark("一年以下");
+				}else{
+					humanresources.setRemark(ret+"年以上");
+				}
+			}
+
+			/* 获取国安侠GMV*/
+			Calendar c = Calendar.getInstance();
+			Integer cur_year = c.get(Calendar.YEAR);
+			Integer cur_month=c.get(Calendar.MONTH)+1;
+			List<Map<String,Object>> gmvList = dynamicDao.selectGMVOfEmployee(cur_year,cur_month,employeeNo);
+			List<Map<String,Object>> customerList = dynamicDao.selectCustomerOfEmployee(cur_year,cur_month,employeeNo);
+			map.put("human", humanresources);
+			map.put("gmv",gmvList);
+			map.put("customer",customerList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return map;
+	}
+
+	@Override
+	public List<Map<String, Object>> getOrderPercentageOfChannel(String areaCode) {
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		try {
+
+			list = dynamicDao.selectAreaDealOfEmployeeByChannel(null,null,areaCode);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return list;
+		}
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> getConsumTimeOfCustomer(String areaCode) {
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		try {
+
+			list = dynamicDao.selectAreaDealOfEmployeeByConsum(null,null,areaCode);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return list;
+		}
+		return list;
 	}
 }
