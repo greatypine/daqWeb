@@ -4557,28 +4557,36 @@ var initClick = function(){
     	var type=encode64("city_gmv");
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
+    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
+    	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+        var url = "headquarters_details.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+pageStatusInfo.targets+"&pn="+provinceName+"&cn="+cityName;
         window.open(url);
     });
     $("#store_gmv_more").on('click',function(){
     	var type=encode64("store_gmv");
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
+    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
+    	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+        var url = "headquarters_details.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+pageStatusInfo.targets+"&pn="+provinceName+"&cn="+cityName;
         window.open(url);
     });
     $("#store_order_more").on('click',function(){
     	var type=encode64("store_order");
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
+    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
+    	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+        var url = "headquarters_details.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+pageStatusInfo.targets+"&pn="+provinceName+"&cn="+cityName;
         window.open(url);
     });
     $("#guoanxia_gmv_more").on('click',function(){
     	var type=encode64("guoanxia_gmv");
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
+    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
+    	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+        var url = "headquarters_details.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+pageStatusInfo.targets+"&pn="+provinceName+"&cn="+cityName;
         window.open(url);
     });
     $("#commodity_gmv_more").on('click',function(){
@@ -4587,28 +4595,34 @@ var initClick = function(){
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?p="+provinceId+"&pn="+provinceName+"&c="+cityId+"&cn="+cityName+"&tps="+type+"&targets="+pageStatusInfo.targets;
+        var url = "headquarters_details.html?p="+provinceId+"&pn="+provinceName+"&cs="+cityId+"&cn="+cityName+"&tps="+type+"&targets="+pageStatusInfo.targets;
         window.open(url);
     });
     $("#businessDep_gmv_more").on('click',function(){
     	var type=encode64("businessDep_gmv");
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
+    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
+    	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+        var url = "headquarters_details.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+pageStatusInfo.targets+"&pn="+provinceName+"&cn="+cityName;
         window.open(url);
     });
     $("#channel_gmv_more").on('click',function(){
     	var type=encode64("channel_gmv");
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
+    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
+    	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+        var url = "headquarters_details.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+pageStatusInfo.targets+"&pn="+provinceName+"&cn="+cityName;
         window.open(url);
     });
     $("#channel_order_more").on('click',function(){
     	var type=encode64("channel_order");
     	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_details.html?"+"p="+provinceId+"&c="+cityId+"&tps="+type+"&targets="+pageStatusInfo.targets;
+    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
+    	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+        var url = "headquarters_details.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+pageStatusInfo.targets+"&pn="+provinceName+"&cn="+cityName;
         window.open(url);
     });
     $("#gmv_rank_more").on('click',function(){

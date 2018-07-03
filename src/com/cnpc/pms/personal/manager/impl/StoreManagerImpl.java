@@ -27,7 +27,6 @@ import com.cnpc.pms.platform.entity.PlatformStore;
 import com.cnpc.pms.platform.entity.SysArea;
 import com.cnpc.pms.platform.manager.PlatformStoreManager;
 import com.cnpc.pms.platform.manager.SysAreaManager;
-import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import com.cnpc.pms.utils.ValueUtil;
 import com.mongodb.BasicDBObject;
@@ -227,7 +226,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			} else if ("endUP".equals(map_where.get("key")) && null != map_where.get("value")
 					&& !"".equals(map_where.get("value"))) {
 				System.out.println(map_where.get("value"));
-				sb_where.append(" AND sto.open_shop_time <=date_format('" + map_where.get("value") + "', '%Y-%m-%d') ");
+				sb_where.append(" AND date_format(sto.open_shop_time,'%Y-%m-%d') <=date_format('" + map_where.get("value") + "', '%Y-%m-%d') ");
 			}
 
 		}

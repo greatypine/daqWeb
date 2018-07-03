@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.utils.ImpalaUtil;
+import javafx.beans.binding.IntegerExpression;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
@@ -3277,6 +3279,57 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}catch (Exception e){
             e.printStackTrace();
         }
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAreaDealOfEmployeeByChannel(String beginDate, String endDate, String areaCode) {
+		String sql = "SELECT count(1) as total,channel_name FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by channel_id ";
+		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
+		
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectAreaDealOfEmployeeByConsum(String beginDate, String endDate, String areaCode) {
+		String sql = "select  CASE when total >=20 then 20 when (total<20 and total>=10) then 10  when (total<10 and total>=5) then 5 else 1 end as  flag from  (SELECT count(1) as total  FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by customer_id) a ";
+		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
+		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectGMVOfEmployee(Integer year, Integer month, String employeeNo) {
+		String sql=" select city_name,storeno,store_name,employee_no,employee_name,pesgmv,pes_sendgmv,pes_areagmv,pes_assigngmv,pes_pergmv"+
+				" from ds_pes_gmv_emp_month where year ="+year+" and month = "+month+"and employee_no ='"+employeeNo+"'";
+
+
+
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_result = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_result;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectCustomerOfEmployee(Integer year, Integer month, String employeeNo) {
+		String sql="select ifnull(a.new_cusnum_ten,0) as new_cusnum_ten,ifnull(a.cusnum,0) as cusnum,ifnull(a.cusnum_ten,0)  as cusnum_ten "+
+				" from ds_pes_customer_employee_month a "+
+				" where a.year="+year+" and a.month="+month+" and a.employeeno='"+employeeNo+"'";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_result = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_result;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 		return lst_result;
 	}
 }

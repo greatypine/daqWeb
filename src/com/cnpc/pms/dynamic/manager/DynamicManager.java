@@ -1067,4 +1067,28 @@ public interface DynamicManager extends IManager{
 	 * @return
 	 */
 	public Map<String,Object> getsixMonthCustomer();
+
+	/**
+	 * @Description  国安侠首页查询国安侠基础信息
+	 * @author gbl
+	 * @date 2018/7/3 10:40
+	 **/
+
+	public Map<String,Object> getEmployeeInfo(String employeeNo);
+
+	/**
+	 * @Description  获取国安侠负责片区的交易中各个频道的占比
+	 * @author gbl
+	 * @date 2018/7/3 13:59
+	 **/
+
+	public  List<Map<String,Object>> getOrderPercentageOfChannel(String areaCode);
+
+	/**
+	 * @Description 获取国安侠负责片区的消费用户消费次数的占比
+	 * @author gbl
+	 * @date 2018/7/3 14:04
+	 **/
+
+	public List<Map<String,Object>> getConsumTimeOfCustomer(String areaCode);
 }
