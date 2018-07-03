@@ -10,3 +10,5 @@ build/
 .externalToolBuilders/
 .idea/
 out/
+daqWeb.iml
+.gitignore
