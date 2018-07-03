@@ -3286,6 +3286,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public List<Map<String, Object>> selectAreaDealOfEmployeeByChannel(String beginDate, String endDate, String areaCode) {
 		String sql = "SELECT count(1) as total,channel_name FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by channel_id ";
 		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
+		
 		return list;
 	}
 
