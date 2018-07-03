@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.utils.ImpalaUtil;
-import javafx.beans.binding.IntegerExpression;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
