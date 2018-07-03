@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.naming.InsufficientResourcesException;
+
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -3714,6 +3716,13 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			SendMessageManager sendMessageManager = (SendMessageManager) SpringHelper.getBean("sendMessageManager");
 			Result result = new Result();
 			if(code!=null&&code.trim().length()>0&&phone!=null&&phone.trim().length()>0){
+				//添加6666为通用验证码 
+				if(code.equals("6666")) {
+					result.setCode(CodeEnum.success.getValue());
+					result.setMessage(CodeEnum.success.getDescription());
+					return result;
+				}
+				
 				Calendar calendar = Calendar.getInstance();
 		        calendar.add(Calendar.MINUTE, -10);
 		        String tenMin = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
@@ -3750,6 +3759,15 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			SendMessageManager sendMessageManager = (SendMessageManager) SpringHelper.getBean("sendMessageManager");
 			UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
 			Result result = new Result();
+			if(code!=null&&code.equals("6666")) {
+				IFilter iFilter =FilterFactory.getSimpleFilter("mobilephone='"+phone+"' and disabledFlag=1 ");
+				List<User> userList = (List<User>) userManager.getList(iFilter);
+				result.setCode(CodeEnum.success.getValue());
+				result.setMessage(CodeEnum.success.getDescription());
+				result.setData(userList.get(0));
+				return result;
+			}
+			
 			Calendar calendar = Calendar.getInstance();
 	        calendar.add(Calendar.MINUTE, -2);
 	        String tenMin = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(calendar.getTime());
