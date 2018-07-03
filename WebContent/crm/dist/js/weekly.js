@@ -6439,7 +6439,7 @@ function oneyearorsixweek(){
 					option24.series[2].data=wechant_accounted_for_crowd_array;
 					option24.xAxis[0]["data"] = citynameArray;
 					myChart24.setOption(option24);
-					myChart21.setOption(option21);
+					myChart21.setOption(option21); 
 				}
 			}
 		});		
@@ -6624,7 +6624,7 @@ function oneyearorsixweek(){
 					var storeResource = jsonData.storeResource;
 					for(var i = 0; i < storeResource.length; i++){
 						var info = storeResource[i];
-						storeStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td>'+info.storecount+'</td><td>'+info.home_screen+'</td><td>'+info.home_auxiliary_screen+'</td>'
+						storeStr += '<tr><th>'+(i+1)+'</th><th>'+info.cityname+'</th><td>'+info.storecount+'</td><td>'+info.home_screen+'</td><td>'+info.home_auxiliary_screen+'</td>'
 							+'<td>'+info.outdoor_electronic_screen+'</td><td>'+info.roll_up+'</td><td>'+info.posters+'</td><td>'+info.central_pile_head+'</td>'
 							+'<td>'+info.floor_pile_head+'</td><td>'+info.indoor_interactive_area+'</td></tr>';
 						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input readonly="readonly" type="text" value="'+info.storecount+'" class="form-control"></td><td><input  type="text" value="'+info.home_screen+'" class="form-control"></td>'
@@ -6637,7 +6637,7 @@ function oneyearorsixweek(){
 					for(var i = 0; i < storeResourceCity.length; i ++){
 						var cityname = storeResourceCity[i].city_name;
 						var storecount = storeResourceCity[i].storecount;
-						storeStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+						storeStr += '<tr><th>'+(i+1)+'</th><th>'+cityname+'</th><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 						storeinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input readonly="readonly" type="text" value="'+storecount+'" class="form-control"></td><td><input type="text"  value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input value="0" type="text" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input value="0" type="text" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
@@ -6648,7 +6648,7 @@ function oneyearorsixweek(){
 					var outStoreResource = jsonData.outStoreResource;
 					for(var i = 0; i < outStoreResource.length; i++){
 						var info = outStoreResource[i];
-						outStoreStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td>'+info.storecount+'</td><td>'+info.frame_number+'</td><td>'+info.associated_community_count+'</td><td>'+info.open_community_count+'</td>'
+						outStoreStr += '<tr><th>'+(i+1)+'</th><th>'+info.cityname+'</th><td>'+info.storecount+'</td><td>'+info.frame_number+'</td><td>'+info.associated_community_count+'</td><td>'+info.open_community_count+'</td>'
 						+'<td>'+info.closed_community_count+'</td><td>'+info.activity_area_count+'</td><td>'+info.charge_for_site_count+'</td><td>'+info.free_for_site_count+'</td><td>'+info.site_area+'</td>'
 						+'<td>'+info.associated_community_town_count+'</td></tr>';
 						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+info.cityname+'</td><td><input type="text" readonly="readonly" value="'+info.storecount+'" class="form-control"></td><td><input type="text" value="'+info.frame_number+'" class="form-control"></td>'
@@ -6661,7 +6661,7 @@ function oneyearorsixweek(){
 					for(var i = 0; i < outStoreResourceCity.length; i ++){
 						var cityname = outStoreResourceCity[i].city_name;
 						var storecount = outStoreResourceCity[i].storecount;
-						outStoreStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
+						outStoreStr += '<tr><th>'+(i+1)+'</th><th>'+cityname+'</th><td>'+storecount+'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>';
 						outStoreinputStr += '<tr><td>'+(i+1)+'</td><td>'+cityname+'</td><td><input type="text" readonly="readonly" value="'+storecount+'" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
 							+'<td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td><td><input type="text" value="0" class="form-control"></td>'
