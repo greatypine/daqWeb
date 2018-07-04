@@ -3169,23 +3169,23 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public List<Map<String, Object>> getsixMonthCustomer() {
 		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
 		int i = Calendar.getInstance().get(Calendar.DATE);
-		int begindate = 0;
-		int enddate = 0;
+		String begindate = "01";
+		String enddate = "01";
 		if(i>= 1 && i<=7){
-			begindate = 1;
-			enddate = 7;
+			begindate = "01";
+			enddate = "07";
 		}else if (i>= 8 && i<=14){
-			begindate = 8;
-			enddate = 14;
+			begindate = "08";
+			enddate = "14";
 		}else if (i>= 15 && i<=21){
-			begindate = 15;
-			enddate = 21;
+			begindate = "15";
+			enddate = "21";
 		}else if (i>= 22 && i<=28){
-			begindate = 22;
-			enddate = 28;
+			begindate = "22";
+			enddate = "28";
 		}else if (i>= 29 && i<=31){
-			begindate = 29;
-			enddate = 31;
+			begindate = "29";
+			enddate = "31";
 		}
 		String sql = "select t1.cityname,t1.`month`,round(if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts),0) as customer_count,"
 				+"round(if(t2.humancounts is null,t1.customer_new_count,t1.customer_new_count/t2.humancounts),0) as customer_new_count,"
@@ -3227,23 +3227,23 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public List<Map<String, Object>> getsixMonthAllCustomer() {
 		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
 		int i = Calendar.getInstance().get(Calendar.DATE);
-		int begindate = 0;
-		int enddate = 0;
+		String begindate = "01";
+		String enddate = "01";
 		if(i>= 1 && i<=7){
-			begindate = 1;
-			enddate = 7;
+			begindate = "01";
+			enddate = "07";
 		}else if (i>= 8 && i<=14){
-			begindate = 8;
-			enddate = 14;
+			begindate = "08";
+			enddate = "14";
 		}else if (i>= 15 && i<=21){
-			begindate = 15;
-			enddate = 21;
+			begindate = "15";
+			enddate = "21";
 		}else if (i>= 22 && i<=28){
-			begindate = 22;
-			enddate = 28;
+			begindate = "22";
+			enddate = "28";
 		}else if (i>= 29 && i<=31){
-			begindate = 29;
-			enddate = 31;
+			begindate = "29";
+			enddate = "31";
 		}
 		String sql = "select '全国' as cityname,t1.`month`,round(if(t2.humancounts is null,t1.customer_count,t1.customer_count/t2.humancounts),0) as customer_count,"
 				+"round(if(t2.humancounts is null,t1.customer_new_count,t1.customer_new_count/t2.humancounts),0) as customer_new_count,"
