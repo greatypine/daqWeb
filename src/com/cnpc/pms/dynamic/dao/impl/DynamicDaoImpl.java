@@ -3283,15 +3283,15 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 	@Override
 	public List<Map<String, Object>> selectAreaDealOfEmployeeByChannel(String beginDate, String endDate, String areaCode) {
-		String sql = "SELECT count(1) as total,channel_name FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by channel_id ";
+		String sql = "SELECT count(1) as total,channel_name,channel_id FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by channel_id,channel_name ";
 		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
-		
 		return list;
 	}
 
 	@Override
 	public List<Map<String, Object>> selectAreaDealOfEmployeeByConsum(String beginDate, String endDate, String areaCode) {
-		String sql = "select  CASE when total >=20 then 20 when (total<20 and total>=10) then 10  when (total<10 and total>=5) then 5 else 1 end as  flag from  (SELECT count(1) as total  FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by customer_id) a ";
+		String sql = "select count(1) as total,rang from (select  CASE when total >=20 then 20 when (total<20 and total>=10) then 10  when (total<10 and total>=5) then 5 else 1 end as  rang from  (SELECT count(1) as total,customer_id  FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by customer_id) a ) b group by rang";
+
 		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
 		return list;
 	}

@@ -24,6 +24,7 @@ import java.util.UUID;
 import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.personal.entity.*;
 import com.cnpc.pms.personal.manager.*;
+import com.cnpc.pms.slice.manager.AreaManager;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -6937,6 +6938,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
 			HumanresourcesManager hManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
+			AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
 			OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
 			CustomerManager customerManager = (CustomerManager) SpringHelper.getBean("customerManager");
 			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
@@ -6981,12 +6983,18 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			Integer cur_month=c.get(Calendar.MONTH)+1;
 			List<Map<String,Object>> gmvList = dynamicDao.selectGMVOfEmployee(cur_year,cur_month,employeeNo);
 			List<Map<String,Object>> customerList = dynamicDao.selectCustomerOfEmployee(cur_year,cur_month,employeeNo);
+			List<Map<String,Object>> areaList = areaManager.queryAreaByEmployee(employeeNo);
 			map.put("human", humanresources);
 			map.put("gmv",gmvList);
 			map.put("customer",customerList);
+			map.put("area",areaList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			map.put("human", null);
+			map.put("gmv",null);
+			map.put("customer",null);
+			map.put("area",null);
+			return map;
 		}
 		return map;
 	}

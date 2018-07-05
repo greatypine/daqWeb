@@ -75,5 +75,61 @@ public class ImpalaUtil {
 		}
 		return list;
 	}
+
+
+
+
+    // set the impalad host
+    private static final String IMPALAD_HOST = "10.16.31.192";
+
+    // port 21050 is the default impalad JDBC port
+    private static final String IMPALAD_JDBC_PORT = "21050";
+
+    private static final String CONNECTION_URL = "jdbc:impala://" + IMPALAD_HOST + ':' + IMPALAD_JDBC_PORT + "/gemini;auth=noSasl";
+
+    private static final String JDBC_DRIVER_NAME = "com.cloudera.impala.jdbc41.Driver";
+
+    public static void test(String sql) {
+
+        System.out.println("\n=============================================");
+        System.out.println("Cloudera Impala JDBC Example");
+        System.out.println("Using Connection URL: " + CONNECTION_URL);
+
+        List<Map<String,Object>> list = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+
+            Class.forName(JDBC_DRIVER_NAME);
+
+            con = DriverManager.getConnection(CONNECTION_URL);
+
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            list = convertList(rs);
+            System.out.println("\n== Begin Query Results ======================");
+
+            // print the results to the console
+            while (rs.next()) {
+                // the example query returns one String column
+                System.out.println(rs.getString(1));
+//				System.out.println(rs.getTimestamp(1));
+            }
+
+            System.out.println("== End Query Results =======================\n\n");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                con.close();
+            } catch (Exception e) {
+                // swallow
+            }
+        }
+    }
 	
 }
