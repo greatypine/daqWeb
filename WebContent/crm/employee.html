@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>国安侠</title>
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -52,39 +53,7 @@
                     <div class="logo-lg">
                         <ul class="no-margin no-padding">
                             <li class="current">
-                                <em class="logo_cs">数据运营<i class="glyphicon glyphicon-triangle-bottom"></i></em>
-                                <div class="TDsec-nav">
-                                    <div class="secNav-box">
-                                        <dl class="col-sm-3">
-                                            <dt><i></i>运营数据</dt>
-                                            <dd><a href="#"><span class="fa fa-money"></span>营业额统计</a></dd>
-                                            <dd><a href="#"><span class="fa fa-user-plus"></span>用户运营</a></dd>
-                                            <dd><a href="#"><span class="fa fa-cubes"></span>产品运营</a></dd>
-                                            <dd><a href="#"><span class="fa fa-institution"></span>门店运营</a></dd>
-                                            <dd><a href="#"><span class="fa fa-comments-o"></span>混片情况</a></dd>
-                                        </dl>
-                                        <dl class="col-sm-3">
-                                            <dt><i></i>绩效数据</dt>
-                                            <dd><a href="#"><span class="fa fa-line-chart"></span>门店GMV</a></dd>
-                                            <dd><a href="#"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd>
-                                            <dd><a href="#"><span class="fa fa-area-chart"></span>门店拉新</a></dd>
-                                            <dd><a href="#"><span class="fa fa-bar-chart"></span>国安侠拉新</a></dd>
-                                            <dd><a href="#"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>
-                                        </dl>
-                                        <dl class="col-sm-3">
-                                            <dt><i></i>档案数据</dt>
-                                            <dd><a href="#"><span class="fa fa-file-o"></span>订单档案</a></dd>
-                                            <dd><a href="#"><span class="fa fa-newspaper-o"></span>员工档案</a></dd>
-                                            <dd><a href="#"><span class="fa fa-copy"></span>片区档案</a></dd>
-                                            <dd><a href="#"><span class="fa fa-clipboard"></span>小区档案</a></dd>
-                                        </dl>
-                                        <dl class="col-sm-3">
-                                            <dt><i></i>排名数据</dt>
-                                            <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd>
-                                            <dd><a href="#"><span class="fa fa-signal"></span>XX排名</a></dd>
-                                        </dl>
-                                    </div>
-                                </div>
+                                <em></em>
                             </li>
 
                         </ul>
@@ -92,16 +61,16 @@
 
                     </div>
                 </div>
-                <div class="navbar-custom-menu">
+                <div class="navbar-custom-menu" style="display:none" id="employee_login">
                     <ul class="nav navbar-nav">
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image" id="userPic_little">
                                 <span class="hidden-xs">载入中...</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header">
-                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                    <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image" id="userPic_middle">
 
                                     <p><strong id="cur_card_name">载入中...</strong></p>
                                     <p><span id="cur_card_no">载入中...</span></p>
@@ -130,10 +99,12 @@
       <!-- Main content -->
       <section class="content-header">
         <div class="box box-default details">
-          <!--<div class="box-header h4"><strong>安心合作社运营报告</strong></div>-->
+          
           <div class="box-body">
             <div class="col-sm-3 no-padding text-center"><div class="user_photo"><img id="user_pic" src="dist/img/avatar5.png"></div></div>
             <dl class="dl-horizontal col-sm-4 no-padding">
+              <dt>姓名</dt>
+              <dd id="employeeName">载入中...</dd>
               <dt>职务</dt>
               <dd id="zw">载入中...</dd>
               <dt>员工工号</dt>
@@ -197,17 +168,21 @@
 <script src="dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="dist/js/demo.js"></script>
-<script type="text/javascript" src="../scripts/bidLibjsjquery2.0.js"></script>
+
 <script src="dist/js/nav-scroll.js"></script>
 <!-- 引入 ECharts 文件 -->
 <script src="dist/js/echarts.common.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript">
 
     var employee_no = decode64(getUrlParamByKey("employee_no"));
     var source = decode64(getUrlParamByKey("source"));
     $(function(){
-        if(source=0){
+        if(source==1){//国安侠
             initcurruser();
+            $("#employee_login").show();
+        }else if(source==0){//非国安侠
+        	
         }
 
         getUserHeadPortraits();
@@ -217,14 +192,14 @@
 
     })
     var curr_user = null;
-    var employeeNo= "";
+    
     function initcurruser(){
         //取得当前登录人的门店
         doManager("UserManager", "getCurrentUserDTO",null,
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     curr_user = JSON.parse(data.data);
-                    employeeNo = curr_user.employeeId;
+                    employee_no = curr_user.employeeId;
                     $('span[class="hidden-xs"]').html(curr_user.name);
                     if(curr_user.employeeId!=null){
 
@@ -232,7 +207,7 @@
                         $("#cur_employee_no").html(curr_user.employeeId);
                         $("#cur_card_name").html(curr_user.name);
                         $("#cur_card_no").html(curr_user.zw+" "+curr_user.employeeId);
-
+                        $("#cur_store_name").html(curr_user.store_name);
 
                     }else{
                         $("#cur_card_name").html(curr_user.name);
@@ -246,6 +221,17 @@
             },false);
     }
 
+    
+    function CheckImgExists(imgurl) {  
+        var ImgObj = new Image(); //判断图片是否存在  
+        ImgObj.src = imgurl;  
+        //没有图片，则返回-1  
+        if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {  
+            return true;  
+        } else {  
+            return false;
+        }  
+    } 
 
     //获取员工头像
     function getUserHeadPortraits(){
@@ -253,21 +239,14 @@
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var user_pic = JSON.parse(data.data);
-                    if(user_pic.dataMap!=null){
-
-                        $.ajax({
-                            url:user_pic.dataMap.pngUrl,
-                            type:'HEAD',
-                            error: function() {
-                                console.log("user_pic_none");
-                            },
-                            success: function() {
-                                $("#user_pic").attr("src",user_pic.dataMap.pngUrl);
-                            }
-                        });
-
+                    var isExist = CheckImgExists(user_pic);
+                    if(typeof(user_pic.dataMap.pngUrl)!='undefined'&&user_pic.dataMap.pngUrl!=null&&user_pic.dataMap.pngUrl.indexOf(".com/guoanxia")>0){
+                    	$("#user_pic").attr("src",user_pic.dataMap.pngUrl);
+    					$("#userPic_middle").attr("src",user_pic.dataMap.pngUrl);
+    					$("#userPic_little").attr("src",user_pic.dataMap.pngUrl);
                     }
-
+            		
+                    
                 }
             },false);
     }
@@ -285,6 +264,7 @@
                         var ezw = human_info.human.zw==null?"":human_info.human.zw;
                         $("#zw").html(ezw);
                         $("#employeeNo").html(human_info.human.employee_no);
+                        $("#employeeName").html(human_info.human.name);
                         $("#workingAge").html(human_info.human.remark);
                         $("#phone").html(human_info.human.phone);
                         $("#storeName").html(human_info.human.storename);
@@ -343,59 +323,95 @@
 
     //各个频道交易占比
     function  getChannelPercentOfOrder(){
+		if(areaCodeArray!=null&areaCodeArray.length>0){
+	        doManager("dynamicManager", "getOrderPercentageOfChannel",[areaCodeArray.join()],
+	                function(data, textStatus, XMLHttpRequest) {
+	                    if (data.result) {
+	                        var channelOrder = JSON.parse(data.data);
+	                        var deptNV = new Array();
 
 
-        doManager("dynamicManager", "getOrderPercentageOfChannel",[areaCodeArray.join()],
-            function(data, textStatus, XMLHttpRequest) {
-                if (data.result) {
-                    var channelOrder = JSON.parse(data.data).order;
-                    var channelName = new Array();
-                    var channelValue = new Array();
+	                        if(channelOrder!=null){
+	                            for(var i=0;i<channelOrder.length;i++){
+	                                var v = channelOrder[i].total;
+	                                var n = channelOrder[i].channel_name;
+	                                var vnMap = {};
+	                                vnMap["value"] = v;
+	                                vnMap["name"] = n;
+	                                deptNV.push(vnMap);
+	                            }
 
-                    if(channelOrder!=null){
-                        for(var i=0;i<channelOrder.length;i++){
-                            var v = channelOrder[i].total;
-                            var n = channelOrder[i].channel_name;
-                            channelName[i] = n;
-                            channelValue[i] = v;
-                        }
-                        option1.xAxis[0].data = channelName;
-                        option1.series[0].data = channelValue;
-                        option1.title[0].text = "片区内频道订单量（当年）";
-                        myChart1.setOption(option1);
-                    }
+	                            option1.series[0].data = deptNV;
+	                            option1.title[0].text = "片区内频道订单量（当年）";
+	                            myChart1.setOption(option1);
+	                        }
 
 
-                }
-            },false);
+	                    }
+	                },false);
+		}else{
+		   var deptNV = new Array();
+    	   var vnMap = {};
+    	   vnMap["name"] = "--";
+       	   vnMap["value"] = '0';
+       	   deptNV.push(vnMap);
+   		   option1.series[0].data = deptNV;
+		   myChart1.setOption(option1);
+		}
+
+
     }
 
     //交易消费次数占比
     function  getConsumTimePercentOfOrder(){
+       if(areaCodeArray!=null&&areaCodeArray.length>0){
+           doManager("dynamicManager", "getConsumTimeOfCustomer",[areaCodeArray.join()],
+                   function(data, textStatus, XMLHttpRequest) {
+                       if (data.result) {
+                           var consumTime = JSON.parse(data.data);
+                           var deptNV = new Array();
 
-        doManager("dynamicManager", "getConsumTimeOfCustomer",[areaCodeArray.join()],
-            function(data, textStatus, XMLHttpRequest) {
-                if (data.result) {
-                    var consumTime = JSON.parse(data.data).consum;
-                    var consumName = new Array();
-                    var consumValue = new Array();
+                           if(consumTime!=null){
+                               for(var i=0;i<consumTime.length;i++){
+                                   var v = consumTime[i].total;
+                                   var n = consumTime[i].rang;
+                                   var vnMap = {};
+                                   if(parseInt(n)==20){
+                                       vnMap["name"] = "消费20次";
+                                   }else if(parseInt(n)==10){
+                                       vnMap["name"] = "消费10次以上且小于20次";
+                                   }else if(parseInt(n)==5){
+                                       vnMap["name"] = "消费5次以上且小于10次";
+                                   }else if(parseInt(n)==4){
+                                       vnMap["name"] = "消费1次以上且小于5次";
+                                   }else if(parseInt(n)==1){
+                                       vnMap["name"] = "消费1次";
+                                   }else{
+                                       vnMap["name"] = "消费"+n+"次";
+                                   }
+                                   vnMap["value"] = v;
 
-                    if(consumTime!=null){
-                        for(var i=0;i<consumTime.length;i++){
-                            var v = consumTime[i].total;
-                            var n = consumTime[i].rang;
-                            consumName[i] = n;
-                            consumValue[i] = v;
-                        }
-                        option2.xAxis[0].data = consumName;
-                        option2.series[0].data = consumValue;
-                        option2.title[0].text = "片区内客户消费次数（当年）";
-                        myChart2.setOption(option2);
-                    }
+                                   deptNV.push(vnMap);
+                               }
+
+                               option2.series[0].data = deptNV;
+                               option2.title[0].text = "片区内客户消费次数（当年）";
+                               myChart2.setOption(option2);
+                           }
 
 
-                }
-            },false);
+                       }
+                   },false);
+       }else{
+    	   var deptNV = new Array();
+    	   var vnMap = {};
+    	   vnMap["name"] = "--";
+       	   vnMap["value"] = '0';
+       	   deptNV.push(vnMap);
+   		   option2.series[0].data = deptNV;
+    	   myChart2.setOption(option2);
+       }
+
     }
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart2 = echarts.init(document.getElementById('main2'));
@@ -415,7 +431,7 @@
     }],
     tooltip: {
       trigger: 'item',
-      formatter: "{b}: {c} ({d}%)"
+      formatter: "{b}: {c}单 ({d}%)"
     },
     series: [{
       type: 'pie',
@@ -455,11 +471,11 @@
     }],
     tooltip: {
       trigger: 'item',
-      formatter: "{a} <br/>{b}: {c} ({d}%)"
+      formatter: "{a} <br/>{b}:{c}人 ({d}%)"
     },
     color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5'],
     series: [{
-      name: '违规次数',
+      name: '',
       type: 'pie',
       clockwise: false, //饼图的扇区是否是顺时针排布
       minAngle: 20, //最小的扇区角度（0 ~ 360）
@@ -494,8 +510,7 @@
     }]
   };
 
-  myChart1.setOption(option1);
-  myChart2.setOption(option2);
+
 </script>
 </body>
 </html>

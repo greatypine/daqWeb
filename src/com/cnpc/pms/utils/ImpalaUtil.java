@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,19 +28,18 @@ public class ImpalaUtil {
 		
 		Connection con = null;  
 		ResultSet rs = null;
-        PreparedStatement ps = null;
+		Statement stat=null;
         List<Map<String,Object>> list = null;
+        PreparedStatement ps = null;
         try {  
         	
             
             con = JdbcConPoolC3po.getConnection();
-   
-            ps = con.prepareStatement(sql);
-            
             System.out.println("\n== Begin Query Results ======================");  
-            
-            rs = ps.executeQuery();  
-            
+            //ps = con.prepareStatement(sql);
+            stat = con.createStatement();
+            //rs = ps.executeQuery();
+            rs = stat.executeQuery(sql);
             list = convertList(rs);
            
             System.out.println("== End Query Results =======================\n\n");  
@@ -52,7 +52,7 @@ public class ImpalaUtil {
             return list;
         } finally {  
             try {  
-            	JdbcConPoolC3po.close(con, ps, rs);
+            	JdbcConPoolC3po.close(con, stat, rs);
             } catch (Exception e) {  
                 e.printStackTrace();
                 return list;
@@ -89,7 +89,7 @@ public class ImpalaUtil {
 
     private static final String JDBC_DRIVER_NAME = "com.cloudera.impala.jdbc41.Driver";
 
-    public static void test(String sql) {
+    public static List<Map<String,Object>> test(String sql) {
 
         System.out.println("\n=============================================");
         System.out.println("Cloudera Impala JDBC Example");
@@ -110,26 +110,25 @@ public class ImpalaUtil {
             list = convertList(rs);
             System.out.println("\n== Begin Query Results ======================");
 
-            // print the results to the console
-            while (rs.next()) {
-                // the example query returns one String column
-                System.out.println(rs.getString(1));
-//				System.out.println(rs.getTimestamp(1));
-            }
-
+            
             System.out.println("== End Query Results =======================\n\n");
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
+            return list;
         } finally {
             try {
                 con.close();
+                return list;
             } catch (Exception e) {
-                // swallow
+                e.printStackTrace();
             }
         }
+        
+        return list;
     }
 	
 }
