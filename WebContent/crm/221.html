@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>221战略专场</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min.css">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+ .box-body img{width: 100%}
+.report{font-size: 16px;background-color: #a931a0;color: #fff; padding-bottom: 20px;}
+    .report .box-header{color: #fff;}
+    .report em{width: 70px; position: absolute; right: 0; bottom: 0;}
+    .report img{height: 100%;}
+    .report li{float:left; line-height: 28px; color: #f8e7e5; margin-top: 5px;}
+    .report i{margin-right: 5px; opacity: 0.6;}
+    .report span{font-size: 24px; color: #ffb959; font-weight: bold;}
+    .report p i{color: #fff;}
+    .report p small{font-size: 16px;}
+    .report p:nth-child(2),.report p:nth-child(2n){font-size: 18px; margin: 10px 0 5px 0; color: rgba(255,255,255,0.7);}
+    .report p:nth-child(2n+1){font-size: 34px; padding-left: 20px;}
+    .report dt{border-bottom: 1px dashed rgba(255,255,255,1); padding: 0 5px 5px 5px; position: relative; margin: 0 10px;}
+    .report dt:after{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; left: -7px;}
+    .report dt:before{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; right: -7px;}
+    .report_jr li{width: 31%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
+    .report_jr li i{font-size: 70px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
+    .report_jr li span{font-size: 30px; color: #ffde00;}
+
+    .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
+    .navimenu{min-height: 800px; padding-top: 0;}
+    #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
+      #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+    
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+			<div class="logo_img pull-left">
+				<img src="dist/img/logo.png" height="30">
+				<img src="dist/img/title.png" height="20">
+			</div>
+			<div class="pull-left">
+				<div class="logo-lg">
+					<ul class="no-margin">
+						<li class="current"><em>221战略专场</em></li>
+					</ul>
+				</div>
+			</div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box box-default report">
+          <div class="box-header h4"><strong>221运营报告</strong></div>
+          <div class="box-body">
+            <div class="col-sm-12">
+              <ul class="clearfix no-padding">
+                <li class="col-sm-4"><i class="glyphicon glyphicon-home"></i>221涵盖门店：<br><span>96</span><small>（店）</small></li>
+                <li class="col-sm-4"><i class="fa fa-database"></i>221GMV：<br><small>￥</small><span id="totalGmv">载入中...</span></li>
+               	<li class="col-sm-4"><i class="fa fa-fire"></i>221社员新增数/社员总数：<span id="memberNum">载入中...</span></li>
+              </ul>
+              <ul class="clearfix no-padding">
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>优易GMV：<br><small>￥</small><span id="yyGmv">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>团购GMV：<br><small>￥</small><span id="grouponGmv">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><span id="jwsGmv">载入中...</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+       <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-8 no-padding" id="main3" style="height: 350px;"></div>
+            <div class="col-sm-4" id="main2" style="height: 350px;"></div>
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-6">
+              <h4 class="text-red">优易门店排名Top10</h4>
+              <table class="table table-bordered">
+                <tbody id="yyPro_data">
+	                <tr>
+	                  <th>门店名称</th>
+	                  <th>GMV</th>
+	                  <th>占比</th>
+	                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="text-light-blue">家务事门店排名Top10</h4>
+              <table class="table table-bordered">
+                <tbody id="jwsPro_data">
+	                <tr>
+	                  <th>门店名称</th>
+	                  <th>GMV</th>
+	                  <th>占比</th>
+	                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-body">
+          	<div class="col-sm-6">
+              <h4 class="text-red">团购门店排名Top10</h4>
+              <table class="table table-bordered">
+                <tbody id="grouponPro_data">
+	                <tr>
+	                  <th>门店名称</th>
+	                  <th>GMV</th>
+	                  <th>占比</th>
+	                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6" id="main1" style="height: 350px;"></div>
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue">
+          	<div class="col-sm-3 has-error" style="padding: 0 5px 0 0;">
+          		<select class="form-control select2" id="storeSelect">
+            	</select>
+        	</div>
+          </div>
+          <div class="box-body">
+            <div class="col-sm-6">
+              <h4 class="text-red">商品类排名Top10</h4>
+              <table class="table table-bordered">
+                <tbody id="product_data">
+	                <tr>
+	                  <th>产品名称</th>
+	                  <th>产品销量</th>
+	                  <th>排名</th>
+	                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="text-light-blue">服务类排名Top10</h4>
+              <table class="table table-bordered">
+                <tbody id="service_data">
+	                <tr>
+	                  <th>产品名称</th>
+	                  <th>产品销量</th>
+	                  <th>排名</th>
+	                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<script src="plugins/gooey_menu/gooey.min.js"></script>
+<script type ="text/javascript">
+
+  Date.prototype.format = function() {  
+    var s = '';  
+    var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
+    var day = this.getDate()>=10?this.getDate():('0'+this.getDate());  
+    s += this.getFullYear() + '-'; // 获取年份。  
+    s += mouth + "-"; // 获取月份。  
+    s += day; // 获取日。  
+    return (s); // 返回日期。  
+  };
+  
+  
+</script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>  
+  <script type ="text/javascript">
+  var myChart1 = echarts.init(document.getElementById('main1'));
+  var myChart2 = echarts.init(document.getElementById('main2'));
+  var myChart3 = echarts.init(document.getElementById('main3'));
+
+  //社员人数
+  var memberXData = [];
+  var memberYData = [];
+  option1 = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    legend: {
+      data: ['社员7日增长数'],
+      right:0,
+      textStyle: {color: '#404a59'}
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [{
+      type: 'category',
+      data: memberXData,
+      axisLabel:{
+        textStyle:{color:'#404a59',}
+      },
+      axisLine:{
+        lineStyle:{color:'#404a59',}
+      },
+    }],
+    yAxis: [{
+      type: 'value',
+      axisLabel: {
+        formatter: '{value}',
+        textStyle:{color:'#404a59',}
+      },
+      axisLine:{
+        lineStyle:{color:'#404a59',}
+      },
+    },{
+      type: 'value',
+      axisLabel: {
+        formatter: '{value}',
+        textStyle:{color:'#404a59',}
+      },
+      axisLine:{
+        lineStyle:{color:'#404a59',}
+      },
+      position: 'right',
+    }],
+    series: [{
+      name: '社员7日增长数',
+      type: 'line',
+      itemStyle:{normal:{color:'#ffae00'},},
+      data: memberYData,
+      label: {
+        normal: {
+          show:true,
+          position: 'top',
+          textStyle:{
+            color:'#ffae00',
+          },
+        },
+        emphasis: {
+          textStyle:{
+            color:'#ffae00',
+          },
+        },
+      },
+    }]
+  };
+
+  //商品类服务类产品占比
+  var productGmv = "0";
+  var serviceGmv = "0";
+  option2 = {
+    title: [ {    	
+      text: '商品类服务类占比',
+      left: '20%',
+      top: '0',
+      textAlign: 'center',
+      textStyle: {
+        color: '#666'
+      }
+    }],
+    tooltip: {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    series: [{
+      name: '商品类服务类产品占比',
+      type: 'pie',
+      radius: '90%',
+      center: ['50%', '50%'],
+      clockwise: false,
+      data: [{
+        value: productGmv,
+        name: '商品类'
+      }, {
+        value: serviceGmv,
+        name: '服务类'
+      }],
+      label: {
+        normal: {
+          textStyle: {
+            color: '#fff',
+            fontSize: 14,
+          },
+          position: 'inner',
+          formatter: '{d}%',
+        }
+      },
+
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderWidth: 4,
+          borderColor: '#ffffff',
+        },
+        emphasis: {
+          borderWidth: 0,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }],
+    color: [
+      '#F08080',
+      '#FFC1C1',
+    ],
+  };
+
+  //门店GMV散点图
+  var dataBJ = [];
+  var schema = [
+    {name: 'order', index: 0, text: '订单量'},
+    {name: 'gmv', index: 1, text: 'GMV'},
+    {name: 'store', index: 2, text: '门店'}
+  ];
+
+  var itemStyle = {
+    normal: {
+      opacity: 0.8,
+      shadowBlur: 10,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
+      shadowColor: 'rgba(0, 0, 0, 0.5)'
+    }
+  };
+
+  option3 = {
+    title: {
+      text: "GMV门店分布",
+      left: "10",
+      y: "10",
+      textStyle: {
+        color: "#666"
+      }
+    },
+    color: [
+      '#dd4444', '#fec42c', '#80F1BE'
+    ],
+    legend: {
+      y: 'top',
+      data: ['门店GMV'],
+      textStyle: {
+        color: '#666',
+        fontSize: 16
+      }
+    },
+    grid: {
+      //x: '10%',
+      //x2: 80,
+      y: '28%',
+      y2: '20%',
+      bottom:'10%',
+      left:'5%'
+    },
+    tooltip: {
+      padding: 10,
+      backgroundColor: '#222',
+      borderColor: '#777',
+      borderWidth: 1,
+      formatter: function (obj) {
+        var value = obj.value;
+        return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+          + schema[1].text + '：' + value[1] + '万元</div>'
+          + schema[0].text + '：' + value[0] + '<br>'
+          + schema[2].text + '：' + value[2] + '<br>';
+      }
+    },
+    xAxis: {
+      type: 'value',
+      name: '订单量',
+      nameGap: 16,
+      nameTextStyle: {
+        color: '#666',
+        fontSize: 14
+      },
+      min: function(value){
+  	   	 return parseInt(value.min);
+  	   },
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#666'
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: '门店GMV（万元）',
+      nameLocation: 'end',
+      nameGap: 20,
+      min: function(value){
+ 	   	 return parseInt(value.min);
+   	   },
+      nameTextStyle: {
+        color: '#666',
+        fontSize: 16
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#666'
+        }
+      },
+      splitLine: {
+        show: false
+      }
+    },
+    visualMap: [
+      {
+        left: 'right',
+        top: '10%',
+        dimension: 1,
+        min: 0,
+        max: 10,
+        itemWidth: 30,
+        itemHeight: 100,
+        calculable: true,
+        precision: 0.1,
+        text: ['圆形大小：门店GMV'],
+        textGap: 30,
+        textStyle: {
+          color: '#666'
+        },
+        inRange: {
+          symbolSize: [10, 70]
+        },
+        outOfRange: {
+          symbolSize: [10, 70],
+          color: ['rgba(255,255,255,.2)']
+        },
+        controller: {
+          inRange: {
+            color: ['#c23531']
+          },
+          outOfRange: {
+            color: ['#666']
+          }
+        }
+      },
+      {
+        left: 'right',
+        bottom: '5%',
+        dimension: 0,
+        min: 0,
+        max: 500,
+        itemHeight: 100,
+        calculable: true,
+        precision: 0.1,
+        text: ['明暗：订单量'],
+        textGap: 30,
+        textStyle: {
+          color: '#666'
+        },
+        inRange: {
+          colorLightness: [1, 0.5]
+        },
+        outOfRange: {
+          color: ['rgba(255,255,255,.2)']
+        },
+        controller: {
+          inRange: {
+            color: ['#c23531']
+          },
+          outOfRange: {
+            color: ['#666']
+          }
+        }
+      }
+    ],
+    series: [
+      {
+        name: '门店GMV',
+        type: 'scatter',
+        itemStyle: itemStyle,
+        data: dataBJ,
+      },
+    ]
+  };
+
+  myChart1.setOption(option1);
+  myChart2.setOption(option2);
+  myChart3.setOption(option3);
+</script>
+<script>
+
+	$(function(){
+		inintTotalGmvData();
+		inintMemberData();
+		inintYYGmvData();
+		inintGrouponGmvData();
+		inintJWSGmvData();
+		initScatterplot();
+		initPercent();
+		showStoreRanking();
+		initMemberTrend();
+		initallcity();
+		showProductRanking("all");
+		
+		$("#storeSelect").change(function(){
+			var storeNo = $("#storeSelect  option:selected").val();
+			showProductRanking(storeNo);
+		});
+		
+	});
+    
+	
+	var totalGMV = '0';
+	var dept_id = "all";
+	function inintTotalGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[dept_id],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							totalGMV = jsonData.total_gmv;
+							$("#totalGmv").html(parseFloat(totalGMV).toLocaleString());
+						}else{
+							$("#totalGmv").html('0');
+						}
+					}
+			});
+	}
+	
+	var newMemberNum = '0';
+	var totalMembernum = '0';
+	function inintMemberData(){
+		  doManager("strategyActivityManager","queryNewMember",null,
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							newMemberNum = jsonData.membernum;
+						}
+					}
+			},false);
+		  doManager("strategyActivityManager","queryTotalMember",null,
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							totalMembernum = jsonData.totalnum;
+							$("#memberNum").html(parseFloat(newMemberNum).toLocaleString()+"/"+parseFloat(totalMembernum).toLocaleString());
+						}else{
+							$("#memberNum").html('0');
+						}
+					}
+			},false);
+	}
+	
+	var yyGMV = '0';
+	var yy_dept_id = "8ac28b935fed0bc8015fed4c76f60018";
+	function inintYYGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							yyGMV = jsonData.total_gmv;
+							$("#yyGmv").html(parseFloat(yyGMV).toLocaleString());
+						}else{
+							$("#yyGmv").html('0');
+						}
+					}
+			},false);
+	}
+	
+	var grouponGMV = '0';
+	var groupon_dept_id = "groupon";
+	function inintGrouponGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							grouponGMV = jsonData.total_gmv;
+							$("#grouponGmv").html(parseFloat(grouponGMV).toLocaleString());
+						}else{
+							$("#grouponGmv").html('0');
+						}
+					}
+			},false);
+	}
+	
+	var jwsGMV = '0';
+	var jws_dept_id = "8ac29e835fed0a10015fed4d01dc0015";
+	function inintJWSGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							jwsGMV = jsonData.total_gmv;
+							$("#jwsGmv").html(parseFloat(jwsGMV).toLocaleString());
+						}else{
+							$("#jwsGmv").html('0');
+						}
+					}
+			},false);
+	}
+
+	function initScatterplot(){
+		  doManager("strategyActivityManager","queryDataOfScatterplot",null,
+				function(data,textStatus,XmlHttpRequest){
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.length!=0){
+							$(jsonData).each(function(index,element){
+								var temp = [];
+								temp.push(element.ordernum);
+								temp.push((element.ordergmv/10000).toFixed(2));
+								temp.push(element.store_name);
+								dataBJ.push(temp);
+		                 	});
+							option3.series[0].data = dataBJ;
+							myChart3.setOption(option3,true);
+						}else{
+							dataBJ = [];
+							option3.series[0].data = dataBJ;
+							myChart3.setOption(option3,true);	
+						}
+					}
+			});
+	  }
+	
+	function initPercent(){
+		  doManager("strategyActivityManager","queryDataOfPercent",null,
+				function(data,textStatus,XmlHttpRequest){
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.length!=0){
+							$(jsonData).each(function(index,element){
+								if(element.order_type=='product'){
+									productGmv = element.ordergmv;
+								}else if(element.order_type=='service'){
+									serviceGmv = element.ordergmv;
+								}
+		                 	});
+							option2.series[0].data[0] = productGmv;
+							option2.series[0].data[1] = serviceGmv;
+							myChart2.setOption(option2,true);
+						}else{
+							option2.series[0].data[0] = "0";
+							option2.series[0].data[1] = "0";
+							myChart2.setOption(option2,true);	
+						}
+					}
+			});
+	  }
+	
+	function showStoreRanking(){
+		var yyStr="";
+		doManager("strategyActivityManager","queryStoreRanking",[yy_dept_id],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						for(var i=0;i<jsonData.length;i++){
+							yyStr= "<tr>"
+			                   +"<td>"+jsonData[i].store_name+"</td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   
+								var rate = 0;
+		   			    		if(yyGMV!=0){
+		   			    			rate = (jsonData[i].ordergmv/yyGMV) * 100;
+		   			    		}
+		   			    	
+			                   switch(i)
+			                   {
+				                   case 0:
+				                	 yyStr += "<td><span class='badge bg-red'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 1:
+				                	   yyStr += "<td><span class='badge bg-yellow'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 2:
+				                	   yyStr += "<td><span class='badge bg-blue'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 3:
+				                	   yyStr += "<td><span class='badge bg-green'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 4:
+				                	   yyStr += "<td><span class='badge bg-purple'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   default:
+				                	   yyStr += "<td><span class='badge bg-brown'>"+rate.toFixed(2)+"%</span></td>";
+			                   }
+			                   yyStr += "</tr>";
+			                   $("#yyPro_data").append(yyStr); 
+	                 	}
+					}else{
+						yyStr = "<tr>没有符合条件的数据</tr>";
+						$("#yyPro_data").append(yyStr); 
+					}
+				}
+		},false);
+		
+	   var jwsStr="";
+	   doManager("strategyActivityManager","queryStoreRanking",[jws_dept_id],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						for(var i=0;i<jsonData.length;i++){
+							jwsStr= "<tr>"
+			                   +"<td>"+jsonData[i].store_name+"</td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   
+								var rate = 0;
+		   			    		if(jwsGMV!=0){
+		   			    			rate = (jsonData[i].ordergmv/jwsGMV) * 100;
+		   			    		}
+		   			    	
+			                   switch(i)
+			                   {
+				                   case 0:
+				                	   jwsStr += "<td><span class='badge bg-red'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 1:
+				                	   jwsStr += "<td><span class='badge bg-yellow'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 2:
+				                	   jwsStr += "<td><span class='badge bg-blue'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 3:
+				                	   jwsStr += "<td><span class='badge bg-green'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 4:
+				                	   jwsStr += "<td><span class='badge bg-purple'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   default:
+				                	   jwsStr += "<td><span class='badge bg-brown'>"+rate.toFixed(2)+"%</span></td>";
+			                   }
+			                   jwsStr += "</tr>";
+			                   $("#jwsPro_data").append(jwsStr); 
+	                 	}
+					}else{
+						jwsStr = "<tr>没有符合条件的数据</tr>";
+						$("#jwsPro_data").append(jwsStr); 
+					}
+				}
+		},false);
+	   	
+	   var grouponStr="";
+	   doManager("strategyActivityManager","queryStoreRanking",[groupon_dept_id],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						for(var i=0;i<jsonData.length;i++){
+							grouponStr= "<tr>"
+			                   +"<td>"+jsonData[i].store_name+"</td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   
+								var rate = 0;
+		   			    		if(jwsGMV!=0){
+		   			    			rate = (jsonData[i].ordergmv/grouponGMV) * 100;
+		   			    		}
+		   			    	
+			                   switch(i)
+			                   {
+				                   case 0:
+				                	   grouponStr += "<td><span class='badge bg-red'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 1:
+				                	   grouponStr += "<td><span class='badge bg-yellow'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 2:
+				                	   grouponStr += "<td><span class='badge bg-blue'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 3:
+				                	   grouponStr += "<td><span class='badge bg-green'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   case 4:
+				                	   grouponStr += "<td><span class='badge bg-purple'>"+rate.toFixed(2)+"%</span></td>";
+				                     break;
+				                   default:
+				                	   grouponStr += "<td><span class='badge bg-brown'>"+rate.toFixed(2)+"%</span></td>";
+			                   }
+			                   grouponStr += "</tr>";
+			                   $("#grouponPro_data").append(grouponStr); 
+	                 	}
+					}else{
+						grouponStr = "<tr>没有符合条件的数据</tr>";
+						$("#grouponPro_data").append(grouponStr); 
+					}
+				}
+		},false);
+	}
+	
+	function initMemberTrend(){
+	  doManager("strategyActivityManager","queryMemberTrend",null,
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							memberXData[index]=element.datetime;
+							memberYData[index]=element.membernum;
+	                 	});
+						option1.series[0].data = memberYData;
+						myChart1.setOption(option1,true);
+					}else{
+						memberYData = [];
+						option1.series[0].data = memberYData;
+						myChart1.setOption(option1,true);	
+					}
+				}
+		});
+    }
+	
+	function initallcity(){
+		doManager("strategyActivityManager","queryActivityScope",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$("#storeSelect").append("<option value='all'>全部门店</option>");
+					$(jsonData).each(function(index,element){
+						$("#storeSelect").append('<option value="'+element.store_no+'">'+element.store_name+'</option>');
+                   });
+				}
+		});
+	}
+	
+	function showProductRanking(store_no){
+		doManager("strategyActivityManager","queryProductRanking",["product",store_no],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var productStr="";
+					var jsonData = $.fromJSON(data.data);
+					$("#product_data").find("tr:gt(0)").remove(); 
+					if(jsonData.length!=0){
+						for(var i=0;i<jsonData.length;i++){
+							productStr= "<tr>"
+			                   +"<td>"+jsonData[i].product_name+"</td>"
+			                   +"<td>"+jsonData[i].product_quantity+"</td>";
+		   			    	
+			                   switch(i)
+			                   {
+				                   case 0:
+				                	   productStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 1:
+				                	   productStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 2:
+				                	   productStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 3:
+				                	   productStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 4:
+				                	   productStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+				                     break;
+				                   default:
+				                	   productStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+			                   }
+			                   productStr += "</tr>";
+			                   $("#product_data").append(productStr); 
+	                 	}
+					}else{
+						productStr = "<tr>没有符合条件的数据</tr>";
+						$("#product_data").append(productStr); 
+					}
+				}
+		},false);
+	   	
+	   doManager("strategyActivityManager","queryProductRanking",["service",store_no],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var serviceStr="";
+					var jsonData = $.fromJSON(data.data);
+					$("#service_data").find("tr:gt(0)").remove(); 
+					if(jsonData.length!=0){
+						for(var i=0;i<jsonData.length;i++){
+							serviceStr= "<tr>"
+			                   +"<td>"+jsonData[i].product_name+"</td>"
+			                   +"<td>"+jsonData[i].product_quantity+"</td>";
+		   			    	
+			                   switch(i)
+			                   {
+				                   case 0:
+				                	   serviceStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 1:
+				                	   serviceStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 2:
+				                	   serviceStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 3:
+				                	   serviceStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 4:
+				                	   serviceStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+				                     break;
+				                   default:
+				                	   serviceStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+			                   }
+			                   serviceStr += "</tr>";
+			                   $("#service_data").append(serviceStr); 
+	                 	}
+					}else{
+						serviceStr = "<tr>没有符合条件的数据</tr>";
+						$("#service_data").append(serviceStr); 
+					}
+				}
+		},false);
+	}
+	
+</script>
+</body>
+</html>
