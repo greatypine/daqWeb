@@ -9,6 +9,8 @@ public interface StrategyActivityDao extends IDAO{
 
 	public Map<String, Object> queryStrategyGMV(String dept_id);
 	
+	public List<Map<String, Object>> queryGmvTrend();
+	
 	public Map<String, Object> queryNewMember();
 	
 	public Map<String, Object> queryTotalMember();

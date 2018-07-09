@@ -106,14 +106,14 @@
           <div class="box-body">
             <div class="col-sm-12">
               <ul class="clearfix no-padding">
-                <li class="col-sm-4"><i class="glyphicon glyphicon-home"></i>221涵盖门店：<br><span>96</span><small>（店）</small></li>
-                <li class="col-sm-4"><i class="fa fa-database"></i>221GMV：<br><small>￥</small><span id="totalGmv">载入中...</span></li>
-               	<li class="col-sm-4"><i class="fa fa-fire"></i>221社员新增数/社员总数：<span id="memberNum">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-home"></i>涵盖门店：<br><span>96</span><small>（店）</small></li>
+                <li class="col-sm-4"><i class="fa fa-database"></i>合计GMV：<br><small>￥</small><span id="totalGmv">载入中...</span></li>
+               	<li class="col-sm-4"><i class="fa fa-fire"></i>社员新增/社员总数：</br><span id="memberNum">载入中...</span></li>
               </ul>
               <ul class="clearfix no-padding">
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>优易GMV：<br><small>￥</small><span id="yyGmv">载入中...</span></li>
-                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>团购GMV：<br><small>￥</small><span id="grouponGmv">载入中...</span></li>
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><span id="jwsGmv">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>团购GMV：<br><small>￥</small><span id="grouponGmv">载入中...</span></li>
               </ul>
             </div>
           </div>
@@ -126,7 +126,12 @@
         </div>
         <div class="box box-default">
           <div class="box-body">
-            <div class="col-sm-6">
+            <div class="col-sm-12 no-padding" id="main4" style="height: 350px;"></div>
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-6" style="height: 460px;">
               <h4 class="text-red">优易门店排名Top10</h4>
               <table class="table table-bordered">
                 <tbody id="yyPro_data">
@@ -138,7 +143,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" style="height: 460px;">
               <h4 class="text-light-blue">家务事门店排名Top10</h4>
               <table class="table table-bordered">
                 <tbody id="jwsPro_data">
@@ -154,7 +159,7 @@
         </div>
         <div class="box box-default">
           <div class="box-body">
-          	<div class="col-sm-6">
+          	<div class="col-sm-6" style="height: 460px;">
               <h4 class="text-red">团购门店排名Top10</h4>
               <table class="table table-bordered">
                 <tbody id="grouponPro_data">
@@ -166,7 +171,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="col-sm-6" id="main1" style="height: 350px;"></div>
+            <div class="col-sm-6" id="main1" style="height: 450px;"></div>
           </div>
         </div>
         <div class="box box-default">
@@ -177,7 +182,7 @@
         	</div>
           </div>
           <div class="box-body">
-            <div class="col-sm-6">
+            <div class="col-sm-6" style="height: 460px;">
               <h4 class="text-red">商品类排名Top10</h4>
               <table class="table table-bordered">
                 <tbody id="product_data">
@@ -189,7 +194,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6" style="height: 460px;">
               <h4 class="text-light-blue">服务类排名Top10</h4>
               <table class="table table-bordered">
                 <tbody id="service_data">
@@ -254,6 +259,7 @@
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart2 = echarts.init(document.getElementById('main2'));
   var myChart3 = echarts.init(document.getElementById('main3'));
+  var myChart4 = echarts.init(document.getElementById('main4'));
 
   //社员人数
   var memberXData = [];
@@ -346,7 +352,7 @@
       formatter: "{a} <br/>{b} : {c} ({d}%)"
     },
     series: [{
-      name: '商品类服务类产品占比',
+      name: '产品占比',
       type: 'pie',
       radius: '90%',
       center: ['50%', '50%'],
@@ -499,7 +505,7 @@
         top: '10%',
         dimension: 1,
         min: 0,
-        max: 10,
+        max: 30,
         itemWidth: 30,
         itemHeight: 100,
         calculable: true,
@@ -565,14 +571,132 @@
     ]
   };
 
+  //总GMV走势图
+  var gmvXData = [];
+  var gmvYData = [];
+  
+  var option4 = {
+	  title: {
+		  text: "GMV走势",
+		  left: "10",
+		  y: "10",
+		  textStyle: {
+			  color: "#666"
+		  }
+	  },
+	  color: "#BF3EFF",
+	  tooltip: {
+		  trigger: "axis",
+		  axisPointer: {
+			  type: "cross",
+			  crossStyle: {
+				  color: "#BF3EFF"
+			  }
+		  }
+	  },
+	  legend: {
+		  data: [
+			  {
+				  name: "总GMV",
+				  icon: "circle",
+				  textStyle: {
+					  color: "#666"
+				  }
+			  },
+		  ],
+		  top: "10%",
+		  textStyle: {
+			  color: "#CD0000"
+		  }
+	  },
+	  xAxis: [
+		  {
+			data: gmvXData,
+			type: 'category',
+	        boundaryGap: false,
+	        axisLine: {
+	          lineStyle: {
+	            color: '#666'
+	          }
+	        },
+	        splitLine: {
+	          show: false
+	        },
+	        axisTick: {
+	          show: true
+	        },
+	        splitArea: {
+	          show: false
+	        },
+	        axisLabel: {
+	          interval: 0,
+	        },
+		  }
+	  ],
+	  yAxis: [
+		  {
+			type: 'value',
+	        splitLine: {
+	          show: false
+	        },
+	        axisLine: {
+	          lineStyle: {
+	            color: '#333'
+	          }
+	        },
+	        axisTick: {
+	          show: false
+	        },
+	        axisLabel: {
+	          interval: 1,
+	        },
+	        splitArea: {
+	          show: false
+	        },
+		  }
+	  ],
+	  grid: {
+		  top: "25%",
+		  left: '5%',
+		  right: '5%',
+		  bottom: '10%'
+	  },
+	  series: [
+		  {
+			  name: "总GMV",
+			  type: "bar",
+			  data: gmvYData,
+			  barWidth: "auto",
+			  itemStyle: {
+				  normal: {
+					  color: '#CD5555',
+				  }
+			  },
+		  	  markPoint : {
+			  	data : [
+					  {type : 'max', name: '最大值'},
+					  {type : 'min', name: '最小值'},
+				  ],
+				  itemStyle:{normal: {color:'#CD0000'}},
+				  emphasis: {
+				      itemStyle:{normal: {color:'#CD0000'}}
+				  }
+			  },
+		  },
+	  ]
+  };
+  
   myChart1.setOption(option1);
   myChart2.setOption(option2);
   myChart3.setOption(option3);
+  myChart4.setOption(option4);
 </script>
 <script>
 
 	$(function(){
 		inintTotalGmvData();
+		gmvXData = initgmvXData();
+		initGmvTrend();
 		inintMemberData();
 		inintYYGmvData();
 		inintGrouponGmvData();
@@ -995,6 +1119,63 @@
 		},false);
 	}
 	
+	function initGmvTrend(){
+	  gmvYData = new Array(gmvXData.length+1).join(0).split('');
+		doManager("strategyActivityManager","queryGmvTrend",null,
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var dateTemp = element.datetime;
+							var indexTemp = jQuery.inArray(dateTemp,gmvXData);
+							gmvYData[indexTemp]=element.total_gmv;
+	                    });
+						option4.xAxis[0].data=gmvXData;
+						option4.series[0].data=gmvYData;
+						myChart4.setOption(option4);
+					}else{
+						gmvYData = [];
+						option4.series[0].data=gmvYData;
+						myChart4.setOption(option4);
+					}
+				}
+		});
+	}
+	
+	
+	function initgmvXData() {
+      var data = [];
+      var day1 = new Date();
+      day1.setTime(day1.getTime()-7*24*60*60*1000);
+      var fistDay = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
+      var now = new Date();
+      var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+      data = getAllDate(fistDay,curDay);
+      return data;
+    }
+	
+  //获取当年所有的日期
+  function getAllDate(begin, end) {  
+	  var result = [];
+      var ab = begin.split("-");  
+      var ae = end.split("-");  
+      var db = new Date();  
+      db.setUTCFullYear(ab[0], ab[1] - 1, ab[2]);  
+      var de = new Date();  
+      de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);  
+      var unixDb = db.getTime();  
+      var unixDe = de.getTime();  
+      for (var k = unixDb; k <= unixDe;) {  
+          result.push((new Date(parseInt(k))).format());
+          k = k + 24 * 60 * 60 * 1000;  
+      }  
+      return result;
+  } 
+
+  Date.prototype.toLocaleString = function() {
+      return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
+  }; 
 </script>
 </body>
 </html>

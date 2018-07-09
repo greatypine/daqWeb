@@ -18,6 +18,13 @@ public class StrategyActivityManagerImpl extends BizBaseCommonManager implements
 	}
 
 	@Override
+	public List<Map<String, Object>> queryGmvTrend(){
+		StrategyActivityDao strategyActivityDao = (StrategyActivityDao)SpringHelper.getBean(StrategyActivityDao.class.getName());
+		List<Map<String, Object>> lst_data = strategyActivityDao.queryGmvTrend();
+    	return lst_data;
+	}
+	
+	@Override
 	public Map<String, Object> queryNewMember() {
 		StrategyActivityDao strategyActivityDao = (StrategyActivityDao)SpringHelper.getBean(StrategyActivityDao.class.getName());
 		Map<String, Object> order_obj = strategyActivityDao.queryNewMember();

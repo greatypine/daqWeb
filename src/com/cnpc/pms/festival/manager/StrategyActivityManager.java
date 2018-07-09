@@ -20,6 +20,11 @@ public interface StrategyActivityManager extends IManager{
 	public Map<String, Object> queryStrategyGMV(String dept_id);
 	
 	/**
+	 * 查询GMV走势
+	 */
+	public List<Map<String, Object>> queryGmvTrend();
+	
+	/**
 	 * 统计221新增社员数
 	 */
 	public Map<String, Object> queryNewMember();

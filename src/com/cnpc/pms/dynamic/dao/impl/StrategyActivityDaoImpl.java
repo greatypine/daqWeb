@@ -15,7 +15,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 
 	@Override
 	public Map<String, Object> queryStrategyGMV(String dept_id) {
-		String sql = "SELECT IFNULL(SUM(trading_price),0) total_gmv FROM df_mass_order_total tor "
+		String sql = "SELECT IFNULL(SUM(trading_price),0) total_gmv FROM df_mass_order_monthly tor "
 				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE tor.sign_time >= '2018-07-01' ";
 		
 		if(StringUtils.isNotEmpty(dept_id)){
@@ -36,6 +36,17 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 		return order_obj;
 	}
 
+	@Override
+	public List<Map<String, Object>> queryGmvTrend(){
+		String sql = "SELECT IFNULL(SUM(trading_price), 0) total_gmv,DATE(tor.sign_time) AS datetime FROM df_mass_order_monthly tor "
+				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(tor.sign_time) GROUP BY datetime";
+		
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	
 	@Override
 	public Map<String, Object> queryNewMember() {
 		String sql = "SELECT count(member.customer_id) AS membernum FROM df_user_member member JOIN df_activity_scope das ON (member.regist_storeid = das.platformid) "
@@ -68,7 +79,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot() {
 		String sql = "SELECT das.store_name,tor.ordergmv,tor.ordernum FROM(SELECT tor.store_id,sum(trading_price) AS ordergmv,count(1) AS ordernum "
-				+ "FROM df_mass_order_total tor WHERE tor.sign_time >= '2018-07-01' GROUP BY tor.store_id) tor JOIN df_activity_scope das "
+				+ "FROM df_mass_order_monthly tor WHERE tor.sign_time >= '2018-07-01' GROUP BY tor.store_id) tor JOIN df_activity_scope das "
 				+ "ON (tor.store_id = das.platformid)";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -79,7 +90,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 
 	@Override
 	public List<Map<String, Object>> queryDataOfPercent() {
-		String sql = "SELECT concat(tor.order_type,'') as order_type,sum(trading_price) AS ordergmv FROM df_mass_order_total tor JOIN df_activity_scope das on (tor.store_id = das.platformid) "
+		String sql = "SELECT concat(tor.order_type,'') as order_type,sum(trading_price) AS ordergmv FROM df_mass_order_monthly tor JOIN df_activity_scope das on (tor.store_id = das.platformid) "
 				+ "WHERE tor.sign_time >= '2018-07-01' GROUP BY tor.order_type";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -90,7 +101,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	
 	@Override
 	public List<Map<String, Object>> queryStoreRanking(String dept_id){
-		String sql = "SELECT das.store_name,tor.ordergmv FROM (SELECT tor.store_id,sum(trading_price) AS ordergmv FROM df_mass_order_total tor "
+		String sql = "SELECT das.store_name,tor.ordergmv FROM (SELECT tor.store_id,sum(trading_price) AS ordergmv FROM df_mass_order_monthly tor "
 				+ "WHERE tor.sign_time >= '2018-07-01' ";
 		if(StringUtils.isNotEmpty(dept_id)){
 			if("groupon".equals(dept_id)){
@@ -110,7 +121,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 
 	@Override
 	public List<Map<String, Object>> queryMemberTrend(){
-		String sql = "SELECT count(member.customer_id) AS membernum,	DATE(member.opencard_time) AS datetime FROM	df_user_member member "
+		String sql = "SELECT count(member.customer_id) AS membernum, DATE(member.opencard_time) AS datetime FROM df_user_member member "
 				+ "JOIN df_activity_scope das ON (member.regist_storeid = das.platformid) WHERE	DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(member.opencard_time) GROUP BY datetime ";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
