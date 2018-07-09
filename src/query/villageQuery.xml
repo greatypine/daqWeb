@@ -175,9 +175,9 @@
         <column key="name" header="楼号"  align="center" allowSort="true"  width="20%"/>
     </query>
     <query id="observelistContainer" header="明查台账列表"  order="id desc" method="observeParameterManager.queryObserveParameter">
-        <column key="id" header="" display="false" allowSearch="true" allowSort="true" align="center" width="10%"/>
-        <column key="town_name" header="门店编号" display="true" allowSearch="true" allowSort="true" align="center" width="20%"/>
-        <column key="village_name" header="门店名称" display="true" allowSearch="true" allowSort="true" align="center" width="20%"/>
-        <column key="tiny_village_name" header="明查月份"  align="center" allowSort="true" width="20%"/>
+        <column key="store_id" header="" display="false" allowSearch="true" allowSort="true" align="center" width="10%"/>
+        <column key="storeno" header="门店编号" display="true" allowSearch="true" allowSort="true" align="center" width="20%"/>
+        <column key="store_name" header="门店名称" display="true" allowSearch="true" operator="eq" allowSort="true" align="center" width="20%"/>
+        <column key="observe_month" header="明查月份"  align="center" operator="eq" allowSort="true" width="20%"/>
     </query>
 </pmsquery>

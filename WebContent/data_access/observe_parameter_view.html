@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>目标值信息列表</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="laydate/laydate.js"></script>
+    <script type="text/javascript" src="../scripts/auto.js"></script> 
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../scripts/css/auto.css" rel="stylesheet">
+</head>
+<style type="text/css">
+    	.display{
+    		width:100%
+    	}
+  .demo-input{padding-left: 10px; height: 38px; min-width: 262px; line-height: 38px; border: 1px solid #e6e6e6;  background-color: #fff;  border-radius: 2px;}
+  .demo-footer{padding: 50px 0; color: #999; font-size: 14px;}
+  .demo-footer a{padding: 0 5px; color: #01AAED;}
+  .auto{max-height:200px; overflow-y:scroll;}
+</style>
+<script type="text/javascript">
+var win;
+var lst_select_store=null;
+var storeNameArray=new Array();
+var storeIdMap = {};
+$(function () {
+	//获取当前登录的用户
+	 doManager("UserManager", "findUserInfo", '', function(
+							data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							if(data.data!="null"){
+								var jsonData = $.fromJSON(data.data);
+								if(jsonData==3223||jsonData==3224||jsonData==3225){
+									$("#inser").hide();
+								}else{
+								}
+							}
+						} else {
+							$$.showMessage("系统信息", "信息加载异常!");
+						}
+					},false);
+    //页面加载成功后需要获取数据
+    searchList();
+    $(".operateHeader").width("5%");
+    
+    laydate.render({
+    	  elem: '#observe_month'
+    	  ,type: 'month'
+    });
+    
+   
+    $('#store_name').keyup(function(event){
+  	  storeNameArray=new Array();
+  	    $("#auto_store").empty();
+          var str_name = $(this).val();
+          if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+          	$("#store_id").val("");
+              $('#store_name-search_tradetype').children().remove();
+              if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                  return;
+              }
+              doManager('dynamicManager','getStoreByCity',[0,null,null,null],function(data){
+                  if(data.result){
+                  	lst_select_store = JSON.parse(data.data).storelist;
+                      
+                      for(i=0;i<lst_select_store.length;i++){
+                      	storeNameArray.push(lst_select_store[i].name);
+                      	storeIdMap[lst_select_store[i].name] = lst_select_store[i].store_id;
+        			  	}
+        			  	var autoComplete = new AutoComplete("store_name","auto_store",storeNameArray);
+        			    autoComplete.start(event);
+                  }else{
+                  	
+                  }
+              });
+          }
+      });
+    
+   
+});
+function storeclick(){
+	  var temp_store = document.getElementById("store_name").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+	  $("#store_id").val(storeIdMap[temp_store]);
+};
+//记载页面时请求数据列表默认的方法
+function searchList() {
+    $$.executeSearch('observelistContainer', 'conditionsDiv');
+    $(".operateHeader").width("5%");
+}
+function doClean() {
+    document.service_qa.reset();
+    searchList();
+}
+function insertObserve(){
+	var observe_month = $("#observe_month").val();
+	if(observe_month == null||observe_month.trim() == ""){
+		alert("请选择明查月份后进行添加！");
+		return;
+	}
+	var store_name = $("#store_name").val();
+	if(store_name == null||store_name.trim() == ""){
+		alert("请选择门店后进行添加！");
+		return;
+	}
+	var store_id = $("#store_id").val();
+	if(store_id == null||store_id.trim() == ""){
+		alert("请选择存在门店进行添加！");
+		return;
+	}
+	//判断是否该门店该月份是否已录入
+	doManager('observeParameterManager','queryExitObserveParameter',[store_id,observe_month],function(data){
+        if(data.result){
+        	var queryObserveParameterList = JSON.parse(data.data).queryObserveParameterList;
+        	if(queryObserveParameterList.length >0 &&　queryObserveParameterList != null){
+        		alert("该门店已录入过当前月明查台账，请查询后编辑！");
+        	}else{
+        		window.location.href="observe_paramter_add.html?om="+encode64(observe_month)+"&t="+encode64("add")+"&sn="+encode64(store_name)+"&si="+encode64(store_id);	
+        	}
+        }else{
+        	alert("请求失败，请稍后重新请求！");
+        	return;
+        }
+    },false);
+}
+
+var editObj = {
+		html : '<a href="#" class="blue">编辑</a>',
+		resourceId: "observe_paramter_edit",
+		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+			var store_id = allColumnsDataMap.store_id;
+			window.location.href = "observe_paramter_add.html?om="+encode64(data[2])+"&t="+encode64("edit")+"&sn="+encode64(data[1])+"&si="+encode64(store_id);
+		}
+	}
+
+$pmspage.opArr = [ editObj];  
+
+
+function questioncount(){
+	
+	//window.location.href="observe_question_summary.html";	
+	debugger;
+	doManager('observeParameterManager','exportObserveParamterSummary',["北京"],function(data){	
+        if(data.result){
+        	
+        }else{
+        	alert("请求失败，请稍后重新请求！");
+        	return;
+        }
+    },false);
+
+}
+
+function questionexport(){
+	debugger;
+	doManager('observeParameterManager','exportObserveParamter',["北京"],function(data){
+		
+        if(data.result){
+        	
+        }else{
+        	alert("请求失败，请稍后重新请求！");
+        	return;
+        }
+    },false);
+}
+
+</script>
+<body style="height: 100%">
+	<div class="panel panel-default" style="margin: 10px">
+	    <div class="panel-heading">
+	        <h4 class="panel-title">
+	           	门店数据管理：门店明查台账
+	        </h4>
+	    </div>
+	</div>
+	<div class="panel panel-primary">
+        <div class="panel-heading">明查台账信息查询</div>
+        <div class="panel-body">
+            <div id="conditionsDiv" style="margin-top: 10px">
+                <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                      displaynumber="7">
+                    <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                        <tr>
+                            <td width="7%">明查月份：</td>
+                            <td>
+                                <input id="observe_month" name="observe_month" type="text" readonly style="width:40%" class="form-control demo-input" />
+                            </td>
+                            <td width="7%">门店：</td>
+                            <td style="position:relative">
+                            	<input id="store_id" name="store_id" type="hidden" value=""/>    
+                                <input id="store_name" name="store_name" type="text" style="width:60%" class="form-control"/>
+                            	<div class="auto hidden" id="auto_store" style="width:60%;z-index: 99999;" onclick="storeclick();"></div>
+                            </td>
+                            <td>
+                            	
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="panel-footer" style="text-align: right">
+        	<button class="btn btn-primary" onclick="questioncount()">明查问题汇总导出</button>
+        	<button class="btn btn-primary" onclick="questionexport()">各门店扣分详情导出</button>
+            <button class="btn btn-primary" onclick="searchList()">查询</button>
+            <button class="btn btn-primary" id="inser" onclick="insertObserve()">添加</button>
+            <!-- <button class="btn btn-primary" onclick="doClean();">重置</button> -->
+        </div>
+    </div>
+    <div id="observelisrContainer" class="panel panel-primary" queryid="observelistContainer" operators="$pmspage.opArr"
+         titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
+         showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+         showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true" style="100%">
+   </div>
+         
+</body>
+</html>
