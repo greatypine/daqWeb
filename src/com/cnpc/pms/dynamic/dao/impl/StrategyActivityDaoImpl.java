@@ -102,7 +102,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public List<Map<String, Object>> queryStoreRanking(String dept_id){
 		String sql = "SELECT das.store_name,tor.ordergmv FROM (SELECT tor.store_id,sum(trading_price) AS ordergmv FROM df_mass_order_monthly tor "
-				+ "WHERE tor.sign_time >= '2018-07-01' ";
+				+ "FORCE INDEX(sign_time) WHERE tor.sign_time >= '2018-07-01' ";
 		if(StringUtils.isNotEmpty(dept_id)){
 			if("groupon".equals(dept_id)){
 				sql  = sql + " AND tor.groupon_instance_id IS NOT NULL ";
