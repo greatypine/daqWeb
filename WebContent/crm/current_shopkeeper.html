@@ -2496,7 +2496,7 @@ function initStoreHistoryGMV(){
 		    ],
 		    series : [
 		      {
-		        name:'订单量',
+		        name:'用户量',
 		        type:'bar',
 		        cursor: 'default',
 		        data:[],
@@ -2851,6 +2851,7 @@ function initStoreHistoryGMV(){
   function newEmployeeInfoHtml(t){
 	  var employeeNo =   $(t).attr("id").split("_")[1];
 	  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
+	  //var URL="employee.html?"+"employee_no="+encode64(employeeNo)+"&source="+decode64(0);
 	  window.open(URL); 
   }
   
