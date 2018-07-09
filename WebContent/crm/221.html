@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>221运营专场</title>
+  <title>221专题</title>
   <!-- Tell the browser to be responsive to screen width -->
   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
   <!-- Select2 -->
   <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -88,7 +89,7 @@
 			<div class="pull-left">
 				<div class="logo-lg">
 					<ul class="no-margin">
-						<li class="current"><em>221运营专场</em></li>
+						<li class="current"><em>221专题</em></li>
 					</ul>
 				</div>
 			</div>
@@ -102,7 +103,7 @@
       <!-- Main content -->
       <section class="content-header">
         <div class="box box-default report">
-          <div class="box-header h4"><strong>221运营报告</strong></div>
+          <div class="box-header h4"><strong>221专题简报</strong></div>
           <div class="box-body">
             <div class="col-sm-12">
               <ul class="clearfix no-padding">
@@ -120,13 +121,13 @@
         </div>
        <div class="box box-default">
           <div class="box-body">
-            <div class="col-sm-8 no-padding" id="main3" style="height: 350px;"></div>
-            <div class="col-sm-4" id="main2" style="height: 350px;"></div>
+          	<div class="col-sm-8 no-padding" id="main4" style="height: 350px;"></div>
+          	<div class="col-sm-4" id="main2" style="height: 350px;"></div>
           </div>
         </div>
         <div class="box box-default">
           <div class="box-body">
-            <div class="col-sm-12 no-padding" id="main4" style="height: 350px;"></div>
+            <div class="col-sm-12 no-padding" id="main3" style="height: 350px;"></div>
           </div>
         </div>
         <div class="box box-default">
@@ -176,14 +177,20 @@
         </div>
         <div class="box box-default">
           <div class="box-header h4 text-light-blue">
-          	<div class="col-sm-3 has-error" style="padding: 0 5px 0 0;">
-          		<select class="form-control select2" id="storeSelect">
-            	</select>
-        	</div>
+<!--           	<div class="col-sm-3" style="padding: 0 5px 0 0;"> -->
+<!--           		<select class="form-control select2" id="storeSelect"> -->
+<!--             	</select> -->
+<!--         	</div> -->
+        	<div class="col-sm-3">
+        		<input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+              	<input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" />
+              	<div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+              </div>
+            </div>
           </div>
           <div class="box-body">
-            <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-red">商品类排名Top10</h4>
+            <div class="col-sm-6" style="height: 465px;">
+              <h4 class="text-red">商品类排名Top10 (截止到昨天)</h4>
               <table class="table table-bordered">
                 <tbody id="product_data">
 	                <tr>
@@ -194,8 +201,8 @@
                 </tbody>
               </table>
             </div>
-            <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-light-blue">服务类排名Top10</h4>
+            <div class="col-sm-6" style="height: 465px;">
+              <h4 class="text-light-blue">服务类排名Top10 (截止到昨天)</h4>
               <table class="table table-bordered">
                 <tbody id="service_data">
 	                <tr>
@@ -335,14 +342,10 @@
   };
 
   //商品类服务类产品占比
-  var productGmv = "0";
-  var serviceGmv = "0";
   option2 = {
     title: [ {    	
-      text: '商品类服务类占比',
-      left: '20%',
-      top: '0',
-      textAlign: 'center',
+      text: '商品类服务类占比（万元）',
+      left: 'center',
       textStyle: {
         color: '#666'
       }
@@ -354,16 +357,13 @@
     series: [{
       name: '产品占比',
       type: 'pie',
-      radius: '90%',
+      radius: '80%',
       center: ['50%', '50%'],
       clockwise: false,
-      data: [{
-        value: productGmv,
-        name: '商品类'
-      }, {
-        value: serviceGmv,
-        name: '服务类'
-      }],
+      data: [
+        {value: 0,name: '商品类'}, 
+        {value: 0,name: '服务类'}
+      ],
       label: {
         normal: {
           textStyle: {
@@ -374,7 +374,6 @@
           formatter: '{d}%',
         }
       },
-
       labelLine: {
         normal: {
           show: false
@@ -382,7 +381,7 @@
       },
       itemStyle: {
         normal: {
-          borderWidth: 4,
+          borderWidth: 2,
           borderColor: '#ffffff',
         },
         emphasis: {
@@ -419,7 +418,7 @@
 
   option3 = {
     title: {
-      text: "GMV门店分布",
+      text: "昨日门店GMV分布",
       left: "10",
       y: "10",
       textStyle: {
@@ -577,7 +576,7 @@
   
   var option4 = {
 	  title: {
-		  text: "GMV走势",
+		  text: "近7日GMV走势",
 		  left: "10",
 		  y: "10",
 		  textStyle: {
@@ -666,7 +665,7 @@
 			  name: "总GMV",
 			  type: "bar",
 			  data: gmvYData,
-			  barWidth: "auto",
+			  barWidth: "50",
 			  itemStyle: {
 				  normal: {
 					  color: '#CD5555',
@@ -705,13 +704,41 @@
 		inintJWSGmvData();
 		showStoreRanking();
 		initMemberTrend();
-		initallcity();
+// 		initallcity();
+		initallstore();
 		showProductRanking("all");
 		
-		$("#storeSelect").change(function(){
-			var storeNo = $("#storeSelect  option:selected").val();
+// 		$("#storeSelect").change(function(){
+// 			var storeNo = $("#storeSelect  option:selected").val();
+// 			showProductRanking(storeNo);
+// 		});
+		
+		var autoComplete = new AutoComplete("store_name_manual","auto",array);
+	  	document.getElementById("store_name_manual").onkeyup = function(event){
+	  		autoComplete.start(event);
+	  		if($("#store_name_manual").val().trim() == ""){
+				$("#store_id_manual").val("");
+			}
+	  		for(var key in storeJson){
+	  			if(document.getElementById("store_name_manual").value==key){
+	  				document.getElementById("store_id_manual").value=storeJson[key];
+	  			}
+	  		}
+	  	}
+	  	$("#auto").on("click",function(event){
+			for(var key in storeJson){
+				if(document.getElementById("store_name_manual").value==key){
+					document.getElementById("store_id_manual").value=storeJson[key];
+				}
+			}
+			var storeNo = $("#store_id_manual").val(); 
 			showProductRanking(storeNo);
 		});
+	  	
+// 	  	$("#auto").change(function(){
+// 	  		var storeNo = $("#store_id_manual").val(); 
+// 			showProductRanking(storeNo);
+// 	  	});
 		
 	});
     
@@ -725,7 +752,7 @@
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
 							totalGMV = jsonData.total_gmv;
-							$("#totalGmv").html(parseFloat(totalGMV).toLocaleString());
+							$("#totalGmv").html(changeMoney(parseInt(totalGMV)));
 						}else{
 							$("#totalGmv").html('0');
 						}
@@ -751,7 +778,7 @@
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
 							totalMembernum = jsonData.totalnum;
-							$("#memberNum").html(parseFloat(newMemberNum).toLocaleString()+"/"+parseFloat(totalMembernum).toLocaleString());
+							$("#memberNum").html(parseFloat(newMemberNum).toLocaleString()+"/"+parseFloat(totalMembernum).toLocaleString()+"人");
 						}else{
 							$("#memberNum").html('0');
 						}
@@ -768,7 +795,7 @@
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
 							yyGMV = jsonData.total_gmv;
-							$("#yyGmv").html(parseFloat(yyGMV).toLocaleString());
+							$("#yyGmv").html(changeMoney(parseInt(yyGMV)));
 						}else{
 							$("#yyGmv").html('0');
 						}
@@ -785,12 +812,12 @@
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
 							grouponGMV = jsonData.total_gmv;
-							$("#grouponGmv").html(parseFloat(grouponGMV).toLocaleString());
+							$("#grouponGmv").html(changeMoney(parseInt(grouponGMV)));
 						}else{
 							$("#grouponGmv").html('0');
 						}
 					}
-			});
+			},false);
 	}
 	
 	var jwsGMV = '0';
@@ -802,7 +829,7 @@
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
 							jwsGMV = jsonData.total_gmv;
-							$("#jwsGmv").html(parseFloat(jwsGMV).toLocaleString());
+							$("#jwsGmv").html(changeMoney(parseInt(jwsGMV)));
 						}else{
 							$("#jwsGmv").html('0');
 						}
@@ -834,6 +861,8 @@
 			});
 	  }
 	
+	var productGmv = "0";
+	var serviceGmv = "0";
 	function initPercent(){
 		  doManager("strategyActivityManager","queryDataOfPercent",null,
 				function(data,textStatus,XmlHttpRequest){
@@ -847,8 +876,8 @@
 									serviceGmv = element.ordergmv;
 								}
 		                 	});
-							option2.series[0].data[0] = productGmv;
-							option2.series[0].data[1] = serviceGmv;
+ 							option2.series[0].data[0] = (productGmv/10000).toFixed(2);
+ 							option2.series[0].data[1] = (serviceGmv/10000).toFixed(2);
 							myChart2.setOption(option2,true);
 						}else{
 							option2.series[0].data[0] = "0";
@@ -964,7 +993,7 @@
 			                   +"<td>"+jsonData[i].ordergmv+"</td>";
 			                   
 								var rate = 0;
-		   			    		if(jwsGMV!=0){
+		   			    		if(grouponGMV!=0){
 		   			    			rate = (jsonData[i].ordergmv/grouponGMV) * 100;
 		   			    		}
 		   			    	
@@ -1019,19 +1048,6 @@
 				}
 		});
     }
-	
-	function initallcity(){
-		doManager("strategyActivityManager","queryActivityScope",null,
-		    function(data,textStatus,XmlHttpRequest){
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					$("#storeSelect").append("<option value='all'>全部门店</option>");
-					$(jsonData).each(function(index,element){
-						$("#storeSelect").append('<option value="'+element.store_no+'">'+element.store_name+'</option>');
-                   });
-				}
-		});
-	}
 	
 	function showProductRanking(store_no){
 		doManager("strategyActivityManager","queryProductRanking",["product",store_no],
@@ -1144,6 +1160,50 @@
 	}
 	
 	
+// 	function initallcity(){
+//		doManager("strategyActivityManager","queryActivityScope",null,
+//		    function(data,textStatus,XmlHttpRequest){
+//				if (data.result) {
+//					var jsonData = $.fromJSON(data.data);
+//					$("#storeSelect").append("<option value='all'>全部门店</option>");
+//					$(jsonData).each(function(index,element){
+//						$("#storeSelect").append('<option value="'+element.store_no+'">'+element.store_name+'</option>');
+//                });
+//				}
+//		});
+//	}
+	var array=new Array();
+ 	//初始化所有门店 
+ 	function initallstore() {
+ 		doManager("strategyActivityManager","queryActivityScope", null,
+ 			function(data, textStatus, XMLHttpRequest) {
+ 				if (data.result) {
+ 					var jsonData = $.fromJSON(data.data);
+ 					array = new Array();
+ 					var storeString = "";
+ 					for(i=0;i<jsonData.length;i++){
+ 						array.push(jsonData[i].store_name);
+ 						if(i == 0){
+ 							storeString = "{'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+",";
+ 						}else if(i == jsonData.length-1){
+ 							storeString = storeString+"'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+"}";
+ 						}else{
+ 							storeString = storeString+"'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+",";
+ 						}
+ 					}
+ 					storeJson=$.fromJSON(storeString);
+ 					var autoComplete = new AutoComplete("store_name_manual","auto",array);
+					document.getElementById("store_name_manual").onkeyup = function(event){
+						autoComplete.start(event);
+						if($("#store_name_manual").val().trim() == ""){
+							$("#store_id_manual").val("");
+						}
+						document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+					}
+ 				}
+ 			}, false);
+ 	}
+	
 	function initgmvXData() {
       var data = [];
       var day1 = new Date();
@@ -1176,6 +1236,22 @@
   Date.prototype.toLocaleString = function() {
       return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
   }; 
+  
+  function changeMoney (x) {
+	    x=x/10000;
+	    var y = '';
+	    if(parseInt(x)/10000<=1){
+	    	y=ForDight(x,2)+"万";
+	    }else if(parseInt(x)/10000>1){
+	    	x=x/10000+'';
+	    	y=ForDight(x,2)+"亿";
+	    }
+	    return y;
+  }
+  function ForDight(str,How){  
+    Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
+    return Dight;  
+  }
 </script>
 </body>
 </html>
