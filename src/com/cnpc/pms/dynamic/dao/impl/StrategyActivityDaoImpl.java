@@ -39,7 +39,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public List<Map<String, Object>> queryGmvTrend(){
 		String sql = "SELECT IFNULL(SUM(trading_price), 0) total_gmv,DATE(tor.sign_time) AS datetime FROM df_mass_order_monthly tor "
-				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(tor.sign_time) GROUP BY datetime";
+				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE DATE_SUB(CURDATE(), INTERVAL 6 DAY) <= date(tor.sign_time) GROUP BY datetime";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据

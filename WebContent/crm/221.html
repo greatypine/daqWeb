@@ -696,13 +696,13 @@
 	$(function(){
 		inintTotalGmvData();
 		gmvXData = initgmvXData();
+		initScatterplot();
+		initPercent();
 		initGmvTrend();
 		inintMemberData();
 		inintYYGmvData();
 		inintGrouponGmvData();
 		inintJWSGmvData();
-		initScatterplot();
-		initPercent();
 		showStoreRanking();
 		initMemberTrend();
 		initallcity();
@@ -773,7 +773,7 @@
 							$("#yyGmv").html('0');
 						}
 					}
-			},false);
+			});
 	}
 	
 	var grouponGMV = '0';
@@ -790,7 +790,7 @@
 							$("#grouponGmv").html('0');
 						}
 					}
-			},false);
+			});
 	}
 	
 	var jwsGMV = '0';
@@ -807,7 +807,7 @@
 							$("#jwsGmv").html('0');
 						}
 					}
-			},false);
+			});
 	}
 
 	function initScatterplot(){
