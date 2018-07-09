@@ -958,7 +958,11 @@ function mGetDate(year, month){
 			if (data.result) {
 				//alert("导出成功！ ");
 				var ret = JSON.parse(data.data); 
-				window.location.href=ret;
+				if(ret==null||ret=="null"){
+					$$.showMessage("系统信息", "导出失败!");
+				}else{
+					window.location.href=ret;
+				}
 			} else {
 				$$.showMessage("系统信息", "导出失败!");
 			}

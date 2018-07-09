@@ -34,6 +34,7 @@ import org.springframework.jmx.export.SpringModelMBean;
 import org.springframework.util.FileCopyUtils;
 
 import com.aliyun.oss.common.utils.RangeSpec.Type;
+import com.aliyun.oss.internal.OSSUtils;
 import com.cnpc.pms.base.entity.DataEntity;
 import com.cnpc.pms.base.manager.impl.BaseManagerImpl;
 import com.cnpc.pms.base.paging.FSP;
@@ -60,6 +61,7 @@ import com.cnpc.pms.personal.entity.WorkRecordTotal;
 import com.cnpc.pms.personal.manager.CompanyManager;
 import com.cnpc.pms.personal.manager.DsTopDataManager;
 import com.cnpc.pms.personal.manager.HumanresourcesManager;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.ScoreRecordManager;
 import com.cnpc.pms.personal.manager.ScoreRecordTotalManager;
 import com.cnpc.pms.personal.manager.StoreManager;
@@ -68,6 +70,7 @@ import com.cnpc.pms.personal.manager.WorkMonthManager;
 import com.cnpc.pms.personal.manager.WorkRecordManager;
 import com.cnpc.pms.personal.manager.WorkRecordTotalManager;
 import com.cnpc.pms.utils.DateUtils;
+import com.cnpc.pms.utils.OSSUploadUtil;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import com.cnpc.pms.utils.ValueUtil;
 import com.cnpc.pms.utils.excel.PinyinUtil;
@@ -513,7 +516,8 @@ public class WorkRecordManagerImpl extends BaseManagerImpl implements WorkRecord
 	        
 	        UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
 	        
-	        String str_file_dir_path = PropertiesUtil.getValue("file.root");
+	        //String str_file_dir_path = PropertiesUtil.getValue("file.root");
+	        String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 	        
 	        String exportFileName = "";
 	        try {
@@ -787,15 +791,22 @@ public class WorkRecordManagerImpl extends BaseManagerImpl implements WorkRecord
     	        
     	        //sh_data.setColumnHidden(32, true);
     	        
+    	        
     	        FileOutputStream fis_out_excel = new FileOutputStream(file_new);
     	        wb_wrinfo.write(fis_out_excel);
     	        fis_out_excel.close();
     	        fis_input_excel.close();
+    	        
+    	        //上传oss
+    	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+    	        String url = ossRefFileManager.uploadOssFile(file_new, "xls", "daqWeb/workrecord/");
+    	        return url ;
+    	        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	        
-	  return PropertiesUtil.getValue("file.web.root")+"/"+exportFileName;
+         //return PropertiesUtil.getValue("file.web.root")+"/"+exportFileName;
+         return null;
 		
 		
 	}
