@@ -4028,6 +4028,11 @@ var curr_user;
 	  window.open(url,"index_K"); 
   }
   
+  //221战略运营页
+  function goto221(){
+	  window.open("221.html","221");
+  }
+  
   //518直播间
   function gotolive(){
 	  window.open("518.html","518");

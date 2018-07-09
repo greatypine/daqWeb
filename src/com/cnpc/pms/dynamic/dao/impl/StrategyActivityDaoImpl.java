@@ -79,8 +79,8 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot() {
 		String sql = "SELECT das.store_name,tor.ordergmv,tor.ordernum FROM(SELECT tor.store_id,sum(trading_price) AS ordergmv,count(1) AS ordernum "
-				+ "FROM df_mass_order_monthly tor WHERE tor.sign_time >= '2018-07-01' GROUP BY tor.store_id) tor JOIN df_activity_scope das "
-				+ "ON (tor.store_id = das.platformid)";
+				+ "FROM df_mass_order_monthly tor FORCE INDEX(sign_time) WHERE tor.sign_time >= '2018-07-01' GROUP BY tor.store_id) tor "
+				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid)";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -143,7 +143,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public List<Map<String, Object>> queryProductRanking(String product_type,String store_no){
 		String sql = "SELECT tor.product_name, tor.product_quantity FROM (SELECT tor.product_name,  tor.store_id,sum(product_quantity) AS product_quantity "
-				+ "FROM df_ope_product_sales_day tor WHERE tor.recdate >= '2018-07-01' ";
+				+ "FROM ds_ope_product_store_day tor WHERE tor.recdate >= '2018-07-01' ";
 		
 		if(StringUtils.isNotEmpty(product_type)){
 			sql = sql + " AND tor.product_type = '"+product_type+"' ";

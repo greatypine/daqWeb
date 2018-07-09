@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>221战略专场</title>
+  <title>221运营专场</title>
   <!-- Tell the browser to be responsive to screen width -->
   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -88,7 +88,7 @@
 			<div class="pull-left">
 				<div class="logo-lg">
 					<ul class="no-margin">
-						<li class="current"><em>221战略专场</em></li>
+						<li class="current"><em>221运营专场</em></li>
 					</ul>
 				</div>
 			</div>
@@ -744,7 +744,7 @@
 							newMemberNum = jsonData.membernum;
 						}
 					}
-			},false);
+			});
 		  doManager("strategyActivityManager","queryTotalMember",null,
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
@@ -756,7 +756,7 @@
 							$("#memberNum").html('0');
 						}
 					}
-			},false);
+			});
 	}
 	
 	var yyGMV = '0';
@@ -904,7 +904,7 @@
 						$("#yyPro_data").append(yyStr); 
 					}
 				}
-		},false);
+		});
 		
 	   var jwsStr="";
 	   doManager("strategyActivityManager","queryStoreRanking",[jws_dept_id],
@@ -950,7 +950,7 @@
 						$("#jwsPro_data").append(jwsStr); 
 					}
 				}
-		},false);
+		});
 	   	
 	   var grouponStr="";
 	   doManager("strategyActivityManager","queryStoreRanking",[groupon_dept_id],
@@ -996,7 +996,7 @@
 						$("#grouponPro_data").append(grouponStr); 
 					}
 				}
-		},false);
+		});
 	}
 	
 	function initMemberTrend(){
@@ -1074,7 +1074,7 @@
 						$("#product_data").append(productStr); 
 					}
 				}
-		},false);
+		});
 	   	
 	   doManager("strategyActivityManager","queryProductRanking",["service",store_no],
 			function(data,textStatus,XmlHttpRequest){
@@ -1116,7 +1116,7 @@
 						$("#service_data").append(serviceStr); 
 					}
 				}
-		},false);
+		});
 	}
 	
 	function initGmvTrend(){
