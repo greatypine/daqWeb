@@ -137,9 +137,10 @@
 	    <!-- <div style="color: blue;margin-left: 20px;">请您输入电话号码：</div> -->
 	    <div class="register-box pull-right" style="margin-top: 10px;">
 	
-	    <div class="register-box-body" style="padding-top: 10px;">
+	    <div class="register-box-body" style="padding-top: 10px;position: relative;">
 	    
 	      <!--<div class="login-box-msg h4"><strong>登录</strong><span class="line"></span></div>-->
+			<a title="如果该号码不再使用，请联系城市公司HR修改。" style="position: absolute;right: 15px;top:30px;z-index: 999999;"><img id="tipimg" src="images/tip.png" width="20px" height="20px" /></a>
 	
 	      <form action="index.html" method="post">
 	      <div id="login_error_msg" class="has-feedback text-red" style="font-size: 16px;padding-bottom: 5px;"></div>
@@ -310,9 +311,11 @@ var id = decode64(getUrlParamByKey("id"));
 								$("#hiddenphone").val(emp_phone);
 								$("#phone").val("*******"+emp_phone.substring(emp_phone.length-4,emp_phone.length));
 								$("#sendCodeBtn").attr("disabled",false);
+								$("#tipimg").show();
 							}else{
 								//账号存在异常 
-								$("#login_error_msg").html("该账号电话信息异常！");
+								$("#login_error_msg").html("该账号电话"+emp_phone+"异常, 请联系HR进行修改！ ");
+								$("#tipimg").hide();
 								/* $("#msgdetail").html("该账号电话信息异常！"); */
 								/* document.getElementById("model_alert").style.display="block";
 								document.getElementById("process_div").style.display="block"; */
@@ -321,7 +324,8 @@ var id = decode64(getUrlParamByKey("id"));
 							}
 						}else{
 							//账号存在异常 
-							$("#login_error_msg").html("账号存在异常！");
+							$("#login_error_msg").html("账号不存在！");
+							$("#tipimg").hide();
 							/* $("#msgdetail").html("账号存在异常！");
 							document.getElementById("model_alert").style.display="block";
 							document.getElementById("process_div").style.display="block"; */
