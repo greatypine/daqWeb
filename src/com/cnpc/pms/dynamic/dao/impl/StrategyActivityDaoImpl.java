@@ -19,10 +19,10 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE 1=1 ";
 		
 		if(StringUtils.isNotEmpty(start_time)){
-			sql = sql + " AND tor.sign_time >= '"+start_time+"' ";
+			sql = sql + " AND date(tor.sign_time) >= '"+start_time+"' ";
 		}
 		if(StringUtils.isNotEmpty(end_time)){
-			sql = sql + " AND tor.sign_time <= '"+end_time+"' ";
+			sql = sql + " AND date(tor.sign_time) <= '"+end_time+"' ";
 		}
 		
 		if(StringUtils.isNotEmpty(dept_id)){

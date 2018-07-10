@@ -764,7 +764,7 @@
 	var end_date = cur_date.getDate();
 	var end_time = cur_date.getFullYear()+"-" + (end_month < 10 ? '0' + end_month : '' + end_month) + "-" + (end_date < 10 ? '0' + end_date : '' + end_date);
 	
-	cur_date.setTime(cur_date.getTime()-24*60*60*1000);
+	cur_date.setTime(cur_date.getTime()-2*24*60*60*1000);
 	var yestoday_month = cur_date.getMonth()+1;
 	var yestoday_date = cur_date.getDate();
 	var yestoday_time = cur_date.getFullYear()+"-" + (yestoday_month < 10 ? '0' + yestoday_month : '' + yestoday_month) + "-" + (yestoday_date < 10 ? '0' + yestoday_date : '' + yestoday_date);
