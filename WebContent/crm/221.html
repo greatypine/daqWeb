@@ -114,7 +114,7 @@
               </ul>
               <ul class="clearfix no-padding">
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>优易GMV：<br><small>￥</small><span id="yyGmv">载入中...</span></li>
-                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><span id="jwsGmv">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><small>￥</small><span id="jwsGmv">载入中...</span></li>
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>团购GMV：<br><small>￥</small><span id="grouponGmv">载入中...</span></li>
               </ul>
             </div>
@@ -122,7 +122,7 @@
               <dt style="margin-top: 20px;">昨日<em></em></dt>
               <ul class="clearfix no-padding">
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>优易GMV：<br><small>￥</small><span id="yestoday_yyGmv">载入中...</span></li>
-                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><span id="yestoday_jwsGmv">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><small>￥</small><span id="yestoday_jwsGmv">载入中...</span></li>
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>团购GMV：<br><small>￥</small><span id="yestoday_grouponGmv">载入中...</span></li>
               </ul>
             </div>
@@ -198,7 +198,7 @@
             </div>
           </div>
           <div class="box-body">
-            <div class="col-sm-6" style="height: 465px;">
+            <div class="col-sm-6" style="height: 480px;">
               <h4 class="text-red">商品类排名Top10 (截止到昨天)</h4>
               <table class="table table-bordered">
                 <tbody id="product_data">
@@ -210,7 +210,7 @@
                 </tbody>
               </table>
             </div>
-            <div class="col-sm-6" style="height: 465px;">
+            <div class="col-sm-6" style="height: 480px;">
               <h4 class="text-light-blue">服务类排名Top10 (截止到昨天)</h4>
               <table class="table table-bordered">
                 <tbody id="service_data">
@@ -439,7 +439,7 @@
     ],
     legend: {
       y: 'top',
-      data: ['门店GMV'],
+      data: ['GMV'],
       textStyle: {
         color: '#666',
         fontSize: 16
@@ -488,7 +488,7 @@
     },
     yAxis: {
       type: 'value',
-      name: '门店GMV（万元）',
+      name: 'GMV（万元）',
       nameLocation: 'end',
       nameGap: 20,
       min: function(value){
@@ -644,6 +644,10 @@
 	  yAxis: [
 		  {
 			type: 'value',
+			name: 'GMV（万元）',
+			min: function(value){
+	 	   	 	return parseInt(value.min);
+	   	    },
 	        splitLine: {
 	          show: false
 	        },
@@ -826,14 +830,15 @@
 			});
 	}
 	
+	var yestoday_yyGMV = '0';
 	function inintYestodayYYGmvData(){
 		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,yestoday_time,yestoday_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
-							yyGMV = jsonData.total_gmv;
-							$("#yestoday_yyGmv").html(changeMoney(parseInt(yyGMV)));
+							yestoday_yyGMV = jsonData.total_gmv;
+							$("#yestoday_yyGmv").html(changeMoney(parseInt(yestoday_yyGMV)));
 						}else{
 							$("#yestoday_yyGmv").html('0');
 						}
@@ -858,14 +863,15 @@
 			},false);
 	}
 	
+	var yestoday_grouponGMV = '0';
 	function inintYestodayGrouponGmvData(){
 		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,yestoday_time,yestoday_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
-							grouponGMV = jsonData.total_gmv;
-							$("#yestoday_grouponGmv").html(changeMoney(parseInt(grouponGMV)));
+							yestoday_grouponGMV = jsonData.total_gmv;
+							$("#yestoday_grouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
 						}else{
 							$("#yestoday_grouponGmv").html('0');
 						}
@@ -890,14 +896,15 @@
 			});
 	}
 	
+	var yestoday_jwsGMV = '0';
 	function inintYestodayJWSGmvData(){
 		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,yestoday_time,yestoday_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
-							jwsGMV = jsonData.total_gmv;
-							$("#yestoday_jwsGmv").html(changeMoney(parseInt(jwsGMV)));
+							yestoday_jwsGMV = jsonData.total_gmv;
+							$("#yestoday_jwsGmv").html(changeMoney(parseInt(yestoday_jwsGMV)));
 						}else{
 							$("#yestoday_jwsGmv").html('0');
 						}
@@ -1213,7 +1220,7 @@
 						$(jsonData).each(function(index,element){
 							var dateTemp = element.datetime;
 							var indexTemp = jQuery.inArray(dateTemp,gmvXData);
-							gmvYData[indexTemp]=element.total_gmv;
+							gmvYData[indexTemp]=(element.total_gmv/10000).toFixed(2);
 	                    });
 						option4.xAxis[0].data=gmvXData;
 						option4.series[0].data=gmvYData;
