@@ -17,7 +17,7 @@ public interface StrategyActivityManager extends IManager{
 	/**
 	 * 统计221GMV/优易GMV/家务事GMV
 	 */
-	public Map<String, Object> queryStrategyGMV(String dept_id);
+	public Map<String, Object> queryStrategyGMV(String dept_id,String start_time,String end_time);
 	
 	/**
 	 * 查询GMV走势

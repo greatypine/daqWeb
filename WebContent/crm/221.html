@@ -106,6 +106,7 @@
           <div class="box-header h4"><strong>221专题简报</strong></div>
           <div class="box-body">
             <div class="col-sm-12">
+              <dt style="margin-top: 20px;">总计<em></em></dt>
               <ul class="clearfix no-padding">
                 <li class="col-sm-4"><i class="glyphicon glyphicon-home"></i>涵盖门店：<br><span>96</span><small>（店）</small></li>
                 <li class="col-sm-4"><i class="fa fa-database"></i>合计GMV：<br><small>￥</small><span id="totalGmv">载入中...</span></li>
@@ -115,6 +116,14 @@
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>优易GMV：<br><small>￥</small><span id="yyGmv">载入中...</span></li>
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><span id="jwsGmv">载入中...</span></li>
                 <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>团购GMV：<br><small>￥</small><span id="grouponGmv">载入中...</span></li>
+              </ul>
+            </div>
+            <div class="col-sm-12">
+              <dt style="margin-top: 20px;">昨日<em></em></dt>
+              <ul class="clearfix no-padding">
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>优易GMV：<br><small>￥</small><span id="yestoday_yyGmv">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>家务事GMV：<br><span id="yestoday_jwsGmv">载入中...</span></li>
+                <li class="col-sm-4"><i class="glyphicon glyphicon-yen"></i>团购GMV：<br><small>￥</small><span id="yestoday_grouponGmv">载入中...</span></li>
               </ul>
             </div>
           </div>
@@ -504,7 +513,7 @@
         top: '10%',
         dimension: 1,
         min: 0,
-        max: 30,
+        max: 10,
         itemWidth: 30,
         itemHeight: 100,
         calculable: true,
@@ -702,6 +711,9 @@
 		inintYYGmvData();
 		inintGrouponGmvData();
 		inintJWSGmvData();
+		inintYestodayYYGmvData();
+		inintYestodayGrouponGmvData();
+		inintYestodayJWSGmvData();
 		showStoreRanking();
 		initMemberTrend();
 // 		initallcity();
@@ -745,8 +757,19 @@
 	
 	var totalGMV = '0';
 	var dept_id = "all";
+	var start_time = '2018-07-01';
+	var cur_date = new Date();
+	cur_date.setTime(cur_date.getTime()+24*60*60*1000);
+	var end_month = cur_date.getMonth()+1;
+	var end_date = cur_date.getDate();
+	var end_time = cur_date.getFullYear()+"-" + (end_month < 10 ? '0' + end_month : '' + end_month) + "-" + (end_date < 10 ? '0' + end_date : '' + end_date);
+	
+	cur_date.setTime(cur_date.getTime()-24*60*60*1000);
+	var yestoday_month = cur_date.getMonth()+1;
+	var yestoday_date = cur_date.getDate();
+	var yestoday_time = cur_date.getFullYear()+"-" + (yestoday_month < 10 ? '0' + yestoday_month : '' + yestoday_month) + "-" + (yestoday_date < 10 ? '0' + yestoday_date : '' + yestoday_date);
 	function inintTotalGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[dept_id],
+		  doManager("strategyActivityManager","queryStrategyGMV",[dept_id,start_time,end_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
@@ -789,7 +812,7 @@
 	var yyGMV = '0';
 	var yy_dept_id = "8ac28b935fed0bc8015fed4c76f60018";
 	function inintYYGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id],
+		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,start_time,end_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
@@ -803,10 +826,25 @@
 			});
 	}
 	
+	function inintYestodayYYGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,yestoday_time,yestoday_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							yyGMV = jsonData.total_gmv;
+							$("#yestoday_yyGmv").html(changeMoney(parseInt(yyGMV)));
+						}else{
+							$("#yestoday_yyGmv").html('0');
+						}
+					}
+			});
+	}
+	
 	var grouponGMV = '0';
 	var groupon_dept_id = "groupon";
 	function inintGrouponGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id],
+		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,start_time,end_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
@@ -820,10 +858,25 @@
 			},false);
 	}
 	
+	function inintYestodayGrouponGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,yestoday_time,yestoday_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							grouponGMV = jsonData.total_gmv;
+							$("#yestoday_grouponGmv").html(changeMoney(parseInt(grouponGMV)));
+						}else{
+							$("#yestoday_grouponGmv").html('0');
+						}
+					}
+			},false);
+	}
+	
 	var jwsGMV = '0';
 	var jws_dept_id = "8ac29e835fed0a10015fed4d01dc0015";
 	function inintJWSGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id],
+		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,start_time,end_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
@@ -832,6 +885,21 @@
 							$("#jwsGmv").html(changeMoney(parseInt(jwsGMV)));
 						}else{
 							$("#jwsGmv").html('0');
+						}
+					}
+			});
+	}
+	
+	function inintYestodayJWSGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,yestoday_time,yestoday_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							jwsGMV = jsonData.total_gmv;
+							$("#yestoday_jwsGmv").html(changeMoney(parseInt(jwsGMV)));
+						}else{
+							$("#yestoday_jwsGmv").html('0');
 						}
 					}
 			});
@@ -876,8 +944,8 @@
 									serviceGmv = element.ordergmv;
 								}
 		                 	});
- 							option2.series[0].data[0] = (productGmv/10000).toFixed(2);
- 							option2.series[0].data[1] = (serviceGmv/10000).toFixed(2);
+ 							option2.series[0].data[0].value = (productGmv/10000).toFixed(2);
+ 							option2.series[0].data[1].value = (serviceGmv/10000).toFixed(2);
 							myChart2.setOption(option2,true);
 						}else{
 							option2.series[0].data[0] = "0";

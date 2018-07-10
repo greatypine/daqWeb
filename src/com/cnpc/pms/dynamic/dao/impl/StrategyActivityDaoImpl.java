@@ -14,9 +14,16 @@ import com.cnpc.pms.dynamic.dao.StrategyActivityDao;
 public class StrategyActivityDaoImpl extends BaseDAOHibernate implements StrategyActivityDao {
 
 	@Override
-	public Map<String, Object> queryStrategyGMV(String dept_id) {
+	public Map<String, Object> queryStrategyGMV(String dept_id,String start_time,String end_time) {
 		String sql = "SELECT IFNULL(SUM(trading_price),0) total_gmv FROM df_mass_order_monthly tor "
-				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE tor.sign_time >= '2018-07-01' ";
+				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE 1=1 ";
+		
+		if(StringUtils.isNotEmpty(start_time)){
+			sql = sql + " AND tor.sign_time >= '"+start_time+"' ";
+		}
+		if(StringUtils.isNotEmpty(end_time)){
+			sql = sql + " AND tor.sign_time <= '"+end_time+"' ";
+		}
 		
 		if(StringUtils.isNotEmpty(dept_id)){
 			if("groupon".equals(dept_id)){

@@ -11,9 +11,9 @@ import com.cnpc.pms.festival.manager.StrategyActivityManager;
 public class StrategyActivityManagerImpl extends BizBaseCommonManager implements StrategyActivityManager {
 
 	@Override
-	public Map<String, Object> queryStrategyGMV(String dept_id) {
+	public Map<String, Object> queryStrategyGMV(String dept_id,String start_time,String end_time) {
 		StrategyActivityDao strategyActivityDao = (StrategyActivityDao)SpringHelper.getBean(StrategyActivityDao.class.getName());
-		Map<String, Object> order_obj = strategyActivityDao.queryStrategyGMV(dept_id);
+		Map<String, Object> order_obj = strategyActivityDao.queryStrategyGMV(dept_id,start_time,end_time);
     	return order_obj;
 	}
 

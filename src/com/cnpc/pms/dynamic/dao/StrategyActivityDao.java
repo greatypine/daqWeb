@@ -7,7 +7,7 @@ import com.cnpc.pms.base.dao.IDAO;
 
 public interface StrategyActivityDao extends IDAO{
 
-	public Map<String, Object> queryStrategyGMV(String dept_id);
+	public Map<String, Object> queryStrategyGMV(String dept_id,String start_time,String end_time);
 	
 	public List<Map<String, Object>> queryGmvTrend();
 	
