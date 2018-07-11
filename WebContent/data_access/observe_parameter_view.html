@@ -47,9 +47,12 @@ $(function () {
     searchList();
     $(".operateHeader").width("5%");
     
+    var min= new Date();
+    var max=min.getFullYear() + "-" + (min.getMonth() + 1); 
     laydate.render({
     	  elem: '#observe_month'
-    	  ,type: 'month'
+    	  ,type: 'month'//最大日期
+    	  ,max: max
     });
     
    

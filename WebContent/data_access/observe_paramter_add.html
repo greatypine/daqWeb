@@ -20,8 +20,23 @@
     var store_name=decode64(getUrlParamByKey("sn"));
     var store_id=decode64(getUrlParamByKey("si"));
     var observe_question_number = 0;
+    
+    function latetime(){
+    	var today = new Date();
+    	var now = today.getDate();
+    	var year = today.getYear();
+    	if (year < 2000) year += 1900;var month = today.getMonth();
+    	var monarr = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    	if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) monarr[1] = "29";
+    	alert(monarr[month]-now);
+    	var late = monarr[month]-now;
+    	return late;
+    }
+    
     $(function(){
-    	$( "#observe_date" ).datepicker();
+    	$( "#observe_date" ).datepicker({
+    		maxDate:"+0m"+latetime()+"d"
+    	});
     	/* var emparray = [];
     	$("#observebaseInfo tr:gt(1)").each(function(i,t){
 	    		 var a = $(t).find("th").html();
