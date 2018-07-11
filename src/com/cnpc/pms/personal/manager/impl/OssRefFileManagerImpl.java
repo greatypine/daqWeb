@@ -18,7 +18,7 @@ public class OssRefFileManagerImpl extends BizBaseCommonManager implements OssRe
     	OssRefFile ossObj = new OssRefFile();
     	try {
     		String url = f.getPath();
-        	String fileName=url.substring(url.lastIndexOf("\\")+1);
+        	String fileName=url.substring(url.lastIndexOf(File.separator)+1);
         	if(fileName==null||fileName=="") {
         		fileName=url.substring(url.lastIndexOf("template")+9);
         	}
