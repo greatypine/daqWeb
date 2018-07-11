@@ -3283,14 +3283,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 	@Override
 	public List<Map<String, Object>> selectAreaDealOfEmployeeByChannel(String beginDate, String endDate, String areaCode) {
-		String sql = "SELECT count(1) as total,channel_name,channel_id FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by channel_id,channel_name ";
+		String sql = "SELECT count(1) as total,channel_name,channel_id FROM daqWeb.df_mass_order_total where area_code in (\"0021Y000600035\") group by channel_id,channel_name ";
 		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
 		return list;
 	}
 
 	@Override
 	public List<Map<String, Object>> selectAreaDealOfEmployeeByConsum(String beginDate, String endDate, String areaCode) {
-		String sql = "select count(1) as total,rang from (select  CASE when total >=20 then 20 when (total<20 and total>=10) then 10  when (total<10 and total>=5) then 5  when (total<5 and total>1) then 4 when total=1 then 1 else 0 end as  rang from  (SELECT count(1) as total,customer_id  FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by customer_id) a ) b group by rang";
+		String sql = "select count(1) as total,rang from (select  CASE when total >=20 then 20 when (total<20 and total>=10) then 10  when (total<10 and total>=5) then 5  when (total<5 and total>1) then 4 when total=1 then 1 else 0 end as  rang from  (SELECT count(1) as total,customer_id  FROM daqWeb.df_mass_order_total where area_code in (\"0021Y000600035\") group by customer_id) a ) b group by rang";
         //String  sql="select count(1) as total,3 as rang from daqWeb.df_mass_order_total";
 		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
 		return list;
@@ -3299,7 +3299,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	@Override
 	public List<Map<String, Object>> selectGMVOfEmployee(Integer year, Integer month, String employeeNo) {
 		String sql=" select city_name,storeno,store_name,employee_no,employee_name,pesgmv,pes_sendgmv,pes_areagmv,pes_assigngmv,pes_pergmv"+
-				" from ds_pes_gmv_emp_month where year ="+year+" and month = "+month+"and employee_no ='"+employeeNo+"'";
+				" from ds_pes_gmv_emp_month where year ="+year+" and month = "+month+" and employee_no ='"+employeeNo+"'";
 
 
 
@@ -3322,6 +3322,56 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				" where a.year="+year+" and a.month="+month+" and a.employeeno='"+employeeNo+"'";
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_result = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_result;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderOfEmployee(Integer year, Integer month, String employeeNo) {
+		// TODO Auto-generated method stub
+		String sql = "select SUM(IFNULL(datanum,0)) AS total  from ds_pes_order_empchannel_month dss WHERE YEAR = "+year+" AND MONTH = "+ month+
+					 " AND and dss.employee_no like '%"+employeeNo+"%'"+
+					 " AND dss.employee_no IS NOT NULL"+
+					 " AND dss.employee_no != ''"+
+					 " group by employee_no ";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+			Query query = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql);
+			lst_result = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			lst_result = lst_result;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryLastSevenDayCommunityMembersOfStore(String storeId) {
+		String sql="select SUM(a.newcount) as newcount ,a.opentime from (select 0 as newcount,DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 7 DAY),'%Y-%m-%d') AS opentime  \n" +
+				" UNION" +
+				" select 0 as newcount,DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 6 DAY),'%Y-%m-%d') AS opentime " +
+				" UNION" +
+				" select 0 as newcount,DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 5 DAY),'%Y-%m-%d') AS opentime " +
+				" UNION" +
+				" select 0 as newcount,DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 DAY),'%Y-%m-%d') AS opentime " +
+				" UNION" +
+				" select 0 as newcount,DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 3 DAY),'%Y-%m-%d') AS opentime " +
+				" UNION" +
+				" select 0 as newcount,DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 2 DAY),'%Y-%m-%d') AS opentime " +
+				" UNION" +
+				" select 0 as newcount,DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY),'%Y-%m-%d') AS opentime " +
+				" UNION" +
+				" SELECT count(1) AS newcount,DATE_FORMAT(dum.opencard_time,'%Y-%m-%d') AS opentime FROM df_user_member dum where regist_storeid='"+storeId+"' and date(dum.opencard_time)>=DATE_SUB(CURDATE(), INTERVAL 7 DAY) and date(dum.opencard_time)<CURDATE()  GROUP BY DATE_FORMAT(dum.opencard_time,'%Y-%m-%d')) a group by a.opentime";
+		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+		try{
+
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(sql);
 			lst_result = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

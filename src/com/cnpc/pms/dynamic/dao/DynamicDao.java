@@ -932,4 +932,26 @@ public interface DynamicDao extends IDAO{
 	 **/
 
 	public List<Map<String,Object>> selectCustomerOfEmployee(Integer year,Integer month,String employeeNo);
+	/**
+	 * 
+	* @Title: selectOrderOfEmployee  
+	* @Description: TODO 查询国安侠订单
+	* 2018年7月9日
+	* @param @param year
+	* @param @param month
+	* @param @param employeeNo
+	* @param @return      
+	* @return List<Map<String,Object>> 
+	* @throws
+	* @author gbl
+	 */
+	public List<Map<String,Object>> selectOrderOfEmployee(Integer year,Integer month,String employeeNo);
+
+	/**
+	 * @Description  查询门店近七日的社员新增
+	 * @author gbl
+	 * @date 2018/7/11 14:34
+	 **/
+
+	public List<Map<String,Object>> queryLastSevenDayCommunityMembersOfStore(String storeId);
 }

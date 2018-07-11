@@ -1091,4 +1091,12 @@ public interface DynamicManager extends IManager{
 	 **/
 
 	public List<Map<String,Object>> getConsumTimeOfCustomer(String areaCode);
+
+	/**
+	 * @Description 查询门店近7日的社员
+	 * @author gbl
+	 * @date 2018/7/11 15:01
+	 **/
+
+	public List<Map<String,Object>> queryLastSevenDayCommunityMember(Long storeId);
 }

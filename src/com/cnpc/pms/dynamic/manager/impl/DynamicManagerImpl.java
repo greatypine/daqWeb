@@ -6984,16 +6984,19 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			List<Map<String,Object>> gmvList = dynamicDao.selectGMVOfEmployee(cur_year,cur_month,employeeNo);
 			List<Map<String,Object>> customerList = dynamicDao.selectCustomerOfEmployee(cur_year,cur_month,employeeNo);
 			List<Map<String,Object>> areaList = areaManager.queryAreaByEmployee(employeeNo);
+			List<Map<String,Object>> orderList = dynamicDao.selectOrderOfEmployee(cur_year, cur_month, employeeNo);
 			map.put("human", humanresources);
 			map.put("gmv",gmvList);
 			map.put("customer",customerList);
 			map.put("area",areaList);
+			map.put("order",orderList);
 		} catch (Exception e) {
 			e.printStackTrace();
 			map.put("human", null);
 			map.put("gmv",null);
 			map.put("customer",null);
 			map.put("area",null);
+			map.put("order",null);
 			return map;
 		}
 		return map;
@@ -7028,5 +7031,23 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			return list;
 		}
 		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> queryLastSevenDayCommunityMember(Long storeId) {
+		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+		DynamicDao dynamicDao = (DynamicDao) SpringHelper.getBean(DynamicDao.class.getName());
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+
+		try {
+
+			Store store = storeManager.findStore(storeId);
+			list=dynamicDao.queryLastSevenDayCommunityMembersOfStore(store.getPlatformid());
+
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return list;
+		}
 	}
 }
