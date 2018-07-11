@@ -6611,7 +6611,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				}
 			}else if(dynamicDto.getTarget()==2){//店长
 				Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
-				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
+				dynamicDto.setStoreNo(String.valueOf(store.getStoreno()));
 			}
 			result= dynamicDao.getStoreMember(dynamicDto,cityNo, pageInfo);
 			result.put("status","success");
