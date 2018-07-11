@@ -137,7 +137,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 
 		System.out.println(sb_where);
 		map_result.put("pageinfo", obj_page);
-		map_result.put("header", "目标值录入信息");
+		map_result.put("header", "明查台账录入信息");
 		map_result.put("data", observeParameterDao.queryObserveParameterList(sb_where.toString(), obj_page));
 		return map_result;
 	}
@@ -175,7 +175,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String,Object> exportObserveParamterSummary(String cityname) {
+	public File exportObserveParamterSummary(String cityname) {
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryObserveParameterSummaryByCity(cityname);
 		List<String> storenameList = new ArrayList<>();
@@ -209,7 +209,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 			if(list==null||list.size()==0){
 				result.put("message","没有符合条件的数据！");
 				result.put("status","null");
-				return result;
+				return null;
 			}
 			String str_file_dir_path = PropertiesUtil.getValue("file.root");
 			String str_web_path = PropertiesUtil.getValue("file.web.root");
@@ -268,17 +268,18 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 					}
 				}
 			}
-
-			result.put("message","导出成功！");
+			return file_xls;
+			/*result.put("message","导出成功！");
 			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", str_web_path.concat(file_xls.getName()));*/
 		}else{
-			result.put("message","请重新操作！");
-			result.put("status","fail");
+			/*result.put("message","请重新操作！");
+			result.put("status","fail");*/
+			return null;
 		}
 
 
-		return result;
+		
 	}
 	
 	private HSSFCellStyle getHeaderStyle(){
@@ -322,7 +323,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 	}
 
 	@Override
-	public Map<String, Object> exportObserveParamter(String cityname) {
+	public File exportObserveParamter(String cityname) {
 		Map<String,Object> result  = new HashMap<String,Object>();
 		ObserveParameterDao observeParameterDao = (ObserveParameterDao)SpringHelper.getBean(ObserveParameterDao.class.getName());
 		List<Map<String, Object>> list = observeParameterDao.queryExitObserveParameter(null, DateUtils.getCurrMonthDate(),"0",null);
@@ -446,14 +447,12 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 			result.put("message","导出成功！");
 			result.put("status","success");
 			result.put("data", str_web_path.concat(file_xls.getName()));
+			return file_xls;
 		}else{
 			result.put("message","没有符合条件的数据！");
 			result.put("status","null");
-			return result;
+			return null;
 		}
-
-
-		return result;
 	}
 
 	

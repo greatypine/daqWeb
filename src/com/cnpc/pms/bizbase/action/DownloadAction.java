@@ -22,6 +22,7 @@ import com.cnpc.pms.personal.manager.CityHumanresourcesManager;
 import com.cnpc.pms.personal.manager.ExpressManager;
 import com.cnpc.pms.personal.manager.HouseCustomerManager;
 import com.cnpc.pms.personal.manager.HumanresourcesManager;
+import com.cnpc.pms.personal.manager.ObserveParameterManager;
 import com.cnpc.pms.personal.manager.OfficeManager;
 import com.cnpc.pms.personal.manager.StoreDocumentInfoManager;
 import com.cnpc.pms.personal.manager.StoreKeeperManager;
@@ -423,7 +424,27 @@ public class DownloadAction extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else {
+		}else if ("observe_question".equals(str_file_name)) {
+			try {
+				ObserveParameterManager observeParameterManager = (ObserveParameterManager)SpringHelper.getBean("observeParameterManager");
+					File exportObserveParamterSummary = observeParameterManager.exportObserveParamterSummary(null);
+
+					DownloadUtil.downLoadFile(exportObserveParamterSummary.getAbsolutePath(), resp,
+							"明查台账汇总" + DateUtils.dateFormat(new Date()) + ".xls", "xls");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else if ("observe_parameter".equals(str_file_name)) {
+			try {
+				ObserveParameterManager observeParameterManager = (ObserveParameterManager)SpringHelper.getBean("observeParameterManager");
+
+					File exportObserveParamter = observeParameterManager.exportObserveParamter(null);
+					DownloadUtil.downLoadFile(exportObserveParamter.getAbsolutePath(), resp,
+							DateUtils.dateFormat(new Date(),"yyyy-MM") + "月明查台账汇总" + ".xls", "xls");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else {
 			strRootpath = req.getSession().getServletContext().getRealPath(File.separator);
 			// 配置文件中的路径
 			String str_filepath = getPropertiesValueUtil().getStringValue(str_file_name).replace("/", File.separator);

@@ -140,8 +140,10 @@ $pmspage.opArr = [ editObj];
 
 
 function questioncount(){
-	
-	//window.location.href="observe_question_summary.html";	
+	var path = getRootPath();
+	window.open(path + "/downloadExcel.action"
+			  +"?fileName=observe_question");
+	/* //window.location.href="observe_question_summary.html";	
 	debugger;
 	doManager('observeParameterManager','exportObserveParamterSummary',["北京"],function(data){	
         if(data.result){
@@ -150,12 +152,15 @@ function questioncount(){
         	alert("请求失败，请稍后重新请求！");
         	return;
         }
-    },false);
+    },false); */
 
 }
 
 function questionexport(){
-	debugger;
+	var path = getRootPath();
+	window.open(path + "/downloadExcel.action"
+			  +"?fileName=observe_parameter");
+	/* debugger;
 	doManager('observeParameterManager','exportObserveParamter',["北京"],function(data){
 		
         if(data.result){
@@ -164,7 +169,7 @@ function questionexport(){
         	alert("请求失败，请稍后重新请求！");
         	return;
         }
-    },false);
+    },false); */
 }
 
 </script>
