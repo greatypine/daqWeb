@@ -21,6 +21,8 @@
 				<prop key="update*">PROPAGATION_REQUIRED </prop> 				
 				<prop key="delete*">PROPAGATION_REQUIRED </prop>
 				<prop key="import*">PROPAGATION_REQUIRED</prop>
+				<prop key="export*">PROPAGATION_REQUIRED</prop>
+				<prop key="upload*">PROPAGATION_REQUIRED</prop>
 				<prop key="do*">PROPAGATION_REQUIRED</prop>
 				<prop key="newTx">PROPAGATION_REQUIRES_NEW</prop>
 				<prop key="newTran*">PROPAGATION_REQUIRES_NEW</prop>

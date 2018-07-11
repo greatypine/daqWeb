@@ -15,6 +15,7 @@ import com.cnpc.pms.messageModel.manager.MessageNewManager;
 import com.cnpc.pms.personal.dao.WorkRecordTotalDao;
 import com.cnpc.pms.personal.entity.*;
 import com.cnpc.pms.personal.manager.DsTopDataManager;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.ScoreRecordManager;
 import com.cnpc.pms.personal.manager.ScoreRecordTotalManager;
 import com.cnpc.pms.personal.manager.StoreManager;
@@ -339,8 +340,10 @@ public class WorkRecordTotalManagerImpl extends BizBaseCommonManager implements 
 		}
 
 
-		String str_file_dir_path = PropertiesUtil.getValue("file.root");
-
+		//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+		
+		String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+		
 		String exportFileName = "work_record_"+work_month+".xls";
 
 		String str_newfilepath = str_file_dir_path + "/"+exportFileName;
@@ -615,11 +618,17 @@ public class WorkRecordTotalManagerImpl extends BizBaseCommonManager implements 
 			wb_wrinfo.write(fis_out_excel);
 			fis_out_excel.close();
 			fis_input_excel.close();
+			
+			//上传ossHR导出考勤
+	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+	        String url = ossRefFileManager.uploadOssFile(file_new, "xls", "daqWeb/workrecord/");
+	        return url ;
+	        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return PropertiesUtil.getValue("file.web.root")+exportFileName;
+		return null;
 	}
 
 	@Override

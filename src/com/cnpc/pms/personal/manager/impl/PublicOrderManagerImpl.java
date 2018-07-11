@@ -42,6 +42,7 @@ import com.cnpc.pms.personal.dao.PublicOrderDao;
 import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.PublicOrder;
 import com.cnpc.pms.personal.entity.Store;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.PublicOrderManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 
@@ -259,8 +260,9 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 
 		if(list!=null&&list.size()>0){//成功返回数据
 
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
+			String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+			//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
 			/*HSSFWorkbook wb = new HSSFWorkbook();
 			// 创建Excel的工作sheet,对应到一个excel文档的tab
@@ -380,7 +382,11 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 
 			result.put("message","导出成功！");
 			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			
+			//上传ossHR导出考勤
+	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+	        String url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+			result.put("data", url);
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -438,8 +444,9 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 
 		if(list!=null&&list.size()>0){//成功返回数据
 
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
+			String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+			//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
 	        XSSFWorkbook wb = new XSSFWorkbook();   
 	        setCellStyle_common(wb);
@@ -486,7 +493,10 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 
 			result.put("message","导出成功！");
 			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			//上传ossHR导出考勤
+	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+	        String url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+			result.put("data", url);
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
