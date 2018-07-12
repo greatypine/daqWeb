@@ -21,4 +21,14 @@ public interface PlatformEmployeeDao {
 	 * @return
 	 */
 	public List<Map<String, Object>> getEmployeeByEmployeeNo(String employeeNo);
+	
+	/**
+	 * 
+	 * TODO 根据gemini 的员工 id查询daqweb的员工编号
+	 * 2018年3月7日
+	 * @author gaoll
+	 * @param employeeNo
+	 * @return
+	 */
+	public List<Map<String, Object>> getEmployeeByEmployeeId(String employeeNo);
 }
