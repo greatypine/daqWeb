@@ -383,9 +383,9 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 			result.put("message","导出成功！");
 			result.put("status","success");
 			
-			//上传ossHR导出考勤
+			//上传ossHR导出公海订单
 	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-	        String url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+	        String url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
 			result.put("data", url);
 		}else{
 			result.put("message","请重新操作！");
@@ -493,9 +493,9 @@ public class PublicOrderManagerImpl extends BizBaseCommonManager implements Publ
 
 			result.put("message","导出成功！");
 			result.put("status","success");
-			//上传ossHR导出考勤
+			//上传ossHR导出公海订单
 	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-	        String url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+	        String url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
 			result.put("data", url);
 		}else{
 			result.put("message","请重新操作！");

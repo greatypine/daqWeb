@@ -103,6 +103,7 @@ import com.cnpc.pms.personal.manager.HumanresourcesChangeManager;
 import com.cnpc.pms.personal.manager.HumanresourcesLogManager;
 import com.cnpc.pms.personal.manager.HumanresourcesManager;
 import com.cnpc.pms.personal.manager.ImportHumanresourcesManager;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.OuterCompanyManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.manager.SysUserGroupOperaManager;
@@ -3826,7 +3827,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   		}
   		return result;
   	}
-    
+
+    //数据动态  导出员工档案 
   	@Override
   	public Map<String, Object> exportHuman(Humanresources humanresources) {
   		Map<String, Object> result = new HashMap<String,Object>();
@@ -3848,8 +3850,10 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   			return null;
   		}
   		if(list!=null&&list.size()>0){//成功返回数据
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-  			String str_web_path = PropertiesUtil.getValue("file.web.root");
+  			
+  			String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+  			//String str_file_dir_path = PropertiesUtil.getValue("file.root");。。
+  			//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   			/*2003版excel
   			 * HSSFWorkbook wb = new HSSFWorkbook();
@@ -3933,7 +3937,11 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+  			//上传oss导出员工档案
+	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+	        String url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+	        result.put("data", url);
+	        //result.put("data", str_web_path.concat(file_xls.getName()));
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
