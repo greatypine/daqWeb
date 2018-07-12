@@ -2382,7 +2382,7 @@ function initStoreHistoryGMV(){
        var index = params.dataIndex;
        var ref =  /-/g;
        var dayTime = option2.xAxis.data[params.dataIndex].replace(ref,"/");
-       var flagBar = encode64("2");//标记是从门店页面柱状图跳入
+       var flagBar = encode64("1");//标记是从门店页面柱状图跳入
 
        var url  = "user_member_view.html?t="+encode64('2')+"&r=&c=&cn="+encode64(currentStore.cityName)+"&e="+encode64(EMPLOYEE_ID)+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&s="+encode64(currentStore.store_id)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&fb="+flagBar;
        window.open(url,"user_member_view");

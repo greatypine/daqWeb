@@ -293,13 +293,21 @@
 	var storeName=decode64(getUrlParamByKey("sn"));
 	var storeNo=decode64(getUrlParamByKey("so"));
 	var role = decode64(getUrlParamByKey("r"));
+	var fromBar = decode64(getUrlParamByKey("fb"));
+	var beti = decode64(getUrlParamByKey("beTi"));
+	var endt = decode64(getUrlParamByKey("endT"));
+	
 	$(function () {
 		$("#ui-datepicker-quick input").click(function(){
 		    var buttonValue= $(this).val();
 		    $('#data_choice').html(buttonValue);
 		});
 		if(target==0){//总部
-			
+			if(cityName!=""){
+				$("#city_name_tradetype").val(cityName);
+				$("#city_id_tradetype").val(cityId);
+				$("#city_name_tradetype").attr("readonly",true);
+			}
 		}else if(target==1){//城市
 			$("#city_name_tradetype").val(cityName);
 			$("#city_name_tradetype").attr("readonly",true);
@@ -309,7 +317,20 @@
 			$("#store_name_tradetype").val(storeName);
 			$("#store_name_tradetype").attr("readonly",true);
 		}
-		
+		if(fromBar == "1"){
+			 $.setStartTime();
+			    $.setEndTime();
+			    $.datepickerjQ();
+			
+			$("#searchTime").attr("value",beti +'-'+ endt);
+		    $("#startOpenCardDate").attr("value",beti);
+		    $("#endOpenCardDate").attr("value",endt);
+		    /* $("#startOpenCardDate" ).datepicker({defaultDate:beti});
+	        $("#endOpenCardDate" ).datepicker({defaultDate:endt}); */
+		   
+		   
+			searchInfo_tradetype_step2();
+		}
 	    $(".logo-lg > ul > li").hover(function(){
 	      $(this).children(".nav_dropdown").toggle('1000');
 	    });
@@ -535,6 +556,7 @@
 		                       +"<td>"+jData[i].count199+"</td>"
 		                       +"<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
+		                       /* <a href=""></a> */
 		                       
 		                  $("#tradeType_tbody").append(infoStr);     
 	        	   }
