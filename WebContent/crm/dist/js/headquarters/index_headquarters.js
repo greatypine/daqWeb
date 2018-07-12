@@ -467,8 +467,13 @@ var initPageElements = function () {
 	  var dayTime = year+"/"+turnoverCustomerOrderOption.xAxis.data[params.dataIndex].replace("-","/");
 	  var flagBar = encode64("1");//标记是从总部页面柱状图跳入
 	  //var role = curr_user.usergroup.code;
-	  var url = "";
-	  url = "user_member_view.html?t="+encode64('1')+"&r=&c="+cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar;
+	  var target=pageStatusInfo.targets; 
+	  var url = "" ; 
+	  if(target==0){ 
+	  		url = "user_member_view.html?t="+encode64(0)+"&r=&c="+cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar; 
+	  }else if(target==1){
+	  	 	url = "user_member_view.html?t="+encode64(1)+"&r=&c="+cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar; 
+	  }
 	  window.open(url,"user_member_view");
     });
     cityUserOption = {
@@ -4100,7 +4105,7 @@ var curr_user;
 	  var url = "";
 	  var target=pageStatusInfo.targets;
 	  if(target==0){
-	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg"+"&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName);
+	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id);
 	  }else if(target==1){
 	  	url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 	  }
