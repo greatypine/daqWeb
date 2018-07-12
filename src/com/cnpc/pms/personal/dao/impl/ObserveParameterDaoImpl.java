@@ -17,7 +17,7 @@ public class ObserveParameterDaoImpl extends BaseDAOHibernate  implements Observ
 	public List<Map<String, Object>> queryObserveParameterList(String where, PageInfo pageInfo) {
 		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();	
 		// sql查询列，用于页面展示所有的数据
-		String find_sql = "select store_id,store_name,storeno,observe_month from t_store_observe_parameter where status = 0 and type = 0"+where;
+		String find_sql = "select store_id,store_name,storeno,observe_month from t_store_observe_parameter where status = 0 and type = 0"+where+" order by create_time desc";
 		// SQL查询对象
 				SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
 						.createSQLQuery(find_sql);

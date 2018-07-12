@@ -66,7 +66,7 @@ $(function () {
               if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                   return;
               }
-              doManager('dynamicManager','getStoreByCity',[0,null,null,null],function(data){
+              doManager('dynamicManager','getStoreByCity',[0,null,null,str_name],function(data){
                   if(data.result){
                   	lst_select_store = JSON.parse(data.data).storelist;
                       

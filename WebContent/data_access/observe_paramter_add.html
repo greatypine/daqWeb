@@ -168,10 +168,18 @@
 		if (data.result) {
 			var jsonData = $.fromJSON(data.data);
 			if(jsonData.code ==  1){
-				alert("添加成功！");
+				if(add_edit == 'add'){
+					alert("添加成功！");
+		    	}else if(add_edit == 'edit'){
+		    		alert("修改成功！");
+		    	}
 				window.location.href = 'observe_parameter_view.html';
 			}else if (jsonData.code ==  -1){
-				alert("添加失败！");
+				if(add_edit == 'add'){
+					alert("添加失败！");
+		    	}else if(add_edit == 'edit'){
+		    		alert("修改失败！");
+		    	}
 			}
 		} else {
 			$$.showMessage("系统信息", "请求失败!");
