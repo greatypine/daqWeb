@@ -198,6 +198,8 @@ var initPageElements = function () {
     mapChart = echarts.init(document.getElementById('main9'));
     // 初始化城市排名
     cityRankChartGmv = echarts.init(document.getElementById('main1'));
+    //社员7日走势
+    turnoverCustomerOrderChart = echarts.init(document.getElementById('main2'));
     //初始化城市排名矩形图
     cityUserGMV = echarts.init(document.getElementById('main12'));
     // 初始化门店(GMV)排名显示图
@@ -309,6 +311,172 @@ var initPageElements = function () {
       }
     ]
   };
+  	// 客流分析
+  turnoverCustomerOrderOption = {
+    title: {
+      text:"社员7日走势",x: '5%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"},
+    },
+    tooltip : {
+      trigger: 'axis',
+      formatter:function(params)//数据格式
+            {
+            var relVal = params[0]['name']+"<br/>";
+            //relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
+	        //relVal+="<br/>";
+            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
+	        relVal+="<br/>";
+             return relVal;
+        },
+    },
+    legend: {
+      data:[/*'累计社员人数',*/'新增社员人数'],
+      textStyle:{color:"#efefef",fontSize:"12"},
+      right:0,
+      orient:'vertical',
+      padding: 20
+    },
+    grid: {
+      top: '28%',
+      left: '3%',
+      right: '2%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      //data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        show: true,
+        lineStyle:{color:'#ffc203'},
+      },
+      axisTick:{
+        show: false
+      },
+      axisLabel:{
+        show: true,
+        textStyle: {color:'#fff'}
+      },
+    },
+    yAxis: [
+    	{
+          type: 'value',
+          position: 'left',
+	      splitLine: {
+	        show: false
+	      },
+	      axisLine: {
+	        show: false
+	      },
+	      axisTick:{
+	        show: false
+	      },
+	      axisLabel:{
+	        show: true,
+	        textStyle: {color:'#fff'}
+	      }
+       },
+      {
+          type: 'value',
+          position: 'right',
+	      splitLine: {
+	        show: false
+	      },
+	      axisLine: {
+	        show: false
+	      },
+	      axisTick:{
+	        show: false
+	      },
+	      axisLabel:{
+	        show: true,
+	        textStyle: {color:'#fff'}
+	      }
+       }
+    ],
+    series: [
+      {
+        name:'新增社员人数',
+        cursor:'pointer',
+        type: 'bar',
+        yAxis: 1,
+        stack: '总量',
+        label: {
+          show: false,
+          position: 'top',
+          formatter: '{c} ',
+          textStyle:{
+            color:"#ff3064"
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: "#ff3064",
+            label: {
+              show: true,
+              textStyle: {
+                color: "#fff"
+              },
+              position: "top",
+
+            }
+          }
+        },
+
+      },
+      /*
+	  {
+        name:'累计社员人数',
+        cursor: 'default',
+        type: 'bar',
+        yAxis: 1,
+        stack: '总量',
+        label: {
+          show: true,
+          position: 'top',
+          formatter: '{c} ',
+          textStyle:{
+            color:"#30d7c7"
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: "#30d7c7",
+            label: {
+              show: false,
+              textStyle: {
+                color: "#30d7c7"
+              },
+              position: "top",
+
+            }
+          }
+        },
+      },
+		*/
+    ]
+  };
+      // 事件绑定
+    turnoverCustomerOrderChart.on('click', function (params){
+	  var pId = encode64(pageStatusInfo.provinceId==""?'':pageStatusInfo.provinceId);
+	  var cId = encode64(pageStatusInfo.cityId==""?'':pageStatusInfo.cityId);
+	  var cName = encode64(pageStatusInfo.cityName==""?'':pageStatusInfo.cityName);
+	  var nowdays = new Date();
+      var year = turnoverCustomerOrderOption.xAxis.extdata[params.dataIndex];
+	  var dayTime = year+"/"+turnoverCustomerOrderOption.xAxis.data[params.dataIndex].replace("-","/");
+	  var flagBar = encode64("1");//标记是从总部页面柱状图跳入
+	  var role = curr_user.usergroup.code;
+	  var target=pageStatusInfo.targets;
+	  var url = "";
+	  if(target==0){
+	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg"+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar;
+	  }else if(target==1){
+	  	url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&#fg"+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar;
+	  }
+	  window.open(url,"user_member_view");
+    });
     cityUserOption = {
 	 title:[
     		{x: '10%', y: '3%',textStyle:{color:"#efefef",fontSize:"16"}},
@@ -2842,166 +3010,21 @@ var getTurnoverCustomerOrder = function(pageStatusInfo){
        }
 }
 var showTurnoverCustomerOrder = function(turnoverCustomer){
-  turnoverCustomerOrderChart = echarts.init(document.getElementById('main2'));
-	// 客流分析
-  turnoverCustomerOrderOption = {
-    title: {
-      text:"社员7日走势",x: '5%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"},
-    },
-    tooltip : {
-      trigger: 'axis',
-      formatter:function(params)//数据格式
-            {
-            var relVal = params[0]['name']+"<br/>";
-            //relVal += params[1]['marker']+params[1]['seriesName']+ ' : ' + String(params[1]['value']);
-	        //relVal+="<br/>";
-            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + String(params[0]['value']);
-	        relVal+="<br/>";
-             return relVal;
-        }
-    },
-    legend: {
-      data:[/*'累计社员人数',*/'新增社员人数'],
-      textStyle:{color:"#efefef",fontSize:"12"},
-      right:0,
-      orient:'vertical',
-      padding: 20
-    },
-    grid: {
-      top: '28%',
-      left: '3%',
-      right: '2%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: {
-      type: 'category',
-      //data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
-      splitLine: {
-        show: false
-      },
-      axisLine: {
-        show: true,
-        lineStyle:{color:'#ffc203'},
-      },
-      axisTick:{
-        show: false
-      },
-      axisLabel:{
-        show: true,
-        textStyle: {color:'#fff'}
-      },
-    },
-    yAxis: [
-    	{
-          type: 'value',
-          position: 'left',
-	      splitLine: {
-	        show: false
-	      },
-	      axisLine: {
-	        show: false
-	      },
-	      axisTick:{
-	        show: false
-	      },
-	      axisLabel:{
-	        show: true,
-	        textStyle: {color:'#fff'}
-	      }
-       },
-      {
-          type: 'value',
-          position: 'right',
-	      splitLine: {
-	        show: false
-	      },
-	      axisLine: {
-	        show: false
-	      },
-	      axisTick:{
-	        show: false
-	      },
-	      axisLabel:{
-	        show: true,
-	        textStyle: {color:'#fff'}
-	      }
-       }
-    ],
-    series: [
-      {
-        name:'新增社员人数',
-        cursor: 'default',
-        type: 'bar',
-        yAxis: 1,
-        stack: '总量',
-        label: {
-          show: false,
-          position: 'top',
-          formatter: '{c} ',
-          textStyle:{
-            color:"#ff3064"
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: "#ff3064",
-            label: {
-              show: true,
-              textStyle: {
-                color: "#fff"
-              },
-              position: "top",
-
-            }
-          }
-        },
-
-      },
-      /*
-	  {
-        name:'累计社员人数',
-        cursor: 'default',
-        type: 'bar',
-        yAxis: 1,
-        stack: '总量',
-        label: {
-          show: true,
-          position: 'top',
-          formatter: '{c} ',
-          textStyle:{
-            color:"#30d7c7"
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: "#30d7c7",
-            label: {
-              show: false,
-              textStyle: {
-                color: "#30d7c7"
-              },
-              position: "top",
-
-            }
-          }
-        },
-      },
-		*/
-    ]
-  };
   	var data = [];
   	var data1 = [];
     var data2 = [];
+    var data3 = [];
     $.each(eval(turnoverCustomer['week_new_data']), function (idx, val) {
     	data.push(val['crtime']);
     	data1.push(val['newcount']);
+    	data3.push(val['year_date']);
     });
     for(var i=0;i<7;i++){
     	var key = 'day'+(i+1);
     	data2.push(turnoverCustomer["growAllCounts"][0][key]==null?'0':turnoverCustomer["growAllCounts"][0][key]);
     }
 	turnoverCustomerOrderOption.xAxis.data = data.reverse();
+	turnoverCustomerOrderOption.xAxis.extdata = data3.reverse();
 	turnoverCustomerOrderOption.series[0].data = data1.reverse();
 	//turnoverCustomerOrderOption.series[1].data = data2;
 	//customerNewChartOption.title.text="社员7日走势";

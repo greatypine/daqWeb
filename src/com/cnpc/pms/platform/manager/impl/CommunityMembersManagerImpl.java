@@ -70,6 +70,7 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 	           	Map<String,Object> lst_total_map = new HashMap<String, Object>();
 	           	lst_new_map.put("crtime", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
 	           	lst_total_map.put("crtime", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
+	           	lst_new_map.put("year_date", minDateStr.substring(0,(minDateStr.indexOf("-"))));
 	           	lst_new_map.put("newcount", 0);
 	           	lst_new_map.put("totalcount", 0);
 	           	for(int j=0;j<newWeekCountList.size();j++){
