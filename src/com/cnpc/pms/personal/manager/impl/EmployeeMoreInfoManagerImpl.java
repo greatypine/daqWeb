@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.bson.Document;
-import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 
 import com.cnpc.pms.base.paging.FilterFactory;
@@ -15,9 +14,7 @@ import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.mongodb.common.MongoDbUtil;
 import com.cnpc.pms.personal.entity.EmployeeMoreInfo;
-import com.cnpc.pms.personal.entity.ObserveParameter;
 import com.cnpc.pms.personal.manager.EmployeeMoreInfoManager;
-import com.cnpc.pms.personal.util.MapUtils;
 import com.cnpc.pms.platform.dao.PlatformEmployeeDao;
 import com.cnpc.pms.utils.DateUtils;
 import com.mongodb.client.AggregateIterable;
