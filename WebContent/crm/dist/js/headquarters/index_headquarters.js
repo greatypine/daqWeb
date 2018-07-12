@@ -4106,7 +4106,7 @@ var curr_user;
 	  var url = "";
 	  var target=pageStatusInfo.targets;
 	  if(target==0){
-	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg"+"&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName);
 	  }else if(target==1){
 	  	url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 	  }
