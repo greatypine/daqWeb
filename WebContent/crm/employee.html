@@ -101,8 +101,8 @@
         <div class="box box-default details">
           
           <div class="box-body">
-            <div class="col-sm-3 no-padding text-center"><div class="user_photo"><img id="user_pic" src="dist/img/avatar5.png"></div></div>
-            <dl class="dl-horizontal col-sm-4 no-padding">
+            <div class="col-sm-2 no-padding text-center"><div class="user_photo"><img id="user_pic" src="dist/img/avatar5.png"></div></div>
+            <dl class="dl-horizontal col-sm-3 no-padding">
               <dt>姓名</dt>
               <dd id="employeeName">载入中...</dd>
               <dt>职务</dt>
@@ -118,23 +118,33 @@
               <dt>所属片区</dt>
               <dd id="areaName">载入中...</dd>
             </dl>
-            <div class="col-sm-5 no-padding">
-              <div class="col-sm-6">
+            <div class="col-sm-7 no-padding">
+              <div class="col-sm-4">
                 <div class="small-box bg-yellow text-center">
                   <div class="icons"><img src="dist/img/gax_weekly1.png"></div>
                   <div class="inner">
-                    <h3 id="consumer">载入中...</h3>
-                    <p>累计用户量</p>
+                    <h3 id="sendOrder">载入中...</h3>
+                    <p>累计送单量</p>
                   </div>
                   <a class="small-box-footer">截止到昨天24时 <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-4">
                 <div class="small-box bg-aqua text-center">
                   <div class="icons"><img src="dist/img/gax_weekly2.png"></div>
                   <div class="inner">
                     <h3 id="gmv">载入中...</h3>
                     <p>累计营业额</p>
+                  </div>
+                  <a class="small-box-footer">截止到昨天24时 <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+               <div class="col-sm-4" style="padding: 0 5px;">
+                <div class="small-box bg-green text-center">
+                  <div class="icons"><img src="dist/img/gax_weekly3.png"></div>
+                  <div class="inner">
+                    <h3 id="consumer">载入中...</h3>
+                    <p>累计用户量</p>
                   </div>
                   <a class="small-box-footer">截止到昨天24时 <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
@@ -239,13 +249,14 @@
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var user_pic = JSON.parse(data.data);
-                    var isExist = CheckImgExists(user_pic);
                     if(typeof(user_pic.dataMap.pngUrl)!='undefined'&&user_pic.dataMap.pngUrl!=null&&user_pic.dataMap.pngUrl.indexOf(".com/guoanxia")>0){
                     	$("#user_pic").attr("src",user_pic.dataMap.pngUrl);
     					$("#userPic_middle").attr("src",user_pic.dataMap.pngUrl);
     					$("#userPic_little").attr("src",user_pic.dataMap.pngUrl);
                     }
             		
+                    
+
                     
                 }
             },false);
@@ -281,6 +292,12 @@
                     }else if(human_info.customer.length==0){
                         $("#consumer").html(0);
                     }
+                    
+                    if(human_info.order!=null&&human_info.order.length!=0){
+                        $("#sendOrder").html(human_info.order[0].total);
+                    }else if(human_info.customer.length==0){
+                        $("#sendOrder").html(0);
+                    }
 
                     if(human_info.area!=null&&human_info.area.length!=0){
                         var areaList = human_info.area;
@@ -294,7 +311,7 @@
 
                         $("#areaName").html(areaNameArray.join("、"));
                     }else if(human_info.area.length==0){
-                        $("#areaName").html('');
+                        $("#areaName").html('暂无');
                     }
 
 
@@ -344,7 +361,15 @@
 	                            option1.series[0].data = deptNV;
 	                            option1.title[0].text = "片区内频道订单量（当年）";
 	                            myChart1.setOption(option1);
-	                        }
+	                        }else{
+	 	                       var deptNV = new Array();
+		                 	   var vnMap = {};
+		                 	   vnMap["name"] = "--";
+	                    	   vnMap["value"] = '0';
+	                    	   deptNV.push(vnMap);
+	                		   option1.series[0].data = deptNV;
+		             		   myChart1.setOption(option1);
+		                    }
 
 
 	                    }
@@ -397,6 +422,14 @@
                                option2.series[0].data = deptNV;
                                option2.title[0].text = "片区内客户消费次数（当年）";
                                myChart2.setOption(option2);
+                           }else{
+                        	   var deptNV = new Array();
+                        	   var vnMap = {};
+                        	   vnMap["name"] = "--";
+                           	   vnMap["value"] = '0';
+                           	   deptNV.push(vnMap);
+                       		   option2.series[0].data = deptNV;
+                        	   myChart2.setOption(option2);
                            }
 
 
