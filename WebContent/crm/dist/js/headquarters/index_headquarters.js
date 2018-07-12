@@ -460,21 +460,15 @@ var initPageElements = function () {
   };
       // 事件绑定
     turnoverCustomerOrderChart.on('click', function (params){
-	  var pId = encode64(pageStatusInfo.provinceId==""?'':pageStatusInfo.provinceId);
 	  var cId = encode64(pageStatusInfo.cityId==""?'':pageStatusInfo.cityId);
 	  var cName = encode64(pageStatusInfo.cityName==""?'':pageStatusInfo.cityName);
 	  var nowdays = new Date();
       var year = turnoverCustomerOrderOption.xAxis.extdata[params.dataIndex];
 	  var dayTime = year+"/"+turnoverCustomerOrderOption.xAxis.data[params.dataIndex].replace("-","/");
 	  var flagBar = encode64("1");//标记是从总部页面柱状图跳入
-	  var role = curr_user.usergroup.code;
-	  var target=pageStatusInfo.targets;
+	  //var role = curr_user.usergroup.code;
 	  var url = "";
-	  if(target==0){
-	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg"+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar;
-	  }else if(target==1){
-	  	url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&#fg"+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar;
-	  }
+	  url = "user_member_view.html?t="+encode64('1')+"&r=&c="+cId+"&cn="+cName+"&e="+encode64(curr_user.id)+"&beTi="+encode64(dayTime)+"&endT="+encode64(dayTime)+"&fb="+flagBar;
 	  window.open(url,"user_member_view");
     });
     cityUserOption = {
