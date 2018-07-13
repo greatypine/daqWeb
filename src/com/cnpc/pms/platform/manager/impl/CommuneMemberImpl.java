@@ -43,6 +43,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         if (!"0000".equals(dd)) {
             if(dd.length()<4){
                 cityno="0"+dd;
+            }else {
+            	cityno=dd;
             }
             List<Map<String, Object>> selCityList = new ArrayList<Map<String, Object>>();
             selCityList = commDao.getSelCity(cityno);
