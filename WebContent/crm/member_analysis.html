@@ -49,7 +49,7 @@
     .report_jr li i{font-size: 70px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
     .report_jr li span{font-size: 30px; color: #ffde00;}
 
-    .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
+    .vertical-example{position: absolute; top: 70px; left: 5%; width: 100px;}
     .navimenu{min-height: 800px; padding-top: 0;}
     #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
       #process_div{ 
@@ -72,7 +72,27 @@
 		height:32px;
 		color: #fff;
 	}
-    
+ .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
+ .download p{font-size: 12px;}
+ .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
+     /* Firefox: */
+     -moz-animation-name:myfirst; -moz-animation-duration:2s;-moz-animation-timing-function:linear;-moz-animation-iteration-count:infinite;-moz-animation-direction:alternate;-moz-animation-play-state:running;
+     /* Safari and Chrome: */
+     -webkit-animation-name:myfirst;-webkit-animation-duration:2s;-webkit-animation-timing-function:linear;-webkit-animation-iteration-count:infinite;-webkit-animation-direction:alternate;-webkit-animation-play-state:running;
+     /* Opera: */
+     -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
+ .add_citymember{wposition: absolute;}
+ .toast{
+     width:400px;
+     height:240px;
+     background:transparent;
+     background-color:rgba(241,241,241,1);
+     box-shadow: 0 1px 1px rgba(0,0,0,1);
+     border-radius:10px;
+     position: fixed;
+     margin:auto;left:40%; top:30%;
+     z-index: 1;
+ }
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -81,6 +101,7 @@
  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
 <div class="wrapper">
 <!-- 新header -->
+    <div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
  <header class="main-header">
     <nav class="navbar navbar-static-top">
       <div class="container">
@@ -100,8 +121,10 @@
   </header>
 
   <!-- Content Wrapper. Contains page content -->
+    <div id="page">
   <div class="content-wrapper">
     <div class="container" style="width: 1300px;">
+        <input type="hidden" id="selDay" value="1"/>
       <!-- Main content -->
       <section class="content-header">
          <div class="box box-default report">
@@ -122,6 +145,7 @@
             </div>
             <div class="col-sm-12">
               <dt>社员<em><img src="dist/img/member1.png"></em></dt>
+            <!--  <div style="position: absolute;">-->
               <ul class="clearfix report_jr no-padding">
                 <li>
                   <div class="col-sm-8">今日成交额：<br><small>￥</small> <span id="dayDealSum"></span></div>
@@ -132,10 +156,20 @@
                   <div class="col-sm-4"><i class="fa  fa-bar-chart"></i></div>
                   </li>
                 <li>
+                <div>
+                  <div class="add_citymember">
                   <div class="col-sm-8">今日新增社员：<br><span  id="dayNewMem"></span><small></small></div>
                   <div class="col-sm-4"><i class="fa fa-user-plus"></i></div>
+                  </div>
+                </div>
                   </li>
               </ul>
+              <div id="cityMember" class="toast" style="display: none">
+                  <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
+                  <div style="margin-left: 10%" id="addCityMem">
+                  </div>
+              </div>
+             <!-- </div>-->
               <ul class="clearfix no-padding">
                 <li class="col-sm-3"><i class="fa fa-group"></i>社员总数：<br><span id="memAll"></span></li>
                 <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
@@ -220,78 +254,91 @@
             </div>
           </div>
         </div> -->
-      <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-5">
-              <h4 class="text-light-blue"><strong>安心合作社成交额</strong></h4>
-              <div class="col-sm-12 no-padding" id="main16" style="height: 260px;"></div>
-            </div>
-            <div class="col-sm-7">
-              <h4 class="text-light-blue"><strong>城市成交额</strong></h4>
-              <div class="col-sm-12 no-padding" id="main17" style="height: 260px;"></div>
-            </div>
+          <div class="box box-default">
+              <div class="box-body">
+                  <div class="col-sm-5">
+                      <h4 class="text-light-blue"><strong>安心合作社成交额</strong></h4>
+                      <div class="col-sm-12 no-padding" id="main16" style="height: 260px;"></div>
+                  </div>
+                  <div class="col-sm-7">
+                      <h4 class="text-light-blue"><strong>城市成交额</strong></h4>
+                      <div class="col-sm-12 no-padding" id="main17" style="height: 260px;"></div>
+                  </div>
+              </div>
           </div>
-        </div>
-      <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-6">
-              <h4 class="text-red">最受欢迎商品</h4>
-              <table class="table table-bordered">
-                <tbody id="hotPro_data">
-                <tr>
-                  <th>商品名称</th>
-                  <th>卖出数量</th>
-                  <!-- <th>售卖时长</th> -->
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="text-light-blue">无人问津商品</h4>
-              <table class="table table-bordered">
-                <tbody id="coolPro_data">
-                <tr>
-                  <th>商品名称</th>
-                  <th>卖出数量</th>
-                  <!-- <th>售卖时长</th> -->
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+          <div class="box box-default">
+              <div class="box-body">
+                  <div class="col-sm-6">
+                      <h4 class="text-red">最受欢迎商品</h4>
+                      <table class="table table-bordered">
+                          <tbody id="hotPro_data">
+                          <tr>
+                              <th>商品名称</th>
+                              <th>卖出数量</th>
+                              <!-- <th>售卖时长</th> -->
+                              <th>排名</th>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                  <div class="col-sm-6">
+                      <h4 class="text-light-blue">无人问津商品</h4>
+                      <table class="table table-bordered">
+                          <tbody id="coolPro_data">
+                          <tr>
+                              <th>商品名称</th>
+                              <th>卖出数量</th>
+                              <!-- <th>售卖时长</th> -->
+                              <th>排名</th>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
           </div>
-        </div>
-              <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-7 no-padding">
-              <h4 class="box-header h4 text-light-blue"><strong>E店排行榜</strong></h4>
-              <table class="table table-bordered">
-                <tbody id="eshop_data">
-                <tr>
-                  <th >E店名称</th>
-                  <th>成交额</th>
-                  <th>订单量</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-5" id="main9" style="height: 480px;"></div>
+          <div class="box box-default">
+              <div class="box-body">
+                  <div class="col-sm-7 no-padding">
+                      <h4 class="box-header h4 text-light-blue"><strong>E店排行榜</strong></h4>
+                      <table class="table table-bordered">
+                          <tbody id="eshop_data">
+                          <tr>
+                              <th>E店名称</th>
+                              <th>成交额</th>
+                              <th>订单量</th>
+                              <th>排名</th>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+                  <div class="col-sm-5" id="main9" style="height: 480px;"></div>
+              </div>
           </div>
-      </div>
-      <div class="box box-default">
-          <div class="box-body">
-          <div class="col-sm-7">
-          <div class="box-header h4 text-light-blue"><strong>社员增长趋势</strong></div>
-            <div class="col-sm-12 no-padding" id="main1" style="height: 350px;"></div>
+          <div class="box box-default">
+              <div class="box-body">
+                  <div class="col-sm-7">
+                      <div class="form-group col-lg-6" style="padding: 0 25px;">
+                      <div class="box-header h4 text-light-blue" ><strong id="sevenOrMon">社员增长趋势</strong>
+                      </div></div>
+                          <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+                              <button type="button" class="btn btn-block btn-primary" onclick="btnAction('0')">近7天</button>
+                          </div>
+                          <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+                              <button type="button" onclick="btnAction('1')" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">近30天</button>
+                          </div>
+
+
+                  <div id="tab-content">
+                      <div class="col-sm-12 no-padding" id="main1" style="height: 350px;display: block"></div>
+                      <div class="col-sm-12 no-padding" id="main1_1" style="height: 350px;display: none"></div>
+                  </div>
+              </div>
+              <div class="col-sm-5">
+                  <div class="box-header h4 text-light-blue"><strong id="cmCount">社员总数：</strong></div>
+                  <div class="col-sm-12 no-padding" id="main2" style="height: 350px;"></div>
+              </div>
           </div>
-          <div class="col-sm-5">
-          <div class="box-header h4 text-light-blue"><strong id="cmCount">社员总数：</strong></div>
-            <div class="col-sm-12 no-padding" id="main2" style="height: 350px;"></div>
-          </div>
-          </div>
-        </div>
+    </div>
      <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6">
@@ -320,7 +367,7 @@
             <div class="col-sm-4 no-padding" id="main8" style="height: 350px;"></div>
           </div>
       </div>
-<!--      <div class="box box-default">
+      <div class="box box-default">
         <div class="box-header h4 text-light-blue"><strong>优惠情况</strong></div>
           <div class="box-body">
             <div class="col-sm-6 no-padding" id="main10" style="height: 350px;"></div>
@@ -374,7 +421,7 @@
               </table>
             </div> 
           </div>
-      </div> -->
+      </div>
       </section>
 
     </div>
@@ -382,21 +429,22 @@
       <nav id="gooey-v">
         <input type="checkbox" class="menu-open" name="menu-open4" id="menu-open4"/>
         <label class="open-button" for="menu-open4"><span style="font-size: 16px;font-weight: normal;">城市</span></label>
-        <a href="#" class="gooey-menu-item"> 北京 </a>
-        <a href="#" class="gooey-menu-item"> 上海 </a>
-        <a href="#" class="gooey-menu-item"> 天津 </a>
-        <a href="#" class="gooey-menu-item"> 沈阳 </a>
-        <a href="#" class="gooey-menu-item"> 北京 </a>
-        <a href="#" class="gooey-menu-item"> 上海 </a>
-        <a href="#" class="gooey-menu-item"> 天津 </a>
-        <a href="#" class="gooey-menu-item"> 沈阳 </a>
-        <a href="#" class="gooey-menu-item"> 北京 </a>
-        <a href="#" class="gooey-menu-item"> 上海 </a>
-        <a href="#" class="gooey-menu-item"> 天津 </a>
-        <a href="#" class="gooey-menu-item"> 沈阳 </a>
+          <div id="showcitys"></div>
+        <!--<a href="javascript:doCityMem('010')" class="gooey-menu-item"> 北京 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 上海 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 天津 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 沈阳 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 北京 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 上海 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 天津 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 沈阳 </a>
+        <a href="javascript:doCityMem('0871')" class="gooey-menu-item"> 北京 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 上海 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 天津 </a>
+        <a href="javascript:doCityMem('010')" class="gooey-menu-item"> 沈阳 </a>-->
       </nav>
     </div>
-
+  </div>
 </div>
 <!-- ./wrapper -->
 
@@ -420,6 +468,8 @@
 <script type="text/javascript" src="plugins/jquery.page.js"></script>
 <script type="text/javascript" src="plugins/moment.min.js"></script>
 <script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script src="dist/js/utils/htmlToPdf/html2canvas.js"></script>
+<script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script>
 
@@ -445,8 +495,31 @@ var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别
 var cityId = decode64(getUrlParamByKey("c"));//城市ID
 var cityName = decode64(getUrlParamByKey("cn"));//城市名称
 var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
-	
-	
+var option1_1 = null;
+var option1 = null;
+function showAddMember(){
+    $(".add_citymember").mouseover(function(){
+        $("#cityMember").show();
+    });
+    $(".add_citymember").mouseleave(function(){
+        $("#cityMember").hide();
+    });
+}
+function doCityMem(citycode){
+    //跳转城市页面
+    var url = "member_analysis_city.html?c="+encode64(citycode);
+    window.open(url);
+}
+
+var showCityInfo = function (dataServer){
+    var cityName = dataServer.jsonCityName;
+    var cityCode = dataServer.jsonCityCode;
+    var cityStr="";
+    for(var i=0;i<cityCode.length;i++){
+        cityStr += "<a href=\"javascript:doCityMem('"+cityCode[i]+"')\"  class='gooey-menu-item'>"+cityName[i]+"</a>";
+    }
+        $("#showcitys").append(cityStr);
+};
 	function doUserMem(){
 		var url = "";
 		if(target==0){
@@ -506,12 +579,12 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	      selectedMode:false,
 	      textStyle: {color: '#404a59'}
 	    },
-	    grid: {
-	      left: '3%',
-	      right: '4%',
-	      bottom: '3%',
-	      containLabel: true
-	    },
+          grid: {
+              left: '3%',
+              right: '4%',
+              bottom: '3%',
+              containLabel: true
+          },
 	    xAxis: [{
 	        type: 'category',
 	        data: dataServer.jsonDateMem,
@@ -587,6 +660,118 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	    }]
 	  };
 	  myChart1.setOption(option1);
+
+      var myChart1_1 = echarts.init(document.getElementById('main1_1'));
+      //社员人数
+      option1_1 = {
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                  type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+              }
+          },
+          legend: {
+              data: [ '新增社员人数','累计社员人数'],
+              right:'35%',
+              selectedMode:false,
+              textStyle: {color: '#404a59'}
+          },
+          grid: {
+              left: '10%',
+              right: '6%',
+              bottom: '15%',
+              containLabel: true
+          },
+          xAxis: [{
+              type: 'category',
+              data: dataServer.jsonDateMon,
+              axisLabel:{
+                  textStyle:{color:'#404a59',}
+              },
+              axisLine:{
+                  lineStyle:{color:'#404a59',}
+              },
+          }],
+          yAxis: [{
+              type: 'value',
+              name: '新增社员人数',
+              splitLine: {show: false},
+              axisLabel: {
+                  formatter: '{value}',
+                  textStyle:{color:'#404a59'}
+              },
+              axisLine:{
+                  lineStyle:{color:'#404a59'}
+              }
+          },{
+              type: 'value',
+              name: '累计社员人数',
+              axisLabel: {
+                  formatter: '{value}',
+                  textStyle:{color:'#404a59'}
+              },
+              axisLine:{
+                  lineStyle:{color:'#404a59'}
+              },
+              position: 'right',
+          }],
+          dataZoom: [
+              {
+                  type: 'inside',
+                  start:50,
+                  end: 100
+              },
+              {
+                  show: true,
+                  type: 'slider',
+                  y: '90%',
+                  start: 0,
+                  end: 100
+              }
+          ],
+          series: [ {
+              name: '新增社员人数',
+              type: 'bar',
+              itemStyle:{normal:{color:'#ffae00'},},
+              data: dataServer.jsonNewMonCounts,
+              label: {
+                  normal: {
+                      show:true,
+                      position: 'top',
+                      textStyle:{
+                          color:'#ffae00',
+                      },
+                  },
+                  emphasis: {
+                      textStyle:{
+                          color:'#ffae00',
+                      },
+                  },
+              },
+          },{
+              name: '累计社员人数',
+              type: 'line',
+              itemStyle:{normal:{color:'#01949B'}},
+              data: dataServer.jsonAllMonCounts,
+              yAxisIndex: 1,
+              label: {
+                  normal: {
+                      show:true,
+                      position: 'top',
+                      textStyle:{
+                          color:'#01949B',
+                      },
+                  },
+                  emphasis: {
+                      textStyle:{
+                          color:'#01949B',
+                      },
+                  },
+              },
+          }]
+      };
+      myChart1_1.setOption(option1_1);
+
   }
   
   var showMember = function (dataServer){
@@ -999,7 +1184,8 @@ function doMemberInfo(){
         	//订单商品分类统计
         	showOrderType(resultJson);
  			//运营情况
- 			showHistoryData(resultJson);  
+ 			showHistoryData(resultJson);
+            setCityAddMem(resultJson);
 
         	setLoadingMark(false);
         	//设置10秒刷新页面
@@ -1034,7 +1220,7 @@ function doMemberSum(){
         	showEshop(resultJson);
         	
         	//粮票
-        	//showRebateMoney(resultJson);
+        	showRebateMoney(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
@@ -1057,6 +1243,14 @@ function doEshopMemberSum(){
     });
 }
  $(function () {
+     doManager('communeMember','getCityCode',"0000",function(data) {
+         if (data.result) {
+             var resultJson = JSON.parse(data.data);
+             if(resultJson != null){
+                 showCityInfo(resultJson);
+             }
+         }
+     },false);
     $("#gooey-v").gooeymenu({
         bgColor: "#68d099",
         contentColor: "white",
@@ -1078,13 +1272,94 @@ function doEshopMemberSum(){
         transitionStep: 100,
         hover: "#68d099"
       });
-    // $('#citySelect').css('display','block');
+     $('#citySelect').css('display','block');
     	localStorage.clear();
 	 	loginShow();
+     showAddMember();
+	//下载报告
+     var downPdf = document.getElementById("downloadPdf");
+     var pagedom = $("#page");
+     downPdf.onclick = function() {
+         $("#process_div").show();
+         $("#process_div_pic").show();
+         scrollTo(0,0);
+         html2canvas(pagedom, {
+             onrendered : function(canvas) {
+                 var contentWidth = canvas.width;
+                 var contentHeight = canvas.height;
+                 //一页pdf显示html页面生成的canvas高度;
+                 var pageHeight = contentWidth / 592.28 * 841.89;
+                 //未生成pdf的html页面高度
+                 var leftHeight = contentHeight;
+                 //页面偏移
+                 var position = 0;
+                 //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                 var imgWidth = 595.28;
+                 var imgHeight = 592.28 / contentWidth
+                     * contentHeight;
+                 var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                 var pdf = new jsPDF('', 'pt', 'a4');
+                 //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                 //当内容未超过pdf一页显示的范围，无需分页
+                 if (leftHeight < pageHeight) {
+                     pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
+                         imgHeight);
+                 } else {
+                     while (leftHeight > 0) {
+                         pdf.addImage(pageData, 'JPEG', 0, position,
+                             imgWidth, imgHeight)
+                         leftHeight -= pageHeight;
+                         position -= 841.89;
+                         //避免添加空白页
+                         if (leftHeight > 0) {
+                             pdf.addPage();
+                         }
+                     }
+                 }
+                 pdf.save('安心合作社运营简报.pdf');
+                 $("#process_div_pic").hide();
+                 $("#process_div").hide();
+             }
+         })
+     }
 	 //获取社员量
 
+
+
 });
- 
+//切换月
+function btnAction(type){
+
+    if(type=="1"){
+        $('#main1').css('display','none');
+        var myChart1_1 = echarts.init(document.getElementById('main1_1'));
+        myChart1_1.clear();
+        $('#main1_1').css('display','block');
+        var chart7div=document.getElementById('main1_1');
+        var tabcontent = document.getElementById('tab-content');
+        var width=tabcontent.offsetWidth;
+        chart7div.style.width=width+'px';
+        myChart1_1.resize(width);
+
+        myChart1_1.setOption(option1_1);
+        //$("#checkData").html("切换近7天");
+        //$("#sevenOrMon").html("社员30天增长趋势");
+    }else{
+        $('#main1_1').css('display','none');
+        $('#main1').css('display','block');
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        myChart1.clear();
+        var chart7div=document.getElementById('main1');
+        var tabcontent = document.getElementById('tab-content');
+        var width=tabcontent.offsetWidth;
+        chart7div.style.width=width+'px';
+        myChart1.resize(width);
+        myChart1.setOption(option1);
+        $("#checkData").html("切换近30天");
+        $("#sevenOrMon").html("社员7天增长趋势");
+    }
+
+}
  
 var showMemberRegist = function (dataServer){
 	  var myChart7 = echarts.init(document.getElementById('main7'));
@@ -1471,7 +1746,11 @@ var showHistoryData = function (dataServer) {
 	$("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
     //新增社员
 	$("#dayNewMem").html(parseInt(dataServer.dayAddMem==null?'0':dataServer.dayAddMem));
-	$("#oneDeal").html(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount==null?'0':(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount).toFixed(2));
+    if(dataServer.cmGoodsDealCount==null||dataServer.cmGoodsDealCount==0){
+        $("#oneDeal").html("0");
+    }else{
+        $("#oneDeal").html(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount==null?'0':(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount).toFixed(2));
+    }
 	//周消费频次
 	$("#jsonEshopWeekCou").html(parseInt(dataServer.jsonEshopWeekCou==null?'0':dataServer.jsonEshopWeekCou));
 	//E店累计成交额
@@ -2834,7 +3113,6 @@ var showTimeOrder = function(dataServer){
 
 var showOrderType = function(dataServer){
 	var myChart22= echarts.init(document.getElementById('main22'));
-	debugger;
 	  option22 = {
 			    tooltip: {
 				      trigger: 'item',
@@ -2903,7 +3181,23 @@ var showOrderType = function(dataServer){
 	  
 	  myChart22.setOption(option22);
 }
- 
+ var setCityAddMem = function(dataServer){
+     var cityName = dataServer.jsonCityNames;
+     var cityAdd = dataServer.jsonCityAdds;
+     var cityStr="<ul class='clearfix'>";
+     for(var i=0;i<cityName.length;i++){
+         if(((i+1)%3)==0){
+             if(i==cityName.length-1){
+                 cityStr += "<li style='width: 100px'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
+             }else{
+                 cityStr += "<li style='width: 100px'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
+             }
+         }else{
+             cityStr += "<li style='width: 100px'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
+         }
+     }
+     $("#addCityMem").append(cityStr);
+ }
 //设置加载中图标
 var setLoadingMark = function (bShow) {
     if (bShow == true) {
