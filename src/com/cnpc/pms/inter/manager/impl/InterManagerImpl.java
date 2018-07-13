@@ -3652,11 +3652,16 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 					result.setData(userList.get(0));
 				}else{
 					result.setCode(CodeEnum.repeatData.getValue());
-					result.setMessage("无效电话");
+					//此电话被多个系统账号使用（A00001，GSG010100, TJ00001)，请联系HR修改后再试
+					String existEmployeeId="";
+					for(User u:userList) {
+						existEmployeeId+=u.getEmployeeId()+",";
+					}
+					result.setMessage("此电话被多个系统账号使用（"+existEmployeeId+")，请联系HR修改后再试");
 				}
 			}else{
 				result.setCode(CodeEnum.nullData.getValue());
-				result.setMessage("无效电话");
+				result.setMessage("电话号格式错误！");
 			}
 			return result;
 		}
