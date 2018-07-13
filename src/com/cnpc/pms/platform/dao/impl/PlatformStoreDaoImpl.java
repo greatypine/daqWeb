@@ -515,7 +515,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * 2018年6月6日
 		 */
 		
-		String sumRetrenchSql = "select sum(tmi.sum_retrench_money)  sumall,sum(tmi.sum_retrench_money)-(sum(tmi.sum_rebate)-sum(tmi.remain_rebate)) subprice,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) usedrebate from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id ";
+		String sumRetrenchSql = "select ifnull(sum(tmi.sum_retrench_money),0)  sumall,ifnull(sum(tmi.sum_retrench_money)-(sum(tmi.sum_rebate)-sum(tmi.remain_rebate)),0) subprice,ifnull(sum(tmi.sum_rebate)-sum(tmi.remain_rebate),0) usedrebate from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id ";
 		if(!"0000".equals(dd)) {
 			sumRetrenchSql = sumRetrenchSql+" and tc.city_code='"+dd+"'";
 		}
@@ -540,7 +540,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		 * @author wuxinxin
 		 * 2018年6月6日
 		 */
-		String sumRebateSql = "select sum(tmi.sum_rebate)  sumreall,sum(tmi.remain_rebate) sumhavere,sum(tmi.sum_rebate)-sum(tmi.remain_rebate) sumused from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id";
+		String sumRebateSql = "select ifnull(sum(tmi.sum_rebate),0)  sumreall,ifnull(sum(tmi.remain_rebate),0) sumhavere,ifnull(sum(tmi.sum_rebate)-sum(tmi.remain_rebate),0) sumused from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id";
 		if(!"0000".equals(dd)) {
 			sumRebateSql = sumRebateSql+" and tc.city_code='"+dd+"'";
 		}

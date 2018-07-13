@@ -4485,7 +4485,7 @@ var curr_user;
 	  if(target==0){
 	  	url = "member_analysis.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
 	  }else if(target==1){
-		  url = "member_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+		  url = "member_analysis_city.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 	  }
 	  window.open(url,"member_analysis");  
   }
