@@ -37,4 +37,12 @@ public interface EmployeeMoreInfoManager  extends IManager {
 	 */
 	public void getHistoryEmployeePositionsDistance();
 
+	/**
+	 * @Description  分析员工工龄
+	 * @author gbl
+	 * @date 2018/7/10 13:30
+	 **/
+
+	public void  analyzeEmployeeWorkingAge();
+
 }

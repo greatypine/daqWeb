@@ -1,12 +1,11 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import com.cnpc.pms.personal.dao.EmployeeMoreInfoDao;
 import org.bson.Document;
+import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 
 import com.cnpc.pms.base.paging.FilterFactory;
@@ -234,6 +233,111 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 	        skipcount += 100;
 	        System.out.println("=====================================》》》》》》》》》》》》》》》》》共"+j+"条数据，插入"+m+"条数据");
 		}
+	}
+
+
+	private static int getMonthDiff(Date d1, Date d2) {
+		Calendar c1 = Calendar.getInstance();
+		Calendar c2 = Calendar.getInstance();
+		c1.setTime(d1);
+		c2.setTime(d2);
+		if(c1.getTimeInMillis() < c2.getTimeInMillis()) return 0;
+		int year1 = c1.get(Calendar.YEAR);
+		int year2 = c2.get(Calendar.YEAR);
+		int month1 = c1.get(Calendar.MONTH);
+		int month2 = c2.get(Calendar.MONTH);
+		int day1 = c1.get(Calendar.DAY_OF_MONTH);
+		int day2 = c2.get(Calendar.DAY_OF_MONTH);
+		// 获取年的差值 假设 d1 = 2015-8-16  d2 = 2011-9-30
+		int yearInterval = year1 - year2;
+		// 如果 d1的 月-日 小于 d2的 月-日 那么 yearInterval-- 这样就得到了相差的年数
+		if(month1 < month2 || month1 == month2 && day1 < day2) yearInterval --;
+		// 获取月数差值
+		int monthInterval =  (month1 + 12) - month2  ;
+		if(day1 < day2) monthInterval --;
+		monthInterval %= 12;
+		return yearInterval * 12 + monthInterval;
+	}
+
+	/**
+	 * @Description 时间间隔天数
+	 * @author gbl
+	 * @date 2018/7/10 13:47
+	 **/
+	private Map<String,Object> dateCompare(Date fromDate, Date toDate){
+		Map<String,Object> result = new HashMap<String,Object>();
+		Calendar  from  =  Calendar.getInstance();
+		from.setTime(fromDate);
+		Calendar  to  =  Calendar.getInstance();
+		to.setTime(toDate);
+		//只要年月
+		int fromYear = from.get(Calendar.YEAR);
+		int fromMonth = from.get(Calendar.MONTH);
+		int toYear = to.get(Calendar.YEAR);
+		int toMonth = to.get(Calendar.MONTH);
+		int year = toYear  -  fromYear;
+		int month = toYear *  12  + toMonth  -  (fromYear  *  12  +  fromMonth);
+		int day = (int) ((to.getTimeInMillis()  -  from.getTimeInMillis())  /  (24  *  3600  *  1000));
+
+		result.put("year",year);
+		result.put("month",month);
+		result.put("day",day);
+		return result;
+	}
+
+
+
+	@Override
+	public void analyzeEmployeeWorkingAge() {
+
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao) SpringHelper.getBean(EmployeeMoreInfo.class.getName());
+
+		List<Map<String,Object>> humanresources = null;
+		List<Map<String,Object>> storekeeper = null;
+
+		try {
+			humanresources = employeeMoreInfoDao.queryHumanresource();
+			storekeeper = employeeMoreInfoDao.queryStoreKepeer();
+			Map<String,Object> result = new HashMap<String,Object>();
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+			//更新国安侠工龄
+			for(int i=0;i<humanresources.size();i++){
+				Object topostdate = humanresources.get(i).get("topostdate");
+				Object employeeNo = humanresources.get(i).get("employee_no");
+				if(topostdate==null){
+					continue;
+				}
+				result = dateCompare(sdf.parse(String.valueOf(topostdate)),date);
+				Integer year = Integer.parseInt(String.valueOf(result.get("year")));
+				Integer month = Integer.parseInt(String.valueOf(result.get("month")));
+				Integer day = Integer.parseInt(String.valueOf(result.get("day")));
+				employeeMoreInfoDao.updateEmployeeWorkingAge(String.valueOf(employeeNo),year,month,day);
+			}
+
+			//更新店长工龄
+			for(int j=0;j<storekeeper.size();j++){
+				Object topostdate = storekeeper.get(j).get("topostdate");
+				Object employeeNo = storekeeper.get(j).get("employee_no");
+				if(topostdate==null){
+					continue;
+				}
+				result = dateCompare(sdf.parse(String.valueOf(topostdate)),date);
+				result = dateCompare(sdf.parse(String.valueOf(topostdate)),date);
+				Integer year = Integer.parseInt(String.valueOf(result.get("year")));
+				Integer month = Integer.parseInt(String.valueOf(result.get("month")));
+				Integer day = Integer.parseInt(String.valueOf(result.get("day")));
+				employeeMoreInfoDao.updateEmployeeWorkingAge(String.valueOf(employeeNo),year,month,day);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+
+
+
 	}
 
 }
