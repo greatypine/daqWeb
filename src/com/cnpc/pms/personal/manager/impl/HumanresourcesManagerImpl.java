@@ -4025,8 +4025,11 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		//导出操作开始 
   		Map<String, Object> result = new HashMap<String,Object>();
   		if(lst_data!=null&&lst_data.size()>0){//成功返回数据
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-  			String str_web_path = PropertiesUtil.getValue("file.web.root");
+  			
+  			String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+
+  			//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
   	        setCellStyle_common(wb);
@@ -4074,7 +4077,12 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+  			//上传oss导出员工档案
+	        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+	        String url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+	        result.put("data", url);
+	        
+  			//result.put("data", str_web_path.concat(file_xls.getName()));
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
