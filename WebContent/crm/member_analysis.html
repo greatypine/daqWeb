@@ -97,6 +97,7 @@
      margin:auto;left:40%; top:30%;
      z-index: 1;
  }
+ .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -3194,12 +3195,12 @@ var showOrderType = function(dataServer){
      for(var i=0;i<cityName.length;i++){
          if(((i+1)%3)==0){
              if(i==cityName.length-1){
-                 cityStr += "<li style='width: 100px'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
+                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
              }else{
-                 cityStr += "<li style='width: 100px'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
+                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
              }
          }else{
-             cityStr += "<li style='width: 100px'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
+             cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
          }
      }
      $("#addCityMem").append(cityStr);
