@@ -72,7 +72,28 @@
 		height:32px;
 		color: #fff;
 	}
-    
+ .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
+ .download p{font-size: 12px;}
+ .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
+     /* Firefox: */
+     -moz-animation-name:myfirst; -moz-animation-duration:2s;-moz-animation-timing-function:linear;-moz-animation-iteration-count:infinite;-moz-animation-direction:alternate;-moz-animation-play-state:running;
+     /* Safari and Chrome: */
+     -webkit-animation-name:myfirst;-webkit-animation-duration:2s;-webkit-animation-timing-function:linear;-webkit-animation-iteration-count:infinite;-webkit-animation-direction:alternate;-webkit-animation-play-state:running;
+     /* Opera: */
+     -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
+ .add_citymember{wposition: absolute;}
+ .toast{
+     width:400px;
+     height:240px;
+     background:transparent;
+     background-color:rgba(241,241,241,1);
+     box-shadow: 0 1px 1px rgba(0,0,0,1);
+     border-radius:10px;
+     position: fixed;
+     margin:auto;left:40%; top:30%;
+     z-index: 1;
+ }
+ .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -2903,7 +2924,23 @@ var showOrderType = function(dataServer){
 	  
 	  myChart22.setOption(option22);
 }
- 
+ var setCityAddMem = function(dataServer){
+     var cityName = dataServer.jsonCityNames;
+     var cityAdd = dataServer.jsonCityAdds;
+     var cityStr="<ul class='clearfix'>";
+     for(var i=0;i<cityName.length;i++){
+         if(((i+1)%3)==0){
+             if(i==cityName.length-1){
+                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
+             }else{
+                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
+             }
+         }else{
+             cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
+         }
+     }
+     $("#addCityMem").append(cityStr);
+ }
 //设置加载中图标
 var setLoadingMark = function (bShow) {
     if (bShow == true) {
