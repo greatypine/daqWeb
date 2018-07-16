@@ -3381,4 +3381,36 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}
 		return lst_result;
 	}
+	
+	@Override
+	public Map<String, Object> getTwoTwoOneGMVRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO, 
+			List<Map<String, Object>> provinceNO) {
+		Map<String, Object> map_all = new HashMap<String, Object>();
+		String cityStr1 = "";
+		String provinceStr1 = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr1+=" and tor.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr1+=" and tor.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+/*		String sql = "SELECT IFNULL(FLOOR(sum(dom.trading_price)), 0) AS week_gmv,date_format(dom.sign_time, '%m-%d') AS week_date FROM df_mass_order_monthly dom  " +
+				"WHERE dom.store_name NOT LIKE '%测试%' AND dom.sign_time >='"+dd.getBeginDate()+" 00:00:00' AND dom.sign_time<='"+dd.getEndDate()+" 23:59:59' "+provinceStr1+cityStr1+"   GROUP BY DATE(dom.sign_time) ";*/
+		String sql = "SELECT IFNULL(SUM(trading_price), 0) AS week_gmv , date_format(tor.sign_time, '%m-%d') AS week_date FROM df_mass_order_monthly tor " +
+				"JOIN df_activity_scope das ON tor.store_id = das.platformid JOIN df_activity_bussiness_scope dab ON tor.channel_id = dab.id AND dab.LEVEL = 2 " +
+				"WHERE (tor.store_name NOT LIKE '%测试%' AND tor.sign_time >= '"+dd.getBeginDate()+" 00:00:00' AND tor.sign_time <= '"+dd.getEndDate()+" 23:59:59' "+provinceStr1+cityStr1+") GROUP BY DATE(tor.sign_time)";
+		List<Map<String, Object>> lst_data = null;
+		try{
+	    	 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+	    	 lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }
+		map_all.put("lst_data", lst_data);
+		return map_all;
+	}
 }

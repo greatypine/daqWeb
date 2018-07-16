@@ -34,26 +34,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		/**
 		 * @author wuxinxin 2018年5月17日
 		 */
-
 		Map<String, Object> result = new HashMap<String, Object>();
 		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
 		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
-        //查询城市名
-        String cityno = "";
-        if (!"0000".equals(dd)) {
-            if(dd.length()<4){
-                cityno="0"+dd;
-            }else {
-            	cityno=dd;
-            }
-            List<Map<String, Object>> selCityList = new ArrayList<Map<String, Object>>();
-            selCityList = commDao.getSelCity(cityno);
-            if (selCityList != null && selCityList.size() > 0) {
-                result.put("selcityname", selCityList.get(0).get("cityname"));
-            }else {
-            	result.put("selcityname", "内测");
-            }
-        }
 		// 查询e店数量---必须
 		List<Map<String, Object>> eShopCountList = new ArrayList<Map<String, Object>>();
 		eShopCountList = cmDao.getEshopCount(dd);
@@ -118,17 +101,20 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		cmGoodsDealCountList = commDao.getCmGoodsDealCount(dd);
 		if (cmGoodsDealCountList != null && cmGoodsDealCountList.size() > 0) {
 			result.put("cmGoodsDealCount", cmGoodsDealCountList.get(0).get("cou"));
+			result.put("cmGoodsTurnover", cmGoodsDealCountList.get(1).get("cou"));
 		} else {
 			result.put("cmGoodsDealCount", "0");
+			result.put("cmGoodsTurnover", "0");
 		}
 		// 查询成交额
-        List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String, Object>>();
-        cmGoodsTurnoverList =commDao.getCmGoodsTurnover(dd);
-        if (cmGoodsTurnoverList != null && cmGoodsTurnoverList.size() > 0) {
-            result.put("cmGoodsTurnover", cmGoodsTurnoverList.get(0).get("cou"));
-        } else {
-            result.put("cmGoodsTurnover", "0");
-        }
+		/*
+		 * List<Map<String, Object>> cmGoodsTurnoverList = new
+		 * ArrayList<Map<String,Object>>(); cmGoodsTurnoverList =
+		 * commDao.getCmGoodsTurnover("");
+		 * if(cmGoodsTurnoverList!=null&&cmGoodsTurnoverList.size()>0){
+		 * result.put("cmGoodsTurnover", cmGoodsTurnoverList.get(0).get("cou")); }else {
+		 * result.put("cmGoodsTurnover", "0"); }
+		 */
 		// 查询动销商品--必须
 		List<Map<String, Object>> movingPinCountList = new ArrayList<Map<String, Object>>();
 		movingPinCountList = commDao.getMovingPinCount(dd);
@@ -184,15 +170,12 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				Double eshopGmv = Double.parseDouble(eshopWeekList.get(i).get("eweekgmv").toString());
 				if(eshopCou!=0) {
 					eshopWeekDeal.add(String.format("%.2f",eshopGmv/eshopCou));
+					eshopWeekCount.add(String.format("%.2f",Double.parseDouble(eshopCou/memCou+"")));
+					
 				}else {
 					eshopWeekDeal.add("0.0");
-
+					eshopWeekCount.add("0");
 				}
-				if(memCou!=0){
-                    eshopWeekCount.add(String.format("%.2f",Double.parseDouble(eshopCou/memCou+"")));
-                }else{
-                    eshopWeekCount.add("0");
-                }
 			}
 		}
 		JSONArray jsonEshopWeekDeal = (JSONArray) JSONArray.fromObject(eshopWeekDeal);
@@ -228,9 +211,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		}
 
 		//查询订单时效性
-
-
-        List selcount = new ArrayList();
+		
+		
+		List selcount = new ArrayList();
 		List seltimes = new ArrayList();
 		List<Map<String, Object>> orderTimesList = commDao.getTimeDiff(dd);
 		long scount0 =0;//提前配送
@@ -316,30 +299,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		JSONArray jsonOrderTypeSums = (JSONArray) JSONArray.fromObject(orderTypeSums);
 		result.put("jsonOrderTypeNames", jsonOrderTypeNames);
 		result.put("jsonOrderTypeSums", jsonOrderTypeSums);
-
-
-
-		//查询城市当日新增社员数量
-        List<Map<String, Object>> cityDayAddList = new ArrayList<Map<String, Object>>();
-        cityDayAddList = commDao.getDayCityaddMemCount(dd);
-        List cityNames = new ArrayList();
-        List cityAdds = new ArrayList();
-        for(Map<String, Object> addCity : cityDayAddList){
-            if (addCity.get("cityname").toString().contains("黔东南")) {
-                cityNames.add("黔东南洲");
-
-            }else{
-                cityNames.add(addCity.get("cityname"));
-            }
-            cityAdds.add(addCity.get("citycou"));
-        }
-        JSONArray jsonCityNames = (JSONArray) JSONArray.fromObject(cityNames);
-        JSONArray jsonCityAdds = (JSONArray) JSONArray.fromObject(cityAdds);
-        result.put("jsonCityNames", jsonCityNames);
-        result.put("jsonCityAdds", jsonCityAdds);
-
-
-
+		
 		List dateXCounts = new ArrayList();
 		try {
 			//生成X轴坐标
@@ -534,7 +494,6 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List newCounts = new ArrayList();
 		List allCounts = new ArrayList();
 		List dateMemCounts = new ArrayList();
-
 		List<Map<String, Object>> cmAllGrowList = commDao.getCmAllGrow(dd);
 		try {
 			//生成X轴坐标
@@ -542,78 +501,38 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		List<Map<String, Object>> cmAllList = commDao.getAllMembers(dd);
 
-        List<Map<String, Object>> cmAllList = commDao.getAllMembers(dd);
+		if (cmAllList == null || cmAllList.size() < 2) {
+			for (int i = 0; i < 10; i++) {
+				// 添加新社员
+				newCounts.add(i + i * i);
+				// 总社员
+				allCounts.add(i + i * i + i + i * i * 2);
+			}
 
-        if (cmAllList == null || cmAllList.size() < 2) {
-            for (int i = 0; i < 10; i++) {
-                // 添加新社员
-                newCounts.add(i + i * i);
-                // 总社员
-                allCounts.add(i + i * i + i + i * i * 2);
-            }
+		} else {
+			for (int i = 0; i < cmAllList.size(); i++) {
+				// 添加新增社员
+				if (i >= cmAllGrowList.size()) {
+					newCounts.add(0);
+				} else {
+					newCounts.add(Integer.parseInt(cmAllGrowList.get(i).get("allcount").toString()));
+				}
+				// 总社员
+				allCounts.add(Integer.parseInt(cmAllList.get(i).get("allcount").toString()));
 
-        } else {
-            for (int i = 0; i < cmAllList.size(); i++) {
-                // 添加新增社员
-                if (i >= cmAllGrowList.size()) {
-                    newCounts.add(0);
-                } else {
-                    newCounts.add(Integer.parseInt(cmAllGrowList.get(i).get("allcount").toString()));
-                }
-                // 总社员
-                allCounts.add(Integer.parseInt(cmAllList.get(i).get("allcount").toString()));
+			}
 
-            }
-
-        }
-
-        JSONArray jsonNew = (JSONArray) JSONArray.fromObject(newCounts);
-        JSONArray jsonAllCounts = (JSONArray) JSONArray.fromObject(allCounts);
-        JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
-        List dateMonCounts = new ArrayList();
-        List newMonCounts = new ArrayList();
-        List allMonCounts = new ArrayList();
-		try {
-			//生成30天X轴坐标Old
-            dateMonCounts = reDate(30);
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
-		int total = 0;
-		//查询30天前累计数据
-        List<Map<String, Object>> cmMonGrowList = commDao.getMonGrowMembers(dd);
-        List<Map<String, Object>> cmOldAllList = commDao.getOldAllMembers(dd);
-        if (cmOldAllList == null || cmOldAllList.size()>0) {
-            total = Integer.parseInt(cmOldAllList.get(0).get("oldcount").toString());
-        }
+		JSONArray jsonNew = (JSONArray) JSONArray.fromObject(newCounts);
+		JSONArray jsonAllCounts = (JSONArray) JSONArray.fromObject(allCounts);
+		JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
 
-		if(cmMonGrowList!=null&&cmMonGrowList.size()>0){
-            if(cmMonGrowList.size()==30){
-                //30天每天有新增
-                for (int i = 0; i < cmMonGrowList.size(); i++) {
-                    int temp = Integer.parseInt(cmMonGrowList.get(i).get("newcount").toString());
-                    newMonCounts.add(temp);
-                    total += temp;
-                    allMonCounts.add(total);
-                }
-
-            }else{
-                    //当中某天未增加社员
-            }
-        }
-
-		JSONArray jsonNewMonCounts = (JSONArray) JSONArray.fromObject(newMonCounts);
-		JSONArray jsonAllMonCounts = (JSONArray) JSONArray.fromObject(allMonCounts);
-		JSONArray jsonMonMem = (JSONArray) JSONArray.fromObject(dateMonCounts);
-
-		result.put("jsonNewMonCounts", jsonNewMonCounts);
-		result.put("jsonAllMonCounts", jsonAllMonCounts);
 		result.put("growNewCounts", jsonNew);
 		result.put("growAllCounts", jsonAllCounts);
 		result.put("jsonDateMem", jsonDateMem);
-		result.put("jsonDateMon", dateMonCounts);
-
+		
 		// 查询男女比例
 				List<Map<String, Object>> cmSexList = new ArrayList<Map<String, Object>>();
 				cmSexList = commDao.getCmSexRatios(dd);
@@ -646,7 +565,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				}
 				// 查询社员户籍分布
 				List<Map<String, Object>> areaList = commDao.getMembersArea(dd);// getCmBirthday
-				if (areaList != null&&areaList.size()>0) {
+				if (areaList != null) {
 					result.put("mePro", areaList.get(0).get("mePro").toString());
 					result.put("meCount", areaList.get(1).get("meCount").toString());
 
@@ -674,9 +593,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				List<Map<String, Object>> allRetrenchList = cmDao.getAllRetrench(dd);
 				if (allRetrenchList!=null&&!allRetrenchList.isEmpty()) {
 					for (Map<String, Object> allRetrenchmap : allRetrenchList) {
-						result.put("sumall", Double.parseDouble(allRetrenchmap.get("sumall").toString()));
-						result.put("subprice", Double.parseDouble(allRetrenchmap.get("subprice").toString()));
-						result.put("usedrebate", Double.parseDouble(allRetrenchmap.get("usedrebate").toString()));
+						result.put("sumall", allRetrenchmap.get("sumall").toString());
+						result.put("subprice", allRetrenchmap.get("subprice").toString());
+						result.put("usedrebate", allRetrenchmap.get("usedrebate").toString());
 					}
 				}else {
 					result.put("sumall", "0");
@@ -687,9 +606,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				List<Map<String, Object>> allRebateList = cmDao.getAllRebate(dd);
 				if (allRebateList!=null&&!allRebateList.isEmpty()) {
 					for (Map<String, Object> allRebatemap : allRebateList) {
-						result.put("sumreall", Double.parseDouble(allRebatemap.get("sumreall").toString()));
-						result.put("sumhavere", Double.parseDouble(allRebatemap.get("sumhavere").toString()));
-						result.put("sumused", Double.parseDouble(allRebatemap.get("sumused").toString()));
+						result.put("sumreall", allRebatemap.get("sumreall").toString());
+						result.put("sumhavere", allRebatemap.get("sumhavere").toString());
+						result.put("sumused", allRebatemap.get("sumused").toString());
 					}
 				}else {
 					result.put("sumreall", "0");
@@ -1057,32 +976,5 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		 return null;
 		
 	}
-
-    @Override
-    public Map<String, Object> getCityCode(String dd) {
-        Map<String, Object> result = new HashMap<String, Object>();
-        CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
-        List<Map<String, Object>> cityList = commDao.getCityNoName(dd);
-        List cityCode = new ArrayList();
-        List cityName = new ArrayList();
-        if (cityList != null && cityList.size() > 0) {
-
-            for (int i = 0; i < cityList.size(); i++) {
-
-                cityCode.add(cityList.get(i).get("cityno").toString());
-                if (cityList.get(i).get("cityname").toString().contains("黔东南")) {
-                    cityName.add("黔东南");
-                } else {
-                    cityName.add(cityList.get(i).get("cityname").toString());
-                }
-            }
-            JSONArray jsonCityName = (JSONArray) JSONArray.fromObject(cityName);
-            JSONArray jsonCityCode = (JSONArray) JSONArray.fromObject(cityCode);
-
-            result.put("jsonCityCode", jsonCityCode);
-            result.put("jsonCityName", jsonCityName);
-        }
-        return result;
-    }
 
 }

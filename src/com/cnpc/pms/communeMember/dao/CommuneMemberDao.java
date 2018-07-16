@@ -288,37 +288,5 @@ public interface CommuneMemberDao extends IDAO {
 	 * 查询订单商品分类
 	 */
 	public List<Map<String, Object>> getOrderType(String string);
-    /**
-     * 查询已开门店城市
-     */
-    public List<Map<String,Object>> getCityNoName(String string);
-
-    /**
-     * 查询当前选择城市
-     */
-    public List<Map<String,Object>> getSelCity(String string);
-
-    /**
-     * TODO 获取累计社员量
-     *
-     * @author wuxinxin
-     */
-    public List<Map<String, Object>> getOldAllMembers(String dd);
-
-    /**
-     * TODO 获取30天累计社员量
-     *
-     * @author wuxinxin
-     */
-    public List<Map<String, Object>> getMonGrowMembers(String dd);
-
-
-    /**
-     * TODO 获取30天累计社员量
-     *
-     * @author wuxinxin
-     */
-    public List<Map<String, Object>> getDayCityaddMemCount(String dd);
-
 
 }

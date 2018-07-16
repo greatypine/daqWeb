@@ -72,15 +72,6 @@
 		height:32px;
 		color: #fff;
 	}
- .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
- .download p{font-size: 12px;}
- .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
-     /* Firefox: */
-     -moz-animation-name:myfirst; -moz-animation-duration:2s;-moz-animation-timing-function:linear;-moz-animation-iteration-count:infinite;-moz-animation-direction:alternate;-moz-animation-play-state:running;
-     /* Safari and Chrome: */
-     -webkit-animation-name:myfirst;-webkit-animation-duration:2s;-webkit-animation-timing-function:linear;-webkit-animation-iteration-count:infinite;-webkit-animation-direction:alternate;-webkit-animation-play-state:running;
-     /* Opera: */
-     -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
     
   </style>
 </head>
@@ -89,7 +80,6 @@
 <div id="process_div" ></div> 
  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
 <div class="wrapper">
-<div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
 <!-- 新header -->
  <header class="main-header">
     <nav class="navbar navbar-static-top">
@@ -115,7 +105,7 @@
       <!-- Main content -->
       <section class="content-header">
          <div class="box box-default report">
-           <div class="box-header h4"><strong>安心合作社</strong><span id="cityname"></span><strong>运营简报</strong><!--<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a>--></div>
+           <div class="box-header h4"><strong>安心合作社</strong><span id="cityname"></span><strong>运营简报</strong><a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a></div>
           <div class="box-body">
           	<div class="col-sm-12">
               <dt style="margin-top: 20px;">安心合作社<em><img src="dist/img/member1.png"></em></dt>
@@ -285,8 +275,6 @@
 <script type="text/javascript" src="plugins/jquery.page.js"></script>
 <script type="text/javascript" src="plugins/moment.min.js"></script>
 <script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
-<script src="dist/js/utils/htmlToPdf/html2canvas.js"></script>
-<script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script>
 
@@ -859,48 +847,48 @@ function getUser(){
   	},false);
 }
 function doMemberInfo(){
-    doManager('communeMember','selectAllCm',cityId,function(data){
+    doManager('communeMember','selectAllCm',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-
-            //运营情况
-            showHistoryData(resultJson);
-
-            setLoadingMark(false);
-            //设置10秒刷新页面
-            //setInterval("window.location.reload()",10000);
+ 			//运营情况
+ 			showHistoryData(resultJson);  
+        	//成交量、成交额走势
+        	showDeal(resultJson);
+        	showEshopCount(resultJson);
+        	showEshopMemSum(resultJson);
+        	setLoadingMark(false);
+        	//设置10秒刷新页面
+        	//setInterval("window.location.reload()",10000);
         }else{
         	alert("暂无社员相关信息");
         }
     },false);
 }
 function doMemberSum(){
-    doManager('communeMember','selectMeSum',cityId,function(data){
+    doManager('communeMember','selectMeSum',"0000",function(data){
         if(data.result){
-            var resultJson= JSON.parse(data.data);
-            //完成订单/取消订单走势，订单均价走势
-            showEshopCount(resultJson);
-            showEshopMemSum(resultJson);
-            //成交量、成交额走势
-            showDeal(resultJson);
-            //社员属性信息饼图
-            showMemberInfo(resultJson);
-            //社员饼图
-            showMember(resultJson);
-            //增长曲线图
-            showMemberGrow(resultJson);
-            //最受欢迎商品、无人问津商品
-            showProduct(resultJson);
-            //E店情况
-            showEshop(resultJson);
-
+        	var resultJson= JSON.parse(data.data);
+        	//社员属性信息饼图
+        	showMemberInfo(resultJson);
+        	//最受欢迎商品、无人问津商品
+        	showProduct(resultJson);
+        	//社员饼图
+ 			showMember(resultJson);
+ 			//增长曲线图
+        	showMemberGrow(resultJson);
+        	
+        	//E店情况
+        	showEshop(resultJson);
+        	
+        	//粮票
+        	//showRebateMoney(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
     });
 }
 function doEshopMemberSum(){
-    doManager('communeMember','selectMeOrder',cityId,function(data){
+    doManager('communeMember','selectMeOrder',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
         	
@@ -939,52 +927,6 @@ function doEshopMemberSum(){
       });
     // $('#citySelect').css('display','block');
 	 loginShow();
-     //下载报告
-     var downPdf = document.getElementById("downloadPdf");
-     var pagedom = $("#page");
-     downPdf.onclick = function() {
-         $("#process_div").show();
-         $("#process_div_pic").show();
-         scrollTo(0,0);
-         html2canvas(pagedom, {
-             onrendered : function(canvas) {
-                 var contentWidth = canvas.width;
-                 var contentHeight = canvas.height;
-                 //一页pdf显示html页面生成的canvas高度;
-                 var pageHeight = contentWidth / 592.28 * 841.89;
-                 //未生成pdf的html页面高度
-                 var leftHeight = contentHeight;
-                 //页面偏移
-                 var position = 0;
-                 //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-                 var imgWidth = 595.28;
-                 var imgHeight = 592.28 / contentWidth
-                     * contentHeight;
-                 var pageData = canvas.toDataURL('image/jpeg', 1.0);
-                 var pdf = new jsPDF('', 'pt', 'a4');
-                 //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-                 //当内容未超过pdf一页显示的范围，无需分页
-                 if (leftHeight < pageHeight) {
-                     pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
-                         imgHeight);
-                 } else {
-                     while (leftHeight > 0) {
-                         pdf.addImage(pageData, 'JPEG', 0, position,
-                             imgWidth, imgHeight)
-                         leftHeight -= pageHeight;
-                         position -= 841.89;
-                         //避免添加空白页
-                         if (leftHeight > 0) {
-                             pdf.addPage();
-                         }
-                     }
-                 }
-                 pdf.save('安心合作社运营简报.pdf');
-                 $("#process_div_pic").hide();
-                 $("#process_div").hide();
-             }
-         })
-     }
 	 //获取社员量
 
 });
@@ -1064,8 +1006,6 @@ var showProduct = function (dataServer){
 };
 
 var showHistoryData = function (dataServer) {
-    //安心合作社城市
-    $("#cityname").html("("+dataServer.selcityname+")");
 	//社员量
 	$("#memAll").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
 	$("#cmCount").html("社员总数："+parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
@@ -1097,11 +1037,7 @@ var showHistoryData = function (dataServer) {
 	$("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
     //新增社员
 	$("#dayNewMem").html(parseInt(dataServer.dayAddMem==null?'0':dataServer.dayAddMem));
-    if(dataServer.cmGoodsDealCount==null||dataServer.cmGoodsDealCount==0){
-        $("#oneDeal").html("0");
-    }else{
 	$("#oneDeal").html(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount==null?'0':(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount).toFixed(2));
-    }
 	//周消费频次
 	$("#jsonEshopWeekCou").html(parseInt(dataServer.jsonEshopWeekCou==null?'0':dataServer.jsonEshopWeekCou));
 	//E店累计成交额
@@ -1247,7 +1183,7 @@ var showDeal = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -1319,7 +1255,7 @@ var showDeal = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -1446,7 +1382,7 @@ var showEshopCount = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -1550,7 +1486,7 @@ var showEshopCount = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [
@@ -1624,7 +1560,7 @@ var showEshopMemSum = function (dataServer){
 		    xAxis : [
 		        {
 		            type : 'category',
-		            data: dataServer.jsonDateMem
+		            data: dataServer.jsonDateX
 		        }
 		    ],
 		    yAxis : [

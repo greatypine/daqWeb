@@ -36,9 +36,5 @@ public interface CommuneMember extends IManager{
 	 * 按城市查询社员信息
 	 */
 	public Map<String, Object> selectMeCityOrder(String cityCode);
-	/**
-	 * 查询城市信息
-	 */
-	public Map<String, Object> getCityCode(String cityCode);
 	
 }

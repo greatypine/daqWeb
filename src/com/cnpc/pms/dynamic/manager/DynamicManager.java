@@ -1099,4 +1099,13 @@ public interface DynamicManager extends IManager{
 	 **/
 
 	public List<Map<String,Object>> queryLastSevenDayCommunityMember(Long storeId);
+	
+	/**
+     * 查询221近七日GMV走势图
+     * 2018年7月11日
+     * @author zhangli
+     * @param dd
+     * @return
+     */
+    public Map<String, Object> getTwoTwoOneGMVRangeForWeek(DynamicDto dd);
 }

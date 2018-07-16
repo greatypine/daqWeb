@@ -91,6 +91,7 @@ const CACHE_HEADER_HISTORY_DATA = 'historyData_';
 const CACHE_HEADER_OPEN_CARD_USER = 'openCardUser_';
 const CACHE_HEADER_CUSTOMER_COUNT_DATA = 'customerData_';
 const CACHE_HEADER_CITY_RANK_GVM = 'cityRankGmv_';
+const CACHE_HEADER_TWOTWOONE_RANK_GVM = 'twoTwoOneRankGmv_';
 const CACHE_HEADER_STORE_RANK_GMV = 'storeRankGmv_';
 const CACHE_HEADER_STORE_RANK_ORDER = 'storeRankOrder_';
 const CACHE_HEADER_GUOAN_MAN_RANK_GMV = 'guoanManRankGmv_';
@@ -126,8 +127,11 @@ var showPageContent = function (pageStatusInfo) {
     // 显示地图
     showMap(pageStatusInfo);
 
-    // 显示城市排名(GMV)
+    // 显示城市排名(GMV)-修改为近七日GMV走势图
     getCityRankDataGmv(pageStatusInfo);
+    
+    // 显示近七日221GMV走势
+    getTwoTwoOneRankGmv(pageStatusInfo);
     
     // 显示门店排名(GMV)
     getStoreRankDataGmv(pageStatusInfo);
@@ -213,6 +217,18 @@ var initPageElements = function () {
       //{text:"城市排名（GMV:元）",x: '2%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
       {x: '2%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
     ],
+    legend: {
+            show: 'true',
+            data: [{
+	            name:'城市GMV走势',
+	            textStyle:{color:"#fff"}
+            },{
+            	name:'221GMV走势',
+            	textStyle:{color:"#fff"}
+            	}],
+            right: '3%',
+            top: '6%',
+     },
     tooltip : {
       trigger: 'axis',
       position: function (point, params, dom, rect, size) {
@@ -224,7 +240,7 @@ var initPageElements = function () {
     grid: {
       left: '3%',
       right: '5%',
-      top: '17%',
+      top: '19%',
       height: 280, //设置grid高度
       containLabel: true
     },
@@ -295,12 +311,49 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
+        name: '城市GMV走势',
         type:'line',
         data:[ 25.6, 76.7, 30.5,25.6, 76.7, 30.5],
         smooth: true,
         showAllSymbol: true,
         symbol: 'emptyCircle',
         symbolSize: 10,
+        itemStyle : {  
+            normal : {  
+                color:'#D7504B',  //圈圈的颜色
+                lineStyle:{  
+                    color:'#D7504B'  //线的颜色
+                }  
+            }  
+        },
+        markPoint: {
+          data: [
+            {type: 'max', name: '最大值'},
+            {type: 'min', name: '最小值'}
+          ]
+        },
+        /*'#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+           '#FE8463','#9BCA63','#FAD860','#F3A43B','#60C0DD',
+           '#D7504B','#C6E579','#F4E001','#F0805A','#26C0C0'*/
+      },
+      {
+        cursor: 'default',
+        //name:'一街坊、八街坊东、八街西、永定路社区社区部',
+        name: '221GMV走势',
+        type:'line',
+        data:[ 25.6, 76.7, 30.5,25.6, 76.7, 30.5,40],
+        smooth: true,
+        showAllSymbol: true,
+        symbol: 'emptyCircle',
+        symbolSize: 10,
+        itemStyle : {  
+            normal : {  
+                color:'#26C0C0',  //圈圈的颜色
+                lineStyle:{  
+                    color:'#26C0C0'  //线的颜色
+                }  
+            }  
+        },
         markPoint: {
           data: [
             {type: 'max', name: '最大值'},
@@ -2118,6 +2171,50 @@ var showCityRankGmv = function (cityRankDataGmv) {
 	cityRankGmvOption.xAxis[0].data = data.reverse();
     cityRankGmvOption.series[0].data = data1.reverse();
     cityRankGmvOption.title[0].text = "近7日GMV走势";
+    cityRankChartGmv.setOption(cityRankGmvOption,true);
+};
+var getTwoTwoOneRankGmv = function(){
+	    var cacheKey = CACHE_HEADER_TWOTWOONE_RANK_GVM + pageStatusInfo.getCacheKey();
+    // 从缓存获取数据
+    var twoTwoOneRankDataGmv = JsCache.get(cacheKey);
+    if (twoTwoOneRankDataGmv) {
+        //console.log('show twotwoone rank graph base on js cache.')
+        showTwoTwoOneRankGmv(twoTwoOneRankDataGmv);
+    } else {
+        // 准备服务端数据请求参数
+        var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+        }
+        //console.log('\trequest: city rank gmv. ');
+        //console.log(reqestParameter);
+        // 近七日221GMV走势图
+        var startTime = new Date().getTime();
+        doManager("dynamicManager", "getTwoTwoOneGMVRangeForWeek",[reqestParameter],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var resultJson = JSON.parse(data.data);
+                    showTwoTwoOneRankGmv(resultJson);
+                    JsCache.set(cacheKey, resultJson);
+                }
+            });
+        //console.log('request twotwoone rank gmv data from server in ' + (new Date().getTime() - startTime) + ' millisecond');
+    }
+
+}
+// 显示近7天221GMV走势
+var showTwoTwoOneRankGmv = function (twoTwoOneRankDataGmv) {
+  	var data = [];
+    var data1 = [];
+    $.each(eval(twoTwoOneRankDataGmv['lst_data']), function (idx, val) {
+    	data.push(val['week_date']);
+    	data1.push(val['week_gmv']);
+    });
+	//cityRankGmvOption.xAxis[0].data = data.reverse();
+    cityRankGmvOption.series[1].data = data1.reverse();
+    //cityRankGmvOption.title[0].text = "近7日GMV走势";
     cityRankChartGmv.setOption(cityRankGmvOption,true);
 };
 // 获取门店排名(GMV)数据
@@ -4485,7 +4582,7 @@ var curr_user;
 	  if(target==0){
 	  	url = "member_analysis.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
 	  }else if(target==1){
-		  url = "member_analysis_city.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+		  url = "member_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 	  }
 	  window.open(url,"member_analysis");  
   }
