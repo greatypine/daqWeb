@@ -674,9 +674,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				List<Map<String, Object>> allRetrenchList = cmDao.getAllRetrench(dd);
 				if (allRetrenchList!=null&&!allRetrenchList.isEmpty()) {
 					for (Map<String, Object> allRetrenchmap : allRetrenchList) {
-						result.put("sumall", allRetrenchmap.get("sumall").toString());
-						result.put("subprice", allRetrenchmap.get("subprice").toString());
-						result.put("usedrebate", allRetrenchmap.get("usedrebate").toString());
+						result.put("sumall", Double.parseDouble(allRetrenchmap.get("sumall").toString()));
+						result.put("subprice", Double.parseDouble(allRetrenchmap.get("subprice").toString()));
+						result.put("usedrebate", Double.parseDouble(allRetrenchmap.get("usedrebate").toString()));
 					}
 				}else {
 					result.put("sumall", "0");
@@ -687,9 +687,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				List<Map<String, Object>> allRebateList = cmDao.getAllRebate(dd);
 				if (allRebateList!=null&&!allRebateList.isEmpty()) {
 					for (Map<String, Object> allRebatemap : allRebateList) {
-						result.put("sumreall", allRebatemap.get("sumreall").toString());
-						result.put("sumhavere", allRebatemap.get("sumhavere").toString());
-						result.put("sumused", allRebatemap.get("sumused").toString());
+						result.put("sumreall", Double.parseDouble(allRebatemap.get("sumreall").toString()));
+						result.put("sumhavere", Double.parseDouble(allRebatemap.get("sumhavere").toString()));
+						result.put("sumused", Double.parseDouble(allRebatemap.get("sumused").toString()));
 					}
 				}else {
 					result.put("sumreall", "0");

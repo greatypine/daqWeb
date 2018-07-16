@@ -49,7 +49,11 @@
     .report_jr li i{font-size: 70px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
     .report_jr li span{font-size: 30px; color: #ffde00;}
 
-    .vertical-example{position: absolute; top: 70px; left: 5%; width: 100px;}
+    .vertical-example{
+    position: absolute;
+    top: 50px;
+    right: 40px;
+    width: 100px;}
     .navimenu{min-height: 800px; padding-top: 0;}
     #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
       #process_div{ 
@@ -133,7 +137,7 @@
           	<div class="col-sm-12">
               <dt style="margin-top: 20px;">安心合作社<em><img src="dist/img/member1.png"></em></dt>
               <ul class="clearfix">
-                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-home"></i>E店数量：<span id="eShopCount"></span></li>
+                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-home"></i>安心合作社：<span id="eShopCount"></span></li>
                 <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-equalizer"></i>SKU总数：<span id="skuCount"></span></li>
                 <li class="col-sm-4 no-padding"><i class="fa fa-hourglass-half"></i>SKU动销：<span id="movingPinCount"></span></li>
               </ul>
@@ -299,11 +303,11 @@
           <div class="box box-default">
               <div class="box-body">
                   <div class="col-sm-7 no-padding">
-                      <h4 class="box-header h4 text-light-blue"><strong>E店排行榜</strong></h4>
+                      <h4 class="box-header h4 text-light-blue"><strong>安心合作社排行榜</strong></h4>
                       <table class="table table-bordered">
                           <tbody id="eshop_data">
                           <tr>
-                              <th>E店名称</th>
+                              <th>安心合作社名称</th>
                               <th>成交额</th>
                               <th>订单量</th>
                               <th>排名</th>
@@ -320,10 +324,10 @@
                       <div class="form-group col-lg-6" style="padding: 0 25px;">
                       <div class="box-header h4 text-light-blue" ><strong id="sevenOrMon">社员增长趋势</strong>
                       </div></div>
-                          <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+                          <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 5px;">
                               <button type="button" class="btn btn-block btn-primary" onclick="btnAction('0')">近7天</button>
                           </div>
-                          <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
+                          <div class="col-lg-2" style="margin-top: 20px; padding: 0 5px;">
                               <button type="button" onclick="btnAction('1')" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">近30天</button>
                           </div>
 
@@ -368,29 +372,42 @@
           </div>
       </div>
       <div class="box box-default">
-        <div class="box-header h4 text-light-blue"><strong>优惠情况</strong></div>
+        <div class="box-header h4 text-light-blue"><strong>社员优惠分析</strong></div>
           <div class="box-body">
-            <div class="col-sm-6 no-padding" id="main10" style="height: 350px;"></div>
             <div class="col-sm-6 no-padding" id="main11" style="height: 350px;"></div>
-             <div class="col-sm-6 no-padding">
+            <div class="col-sm-6 no-padding" id="main10" style="height: 350px;"></div>
+
+            <div class="col-sm-6">
+              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票累计榜</span></h4>
+              <table class="table table-bordered">
+                <tbody id="sum_rebate">
+                <tr>
+                  <th>排名</th>
+                  <th>累计粮票数</th>
+                  <th>社员</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6" >
+              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票使用榜</span></h4>
+              <table class="table table-bordered">
+                <tbody id="used_rebate">
+                <tr>
+                  <th>排名</th>
+                  <th>粮票已使用</th>
+                  <th>社员</th>
+                </tr>
+                </tbody>
+              </table>
+            </div> 
+<!--              <div class="col-sm-6 no-padding">
               <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">社员省钱榜</span></h4>
               <table class="table table-bordered">
                 <tbody id="retrench_money">
                 <tr>
                   <th >社员</th>
                   <th>累计省钱</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票累计榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="sum_rebate">
-                <tr>
-                  <th>社员</th>
-                  <th>累计粮票数</th>
                   <th>排名</th>
                 </tr>
                 </tbody>
@@ -407,19 +424,7 @@
                 </tr>
                 </tbody>
               </table>
-            </div>
-            <div class="col-sm-6" >
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票使用榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="used_rebate">
-                <tr>
-                  <th>社员</th>
-                  <th>粮票已使用</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div> 
+            </div> -->
           </div>
       </div>
       </section>
@@ -1761,7 +1766,7 @@ var showHistoryData = function (dataServer) {
 	  //社员人数
 option9 = {
   title: [ {
-    text: 'E店GMV：'+eMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)),
+    text: 'GMV构成：'+eMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)),
     left: '30%',
     top: '3%',
     textAlign: 'center',
@@ -1875,7 +1880,7 @@ var showRebateMoney = function (dataServer) {
 	//社员量
 	var retrenchPhones = dataServer.retrenchPhones;
 	var retrenchCous = dataServer.retrenchCous;
-	   var retrenchmoney="";
+/* 	   var retrenchmoney="";
 	   if(retrenchPhones==null||retrenchPhones.length==0){
 		   retrenchmoney = "<tr>没有符合条件的数据</tr>"
 	   }else{
@@ -1907,11 +1912,11 @@ var showRebateMoney = function (dataServer) {
 	                   retrenchmoney += "</tr>";
 	              $("#retrench_money").append(retrenchmoney);     
 		   }
-	   }
+	   } */
 
 	var haveRebatePhones = dataServer.haveRebatePhones;
 	var haveRebateCous = dataServer.haveRebateCous;
-	   var haverebate="";
+/* 	   var haverebate="";
 	   if(haveRebatePhones==null||haveRebatePhones.length==0){
 		   haverebate = "<tr>没有符合条件的数据</tr>"
 	   }else{
@@ -1943,7 +1948,7 @@ var showRebateMoney = function (dataServer) {
 	                   haverebate += "</tr>";
 	              $("#have_rebate").append(haverebate);     
 		   }
-	   }
+	   } */
 
 	var usedRebatePhones = dataServer.usedRebatePhones;
 	var usedRebateCous = dataServer.usedRebateCous;
@@ -1952,31 +1957,30 @@ var showRebateMoney = function (dataServer) {
 		   usedrebate = "<tr>没有符合条件的数据</tr>"
 	   }else{
 		   for(var i=0;i<usedRebatePhones.length;i++){
-			   usedrebate= "<tr>"
-	                   +"<td>"+usedRebatePhones[i]+"</td>"
-	                   +"<td>"+usedRebateCous[i]+"</td>";
-	                   
-	                   switch(i)
-	                   {
-	                   case 0:
-	                	   usedrebate += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 1:
-	                	   usedrebate += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 2:
-	                	   usedrebate += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 3:
-	                	   usedrebate += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 4:
-	                	   usedrebate += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
-	                     break;
-	                   default:
-	                	   usedrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
-	                   }
-	                   usedrebate += "</tr>";
+			   usedrebate= "<tr>";
+                   switch(i)
+                   {
+                   case 0:
+                	   usedrebate += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+                     break;
+                   case 1:
+                	   usedrebate += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+                     break;
+                   case 2:
+                	   usedrebate += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+                     break;
+                   case 3:
+                	   usedrebate += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+                     break;
+                   case 4:
+                	   usedrebate += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+                     break;
+                   default:
+                	   usedrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+                   }
+                   usedrebate += "<td>"+usedRebateCous[i]+"</td>"
+	           +"<td>"+usedRebatePhones[i]+"</td>";
+	           usedrebate += "</tr>";
 	              $("#used_rebate").append(usedrebate);     
 		   }
 	   }
@@ -1988,32 +1992,34 @@ var showRebateMoney = function (dataServer) {
 		   sumrebate = "<tr>没有符合条件的数据</tr>"
 	   }else{
 		   for(var i=0;i<rebatePhones.length;i++){
-			   sumrebate= "<tr>"
-	                   +"<td>"+rebatePhones[i]+"</td>"
-	                   +"<td>"+rebateCous[i]+"</td>";
+			   sumrebate= "<tr>";
+				   switch(i)
+                   {
+                   case 0:
+                	   sumrebate += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+                     break;
+                   case 1:
+                	   sumrebate += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+                     break;
+                   case 2:
+                	   sumrebate += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+                     break;
+                   case 3:
+                	   sumrebate += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+                     break;
+                   case 4:
+                	   sumrebate += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+                     break;
+                   default:
+                	   sumrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+                   }
 	                   
-	                   switch(i)
-	                   {
-	                   case 0:
-	                	   sumrebate += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 1:
-	                	   sumrebate += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 2:
-	                	   sumrebate += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 3:
-	                	   sumrebate += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
-	                     break;
-	                   case 4:
-	                	   sumrebate += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
-	                     break;
-	                   default:
-	                	   sumrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
-	                   }
+			   sumrebate +="<td>"+rebateCous[i]+"</td>"
+	                   +"<td>"+rebatePhones[i]+"</td>";
+	                   
+	                  
 	                   sumrebate += "</tr>";
-	   				   $("#sum_rebate").append(sumrebate);     
+	   				   $("#sum_rebate").append(sumrebate);
 		   }
 	   }
 	   
@@ -2026,7 +2032,7 @@ var showRebateMoney = function (dataServer) {
 			    },
 			    backgroundColor:'#ffffff',
 			    title: [{
-				      text: '累计省钱：'+eMoney(parseInt(dataServer.sumall==null?'0':dataServer.sumall)),
+				      text: '优惠分析：'+eMoney(dataServer.sumall==null?'0':dataServer.sumall),
 				      left: '5%',
 				      top: '2%',
 				      textAlign: 'left',
@@ -2072,10 +2078,10 @@ var showRebateMoney = function (dataServer) {
 			        }
 			      },
 		      	data: [{
-			        value: rebateMoney(parseInt(dataServer.subprice==null?'0':dataServer.subprice)),
+			        value: rebateMoney(dataServer.subprice==null?'0':dataServer.subprice),
 			        name: '商品差价'
 			      }, {
-			        value: rebateMoney(parseInt(dataServer.usedrebate==null?'0':dataServer.usedrebate)),
+			        value: rebateMoney(dataServer.usedrebate==null?'0':dataServer.usedrebate),
 			        name: '粮票抵扣'
 			      }]
 			    }],
@@ -2091,7 +2097,7 @@ var showRebateMoney = function (dataServer) {
 			    },
 			    backgroundColor:'#ffffff',
 			    title: [{
-				      text: '累计粮票：'+eMoney(parseInt(dataServer.sumreall==null?'0':dataServer.sumreall)),
+				      text: '社员累计粮票：'+eMoney(dataServer.sumreall==null?'0':dataServer.sumreall),
 				      left: '5%',
 				      top: '2%',
 				      textAlign: 'left',
@@ -2137,10 +2143,10 @@ var showRebateMoney = function (dataServer) {
 			        }
 			      },
 		      	data: [{
-			        value: rebateMoney(parseInt(dataServer.sumhavere==null?'0':dataServer.sumhavere)),
+			        value: rebateMoney(dataServer.sumhavere==null?'0':dataServer.sumhavere),
 			        name: '剩余粮票'
 			      }, {
-			        value: rebateMoney(parseInt(dataServer.sumused==null?'0':dataServer.sumused)),
+			        value: rebateMoney(dataServer.sumused==null?'0':dataServer.sumused),
 			        name: '已用粮票'
 			      }]
 			    }]
