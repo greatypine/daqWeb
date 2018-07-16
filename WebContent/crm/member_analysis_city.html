@@ -1065,7 +1065,7 @@ var showProduct = function (dataServer){
 
 var showHistoryData = function (dataServer) {
     //安心合作社城市
-    $("#cityname").html(dataServer.selcityname+"店");
+    $("#cityname").html("("+dataServer.selcityname+")");
 	//社员量
 	$("#memAll").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
 	$("#cmCount").html("社员总数："+parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
