@@ -244,7 +244,8 @@ var id = decode64(getUrlParamByKey("id"));
 						if (data.result) {
 							var defaultInfo = $.fromJSON(data.data);
 							if(defaultInfo.code==9000033){
-								$("#login_error_msg").html("该电话号码无效！");
+								$("#login_error_msg").html(defaultInfo.message);
+								//$("#login_error_msg").html("该电话号码无效！");
 								/* $("#msgdetail").html("该电话号码无效！"); */
 								clearInterval(interval);
 								$("#sendCodeBtn").attr("disabled",false);
