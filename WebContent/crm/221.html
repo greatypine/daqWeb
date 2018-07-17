@@ -533,13 +533,11 @@
 
 	$(function(){
 		gmvXData = initgmvXData();
-		inintMemberData();
-		inintYYGmvData();
-		inintJWSGmvData();
- 		inintGrouponGmvData();
+		inintTotalGmvData();
 		inintYestodayGmvData();
 		doTypeGMV();
 		initMemberTrend();
+		inintMemberData();
 		initScatterplot();
 		showStoreRanking();
 		
@@ -578,95 +576,47 @@
 	
 	var yyGMV = '0';
 	var yy_dept_id = "1";//优易+老年之家（养老餐）
-	function inintYYGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,null,start_time,end_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							yyGMV = jsonData.total_gmv;
-							$("#yyGmv").html(changeMoney(parseInt(yyGMV)));
-						}else{
-							$("#yyGmv").html('0');
-						}
-					}
-			},false);
-	}
-	
 	var jwsGMV = '0';
 	var jws_dept_id = "2";//家务事
-	function inintJWSGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,null,start_time,end_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							jwsGMV = jsonData.total_gmv;
-							$("#jwsGmv").html(changeMoney(parseInt(jwsGMV)));
-						}else{
-							$("#jwsGmv").html('0');
-						}
-					}
-			},false);
-	}
-	
 	var grouponGMV = '0';
 	var groupon_dept_id = "3";
-	function inintGrouponGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,null,start_time,end_time],
+	function inintTotalGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[start_time,end_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
-							grouponGMV = jsonData.total_gmv;
+							yyGMV = jsonData.pro_total_gmv;
+							$("#yyGmv").html(changeMoney(parseInt(yyGMV)));
+							jwsGMV = jsonData.ser_total_gmv;
+							$("#jwsGmv").html(changeMoney(parseInt(jwsGMV)));
+							grouponGMV = jsonData.gro_total_gmv;
+							
 						}
 					}
 			},false);
-		  $("#totalGmv").html(changeMoney(parseInt(yyGMV)+parseInt(jwsGMV)+parseInt(grouponGMV)));
-		  $("#avgGmv").html(changeMoney(((parseInt(yyGMV)+parseInt(jwsGMV)+parseInt(grouponGMV))/96).toFixed(2)));
+		 $("#totalGmv").html(changeMoney(parseInt(yyGMV)+parseInt(jwsGMV)+parseInt(grouponGMV)));
+		 $("#avgGmv").html(changeMoney(((parseInt(yyGMV)+parseInt(jwsGMV)+parseInt(grouponGMV))/96).toFixed(2)));
 	}
 	
 	var yestoday_yyGMV = '0';
 	function inintYestodayGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,null,yestoday_time,yestoday_time],
+		  doManager("strategyActivityManager","queryStrategyGMV",[yestoday_time,yestoday_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
-							yestoday_yyGMV = jsonData.total_gmv;
+							yestoday_yyGMV = jsonData.pro_total_gmv;
 							$("#yestodayProductGmv").html(changeMoney(parseInt(yestoday_yyGMV)));
-						}else{
-							$("#yestodayProductGmv").html('0');
-						}
-					}
-			},false);
-		  
-		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,null,yestoday_time,yestoday_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							yestoday_jwsGMV = jsonData.total_gmv;
+							yestoday_jwsGMV = jsonData.ser_total_gmv;
 							$("#yestodayServiceGmv").html(changeMoney(parseInt(yestoday_jwsGMV)));
-						}else{
-							$("#yestodayServiceGmv").html('0');
+							yestoday_grouponGMV = jsonData.gro_total_gmv;
 						}
 					}
 			},false);
+		  $("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
+		  $("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
 		  
-		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,null,yestoday_time,yestoday_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							yestoday_grouponGMV = jsonData.total_gmv;
-							$("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
-							$("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
-						}else{
-							$("#yestodayGrouponGmv").html('0');
-						}
-					}
-			});
 	}
 	
 	function initScatterplot(){

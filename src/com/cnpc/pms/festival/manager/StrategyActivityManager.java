@@ -16,9 +16,8 @@ public interface StrategyActivityManager extends IManager{
 	
 	/**
 	 * 统计221商品类/服务类/团购GMV
-	 * @param dept_id:1商品类，2服务类，3团购类
 	 */
-	public Map<String, Object> queryStrategyGMV(String dept_id,String store_no,String start_time,String end_time);
+	public Map<String, Object> queryStrategyGMV(String start_time,String end_time);
 	
 	/**
 	 * 统计非221GMV，按事业群分组

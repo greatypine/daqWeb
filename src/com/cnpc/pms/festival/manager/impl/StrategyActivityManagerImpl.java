@@ -21,9 +21,9 @@ import net.sf.json.JSONArray;
 public class StrategyActivityManagerImpl extends BizBaseCommonManager implements StrategyActivityManager {
 
 	@Override
-	public Map<String, Object> queryStrategyGMV(String dept_id,String store_no,String start_time,String end_time) {
+	public Map<String, Object> queryStrategyGMV(String start_time,String end_time) {
 		StrategyActivityDao strategyActivityDao = (StrategyActivityDao)SpringHelper.getBean(StrategyActivityDao.class.getName());
-		Map<String, Object> order_obj = strategyActivityDao.queryStrategyGMV(dept_id,store_no,start_time,end_time);
+		Map<String, Object> order_obj = strategyActivityDao.queryStrategyGMV(start_time,end_time);
     	return order_obj;
 	}
 	

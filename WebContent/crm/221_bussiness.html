@@ -399,41 +399,17 @@
 	var grouponGMV = '0';
 	var groupon_dept_id = "3";
 	function inintBusiGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,null,start_time,end_time],
+		  doManager("strategyActivityManager","queryStrategyGMV",[start_time,end_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
-							yyGMV = jsonData.total_gmv;
+							yyGMV = jsonData.pro_total_gmv;
 							$("#yyGmv").html(changeMoney(parseInt(yyGMV)));
-						}else{
-							$("#yyGmv").html('0');
-						}
-					}
-			},false);
-		  
-		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,null,start_time,end_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							jwsGMV = jsonData.total_gmv;
+							jwsGMV = jsonData.ser_total_gmv;
 							$("#jwsGmv").html(changeMoney(parseInt(jwsGMV)));
-						}else{
-							$("#jwsGmv").html('0');
-						}
-					}
-			},false);
-		  
-		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,null,start_time,end_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							grouponGMV = jsonData.total_gmv;
+							grouponGMV = jsonData.gro_total_gmv;
 							$("#grouponGmv").html(changeMoney(parseInt(grouponGMV)));
-						}else{
-							$("#grouponGmv").html('0');
 						}
 					}
 			},false);
@@ -468,46 +444,22 @@
 	
 	var yestoday_yyGMV = '0';
 	function inintYestodayGmvData(){
-		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,null,yestoday_time,yestoday_time],
+		  doManager("strategyActivityManager","queryStrategyGMV",[yestoday_time,yestoday_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
 						var jsonData = $.fromJSON(datax.data);
 						if(Object.keys(jsonData).length!=0){
-							yestoday_yyGMV = jsonData.total_gmv;
+							yestoday_yyGMV = jsonData.pro_total_gmv;
 							$("#yestodayProductGmv").html(changeMoney(parseInt(yestoday_yyGMV)));
-						}else{
-							$("#yestodayProductGmv").html('0');
-						}
-					}
-			},false);
-		  
-		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,null,yestoday_time,yestoday_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							yestoday_jwsGMV = jsonData.total_gmv;
+							yestoday_jwsGMV = jsonData.ser_total_gmv;
 							$("#yestodayServiceGmv").html(changeMoney(parseInt(yestoday_jwsGMV)));
-						}else{
-							$("#yestodayServiceGmv").html('0');
+							yestoday_grouponGMV = jsonData.gro_total_gmv;
+							$("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
 						}
 					}
 			},false);
+		  $("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
 		  
-		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,null,yestoday_time,yestoday_time],
-				function(datax,textStatus,XmlHttpRequest){
-					if (datax.result) {
-						var jsonData = $.fromJSON(datax.data);
-						if(Object.keys(jsonData).length!=0){
-							yestoday_grouponGMV = jsonData.total_gmv;
-							$("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
-							$("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
-						}else{
-							$("#yestodayGrouponGmv").html('0');
-							$("#yestodayTotalGmv").html('0');
-						}
-					}
-			});
 	}
 
 	function showProductRanking(store_no){
