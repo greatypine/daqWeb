@@ -4176,9 +4176,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				JSONObject jo = new JSONObject();
 				Map<String,Object> dynamic = (Map<String,Object>)dynamicList.get(i);
 				for (int j = 0; j < dynamicAllList.size(); j++) {
-					if("product_name".equals(keyName)){
+					if("product_id".equals(keyName)){
 						if(dynamic.get(keyName).toString().equals(dynamicAllList.get(j).get(keyName).toString())
-								&&dynamic.get("city_name").toString().equals(dynamicAllList.get(j).get("city_name").toString())){
+								&&dynamic.get("cityno").toString().equals(dynamicAllList.get(j).get("cityno").toString())){
 							dynamic.put("rank", j+1);;
 						}
 					}else{
@@ -5299,10 +5299,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else if(target==4){
 				dynamicList = dynamicDao.queryProductCityOrder(dynamicDto,null);
 				dynamicAllList = dynamicDao.queryProductCityOrder(dynamicDto2,null);
-				list = this.getRankList(dynamicList, dynamicAllList,"product_name",dynamicDto,"5");
-				tableName = "商品(本月GMV)排名";
+				list = this.getRankList(dynamicList, dynamicAllList,"product_id",dynamicDto,"5");
+				tableName = "商品(本月销售量)排名";
 				str_headers[2]="商品名称";
-				str_headers[3]="GMV(元)";
+				str_headers[3]="销售量(个)";
 				headers_key[1]="rank";
 				headers_key[2]="product_name";
 				headers_key[3]="product_count";
