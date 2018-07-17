@@ -35,13 +35,6 @@ public class StrategyActivityManagerImpl extends BizBaseCommonManager implements
 	}
 
 	@Override
-	public List<Map<String, Object>> queryGmvTrend(){
-		StrategyActivityDao strategyActivityDao = (StrategyActivityDao)SpringHelper.getBean(StrategyActivityDao.class.getName());
-		List<Map<String, Object>> lst_data = strategyActivityDao.queryGmvTrend();
-    	return lst_data;
-	}
-	
-	@Override
 	public Map<String, Object> queryNewMember(String store_no,String start_time,String end_time) {
 		StrategyActivityDao strategyActivityDao = (StrategyActivityDao)SpringHelper.getBean(StrategyActivityDao.class.getName());
 		Map<String, Object> order_obj = strategyActivityDao.queryNewMember(store_no,start_time,end_time);
@@ -144,7 +137,7 @@ public class StrategyActivityManagerImpl extends BizBaseCommonManager implements
 		List dateMemCounts = new ArrayList();
 		try {
 			//生成X轴坐标
-			dateMemCounts = reDate(6);
+			dateMemCounts = reDate(7);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -178,7 +171,7 @@ public class StrategyActivityManagerImpl extends BizBaseCommonManager implements
 		c.add(Calendar.DAY_OF_MONTH, -dd);
 		List dateX = new ArrayList();
 		dateX.add(f.format(c.getTime()));
-		for (int i = dd; i > 0; i--) {
+		for (int i = dd; i > 1; i--) {
 			c.add(Calendar.DAY_OF_MONTH, 1);
 			dateX.add(f.format(c.getTime()));
 		}

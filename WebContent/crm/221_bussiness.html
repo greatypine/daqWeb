@@ -104,9 +104,9 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
-         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">211合计</a></li>
+         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221合计</a></li>
          <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
-         <li class="active"><a href="javascript:void(0)">211分业务</a></li>
+         <li class="active"><a href="javascript:void(0)">221分业务</a></li>
          <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
          <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
        </ul>
@@ -376,29 +376,6 @@
 		initUnPercent();
 		inintYestodayGmvData();
 		showProductRanking();
-// 		initallstore();
-		
-// 		var autoComplete = new AutoComplete("store_name_manual","auto",array);
-// 	  	document.getElementById("store_name_manual").onkeyup = function(event){
-// 	  		autoComplete.start(event);
-// 	  		if($("#store_name_manual").val().trim() == ""){
-// 				$("#store_id_manual").val("");
-// 			}
-// 	  		for(var key in storeJson){
-// 	  			if(document.getElementById("store_name_manual").value==key){
-// 	  				document.getElementById("store_id_manual").value=storeJson[key];
-// 	  			}
-// 	  		}
-// 	  	}
-// 	  	$("#auto").on("click",function(event){
-// 			for(var key in storeJson){
-// 				if(document.getElementById("store_name_manual").value==key){
-// 					document.getElementById("store_id_manual").value=storeJson[key];
-// 				}
-// 			}
-// 			var storeNo = $("#store_id_manual").val(); 
-// 			showProductRanking(storeNo);
-// 		});
 	});
     
 	
@@ -462,8 +439,6 @@
 			},false);
 	}
 	
-// 	var productGmv = "0";
-// 	var serviceGmv = "0";
 	function initPercent(){
 		option1.series[0].data[0].value = (yyGMV/10000).toFixed(2);
 		option1.series[0].data[1].value = (jwsGMV/10000).toFixed(2);
@@ -488,7 +463,7 @@
 						myChart2.setOption(option2,true);	
 					}
 				}
-		},false);
+		});
 	}
 	
 	var yestoday_yyGMV = '0';
@@ -674,7 +649,7 @@
 						document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 					}
  				}
- 			}, false);
+ 			});
  	}
 	
  	function toIndex(){

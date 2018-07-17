@@ -106,9 +106,9 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
-         <li class="active"><a href="javascript:void(0);" data-toggle="tab">211合计</a></li>
+         <li class="active"><a href="javascript:void(0);" data-toggle="tab">221合计</a></li>
          <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
-         <li><a href="javascript:void(0);" onclick="toBussiness()" data-toggle="tab">211分业务</a></li>
+         <li><a href="javascript:void(0);" onclick="toBussiness()" data-toggle="tab">221分业务</a></li>
          <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
          <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
        </ul>
@@ -174,11 +174,11 @@
           	<div class="col-sm-6 no-padding" id="main1" style="height: 350px;"></div>
           </div>
         </div>
-       <div class="box box-default">
-          <div class="box-body">
-          	<div class="col-sm-12 no-padding" id="main4" style="height: 350px;"></div>
-          </div>
-        </div>
+<!--        <div class="box box-default"> -->
+<!--           <div class="box-body"> -->
+<!--           	<div class="col-sm-12 no-padding" id="main4" style="height: 350px;"></div> -->
+<!--           </div> -->
+<!--         </div> -->
         <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-12 no-padding" id="main3" style="height: 350px;"></div>
@@ -264,25 +264,6 @@
 <script src="plugins/gooey_menu/gooey.min.js"></script>
 <script type ="text/javascript">
 
-	$(document).ready(function() {
-// 	    $("#content-slider").lightSlider({
-// 	      loop:true,
-// 	      keyPress:true
-// 	    });
-// 	    $('#image-gallery').lightSlider({
-// 	      gallery:true,
-// 	      item:1,
-// 	      thumbItem:9,
-// 	      slideMargin: 0,
-// 	      speed:500,
-// 	      auto:true,
-// 	      loop:true,
-// 	      onSliderLoad: function() {
-// 	        $('#image-gallery').removeClass('cS-hidden');
-// 	      }
-// 	    });
-	  });
-
   Date.prototype.format = function() {  
     var s = '';  
     var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
@@ -299,7 +280,6 @@
   <script type ="text/javascript">
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart3 = echarts.init(document.getElementById('main3'));
-  var myChart4 = echarts.init(document.getElementById('main4'));
 
   //社员人数
   var memberXData = [];
@@ -546,145 +526,22 @@
     ]
   };
 
-  //总GMV走势图
-  var gmvXData = [];
-  var gmvYData = [];
-  
-  var option4 = {
-	  title: {
-		  text: "近7日GMV走势",
-		  left: "10",
-		  y: "10",
-		  textStyle: {
-			  color: "#666"
-		  }
-	  },
-	  color: "#BF3EFF",
-	  tooltip: {
-		  trigger: "axis",
-		  axisPointer: {
-			  type: "cross",
-			  crossStyle: {
-				  color: "#BF3EFF"
-			  }
-		  }
-	  },
-	  legend: {
-		  data: [
-			  {
-				  name: "总GMV",
-				  icon: "circle",
-				  textStyle: {
-					  color: "#666"
-				  }
-			  },
-		  ],
-		  top: "5%",
-		  textStyle: {
-			  color: "#CD0000"
-		  }
-	  },
-	  xAxis: [
-		  {
-			data: gmvXData,
-			type: 'category',
-// 	        boundaryGap: false,
-	        axisLine: {
-	          lineStyle: {
-	            color: '#666'
-	          }
-	        },
-	        splitLine: {
-	          show: false
-	        },
-	        axisTick: {
-	          show: true
-	        },
-	        splitArea: {
-	          show: false
-	        },
-	        axisLabel: {
-	          interval: 0,
-	        },
-		  }
-	  ],
-	  yAxis: [
-		  {
-			type: 'value',
-			name: 'GMV（万元）',
-			min: 0,
-	        splitLine: {
-	          show: false
-	        },
-	        axisLine: {
-	          lineStyle: {
-	            color: '#333'
-	          }
-	        },
-	        axisTick: {
-	          show: false
-	        },
-	        axisLabel: {
-	          interval: 1,
-	        },
-	        splitArea: {
-	          show: false
-	        },
-		  }
-	  ],
-	  grid: {
-		  top: "25%",
-		  left: '5%',
-		  right: '5%',
-		  bottom: '10%'
-	  },
-	  series: [
-		  {
-			  name: "总GMV",
-			  type: "bar",
-			  data: gmvYData,
-			  barWidth: "50",
-			  itemStyle: {
-				  normal: {
-					  color: '#CD5555',
-				  }
-			  },
-		  	  markPoint : {
-			  	data : [
-					  {type : 'max', name: '最大值'},
-					  {type : 'min', name: '最小值'},
-				  ],
-				  itemStyle:{normal: {color:'#CD0000'}},
-				  emphasis: {
-				      itemStyle:{normal: {color:'#CD0000'}}
-				  }
-			  },
-		  },
-	  ]
-  };
-  
   myChart1.setOption(option1);
   myChart3.setOption(option3);
-  myChart4.setOption(option4);
 </script>
 <script>
 
 	$(function(){
 		gmvXData = initgmvXData();
-		initScatterplot();
-		initGmvTrend();
 		inintMemberData();
 		inintYYGmvData();
 		inintJWSGmvData();
  		inintGrouponGmvData();
 		inintYestodayGmvData();
 		doTypeGMV();
-		//单店昨日情况
-// 		initStoreCompleteInfo();
-// 		inintYestodayGrouponGmvData();
-// 		inintYestodayJWSGmvData();
-		showStoreRanking();
 		initMemberTrend();
+		initScatterplot();
+		showStoreRanking();
 		
 	});
     
@@ -717,18 +574,6 @@
 						}
 					}
 			});
-// 		  doManager("strategyActivityManager","queryTotalMember",null,
-// 				function(datax,textStatus,XmlHttpRequest){
-// 					if (datax.result) {
-// 						var jsonData = $.fromJSON(datax.data);
-// 						if(Object.keys(jsonData).length!=0){
-// 							totalMembernum = jsonData.totalnum;
-// 							$("#memberNum").html(parseFloat(newMemberNum).toLocaleString()+"/"+parseFloat(totalMembernum).toLocaleString()+"人");
-// 						}else{
-// 							$("#memberNum").html('0');
-// 						}
-// 					}
-// 			});
 	}
 	
 	var yyGMV = '0';
@@ -823,34 +668,6 @@
 					}
 			});
 	}
-	
-// 	function initStoreCompleteInfo(){
-// 		  doManager("strategyActivityManager","queryStoreCompleteInfo",null,
-// 			function(datax,textStatus,XmlHttpRequest){
-// 				if (datax.result) {
-// 					var jsonData = $.fromJSON(datax.data);
-// 					if(jsonData!=null&&jsonData.length>0){
-// 						var infoStr="";
-// 						for(var i=0;i<jsonData.length;i++){
-// 							infoStr=infoStr+ '<li data-thumb="img/thumb/cS-1.jpg">';
-// 							infoStr=infoStr+'<h5>'+jsonData[i].store_name+'<span class="pull-right">店长：'+jsonData[i].store_user+'</span></h5>';
-// 							infoStr=infoStr+'<div class="col-sm-12">';
-// 							infoStr=infoStr+'<div class="col-sm-6 no-padding">昨日GMV：<span>￥'+(jsonData[i].pro_total_gmv+jsonData[i].ser_total_gmv+jsonData[i].gro_total_gmv)+'</span></div>';
-// 							infoStr=infoStr+'<div class="col-sm-6 no-padding">商品类GMV：<span>￥'+jsonData[i].pro_total_gmv+'</span></div>';
-// 							infoStr=infoStr+'<div class="col-sm-6 no-padding">服务类GMV：<span>￥'+jsonData[i].ser_total_gmv+'</span></div>';
-// 							infoStr=infoStr+'<div class="col-sm-6 no-padding">团购GMV：<span>￥'+jsonData[i].gro_total_gmv+'</span></div>';
-// 							infoStr=infoStr+'</div>';
-// 							infoStr=infoStr+'<div class="col-sm-6">社员新增：<span>'+jsonData[i].member_num+'人</span></div>';
-// 		                    infoStr=infoStr+'</li>';
-// 						}
-// 						$("#image-gallery").append(infoStr); 
-// 					}else{
-// 		        		crm_alert(5,"系统查无此条件的数据");
-// 		        		return;
-// 					}
-// 				}
-// 		},false);
-// 	}
 	
 	function initScatterplot(){
 		  doManager("strategyActivityManager","queryDataOfScatterplot",null,
@@ -1039,30 +856,6 @@
 				}
 		});
     }
-	
-	function initGmvTrend(){
-	  gmvYData = new Array(gmvXData.length+1).join(0).split('');
-		doManager("strategyActivityManager","queryGmvTrend",null,
-			function(data,textStatus,XmlHttpRequest){
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					if(jsonData.length!=0){
-						$(jsonData).each(function(index,element){
-							var dateTemp = element.datetime;
-							var indexTemp = jQuery.inArray(dateTemp,gmvXData);
-							gmvYData[indexTemp]=(element.total_gmv/10000).toFixed(2);
-	                    });
-						option4.xAxis[0].data=gmvXData;
-						option4.series[0].data=gmvYData;
-						myChart4.setOption(option4);
-					}else{
-						gmvYData = [];
-						option4.series[0].data=gmvYData;
-						myChart4.setOption(option4);
-					}
-				}
-		});
-	}
 	
 	function doTypeGMV(){
 	    doManager('strategyActivityManager','queryTypeGmv',null,function(data){

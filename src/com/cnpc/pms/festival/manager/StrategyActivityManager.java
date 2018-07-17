@@ -26,11 +26,6 @@ public interface StrategyActivityManager extends IManager{
 	public List<Map<String, Object>> queryUnStrategyGMV(String start_time,String end_time);
 	
 	/**
-	 * 查询GMV走势
-	 */
-	public List<Map<String, Object>> queryGmvTrend();
-	
-	/**
 	 * 统计221新增社员数
 	 */
 	public Map<String, Object> queryNewMember(String store_no,String start_time,String end_time);

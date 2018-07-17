@@ -42,7 +42,8 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	
 	@Override
 	public List<Map<String, Object>> queryUnStrategyGMV(String start_time,String end_time){
-		String sql = "SELECT IFNULL(SUM(trading_price), 0) total_gmv,department_name FROM df_mass_order_monthly tor WHERE tor.order_tag2 IS NULL ";
+		String sql = "SELECT IFNULL(SUM(trading_price), 0) total_gmv,department_name FROM df_mass_order_monthly tor,df_activity_scope ds "
+				+ "WHERE ds.platformid=tor.store_id AND tor.order_tag2 IS NULL ";
 		if(StringUtils.isNotEmpty(start_time)){
 			sql = sql + " AND date(tor.sign_time) >= '"+start_time+"' ";
 		}
@@ -50,21 +51,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 			sql = sql + " AND date(tor.sign_time) <= '"+end_time+"' ";
 		}
 		sql = sql + " AND tor.department_name IS NOT NULL AND tor.department_name NOT LIKE '测试%' "
-				//+ "AND tor.store_id NOT IN (SELECT platformid FROM df_activity_scope) "
-				+ "AND NOT EXISTS (SELECT platformid FROM df_activity_scope	WHERE platformid = tor.store_id)"
 				+ "GROUP BY bussiness_group_id";
-		
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		// 获得查询数据
-		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		return lst_data;
-	}
-	
-	@Override
-	public List<Map<String, Object>> queryGmvTrend(){
-		String sql = "SELECT IFNULL(SUM(trading_price), 0) total_gmv,DATE(tor.sign_time) AS datetime FROM df_mass_order_monthly tor "
-				+ "JOIN df_activity_scope das ON (tor.store_id = das.platformid) WHERE DATE_SUB(CURDATE(), INTERVAL 6 DAY) <= date(tor.sign_time) "
-				+ "AND tor.order_tag2 IS NOT NULL GROUP BY datetime";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -274,7 +261,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 				"					dmom1.order_tag2 is not null " + 
 				"			) alltype " + 
 				"		where " + 
-				"			DATE_SUB(CURDATE(), INTERVAL 6 DAY) <= date(dmom0.sign_time) " + 
+				"			DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dmom0.sign_time) " + 
 				"		and CURDATE() > date(dmom0.sign_time) " + 
 				"	) dateSeven " + 
 				"left join ( " + 
@@ -287,7 +274,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 				"		df_activity_scope das " + 
 				"	where " + 
 				"		dmom.store_id = das.platformid " + 
-				"	and DATE_SUB(CURDATE(), INTERVAL 6 DAY) <= date(dmom.sign_time) " + 
+				"	and DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(dmom.sign_time) " + 
 				"	and CURDATE() > date(dmom.sign_time) " + 
 				"	and dmom.order_tag2 is not null " + 
 				"	group by " + 
