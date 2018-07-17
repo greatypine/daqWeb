@@ -3283,14 +3283,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 	@Override
 	public List<Map<String, Object>> selectAreaDealOfEmployeeByChannel(String beginDate, String endDate, String areaCode) {
-		String sql = "SELECT count(1) as total,channel_name,channel_id FROM daqWeb.df_mass_order_total where area_code in (\"0021Y000600035\") group by channel_id,channel_name ";
+		String sql = "SELECT count(1) as total,channel_name,channel_id FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by channel_id,channel_name ";
 		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
 		return list;
 	}
 
 	@Override
 	public List<Map<String, Object>> selectAreaDealOfEmployeeByConsum(String beginDate, String endDate, String areaCode) {
-		String sql = "select count(1) as total,rang from (select  CASE when total >=20 then 20 when (total<20 and total>=10) then 10  when (total<10 and total>=5) then 5  when (total<5 and total>1) then 4 when total=1 then 1 else 0 end as  rang from  (SELECT count(1) as total,customer_id  FROM daqWeb.df_mass_order_total where area_code in (\"0021Y000600035\") group by customer_id) a ) b group by rang";
+		String sql = "select count(1) as total,rang from (select  CASE when total >=20 then 20 when (total<20 and total>=10) then 10  when (total<10 and total>=5) then 5  when (total<5 and total>1) then 4 when total=1 then 1 else 0 end as  rang from  (SELECT count(1) as total,customer_id  FROM daqWeb.df_mass_order_total where area_code in ("+areaCode+") group by customer_id) a ) b group by rang";
         //String  sql="select count(1) as total,3 as rang from daqWeb.df_mass_order_total";
 		List<Map<String,Object>> list = ImpalaUtil.execute(sql);
 		return list;

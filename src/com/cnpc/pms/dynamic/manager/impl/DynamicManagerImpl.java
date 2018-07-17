@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.cnpc.pms.base.paging.IFilter;
+import com.cnpc.pms.personal.dao.EmployeeMoreInfoDao;
 import com.cnpc.pms.personal.entity.*;
 import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.slice.manager.AreaManager;
@@ -6941,41 +6942,21 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
 			OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
 			CustomerManager customerManager = (CustomerManager) SpringHelper.getBean("customerManager");
+			EmployeeMoreInfoManager employeeMoreInfoManager = (EmployeeMoreInfoManager)SpringHelper.getBean("employeeMoreInfoManager");
 			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+			EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao) SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
 			/* 获取国安侠基本信息*/
 			IFilter iFilter =FilterFactory.getSimpleFilter("employee_no='"+employeeNo+"' AND humanstatus=1 ");
 			List<Humanresources> lst_humanList = (List<Humanresources>)hManager.getList(iFilter);
 			Humanresources humanresources = new Humanresources();
-			int month = 0;
+
 			if(lst_humanList!=null&&lst_humanList.size()>0){
 				humanresources = lst_humanList.get(0);
-				//计算工作时间
-				if(humanresources.getTopostdate()!=null&&humanresources.getTopostdate().length()>0){
-					String topost = humanresources.getTopostdate();
-					SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-					SimpleDateFormat df=new SimpleDateFormat("yyyy/MM/dd");
-					try {
-						month = getMonthDiff(new Date(), sdf.parse(topost));
-					} catch (ParseException e) {
-						try {
-							month = getMonthDiff(new Date(), df.parse(topost));
-						} catch (ParseException e1) {
-							month = 999;
-						}
+				List<?> list = employeeMoreInfoManager.getEmployeeByEmployeeno(humanresources.getEmployee_no());
+				EmployeeMoreInfo em = (EmployeeMoreInfo)list.get(0);
+				humanresources.setRemark(em.getWorkingAge_year_precise());
+			}
 
-					}
-				}
-			}
-			if(month==999){
-				humanresources.setRemark("暂无");
-			}else{
-				int ret = month/12;
-				if(ret==0){
-					humanresources.setRemark("一年以下");
-				}else{
-					humanresources.setRemark(ret+"年以上");
-				}
-			}
 
 			/* 获取国安侠GMV*/
 			Calendar c = Calendar.getInstance();
@@ -6985,6 +6966,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			List<Map<String,Object>> customerList = dynamicDao.selectCustomerOfEmployee(cur_year,cur_month,employeeNo);
 			List<Map<String,Object>> areaList = areaManager.queryAreaByEmployee(employeeNo);
 			List<Map<String,Object>> orderList = dynamicDao.selectOrderOfEmployee(cur_year, cur_month, employeeNo);
+			List<Map<String,Object>> moveDistanceList = employeeMoreInfoDao.queryEmployeeMoveDistance(employeeNo);
+			if(moveDistanceList!=null&&moveDistanceList.size()>0){
+				map.put("moveDistance",moveDistanceList.get(0).get("moveDistance"));
+			}else{
+				map.put("moveDistance",null);
+			}
 			map.put("human", humanresources);
 			map.put("gmv",gmvList);
 			map.put("customer",customerList);

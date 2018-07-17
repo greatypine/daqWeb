@@ -115,6 +115,8 @@
               <dd id="phone">载入中...</dd>
               <dt>所属门店</dt>
               <dd id="storeName">载入中...</dd>
+              <dt>配送里程</dt>
+              <dd id="moveDistance">载入中...</dd>
               <dt>所属片区</dt>
               <dd id="areaName">载入中...</dd>
             </dl>
@@ -279,6 +281,12 @@
                         $("#workingAge").html(human_info.human.remark);
                         $("#phone").html(human_info.human.phone);
                         $("#storeName").html(human_info.human.storename);
+                    }
+
+                    if(human_info.moveDistance!=null){
+                        $("#moveDistance").html(human_info.moveDistance+" 公里");
+                    }else{
+                        $("#moveDistance").html("暂无");
                     }
 
                     if(human_info.gmv!=null&&human_info.gmv.length!=0){
