@@ -162,6 +162,11 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 			pipeline.add(project);
 			Document unwind = new Document("$unwind","$locations");
 			pipeline.add(unwind);
+			Document filter = new Document();
+			String curDate = DateUtils.dateFormat(DateUtils.getDateBeforeOneDate(new Date()), "yyyy/MM/dd");
+			filter.put("locations.createTime",new Document("$lt",(new Date(curDate))));
+			Document match1 = new Document("$match",filter);
+			pipeline.add(match1);
 			Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
 			pipeline.add(group);
 			Document limit = new Document("$limit",skipcount+100);
