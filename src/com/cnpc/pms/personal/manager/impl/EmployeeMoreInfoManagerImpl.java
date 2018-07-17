@@ -1,7 +1,9 @@
 package com.cnpc.pms.personal.manager.impl;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import com.cnpc.pms.personal.dao.EmployeeMoreInfoDao;
 import org.bson.Document;
@@ -140,6 +142,8 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 	public static void main(String[] args) {
 		double distance = Distance(116.285798,39.922102, 116.285798,39.932102);
 		System.out.println(distance);
+		System.out.println(25/12+"----"+25%12);
+
 	}
 
 	@Override
@@ -148,112 +152,95 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
 		MongoCollection<Document> collection = database.getCollection("employee_position");
+		long count = collection.count();
 		PlatformEmployeeDao platformEmployeeDao = (PlatformEmployeeDao)SpringHelper.getBean(PlatformEmployeeDao.class.getName());
-		org.json.JSONArray jArray = new org.json.JSONArray();
-		List<Document> pipeline = new ArrayList<Document>();
-		Document project = new Document("$project",new Document("_id","$employeeId").append("locations", 1));
-		pipeline.add(project);
-		Document unwind = new Document("$unwind","$locations");
-		pipeline.add(unwind);
-		/*Document filter = new Document();
-		String curDate = DateUtils.dateFormat(DateUtils.getDateBeforeOneDate(new Date()), "yyyy/MM/dd");
-		filter.put("locations.createTime",new Document("$gte",(new Date(curDate+" 00:00:00"))).append("$lte", (new Date(curDate+" 23:59:59"))));
-		Document match1 = new Document("$match",filter);
-		pipeline.add(match1);*/
-		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
-		pipeline.add(group);
-		AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
-		MongoCursor<Document> cursor = aggregate.iterator();
-		Map<String,Object> jObject = null;
-		List<Map<String,Object>> listempInfo = new ArrayList<Map<String,Object>>();
-        int j = 0;
-		while (cursor.hasNext()) {  
-        	j++;
-	           Document doc = cursor.next();  
-	           jObject =new HashMap<String, Object>();
-			   jObject.put("locations", doc.get("locations"));
-			   jObject.put("id", doc.get("_id"));
-			   List<Map<String,Object>> employeeByEmployeeId = platformEmployeeDao.getEmployeeByEmployeeId(doc.get("_id").toString()); 
-			   if(employeeByEmployeeId.size() > 0){
-				   String employeeNo = employeeByEmployeeId.get(0).get("employeeNo").toString();
-				   jObject.put("employeeNo",employeeNo);
-				   listempInfo.add(jObject);
-			   }
-	    }
-		 System.out.println(j);
-		 int m = 0;
-        if(listempInfo.size() > 0){   
-        	for(int z = 0; z < listempInfo.size(); z++){
-        		Map<String, Object> map = listempInfo.get(z);
-        		List object = (List)map.get("locations");
-        		String employeeNo = map.get("employeeNo").toString();
-        		EmployeeMoreInfo employeeMoreInfo = new EmployeeMoreInfo();
-        		employeeMoreInfo.setEmployeeNo(employeeNo);
-     		   float moveDistance = 0;
-     		   if(object.size() > 0){
-     			   double distance_sum = 0;
-     			   for(int i = 0; i <object.size(); i++){
-     				   if(i != object.size()-1){
-     					  List object2 = (List)object.get(i);
-     					 List object3 = (List)object.get(i+1);
-     					  double distance = Distance(Double.parseDouble(object2.get(0).toString()),Double.parseDouble(object2.get(1).toString()), Double.parseDouble(object3.get(0).toString()),Double.parseDouble(object3.get(1).toString()));
-     					    //long distance = MapUtils.getDistance(object.get(i).toString().replace("[", "").replace("]", "").replace(" ", ""), object.get(i+1).toString().replace("[", "").replace("]", "").replace(" ", ""));
-     					    distance_sum += distance;
-     				   }
-     			   }
-     			   moveDistance= distance_sum == 0 ? 0 :Float.parseFloat(distance_sum+"");
-     		   }
-     		   if(moveDistance > 0){
-     			   employeeMoreInfo.setMoveDistance(moveDistance);
-     			   List<?> employeeByEmployeeno = this.getEmployeeByEmployeeno(employeeNo);
-     			   if(employeeByEmployeeno != null && employeeByEmployeeno.size() > 0){
-     				   for(int i = 0; i < employeeByEmployeeno.size(); i++){
-     					   EmployeeMoreInfo employeeMoreInfo1 = (EmployeeMoreInfo)employeeByEmployeeno.get(i);
-     					   float moveDistance2 = employeeMoreInfo1.getMoveDistance();
-     					   employeeMoreInfo.setMoveDistance(moveDistance2+moveDistance);
-     					   BeanUtils.copyProperties(employeeMoreInfo, employeeMoreInfo1,
-     									new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
-     					  
-     					preObject(employeeMoreInfo1);
-     					this.saveObject(employeeMoreInfo1);
-     					 m++;
-     					}
-     			   }else{
-     				   preObject(employeeMoreInfo);
-     				   this.saveObject(employeeMoreInfo);
-     				   m++;
-     			   }
-     		   }
-        	}
-        }  
-        System.out.println(m);
-        System.out.println("=====================================》》》》》》》》》》》》》》》》》共"+j+"条数据，插入"+m+"条数据");
-		
+		long skipcount = 0;
+		while(count >= skipcount){
+			org.json.JSONArray jArray = new org.json.JSONArray();
+			List<Document> pipeline = new ArrayList<Document>();
+			Document project = new Document("$project",new Document("_id","$employeeId").append("locations", 1));
+			pipeline.add(project);
+			Document unwind = new Document("$unwind","$locations");
+			pipeline.add(unwind);
+			Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
+			pipeline.add(group);
+			Document limit = new Document("$limit",skipcount+100);
+			pipeline.add(limit);
+			Document skip = new Document("$skip",skipcount);
+			pipeline.add(skip);
+			AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
+			MongoCursor<Document> cursor = aggregate.iterator();
+			Map<String,Object> jObject = null;
+			List<Map<String,Object>> listempInfo = new ArrayList<Map<String,Object>>();
+	        int j = 0;
+			while (cursor.hasNext()) {  
+	        	j++;
+		           Document doc = cursor.next();  
+		           jObject =new HashMap<String, Object>();
+				   jObject.put("locations", doc.get("locations"));
+				   jObject.put("id", doc.get("_id"));
+				   List<Map<String,Object>> employeeByEmployeeId = platformEmployeeDao.getEmployeeByEmployeeId(doc.get("_id").toString()); 
+
+				   if(employeeByEmployeeId.size() > 0){
+					   String employeeNo = employeeByEmployeeId.get(0).get("employeeNo").toString();
+					   jObject.put("employeeNo",employeeNo);
+					   listempInfo.add(jObject);
+				   }
+		    }
+			 System.out.println(j);
+			 int m = 0;
+	        if(listempInfo.size() > 0){   
+	        	for(int z = 0; z < listempInfo.size(); z++){
+	        		Map<String, Object> map = listempInfo.get(z);
+	        		List object = (List)map.get("locations");
+	        		String employeeNo = map.get("employeeNo").toString();
+	        		EmployeeMoreInfo employeeMoreInfo = new EmployeeMoreInfo();
+	        		employeeMoreInfo.setEmployeeNo(employeeNo);
+	     		   float moveDistance = 0;
+	     		   if(object.size() > 0){
+	     			   double distance_sum = 0;
+	     			   for(int i = 0; i <object.size(); i++){
+	     				   if(i != object.size()-1){
+	     					  List object2 = (List)object.get(i);
+	     					 List object3 = (List)object.get(i+1);
+	     					  double distance = Distance(Double.parseDouble(object2.get(0).toString()),Double.parseDouble(object2.get(1).toString()), Double.parseDouble(object3.get(0).toString()),Double.parseDouble(object3.get(1).toString()));
+	     					    //long distance = MapUtils.getDistance(object.get(i).toString().replace("[", "").replace("]", "").replace(" ", ""), object.get(i+1).toString().replace("[", "").replace("]", "").replace(" ", ""));
+	     					    distance_sum += distance;
+	     				   }
+	     			   }
+	     			   moveDistance= distance_sum == 0 ? 0 :Float.parseFloat(distance_sum+"");
+	     		   }
+	     		   if(moveDistance > 0){
+	     			   employeeMoreInfo.setMoveDistance(moveDistance);
+	     			   List<?> employeeByEmployeeno = this.getEmployeeByEmployeeno(employeeNo);
+	     			   if(employeeByEmployeeno != null && employeeByEmployeeno.size() > 0){
+	     				   for(int i = 0; i < employeeByEmployeeno.size(); i++){
+	     					   EmployeeMoreInfo employeeMoreInfo1 = (EmployeeMoreInfo)employeeByEmployeeno.get(i);
+	     					   float moveDistance2 = employeeMoreInfo1.getMoveDistance();
+	     					   employeeMoreInfo.setMoveDistance(moveDistance2+moveDistance);
+	     					   BeanUtils.copyProperties(employeeMoreInfo, employeeMoreInfo1,
+	     									new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
+	     					  
+	     					preObject(employeeMoreInfo1);
+	     					this.saveObject(employeeMoreInfo1);
+	     					 m++;
+	     					}
+	     			   }else{
+	     				   preObject(employeeMoreInfo);
+	     				   this.saveObject(employeeMoreInfo);
+	     				   m++;
+	     			   }
+	     		   }
+	        	}
+	        }  
+	        System.out.println(m);
+	        skipcount += 100;
+	        System.out.println("=====================================》》》》》》》》》》》》》》》》》共"+j+"条数据，插入"+m+"条数据");
+		}
 	}
 
 
-	private static int getMonthDiff(Date d1, Date d2) {
-		Calendar c1 = Calendar.getInstance();
-		Calendar c2 = Calendar.getInstance();
-		c1.setTime(d1);
-		c2.setTime(d2);
-		if(c1.getTimeInMillis() < c2.getTimeInMillis()) return 0;
-		int year1 = c1.get(Calendar.YEAR);
-		int year2 = c2.get(Calendar.YEAR);
-		int month1 = c1.get(Calendar.MONTH);
-		int month2 = c2.get(Calendar.MONTH);
-		int day1 = c1.get(Calendar.DAY_OF_MONTH);
-		int day2 = c2.get(Calendar.DAY_OF_MONTH);
-		// 获取年的差值 假设 d1 = 2015-8-16  d2 = 2011-9-30
-		int yearInterval = year1 - year2;
-		// 如果 d1的 月-日 小于 d2的 月-日 那么 yearInterval-- 这样就得到了相差的年数
-		if(month1 < month2 || month1 == month2 && day1 < day2) yearInterval --;
-		// 获取月数差值
-		int monthInterval =  (month1 + 12) - month2  ;
-		if(day1 < day2) monthInterval --;
-		monthInterval %= 12;
-		return yearInterval * 12 + monthInterval;
-	}
+
 
 	/**
 	 * @Description 时间间隔天数
@@ -274,7 +261,15 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 		int year = toYear  -  fromYear;
 		int month = toYear *  12  + toMonth  -  (fromYear  *  12  +  fromMonth);
 		int day = (int) ((to.getTimeInMillis()  -  from.getTimeInMillis())  /  (24  *  3600  *  1000));
-
+		int year1= month%12;
+		int year2 = month/12;
+		if(year1>0){
+			result.put("preciseYear",year2+"年以上");
+		}else if(year1==0){
+			result.put("preciseYear",year2+"年");
+		}else{
+			result.put("preciseYear","none");
+		}
 		result.put("year",year);
 		result.put("month",month);
 		result.put("day",day);
@@ -286,8 +281,8 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 	@Override
 	public void analyzeEmployeeWorkingAge() {
 
-		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao) SpringHelper.getBean(EmployeeMoreInfo.class.getName());
-
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao) SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		EmployeeMoreInfoManager employeeMoreInfoManager = (EmployeeMoreInfoManager)SpringHelper.getBean("employeeMoreInfoManager");
 		List<Map<String,Object>> humanresources = null;
 		List<Map<String,Object>> storekeeper = null;
 
@@ -296,20 +291,66 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 			storekeeper = employeeMoreInfoDao.queryStoreKepeer();
 			Map<String,Object> result = new HashMap<String,Object>();
 			Date date = new Date();
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+			SimpleDateFormat sf=new SimpleDateFormat("yyyy.MM.dd");
+			EmployeeMoreInfo employeeMoreInfo=null;
+			List<EmployeeMoreInfo> employeeList = new ArrayList<EmployeeMoreInfo>();
 			//更新国安侠工龄
 			for(int i=0;i<humanresources.size();i++){
 				Object topostdate = humanresources.get(i).get("topostdate");
 				Object employeeNo = humanresources.get(i).get("employee_no");
-				if(topostdate==null){
+				if(topostdate==null||employeeNo==null){
 					continue;
+
 				}
-				result = dateCompare(sdf.parse(String.valueOf(topostdate)),date);
+
+
+				try {
+					result = dateCompare(sdf.parse(topostdate.toString()),date);
+				} catch (ParseException e) {
+					try {
+						result = dateCompare(df.parse(topostdate.toString()),date);
+					} catch (ParseException e1) {
+                        try {
+                            result = dateCompare(sf.parse(topostdate.toString()),date);
+                        } catch (ParseException e2) {
+                            e2.printStackTrace();
+                            result.put("year",0);
+                            result.put("month",0);
+                            result.put("day",0);
+                            result.put("preciseYear","none");
+                        }
+                    }
+				}
 				Integer year = Integer.parseInt(String.valueOf(result.get("year")));
 				Integer month = Integer.parseInt(String.valueOf(result.get("month")));
 				Integer day = Integer.parseInt(String.valueOf(result.get("day")));
-				employeeMoreInfoDao.updateEmployeeWorkingAge(String.valueOf(employeeNo),year,month,day);
+				String preciseYear = String.valueOf(result.get("preciseYear"));
+
+
+				employeeList = (List<EmployeeMoreInfo>) this.getList(FilterFactory.getSimpleFilter("employeeNo",employeeNo));
+
+				if(employeeList!=null&&employeeList.size()>0){//如果存在则更新
+					for(int j=0;j<employeeList.size();j++){
+						EmployeeMoreInfo employeeMoreInfo_s = employeeList.get(j);
+						employeeMoreInfo_s.setWorkingAge_year(year);
+						employeeMoreInfo_s.setWorkingAge_month(month);
+						employeeMoreInfo_s.setWorkingAge_day(day);
+						employeeMoreInfo_s.setWorkingAge_year_precise(preciseYear);
+						preObject(employeeMoreInfo_s);
+						employeeMoreInfoManager.saveObject(employeeMoreInfo_s);
+					}
+				}else{//不存在则新增
+					employeeMoreInfo = new EmployeeMoreInfo();
+					employeeMoreInfo.setWorkingAge_year(year);
+					employeeMoreInfo.setWorkingAge_month(month);
+					employeeMoreInfo.setWorkingAge_day(day);
+					employeeMoreInfo.setWorkingAge_year_precise(preciseYear);
+					preObject(employeeMoreInfo);
+					employeeMoreInfoManager.saveObject(employeeMoreInfo);
+				}
+
 			}
 
 			//更新店长工龄
@@ -319,12 +360,50 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 				if(topostdate==null){
 					continue;
 				}
-				result = dateCompare(sdf.parse(String.valueOf(topostdate)),date);
-				result = dateCompare(sdf.parse(String.valueOf(topostdate)),date);
+
+				try {
+					result = dateCompare(sdf.parse(topostdate.toString()),date);
+				} catch (ParseException e) {
+					try {
+						result = dateCompare(df.parse(topostdate.toString()),date);
+					} catch (ParseException e1) {
+						try {
+							result = dateCompare(sf.parse(topostdate.toString()),date);
+						} catch (ParseException e2) {
+							e2.printStackTrace();
+							result.put("year",0);
+							result.put("month",0);
+							result.put("day",0);
+							result.put("preciseYear","none");
+						}
+					}
+				}
+
 				Integer year = Integer.parseInt(String.valueOf(result.get("year")));
 				Integer month = Integer.parseInt(String.valueOf(result.get("month")));
 				Integer day = Integer.parseInt(String.valueOf(result.get("day")));
-				employeeMoreInfoDao.updateEmployeeWorkingAge(String.valueOf(employeeNo),year,month,day);
+				String preciseYear = String.valueOf(result.get("preciseYear"));
+
+				employeeList = (List<EmployeeMoreInfo>) this.getList(FilterFactory.getSimpleFilter("employeeNo",employeeNo));
+				if(employeeList!=null&&employeeList.size()>0){//如果存在则更新
+					for(int n=0;n<employeeList.size();n++){
+						EmployeeMoreInfo employeeMoreInfo_e = employeeList.get(n);
+						employeeMoreInfo_e.setWorkingAge_year(year);
+						employeeMoreInfo_e.setWorkingAge_month(month);
+						employeeMoreInfo_e.setWorkingAge_day(day);
+						employeeMoreInfo_e.setWorkingAge_year_precise(preciseYear);
+						preObject(employeeMoreInfo_e);
+						employeeMoreInfoManager.saveObject(employeeMoreInfo_e);
+					}
+				}else{//不存在则新增
+					employeeMoreInfo = new EmployeeMoreInfo();
+					employeeMoreInfo.setWorkingAge_year(year);
+					employeeMoreInfo.setWorkingAge_month(month);
+					employeeMoreInfo.setWorkingAge_day(day);
+					employeeMoreInfo.setWorkingAge_year_precise(preciseYear);
+					preObject(employeeMoreInfo);
+					employeeMoreInfoManager.saveObject(employeeMoreInfo);
+				}
 			}
 
 		} catch (Exception e) {
@@ -335,5 +414,7 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 
 
 	}
+
+
 
 }

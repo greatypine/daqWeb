@@ -42,5 +42,13 @@ public class EmployeeMoreDaoImpl extends BaseDAOHibernate implements EmployeeMor
         query.executeUpdate();
     }
 
+    @Override
+    public List<Map<String, Object>> queryEmployeeMoveDistance(String employeeNo) {
+        String sql="select FORMAT(moveDistance,2) as moveDistance  from t_employee_more_info where employeeNo='"+employeeNo+"' limit 1";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
 
 }
