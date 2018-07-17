@@ -220,7 +220,7 @@ var initPageElements = function () {
     legend: {
             show: 'true',
             data: [{
-	            name:'城市GMV走势',
+	            name:'全部GMV走势',
 	            textStyle:{color:"#fff"}
             },{
             	name:'221GMV走势',
@@ -311,7 +311,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '城市GMV走势',
+        name: '全部GMV走势',
         type:'line',
         data:[ 25.6, 76.7, 30.5,25.6, 76.7, 30.5],
         smooth: true,
@@ -2173,7 +2173,7 @@ var showCityRankGmv = function (cityRankDataGmv) {
     cityRankGmvOption.title[0].text = "近7日GMV走势";
     cityRankChartGmv.setOption(cityRankGmvOption,true);
 };
-var getTwoTwoOneRankGmv = function(){
+var getTwoTwoOneRankGmv = function(pageStatusInfo){
 	    var cacheKey = CACHE_HEADER_TWOTWOONE_RANK_GVM + pageStatusInfo.getCacheKey();
     // 从缓存获取数据
     var twoTwoOneRankDataGmv = JsCache.get(cacheKey);
