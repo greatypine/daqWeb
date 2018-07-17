@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>221专题</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min.css">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+   <link rel="stylesheet"  href="dist/css/lightslider.css"/>
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+ .box-body img{width: 100%}
+	.details{background-color: #ff7d73; padding: 10px 0 10px 0; color: #fff;}
+    .details small{opacity: 0.6}
+    .small-box .icon{top: 5px; font-size: 70px;}
+    .small-box:hover .icon{font-size: 80px;}
+    .detail_tomorrow{font-size: 16px; opacity: 0.8; margin-top: 10px;}
+    .detail_tomorrow span{padding-left: 15px;}
+    .detail_tomorrow i{padding-right: 5px;}
+    .lightslider{line-height: 36px; margin-top: 20px;}
+    .lightslider h4 span{font-size: 14px;}
+    .lightslider span{font-size: 24px;}
+    .demo ul li{padding: 0 40px;}
+	.nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
+    .nav-tabs-custom > .nav-tabs > li > a{ margin: 10px 0; font-size: 18px;}
+    .nav-tabs-custom > .nav-tabs > li > a:hover{ margin: 10px 0;color: #f39c12;}
+    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: transparent; color: #f39c12; border-bottom: 2px solid #f39c12; font-weight: bold; cursor: pointer;}
+    .nav-tabs-custom > .nav-tabs{margin: 0 auto; width: 450px;}
+
+    .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
+    .navimenu{min-height: 800px; padding-top: 0;}
+    #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
+      #process_div{ 
+		background-color:#292a2b; 
+		display:inline; 
+		z-index:100000;  
+		left:0px; 
+		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+		filter:Alpha(Opacity=30); 
+		opacity: 0.3; 
+	} 
+	
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+    
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+<header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+			<div class="logo_img pull-left">
+				<img src="dist/img/logo.png" height="30">
+				<img src="dist/img/title.png" height="20">
+			</div>
+			<div class="pull-left">
+				<div class="logo-lg">
+					<ul class="no-margin">
+						<li class="current"><em>221专题</em></li>
+					</ul>
+				</div>
+			</div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      
+      <div class="nav-tabs-custom">
+       <ul class="nav nav-tabs">
+         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">211合计</a></li>
+         <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
+         <li class="active"><a href="javascript:void(0)">211分业务</a></li>
+         <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
+         <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
+       </ul>
+      
+      <section class="content-header">
+        <div class="box box-default details">
+          <div class="box-body">
+          	<div class="col-sm-6">
+              <h5 style="color: #7c4139;">整体完成情况</h5>
+              <div class="pull-left col-sm-6">
+                <div class="small-box bg-aqua-active">
+                  <div class="inner">
+                    <h3><sup style="font-size: 20px" id="yyGmv">载入中...</sup></h3>
+                    <p>商品类GMV</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-cny"></i>
+                  </div>
+                  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <div class="pull-left col-sm-6">
+                <div class="small-box bg-teal-active">
+                  <div class="inner">
+                    <h3><sup style="font-size: 20px" id="jwsGmv">载入中...</sup></h3>
+                    <p>服务类GMV</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-database"></i>
+                  </div>
+                  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV<span id="grouponGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class=""></i><span id=""></span></div>
+            </div>
+            <div class="col-sm-6">
+              <h5 style="color: #7c4139;">昨日完成情况</h5>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>合计GMV：<span id="yestodayTotalGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>商品类GMV：<span id="yestodayProductGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>服务类GMV：<span id="yestodayServiceGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV：<span id="yestodayGrouponGmv">载入中...</span></div>
+            </div>
+          </div>
+        </div>
+       <div class="box box-default">
+          <div class="box-body">
+          	<div class="col-sm-6 no-padding" id="main1" style="height: 350px;"></div>
+          	<div class="col-sm-6" id="main2" style="height: 350px;"></div>
+          </div>
+        </div>
+        <div class="box box-default">
+<!--           <div class="box-header h4 text-light-blue"> -->
+<!--         	<div class="col-sm-3"> -->
+<!--         		<input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/> -->
+<!--               	<input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" /> -->
+<!--               	<div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;"> -->
+<!--               </div> -->
+<!--             </div> -->
+<!--           </div> -->
+          <div class="box-body">
+            <div class="col-sm-6" style="height: 480px;">
+              <h4 class="text-red">【商品类】排名Top10 (截止到昨天)</h4>
+              <table class="table table-bordered">
+                <tbody id="product_data">
+	                <tr>
+	                  <th width="60%">产品名称</th>
+	                  <th width="30%">产品销量</th>
+	                  <th width="10%">排名</th>
+	                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6" style="height: 480px;">
+              <h4 class="text-light-blue">【服务类】排名Top10 (截止到昨天)</h4>
+              <table class="table table-bordered">
+                <tbody id="service_data">
+	                <tr>
+	                  <th width="60%">产品名称</th>
+	                  <th width="30%">产品销量</th>
+	                  <th width="10%">排名</th>
+	                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<script src="dist/js/lightslider.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<script src="plugins/gooey_menu/gooey.min.js"></script>
+<script type ="text/javascript">
+
+  Date.prototype.format = function() {  
+    var s = '';  
+    var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
+    var day = this.getDate()>=10?this.getDate():('0'+this.getDate());  
+    s += this.getFullYear() + '-'; // 获取年份。  
+    s += mouth + "-"; // 获取月份。  
+    s += day; // 获取日。  
+    return (s); // 返回日期。  
+  };
+  
+</script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>  
+  <script type ="text/javascript">
+  var myChart1 = echarts.init(document.getElementById('main1'));
+  var myChart2 = echarts.init(document.getElementById('main2'));
+
+  //221商品类服务类团购占比
+  option1 = {
+    title: [ {    	
+      text: '221商品类服务类团购占比（万元）',
+      left: 'center',
+      textStyle: {
+        color: '#666'
+      }
+    }],
+    tooltip: {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    series: [{
+      name: '产品占比',
+      type: 'pie',
+      radius: '80%',
+      center: ['50%', '50%'],
+      clockwise: false,
+      data: [
+        {value: 0,name: '商品类'}, 
+        {value: 0,name: '服务类'},
+        {value: 0,name: '团购'}
+      ],
+      label: {
+        normal: {
+          textStyle: {
+            color: '#fff',
+            fontSize: 14,
+          },
+          position: 'inner',
+          formatter: '{d}%',
+        }
+      },
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderWidth: 2,
+          borderColor: '#ffffff',
+        },
+        emphasis: {
+          borderWidth: 0,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }],
+    color: [
+      '#F08080',
+      '#FFC1C1',
+      '#FF6A6A'
+    ],
+  };
+
+  //非221事业群占比
+  var unBusiData = [];
+  option2 = {
+    title: [ {    	
+      text: '非221事业群占比（万元）',
+      left: 'center',
+      textStyle: {
+        color: '#666'
+      }
+    }],
+    tooltip: {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    series: [{
+      name: '产品占比',
+      type: 'pie',
+      radius: '80%',
+      center: ['50%', '50%'],
+      clockwise: false,
+      data: unBusiData,
+      label: {
+        normal: {
+          textStyle: {
+            color: '#fff',
+            fontSize: 14,
+          },
+          position: 'inner',
+          formatter: '{d}%',
+        }
+      },
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderWidth: 2,
+          borderColor: '#ffffff',
+        },
+        emphasis: {
+          borderWidth: 0,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }],
+    color: [
+      '#F08080',
+      '#FFC1C1',
+      '#FF6A6A',
+      '#FF82AB',
+      '#FF8247',
+      '#FF6EB4',
+      '#FA8072'
+    ],
+  };
+  
+  myChart1.setOption(option1);
+  myChart2.setOption(option2);
+</script>
+<script>
+
+	$(function(){
+		inintBusiGmvData();
+		initPercent();
+		initUnPercent();
+		inintYestodayGmvData();
+		showProductRanking();
+// 		initallstore();
+		
+// 		var autoComplete = new AutoComplete("store_name_manual","auto",array);
+// 	  	document.getElementById("store_name_manual").onkeyup = function(event){
+// 	  		autoComplete.start(event);
+// 	  		if($("#store_name_manual").val().trim() == ""){
+// 				$("#store_id_manual").val("");
+// 			}
+// 	  		for(var key in storeJson){
+// 	  			if(document.getElementById("store_name_manual").value==key){
+// 	  				document.getElementById("store_id_manual").value=storeJson[key];
+// 	  			}
+// 	  		}
+// 	  	}
+// 	  	$("#auto").on("click",function(event){
+// 			for(var key in storeJson){
+// 				if(document.getElementById("store_name_manual").value==key){
+// 					document.getElementById("store_id_manual").value=storeJson[key];
+// 				}
+// 			}
+// 			var storeNo = $("#store_id_manual").val(); 
+// 			showProductRanking(storeNo);
+// 		});
+	});
+    
+	
+	var totalGMV = '0';
+	var start_time = '2018-07-01';
+	var cur_date = new Date();
+	cur_date.setTime(cur_date.getTime()+24*60*60*1000);
+	var end_month = cur_date.getMonth()+1;
+	var end_date = cur_date.getDate();
+	var end_time = cur_date.getFullYear()+"-" + (end_month < 10 ? '0' + end_month : '' + end_month) + "-" + (end_date < 10 ? '0' + end_date : '' + end_date);
+	
+	cur_date.setTime(cur_date.getTime()-2*24*60*60*1000);
+	var yestoday_month = cur_date.getMonth()+1;
+	var yestoday_date = cur_date.getDate();
+	var yestoday_time = cur_date.getFullYear()+"-" + (yestoday_month < 10 ? '0' + yestoday_month : '' + yestoday_month) + "-" + (yestoday_date < 10 ? '0' + yestoday_date : '' + yestoday_date);
+	
+	var yyGMV = '0';
+	var yy_dept_id = "1";//优易+老年之家（养老餐）
+	var jwsGMV = '0';
+	var jws_dept_id = "2";//家务事
+	var grouponGMV = '0';
+	var groupon_dept_id = "3";
+	function inintBusiGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,null,start_time,end_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							yyGMV = jsonData.total_gmv;
+							$("#yyGmv").html(changeMoney(parseInt(yyGMV)));
+						}else{
+							$("#yyGmv").html('0');
+						}
+					}
+			},false);
+		  
+		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,null,start_time,end_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							jwsGMV = jsonData.total_gmv;
+							$("#jwsGmv").html(changeMoney(parseInt(jwsGMV)));
+						}else{
+							$("#jwsGmv").html('0');
+						}
+					}
+			},false);
+		  
+		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,null,start_time,end_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							grouponGMV = jsonData.total_gmv;
+							$("#grouponGmv").html(changeMoney(parseInt(grouponGMV)));
+						}else{
+							$("#grouponGmv").html('0');
+						}
+					}
+			},false);
+	}
+	
+// 	var productGmv = "0";
+// 	var serviceGmv = "0";
+	function initPercent(){
+		option1.series[0].data[0].value = (yyGMV/10000).toFixed(2);
+		option1.series[0].data[1].value = (jwsGMV/10000).toFixed(2);
+		option1.series[0].data[2].value = (grouponGMV/10000).toFixed(2);
+		myChart1.setOption(option1,true);
+	}
+	
+	function initUnPercent(){
+		doManager("strategyActivityManager","queryUnStrategyGMV",[start_time,end_time],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							unBusiData.push({'value':(element.total_gmv/10000).toFixed(2),"name":element.department_name});
+	                 	});
+						option2.series[0].data = unBusiData;
+						myChart2.setOption(option2,true);
+					}else{
+						unBusiData = [];
+						option2.series[0].data = unBusiData;
+						myChart2.setOption(option2,true);	
+					}
+				}
+		},false);
+	}
+	
+	var yestoday_yyGMV = '0';
+	function inintYestodayGmvData(){
+		  doManager("strategyActivityManager","queryStrategyGMV",[yy_dept_id,null,yestoday_time,yestoday_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							yestoday_yyGMV = jsonData.total_gmv;
+							$("#yestodayProductGmv").html(changeMoney(parseInt(yestoday_yyGMV)));
+						}else{
+							$("#yestodayProductGmv").html('0');
+						}
+					}
+			},false);
+		  
+		  doManager("strategyActivityManager","queryStrategyGMV",[jws_dept_id,null,yestoday_time,yestoday_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							yestoday_jwsGMV = jsonData.total_gmv;
+							$("#yestodayServiceGmv").html(changeMoney(parseInt(yestoday_jwsGMV)));
+						}else{
+							$("#yestodayServiceGmv").html('0');
+						}
+					}
+			},false);
+		  
+		  doManager("strategyActivityManager","queryStrategyGMV",[groupon_dept_id,null,yestoday_time,yestoday_time],
+				function(datax,textStatus,XmlHttpRequest){
+					if (datax.result) {
+						var jsonData = $.fromJSON(datax.data);
+						if(Object.keys(jsonData).length!=0){
+							yestoday_grouponGMV = jsonData.total_gmv;
+							$("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
+							$("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
+						}else{
+							$("#yestodayGrouponGmv").html('0');
+							$("#yestodayTotalGmv").html('0');
+						}
+					}
+			});
+	}
+
+	function showProductRanking(store_no){
+		doManager("strategyActivityManager","queryProductRanking",['product',store_no],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var productStr="";
+					var jsonData = $.fromJSON(data.data);
+					$("#product_data").find("tr:gt(0)").remove(); 
+					if(jsonData.length!=0){
+						for(var i=0;i<jsonData.length;i++){
+							productStr= "<tr>"
+			                   +"<td>"+jsonData[i].product_name+"</td>"
+			                   +"<td>"+jsonData[i].product_quantity+"</td>";
+		   			    	
+			                   switch(i)
+			                   {
+				                   case 0:
+				                	   productStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 1:
+				                	   productStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 2:
+				                	   productStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 3:
+				                	   productStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 4:
+				                	   productStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+				                     break;
+				                   default:
+				                	   productStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+			                   }
+			                   productStr += "</tr>";
+			                   $("#product_data").append(productStr); 
+	                 	}
+					}else{
+						productStr = "<tr>没有符合条件的数据</tr>";
+						$("#product_data").append(productStr); 
+					}
+				}
+		});
+	   	
+	   doManager("strategyActivityManager","queryProductRanking",['service',store_no],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var serviceStr="";
+					var jsonData = $.fromJSON(data.data);
+					$("#service_data").find("tr:gt(0)").remove(); 
+					if(jsonData.length!=0){
+						for(var i=0;i<jsonData.length;i++){
+							serviceStr= "<tr>"
+			                   +"<td>"+jsonData[i].product_name+"</td>"
+			                   +"<td>"+jsonData[i].product_quantity+"</td>";
+		   			    	
+			                   switch(i)
+			                   {
+				                   case 0:
+				                	   serviceStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 1:
+				                	   serviceStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 2:
+				                	   serviceStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 3:
+				                	   serviceStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
+				                     break;
+				                   case 4:
+				                	   serviceStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
+				                     break;
+				                   default:
+				                	   serviceStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
+			                   }
+			                   serviceStr += "</tr>";
+			                   $("#service_data").append(serviceStr); 
+	                 	}
+					}else{
+						serviceStr = "<tr>没有符合条件的数据</tr>";
+						$("#service_data").append(serviceStr); 
+					}
+				}
+		});
+	}
+	
+	function initGmvTrend(){
+	  gmvYData = new Array(gmvXData.length+1).join(0).split('');
+		doManager("strategyActivityManager","queryGmvTrend",null,
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var dateTemp = element.datetime;
+							var indexTemp = jQuery.inArray(dateTemp,gmvXData);
+							gmvYData[indexTemp]=(element.total_gmv/10000).toFixed(2);
+	                    });
+						option4.xAxis[0].data=gmvXData;
+						option4.series[0].data=gmvYData;
+						myChart4.setOption(option4);
+					}else{
+						gmvYData = [];
+						option4.series[0].data=gmvYData;
+						myChart4.setOption(option4);
+					}
+				}
+		});
+	}
+
+	var array=new Array();
+ 	//初始化所有门店 
+ 	function initallstore() {
+ 		doManager("strategyActivityManager","queryActivityScope", null,
+ 			function(data, textStatus, XMLHttpRequest) {
+ 				if (data.result) {
+ 					var jsonData = $.fromJSON(data.data);
+ 					array = new Array();
+ 					var storeString = "";
+ 					for(i=0;i<jsonData.length;i++){
+ 						array.push(jsonData[i].store_name);
+ 						if(i == 0){
+ 							storeString = "{'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+",";
+ 						}else if(i == jsonData.length-1){
+ 							storeString = storeString+"'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+"}";
+ 						}else{
+ 							storeString = storeString+"'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+",";
+ 						}
+ 					}
+ 					storeJson=$.fromJSON(storeString);
+ 					var autoComplete = new AutoComplete("store_name_manual","auto",array);
+					document.getElementById("store_name_manual").onkeyup = function(event){
+						autoComplete.start(event);
+						if($("#store_name_manual").val().trim() == ""){
+							$("#store_id_manual").val("");
+						}
+						document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+					}
+ 				}
+ 			}, false);
+ 	}
+	
+ 	function toIndex(){
+ 		window.location.href="221.html";
+ 	}
+ 	
+ 	function toStore(){
+ 		window.location.href="221_store.html";
+ 	}
+ 	
+  Date.prototype.toLocaleString = function() {
+      return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
+  }; 
+  
+  function changeMoney (x) {
+	    x=x/10000;
+	    var y = '';
+	    if(parseInt(x)/10000<=1){
+	    	y=ForDight(x,2)+"万";
+	    }else if(parseInt(x)/10000>1){
+	    	x=x/10000+'';
+	    	y=ForDight(x,2)+"亿";
+	    }
+	    return y;
+  }
+  function ForDight(str,How){  
+    Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
+    return Dight;  
+  }
+</script>
+</body>
+</html>
