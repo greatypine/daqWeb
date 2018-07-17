@@ -66,22 +66,22 @@
 		
         doManager('messageTypeManager','selectMessageTypeById',[id],function(data){
            if(data.result){
-               var messageType = JSON.parse(data.data);
-              
-               $("#name").val(messageType[0]["name"]);
-               $("#type").val(messageType[0]["code"]);
-               $("#remark").val(messageType[0]["remark"]);
-               for(var i=0;i<messageType.length;i++){
-            	   var $tbody = $('.table-striped').find('tbody');
-                   $tbody.append('<tr>' +
-                   	'<td><input id="actioncode" name="actionCode"  class="form-control" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,\'\')" value="'+messageType[i].actionCode+'"></input></td>'+
-                       '<td><input id="describe" name="describe" class="form-control" value="'+messageType[i].description+'"></input></td>' +
-                       '<td style="text-align: center"><img src="../images/minus_16px.png" onclick="imgClickDelete(this)"></td></tr>');
-            	   
+                    var messageType = JSON.parse(data.data);
+                    if(messageType!=null&&messageType.length>0){
+                       $("#name").val(messageType[0]["name"]);
+                       $("#type").val(messageType[0]["code"]);
+                       $("#remark").val(messageType[0]["remark"]);
+                       for(var i=0;i<messageType.length;i++){
+                           var $tbody = $('.table-striped').find('tbody');
+                           $tbody.append('<tr>' +
+                               '<td><input id="actioncode" name="actionCode"  class="form-control" onkeyup="this.value=this.value.replace(/[\u4e00-\u9fa5]/g,\'\')" value="'+messageType[i].actionCode+'"></input></td>'+
+                               '<td><input id="describe" name="describe" class="form-control" value="'+messageType[i].description+'"></input></td>' +
+                               '<td style="text-align: center"><img src="../images/minus_16px.png" onclick="imgClickDelete(this)"></td></tr>');
+
+                       }
+                   }
                }
-           }else{
-               $$.showMessage('提示',"撤销失败");
-           }
+
         });
  
 	})
@@ -135,8 +135,11 @@
                 	 if(data.result){
      	            	var acJson = JSON.parse(data.data);
      	            	if(acJson==null||acJson.length==0||(acJson!=null&&parseInt(acJson["id"])==id)){//不重复
-     	            		
-	     	       			doManager('messageActionManager','checkActionCodeIsRepeat',[type,actionCodeArray.join()],function(data){
+     	            	    var actionStr=null;
+     	            		if(actionCodeArray.length>0){
+                                actionStr = actionCodeArray.join();
+                            }
+	     	       			doManager('messageActionManager','checkActionCodeIsRepeat',[type,actionStr],function(data){
 	     	    	            if(data.result){
 	     	    	            	var acJson = JSON.parse(data.data);
 	     	    	            	if(acJson==null||acJson.length==0){//不重复
