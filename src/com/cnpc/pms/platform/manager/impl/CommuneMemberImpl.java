@@ -598,7 +598,22 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
                     allMonCounts.add(total);
                 }
 
-            }else{
+            }else{ 
+            	int m=0;
+            	for (int j = 0;j< dateMonCounts.size();j++) {
+            		int temp2=0;
+            		if(m<cmMonGrowList.size()) {
+                		if( cmMonGrowList.get(m).get("mondate").toString().contains(dateMonCounts.get(j).toString())) {
+               			 temp2 = Integer.parseInt(cmMonGrowList.get(m).get("newcount").toString());
+                            m++;
+                		}
+            		}
+
+            		 newMonCounts.add(temp2);
+                     total += temp2;
+                     allMonCounts.add(total);
+            		
+				}
                     //当中某天未增加社员
             }
         }
