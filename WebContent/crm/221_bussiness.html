@@ -57,7 +57,7 @@
     .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #f39c12;}
     .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #f39c12; margin: 5px 0; padding-left: 5px;}
     .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
-	
+
     .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
     .navimenu{min-height: 800px; padding-top: 0;}
     #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
@@ -112,8 +112,8 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
-         <li class="active"><a href="javascript:void(0);" data-toggle="tab">221整体</a></li>
-         <li><a href="javascript:void(0);" onclick="toBussiness()" data-toggle="tab">221业务</a></li>
+         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221整体</a></li>
+         <li class="active"><a href="javascript:void(0)">221业务</a></li>
          <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
        </ul>
       <div class="tab-content no-padding">
@@ -121,17 +121,13 @@
       <section>
         <div class="box box-default details">
           <div class="box-body">
-          	<div class="col-sm-12">
-          		<h4><b>211统计范围：<span>96店</span></b></h4>
-              	<small>产品范围：商品类+服装类+团购</small>
-          	</div>
           	<div class="col-sm-6">
               <h5 style="color: #7c4139;">整体完成情况</h5>
               <div class="pull-left col-sm-6">
                 <div class="small-box bg-aqua-active">
                   <div class="inner">
-                    <h3><sup style="font-size: 20px" id="totalGmv">载入中...</sup></h3>
-                    <p>累计GMV</p>
+                    <h3><sup style="font-size: 20px" id="yyGmv">载入中...</sup></h3>
+                    <p>商品类GMV</p>
                   </div>
                   <div class="icon">
                     <i class="fa fa-cny"></i>
@@ -142,8 +138,8 @@
               <div class="pull-left col-sm-6">
                 <div class="small-box bg-teal-active">
                   <div class="inner">
-                    <h3><sup style="font-size: 20px" id="avgGmv">载入中...</sup></h3>
-                    <p>店均GMV</p>
+                    <h3><sup style="font-size: 20px" id="jwsGmv">载入中...</sup></h3>
+                    <p>服务类GMV</p>
                   </div>
                   <div class="icon">
                     <i class="fa fa-database"></i>
@@ -151,19 +147,9 @@
 <!--                   <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
                 </div>
               </div>
-<!--               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>累计GMV<span id="totalGmv">载入中...</span></div> -->
-<!--               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-users"></i>累计社员<span id="memberNum">载入中...</span></div> -->
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV<span id="grouponGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class=""></i><span id=""></span></div>
             </div>
-<!--             <div class="col-sm-6 lightslider"> -->
-<!--               <div class="demo"> -->
-<!--                 <div class="item"> -->
-<!--                   <div class="clearfix" style="max-width:474px;"> -->
-<!--                     <ul id="image-gallery" class="gallery list-unstyled cS-hidden"> -->
-<!--                     </ul> -->
-<!--                   </div> -->
-<!--                 </div> -->
-<!--               </div> -->
-<!--             </div> -->
             <div class="col-sm-6">
               <h5 style="color: #7c4139;">昨日完成情况</h5>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>总GMV：<span id="yestodayTotalGmv">载入中...</span></div>
@@ -175,58 +161,44 @@
         </div>
        <div class="box box-default">
           <div class="box-body">
-          	<div class="col-sm-6 no-padding" id="main5" style="height: 350px;"></div>
           	<div class="col-sm-6 no-padding" id="main1" style="height: 350px;"></div>
+          	<div class="col-sm-6" id="main2" style="height: 350px;"></div>
           </div>
         </div>
-<!--        <div class="box box-default"> -->
-<!--           <div class="box-body"> -->
-<!--           	<div class="col-sm-12 no-padding" id="main4" style="height: 350px;"></div> -->
+        <div class="box box-default">
+<!--           <div class="box-header h4 text-light-blue"> -->
+<!--         	<div class="col-sm-3"> -->
+<!--         		<input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/> -->
+<!--               	<input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" /> -->
+<!--               	<div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;"> -->
+<!--               </div> -->
+<!--             </div> -->
 <!--           </div> -->
-<!--         </div> -->
-        <div class="box box-default">
           <div class="box-body">
-            <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-red">【商品类】门店排名Top10</h4>
+            <div class="col-sm-6" style="height: 480px;">
+              <h4 class="text-red">【商品类】排名Top10 (截止到昨天)</h4>
               <table class="table table-bordered">
-                <tbody id="yyPro_data">
+                <tbody id="product_data">
 	                <tr>
-	                  <th>门店名称</th>
-	                  <th>GMV</th>
-	                  <th>占比</th>
+	                  <th width="60%">产品名称</th>
+	                  <th width="30%">产品销量</th>
+	                  <th width="10%">排名</th>
 	                </tr>
                 </tbody>
               </table>
             </div>
-            <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-light-blue">【服务类】门店排名Top10</h4>
+            <div class="col-sm-6" style="height: 480px;">
+              <h4 class="text-light-blue">【服务类】排名Top10 (截止到昨天)</h4>
               <table class="table table-bordered">
-                <tbody id="jwsPro_data">
+                <tbody id="service_data">
 	                <tr>
-	                  <th>门店名称</th>
-	                  <th>GMV</th>
-	                  <th>占比</th>
+	                  <th width="60%">产品名称</th>
+	                  <th width="30%">产品销量</th>
+	                  <th width="10%">排名</th>
 	                </tr>
                 </tbody>
               </table>
             </div>
-          </div>
-        </div>
-        <div class="box box-default">
-          <div class="box-body">
-          	<div class="col-sm-12" style="height: 460px;">
-              <h4 class="text-red">【团购类】门店排名Top10</h4>
-              <table class="table table-bordered">
-                <tbody id="grouponPro_data">
-	                <tr>
-	                  <th>门店名称</th>
-	                  <th>GMV</th>
-	                  <th>占比</th>
-	                </tr>
-                </tbody>
-              </table>
-            </div>
-<!--             <div class="col-sm-6" id="main1" style="height: 450px;"></div> -->
           </div>
         </div>
       </section>
@@ -281,93 +253,138 @@
 <script src="dist/js/echarts.common.min.js"></script>  
   <script type ="text/javascript">
   var myChart1 = echarts.init(document.getElementById('main1'));
+  var myChart2 = echarts.init(document.getElementById('main2'));
 
-  //社员人数
-  var memberXData = [];
-  var memberYData = [];
+  //221商品类服务类团购占比
   option1 = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { // 坐标轴指示器，坐标轴触发有效
-        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+    title: [ {    	
+      text: '221商品类服务类团购占比（万元）',
+      left: 'center',
+      textStyle: {
+        color: '#666'
       }
-    },
-    legend: {
-      data: ['社员7日增长数'],
-      right:0,
-      textStyle: {color: '#404a59'}
-    },
-    grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
-      containLabel: true
-    },
-    xAxis: [{
-      type: 'category',
-      data: memberXData,
-      axisLabel:{
-        textStyle:{color:'#404a59',}
-      },
-      axisLine:{
-        lineStyle:{color:'#404a59',}
-      },
     }],
-    yAxis: [{
-      type: 'value',
-      axisLabel: {
-        formatter: '{value}',
-        textStyle:{color:'#404a59',}
-      },
-      axisLine:{
-        lineStyle:{color:'#404a59',}
-      },
-    },{
-      type: 'value',
-      axisLabel: {
-        formatter: '{value}',
-        textStyle:{color:'#404a59',}
-      },
-      axisLine:{
-        lineStyle:{color:'#404a59',}
-      },
-      position: 'right',
-    }],
+    tooltip: {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
     series: [{
-      name: '社员7日增长数',
-      type: 'bar',
-      itemStyle:{normal:{color:'#ffae00'},},
-      data: memberYData,
+      name: '产品占比',
+      type: 'pie',
+      radius: '80%',
+      center: ['50%', '50%'],
+      clockwise: false,
+      data: [
+        {value: 0,name: '商品类'}, 
+        {value: 0,name: '服务类'},
+        {value: 0,name: '团购'}
+      ],
       label: {
         normal: {
-          show:true,
-          position: 'top',
-          textStyle:{
-            color:'#ffae00',
+          textStyle: {
+            color: '#fff',
+            fontSize: 14,
           },
+          position: 'inner',
+          formatter: '{d}%',
+        }
+      },
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderWidth: 2,
+          borderColor: '#ffffff',
         },
         emphasis: {
-          textStyle:{
-            color:'#ffae00',
-          },
-        },
-      },
-    }]
+          borderWidth: 0,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }],
+    color: [
+      '#F08080',
+      '#FFC1C1',
+      '#FF6A6A'
+    ],
   };
 
+  //非221事业群占比
+  var unBusiData = [];
+  option2 = {
+    title: [ {    	
+      text: '非221事业群占比（万元）',
+      left: 'center',
+      textStyle: {
+        color: '#666'
+      }
+    }],
+    tooltip: {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    series: [{
+      name: '产品占比',
+      type: 'pie',
+      radius: '80%',
+      center: ['50%', '50%'],
+      clockwise: false,
+      data: unBusiData,
+      label: {
+        normal: {
+          textStyle: {
+            color: '#fff',
+            fontSize: 14,
+          },
+          position: 'inner',
+          formatter: '{d}%',
+        }
+      },
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderWidth: 2,
+          borderColor: '#ffffff',
+        },
+        emphasis: {
+          borderWidth: 0,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }],
+    color: [
+      '#F08080',
+      '#FFC1C1',
+      '#FF6A6A',
+      '#FF82AB',
+      '#FF8247',
+      '#FF6EB4',
+      '#FA8072'
+    ],
+  };
+  
   myChart1.setOption(option1);
+  myChart2.setOption(option2);
 </script>
 <script>
 
 	$(function(){
-		gmvXData = initgmvXData();
-		inintTotalGmvData();
+		inintBusiGmvData();
+		initPercent();
+		initUnPercent();
 		inintYestodayGmvData();
-		doTypeGMV();
-		initMemberTrend();
-// 		inintMemberData();
-		showStoreRanking();
-		
+		showProductRanking();
 	});
     
 	
@@ -384,30 +401,13 @@
 	var yestoday_date = cur_date.getDate();
 	var yestoday_time = cur_date.getFullYear()+"-" + (yestoday_month < 10 ? '0' + yestoday_month : '' + yestoday_month) + "-" + (yestoday_date < 10 ? '0' + yestoday_date : '' + yestoday_date);
 	
-	var newMemberNum = '0';
-	var totalMembernum = '0';
-// 	function inintMemberData(){
-// 		  doManager("strategyActivityManager","queryNewMember",[null,start_time,end_time],
-// 				function(datax,textStatus,XmlHttpRequest){
-// 					if (datax.result) {
-// 						var jsonData = $.fromJSON(datax.data);
-// 						if(Object.keys(jsonData).length!=0){
-// 							newMemberNum = jsonData.membernum;
-// 							$("#memberNum").html(parseFloat(newMemberNum).toLocaleString()+"人");
-// 						}else{
-// 							$("#memberNum").html('0');
-// 						}
-// 					}
-// 			});
-// 	}
-	
 	var yyGMV = '0';
 	var yy_dept_id = "1";//优易+老年之家（养老餐）
 	var jwsGMV = '0';
 	var jws_dept_id = "2";//家务事
 	var grouponGMV = '0';
 	var groupon_dept_id = "3";
-	function inintTotalGmvData(){
+	function inintBusiGmvData(){
 		  doManager("strategyActivityManager","queryStrategyGMV",[start_time,end_time],
 				function(datax,textStatus,XmlHttpRequest){
 					if (datax.result) {
@@ -418,12 +418,37 @@
 							jwsGMV = jsonData.ser_total_gmv;
 							$("#jwsGmv").html(changeMoney(parseInt(jwsGMV)));
 							grouponGMV = jsonData.gro_total_gmv;
-							
+							$("#grouponGmv").html(changeMoney(parseInt(grouponGMV)));
 						}
 					}
 			},false);
-		 $("#totalGmv").html(changeMoney(parseInt(yyGMV)+parseInt(jwsGMV)+parseInt(grouponGMV)));
-		 $("#avgGmv").html(changeMoney(((parseInt(yyGMV)+parseInt(jwsGMV)+parseInt(grouponGMV))/96).toFixed(2)));
+	}
+	
+	function initPercent(){
+		option1.series[0].data[0].value = (yyGMV/10000).toFixed(2);
+		option1.series[0].data[1].value = (jwsGMV/10000).toFixed(2);
+		option1.series[0].data[2].value = (grouponGMV/10000).toFixed(2);
+		myChart1.setOption(option1,true);
+	}
+	
+	function initUnPercent(){
+		doManager("strategyActivityManager","queryUnStrategyGMV",[start_time,end_time],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							unBusiData.push({'value':(element.total_gmv/10000).toFixed(2),"name":element.department_name});
+	                 	});
+						option2.series[0].data = unBusiData;
+						myChart2.setOption(option2,true);
+					}else{
+						unBusiData = [];
+						option2.series[0].data = unBusiData;
+						myChart2.setOption(option2,true);	
+					}
+				}
+		});
 	}
 	
 	var yestoday_yyGMV = '0';
@@ -438,308 +463,164 @@
 							yestoday_jwsGMV = jsonData.ser_total_gmv;
 							$("#yestodayServiceGmv").html(changeMoney(parseInt(yestoday_jwsGMV)));
 							yestoday_grouponGMV = jsonData.gro_total_gmv;
+							$("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
 						}
 					}
 			},false);
-		  $("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
 		  $("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
 		  
 	}
-	
-	var productGmv = "0";
-	var serviceGmv = "0";
-	
-	function showStoreRanking(){
-		var yyStr="";
-		doManager("strategyActivityManager","queryStoreRanking",[yy_dept_id],
+
+	function showProductRanking(store_no){
+		doManager("strategyActivityManager","queryProductRanking",['product',store_no],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
+					var productStr="";
 					var jsonData = $.fromJSON(data.data);
+					$("#product_data").find("tr:gt(0)").remove(); 
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
-							yyStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
-			                   
-								var rate = 0;
-		   			    		if(yyGMV!=0){
-		   			    			rate = (jsonData[i].ordergmv/yyGMV) * 100;
-		   			    		}
+							productStr= "<tr>"
+			                   +"<td>"+jsonData[i].product_name+"</td>"
+			                   +"<td>"+jsonData[i].product_quantity+"</td>";
 		   			    	
 			                   switch(i)
 			                   {
 				                   case 0:
-				                	 yyStr += "<td><span class='badge bg-red'>"+rate.toFixed(2)+"%</span></td>";
+				                	   productStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 1:
-				                	   yyStr += "<td><span class='badge bg-yellow'>"+rate.toFixed(2)+"%</span></td>";
+				                	   productStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 2:
-				                	   yyStr += "<td><span class='badge bg-blue'>"+rate.toFixed(2)+"%</span></td>";
+				                	   productStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 3:
-				                	   yyStr += "<td><span class='badge bg-green'>"+rate.toFixed(2)+"%</span></td>";
+				                	   productStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 4:
-				                	   yyStr += "<td><span class='badge bg-purple'>"+rate.toFixed(2)+"%</span></td>";
+				                	   productStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
 				                     break;
 				                   default:
-				                	   yyStr += "<td><span class='badge bg-brown'>"+rate.toFixed(2)+"%</span></td>";
+				                	   productStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
 			                   }
-			                   yyStr += "</tr>";
-			                   $("#yyPro_data").append(yyStr); 
+			                   productStr += "</tr>";
+			                   $("#product_data").append(productStr); 
 	                 	}
 					}else{
-						yyStr = "<tr>没有符合条件的数据</tr>";
-						$("#yyPro_data").append(yyStr); 
-					}
-				}
-		});
-		
-	   var jwsStr="";
-	   doManager("strategyActivityManager","queryStoreRanking",[jws_dept_id],
-			function(data,textStatus,XmlHttpRequest){
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					if(jsonData.length!=0){
-						for(var i=0;i<jsonData.length;i++){
-							jwsStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
-			                   
-								var rate = 0;
-		   			    		if(jwsGMV!=0){
-		   			    			rate = (jsonData[i].ordergmv/jwsGMV) * 100;
-		   			    		}
-		   			    	
-			                   switch(i)
-			                   {
-				                   case 0:
-				                	   jwsStr += "<td><span class='badge bg-red'>"+rate.toFixed(2)+"%</span></td>";
-				                     break;
-				                   case 1:
-				                	   jwsStr += "<td><span class='badge bg-yellow'>"+rate.toFixed(2)+"%</span></td>";
-				                     break;
-				                   case 2:
-				                	   jwsStr += "<td><span class='badge bg-blue'>"+rate.toFixed(2)+"%</span></td>";
-				                     break;
-				                   case 3:
-				                	   jwsStr += "<td><span class='badge bg-green'>"+rate.toFixed(2)+"%</span></td>";
-				                     break;
-				                   case 4:
-				                	   jwsStr += "<td><span class='badge bg-purple'>"+rate.toFixed(2)+"%</span></td>";
-				                     break;
-				                   default:
-				                	   jwsStr += "<td><span class='badge bg-brown'>"+rate.toFixed(2)+"%</span></td>";
-			                   }
-			                   jwsStr += "</tr>";
-			                   $("#jwsPro_data").append(jwsStr); 
-	                 	}
-					}else{
-						jwsStr = "<tr>没有符合条件的数据</tr>";
-						$("#jwsPro_data").append(jwsStr); 
+						productStr = "<tr>没有符合条件的数据</tr>";
+						$("#product_data").append(productStr); 
 					}
 				}
 		});
 	   	
-	   var grouponStr="";
-	   doManager("strategyActivityManager","queryStoreRanking",[groupon_dept_id],
+	   doManager("strategyActivityManager","queryProductRanking",['service',store_no],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
+					var serviceStr="";
 					var jsonData = $.fromJSON(data.data);
+					$("#service_data").find("tr:gt(0)").remove(); 
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
-							grouponStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
-			                   
-								var rate = 0;
-		   			    		if(grouponGMV!=0){
-		   			    			rate = (jsonData[i].ordergmv/grouponGMV) * 100;
-		   			    		}
+							serviceStr= "<tr>"
+			                   +"<td>"+jsonData[i].product_name+"</td>"
+			                   +"<td>"+jsonData[i].product_quantity+"</td>";
 		   			    	
 			                   switch(i)
 			                   {
 				                   case 0:
-				                	   grouponStr += "<td><span class='badge bg-red'>"+rate.toFixed(2)+"%</span></td>";
+				                	   serviceStr += "<td><span class='badge bg-red'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 1:
-				                	   grouponStr += "<td><span class='badge bg-yellow'>"+rate.toFixed(2)+"%</span></td>";
+				                	   serviceStr += "<td><span class='badge bg-yellow'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 2:
-				                	   grouponStr += "<td><span class='badge bg-blue'>"+rate.toFixed(2)+"%</span></td>";
+				                	   serviceStr += "<td><span class='badge bg-blue'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 3:
-				                	   grouponStr += "<td><span class='badge bg-green'>"+rate.toFixed(2)+"%</span></td>";
+				                	   serviceStr += "<td><span class='badge bg-green'>"+(i+1)+"</span></td>";
 				                     break;
 				                   case 4:
-				                	   grouponStr += "<td><span class='badge bg-purple'>"+rate.toFixed(2)+"%</span></td>";
+				                	   serviceStr += "<td><span class='badge bg-purple'>"+(i+1)+"</span></td>";
 				                     break;
 				                   default:
-				                	   grouponStr += "<td><span class='badge bg-brown'>"+rate.toFixed(2)+"%</span></td>";
+				                	   serviceStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
 			                   }
-			                   grouponStr += "</tr>";
-			                   $("#grouponPro_data").append(grouponStr); 
+			                   serviceStr += "</tr>";
+			                   $("#service_data").append(serviceStr); 
 	                 	}
 					}else{
-						grouponStr = "<tr>没有符合条件的数据</tr>";
-						$("#grouponPro_data").append(grouponStr); 
+						serviceStr = "<tr>没有符合条件的数据</tr>";
+						$("#service_data").append(serviceStr); 
 					}
 				}
 		});
 	}
 	
-	function initMemberTrend(){
-	  doManager("strategyActivityManager","queryMemberTrend",null,
+	function initGmvTrend(){
+	  gmvYData = new Array(gmvXData.length+1).join(0).split('');
+		doManager("strategyActivityManager","queryGmvTrend",null,
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
 					if(jsonData.length!=0){
 						$(jsonData).each(function(index,element){
-							memberXData[index]=element.datetime;
-							memberYData[index]=element.membernum;
-	                 	});
-						option1.series[0].data = memberYData;
-						myChart1.setOption(option1,true);
+							var dateTemp = element.datetime;
+							var indexTemp = jQuery.inArray(dateTemp,gmvXData);
+							gmvYData[indexTemp]=(element.total_gmv/10000).toFixed(2);
+	                    });
+						option4.xAxis[0].data=gmvXData;
+						option4.series[0].data=gmvYData;
+						myChart4.setOption(option4);
 					}else{
-						memberYData = [];
-						option1.series[0].data = memberYData;
-						myChart1.setOption(option1,true);	
+						gmvYData = [];
+						option4.series[0].data=gmvYData;
+						myChart4.setOption(option4);
 					}
 				}
 		});
-    }
-	
-	function doTypeGMV(){
-	    doManager('strategyActivityManager','queryTypeGmv',null,function(data){
-	        if(data.result){
-	        	var resultJson= JSON.parse(data.data);
-	        	showGMV(resultJson);
-	        }
-	    },false);
 	}
-	function showGMV(dataServer){
-		var myChart5 = echarts.init(document.getElementById('main5'));
-	    var option5 = {
-    		  	title: {
-    			  text: "近7日GMV走势（万元）",
-    			  left: "10",
-    			  y: "10",
-    			  textStyle: {
-    				  color: "#666"
-    			  }
-    		  	},
-    		  	color: "#BF3EFF",
-	    		tooltip : {
-	    	        trigger: 'axis',
-	    	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-	    	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-	    	        }
-	    	    },
-	    	    legend: {
-	    	        data:['商品','服务','团购']
-	    	    },
-	    	    calculable : true,
-	    	    xAxis : [
-	    	        {
-	    	            type : 'category',
-	    	            data : dataServer.jsonDateMem
 
-	    	        }
-	    	    ],
-	    	    yAxis : [
-	    	        {
-	    	            type : 'value'
-	    	        }
-	    	    ],
-	    	    series : [
-	    	       
-	    	        {
-	    	            name:'商品',
-	    	            type:'bar',
-	    	            stack: 'type',
-	    	            color:'#8BC8F3',
-	    	           itemStyle: {
-	    	              normal: {
-	    	            	color: '#8BC8F3',
-	    	                label : {
-	    	                  show: true, position: 'inside'
-	    	                }
-	    	              }
-	    	            },
-	    	            data:dataServer.jsonproductCounts
-	    	        },
-	    	        {
-	    	            name:'服务',
-	    	            type:'bar',
-	    	            stack: 'type',
-	    	            itemStyle: {
-	    	              normal: {
-	    	            	color: '#B6A2DE',
-	    	                label : {
-	    	                  show: true, position: 'inside'
-	    	                }
-	    	              }
-	    	            },
-	    	            data:dataServer.jsonserviceCounts
-	    	        },
-	    	        {
-	    	            name:'团购',
-	    	            type:'bar',
-	    	            stack: 'type',
-	    	             itemStyle: {
-	    	              normal: {
-	    	                color: '#FFB980',
-	    	                label : {
-	    	                  show: true, position: 'inside'
-	    	                }
-	    	              }
-	    	            },
-	    	            data:dataServer.jsonfroupCounts
-	    	        }
-	    	    ]
-	    };
-	    
-	    myChart5.setOption(option5);
-	    }
+	var array=new Array();
+ 	//初始化所有门店 
+ 	function initallstore() {
+ 		doManager("strategyActivityManager","queryActivityScope", null,
+ 			function(data, textStatus, XMLHttpRequest) {
+ 				if (data.result) {
+ 					var jsonData = $.fromJSON(data.data);
+ 					array = new Array();
+ 					var storeString = "";
+ 					for(i=0;i<jsonData.length;i++){
+ 						array.push(jsonData[i].store_name);
+ 						if(i == 0){
+ 							storeString = "{'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+",";
+ 						}else if(i == jsonData.length-1){
+ 							storeString = storeString+"'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+"}";
+ 						}else{
+ 							storeString = storeString+"'"+jsonData[i].store_name+"'"+":"+"'"+jsonData[i].store_no+"'"+",";
+ 						}
+ 					}
+ 					storeJson=$.fromJSON(storeString);
+ 					var autoComplete = new AutoComplete("store_name_manual","auto",array);
+					document.getElementById("store_name_manual").onkeyup = function(event){
+						autoComplete.start(event);
+						if($("#store_name_manual").val().trim() == ""){
+							$("#store_id_manual").val("");
+						}
+						document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+					}
+ 				}
+ 			});
+ 	}
 	
-	function toBussiness(){
- 		window.location.href="221_bussiness.html";
+ 	function toIndex(){
+ 		window.location.href="221.html";
  	}
  	
  	function toStore(){
  		window.location.href="221_store.html";
  	}
-	
-	function initgmvXData() {
-      var data = [];
-      var day1 = new Date();
-      day1.setTime(day1.getTime()-6*24*60*60*1000);
-      var fistDay = day1.getFullYear()+"-" + (day1.getMonth()+1) + "-" + day1.getDate();
-      var now = new Date();
-      var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
-      data = getAllDate(fistDay,curDay);
-      return data;
-    }
-	
-  //获取当年所有的日期
-  function getAllDate(begin, end) {  
-	  var result = [];
-      var ab = begin.split("-");  
-      var ae = end.split("-");  
-      var db = new Date();  
-      db.setUTCFullYear(ab[0], ab[1] - 1, ab[2]);  
-      var de = new Date();  
-      de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);  
-      var unixDb = db.getTime();  
-      var unixDe = de.getTime();  
-      for (var k = unixDb; k <= unixDe;) {  
-          result.push((new Date(parseInt(k))).format());
-          k = k + 24 * 60 * 60 * 1000;  
-      }  
-      return result;
-  } 
-
+ 	
   Date.prototype.toLocaleString = function() {
       return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
   }; 

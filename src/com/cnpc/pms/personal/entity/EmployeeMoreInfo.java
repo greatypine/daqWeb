@@ -22,7 +22,10 @@ public class EmployeeMoreInfo extends DataEntity{
 	
 	@Column(name="workingAge_year")
 	private Integer workingAge_year;//工龄 按年
-	
+
+	@Column(name="workingAge_year_precise")
+	private String workingAge_year_precise;//工龄 例如 一年以上，两年以上
+
 	@Column(name="workingAge_month")
 	private Integer workingAge_month;//工龄 按月
 	
@@ -126,7 +129,12 @@ public class EmployeeMoreInfo extends DataEntity{
 	public void setJoinTime(Date joinTime) {
 		this.joinTime = joinTime;
 	}
-	
-	
-	
+
+	public String getWorkingAge_year_precise() {
+		return workingAge_year_precise;
+	}
+
+	public void setWorkingAge_year_precise(String workingAge_year_precise) {
+		this.workingAge_year_precise = workingAge_year_precise;
+	}
 }

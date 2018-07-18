@@ -38,4 +38,12 @@ public interface EmployeeMoreInfoDao extends IDAO {
 
     public void updateEmployeeWorkingAge(String employeeNo,Integer year,Integer month,Integer day);
 
+    /**
+     * @Description
+     * @author gbl
+     * @date 2018/7/13 9:46
+     **/
+
+    public List<Map<String,Object>> queryEmployeeMoveDistance(String employeeNo);
+
 }

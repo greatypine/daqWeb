@@ -566,7 +566,9 @@ Date.prototype.format=function(fmt) {
     	$("#city_name_manualOrder").val("");
     	$("#city_id_autoOrder").val("");
     	$("#city_name_autoOrder").val("");
-    	
+
+        initStore();
+
     }else if(target==3){//事业群级别
     	$("#manualcity").show();
     	$("#autocity").show();
@@ -647,7 +649,18 @@ Date.prototype.format=function(fmt) {
 		
 		
 	}
-	
+
+
+var currentStore;
+function initStore(){
+    doManager("StoreManager", "findStoreByStoreNo",[storeno],
+        function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var store = JSON.parse(data.data);
+                currentStore = store;
+            }
+        },false);
+}
 	
 	//通过
 	function orderApprovePass(t){
@@ -1065,7 +1078,7 @@ Date.prototype.format=function(fmt) {
 	 				abnortype:type,
 	 				status:status,
 	 		  		target:target,
-	 		  		storeno:storeno,
+	 		  		storeno:currentStore.platformid,
 	 		  		datatype:"can_appeal",
 	 		  		cityname:"",
 	 		  		dept:dept,
@@ -1207,7 +1220,7 @@ Date.prototype.format=function(fmt) {
 	 				abnortype:type,
 	 				status:status,
 	 		  		target:target,
-	 		  		storeno:storeno,
+	 		  		storeno:currentStore.platformid,
 	 		  		datatype:"can_appeal",
 	 		  		cityname:"",
 	 		  		dept:dept,
@@ -1419,7 +1432,7 @@ Date.prototype.format=function(fmt) {
 	 				abnortype:"",
 	 				status:status,
 	 		  		target:target,
-	 		  		storeno:storeno,
+	 		  		storeno:currentStore.platformid,
 	 		  		datatype:"cannot_appeal",
 	 		  		cityname:"",
 	 		  		dept:dept,
@@ -1552,7 +1565,7 @@ Date.prototype.format=function(fmt) {
 	 				abnortype:type,
 	 				status:status,
 	 		  		target:target,
-	 		  		storeno:storeno,
+	 		  		storeno:currentStore.platformid,
 	 		  		datatype:"cannot_appeal",
 	 		  		cityname:"",
 	 		  		dept:dept,
