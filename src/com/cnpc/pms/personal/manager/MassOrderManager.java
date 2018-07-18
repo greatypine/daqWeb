@@ -72,4 +72,11 @@ public interface MassOrderManager extends IManager {
 	 */
 	public Map<String, Object> queryEmployeeBySN(String order_sn,String beginDate);
 	
+	/**
+	 * 根据ID查询E店合同信息
+	 * @param contract_id
+	 * @return
+	 */
+	public Map<String, Object> queryContractById(String contract_id);
+	
 }

@@ -176,6 +176,17 @@
                 </div>
                 <div class="fold-con">
                 <div class="selectorLine clearfix">
+                  <div class="pull-left search-title">221标签：</div>
+                  <div class="search-con">
+                    <div class="sl-v-list-busi">
+                      <a onclick="busiSelection('商品类')" style="cursor:pointer;">商品类</a>
+                      <a onclick="busiSelection('服务类')" style="cursor:pointer;">服务类</a>
+                      <a onclick="busiSelection('团购')" style="cursor:pointer;">团购</a>
+                      <input type="text" style="display:none" class="form-control" placeholder="订单标签"  id="busi_private_manual"/>
+                    </div>
+                  </div>
+                 </div>
+                <div class="selectorLine clearfix">
 	                  <div class="pull-left search-title">订单标签：</div>
 	                  <div class="search-con">
 	                    <div class="sl-v-list-label">
@@ -316,6 +327,7 @@
                   <td width="10%" id="time_sort">签收时间 <i class="fa fa-angle-up" id="time_sort_label"></i></td>
                   <td width="9%">业务信息</td>
                   <td width="10%">人员信息</td>
+<!--                   <td width="9%">利润（元）</td> -->
                   <td width="10%">订单标签</td>
                 </tr>
                 </tbody>
@@ -405,6 +417,7 @@ Date.prototype.format=function(fmt) {
  	var cityId = decode64(getUrlParamByKey("c"));//城市ID
  	var initCity = cityId;
 	var employeeId = decode64(getUrlParamByKey("e"));//员工ID
+	var employeeNo = decode64(getUrlParamByKey("eo"));//员工no
 	var storeId = decode64(getUrlParamByKey("s"));//门店ID
 	var storeNo = decode64(getUrlParamByKey("so"));//门店no
 	var target = decode64(getUrlParamByKey("t"));//执行人级别 
@@ -481,12 +494,20 @@ Date.prototype.format=function(fmt) {
 	$("#dept_private_manual").val(deptname);
 	$("#channel_manual").val(channelname);
 	if(time!=null){
+		time="2018/07/02-2018/05/03";
+		redirectTag="employee";
+		employeeNo="AHHDGH348";
 		if(redirectTag=='day'){
 			$('#auto_date').data('daterangepicker').setStartDate(time);
 			$('#auto_date').data('daterangepicker').setEndDate(time);
 		}else if(redirectTag=='scatterplot'){
 			$('#auto_date').data('daterangepicker').setStartDate(time+"-01");
 			$('#auto_date').data('daterangepicker').setEndDate(time+"-"+getLastDay(time.split('-')[0],time.split('-')[1]));
+		}else if(redirectTag=='employee'){
+			$('#auto_date').data('daterangepicker').setStartDate(time.split('-')[0]);
+			$('#auto_date').data('daterangepicker').setEndDate(time.split('-')[1]);
+			$('#employee_a_no').val(employeeNo);
+			$('#employee_a_no_a').val(employeeNo);
 		}
 	}
     
@@ -575,7 +596,7 @@ Date.prototype.format=function(fmt) {
       
       $(".sl-v-list-label a").click(function(){
     	  var screen = $(this).text();
-          var filter = $("<a href='#' class='condition'><span>" + screen + "</span><i class='fa fa-times'></i></a>");
+          var filter = $("<a href='javascript:;' class='condition'><span>" + screen + "</span><i class='fa fa-times'></i></a>");
           var ui =document.getElementById("clear_all");
 
           if($(this).hasClass('bg-orange-active')){
@@ -632,13 +653,72 @@ Date.prototype.format=function(fmt) {
 
         });
 
+      $(".sl-v-list-busi a").click(function(){
+    	  var screen = $(this).text();
+          var filter = $("<a style='cursor:pointer;' class='condition'><span>" + screen + "</span><i class='fa fa-times'></i></a>");
+          var ui =document.getElementById("clear_all");
+          
+          if($(this).hasClass('bg-orange-active')){
+            $(".breadcrumb .search-con").append();
+            $(this).removeClass('bg-orange-active');
+            
+            $(".breadcrumb .search-con").find('a').each(function(){
+              var selectedcareer_group = $(this);
+              if(selectedcareer_group.text()==screen){
+                   selectedcareer_group.remove();
+              }
+            });
+            
+            var curValue = $(this).text();
+          	var name = curValue.substring(0,curValue.length)+",";
+    		var busiName = $("#busi_private_manual").val();
+    		$("#busi_private_manual").val(busiName.replace(name,""));
+
+            var selectObj = $(".breadcrumb .search-con").find('a');
+
+            if(selectObj.length==1){
+              $(".all").addClass("bg-orange-active");
+              ui.style.display="none";
+            }else{
+              ui.style.display="";
+            }
+          }else {
+            $(this).addClass("bg-orange-active");
+            $(".breadcrumb .search-con").append(filter);
+            $(".all").removeClass("bg-orange-active");
+            ui.style.display="";
+          }
+
+          var obj=$(this);
+          filter.on("click",function(){
+            obj.removeClass("bg-orange-active");
+            filter.remove();
+            var curValue = $(this).text();
+          	var name = curValue.substring(0,curValue.length)+",";
+    		var deptName = $("#busi_private_manual").val();
+    		$("#busi_private_manual").val(deptName.replace(name,""));
+
+            var aobj = $(".breadcrumb .search-con a");
+            if(aobj.length==1){
+              $(".all").addClass("bg-orange-active");
+              ui.style.display="none";
+            }else{
+              ui.style.display="";
+            }
+
+          });
+
+      });
+      
       	//清空所有条件
         $(".breadcrumb .pull-right").click(function(){
       	  $("#label_private_manual").val("");
       	  $("#dept_private_manual").val("");
+      	  $("#busi_private_manual").val("");
           $(".breadcrumb .search-con .condition").remove();
           $(".sl-v-list a").removeClass("bg-orange-active");
           $(".sl-v-list-label a").removeClass("bg-orange-active");
+          $(".sl-v-list-busi a").removeClass("bg-orange-active");
           var ui =document.getElementById("clear_all");
           ui.style.display="none";
           resetSerachParam(2);
@@ -687,7 +767,7 @@ Date.prototype.format=function(fmt) {
   	*/
   	if(tag!=null&&tag!=""){
    		$("#tag_"+tag).addClass("bg-orange-active");
-        var filter = $("<a href='#' class='condition'><span>" + tag + "</span><i class='fa fa-times'></i></a>");
+        var filter = $("<a href='javascript:;' class='condition'><span>" + tag + "</span><i class='fa fa-times'></i></a>");
         $(".breadcrumb .search-con").append(filter);
         var ui =document.getElementById("clear_all");
         ui.style.display="";
@@ -906,6 +986,16 @@ Date.prototype.format=function(fmt) {
 		},false);
 	}
      
+	//221标签快速选择
+    function busiSelection(labelname){
+    	var labelName = $("#busi_private_manual").val();
+    	if(labelName.indexOf(labelname)>=0){
+    		$("#busi_private_manual").val($("#busi_private_manual").val());
+    	}else{
+    		$("#busi_private_manual").val($("#busi_private_manual").val()+labelname+",");
+    	}
+    }
+	
     //订单标签快速选择
     function orderTypeSelection(labelname){
     	var labelName = $("#label_private_manual").val();
@@ -1031,6 +1121,13 @@ Date.prototype.format=function(fmt) {
 	    if(departmentNames!=null && departmentNames!='' && departmentNames.indexOf(',') >= 0){
 	    	departmentNames = departmentNames.substring(0,departmentNames.length-1);
 	    }
+	    var busiNames = $("#busi_private_manual").val();
+	    if(busiNames!=null && busiNames!='' && busiNames.indexOf(',') >= 0){
+	    	busiNames = busiNames.substring(0,busiNames.length-1);
+	    	busiNames = busiNames.replace("商品类","1");
+	    	busiNames = busiNames.replace("服务类","2");
+	    	busiNames = busiNames.replace("团购","3");
+	    }
 	    var sort_tag = "";
 	    var sort_type = "";
 	    if(sort_tag_type=="price_sort"){
@@ -1069,6 +1166,7 @@ Date.prototype.format=function(fmt) {
 	    		employee_no:employeeNo,
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
+	    		busi_names:busiNames,
 	    		sort_tag:sort_tag,
 	    		sort_type:sort_type
 			}
@@ -1144,6 +1242,7 @@ Date.prototype.format=function(fmt) {
        			    var trading_price = jData[i].trading_price;
        			    var payable_price = jData[i].payable_price;
        			    var gmv_price = jData[i].gmv_price;
+       			    var business_type = jData[i].business_type=='pool'?'联营':'自营';
        			    
        			    var cname="<strong>下单客户姓名：</strong>"+customer_name+"<br>";
 			       	var cphone="<strong>下单客户电话：</strong>"+customer_mobile_phone+"<br>";
@@ -1169,7 +1268,8 @@ Date.prototype.format=function(fmt) {
  			       	var dept="<strong>事业群：</strong>"+department_name+"<br>";
 			        var channel="<strong>频道：</strong>"+channel_name+"<br>";
 			        var ename="<strong>E店：</strong>"+eshop_name+"<br>";
- 			        var econtent =dept+channel+ename+"@etips"+i;
+			        var busitype="<strong>商业模式：</strong>"+business_type+"<br>";
+ 			        var econtent =dept+channel+ename+busitype+"@etips"+i;
 			        var eid = "etips"+i;
 			        
 			        var gmv="<strong>有效金额：</strong>"+gmv_price+"<br>";
@@ -1179,16 +1279,19 @@ Date.prototype.format=function(fmt) {
 			        var pid = "ptips"+i; 
 			        
 			        var employeeid = "employeetips"+i;  
+			        
+			        var profitid = "profittips"+i;  
        			       
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
                     	+"<td><a href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
- 			   	   	    +"<td><a href=\"#\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone+"</a></td>"
- 			   	        +"<td><a href=\"#\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
-                	   	+"<td><a href=\"#\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
-                	   	+"<td><a href=\"#\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+s+"</a></td>"
- 			   	   	    +"<td><a href=\"#\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
- 			   	   	    +"<td><a href=\"#\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>"
+ 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone+"</a></td>"
+ 			   	        +"<td><a href=\"javascript:;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
+                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
+                	   	+"<td><a href=\"javascript:;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+s+"</a></td>"
+ 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
+ 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>"
+//  			   	   		+"<td><a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a></td>"
                     	+"<td>";
 	        		   if(jData[i].pubseas_label=='1'){
 							infoStr= infoStr
@@ -1272,7 +1375,6 @@ Date.prototype.format=function(fmt) {
 	  doManager('massOrderManager','queryEmployeeBySN',[ordersn,beginDate],function(data){
 		  if(data.result){
 		   	  var result= JSON.parse(data.data);
-		   	  var flowStr="";
 		   	  if(result!=null){
 			       var ename = "<strong>送单侠名称：</strong>"+result.employee_name+"<br>";
  			       var ephone = "<strong>送单侠电话：</strong><a style=\"color:#000\" href=\"javascript:searchEmployee('"+result.employee_phone+"')\">"+result.employee_phone+"</a><br>";
@@ -1316,7 +1418,6 @@ Date.prototype.format=function(fmt) {
 	  doManager('massOrderManager','queryAreaDetailByCode',[code,ordersn,beginDate],function(data){
 		  if(data.result){
 		   	  var result= JSON.parse(data.data);
-		   	  var flowStr="";
 		   	  if(result!=null){
 			       var village = "<strong>小区名：</strong>"+result.village_name+"<br>";
 			       var store = "<strong>门店名：</strong>"+result.store_name+"<br>";
@@ -1404,6 +1505,36 @@ Date.prototype.format=function(fmt) {
   		});  
   }
   
+  //利润信息显示
+  function showprofit(rebate,coupon,cost,contract_id,profitid){
+	  var rebate_org = rebate;
+	  var coupon_org = coupon;
+	  var cost_org = cost;
+	  doManager('massOrderManager','queryContractById',[contract_id],function(data){
+		  if(data.result){
+		   	  var result= JSON.parse(data.data);
+		   	  if(result!=null){
+				   var rebate="<strong>返利：</strong>"+rebate_org+"<br>";
+			       var coupon="<strong>优惠券：</strong>"+coupon_org+"<br>";
+			       var cost="<strong>成本：</strong>"+cost_org+"<br>";
+			       var method_org = "从价";
+			       if(result.method=='volume'){
+			    	   method_org = "从量";
+			       }else if(result.method=='percent'){
+			    	   method_org = "从率";
+			       }
+			       var method = "<strong>结算方式：</strong>"+method_org+"<br>";
+			       var profitcontent =rebate+coupon+cost+method;
+				   	  
+			  	   layer.tips(profitcontent, '#'+profitid, {
+			 		   tips: [4, '#0FA6D8'], //还可配置颜色
+			 		   time:5000
+			 	   });	
+		   	  }
+		  }
+	  },false);
+  }
+  
   //导出
   function export_manual_massOrder(hiddenvalue){
 	  	var sdate = $("#auto_date").val();
@@ -1451,6 +1582,13 @@ Date.prototype.format=function(fmt) {
 	    if(departmentNames!=null && departmentNames!='' && departmentNames.indexOf(',') >= 0){
 	    	departmentNames = departmentNames.substring(0,departmentNames.length-1);
 	    }
+	    var busiNames = $("#busi_private_manual").val();
+	    if(busiNames!=null && busiNames!='' && busiNames.indexOf(',') >= 0){
+	    	busiNames = busiNames.substring(0,busiNames.length-1);
+	    	busiNames = busiNames.replace("商品类","1");
+	    	busiNames = busiNames.replace("服务类","2");
+	    	busiNames = busiNames.replace("团购","3");
+	    }
 	    var sort_tag = "";
 	    var sort_type = "";
 	    if(sort_tag_type=="price_sort"){
@@ -1489,6 +1627,7 @@ Date.prototype.format=function(fmt) {
 	    		employee_no:employeeNo,
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
+	    		busi_names:busiNames,
 	    		sort_tag:sort_tag,
 	    		sort_type:sort_type,
 	    		hidden_flag:hiddenvalue

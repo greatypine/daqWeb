@@ -43,6 +43,7 @@ public class MassOrderDto {
 	private String order_labels;
 	private String addr_customer_name;
 	private String addr_customer_phone;
+	private String busi_names;
 	private String sort_tag;
 	private String sort_type;
 	private String hidden_flag;
@@ -247,6 +248,12 @@ public class MassOrderDto {
 	}
 	public void setAddr_customer_phone(String addr_customer_phone) {
 		this.addr_customer_phone = addr_customer_phone;
+	}
+	public String getBusi_names() {
+		return busi_names;
+	}
+	public void setBusi_names(String busi_names) {
+		this.busi_names = busi_names;
 	}
 	public String getSort_tag() {
 		return sort_tag;
