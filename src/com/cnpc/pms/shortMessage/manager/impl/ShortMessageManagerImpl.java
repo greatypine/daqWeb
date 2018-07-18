@@ -386,5 +386,50 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> commonSendShortMessage(Map<String,Object> param) {
+
+		ShortMessageDao shortMessageDao = (ShortMessageDao)SpringHelper.getBean(ShortMessageDao.class.getName());
+		InterManager interManager = (InterManager)SpringHelper.getBean("interManager");
+		SendMessageManager sendMessageManager = (SendMessageManager)SpringHelper.getBean("sendMessageManager");
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Map<String,Object> result = new HashMap<String,Object>();
+
+
+		try {
+			String type= param.get("type")==null?"":String.valueOf(param.get("type"));//短信类型
+			String signature = param.get("signature")==null?"":String.valueOf(param.get("signature"));//短信签名
+			String timestamp = String.valueOf(System.currentTimeMillis());
+
+			list.add(param);
+
+			ShortMessage sm = new ShortMessage();
+			if("SYYQM".equals(type)){//社员邀请码
+				String content = "亲爱的同事XXX：国安社区全员社员卡开卡推荐激励开启啦！请牢记您的推荐码XXXXXX，务必要求被推荐人在线填写，以此认定推荐人！";
+				sm.setCheckStatus(0);
+				sm.setCode(timestamp);
+				sm.setType(type);
+				sm.setTitle("SYYQM");
+				sm.setContent(content);
+				sm.setSignature(signature);
+				sm.setUserGroupCode("only one");
+				preObject(sm);
+				saveObject(sm);//保存短信
+			}
+
+			Thread thread = new Thread(new SendShortMessageTask(list, sm));
+			thread.start();
+
+			result.put("code",CodeEnum.success.getValue());
+			result.put("message","发送成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message","发送失败");
+			return result;
+		}
+		return result;
+	}
+
 
 }
