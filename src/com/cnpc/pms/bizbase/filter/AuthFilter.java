@@ -542,6 +542,10 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			if (url.contains("221.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			if (url.contains("logout.html")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;

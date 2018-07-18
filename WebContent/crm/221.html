@@ -280,6 +280,30 @@
 <!-- 引入 ECharts 文件 -->
 <script src="dist/js/echarts.common.min.js"></script>  
   <script type ="text/javascript">
+  
+  var screenlogin=getUrlParamByKey("su");
+  
+  function loginShow(){
+	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+	    var callback = function callback(data, textStatus, XMLHttpRequest) {
+	    	var stateObject = {};
+	    	var newUrl = "/daqWeb/crm/221.html?ta=0";
+	    	//target = 1;
+	    	history.replaceState(stateObject,null,newUrl);
+	    	excuteData();
+		};
+	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+			alert("登录信息错误，请确认输入或联系管理员!");
+			return false;
+		}
+	    var url = "../login.do";
+	    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+	}else{
+		excuteData();
+	}
+  }
+  
   var myChart1 = echarts.init(document.getElementById('main1'));
 
   //社员人数
@@ -360,6 +384,11 @@
 <script>
 
 	$(function(){
+		loginShow();
+	});
+    
+	function excuteData(){
+		getUser();
 		gmvXData = initgmvXData();
 		inintTotalGmvData();
 		inintYestodayGmvData();
@@ -367,9 +396,8 @@
 		initMemberTrend();
 // 		inintMemberData();
 		showStoreRanking();
-		
-	});
-    
+	}
+	
 	
 	var totalGMV = '0';
 	var start_time = '2018-07-01';
@@ -427,6 +455,8 @@
 	}
 	
 	var yestoday_yyGMV = '0';
+	var yestoday_jwsGMV = '0';
+	var yestoday_grouponGMV = '0';
 	function inintYestodayGmvData(){
 		  doManager("strategyActivityManager","queryStrategyGMV",[yestoday_time,yestoday_time],
 				function(datax,textStatus,XmlHttpRequest){
@@ -703,6 +733,20 @@
 	    
 	    myChart5.setOption(option5);
 	    }
+	
+	  
+	  function getUser(){
+			doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var employeeID="";
+					var curr_user = JSON.parse(data.data);
+					if(curr_user == null){
+						urlStr = "../logout.do";
+						window.location.href = urlStr;
+					}
+				}
+		  	},false);
+		}
 	
 	function toBussiness(){
  		window.location.href="221_bussiness.html";
