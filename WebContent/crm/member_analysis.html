@@ -130,6 +130,7 @@
   <div class="content-wrapper">
     <div class="container" style="width: 1300px;">
         <input type="hidden" id="selDay" value="1"/>
+        <input type="hidden" id="setadd" value="0"/>
       <!-- Main content -->
       <section class="content-header">
          <div class="box box-default report">
@@ -434,7 +435,7 @@
     <div class="vertical-example" id="citySelect" style="display:none">
       <nav id="gooey-v">
         <input type="checkbox" class="menu-open" name="menu-open4" id="menu-open4"/>
-        <label class="open-button" for="menu-open4"><span style="font-size: 16px;font-weight: normal;">城市</span></label>
+        <label class="open-button" for="menu-open4" style="font-size: 16px;font-weight: normal;">城市</label>
           <div id="showcitys"></div>
       </nav>
     </div>
@@ -492,10 +493,22 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 var option1_1 = null;
 var option1 = null;
 function showAddMember(){
+    $(".add_citymember").click(function(){
+    	if($("#setadd").val()=="0"){
+    		$("#setadd").val("1");
+            $("#cityMember").show();
+    	}else{
+    		$("#setadd").val("0");
+    		$("#cityMember").hide();
+    	}
+    	
+    });
     $(".add_citymember").mouseover(function(){
+    	$("#setadd").val("1");
         $("#cityMember").show();
     });
     $(".add_citymember").mouseleave(function(){
+    	$("#setadd").val("0");
         $("#cityMember").hide();
     });
 }

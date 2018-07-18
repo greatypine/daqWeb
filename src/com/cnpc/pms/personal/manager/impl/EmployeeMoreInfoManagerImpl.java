@@ -148,6 +148,8 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 
 	@Override
 	public void getHistoryEmployeePositionsDistance() {
+		EmployeeMoreInfoManager employeeMoreInfoManager = (EmployeeMoreInfoManager)SpringHelper.getBean("employeeMoreInfoManager");
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
@@ -162,6 +164,11 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 			pipeline.add(project);
 			Document unwind = new Document("$unwind","$locations");
 			pipeline.add(unwind);
+			Document filter = new Document();
+			String curDate = DateUtils.dateFormat(DateUtils.getDateBeforeOneDate(new Date()), "yyyy/MM/dd");
+			filter.put("locations.createTime",new Document("$lt",(new Date(curDate))));
+			Document match1 = new Document("$match",filter);
+			pipeline.add(match1);
 			Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
 			pipeline.add(group);
 			Document limit = new Document("$limit",skipcount+100);
@@ -222,12 +229,12 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 	     									new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
 	     					  
 	     					preObject(employeeMoreInfo1);
-	     					this.saveObject(employeeMoreInfo1);
+							employeeMoreInfoManager.saveObject(employeeMoreInfo1);
 	     					 m++;
 	     					}
 	     			   }else{
 	     				   preObject(employeeMoreInfo);
-	     				   this.saveObject(employeeMoreInfo);
+						   employeeMoreInfoManager.saveObject(employeeMoreInfo);
 	     				   m++;
 	     			   }
 	     		   }

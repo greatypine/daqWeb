@@ -149,5 +149,13 @@ public interface ShortMessageManager extends IManager{
 	* @author gbl
 	 */
 	public Map<String,Object> sendShortMessage(ShortMessage shortMessage);
+
+	/**
+	 * @Description 公共的发送短信
+	 * @author gbl
+	 * @date 2018/7/17 15:37
+	 **/
+
+	public Map<String,Object> commonSendShortMessage(Map<String,Object> param);
 	
 }
