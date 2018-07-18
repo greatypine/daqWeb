@@ -16,9 +16,9 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public Map<String, Object> queryStrategyGMV(String start_time,String end_time) {
 		String sql = "SELECT IFNULL(MAX(pro_total_gmv),0) as pro_total_gmv,	IFNULL(MAX(ser_total_gmv),0) as ser_total_gmv,"
-				+ "IFNULL(MAX(gro_total_gmv),0) as gro_total_gmv FROM (SELECT CASE WHEN tor.order_tag2='1' THEN SUM(trading_price) "
-				+ "END as pro_total_gmv,CASE WHEN tor.order_tag2='2' THEN SUM(trading_price) END as ser_total_gmv,CASE WHEN tor.order_tag2='3' "
-				+ "THEN SUM(trading_price) END as gro_total_gmv FROM df_mass_order_monthly tor JOIN df_activity_scope das ON (tor.store_id = das.platformid) "
+				+ "IFNULL(MAX(gro_total_gmv),0) as gro_total_gmv FROM (SELECT CASE WHEN tor.order_tag2='1' THEN SUM(gmv_price) "
+				+ "END as pro_total_gmv,CASE WHEN tor.order_tag2='2' THEN SUM(gmv_price) END as ser_total_gmv,CASE WHEN tor.order_tag2='3' "
+				+ "THEN SUM(gmv_price) END as gro_total_gmv FROM df_mass_order_monthly tor JOIN df_activity_scope das ON (tor.store_id = das.platformid) "
 				+ "WHERE tor.order_tag2 IS NOT NULL  ";
 		if(StringUtils.isNotEmpty(start_time)){
 			sql = sql + " AND date(tor.sign_time) >= '"+start_time+"' ";
@@ -40,7 +40,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	
 	@Override
 	public List<Map<String, Object>> queryUnStrategyGMV(String start_time,String end_time){
-		String sql = "SELECT IFNULL(SUM(trading_price), 0) total_gmv,department_name FROM df_mass_order_monthly tor,df_activity_scope ds "
+		String sql = "SELECT IFNULL(SUM(gmv_price), 0) total_gmv,department_name FROM df_mass_order_monthly tor,df_activity_scope ds "
 				+ "WHERE ds.platformid=tor.store_id AND tor.order_tag2 IS NULL ";
 		if(StringUtils.isNotEmpty(start_time)){
 			sql = sql + " AND date(tor.sign_time) >= '"+start_time+"' ";
@@ -114,8 +114,8 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	public List<Map<String, Object>> queryStoreCompleteInfo(String store_no){
 		String sql = "SELECT IFNULL(MAX(pro_total_gmv), 0) AS pro_total_gmv,IFNULL(MAX(ser_total_gmv), 0) AS ser_total_gmv,"
 				+ "IFNULL(MAX(gro_total_gmv), 0) AS gro_total_gmv,store_name,store_no FROM (SELECT CASE WHEN tor.order_tag2 = '1' "
-				+ "THEN	SUM(trading_price)	END AS pro_total_gmv,CASE WHEN tor.order_tag2 = '2' THEN SUM(trading_price) END AS ser_total_gmv,"
-				+ "CASE WHEN tor.order_tag2 = '3' THEN	SUM(trading_price) END AS gro_total_gmv,das.store_name,das.store_id,das.store_no,"
+				+ "THEN	SUM(gmv_price)	END AS pro_total_gmv,CASE WHEN tor.order_tag2 = '2' THEN SUM(gmv_price) END AS ser_total_gmv,"
+				+ "CASE WHEN tor.order_tag2 = '3' THEN	SUM(gmv_price) END AS gro_total_gmv,das.store_name,das.store_id,das.store_no,"
 				+ "tor.order_tag2 FROM	df_mass_order_monthly tor JOIN df_activity_scope das ON (tor.store_id = das.platformid) "
 				+ "WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 AND tor.order_tag2 IS NOT NULL ";
 		if(StringUtils.isNotEmpty(store_no)){
@@ -131,7 +131,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot() {
-		String sql = "SELECT das.store_name,tor.ordergmv,tor.ordernum,das.store_no FROM(SELECT tor.store_id,sum(trading_price) AS ordergmv,count(1) AS ordernum "
+		String sql = "SELECT das.store_name,tor.ordergmv,tor.ordernum,das.store_no FROM(SELECT tor.store_id,sum(gmv_price) AS ordergmv,count(1) AS ordernum "
 				+ "FROM df_mass_order_monthly tor FORCE INDEX(sign_time) WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 AND tor.order_tag2 IS NOT NULL "
 				+ "GROUP BY tor.store_id) tor JOIN df_activity_scope das ON (tor.store_id = das.platformid)";
 		
@@ -144,7 +144,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public List<Map<String, Object>> queryYestodayGmvRanking(String dept_id,String order_by){
 		String sql = "SELECT das.store_name,IFNULL(tor.ordergmv,0) AS ordergmv FROM (SELECT SUM(ordergmv) AS ordergmv,store_id FROM (SELECT tor.store_id,"
-				+ "sum(trading_price) AS ordergmv FROM df_mass_order_monthly tor WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 ";
+				+ "sum(gmv_price) AS ordergmv FROM df_mass_order_monthly tor WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 ";
 		if(StringUtils.isNotEmpty(dept_id)){
 			sql = sql + "AND tor.order_tag2 = '" + dept_id+"'";
 		}
@@ -178,7 +178,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	
 	@Override
 	public List<Map<String, Object>> queryStoreRanking(String dept_id){
-		String sql = "SELECT das.store_name,tor.ordergmv FROM (SELECT tor.store_id,sum(trading_price) AS ordergmv FROM df_mass_order_monthly tor "
+		String sql = "SELECT das.store_name,tor.ordergmv FROM (SELECT tor.store_id,sum(gmv_price) AS ordergmv FROM df_mass_order_monthly tor "
 				+ "FORCE INDEX(sign_time) WHERE tor.sign_time >= '2018-07-01' AND tor.order_tag2 IS NOT NULL ";
 		if(StringUtils.isNotEmpty(dept_id)){
 			sql  = sql + " AND tor.order_tag2='"+dept_id+"' ";
@@ -264,7 +264,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 				"	) dateSeven " + 
 				"left join ( " + 
 				"	select " + 
-				"		TRUNCATE ((SUM(dmom.trading_price)) / 10000,2) AS allcount, " + 
+				"		TRUNCATE ((SUM(dmom.gmv_price)) / 10000,2) AS allcount, " + 
 				"		DATE_FORMAT(dmom.sign_time, \"%Y-%m-%d\") as crtime, " + 
 				"		dmom.order_tag2 as ordtype " + 
 				"	from " + 
