@@ -409,7 +409,7 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 				sm.setCheckStatus(0);
 				sm.setCode(timestamp);
 				sm.setType(type);
-				sm.setTitle("SYYQM");
+				sm.setTitle("社员邀请码");
 				sm.setContent(content);
 				sm.setSignature(signature);
 				sm.setUserGroupCode("only one");
