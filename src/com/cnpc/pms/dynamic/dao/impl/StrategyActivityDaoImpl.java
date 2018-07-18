@@ -131,7 +131,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot() {
-		String sql = "SELECT das.store_name,tor.ordergmv,tor.ordernum FROM(SELECT tor.store_id,sum(trading_price) AS ordergmv,count(1) AS ordernum "
+		String sql = "SELECT das.store_name,tor.ordergmv,tor.ordernum,das.store_no FROM(SELECT tor.store_id,sum(trading_price) AS ordergmv,count(1) AS ordernum "
 				+ "FROM df_mass_order_monthly tor FORCE INDEX(sign_time) WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 AND tor.order_tag2 IS NOT NULL "
 				+ "GROUP BY tor.store_id) tor JOIN df_activity_scope das ON (tor.store_id = das.platformid)";
 		

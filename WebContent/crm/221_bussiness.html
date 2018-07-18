@@ -32,23 +32,31 @@
   <script src="IE 9/respond.min.js"></script>
   <![endif]-->
   <style>
- .box-body img{width: 100%}
-	.details{background-color: #ff7d73; padding: 10px 0 10px 0; color: #fff;}
+/*  .box-body img{width: 100%} */
+	.content-wrapper{background: #fff;}
+    .details{background-color: #ff7d73; padding: 10px 0 10px 0; color: #fff;}
     .details small{opacity: 0.6}
     .small-box .icon{top: 5px; font-size: 70px;}
     .small-box:hover .icon{font-size: 80px;}
+    .detail_today{font-size: 20px;}
     .detail_tomorrow{font-size: 16px; opacity: 0.8; margin-top: 10px;}
-    .detail_tomorrow span{padding-left: 15px;}
-    .detail_tomorrow i{padding-right: 5px;}
+    .detail_today span,.detail_tomorrow span{padding-left: 15px;}
+    .detail_today i,.detail_tomorrow i{padding-right: 5px;}
     .lightslider{line-height: 36px; margin-top: 20px;}
-    .lightslider h4 span{font-size: 14px;}
-    .lightslider span{font-size: 24px;}
+    .lightslider h4{color:#fdff64;font-size: 18px;}
+    .lightslider .col-sm-6{color: #f9f9f9}
+    .lightslider .col-sm-6 i{padding-right: 5px; font-size: 16px; opacity: 0.7}
+    .lightslider .col-sm-6 span{font-size: 24px; color: #fff; font-weight: bold;}
+    .demo{border-radius: 10px; box-shadow: 0 5px 5px rgba(0,0,0,0.3); padding: 20px 0; position: relative; overflow: hidden;}
     .demo ul li{padding: 0 40px;}
-	.nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
-    .nav-tabs-custom > .nav-tabs > li > a{ margin: 10px 0; font-size: 18px;}
-    .nav-tabs-custom > .nav-tabs > li > a:hover{ margin: 10px 0;color: #f39c12;}
-    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: transparent; color: #f39c12; border-bottom: 2px solid #f39c12; font-weight: bold; cursor: pointer;}
-    .nav-tabs-custom > .nav-tabs{margin: 0 auto; width: 450px;}
+    .demo .yuan{position: absolute; background-color: #f97487; width: 80px; height: 80px; border-radius: 50px; right: -40px; top: -40px; padding: 45px 0 0 30px; transform: rotate(45deg);}
+    .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
+    .nav-tabs-custom > .nav-tabs > li > a{font-size: 14px; padding: 8px 15px;}
+    .nav-tabs-custom > .nav-tabs > li > a:hover{color: #f39c12;}
+    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: #fff; color: #f39c12;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #f39c12; border-left: 1px solid #f39c12; border-right:1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #f39c12; margin: 5px 0; padding-left: 5px;}
+    .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
 
     .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
     .navimenu{min-height: 800px; padding-top: 0;}
@@ -104,14 +112,13 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
-         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221合计</a></li>
-         <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
-         <li class="active"><a href="javascript:void(0)">221分业务</a></li>
-         <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
+         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221整体</a></li>
+         <li class="active"><a href="javascript:void(0)">221业务</a></li>
          <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
        </ul>
-      
-      <section class="content-header">
+      <div class="tab-content no-padding">
+      <div class="tab-pane active" id="tab_1">
+      <section>
         <div class="box box-default details">
           <div class="box-body">
           	<div class="col-sm-6">
@@ -125,7 +132,7 @@
                   <div class="icon">
                     <i class="fa fa-cny"></i>
                   </div>
-                  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+<!--                   <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
                 </div>
               </div>
               <div class="pull-left col-sm-6">
@@ -137,7 +144,7 @@
                   <div class="icon">
                     <i class="fa fa-database"></i>
                   </div>
-                  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+<!--                   <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a> -->
                 </div>
               </div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV<span id="grouponGmv">载入中...</span></div>
@@ -145,7 +152,7 @@
             </div>
             <div class="col-sm-6">
               <h5 style="color: #7c4139;">昨日完成情况</h5>
-              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>合计GMV：<span id="yestodayTotalGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>总GMV：<span id="yestodayTotalGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>商品类GMV：<span id="yestodayProductGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>服务类GMV：<span id="yestodayServiceGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV：<span id="yestodayGrouponGmv">载入中...</span></div>
@@ -195,6 +202,8 @@
           </div>
         </div>
       </section>
+      </div>
+      </div>
       </div>
     </div>
   </div>
