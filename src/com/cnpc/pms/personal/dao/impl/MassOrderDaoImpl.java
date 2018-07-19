@@ -44,7 +44,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,a.create_time,a.sign_time,a.return_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.customer_name,IFNULL(a.addr_name,'') as addr_name,"
 				+ "IFNULL(INSERT(a.addr_mobilephone,4,4,'****'),'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,a.channel_name,a.department_name,"
-				+ "a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score "
+				+ "a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score,IFNULL(a.order_tag2,'') as order_tag2 "
 //				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit,IFNULL(a.apportion_rebate,0) as apportion_rebate,"
 //				+ "IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price "
 				+ "from ";
@@ -73,7 +73,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 		}
 
 		if(StringUtils.isNotEmpty(massOrderDto.getBusi_names())){
-			sqlA = sqlA + " JOIN df_activity_scope das ON a.store_code=das.store_no ";
+			sqlTemp2 = sqlTemp2 + " JOIN df_activity_scope das ON a.store_code=das.store_no ";
 			sqlB = sqlB + " JOIN df_activity_scope das ON a.store_code=das.store_no ";
 		}
 		
@@ -256,8 +256,9 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> exportOrder(MassOrderDto massOrderDto, String timeFlag) {
-		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,a.info_employee_a_no,IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,"
-				+ "IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.sign_time,a.return_time,a.employee_name,a.employee_phone,"
+		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,IFNULL(a.info_employee_a_no,'') AS info_employee_a_no,"
+				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,"
+				+ "IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.sign_time,IFNULL(a.return_time,'') AS return_time,IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,"
 				+ "a.eshop_name,a.store_name,a.store_code,a.channel_name,a.department_name,a.store_city_name,CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,"
 				+ "CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,CASE WHEN a.return_label='1' THEN '是'  ELSE '否' END AS return_label,"
 				+ "CASE WHEN a.loan_label='1' THEN '是'  ELSE '否' END AS loan_label,CASE WHEN a.loan_label='3' THEN '是'  ELSE '否' END AS car_label,"
