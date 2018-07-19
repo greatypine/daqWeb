@@ -404,7 +404,31 @@
 	  var fileNameID = "fileName"+t;
 	  $('#fileName'+t).val(fileName);
 	  var lay_index = layer.load("2");
-	  var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=notice_file";
+/*	  var url = getRootPath()+ "/uploadFileToOss.action?storeDir=daqWeb/notice_file/";
+      var elementsId = [fileID];
+      $.ajaxFileUpload({
+          url: url,
+          type: 'post',
+          secureuri: false, //一般设置为false
+          fileElementId: elementsId, // 上传文件的id、name属性名
+          dataType: 'json', //返回值类型，一般设置为json、application/json
+          success: function(data, status){
+
+              if(data.status=="success"){
+
+                $('#filePath'+t).attr('src',data.downLoadUrl);
+                 layer.close(lay_index);
+              }else{
+                  $$.showMessage('提示',data.message);
+              }
+          },
+          error: function(data, status, e){
+              $$.showMessage("提示",e);
+          }
+      });*/
+
+
+      var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=notice_file";
       var elementsId = [fileID];
       $.ajaxFileUpload({
           url: url,
@@ -415,12 +439,12 @@
           success: function(data, status){
               data = JSON.parse(data);
               if(data.result){
-                  var pmsFile = JSON.parse(data.data); 
-                $('#filePath'+t).attr('src',getRootPath().replace("daqWeb","file_manager")+"/"+pmsFile.filePath);  
-                //$('#filePath').attr('src',getFilePath()+pmsFile.filePath);
-                //$('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath); 
-                
-                 layer.close(lay_index);
+                  var pmsFile = JSON.parse(data.data);
+                  $('#filePath'+t).attr('src',getRootPath().replace("daqWeb","file_manager")+"/"+pmsFile.filePath);
+                  //$('#filePath').attr('src',getFilePath()+pmsFile.filePath);
+                  //$('#filePath').attr('src',"https://imagedata.guoanshequ.com/file_manager/"+pmsFile.filePath);
+
+                  layer.close(lay_index);
               }else{
                   $$.showMessage('提示',data.message);
               }
