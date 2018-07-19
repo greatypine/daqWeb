@@ -57,9 +57,11 @@ public interface ObserveParameterManager extends IManager{
 	 * @param cityname
 	 * @return
 	 */
-	public Map<String,Object> queryObserveParameterSummaryByCity(String cityname);
+	public Map<String,Object> queryObserveParameterSummaryByCity(String cityname,String store_id,String observe_month,String employeeId);
 
 	public File exportObserveParamterSummary(String cityname);
+	
+	public File exportObserveParamterSummary(String cityname,String observe_month,String store_id,String employeeId);
 	
 	public File exportObserveParamter(String cityname);
 	

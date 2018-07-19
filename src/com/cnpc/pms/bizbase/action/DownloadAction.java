@@ -426,8 +426,12 @@ public class DownloadAction extends HttpServlet {
 			}
 		}else if ("observe_question".equals(str_file_name)) {
 			try {
+				String observe_month = new String(req.getParameter("observe_month").getBytes("iso8859-1"), "UTF-8");
+				String city_name = new String(req.getParameter("city_name").getBytes("iso8859-1"), "UTF-8");
+				String employeeId = new String(req.getParameter("employeeId").getBytes("iso8859-1"), "UTF-8");
 				ObserveParameterManager observeParameterManager = (ObserveParameterManager)SpringHelper.getBean("observeParameterManager");
-					File exportObserveParamterSummary = observeParameterManager.exportObserveParamterSummary(null);
+					//File exportObserveParamterSummary = observeParameterManager.exportObserveParamterSummary(null);
+					File exportObserveParamterSummary = observeParameterManager.exportObserveParamterSummary(city_name,observe_month,store_id,employeeId);
 
 					DownloadUtil.downLoadFile(exportObserveParamterSummary.getAbsolutePath(), resp,
 							"明查台账汇总" + DateUtils.dateFormat(new Date()) + ".xls", "xls");
@@ -437,7 +441,6 @@ public class DownloadAction extends HttpServlet {
 		}else if ("observe_parameter".equals(str_file_name)) {
 			try {
 				ObserveParameterManager observeParameterManager = (ObserveParameterManager)SpringHelper.getBean("observeParameterManager");
-
 					File exportObserveParamter = observeParameterManager.exportObserveParamter(null);
 					DownloadUtil.downLoadFile(exportObserveParamter.getAbsolutePath(), resp,
 							DateUtils.dateFormat(new Date(),"yyyy-MM") + "月明查台账汇总" + ".xls", "xls");
