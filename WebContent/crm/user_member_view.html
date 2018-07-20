@@ -234,7 +234,11 @@
 	                      <th width="8%">城市</th>
 	                      <th width="10%">门店名称</th>
 	                      <th width="10%">门店编号</th>
-	                      <th width="12%">新增社员数</th>
+	                      <th width="12%">
+	                      	新增社员数
+	                      	<font id="showattention" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+                  			<font id="attention" style="font-size: 12px;white-space: nowrap;position: absolute;top:-5px;z-index: 1000;display:none;left:40px">包含畅购卡升级和199</font>		 
+	                      </th>
 	                      <th width="12%">199新增开卡数</th>
 	                      <th width="12%">累计社员总数</th>
 	                    </tr>
@@ -334,6 +338,13 @@
 	    $(".logo-lg > ul > li").hover(function(){
 	      $(this).children(".nav_dropdown").toggle('1000');
 	    });
+	    
+	    $("#showattention").on("mouseover",function(event){
+	  		$("#attention").show();
+	  	});
+	  	$("#showattention").on("mouseout",function(event){
+	  		$("#attention").hide();
+	  	});
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
   var lst_select_city=null;

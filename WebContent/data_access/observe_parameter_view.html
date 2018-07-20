@@ -25,9 +25,14 @@
 <script type="text/javascript">
 var win;
 var lst_select_store=null;
+var lst_select_city=null;
 var storeNameArray=new Array();
+var cityNameArray=new Array();
 var storeIdMap = {};
+var cityIdMap = {};
+var employeeId = null;
 $(function () {
+	getUser();
 	//获取当前登录的用户
 	 doManager("UserManager", "findUserInfo", '', function(
 							data, textStatus, XMLHttpRequest) {
@@ -54,6 +59,7 @@ $(function () {
     	  ,type: 'month'//最大日期
     	  ,max: max
     });
+    $('#observe_month').val(min.getFullYear() + "-" + ((min.getMonth() + 1)<10 ?"0"+(min.getMonth() + 1) : (min.getMonth() + 1)));
     
    
     $('#store_name').keyup(function(event){
@@ -62,11 +68,27 @@ $(function () {
           var str_name = $(this).val();
           if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
           	$("#store_id").val("");
-              $('#store_name-search_tradetype').children().remove();
+              $('#store_name').children().remove();
               if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                   return;
               }
-              doManager('dynamicManager','getStoreByCity',[0,null,null,str_name],function(data){
+              var city_id = null;
+              if(target==0){//总部
+              	 city_id = ($("#city_id").val())==""?null:($("#city_id").val());
+              	 var city_name =  $("#city_name").val();
+                   if(city_id==null&&city_name!=""){
+                   		city_id=-10000;
+                   }else if(city_name == ""){
+                	   city_id=null;
+                   }
+              }else if(target==1){//城市
+            	var city_name =  $("#city_name").val();
+              	city_id = $("#city_id").val();
+              	if(city_name == ""){
+             	   city_id=null;
+                }
+              }
+              doManager('dynamicManager','getStoreByCity',[0,employeeId,city_id,str_name],function(data){
                   if(data.result){
                   	lst_select_store = JSON.parse(data.data).storelist;
                       
@@ -83,11 +105,89 @@ $(function () {
           }
       });
     
+    $('#city_name').keyup(function(event){
+    	  cityNameArray=new Array();
+    	    $("#auto_city").empty();
+    	    var str_name = $(this).val();
+            if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+            	$("#city_id").val("");
+                if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                    return;
+                }
+                var city_id = null;
+                doManager('UserManager','getCurrentUserCity',null,function(data){
+                    if(data.result){
+                    	
+                    	lst_select_city = JSON.parse(data.data);
+                    	 for(i=0;i<lst_select_city.length;i++){
+                    		 if(lst_select_city[i].cityname.indexOf(str_name)!=-1){
+                    			 cityNameArray.push(lst_select_city[i].cityname);
+                             	 cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].cityid;
+                    		 }
+           			  	 }
+           			  	var autoComplete = new AutoComplete("city_name","auto_city",cityNameArray);
+           			    autoComplete.start(event);
+                    }else{
+                    	
+                    }
+                });
+            }
+        });
+    
    
 });
+
+var cityId = null;
+function getUser(){
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			var curr_user = JSON.parse(data.data);
+			employeeId = curr_user.id;
+			$("#employee_id").val(employeeId);
+			var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
+		  	if(regex_zb.test(curr_user.usergroup.code)){
+		  		target = 0;
+		  	}else{
+		  		target = 1;
+		  	}
+		}
+  	},false);
+	doManager("UserManager", "getCurrentUserCity",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var citylist= JSON.parse(data.data);
+			if(citylist.length == 0){
+				$("#city_name").attr("disabled",true);
+				crm_alert(0,"该账号未分配城市！");
+			}
+			var citylistLength = citylist.length;
+			if(citylistLength == 0){
+				$("#city_name").attr("disabled",true);
+			}
+			if(citylistLength == 1){
+				var cityName = citylist[0].cityname==null?"":citylist[0].cityname;
+				var cityid = citylist[0].cityid;
+				$("#city_name").val(cityName);
+				$("#city_id").val(cityid);
+				$("#city_name").attr("disabled",true);
+			}
+			/* if(citylistLength >1 ){
+				var cityName = citylist[0].cityname==null?"":citylist[0].cityname;
+				var cityid = citylist[0].cityid;
+				$("#city_name").val(cityName);
+				$("#city_id").val(cityid);
+			} */
+		}
+	},false);  
+}
+
 function storeclick(){
 	  var temp_store = document.getElementById("store_name").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 	  $("#store_id").val(storeIdMap[temp_store]);
+};
+function cityclick(){
+	  var temp_store = document.getElementById("city_name").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+	  $("#city_id").val(cityIdMap[temp_store]);
 };
 //记载页面时请求数据列表默认的方法
 function searchList() {
@@ -142,37 +242,31 @@ var editObj = {
 $pmspage.opArr = [ editObj];  
 
 
-function questioncount(){
+ function questioncount(){
+	var path = getRootPath();
+	var observe_month = $("#observe_month").val();
+	
+    if(observe_month == null||observe_month.trim() == ""){
+    	var min= new Date();
+    	observe_month=min.getFullYear() + "-" + ((min.getMonth() + 1)<10 ?"0"+(min.getMonth() + 1) : (min.getMonth() + 1));
+	}
+	var store_id = $("#store_id").val();
+	var cityname = $("#city_name").val();
+	window.open(path + "/downloadExcel.action"
+			  +"?fileName=observe_question&observe_month="+observe_month+"&store_id="+store_id+"&city_name="+cityname+"&employeeId="+employeeId);
+
+}
+/* function questioncount(){
 	var path = getRootPath();
 	window.open(path + "/downloadExcel.action"
 			  +"?fileName=observe_question");
-	/* //window.location.href="observe_question_summary.html";	
-	debugger;
-	doManager('observeParameterManager','exportObserveParamterSummary',["北京"],function(data){	
-        if(data.result){
-        	
-        }else{
-        	alert("请求失败，请稍后重新请求！");
-        	return;
-        }
-    },false); */
 
-}
+} */
 
 function questionexport(){
 	var path = getRootPath();
 	window.open(path + "/downloadExcel.action"
 			  +"?fileName=observe_parameter");
-	/* debugger;
-	doManager('observeParameterManager','exportObserveParamter',["北京"],function(data){
-		
-        if(data.result){
-        	
-        }else{
-        	alert("请求失败，请稍后重新请求！");
-        	return;
-        }
-    },false); */
 }
 
 </script>
@@ -180,12 +274,12 @@ function questionexport(){
 	<div class="panel panel-default" style="margin: 10px">
 	    <div class="panel-heading">
 	        <h4 class="panel-title">
-	           	门店数据管理：门店明查台账
+	           	明查暗访管理：明查管理
 	        </h4>
 	    </div>
 	</div>
 	<div class="panel panel-primary">
-        <div class="panel-heading">明查台账信息查询</div>
+        <div class="panel-heading">明查信息查询</div>
         <div class="panel-body">
             <div id="conditionsDiv" style="margin-top: 10px">
                 <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
@@ -196,14 +290,18 @@ function questionexport(){
                             <td>
                                 <input id="observe_month" name="observe_month" type="text" readonly style="width:40%" class="form-control demo-input" />
                             </td>
+                            <td width="7%">城市：</td>
+                            <td style="position:relative">
+                            	<input id="city_id" name="city_id" type="hidden" value=""/>    
+                                <input id="city_name" name="city_name" type="text" style="width:60%" class="form-control"/>
+                            	<div class="auto hidden" id="auto_city" style="width:60%;z-index: 99999;" onclick="cityclick();"></div>
+                            </td>
                             <td width="7%">门店：</td>
                             <td style="position:relative">
                             	<input id="store_id" name="store_id" type="hidden" value=""/>    
                                 <input id="store_name" name="store_name" type="text" style="width:60%" class="form-control"/>
                             	<div class="auto hidden" id="auto_store" style="width:60%;z-index: 99999;" onclick="storeclick();"></div>
-                            </td>
-                            <td>
-                            	
+                            	<input id="employee_id" name="employee_id" type="hidden" value=""/>
                             </td>
                         </tr>
                     </table>
@@ -212,7 +310,7 @@ function questionexport(){
         </div>
         <div class="panel-footer" style="text-align: right">
         	<button class="btn btn-primary" onclick="questioncount()">明查问题汇总导出</button>
-        	<button class="btn btn-primary" onclick="questionexport()">各门店扣分详情导出</button>
+        	<!-- <button class="btn btn-primary" onclick="questionexport()">各门店扣分详情导出</button> -->
             <button class="btn btn-primary" onclick="searchList()">查询</button>
             <button class="btn btn-primary" id="inser" onclick="insertObserve()">添加</button>
             <!-- <button class="btn btn-primary" onclick="doClean();">重置</button> -->

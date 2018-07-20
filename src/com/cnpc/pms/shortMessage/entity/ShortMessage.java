@@ -3,6 +3,7 @@ package com.cnpc.pms.shortMessage.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.cnpc.pms.base.entity.DataEntity;
 
@@ -38,6 +39,11 @@ public class ShortMessage extends DataEntity{
    
 	@Column(name="type",length=10)
 	private String type;//短信类型(数据字典维护)
+
+	@Transient
+	private String employeeNo;
+
+
     
     
 	public String getTitle() {
@@ -103,7 +109,13 @@ public class ShortMessage extends DataEntity{
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	
-	
+
+	public String getEmployeeNo() {
+		return employeeNo;
+	}
+
+	public void setEmployeeNo(String employeeNo) {
+		this.employeeNo = employeeNo;
+	}
 }
+

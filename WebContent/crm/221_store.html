@@ -32,26 +32,61 @@
   <script src="IE 9/respond.min.js"></script>
   <![endif]-->
   <style>
- .box-body img{width: 100%}
-	.details{background-color: #ff7d73; padding: 10px 0 10px 0; color: #fff;}
+/*  .box-body img{width: 100%} */
+	.content-wrapper{background: #fff;}
+    .details{background-color: #ff7d73; padding: 10px 0 10px 0; color: #fff;}
     .details small{opacity: 0.6}
     .small-box .icon{top: 5px; font-size: 70px;}
     .small-box:hover .icon{font-size: 80px;}
+    .detail_today{font-size: 20px;}
     .detail_tomorrow{font-size: 16px; opacity: 0.8; margin-top: 10px;}
-    .detail_tomorrow span{padding-left: 15px;}
-    .detail_tomorrow i{padding-right: 5px;}
-    .lightslider{line-height: 36px; margin-top: 20px;}
-    .lightslider h4{color:#fdff64;font-size: 18px;}
-    .lightslider .col-sm-6{color: #e7e7e7}
-    .lightslider .col-sm-6 span{font-size: 24px; color: #fff; font-weight: bold;}
-    .demo ul li{padding: 0 40px;}
-    .demo{ background-color: rgba(90,114,147,1); border-radius: 10px; box-shadow: 0 5px 5px rgba(0,0,0,0.3); padding: 20px 0; position: relative; overflow: hidden;}
-    .demo .yuan{position: absolute; background-color: #f97487; width: 80px; height: 80px; border-radius: 50px; right: -40px; top: -40px; padding: 45px 0 0 30px; transform: rotate(45deg);}
-	.nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
-    .nav-tabs-custom > .nav-tabs > li > a{ margin: 10px 0; font-size: 18px;}
-    .nav-tabs-custom > .nav-tabs > li > a:hover{ margin: 10px 0;color: #f39c12;}
-    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: transparent; color: #f39c12; border-bottom: 2px solid #f39c12; font-weight: bold; cursor: pointer;}
-    .nav-tabs-custom > .nav-tabs{margin: 0 auto; width: 450px;}
+    .detail_today span,.detail_tomorrow span{padding-left: 15px;}
+    .detail_today i,.detail_tomorrow i{padding-right: 5px;}
+    .lightslider h4{color:#32523d;font-size: 18px; margin-top: 20px;}
+    .lightslider .col-sm-12{margin-top: 10px;}
+    .lightslider .col-sm-6{color: #f9f9f9}
+    .lightslider .col-sm-6 i{padding-right: 5px; font-size: 16px; opacity: 0.7}
+    .lightslider .col-sm-6 span{font-size: 20px; color: #f0f688; font-weight: bold;}
+    .demo{border-radius: 10px; box-shadow: 0 5px 5px rgba(0,0,0,0.3); padding: 10px 0 20px 0; position: relative; overflow: hidden;}
+    .demo ul li{padding: 0 25px;}
+    .demo ul li h4 .pull-right{margin-right: 30px;}
+    .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
+    .nav-tabs-custom > .nav-tabs > li > a{font-size: 14px; padding: 8px 15px;}
+    .nav-tabs-custom > .nav-tabs > li > a:hover{color: #f39c12;}
+    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: #fff; color: #f39c12;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #f39c12; border-left: 1px solid #f39c12; border-right:1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #f39c12; margin: 5px 0; padding-left: 5px;}
+    .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
+    /*Search box*/
+    .search_bar{position: absolute; top: 0px; right: 0px;
+      width: 0%;min-width: 40px;min-height: 40px;
+      float: right;overflow: hidden;
+      -webkit-transition: width 0.3s;
+      -moz-transition: width 0.3s;
+      transition: width 0.3s;
+      -webkit-backface-visibility: hidden;border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+    }
+
+/*  	.auto{max-height:300px; overflow-y:scroll;z-index: 999;width:90.5%;position: absolute!important;} */
+ 	.auto_out{height:34px;line-height:34px;font-size:12px;}
+ 	#auto{margin-top:40px;}
+
+    .input{
+      position: absolute;top: 0;right: 0;
+      border: none;outline: none;
+      width: 100%;height: 40px; line-height:40px;z-index: 10;
+      font-size: 16px;color: #162934;background:transparent;;background-color: #fff;
+    }
+
+    .search_ico,.search_btn {
+      width: 40px;height: 40px;display: block;
+      position: absolute;right: 0;top: 0;
+      padding: 0;margin: 0;line-height: 40px;cursor: pointer; border-radius: 6px;
+    }
+
+    .search_ico{background: #f97487;z-index:90; text-align: center; border-radius: 6px;}
+    .search_open{width: 70% !important; z-index:1002; border-radius: 6px;}
+    #show{position:absolute; padding:20px}
 
     .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
     .navimenu{min-height: 800px; padding-top: 0;}
@@ -76,7 +111,7 @@
 		height:32px;
 		color: #fff;
 	}
-    
+    table{color:#000}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -107,72 +142,63 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
-         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221合计</a></li>
-         <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
-         <li><a href="javascript:void(0);" onclick="toBussiness()">221分业务</a></li>
-         <li style="padding-top: 20px; color: rgba(0,0,0,0.3)">\</li>
+         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221整体</a></li>
+         <li><a href="javascript:void(0);" onclick="toBussiness()">221业务</a></li>
          <li class="active"><a href="javascript:void(0);" data-toggle="tab">221单店</a></li>
        </ul>
-      
-      <section class="content-header">
+      <div class="tab-content no-padding">
+      <div class="tab-pane active" id="tab_1">
+      <section>
         <div class="box box-default details">
           <div class="box-body">
           	<div class="col-sm-6">
               <h5 style="color: #7c4139;">96店昨日完成情况</h5>
-              <div class="pull-left col-sm-6">
-                <div class="small-box bg-aqua-active">
-                  <div class="inner">
-                    <h3><sup style="font-size: 20px" id="yestodayTotalGmv">载入中...</sup></h3>
-                    <p>总计GMV</p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-cny"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-              </div>
-              <div class="pull-left col-sm-6">
-                <div class="small-box bg-teal-active">
-                  <div class="inner">
-                    <h3><sup style="font-size: 20px" id="yestodayAvgGmv">载入中...</sup></h3>
-                    <p>店均GMV</p>
-                  </div>
-                  <div class="icon">
-                    <i class="fa fa-database"></i>
-                  </div>
-                  <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
-              </div>
+              <div class="col-sm-6 detail_today"><i class="fa fa-cny"></i>总计GMV<span class="h3" id="yestodayTotalGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_today"><i class="fa fa-database"></i>店均GMV<span class="h3" id="yestodayAvgGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>累计GMV<span id="totalGmv">载入中...</span></div>
-              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-users"></i>累计社员<span id="memberNum">载入中...</span></div>
+<!--               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-users"></i>累计社员<span id="memberNum">载入中...</span></div> -->
             </div>
-            <div class="col-sm-6">
-	       		<input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
-	            <input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" />
-	            <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
-	            </div>
-	          </div>
             <div class="col-sm-6 lightslider">
-              <div class="demo">
+              <div class="demo bg-teal-active">
                 <div class="item">
-                  <div class="clearfix" style="max-width:474px;">
-                    <ul id="image-gallery" class="gallery list-unstyled cS-hidden">
+                  <div class="clearfix">
+                    <ul id="image-galle" class="gallery list-unstyled cS-hidden">
                     	<li data-thumb="img/thumb/cS-1.jpg">
-                          <h4>门店名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="pull-center">店长：XXXX</span></h4>
+                          <h4>门店名称<span class="pull-right">店长：XXXX</span></h4>
                           <div class="col-sm-12">
-                          	<div class="col-sm-6 no-padding">昨日GMV：</br><span><small>￥</small>0</span></div>
-                            <div class="col-sm-6 no-padding">商品类GMV：</br><span><small>￥</small>0</span></div>
-                            <div class="col-sm-6 no-padding">商品类GMV：</br><span><small>￥</small>0</span></div>
-                            <div class="col-sm-6 no-padding">商品类GMV：</br><span><small>￥</small>0</span></div>
+                          	<div class="col-sm-6 no-padding"><i class="fa fa-cube"></i>昨日GMV：<span><small>￥</small>0</span></div>
+                          	<div class="col-sm-6 no-padding"><i class="fa fa-paw"></i>商品类GMV：<span><small>￥</small>0</span></div>
+                            <div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>服务类GMV：<span><small>￥</small>0</span></div>
+                            <div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>团购GMV：<span><small>￥</small>0</span></div>
                           </div>
-                          <div class="col-sm-6" style="margin-top: 20px;">社员新增：<span><small>￥</small>0人</span></div>
+                          <div class="col-sm-6" style="margin-top: 20px;"><i class="fa fa-male"></i>社员新增：<span><small></small>100人</span></div>
                         </li>
                     </ul>
                   </div>
                 </div>
-                <div class="yuan">hot</div>
+<!--                 <div class="yuan">hot</div> -->
+<!-- 				<div class="col-sm-6"> -->
+<!-- 	       		<input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/> -->
+<!-- 	            <input type="text" class="form-control"  placeholder="选择门店" id="store_name_manual" /> -->
+<!-- 	            <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;"> -->
+<!-- 	            </div> -->
+<!-- 	          </div> -->
+				<div id="search_bar" class="search_bar" style="display:none">
+                  <form id="myform">
+                  	<input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+                    <input class="input" placeholder="选择门店" type="text" name="key" id="store_name_manual">
+                    <span class="search_ico"><i class="fa fa-search"></i></span>
+                  	<div id="auto" style="width: 94%;z-index: 9999999999;"></div>
+                  </form>
+                </div>
               </div>
             </div>
+            
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-12 no-padding" id="main3" style="height: 350px;"></div>
           </div>
         </div>
         <div class="box box-default">
@@ -317,6 +343,8 @@
         </div>
       </section>
       </div>
+      </div>
+      </div>
     </div>
   </div>
 </div>
@@ -355,7 +383,7 @@
 // 	      loop:true,
 // 	      keyPress:true
 // 	    });
-	    $('#image-gallery').lightSlider({
+	    $('#image-galle').lightSlider({
 	      gallery:true,
 	      item:1,
 	      thumbItem:9,
@@ -364,9 +392,19 @@
 	      auto:false,
 	      loop:true,
 	      onSliderLoad: function() {
-	        $('#image-gallery').removeClass('cS-hidden');
+	        $('#image-galle').removeClass('cS-hidden');
 	      }
 	    });
+	    $(".search_ico").click(function(){
+	        $(".search_bar").toggleClass('search_open');
+	        var keys = $("#store_name_manual").val();
+	        if(keys.length>0){
+	          $("#store_name_manual").val('');
+	          $("#myform").submit();
+	        }else{
+	          return false;
+	        }
+	      });
 	  });
 
   Date.prototype.format = function() {  
@@ -382,6 +420,188 @@
 </script>
 <!-- 引入 ECharts 文件 -->
 <script src="dist/js/echarts.common.min.js"></script>  
+<script type ="text/javascript">
+	var myChart3 = echarts.init(document.getElementById('main3'));
+	
+	//门店GMV散点图
+	  var dataBJ = [];
+	  var schema = [
+	    {name: 'order', index: 0, text: '订单量'},
+	    {name: 'gmv', index: 1, text: 'GMV'},
+	    {name: 'store', index: 2, text: '门店'}
+	  ];
+
+	  var itemStyle = {
+	    normal: {
+	      opacity: 0.8,
+	      shadowBlur: 10,
+	      shadowOffsetX: 0,
+	      shadowOffsetY: 0,
+	      shadowColor: 'rgba(0, 0, 0, 0.5)'
+	    }
+	  };
+
+	  option3 = {
+	    title: {
+	      text: "昨日门店GMV分布",
+	      left: "10",
+	      y: "10",
+	      textStyle: {
+	        color: "#666"
+	      }
+	    },
+	    color: [
+	      '#dd4444', '#fec42c', '#80F1BE'
+	    ],
+	    legend: {
+	      y: 'top',
+	      data: ['GMV'],
+	      textStyle: {
+	        color: '#666',
+	        fontSize: 16
+	      }
+	    },
+	    grid: {
+	      //x: '10%',
+	      //x2: 80,
+	      y: '28%',
+	      y2: '20%',
+	      bottom:'10%',
+	      left:'5%'
+	    },
+	    tooltip: {
+	      padding: 10,
+	      backgroundColor: '#222',
+	      borderColor: '#777',
+	      borderWidth: 1,
+	      formatter: function (obj) {
+	        var value = obj.value;
+	        return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+	          + schema[1].text + '：' + value[1] + '万元</div>'
+	          + schema[0].text + '：' + value[0] + '<br>'
+	          + schema[2].text + '：' + value[2] + '<br>';
+	      }
+	    },
+	    xAxis: {
+	      type: 'value',
+	      name: '订单量',
+	      nameGap: 16,
+	      nameTextStyle: {
+	        color: '#666',
+	        fontSize: 14
+	      },
+	      min: function(value){
+	  	   	 return parseInt(value.min);
+	  	   },
+	      splitLine: {
+	        show: false
+	      },
+	      axisLine: {
+	        lineStyle: {
+	          color: '#666'
+	        }
+	      }
+	    },
+	    yAxis: {
+	      type: 'value',
+	      name: 'GMV（万元）',
+	      nameLocation: 'end',
+	      nameGap: 20,
+	      min: function(value){
+	 	   	 return parseInt(value.min);
+	   	   },
+	      nameTextStyle: {
+	        color: '#666',
+	        fontSize: 16
+	      },
+	      axisLine: {
+	        lineStyle: {
+	          color: '#666'
+	        }
+	      },
+	      splitLine: {
+	        show: false
+	      }
+	    },
+	    visualMap: [
+	      {
+	        left: 'right',
+	        top: '10%',
+	        dimension: 1,
+	        min: 0,
+	        max: 10,
+	        itemWidth: 30,
+	        itemHeight: 100,
+	        calculable: true,
+	        precision: 0.1,
+	        text: ['圆形大小：门店GMV'],
+	        textGap: 30,
+	        textStyle: {
+	          color: '#666'
+	        },
+	        inRange: {
+	          symbolSize: [10, 70]
+	        },
+	        outOfRange: {
+	          symbolSize: [10, 70],
+	          color: ['rgba(255,255,255,.2)']
+	        },
+	        controller: {
+	          inRange: {
+	            color: ['#c23531']
+	          },
+	          outOfRange: {
+	            color: ['#666']
+	          }
+	        }
+	      },
+	      {
+	        left: 'right',
+	        bottom: '5%',
+	        dimension: 0,
+	        min: 0,
+	        max: 500,
+	        itemHeight: 100,
+	        calculable: true,
+	        precision: 0.1,
+	        text: ['明暗：订单量'],
+	        textGap: 30,
+	        textStyle: {
+	          color: '#666'
+	        },
+	        inRange: {
+	          colorLightness: [1, 0.5]
+	        },
+	        outOfRange: {
+	          color: ['rgba(255,255,255,.2)']
+	        },
+	        controller: {
+	          inRange: {
+	            color: ['#c23531']
+	          },
+	          outOfRange: {
+	            color: ['#666']
+	          }
+	        }
+	      }
+	    ],
+	    series: [
+	      {
+	        name: '门店GMV',
+	        type: 'scatter',
+	        itemStyle: itemStyle,
+	        data: dataBJ,
+	      },
+	    ]
+	  };
+	  
+	  myChart3.setOption(option3);
+	  
+	  myChart3.on('click', function (params) {
+		var storeNo = params.data[3];
+		initStoreCompleteInfo(storeNo);
+	  });
+</script>
 <script>
 
 	$(function(){
@@ -389,6 +609,7 @@
 		inintTotalGmvData();
 		inintYestodayGmvData();
 		initStoreCompleteInfo();
+		initScatterplot();
 		inintMemberData();
 		//单店GMV排名
 		showYestodayGmvRanking();
@@ -505,28 +726,61 @@
 				if (datax.result) {
 					var jsonData = $.fromJSON(datax.data);
 					if(jsonData!=null&&jsonData.length>0){
-						$("#image-gallery").find("li").remove(); 
+						$("#image-galle").find("li").remove(); 
 						var infoStr="";
 						for(var i=0;i<jsonData.length;i++){
-							infoStr=infoStr+ '<li data-thumb="img/thumb/cS-1.jpg">';
-							infoStr=infoStr+'<h5>'+jsonData[i].store_name+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="pull-center">店长：'+jsonData[i].store_user+'</span></h5>';
+							infoStr=infoStr+ '<li data-thumb="img/thumb/cS-1.jpg" id="store_info">';
+							infoStr=infoStr+'<h4>'+jsonData[i].store_name+'<span class="pull-right">店长：'+jsonData[i].store_user+'</span></h4>';
 							infoStr=infoStr+'<div class="col-sm-12">';
-							infoStr=infoStr+'<div class="col-sm-6 no-padding">昨日GMV：</br><span>￥'+(jsonData[i].pro_total_gmv+jsonData[i].ser_total_gmv+jsonData[i].gro_total_gmv).toFixed(2)+'</span></div>';
-							infoStr=infoStr+'<div class="col-sm-6 no-padding">商品类GMV：</br><span>￥'+jsonData[i].pro_total_gmv+'</span></div>';
-							infoStr=infoStr+'<div class="col-sm-6 no-padding">服务类GMV：</br><span>￥'+jsonData[i].ser_total_gmv+'</span></div>';
-							infoStr=infoStr+'<div class="col-sm-6 no-padding">团购GMV：</br><span>￥'+jsonData[i].gro_total_gmv+'</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cube"></i>昨日GMV：<span>￥'+(jsonData[i].pro_total_gmv+jsonData[i].ser_total_gmv+jsonData[i].gro_total_gmv).toFixed(2)+'</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-paw"></i>商品类GMV：<span>￥'+jsonData[i].pro_total_gmv+'</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>服务类GMV：<span>￥'+jsonData[i].ser_total_gmv+'</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>团购GMV：<span>￥'+jsonData[i].gro_total_gmv+'</span></div>';
 							infoStr=infoStr+'</div>';
-							infoStr=infoStr+'<div class="col-sm-6">社员新增：<span>'+jsonData[i].member_num+'人</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6"><i class="fa fa-male"></i>社员新增：<span>'+jsonData[i].member_num+'人</span></div>';
 		                    infoStr=infoStr+'</li>';
 						}
-						$("#image-gallery").append(infoStr); 
+						$("#image-galle").append(infoStr); 
 					}else{
 		        		crm_alert(5,"系统查无此条件的数据");
 		        		return;
 					}
 				}
 		},false);
+		loadingsize();
 	}
+	
+	function loadingsize(){
+		var storeinfo=document.getElementById('image-galle');
+		storeinfo.style.width='530px';
+		storeinfo.style.overflow='hidden';
+		storeinfo.style.transform='none';
+	}
+	
+	function initScatterplot(){
+		  doManager("strategyActivityManager","queryDataOfScatterplot",null,
+				function(data,textStatus,XmlHttpRequest){
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.length!=0){
+							$(jsonData).each(function(index,element){
+								var temp = [];
+								temp.push(element.ordernum);
+								temp.push((element.ordergmv/10000).toFixed(2));
+								temp.push(element.store_name);
+								temp.push(element.store_no);
+								dataBJ.push(temp);
+		                 	});
+							option3.series[0].data = dataBJ;
+							myChart3.setOption(option3,true);
+						}else{
+							dataBJ = [];
+							option3.series[0].data = dataBJ;
+							myChart3.setOption(option3,true);	
+						}
+					}
+			});
+	  }
 	
 	function showYestodayGmvRanking(){
 		var yyStr="";

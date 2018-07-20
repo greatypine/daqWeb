@@ -148,6 +148,8 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 
 	@Override
 	public void getHistoryEmployeePositionsDistance() {
+		EmployeeMoreInfoManager employeeMoreInfoManager = (EmployeeMoreInfoManager)SpringHelper.getBean("employeeMoreInfoManager");
+
 		Map<String, Object> result = new HashMap<String, Object>();
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
@@ -227,12 +229,12 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 	     									new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
 	     					  
 	     					preObject(employeeMoreInfo1);
-	     					this.saveObject(employeeMoreInfo1);
+							employeeMoreInfoManager.saveObject(employeeMoreInfo1);
 	     					 m++;
 	     					}
 	     			   }else{
 	     				   preObject(employeeMoreInfo);
-	     				   this.saveObject(employeeMoreInfo);
+						   employeeMoreInfoManager.saveObject(employeeMoreInfo);
 	     				   m++;
 	     			   }
 	     		   }

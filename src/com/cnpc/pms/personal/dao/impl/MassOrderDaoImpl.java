@@ -41,9 +41,13 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Map<String, Object> queryMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo, String timeFlag) {
 		String sqlA = "select CONCAT(a.id,'') as id, a.order_sn,IFNULL(INSERT(a.customer_mobile_phone,4,4,'****'),'') as customer_mobile_phone,a.eshop_name,a.employee_name,"
-				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,a.create_time,a.sign_time,a.return_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,"
-				+ "a.customer_name,IFNULL(a.addr_name,'') as addr_name,IFNULL(INSERT(a.addr_mobilephone,4,4,'****'),'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,a.channel_name,a.department_name,a.customer_isnew_flag,a.area_code,"
-				+ "a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score from ";
+				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,a.create_time,a.sign_time,a.return_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
+				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.customer_name,IFNULL(a.addr_name,'') as addr_name,"
+				+ "IFNULL(INSERT(a.addr_mobilephone,4,4,'****'),'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,a.channel_name,a.department_name,"
+				+ "a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score,IFNULL(a.order_tag2,'') as order_tag2 "
+//				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit,IFNULL(a.apportion_rebate,0) as apportion_rebate,"
+//				+ "IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price "
+				+ "from ";
 
 		String sqlB = sqlA;
 
@@ -68,6 +72,11 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sqlTemp2 = sqlTemp2 + " df_mass_order_total a ";
 		}
 
+		if(StringUtils.isNotEmpty(massOrderDto.getBusi_names())){
+			sqlTemp2 = sqlTemp2 + " JOIN df_activity_scope das ON a.store_code=das.store_no ";
+			sqlB = sqlB + " JOIN df_activity_scope das ON a.store_code=das.store_no ";
+		}
+		
 		sqlA = sqlA + sqlTemp2 + " where a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
 		sqlB = sqlB + " where a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
 
@@ -198,7 +207,10 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					+ " and a.info_village_code in (select vc.code from tiny_village_code vc where vc.tiny_village_name like '%"
 					+ massOrderDto.getVillage_name().trim() + "%') ";
 		}
-
+		if (StringUtils.isNotEmpty(massOrderDto.getBusi_names())) {
+			sql = sql + " and a.order_tag2 in ( " + massOrderDto.getBusi_names() + ")";
+		}
+		
 		if(StringUtils.isNotEmpty(massOrderDto.getSort_tag()) && StringUtils.isNotEmpty(massOrderDto.getSort_type())){
 			sqlA = sqlA + sql + " ORDER BY a.trading_price "+massOrderDto.getSort_tag()+" ";
 		}else{
@@ -244,24 +256,32 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> exportOrder(MassOrderDto massOrderDto, String timeFlag) {
-		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,a.info_employee_a_no,IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,"
-				+ "IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.sign_time,a.return_time,a.employee_name,a.employee_phone,"
+		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,IFNULL(a.info_employee_a_no,'') AS info_employee_a_no,"
+				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,"
+				+ "IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.sign_time,IFNULL(a.return_time,'') AS return_time,IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,"
 				+ "a.eshop_name,a.store_name,a.store_code,a.channel_name,a.department_name,a.store_city_name,CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,"
 				+ "CASE WHEN a.abnormal_label='1' THEN '是'  ELSE '否' END AS abnormal_label,CASE WHEN a.return_label='1' THEN '是'  ELSE '否' END AS return_label,"
 				+ "CASE WHEN a.loan_label='1' THEN '是'  ELSE '否' END AS loan_label,CASE WHEN a.loan_label='3' THEN '是'  ELSE '否' END AS car_label,"
 				+ "CASE WHEN a.loan_label='4' THEN '是'  ELSE '否' END AS quick_label,CASE WHEN a.loan_label='5' THEN '是'  ELSE '否' END AS gift_label,"
 				+ "CASE WHEN a.customer_isnew_flag='20' THEN '拉新20元' WHEN a.customer_isnew_flag='10' THEN '拉新10元' WHEN a.customer_isnew_flag='0' THEN '拉新'  ELSE '否' END AS customer_isnew_flag,"
 				+ "CASE WHEN a.order_tag1 like '%B%' THEN '是'  ELSE '否' END AS order_tag_b,CASE WHEN a.order_tag1 like '%K%' THEN '是'  ELSE '否' END AS order_tag_k,"
-				+ "CASE WHEN a.order_tag1 like '%S%' THEN '是'  ELSE '否' END AS order_tag_s, CASE WHEN a.score is not null THEN '是' ELSE '否' END AS score from ";
+				+ "CASE WHEN a.order_tag1 like '%S%' THEN '是'  ELSE '否' END AS order_tag_s, CASE WHEN a.score is not null THEN '是' ELSE '否' END AS score,"
+				+ "CASE WHEN a.order_tag2 like '%1%' THEN '是'  ELSE '否' END AS order_tag_product, CASE WHEN a.order_tag2 like '%2%' THEN '是' ELSE '否' END AS order_tag_service,"
+				+ "CASE WHEN a.order_tag2 like '%3%' THEN '是'  ELSE '否' END AS order_tag_groupon "
+//				+ ",IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit "
+				+ "from ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_daily ";
+			sql = sql + " df_mass_order_daily a ";
 		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_monthly ";
+			sql = sql + " df_mass_order_monthly a ";
 		} else {
-			sql = sql + " df_mass_order_total ";
+			sql = sql + " df_mass_order_total a ";
 		}
-		sql = sql + " a where a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
+		if(StringUtils.isNotEmpty(massOrderDto.getBusi_names())){
+			sql = sql + " JOIN df_activity_scope das ON a.store_code=das.store_no ";
+		}
+		sql = sql + " where a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
 		if (StringUtils.isNotEmpty(massOrderDto.getBeginDate())) {
 			sql = sql + " and (a.sign_time between '" + massOrderDto.getBeginDate() + " 00:00:00' and '"
 					+ massOrderDto.getEndDate() + " 23:59:59')";
@@ -388,7 +408,9 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					+ " and a.info_village_code in (select vc.code from tiny_village_code vc where vc.tiny_village_name like '%"
 					+ massOrderDto.getVillage_name().trim() + "%') ";
 		}
-		
+		if (StringUtils.isNotEmpty(massOrderDto.getBusi_names())) {
+			sql = sql + " and a.order_tag2 in ( " + massOrderDto.getBusi_names() + ")";
+		}
 		if(StringUtils.isNotEmpty(massOrderDto.getSort_tag()) && StringUtils.isNotEmpty(massOrderDto.getSort_type())){
 			sql =  sql + " ORDER BY a.trading_price "+massOrderDto.getSort_tag()+" ";
 		}else{
