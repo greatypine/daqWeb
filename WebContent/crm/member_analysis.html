@@ -87,7 +87,7 @@
      -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
  .add_citymember{wposition: absolute;}
  .toast{
-     width:400px;
+     width:450px;
      height:240px;
      background:transparent;
      background-color:rgba(241,241,241,1);
@@ -172,7 +172,7 @@
               </ul>
               <div id="cityMember" class="toast" style="display: none">
                   <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
-                  <div style="margin-left: 10%" id="addCityMem">
+                  <div style="margin-left: 5%" id="addCityMem">
                   </div>
               </div>
              <!-- </div>-->
@@ -508,8 +508,8 @@ function showAddMember(){
         $("#cityMember").show();
     });
     $(".add_citymember").mouseleave(function(){
-    	$("#setadd").val("0");
-        $("#cityMember").hide();
+    	/* $("#setadd").val("0");
+        $("#cityMember").hide(); */
     });
 }
 function doCityMem(citycode){
@@ -3221,12 +3221,12 @@ var showOrderType = function(dataServer){
      for(var i=0;i<cityName.length;i++){
          if(((i+1)%3)==0){
              if(i==cityName.length-1){
-                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
+                 cityStr += "<li style='width: 130px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
              }else{
-                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
+                 cityStr += "<li style='width: 130px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
              }
          }else{
-             cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
+             cityStr += "<li style='width: 130px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
          }
      }
      $("#addCityMem").html(cityStr);
