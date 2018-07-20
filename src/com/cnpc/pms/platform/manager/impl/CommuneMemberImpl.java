@@ -404,7 +404,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 		String cityno = "";
-		if(!"0000".equals(dd)||!cityno.substring(0,1).equals("0")) {
+		if(!"0000".equals(dd)) {
 			if(dd!=null&&!dd.substring(0,1).equals("0")){
 				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(dd));
 				cityno = cityNO.get(0).get("cityno").toString();
