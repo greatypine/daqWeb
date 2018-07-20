@@ -156,13 +156,10 @@ function getUser(){
 	doManager("UserManager", "getCurrentUserCity",null,function(data, textStatus, XMLHttpRequest) {
 		if (data.result) {
 			var citylist= JSON.parse(data.data);
-			if(citylist.length == 0){
-				$("#city_name").attr("disabled",true);
-				crm_alert(0,"该账号未分配城市！");
-			}
 			var citylistLength = citylist.length;
 			if(citylistLength == 0){
 				$("#city_name").attr("disabled",true);
+				crm_alert(0,"该账号未分配城市！");
 			}
 			if(citylistLength == 1){
 				var cityName = citylist[0].cityname==null?"":citylist[0].cityname;
