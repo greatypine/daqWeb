@@ -378,4 +378,13 @@
     <servlet-name>reciveMessageReply</servlet-name>
     <url-pattern>/replyMessage.action</url-pattern>
   </servlet-mapping>
+  <!--上传文件到oss-->
+  <servlet>
+    <servlet-name>uploadFileToOss</servlet-name>
+    <servlet-class>com.cnpc.pms.upload.action.UploadFileToOssAction</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>uploadFileToOss</servlet-name>
+    <url-pattern>/uploadFileToOss.action</url-pattern>
+  </servlet-mapping>
 </web-app>

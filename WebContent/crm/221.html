@@ -264,6 +264,7 @@
 <script src="bootstrap/js/raphael-min.js"></script>
 <script src="plugins/morris/morris.min.js"></script>
 <script src="plugins/gooey_menu/gooey.min.js"></script>
+<script src="dist/js/base64.js"></script>
 <script type ="text/javascript">
 
   Date.prototype.format = function() {  
@@ -278,8 +279,35 @@
   
 </script>
 <!-- 引入 ECharts 文件 -->
-<script src="dist/js/echarts.common.min.js"></script>  
+<script src="dist/js/echarts.common.min.js	"></script>  
   <script type ="text/javascript">
+  
+  var screenlogin=getUrlParamByKey("su");
+  
+  function loginShow(){
+	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+		var b = new Base64();
+		screenlogin=b.decode(screenlogin);
+		var obj=JSON.parse(screenlogin);
+		var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
+	    var callback = function callback(data, textStatus, XMLHttpRequest) {
+	    	var stateObject = {};
+	    	var newUrl = "/daqWeb/crm/221.html?ta=0";
+	    	//target = 1;
+	    	history.replaceState(stateObject,null,newUrl);
+	    	excuteData();
+		};
+	    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+			alert("登录信息错误，请确认输入或联系管理员!");
+			return false;
+		}
+	    var url = "../login.do";
+	    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+	}else{
+		excuteData();
+	}
+  };
+  
   var myChart1 = echarts.init(document.getElementById('main1'));
 
   //社员人数
@@ -360,6 +388,11 @@
 <script>
 
 	$(function(){
+		loginShow();
+	});
+    
+	function excuteData(){
+		getUser();
 		gmvXData = initgmvXData();
 		inintTotalGmvData();
 		inintYestodayGmvData();
@@ -367,9 +400,8 @@
 		initMemberTrend();
 // 		inintMemberData();
 		showStoreRanking();
-		
-	});
-    
+	};
+	
 	
 	var totalGMV = '0';
 	var start_time = '2018-07-01';
@@ -427,6 +459,8 @@
 	}
 	
 	var yestoday_yyGMV = '0';
+	var yestoday_jwsGMV = '0';
+	var yestoday_grouponGMV = '0';
 	function inintYestodayGmvData(){
 		  doManager("strategyActivityManager","queryStrategyGMV",[yestoday_time,yestoday_time],
 				function(datax,textStatus,XmlHttpRequest){
@@ -704,13 +738,27 @@
 	    myChart5.setOption(option5);
 	    }
 	
+	  
+	  function getUser(){
+			doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var employeeID="";
+					var curr_user = JSON.parse(data.data);
+					if(curr_user == null){
+						urlStr = "../logout.do";
+						window.location.href = urlStr;
+					}
+				}
+		  	},false);
+		};
+	
 	function toBussiness(){
  		window.location.href="221_bussiness.html";
- 	}
+ 	};
  	
  	function toStore(){
  		window.location.href="221_store.html";
- 	}
+ 	};
 	
 	function initgmvXData() {
       var data = [];
@@ -721,7 +769,7 @@
       var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
       data = getAllDate(fistDay,curDay);
       return data;
-    }
+    };
 	
   //获取当年所有的日期
   function getAllDate(begin, end) {  
@@ -734,12 +782,12 @@
       de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);  
       var unixDb = db.getTime();  
       var unixDe = de.getTime();  
-      for (var k = unixDb; k <= unixDe;) {  
-          result.push((new Date(parseInt(k))).format());
+      for (var k = unixDb; k <= unixDe;) {
+    	 result.push((new Date(parseInt(k))).format());
           k = k + 24 * 60 * 60 * 1000;  
-      }  
+      };  
       return result;
-  } 
+  } ;
 
   Date.prototype.toLocaleString = function() {
       return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();

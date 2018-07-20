@@ -446,5 +446,12 @@ public interface UserManager extends IManager {
 	 
 	 
 	 public String modifyStoreUserPassword(User user);
+
+	/**
+	 * app跳转web页面调用此方法登陆
+	 * @param
+	 * @return
+     */
+	public User isAppScreenUser(String code,String employeeId,String password);
 	 
 }

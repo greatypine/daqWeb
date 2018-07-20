@@ -26,7 +26,7 @@ public interface ObserveParameterDao extends IDAO{
 	 * @param observe_month
 	 * @return
 	 */
-	public List<Map<String,Object>> queryExitObserveParameter(String store_id,String observe_month,String save_type,String cityname);
+	public List<Map<String,Object>> queryExitObserveParameter(String store_id,String observe_month,String save_type,String cityname,String employeeId);
 	
 	
 	/**
@@ -36,7 +36,7 @@ public interface ObserveParameterDao extends IDAO{
 	 * @param cityname
 	 * @return
 	 */
-	public List<String> queryObserveMonthByCity(String cityname);
+	public List<String> queryObserveMonthByCity(String cityname,String store_id,String observe_month,String employeeId);
 	
 	
 	/**
@@ -46,6 +46,6 @@ public interface ObserveParameterDao extends IDAO{
 	 * @param cityname
 	 * @return
 	 */
-	public List<Map<String,Object>> queryObserveParameterSummaryByCity(String cityname);
+	public List<Map<String,Object>> queryObserveParameterSummaryByCity(String cityname,String store_id,String observe_month,String employeeId);
 
 }

@@ -194,8 +194,8 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 
 	@Override
 	public List<Map<String, Object>> queryMemberTrend(){
-		String sql = "SELECT count(member.customer_id) AS membernum, DATE(member.opencard_time) AS datetime FROM df_user_member member "
-				+ "JOIN df_activity_scope das ON (member.regist_storeid = das.platformid) WHERE	DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(member.opencard_time) GROUP BY datetime ";
+		String sql = "SELECT count(member.customer_id) AS membernum, DATE_FORMAT(member.opencard_time,\"%m-%d\") AS datetime FROM df_user_member member "
+				+ "JOIN df_activity_scope das ON (member.regist_storeid = das.platformid) WHERE	DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date(member.opencard_time) and date(member.opencard_time)<CURDATE() GROUP BY datetime ";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据

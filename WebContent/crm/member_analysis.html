@@ -7,7 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min.css">
+  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min_mem.css">
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
@@ -56,23 +56,23 @@
     width: 100px;}
     .navimenu{min-height: 800px; padding-top: 0;}
     #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
-      #process_div{ 
-		background-color:#292a2b; 
-		display:inline; 
-		z-index:100000;  
-		left:0px; 
+      #process_div{
+		background-color:#292a2b;
+		display:inline;
+		z-index:100000;
+		left:0px;
 		opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
-		filter:Alpha(Opacity=30); 
-		opacity: 0.3; 
-	} 
-	
+		filter:Alpha(Opacity=30);
+		opacity: 0.3;
+	}
+
 	#process_div_pic{
 		position:fixed;
 		top:50%;
-		left:50%; 
-		z-index:100000000; 
-		margin:-16px 0 0 -50px; 
-		width:100px; 
+		left:50%;
+		z-index:100000000;
+		margin:-16px 0 0 -50px;
+		width:100px;
 		height:32px;
 		color: #fff;
 	}
@@ -87,7 +87,7 @@
      -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
  .add_citymember{wposition: absolute;}
  .toast{
-     width:400px;
+     width:450px;
      height:240px;
      background:transparent;
      background-color:rgba(241,241,241,1);
@@ -102,8 +102,8 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <!-- Site wrapper -->
-<div id="process_div" ></div> 
- <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
+<div id="process_div" ></div>
+ <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
 <div class="wrapper">
 <!-- 新header -->
     <div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
@@ -172,7 +172,7 @@
               </ul>
               <div id="cityMember" class="toast" style="display: none">
                   <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
-                  <div style="margin-left: 10%" id="addCityMem">
+                  <div style="margin-left: 5%" id="addCityMem">
                   </div>
               </div>
              <!-- </div>-->
@@ -185,11 +185,11 @@
             </div>
         </div>
     </div>
-      
+
 <!--         <div class="box box-default report">
           <div class="box-header h4">
           	<strong>安心合作社运营简报</strong>
-          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a> 
+          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a>
           </div>
           <div class="box-body">
             <div class="col-sm-5 col-xs-12 text-center"><img src="dist/img/member1.png"></div>
@@ -402,7 +402,7 @@
                 </tr>
                 </tbody>
               </table>
-            </div> 
+            </div>
 <!--              <div class="col-sm-6 no-padding">
               <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">社员省钱榜</span></h4>
               <table class="table table-bordered">
@@ -483,7 +483,7 @@
 <script src="dist/js/nav-scroll.js"></script>
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/nav-scroll.js"></script>
-
+<script src="dist/js/base64.js"></script>
 <script src="plugins/gooey_menu/gooey.min.js"></script>
 <script>
 var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
@@ -501,7 +501,7 @@ function showAddMember(){
     		$("#setadd").val("0");
     		$("#cityMember").hide();
     	}
-    	
+
     });
     $(".add_citymember").mouseover(function(){
     	$("#setadd").val("1");
@@ -517,6 +517,28 @@ function doCityMem(citycode){
     var url = "member_analysis_city.html?c="+encode64(citycode);
     window.open(url);
 }
+
+//定时刷新今日订单量、成交额、新增社员量
+function doUpdate(){
+	doManager('communeMember','selectDayAllCm',"0000",function(data){
+		if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//clearInterval($("#dayDealCount"));
+        	//alert("resultJson.dayDealCount"+resultJson.dayDealCount+"dayDealSum"+resultJson.dayDealSum+"dayAddMem"+resultJson.dayAddMem);
+        	$("#dayDealCount").html(parseInt(resultJson.dayDealCount==null?'0':resultJson.dayDealCount));
+            //当日成交额
+        	$("#dayDealSum").html(changeMoney(parseInt(resultJson.dayDealSum==null?'0':resultJson.dayDealSum)));
+        	//新增社员
+        	$("#dayNewMem").html(parseInt(resultJson.dayAddMem==null?'0':resultJson.dayAddMem));
+        	setCityAddMem(resultJson);
+		}
+	});
+	//当日订单量
+	
+	
+	
+}
+
 
 var showCityInfo = function (dataServer){
     var cityName = dataServer.jsonCityName;
@@ -539,11 +561,14 @@ var showCityInfo = function (dataServer){
 		window.open(url,"user_member_view");
 	}
 	var screenlogin=getUrlParamByKey("su");
-	
+
 	function loginShow(){
-		
+
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
-			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+            var b = new Base64();
+            screenlogin=b.decode(screenlogin);
+            var obj=JSON.parse(screenlogin);
+            var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
 		    var callback = function callback(data, textStatus, XMLHttpRequest) {
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
 		    	var stateObject = {};
@@ -560,14 +585,14 @@ var showCityInfo = function (dataServer){
 				return false;
 			}
 		    var url = "../login.do";
-		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback);
 		}else{
 			getUser();
 			doMemberInfo();
 			doMemberSum();
 			//doEshopMemberSum();
 		}
-		
+
 	}
 
   var showMemberGrow = function (dataServer){
@@ -780,7 +805,7 @@ var showCityInfo = function (dataServer){
       myChart1_1.setOption(option1_1);
 
   }
-  
+
   var showMember = function (dataServer){
 	  var myChart2 = echarts.init(document.getElementById('main2'));
 	  //合作社社员
@@ -845,7 +870,7 @@ var showCityInfo = function (dataServer){
 	  };
 	  myChart2.setOption(option2);
   }
-  
+
   var showMemberInfo = function(dataServer){
 	  var myChart3 = echarts.init(document.getElementById('main3'));
 	  var myChart4 = echarts.init(document.getElementById('main4'));
@@ -932,7 +957,7 @@ var showCityInfo = function (dataServer){
 	      }
 	    };
 	  });
-	  
+
 	  option4 = {
 	    tooltip: {
 	      trigger: 'item',
@@ -1040,9 +1065,9 @@ var showCityInfo = function (dataServer){
 	    }
     ]
 };
-	  
-	  
-	  
+
+
+
 	  //月份
 	  option6 = {
 	    title: [{
@@ -1140,18 +1165,18 @@ var showCityInfo = function (dataServer){
 	var meCountL = dataServer.meCount.split('-');
 	var  len = meProL.length-2;
 	for(var i=0;i<len;i++){
-		
+
 		if(len>0){
 			if((len-1)==i){
 				meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
 			}else{
 				meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"},';
 			}
-			
+
 		}else{
 			meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
 		}
-	}	
+	}
 	meData+="]";
     var cityUserDataObject = JSON.parse(meData);
     option5.series[0].data = cityUserDataObject;
@@ -1165,7 +1190,7 @@ var showCityInfo = function (dataServer){
 	        //var depName=encode64(businessDepRankGMVOption.legend.data[params.dataIndex]);
 	        window.open("user_member_view.html");
 	    }); */
-	  
+
   }
 </script>
 <script type="text/javascript">
@@ -1195,8 +1220,8 @@ function doMemberInfo(){
             setCityAddMem(resultJson);
 
         	setLoadingMark(false);
-        	//设置10秒刷新页面
-        	//setInterval("window.location.reload()",10000);
+        	//设置10分钟刷新页面600
+        	setInterval("doUpdate()","60000");
         }else{
         	alert("暂无社员相关信息");
         }
@@ -1225,7 +1250,7 @@ function doMemberSum(){
         	showProduct(resultJson);
         	//E店情况
         	showEshop(resultJson);
-        	
+
         	//粮票
         	showRebateMoney(resultJson);
         }else{
@@ -1237,10 +1262,10 @@ function doEshopMemberSum(){
     doManager('communeMember','selectMeOrder',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	
+
         	showEshopCount(resultJson);
         	//社员、非社员订单走势
-        	
+
         	showEshopMemCount(resultJson);
         	//社员、非社员成交额走势
         	showEshopMemSum(resultJson);
@@ -1367,11 +1392,11 @@ function btnAction(type){
     }
 
 }
- 
+
 var showMemberRegist = function (dataServer){
 	  var myChart7 = echarts.init(document.getElementById('main7'));
 	  //社员分布
-	  
+
 /* 	  option7 = {
 	    title : {
 	        text: '社员分布',
@@ -1438,7 +1463,7 @@ var showMemberRegist = function (dataServer){
 	                    barBorderWidth: 6,
 	                    barBorderRadius:0,
 	                    label : {
-	                        show: true, 
+	                        show: true,
 	                        position: 'top',
 	                        formatter: function (params) {
 	                            for (var i = 0, l = option7.xAxis[0].data.length; i < l; i++) {
@@ -1529,7 +1554,7 @@ var showMemberRegist = function (dataServer){
 			                    barBorderWidth: 5,
 			                    barBorderRadius:0,
 			                    label : {
-			                        show: true, 
+			                        show: true,
 			                        position: 'insideBottom'
 			                    }
 			                }
@@ -1537,8 +1562,8 @@ var showMemberRegist = function (dataServer){
 			            data: dataServer.reCityMonCou
 			        }
 			    ]
-			}; 
-	  
+			};
+
 	  myChart7.setOption(option7);
 };
 var showCityMember = function(dataserver){
@@ -1660,7 +1685,7 @@ var showProduct = function (dataServer){
 			   hotStr= "<tr>"
                    +"<td>"+hotProName[i]+"</td>"
                    +"<td>"+hotProCount[i]+"</td>";//+"<td>"+hotProSellDur[i]+"</td>"        //售卖时长
-                   
+
                    switch(i)
                    {
                    case 0:
@@ -1682,7 +1707,7 @@ var showProduct = function (dataServer){
                 	   hotStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
                    }
                    hotStr += "</tr>";
-              $("#hotPro_data").append(hotStr);     
+              $("#hotPro_data").append(hotStr);
 	   }
 	   var coolProName = dataServer.coolProName;
 	   var coolProCount = dataServer.coolProCount;
@@ -1715,9 +1740,9 @@ var showProduct = function (dataServer){
                      break;
                    default:
                 	   coolStr += "<td><span class='badge bg-brown'>"+(j+1)+"</span></td>";
-                   }      
+                   }
                    coolStr += "</tr>";
-              $("#coolPro_data").append(coolStr);     
+              $("#coolPro_data").append(coolStr);
 	   }
 };
 
@@ -1762,8 +1787,8 @@ var showHistoryData = function (dataServer) {
 	$("#jsonEshopWeekCou").html(parseInt(dataServer.jsonEshopWeekCou==null?'0':dataServer.jsonEshopWeekCou));
 	//E店累计成交额
 	$("#cmEshopGmv").html(changeMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)));
-	
-	   
+
+
 	  var myChart9 = echarts.init(document.getElementById('main9'));
 	  //社员人数
 option9 = {
@@ -1789,7 +1814,7 @@ option9 = {
   },
   series: [
   	{
-    name:'成交量',	
+    name:'成交量',
     type: 'pie',
     radius: '70%',
     center: ['50%', '60%'],
@@ -1836,7 +1861,7 @@ option9 = {
   ],
 };
 	  myChart9.setOption(option9);
-	
+
 };
 var showEshop = function (dataServer) {
 	//社员量
@@ -1853,7 +1878,7 @@ var showEshop = function (dataServer) {
                    +"<td>"+eshopName[i]+"</td>"
                    +"<td>"+eshopSum[i]+"</td>"
                    +"<td>"+eshopCount[i]+"</td>";
-                   
+
                    switch(i)
                    {
                    case 0:
@@ -1875,7 +1900,7 @@ var showEshop = function (dataServer) {
                 	   eshopStr += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
                    }
                    eshopStr += "</tr>";
-              $("#eshop_data").append(eshopStr);     
+              $("#eshop_data").append(eshopStr);
 	   }
 };
 var showRebateMoney = function (dataServer) {
@@ -1890,7 +1915,7 @@ var showRebateMoney = function (dataServer) {
 			   retrenchmoney= "<tr>"
 	                   +"<td>"+retrenchPhones[i]+"</td>"
 	                   +"<td>"+retrenchCous[i]+"</td>";
-	                   
+
 	                   switch(i)
 	                   {
 	                   case 0:
@@ -1912,7 +1937,7 @@ var showRebateMoney = function (dataServer) {
 	                	   retrenchmoney += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
 	                   }
 	                   retrenchmoney += "</tr>";
-	              $("#retrench_money").append(retrenchmoney);     
+	              $("#retrench_money").append(retrenchmoney);
 		   }
 	   } */
 
@@ -1926,7 +1951,7 @@ var showRebateMoney = function (dataServer) {
 			   haverebate= "<tr>"
 	                   +"<td>"+haveRebatePhones[i]+"</td>"
 	                   +"<td>"+haveRebateCous[i]+"</td>";
-	                   
+
 	                   switch(i)
 	                   {
 	                   case 0:
@@ -1948,7 +1973,7 @@ var showRebateMoney = function (dataServer) {
 	                	   haverebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
 	                   }
 	                   haverebate += "</tr>";
-	              $("#have_rebate").append(haverebate);     
+	              $("#have_rebate").append(haverebate);
 		   }
 	   } */
 
@@ -1983,7 +2008,7 @@ var showRebateMoney = function (dataServer) {
                    usedrebate += "<td>"+usedRebateCous[i]+"</td>"
 	           +"<td>"+usedRebatePhones[i]+"</td>";
 	           usedrebate += "</tr>";
-	              $("#used_rebate").append(usedrebate);     
+	              $("#used_rebate").append(usedrebate);
 		   }
 	   }
 
@@ -2015,18 +2040,18 @@ var showRebateMoney = function (dataServer) {
                    default:
                 	   sumrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
                    }
-	                   
+
 			   sumrebate +="<td>"+rebateCous[i]+"</td>"
 	                   +"<td>"+rebatePhones[i]+"</td>";
-	                   
-	                  
+
+
 	                   sumrebate += "</tr>";
 	   				   $("#sum_rebate").append(sumrebate);
 		   }
 	   }
-	   
+
 	  var myChart10 = echarts.init(document.getElementById('main10'));
-	  
+
 	  	option10 = {
 			    tooltip: {
 			      trigger: 'item',
@@ -2091,7 +2116,7 @@ var showRebateMoney = function (dataServer) {
 			  };
 		myChart10.setOption(option10);
 	  var myChart11 = echarts.init(document.getElementById('main11'));
-	  
+
 	  	option11 = {
 			    tooltip: {
 			      trigger: 'item',
@@ -2154,7 +2179,7 @@ var showRebateMoney = function (dataServer) {
 			    }]
 			  };
 		myChart11.setOption(option11);
-	
+
 };
 
 var showDeal = function (dataServer){
@@ -2362,11 +2387,11 @@ function rebateMoney(x) {
 	}
     return y;
 }
-function ForDight(str,How){  
-    Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
-    return Dight;  
+function ForDight(str,How){
+    Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);
+    return Dight;
  }
- 
+
 var showEshopMemCount = function (dataServer){
 	var myChart14= echarts.init(document.getElementById('main14'));
 	option14 = {
@@ -2853,13 +2878,13 @@ var showEshopMemSum = function (dataServer){
 		        {
 		            type : 'category',
 		            data: dataServer.jsonCityShopNames,
-		            axisLabel: {  
-                        interval: 0,  
-                        formatter:function(value)  
-                        {  
-                            return value.split("").join("\n");  
-                        }  
-                    } 
+		            axisLabel: {
+                        interval: 0,
+                        formatter:function(value)
+                        {
+                            return value.split("").join("\n");
+                        }
+                    }
 		        }
 		    ],
 		    yAxis : [
@@ -2910,7 +2935,7 @@ var showEshopMemSum = function (dataServer){
 	myChart17.setOption(option17);
 }
 var showTimeOrder = function(dataServer){
-	
+
 	var myChart20= echarts.init(document.getElementById('main20'));
 
 
@@ -2970,8 +2995,8 @@ var showTimeOrder = function(dataServer){
 	        boundaryGap : false,
 	        axisLine: {onZero: false},
 	        splitLine: {show: false},
-	        axisLabel :{  
-	            interval:0   
+	        axisLabel :{
+	            interval:0
 	        },
 	        splitNumber: 20,
 	        min: 'dataMin',
@@ -3012,10 +3037,10 @@ var showTimeOrder = function(dataServer){
 	    ]
 	};
 	myChart20.setOption(option20);
-	
+
 	var myChart21= echarts.init(document.getElementById('main21'));
-	
-	
+
+
 	  //订单配送时效分布
   	  var datatimes = [{
 		            	    value: dataServer.jsonSelCount[7],
@@ -3067,7 +3092,7 @@ var showTimeOrder = function(dataServer){
           	    value: dataServer.jsonSelCount[7],
           	    name: "大于1天"
           	  }
-          ]; 
+          ];
 	  }
 
 	  option21 = {
@@ -3115,7 +3140,7 @@ var showTimeOrder = function(dataServer){
 			        }
 			    ]
 			};
-	  
+
 	  myChart21.setOption(option21);
 }
 
@@ -3170,23 +3195,23 @@ var showOrderType = function(dataServer){
 	var ordTypeSum = dataServer.jsonOrderTypeSums;
 	var  len = ordTypeName.length;
 	for(var i=0;i<len;i++){
-		
+
 		if(len>0){
 			if((len-1)==i){
 				typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
 			}else{
 				typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"},';
 			}
-			
+
 		}else{
 			typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
 		}
-	}	
+	}
 	typeData+="]";
 	var cityUserDataObject = JSON.parse(typeData);
 	option22.series[0].data = cityUserDataObject;
 
-	  
+
 	  myChart22.setOption(option22);
 }
  var setCityAddMem = function(dataServer){
@@ -3196,15 +3221,15 @@ var showOrderType = function(dataServer){
      for(var i=0;i<cityName.length;i++){
          if(((i+1)%3)==0){
              if(i==cityName.length-1){
-                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
+                 cityStr += "<li style='width: 110px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
              }else{
-                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
+                 cityStr += "<li style='width: 110px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
              }
          }else{
-             cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
+             cityStr += "<li style='width: 110px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
          }
      }
-     $("#addCityMem").append(cityStr);
+     $("#addCityMem").html(cityStr);
  }
 //设置加载中图标
 var setLoadingMark = function (bShow) {

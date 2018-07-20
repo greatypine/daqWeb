@@ -2317,4 +2317,24 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 		return lst_result;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, Object> queryContractById(String contract_id){
+		String sql="select CONCAT(tc.method,'') as method from t_contract tc where tc.id = '"+contract_id+"'";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+	 	List<Map<String, Object>> lst_data = null;
+	 	Map<String, Object> map_r = null;
+	     try{
+	        SQLQuery query = session.createSQLQuery(sql);
+	        lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	        if(lst_data!=null&&lst_data.size()>0){
+		    	 map_r =  lst_data.get(0);
+		     }
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }finally {
+	         session.close();
+	     }
+	    return map_r;
+	}
 }
