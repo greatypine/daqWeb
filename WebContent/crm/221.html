@@ -279,7 +279,7 @@
   
 </script>
 <!-- 引入 ECharts 文件 -->
-<script src="dist/js/echarts.common.min.js"></script>  
+<script src="dist/js/echarts.common.min.js	"></script>  
   <script type ="text/javascript">
   
   var screenlogin=getUrlParamByKey("su");
@@ -306,7 +306,7 @@
 	}else{
 		excuteData();
 	}
-  }
+  };
   
   var myChart1 = echarts.init(document.getElementById('main1'));
 
@@ -400,7 +400,7 @@
 		initMemberTrend();
 // 		inintMemberData();
 		showStoreRanking();
-	}
+	};
 	
 	
 	var totalGMV = '0';
@@ -750,15 +750,15 @@
 					}
 				}
 		  	},false);
-		}
+		};
 	
 	function toBussiness(){
  		window.location.href="221_bussiness.html";
- 	}
+ 	};
  	
  	function toStore(){
  		window.location.href="221_store.html";
- 	}
+ 	};
 	
 	function initgmvXData() {
       var data = [];
@@ -769,7 +769,7 @@
       var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
       data = getAllDate(fistDay,curDay);
       return data;
-    }
+    };
 	
   //获取当年所有的日期
   function getAllDate(begin, end) {  
@@ -783,11 +783,11 @@
       var unixDb = db.getTime();  
       var unixDe = de.getTime();  
       for (var k = unixDb; k <= unixDe;) {  
-          result.push((new Date(parseInt(k))).format());
+          result.push((new Date(parseInt(k))));
           k = k + 24 * 60 * 60 * 1000;  
-      }  
+      };  
       return result;
-  } 
+  } ;
 
   Date.prototype.toLocaleString = function() {
       return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
