@@ -483,7 +483,7 @@
 <script src="dist/js/nav-scroll.js"></script>
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/nav-scroll.js"></script>
-
+    <script src="dist/js/base64.js"/>
 <script src="plugins/gooey_menu/gooey.min.js"></script>
 <script>
 var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
@@ -543,7 +543,10 @@ var showCityInfo = function (dataServer){
 	function loginShow(){
 		
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
-			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+            var b = new Base64();
+            screenlogin=b.decode(screenlogin);
+            var obj=JSON.parse(screenlogin);
+            var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
 		    var callback = function callback(data, textStatus, XMLHttpRequest) {
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
 		    	var stateObject = {};

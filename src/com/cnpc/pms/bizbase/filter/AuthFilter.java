@@ -3,24 +3,6 @@
  */
 package com.cnpc.pms.bizbase.filter;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.cnpc.pms.base.common.model.ClientRequestObject;
 import com.cnpc.pms.base.exception.DispatcherException;
 import com.cnpc.pms.base.exception.UtilityException;
@@ -34,6 +16,17 @@ import com.cnpc.pms.base.util.StrUtil;
 import com.cnpc.pms.bizbase.rbac.resourcemanage.entity.AuthModel;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * The Authority Filter.
@@ -193,6 +186,11 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			//app调用web页面
+			if (url.equals("userManager?isAppScreenUser")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			// skip 通知公告
 			if (url.equals("generalPortalContentManager?getGeneralPortalContentDTOList")) {
 				filterChain.doFilter(servletRequest, servletResponse);
@@ -222,6 +220,10 @@ public class AuthFilter extends OncePerRequestFilter {
 				return;
 			}
 			if (url.equals("functionManager?getStatus")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			if (url.equals("storeManager?findStoreData")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}

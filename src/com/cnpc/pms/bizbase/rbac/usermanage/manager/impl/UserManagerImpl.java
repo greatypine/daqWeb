@@ -39,27 +39,11 @@ import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.personal.dao.CustomerDao;
 import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.RelationDao;
-import com.cnpc.pms.personal.entity.DistCity;
-import com.cnpc.pms.personal.entity.DistCityCode;
-import com.cnpc.pms.personal.entity.Humanresources;
-import com.cnpc.pms.personal.entity.OnLineHumanresources;
-import com.cnpc.pms.personal.entity.SendBoxLoginLog;
-import com.cnpc.pms.personal.entity.Store;
-import com.cnpc.pms.personal.entity.StoreKeeper;
-import com.cnpc.pms.personal.entity.SysUserGroupOpera;
-import com.cnpc.pms.personal.manager.DistCityCodeManager;
-import com.cnpc.pms.personal.manager.DistCityManager;
-import com.cnpc.pms.personal.manager.HumanresourcesManager;
-import com.cnpc.pms.personal.manager.OnLineHumanresourcesManager;
-import com.cnpc.pms.personal.manager.SendBoxLoginLogManager;
-import com.cnpc.pms.personal.manager.StoreKeeperManager;
-import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.personal.manager.SysUserGroupOperaManager;
-import com.cnpc.pms.personal.manager.UserLoginLogManager;
+import com.cnpc.pms.personal.entity.*;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.INConditionForRewrite;
 import com.cnpc.pms.utils.MD5Utils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -2569,5 +2553,22 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		}
 		return ret_msg;
 	}
-	
+
+	@Override
+	public User isAppScreenUser(String code,String employeeId,String password) {
+		IFilter filter = FilterFactory.getSimpleFilter("(code='"+code+"' or employeeId='"+employeeId+"') AND password='"+password+"'");
+		List<User> lst_userList = (List<User>) this.getList(filter);
+		if(lst_userList!=null&&lst_userList.size()>0){
+			User userEntity =lst_userList.get(0);
+			if (userEntity.isSystemManager()) {
+				return userEntity;
+			} else {
+				if (DisableFlagEnum.OFF.getDisabledFlag().equals(
+						userEntity.getDisabledFlag())) {
+					return userEntity;
+				}
+			}
+		}
+		return null;
+	}
 }
