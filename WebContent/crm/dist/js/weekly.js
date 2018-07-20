@@ -3016,6 +3016,244 @@ optionEmpzongguan = {
   ]
 };
 
+//人员动态线上人员
+optionzongbu = {
+  title: {
+    text: '近六周线上人员动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+  },
+  color:["#d06e92","#639d92"],
+  tooltip: {trigger: 'axis'},
+  legend: {
+    data:['离职数量','入职数量'],left:"right",y:"8%",
+    itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+  },
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: 
+  	{
+          axisTick : {show: false},
+          splitLine: {show:true},
+          axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+          axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+        },
+  series: [
+    {
+      name:'离职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+    {
+      name:'入职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    }
+  ]
+};
+	//人员动态：总数
+optionEmpzongbu = {
+  title: {
+    text: '近六周线上人员数统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+  },
+  legend: {
+      data:['总人数'],left:"right",y:"8%",
+      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+    },
+    color:["#036BC8"],
+  tooltip: {trigger: 'axis'},
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: {
+    type: 'value',
+    boundaryGap: [0, 0.1],
+    splitLine: {show:true},
+    //interval: 10,
+  },
+  series: [
+    {
+      name:'总人数',
+      type:'line',
+      stack: '总量',
+      data:[],
+      itemStyle: {
+          normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+  	            offset: 0,
+  	            color: "#036BC8"
+  	          }, {
+  	            offset: 1,
+  	            color: 'rgba(138,43,226,0.8)'
+  	          }]),
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+  ]
+};
+
+//人员动态 线上人员（公司）
+optiongongsi = {
+  title: {
+    text: '近六周国安侠动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+  },
+  color:["#d06e92","#639d92"],
+  tooltip: {trigger: 'axis'},
+  legend: {
+    data:['离职数量','入职数量'],left:"right",y:"8%",
+    itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+  },
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: 
+  	{
+          axisTick : {show: false},
+          splitLine: {show:true},
+          axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+          axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+        },
+  series: [
+    {
+      name:'离职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+    {
+      name:'入职数量',
+      type:'line',
+      data:[],
+      itemStyle: {
+          normal: {
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    }
+  ]
+};
+	//人员动态：总数
+optionEmpgongsi = {
+  title: {
+    text: '近六周国安侠数统计',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"}
+  },
+  legend: {
+      data:['总人数'],left:"right",y:"8%",
+      itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+    },
+    color:["#036BC8"],
+  tooltip: {trigger: 'axis'},
+  grid: {
+    left: '3%',
+    right: '5.6%',
+    bottom: '3%',
+    top:'20%',
+    containLabel: true
+  },
+  xAxis: [{
+    type: 'category',
+    boundaryGap: false,
+    data: six_week_data_array
+  }],
+  yAxis: {
+    type: 'value',
+    boundaryGap: [0, 0.1],
+    splitLine: {show:true},
+    //interval: 10,
+  },
+  series: [
+    {
+      name:'总人数',
+      type:'line',
+      stack: '总量',
+      data:[],
+      itemStyle: {
+          normal: {
+        	  color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+  	            offset: 0,
+  	            color: "#036BC8"
+  	          }, {
+  	            offset: 1,
+  	            color: 'rgba(138,43,226,0.8)'
+  	          }]),
+            label: {
+              show: true,
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            }
+          }
+      }
+    },
+  ]
+};
+
 
 //人员编制动态
 /* option8 = {
@@ -5557,6 +5795,10 @@ function oneyearorsixweek(){
 		var myChartEmpZhuanyuan = echarts.init(document.getElementById('mainempzhuanyuan'));
 		var myChartZongguan = echarts.init(document.getElementById('mainzongguan'));
 		var myChartEmpZongguan = echarts.init(document.getElementById('mainempzongguan'));
+		var myChartZongbu = echarts.init(document.getElementById('mainzongbu'));
+		var myChartEmpZongbu = echarts.init(document.getElementById('mainempzongbu'));
+		//var myChartGongsi = echarts.init(document.getElementById('maingongsi'));
+		//var myChartEmpGongsi = echarts.init(document.getElementById('mainempgongsi'));
 		myChart7.setOption(option7);
 		myChartEmp.setOption(optionEmp);
 		myChartDianzhang.setOption(optiondianzhang);
@@ -5567,6 +5809,10 @@ function oneyearorsixweek(){
 		myChartEmpZhuanyuan.setOption(optionEmpzhuanyuan);
 		myChartZongguan.setOption(optionzongguan);
 		myChartEmpZongguan.setOption(optionEmpzongguan);
+		myChartZongbu.setOption(optionzongbu);
+		myChartEmpZongbu.setOption(optionEmpzongbu);
+		//myChartGongsi.setOption(optiongongsi);
+		//myChartEmpGongsi.setOption(optionEmpgongsi);
 		doManager("humanresourcesManager","getEmployeeInfoByWeek",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
@@ -5776,8 +6022,91 @@ function oneyearorsixweek(){
 				}
 				optionzongguan.series[1].data=toPostZongguanArray;
 				myChartZongguan.setOption(optionzongguan);
-			}
+				
+				//线上人员（总部）
+				var queryZongbuTotal = jsonData.queryZongbuTotal;
+				var zongbuTotalArray = new Array();
+				if(queryZongbuTotal.length >0){
+					zongbuTotalArray.push(queryZongbuTotal[0].a);
+					zongbuTotalArray.push(queryZongbuTotal[0].b);
+					zongbuTotalArray.push(queryZongbuTotal[0].c);
+					zongbuTotalArray.push(queryZongbuTotal[0].d);
+					zongbuTotalArray.push(queryZongbuTotal[0].e);
+					zongbuTotalArray.push(queryZongbuTotal[0].f);
+				}
+				optionEmpzongbu.series[0].data=zongbuTotalArray;
+				optionEmpzongbu.yAxis.min = (queryZongbuTotal[0].a*0.98).toFixed(0);
+				myChartEmpZongbu.setOption(optionEmpzongbu);
+				
+				var queryLeaveZongbu = jsonData.queryLeaveZongbu;
+				var leaveZongbuarray = [0,0,0,0,0,0];
+				if(queryLeaveZongbu.length > 0){
+					for(var z = 0; z < queryLeaveZongbu.length; z++){
+						var humanInfo =  queryLeaveZongbu[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;	
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						leaveZongbuarray[index] = humancount;
+					}
+				}
+				optionzongbu.series[0].data=leaveZongbuarray;
+				var queryToPostZongbu = jsonData.queryToPostZongbu;
+				var toPostZongbuArray = [0,0,0,0,0,0];
+				if(queryToPostZongbu.length > 0){
+					for(var z = 0; z < queryToPostZongbu.length; z++){
+						var humanInfo =  queryToPostZongbu[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						toPostZongbuArray[index] = humancount;
+					}
+				}
+				optionzongbu.series[1].data=toPostZongbuArray;
+				myChartZongbu.setOption(optionzongbu);
+				
+				/*//线上人员（城市公司）
+				var queryGongsiTotal = jsonData.queryGongsiTotal;
+				var gongsiTotalArray = new Array();
+				if(queryGongsiTotal.length >0){
+					gongsiTotalArray.push(queryGongsiTotal[0].a);
+					gongsiTotalArray.push(queryGongsiTotal[0].b);
+					gongsiTotalArray.push(queryGongsiTotal[0].c);
+					gongsiTotalArray.push(queryGongsiTotal[0].d);
+					gongsiTotalArray.push(queryGongsiTotal[0].e);
+					gongsiTotalArray.push(queryGongsiTotal[0].f);
+				}
+				optionEmpgongsi.series[0].data=gongsiTotalArray;
+				optionEmpgongsi.yAxis.min = (queryGongsiTotal[0].a*0.98).toFixed(0);
+				myChartEmpGongsi.setOption(optionEmpgongsi);
+				
+				var queryLeaveGongsi = jsonData.queryLeaveGongsi;
+				var leaveGongsirray = [0,0,0,0,0,0];
+				if(queryLeaveGongsi.length > 0){
+					for(var z = 0; z < queryLeaveGongsi.length; z++){
+						var humanInfo =  queryLeaveGongsi[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;	
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						leaveGongsirray[index] = humancount;
+					}
+				}
+				optiongonsi.series[0].data=leaveGongsirray;
+				var queryToPostGongsi = jsonData.queryToPostGongsi;
+				var toPostGongsiArray = [0,0,0,0,0,0];
+				if(queryToPostGongsi.length > 0){
+					for(var z = 0; z < queryToPostGongsi.length; z++){
+						var humanInfo =  queryToPostZongguan[z];
+						var weektime = humanInfo.week_time;
+						var humancount = humanInfo.count;
+						var index = jQuery.inArray(weektime,six_week_data_array);
+						toPostGongsiArray[index] = humancount;
+					}
+				}
+				optiongongsi.series[1].data=toPostGongsiArray;
+				myChartGongsi.setOption(optiongongsi);*/
+			}	
 		});
+			
 		doManager("humanresourcesManager","getWeekPoint",null,function(data,textStatus,XmlHttpRequest){
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
@@ -6502,7 +6831,7 @@ function oneyearorsixweek(){
 						if(index == -1){
 							var cityDate = {
 									"cityname":jsonData[i].cityname,
-									"rate":""
+									"rate":0
 								};
 							var weekDate = { name:jsonData[i].cityname,
 								      type:'line'};
