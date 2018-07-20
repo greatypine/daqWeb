@@ -1709,7 +1709,7 @@ var showEshopMemSum = function (dataServer){
 };
 //定时刷新今日订单量、成交额、新增社员量
 function doUpdate(){
-	doManager('communeMember','selectDayAllCm',"0000",function(data){
+	doManager('communeMember','selectDayAllCm',[cityId],function(data){
 		if(data.result){
         	var resultJson= JSON.parse(data.data);
         	//clearInterval($("#dayDealCount"));
