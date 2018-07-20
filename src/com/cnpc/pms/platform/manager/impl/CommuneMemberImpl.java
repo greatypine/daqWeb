@@ -15,7 +15,10 @@ import java.util.Map;
 
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.communeMember.dao.CommuneMemberDao;
+import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.platform.dao.PlatformStoreDao;
 import com.cnpc.pms.platform.manager.CommuneMember;
 
@@ -29,17 +32,55 @@ import net.sf.json.JSONObject;
  */
 public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMember {
 
+
+	@Override
+	public Map<String, Object> selectCitys(String dd) {
+		/**
+		 * @author wuxinxin
+		 * 2018年7月19日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		/*UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		List<DistCity> citys = userManager.getCurrentUserCity();*/
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+		String cityno = "";
+		if(dd!=null&&!dd.substring(0,1).equals("0")){
+				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(dd));
+				cityno = cityNO.get(0).get("cityno").toString();
+			}
+			result.put("selcitycode", cityno);
+			return result;
+		
+	}
+	
 	@Override
 	public Map<String, Object> selectAllCm(String dd) {
 		/**
 		 * @author wuxinxin 2018年5月17日
 		 */
-
+		//查询城市id
+		
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+		String cityno = "";
+		if(!"0000".equals(dd)) {
+			if(dd!=null&&!dd.substring(0,1).equals("0")){
+				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(dd));
+				cityno = cityNO.get(0).get("cityno").toString();
+				if(cityno.substring(0,2).equals("00")) {
+					dd=cityno.replace("00", "0");
+				}
+			}
+		}
+		
+		
+	
 		Map<String, Object> result = new HashMap<String, Object>();
+		
 		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
 		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
         //查询城市名
-        String cityno = "";
         if (!"0000".equals(dd)) {
             if(dd.length()<4){
                 cityno="0"+dd;
@@ -49,9 +90,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
             List<Map<String, Object>> selCityList = new ArrayList<Map<String, Object>>();
             selCityList = commDao.getSelCity(cityno);
             if (selCityList != null && selCityList.size() > 0) {
-                result.put("selcityname", selCityList.get(0).get("cityname"));
+                result.put("selcityname", "("+selCityList.get(0).get("cityname")+")");
             }else {
-            	result.put("selcityname", "内测");
+            	result.put("selcityname", "");
             }
         }
 		// 查询e店数量---必须
@@ -358,15 +399,24 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		/**
 		 * @author wuxinxin 2018年5月17日
 		 */
+		
+		
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+		String cityno = "";
+		if(!"0000".equals(dd)) {
+			if(dd!=null&&!dd.substring(0,1).equals("0")){
+				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(dd));
+				cityno = cityNO.get(0).get("cityno").toString();
+				if(cityno.substring(0,2).equals("00")) {
+					dd=cityno.replace("00", "0");
+				}
+			}
+		}
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
 		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
-		
-		
-		
-		
-		
-		
 		
 		//查询7日成交额、订单量
 		List<Map<String, Object>> day7List = commDao.getDay7DealCount(dd);
@@ -382,15 +432,17 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		result.put("jsonAllDealsums", jsonAllDealsums);
 		result.put("jsonAllDealCounts", jsonAllDealCounts);
 		
-		
-		
-		
 		// 查询已成交订单量
 
 		// 查询取消订单量
 		// 查询7日取消订单走势
 		// 查询7日成交订单走势、成交额走势、非社员订单量、非社员成交额
 		List<Map<String, Object>> eshopMemList = commDao.getEshopMemCount(dd);
+		
+		
+		
+		
+		
 		List memCounts = new ArrayList();// 社员成交量
 		List memSums = new ArrayList();// 社员成交额
 		List noMemCounts = new ArrayList();// 非社员成交量
@@ -915,7 +967,20 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		 * 查询订单相关信息
 		 * 2018年6月12日
 		 */
+		//查询城市id
 		
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+		String cityno = "";
+		if(!"0000".equals(dd)) {
+			if(dd!=null&&!dd.substring(0,1).equals("0")){
+				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(dd));
+				cityno = cityNO.get(0).get("cityno").toString();
+				if(cityno.substring(0,2).equals("00")) {
+					dd=cityno.replace("00", "0");
+				}
+			}
+		}
 		Map<String, Object> result = new HashMap<String, Object>();
 		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
 		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
@@ -1099,5 +1164,53 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         }
         return result;
     }
+
+	@Override
+	public Map<String, Object> selectDayAllCm(String dd) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+
+		// 查询当日成交量、成交额 ----必须
+		List<Map<String, Object>> dayDealList = new ArrayList<Map<String, Object>>();
+		dayDealList = commDao.getDayDealCount(dd);
+		if (dayDealList != null && !dayDealList.isEmpty()) {
+			result.put("dayDealCount", dayDealList.get(0).get("cou"));
+			result.put("dayDealSum", dayDealList.get(0).get("dealsum"));
+		} else {
+			result.put("dayDealCount", "0");
+			result.put("dayDealSum", "0");
+		}
+
+		// 查询当日新增社员数量---必须
+		List<Map<String, Object>> dayAddMemList = commDao.getDayaddMemCount(dd);
+		if (dayAddMemList != null && dayAddMemList.size() > 0) {
+			result.put("dayAddMem", dayAddMemList.get(0).get("cou"));
+		} else {
+			result.put("dayAddMem", "0");
+		}
+		if ("0000".equals(dd)) {
+
+			// 查询城市当日新增社员数量
+			List<Map<String, Object>> cityDayAddList = new ArrayList<Map<String, Object>>();
+			cityDayAddList = commDao.getDayCityaddMemCount(dd);
+			List cityNames = new ArrayList();
+			List cityAdds = new ArrayList();
+			for (Map<String, Object> addCity : cityDayAddList) {
+				if (addCity.get("cityname").toString().contains("黔东南")) {
+					cityNames.add("黔东南洲");
+
+				} else {
+					cityNames.add(addCity.get("cityname"));
+				}
+				cityAdds.add(addCity.get("citycou"));
+			}
+			JSONArray jsonCityNames = (JSONArray) JSONArray.fromObject(cityNames);
+			JSONArray jsonCityAdds = (JSONArray) JSONArray.fromObject(cityAdds);
+			result.put("jsonCityNames", jsonCityNames);
+			result.put("jsonCityAdds", jsonCityAdds);
+		}
+		return result;
+	}
+
 
 }

@@ -41,4 +41,15 @@ public interface CommuneMember extends IManager{
 	 */
 	public Map<String, Object> getCityCode(String cityCode);
 	
+	/**
+	 * 查询城市id
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCitys(String dd);
+	/**
+	 * 查询当日成交额
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectDayAllCm(String dd);
+	
 }

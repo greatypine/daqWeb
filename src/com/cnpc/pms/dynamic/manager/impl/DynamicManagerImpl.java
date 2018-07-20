@@ -6953,8 +6953,44 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			if(lst_humanList!=null&&lst_humanList.size()>0){
 				humanresources = lst_humanList.get(0);
 				List<?> list = employeeMoreInfoManager.getEmployeeByEmployeeno(humanresources.getEmployee_no());
-				EmployeeMoreInfo em = (EmployeeMoreInfo)list.get(0);
-				humanresources.setRemark(em.getWorkingAge_year_precise());
+				if(list!=null&&list.size()>0){
+					EmployeeMoreInfo em = (EmployeeMoreInfo)list.get(0);
+					humanresources.setRemark(em.getWorkingAge_year_precise());
+				}else{
+
+					int month = 0;
+					if(lst_humanList!=null&&lst_humanList.size()>0){
+						humanresources = lst_humanList.get(0);
+						//计算工作时间
+						if(humanresources.getTopostdate()!=null&&humanresources.getTopostdate().length()>0){
+							String topost = humanresources.getTopostdate();
+							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+							SimpleDateFormat df=new SimpleDateFormat("yyyy/MM/dd");
+							try {
+								month = getMonthDiff(new Date(), sdf.parse(topost));
+							} catch (ParseException e) {
+								try {
+									month = getMonthDiff(new Date(), df.parse(topost));
+								} catch (ParseException e1) {
+									month = 999;
+								}
+
+							}
+						}
+					}
+					if(month==999){
+						humanresources.setRemark("暂无");
+					}else{
+						int ret = month/12;
+						if(ret==0){
+							humanresources.setRemark("一年以下");
+						}else{
+							humanresources.setRemark(ret+"年以上");
+						}
+					}
+
+				}
+
 			}
 
 

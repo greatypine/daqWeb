@@ -5139,7 +5139,10 @@ function getUser(){
 function loginShow(){
 	
 	if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
-		var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+        var b = new Base64();
+        screenlogin=b.decode(screenlogin);
+        var obj=JSON.parse(screenlogin);
+        var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
 	    var callback = function callback(data, textStatus, XMLHttpRequest) {
 	    	//window.parent.location=getRootPath() + "/crm/index_city_net.html";
 	    	var stateObject = {};

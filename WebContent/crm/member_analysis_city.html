@@ -7,7 +7,7 @@
   <!-- Tell the browser to be responsive to screen width -->
   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min.css">
+  <link rel="stylesheet" href="plugins/gooey_menu/gooey.min_mem.css">
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
@@ -30,7 +30,7 @@
   <script src="IE 9/respond.min.js"></script>
   <![endif]-->
   <style>
- .box-body img{width: 100%}
+.box-body img{width: 100%}
 .report{font-size: 16px;background-color: #a93f31;color: #fff; padding-bottom: 20px;}
     .report .box-header{color: #fff;}
     .report em{width: 70px; position: absolute; right: 0; bottom: 0;}
@@ -49,7 +49,11 @@
     .report_jr li i{font-size: 70px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
     .report_jr li span{font-size: 30px; color: #ffde00;}
 
-    .vertical-example{position: absolute; top: 70px; right: 30px; width: 100px;}
+    .vertical-example{
+    position: absolute;
+    top: 50px;
+    right: 40px;
+    width: 100px;}
     .navimenu{min-height: 800px; padding-top: 0;}
     #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
       #process_div{ 
@@ -246,19 +250,8 @@
     <div class="vertical-example" id="citySelect" style="display:none">
       <nav id="gooey-v">
         <input type="checkbox" class="menu-open" name="menu-open4" id="menu-open4"/>
-        <label class="open-button" for="menu-open4"><span style="font-size: 16px;font-weight: normal;">城市</span></label>
-        <a href="#" class="gooey-menu-item"> 北京 </a>
-        <a href="#" class="gooey-menu-item"> 上海 </a>
-        <a href="#" class="gooey-menu-item"> 天津 </a>
-        <a href="#" class="gooey-menu-item"> 沈阳 </a>
-        <a href="#" class="gooey-menu-item"> 北京 </a>
-        <a href="#" class="gooey-menu-item"> 上海 </a>
-        <a href="#" class="gooey-menu-item"> 天津 </a>
-        <a href="#" class="gooey-menu-item"> 沈阳 </a>
-        <a href="#" class="gooey-menu-item"> 北京 </a>
-        <a href="#" class="gooey-menu-item"> 上海 </a>
-        <a href="#" class="gooey-menu-item"> 天津 </a>
-        <a href="#" class="gooey-menu-item"> 沈阳 </a>
+        <label class="open-button" for="menu-open4" style="font-size: 16px;font-weight: normal;">城市</label>
+          <div id="showcitys"></div>
       </nav>
     </div>
 
@@ -305,8 +298,8 @@
 <script src="dist/js/nav-scroll.js"></script>
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/nav-scroll.js"></script>
-
 <script src="plugins/gooey_menu/gooey.min.js"></script>
+<script src="dist/js/base64.js"></script>
 <script>
 var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
 var cityId = decode64(getUrlParamByKey("c"));//城市ID
@@ -330,14 +323,22 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	function loginShow(){
 		
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
-			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+			
 			var cityName = getUrlParamByKey("cname");
-		    var callback = function callback(data, textStatus, XMLHttpRequest) {
+			 var b = new Base64();
+            screenlogin=b.decode(screenlogin);
+            var obj=JSON.parse(screenlogin);
+            var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
+			var callback = function callback(data, textStatus, XMLHttpRequest) {
+/* 			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+		    var callback = function callback(data, textStatus, XMLHttpRequest) { */
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
-		    	var stateObject = {};
-		    	var newUrl = "/daqWeb/crm/member_analysis?ta=0";
+		    	var newUrl = "/daqWeb/crm/member_analysis_city?ta=0";
 		    	target = null;
 		    	getUser();
+		    	if(cityId.charAt(0)!="0"||cityId.length>10){
+		    		getUserCitys();
+		    	}
 		    	doMemberInfo();
 		    	doMemberSum();
 		    	//doEshopMemberSum();
@@ -351,6 +352,9 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
 		}else{
 			getUser();
+			if(cityId.charAt(0)!="0"||cityId.length>10){
+	    		getUserCitys();
+	    	}
 			doMemberInfo();
 			doMemberSum();
 			//doEshopMemberSum();
@@ -858,8 +862,59 @@ function getUser(){
 		}
   	},false);
 }
+function getUserCitys(){
+	doManager("UserManager", "getCurrentUserCity",null,function(data) {
+		if (data.result) {
+			var citys = JSON.parse(data.data);
+			if(citys.length>0){
+			
+				if(cityId==null||cityId==""||cityId.length>10){
+					cityId = citys[0].cityid;
+					cityName = citys[0].cityname;
+				}
+				  var cityStr="";
+					if(citys.length>1){
+					    for(var i=0;i<citys.length;i++){
+					        cityStr += "<a href=\"javascript:doCityMem('"+citys[i].cityid+"')\"  class='gooey-menu-item'>"+citys[i].cityname+"</a>";
+					    }
+					        $("#showcitys").append(cityStr);
+						    $("#gooey-v").gooeymenu({
+						        bgColor: "#68d099",
+						        contentColor: "white",
+						        style: "vertical",
+						        horizontal: {
+						          menuItemPosition: "glue"
+						        },
+						        vertical: {
+						          menuItemPosition: "glue",
+						          direction: "down"
+						        },
+						        circle: {
+						          radius: 90
+						        },
+						        margin: "small",
+						        size: 60,
+						        bounce: true,
+						        bounceLength: "small",
+						        transitionStep: 100,
+						        hover: "#68d099"
+						      });
+						     $('#citySelect').css('display','block');
+						    localStorage.clear();
+					        
+					}
+				}
+			}
+  	},false);
+}
+function doCityMem(citycode){
+    //跳转城市页面
+    var url = "member_analysis_city.html?c="+encode64(citycode);
+    window.location=url;
+}
+
 function doMemberInfo(){
-    doManager('communeMember','selectAllCm',cityId,function(data){
+	doManager('communeMember','selectAllCm',[cityId],function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
 
@@ -867,15 +922,15 @@ function doMemberInfo(){
             showHistoryData(resultJson);
 
             setLoadingMark(false);
-            //设置10秒刷新页面
-            //setInterval("window.location.reload()",10000);
+          //设置10分钟刷新页面
+        	setInterval("doUpdate()","60000");
         }else{
         	alert("暂无社员相关信息");
         }
     },false);
 }
 function doMemberSum(){
-    doManager('communeMember','selectMeSum',cityId,function(data){
+    doManager('communeMember','selectMeSum',[cityId],function(data){
         if(data.result){
             var resultJson= JSON.parse(data.data);
             //完成订单/取消订单走势，订单均价走势
@@ -900,7 +955,7 @@ function doMemberSum(){
     });
 }
 function doEshopMemberSum(){
-    doManager('communeMember','selectMeOrder',cityId,function(data){
+    doManager('communeMember','selectMeOrder',[cityId],function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
         	
@@ -916,28 +971,6 @@ function doEshopMemberSum(){
     });
 }
  $(function () {
-    $("#gooey-v").gooeymenu({
-        bgColor: "#68d099",
-        contentColor: "white",
-        style: "vertical",
-        horizontal: {
-          menuItemPosition: "glue"
-        },
-        vertical: {
-          menuItemPosition: "glue",
-          direction: "down"
-        },
-        circle: {
-          radius: 90
-        },
-        margin: "small",
-        size: 60,
-        bounce: true,
-        bounceLength: "small",
-        transitionStep: 100,
-        hover: "#68d099"
-      });
-    // $('#citySelect').css('display','block');
 	 loginShow();
      //下载报告
      var downPdf = document.getElementById("downloadPdf");
@@ -1065,7 +1098,7 @@ var showProduct = function (dataServer){
 
 var showHistoryData = function (dataServer) {
     //安心合作社城市
-    $("#cityname").html("("+dataServer.selcityname+")");
+    $("#cityname").html(dataServer.selcityname);
 	//社员量
 	$("#memAll").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
 	$("#cmCount").html("社员总数："+parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
@@ -1673,8 +1706,26 @@ var showEshopMemSum = function (dataServer){
 		    ]
 		};
 	myChart16.setOption(option16);
-}
- 
+};
+//定时刷新今日订单量、成交额、新增社员量
+function doUpdate(){
+	doManager('communeMember','selectDayAllCm',"0000",function(data){
+		if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//clearInterval($("#dayDealCount"));
+        	//alert("resultJson.dayDealCount"+resultJson.dayDealCount+"dayDealSum"+resultJson.dayDealSum+"dayAddMem"+resultJson.dayAddMem);
+        	$("#dayDealCount").html(parseInt(resultJson.dayDealCount==null?'0':resultJson.dayDealCount));
+            //当日成交额
+        	$("#dayDealSum").html(changeMoney(parseInt(resultJson.dayDealSum==null?'0':resultJson.dayDealSum)));
+        	//新增社员
+        	$("#dayNewMem").html(parseInt(resultJson.dayAddMem==null?'0':resultJson.dayAddMem));
+		}
+	});
+	//当日订单量
+	
+	
+	
+};
 //设置加载中图标
 var setLoadingMark = function (bShow) {
     if (bShow == true) {

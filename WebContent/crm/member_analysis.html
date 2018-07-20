@@ -87,7 +87,7 @@
      -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
  .add_citymember{wposition: absolute;}
  .toast{
-     width:400px;
+     width:450px;
      height:240px;
      background:transparent;
      background-color:rgba(241,241,241,1);
@@ -172,7 +172,7 @@
               </ul>
               <div id="cityMember" class="toast" style="display: none">
                   <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
-                  <div style="margin-left: 10%" id="addCityMem">
+                  <div style="margin-left: 5%" id="addCityMem">
                   </div>
               </div>
              <!-- </div>-->
@@ -483,7 +483,7 @@
 <script src="dist/js/nav-scroll.js"></script>
 <script src="dist/js/demo.js"></script>
 <script src="dist/js/nav-scroll.js"></script>
-    <script src="dist/js/base64.js"></script>
+<script src="dist/js/base64.js"></script>
 <script src="plugins/gooey_menu/gooey.min.js"></script>
 <script>
 var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
@@ -517,6 +517,28 @@ function doCityMem(citycode){
     var url = "member_analysis_city.html?c="+encode64(citycode);
     window.open(url);
 }
+
+//定时刷新今日订单量、成交额、新增社员量
+function doUpdate(){
+	doManager('communeMember','selectDayAllCm',"0000",function(data){
+		if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//clearInterval($("#dayDealCount"));
+        	//alert("resultJson.dayDealCount"+resultJson.dayDealCount+"dayDealSum"+resultJson.dayDealSum+"dayAddMem"+resultJson.dayAddMem);
+        	$("#dayDealCount").html(parseInt(resultJson.dayDealCount==null?'0':resultJson.dayDealCount));
+            //当日成交额
+        	$("#dayDealSum").html(changeMoney(parseInt(resultJson.dayDealSum==null?'0':resultJson.dayDealSum)));
+        	//新增社员
+        	$("#dayNewMem").html(parseInt(resultJson.dayAddMem==null?'0':resultJson.dayAddMem));
+        	setCityAddMem(resultJson);
+		}
+	});
+	//当日订单量
+	
+	
+	
+}
+
 
 var showCityInfo = function (dataServer){
     var cityName = dataServer.jsonCityName;
@@ -1198,8 +1220,8 @@ function doMemberInfo(){
             setCityAddMem(resultJson);
 
         	setLoadingMark(false);
-        	//设置10秒刷新页面
-        	//setInterval("window.location.reload()",10000);
+        	//设置10分钟刷新页面600
+        	setInterval("doUpdate()","60000");
         }else{
         	alert("暂无社员相关信息");
         }
@@ -3199,15 +3221,15 @@ var showOrderType = function(dataServer){
      for(var i=0;i<cityName.length;i++){
          if(((i+1)%3)==0){
              if(i==cityName.length-1){
-                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
+                 cityStr += "<li style='width: 130px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
              }else{
-                 cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
+                 cityStr += "<li style='width: 130px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
              }
          }else{
-             cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
+             cityStr += "<li style='width: 130px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
          }
      }
-     $("#addCityMem").append(cityStr);
+     $("#addCityMem").html(cityStr);
  }
 //设置加载中图标
 var setLoadingMark = function (bShow) {
