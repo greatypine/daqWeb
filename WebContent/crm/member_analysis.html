@@ -518,6 +518,28 @@ function doCityMem(citycode){
     window.open(url);
 }
 
+//定时刷新今日订单量、成交额、新增社员量
+function doUpdate(){
+	doManager('communeMember','selectDayAllCm',"0000",function(data){
+		if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//clearInterval($("#dayDealCount"));
+        	//alert("resultJson.dayDealCount"+resultJson.dayDealCount+"dayDealSum"+resultJson.dayDealSum+"dayAddMem"+resultJson.dayAddMem);
+        	$("#dayDealCount").html(parseInt(resultJson.dayDealCount==null?'0':resultJson.dayDealCount));
+            //当日成交额
+        	$("#dayDealSum").html(changeMoney(parseInt(resultJson.dayDealSum==null?'0':resultJson.dayDealSum)));
+        	//新增社员
+        	$("#dayNewMem").html(parseInt(resultJson.dayAddMem==null?'0':resultJson.dayAddMem));
+        	setCityAddMem(resultJson);
+		}
+	});
+	//当日订单量
+	
+	
+	
+}
+
+
 var showCityInfo = function (dataServer){
     var cityName = dataServer.jsonCityName;
     var cityCode = dataServer.jsonCityCode;
@@ -1198,8 +1220,8 @@ function doMemberInfo(){
             setCityAddMem(resultJson);
 
         	setLoadingMark(false);
-        	//设置10秒刷新页面
-        	//setInterval("window.location.reload()",10000);
+        	//设置10分钟刷新页面600
+        	setInterval("doUpdate()","60000");
         }else{
         	alert("暂无社员相关信息");
         }
@@ -3207,7 +3229,7 @@ var showOrderType = function(dataServer){
              cityStr += "<li style='width: 100px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
          }
      }
-     $("#addCityMem").append(cityStr);
+     $("#addCityMem").html(cityStr);
  }
 //设置加载中图标
 var setLoadingMark = function (bShow) {
