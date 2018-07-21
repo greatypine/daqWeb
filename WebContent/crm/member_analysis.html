@@ -185,42 +185,38 @@
             </div>
         </div>
     </div>
+          <!-- 社员部分 -->
+          <div class="box box-default">
+              <div class="box-body">
+                  <div class="col-sm-7">
+                      <div class="form-group col-lg-6" style="padding: 0 25px;">
+                      <div class="box-header h4 text-light-blue" ><strong id="sevenOrMon">社员增长趋势</strong>
+                      </div></div>
+                          <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 5px;">
+                              <button type="button" class="btn btn-block btn-primary" onclick="btnAction('0')">近7天</button>
+                          </div>
+                          <div class="col-lg-2" style="margin-top: 20px; padding: 0 5px;">
+                              <button type="button" onclick="btnAction('1')" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">近30天</button>
+                          </div>
 
-<!--         <div class="box box-default report">
-          <div class="box-header h4">
-          	<strong>安心合作社运营简报</strong>
-          	<a style="float: right;margin-right: 50px;color:#00acee;" href="javascript:doUserMem();">合作社社员统计</a>
-          </div>
-          <div class="box-body">
-            <div class="col-sm-5 col-xs-12 text-center"><img src="dist/img/member1.png"></div>
-            <div class="col-sm-7 col-xs-12">
-              <div class="col-sm-6 col-xs-12">
-                <div class="report-tit">社员今日信息</div>
-                <p title="当日累计成交额"><i class="fa fa-money"></i>成交额:<small>&nbsp;&nbsp;￥</small><span id="dayDealSum" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="当日累计订单量"><i class="fa fa-file-text"></i>完成订单量:<small>&nbsp;&nbsp;</small><span id="dayDealCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="当日取消订单量"><i class="fa fa-file-text"></i>取消订单量:<small>&nbsp;&nbsp;</small><span id="dayReDealCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="客单价=成交额÷订单量"><i class="fa fa-empire"></i>客单价：<small>&nbsp;&nbsp;￥</small><span id="dayOneSum" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="客单量=订单量÷社员数"><i class="fa fa-sticky-note"></i>客单量:<small>&nbsp;&nbsp;</small><span id="dayOneCount" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
-                <p title="当日新增社员"><i class="fa fa-pagelines"></i>新增社员:<small>&nbsp;&nbsp;</small><span id="dayNewMem" style="font-size: 34px; color: #ffb959; font-weight: bold;"></span></p>
+
+                  <div id="tab-content">
+                      <div class="col-sm-12 no-padding" id="main1" style="height: 350px;display: block"></div>
+                      <div class="col-sm-12 no-padding" id="main1_1" style="height: 350px;display: none"></div>
+                  </div>
               </div>
-              <ul class="col-sm-6 col-xs-12">
-                <div class="report-tit">社员累计数据</div>
-                <li title="累计社员总数"><i class="fa fa-fire"></i>社员总数：<span id="memAll"></span></li>
-                <li title="累计订单量"><i class="fa fa-file-text-o"></i>订单量：<span id="cmGoodsDealCount"></span></li>
-                <li title="累计GMV"><i class="fa fa-database"></i>GMV：￥<span id="cmGoodsTurnover"></span></li>
-                <li title="订单均价=GMV÷订单量"><i class="fa fa-git-square"></i>订单均价：￥<span id="oneDeal"></span></li>
-                <li title="安心合作社总数"><i class="fa fa-bank"></i>E店总数：<span id="eShopCount"></span></li>
-                <li title="安心合作社商品总数"><i class="fa fa-cube"></i>SKU总数：<span id="skuCount"></span></li>
-                <li title="安心合作社动销商品数"><i class="fa fa-delicious"></i>SKU动销：<span id="movingPinCount"></span></li>
-              </ul>
-            </div>
+              <div class="col-sm-5">
+                  <div class="box-header h4 text-light-blue"><strong id="cmCount">社员总数：</strong></div>
+                  <div class="col-sm-12 no-padding" id="main2" style="height: 350px;"></div>
+              </div>
           </div>
-        </div> -->
-      <div class="box box-default">
+    </div>
+          <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-12">
-              <h4 class="text-light-blue"><strong>全部订单时段性分布</strong></h4>
-              <div class="col-sm-12 no-padding" id="main20" style="height: 260px;"></div>
+              <h4 class="text-light-blue"><strong>社员活跃度</strong></h4>
+              <div class="col-sm-6 no-padding" id="main23" style="height: 360px;"></div>
+              <div class="col-sm-6 no-padding" id="main24" style="height: 360px;"></div>
             </div>
           </div>
         </div>
@@ -233,6 +229,98 @@
             <div class="col-sm-6">
               <h4 class="text-light-blue"><strong>7大场景订单分布</strong></h4>
               <div class="col-sm-12 no-padding" id="main22" style="height: 360px;"></div>
+            </div>
+          </div>
+        </div>
+     <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-6">
+              <h4 class="text-light-blue"><strong>社员成交额走势</strong></h4>
+              <div class="col-sm-12 no-padding" id="main12" style="height: 260px;"></div>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="text-light-blue"><strong>社员订单量走势</strong></h4>
+              <div class="col-sm-12 no-padding" id="main13" style="height: 260px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
+          <div class="box-body">
+          	<div class="col-sm-6 no-padding" id="main3" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main4" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main5" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main6" style="height: 350px;"></div>
+          </div>
+       </div>
+       <div class="box box-default">
+          <div class="box-header h4 text-light-blue"><strong>社员城市分布</strong></div>
+          <div class="box-body">
+            <div class="col-sm-8 no-padding" id="main7" style="height: 350px;"></div>
+            <div class="col-sm-4 no-padding" id="main8" style="height: 350px;"></div>
+          </div>
+      </div>
+      <div class="box box-default">
+        <div class="box-header h4 text-light-blue"><strong>社员优惠分析</strong></div>
+          <div class="box-body">
+            <div class="col-sm-6 no-padding" id="main11" style="height: 350px;"></div>
+            <div class="col-sm-6 no-padding" id="main10" style="height: 350px;"></div>
+
+            <div class="col-sm-6">
+              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票累计榜</span></h4>
+              <table class="table table-bordered">
+                <tbody id="sum_rebate">
+                <tr>
+                  <th>排名</th>
+                  <th>累计发放粮票</th>
+                  <th>社员</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6" >
+              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票使用榜</span></h4>
+              <table class="table table-bordered">
+                <tbody id="used_rebate">
+                <tr>
+                  <th>排名</th>
+                  <th>粮票已使用</th>
+                  <th>社员</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+<!--              <div class="col-sm-6 no-padding">
+              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">社员省钱榜</span></h4>
+              <table class="table table-bordered">
+                <tbody id="retrench_money">
+                <tr>
+                  <th >社员</th>
+                  <th>累计省钱</th>
+                  <th>排名</th>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-sm-6">
+              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票持有榜</span></h4>
+              <table class="table table-bordered">
+                <tbody id="have_rebate">
+                <tr>
+                  <th>社员</th>
+                  <th>粮票持有数</th>
+                  <th>排名</th>
+                </tr>
+                </tbody>
+              </table>
+            </div> -->
+          </div>
+      </div>
+      <div class="box box-default">
+          <div class="box-body">
+            <div class="col-sm-12">
+              <h4 class="text-light-blue"><strong>全部订单时段性分布</strong></h4>
+              <div class="col-sm-12 no-padding" id="main20" style="height: 260px;"></div>
             </div>
           </div>
         </div>
@@ -320,115 +408,6 @@
                   <div class="col-sm-5" id="main9" style="height: 480px;"></div>
               </div>
           </div>
-          <div class="box box-default">
-              <div class="box-body">
-                  <div class="col-sm-7">
-                      <div class="form-group col-lg-6" style="padding: 0 25px;">
-                      <div class="box-header h4 text-light-blue" ><strong id="sevenOrMon">社员增长趋势</strong>
-                      </div></div>
-                          <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 5px;">
-                              <button type="button" class="btn btn-block btn-primary" onclick="btnAction('0')">近7天</button>
-                          </div>
-                          <div class="col-lg-2" style="margin-top: 20px; padding: 0 5px;">
-                              <button type="button" onclick="btnAction('1')" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">近30天</button>
-                          </div>
-
-
-                  <div id="tab-content">
-                      <div class="col-sm-12 no-padding" id="main1" style="height: 350px;display: block"></div>
-                      <div class="col-sm-12 no-padding" id="main1_1" style="height: 350px;display: none"></div>
-                  </div>
-              </div>
-              <div class="col-sm-5">
-                  <div class="box-header h4 text-light-blue"><strong id="cmCount">社员总数：</strong></div>
-                  <div class="col-sm-12 no-padding" id="main2" style="height: 350px;"></div>
-              </div>
-          </div>
-    </div>
-     <div class="box box-default">
-          <div class="box-body">
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>社员成交额走势</strong></h4>
-              <div class="col-sm-12 no-padding" id="main12" style="height: 260px;"></div>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>社员订单量走势</strong></h4>
-              <div class="col-sm-12 no-padding" id="main13" style="height: 260px;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="box box-default">
-          <div class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
-          <div class="box-body">
-          	<div class="col-sm-6 no-padding" id="main3" style="height: 350px;"></div>
-            <div class="col-sm-6 no-padding" id="main4" style="height: 350px;"></div>
-            <div class="col-sm-6 no-padding" id="main5" style="height: 350px;"></div>
-            <div class="col-sm-6 no-padding" id="main6" style="height: 350px;"></div>
-          </div>
-       </div>
-       <div class="box box-default">
-          <div class="box-header h4 text-light-blue"><strong>社员城市分布</strong></div>
-          <div class="box-body">
-            <div class="col-sm-8 no-padding" id="main7" style="height: 350px;"></div>
-            <div class="col-sm-4 no-padding" id="main8" style="height: 350px;"></div>
-          </div>
-      </div>
-      <div class="box box-default">
-        <div class="box-header h4 text-light-blue"><strong>社员优惠分析</strong></div>
-          <div class="box-body">
-            <div class="col-sm-6 no-padding" id="main11" style="height: 350px;"></div>
-            <div class="col-sm-6 no-padding" id="main10" style="height: 350px;"></div>
-
-            <div class="col-sm-6">
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票累计榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="sum_rebate">
-                <tr>
-                  <th>排名</th>
-                  <th>累计发放粮票</th>
-                  <th>社员</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6" >
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票使用榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="used_rebate">
-                <tr>
-                  <th>排名</th>
-                  <th>粮票已使用</th>
-                  <th>社员</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-<!--              <div class="col-sm-6 no-padding">
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">社员省钱榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="retrench_money">
-                <tr>
-                  <th >社员</th>
-                  <th>累计省钱</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="box-header h4 "><span style="color:#686868;font-size:16px;">粮票持有榜</span></h4>
-              <table class="table table-bordered">
-                <tbody id="have_rebate">
-                <tr>
-                  <th>社员</th>
-                  <th>粮票持有数</th>
-                  <th>排名</th>
-                </tr>
-                </tbody>
-              </table>
-            </div> -->
-          </div>
-      </div>
       </section>
 
     </div>
@@ -576,6 +555,7 @@ var showCityInfo = function (dataServer){
 		    	target = null;
 		    	getUser();
 		    	doMemberInfo();
+		    	selectCmDealInfo();
 		    	doMemberSum();
 		    	//doEshopMemberSum();
 		    	history.pushState(stateObject,null,newUrl);
@@ -590,6 +570,7 @@ var showCityInfo = function (dataServer){
 			getUser();
 			doMemberInfo();
 			doMemberSum();
+			selectCmDealInfo();
 			//doEshopMemberSum();
 		}
 
@@ -1195,6 +1176,122 @@ var showCityInfo = function (dataServer){
 </script>
 <script type="text/javascript">
 
+
+
+function doMemberInfo1(){
+	//直接赋值---基本信息加载
+    doManager('communeMember','selectCmBaseInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+ 			showHistoryData(resultJson);
+            setCityAddMem(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo2(){
+	//查询社员增长情况
+    doManager('communeMember','selectCmAddInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo3(){
+	//客单价信息饼图
+    doManager('communeMember','selectCmDealInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo4(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo5(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo6(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo7(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo8(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo9(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+function doMemberInfo10(){
+    doManager('communeMember','selectAllCm',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
+
+
+
+
+
+
+
+
+
+
+
 function getUser(){
 	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
 		if (data.result) {
@@ -1207,10 +1304,24 @@ function getUser(){
 		}
   	},false);
 }
+function selectCmDealInfo(){
+    doManager('communeMember','selectCmDealInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+            setCmDealInfo(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    },false);
+}
 function doMemberInfo(){
     doManager('communeMember','selectAllCm',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
+        	//社员饼图
+ 			showMember(resultJson);
+        	//7日社员增长
+        	showMemberGrow(resultJson);
         	//订单时段性分布
         	showTimeOrder(resultJson);
         	//订单商品分类统计
@@ -1239,9 +1350,9 @@ function doMemberSum(){
         	//社员属性信息饼图
         	showMemberInfo(resultJson);
         	//社员饼图
- 			showMember(resultJson);
+ 			//showMember(resultJson);
  			//增长曲线图
-        	showMemberGrow(resultJson);
+        	//showMemberGrow(resultJson);
         	//社员注册信息
         	showMemberRegist(resultJson);
         	//城市注册排名
@@ -3143,7 +3254,173 @@ var showTimeOrder = function(dataServer){
 
 	  myChart21.setOption(option21);
 }
+var setCmDealInfo = function(dataServer){
+	var myChart23= echarts.init(document.getElementById('main23'));
+	  option23 = {
+			    title: [{
+				      text: '周消费频次分布',
+				      left: '20%',
+				      top: '2%',
+				      textAlign: 'center',
+				      textBaseline: 'middle',
+				      textStyle: {
+				        color: '#666',
+				        fontWeight: 'normal',
+				        fontSize: 16
+				      }
+				    }],
+			    tooltip: {
+				      trigger: 'item',
+				      formatter: '{a}<br/>{b}: {c} ({d}%)'
+				},
+			    calculable : true,
+			    series : [
+			    	{
+			            name:'周消费频次分布',
+			            type:'pie',
+			            radius : [30, 110],
+			            center : ['50%', '50%'],
+			           // roseType : 'radius',
+			            width: '40%',       // for funnel
+			            max: 40,            // for funnel
+			            itemStyle : {
+			                normal : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                },
+			                emphasis : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                }
+			            }
+			  	      ,label: {
+					        normal: {
+					          position: 'out', //标签的位置
+					          formatter: '{b}\n{d}%',
+					          color: '#59ADF3'
 
+					        }
+					   }
+			        }
+			    ]
+			};
+	var memOrderData = '[';
+	var memOrderCount = dataServer.jsonMemOrderCountVal;
+	var memOrderCountName = dataServer.jsonMemOrderCountName;
+	var  len = memOrderCountName.length;
+	var len0_1 = 0;
+	for(var i=0;i<len;i++){
+
+		if(len>0){
+			if((len-1)==i){
+				memOrderData=memOrderData+'{"value":"'+memOrderCount[i]+'","name":"'+memOrderCountName[i]+'"}';
+			}else{
+				memOrderData=memOrderData+'{"value":"'+memOrderCount[i]+'","name":"'+memOrderCountName[i]+'"},';	
+			}
+
+		}else{
+			memOrderData=memOrderData+'{"value":"'+memOrderCount[i]+'","name":"'+memOrderCountName[i]+'"}';
+		}
+	}
+	memOrderData+="]";
+	var memOrderObject = JSON.parse(memOrderData);
+	option23.series[0].data = memOrderObject;
+
+
+	  myChart23.setOption(option23);
+	  
+	  
+	  
+	  var myChart24= echarts.init(document.getElementById('main24'));
+	  option24 = {
+			    title: [{
+				      text: '周消费能力分布',
+				      left: '20%',
+				      top: '2%',
+				      textAlign: 'center',
+				      textBaseline: 'middle',
+				      textStyle: {
+				        color: '#666',
+				        fontWeight: 'normal',
+				        fontSize: 16
+				      }
+				    }],
+			    tooltip: {
+				      trigger: 'item',
+				      formatter: '{a}<br/>{b}: {c} ({d}%)'
+				},
+			    calculable : true,
+			    series : [
+			    	{
+			            name:'周消费能力分布',
+			            type:'pie',
+			            radius : [30, 110],
+			            center : ['50%', '50%'],
+			           // roseType : 'radius',
+			            width: '40%',       // for funnel
+			            max: 40,            // for funnel
+			            itemStyle : {
+			                normal : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                },
+			                emphasis : {
+			                    label : {
+			                        show : true
+			                    },
+			                    labelLine : {
+			                        show : true
+			                    }
+			                }
+			            }
+			  	      ,label: {
+					        normal: {
+					          position: 'out', //标签的位置
+					          formatter: '{b}\n{d}%',
+					          color: '#59ADF3'
+
+					        }
+					   }
+			        }
+			    ]
+			};
+	var memOrderSumData = '[';
+	var memOrderSum = dataServer.jsonMemOrderSumVal;
+	var memOrderSumName = dataServer.jsonMemOrderSumName;
+	var  sumLen = memOrderSumName.length;
+	var  sumLen0_1 = memOrderSumName.length;
+	for(var i=0;i<sumLen;i++){
+
+		if(sumLen>0){
+			if((sumLen-1)==i){
+				memOrderSumData=memOrderSumData+'{"value":"'+memOrderSum[i]+'","name":"'+memOrderSumName[i]+'"}';
+			}else{
+				memOrderSumData=memOrderSumData+'{"value":"'+memOrderSum[i]+'","name":"'+memOrderSumName[i]+'"},';
+			}
+
+		}else{
+			memOrderSumData=memOrderSumData+'{"value":"'+memOrderSum[i]+'","name":"'+memOrderSumName[i]+'"}';
+		}
+	}
+	memOrderSumData+="]";
+	var memOrderSumObject = JSON.parse(memOrderSumData);
+	option24.series[0].data = memOrderSumObject;
+
+
+	  myChart24.setOption(option24);
+}
 var showOrderType = function(dataServer){
 	var myChart22= echarts.init(document.getElementById('main22'));
 	  option22 = {
