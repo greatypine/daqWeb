@@ -213,13 +213,10 @@
     </div>
           <div class="box box-default">
           <div class="box-body">
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>周消费频次</strong></h4>
-              <div class="col-sm-12 no-padding" id="main23" style="height: 360px;"></div>
-            </div>
-            <div class="col-sm-6">
-              <h4 class="text-light-blue"><strong>周消费价格段位</strong></h4>
-              <div class="col-sm-12 no-padding" id="main24" style="height: 360px;"></div>
+            <div class="col-sm-12">
+              <h4 class="text-light-blue"><strong>社员活跃度</strong></h4>
+              <div class="col-sm-6 no-padding" id="main23" style="height: 360px;"></div>
+              <div class="col-sm-6 no-padding" id="main24" style="height: 360px;"></div>
             </div>
           </div>
         </div>
@@ -3260,6 +3257,18 @@ var showTimeOrder = function(dataServer){
 var setCmDealInfo = function(dataServer){
 	var myChart23= echarts.init(document.getElementById('main23'));
 	  option23 = {
+			    title: [{
+				      text: '周消费频次分布',
+				      left: '20%',
+				      top: '2%',
+				      textAlign: 'center',
+				      textBaseline: 'middle',
+				      textStyle: {
+				        color: '#666',
+				        fontWeight: 'normal',
+				        fontSize: 16
+				      }
+				    }],
 			    tooltip: {
 				      trigger: 'item',
 				      formatter: '{a}<br/>{b}: {c} ({d}%)'
@@ -3267,7 +3276,7 @@ var setCmDealInfo = function(dataServer){
 			    calculable : true,
 			    series : [
 			    	{
-			            name:'周消费频次',
+			            name:'周消费频次分布',
 			            type:'pie',
 			            radius : [30, 110],
 			            center : ['50%', '50%'],
@@ -3332,6 +3341,18 @@ var setCmDealInfo = function(dataServer){
 	  
 	  var myChart24= echarts.init(document.getElementById('main24'));
 	  option24 = {
+			    title: [{
+				      text: '周消费能力分布',
+				      left: '20%',
+				      top: '2%',
+				      textAlign: 'center',
+				      textBaseline: 'middle',
+				      textStyle: {
+				        color: '#666',
+				        fontWeight: 'normal',
+				        fontSize: 16
+				      }
+				    }],
 			    tooltip: {
 				      trigger: 'item',
 				      formatter: '{a}<br/>{b}: {c} ({d}%)'
@@ -3339,7 +3360,7 @@ var setCmDealInfo = function(dataServer){
 			    calculable : true,
 			    series : [
 			    	{
-			            name:'周消费价格段位',
+			            name:'周消费能力分布',
 			            type:'pie',
 			            radius : [30, 110],
 			            center : ['50%', '50%'],

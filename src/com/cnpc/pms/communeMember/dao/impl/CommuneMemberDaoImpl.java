@@ -1323,14 +1323,13 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * 2018年7月21日
 		 */
 		
-		int dayCount = 6;
+		int dayCount = 5;
 		String sql = "select  " + 
 				"ifnull( sum( CASE when c2.picou <= 10 then 1 else 0 end ), 0 ) as sum0, " + 
 				"ifnull( sum( CASE when c2.picou > 10 and c2.picou <= 100 then 1 else 0 end ), 0 ) as sum1, " + 
 				"ifnull( sum( CASE when c2.picou > 100 and c2.picou <= 300 then 1 else 0 end ), 0 ) as sum2, " + 
 				"ifnull( sum( CASE when c2.picou > 300 and c2.picou <= 1000 then 1 else 0 end ), 0 ) as sum3, " + 
-				"ifnull( sum( CASE when c2.picou > 1000 and c2.picou <= 2000 then 1 else 0 end ), 0 ) as sum4, " + 
-				"ifnull( sum( CASE when c2.picou > 2000 then 1 else 0 end ), 0 ) as sum5 " + 
+				"ifnull( sum( CASE when c2.picou > 1000 then 1 else 0 end ), 0 ) as sum4 " + 
 				"from  " + 
 				"(select ifnull(sum(dmom.trading_price),0) picou from df_user_member dum left join df_mass_order_monthly dmom on (dum.customer_id=dmom.customer_id and dmom.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmom.sign_time<curdate()) ";
         if(!"0000".equals(dd)) {
@@ -1355,10 +1354,8 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				    	 map_content.put("memSumName", "100-300元");
 				     }else if(3==i){
 				    	 map_content.put("memSumName", "300-1000元");
-				     }else if(4==i){
-				    	 map_content.put("memSumName", "1000-2000元");
 				     }else {
-				    	 map_content.put("memSumName", "2000元以上");
+				    	 map_content.put("memSumName", "1000元以上");
 				     }
 					lst_result.add(map_content);
 				}
@@ -1375,13 +1372,12 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年7月21日
 		 */
-		int dayCount = 5;
+		int dayCount = 4;
 		String sql = "select  " + 
 				"ifnull(sum(CASE when  c1.idcou<=1  then 1 else 0 end),0) as count0, " + 
 				"ifnull( sum( CASE when c1.idcou >=2 and c1.idcou <=  5 then 1 else 0 end ), 0 ) as count1, " + 
 				"ifnull( sum( CASE when c1.idcou > 5 and c1.idcou <= 10 then 1 else 0 end ), 0 ) as count2, " + 
-				"ifnull( sum( CASE when c1.idcou > 10 and c1.idcou <= 20 then 1 else 0 end ), 0 ) as count3, " + 
-				"ifnull( sum( CASE when c1.idcou > 20 then 1 else 0 end ), 0 ) as count4 " + 
+				"ifnull( sum( CASE when c1.idcou > 10 then 1 else 0 end ), 0 ) as count3 " + 
 				"from  " + 
 				"(select ifnull(count(dmom.id),0) idcou from df_user_member dum left join df_mass_order_monthly dmom on (dum.customer_id=dmom.customer_id and dmom.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmom.sign_time<curdate())  ";
         if(!"0000".equals(dd)) {
@@ -1405,9 +1401,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				     }else if(2==i){
 				    	 map_content.put("memCountName", "6-10次"); 
 				     }else if(3==i){
-				    	 map_content.put("memCountName", "10-20次");
-				     }else if(4==i){
-				    	 map_content.put("memCountName", "20次以上");
+				    	 map_content.put("memCountName", "10次以上");
 				     }
 					lst_result.add(map_content);
 				}
