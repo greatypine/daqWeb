@@ -1316,5 +1316,107 @@ public List<Map<String, Object>> getMembersArea(String dd) {
         }
         return null;
     }
+	@Override
+	public List<Map<String, Object>> getMemOrderSum(String dd) {
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		
+		int dayCount = 6;
+		String sql = "select  " + 
+				"ifnull( sum( CASE when c2.picou <= 10 then 1 else 0 end ), 0 ) as sum0, " + 
+				"ifnull( sum( CASE when c2.picou > 10 and c2.picou <= 100 then 1 else 0 end ), 0 ) as sum1, " + 
+				"ifnull( sum( CASE when c2.picou > 100 and c2.picou <= 300 then 1 else 0 end ), 0 ) as sum2, " + 
+				"ifnull( sum( CASE when c2.picou > 300 and c2.picou <= 1000 then 1 else 0 end ), 0 ) as sum3, " + 
+				"ifnull( sum( CASE when c2.picou > 1000 and c2.picou <= 2000 then 1 else 0 end ), 0 ) as sum4, " + 
+				"ifnull( sum( CASE when c2.picou > 2000 then 1 else 0 end ), 0 ) as sum5 " + 
+				"from  " + 
+				"(select ifnull(sum(dmom.trading_price),0) picou from df_user_member dum left join df_mass_order_monthly dmom on (dum.customer_id=dmom.customer_id and dmom.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmom.sign_time<curdate()) ";
+        if(!"0000".equals(dd)) {
+            sql = sql+ "  where dum.regist_cityno='"+dd+"'";
+        }
+        sql = sql+" group by dum.customer_id) c2";
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+		try {
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (!lst_data.isEmpty()) {
+
+				Map<String, Object> map_data = (Map<String, Object>) lst_data.get(0);
+				for (int i = 0; i < dayCount; i++) {
+					Map<String, Object> map_content = new HashMap<String, Object>();
+					map_content.put("memSum", map_data.get("sum" + i));
+				     if(0==i) {
+				    	 map_content.put("memSumName", "10元以内");
+				     }else if(1==i){
+				    	 map_content.put("memSumName", "10-100元");
+				     }else if(2==i){
+				    	 map_content.put("memSumName", "100-300元");
+				     }else if(3==i){
+				    	 map_content.put("memSumName", "300-1000元");
+				     }else if(4==i){
+				    	 map_content.put("memSumName", "1000-2000元");
+				     }else {
+				    	 map_content.put("memSumName", "2000元以上");
+				     }
+					lst_result.add(map_content);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getMemOrderCount(String dd) {
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		int dayCount = 5;
+		String sql = "select  " + 
+				"ifnull(sum(CASE when  c1.idcou<=1  then 1 else 0 end),0) as count0, " + 
+				"ifnull( sum( CASE when c1.idcou >=2 and c1.idcou <=  5 then 1 else 0 end ), 0 ) as count1, " + 
+				"ifnull( sum( CASE when c1.idcou > 5 and c1.idcou <= 10 then 1 else 0 end ), 0 ) as count2, " + 
+				"ifnull( sum( CASE when c1.idcou > 10 and c1.idcou <= 20 then 1 else 0 end ), 0 ) as count3, " + 
+				"ifnull( sum( CASE when c1.idcou > 20 then 1 else 0 end ), 0 ) as count4 " + 
+				"from  " + 
+				"(select ifnull(count(dmom.id),0) idcou from df_user_member dum left join df_mass_order_monthly dmom on (dum.customer_id=dmom.customer_id and dmom.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmom.sign_time<curdate())  ";
+        if(!"0000".equals(dd)) {
+            sql = sql+ "  where dum.regist_cityno='"+dd+"'";
+        }
+        sql = sql+" group by dum.customer_id) c1";
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+		try {
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (!lst_data.isEmpty()) {
+
+				Map<String, Object> map_data = (Map<String, Object>) lst_data.get(0);
+				for (int i = 0; i < dayCount; i++) {
+					Map<String, Object> map_content = new HashMap<String, Object>();
+					map_content.put("memCount", map_data.get("count" + i));
+				     if(0==i) {
+				    	 map_content.put("memCountName", "1次以下");
+				     }else if(1==i){
+				    	 map_content.put("memCountName", "2-5次");
+				     }else if(2==i){
+				    	 map_content.put("memCountName", "6-10次"); 
+				     }else if(3==i){
+				    	 map_content.put("memCountName", "10-20次");
+				     }else if(4==i){
+				    	 map_content.put("memCountName", "20次以上");
+				     }
+					lst_result.add(map_content);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lst_result;
+	}
+    
 
 }

@@ -51,5 +51,22 @@ public interface CommuneMember extends IManager{
 	 * @author wuxinxin
 	 */
 	public Map<String, Object> selectDayAllCm(String dd);
+	/**
+	 * 查询页面展示基本数据
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmBaseInfo(String dd);
+	/**
+	 * 查询社员增长情况
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmAddInfo(String dd);
+	/**
+	 * 客单价信息饼图
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmDealInfo(String dd);
 	
 }

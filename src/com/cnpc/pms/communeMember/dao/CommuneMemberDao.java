@@ -319,6 +319,18 @@ public interface CommuneMemberDao extends IDAO {
      * @author wuxinxin
      */
     public List<Map<String, Object>> getDayCityaddMemCount(String dd);
+    /**
+     * TODO 查询社员7日订单价分布
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getMemOrderSum(String dd);
+    /**
+     * TODO 查询社员7日消费次数
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getMemOrderCount(String dd);
 
 
 }
