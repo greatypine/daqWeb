@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 
@@ -152,5 +153,114 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 	public List<Map<String, Object>> getDeptMonthDayGMV(String storeId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public List<Map<String, Object>> queryTwoTwoOneGMVByWeek(DynamicDto dto) {
+		String sql = "SELECT YEARWEEK(dmo.sign_time) AS week_date,subdate(dmo.sign_time,date_format(dmo.sign_time, '%w')) AS week_time," +
+				"IFNULL(FLOOR(SUM(dmo.trading_price)),0) AS week_amount FROM df_mass_order_monthly dmo JOIN df_activity_scope das ON dmo.store_code = das.store_no " +
+				"WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL ";
+		if(StringUtils.isNotEmpty(dto.getStoreNo())){
+			sql = sql + " AND dmo.store_code = '"+dto.getStoreNo()+"' ";
+		}
+		if(StringUtils.isNotEmpty(dto.getCityName())){
+			sql = sql + " AND dmo.store_city_name like '"+dto.getCityName()+"%' ";
+		}
+		if(StringUtils.isNotEmpty(dto.getSearchstr())){//商品,团购,服务
+			String str = "";
+			String[] strArr = dto.getSearchstr().split(",");
+			for(int i=0;i<strArr.length;i++){
+				str+="'"+strArr[i]+"',";
+			}
+			str = str.substring(0,str.lastIndexOf(","));
+			sql = sql + " AND dmo.order_tag2 in ("+str+") ";
+		}else{
+			sql = sql +" AND dmo.order_tag2 not in ('1','2','3')";
+		}
+		sql = sql + " GROUP BY week_date";
+		
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	@Override
+	public List<Map<String, Object>> queryTwoTwoOneGMVByDay(DynamicDto dynamicDto) {
+		String sql="SELECT DATE(dmo.sign_time) AS day_time,IFNULL(FLOOR(sum(dmo.trading_price)),0) AS turnover FROM df_mass_order_monthly dmo " +
+				"JOIN df_activity_scope das ON dmo.store_code = das.store_no WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL ";
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + " AND dmo.store_code = '"+dynamicDto.getStoreNo()+"' ";
+		}
+		if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
+			sql = sql + " AND dmo.store_city_name like '"+dynamicDto.getCityName()+"%' ";
+		}
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){//商品,团购,服务
+			String str = "";
+			String[] strArr = dynamicDto.getSearchstr().split(",");
+			for(int i=0;i<strArr.length;i++){
+				str+="'"+strArr[i]+"',";
+			}
+			str = str.substring(0,str.lastIndexOf(","));
+			sql = sql + " AND dmo.order_tag2 in ("+str+") ";
+		}else{
+			sql = sql +" AND dmo.order_tag2 not in ('1','2','3')";
+		}
+		sql = sql + " GROUP BY DATE(dmo.sign_time) ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	@Override
+	public List<Map<String, Object>> queryTwoTwoOneGMVByHour(DynamicDto dynamicDto) {
+		String sql="SELECT IFNULL(FLOOR(sum(dmo.trading_price)),0) AS turnover,DATE_FORMAT(dmo.sign_time, '%H') AS time FROM df_mass_order_daily dmo" +
+				"JOIN df_activity_scope das ON dmo.store_code = das.store_no WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL ";
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + " AND dmo.store_code = '"+dynamicDto.getStoreNo()+"' ";
+		}
+		if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
+			sql = sql + " AND dmo.store_city_name like '"+dynamicDto.getCityName()+"%' ";
+		}
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){//商品,团购,服务
+			String str = "";
+			String[] strArr = dynamicDto.getSearchstr().split(",");
+			for(int i=0;i<strArr.length;i++){
+				str+="'"+strArr[i]+"',";
+			}
+			str = str.substring(0,str.lastIndexOf(","));
+			sql = sql + " AND dmo.order_tag2 in ("+str+") ";
+		}else{
+			sql = sql +" AND dmo.order_tag2 not in ('1','2','3')";
+		}
+		sql = sql + " GROUP BY DATE_FORMAT(dmo.sign_time,'%H') ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	@Override
+	public List<Map<String, Object>> queryDataOfScatterplot(DynamicDto dynamicDto) {
+		String sql="SELECT IFNULL(SUM(dsc.order_count), 0) AS order_count,IFNULL(FLOOR(SUM(dsc.order_amount)),0) AS order_amount,dsc.city_name," +
+				"dsc.cityno,dsc.store_name,CONCAT(dsc. YEAR, '-', dsc. MONTH) AS time,dsc.storeno FROM ds_ope_gmv_storechannel_month dsc JOIN df_activity_scope " +
+				"das ON dsc.storeno=das.store_no WHERE 1 = 1 AND dsc.store_name NOT LIKE '%企业购%' ";
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + " AND dsc.storeno = '"+dynamicDto.getStoreNo()+"' ";
+		}
+		if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
+			sql = sql + " AND dsc.city_name like '%"+dynamicDto.getCityName()+"%' ";
+		}
+		sql = sql + " GROUP BY city_name,store_name,time HAVING time >= DATE_FORMAT(DATE_SUB(CURRENT_DATE (),INTERVAL 3 MONTH),'%Y-%c') ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	@Override
+	public List<Map<String, Object>> queryTwoTwoOneStoreCount(
+			DynamicDto dynamicDto) {
+		String sql="SELECT count(*) as store_count FROM df_activity_scope";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
 	}
 }

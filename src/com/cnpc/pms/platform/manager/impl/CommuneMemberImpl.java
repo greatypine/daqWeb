@@ -1339,7 +1339,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		String cityno = "";
 		if (!"0000".equals(dd)) {
 			if (dd != null && !dd.substring(0, 1).equals("0")) {
-				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(11 + ""));
+				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(dd));
 				cityno = cityNO.get(0).get("cityno").toString();
 				if (cityno.substring(0, 2).equals("00")) {
 					dd = cityno.replace("00", "0");

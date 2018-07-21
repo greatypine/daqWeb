@@ -33,4 +33,34 @@ public interface CommunityMembersDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String, Object>> getDeptMonthDayGMV(String storeId);
+	/**
+	 * 查询221每周GMV
+	 * @param dynamicDto
+	 * @return
+	 */
+	public List<Map<String, Object>> queryTwoTwoOneGMVByWeek(DynamicDto dynamicDto);
+	/**
+	 * 查询221每日GMV
+	 * @param dynamicDto
+	 * @return
+	 */
+	public List<Map<String, Object>> queryTwoTwoOneGMVByDay(DynamicDto dynamicDto);
+	/**
+	 * 查询221每时GMV
+	 * @param dynamicDto
+	 * @return
+	 */
+	public List<Map<String, Object>> queryTwoTwoOneGMVByHour(DynamicDto dynamicDto);
+	/**
+	 * 查询221门店散点图
+	 * @param dynamicDto
+	 * @return
+	 */
+	public List<Map<String, Object>> queryDataOfScatterplot(DynamicDto dynamicDto);
+	/**
+	 * 查询221门店个数
+	 * @param dynamicDto
+	 * @return
+	 */
+	public List<Map<String, Object>> queryTwoTwoOneStoreCount(DynamicDto dynamicDto);
 }

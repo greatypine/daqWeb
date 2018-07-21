@@ -4152,7 +4152,7 @@ var curr_user;
   
   //221战略运营页
   function goto221(){
-	  window.open("221.html","221");
+	  window.open("221_store.html","221");
   }
   
   //518直播间

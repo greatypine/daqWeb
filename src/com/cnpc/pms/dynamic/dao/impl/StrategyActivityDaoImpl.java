@@ -143,7 +143,13 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 
 	@Override
 	public List<Map<String, Object>> queryYestodayGmvRanking(String dept_id,String order_by){
-		String sql = "SELECT das.store_name,IFNULL(tor.ordergmv,0) AS ordergmv FROM (SELECT SUM(ordergmv) AS ordergmv,store_id FROM (SELECT tor.store_id,"
+		String goaldone ="";
+		if(StringUtils.isNotEmpty(dept_id)){
+			goaldone ="5000";
+		}else {
+			goaldone ="10000";
+		}
+		String sql = "SELECT das.store_name,IFNULL(tor.ordergmv,0) AS ordergmv,tor.store_no,if(IFNULL(tor.ordergmv, 0)>"+goaldone+",'达成','未达成') as goaldone FROM (SELECT SUM(ordergmv) AS ordergmv,store_id,store_no FROM (SELECT tor.store_id, store_code as store_no, "
 				+ "sum(gmv_price) AS ordergmv FROM df_mass_order_monthly tor WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 ";
 		if(StringUtils.isNotEmpty(dept_id)){
 			sql = sql + "AND tor.order_tag2 = '" + dept_id+"'";

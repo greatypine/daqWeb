@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>营业额分析</title>
+   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+	   folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/iCheck/all.css">
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script><![endif]-->
+  <style>
+  html,body,.skin-blue .wrapper{background-color: #f1f1f1; min-height: 100%;}
+  p{margin: 0;}
+  .content-wrapper{background-color: #fff;}
+  /*tab切换*/
+  .nav-tabs1{background-color: #f55a44; padding: 10px 0 0 20px;}
+  .nav-tabs1 > li{ margin: 0; background-color: rgba(0,0,0,0.5); width: 60px; height: 26px; line-height: 26px; text-align: center; margin-right: 5px; border-radius: 5px; cursor: pointer;}
+  .nav-tabs1 > li.active{background-color: #fff;}
+  .nav-tabs1 > li > a{color: rgba(255,255,255,1); padding: 0; display: block; width: 100%; height: 100%;line-height: 26px;}
+  .nav-tabs1 > li > a:hover{border-color: transparent; color: #fff;}
+  .nav-tabs1 > li.active > a, .nav-tabs1 > li.active > a:focus, .nav-tabs1 > li.active > a:hover{ background-color: transparent; border: 0; color: #f55a44;}
+  /*tab切换 end*/
+  .dmodule1{ color: #fff; padding: 10px 0 0 10px;}
+  .dmodule1 p:nth-child(2){font-size: 30px; font-weight: bold; line-height: 70px;}
+  .dmodule2{ color: #fff; height: 155px; padding: 10px 0 0 10px;}
+  .dmodule2 p:nth-child(2){font-size: 30px; font-weight: bold; line-height: 110px;}
+  .data_module1{background-color: #5e5e5e;}
+  .data_module2{margin-top: 10px; background-color: #696969;}
+  .data_module3{background-color: #666;}
+  .data_module4{margin-top: 10px; background-color: #f55a44;}
+  .skin-blue .sidebar-form{border-color: #ddd;}
+  .skin-blue .sidebar-form input[type="text"], .skin-blue .sidebar-form .btn{background-color: transparent;}
+  .zbsearch{font-size: 12px; margin-bottom: 10px;}
+  .skin-blue .sidebar-form{margin: 0 0 10px 0;}
+  .select2-results__options::-webkit-scrollbar{width: 8px; background-color: #fff;}
+  .select2-results__options::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+  .select2-results__options::-webkit-scrollbar-track{background-color: #fff;}
+  .has-error .select2-selection--single{border-color: #dd4b39; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
+  .has-error button{background-color: #dd4b39; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
+  .has-warning .select2-selection--single{border-color: #f39c12; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
+  .has-warning button{background-color: #f39c12; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
+  /*对比*/
+  .main-sidebar{ padding-top: 80px; right: 0; left: auto; box-shadow: -5px 0 5px rgba(0,0,0,0.5); color: #fff;}
+  .main-sidebar .mybtn{width: 80px; font-size: 14px; position: absolute; bottom: 30px; left: 50%; margin-left: -40px;}
+  .sidebar{padding: 0 15px;}
+  .contrast{position: absolute; background-color: #222d32; left: -30px;; top: 50%; margin-top: -30px; padding: 5px 10px; color: #fff;}
+  .contrast:after{content: ''; width: 0; height: 0; border-bottom: 20px solid #222d32; border-left: 40px solid transparent; position: absolute; top: 50%; left: 0px; margin-top: -45px;}
+  .contrast:before{content: ''; width: 0; height: 0; border-top: 20px solid #222d32; border-left: 40px solid transparent; position: absolute; top: 50%; left: 0px; margin-top: 25px;}
+  .sidebar p{line-height: 30px;}
+  .sidebar p i{margin-top: 10px;}
+	#process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	.auto{max-height:200px; overflow-y:scroll;}
+	.nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
+    .nav-tabs-custom > .nav-tabs2 > li > a{font-size: 14px; padding: 8px 15px;}
+    .nav-tabs-custom > .nav-tabs2 > li > a:hover{color: #f39c12;}
+    .nav-tabs-custom > .nav-tabs2 > li.active > a,.nav-tabs-custom > .nav-tabs2 > li.active > a:hover{background: #fff; color: #f39c12;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #f39c12; border-left: 1px solid #f39c12; border-right:1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs2 > li:first-of-type.active > a{border-left: 1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs2{border-bottom: 1px solid #f39c12; margin: 5px 0; padding-left: 5px;}
+    .nav-tabs-custom > .nav-tabs2 > li{margin-bottom: -1px;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+   <aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <div class="contrast sidebar-toggle" data-toggle="offcanvas" role="button" style="display: none;">对<br>比</div>
+    <section class="sidebar">
+      <!-- search form -->
+      <form name="lineandstation">
+        <div class="col-sm-6 has-error" style="padding: 0 5px 0 0;">
+          <select class="form-control select2" id="deptSelectContrast">
+          </select>
+        </div>
+        <div class="col-sm-6 has-error no-padding form-group" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
+          <select class="form-control select2" id="channelSelectContrast">
+          </select>
+        </div>
+        <div class="col-sm-6 has-warning" style="padding: 0 5px 0 0;">
+          <select class="form-control select2" id="citySelectContrast">
+          </select>
+        </div>
+        <div class="col-sm-6 has-warning no-padding form-group no-margin" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
+          <input id="store_id_manual_contrast" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+          <input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual_contrast" />
+          <div class="auto hidden" id="auto_contrast" style="width: 94%;z-index: 99999;">
+          </div>
+        </div>
+		<div class="col-sm-12 text-center no-padding has-error">
+          <button type="button" class="btn btn-block btn-error btn-sm" id="search-btn-contrast" style="margin: 10px 45px 0 auto; font-size: 14px;">加入对比</button>
+        </div>
+        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_first_group">
+          	<p><label id="label_manual_first"></label><i id="label_first_reset" class="fa fa-remove pull-right"></i></p>
+        </div>
+        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_second_group">
+          	<p><label id="label_manual_second"></label><i id="label_second_reset" class="fa fa-remove pull-right"></i></p>
+        </div>
+        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_third_group">
+          	<p><label id="label_manual_third"></label><i id="label_third_reset" class="fa fa-remove pull-right"></i></p>
+        </div>
+        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_fourth_group">
+          	<p><label id="label_manual_fourth"></label><i id="label_fourth_reset" class="fa fa-remove pull-right"></i></p>
+        </div>
+        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_fifth_group">
+          	<p><label id="label_manual_fifth"></label><i id="label_fifth_reset" class="fa fa-remove pull-right"></i></p>
+        </div>
+        <button type="button" class="mybtn btn btn-block btn-warning btn-sm" id="contrast">开始对比</button>
+        <label class="mybtn" id="warning_text" style="display:none;margin: 15px auto 0 50px;font-size: 14px;">最多5个</label>
+      </form>
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+  <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+		<div class="logo_img pull-left">
+			<img src="dist/img/logo.png" height="30">
+			<img src="dist/img/title.png" height="20">
+		</div>
+		<div class="pull-left">
+			<div class="logo-lg">
+				<ul class="no-margin">
+					<li class="current" onclick="excuteRefresh()"><em>营业额分析</em></li>
+				</ul>
+			</div>
+		</div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	<div class="nav-tabs-custom">
+       <ul class="nav nav-tabs nav-tabs2">
+         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">全部GMV</a></li>
+         <li class="active"><a href="javascript:void(0);" data-toggle="tab">221GMV</a></li>
+       </ul>
+      <div class="tab-content no-padding">
+      <div class="tab-pane active" id="tab_1">
+			  <!-- Main content -->
+	  <section style="margin-top: 10px;">
+		<div class="clearfix">
+		  		  <div class="col-sm-12">
+			<div class="zbsearch clearfix">
+              <form name="lineandstation">
+                <!-- <div class="col-sm-5 has-error form-group" style="padding: 0 5px 0 0;">
+                  <select class="form-control select2" id="deptSelect">
+                  </select>
+                </div>
+                <div class="col-sm-5 has-error no-padding form-group" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
+                  <select class="form-control" id="channelSelect">
+                  </select>
+                </div>
+                <div class="col-sm-2 no-padding has-error">
+						<span class="input-group-btn">
+							<button type="button" name="search" id="search-btn1" class="btn btn-flat"><i class="fa fa-search"></i></button>
+						</span>
+                </div> -->
+                <div class="col-sm-2 has-warning form-group" style="padding: 0 5px 0 0;">
+                  <select class="form-control select2" id="citySelect">
+                  </select>
+                </div>
+                <div class="col-sm-2 has-warning no-padding form-group no-margin" style="box-shadow: 0 0 2px
+                rgba(0,0,0,0.4);">
+                  <input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+                  <input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" />
+                  <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+                  </div>
+                </div>
+                <div class="col-sm-1 has-warning no-padding form-group">
+						<span class="input-group-btn">
+							<button type="button" name="search" id="search-btn2" class="btn btn-flat"><i class="fa fa-search"></i></button>
+						</span>
+                </div>
+                <!-- <div class="col-sm-12 no-padding">
+                	<div class="col-sm-6 form-group no-padding no-margin">
+		          		<label id="cbLabel"><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C+小B</span></label>
+		        	</div>
+			        <div class="col-sm-6 form-group no-padding no-margin">
+			          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B</span></label>
+			        </div>
+               	</div> -->
+                <div class="col-sm-2" style="padding: 6px 0">
+                	<div class="col-sm-4 form-group no-padding no-margin">
+		          		<label id="cbLabel"><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked="checked"><span style="padding-left: 10px;">商品</span></label>
+		        	</div>
+			        <div class="col-sm-4 form-group no-padding no-margin">
+			          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb" checked="checked"><span style="padding-left: 10px;">服务</span></label>
+			        </div>
+			        <div class="col-sm-4 form-group no-padding no-margin">
+			          	<label><input type="checkbox" class="minimal-red" id="thirdbClick" value="maxbt" checked="checked"><span style="padding-left: 10px;">团购</span></label>
+			        </div>
+			        
+               	</div>
+              </form>
+            </div>
+			<!-- <div class="dmodule1 data_module1" id="data_module1">
+			  <p>当日累计GMV</p>
+			  <p class="text-center" id="curDayGMV">载入中...</p>
+			</div>
+			<div class="dmodule1 data_module2" id="data_module2">
+			  <p>当月累计GMV</p>
+			  <p class="text-center" id="curMonthGMV">载入中...</p>
+			</div> -->
+		  </div>
+		  <div class="col-sm-12" style="padding-left: 0;">
+			<div class="nav_l" id="nav_l">
+			  <!-- Tabs within a box -->
+			  <ul class="nav nav-tabs no-border nav-tabs1">
+<!-- 				<li class="active"><a href="#revenue-chart" data-toggle="tab">实时</a></li> -->
+				<!-- <li><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">时</a></li> -->
+                <li class="active"><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
+				<!-- <li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li> -->
+                <!-- <li  class="active"><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li> -->
+                <!-- <div class="col-sm-1 pull-right"><button type="button" id="search-btn-add" class="btn btn-block btn-sm" style="margin-right: 50px; font-size: 14px; background-color: rgba(0,0,0,0.1);color: #fff">加入对比</button></div> -->
+			  </ul>
+			  <div class="tab-content no-padding" id="tab-content">
+				<!-- Morris chart - Sales -->
+<!-- 				<div class="chart tab-pane active" id="revenue-chart"> -->
+<!-- 				  <div id="main1" style="width: 100%; height: 300px;"></div> -->
+<!-- 				</div> -->
+				<div class="chart tab-pane" id="sales-chart">
+				  <div id="main4" style="width: 100%; height: 411px;"></div>
+				</div>
+                <div class="chart tab-pane active" id="day-chart">
+                  <div id="main5" style="width: 100%; height: 411px;"></div>
+                </div>
+				<div class="chart tab-pane" id="week-chart">
+				  <div id="main7" style="width: 100%; height: 411px;"></div>
+				</div>
+                <div class="chart tab-pane" id="month-chart">
+                  <div id="main6" style="width: 100%; height: 411px;"></div>
+                </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<div class="clearfix" style="margin-top: 10px;">
+		  <!-- <div class="col-sm-2"><div id="main2" style="height: 320px;"></div></div> -->
+		  <div class="col-sm-12" style="padding-left: 0;">
+              <div id="main3" style="height: 320px;"></div>
+          </div>
+		</div>
+	  </section>
+      </div>	  <!-- Main content -->
+	  <!-- <section style="margin-top: 10px;">
+		<div class="clearfix">
+		  		  <div class="col-sm-12">
+			<div class="zbsearch clearfix">
+              <form name="lineandstation">
+                <div class="col-sm-5 has-error form-group" style="padding: 0 5px 0 0;">
+                  <select class="form-control select2" id="deptSelect">
+                  </select>
+                </div>
+                <div class="col-sm-5 has-error no-padding form-group" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
+                  <select class="form-control" id="channelSelect">
+                  </select>
+                </div>
+                <div class="col-sm-2 no-padding has-error">
+						<span class="input-group-btn">
+							<button type="button" name="search" id="search-btn1" class="btn btn-flat"><i class="fa fa-search"></i></button>
+						</span>
+                </div>
+                <div class="col-sm-2 has-warning form-group" style="padding: 0 5px 0 0;">
+                  <select class="form-control select2" id="citySelect">
+                  </select>
+                </div>
+                <div class="col-sm-2 has-warning no-padding form-group no-margin" style="box-shadow: 0 0 2px
+                rgba(0,0,0,0.4);">
+                  <input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+                  <input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" />
+                  <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+                  </div>
+                </div>
+                <div class="col-sm-1 has-warning no-padding form-group">
+						<span class="input-group-btn">
+							<button type="button" name="search" id="search-btn2" class="btn btn-flat"><i class="fa fa-search"></i></button>
+						</span>
+                </div>
+                <div class="col-sm-12 no-padding">
+                	<div class="col-sm-6 form-group no-padding no-margin">
+		          		<label id="cbLabel"><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C+小B</span></label>
+		        	</div>
+			        <div class="col-sm-6 form-group no-padding no-margin">
+			          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B</span></label>
+			        </div>
+               	</div>
+                <div class="col-sm-2" style="padding: 6px 0">
+                	<div class="col-sm-4 form-group no-padding no-margin">
+		          		<label id="cbLabel"><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">商品</span></label>
+		        	</div>
+			        <div class="col-sm-4 form-group no-padding no-margin">
+			          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">服务</span></label>
+			        </div>
+			        <div class="col-sm-4 form-group no-padding no-margin">
+			          	<label><input type="checkbox" class="minimal-red" id="thirdbClick" value="maxb"><span style="padding-left: 10px;">团购</span></label>
+			        </div>
+			        
+               	</div>
+              </form>
+            </div>
+			<div class="dmodule1 data_module1" id="data_module1">
+			  <p>当日累计GMV</p>
+			  <p class="text-center" id="curDayGMV">载入中...</p>
+			</div>
+			<div class="dmodule1 data_module2" id="data_module2">
+			  <p>当月累计GMV</p>
+			  <p class="text-center" id="curMonthGMV">载入中...</p>
+			</div>
+		  </div>
+		  <div class="col-sm-12" style="padding-left: 0;">
+			<div class="nav_l" id="nav_l">
+			  Tabs within a box
+			  <ul class="nav nav-tabs no-border">
+				<li class="active"><a href="#revenue-chart" data-toggle="tab">实时</a></li>
+				<li><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">时</a></li>
+                <li><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
+				<li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li>
+                <li  class="active"><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li>
+                <div class="col-sm-1 pull-right"><button type="button" id="search-btn-add" class="btn btn-block btn-sm" style="margin-right: 50px; font-size: 14px; background-color: rgba(0,0,0,0.1);color: #fff">加入对比</button></div>
+			  </ul>
+			  <div class="tab-content no-padding" id="tab-content">
+				Morris chart - Sales
+				<div class="chart tab-pane active" id="revenue-chart">
+				  <div id="main1" style="width: 100%; height: 300px;"></div>
+				</div>
+				<div class="chart tab-pane" id="sales-chart">
+				  <div id="main4" style="width: 100%; height: 411px;"></div>
+				</div>
+                <div class="chart tab-pane" id="day-chart">
+                  <div id="main5" style="width: 100%; height: 411px;"></div>
+                </div>
+				<div class="chart tab-pane" id="week-chart">
+				  <div id="main7" style="width: 100%; height: 411px;"></div>
+				</div>
+                <div class="chart tab-pane active" id="month-chart">
+                  <div id="main6" style="width: 100%; height: 411px;"></div>
+                </div>
+			  </div>
+			</div>
+		  </div>
+		</div>
+		<div class="clearfix" style="margin-top: 10px;">
+		  <div class="col-sm-2"><div id="main2" style="height: 320px;"></div></div>
+		  <div class="col-sm-12" style="padding-left: 0;">
+              <div id="main3" style="height: 320px;"></div>
+          </div>
+		</div>
+	  </section> -->
+      </div>
+      </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<!-- 总部首页 script -->
+<!-- <script src="dist/js/headquarters/index_K.js"></script> -->
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script src="dist/js/headquarters/index_K_221.js"></script>
+</body>
+</html>

@@ -112,9 +112,9 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
+         <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
          <li class="active"><a href="javascript:void(0);" data-toggle="tab">221整体</a></li>
          <li><a href="javascript:void(0);" onclick="toBussiness()" data-toggle="tab">221业务</a></li>
-         <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
        </ul>
       <div class="tab-content no-padding">
       <div class="tab-pane active" id="tab_1">
@@ -123,7 +123,7 @@
           <div class="box-body">
           	<div class="col-sm-12">
           		<h4><b>211统计范围：<span>96店</span></b></h4>
-              	<small>产品范围：商品类+服务类+团购（商业）</small>
+              	<small>产品范围：商品类（含养老餐）+服务类+团购（商业）</small>
           	</div>
           	<div class="col-sm-6">
               <h5 style="color: #7c4139;">整体完成情况</h5>
@@ -167,7 +167,7 @@
             <div class="col-sm-6">
               <h5 style="color: #7c4139;">昨日完成情况</h5>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>总GMV：<span id="yestodayTotalGmv">载入中...</span></div>
-              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>商品类GMV：<span id="yestodayProductGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow" title="含养老餐"><i class="fa fa-credit-card"></i>商品类GMV：<span id="yestodayProductGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>服务类GMV：<span id="yestodayServiceGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV：<span id="yestodayGrouponGmv">载入中...</span></div>
             </div>
@@ -184,7 +184,7 @@
 <!--           	<div class="col-sm-12 no-padding" id="main4" style="height: 350px;"></div> -->
 <!--           </div> -->
 <!--         </div> -->
-        <div class="box box-default">
+<!--         <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6" style="height: 460px;">
               <h4 class="text-red">【商品类】门店排名Top10</h4>
@@ -225,7 +225,7 @@
 	                </tr>
                 </tbody>
               </table>
-            </div>
+            </div> -->
 <!--             <div class="col-sm-6" id="main1" style="height: 450px;"></div> -->
           </div>
         </div>
