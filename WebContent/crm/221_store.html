@@ -384,7 +384,7 @@
 <script src="plugins/morris/morris.min.js"></script>
 <script src="plugins/gooey_menu/gooey.min.js"></script>
 <script type ="text/javascript">
-
+	var target = decode64(getUrlParamByKey("t"));//执行人级别 
 	$(document).ready(function() {
 // 	    $("#content-slider").lightSlider({
 // 	      loop:true,
@@ -609,7 +609,12 @@
 		var storeNo = params.data[3];
 		var store_no = params.data[3];
 		initStoreCompleteInfo(storeNo);
-		url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(0)+"&store_name="+encode64(store_name);
+		var url = "";
+		if(target==0){
+			  	url = "index_K_221.html?t="+encode64(0)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(0)+"&store_name="+encode64(store_name);
+			  }else if(target==1){
+			  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(0)+"&store_name="+encode64(store_name);
+		 }
 		window.open(url,"searchData_view");
 	  });
 </script>
@@ -1281,7 +1286,12 @@
   }
   
   function goTo221Kline(store_no,type,store_name){
-	  url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(type)+"&store_name="+encode64(store_name);
+	  var url = "";
+	  if(target==0){
+		  	url = "index_K_221.html?t="+encode64(0)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(type)+"&store_name="+encode64(store_name);
+		  }else if(target==1){
+		  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(type)+"&store_name="+encode64(store_name);
+	  }
 	  window.open(url);
   }
   

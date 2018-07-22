@@ -2326,7 +2326,11 @@ Date.prototype.format = function() {
 	  location.reload();
   }
   function toIndex(){
- 		window.location.href="index_K.html?t="+encode64('1')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+  		if(target==0){
+			window.location.href="index_K.html?t="+encode64('0')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+		}else if(target==1){
+			window.location.href="index_K.html?t="+encode64('1')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+		}
   }
   function queryTwoTwoOneStoreCount(){
   	 var reqestParameter = {
