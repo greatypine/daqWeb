@@ -24,6 +24,8 @@ public class StrategyActivityManagerImpl extends BizBaseCommonManager implements
 	public Map<String, Object> queryStrategyGMV(String start_time,String end_time) {
 		StrategyActivityDao strategyActivityDao = (StrategyActivityDao)SpringHelper.getBean(StrategyActivityDao.class.getName());
 		Map<String, Object> order_obj = strategyActivityDao.queryStrategyGMV(start_time,end_time);
+		Map<String, Object> ylcgmvTemp = strategyActivityDao.queryYangLaoCanGmv(null, start_time, end_time);
+		order_obj.put("ylc_total_gmv", ylcgmvTemp.get("ylc_total_gmv")==null?"0":ylcgmvTemp.get("ylc_total_gmv"));
     	return order_obj;
 	}
 	
@@ -63,6 +65,8 @@ public class StrategyActivityManagerImpl extends BizBaseCommonManager implements
 			}
 			Map<String, Object> memberTemp = strategyActivityDao.queryNewMember(store_no, yestoday, yestoday);
 			map.put("member_num", memberTemp.get("membernum")==null?"0":memberTemp.get("membernum"));
+			Map<String, Object> ylcgmvTemp = strategyActivityDao.queryYangLaoCanGmv(store_no, yestoday, yestoday);
+			map.put("ylc_total_gmv", ylcgmvTemp.get("ylc_total_gmv")==null?"0":ylcgmvTemp.get("ylc_total_gmv"));
 		}
     	return lst_data;
 	}

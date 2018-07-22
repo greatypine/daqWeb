@@ -15,6 +15,8 @@ import net.sf.json.JSONArray;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.community.dao.CommunityMembersDao;
+import com.cnpc.pms.dynamic.dao.ChartStatDao;
+import com.cnpc.pms.dynamic.entity.ChartStatDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.platform.manager.CommunityMembersManager;
 import com.cnpc.pms.utils.DateUtils;
@@ -125,5 +127,49 @@ public class CommunityMembersManagerImpl extends BizBaseCommonManager implements
 		List<Map<String, Object>> depGMVList = new ArrayList<Map<String,Object>>();
 		depGMVList =communityMembersDao.getDeptMonthDayGMV(storeId);
 		return null;
+	}
+
+	@Override
+	public Map<String, Object> queryTwoTwoOneGMVByWeek(DynamicDto dynamicDto) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
+		List<Map<String, Object>> lst_data = communityMembersDao.queryTwoTwoOneGMVByWeek(dynamicDto);
+		result.put("twoTwoOneData", lst_data);
+		return result;
+	}
+	@Override
+	public Map<String, Object> queryTwoTwoOneGMVByDay(DynamicDto dynamicDto) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
+		List<Map<String, Object>> lst_data = communityMembersDao.queryTwoTwoOneGMVByDay(dynamicDto);
+		result.put("twoTwoOneDayData", lst_data);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> queryTwoTwoOneGMVByHour(DynamicDto dynamicDto) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
+		List<Map<String, Object>> lst_data = communityMembersDao.queryTwoTwoOneGMVByHour(dynamicDto);
+		result.put("twoTwoOneHourData", lst_data);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> queryDataOfScatterplot(DynamicDto dynamicDto) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
+		List<Map<String, Object>> lst_data = communityMembersDao.queryDataOfScatterplot(dynamicDto);
+		result.put("twoTwoOneScatterplotData", lst_data);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> queryTwoTwoOneStoreCount(DynamicDto dynamicDto) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		CommunityMembersDao communityMembersDao = (CommunityMembersDao)SpringHelper.getBean(CommunityMembersDao.class.getName());
+		List<Map<String, Object>> lst_data = communityMembersDao.queryTwoTwoOneStoreCount(dynamicDto);
+		result.put("twoTwoOneStoreCountData", String.valueOf(lst_data.get(0).get("store_count")));
+		return result;
 	}
 }

@@ -4,7 +4,10 @@ import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
-
+/**
+ * @Function:总部首页
+ * @author:zhangli
+ */
 public interface CommunityMembersManager extends IManager{
 	/**
 	 *查询全国/省/市的新增社员人数(当月),社员总数
@@ -30,4 +33,34 @@ public interface CommunityMembersManager extends IManager{
 	 * @return
 	 */
 	Map<String, Object> getDepDayGMVOfMonthForStore(String storeId);
+	/**
+	 * 查询每周221GMV
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> queryTwoTwoOneGMVByWeek(DynamicDto dynamicDto);
+	/**
+	 * 查询每日221GMV
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> queryTwoTwoOneGMVByDay(DynamicDto dynamicDto);
+	/**
+	 * 查询每时221GMV
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> queryTwoTwoOneGMVByHour(DynamicDto dynamicDto);
+	/**
+	 * 查询门店221散点图
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> queryDataOfScatterplot(DynamicDto dynamicDto);
+	/**
+	 * 查询221门店个数
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> queryTwoTwoOneStoreCount(DynamicDto dynamicDto);
 }
