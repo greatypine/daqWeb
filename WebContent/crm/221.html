@@ -170,6 +170,7 @@
               <div class="col-sm-6 detail_tomorrow" title="含养老餐"><i class="fa fa-credit-card"></i>商品类GMV：<span id="yestodayProductGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>服务类GMV：<span id="yestodayServiceGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV：<span id="yestodayGrouponGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>养老餐GMV：<span id="yestodayYangLaoCanGmv">载入中...</span></div>
             </div>
           </div>
         </div>
@@ -472,11 +473,13 @@
 							yestoday_jwsGMV = jsonData.ser_total_gmv;
 							$("#yestodayServiceGmv").html(changeMoney(parseInt(yestoday_jwsGMV)));
 							yestoday_grouponGMV = jsonData.gro_total_gmv;
+							yestoday_yanglaocanGmv = jsonData.ylc_total_gmv;
 						}
 					}
 			},false);
 		  $("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
 		  $("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
+		  $("#yestodayYangLaoCanGmv").html(changeMoney(parseInt(yestoday_yanglaocanGmv)));
 		  
 	}
 	

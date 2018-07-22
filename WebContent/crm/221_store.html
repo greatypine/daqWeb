@@ -747,8 +747,9 @@
 							infoStr=infoStr+'<div class="col-sm-6 no-padding" title="含养老餐"><i class="fa fa-paw"></i>商品类GMV：<span>￥'+jsonData[i].pro_total_gmv+'</span></div>';
 							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>服务类GMV：<span>￥'+jsonData[i].ser_total_gmv+'</span></div>';
 							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>团购GMV：<span>￥'+jsonData[i].gro_total_gmv+'</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-male"></i>社员新增：<span>'+jsonData[i].member_num+'人</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>养老餐GMV：<span>￥'+jsonData[i].ylc_total_gmv+'</span></div>';
 							infoStr=infoStr+'</div>';
-							infoStr=infoStr+'<div class="col-sm-6"><i class="fa fa-male"></i>社员新增：<span>'+jsonData[i].member_num+'人</span></div>';
 		                    infoStr=infoStr+'</li>';
 						}
 						$("#image-galle").append(infoStr); 
@@ -1280,7 +1281,8 @@
   }
   
   function goTo221Kline(store_no,type,store_name){
-	  window.location.href=url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(type)+"&store_name="+encode64(store_name);
+	  url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(type)+"&store_name="+encode64(store_name);
+	  window.open(url);
   }
   
 </script>
