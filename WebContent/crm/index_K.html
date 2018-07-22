@@ -410,6 +410,9 @@ Date.prototype.format = function() {
  var storeName=decode64(getUrlParamByKey("sn"));//门店名称
  var cityname = decode64(getUrlParamByKey("cn"));//城市名称
  var screenlogin=getUrlParamByKey("su");
+ var storeNo_ = (decode64(getUrlParamByKey("so")) == 'null'||decode64(getUrlParamByKey("so")) == null) ? '' : decode64(getUrlParamByKey("so"));//门店no
+ var ordertype = (decode64(getUrlParamByKey("ordertype")) == 'null'||decode64(getUrlParamByKey("ordertype")) == null) ? '' : decode64(getUrlParamByKey("ordertype"));//商品服务团购 全部:0;商品1服务2团购3
+ var storeName_ = (decode64(getUrlParamByKey("store_name")) == 'null'||decode64(getUrlParamByKey("store_name")) == null) ? '' : decode64(getUrlParamByKey("store_name"));//商品服务团购 全部:0;商品1服务2团购3
  //var ta = getUrlParamByKey("ta");
  
  function loginShow(){
@@ -2730,7 +2733,7 @@ Date.prototype.format = function() {
 	  if(target==0){
 		  	url = "index_K_221.html?t="+encode64('0')+"&s=&sn=&c=&cn=";
 		  }else if(target==1){
-		  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(cityName);
+		  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
 		  }
  		window.location.href=url;
   }

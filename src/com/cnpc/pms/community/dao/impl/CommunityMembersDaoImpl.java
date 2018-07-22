@@ -158,12 +158,12 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 	public List<Map<String, Object>> queryTwoTwoOneGMVByWeek(DynamicDto dto) {
 		String sql = "SELECT YEARWEEK(dmo.sign_time) AS week_date,subdate(dmo.sign_time,date_format(dmo.sign_time, '%w')) AS week_time," +
 				"IFNULL(FLOOR(SUM(dmo.trading_price)),0) AS week_amount FROM df_mass_order_monthly dmo JOIN df_activity_scope das ON dmo.store_code = das.store_no " +
-				"WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL ";
+				"WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL AND dmo.sign_time > '2018-07-01 00:00:00' ";
 		if(StringUtils.isNotEmpty(dto.getStoreNo())){
 			sql = sql + " AND dmo.store_code = '"+dto.getStoreNo()+"' ";
 		}
 		if(StringUtils.isNotEmpty(dto.getCityName())){
-			sql = sql + " AND dmo.store_city_name like '"+dto.getCityName()+"%' ";
+			sql = sql + " AND dmo.store_city_name like '%"+dto.getCityName()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(dto.getSearchstr())){//商品,团购,服务
 			String str = "";
@@ -186,12 +186,12 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 	@Override
 	public List<Map<String, Object>> queryTwoTwoOneGMVByDay(DynamicDto dynamicDto) {
 		String sql="SELECT DATE(dmo.sign_time) AS day_time,IFNULL(FLOOR(sum(dmo.trading_price)),0) AS turnover FROM df_mass_order_monthly dmo " +
-				"JOIN df_activity_scope das ON dmo.store_code = das.store_no WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL ";
+				"JOIN df_activity_scope das ON dmo.store_code = das.store_no WHERE dmo.store_name NOT LIKE '%测试%' AND dmo.order_tag2 IS NOT NULL AND dmo.sign_time > '2018-07-01 00:00:00' ";
 		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
 			sql = sql + " AND dmo.store_code = '"+dynamicDto.getStoreNo()+"' ";
 		}
 		if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
-			sql = sql + " AND dmo.store_city_name like '"+dynamicDto.getCityName()+"%' ";
+			sql = sql + " AND dmo.store_city_name like '%"+dynamicDto.getCityName()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){//商品,团购,服务
 			String str = "";
@@ -218,7 +218,7 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 			sql = sql + " AND dmo.store_code = '"+dynamicDto.getStoreNo()+"' ";
 		}
 		if(StringUtils.isNotEmpty(dynamicDto.getCityName())){
-			sql = sql + " AND dmo.store_city_name like '"+dynamicDto.getCityName()+"%' ";
+			sql = sql + " AND dmo.store_city_name like '%"+dynamicDto.getCityName()+"%' ";
 		}
 		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr())){//商品,团购,服务
 			String str = "";

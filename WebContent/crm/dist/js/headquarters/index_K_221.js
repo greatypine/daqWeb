@@ -1,37 +1,3 @@
-// Date.prototype.format=function(fmt) {        
-//     var o = {        
-//     "M+" : this.getMonth()+1, //月份        
-//     "d+" : this.getDate(), //日        
-//     "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
-//     "H+" : this.getHours(), //小时        
-//     "m+" : this.getMinutes(), //分        
-//     "s+" : this.getSeconds(), //秒        
-//     "q+" : Math.floor((this.getMonth()+3)/3), //季度        
-//     "S" : this.getMilliseconds() //毫秒        
-//     };        
-//     var week = {        
-//     "0" : "\u65e5",        
-//     "1" : "\u4e00",        
-//     "2" : "\u4e8c",        
-//     "3" : "\u4e09",        
-//     "4" : "\u56db",        
-//     "5" : "\u4e94",        
-//     "6" : "\u516d"       
-//     };        
-//     if(/(y+)/.test(fmt)){        
-//         fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
-//     }        
-//     if(/(E+)/.test(fmt)){        
-//         fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
-//     }        
-//     for(var k in o){        
-//         if(new RegExp("("+ k +")").test(fmt)){        
-//             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
-//         }        
-//     }        
-//     return fmt;        
-// } 
-
 Date.prototype.format = function() {  
     var s = '';  
     var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
@@ -68,41 +34,15 @@ Date.prototype.format = function() {
   }
   window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
 
-//   //搜索框联动
-//   var lineNum = ["101", "102"];
-//   var collect = document.getElementById("lines")
-//   var old = collect.innerHTML
-//   function aa() {
-// 	  var lineNu = " "
-// 	  for (var j = 0; j < lineNum.length; j++) {
-// 		  lineNu += '<option>' + lineNum[j] + '</option>';
-// 	  }
-// 	  collect.innerHTML = old + lineNu;
-//   } //网页加载时执行此函数，为线路选择框动态添加选项
-//   aa();
-//   var stationName = [
-// 	  ["事业部一", "事业部二", "事业部三"],
-// 	  ["频道一", "频道二", "频道三"]
-//   ];
-
-//   function getStationName() {
-// 	  var line_num = document.lineandstation.lines;
-// 	  var station_name = document.lineandstation.station;
-// 	  var lineStation = stationName[line_num.selectedIndex - 1];
-// 	  station_name.length = 1;
-// 	  for (var i = 0; i < lineStation.length; i++) {
-// 		  station_name[i + 1] = new Option(lineStation[i], lineStation[i]);
-// 	  }
-//   } //为站点选择框根据线路选择框的值动态添加选项
  var storeNo = decode64(getUrlParamByKey("so"));//门店no
  var target = decode64(getUrlParamByKey("t"));//执行人级别 
  var storeName=decode64(getUrlParamByKey("sn"));//门店名称
  var cityname = decode64(getUrlParamByKey("cn"));//城市名称
  var screenlogin=getUrlParamByKey("su");
  //var ta = getUrlParamByKey("ta");
- var storeNo_ = decode64(getUrlParamByKey("so"));//门店no
- var ordertype = decode64(getUrlParamByKey("ordertype"));//商品服务团购 全部:0;商品1服务2团购3
- var storeName_ = decode64(getUrlParamByKey("store_name"));//商品服务团购 全部:0;商品1服务2团购3
+ var storeNo_ = (decode64(getUrlParamByKey("so")) == 'null'||decode64(getUrlParamByKey("so")) == null) ? '' : decode64(getUrlParamByKey("so"));//门店no
+ var ordertype = (decode64(getUrlParamByKey("ordertype")) == 'null'||decode64(getUrlParamByKey("ordertype")) == null) ? '' : decode64(getUrlParamByKey("ordertype"));//商品服务团购 全部:0;商品1服务2团购3
+ var storeName_ = (decode64(getUrlParamByKey("store_name")) == 'null'||decode64(getUrlParamByKey("store_name")) == null) ? '' : decode64(getUrlParamByKey("store_name"));//商品服务团购 全部:0;商品1服务2团购3
  function loginShow(){
 		
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
@@ -502,11 +442,12 @@ Date.prototype.format = function() {
         name: '门店GMV',
         type: 'scatter',
         itemStyle: itemStyle,
+        cursor:'default',
         data: dataBJ,
       },
     ]
   };
-
+/*
   myChart3.on('click', function (params) {
 	  	var dataArr = [];
 	  	dataArr = params.data;
@@ -526,7 +467,7 @@ Date.prototype.format = function() {
 		}
 		window.open(url,"searchData_view");
 	});
-  
+*/  
 //   myChart1.setOption(option1,true);
   //myChart2.setOption(option2,true);
   myChart3.setOption(option3,true);
@@ -689,7 +630,8 @@ Date.prototype.format = function() {
     //K线图--日
     var xData = function() {
       var data = [];
-      var fistDay = getFirstDayOfYear();
+      //var fistDay = getFirstDayOfYear();
+      var fistDay = "2018-07-01";
       var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
       data = getAllDate(fistDay,curDay);
       return data;
@@ -769,7 +711,7 @@ Date.prototype.format = function() {
         height: '30',
         xAxisIndex: [0],
         bottom: '30',
-        start: '50',
+        start: '0',
         end: '100',
         handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
         handleSize: '110%',
@@ -1697,29 +1639,30 @@ Date.prototype.format = function() {
  	} 
   
   function initDayData(){
-	  var fistDay = getFirstDayOfYear();
+	  var fistDay = "2018-07-01";
 	  var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
 	  xData = getAllDate(fistDay,curDay);
 	  var productCheck = $("#cbClick").is(':checked');
 	  var serviceCheck = $("#maxbClick").is(':checked');
 	  var buyCheck = $("#thirdbClick").is(':checked');
 	  var searchstr = "";
-	  var storeNo = storeNo_;
+	  var storeNo = $("#store_id_manual").val();
 	  if(storeNo_ == ""){
 	  	storeNo = shareChartStatDto.storeno;
 	  }
-	  if(productCheck||ordertype=='1'){
+	  if(productCheck){
 	  	searchstr+="1,"
 	  }
-	  if(serviceCheck||ordertype=='2'){
+	  if(serviceCheck){
 	  	searchstr+="2,"
 	  }
-	  if(buyCheck||ordertype=='3'){
+	  if(buyCheck){
 	  	searchstr+="3,"
 	  }
+	  /*
 	  if(ordertype == '0'){
 	  	searchstr="1,2,3"
-	  }
+	  }*/
 	  searchstr = searchstr.substring(0,searchstr.lastIndexOf(","));
 	  var reqestParameter = {
         cityName: "北京",
@@ -1768,11 +1711,13 @@ Date.prototype.format = function() {
 		                }
 						chart5_option.series[0].data=yData;
 						chart5_option.series[1].data=yData_jy;
+						chart5_option.xAxis[0].data=xData;
 						chart5.setOption(chart5_option);
 					}else{
 						yData = [];
 						chart5_option.series[0].data=yData;
 						chart5_option.series[1].data=yData_jy;
+						chart5_option.xAxis[0].data=xData;
 						chart5.setOption(chart5_option);
 					}
 				}
@@ -1898,7 +1843,7 @@ Date.prototype.format = function() {
 	  if(buyCheck){
 	  	searchstr+="3,"
 	  }
-	  var storeNo = storeNo_;
+	  var storeNo = $("#store_id_manual").val();
 	  if(storeNo_ == ""){
 	  	storeNo = shareChartStatDto.storeno;
 	  }
@@ -2221,11 +2166,15 @@ Date.prototype.format = function() {
 		var number_str = $("#store_id_manual").val(); 
   	    var storeName = $("#store_name_manual").val();
   	  	if(storeName!=""){
-	  	  	if($.inArray(storeName, array) == -1){
+  	  		if(storeName_){
+  	  		
+  	  		}else{
+  	  			if($.inArray(storeName, array) == -1){
 				crm_alert(0,"该门店不存在！");
 				timeTicket = setInterval(loadtime, 5000);
 				return;
-			}
+				}
+  	  		}
 	    }
   	    if(number_str==""&&storeName!=""){
 	    	number_str=-10000;
@@ -2377,7 +2326,7 @@ Date.prototype.format = function() {
 	  location.reload();
   }
   function toIndex(){
- 		window.location.href="index_K.html";
+ 		window.location.href="index_K.html?t="+encode64('1')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
   }
   function queryTwoTwoOneStoreCount(){
   	 var reqestParameter = {
@@ -2395,9 +2344,30 @@ Date.prototype.format = function() {
   }
   function initStoreSelectBy221(){
   	if(storeNo_!=null&&storeNo_!=""){
+  		$("#store_id_manual").val(storeNo_);
+  		$("#store_name_manual").val(storeName_);
   		var dutoDiv = $("<div class='auto_out on'>");
   		var strong = $("<strong>").html(storeName_);
   		dutoDiv.append(strong);
   		$("#auto").append(dutoDiv);
+  	}
+  	if(ordertype!=null&&ordertype!=""){
+  	  if(ordertype=='0'){
+	  	  $("#cbClick").prop("checked", true);
+	  	  $("#maxbClick").prop("checked", true);
+	  	  $("#thirdbClick").prop("checked", true);
+  	  }else if(ordertype=='1'){
+  	  	  $("#cbClick").prop("checked", true);
+	  	  $("#maxbClick").prop("checked", false);
+	  	  $("#thirdbClick").prop("checked", false);
+  	  }else if(ordertype=='2'){
+  	  	  $("#cbClick").prop("checked", false);
+	  	  $("#maxbClick").prop("checked", true);
+	  	  $("#thirdbClick").prop("checked", false);
+  	  }else if(ordertype=='2'){
+  	  	  $("#cbClick").prop("checked", false);
+	  	  $("#maxbClick").prop("checked", false);
+	  	  $("#thirdbClick").prop("checked", true);
+  	  }
   	}
   }
