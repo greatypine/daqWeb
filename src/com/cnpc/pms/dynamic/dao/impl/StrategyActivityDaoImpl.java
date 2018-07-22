@@ -16,10 +16,10 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public Map<String, Object> queryStrategyGMV(String start_time,String end_time) {
 		String sql = "SELECT IFNULL(MAX(pro_total_gmv),0) as pro_total_gmv,	IFNULL(MAX(ser_total_gmv),0) as ser_total_gmv,"
-				+ "IFNULL(MAX(gro_total_gmv),0) as gro_total_gmv,IFNULL(MAX(ylc_total_gmv), 0) AS ylc_total_gmv "
+				+ "IFNULL(MAX(gro_total_gmv),0) as gro_total_gmv "
 				+ "FROM (SELECT CASE WHEN tor.order_tag2='1' THEN SUM(gmv_price) "
 				+ "END as pro_total_gmv,CASE WHEN tor.order_tag2='2' THEN SUM(gmv_price) END as ser_total_gmv,CASE WHEN tor.order_tag2='3' "
-				+ "THEN SUM(gmv_price) END as gro_total_gmv,CASE WHEN tor.channel_id = '8ac29e835fed0a10015fed493fb10010' THEN SUM(gmv_price) END AS ylc_total_gmv "
+				+ "THEN SUM(gmv_price) END as gro_total_gmv "
 				+ "FROM df_mass_order_monthly tor JOIN df_activity_scope das ON (tor.store_id = das.platformid) "
 				+ "WHERE tor.order_tag2 IS NOT NULL  ";
 		if(StringUtils.isNotEmpty(start_time)){
@@ -115,10 +115,9 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 	@Override
 	public List<Map<String, Object>> queryStoreCompleteInfo(String store_no){
 		String sql = "SELECT IFNULL(MAX(pro_total_gmv), 0) AS pro_total_gmv,IFNULL(MAX(ser_total_gmv), 0) AS ser_total_gmv,"
-				+ "IFNULL(MAX(gro_total_gmv), 0) AS gro_total_gmv,store_name,store_no,IFNULL(MAX(ylc_total_gmv), 0) AS ylc_total_gmv FROM (SELECT CASE WHEN tor.order_tag2 = '1' "
+				+ "IFNULL(MAX(gro_total_gmv), 0) AS gro_total_gmv,store_name,store_no FROM (SELECT CASE WHEN tor.order_tag2 = '1' "
 				+ "THEN	SUM(gmv_price)	END AS pro_total_gmv,CASE WHEN tor.order_tag2 = '2' THEN SUM(gmv_price) END AS ser_total_gmv,"
-				+ "CASE WHEN tor.order_tag2 = '3' THEN	SUM(gmv_price) END AS gro_total_gmv,"
-				+ "CASE WHEN tor.channel_id = '8ac29e835fed0a10015fed493fb10010' THEN SUM(gmv_price) END AS ylc_total_gmv, "
+				+ "CASE WHEN tor.order_tag2 = '3' THEN	SUM(gmv_price) END AS gro_total_gmv, "
 				+ "das.store_name,das.store_id,das.store_no,"
 				+ "tor.order_tag2 FROM	df_mass_order_monthly tor JOIN df_activity_scope das ON (tor.store_id = das.platformid) "
 				+ "WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 AND tor.order_tag2 IS NOT NULL ";
@@ -297,5 +296,30 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 		
+	}
+	
+	@Override
+	public Map<String, Object> queryYangLaoCanGmv(String store_no,String start_time,String end_time) {
+		String sql = "SELECT sum(tor.gmv_price) AS ylc_total_gmv FROM df_mass_order_monthly tor JOIN df_activity_scope das ON (tor.store_id = das.platformid ";
+		if(StringUtils.isNotEmpty(store_no)){
+			sql = sql + "AND das.store_no='"+store_no+"'";
+		}
+		sql = sql + ") WHERE 1=1 and tor.channel_id = '8ac29e835fed0a10015fed493fb10010' and tor.order_tag2 ='1' ";
+		
+		if(StringUtils.isNotEmpty(start_time)){
+			sql = sql + " AND date(tor.sign_time) >= '"+start_time+"' ";
+		}
+		if(StringUtils.isNotEmpty(end_time)){
+			sql = sql + " AND date(tor.sign_time) <= '"+end_time+"' ";
+		}
+				
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		Map<String, Object> order_obj = null;
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if (lst_data != null && lst_data.size() > 0) {
+			order_obj = (Map<String, Object>) lst_data.get(0);
+		}
+		return order_obj;	
 	}
 }

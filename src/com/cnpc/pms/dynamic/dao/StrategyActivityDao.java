@@ -34,4 +34,6 @@ public interface StrategyActivityDao extends IDAO{
 	public List<Map<String, Object>> queryProductRanking(String dept_id,String store_no);
 	
 	public List<Map<String, Object>> queryTypeGMV();
+
+	Map<String, Object> queryYangLaoCanGmv(String store_no, String start_time, String end_time);
 }
