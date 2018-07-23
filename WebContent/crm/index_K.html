@@ -300,6 +300,7 @@
 <script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script>
+    <script src="dist/js/base64.js"></script>
 <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
 <!-- 总部首页 script -->
 <!-- <script src="dist/js/headquarters/index_K.js"></script> -->
@@ -418,7 +419,10 @@ Date.prototype.format = function() {
  function loginShow(){
 		
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
-			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+            var b = new Base64();
+            screenlogin=b.decode(screenlogin);
+            var obj=JSON.parse(screenlogin);
+            var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
 		    var callback = function callback(data, textStatus, XMLHttpRequest) {
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
 		    	var stateObject = {};
