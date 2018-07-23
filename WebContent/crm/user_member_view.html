@@ -1022,11 +1022,13 @@
 function resetSerachParam(){
 	 $("#auto_store").empty();
 	if(target==0){//总部
-  		$("#store_id_tradetype").val("");
+		if(fromBar != "1" && fromBar != "2"){
+			$("#city_id_tradetype").val("");
+			$("#city_name_tradetype").val("");
+		}
+		$("#store_id_tradetype").val("");
   		$("#store_name_tradetype").val("");
-		
-    	$("#city_id_tradetype").val("");
-		$("#city_name_tradetype").val("");
+    	
     
   	  }else if(target==1){//城市级别
     	
