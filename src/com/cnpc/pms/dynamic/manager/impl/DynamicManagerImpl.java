@@ -6862,8 +6862,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			HSSFSheet sheet = wb.createSheet("城市会员");
 			HSSFRow row = sheet.createRow(0);
 			
-			String[] str_headers = {"员工姓名","员工编号","邀请码","邀请人数"};
-			String[] headers_key = {"name","employee_no","inviteCode","total"};
+			String[] str_headers = {"员工编号","员工姓名","城市","门店","邀请码","邀请人数"};
+			String[] headers_key = {"employee_no","name","city_name","storename","inviteCode","total"};
 			for(int i = 0;i < str_headers.length;i++){
 				HSSFCell cell = row.createCell(i);
 				cell.setCellStyle(getHeaderStyle());

@@ -189,12 +189,12 @@
                                     <table class="table table-striped">
                                         <tbody id="customer_tbody">
                                         <tr>
-                                            <th width="10%">序号</th>
-<!--                                             <th width="10%">城市</th> -->
-<!--                                             <th width="10%">门店名称</th> -->
-<!--                                             <th width="10%">门店编码</th> -->
-                                            <th width="10%">员工姓名</th>
+
+
                                             <th width="10%">员工编号</th>
+                                            <th width="10%">员工姓名</th>
+                                            <th width="10%">城市</th>
+                                            <th width="10%">门店</th>
                                             <!--<th width="10%">手机号</th>-->
                                             <th width="10%">邀请码</th>
                                             <th width="10%">邀请人数</th>
@@ -489,11 +489,12 @@
                  
                     var infoStr="";
                     for(var i=0;i<jData.length;i++){
-                        var index = (cur_page-1)*10+i+1;
+                        //var index = (cur_page-1)*10+i+1;
                     	infoStr= "<tr>"
-                        	+"<td>"+index+"</td>"
-                            +"<td>"+jData[i].name+"</td>"
                             +"<td>"+(jData[i].employee_no==null?"":jData[i].employee_no)+"</td>"
+                            +"<td>"+jData[i].name+"</td>"
+                            +"<td>"+jData[i].city_name+"</td>"
+                            +"<td>"+jData[i].storename+"</td>"
                             /*+"<td>"+jData[i].mobilephone+"</td>"*/
                             +"<td>"+jData[i].inviteCode+"</td>"
                             +"<td>"+jData[i].total+"</td>"
