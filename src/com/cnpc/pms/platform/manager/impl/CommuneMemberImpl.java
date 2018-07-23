@@ -70,6 +70,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				cityno = cityNO.get(0).get("cityno").toString();
 				if(cityno.substring(0,2).equals("00")) {
 					dd=cityno.replace("00", "0");
+				}else {
+					dd=cityno;
 				}
 			}
 		}
@@ -378,8 +380,122 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         JSONArray jsonCityAdds = (JSONArray) JSONArray.fromObject(cityAdds);
         result.put("jsonCityNames", jsonCityNames);
         result.put("jsonCityAdds", jsonCityAdds);
+        	// 查询新开社员总量
+     		List<Map<String, Object>> newCmCountList = new ArrayList<Map<String, Object>>();
+     		newCmCountList = commDao.getNewCount(dd);
 
+     		if (newCmCountList != null && newCmCountList.size() > 0) {
+     			result.put("newCmCount", newCmCountList.get(0).get("newCount"));
+     		} else {
+     			result.put("newCmCount", "0");
+     		}
+     		
+     		// -------------------查询新增量start----------------//
+     		List newCounts = new ArrayList();
+     		List allCounts = new ArrayList();
+     		List dateMemCounts = new ArrayList();
 
+     		List<Map<String, Object>> cmAllGrowList = commDao.getCmAllGrow(dd);
+     		try {
+     			//生成X轴坐标
+     			dateMemCounts = reDate(7);
+     		} catch (ParseException e) {
+     			e.printStackTrace();
+     		}
+
+             List<Map<String, Object>> cmAllList = commDao.getAllMembers(dd);
+
+             if (cmAllList == null || cmAllList.size() < 2) {
+                 for (int i = 0; i < 10; i++) {
+                     // 添加新社员
+                     newCounts.add(i + i * i);
+                     // 总社员
+                     allCounts.add(i + i * i + i + i * i * 2);
+                 }
+
+             } else {
+                 for (int i = 0; i < cmAllList.size(); i++) {
+                     // 添加新增社员
+                     if (i >= cmAllGrowList.size()) {
+                         newCounts.add(0);
+                     } else {
+                         newCounts.add(Integer.parseInt(cmAllGrowList.get(i).get("allcount").toString()));
+                     }
+                     // 总社员
+                     allCounts.add(Integer.parseInt(cmAllList.get(i).get("allcount").toString()));
+
+                 }
+
+             }
+
+             JSONArray jsonNew = (JSONArray) JSONArray.fromObject(newCounts);
+             JSONArray jsonAllCounts = (JSONArray) JSONArray.fromObject(allCounts);
+             JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
+             List dateMonCounts = new ArrayList();
+             List newMonCounts = new ArrayList();
+             List allMonCounts = new ArrayList();
+     		try {
+     			//生成30天X轴坐标Old
+                 dateMonCounts = reDate(30);
+     		} catch (ParseException e) {
+     			e.printStackTrace();
+     		}
+     		int total = 0;
+     		//查询30天前累计数据
+             List<Map<String, Object>> cmMonGrowList = commDao.getMonGrowMembers(dd);
+             List<Map<String, Object>> cmOldAllList = commDao.getOldAllMembers(dd);
+             if (cmOldAllList == null || cmOldAllList.size()>0) {
+                 total = Integer.parseInt(cmOldAllList.get(0).get("oldcount").toString());
+             }
+
+     		if(cmMonGrowList!=null&&cmMonGrowList.size()>0){
+                 if(cmMonGrowList.size()==30){
+                     //30天每天有新增
+                     for (int i = 0; i < cmMonGrowList.size(); i++) {
+                         int temp = Integer.parseInt(cmMonGrowList.get(i).get("newcount").toString());
+                         newMonCounts.add(temp);
+                         total += temp;
+                         allMonCounts.add(total);
+                     }
+
+                 }else{ 
+                 	int m=0;
+                 	for (int j = 0;j< dateMonCounts.size();j++) {
+                 		int temp2=0;
+                 		if(m<cmMonGrowList.size()) {
+                     		if( cmMonGrowList.get(m).get("mondate").toString().contains(dateMonCounts.get(j).toString())) {
+                    			 temp2 = Integer.parseInt(cmMonGrowList.get(m).get("newcount").toString());
+                                 m++;
+                     		}
+                 		}
+
+                 		 newMonCounts.add(temp2);
+                          total += temp2;
+                          allMonCounts.add(total);
+                 		
+     				}
+                         //当中某天未增加社员
+                 }
+             }
+
+     		JSONArray jsonNewMonCounts = (JSONArray) JSONArray.fromObject(newMonCounts);
+     		JSONArray jsonAllMonCounts = (JSONArray) JSONArray.fromObject(allMonCounts);
+     		JSONArray jsonMonMem = (JSONArray) JSONArray.fromObject(dateMonCounts);
+
+     		result.put("jsonNewMonCounts", jsonNewMonCounts);
+     		result.put("jsonAllMonCounts", jsonAllMonCounts);
+     		result.put("growNewCounts", jsonNew);
+     		result.put("growAllCounts", jsonAllCounts);
+     		result.put("jsonDateMem", jsonDateMem);
+     		result.put("jsonDateMon", dateMonCounts);
+    		// 查询老用户转社员总量
+    		List<Map<String, Object>> oldCmCountList = new ArrayList<Map<String, Object>>();
+    		oldCmCountList = commDao.getOldCount(dd);
+    		if (oldCmCountList != null && oldCmCountList.size() > 0) {
+    			result.put("oldCmCount", oldCmCountList.get(0).get("oldCount"));
+    		} else {
+    			result.put("oldCmCount", "0");
+    		}
 
 		List dateXCounts = new ArrayList();
 		try {
@@ -1212,5 +1328,342 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> selectCmBaseInfo(String dd) {
+		/**
+		 * @author wuxinxin 2018年7月21日
+		 */
+		// 查询城市id
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String, Object>>();
+		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+		String cityno = "";
+		if (!"0000".equals(dd)) {
+			if (dd != null && !dd.substring(0, 1).equals("0")) {
+				cityNO = storeDao.getCityNOOfCityById(Long.parseLong(dd));
+				cityno = cityNO.get(0).get("cityno").toString();
+				if (cityno.substring(0, 2).equals("00")) {
+					dd = cityno.replace("00", "0");
+				} else {
+					dd = cityno;
+				}
+			}
+		}
+
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		// 查询城市名
+		if (!"0000".equals(dd)) {
+			if (dd.length() < 4) {
+				cityno = "0" + dd;
+			} else {
+				cityno = dd;
+			}
+			List<Map<String, Object>> selCityList = new ArrayList<Map<String, Object>>();
+			selCityList = commDao.getSelCity(cityno);
+			if (selCityList != null && selCityList.size() > 0) {
+				result.put("selcityname", "(" + selCityList.get(0).get("cityname") + ")");
+			} else {
+				result.put("selcityname", "");
+			}
+		}
+		// 查询e店数量---必须
+		List<Map<String, Object>> eShopCountList = new ArrayList<Map<String, Object>>();
+		eShopCountList = cmDao.getEshopCount(dd);
+		if (eShopCountList != null && eShopCountList.size() > 0) {
+			result.put("eShopCount", eShopCountList.get(0).get("cou"));
+		} else {
+			result.put("eShopCount", "0");
+		}
+		// 查询当日成交量、成交额 ----必须
+		List<Map<String, Object>> dayDealList = new ArrayList<Map<String, Object>>();
+		dayDealList = commDao.getDayDealCount(dd);
+		if (dayDealList != null && !dayDealList.isEmpty()) {
+			result.put("dayDealCount", dayDealList.get(0).get("cou"));
+			result.put("dayDealSum", dayDealList.get(0).get("dealsum"));
+		} else {
+			result.put("dayDealCount", "0");
+			result.put("dayDealSum", "0");
+		}
+		// 查询SKU数量---必须
+		List<Map<String, Object>> skuCountList = new ArrayList<Map<String, Object>>();
+		skuCountList = cmDao.getGoodsTypeCount(dd);
+		if (skuCountList != null && !skuCountList.isEmpty()) {
+			result.put("skuCount", skuCountList.get(0).get("cou"));
+		} else {
+			result.put("skuCount", "0");
+		}
+
+		// 查询社员总量---必须
+		List<Map<String, Object>> cmCountList = new ArrayList<Map<String, Object>>();
+		cmCountList = commDao.getAllCount(dd);
+		if (cmCountList != null && cmCountList.size() > 0) {
+			result.put("cmCount", cmCountList.get(0).get("allCount"));
+		} else {
+			result.put("cmCount", "0");
+		}
+		// 查询当日新增社员数量---必须
+		List<Map<String, Object>> dayAddMemList = commDao.getDayaddMemCount(dd);
+		if (dayAddMemList != null && dayAddMemList.size() > 0) {
+			result.put("dayAddMem", dayAddMemList.get(0).get("cou"));
+		} else {
+			result.put("dayAddMem", "0");
+		}
+		// 查询成交量、查询成交额--必须
+		List<Map<String, Object>> cmGoodsDealCountList = new ArrayList<Map<String, Object>>();
+		cmGoodsDealCountList = commDao.getCmGoodsDealCount(dd);
+		if (cmGoodsDealCountList != null && cmGoodsDealCountList.size() > 0) {
+			result.put("cmGoodsDealCount", cmGoodsDealCountList.get(0).get("cou"));
+		} else {
+			result.put("cmGoodsDealCount", "0");
+		}
+		// 查询成交额
+		List<Map<String, Object>> cmGoodsTurnoverList = new ArrayList<Map<String, Object>>();
+		cmGoodsTurnoverList = commDao.getCmGoodsTurnover(dd);
+		if (cmGoodsTurnoverList != null && cmGoodsTurnoverList.size() > 0) {
+			result.put("cmGoodsTurnover", cmGoodsTurnoverList.get(0).get("cou"));
+		} else {
+			result.put("cmGoodsTurnover", "0");
+		}
+		// 查询动销商品--必须
+		List<Map<String, Object>> movingPinCountList = new ArrayList<Map<String, Object>>();
+		movingPinCountList = commDao.getMovingPinCount(dd);
+		if (movingPinCountList != null && movingPinCountList.size() > 0) {
+			result.put("movingPinCount", movingPinCountList.get(0).get("cou"));
+		} else {
+			result.put("movingPinCount", "0");
+		}
+
+		// -------------------查询新增量 end----------------//
+
+		// 查询城市非社员成交额
+		List<Map<String, Object>> noMemCityList = commDao.getDayOfEshopNmemSumCity(dd);
+		List noMemCitySums = new ArrayList();
+		if (noMemCityList != null && !noMemCityList.isEmpty()) {
+			for (int i = 0; i < noMemCityList.size(); i++) {
+				noMemCitySums.add(noMemCityList.get(i).get("citypri").toString());
+				noMemCitySums.add(noMemCityList.get(i).get("cname").toString());
+			}
+		}
+		JSONArray jsonNoMemCitySums = (JSONArray) JSONArray.fromObject(noMemCitySums);
+		result.put("jsonNoMemCitySums", jsonNoMemCitySums);
+
+		// 查询平均客单价,周消费频次----getEshopWeekCount
+		List<Map<String, Object>> eshopWeekList = commDao.getEshopWeekCount(dd);
+		// 平均客单价=周成交额/周订单量
+		List eshopWeekDeal = new ArrayList();
+		// 周消费频次=周订单量/社员总数
+		List eshopWeekCount = new ArrayList();
+		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
+		if (eshopWeekList != null && !eshopWeekList.isEmpty()) {
+			for (int i = 0; i < eshopWeekList.size(); i++) {
+				int eshopCou = Integer.parseInt(eshopWeekList.get(i).get("eweekcou").toString());
+				Double eshopGmv = Double.parseDouble(eshopWeekList.get(i).get("eweekgmv").toString());
+				if (eshopCou != 0) {
+					eshopWeekDeal.add(String.format("%.2f", eshopGmv / eshopCou));
+				} else {
+					eshopWeekDeal.add("0.0");
+
+				}
+				if (memCou != 0) {
+					eshopWeekCount.add(String.format("%.2f", Double.parseDouble(eshopCou / memCou + "")));
+				} else {
+					eshopWeekCount.add("0");
+				}
+			}
+		}
+		JSONArray jsonEshopWeekDeal = (JSONArray) JSONArray.fromObject(eshopWeekDeal);
+		JSONArray jsonEshopWeekCou = (JSONArray) JSONArray.fromObject(eshopWeekCount);
+		result.put("jsonEshopWeekDeal", jsonEshopWeekDeal);
+		result.put("jsonEshopWeekCou", jsonEshopWeekCou);
+
+		// 获取e店社员、非社员总成交额
+		List<Map<String, Object>> allEshopSumList = new ArrayList<Map<String, Object>>();
+		allEshopSumList = commDao.getAllEshopSum(dd);
+		if (allEshopSumList != null && allEshopSumList.size() > 0) {
+			result.put("allEshopSum", allEshopSumList.get(0).get("cou"));
+		} else {
+			result.put("allEshopSum", "0");
+		}
+		// 获取e店社员成交额
+		List<Map<String, Object>> yesEshopSumList = new ArrayList<Map<String, Object>>();
+		yesEshopSumList = commDao.getYesEshopSum(dd);
+		if (yesEshopSumList != null && yesEshopSumList.size() > 0) {
+			result.put("yesEshopSum", yesEshopSumList.get(0).get("cou"));
+		} else {
+			result.put("yesEshopSum", "0");
+		}
+		// 获取e店非社员成交额
+		List<Map<String, Object>> noEshopSumList = new ArrayList<Map<String, Object>>();
+		noEshopSumList = commDao.getNoEshopSum(dd);
+		if (noEshopSumList != null && noEshopSumList.size() > 0) {
+			result.put("noEshopSum", noEshopSumList.get(0).get("cou"));
+		} else {
+			result.put("noEshopSum", "0");
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> selectCmAddInfo(String dd) {
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		// 查询新开社员总量
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		List<Map<String, Object>> newCmCountList = new ArrayList<Map<String, Object>>();
+		newCmCountList = commDao.getNewCount(dd);
+
+		if (newCmCountList != null && newCmCountList.size() > 0) {
+			result.put("newCmCount", newCmCountList.get(0).get("newCount"));
+		} else {
+			result.put("newCmCount", "0");
+		}
+		
+		// -------------------查询新增量start----------------//
+		List newCounts = new ArrayList();
+		List allCounts = new ArrayList();
+		List dateMemCounts = new ArrayList();
+
+		List<Map<String, Object>> cmAllGrowList = commDao.getCmAllGrow(dd);
+		try {
+			//生成X轴坐标
+			dateMemCounts = reDate(7);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+        List<Map<String, Object>> cmAllList = commDao.getAllMembers(dd);
+
+        if (cmAllList == null || cmAllList.size() < 2) {
+            for (int i = 0; i < 10; i++) {
+                // 添加新社员
+                newCounts.add(i + i * i);
+                // 总社员
+                allCounts.add(i + i * i + i + i * i * 2);
+            }
+
+        } else {
+            for (int i = 0; i < cmAllList.size(); i++) {
+                // 添加新增社员
+                if (i >= cmAllGrowList.size()) {
+                    newCounts.add(0);
+                } else {
+                    newCounts.add(Integer.parseInt(cmAllGrowList.get(i).get("allcount").toString()));
+                }
+                // 总社员
+                allCounts.add(Integer.parseInt(cmAllList.get(i).get("allcount").toString()));
+
+            }
+
+        }
+
+        JSONArray jsonNew = (JSONArray) JSONArray.fromObject(newCounts);
+        JSONArray jsonAllCounts = (JSONArray) JSONArray.fromObject(allCounts);
+        JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
+        List dateMonCounts = new ArrayList();
+        List newMonCounts = new ArrayList();
+        List allMonCounts = new ArrayList();
+		try {
+			//生成30天X轴坐标Old
+            dateMonCounts = reDate(30);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		int total = 0;
+		//查询30天前累计数据
+        List<Map<String, Object>> cmMonGrowList = commDao.getMonGrowMembers(dd);
+        List<Map<String, Object>> cmOldAllList = commDao.getOldAllMembers(dd);
+        if (cmOldAllList == null || cmOldAllList.size()>0) {
+            total = Integer.parseInt(cmOldAllList.get(0).get("oldcount").toString());
+        }
+
+		if(cmMonGrowList!=null&&cmMonGrowList.size()>0){
+            if(cmMonGrowList.size()==30){
+                //30天每天有新增
+                for (int i = 0; i < cmMonGrowList.size(); i++) {
+                    int temp = Integer.parseInt(cmMonGrowList.get(i).get("newcount").toString());
+                    newMonCounts.add(temp);
+                    total += temp;
+                    allMonCounts.add(total);
+                }
+
+            }else{ 
+            	int m=0;
+            	for (int j = 0;j< dateMonCounts.size();j++) {
+            		int temp2=0;
+            		if(m<cmMonGrowList.size()) {
+                		if( cmMonGrowList.get(m).get("mondate").toString().contains(dateMonCounts.get(j).toString())) {
+               			 temp2 = Integer.parseInt(cmMonGrowList.get(m).get("newcount").toString());
+                            m++;
+                		}
+            		}
+
+            		 newMonCounts.add(temp2);
+                     total += temp2;
+                     allMonCounts.add(total);
+            		
+				}
+                    //当中某天未增加社员
+            }
+        }
+
+		JSONArray jsonNewMonCounts = (JSONArray) JSONArray.fromObject(newMonCounts);
+		JSONArray jsonAllMonCounts = (JSONArray) JSONArray.fromObject(allMonCounts);
+		JSONArray jsonMonMem = (JSONArray) JSONArray.fromObject(dateMonCounts);
+
+		result.put("jsonNewMonCounts", jsonNewMonCounts);
+		result.put("jsonAllMonCounts", jsonAllMonCounts);
+		result.put("growNewCounts", jsonNew);
+		result.put("growAllCounts", jsonAllCounts);
+		result.put("jsonDateMem", jsonDateMem);
+		result.put("jsonDateMon", dateMonCounts);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> selectCmDealInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日---------------------待开发
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		//获取购物频次
+		List<Map<String, Object>> memOrderCountList = commDao.getMemOrderCount(dd);
+		List memOrderCountVal = new ArrayList();
+		List memOrderCountName = new ArrayList();
+		for (Map<String, Object> map : memOrderCountList) {
+			memOrderCountVal.add(map.get("memCount").toString());
+			memOrderCountName.add(map.get("memCountName").toString());
+		}
+		JSONArray jsonMemOrderCountVal = (JSONArray) JSONArray.fromObject(memOrderCountVal);
+		JSONArray jsonMemOrderCountName = (JSONArray) JSONArray.fromObject(memOrderCountName);
+		result.put("jsonMemOrderCountVal", jsonMemOrderCountVal);
+		result.put("jsonMemOrderCountName", jsonMemOrderCountName);
+
+		//获取订单价格范围
+		List<Map<String, Object>> memOrderSumList = commDao.getMemOrderSum(dd);
+		List memOrderSumVal = new ArrayList();
+		List memOrderSumName = new ArrayList();
+		for (Map<String, Object> map : memOrderSumList) {
+			memOrderSumVal.add(map.get("memSum").toString());
+			memOrderSumName.add(map.get("memSumName").toString());
+		}
+		JSONArray jsonMemOrderSumVal = (JSONArray) JSONArray.fromObject(memOrderSumVal);
+		JSONArray jsonMemOrderSumName = (JSONArray) JSONArray.fromObject(memOrderSumName);
+		result.put("jsonMemOrderSumVal", jsonMemOrderSumVal);
+		result.put("jsonMemOrderSumName", jsonMemOrderSumName);
+		return result;
+		
+	}
 
 }

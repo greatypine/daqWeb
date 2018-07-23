@@ -112,9 +112,9 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
+         <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
          <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221整体</a></li>
          <li class="active"><a href="javascript:void(0)">221业务</a></li>
-         <li><a href="javascript:void(0);" onclick="toStore()" data-toggle="tab">221单店</a></li>
        </ul>
       <div class="tab-content no-padding">
       <div class="tab-pane active" id="tab_1">
@@ -153,9 +153,10 @@
             <div class="col-sm-6">
               <h5 style="color: #7c4139;">昨日完成情况</h5>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>总GMV：<span id="yestodayTotalGmv">载入中...</span></div>
-              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>商品类GMV：<span id="yestodayProductGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow" title="含养老餐"><i class="fa fa-credit-card"></i>商品类GMV：<span id="yestodayProductGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>服务类GMV：<span id="yestodayServiceGmv">载入中...</span></div>
               <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>团购GMV：<span id="yestodayGrouponGmv">载入中...</span></div>
+              <div class="col-sm-6 detail_tomorrow"><i class="fa fa-credit-card"></i>养老餐GMV：<span id="yestodayYangLaoCanGmv">载入中...</span></div>
             </div>
           </div>
         </div>
@@ -174,7 +175,7 @@
 <!--               </div> -->
 <!--             </div> -->
 <!--           </div> -->
-          <div class="box-body">
+<!--           <div class="box-body">
             <div class="col-sm-6" style="height: 480px;">
               <h4 class="text-red">【商品类】排名Top10 (截止到昨天)</h4>
               <table class="table table-bordered">
@@ -199,7 +200,7 @@
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> -->
         </div>
       </section>
       </div>
@@ -464,11 +465,12 @@
 							$("#yestodayServiceGmv").html(changeMoney(parseInt(yestoday_jwsGMV)));
 							yestoday_grouponGMV = jsonData.gro_total_gmv;
 							$("#yestodayGrouponGmv").html(changeMoney(parseInt(yestoday_grouponGMV)));
+							yestoday_yanglaocanGmv = jsonData.ylc_total_gmv;
 						}
 					}
 			},false);
 		  $("#yestodayTotalGmv").html(changeMoney(parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV)));
-		  
+		  $("#yestodayYangLaoCanGmv").html(changeMoney(parseInt(yestoday_yanglaocanGmv)));
 	}
 
 	function showProductRanking(store_no){

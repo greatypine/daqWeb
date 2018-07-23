@@ -1,344 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>营业额分析</title>
-   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
-  <!-- Morris charts -->
-  <link rel="stylesheet" href="plugins/morris/morris.css">
-  <!-- Select2 -->
-  <link rel="stylesheet" href="plugins/select2/select2.min.css">
-  <link href="../scripts/css/auto.css" rel="stylesheet">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-	   folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-  <link rel="stylesheet" href="plugins/iCheck/all.css">
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE 9]>
-  <script src="IE 9/html5shiv.min.js"></script>
-  <script src="IE 9/respond.min.js"></script><![endif]-->
-  <style>
-  html,body,.skin-blue .wrapper{background-color: #f1f1f1; min-height: 100%;}
-  p{margin: 0;}
-  .content-wrapper{background-color: #fff;}
-  /*tab切换*/
-  .nav-tabs1{background-color: #f55a44; padding: 10px 0 0 20px;}
-  .nav-tabs1 > li{ margin: 0; background-color: rgba(0,0,0,0.5); width: 60px; height: 26px; line-height: 26px; text-align: center; margin-right: 5px; border-radius: 5px; cursor: pointer;}
-  .nav-tabs1 > li.active{background-color: #fff;}
-  .nav-tabs1 > li > a{color: rgba(255,255,255,1); padding: 0; display: block; width: 100%; height: 100%;line-height: 26px;}
-  .nav-tabs1 > li > a:hover{border-color: transparent; color: #fff;}
-  .nav-tabs1 > li.active > a, .nav-tabs1 > li.active > a:focus, .nav-tabs1 > li.active > a:hover{ background-color: transparent; border: 0; color: #f55a44;}
-  /*tab切换 end*/
-  .dmodule1{ color: #fff; padding: 10px 0 0 10px;}
-  .dmodule1 p:nth-child(2){font-size: 30px; font-weight: bold; line-height: 70px;}
-  .dmodule2{ color: #fff; height: 155px; padding: 10px 0 0 10px;}
-  .dmodule2 p:nth-child(2){font-size: 30px; font-weight: bold; line-height: 110px;}
-  .data_module1{background-color: #5e5e5e;}
-  .data_module2{margin-top: 10px; background-color: #696969;}
-  .data_module3{background-color: #666;}
-  .data_module4{margin-top: 10px; background-color: #f55a44;}
-  .skin-blue .sidebar-form{border-color: #ddd;}
-  .skin-blue .sidebar-form input[type="text"], .skin-blue .sidebar-form .btn{background-color: transparent;}
-  .zbsearch{font-size: 12px; margin-bottom: 10px;}
-  .skin-blue .sidebar-form{margin: 0 0 10px 0;}
-  .select2-results__options::-webkit-scrollbar{width: 8px; background-color: #fff;}
-  .select2-results__options::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
-  .select2-results__options::-webkit-scrollbar-track{background-color: #fff;}
-  .has-error .select2-selection--single{border-color: #dd4b39; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
-  .has-error button{background-color: #dd4b39; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
-  .has-warning .select2-selection--single{border-color: #f39c12; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
-  .has-warning button{background-color: #f39c12; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
-  /*对比*/
-  .main-sidebar{ padding-top: 80px; right: 0; left: auto; box-shadow: -5px 0 5px rgba(0,0,0,0.5); color: #fff;}
-  .main-sidebar .mybtn{width: 80px; font-size: 14px; position: absolute; bottom: 30px; left: 50%; margin-left: -40px;}
-  .sidebar{padding: 0 15px;}
-  .contrast{position: absolute; background-color: #222d32; left: -30px;; top: 50%; margin-top: -30px; padding: 5px 10px; color: #fff;}
-  .contrast:after{content: ''; width: 0; height: 0; border-bottom: 20px solid #222d32; border-left: 40px solid transparent; position: absolute; top: 50%; left: 0px; margin-top: -45px;}
-  .contrast:before{content: ''; width: 0; height: 0; border-top: 20px solid #222d32; border-left: 40px solid transparent; position: absolute; top: 50%; left: 0px; margin-top: 25px;}
-  .sidebar p{line-height: 30px;}
-  .sidebar p i{margin-top: 10px;}
-	#process_div{ 
-			background-color:#292a2b; 
-			display:inline; 
-			z-index:100000;  
-			left:0px; 
-			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
-			filter:Alpha(Opacity=30); 
-			opacity: 0.3; 
-		} 
-		
-	#process_div_pic{
-		position:fixed;
-		top:50%;
-		left:50%; 
-		z-index:100000000; 
-		margin:-16px 0 0 -50px; 
-		width:100px; 
-		height:32px;
-		color: #fff;
-	}
-	.auto{max-height:200px; overflow-y:scroll;}
-	.nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
-    .nav-tabs-custom > .nav-tabs2 > li > a{font-size: 14px; padding: 8px 15px;}
-    .nav-tabs-custom > .nav-tabs2 > li > a:hover{color: #f39c12;}
-    .nav-tabs-custom > .nav-tabs2 > li.active > a,.nav-tabs-custom > .nav-tabs2 > li.active > a:hover{background: #fff; color: #f39c12;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #f39c12; border-left: 1px solid #f39c12; border-right:1px solid #f39c12;}
-    .nav-tabs-custom > .nav-tabs2 > li:first-of-type.active > a{border-left: 1px solid #f39c12;}
-    .nav-tabs-custom > .nav-tabs2{border-bottom: 1px solid #f39c12; margin: 5px 0; padding-left: 5px;}
-    .nav-tabs-custom > .nav-tabs2 > li{margin-bottom: -1px;}
-  </style>
-</head>
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
-<div id="process_div" style="display:none"></div>
-<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
-<!-- Site wrapper -->
-<div class="wrapper">
-   <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <div class="contrast sidebar-toggle" data-toggle="offcanvas" role="button">对<br>比</div>
-    <section class="sidebar">
-      <!-- search form -->
-      <form name="lineandstation">
-        <div class="col-sm-6 has-error" style="padding: 0 5px 0 0;">
-          <select class="form-control select2" id="deptSelectContrast">
-          </select>
-        </div>
-        <div class="col-sm-6 has-error no-padding form-group" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
-          <select class="form-control select2" id="channelSelectContrast">
-          </select>
-        </div>
-        <div class="col-sm-6 has-warning" style="padding: 0 5px 0 0;">
-          <select class="form-control select2" id="citySelectContrast">
-          </select>
-        </div>
-        <div class="col-sm-6 has-warning no-padding form-group no-margin" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
-          <input id="store_id_manual_contrast" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
-          <input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual_contrast" />
-          <div class="auto hidden" id="auto_contrast" style="width: 94%;z-index: 99999;">
-          </div>
-        </div>
-		<div class="col-sm-12 text-center no-padding has-error">
-          <button type="button" class="btn btn-block btn-error btn-sm" id="search-btn-contrast" style="margin: 10px 45px 0 auto; font-size: 14px;">加入对比</button>
-        </div>
-        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_first_group">
-          	<p><label id="label_manual_first"></label><i id="label_first_reset" class="fa fa-remove pull-right"></i></p>
-        </div>
-        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_second_group">
-          	<p><label id="label_manual_second"></label><i id="label_second_reset" class="fa fa-remove pull-right"></i></p>
-        </div>
-        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_third_group">
-          	<p><label id="label_manual_third"></label><i id="label_third_reset" class="fa fa-remove pull-right"></i></p>
-        </div>
-        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_fourth_group">
-          	<p><label id="label_manual_fourth"></label><i id="label_fourth_reset" class="fa fa-remove pull-right"></i></p>
-        </div>
-        <div class="col-sm-12 text-center form-group" style="display:none;" id="label_fifth_group">
-          	<p><label id="label_manual_fifth"></label><i id="label_fifth_reset" class="fa fa-remove pull-right"></i></p>
-        </div>
-        <button type="button" class="mybtn btn btn-block btn-warning btn-sm" id="contrast">开始对比</button>
-        <label class="mybtn" id="warning_text" style="display:none;margin: 15px auto 0 50px;font-size: 14px;">最多5个</label>
-      </form>
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-  <header class="main-header">
-    <nav class="navbar navbar-static-top">
-      <div class="container">
-		<div class="logo_img pull-left">
-			<img src="dist/img/logo.png" height="30">
-			<img src="dist/img/title.png" height="20">
-		</div>
-		<div class="pull-left">
-			<div class="logo-lg">
-				<ul class="no-margin">
-					<li class="current" onclick="excuteRefresh()"><em>营业额分析</em></li>
-				</ul>
-			</div>
-		</div>
-      </div>
-    </nav>
-  </header>
-  
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-	  <div class="nav-tabs-custom">
-       <ul class="nav nav-tabs nav-tabs2">
-         <li class="active"><a href="javascript:void(0);" data-toggle="tab">全部GMV</a></li>
-         <li><a href="javascript:void(0);" onclick="toBussiness()" data-toggle="tab">221GMV</a></li>
-       </ul>
-      <div class="tab-content no-padding">
-      <div class="tab-pane active" id="tab_1">
-      	  <!-- Main content -->
-	  <section style="margin-top: 10px;">
-		<div class="clearfix">
-		  <div class="col-sm-2">
-			<div class="zbsearch clearfix">
-              <form name="lineandstation">
-                <div class="col-sm-5 has-error form-group" style="padding: 0 5px 0 0;">
-                  <select class="form-control select2" id="deptSelect">
-                  </select>
-                </div>
-                <div class="col-sm-5 has-error no-padding form-group" style="box-shadow: 0 0 2px rgba(0,0,0,0.4);">
-                  <select class="form-control" id="channelSelect">
-                  </select>
-                </div>
-                <div class="col-sm-2 no-padding has-error">
-						<span class="input-group-btn">
-							<button type="button" name="search" id="search-btn1" class="btn btn-flat"><i class="fa fa-search"></i></button>
-						</span>
-                </div>
-                <div class="col-sm-5 has-warning form-group" style="padding: 0 5px 0 0;">
-                  <select class="form-control select2" id="citySelect">
-                  </select>
-                </div>
-                <div class="col-sm-5 has-warning no-padding form-group no-margin" style="box-shadow: 0 0 2px
-                rgba(0,0,0,0.4);">
-                  <input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
-                  <input type="text" class="form-control"  placeholder="全部门店" id="store_name_manual" />
-                  <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
-                  </div>
-                </div>
-                <div class="col-sm-2 has-warning no-padding form-group">
-						<span class="input-group-btn">
-							<button type="button" name="search" id="search-btn2" class="btn btn-flat"><i class="fa fa-search"></i></button>
-						</span>
-                </div>
-                <div class="col-sm-12 no-padding">
-                	<div class="col-sm-6 form-group no-padding no-margin">
-		          		<label id="cbLabel"><input type="checkbox" class="minimal-red" id="cbClick" value="cb" checked><span style="padding-left: 10px;">C+小B</span></label>
-		        	</div>
-			        <div class="col-sm-6 form-group no-padding no-margin">
-			          	<label><input type="checkbox" class="minimal-red" id="maxbClick" value="maxb"><span style="padding-left: 10px;">大B</span></label>
-			        </div>
-               	</div>
-              </form>
-            </div>
-			<div class="dmodule1 data_module1" id="data_module1">
-			  <p>当日累计GMV</p>
-			  <p class="text-center" id="curDayGMV">载入中...</p>
-			</div>
-			<div class="dmodule1 data_module2" id="data_module2">
-			  <p>当月累计GMV</p>
-			  <p class="text-center" id="curMonthGMV">载入中...</p>
-			</div>
-		  </div>
-		  <div class="col-sm-10" style="padding-left: 0;">
-			<div class="nav_l" id="nav_l">
-			  <!-- Tabs within a box -->
-			  <ul class="nav nav-tabs no-border nav-tabs1">
-<!-- 				<li class="active"><a href="#revenue-chart" data-toggle="tab">实时</a></li> -->
-				<li><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">时</a></li>
-                <li><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
-				<li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li>
-                <li  class="active"><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li>
-                <div class="col-sm-1 pull-right"><button type="button" id="search-btn-add" class="btn btn-block btn-sm" style="margin-right: 50px; font-size: 14px; background-color: rgba(0,0,0,0.1);color: #fff">加入对比</button></div>
-			  </ul>
-			  <div class="tab-content no-padding" id="tab-content">
-				<!-- Morris chart - Sales -->
-<!-- 				<div class="chart tab-pane active" id="revenue-chart"> -->
-<!-- 				  <div id="main1" style="width: 100%; height: 300px;"></div> -->
-<!-- 				</div> -->
-				<div class="chart tab-pane" id="sales-chart">
-				  <div id="main4" style="width: 100%; height: 411px;"></div>
-				</div>
-                <div class="chart tab-pane" id="day-chart">
-                  <div id="main5" style="width: 100%; height: 411px;"></div>
-                </div>
-				<div class="chart tab-pane" id="week-chart">
-				  <div id="main7" style="width: 100%; height: 411px;"></div>
-				</div>
-                <div class="chart tab-pane active" id="month-chart">
-                  <div id="main6" style="width: 100%; height: 411px;"></div>
-                </div>
-			  </div>
-
-			</div>
-		  </div>
-		</div>
-		<div class="clearfix" style="margin-top: 10px;">
-		  <div class="col-sm-2"><div id="main2" style="height: 320px;"></div></div>
-		  <div class="col-sm-10" style="padding-left: 0;">
-              <div id="main3" style="height: 320px;"></div>
-          </div>
-		</div>
-	  </section>
-      </div>
-      </div>
-  </div>
-  <!-- /.content-wrapper -->
-
-</div>
-<!-- ./wrapper -->
-
-<!-- jQuery 2.2.0 -->
-<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
-<!-- FastClick -->
-<script src="plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-<script src="dist/js/nav-scroll.js"></script>
-<!-- Select2 -->
-<script src="plugins/select2/select2.full.min.js"></script>
-<!-- iCheck 1.0.1 -->
-<script src="plugins/iCheck/icheck.min.js"></script>
-<!-- page script -->
-<script type="text/javascript" src="plugins/jquery.page.js"></script>
-<script type="text/javascript" src="plugins/moment.min.js"></script>
-<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
-<script type="text/javascript" src="../scripts/auto.js"></script>
-<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
-<!-- 总部首页 script -->
-<!-- <script src="dist/js/headquarters/index_K.js"></script> -->
-<script type="text/javascript">
-
-// Date.prototype.format=function(fmt) {        
-//     var o = {        
-//     "M+" : this.getMonth()+1, //月份        
-//     "d+" : this.getDate(), //日        
-//     "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时        
-//     "H+" : this.getHours(), //小时        
-//     "m+" : this.getMinutes(), //分        
-//     "s+" : this.getSeconds(), //秒        
-//     "q+" : Math.floor((this.getMonth()+3)/3), //季度        
-//     "S" : this.getMilliseconds() //毫秒        
-//     };        
-//     var week = {        
-//     "0" : "\u65e5",        
-//     "1" : "\u4e00",        
-//     "2" : "\u4e8c",        
-//     "3" : "\u4e09",        
-//     "4" : "\u56db",        
-//     "5" : "\u4e94",        
-//     "6" : "\u516d"       
-//     };        
-//     if(/(y+)/.test(fmt)){        
-//         fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));        
-//     }        
-//     if(/(E+)/.test(fmt)){        
-//         fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);        
-//     }        
-//     for(var k in o){        
-//         if(new RegExp("("+ k +")").test(fmt)){        
-//             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));        
-//         }        
-//     }        
-//     return fmt;        
-// } 
-
 Date.prototype.format = function() {  
     var s = '';  
     var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
@@ -364,57 +23,26 @@ Date.prototype.format = function() {
 // 	document.getElementById("main1").style.height= winHeight/2 - 60  +"px";
 	document.getElementById("main4").style.height= winHeight/2 - 60  +"px";
 	document.getElementById("main5").style.height= winHeight/2 - 60  +"px";
-	document.getElementById("main6").style.height= winHeight/2 - 60  +"px";
+	//document.getElementById("main6").style.height= winHeight/2 - 60  +"px";
 	document.getElementById("main7").style.height= winHeight/2 - 60  +"px";
-	document.getElementById("main2").style.height= winHeight/2 - 60  +"px";
+	//document.getElementById("main2").style.height= winHeight/2 - 60  +"px";
 	document.getElementById("main3").style.height= winHeight/2 - 60  +"px";
-    document.getElementById("data_module1").style.height= (winHeight/2 - 132)/2 +"px";
-    document.getElementById("data_module2").style.height= (winHeight/2 - 132)/2 +"px";
+    //document.getElementById("data_module1").style.height= (winHeight/2 - 132)/2 +"px";
+    //document.getElementById("data_module2").style.height= (winHeight/2 - 132)/2 +"px";
 // 	document.getElementById("data_module3").style.height= (winHeight/2 - 45)/2  +"px";
 // 	document.getElementById("data_module4").style.height= (winHeight/2 - 45)/2 - 15  +"px";
   }
   window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
 
-//   //搜索框联动
-//   var lineNum = ["101", "102"];
-//   var collect = document.getElementById("lines")
-//   var old = collect.innerHTML
-//   function aa() {
-// 	  var lineNu = " "
-// 	  for (var j = 0; j < lineNum.length; j++) {
-// 		  lineNu += '<option>' + lineNum[j] + '</option>';
-// 	  }
-// 	  collect.innerHTML = old + lineNu;
-//   } //网页加载时执行此函数，为线路选择框动态添加选项
-//   aa();
-//   var stationName = [
-// 	  ["事业部一", "事业部二", "事业部三"],
-// 	  ["频道一", "频道二", "频道三"]
-//   ];
-
-//   function getStationName() {
-// 	  var line_num = document.lineandstation.lines;
-// 	  var station_name = document.lineandstation.station;
-// 	  var lineStation = stationName[line_num.selectedIndex - 1];
-// 	  station_name.length = 1;
-// 	  for (var i = 0; i < lineStation.length; i++) {
-// 		  station_name[i + 1] = new Option(lineStation[i], lineStation[i]);
-// 	  }
-//   } //为站点选择框根据线路选择框的值动态添加选项
-</script>
-<!-- 引入 ECharts 文件 -->
-<script src="dist/js/echarts.common.min.js"></script>
-<script>
  var storeNo = decode64(getUrlParamByKey("so"));//门店no
  var target = decode64(getUrlParamByKey("t"));//执行人级别 
  var storeName=decode64(getUrlParamByKey("sn"));//门店名称
  var cityname = decode64(getUrlParamByKey("cn"));//城市名称
  var screenlogin=getUrlParamByKey("su");
+ //var ta = getUrlParamByKey("ta");
  var storeNo_ = (decode64(getUrlParamByKey("so")) == 'null'||decode64(getUrlParamByKey("so")) == null) ? '' : decode64(getUrlParamByKey("so"));//门店no
  var ordertype = (decode64(getUrlParamByKey("ordertype")) == 'null'||decode64(getUrlParamByKey("ordertype")) == null) ? '' : decode64(getUrlParamByKey("ordertype"));//商品服务团购 全部:0;商品1服务2团购3
  var storeName_ = (decode64(getUrlParamByKey("store_name")) == 'null'||decode64(getUrlParamByKey("store_name")) == null) ? '' : decode64(getUrlParamByKey("store_name"));//商品服务团购 全部:0;商品1服务2团购3
- //var ta = getUrlParamByKey("ta");
- 
  function loginShow(){
 		
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
@@ -438,7 +66,7 @@ Date.prototype.format = function() {
 	}
 
 //   var myChart1 = echarts.init(document.getElementById('main1'));
-  var myChart2 = echarts.init(document.getElementById('main2'));
+  //var myChart2 = echarts.init(document.getElementById('main2'));
   var myChart3 = echarts.init(document.getElementById('main3'));
 
   //K线图
@@ -814,11 +442,12 @@ Date.prototype.format = function() {
         name: '门店GMV',
         type: 'scatter',
         itemStyle: itemStyle,
+        cursor:'default',
         data: dataBJ,
       },
     ]
   };
-
+/*
   myChart3.on('click', function (params) {
 	  	var dataArr = [];
 	  	dataArr = params.data;
@@ -838,13 +467,11 @@ Date.prototype.format = function() {
 		}
 		window.open(url,"searchData_view");
 	});
-  
+*/  
 //   myChart1.setOption(option1,true);
-  myChart2.setOption(option2,true);
+  //myChart2.setOption(option2,true);
   myChart3.setOption(option3,true);
 
-</script>
-<script>
   var chart4;
   var chart4_option;
   function chartresize1(){
@@ -987,10 +614,9 @@ Date.prototype.format = function() {
 	  chart4.resize(width);
 	}
   }
-</script>
-<script>
-   var xData = [];
+     var xData = [];
    var yData = [];
+   var yData_jy = [];
    var chart5;
    var chart5_option;
   function chartresize2(){
@@ -1004,7 +630,8 @@ Date.prototype.format = function() {
     //K线图--日
     var xData = function() {
       var data = [];
-      var fistDay = getFirstDayOfYear();
+      //var fistDay = getFirstDayOfYear();
+      var fistDay = "2018-07-01";
       var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
       data = getAllDate(fistDay,curDay);
       return data;
@@ -1029,6 +656,11 @@ Date.prototype.format = function() {
         top: '10%',
 
       },
+      legend: {
+				x: '78%',
+				top: '1%',
+				data: ['日总数', '经营指标']
+	  },
       calculable: true,
       xAxis: [{
         type: 'category',
@@ -1079,7 +711,7 @@ Date.prototype.format = function() {
         height: '30',
         xAxisIndex: [0],
         bottom: '30',
-        start: '50',
+        start: '0',
         end: '100',
         handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
         handleSize: '110%',
@@ -1091,7 +723,7 @@ Date.prototype.format = function() {
         //backgroundColor:'#fff'
       }],
       series: [{
-        name: "总数",
+        name: "日总数",
         type: "line",
         stack: "总量",
         symbolSize:10,
@@ -1110,7 +742,23 @@ Date.prototype.format = function() {
           }
         },
         data:yData
-      },
+      },{
+		name: "经营指标",
+		type: "line",
+		symbolSize:10,
+		symbol:'circle',
+		itemStyle: {
+			normal: {
+              color: '#000',
+              barBorderRadius: 0,
+              lineStyle:{
+                width:2,
+                type:'dotted'  //'dotted'虚线 'solid'实线
+              }
+            }
+		},
+		data:yData_jy
+		}
       ]
     }
 
@@ -1147,8 +795,6 @@ Date.prototype.format = function() {
 		window.open(url,"searchData_view");
 	});
   }
-</script>
-<script>
 	var chart7 ;
 	var chart7_option;
 	var xData_week=[];
@@ -1282,8 +928,6 @@ Date.prototype.format = function() {
 			chart7.resize(width);
 		}
 	}
-</script>
-<script>
 	var yData_month = [];
 	var yData_month_target = [];
 	var chart6;
@@ -1465,11 +1109,12 @@ Date.prototype.format = function() {
   var shareChartStatDto1=null;
   var shareChartStatDto2=null;
   var shareChartStatDto3=null;
+  var storeCount = "";
   $(function(){
+  	  queryTwoTwoOneStoreCount();
+  	  //初始化门店下拉框
+  	  initStoreSelectBy221();
 	  loginShow();
-	  initalldept();
-	  initallchannel();
-	  initallchannelcontrast();
 	  if(target==0){//总部
 	  	initallcity(); 
 	  	initallstore();
@@ -1553,28 +1198,16 @@ Date.prototype.format = function() {
 	  
 	  timeTicket=setInterval(loadtime, 5000);
 	  
-	  $("#search-btn1").click(function(){
-		 excuteChart();
-	 });
 	  $("#search-btn2").click(function(){
 		 excuteChart();
 	 }); 
-	 $("#deptSelect").change(function(){
-		 $('#cbLabel').children("div").addClass('checked'); 
-		 iCheckStr = $('#cbClick').val();
-		 excuteChart();
-	 });
-	 $("#channelSelect").change(function(){
-		 $('#cbLabel').children("div").addClass('checked'); 
-		 iCheckStr = $('#cbClick').val();
-		 excuteChart();
-	 });
+	 
 	 $("#citySelect").change(function(){
 		 $('#cbLabel').children("div").addClass('checked'); 
 		 iCheckStr = $('#cbClick').val();
 		 excuteChart();
 	 });
-	 //小B端iCheck
+	 //商品iCheck
 	 $('#cbClick').on('ifChecked', function(event){ //ifChecked 事件应该在插件初始化之前绑定 
 		 iCheckStr = $(this).val();
 		 excuteChart();
@@ -1586,7 +1219,7 @@ Date.prototype.format = function() {
 	 $('#cbClick').iCheck({
 	  	checkboxClass: 'icheckbox_minimal-red'
 	 });
-	 //大B端iCheck
+	 //服务iCheck
 	 $('#maxbClick').on('ifChecked', function(event){ //ifChecked 事件应该在插件初始化之前绑定 
 		 iCheckMaxStr = $(this).val();
 		 excuteChart();
@@ -1596,6 +1229,18 @@ Date.prototype.format = function() {
 		 excuteChart();
 	 });
 	 $('#maxbClick').iCheck({
+	  	checkboxClass: 'icheckbox_minimal-red'
+	 });
+	 //团购iCheck
+	 $('#thirdbClick').on('ifChecked', function(event){ //ifChecked 事件应该在插件初始化之前绑定 
+		 iCheckMaxStr = $(this).val();
+		 excuteChart();
+	 });
+	 $('#thirdbClick').on('ifUnchecked', function(event){
+		 iCheckMaxStr = "";
+		 excuteChart();
+	 });
+	 $('#thirdbClick').iCheck({
 	  	checkboxClass: 'icheckbox_minimal-red'
 	 });
 	  //＋对比
@@ -1953,14 +1598,33 @@ Date.prototype.format = function() {
   
   var hourData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   function initHourData(){
- 		doManager("chartStatManager","queryTurnoverByHour",[shareChartStatDto],
+  	  var productCheck = $("#cbClick").is(':checked');
+	  var serviceCheck = $("#maxbClick").is(':checked');
+	  var buyCheck = $("#thirdbClick").is(':checked');
+	  var searchstr = "";
+	  if(productCheck){
+	  	searchstr+="1,"
+	  }
+	  if(serviceCheck){
+	  	searchstr+="2,"
+	  }
+	  if(buyCheck){
+	  	searchstr+="3,"
+	  }
+	  searchstr = searchstr.substring(0,searchstr.lastIndexOf(","));
+	  var reqestParameter = {
+        cityName: "北京",
+        storeNo: shareChartStatDto.storeno,
+        searchstr: searchstr
+      }
+ 		doManager("communityMembersManager","queryTwoTwoOneGMVByHour",[reqestParameter],
  			function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
  					var nowHour = now.getHours();
  					hourData=new Array(nowHour+2).join(0).split('');
  					var jsonData = $.fromJSON(data.data);
- 					if(jsonData.length!=0){
- 						$(jsonData).each(function(index,element){
+ 					if(jsonData.twoTwoOneHourData.length!=0){
+ 						$(jsonData.twoTwoOneHourData).each(function(index,element){
  	 						hourData[parseInt(element.time)]=element.turnover;
  	                     });
  						chart4_option.series[0].data=hourData;
@@ -1975,24 +1639,85 @@ Date.prototype.format = function() {
  	} 
   
   function initDayData(){
-	  var fistDay = getFirstDayOfYear();
+	  var fistDay = "2018-07-01";
 	  var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
 	  xData = getAllDate(fistDay,curDay);
-	  doManager("chartStatManager","queryTurnoverByDay",[shareChartStatDto],
+	  var productCheck = $("#cbClick").is(':checked');
+	  var serviceCheck = $("#maxbClick").is(':checked');
+	  var buyCheck = $("#thirdbClick").is(':checked');
+	  var searchstr = "";
+	  var storeNo = $("#store_id_manual").val();
+	  if(storeNo_ == ""){
+	  	storeNo = shareChartStatDto.storeno;
+	  }
+	  if(productCheck){
+	  	searchstr+="1,"
+	  }
+	  if(serviceCheck){
+	  	searchstr+="2,"
+	  }
+	  if(buyCheck){
+	  	searchstr+="3,"
+	  }
+	  /*
+	  if(ordertype == '0'){
+	  	searchstr="1,2,3"
+	  }*/
+	  searchstr = searchstr.substring(0,searchstr.lastIndexOf(","));
+	  var reqestParameter = {
+        cityName: "北京",
+        storeNo: storeNo,
+        searchstr: searchstr
+      }
+	  doManager("communityMembersManager","queryTwoTwoOneGMVByDay",[reqestParameter],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					yData=new Array(xData.length+1).join(0).split('');
+					yData_jy=new Array(xData.length+1).join(0).split('');
 					var jsonData = $.fromJSON(data.data);
-					if(jsonData.length!=0){
-						$(jsonData).each(function(index,element){
+					if(jsonData.twoTwoOneDayData.length!=0){
+						$(jsonData.twoTwoOneDayData).each(function(index,element){
 							var indexTemp = jQuery.inArray(element.day_time,xData);
 							yData[indexTemp]=element.turnover;
 		                });
+		                if(storeNo){
+			                $(yData).each(function(index,element){
+			                	if(productCheck&&serviceCheck){
+									yData_jy[index]=10000;
+			                	}else if(productCheck){
+			                		yData_jy[index]=5000;
+			                	}else if(serviceCheck){
+			                		yData_jy[index]=5000;
+			                	}else if(!productCheck&&!serviceCheck){
+			                		yData_jy[index]=0;
+			                	}else{
+			                		yData_jy[index]=5000;
+			                	}
+			                });
+		                }else{
+		                	$(yData).each(function(index,element){
+		                		if(productCheck&&serviceCheck){
+									yData_jy[index]=10000*storeCount;
+			                	}else if(productCheck){
+			                		yData_jy[index]=5000*storeCount;
+			                	}else if(serviceCheck){
+			                		yData_jy[index]=5000*storeCount;
+			                	}else if(!productCheck&&!serviceCheck){
+			                		yData_jy[index]=0;
+			                	}else{
+			                		yData_jy[index]=5000*storeCount;
+			                	}
+		                	});
+		                }
 						chart5_option.series[0].data=yData;
+						chart5_option.series[1].data=yData_jy;
+						chart5_option.xAxis[0].data=xData;
 						chart5.setOption(chart5_option);
 					}else{
 						yData = [];
 						chart5_option.series[0].data=yData;
+						chart5_option.series[1].data=yData_jy;
+						chart5_option.xAxis[0].data=xData;
 						chart5.setOption(chart5_option);
 					}
 				}
@@ -2002,12 +1727,31 @@ Date.prototype.format = function() {
   var weekData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
   function initWeekData(){
 	  weekData = new Array(xData_week.length+1).join(0).split('');
-		doManager("chartStatManager","queryTurnoverByWeek",[shareChartStatDto],
-			function(data,textStatus,XmlHttpRequest){
-				if (data.result) {
+	  var productCheck = $("#cbClick").is(':checked');
+	  var serviceCheck = $("#maxbClick").is(':checked');
+	  var buyCheck = $("#thirdbClick").is(':checked');
+	  var searchstr = "";
+	  if(productCheck){
+	  	searchstr+="1,"
+	  }
+	  if(serviceCheck){
+	  	searchstr+="2,"
+	  }
+	  if(buyCheck){
+	  	searchstr+="3,"
+	  }
+	  searchstr = searchstr.substring(0,searchstr.lastIndexOf(","));
+	  var reqestParameter = {
+        cityName: "北京",
+        storeNo: shareChartStatDto.storeno,
+        searchstr: searchstr
+      }
+		doManager("communityMembersManager", "queryTwoTwoOneGMVByWeek",[reqestParameter],
+            function(data, textStatus, XMLHttpRequest) {
+               if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					if(jsonData.length!=0){
-						$(jsonData).each(function(index,element){
+					if(jsonData.twoTwoOneData.length!=0){
+						$(jsonData.twoTwoOneData).each(function(index,element){
 							var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
 							var indexTemp = jQuery.inArray(dateTemp,xData_week);
 							weekData[indexTemp]=element.week_amount;
@@ -2020,7 +1764,7 @@ Date.prototype.format = function() {
 						chart7.setOption(chart7_option);
 					}
 				}
-		});
+            });
 	} 
   
   Date.prototype.toLocaleString = function() {
@@ -2086,12 +1830,35 @@ Date.prototype.format = function() {
 	}
   
   function initScatterplot(){
-	  doManager("chartStatManager","queryDataOfScatterplot",[shareChartStatDto],
+      var productCheck = $("#cbClick").is(':checked');
+	  var serviceCheck = $("#maxbClick").is(':checked');
+	  var buyCheck = $("#thirdbClick").is(':checked');
+	  var searchstr = "";
+	  if(productCheck){
+	  	searchstr+="1,"
+	  }
+	  if(serviceCheck){
+	  	searchstr+="2,"
+	  }
+	  if(buyCheck){
+	  	searchstr+="3,"
+	  }
+	  var storeNo = $("#store_id_manual").val();
+	  if(storeNo_ == ""){
+	  	storeNo = shareChartStatDto.storeno;
+	  }
+	  searchstr = searchstr.substring(0,searchstr.lastIndexOf(","));
+	  var reqestParameter = {
+        cityName: "北京",
+        storeNo: storeNo,
+        searchstr: searchstr
+      }
+	  doManager("communityMembersManager","queryDataOfScatterplot",[reqestParameter],
 			function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					if(jsonData.length!=0){
-						$(jsonData).each(function(index,element){
+					if(jsonData.twoTwoOneScatterplotData.length!=0){
+						$(jsonData.twoTwoOneScatterplotData).each(function(index,element){
 							var temp = [];
 							temp.push(element.order_count);
 							temp.push((element.order_amount/10000).toFixed(2));
@@ -2112,162 +1879,8 @@ Date.prototype.format = function() {
 				}
 		});
   }
-  
-  function initalldept(){
-	  doManager("chartStatManager","queryAllDept",null,
-		    function(data,textStatus,XmlHttpRequest){
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					$("#deptSelect").append("<option value=''>全部事业群</option>");
-					$("#deptSelectContrast").append("<option value=''>全部事业群</option>");
-					$(jsonData).each(function(index,element){
-						$("#deptSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
-						$("#deptSelectContrast").append('<option value="'+element.id+'">'+element.name+'</option>');
-	                  });
-				}
-		});
-  }
-  
-  var array_channel=new Array();
-	//初始化所有频道
-	function initallchannel() {
-		doManager("chartStatManager", "queryAllChannel", null,
-			function(data, textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					array_channel = new Array();
-					var storeString = "";
-					for(i=0;i<jsonData.length;i++){
-						array_channel.push(jsonData[i].name);
-						if(i == 0){
-							storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
-						}else if(i == jsonData.length-1){
-							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+"}";
-						}else{
-							storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
-						}
-					}
-					storeJson=$.fromJSON(storeString);
-					$("#channelSelect").append("<option value=''>全部频道</option>");
-					$(jsonData).each(function(index,element){
-						$("#channelSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
-	                });
-				}
-			}, false);
-	}
 	
-	$("#deptSelect").change(function(){
-		initChannelSelectcomplate();
-	});
 	
-	  var array_channel_contrast=new Array();
-		//初始化所有频道
-		function initallchannelcontrast() {
-			doManager("chartStatManager", "queryAllChannel", null,
-				function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						var jsonData = $.fromJSON(data.data);
-						array_chnanel_contrast = new Array();
-						var storeString = "";
-						for(i=0;i<jsonData.length;i++){
-							array_channel_contrast.push(jsonData[i].name);
-							if(i == 0){
-								storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
-							}else if(i == jsonData.length-1){
-								storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+"}";
-							}else{
-								storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
-							}
-						}
-						storeJson=$.fromJSON(storeString);
-						var autoCompleteContrast = new AutoComplete("channel_name_manual_contrast","auto_channel_contrast",array_channel_contrast);
-						$("#channelSelectContrast").append("<option value=''>全部频道</option>");
-						$(jsonData).each(function(index,element){
-							$("#channelSelectContrast").append('<option value="'+element.id+'">'+element.name+'</option>');
-		                });
-					}
-				}, false);
-		}
-	
-	$("#deptSelectContrast").change(function(){
-		initChannelSelectcomplateContrast();
-	});
-	
-	var storeJsonChannel;
-	function initChannelSelectcomplate(){
-		var deptSelect = $("#deptSelect  option:selected").val();
-		$("#channelSelect").empty();
-		if(deptSelect==""){
-			initallchannel();
-		}else{
-			//根据事业群查询频道信息
-			var deptId = "'"+deptSelect+"'";
-			doManager("chartStatManager","findChannelByDept",[deptId],
-			    function(data,textStatus,XmlHttpRequest){
-					if (data.result) {
-						var jsonData = $.fromJSON(data.data);
-						array_channel=new Array();
-						var storeString = "";
-						$(jsonData).each(function(index,element){
-							var channelName = element.name;
-							var id = element.id;
-							array_channel.push(channelName);
-							if(index == 0){
-	 							storeString = "{'"+channelName+"'"+":"+"'"+id+"'"+",";
-	 						}else if(index == jsonData.length-1){
-	 							storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+"}";
-	 						}else{
-	 							storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+",";
-	 						}
-						});
-						storeJsonChannel=$.fromJSON(storeString);
-						$("#channelSelect").append("<option value=''>全部频道</option>");
-						$(jsonData).each(function(index,element){
-							$("#channelSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
-		                });
-					}
-			});
-		}
-		
-	}
-	
-	var storeJsonChannelContrast;
-	function initChannelSelectcomplateContrast(){
-		var deptSelect = $("#deptSelectContrast  option:selected").val();
-		$("#channelSelectContrast").empty();
-		if(deptSelect==""){
-			initallchannelcontrast();
-		}else{
-			//根据事业群查询频道信息
-			var deptId = "'"+deptSelect+"'";
-			doManager("chartStatManager","findChannelByDept",[deptId],
-			    function(data,textStatus,XmlHttpRequest){
-					if (data.result) {
-						var jsonData = $.fromJSON(data.data);
-						array_channel_contrast=new Array();
-						var storeString = "";
-						$(jsonData).each(function(index,element){
-							var channelName = element.name;
-							var id = element.id;
-							array_channel_contrast.push(channelName);
-							if(index == 0){
-	 							storeString = "{'"+channelName+"'"+":"+"'"+id+"'"+",";
-	 						}else if(index == jsonData.length-1){
-	 							storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+"}";
-	 						}else{
-	 							storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+",";
-	 						}
-						});
-						storeJsonChannel=$.fromJSON(storeString);
-						$("#channelSelectContrast").append("<option value=''>全部频道</option>");
-						$(jsonData).each(function(index,element){
-							$("#channelSelectContrast").append('<option value="'+element.id+'">'+element.name+'</option>');
-		                });
-					}
-			});
-		}
-		
-	}
   
   function initallcity(){
 	   var effectiveCity = [];
@@ -2285,13 +1898,14 @@ Date.prototype.format = function() {
 		    function(data,textStatus,XmlHttpRequest){
 				if (data.result) {
 					var jsonData = $.fromJSON(data.data);
-					$("#citySelect").append("<option value=''>全部城市</option>");
-					$("#citySelectContrast").append("<option value=''>全部城市</option>");
+					//$("#citySelect").append("<option value=''>全部城市</option>");
+					//$("#citySelectContrast").append("<option value=''>全部城市</option>");
 					$(jsonData).each(function(index,element){
 						var indexTemp = jQuery.inArray(element.cityname,effectiveCity);
 						if(indexTemp>=0){
-							$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
-							$("#citySelectContrast").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+							if(element.cityname == '北京'){
+								$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+							}
 						}
                    });
 				}
@@ -2349,8 +1963,10 @@ Date.prototype.format = function() {
 					$(jsonData).each(function(index,element){
 						var indexTemp = jQuery.inArray(element.cityname,effectiveCity);
 						if(indexTemp>=0){
-							$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
-							$("#citySelectContrast").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+							if(element.cityname == '北京'){
+								$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+							}
+							//$("#citySelectContrast").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
 						}
                    });
 					
@@ -2508,20 +2124,9 @@ Date.prototype.format = function() {
 		  }else{
 		    cityName = null;
 		  }
-	      var deptname = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
-	      if(deptname!="" && deptname=="全部事业群"){
-	    	  deptname = null;
-	      }
-	      var channelname = $("#channelSelect option:selected").html()==""?null:$("#channelSelect option:selected").html();
-	      if(channelname!="" && channelname=="全部频道"){
-	    	  channelname = null;
-	      }
-		  
 		  return shareChartStatDto = {				
 				storeno:storeno,
 				cityname:cityName,
-				deptname:deptname,
-				channelname:channelname,
 				cLabel:cLabel,
 				maxBLabel:maxBLabel,
 				smallBLabel:smallBLabel
@@ -2558,26 +2163,18 @@ Date.prototype.format = function() {
 	//搜索
 	function search_manual_k(){
 		clearInterval(timeTicket);
-		var deptName = $("#deptSelect  option:selected").text();
-		
-		//检测数据正确性
-		var channelName = $("#channelSelect  option:selected").text();
-		if(channelName!="" && channelName!="全部频道"){
-	  	  	if($.inArray(channelName, array_channel) == -1){
-				crm_alert(0,"该频道不存在！");
-				timeTicket = setInterval(loadtime, 5000);
-				return;
-			}
-	    }
-		
 		var number_str = $("#store_id_manual").val(); 
   	    var storeName = $("#store_name_manual").val();
   	  	if(storeName!=""){
-	  	  	if($.inArray(storeName, array) == -1){
+  	  		if(storeName_){
+  	  		
+  	  		}else{
+  	  			if($.inArray(storeName, array) == -1){
 				crm_alert(0,"该门店不存在！");
 				timeTicket = setInterval(loadtime, 5000);
 				return;
-			}
+				}
+  	  		}
 	    }
   	    if(number_str==""&&storeName!=""){
 	    	number_str=-10000;
@@ -2600,20 +2197,20 @@ Date.prototype.format = function() {
 // 		  setInterval(initCurMonthData, 5000);
 		  //分时GMV
 		  hourData = [];
-		  initHourData();
+		  //initHourData();
 // 		  setInterval(initHourData, 5000);
 		  //日GMV
    		  yData = [];
 		  initDayData();
 		  //周GMV
 		  weekData = [];
-		  initWeekData();
+		  //initWeekData();
 		  //月GMV
 		  yData_month = [];
 		  yData_month_target = [];
 		  initMonthData();
 		  //占比营业额
-		  initOnlineOfflineTurnover();
+		  //initOnlineOfflineTurnover();
 		  //门店GMV散点分布
 		  dataBJ = [];
 		  initScatterplot();		  
@@ -2728,16 +2325,53 @@ Date.prototype.format = function() {
   function excuteRefresh(){
 	  location.reload();
   }
-  function toBussiness(){
-	  var url = "";
-	  if(target==0){
-		  	url = "index_K_221.html?t="+encode64('0')+"&s=&sn=&c=&cn=";
-		  }else if(target==1){
-		  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
-		  }
- 		window.location.href=url;
+  function toIndex(){
+  		if(target==0){
+			window.location.href="index_K.html?t="+encode64('0')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+		}else if(target==1){
+			window.location.href="index_K.html?t="+encode64('1')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+		}
   }
-</script>
-
-</body>
-</html>
+  function queryTwoTwoOneStoreCount(){
+  	 var reqestParameter = {
+        cityName: "北京",
+        storeNo: "",
+        searchstr: ""
+      }
+  	 doManager("communityMembersManager","queryTwoTwoOneStoreCount",[reqestParameter],
+			function(data,textStatus,XmlHttpRequest){
+			  if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				storeCount = jsonData.twoTwoOneStoreCountData;
+			}
+		});
+  }
+  function initStoreSelectBy221(){
+  	if(storeNo_!=null&&storeNo_!=""){
+  		$("#store_id_manual").val(storeNo_);
+  		$("#store_name_manual").val(storeName_);
+  		var dutoDiv = $("<div class='auto_out on'>");
+  		var strong = $("<strong>").html(storeName_);
+  		dutoDiv.append(strong);
+  		$("#auto").append(dutoDiv);
+  	}
+  	if(ordertype!=null&&ordertype!=""){
+  	  if(ordertype=='0'){
+	  	  $("#cbClick").prop("checked", true);
+	  	  $("#maxbClick").prop("checked", true);
+	  	  $("#thirdbClick").prop("checked", true);
+  	  }else if(ordertype=='1'){
+  	  	  $("#cbClick").prop("checked", true);
+	  	  $("#maxbClick").prop("checked", false);
+	  	  $("#thirdbClick").prop("checked", false);
+  	  }else if(ordertype=='2'){
+  	  	  $("#cbClick").prop("checked", false);
+	  	  $("#maxbClick").prop("checked", true);
+	  	  $("#thirdbClick").prop("checked", false);
+  	  }else if(ordertype=='2'){
+  	  	  $("#cbClick").prop("checked", false);
+	  	  $("#maxbClick").prop("checked", false);
+	  	  $("#thirdbClick").prop("checked", true);
+  	  }
+  	}
+  }

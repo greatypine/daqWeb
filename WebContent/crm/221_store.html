@@ -65,6 +65,7 @@
       -moz-transition: width 0.3s;
       transition: width 0.3s;
       -webkit-backface-visibility: hidden;border-radius: 6px; box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+     margin-top: 5px;
     }
 
 /*  	.auto{max-height:300px; overflow-y:scroll;z-index: 999;width:90.5%;position: absolute!important;} */
@@ -142,9 +143,9 @@
       
       <div class="nav-tabs-custom">
        <ul class="nav nav-tabs">
+         <li class="active"><a href="javascript:void(0);" data-toggle="tab">221单店</a></li>
          <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">221整体</a></li>
          <li><a href="javascript:void(0);" onclick="toBussiness()">221业务</a></li>
-         <li class="active"><a href="javascript:void(0);" data-toggle="tab">221单店</a></li>
        </ul>
       <div class="tab-content no-padding">
       <div class="tab-pane active" id="tab_1">
@@ -161,7 +162,7 @@
             <div class="col-sm-6 lightslider">
               <div class="demo bg-teal-active">
                 <div class="item">
-                  <div class="clearfix">
+                  <div class="clearfix" style="margin-top: 20px;">
                     <ul id="image-galle" class="gallery list-unstyled cS-hidden">
                     	<li data-thumb="img/thumb/cS-1.jpg">
                           <h4>门店名称<span class="pull-right">店长：XXXX</span></h4>
@@ -183,10 +184,10 @@
 <!-- 	            <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;"> -->
 <!-- 	            </div> -->
 <!-- 	          </div> -->
-				<div id="search_bar" class="search_bar" style="display:none">
+				<div id="search_bar" class="search_bar" style="display:block;">
                   <form id="myform">
                   	<input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
-                    <input class="input" placeholder="选择门店" type="text" name="key" id="store_name_manual">
+                    <input class="input" placeholder="选择门店" type="text" name="key" id="store_name_manual" style="padding:10px;">
                     <span class="search_ico"><i class="fa fa-search"></i></span>
                   	<div id="auto" style="width: 94%;z-index: 9999999999;"></div>
                   </form>
@@ -204,24 +205,26 @@
         <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-red">221单店【GMV】昨日完成情况前十</h4>
+              <h4 class="text-red">221单店【GMV】昨日完成情况前十（目标值：1万）</h4>
               <table class="table table-bordered">
                 <tbody id="gmv_store_up_data">
 	                <tr>
 	                  <th>门店名称</th>
 	                  <th>GMV</th>
+	                  <th>目标达成情况</th>
 	                  <th>排名</th>
 	                </tr>
                 </tbody>
               </table>
             </div>
             <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-light-blue">221单店【GMV】昨日完成情况后十</h4>
+              <h4 class="text-light-blue">221单店【GMV】昨日完成情况后十（目标值：1万）</h4>
               <table class="table table-bordered">
                 <tbody id="gmv_store_down_data">
 	                <tr>
 	                  <th>门店名称</th>
 	                  <th>GMV</th>
+	                  <th>目标达成情况</th>
 	                  <th>排名</th>
 	                </tr>
                 </tbody>
@@ -232,24 +235,26 @@
         <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-red">221单店【商品类】昨日完成情况前十</h4>
+              <h4 class="text-red">221单店【商品类】昨日完成情况前十（目标值：0.5万）</h4>
               <table class="table table-bordered">
                 <tbody id="product_store_up_data">
 	                <tr>
 	                  <th>门店名称</th>
 	                  <th>GMV</th>
+	                  <th>目标达成情况</th>
 	                  <th>排名</th>
 	                </tr>
                 </tbody>
               </table>
             </div>
             <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-light-blue">221单店【商品类】昨日完成情况后十</h4>
+              <h4 class="text-light-blue">221单店【商品类】昨日完成情况后十（目标值：0.5万）</h4>
               <table class="table table-bordered">
                 <tbody id="product_store_down_data">
 	                <tr>
 	                  <th>门店名称</th>
 	                  <th>GMV</th>
+	                  <th>目标达成情况</th>
 	                  <th>排名</th>
 	                </tr>
                 </tbody>
@@ -260,24 +265,26 @@
         <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-red">221单店【服务类】昨日完成情况前十</h4>
+              <h4 class="text-red">221单店【服务类】昨日完成情况前十（目标值：0.5万）</h4>
               <table class="table table-bordered">
                 <tbody id="service_store_up_data">
 	                <tr>
 	                  <th>门店名称</th>
 	                  <th>GMV</th>
+	                  <th>目标达成情况</th>
 	                  <th>排名</th>
 	                </tr>
                 </tbody>
               </table>
             </div>
             <div class="col-sm-6" style="height: 460px;">
-              <h4 class="text-light-blue">221单店【服务类】昨日完成情况后十</h4>
+              <h4 class="text-light-blue">221单店【服务类】昨日完成情况后十（目标值：0.5万）</h4>
               <table class="table table-bordered">
                 <tbody id="service_store_down_data">
 	                <tr>
 	                  <th>门店名称</th>
 	                  <th>GMV</th>
+	                  <th>目标达成情况</th>
 	                  <th>排名</th>
 	                </tr>
                 </tbody>
@@ -377,7 +384,7 @@
 <script src="plugins/morris/morris.min.js"></script>
 <script src="plugins/gooey_menu/gooey.min.js"></script>
 <script type ="text/javascript">
-
+	var target = decode64(getUrlParamByKey("t"));//执行人级别 
 	$(document).ready(function() {
 // 	    $("#content-slider").lightSlider({
 // 	      loop:true,
@@ -397,13 +404,13 @@
 	    });
 	    $(".search_ico").click(function(){
 	        $(".search_bar").toggleClass('search_open');
-	        var keys = $("#store_name_manual").val();
-	        if(keys.length>0){
+	        /*var keys = $("#store_name_manual").val();
+ 	        if(keys.length>0){
 	          $("#store_name_manual").val('');
 	          $("#myform").submit();
 	        }else{
 	          return false;
-	        }
+	        } */
 	      });
 	  });
 
@@ -598,8 +605,17 @@
 	  myChart3.setOption(option3);
 	  
 	  myChart3.on('click', function (params) {
+		var store_name = params.data[2]
 		var storeNo = params.data[3];
+		var store_no = params.data[3];
 		initStoreCompleteInfo(storeNo);
+		var url = "";
+		if(target==0){
+			  	url = "index_K_221.html?t="+encode64(0)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(0)+"&store_name="+encode64(store_name);
+			  }else if(target==1){
+			  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(0)+"&store_name="+encode64(store_name);
+		 }
+		window.open(url,"searchData_view");
 	  });
 </script>
 <script>
@@ -730,14 +746,15 @@
 						var infoStr="";
 						for(var i=0;i<jsonData.length;i++){
 							infoStr=infoStr+ '<li data-thumb="img/thumb/cS-1.jpg" id="store_info">';
-							infoStr=infoStr+'<h4>'+jsonData[i].store_name+'<span class="pull-right">店长：'+jsonData[i].store_user+'</span></h4>';
+							infoStr=infoStr+'<h4 onclick="javascript:goTo221Kline(\''+jsonData[i].store_no+'\',\''+0+'\',\''+jsonData[i].store_name+'\')">'+jsonData[i].store_name+'<span class="pull-right">店长：'+jsonData[i].store_user+'</span></h4>';
 							infoStr=infoStr+'<div class="col-sm-12">';
 							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cube"></i>昨日GMV：<span>￥'+(jsonData[i].pro_total_gmv+jsonData[i].ser_total_gmv+jsonData[i].gro_total_gmv).toFixed(2)+'</span></div>';
-							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-paw"></i>商品类GMV：<span>￥'+jsonData[i].pro_total_gmv+'</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding" title="含养老餐"><i class="fa fa-paw"></i>商品类GMV：<span>￥'+jsonData[i].pro_total_gmv+'</span></div>';
 							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>服务类GMV：<span>￥'+jsonData[i].ser_total_gmv+'</span></div>';
 							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>团购GMV：<span>￥'+jsonData[i].gro_total_gmv+'</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-male"></i>社员新增：<span>'+jsonData[i].member_num+'人</span></div>';
+							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cart-plus"></i>养老餐GMV：<span>￥'+jsonData[i].ylc_total_gmv+'</span></div>';
 							infoStr=infoStr+'</div>';
-							infoStr=infoStr+'<div class="col-sm-6"><i class="fa fa-male"></i>社员新增：<span>'+jsonData[i].member_num+'人</span></div>';
 		                    infoStr=infoStr+'</li>';
 						}
 						$("#image-galle").append(infoStr); 
@@ -791,8 +808,9 @@
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
 							yyStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   +"<td><a href=javascript:goTo221Kline('"+jsonData[i].store_no+"',0,'"+jsonData[i].store_name+"')>"+jsonData[i].store_name+"</a></td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>"
+			                   +"<td>"+jsonData[i].goaldone+"</td>";
 			                   
 			                   switch(i)
 			                   {
@@ -832,8 +850,9 @@
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
 							jwsStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   +"<td><a href=javascript:goTo221Kline('"+jsonData[i].store_no+"',0,'"+jsonData[i].store_name+"')>"+jsonData[i].store_name+"</a></td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>"
+			                   +"<td>"+jsonData[i].goaldone+"</td>";
 			                   
 			                   switch(i)
 			                   {
@@ -875,8 +894,9 @@
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
 							yyStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   +"<td><a href=javascript:goTo221Kline('"+jsonData[i].store_no+"',1,'"+jsonData[i].store_name+"')>"+jsonData[i].store_name+"</a></td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>"
+			                   +"<td>"+jsonData[i].goaldone+"</td>";
 			                   
 			                   switch(i)
 			                   {
@@ -916,8 +936,9 @@
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
 							jwsStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   +"<td><a href=javascript:goTo221Kline('"+jsonData[i].store_no+"',1,'"+jsonData[i].store_name+"')>"+jsonData[i].store_name+"</a></td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>"
+			                   +"<td>"+jsonData[i].goaldone+"</td>";
 			                   
 			                   switch(i)
 			                   {
@@ -959,8 +980,9 @@
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
 							yyStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   +"<td><a href=javascript:goTo221Kline('"+jsonData[i].store_no+"',2,'"+jsonData[i].store_name+"')>"+jsonData[i].store_name+"</a></td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>"
+			                   +"<td>"+jsonData[i].goaldone+"</td>";
 			                   
 			                   switch(i)
 			                   {
@@ -1000,8 +1022,9 @@
 					if(jsonData.length!=0){
 						for(var i=0;i<jsonData.length;i++){
 							jwsStr= "<tr>"
-			                   +"<td>"+jsonData[i].store_name+"</td>"
-			                   +"<td>"+jsonData[i].ordergmv+"</td>";
+			                   +"<td><a href=javascript:goTo221Kline('"+jsonData[i].store_no+"',2,'"+jsonData[i].store_name+"')>"+jsonData[i].store_name+"</a></td>"
+			                   +"<td>"+jsonData[i].ordergmv+"</td>"
+			                   +"<td>"+jsonData[i].goaldone+"</td>";
 			                   
 			                   switch(i)
 			                   {
@@ -1261,6 +1284,17 @@
     Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
     return Dight;  
   }
+  
+  function goTo221Kline(store_no,type,store_name){
+	  var url = "";
+	  if(target==0){
+		  	url = "index_K_221.html?t="+encode64(0)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(type)+"&store_name="+encode64(store_name);
+		  }else if(target==1){
+		  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(type)+"&store_name="+encode64(store_name);
+	  }
+	  window.open(url);
+  }
+  
 </script>
 </body>
 </html>
