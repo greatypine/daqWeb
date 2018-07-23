@@ -72,6 +72,7 @@ import com.cnpc.pms.personal.dao.ImportHumanresourcesDao;
 import com.cnpc.pms.personal.dao.PublicOrderDao;
 import com.cnpc.pms.personal.dao.RelationDao;
 import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.dao.SyncRecordDao;
 import com.cnpc.pms.personal.dao.YyMicrDataDao;
 import com.cnpc.pms.personal.entity.Company;
 import com.cnpc.pms.personal.entity.DataHumanType;
@@ -4208,6 +4209,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 	public Map<String, Object> getEmployeeInfoByWeek() {
 		Map<String,Object> result = new HashMap<String,Object>();
 		HumanresourcesDao humanresourcesDao = (HumanresourcesDao)SpringHelper.getBean(HumanresourcesDao.class.getName());
+		SyncRecordDao syncRecordDao = (SyncRecordDao)SpringHelper.getBean(SyncRecordDao.class.getName());
 		//总人数信息
 		List<Map<String,Object>> queryToPostHuman = humanresourcesDao.queryToPostHuman(null);
 		List<Map<String,Object>> queryLeaveHuman = humanresourcesDao.queryLeaveHuman(null);
@@ -4233,6 +4235,16 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		List<Map<String,Object>> queryLeaveZongguan = humanresourcesDao.queryLeaveHuman("综合管理");
 		List<Map<String,Object>> queryZongguanTotal = humanresourcesDao.queryHumanTotal("综合管理");
 		
+		//总部人员
+		List<Map<String,Object>> getjoinHumanresources = syncRecordDao.getjoinHumanresources(null);
+		List<Map<String, Object>> getleftHumanresources = syncRecordDao.getleftHumanresources(null);
+		List<Map<String, Object>> totalHumanresources = syncRecordDao.getTotalHumanresources(null);
+		
+		//城市公司
+		/*List<Map<String,Object>> getjoinHumanresources1 = syncRecordDao.getjoinHumanresources("公司");
+		List<Map<String, Object>> getleftHumanresources1 = syncRecordDao.getleftHumanresources("公司");
+		List<Map<String, Object>> totalHumanresources1 = syncRecordDao.getTotalHumanresources("公司");*/
+		
 		result.put("queryToPostHuman", queryToPostHuman);
 		result.put("queryLeaveHuman", queryLeaveHuman);
 		result.put("queryHumanTotal", queryHumanTotal);
@@ -4252,6 +4264,14 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		result.put("queryToPostZongguan", queryToPostZongguan);
 		result.put("queryLeaveZongguan", queryLeaveZongguan);
 		result.put("queryZongguanTotal", queryZongguanTotal);
+		
+		result.put("queryToPostZongbu", getjoinHumanresources);
+		result.put("queryLeaveZongbu", getleftHumanresources);
+		result.put("queryZongbuTotal", totalHumanresources);
+		
+		/*result.put("queryToPostgongsi", getjoinHumanresources1);
+		result.put("queryLeavegongsi", getleftHumanresources1);
+		result.put("queryGongsiTotal", totalHumanresources1);*/
 		
 		
 		result.put("dateAndWeek", dateAndWeek);

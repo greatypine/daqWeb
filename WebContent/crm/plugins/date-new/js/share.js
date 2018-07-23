@@ -210,8 +210,8 @@ $(function(){
     $("#endDateLast").attr("value",timeStr)
     
     var start_DateStr = "2018/01/01";
-    $("#searchTime").attr("value",start_DateStr +'-'+ timeStr)
-    $("#startOpenCardDate").attr("value",start_DateStr)
+    $("#searchTime").attr("value",startDateStr +'-'+ timeStr)
+    $("#startOpenCardDate").attr("value",startDateStr)
     $("#endOpenCardDate").attr("value",timeStr)
 });
 

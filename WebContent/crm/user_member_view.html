@@ -31,15 +31,15 @@
   <script src="IE 9/respond.min.js"></script>
   <![endif]-->
   <style>
-    .box-default{border-bottom: 1px solid #e1e1e1;}
+    .box-default{border-bottom: 1px solid #e1e1e1;height:100%; width:100%;}
     .info_head{padding: 25px 0 35px 0;}
     .info_head img{width:123px; margin-top:10px;}
     .info_head span{padding-left: 20px;}
     .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
     .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
     .box .h4{padding-left:20px;}
-    .nav-tabs-custom{padding:0 20px;}
-    .nav-tabs{border:0;}
+    .nav-tabs-custom > .nav-tabs > li.active{border-top-color:#3c8dbc!important}
+	.nav-tabs-custom > .nav-tabs > li.active > a{background-color:#fff;color:#000;}
     .logo-lg li{float: left; position: relative;}
 
     .logo-lg i{color: #fff;}
@@ -47,6 +47,7 @@
     .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
     .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
     .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    .table button{padding: 3px 20px; margin: 0 5px;}
     
     
     .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
@@ -151,107 +152,198 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
-    <div class="container" style="width:1230px">
+    <div>
       <!-- Main content -->
 
       <section class="content-header">
-        <div class="box box-default">
-          <div class="box-header h4 text-light-blue">
-          	<div class="pull-left "><strong>合作社社员统计</strong></div>
-          	<div class="pull-left text-red" style="padding-left:15px;font-size:75%">（统计数据每10分钟更新一次）</div>
-          </div>
-          <div class="box-body">
-            <form id="searchform" class="clearfix">
-            <div class="form-group col-lg-4">
-              <label>开卡时间</label>
-             	<div class="search-con">
-					<div class="time" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
-					    <div class="time_endbg" id="time_endbg">
-					        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
-					        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
-					    </div>
+        <div class="nav-tabs-custom">
+        <div class="pull-right text-red" style="padding-left:15px;font-size:75%">统计数据每10分钟更新一次</div>
+          <ul class="nav nav-tabs">
+		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
+		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
+		  </ul>
+		  <div class="tab-content">
+			  <div class="tab-pane active" id="tab_1">
+	          <div class="box-body">
+	          <div class="clearfix search-criteria">
+	            <div id="selectorLine clearfix no-border" class="clearfix">
+	            <div class="form-group col-lg-4">
+	              <label>开卡时间</label>
+	             	<div class="search-con">
+						<div class="time" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
+						    <div class="time_endbg" id="time_endbg">
+						        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
+						        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
+						    </div>
+						</div>
+						<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px 0 0;">	
+						    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
+						        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+						        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
+						        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
+						        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
+						        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
+						        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
+						    </div>
+						    <div class="ui-datepicker-choose">
+						        <!--<p>自选日期</p>-->
+						        <div class="ui-datepicker-date">
+							       	<input name="startDate" id="startOpenCardDate" class="startDate" readonly value="2018/05/21" type="text">
+							           到
+						            <input name="endDate" id="endOpenCardDate" class="endDate" readonly  value="2018/05/21" type="text" disabled>
+						        </div>
+						        <div class="opeDiv">
+						            <span class="Confirm" id="Confirm" onclick="datePickersOpenCard()">确定</span>
+						            <span class="Cancel" id="Cancel">取消</span>
+						        </div>
+						    </div>
+						</div>
 					</div>
-					<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px 0 0;">	
-					    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
-					        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-					        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
-					        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-					        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-					        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
-					        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
-					    </div>
-					    <div class="ui-datepicker-choose">
-					        <!--<p>自选日期</p>-->
-					        <div class="ui-datepicker-date">
-						       	<input name="startDate" id="startOpenCardDate" class="startDate" readonly value="2018/05/21" type="text">
-						           到
-					            <input name="endDate" id="endOpenCardDate" class="endDate" readonly  value="2018/05/21" type="text" disabled>
-					        </div>
-					        <div class="opeDiv">
-					            <span class="Confirm" id="Confirm" onclick="datePickersOpenCard()">确定</span>
-					            <span class="Cancel" id="Cancel">取消</span>
-					        </div>
-					    </div>
+	            </div>
+	            <div class="form-group col-lg-4">
+	              <label>城市</label>
+				  <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
+				  <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+	              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
+	              <!-- /.input group -->
+	              </div>
+	            </div>
+	            <div class="form-group col-lg-4">
+	              <label>门店</label>
+				  <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
+				  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
+	              <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
+	              </div>
+	              <!-- /.input group -->
+	            </div>
+	            </div>
+	            </div>
+	            
+	            <div class="clearfix">
+	            	<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+		                <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+		            </div>
+		            <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+		              <button type="button" onclick="export_tradetype()" class="btn btn-block btn-warning">导出</button>
+		            </div>
+		            <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+		              <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_tradetype_step1(1)">查询</button>
+		            </div>
+		            
+	            </div>
+	
+	          </div>
+	          <div class="box-body">
+	              <div class="tab-content">
+	                <div>
+	                  <table class="table table-striped">
+	                    <tbody id="tradeType_tbody">
+		                    <tr>
+		                      <th width="8%">城市</th>
+		                      <th width="10%">门店名称</th>
+		                      <th width="10%">门店编号</th>
+		                      <th width="12%">
+		                      	新增社员数
+		                      	<font id="showattention" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+	                  			<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:40px">包含畅购卡升级和199开卡</font>		 
+		                      </th>
+		                      <th width="12%">199新增开卡数</th>
+		                      <th width="12%">累计社员总数</th>
+		                    </tr>
+	                    </tbody>
+	                  </table>
+	                </div>
+	                <!-- /.tab-pane -->
+	              </div>
+	              <!-- /.tab-content -->
+	            <div class="tcdPageCode" id="page_tradetype"></div>
+	          </div>
+	        </div>
+	        
+	        <div class="tab-pane" id="tab_2">
+	          <div class="box-body">
+	          <div class="clearfix search-criteria">
+	            <div id="selectorLine clearfix no-border" class="clearfix">
+	            <div class="form-group col-lg-4">
+	              <label>开卡时间</label>
+	             	<div class="search-con">
+						<div class="time" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
+						    <div class="time_endbg" id="first_time_endbg">
+						        <p>日期选择：<span class="data_choice_city" id="data_choice">默认时期</span></p>
+						        <input type="text" class="ui-datepicker-time" id="first_date" readonly value=""/>
+						    </div>
+						</div>
+						<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin:0 15px 0 0;">	
+						    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
+						        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+						        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
+						        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
+						        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
+						        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
+						        <span class="ui-close-date" id="first-ui-close-date" style="cursor:pointer;">X</span>
+						    </div>
+						    <div class="ui-datepicker-choose">
+						        <!--<p>自选日期</p>-->
+						        <div class="ui-datepicker-date">
+							       	<input name="startDate" id="startDateFirst" class="startDate_city" readonly value="2018/05/21" type="text">
+							           到
+						            <input name="endDate" id="endDateFirst" class="endDate_city" readonly  value="2018/05/21" type="text" disabled>
+						        </div>
+						        <div class="opeDiv">
+						            <span class="Confirm" id="ConfirmFirst" onclick="datePickersOpenCard()">确定</span>
+						            <span class="Cancel" id="CancelFirst">取消</span>
+						        </div>
+						    </div>
+						</div>
 					</div>
-				</div>
-            </div>
-            <div class="form-group col-lg-4">
-              <label>城市</label>
-			  <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
-			  <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
-              <!-- /.input group -->
-              </div>
-            </div>
-            <div class="form-group col-lg-4">
-              <label>门店</label>
-			  <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
-			  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
-              <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
-              </div>
-              <!-- /.input group -->
-            </div>
-            </form>
-            <div class="form-group col-lg-6" style="margin-top: 20px; padding: 0 25px;">
-            </div>
-            <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
-              <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_tradetype_step1(1)">查询</button>
-            </div>
-            <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
-              <button type="button" onclick="export_tradetype()" class="btn btn-block btn-warning">导出</button>
-            </div>
-            <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
-                <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
-            </div>
-
-          </div>
-          <div class="box-body">
-            <div class="nav-tabs-custom">
-              <div class="tab-content">
-                <div>
-                  <table class="table table-striped">
-                    <tbody id="tradeType_tbody">
-	                    <tr>
-	                      <th width="8%">城市</th>
-	                      <th width="10%">门店名称</th>
-	                      <th width="10%">门店编号</th>
-	                      <th width="12%">
-	                      	新增社员数
-	                      	<font id="showattention" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-                  			<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:40px">包含畅购卡升级和199开卡</font>		 
-	                      </th>
-	                      <th width="12%">199新增开卡数</th>
-	                      <th width="12%">累计社员总数</th>
-	                    </tr>
-                    </tbody>
-                  </table>
-                </div>
-                <!-- /.tab-pane -->
-              </div>
-              <!-- /.tab-content -->
-            </div>
-            <div class="tcdPageCode" id="page_tradetype"></div>
-          </div>
+	            </div>
+	            <div class="form-group col-lg-4">
+	              <label>城市</label>
+				  <input id="city_id" name="city_id_tradetype" type="hidden" value=""/>
+				  <input type="text" class="form-control"  placeholder="城市" id="city_name" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+	              <div class="auto hidden" id="auto_city_member" style="width:82%;z-index: 99999;">
+	              <!-- /.input group -->
+	              </div>
+	            </div>
+	            </div>
+	            </div>
+	            
+	            <div class="clearfix">
+		            <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+		              <button type="button" onclick="export_city()" class="btn btn-block btn-warning">导出</button>
+		            </div>
+		            <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+		              <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_step1(1)">查询</button>
+		            </div>
+		            
+	            </div>
+	
+	          </div>
+	          <div class="box-body">
+	              <div class="tab-content">
+	                <div>
+	                  <table class="table table-striped">
+	                    <tbody id="tradeType_tbody_city">
+		                    <tr>
+		                      <th width="8%">城市</th>
+		                      <th width="12%">
+		                      	新增社员数
+		                      	<font id="showattentioncity" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+	                  			<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:40px">包含畅购卡升级和199开卡</font>		 
+		                      </th>
+		                      <th width="12%">199新增开卡数</th>
+		                      <th width="12%">累计社员总数</th>
+		                    </tr>
+	                    </tbody>
+	                  </table>
+	                </div>
+	                <!-- /.tab-pane -->
+	              </div>
+	              <!-- /.tab-content -->
+	            <div class="tcdPageCode" id="page_city"></div>
+	          </div>
+	        </div>
+        </div>
         </div>
       </section>
     </div>
@@ -307,44 +399,64 @@
 		    var buttonValue= $(this).val();
 		    $('#data_choice').html(buttonValue);
 		});
+		$("#first-ui-datepicker-quick input").click(function(){
+		    var buttonValue= $(this).val();
+		    $('#first_data_choice').html(buttonValue);
+		});
 		if(target==0){//总部
 			if(cityName!=""){
 				$("#city_name_tradetype").val(cityName);
 				$("#city_id_tradetype").val(cityId);
+				$("#city_name").val(cityName);
+				$("#city_id").val(cityId);
 				$("#city_name_tradetype").attr("readonly",true);
+				$("#city_name").attr("readonly",true);
 			}
 		}else if(target==1){//城市
 			$("#city_name_tradetype").val(cityName);
 			$("#city_name_tradetype").attr("readonly",true);
+			$("#city_name").val(cityName);
+			$("#city_name").attr("readonly",true);
 		}else if(target==2){//店长
+			$("#tab_2_avtive").hide();
+			$("#tab_2").hide();
 			$("#city_name_tradetype").val(cityName);
 			$("#city_name_tradetype").attr("readonly",true);
 			$("#store_name_tradetype").val(storeName);
 			$("#store_name_tradetype").attr("readonly",true);
 		}
 		if(fromBar == "1"){
-			 $.setStartTime();
-			    $.setEndTime();
-			    $.datepickerjQ();
-			
+			$("#first_date").attr("value",beti +'-'+ endt);
+		    $("#startDateFirst").attr("value",beti);
+		    $("#endDateFirst").attr("value",endt);
+			searchInfo_step2();
+			$("#tab_2_avtive").addClass("active");
+			$("#tab_2").addClass("active");
+			$("#tab_1_avtive").removeClass("active");
+			$("#tab_1").removeClass("active");
+		}else if(fromBar == "2"){
 			$("#searchTime").attr("value",beti +'-'+ endt);
 		    $("#startOpenCardDate").attr("value",beti);
 		    $("#endOpenCardDate").attr("value",endt);
-		    /* $("#startOpenCardDate" ).datepicker({defaultDate:beti});
-	        $("#endOpenCardDate" ).datepicker({defaultDate:endt}); */
-		   
-		   
 			searchInfo_tradetype_step2();
 		}
 	    $(".logo-lg > ul > li").hover(function(){
 	      $(this).children(".nav_dropdown").toggle('1000');
 	    });
 	    
+	    //门店纬度
 	    $("#showattention").on("mouseover",function(event){
 	  		$("#attention").show();
 	  	});
 	  	$("#showattention").on("mouseout",function(event){
 	  		$("#attention").hide();
+	  	});
+	  	//城市纬度
+	  	$("#showattentioncity").on("mouseover",function(event){
+	  		$("#attentioncity").show();
+	  	});
+	  	$("#showattentioncity").on("mouseout",function(event){
+	  		$("#attentioncity").hide();
 	  	});
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
@@ -357,7 +469,6 @@
 	   $("#auto_store").empty();
 	   $("#store_id_tradetype").val("");
 	   $("#store_name_tradetype").val("");
-       $('#store_name-search_tradetype').children().remove();
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
         	$("#city_id_tradetype").val("");
@@ -386,11 +497,47 @@
             });
         }
     });
+  
+  $('#city_name').keyup(function(event){//门店交易额统计
+	  cityNameArray=new Array();
+	   $("#auto_city_member").empty();
+        var str_name = $(this).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        	$("#city_id").val("");
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id = null;
+            if(target==1){
+            	city_id = cityId;
+            	
+            }
+            doManager('dynamicManager','selectAllCity',null,function(data){
+                if(data.result){
+                	
+                	lst_select_city = JSON.parse(data.data);
+                	 for(i=0;i<lst_select_city.length;i++){
+                		 cityNameArray.push(lst_select_city[i].cityname);
+                     	 cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
+       			  	 }
+       			  	var autoComplete = new AutoComplete("city_name","auto_city_member",cityNameArray);
+       			    autoComplete.start(event);
+                }else{
+                	
+                }
+            });
+        }
+    });
 
 	  $('#auto_city').on("click",function(){
 		  var temp_city = document.getElementById("city_name_tradetype").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 		  $("#city_id_tradetype").val(cityIdMap[temp_city]);
 	  }); 
+	  
+	  $('#auto_city_member').on("click",function(){
+		  var temp_city = document.getElementById("city_name").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+		  $("#city_id").val(cityIdMap[temp_city]);
+	  });
      
      
      
@@ -405,7 +552,6 @@
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
         	$("#store_id_tradetype").val("");
-            $('#store_name-search_tradetype').children().remove();
             if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                 return;
             }
@@ -447,12 +593,134 @@
     
  
     <!-------------------------------------------------------点击查询----------------------------------------------------------------->  
-   
+   	//门店分页查询
     var isCreatePage1=false;
     function searchInfo_tradetype_step1(cur_page){
     	isCreatePage1=false;
   		searchInfo_tradetype_step2(cur_page);
   	}
+    //城市分页查询
+    var isCityCreatePage1=false;
+    function searchInfo_step1(cur_page){
+    	isCityCreatePage1=false;
+    	searchInfo_step2(cur_page);
+  	}
+    
+    function searchInfo_step2(cur_page){
+    	//注册时间
+	    var sdate = $("#first_date").val();
+	    var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		begin_end_date = sdate.split("-");
+	   	}
+    	$("#process_div").show();
+   	 	$("#process_div_pic").show();
+   	 	
+ 	   var dynamicDto=null;
+ 	   if(target==0){//总部
+ 		  var cityId = $("#city_id").val();
+ 		  var cityName = $("#city_name").val();
+ 		  if(cityId==""&&cityName!=""){
+ 			 cityId="-10000";
+ 		  }
+ 		  dynamicDto = {
+ 	  				beginDate:begin_end_date[0].trim(),
+ 	  				endDate:begin_end_date[1].trim(),
+ 	  				cityId:cityId,
+ 	  		  		employeeId:employeeId,
+ 	  		  		target:target,
+ 	  		  		searchstr:"city"
+ 	  			}
+ 	   }else if(target==1){//城市
+	    	 dynamicDto = {
+	    		beginDate:begin_end_date[0].trim(),
+	 	  		endDate:begin_end_date[1].trim(),
+  				cityId:initCity,
+  		  		employeeId:employeeId,
+  		  		target:target,
+  		  		searchstr:"city"
+  			}
+	    }
+ 	    var pageInfo = new Object();
+ 	    pageInfo.currentPage = cur_page;
+	    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
+           if(data.result){
+           	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   $("#tradeType_tbody_city").find("tr:gt(0)").remove(); 
+	        	   var jData = result.member;
+	        	   if(jData==null||jData.length==0){
+	        		   crm_alert(5,"没有符合条件的数据！");
+	        		   $("#page_city").createPage({
+	        	 	  	    pageCount:0,
+	        	 	  	    current:0,
+	        	 	  	    backFn:function(p){
+	        	 	  	    	
+	        	 	  	    }
+	        	 	  	});
+	        		   $("#process_div").hide();
+	        	       $("#process_div_pic").hide();
+	        		   return;
+	        	   }
+	        	   totalPage_tradetype = result.total_pages;
+	        	  
+	        	   if(!isCreatePage1){
+	        		   $("#page_city").createPage({
+	   	       	  	    pageCount:totalPage_tradetype,
+	   	       	  	    current:cur_page,
+	   	       	  	    backFn:function(p){
+	   	       	  			searchInfo_step2(p,begin_end_date);
+	   	       	  	    }
+	   	       	  	  });
+	        		   isCreatePage1=true;
+	        	   }
+	        	   
+	        	   var infoStr="";
+	        	   for(var i=0;i<jData.length;i++){
+	        		   var cityname = jData[i].city_name;
+	        		   if(cityname == '无'){
+	        			   cityname = $("#city_name").val() == "" ? cityname : $("#city_name").val();
+	        		   }
+	        		   
+	        		   infoStr= "<tr>"
+		                       +"<td>"+cityname+"</td>"
+		                       +"<td>"+jData[i].nowcount+"</td>"
+		                       +"<td>"+jData[i].count199+"</td>"
+		                       +"<td>"+jData[i].opencount+"</td>"
+		                       +"</tr>";
+		                       /* <a href=""></a> */
+		                       
+		                  $("#tradeType_tbody_city").append(infoStr);     
+	        	   }
+	           }else if(result.status=='storefail'){
+	        	   $("#tradeType_tbody_city").find("tr:gt(0)").remove(); 
+	           	   crm_alert(5,JSON.parse(result.data).message);
+		           	$("#page_city").createPage({
+		   	 	  	    pageCount:0,
+		   	 	  	    current:0,
+		   	 	  	    backFn:function(p){
+		   	 	  	    	
+		   	 	  	    }
+		   	 	  	});
+	        	   $("#process_div").hide();
+	    	       $("#process_div_pic").hide();
+	        	   return;
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }
+           
+           }else{
+        	   crm_alert(5,"请稍后重新请求！");
+           }
+          $("#process_div").hide();
+     	  $("#process_div_pic").hide();
+       }); 
+    }
+    
+    
     
     
     
@@ -488,7 +756,8 @@
  	  				cityId:cityId,
  	  		  		employeeId:employeeId,
  	  		  		target:target,
- 	  		  		storeId:number_str
+ 	  		  		storeId:number_str,
+ 	  		  		searchstr:"store"
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -498,7 +767,8 @@
   				cityId:initCity,
   		  		employeeId:employeeId,
   		  		target:target,
-  		  		storeId:number_str
+  		  		storeId:number_str,
+  		  		searchstr:"store"
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -507,7 +777,8 @@
   				storeNumer:number_str,
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
-  		  		target:target
+  		  		target:target,
+  		  		searchstr:"store"
   			}
 	    }else if(target==3){//事业部
 	    	dynamicDto = {
@@ -516,7 +787,8 @@
 	  				storeNumer:number_str,
 	  		  		employeeNo:employeeId,
 	  		  		storeId:number_str,
-	  		  		target:target
+	  		  		target:target,
+	  		  		searchstr:"store"
 	  			}
 	    }
  	    var pageInfo = new Object();
@@ -632,7 +904,8 @@
  	  				cityId:cityId,
  	  		  		employeeId:employeeId,
  	  		  		target:target,
- 	  		  		storeId:number_str
+ 	  		  		storeId:number_str,
+ 	  		  		searchstr:"store"
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -642,7 +915,8 @@
   				cityId:initCity,
   		  		employeeId:employeeId,
   		  		target:target,
-  		  		storeId:number_str
+  		  		storeId:number_str,
+  		  		searchstr:"store"
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -651,9 +925,72 @@
   				storeNumer:number_str,
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
-  		  		target:target
+  		  		target:target,
+  		  		searchstr:"store"
   			}
 	    }
+	   
+	    doManager('dynamicManager','exportUserMemberInfo',[dynamicDto],function(data){
+          if(data.result){
+          	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   window.location.href=result.data;
+	           }else if(result.status=='null'){
+	        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	           }
+          
+          }else{
+       	   crm_alert(5,"请稍后重新请求！");
+          }
+         $("#process_div").hide();
+    	 $("#process_div_pic").hide();
+      }); 
+    }
+    
+    
+    
+  //导出城市
+    function export_city(){
+    	//注册时间
+	    var sdate = $("#first_date").val();
+	    var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		begin_end_date = sdate.split("-");
+	   	}
+    	$("#process_div").show();
+  	 	$("#process_div_pic").show();
+  	 	var dynamicDto=null;
+  	   if(target==0){//总部
+  		  var cityId = $("#city_id").val();
+  		  var cityName = $("#city_name").val();
+  		  if(cityId==""&&cityName!=""){
+  			 cityId="-10000";
+  		  }
+  		  dynamicDto = {
+  	  				beginDate:begin_end_date[0].trim(),
+  	  				endDate:begin_end_date[1].trim(),
+  	  				cityId:cityId,
+  	  		  		employeeId:employeeId,
+  	  		  		target:target,
+  	  		  		searchstr:"city"
+  	  			}
+  	   }else if(target==1){//城市
+ 	    	 dynamicDto = {
+ 	    		beginDate:begin_end_date[0].trim(),
+ 	 	  		endDate:begin_end_date[1].trim(),
+   				cityId:initCity,
+   		  		employeeId:employeeId,
+   		  		target:target,
+   		  		searchstr:"city"
+   			}
+ 	    }
 	   
 	    doManager('dynamicManager','exportUserMemberInfo',[dynamicDto],function(data){
           if(data.result){
@@ -684,17 +1021,14 @@ function resetSerachParam(){
 	if(target==0){//总部
   		$("#store_id_tradetype").val("");
   		$("#store_name_tradetype").val("");
-    	$("#store_name-search_tradetype").empty();
 		
     	$("#city_id_tradetype").val("");
-		$("#city_name-search_tradetype").empty();
 		$("#city_name_tradetype").val("");
     
   	  }else if(target==1){//城市级别
     	
   		$("#store_id_tradetype").val("");
   		$("#store_name_tradetype").val("");
-    	$("#store_name-search_tradetype").empty();
   		  
   	  }else if(target==2){//店长
   		
@@ -709,7 +1043,7 @@ function resetSerachParam(){
 	$("#data_choice").html("默认时期");
 
 }
-   
+
 </script>
 
 </body>

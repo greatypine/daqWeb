@@ -6614,7 +6614,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
 				dynamicDto.setStoreNo(String.valueOf(store.getStoreno()));
 			}
-			result= dynamicDao.getStoreMember(dynamicDto,cityNo, pageInfo);
+			if(dynamicDto.getSearchstr().equals("city")){
+				result= dynamicDao.getCityMember(dynamicDto,cityNo, pageInfo);
+			}else if(dynamicDto.getSearchstr().equals("store")){
+				result= dynamicDao.getStoreMember(dynamicDto,cityNo, pageInfo);
+			}
+			
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -6645,28 +6650,44 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 			setCellStyle_common(wb);
 			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("门店会员");
-			HSSFRow row = sheet.createRow(0);
-			String[] str_headers = {"城市","门店名称","门店编号","新增社员数","199新增开卡数","累计社员总数"};
-			String[] headers_key = {"city_name","name","storeno","nowcount","count199","opencount"};
-//			String[] str_headers = {"城市","新增社员数","累计社员总数"};
-//			String[] headers_key = {"city_name","nowcount","opencount"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+			File file_xls = null;
+			if(dynamicDto.getSearchstr().equals("city")){
+				HSSFSheet sheet = wb.createSheet("城市会员");
+				HSSFRow row = sheet.createRow(0);
+				String[] str_headers = {"城市","新增社员数","199新增开卡数","累计社员总数"};
+				String[] headers_key = {"city_name","nowcount","count199","opencount"};
+				for(int i = 0;i < str_headers.length;i++){
+					HSSFCell cell = row.createCell(i);
+					cell.setCellStyle(getHeaderStyle());
+					cell.setCellValue(new HSSFRichTextString(str_headers[i]));
 				}
+
+				for(int i = 0;i < list.size();i++){
+					row = sheet.createRow(i+1);
+					for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+					}
+				}
+				file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_citymember.xls");
+			}else if(dynamicDto.getSearchstr().equals("store")){
+				HSSFSheet sheet = wb.createSheet("门店会员");
+				HSSFRow row = sheet.createRow(0);
+				String[] str_headers = {"城市","门店名称","门店编号","新增社员数","199新增开卡数","累计社员总数"};
+				String[] headers_key = {"city_name","name","storeno","nowcount","count199","opencount"};
+				for(int i = 0;i < str_headers.length;i++){
+					HSSFCell cell = row.createCell(i);
+					cell.setCellStyle(getHeaderStyle());
+					cell.setCellValue(new HSSFRichTextString(str_headers[i]));
+				}
+
+				for(int i = 0;i < list.size();i++){
+					row = sheet.createRow(i+1);
+					for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+					}
+				}
+				file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_storemember.xls");
 			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_storemember.xls");
 			if(file_xls.exists()){
 				file_xls.delete();
 			}

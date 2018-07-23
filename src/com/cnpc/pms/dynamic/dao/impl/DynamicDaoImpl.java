@@ -3075,6 +3075,61 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		map_result.put("member", list);
 		return map_result;
 	}
+	
+	
+	@Override
+	public Map<String, Object> getCityMember(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo) {
+		List<?> list=null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		
+		String sql= "";
+		if(cityNo == null || "".equals(cityNo) ){
+			sql="select ifnull(city.cityname,'无') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
+					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member GROUP BY  member.regist_cityno "
+					+") t1 LEFT JOIN ( "
+					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where "
+					+"member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
+					+"ON (t1.regist_cityno = t2.regist_cityno) LEFT JOIN ( "
+					+"select count(member.customer_id) as 199count,member.regist_cityno from df_user_member member where member.member_type = 'associator_start_2' and "
+					+"member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t3 "
+					+"ON (t1.regist_cityno = t3.regist_cityno) LEFT JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
+		}else{
+			sql="select ifnull(city.cityname,'无') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
+					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'  GROUP BY  member.regist_cityno "
+					+") t1 LEFT JOIN ( "
+					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'"
+					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
+					+"ON (t1.regist_cityno = t2.regist_cityno) LEFT JOIN ( "
+					+"select count(member.customer_id) as 199count,member.regist_cityno from df_user_member member where member.member_type = 'associator_start_2' and lpad(member.regist_cityno,4,'0') = '"+cityNo+"'"
+					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t3 "
+					+"ON (t1.regist_cityno = t3.regist_cityno) LEFT JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
+		}
+		
+		Query query = this.getHibernateTemplate().getSessionFactory()
+				.getCurrentSession().createSQLQuery(sql);
+		
+		if(pageInfo!=null){
+			String sql_count = "SELECT count(1) from ("+sql+") c ";
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+			
+			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(
+						pageInfo.getRecordsPerPage()
+								* (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+			
+			
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}else{
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}
+		map_result.put("member", list);
+		return map_result;
+	}
 
 	@Override
 	public List<Map<String, Object>> queryDistCityListByUserId(long userId) {
