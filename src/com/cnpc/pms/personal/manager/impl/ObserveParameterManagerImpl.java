@@ -57,22 +57,26 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 						Long id = observeParameter.getId();
 						String storeno = observeParameter.getStoreno();
 						String store_id = observeParameter.getStore_id();
+						String city_name = observeParameter.getCity_name();
 						if(observeParameter.getType().equals("1")){
 							param1.setId(id);
 							param1.setStoreno(storeno);
 							param1.setStore_id(store_id);
+							param1.setCity_name(city_name);
 							BeanUtils.copyProperties(param1, observeParameter,
 									new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
 						}else if(observeParameter.getType().equals("0")){
 							param2.setId(id);
 							param2.setStoreno(storeno);
 							param2.setStore_id(store_id);
+							param2.setCity_name(city_name);
 							BeanUtils.copyProperties(param2, observeParameter,
 									new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
 						}else if(observeParameter.getType().equals("2")){
 							param3.setId(id);
 							param3.setStoreno(storeno);
 							param3.setStore_id(store_id);
+							param3.setCity_name(city_name);
 							BeanUtils.copyProperties(param3, observeParameter,
 									new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
 						}
