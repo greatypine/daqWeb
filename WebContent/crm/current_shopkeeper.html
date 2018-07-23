@@ -186,6 +186,7 @@
                                         <dd><a href="javascript:goToNewAddCustomerGMVToSend()"><span class="fa fa-bar-chart"></span>国安侠用户</a></dd>
                                         <dd><a href="javascript:goToSendOrders()"><span class="fa fa-calendar-check-o"></span>国安侠送单量</a></dd>
                                         <dd><a href="javascript:goToRewardtimes()"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>
+                                        <dd><a href="javascript:goToInvitationMember()"><span class="fa fa-thumbs-o-up"></span>社员开卡统计</a></dd>
                                     </dl>
                                     <dl class="col-sm-3">
                                         <dt><i></i>档案数据</dt>
@@ -1444,7 +1445,7 @@ function initStoreHistoryGMV(){
 	   $("#TULI").show();
 	}
 	
-<!--------------------------------------------------------地图------------------------------------------------>	
+<!--------------------------------------------------------地图------------------------------------------------>
 	
 	
 	//事业部gmv排名
@@ -1772,7 +1773,12 @@ function initStoreHistoryGMV(){
 		  var url = "dynamicData_newaddcus_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
 		  window.open(url,"dynamicData_newaddcus_analysis");
 	}
-	
+    //社员开卡
+	function goToInvitationMember(){
+        var url = "dynamicData_member_invitation.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
+        window.open(url,"dynamicData_member_invitation");
+    }
+
 	/**
 	   * 国安侠内拉新GMV
 	   */
@@ -2902,8 +2908,12 @@ function initStoreHistoryGMV(){
   function newEmployeeInfoHtml(t){
 	  var employeeNo =   $(t).attr("id").split("_")[1];
 	  var URL="employeeInfo.html?"+"employee_no="+encode64(employeeNo)+"&flag=0"+"&#tab_1";
-	  //var URL="employee.html?"+"employee_no="+encode64(employeeNo)+"&source="+decode64(0);
-	  window.open(URL); 
+
+	  window.open(URL);
+
+      /*var employeeNo =   $(t).attr("id").split("_")[1];
+      var URL="employee.html?"+"employee_no="+encode64(employeeNo)+"&source="+decode64(0);
+      window.open(URL);*/
   }
   
   function lightPloygon(area_no){

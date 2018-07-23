@@ -144,28 +144,24 @@
                             <label>查询时间</label>
                            
                             <!-- /.input group -->
-                            <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
-                                <option value="prev_month" >上月</option>
-                                <option value="cur_month" selected>本月（截止到昨天24点）</option>
-                            </select>
+                            <input type="text" class="form-control" id="be_date1" name="be_date1" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
                         </div>
-<!--                         <div class="form-group col-lg-4"> -->
-<!--                             <label>城市</label> -->
-<!-- 							 <input id="city_id_customer" name="city_id_customer" type="hidden" value=""/> -->
-<!-- 							  <input type="text" class="form-control"  placeholder="城市" id="city_name_customer" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/> -->
-<!-- 				              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;"> -->
-<!-- 				              /.input group -->
-<!-- 				              </div> -->
-<!--                             /.input group -->
-<!--                         </div> -->
-<!--                         <div class="form-group col-lg-4"> -->
-<!--                             <label>门店</label> -->
-<!-- 							  <input id="store_id_customer" name="store_id_customer" type="hidden" value=""/> -->
-<!-- 							  <input type="text" class="form-control"  placeholder="门店" id="store_name_customer" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/> -->
-<!-- 				              <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;"> -->
-<!-- 				              </div> -->
-<!--                             /.input group -->
-<!--                         </div> -->
+                         <div class="form-group col-lg-4">
+                             <label>城市</label>
+ 							 <input id="city_id_customer" name="city_id_customer" type="hidden" value=""/>
+ 							  <input type="text" class="form-control"  placeholder="城市" id="city_name_customer" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+ 				              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
+
+ 				              </div>
+
+                         </div>
+                         <div class="form-group col-lg-4">
+                             <label>门店</label>
+ 							  <input id="store_id_customer" name="store_id_customer" type="hidden" value=""/>
+ 							  <input type="text" class="form-control"  placeholder="门店" id="store_name_customer" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
+ 				              <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
+ 				              </div>
+                         </div>
                         <div class="form-group col-lg-4">
                             <label>员工姓名</label>
                             <input id="employee_name" name="employee_name" type="text" class="form-control" bidTableFlag="true" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" value=""/>
@@ -199,7 +195,7 @@
 <!--                                             <th width="10%">门店编码</th> -->
                                             <th width="10%">员工姓名</th>
                                             <th width="10%">员工编号</th>
-                                            <th width="10%">手机号</th>
+                                            <!--<th width="10%">手机号</th>-->
                                             <th width="10%">邀请码</th>
                                             <th width="10%">邀请人数</th>
                                         </tr>
@@ -219,6 +215,7 @@
 <!-- ./wrapper -->
 <!-- jQuery 2.2.0 -->
 <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<script type="text/javascript" src="laydate/laydate.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
@@ -244,6 +241,19 @@
         extend: 'skin/crmskin/style.css' //加载新皮肤
 
     });
+
+    var cur_date = new Date();
+    var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
+    laydate.render({//月份控件
+        elem:'#be_date1',
+        value:new Date(),
+        type:"month",
+        btns: ['now', 'confirm'],
+        theme: '#11214e',
+        min: '2018-1-1',
+        max:year_month
+
+    });
     var cityId = decode64(getUrlParamByKey("c"));//城市ID
     var cityName = decode64(getUrlParamByKey("cn"));//城市名称
     var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
@@ -254,17 +264,17 @@
     var role = decode64(getUrlParamByKey("r"));
     var initCity = cityId;
     $(function () {
-// 		if(target==0){//总部
+		if(target==0){//总部
 			
-// 		}else if(target==1){//城市
-// 			$("#city_name_customer").val(cityName);
-// 			$("#city_name_customer").attr("readonly",true);
-// 		}else if(target==2){//店长
-// 			$("#city_name_customer").val(cityName);
-// 			$("#city_name_customer").attr("readonly",true);
-//             $("#store_name_customer").val(storeName);
-//             $("#store_name_customer").attr("readonly",true);
-//         }
+		}else if(target==1){//城市
+			$("#city_name_customer").val(cityName);
+			$("#city_name_customer").attr("readonly",true);
+		}else if(target==2){//店长
+			$("#city_name_customer").val(cityName);
+			$("#city_name_customer").attr("readonly",true);
+            $("#store_name_customer").val(storeName);
+            $("#store_name_customer").attr("readonly",true);
+        }
         /* if(target==1){
             $("#store_name_customer").attr("readonly",true);
         } */
@@ -385,9 +395,9 @@
      		 return;
      	}
 
-        if(begin_end_date=="prev_month"||begin_end_date=="cur_month"){
+
         	 search_customer1(cur_page,begin_end_date);
-        }
+
     }
 
     //查询上
@@ -397,48 +407,48 @@
        
         $("#process_div").show();
         $("#process_div_pic").show();
-//         var number_str = $("#store_id_customer").val();
-//         var storeName = $("#store_name_customer").val();
-//         if(number_str==""&&storeName!=""){
-//             number_str=-10000;
-//         }
+        var number_str = $("#store_id_customer").val();
+        var storeName = $("#store_name_customer").val();
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
         var dynamicDto=null;
         var employeeNo=$("#employee_no").val();
         var employeeName = $("#employee_name").val();
         if(target==0){
-//         	  var cityId = $("#city_id_customer").val();
-//         	  var cityName = $("#city_name_customer").val();
-//         	  if(cityId==""&&cityName!=""){
-//         		  cityId="-10000";
-//         	  }
+        	  var cityId = $("#city_id_customer").val();
+        	  var cityName = $("#city_name_customer").val();
+        	  if(cityId==""&&cityName!=""){
+        		  cityId="-10000";
+        	  }
         	  dynamicDto = {
                       beginDate:begin_end_date,
-//                       storeNumer:number_str,
-//                       cityId:cityId,
-//                       employeeId:employeeId,
-//                       storeId:number_str,
-//                       target:target,
+                      storeNumer:number_str,
+                      cityId:cityId,
+                      employeeId:employeeId,
+                      storeId:number_str,
+                      target:target,
                       employeeNo:employeeNo,
                       employeeName:employeeName
                   }
         }else  if(target==1){
             dynamicDto = {
                 beginDate:begin_end_date,
-//                 storeNumer:number_str,
-//                 cityId:initCity,
-//                 employeeId:employeeId,
-//                 storeId:number_str,
-//                 target:target,
+                storeNumer:number_str,
+                cityId:initCity,
+                employeeId:employeeId,
+                storeId:number_str,
+                target:target,
                 employeeNo:employeeNo,
                 employeeName:employeeName
             }
         }else if(target==2){
             dynamicDto = {
                 beginDate:begin_end_date,
-//                 storeNumer:number_str,
-//                 employeeNo:employeeId,
-//                 storeId:storeId,
-//                 target:target,
+                storeNumer:number_str,
+                employeeNo:employeeId,
+                storeId:storeId,
+                target:target,
                 employeeNo:employeeNo,
                 employeeName:employeeName
             }
@@ -479,12 +489,12 @@
                  
                     var infoStr="";
                     for(var i=0;i<jData.length;i++){
-                        var index = (i+1)*cur_page;
+                        var index = (cur_page-1)*10+i+1;
                     	infoStr= "<tr>"
                         	+"<td>"+index+"</td>"
                             +"<td>"+jData[i].name+"</td>"
-                            +"<td>"+jData[i].employee_no+"</td>"
-                            +"<td>"+jData[i].mobilephone+"</td>"
+                            +"<td>"+(jData[i].employee_no==null?"":jData[i].employee_no)+"</td>"
+                            /*+"<td>"+jData[i].mobilephone+"</td>"*/
                             +"<td>"+jData[i].inviteCode+"</td>"
                             +"<td>"+jData[i].total+"</td>"
                             +"</tr>";
@@ -513,7 +523,7 @@
 
     }
 
-    //导出 片区GMV
+    //导出
     function   export_AreaGMV(){
         var begin_end_date = $("#be_date1").val();
         if(begin_end_date==""){
@@ -524,50 +534,50 @@
         $("#process_div").show();
         $("#process_div_pic").show();
 
-//         var number_str = $("#store_id_customer").val();
-//         var storeName = $("#store_name_customer").val();
-//         if(number_str==""&&storeName!=""){
-//             number_str=-10000;
-//         }
+        var number_str = $("#store_id_customer").val();
+        var storeName = $("#store_name_customer").val();
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
         var dynamicDto=null;
         var employeeNo=$("#employee_no").val();
         var employeeName = $("#employee_name").val();
         if(target==0){
-//       	  var cityId = $("#city_id_customer").val();
-//       	  var cityName = $("#city_name_customer").val();
-// 	  	  if(cityId==""&&cityName!=""){
-// 	  		  cityId="-10000";
-// 	  	  }
+      	  var cityId = $("#city_id_customer").val();
+      	  var cityName = $("#city_name_customer").val();
+	  	  if(cityId==""&&cityName!=""){
+	  		  cityId="-10000";
+	  	  }
       	  dynamicDto = {
                     beginDate:begin_end_date,
-//                     storeNumer:number_str,
-//                     cityId:cityId,
-//                     employeeId:employeeId,
-//                     storeId:number_str,
-//                     target:target,
+                    storeNumer:number_str,
+                    cityId:cityId,
+                    employeeId:employeeId,
+                    storeId:number_str,
+                    target:target,
                     employeeNo:employeeNo,
                     employeeName:employeeName
                 }
       }else if(target==1){
             dynamicDto = {
                 beginDate:begin_end_date,
-//                 storeNumer:number_str,
-//                 interfaceType:'customerPortrait',
-//                 cityId:initCity,
-//                 employeeId:employeeId,
-//                 storeId:number_str,
-//                 target:target,
+                storeNumer:number_str,
+                interfaceType:'customerPortrait',
+                cityId:initCity,
+                employeeId:employeeId,
+                storeId:number_str,
+                target:target,
                 employeeNo:employeeNo,
                 employeeName:employeeName
             }
         }else if(target==2){
             dynamicDto = {
                 beginDate:begin_end_date,
-//                 storeNumer:number_str,
-//                 interfaceType:'customerPortrait',
-//                 employeeNo:employeeId,
-//                 storeId:storeId,
-//                 target:target,
+                storeNumer:number_str,
+                interfaceType:'customerPortrait',
+                employeeNo:employeeId,
+                storeId:storeId,
+                target:target,
                 employeeNo:employeeNo,
                 employeeName:employeeName
             }
@@ -600,7 +610,27 @@
 
     
     function resetSerachParam(){
-    	
+
+        $("#auto_store").empty();
+        if(target==0){//总部
+            $("#store_id_customer").val("");
+            $("#store_name_customer").val("");
+
+
+            $("#city_id_customer").val("");
+            $("#city_name-search_customer").empty();
+            $("#city_name_customer").val("");
+
+        }else if(target==1){//城市级别
+
+            $("#store_id_customer").val("");
+            $("#store_name_customer").val("");
+
+
+        }else if(target==2){//店长
+
+        }
+
     	$("#employee_no").val("");
     	$("#employee_name").val("");
     }

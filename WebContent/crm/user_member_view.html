@@ -156,7 +156,7 @@
       <!-- Main content -->
 
       <section class="content-header">
-        <div class="nav-tabs-custom no-margin">
+        <div class="nav-tabs-custom">
         <div class="pull-right text-red" style="padding-left:15px;font-size:75%">统计数据每10分钟更新一次</div>
           <ul class="nav nav-tabs">
 		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
@@ -204,15 +204,15 @@
 	              <label>城市</label>
 				  <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-	              <div class="auto hidden" id="auto_city" style="width:85%;z-index: 99999;">
+	              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
 	              <!-- /.input group -->
 	              </div>
 	            </div>
 	            <div class="form-group col-lg-4">
 	              <label>门店</label>
 				  <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
-				  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%"/>
-	              <div class="auto hidden" id="auto_store" style="width:85%;z-index: 99999;">
+				  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
+	              <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
 	              </div>
 	              <!-- /.input group -->
 	            </div>
@@ -245,7 +245,7 @@
 		                      <th width="12%">
 		                      	新增社员数
 		                      	<font id="showattention" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-	                  			<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">包含畅购卡升级和199开卡</font>		 
+	                  			<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:40px">包含畅购卡升级和199开卡</font>		 
 		                      </th>
 		                      <th width="12%">199新增开卡数</th>
 		                      <th width="12%">累计社员总数</th>
@@ -275,7 +275,7 @@
 							</div>
 							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin: 0px 15px; display: none;">	
 							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
- 							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> 
+<!-- 							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> -->
 							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name="">
 							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name="">
 							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name="">
@@ -286,7 +286,7 @@
 							    <div class="ui-datepicker-choose">
 							        <!--<p>自选日期</p>-->
 							        <div class="ui-datepicker-date">
-								            <input name="startDateFirst" id="startDateFirst" class="startDate" readonly="" value="2018/07/01" type="text">
+								            自定<input name="startDateFirst" id="startDateFirst" class="startDate" readonly="" value="2018/07/01" type="text">
 								           到
 							            <input name="endDateFirst" id="endDateFirst" class="endDate" readonly="" value="2018/07/23" type="text">
 							        </div>
@@ -302,7 +302,7 @@
 	              <label>城市</label>
 				  <input id="city_id" name="city_id_tradetype" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="城市" id="city_name" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-	              <div class="auto hidden" id="auto_city_member" style="width:85%;z-index: 99999;">
+	              <div class="auto hidden" id="auto_city_member" style="width:82%;z-index: 99999;">
 	              <!-- /.input group -->
 	              </div>
 	            </div>
@@ -330,7 +330,7 @@
 		                      <th width="12%">
 		                      	新增社员数
 		                      	<font id="showattentioncity" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-	                  			<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:125px">包含畅购卡升级和199开卡</font>		 
+	                  			<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:40px">包含畅购卡升级和199开卡</font>		 
 		                      </th>
 		                      <th width="12%">199新增开卡数</th>
 		                      <th width="12%">累计社员总数</th>
@@ -607,8 +607,6 @@
     	searchInfo_step2(cur_page);
   	}
     
-    var currentPage_city = 1;
-    var totalPage_city = 1; 
     function searchInfo_step2(cur_page){
     	//注册时间
 	    var sdate = $("#first_date").val();
@@ -665,17 +663,17 @@
 	        	       $("#process_div_pic").hide();
 	        		   return;
 	        	   }
-	        	   totalPage_city = result.total_pages;
+	        	   totalPage_tradetype = result.total_pages;
 	        	  
-	        	   if(!isCityCreatePage1){
+	        	   if(!isCreatePage1){
 	        		   $("#page_city").createPage({
-	   	       	  	    pageCount:totalPage_city,
+	   	       	  	    pageCount:totalPage_tradetype,
 	   	       	  	    current:cur_page,
 	   	       	  	    backFn:function(p){
 	   	       	  			searchInfo_step2(p,begin_end_date);
 	   	       	  	    }
 	   	       	  	  });
-	        		   isCityCreatePage1=true;
+	        		   isCreatePage1=true;
 	        	   }
 	        	   
 	        	   var infoStr="";
@@ -1022,13 +1020,11 @@
 function resetSerachParam(){
 	 $("#auto_store").empty();
 	if(target==0){//总部
-		if(fromBar != "1" && fromBar != "2"){
-			$("#city_id_tradetype").val("");
-			$("#city_name_tradetype").val("");
-		}
-		$("#store_id_tradetype").val("");
+  		$("#store_id_tradetype").val("");
   		$("#store_name_tradetype").val("");
-    	
+		
+    	$("#city_id_tradetype").val("");
+		$("#city_name_tradetype").val("");
     
   	  }else if(target==1){//城市级别
     	
@@ -1043,7 +1039,7 @@ function resetSerachParam(){
     var date = nowDate.getDate();
     timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
     nowDate.setDate(nowDate.getDate()+parseInt(-1));
-    var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01'; 
+    var startDateStr = nowDate.getFullYear() + '/' + "01" + '/01'; 
 	$("#searchTime").val(startDateStr +"-"+ timeStr);
 	$("#data_choice").html("默认时期");
 

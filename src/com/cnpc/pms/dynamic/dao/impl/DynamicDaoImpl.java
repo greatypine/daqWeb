@@ -3150,41 +3150,50 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 	@Override
 	public Map<String, Object> queryMemberInvitation(DynamicDto dynamicDto, PageInfo pageInfo) {
-		String sql=" select a.inviteCode,a.total,b.employee_no,CONCAT('*******',SUBSTR(b.mobilephone,8,11)) as mobilephone,b.name from "
-				   +" (select inviteCode,COUNT(1) as total from df_user_member where opencard_time>='"+dynamicDto.getBeginDate()+"' and opencard_time<'"+dynamicDto.getEndDate()+"' GROUP BY inviteCode) a" 
-				   +" INNER JOIN" 
-				   +" (select name,phone as mobilephone,employee_no,inviteCode from t_humanresources where humanstatus=1 and phone is not null and phone!='' and cardnumber is not null and cardnumber!='' and inviteCode is not null and inviteCode!=''" 
-				   +" UNION" 
-				   +" select name,phone as mobilephone,employee_no,inviteCode from t_online_humanresources where phone is not null and phone!='' and cardnumber is not null and cardnumber!='' and inviteCode is not null and inviteCode!=''" 
-				   +" UNION" 
-				   +" select name,phone as mobilephone,employee_no,inviteCode from t_storekeeper where humanstatus=1 and phone is not null and phone!='' and cardnumber is not null and cardnumber!='' and inviteCode is not null and inviteCode!='') b" 
-				   +" on a.inviteCode = b.inviteCode where a.inviteCode is not null ";
+		String whereStoreId="";
+		String  whereOnline="";
+
+		if((dynamicDto.getTarget()==0||dynamicDto.getTarget()==1)&&"N".equals(dynamicDto.getStoreNumer())&&!"-10000".equals(dynamicDto.getStoreNo())){
+			whereOnline = " UNION select name,phone as mobilephone,employee_no,inviteCode from t_online_humanresources t where t.phone is not null and t.phone!='' and t.cardnumber is not null and t.cardnumber!='' and t.inviteCode is not null and t.inviteCode!=''";
+		}
+		if(dynamicDto.getStoreNo()!=null){
+			whereStoreId = "and t.store_id in ("+dynamicDto.getStoreNo()+")";
+		}
+		String sql=" select IFNULL(b.inviteCode,'暂无') as inviteCode,ifnull(a.total,0) as total,b.employee_no,CONCAT('*******',SUBSTR(b.mobilephone,8,11)) as mobilephone,b.name from "
+				+" (select inviteCode,COUNT(1) as total from df_user_member where  customer_id not in (select customer_id from df_member_whitelist) and DATE_FORMAT(opencard_time,'%Y-%m')='"+dynamicDto.getBeginDate()+"' GROUP BY inviteCode) a"
+				+" RIGHT JOIN"
+				+" (select name,phone as mobilephone,employee_no,inviteCode from t_humanresources t where t.humanstatus=1 and t.phone is not null and t.phone!='' and t.cardnumber is not null and t.cardnumber!='' and t.inviteCode is not null and t.inviteCode!='' "+whereStoreId
+
+				+" UNION"
+				+" select name,phone as mobilephone,employee_no,inviteCode from t_storekeeper tst  inner join (select tbu.employeeId from t_store  t INNER JOIN tb_bizbase_user tbu  on t.skid = tbu.id  where t.skid is not null  "+whereStoreId+") c on tst.employee_no = c.employeeId where tst.humanstatus=1 and tst.phone is not null and tst.phone!='' and tst.cardnumber is not null and tst.cardnumber!='' and tst.inviteCode is not null and tst.inviteCode!=''"
+				+ whereOnline+" ) b"
+				+" on a.inviteCode = b.inviteCode  where 1=1 ";
 		if(dynamicDto.getEmployeeName()!=null&&!"".equals(dynamicDto.getEmployeeName())){
 			sql =sql+" and b.name like '%"+dynamicDto.getEmployeeName()+"%'";
 		}
-		
+
 		if(dynamicDto.getEmployeeNo()!=null&&!"".equals(dynamicDto.getEmployeeNo())){
 			sql =sql+" and b.employee_no like '%"+dynamicDto.getEmployeeNo()+"%'";
 		}
-					
+
 		List<?> list=null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-				
-		
+
+
 		if(pageInfo!=null){
 			String sql_count = "SELECT count(1) from ("+sql+") c ";
 			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
-			
+
 			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
 
 			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
-				.setFirstResult(
-						pageInfo.getRecordsPerPage()
-								* (pageInfo.getCurrentPage() - 1))
-				.setMaxResults(pageInfo.getRecordsPerPage()).list();
-			
-			
+					.setFirstResult(
+							pageInfo.getRecordsPerPage()
+									* (pageInfo.getCurrentPage() - 1))
+					.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+
 			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
 			map_result.put("pageinfo", pageInfo);
 			map_result.put("total_pages", total_pages);
