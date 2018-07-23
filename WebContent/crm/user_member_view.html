@@ -204,7 +204,7 @@
 	              <label>城市</label>
 				  <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-	              <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
+	              <div class="auto hidden" id="auto_city" style="width:85%;z-index: 99999;">
 	              <!-- /.input group -->
 	              </div>
 	            </div>
@@ -212,7 +212,7 @@
 	              <label>门店</label>
 				  <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
-	              <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
+	              <div class="auto hidden" id="auto_store" style="width:85%;z-index: 99999;">
 	              </div>
 	              <!-- /.input group -->
 	            </div>
@@ -302,7 +302,7 @@
 	              <label>城市</label>
 				  <input id="city_id" name="city_id_tradetype" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="城市" id="city_name" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-	              <div class="auto hidden" id="auto_city_member" style="width:82%;z-index: 99999;">
+	              <div class="auto hidden" id="auto_city_member" style="width:85%;z-index: 99999;">
 	              <!-- /.input group -->
 	              </div>
 	            </div>
@@ -607,6 +607,8 @@
     	searchInfo_step2(cur_page);
   	}
     
+    var currentPage_city = 1;
+    var totalPage_city = 1; 
     function searchInfo_step2(cur_page){
     	//注册时间
 	    var sdate = $("#first_date").val();
@@ -663,17 +665,17 @@
 	        	       $("#process_div_pic").hide();
 	        		   return;
 	        	   }
-	        	   totalPage_tradetype = result.total_pages;
+	        	   totalPage_city = result.total_pages;
 	        	  
-	        	   if(!isCreatePage1){
+	        	   if(!isCityCreatePage1){
 	        		   $("#page_city").createPage({
-	   	       	  	    pageCount:totalPage_tradetype,
+	   	       	  	    pageCount:totalPage_city,
 	   	       	  	    current:cur_page,
 	   	       	  	    backFn:function(p){
 	   	       	  			searchInfo_step2(p,begin_end_date);
 	   	       	  	    }
 	   	       	  	  });
-	        		   isCreatePage1=true;
+	        		   isCityCreatePage1=true;
 	        	   }
 	        	   
 	        	   var infoStr="";
@@ -1039,7 +1041,7 @@ function resetSerachParam(){
     var date = nowDate.getDate();
     timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
     nowDate.setDate(nowDate.getDate()+parseInt(-1));
-    var startDateStr = nowDate.getFullYear() + '/' + "01" + '/01'; 
+    var startDateStr = nowDate.getFullYear() + '/' + month + '/01'; 
 	$("#searchTime").val(startDateStr +"-"+ timeStr);
 	$("#data_choice").html("默认时期");
 
