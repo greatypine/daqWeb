@@ -805,7 +805,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 					result.put("mCount", cmSexList.get(0).get("mCount"));
 					result.put("fCount", cmSexList.get(0).get("fCount"));
 				} else {
-					result.put("oldCmCount", "0");
+					result.put("mCount", "0");
+					result.put("fCount","0");
 				}
 				// 查询男女比例
 				List<Map<String, Object>> cmAgeList = new ArrayList<Map<String, Object>>();
@@ -1502,6 +1503,25 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		} else {
 			result.put("noEshopSum", "0");
 		}
+		//查询城市当日新增社员数量
+        List<Map<String, Object>> cityDayAddList = new ArrayList<Map<String, Object>>();
+        cityDayAddList = commDao.getDayCityaddMemCount(dd);
+        List cityNames = new ArrayList();
+        List cityAdds = new ArrayList();
+        for(Map<String, Object> addCity : cityDayAddList){
+            if (addCity.get("cityname").toString().contains("黔东南")) {
+                cityNames.add("黔东南洲");
+
+            }else{
+                cityNames.add(addCity.get("cityname"));
+            }
+            cityAdds.add(addCity.get("citycou"));
+        }
+        JSONArray jsonCityNames = (JSONArray) JSONArray.fromObject(cityNames);
+        JSONArray jsonCityAdds = (JSONArray) JSONArray.fromObject(cityAdds);
+        result.put("jsonCityNames", jsonCityNames);
+        result.put("jsonCityAdds", jsonCityAdds);
+		
 		return result;
 	}
 
@@ -1631,7 +1651,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		// TODO Auto-generated method stub
 		/**
 		 * @author wuxinxin
-		 * 2018年7月21日---------------------待开发
+		 * 2018年7月21日
 		 */
 		Map<String, Object> result = new HashMap<String, Object>();
 
@@ -1662,6 +1682,629 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		JSONArray jsonMemOrderSumName = (JSONArray) JSONArray.fromObject(memOrderSumName);
 		result.put("jsonMemOrderSumVal", jsonMemOrderSumVal);
 		result.put("jsonMemOrderSumName", jsonMemOrderSumName);
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectCmVolInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+ 		List dateMemCounts = new ArrayList();
+
+ 		try {
+ 			//生成X轴坐标
+ 			dateMemCounts = reDate(7);
+ 		} catch (ParseException e) {
+ 			e.printStackTrace();
+ 		}
+		//查询7日成交额、订单量
+		List<Map<String, Object>> day7List = commDao.getDay7DealCount(dd);
+		List alldealsums = new ArrayList();
+		List alldealcounts = new ArrayList();	
+		for (int i = 0; i < day7List.size(); i++) {
+				alldealsums.add(Double.valueOf(day7List.get(i).get("alldealsum").toString()).intValue());
+				alldealcounts.add(day7List.get(i).get("alldealcount").toString());
+		}
+
+		JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
+		JSONArray jsonAllDealsums = (JSONArray) JSONArray.fromObject(alldealsums);
+		JSONArray jsonAllDealCounts = (JSONArray) JSONArray.fromObject(alldealcounts);
+		result.put("jsonDateMem", jsonDateMem);
+		result.put("jsonAllDealsums", jsonAllDealsums);
+		result.put("jsonAllDealCounts", jsonAllDealCounts);
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectCmMemberInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		// 查询男女比例
+		List<Map<String, Object>> cmSexList = new ArrayList<Map<String, Object>>();
+		cmSexList = commDao.getCmSexRatios(dd);
+
+		if (cmSexList != null && cmSexList.size() > 0) {
+			result.put("mCount", cmSexList.get(0).get("mCount"));
+			result.put("fCount", cmSexList.get(0).get("fCount"));
+		} else {
+			result.put("mCount", "0");
+			result.put("fCount", "0");
+		}
+		// 查询男女比例
+		List<Map<String, Object>> cmAgeList = new ArrayList<Map<String, Object>>();
+		cmAgeList = commDao.getCmAgeRatios(dd);
+
+		if (cmAgeList != null && cmAgeList.size() > 0) {
+
+			result.put("age60", cmAgeList.get(0).get("age60"));
+			result.put("age70", cmAgeList.get(0).get("age70"));
+			result.put("age80", cmAgeList.get(0).get("age80"));
+			result.put("age90", cmAgeList.get(0).get("age90"));
+			result.put("age00", cmAgeList.get(0).get("age00"));
+			result.put("ageNow", cmAgeList.get(0).get("ageNow"));
+		} else {
+			result.put("age60", "0");
+			result.put("age70", "0");
+			result.put("age80", "0");
+			result.put("age90", "0");
+			result.put("age00", "0");
+			result.put("ageNow", "0");
+		}
+		// 查询社员生日分布
+		List<Map<String, Object>> birList = commDao.getCmBirthday(dd);// getCmBirthday
+		for (int i = 0; i < birList.size(); i++) {
+			result.put("birCount" + (i + 1), birList.get(i).get("birCount").toString());
+		}
+		// 查询社员户籍分布
+		List<Map<String, Object>> areaList = commDao.getMembersArea(dd);// getCmBirthday
+		if (areaList != null&&areaList.size()>0) {
+			result.put("mePro", areaList.get(0).get("mePro").toString());
+			result.put("meCount", areaList.get(1).get("meCount").toString());
+		}
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectCmRegistInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		List cityCounts = new ArrayList();
+		List cityCouCounts = new ArrayList();
+		List cityMonCouCounts = new ArrayList();
+		// 查询本月之前注册城市分布
+		List<Map<String, Object>> cityList = commDao.getCmRegistCity(dd);
+		// 查询当月注册城市分布
+		List<Map<String, Object>> cityMonthList = commDao.getCmRegistMonthCity(dd);
+		if (cityList != null) {
+
+			for (int i = 0; i < cityList.size(); i++) {
+				if (cityList.get(i).get("cityname").toString().contains("黔东南")) {
+					cityCounts.add("黔东南苗族\n侗族自治州 ");
+				} else {
+					cityCounts.add(cityList.get(i).get("cityname").toString());
+				}
+				cityCouCounts.add(Integer.parseInt(cityList.get(i).get("cou").toString()));
+				cityMonCouCounts.add(Integer.parseInt(cityMonthList.get(i).get("cou").toString()));
+			}
+			JSONArray jsonCity = (JSONArray) JSONArray.fromObject(cityCounts);
+			JSONArray jsonCityCou = (JSONArray) JSONArray.fromObject(cityCouCounts);
+			JSONArray jsonCityMonCou = (JSONArray) JSONArray.fromObject(cityMonCouCounts);
+
+			result.put("reCityname", jsonCity);
+			result.put("reCityCou", jsonCityCou);
+			result.put("reCityMonCou", jsonCityMonCou);
+		}
+		
+		// 按城市查询总分布量
+		List<Map<String, Object>> cityAllList = commDao.getAllCmRegistCity(dd);
+		List cityAllCounts = new ArrayList();
+		List cityCountsList = new ArrayList();
+		if (cityAllList != null) {
+
+			for (int i = 0; i < cityAllList.size(); i++) {
+				/*
+				 * if(cityList.get(i).get("cityname").toString().contains("黔东南")) {
+				 * cityAllCounts.add("黔东南"); }else { }
+				 */
+				cityAllCounts.add(cityAllList.get(i).get("cityname").toString());
+				cityCountsList.add(Integer.parseInt(cityAllList.get(i).get("cou").toString()));
+			}
+			JSONArray jsonCityC = (JSONArray) JSONArray.fromObject(cityAllCounts);
+			JSONArray jsonCityAllCou = (JSONArray) JSONArray.fromObject(cityCountsList);
+
+			result.put("jsonCityC", jsonCityC);
+			result.put("jsonCityAllCou", jsonCityAllCou);
+		}
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectRebateInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		// 查询社员粮票剩余前5
+		
+		List<Map<String, Object>> haveRebateList = cmDao.getHaveRebate(dd);
+		List haveRebatePhone = new ArrayList();
+		List haveRebateCou = new ArrayList();
+		if (haveRebateList!=null&&!haveRebateList.isEmpty()) {
+
+			for (int i = 0; i < haveRebateList.size(); i++) {
+				haveRebatePhone.add(haveRebateList.get(i).get("tcphone").toString());
+				haveRebateCou.add(haveRebateList.get(i).get("cou").toString());
+
+			}
+			JSONArray haveRebatePhones = (JSONArray) JSONArray.fromObject(haveRebatePhone);
+			JSONArray haveRebateCous = (JSONArray) JSONArray.fromObject(haveRebateCou);
+
+			result.put("haveRebatePhones", haveRebatePhones);
+			result.put("haveRebateCous", haveRebateCous);
+		}
+		
+		// 查询社员省钱情况
+		List<Map<String, Object>> allRetrenchList = cmDao.getAllRetrench(dd);
+		if (allRetrenchList!=null&&!allRetrenchList.isEmpty()) {
+			for (Map<String, Object> allRetrenchmap : allRetrenchList) {
+				result.put("sumall", Double.parseDouble(allRetrenchmap.get("sumall").toString()));
+				result.put("subprice", Double.parseDouble(allRetrenchmap.get("subprice").toString()));
+				result.put("usedrebate", Double.parseDouble(allRetrenchmap.get("usedrebate").toString()));
+			}
+		}else {
+			result.put("sumall", "0");
+			result.put("subprice", "0");
+			result.put("usedrebate", "0");
+		}
+		// 查询粮票情况
+		List<Map<String, Object>> allRebateList = cmDao.getAllRebate(dd);
+		if (allRebateList!=null&&!allRebateList.isEmpty()) {
+			for (Map<String, Object> allRebatemap : allRebateList) {
+				result.put("sumreall", Double.parseDouble(allRebatemap.get("sumreall").toString()));
+				result.put("sumhavere", Double.parseDouble(allRebatemap.get("sumhavere").toString()));
+				result.put("sumused", Double.parseDouble(allRebatemap.get("sumused").toString()));
+			}
+		}else {
+			result.put("sumreall", "0");
+			result.put("sumhavere", "0");
+			result.put("sumused", "0");
+		}
+		
+		// 查询社员省钱排行前5
+		List<Map<String, Object>> retrenchList = cmDao.getRetrenchMoney(dd);
+		List retrenchPhone = new ArrayList();
+		List retrenchCou = new ArrayList();
+		if (retrenchList!=null&&!retrenchList.isEmpty()) {
+
+			for (int i = 0; i < retrenchList.size(); i++) {
+				retrenchPhone.add(retrenchList.get(i).get("tcphone").toString());
+				retrenchCou.add(retrenchList.get(i).get("cou").toString());
+
+			}
+			JSONArray retrenchPhones = (JSONArray) JSONArray.fromObject(retrenchPhone);
+			JSONArray retrenchCous = (JSONArray) JSONArray.fromObject(retrenchCou);
+
+			result.put("retrenchPhones", retrenchPhones);
+			result.put("retrenchCous", retrenchCous);
+		}
+		
+		
+		// 查询社员粮票累计前5
+		
+		List<Map<String, Object>> rebateList = cmDao.getSumRebate(dd);
+		List rebatePhone = new ArrayList();
+		List rebateCou = new ArrayList();
+		if (rebateList!=null&&!rebateList.isEmpty()) {
+
+			for (int i = 0; i < rebateList.size(); i++) {
+				rebatePhone.add(rebateList.get(i).get("tcphone").toString());
+				rebateCou.add(rebateList.get(i).get("cou").toString());
+
+			}
+			JSONArray rebatePhones = (JSONArray) JSONArray.fromObject(rebatePhone);
+			JSONArray rebateCous = (JSONArray) JSONArray.fromObject(rebateCou);
+
+			result.put("rebatePhones", rebatePhones);
+			result.put("rebateCous", rebateCous);
+		}
+		// 查询社员粮票使用排行前5
+		List<Map<String, Object>> usedRebateList = cmDao.getUsedRebate(dd);
+		List usedRebatePhone = new ArrayList();
+		List usedRebateCou = new ArrayList();
+		if (usedRebateList!=null&&!usedRebateList.isEmpty()) {
+
+			for (int i = 0; i < usedRebateList.size(); i++) {
+				usedRebatePhone.add(usedRebateList.get(i).get("tcphone").toString());
+				usedRebateCou.add(usedRebateList.get(i).get("cou").toString());
+
+			}
+			JSONArray usedRebatePhones = (JSONArray) JSONArray.fromObject(usedRebatePhone);
+			JSONArray usedRebateCous = (JSONArray) JSONArray.fromObject(usedRebateCou);
+
+			result.put("usedRebatePhones", usedRebatePhones);
+			result.put("usedRebateCous", usedRebateCous);
+		}
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectArtelOrderInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin
+		 * 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		//查询订单时效性
+
+
+        List selcount = new ArrayList();
+		List seltimes = new ArrayList();
+		List<Map<String, Object>> orderTimesList = commDao.getTimeDiff(dd);
+		long scount0 =0;//提前配送
+		long scounthalf =0;//半小时送达
+		long scount1 =0;//1小时内
+		long scount2 =0;//2小时以内
+		long scount4 =0;//2-4小时
+		long scount12 =0;//4-12小时
+		long scount24 =0;//12-24小时
+		long scount25 =0;//大于24小时
+		if(orderTimesList!=null&&!orderTimesList.isEmpty()) { 
+			for (int i = 0; i < orderTimesList.size(); i++) {
+				int stime = Integer.parseInt(orderTimesList.get(i).get("seltimes").toString());
+				if(0>stime) {
+					scount0 +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}else if(0<=stime&&1>stime){
+					scounthalf +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}else if(1<=stime&&2>stime){
+					scount1 +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}else if(2<=stime&&4>stime){
+					scount2 +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}else if(4<=stime&&8>stime){
+					scount4 +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}else if(8<=stime&&24>stime){
+					scount12 +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}else if(24<=stime&&48>stime){
+					scount24 +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}else if(48<=stime){
+					scount25 +=Integer.parseInt(orderTimesList.get(i).get("selcount").toString());
+				}
+			}
+		}
+		selcount.add(scount0);
+		selcount.add(scounthalf);
+		selcount.add(scount1);
+		selcount.add(scount2);
+		selcount.add(scount4);
+		selcount.add(scount12);
+		selcount.add(scount24);
+		selcount.add(scount25);
+		seltimes.add("提前配送");
+		seltimes.add("2小时以内");
+		seltimes.add("2-4小时");
+		seltimes.add("4-12小时");
+		seltimes.add("12-24小时");
+		seltimes.add("大于24小时");
+		JSONArray jsonSelCount = (JSONArray) JSONArray.fromObject(selcount);
+		JSONArray jsonSelTimes = (JSONArray) JSONArray.fromObject(seltimes);
+		result.put("jsonSelCount", jsonSelCount);
+		result.put("jsonSelTimes", jsonSelTimes);
+		
+		
+		//查询24小时内订单成交量
+		List<Map<String, Object>> hourCountList = new ArrayList<Map<String, Object>>();
+		hourCountList = commDao.getHourCount(dd);
+		List hourCounts = new ArrayList();
+		List selHours = new ArrayList();
+		if (hourCountList != null && !hourCountList.isEmpty()) {
+			for (Map<String, Object> hourCount : hourCountList) {
+				selHours.add(hourCount.get("seltime").toString());
+				hourCounts.add(hourCount.get("cou").toString());
+			}
+		}
+		JSONArray jsonSelHours = (JSONArray) JSONArray.fromObject(selHours);
+		JSONArray jsonHourCounts = (JSONArray) JSONArray.fromObject(hourCounts);
+		result.put("jsonSelHours", jsonSelHours);
+		result.put("jsonHourCounts", jsonHourCounts);
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectArtelSceneInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+
+		// 查询订单商品分类
+		List<Map<String, Object>> orderTypeList = new ArrayList<Map<String, Object>>();
+		orderTypeList = commDao.getOrderType(dd);
+		List orderTypeNames = new ArrayList();
+		List orderTypeSums = new ArrayList();
+		if (orderTypeList != null && orderTypeList.size() > 0) {
+			for (Map<String, Object> orderType : orderTypeList) {
+				orderTypeSums.add(orderType.get("ordertypecou"));
+				orderTypeNames.add(orderType.get("ordertypename"));
+			}
+		}
+		JSONArray jsonOrderTypeNames = (JSONArray) JSONArray.fromObject(orderTypeNames);
+		JSONArray jsonOrderTypeSums = (JSONArray) JSONArray.fromObject(orderTypeSums);
+		result.put("jsonOrderTypeNames", jsonOrderTypeNames);
+		result.put("jsonOrderTypeSums", jsonOrderTypeSums);
+		return result;
+
+	}
+	@Override
+	public Map<String, Object> selectArtelOrderGmvInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		// 查询已成交订单量
+
+		// 查询取消订单量
+		// 查询7日取消订单走势
+		// 查询7日成交订单走势、成交额走势、非社员订单量、非社员成交额
+		List<Map<String, Object>> eshopMemList = commDao.getEshopMemCount(dd);
+		
+		
+		
+		
+		
+		List memCounts = new ArrayList();// 社员成交量
+		List memSums = new ArrayList();// 社员成交额
+		List noMemCounts = new ArrayList();// 非社员成交量
+		List noMemSums = new ArrayList();// 非社员成交额
+		List eshopCounts = new ArrayList();// 安心合作社成交量
+		List eshopSums = new ArrayList();// 安心合作社成交额
+		List eshopOneDeal = new ArrayList();// 客单价
+
+		if (eshopMemList != null && !eshopMemList.isEmpty()) {
+			for (int i = 0; i < eshopMemList.size(); i++) {
+				memCounts.add(Integer.parseInt(eshopMemList.get(i).get("memcount").toString()));
+				memSums.add(eshopMemList.get(i).get("memgmv").toString().split("\\.")[0]);
+				noMemCounts.add(Integer.parseInt(eshopMemList.get(i).get("nmemcount").toString()));
+				noMemSums.add(eshopMemList.get(i).get("nmemgmv").toString().split("\\.")[0]);
+				eshopCounts.add(Integer.parseInt(eshopMemList.get(i).get("eshopcou").toString()));
+				eshopSums.add(eshopMemList.get(i).get("eshopgmv").toString().split("\\.")[0]);
+				int eshopCou = Integer.parseInt(eshopMemList.get(i).get("eshopcou").toString());
+				Double eshopGmv = Double.parseDouble(eshopMemList.get(i).get("eshopgmv").toString());
+				if (eshopCou != 0) {
+					eshopOneDeal.add(String.format("%.2f", eshopGmv / eshopCou));
+				} else {
+					eshopOneDeal.add("0.0");
+				}
+
+			}
+		}
+		/*
+		 * List<Map<String, Object>> memCountList = commDao.getDayOfEshopMemCount(dd);
+		 * if (!memCountList.isEmpty()) { for (int i = 0; i < memCountList.size(); i++)
+		 * {
+		 * memCounts.add(Integer.parseInt(memCountList.get(i).get("dayOfEshopMemCount").
+		 * toString())); } }
+		 * 
+		 * //查询7日社员成交额走势 List<Map<String, Object>> memSumList =
+		 * commDao.getDayOfEshopMemSum(dd); if (!memSumList.isEmpty()) { for (int i = 0;
+		 * i < memSumList.size(); i++) {
+		 * memSums.add(Double.valueOf(memSumList.get(i).get("dayOfEshopMemSum").toString
+		 * ()).intValue()); } } //查询7日非社员订单量 List<Map<String, Object>> noMemCountsList =
+		 * commDao.getDayOfEshopNmemCount(dd); if (!noMemCountsList.isEmpty()) { for
+		 * (int i = 0; i < noMemCountsList.size(); i++) {
+		 * noMemCounts.add(Double.valueOf(noMemCountsList.get(i).get(
+		 * "dayOfEshopNmemCount").toString()).intValue()); }
+		 * 
+		 * } //查询7日非社员成交额 List<Map<String, Object>> noMemSumList =
+		 * commDao.getDayOfEshopNmemSum(dd); if (!noMemSumList.isEmpty()) { for (int i =
+		 * 0; i < noMemSumList.size(); i++) {
+		 * noMemSums.add(Double.valueOf(noMemSumList.get(i).get("dayOfEshopNmemSum").
+		 * toString()).intValue()); }
+		 * 
+		 * }
+		 */
+		
+		List dateMemCounts = new ArrayList();
+ 		try {
+ 			//生成X轴坐标
+ 			dateMemCounts = reDate(7);
+ 		} catch (ParseException e) {
+ 			e.printStackTrace();
+ 		}
+		JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
+		result.put("jsonDateMem", jsonDateMem);
+		JSONArray jsonDayMemCounts = (JSONArray) JSONArray.fromObject(memCounts);
+		JSONArray jsonDayMemSums = (JSONArray) JSONArray.fromObject(memSums);
+		JSONArray jsonDayNoMemCounts = (JSONArray) JSONArray.fromObject(noMemCounts);
+		JSONArray jsonDayNoMemSums = (JSONArray) JSONArray.fromObject(noMemSums);
+		JSONArray jsonEshopCounts = (JSONArray) JSONArray.fromObject(eshopCounts);
+		JSONArray jsonEshopSums = (JSONArray) JSONArray.fromObject(eshopSums);
+		JSONArray jsonEshopOneDeal = (JSONArray) JSONArray.fromObject(eshopOneDeal);
+		result.put("jsonEshopOneDeal", jsonEshopOneDeal);
+		result.put("jsonEshopCounts", jsonEshopCounts);
+		result.put("jsonEshopSums", jsonEshopSums);
+		result.put("jsonDayMemCounts", jsonDayMemCounts);
+		result.put("jsonDayMemSums", jsonDayMemSums);
+		result.put("jsonDayNoMemCounts", jsonDayNoMemCounts);
+		result.put("jsonDayNoMemSums", jsonDayNoMemSums);
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectArtelCityGmvInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		
+		List<Map<String, Object>> eshopMemList = commDao.getEshopMemCount(dd);
+		List eshopSums = new ArrayList();// 安心合作社成交额
+		
+		if (eshopMemList != null && !eshopMemList.isEmpty()) {
+			for (int i = 0; i < eshopMemList.size(); i++) {
+				eshopSums.add(eshopMemList.get(i).get("eshopgmv").toString().split("\\.")[0]);
+			}
+		}
+		JSONArray jsonEshopSums = (JSONArray) JSONArray.fromObject(eshopSums);
+		result.put("jsonEshopSums", jsonEshopSums);
+		
+		//按城市查询累计成交额、订单量
+		List cityShopCounts = new ArrayList();
+		List cityShopNames = new ArrayList();
+		List cityShopSums = new ArrayList();
+		List<Map<String, Object>> cityshopList = commDao.getEshopNmemCouCity(dd);
+		if (cityshopList!=null&&!cityshopList.isEmpty()) {
+			for (int i = 0; i < cityshopList.size(); i++) {
+				cityShopSums.add(cityshopList.get(i).get("eshopgmv").toString().split("\\.")[0]);
+				cityShopCounts.add(cityshopList.get(i).get("eshopcou").toString());
+				if("乌兰察布市".equals(cityshopList.get(i).get("cname").toString())) {
+					cityShopNames.add("乌兰察布");
+				}else {
+					cityShopNames.add(cityshopList.get(i).get("cname").toString());
+				}
+			}
+		}
+		
+		List dateMemCounts = new ArrayList();
+ 		try {
+ 			//生成X轴坐标
+ 			dateMemCounts = reDate(7);
+ 		} catch (ParseException e) {
+ 			e.printStackTrace();
+ 		}
+		JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
+		JSONArray jsonCityShopSums = (JSONArray) JSONArray.fromObject(cityShopSums);
+		JSONArray jsonCityShopCounts = (JSONArray) JSONArray.fromObject(cityShopCounts);
+		JSONArray jsonCityShopNames = (JSONArray) JSONArray.fromObject(cityShopNames);
+		result.put("jsonDateMem", jsonDateMem);
+		result.put("jsonCityShopSums", jsonCityShopSums);
+		result.put("jsonCityShopCounts", jsonCityShopCounts);
+		result.put("jsonCityShopNames", jsonCityShopNames);
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectArtelRankingInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		
+		// 查询e店情况
+		List<Map<String, Object>> eshopList = commDao.getEshopSell(dd);
+		List eCounts = new ArrayList();
+		List eSums = new ArrayList();
+		List eNames = new ArrayList();
+		if (eshopList!=null&&!eshopList.isEmpty()) {
+
+			for (int i = 0; i < eshopList.size(); i++) {
+				eNames.add(eshopList.get(i).get("ename").toString());
+				// 转换订单量
+				if (Double.parseDouble(eshopList.get(i).get("sellcou").toString()) > 10000) {
+					eCounts.add(toBigMoney(eshopList.get(i).get("sellcou").toString()));
+				} else {
+					eCounts.add(Double.parseDouble(eshopList.get(i).get("sellcou").toString()));
+				}
+				// 转换成交额
+				if (Double.parseDouble(eshopList.get(i).get("sellsum").toString()) > 10000) {
+					eSums.add(toBigMoney(eshopList.get(i).get("sellsum").toString()));
+				} else {
+					eSums.add(Double.parseDouble(eshopList.get(i).get("sellsum").toString()));
+				}
+
+			}
+			JSONArray eshopName = (JSONArray) JSONArray.fromObject(eNames);
+			JSONArray eshopCount = (JSONArray) JSONArray.fromObject(eCounts);
+			JSONArray eshopSum = (JSONArray) JSONArray.fromObject(eSums);
+
+			result.put("eshopName", eshopName);
+			result.put("eshopCount", eshopCount);
+			result.put("eshopSum", eshopSum);
+		}
+		return result;
+		
+	}
+	@Override
+	public Map<String, Object> selectCmOpenInfo(String dd) {
+		// TODO Auto-generated method stub
+		/**
+		 * @author wuxinxin 2018年7月21日
+		 */
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+		
+		
+		// 查询老用户转社员总量
+		List<Map<String, Object>> oldCmCountList = new ArrayList<Map<String, Object>>();
+		oldCmCountList = commDao.getOldCount(dd);
+		if (oldCmCountList != null && oldCmCountList.size() > 0) {
+			result.put("oldCmCount", oldCmCountList.get(0).get("oldCount"));
+		} else {
+			result.put("oldCmCount", "0");
+		}
+		// 查询新开社员总量
+		List<Map<String, Object>> newCmCountList = new ArrayList<Map<String, Object>>();
+		newCmCountList = commDao.getNewCount(dd);
+
+		if (newCmCountList != null && newCmCountList.size() > 0) {
+			result.put("newCmCount", newCmCountList.get(0).get("newCount"));
+		} else {
+			result.put("newCmCount", "0");
+		}
 		return result;
 		
 	}
