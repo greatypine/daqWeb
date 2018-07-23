@@ -19,14 +19,13 @@ if [ -f $dest_file ]; then
 fi
 
 echo 'updating source...'
-git pull origin master
 
 echo 'making warfile...'
 if  $command_str$para_str; then
     if [ "$work_dir/$file_name" != $dest_file ]; then
         mv "$work_dir/$file_name" $dest_file
     fi
-    counter=`ps -ef | grep tomcat7|grep -vE 'grep|tail|gasm'|wc -l`
+    counter=`ps -ef | grep tomcat7/|grep -vE 'grep|tail|gasm'|wc -l`
     if [ $counter -eq 1 ];then
         echo 'stoping tomcat...'
         /usr/local/tomcat7/bin/catalina.sh stop;
@@ -38,7 +37,7 @@ if  $command_str$para_str; then
     echo 'starting tomcat...'
     /usr/local/tomcat7/bin/catalina.sh start;
     sleep 5
-    counter=`ps -ef | grep tomcat7|grep -vE 'grep|tail|gasm'|wc -l`
+    counter=`ps -ef | grep tomcat7/|grep -vE 'grep|tail|gasm'|wc -l`
     if [ $counter -eq 1 ];then
         echo 'starting tomcat success...'
     else
