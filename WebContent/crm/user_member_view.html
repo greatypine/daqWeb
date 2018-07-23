@@ -1043,7 +1043,7 @@ function resetSerachParam(){
     var date = nowDate.getDate();
     timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
     nowDate.setDate(nowDate.getDate()+parseInt(-1));
-    var startDateStr = nowDate.getFullYear() + '/' + month + '/01'; 
+    var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01'; 
 	$("#searchTime").val(startDateStr +"-"+ timeStr);
 	$("#data_choice").html("默认时期");
 
