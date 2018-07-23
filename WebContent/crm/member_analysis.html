@@ -94,7 +94,7 @@
      box-shadow: 0 1px 1px rgba(0,0,0,1);
      border-radius:10px;
      position: fixed;
-     margin:auto;left:40%; top:30%;
+     margin:auto;left:36%; top:30%;
      z-index: 1;
  }
  .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
@@ -106,7 +106,7 @@
  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
 <div class="wrapper">
 <!-- 新header -->
-    <div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
+    <div class="download text-center" id="showDown" style="display:none"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
  <header class="main-header">
     <nav class="navbar navbar-static-top">
       <div class="container">
@@ -554,9 +554,25 @@ var showCityInfo = function (dataServer){
 		    	var newUrl = "/daqWeb/crm/member_analysis?ta=0";
 		    	target = null;
 		    	getUser();
-		    	doMemberInfo();
-		    	selectCmDealInfo();
-		    	doMemberSum();
+		    	//最新方式
+		    	
+		    	doMemberInfo1();
+		    	doMemberInfo2();
+		    	doMemberInfo3();
+		    	doMemberInfo4();
+		    	doMemberInfo5();
+		    	doMemberInfo6();
+		    	doMemberInfo7();
+		    	doMemberInfo8();
+		    	doArtelInfo1();
+		    	doArtelInfo2();
+		    	doArtelInfo3();
+		    	doArtelInfo4();
+		    	doArtelInfo5();
+		    	
+		    	//doMemberInfo();
+		    	//selectCmDealInfo();
+		    	//doMemberSum();
 		    	//doEshopMemberSum();
 		    	history.pushState(stateObject,null,newUrl);
 			};
@@ -567,10 +583,77 @@ var showCityInfo = function (dataServer){
 		    var url = "../login.do";
 		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback);
 		}else{
+			
+			//下载报告
+			 $("#showDown").show();
+		     var downPdf = document.getElementById("downloadPdf");
+		     var pagedom = $("#page");
+		     downPdf.onclick = function() {
+		         $("#process_div").show();
+		         $("#process_div_pic").show();
+		         scrollTo(0,0);
+		         html2canvas(pagedom, {
+		             onrendered : function(canvas) {
+		                 var contentWidth = canvas.width;
+		                 var contentHeight = canvas.height;
+		                 //一页pdf显示html页面生成的canvas高度;
+		                 var pageHeight = contentWidth / 592.28 * 841.89;
+		                 //未生成pdf的html页面高度
+		                 var leftHeight = contentHeight;
+		                 //页面偏移
+		                 var position = 0;
+		                 //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+		                 var imgWidth = 595.28;
+		                 var imgHeight = 592.28 / contentWidth
+		                     * contentHeight;
+		                 var pageData = canvas.toDataURL('image/jpeg', 1.0);
+		                 var pdf = new jsPDF('', 'pt', 'a4');
+		                 //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+		                 //当内容未超过pdf一页显示的范围，无需分页
+		                 if (leftHeight < pageHeight) {
+		                     pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
+		                         imgHeight);
+		                 } else {
+		                     while (leftHeight > 0) {
+		                         pdf.addImage(pageData, 'JPEG', 0, position,
+		                             imgWidth, imgHeight)
+		                         leftHeight -= pageHeight;
+		                         position -= 841.89;
+		                         //避免添加空白页
+		                         if (leftHeight > 0) {
+		                             pdf.addPage();
+		                         }
+		                     }
+		                 }
+		                 pdf.save('安心合作社运营简报.pdf');
+		                 $("#process_div_pic").hide();
+		                 $("#process_div").hide();
+		             }
+		         })
+		     }
+			
+			
 			getUser();
-			doMemberInfo();
-			doMemberSum();
-			selectCmDealInfo();
+			
+			//最新方式
+	    	
+	    	doMemberInfo1();
+	    	doMemberInfo2();
+	    	doMemberInfo3();
+	    	doMemberInfo4();
+	    	doMemberInfo5();
+	    	doMemberInfo6();
+	    	doMemberInfo7();
+	    	doMemberInfo8();
+	    	doArtelInfo1();
+	    	doArtelInfo2();
+	    	doArtelInfo3();
+	    	doArtelInfo4();
+	    	doArtelInfo5();
+			
+		//	doMemberInfo();
+			//doMemberSum();
+			//selectCmDealInfo();
 			//doEshopMemberSum();
 		}
 
@@ -1185,101 +1268,151 @@ function doMemberInfo1(){
         	var resultJson= JSON.parse(data.data);
  			showHistoryData(resultJson);
             setCityAddMem(resultJson);
+            setLoadingMark(false);
+          	//社员饼图
+ 			showMember(resultJson);
+            setInterval("doUpdate()","60000");
         }else{
         	alert("暂无社员相关信息");
         }
     },false);
 }
 function doMemberInfo2(){
-	//查询社员增长情况
-    doManager('communeMember','selectCmAddInfo',"0000",function(data){
+	//直接赋值---基本信息加载
+    doManager('communeMember','selectCmOpenInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
+          	//社员饼图
+ 			showMember(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
     },false);
 }
 function doMemberInfo3(){
+	//查询社员增长情况
+    doManager('communeMember','selectCmAddInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//7日社员增长
+        	showMemberGrow(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    });
+}
+function doMemberInfo4(){
 	//客单价信息饼图
     doManager('communeMember','selectCmDealInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
+        	//社员活跃度
+        	setCmDealInfo(resultJson);
         	//
         }else{
         	alert("暂无社员相关信息");
         }
-    },false);
-}
-function doMemberInfo4(){
-    doManager('communeMember','selectAllCm',"0000",function(data){
-        if(data.result){
-        	var resultJson= JSON.parse(data.data);
-        	//
-        }else{
-        	alert("暂无社员相关信息");
-        }
-    },false);
+    });
 }
 function doMemberInfo5(){
-    doManager('communeMember','selectAllCm',"0000",function(data){
+    doManager('communeMember','selectCmVolInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//
+        	//社员成交额
+        	showDeal(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
-    },false);
+    });
 }
 function doMemberInfo6(){
-    doManager('communeMember','selectAllCm',"0000",function(data){
+    doManager('communeMember','selectCmMemberInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//
+        	//社员分析
+        	showMemberInfo(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
-    },false);
+    });
 }
 function doMemberInfo7(){
-    doManager('communeMember','selectAllCm',"0000",function(data){
+    doManager('communeMember','selectCmRegistInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//
+        	//社员注册信息
+        	showMemberRegist(resultJson);
+        	showCityMember(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
-    },false);
+    });
 }
 function doMemberInfo8(){
-    doManager('communeMember','selectAllCm',"0000",function(data){
+    doManager('communeMember','selectRebateInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//
+        	//粮票
+        	showRebateMoney(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
-    },false);
+    });
 }
-function doMemberInfo9(){
-    doManager('communeMember','selectAllCm',"0000",function(data){
+function doArtelInfo1(){
+    doManager('communeMember','selectArtelOrderInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//
+        	//订单时段性分布
+        	showTimeOrder(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
-    },false);
+    });
 }
-function doMemberInfo10(){
-    doManager('communeMember','selectAllCm',"0000",function(data){
+function doArtelInfo2(){
+    doManager('communeMember','selectArtelSceneInfo',"0000",function(data){
         if(data.result){
         	var resultJson= JSON.parse(data.data);
-        	//
+        	//7大场景订单分布
+        	showOrderType(resultJson);
         }else{
         	alert("暂无社员相关信息");
         }
-    },false);
+    });
+}
+function doArtelInfo3(){
+    doManager('communeMember','selectArtelOrderGmvInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//完成订单/取消订单走势，订单均价走势
+        	showEshopCount(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    });
+}
+function doArtelInfo4(){
+    doManager('communeMember','selectArtelCityGmvInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//安心合作社成交额、城市成交额
+        	showEshopMemSum(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    });
+}
+function doArtelInfo5(){
+    doManager('communeMember','selectArtelRankingInfo',"0000",function(data){
+        if(data.result){
+        	var resultJson= JSON.parse(data.data);
+        	//安心合作社情况
+        	showEshop(resultJson);
+        }else{
+        	alert("暂无社员相关信息");
+        }
+    });
 }
 
 
@@ -1419,53 +1552,6 @@ function doEshopMemberSum(){
     	localStorage.clear();
 	 	loginShow();
      showAddMember();
-	//下载报告
-     var downPdf = document.getElementById("downloadPdf");
-     var pagedom = $("#page");
-     downPdf.onclick = function() {
-         $("#process_div").show();
-         $("#process_div_pic").show();
-         scrollTo(0,0);
-         html2canvas(pagedom, {
-             onrendered : function(canvas) {
-                 var contentWidth = canvas.width;
-                 var contentHeight = canvas.height;
-                 //一页pdf显示html页面生成的canvas高度;
-                 var pageHeight = contentWidth / 592.28 * 841.89;
-                 //未生成pdf的html页面高度
-                 var leftHeight = contentHeight;
-                 //页面偏移
-                 var position = 0;
-                 //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-                 var imgWidth = 595.28;
-                 var imgHeight = 592.28 / contentWidth
-                     * contentHeight;
-                 var pageData = canvas.toDataURL('image/jpeg', 1.0);
-                 var pdf = new jsPDF('', 'pt', 'a4');
-                 //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-                 //当内容未超过pdf一页显示的范围，无需分页
-                 if (leftHeight < pageHeight) {
-                     pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
-                         imgHeight);
-                 } else {
-                     while (leftHeight > 0) {
-                         pdf.addImage(pageData, 'JPEG', 0, position,
-                             imgWidth, imgHeight)
-                         leftHeight -= pageHeight;
-                         position -= 841.89;
-                         //避免添加空白页
-                         if (leftHeight > 0) {
-                             pdf.addPage();
-                         }
-                     }
-                 }
-                 pdf.save('安心合作社运营简报.pdf');
-                 $("#process_div_pic").hide();
-                 $("#process_div").hide();
-             }
-         })
-     }
-	 //获取社员量
 
 
 
