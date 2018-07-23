@@ -93,7 +93,7 @@
 <div id="process_div" ></div> 
  <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div> 
 <div class="wrapper">
-<div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
+<div class="download text-center"  id="showDown" style="display:none"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
 <!-- 新header -->
  <header class="main-header">
     <nav class="navbar navbar-static-top">
@@ -349,6 +349,55 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 		    var url = "../login.do";
 		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
 		}else{
+			
+			 //下载报告
+			 $("#showDown").show();
+		     var downPdf = document.getElementById("downloadPdf");
+		     var pagedom = $("#page");
+		     downPdf.onclick = function() {
+		         $("#process_div").show();
+		         $("#process_div_pic").show();
+		         scrollTo(0,0);
+		         html2canvas(pagedom, {
+		             onrendered : function(canvas) {
+		                 var contentWidth = canvas.width;
+		                 var contentHeight = canvas.height;
+		                 //一页pdf显示html页面生成的canvas高度;
+		                 var pageHeight = contentWidth / 592.28 * 841.89;
+		                 //未生成pdf的html页面高度
+		                 var leftHeight = contentHeight;
+		                 //页面偏移
+		                 var position = 0;
+		                 //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+		                 var imgWidth = 595.28;
+		                 var imgHeight = 592.28 / contentWidth
+		                     * contentHeight;
+		                 var pageData = canvas.toDataURL('image/jpeg', 1.0);
+		                 var pdf = new jsPDF('', 'pt', 'a4');
+		                 //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+		                 //当内容未超过pdf一页显示的范围，无需分页
+		                 if (leftHeight < pageHeight) {
+		                     pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
+		                         imgHeight);
+		                 } else {
+		                     while (leftHeight > 0) {
+		                         pdf.addImage(pageData, 'JPEG', 0, position,
+		                             imgWidth, imgHeight)
+		                         leftHeight -= pageHeight;
+		                         position -= 841.89;
+		                         //避免添加空白页
+		                         if (leftHeight > 0) {
+		                             pdf.addPage();
+		                         }
+		                     }
+		                 }
+		                 pdf.save('安心合作社运营简报.pdf');
+		                 $("#process_div_pic").hide();
+		                 $("#process_div").hide();
+		             }
+		         })
+		     }
+			
 			getUser();
 			if(cityId.charAt(0)!="0"||cityId.length>10){
 	    		getUserCitys();
@@ -970,54 +1019,6 @@ function doEshopMemberSum(){
 }
  $(function () {
 	 loginShow();
-     //下载报告
-     var downPdf = document.getElementById("downloadPdf");
-     var pagedom = $("#page");
-     downPdf.onclick = function() {
-         $("#process_div").show();
-         $("#process_div_pic").show();
-         scrollTo(0,0);
-         html2canvas(pagedom, {
-             onrendered : function(canvas) {
-                 var contentWidth = canvas.width;
-                 var contentHeight = canvas.height;
-                 //一页pdf显示html页面生成的canvas高度;
-                 var pageHeight = contentWidth / 592.28 * 841.89;
-                 //未生成pdf的html页面高度
-                 var leftHeight = contentHeight;
-                 //页面偏移
-                 var position = 0;
-                 //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-                 var imgWidth = 595.28;
-                 var imgHeight = 592.28 / contentWidth
-                     * contentHeight;
-                 var pageData = canvas.toDataURL('image/jpeg', 1.0);
-                 var pdf = new jsPDF('', 'pt', 'a4');
-                 //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-                 //当内容未超过pdf一页显示的范围，无需分页
-                 if (leftHeight < pageHeight) {
-                     pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
-                         imgHeight);
-                 } else {
-                     while (leftHeight > 0) {
-                         pdf.addImage(pageData, 'JPEG', 0, position,
-                             imgWidth, imgHeight)
-                         leftHeight -= pageHeight;
-                         position -= 841.89;
-                         //避免添加空白页
-                         if (leftHeight > 0) {
-                             pdf.addPage();
-                         }
-                     }
-                 }
-                 pdf.save('安心合作社运营简报.pdf');
-                 $("#process_div_pic").hide();
-                 $("#process_div").hide();
-             }
-         })
-     }
-	 //获取社员量
-
 });
 
 var showProduct = function (dataServer){

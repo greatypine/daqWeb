@@ -68,5 +68,65 @@ public interface CommuneMember extends IManager{
 	 * @author wuxinxin
 	 */
 	public Map<String, Object> selectCmDealInfo(String dd);
+	/**
+	 * 社员7日成交信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmVolInfo(String dd);
+	/**
+	 * 社员属性信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmMemberInfo(String dd);
+	/**
+	 * 社员注册信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmRegistInfo(String dd);
+	/**
+	 * 社员注册信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectRebateInfo(String dd);
+	/**
+	 * 安心合作社订单信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectArtelOrderInfo(String dd);
+	/**
+	 * 安心合作社7大场景信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectArtelSceneInfo(String dd);
+	/**
+	 * 安心合作社完成订单/取消订单走势，订单均价走势
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectArtelOrderGmvInfo(String dd);
+	/**
+	 * 安心合作社城市成交额信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectArtelCityGmvInfo(String dd);
+	/**
+	 * 安心合作社排行榜
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectArtelRankingInfo(String dd);
+	/**
+	 * 社员开卡信息
+	 * 
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmOpenInfo(String dd);
 	
 }
