@@ -2245,7 +2245,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		if(key!=null&&!"".equals(key)){
 			monthStr = " AND dcomt.year="+dd.getYear()+"";
 		}
-		sqlStr = "SELECT sum(dcomt.order_amount) as year_sum_gmv " +
+		sqlStr = "SELECT sum(dcomt.order_amount) as year_sum_gmv,SUM(dcomt.order_count) AS year_sum_order " +
 					" FROM ds_ope_gmv_store_month dcomt left join t_store ts on dcomt.storeno=ts.storeno left join t_dist_citycode d on d.cityname=ts.city_name " +
 					"WHERE 1=1  " +
 					monthStr+provinceStr + cityStr;
@@ -2429,7 +2429,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String monthStr = dd.getBeginDate().substring(0,dd.getBeginDate().lastIndexOf("-")).replace("-", "");
 		String sql = "SELECT SUM(ds_cus.pay_count) AS  history_customer_count FROM ds_cusum_month_city ds_cus LEFT JOIN " +
 				"t_dist_citycode d ON d.id = ds_cus.city_id WHERE 1 = 1 AND " +
-				"ds_cus.order_ym < '"+monthStr+"'"+ cityStr+provinceStr;
+				"ds_cus.order_ym <= '"+monthStr+"'"+ cityStr+provinceStr;
 		
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
