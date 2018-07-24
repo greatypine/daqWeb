@@ -3175,7 +3175,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		if(dynamicDto.getEmployeeNo()!=null&&!"".equals(dynamicDto.getEmployeeNo())){
 			sql =sql+" and b.employee_no like '%"+dynamicDto.getEmployeeNo()+"%'";
 		}
-
+        sql =sql+" order by total desc";
 		List<?> list=null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
