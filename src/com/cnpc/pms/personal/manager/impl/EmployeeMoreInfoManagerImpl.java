@@ -53,7 +53,7 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 				filter.put("locations.createTime",new Document("$gte",(new Date(curDate+" 00:00:00"))).append("$lte", (new Date(curDate+" 23:59:59"))));
 				Document match1 = new Document("$match",filter);
 				pipeline.add(match1);
-				Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
+				Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations")));
 				pipeline.add(group);
 				AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
 				MongoCursor<Document> cursor = aggregate.iterator();
@@ -66,6 +66,7 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 					jObject =new HashMap<String, Object>();
 					jObject.put("locations", doc.get("locations"));
 					jObject.put("id", doc.get("_id"));
+					System.out.print(doc.get("locations").toString());
 					List<Map<String,Object>> employeeByEmployeeId = platformEmployeeDao.getEmployeeByEmployeeId(doc.get("_id").toString());
 					if(employeeByEmployeeId.size() > 0){
 						String employeeNo = employeeByEmployeeId.get(0).get("employeeNo").toString();
@@ -75,7 +76,7 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 				}
 				System.out.println(j);
 				int m = 0;
-				if(listempInfo.size() > 0){
+				if(listempInfo.size() < 0){
 					for(int z = 0; z < listempInfo.size(); z++){
 						Map<String, Object> map = listempInfo.get(z);
 						List object = (List)map.get("locations");
@@ -189,7 +190,7 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 					pipeline.add(unwind);
 					Document filter = new Document();
 					String curDate = DateUtils.dateFormat(DateUtils.getDateBeforeOneDate(new Date()), "yyyy/MM/dd");
-					filter.put("locations.createTime",new Document("$lt",(new Date(curDate))));
+					filter.put("locations.createTime",new Document("$lte",(new Date(curDate+" 23:59:59"))));
 					Document match1 = new Document("$match",filter);
 					pipeline.add(match1);
 					Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
