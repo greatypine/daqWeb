@@ -47,7 +47,6 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 	}
 	@Override
 	public List<Map<String, Object>> getCmGoodsTurnover(String dd) {
-		// TODO Auto-generated method stub
 		/**
 		 * @author wuxinxin
 		 * 2018年5月18日
