@@ -569,7 +569,7 @@ Date.prototype.format=function(fmt) {
 												if(va=="副店长"){
 													$("#srczw").show();
 												}
-												if(va=="服务专员"||va=="线上服务专员"){
+												if(va=="服务专员"||va=="线上服务专员"||va=="综合专员"||va=="副店长"){
 													$("#career_group").show();
 													$("#syqfont").show();
 												}else{
@@ -656,14 +656,18 @@ Date.prototype.format=function(fmt) {
 				$("#srczw").hide();
 			}
 			
-			if(zw!=null&&(zw.trim()=="服务专员"||zw.trim()=="线上服务专员")){
+			if(zw!=null&&(zw.trim()=="服务专员"||zw.trim()=="线上服务专员"||zw.trim()=="综合专员"||zw.trim()=="副店长")){
 				$("#career_group").show();
 				$("#syqfont").show();
 			}else{
 				$("#career_group").hide();
 				$("#syqfont").hide();
 			}
-			
+			/* if(zw!=null&&zw.trim()=="综合专员"){
+				$("#career_group").show();
+			}else{
+				$("#career_group").hide();
+			} */
 			
 		});
 		
@@ -742,7 +746,7 @@ Date.prototype.format=function(fmt) {
 		o["zw"] = $("#zw  option:selected").val();
 		//事业群 
 		var fwzw = $("#zw  option:selected").val();
-		if(fwzw=="服务专员"||fwzw=="线上服务专员"){
+		if(fwzw=="服务专员"||fwzw=="线上服务专员"||fwzw=="副店长"||fwzw=="综合专员"){
 			o["career_group"] = $("#career_group  option:selected").val();
 		}else{
 			o["career_group"] = "";

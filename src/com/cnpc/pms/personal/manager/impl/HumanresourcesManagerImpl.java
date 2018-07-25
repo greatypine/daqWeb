@@ -330,7 +330,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 			rcv="存在相同数据！<br> 姓名:"+repHuman.getName()+" <br> 身份证:"+repHuman.getCardnumber();
     		return rcv;
 		}
-    	
+		
+		
     	String employee_No = humanresources.getEmployee_no();
     	if(employee_No!=null&&employee_No.length()>0){
     		//此处为有员工号的 为海格数据  只校验是否重复
@@ -4183,7 +4184,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     @Override
     public List<Humanresources> queryHumanresourceListByPhone(String phone){
     	HumanresourcesManager hManager = (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
-        IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus=1 and phone='"+phone+"'");
+        IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus in (0,1) and phone='"+phone+"'");
         List<Humanresources> lst_humanList = (List<Humanresources>)hManager.getList(iFilter);
         if(lst_humanList!=null&&lst_humanList.size()>0){
         	return lst_humanList;
