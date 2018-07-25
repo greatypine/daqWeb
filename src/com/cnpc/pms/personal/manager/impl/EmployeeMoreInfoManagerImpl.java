@@ -189,7 +189,7 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 					pipeline.add(unwind);
 					Document filter = new Document();
 					String curDate = DateUtils.dateFormat(DateUtils.getDateBeforeOneDate(new Date()), "yyyy/MM/dd");
-					filter.put("locations.createTime",new Document("$lt",(new Date(curDate))));
+					filter.put("locations.createTime",new Document("$lte",(new Date(curDate+" 23:59:59"))));
 					Document match1 = new Document("$match",filter);
 					pipeline.add(match1);
 					Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));

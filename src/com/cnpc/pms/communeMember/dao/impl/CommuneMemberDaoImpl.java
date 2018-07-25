@@ -26,7 +26,6 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 	
 	@Override
 	public List<Map<String, Object>> getCmGoodsDealCount(String string) {
-		// TODO Auto-generated method stub
 		/**
 		 * @author wuxinxin
 		 * 2018年5月22日

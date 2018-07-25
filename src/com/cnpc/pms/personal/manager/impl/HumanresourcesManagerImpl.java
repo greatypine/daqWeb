@@ -1,26 +1,24 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.Collator;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.persistence.Column;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -33,14 +31,12 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.hibernate.dialect.function.VarArgsSQLFunction;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.FileCopyUtils;
@@ -52,7 +48,6 @@ import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.ISort;
 import com.cnpc.pms.base.paging.SortFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
-import com.cnpc.pms.base.paging.impl.Sort;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.PropertiesUtil;
@@ -65,40 +60,24 @@ import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserGroupManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.manager.DynamicManager;
 import com.cnpc.pms.personal.dao.ExpressDao;
-import com.cnpc.pms.personal.dao.HouseStyleDao;
 import com.cnpc.pms.personal.dao.HumanenteachDao;
 import com.cnpc.pms.personal.dao.HumanresourcesDao;
 import com.cnpc.pms.personal.dao.ImportHumanresourcesDao;
-import com.cnpc.pms.personal.dao.PublicOrderDao;
 import com.cnpc.pms.personal.dao.RelationDao;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.dao.SyncRecordDao;
-import com.cnpc.pms.personal.dao.YyMicrDataDao;
-import com.cnpc.pms.personal.entity.Company;
-import com.cnpc.pms.personal.entity.DataHumanType;
 import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.DistCityCode;
-import com.cnpc.pms.personal.entity.Express;
 import com.cnpc.pms.personal.entity.Humanenteach;
 import com.cnpc.pms.personal.entity.Humanresources;
 import com.cnpc.pms.personal.entity.HumanresourcesChange;
-import com.cnpc.pms.personal.entity.HumanresourcesLog;
 import com.cnpc.pms.personal.entity.ImportHumanresources;
 import com.cnpc.pms.personal.entity.OuterCompany;
-import com.cnpc.pms.personal.entity.PublicOrder;
-import com.cnpc.pms.personal.entity.ScoreRecordTotal;
-import com.cnpc.pms.personal.entity.SelfExpress;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.SysUserGroupOpera;
-import com.cnpc.pms.personal.entity.XxExpress;
-import com.cnpc.pms.personal.manager.BuildingManager;
-import com.cnpc.pms.personal.manager.CompanyManager;
 import com.cnpc.pms.personal.manager.CustomerManager;
 import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.DistCityManager;
-import com.cnpc.pms.personal.manager.DsAbnormalOrderManager;
-import com.cnpc.pms.personal.manager.ExpressManager;
-import com.cnpc.pms.personal.manager.HouseManager;
 import com.cnpc.pms.personal.manager.HumanenteachManager;
 import com.cnpc.pms.personal.manager.HumanresourcesChangeManager;
 import com.cnpc.pms.personal.manager.HumanresourcesLogManager;
@@ -108,20 +87,14 @@ import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.OuterCompanyManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.manager.SysUserGroupOperaManager;
-import com.cnpc.pms.personal.manager.TinyVillageManager;
-import com.cnpc.pms.personal.manager.VillageManager;
 import com.cnpc.pms.platform.dao.OrderDao;
-import com.cnpc.pms.platform.entity.PlatformEmployee;
-import com.cnpc.pms.platform.manager.OrderManager;
-import com.cnpc.pms.platform.manager.PlatformEmployeeManager;
+import com.cnpc.pms.shortMessage.manager.ShortMessageManager;
 import com.cnpc.pms.slice.manager.AreaManager;
 import com.cnpc.pms.utils.ChineseToEnglish;
-import com.cnpc.pms.utils.CompressFile;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.EntityEquals;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import com.cnpc.pms.utils.ValueUtil;
-import com.google.gson.JsonObject;
 
 @SuppressWarnings("all")
 public class HumanresourcesManagerImpl extends BizBaseCommonManager implements HumanresourcesManager {
@@ -239,7 +212,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
             	List<?> repleave_list = this.getList(repleaveFilter);
     			if(repleave_list!=null&&repleave_list.size()>0){
     				Humanresources repHuman = (Humanresources) repleave_list.get(0);
-    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
+    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()==null?"":repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
             		return rcvmsg;
     			}
     			
@@ -357,7 +330,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 			rcv="存在相同数据！<br> 姓名:"+repHuman.getName()+" <br> 身份证:"+repHuman.getCardnumber();
     		return rcv;
 		}
-    	
+		
+		
     	String employee_No = humanresources.getEmployee_no();
     	if(employee_No!=null&&employee_No.length()>0){
     		//此处为有员工号的 为海格数据  只校验是否重复
@@ -448,6 +422,19 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 			e.printStackTrace();
 		}
     	
+    	
+    	//新增线下员工 发送邀请码短信 在职 存在邀请码inviteCode 和电话 ----
+    	if(humanresources.getPhone()!=null&&humanresources.getInviteCode()!=null&&humanresources.getHumanstatus().equals(1L)) {
+    		ShortMessageManager shortMessageManager = (ShortMessageManager) SpringHelper.getBean("shortMessageManager");
+    		Map<String, Object> param = new HashMap<String, Object>();
+    		param.put("inviteCode", humanresources.getInviteCode());
+    		param.put("mobilePhone", humanresources.getPhone());
+    		param.put("userName", humanresources.getName());
+    		param.put("type", "SYYQM");
+    		param.put("signature", "国安管家");
+    		shortMessageManager.commonSendShortMessage(param);
+    	}
+    	
     	return rcv;
     }
     
@@ -534,6 +521,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     @Override
     public Humanresources updateHumanresources(Humanresources humanresources){
     	Humanresources hr = (Humanresources)this.getObject(humanresources.getId());
+    	boolean isSendInviteCode=false;//默认不发短信 
     	if(hr.getHumanstatus().equals(Long.parseLong("2"))){
     		
     		hr.setLeavedate(humanresources.getLeavedate());
@@ -555,6 +543,9 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	Store store = s.findStoreByName(humanresources.getStorename());
     	if(store!=null){
     		humanresources.setStore_id(store.getStore_id());
+    		if(hr.getHumanstatus().equals(0L)) {//如果原数据门店状态为未分配门店 
+    			isSendInviteCode=true;
+    		}
     	}
     	//判断保存的八项值 是否有变化。如果有变化 则保存到humanresourceschange表中。
     	HumanresourcesChangeManager changeManager = (HumanresourcesChangeManager)SpringHelper.getBean("humanresourcesChangeManager");
@@ -714,6 +705,10 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	//设置状态为正式
 		if(hr.getHumanstatus().equals(Long.parseLong("0"))){
 			hr.setHumanstatus(Long.parseLong("1"));
+			//如果为线上服务专员 无门店 也推送邀请码 ----
+			if(humanresources.getZw().equals("线上服务专员")) {
+        		isSendInviteCode=true;
+        	}
 		}
 		if(humanresources.getZw()!=null&&humanresources.getZw().equals("市场专员")){
 			store = null;
@@ -854,6 +849,20 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	//修改人员信息操作完，同步人员信息
     	try {
     		syncEmployee(hr);
+    		//同步完后 发短信 邀请码 
+    		if(isSendInviteCode) {
+    			//发送邀请码短信 在职 存在邀请码inviteCode 和电话 ----
+    	    	if(hr.getPhone()!=null&&hr.getInviteCode()!=null&&hr.getHumanstatus().equals(1L)) {
+    	    		ShortMessageManager shortMessageManager = (ShortMessageManager) SpringHelper.getBean("shortMessageManager");
+    	    		Map<String, Object> param = new HashMap<String, Object>();
+    	    		param.put("inviteCode", hr.getInviteCode());
+    	    		param.put("mobilePhone", hr.getPhone());
+    	    		param.put("userName", hr.getName());
+    	    		param.put("type", "SYYQM");
+    	    		param.put("signature", "国安管家");
+    	    		shortMessageManager.commonSendShortMessage(param);
+    	    	}
+    		}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2778,7 +2787,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
             	List<?> repleave_list = this.getList(repleaveFilter);
     			if(repleave_list!=null&&repleave_list.size()>0){
     				Humanresources repHuman = (Humanresources) repleave_list.get(0);
-    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
+    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()==null?"":repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
             		return rcvmsg;
     			}
 				
@@ -3487,6 +3496,18 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     				//批量分配门店后。同步数据
     				syncEmployee(humanresources);
     				
+    				//发送短信----
+    				if(humanresources.getPhone()!=null&&humanresources.getInviteCode()!=null&&humanresources.getHumanstatus().equals(1L)) {
+    		    		ShortMessageManager shortMessageManager = (ShortMessageManager) SpringHelper.getBean("shortMessageManager");
+    		    		Map<String, Object> param = new HashMap<String, Object>();
+    		    		param.put("inviteCode", humanresources.getInviteCode());
+    		    		param.put("mobilePhone", humanresources.getPhone());
+    		    		param.put("userName", humanresources.getName());
+    		    		param.put("type", "SYYQM");
+    		    		param.put("signature", "国安管家");
+    		    		shortMessageManager.commonSendShortMessage(param);
+    		    	}
+    				
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -4163,7 +4184,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     @Override
     public List<Humanresources> queryHumanresourceListByPhone(String phone){
     	HumanresourcesManager hManager = (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
-        IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus=1 and phone='"+phone+"'");
+        IFilter iFilter =FilterFactory.getSimpleFilter(" humanstatus in (0,1) and phone='"+phone+"'");
         List<Humanresources> lst_humanList = (List<Humanresources>)hManager.getList(iFilter);
         if(lst_humanList!=null&&lst_humanList.size()>0){
         	return lst_humanList;
@@ -4205,7 +4226,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     }
     
 
-	@Override
+    @Override
 	public Map<String, Object> getEmployeeInfoByWeek() {
 		Map<String,Object> result = new HashMap<String,Object>();
 		HumanresourcesDao humanresourcesDao = (HumanresourcesDao)SpringHelper.getBean(HumanresourcesDao.class.getName());

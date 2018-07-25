@@ -186,7 +186,7 @@ public class AttachmentManagerImpl extends BizBaseCommonManager implements Attac
 		List<Attachment> list = (List<Attachment>) this
 				.getList(FilterFactory.getSimpleFilter("business_type='" + order_sn + "' and file_type=" + file_type));
 		List<Attachment> ret_attAttachments = null;
-		String str_web_path = PropertiesUtil.getValue("file.web.root");
+		String str_web_path = PropertiesUtil.getValue("file.oss.root");
 		if (list != null && list.size() > 0) {
 			ret_attAttachments = new ArrayList<Attachment>();
 			try {

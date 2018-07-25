@@ -1145,6 +1145,7 @@ var getHistoryData = function (pageStatusInfo) {
 		                            if (data.result) {
 		                            	var resultJson= JSON.parse(data.data);
 		                            	historyDataFromServer['year_gmv_sum'] = resultJson.year_gmv_sum[0].year_sum_gmv;
+		                            	historyDataFromServer['year_sum_order'] = resultJson.year_gmv_sum[0].year_sum_order;
 		                         	}
 		                         }
 		                         ,false);
@@ -1167,6 +1168,7 @@ var showHistoryData = function (historyData) {
     //$("#tradesumoflastmonthOrderHid").html(parseInt(historyData.last_order_count==null?'0':historyData.last_order_count));
     $("#tradesumofyearHid").html(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum));
     */
+    $("#tradesumOrderofyearHid").html(parseInt(historyData.year_sum_order==null?'0':historyData.year_sum_order));
     $("#tradesumofhistoryCustmomerHid").html(parseInt(historyData.history_customer_count));
     $("#tradesumofhistoryOrderHid").html(parseInt(historyData.history_order_count==null?'0':historyData.history_order_count));
     $("#tradesumofmonthOrderHid").html(parseInt(historyData.month_order_count==null?'0':historyData.month_order_count));
@@ -3254,6 +3256,7 @@ var getDailyData = function(){
   					var tradesumoflastmonthOrder = $("#tradesumoflastmonthOrderHid").text();//上月今天订单量
   					var openCardUserMonthcountHid = $("#openCardUserMonthcountHid").text();
 					var openCardUserHistorycountHid = $("#openCardUserHistorycountHid").text();
+					var tradesumOrderofyearHid_ = $("#tradesumOrderofyearHid").text();//当年成交订单量
   					//var tradesumofyear = $("#tradesumofyearHid").text();//上月订单
   					//$("#tradesumofcurmonths").html(changeMoney(parseInt(tradesumofcurmonth)+parseInt(totalprice)));
   					//$("#tradesumofhistorys").html(changeMoney(parseInt(tradesumofhistory)+parseInt(totalprice)));
@@ -3261,7 +3264,7 @@ var getDailyData = function(){
   					$("#tradesumofhistoryCustmomer").html(parseInt(tradesumofcustomerHistory)+parseInt(daily_user_count));
   					//$("#tradesumofhistoryCustmomer").html(parseInt(1630694));
   					$("#tradesumofmonthOrder").html(parseInt(tradesumofmonthOrder)+parseInt(daily_order_count));
-  					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder)+parseInt(daily_order_count));
+  					$("#tradesumofhistoryOrder").html(parseInt(tradesumofhistoryOrder)+parseInt(tradesumOrderofyearHid_)+parseInt(daily_order_count));
   					//$("#openCardUserMonthcount").html(openCardUserMonthcountHid);
   					//$("#openCardUserHistorycount").html(openCardUserHistorycountHid);
   					var order_count_rate;

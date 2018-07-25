@@ -696,6 +696,11 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+
+			if (url.contains("EmployeeMoreInfoManager")) {//员工更多信息
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			
 			if (url.indexOf(REPLYMESSAGE_URL)>=0) {//短信回复
 				filterChain.doFilter(servletRequest, servletResponse);

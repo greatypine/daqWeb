@@ -44,6 +44,7 @@ import com.cnpc.pms.personal.entity.Village;
 import com.cnpc.pms.personal.entity.WorkInfo;
 import com.cnpc.pms.personal.manager.DsAbnormalOrderManager;
 import com.cnpc.pms.personal.manager.FlowDetailManager;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.ScoreRecordManager;
 import com.cnpc.pms.personal.manager.ScoreRecordTotalManager;
 import com.cnpc.pms.personal.manager.StoreManager;
@@ -130,7 +131,12 @@ public class UploadExceptionFileAction extends HttpServlet{
                      //将临时文件输出到本地
                      item.write(file_upload);
                     
-                     String file_url = copyFile(file_upload, "exceptionorder");
+                     String suffix = file_upload.getPath().substring(file_upload.getPath().lastIndexOf(".") + 1);
+                     //上传 oss 异常订单 
+                     OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+           	      	 String url = ossRefFileManager.uploadOssFile(file_upload, suffix , "daqWeb/exceptionorder/");
+           	      
+                     //String file_url = copyFile(file_upload, "exceptionorder");
                      
                      String[] split = item.getName().split("-");
                      //判断是否是修改 
@@ -147,7 +153,7 @@ public class UploadExceptionFileAction extends HttpServlet{
                      attachment.setFile_type(2);
                      attachment.setBusiness_type(order_sn);
                      attachment.setFile_name(item.getName());
-                     attachment.setFile_path(file_url.replaceAll("-", ""));
+                     attachment.setFile_path(url);
                      attachment.setApprove_status(0);
                      attachment.setMessage("");
                      attachment.setRemark(app_reason);

@@ -188,8 +188,10 @@
                                         <dd><a href="javascript:goToNewAddCustomerGMVToSend()"><span class="fa fa-bar-chart"></span>国安侠用户</a></dd>
                                         <dd><a href="javascript:goToSendOrders()"><span class="fa fa-calendar-check-o"></span>国安侠送单量</a></dd>
                                         <dd><a href="javascript:goToRewardtimes()"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>
-                                        <dd style="position: relative;"><a href="javascript:goToInvitationMember()"><span class="fa fa-thumbs-o-up"></span>社员邀请统计</a>
+                                        <dd style="position: relative;"><a href="javascript:goToInvitationMember()"><span class="fa fa-credit-card"></span>社员邀请统计</a>
                                         <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
+                                        <!--<dd style="position: relative;"><a href="javascript:goTo221GMV()"><span class="fa fa-thumbs-o-up"></span>221GMV</a>
+                                            <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>-->
                                     </dl>
                                     <dl class="col-sm-3">
                                         <dt><i></i>档案数据</dt>
@@ -3256,6 +3258,12 @@ function initStoreHistoryGMV(){
 
         var url  = "user_member_view.html?t="+encode64('2')+"&r=&c=&cn="+encode64(currentStore.cityName)+"&e="+encode64(EMPLOYEE_ID)+"&beTi=&endT=&s="+encode64(currentStore.store_id)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
         window.open(url,"user_member_view");
+    }
+
+    //221GMV统计
+    function goTo221GMV(){
+        var url = "dynamicData_gmv_tto.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
+        window.open(url,"dynamicData_gmv_tto");
     }
 </script>
 </body>
