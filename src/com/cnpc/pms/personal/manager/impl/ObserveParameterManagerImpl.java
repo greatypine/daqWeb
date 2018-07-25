@@ -205,9 +205,6 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 					Map<String,Object> storeInfo = new HashMap<String,Object>();
 					storeInfo.put("storename", mapobj.get("store_name"));
 					storeInfo.put("storeno", mapobj.get("storeno"));
-					storeInfo.put("rmname", mapobj.get("rmname"));
-					storeInfo.put("skname", mapobj.get("skname"));
-					storeInfo.put("observe_person", mapobj.get("observe_person"));
 					storeInfoList.add(storeInfo);
 				}
 				int index = storenameList.indexOf(storename);
@@ -215,6 +212,9 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 				map2.put(mapobj.get("observe_month").toString(), mapobj.get("points_combined"));
 				map2.put(mapobj.get("observe_month").toString()+"quest", mapobj.get("observe_question_number"));
 				map2.put("observe_date", mapobj.get("observe_date"));
+				map2.put("rmname", mapobj.get("rmname"));
+				map2.put("skname", mapobj.get("skname"));
+				map2.put("observe_person", mapobj.get("observe_person"));
 			}
 			String join1 = StringUtils.join(listmonth.toArray(), "月份得分,")+"月份得分";
 			String replace1 = join1.replace("-", "年");
