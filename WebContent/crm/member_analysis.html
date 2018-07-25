@@ -261,6 +261,8 @@
                 <tr>
                   <th>排名</th>
                   <th>累计发放粮票</th>
+                  <th>门店</th>
+                  <th>城市</th>
                   <th>社员</th>
                 </tr>
                 </tbody>
@@ -273,6 +275,8 @@
                 <tr>
                   <th>排名</th>
                   <th>粮票已使用</th>
+                    <th>门店</th>
+                    <th>城市</th>
                   <th>社员</th>
                 </tr>
                 </tbody>
@@ -2176,6 +2180,8 @@ var showRebateMoney = function (dataServer) {
 
 	var usedRebatePhones = dataServer.usedRebatePhones;
 	var usedRebateCous = dataServer.usedRebateCous;
+	var usedRebateStore = dataServer.usedRebateStore;
+	var usedRebateCity = dataServer.usedRebateCity;
 	   var usedrebate="";
 	   if(usedRebatePhones==null||usedRebatePhones.length==0){
 		   usedrebate = "<tr>没有符合条件的数据</tr>"
@@ -2202,7 +2208,7 @@ var showRebateMoney = function (dataServer) {
                    default:
                 	   usedrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
                    }
-                   usedrebate += "<td>"+usedRebateCous[i]+"</td>"
+                   usedrebate += "<td>"+usedRebateCous[i]+"</td>"+"<td>"+usedRebateStore[i]+"</td>"+"<td>"+usedRebateCity[i]+"</td>"
 	           +"<td>"+usedRebatePhones[i]+"</td>";
 	           usedrebate += "</tr>";
 	              $("#used_rebate").append(usedrebate);
@@ -2211,6 +2217,8 @@ var showRebateMoney = function (dataServer) {
 
 	var rebatePhones = dataServer.rebatePhones;
 	var rebateCous = dataServer.rebateCous;
+	var rebateStore = dataServer.rebateStore;
+	var rebateCity = dataServer.rebateCity;
 	   var sumrebate="";
 	   if(rebatePhones==null||rebatePhones.length==0){
 		   sumrebate = "<tr>没有符合条件的数据</tr>"
@@ -2238,7 +2246,7 @@ var showRebateMoney = function (dataServer) {
                 	   sumrebate += "<td><span class='badge bg-brown'>"+(i+1)+"</span></td>";
                    }
 
-			   sumrebate +="<td>"+rebateCous[i]+"</td>"
+			   sumrebate +="<td>"+rebateCous[i]+"</td>" +"<td>"+rebateStore[i]+"</td>" +"<td>"+rebateCity[i]+"</td>"
 	                   +"<td>"+rebatePhones[i]+"</td>";
 
 
