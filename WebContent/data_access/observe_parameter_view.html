@@ -232,7 +232,7 @@ var editObj = {
 		resourceId: "observe_paramter_edit",
 		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
 			var store_id = allColumnsDataMap.store_id;
-			window.location.href = "observe_paramter_add.html?om="+encode64(data[2])+"&t="+encode64("edit")+"&sn="+encode64(data[1])+"&si="+encode64(store_id);
+            window.location.href = "observe_paramter_add.html?om="+encode64(allColumnsDataMap.observe_month)+"&t="+encode64("edit")+"&sn="+encode64(allColumnsDataMap.store_name)+"&si="+encode64(store_id);
 		}
 	}
 
