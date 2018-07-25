@@ -1923,34 +1923,83 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		List<Map<String, Object>> rebateList = cmDao.getSumRebate(dd);
 		List rebatePhone = new ArrayList();
+		List rebateStoreName = new ArrayList();
+		List rebateCityName = new ArrayList();
 		List rebateCou = new ArrayList();
 		if (rebateList!=null&&!rebateList.isEmpty()) {
 
 			for (int i = 0; i < rebateList.size(); i++) {
 				rebatePhone.add(rebateList.get(i).get("tcphone").toString());
+				//查询社员注册门店 城市
+                List<Map<String, Object>> cmList = commDao.getCmReStoreCity(rebateList.get(i).get("tcphone").toString());
+                if(cmList!=null&&!cmList.isEmpty()){
+                    if(cmList.get(0).get("storename").toString()!=null){
+                        rebateStoreName.add(cmList.get(0).get("storename"));
+                    }else{
+                        rebateStoreName.add("");
+                    }
+                    if(cmList.get(0).get("cityname").toString()!=null){
+                        rebateCityName.add(cmList.get(0).get("cityname"));
+                    }else{
+                        rebateCityName.add("");
+                    }
+
+                }else{
+                    rebateStoreName.add("");
+                    rebateCityName.add("");
+                }
 				rebateCou.add(rebateList.get(i).get("cou").toString());
 
 			}
 			JSONArray rebatePhones = (JSONArray) JSONArray.fromObject(rebatePhone);
 			JSONArray rebateCous = (JSONArray) JSONArray.fromObject(rebateCou);
+			JSONArray rebateStore = (JSONArray) JSONArray.fromObject(rebateStoreName);
+			JSONArray rebateCity = (JSONArray) JSONArray.fromObject(rebateCityName);
 
 			result.put("rebatePhones", rebatePhones);
+			result.put("rebateStore", rebateStore);
+			result.put("rebateCity", rebateCity);
 			result.put("rebateCous", rebateCous);
 		}
 		// 查询社员粮票使用排行前5
 		List<Map<String, Object>> usedRebateList = cmDao.getUsedRebate(dd);
 		List usedRebatePhone = new ArrayList();
 		List usedRebateCou = new ArrayList();
+        List usedRebateStoreName = new ArrayList();
+        List usedRebateCityName = new ArrayList();
 		if (usedRebateList!=null&&!usedRebateList.isEmpty()) {
 
 			for (int i = 0; i < usedRebateList.size(); i++) {
 				usedRebatePhone.add(usedRebateList.get(i).get("tcphone").toString());
+                //查询社员注册门店 城市
+                List<Map<String, Object>> cmList = commDao.getCmReStoreCity(rebateList.get(i).get("tcphone").toString());
+                if(cmList!=null&&!cmList.isEmpty()){
+                    if(cmList.get(0).get("storename").toString()!=null){
+                        usedRebateStoreName.add(cmList.get(0).get("storename"));
+                    }else{
+                        usedRebateStoreName.add("");
+                    }
+                    if(cmList.get(0).get("cityname").toString()!=null){
+                        usedRebateCityName.add(cmList.get(0).get("cityname"));
+                    }else{
+                        usedRebateCityName.add("");
+                    }
+
+                }else{
+                    usedRebateStoreName.add("");
+                    usedRebateCityName.add("");
+                }
+
 				usedRebateCou.add(usedRebateList.get(i).get("cou").toString());
 
 			}
 			JSONArray usedRebatePhones = (JSONArray) JSONArray.fromObject(usedRebatePhone);
+			JSONArray usedRebateStore = (JSONArray) JSONArray.fromObject(usedRebateStoreName);
+			JSONArray usedRebateCity = (JSONArray) JSONArray.fromObject(usedRebateCityName);
 			JSONArray usedRebateCous = (JSONArray) JSONArray.fromObject(usedRebateCou);
 
+			result.put("usedRebateStore", usedRebateStore);
+			result.put("usedRebateCity", usedRebateCity);
 			result.put("usedRebatePhones", usedRebatePhones);
 			result.put("usedRebateCous", usedRebateCous);
 		}
