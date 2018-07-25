@@ -473,6 +473,8 @@ public class ExcelDataFormat {
 							house.setBuilding_room_number(roomTemp.replaceAll("\\.0", ""));
 						} else if (roomTemp.indexOf("西") != -1) {
 							house.setBuilding_room_number(roomTemp.replaceAll("\\.0", ""));
+						}else if (roomTemp.indexOf("-") != -1){
+							house.setBuilding_room_number(room);
 						} else {
 							house.setBuilding_room_number(floorList.get(j).toString().replaceAll("\\.0", "")
 									+ roomTemp.replaceAll("\\.0", ""));
@@ -595,7 +597,14 @@ public class ExcelDataFormat {
 		List<String> roomList = null;
 		if (cell != null) {
 			roomList = new ArrayList();
-			if (getStringFromCell(cell).indexOf("外复式") != -1) {
+			if(yanzhengRegex(getStringFromCell(cell))){
+
+				String[] strings = getStringFromCell(cell).split("、");
+				for (String string:strings){
+					roomList.add(string);
+				}
+
+			}else if (getStringFromCell(cell).indexOf("外复式") != -1) {
 				roomList.add("01外复式");
 
 			}  else if (getStringFromCell(cell).indexOf("内复式") != -1) {
@@ -1396,11 +1405,11 @@ public class ExcelDataFormat {
 						System.out.println(i);
 						System.out.println(j);
 						while (i <= j) {
-							floorList.add(charAt + "%" + i);
+				floorList.add(charAt + "%" + i);
 							i++;
 						}
 					}
-				}
+			}
 
 			} else if (split.length > 2) {
 				for (int m = 0; m < split.length - 1; m++) {
@@ -1490,5 +1499,18 @@ public class ExcelDataFormat {
 		}
 		return floorList;
 	}
+	//正则验证A0001、Aooo2、B-101格式(不能包含2~5层，和101~105不进行处理)
+	public static Boolean yanzhengRegex(String content){
+		String pattern = ".*、.*";
+		boolean isMatch = Pattern.matches(pattern, content);
+		String pattern1 = ".*，.*";
+		boolean isMatch1 = Pattern.matches(pattern1, content);
+		if(isMatch&&!isMatch1){
+			return true;
+		}
+		return false;
+	}
+
+
 
 }

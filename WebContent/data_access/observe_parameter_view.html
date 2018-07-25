@@ -49,7 +49,7 @@ $(function () {
 						}
 					},false);
     //页面加载成功后需要获取数据
-    searchList();
+   // searchList();
     $(".operateHeader").width("5%");
     
     var min= new Date();
@@ -59,7 +59,7 @@ $(function () {
     	  ,type: 'month'//最大日期
     	  ,max: max
     });
-    $('#observe_month').val(min.getFullYear() + "-" + ((min.getMonth() + 1)<10 ?"0"+(min.getMonth() + 1) : (min.getMonth() + 1)));
+    //$('#observe_month').val(min.getFullYear() + "-" + ((min.getMonth() + 1)<10 ?"0"+(min.getMonth() + 1) : (min.getMonth() + 1)));
     
    
     $('#store_name').keyup(function(event){
@@ -242,11 +242,10 @@ $pmspage.opArr = [ editObj];
  function questioncount(){
 	var path = getRootPath();
 	var observe_month = $("#observe_month").val();
-	
-    if(observe_month == null||observe_month.trim() == ""){
-    	var min= new Date();
-    	observe_month=min.getFullYear() + "-" + ((min.getMonth() + 1)<10 ?"0"+(min.getMonth() + 1) : (min.getMonth() + 1));
-	}
+     if(observe_month == null||observe_month.trim() == ""){
+         alert("请选择明查月份！");
+         return;
+     }
 	var store_id = $("#store_id").val();
 	var cityname = $("#city_name").val();
 	window.open(path + "/downloadExcel.action"

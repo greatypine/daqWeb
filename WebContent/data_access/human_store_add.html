@@ -266,6 +266,22 @@ Date.prototype.format=function(fmt) {
 			$("#phone").focus();
 			$$.showMessage("系统信息","请输入本人电话 !");
 			return;
+		}else{
+			var existhuman=false;
+			doManager("HumanresourcesManager", "queryHumanresourceListByPhone", phone,
+					function(data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							var jsonData = $.fromJSON(data.data);
+							if(jsonData!=null&&jsonData.length>0){
+								existhuman=true;
+							}
+						}
+					}, false);
+			
+			if(existhuman){
+				$$.showMessage("系统信息","系统中存在相同的电话号码！ ");
+				return ;
+			}
 		}
 		
 		var topostdate = $("#topostdate").val();
@@ -429,7 +445,7 @@ Date.prototype.format=function(fmt) {
 			}
 			
 			
-			if(zw!=null&&(zw.trim()=="服务专员"||zw.trim()=="线上服务专员")){
+			if(zw!=null&&(zw.trim()=="服务专员"||zw.trim()=="线上服务专员"||zw.trim()=="综合专员"||zw.trim()=="副店长")){
 				$("#career_group").show();
 				$("#syqfont").show();
 			}else{
@@ -486,7 +502,7 @@ Date.prototype.format=function(fmt) {
 		o["zw"] = $("#zw  option:selected").val();
 		//事业群 
 		var fwzw = $("#zw  option:selected").val();
-		if(fwzw=="服务专员"){
+		if(fwzw=="服务专员"||fwzw=="线上服务专员"||fwzw=="副店长"||fwzw=="综合专员"){
 			o["career_group"] = $("#career_group  option:selected").val();
 		}else{
 			o["career_group"] = "";

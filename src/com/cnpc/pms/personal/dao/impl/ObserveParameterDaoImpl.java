@@ -88,7 +88,7 @@ public class ObserveParameterDaoImpl extends BaseDAOHibernate  implements Observ
 			where += " AND st.store_id = '"+store_id+"'";
 		}
 		if(!"-".equals(observe_month) && observe_month != null){
-			where += " and st.observe_month = '"+observe_month+"'";
+			where += " and st.observe_month <= '"+observe_month+"'";
 		}
 		if(!"".equals(employeeId) && employeeId != null){
 			where += " and city.pk_userid = '"+employeeId+"'";
@@ -110,7 +110,7 @@ public class ObserveParameterDaoImpl extends BaseDAOHibernate  implements Observ
 			where += " AND top.store_id = '"+store_id+"'";
 		}
 		if(!"".equals(observe_month) && observe_month != null){
-			where += " and top.observe_month = '"+observe_month+"'";
+			where += " and top.observe_month <= '"+observe_month+"'";
 		}
 		if(!"".equals(employeeId) && employeeId != null){
 			where += " and city.pk_userid = '"+employeeId+"'";
@@ -118,7 +118,7 @@ public class ObserveParameterDaoImpl extends BaseDAOHibernate  implements Observ
 		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();	
 		String find_sql = "select top.storeno,top.store_name,ifnull(ts.rmname,'') as rmname,ifnull(ts.skname,'') as skname,top.observe_date,top.observe_person,top.points_combined,top.observe_question_number,top.observe_month from t_store_observe_parameter top INNER JOIN "
 				+"t_dist_city city on (top.city_name = city.cityname) inner join (select(select name from tb_bizbase_user t1 where t1.id = t.rmid) as rmname,(select name from tb_bizbase_user t2 where t2.id = t.skid) as skname,t.store_id from t_store t) ts "
-				+"ON (ts.store_id = top.store_id) WHERE top.type = '0' "+where+"  GROUP BY top.store_id,top.observe_month";
+				+"ON (ts.store_id = top.store_id) WHERE top.type = '0' "+where+"  GROUP BY top.store_id,top.observe_month ORDER  BY  top.observe_month ASC";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
 				.createSQLQuery(find_sql);
 		lst_result =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
