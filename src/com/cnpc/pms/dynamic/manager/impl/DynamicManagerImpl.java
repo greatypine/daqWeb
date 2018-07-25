@@ -5110,6 +5110,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				type="front";
 			}else if(storetypename!=null&&storetypename.equals("城市仓")){
 				type="city";
+			}else if(storetypename!=null&&storetypename.equals("虚拟店(仓店)")){
+				type="front";
 			}else{
 				type="normal";
 			}

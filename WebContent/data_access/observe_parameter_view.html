@@ -49,7 +49,7 @@ $(function () {
 						}
 					},false);
     //页面加载成功后需要获取数据
-   // searchList();
+    searchList();
     $(".operateHeader").width("5%");
     
     var min= new Date();
@@ -232,7 +232,7 @@ var editObj = {
 		resourceId: "observe_paramter_edit",
 		func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
 			var store_id = allColumnsDataMap.store_id;
-			window.location.href = "observe_paramter_add.html?om="+encode64(data[2])+"&t="+encode64("edit")+"&sn="+encode64(data[1])+"&si="+encode64(store_id);
+            window.location.href = "observe_paramter_add.html?om="+encode64(allColumnsDataMap.observe_month)+"&t="+encode64("edit")+"&sn="+encode64(allColumnsDataMap.store_name)+"&si="+encode64(store_id);
 		}
 	}
 
@@ -305,10 +305,11 @@ function questionexport(){
             </div>
         </div>
         <div class="panel-footer" style="text-align: right">
-        	<button class="btn btn-primary" onclick="questioncount()">明查问题汇总导出</button>
+
         	<!-- <button class="btn btn-primary" onclick="questionexport()">各门店扣分详情导出</button> -->
-            <button class="btn btn-primary" onclick="searchList()">查询</button>
             <button class="btn btn-primary" id="inser" onclick="insertObserve()">添加</button>
+            <button class="btn btn-primary" onclick="searchList()">查询</button>
+            <button class="btn btn-primary" onclick="questioncount()">明查问题汇总导出</button>
             <!-- <button class="btn btn-primary" onclick="doClean();">重置</button> -->
         </div>
     </div>
