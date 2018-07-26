@@ -1541,5 +1541,64 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		return result;
 	}
 
+	@Override
+	public void deleteTinyVillageOfArea(Long tinyVillageId, String areaNo) throws MyException {
+		AreaInfoManager areaInfoManager = (AreaInfoManager) SpringHelper.getBean("areaInfoManager");
+		AreaHistoryManager areaHistoryManager = (AreaHistoryManager) SpringHelper.getBean("areaHistoryManager");
+		AreaInfoHistoryManager areaInfoHistoryManager = (AreaInfoHistoryManager) SpringHelper.getBean("areaInfoHistoryManager");
+		MongoDBManager mongoDBManager = (MongoDBManager) SpringHelper.getBean("mongoDBManager");
+
+		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+		Area save_area = null;
+		AreaHistory areaHistory = null;
+		List<AreaInfo> areaInfoList = null;
+		List<AreaInfo> new_areaInfoList = new ArrayList<AreaInfo>();
+		Map<String,Object> delResult = new HashMap<String,Object>();
+			if (null != areaNo) {
+				save_area = this.queryAreaByAreaNo(areaNo);
+
+				// 保存片区原始数据记录
+				areaHistory = new AreaHistory();
+				BeanUtils.copyProperties(save_area, areaHistory, new String[] { "id" });
+				areaHistory.setArea_id(save_area.getId());
+				areaHistory.setFlag(1);
+				areaHistoryManager.saveObject(areaHistory);
+
+				areaInfoList = (List<AreaInfo>) areaDao.queryAreaInfoByAreaId(save_area.getId());
+				for (AreaInfo info : areaInfoList) {
+					AreaInfoHistory areaInfoHistory = new AreaInfoHistory();
+					BeanUtils.copyProperties(info, areaInfoHistory, new String[] { "id" });
+					areaInfoHistory.setAreainfo_id(info.getId());
+					areaInfoHistory.setFlag(1);
+					areaInfoHistoryManager.saveObject(areaInfoHistory);
+
+					if((info.getTin_village_id()-tinyVillageId)!=0){//剔除删除的小区
+						new_areaInfoList.add(info);
+					}
+				}
+
+
+				areaInfoManager.deleteAreaInfoByAreaId(save_area);// 删除原始片区详情
+
+
+				for (AreaInfo info : new_areaInfoList) {//重建片区详情
+
+					preObject(info);
+					areaInfoManager.saveObject(info);
+				}
+				save_area.setChildrens(new_areaInfoList);
+				Map<String, Object> result = mongoDBManager.updateTinyAreaOfEmployee(save_area);//重新设置小区负责人
+
+				if (Integer.parseInt(String.valueOf(result.get("code"))) != CodeEnum.success.getValue()) {
+					throw new MyException("更新tiny_area或者mongodb国安侠失败");
+				}
+
+			}
+
+
+
+
+	}
+
 
 }
