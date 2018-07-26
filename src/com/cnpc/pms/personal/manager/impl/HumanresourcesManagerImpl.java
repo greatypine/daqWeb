@@ -680,6 +680,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	hr.setContractdatestart(humanresources.getContractdatestart());
     	hr.setContractdateend(humanresources.getContractdateend());
     	hr.setCareer_group(humanresources.getCareer_group());
+    	hr.setCareer_group2(humanresources.getCareer_group2());
     	hr.setSelectStoreIds(humanresources.getSelectStoreIds());
     	
     	boolean isLeave = false;

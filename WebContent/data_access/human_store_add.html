@@ -365,6 +365,7 @@ Date.prototype.format=function(fmt) {
 						var jsonData = $.fromJSON(data.data);
 						for (i = 0; i < jsonData.length; i++) {
 							$("#career_group").append("<option>" + jsonData[i].career_group + "</option>");
+							$("#career_group2").append("<option>" + jsonData[i].career_group + "</option>");
 						}
 					}
 				}, false);
@@ -448,9 +449,13 @@ Date.prototype.format=function(fmt) {
 			if(zw!=null&&(zw.trim()=="服务专员"||zw.trim()=="线上服务专员"||zw.trim()=="综合专员"||zw.trim()=="副店长")){
 				$("#career_group").show();
 				$("#syqfont").show();
+				$("#career_group2").show();
+				$("#syqfont2").show();
 			}else{
 				$("#career_group").hide();
 				$("#syqfont").hide();
+				$("#career_group2").hide();
+				$("#syqfont2").hide();
 			}
 			
 			
@@ -458,6 +463,8 @@ Date.prototype.format=function(fmt) {
 		
 		$("#career_group").hide();
 		$("#syqfont").hide();
+		$("#career_group2").hide();
+		$("#syqfont2").hide();
 		$("#storefwbtn").attr("disabled",true);
 	});
 
@@ -503,9 +510,19 @@ Date.prototype.format=function(fmt) {
 		//事业群 
 		var fwzw = $("#zw  option:selected").val();
 		if(fwzw=="服务专员"||fwzw=="线上服务专员"||fwzw=="副店长"||fwzw=="综合专员"){
-			o["career_group"] = $("#career_group  option:selected").val();
+			var career_group=$("#career_group  option:selected").val();
+			var career_group2=$("#career_group2  option:selected").val();
+			if(career_group==career_group2){
+				$("#btnSave").attr("disabled",""); 
+				$$.showMessage("系统信息","请选择不同事业群！ ");
+				return;
+			}
+			
+			o["career_group"] = career_group;
+			o["career_group2"] = career_group2;
 		}else{
 			o["career_group"] = "";
+			o["career_group2"] = "";
 		}
 		
 		if(o["humanstatus"]=="2"){
@@ -882,10 +899,13 @@ Date.prototype.format=function(fmt) {
 						<option value="仓库主管">仓库主管</option>
 						<option value="配送主管">配送主管</option>
 						<option value="线上服务专员">线上服务专员</option>
-					</select>
+					</select><br>
 					
-					<font id="syqfont">事业群</font>
+					<font id="syqfont">事&nbsp;业&nbsp;群1：</font>
 					<select id="career_group" name="career_group" style="width: 25%;display:inline-block;height:30px;padding:0;margin-top:10px;" class="form-control">
+					</select>
+					<font id="syqfont2">事&nbsp;业&nbsp;群2：</font>
+					<select id="career_group2" name="career_group2" style="width: 25%;display:inline-block;height:30px;padding:0;margin-top:10px;" class="form-control">
 					</select>
 					
 					</p>
