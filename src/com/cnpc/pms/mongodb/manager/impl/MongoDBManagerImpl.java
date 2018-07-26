@@ -501,8 +501,14 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		UserManager umanager = (UserManager)SpringHelper.getBean("userManager");
 		UserDTO userDTO = umanager.getCurrentUserDTO();
 		TinyVillageCodeManager tinyVillageCodeManager = (TinyVillageCodeManager)SpringHelper.getBean("tinyVillageCodeManager");
-
+		AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
 		try {
+
+			if(tCoordDto.getArea_no()!=null&&!"".equals(tCoordDto.getArea_no())){
+				areaManager.deleteTinyVillageOfArea(tCoordDto.getTiny_village_id(),tCoordDto.getArea_no());//解除小区和片区的绑定
+			}
+
+
 			TinyVillageCode tinyVillageCode = tinyVillageCodeManager.findTinyVillageCodeByTinyId(tCoordDto.getTiny_village_id());
 
 			if(tinyVillageCode==null){
@@ -1274,7 +1280,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<AreaInfo> areaInfos = area.getChildrens();
 		try {
-			
+
 			
 			if(areaInfos!=null&&areaInfos.size()>0){
 				AreaInfo  areaInfo=null;
