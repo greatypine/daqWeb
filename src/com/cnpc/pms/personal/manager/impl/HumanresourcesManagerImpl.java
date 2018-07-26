@@ -212,7 +212,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
             	List<?> repleave_list = this.getList(repleaveFilter);
     			if(repleave_list!=null&&repleave_list.size()>0){
     				Humanresources repHuman = (Humanresources) repleave_list.get(0);
-    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()==null?"":repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
+    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+(repHuman.getLeavereason()==null?"":repHuman.getLeavereason())+"<br> 请您使用页面新增功能添加该员工！ ";
             		return rcvmsg;
     			}
     			
@@ -2788,7 +2788,7 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
             	List<?> repleave_list = this.getList(repleaveFilter);
     			if(repleave_list!=null&&repleave_list.size()>0){
     				Humanresources repHuman = (Humanresources) repleave_list.get(0);
-    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+repHuman.getLeavereason()==null?"":repHuman.getLeavereason()+"<br> 请您使用页面新增功能添加该员工！ ";
+    				rcvmsg="存在离职记录数据！<br> 姓名:"+repHuman.getName()+"<br> 员工号："+repHuman.getEmployee_no()+" <br> 身份证:"+repHuman.getCardnumber()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职日期："+repHuman.getLeavedate()+" <br>&nbsp;&nbsp;&nbsp;&nbsp; 离职原因："+(repHuman.getLeavereason()==null?"":repHuman.getLeavereason())+"<br> 请您使用页面新增功能添加该员工！ ";
             		return rcvmsg;
     			}
 				
