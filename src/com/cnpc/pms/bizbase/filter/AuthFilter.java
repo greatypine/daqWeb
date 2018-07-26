@@ -49,6 +49,8 @@ public class AuthFilter extends OncePerRequestFilter {
 	
 	private static final String REPLYMESSAGE_URL = "replyMessage.action";
 
+	private static final String UPLOADFILETOOSS_URL ="uploadFileToOss.action";
+
 	/** The Constant log. */
 	private static final Logger LOG = LoggerFactory.getLogger(AuthFilter.class);
 
@@ -706,6 +708,13 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+
+			if (url.indexOf(UPLOADFILETOOSS_URL)>=0) {//短信回复
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+
+
 			UserSession userSession = SessionManager.getUserSession();
 			if (userSession == null || userSession.getSessionData() == null
 					|| userSession.getSessionData().get("user") == null) {

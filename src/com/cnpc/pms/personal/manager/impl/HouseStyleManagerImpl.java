@@ -1577,33 +1577,22 @@ public class HouseStyleManagerImpl extends BizBaseCommonManager implements House
 	public List<Map<String, Object>> getnewTinyVillageHousePic(
 			ViewAddressCustomer viewAddressCustomer) {
 		// TODO Auto-generated method stub
-		String web = PropertiesUtil.getValue("file.web.root").concat("house_type_image").concat("/");
-        String picPath = PropertiesUtil.getValue("file.root").concat("house_type_image").concat(File.separator);
+		//String web = PropertiesUtil.getValue("file.web.root").concat("house_type_image").concat("/");
+        //String picPath = PropertiesUtil.getValue("file.root").concat("house_type_image").concat(File.separator);
+        String path = PropertiesUtil.getValue("file.oss.root").concat("house_type_image/");
         List<Map<String,Object>> map_result = new ArrayList<Map<String, Object>>();
         List<Map<String, Object>> lst_address_obj=new ArrayList<Map<String,Object>>();
 		HouseStyleDao dao_houseStyle = (HouseStyleDao) SpringHelper.getBean(HouseStyleDao.class.getName());
 		lst_address_obj=dao_houseStyle.getHousePicByTinyId(viewAddressCustomer.getTv_id());
 		 for(Map obj_add : lst_address_obj){
 	                Map<String,Object> map_content = new HashMap<String, Object>();
-	                String path = "";
-	                File pic_dir = new File(picPath);
-	                final Object house_pic = obj_add.get("house_pic");
-	                if(obj_add==null){
-	                	continue;
-	                }
-	                File[] file_pics = pic_dir.listFiles(new FileFilter() {
-	                    @Override
-	                    public boolean accept(File pathname) {
-	                        return pathname.getName().contains(house_pic.toString());
-	                    }
-	                });
-	                if(file_pics != null && file_pics.length != 0 ){
-	                    path =  web.concat(file_pics[0].getName());
-	                    map_content.put("name",house_pic);
-	                    map_content.put("path",path);
-	                    map_result.add(map_content);
-	                }
-	            
+                     if(obj_add==null){
+                         continue;
+                     }
+	                 final Object house_pic = obj_add.get("house_pic");
+                     map_content.put("name",house_pic);
+                     map_content.put("path",path.concat(house_pic.toString()));
+                     map_result.add(map_content);
 
 	        }
 		

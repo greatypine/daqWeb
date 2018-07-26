@@ -57,7 +57,7 @@
   		 -webkit-transform:scale(1.5,1.5);  
   	     -o-transform:scale(1.5,1.5);  
     }
-    
+
 </style>
 <script type="text/javascript">
     var customer_id = getUrlParamByKey("customer_id");
@@ -1004,7 +1004,7 @@
     }
 
     function loadUpload(){
-        var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=user_image";
+/*        var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=user_image";
         var elementsId = ['uploader_pic'];
         $('#uploader_pic').change(function(){
             $.ajaxFileUpload({
@@ -1028,7 +1028,39 @@
                     $$.showMessage("提示",e);
                 }
             });
-        });
+        });*/
+
+
+
+
+        var url = getRootPath()+ "/uploadFileToOss.action?storeDir=daqWeb/user_image/";
+        var elementsId = ['uploader_pic'];
+        $('#uploader_pic').change(function(){
+            $.ajaxFileUpload({
+                url: url,
+                type: 'post',
+                secureuri: false, //一般设置为false
+                fileElementId: elementsId, // 上传文件的id、name属性名
+                dataType: 'json', //返回值类型，一般设置为json、application/json
+                success: function(data, status){
+
+                    if(data.status=="success"){
+                        $('#cus_pic').attr('src',data.downLoadUrl);
+                        $('#customer_pic').val(data.fileName);
+                    }else{
+                        $$.showMessage('提示',data.message);
+                    }
+                },
+                error: function(data, status, e){
+                    $$.showMessage("提示",e);
+                }
+            });
+
+        })
+
+
+
+
     }
     
     
@@ -1352,7 +1384,7 @@ function manageCar(v){
                     <input type="hidden" id="city_id" />
                 </span>
             </div>
-            <form id="base_form">
+            <form id="base_form" enctype="multipart/form-data" method="post">
             <div class="panel-body" style="height: 80%;">
                 <div id="div_customer" style="float:left;width: 55%;height: 100%">
                     <table id="tiny_village_table" cellpadding="0" cellspacing="0" style="min-width: 100%;margin: 10px; width: auto">
@@ -1521,7 +1553,7 @@ function manageCar(v){
                         </div>
                         <div style="text-align: center">
                             <input type="hidden" id="customer_pic" name="customer_pic"/>
-                            <input type="file" id="uploader_pic" name="uploader_pic"   style="display: none"/>
+                            <input type="file" isuploadtable="true" id="uploader_pic" name="uploader_pic"    style="display:none"/>
                             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                             <span onclick="$('#uploader_pic').click();" style="color:blue;cursor:pointer">更换图片</span>
                         </div>
@@ -1830,10 +1862,10 @@ function manageCar(v){
                    		</tr> 
                    		<tr><td width="8px">社区<span style="color:red">*</span></td>
 	                   		<td>
-	                   			<input type="hidden" name="village_id" id="village_id"/>
-	                   			<input type="text" class="form-control" list="village_name-search" bidTableFlag="true"  name="village_name" id="village_name" style= "width:100%"> 
-		                   		<datalist id="village_name-search">
-		                        </datalist>
+                                <input type="hidden" name="village_id" id="village_id"/>
+                                <input type="text" class="form-control" list="village_name-search" bidTableFlag="true"  name="village_name" id="village_name" style= "width:100%">
+                                <datalist id="village_name-search">
+                                </datalist>
 	                   		</td>
 	                   	</tr>
                    		<tr><td width="8px" ><span id="new_tinvillage_name">小区</span><span style="color:red">*</span></td><td><input type="text" maxlength="40" class="form-control" name="tin_village" id="tin_village" style= "width:100%"></td></tr>
@@ -1858,7 +1890,7 @@ function manageCar(v){
 
         </div>
     </div>
-    
+
 <script type="text/javascript">
 
     var lst_select_tiny = null;
@@ -1866,25 +1898,25 @@ function manageCar(v){
     var map_house = null;
     var lst_house = null;
     var lst_select_village=null;
-    
+
     $('#tv_name').keyup(function(event){
     	 var str_name = $(this).val();
    	     var reg = /^\s+|\s+$/g;
          str_name = str_name.replace(reg,'');
-    	
+
          $('#building_name-search').children().remove();
          $('#building_name').val("");
-        
+
          $('#unit_no-search').children().remove();
          $('#unit_no').val("");
-        
+
          $('#house_no-search').children().remove();
          $('#house_no').val("");
 		 var city_id = $("#city_id").val();
 		 if(city_id==""){
 			city_id = null;
 		 }
-		
+
         str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
         	$("#tv_id").val("");
@@ -1908,10 +1940,10 @@ function manageCar(v){
      $('#tv_name').change(function(){
     	 $('#building_name-search').children().remove();
          $('#building_name').val("");
-        
+
          $('#unit_no-search').children().remove();
          $('#unit_no').val("");
-        
+
          $('#house_no-search').children().remove();
          $('#house_no').val("");
          $(lst_select_tiny).each(function(index,element){
@@ -1923,32 +1955,31 @@ function manageCar(v){
                 }else{
                 	house_option_pingfang();
                 }
-                
+
             }
          });
-    }); 
-    
- 
+    });
 
-    
+
+
     $('#village_name').keyup(function(event){
 
         var str_name = $(this).val();
-   	    var reg = /^\s+|\s+$/g;
+        var reg = /^\s+|\s+$/g;
         str_name = str_name.replace(reg,'');
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        	$('#village_id').val("");
+            $('#village_id').val("");
             $('#village_name-search').children().remove();
             if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                 return;
             }
             var townId = $('#town_id').val();
             if(townId==null||townId==""){
-            	return;
+                return;
             }
             doManager('VillageManager','searchVillageByTownAndName',[townId,str_name],function(data){
                 if(data.result){
-                	lst_select_village = JSON.parse(data.data);
+                    lst_select_village = JSON.parse(data.data);
                     $(lst_select_village).each(function(index,element){
                         $('#village_name-search').append('<option value="'+element.name+'">');
                     });
@@ -1958,10 +1989,10 @@ function manageCar(v){
             });
         }
     });
-    
-    
+
+
     $('#village_name').change(function(){
-    	
+
         $(lst_select_village).each(function(index,element){
             if(element.name == $('#village_name').val()){
                 $('#village_id').val(element.id);
@@ -2006,7 +2037,7 @@ function manageCar(v){
             }
         });
     });
-    
+
     function building_option(){
     	layer.msg("'楼号' 加载中", {
     		  icon: 16

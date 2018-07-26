@@ -17,7 +17,7 @@ import com.cnpc.pms.notice.entity.Notice;
  */
 public interface NoticeManager extends IManager{
 	
-	/**
+	/**notic
 	 * 
 	* @Title: queryAllCity  
 	* @Description: TODO 获取全部城市 
