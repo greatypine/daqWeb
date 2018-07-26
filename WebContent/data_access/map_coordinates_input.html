@@ -778,6 +778,12 @@
 
     function deletePolygon(areaAry,idx){
         var bSuccess = false;
+        var areaname = areaAry[idx].areaname;
+
+        if(areaname != ""){
+            $("#deletevillageInfo span").html("此小区被"+areaname+"片区使用，删除后对应的片区关系将被解除，确认删除吗？");
+        }
+
         $("#deletevillageInfo").dialog({
             bgiframe: true,
             title: '坐标录入',
@@ -789,6 +795,7 @@
                     $("#deletevillageInfo").dialog('close');
                     var requestParam = {};
                     requestParam['tiny_village_id'] = areaAry[idx].id;
+                    requestParam['area_no'] = areaAry[idx].area_no;
                     var valliage_name = areaAry[idx].name;
                     doManager("MongoDBManager", "deleteTinyVillageCoord", requestParam, function(data, textStatus, XMLHttpRequest) {
                         if (data.result) {
