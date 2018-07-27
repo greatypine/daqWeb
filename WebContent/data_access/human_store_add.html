@@ -363,6 +363,7 @@ Date.prototype.format=function(fmt) {
 				function(data, textStatus, XMLHttpRequest) {
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
+						$("#career_group2").append("<option></option>");
 						for (i = 0; i < jsonData.length; i++) {
 							$("#career_group").append("<option>" + jsonData[i].career_group + "</option>");
 							$("#career_group2").append("<option>" + jsonData[i].career_group + "</option>");
