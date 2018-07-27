@@ -47,7 +47,6 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 	}
 	@Override
 	public List<Map<String, Object>> getCmGoodsTurnover(String dd) {
-		// TODO Auto-generated method stub
 		/**
 		 * @author wuxinxin
 		 * 2018年5月18日
@@ -1410,6 +1409,24 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		}
 		return lst_result;
 	}
-    
+
+    @Override
+    public List<Map<String, Object>> getCmReStoreCity(String dd) {
+
+        /**
+         * @author wuxinxin 2018年7月12日
+         */
+        String daySumSql = "select ts.name storename,tdc.cityname cityname from df_user_member dum,t_store  ts,t_dist_citycode tdc where dum.mobilephone='"+dd+"' and dum.regist_storeid= ts.id and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno";
+
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return lst_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }

@@ -3,6 +3,7 @@ package com.cnpc.pms.slice.manager;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.base.MyException;
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
@@ -270,6 +271,12 @@ public interface AreaManager extends IManager {
 	 * @return
 	 */
 	public Map<String, Object> selectAllArea();
-	
-	
+
+	/**
+	 * @Description  解除小区与片区的绑定关系
+	 * @author gbl
+	 * @date 2018/7/26 16:57
+	 **/
+
+	public void deleteTinyVillageOfArea(Long tinyVillageId,String areaNo) throws MyException;
 }

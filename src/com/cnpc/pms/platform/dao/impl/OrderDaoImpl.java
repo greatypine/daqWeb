@@ -1981,7 +1981,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 		String endDate = dd.getEndDate();
 		if(provinceNO!=null&&provinceNO.size()>0){
 			provinceNo = String.valueOf(provinceNO.get(0).get("gb_code"));
-			whereCustomerStr+=" AND t5.city_code='"+provinceNo+"' ";
+			whereCustomerStr+=" AND t5.province_code='"+provinceNo+"' ";
 			whereStr+=" and t.province_code='"+provinceNo+"' ";
 		}
 		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){

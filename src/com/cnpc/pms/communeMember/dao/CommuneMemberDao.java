@@ -332,5 +332,12 @@ public interface CommuneMemberDao extends IDAO {
      */
     public List<Map<String, Object>> getMemOrderCount(String dd);
 
+/**
+     * TODO 查询社员注册门店、城市
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getCmReStoreCity(String dd);
+
 
 }

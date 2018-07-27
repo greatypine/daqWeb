@@ -243,13 +243,13 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			whereStr = " and tdc.id=" + cityId;
 		}
 		if (employee_no != null && !"".equals(employee_no)) {
-			sql = "select t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中') t  inner join  (select tdc.id,tdc.cityname from t_dist_city a"
+			sql = "select t.platformid,t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中') t  inner join  (select tdc.id,tdc.cityname from t_dist_city a"
 					+ "   INNER JOIN t_dist_citycode tdc on a.citycode = tdc.citycode and a.pk_userid=" + employee_no
 					+ whereStr + " ) t1" + "	on t.city_name  = t1.cityname "
 					+ " left JOIN tb_bizbase_user as tbu on t.skid = tbu.id";
 		} else {
-			sql = "select t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中') t  inner join  "
-					+ " (select tdc.id,tdc.cityname from    t_dist_citycode tdc where id=" + cityId + " ) t1"
+			sql = "select t.platformid,t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中') t  inner join  "
+					+ " (select tdc.id,tdc.cityname from    t_dist_citycode tdc where tdc.status=0  " + whereStr + " ) t1"
 					+ " on t.city_name  = t1.cityname " + " left JOIN tb_bizbase_user as tbu on t.skid = tbu.id";
 		}
 

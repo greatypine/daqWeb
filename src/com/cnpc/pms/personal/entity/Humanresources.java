@@ -476,6 +476,11 @@ public class Humanresources extends DataEntity{
 	private String career_group;
 	
 	
+	//所在事业群2
+	@Column(length = 65,name="career_group2")
+	private String career_group2;
+		
+		
 	/**
 	 * 邀请码
 	 */
@@ -1103,6 +1108,14 @@ public class Humanresources extends DataEntity{
 
 	public void setInviteCode(String inviteCode) {
 		this.inviteCode = inviteCode;
+	}
+
+	public String getCareer_group2() {
+		return career_group2;
+	}
+
+	public void setCareer_group2(String career_group2) {
+		this.career_group2 = career_group2;
 	}
 	
 	/***********培训结束********************/

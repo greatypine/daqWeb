@@ -778,6 +778,15 @@
 
     function deletePolygon(areaAry,idx){
         var bSuccess = false;
+       // var areaname = areaAry[idx].areaname;
+
+//        if(areaname != null){
+//            $("#deletevillageInfo span").html("此小区被"+areaname+"片区使用，删除后对应的片区关系将被解除，确认删除吗？");
+//        }else{
+//            $("#deletevillageInfo span").html("是否删除已选中绿色小区？");
+//
+//        }
+
         $("#deletevillageInfo").dialog({
             bgiframe: true,
             title: '坐标录入',
@@ -789,6 +798,7 @@
                     $("#deletevillageInfo").dialog('close');
                     var requestParam = {};
                     requestParam['tiny_village_id'] = areaAry[idx].id;
+                  //  requestParam['area_no'] = areaAry[idx].area_no;
                     var valliage_name = areaAry[idx].name;
                     doManager("MongoDBManager", "deleteTinyVillageCoord", requestParam, function(data, textStatus, XMLHttpRequest) {
                         if (data.result) {
@@ -801,8 +811,15 @@
                                 bSuccess = true;
                                 $$.showMessage("坐标录入", valliage_name+",删除成功!");
                                 var labelEml = $($($("li[name='"+areaAry[idx].id+"']").find("p")[1]).children());
-                                labelEml.attr("class","font-color-red")
+                                labelEml.attr("class","font-color-red");
                                 labelEml.html("未录入坐标,&nbsp;");
+                               // $($($("li[name='"+areaAry[idx].id+"']").find("p")[1])).html($(labelEml)+"未绑定片区");
+//                                var a_str  = $($($("li[name='"+areaAry[idx].id+"']").find("p")[1])).html();
+//                                var n = a_str.indexOf(':');
+//                                var j_str = str.substring(0,n);
+//                                var rep_str = j_str.replace("已","未");
+//                                $($($("li[name='"+areaAry[idx].id+"']").find("p")[1])).html(rep_str);
+
                                 if(position != ""){
                                 	drawPolygon(map, areaAry, idx);
                                 }else{
