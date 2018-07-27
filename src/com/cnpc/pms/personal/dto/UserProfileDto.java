@@ -20,6 +20,8 @@ public class UserProfileDto {
 	private String first_order_time_end;
 	private String last_order_time_begin;
 	private String last_order_time_end;
+	private String open_card_time_begin;
+	private String open_card_time_end;
 	private String user_label;
 	private String user_model;
 	private String trading_price_min;
@@ -90,6 +92,18 @@ public class UserProfileDto {
 	}
 	public void setLast_order_time_end(String last_order_time_end) {
 		this.last_order_time_end = last_order_time_end;
+	}
+	public String getOpen_card_time_begin() {
+		return open_card_time_begin;
+	}
+	public void setOpen_card_time_begin(String open_card_time_begin) {
+		this.open_card_time_begin = open_card_time_begin;
+	}
+	public String getOpen_card_time_end() {
+		return open_card_time_end;
+	}
+	public void setOpen_card_time_end(String open_card_time_end) {
+		this.open_card_time_end = open_card_time_end;
 	}
 	public String getUser_label() {
 		return user_label;
