@@ -504,9 +504,9 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
 		try {
 
-			if(tCoordDto.getArea_no()!=null&&!"".equals(tCoordDto.getArea_no())){
-				areaManager.deleteTinyVillageOfArea(tCoordDto.getTiny_village_id(),tCoordDto.getArea_no());//解除小区和片区的绑定
-			}
+//			if(tCoordDto.getArea_no()!=null&&!"".equals(tCoordDto.getArea_no())){
+//				areaManager.deleteTinyVillageOfArea(tCoordDto.getTiny_village_id(),tCoordDto.getArea_no());//解除小区和片区的绑定
+//			}
 
 
 			TinyVillageCode tinyVillageCode = tinyVillageCodeManager.findTinyVillageCodeByTinyId(tCoordDto.getTiny_village_id());
@@ -1318,8 +1318,8 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						query.append("code", tinyArea.getCode());
 						query.append("storeNo",store.getStoreno());
 						Document updateDoc = new Document("employee_a_no",tinyArea.getEmployee_a_no()).append("employee_b_no", tinyArea.getEmployee_b_no());
-						collection.updateMany(query, new Document("$set",updateDoc)); 
-						
+						collection.updateMany(query, new Document("$set",updateDoc));
+						preObject(tinyArea);
 						tinyAreaManager.saveObject(tinyArea);
 					}
 					
