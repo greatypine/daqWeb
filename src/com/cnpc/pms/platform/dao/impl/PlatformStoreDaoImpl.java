@@ -460,7 +460,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年6月6日
 		 */
-		String usedRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate-tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id and tc.white!='QA' ";
+		String usedRebateSql = "select tc.mobilephone tcphone,tmi.sum_rebate-tmi.remain_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id and tc.white!='QA' ";
 		if(!"0000".equals(dd)) {
 			usedRebateSql = usedRebateSql+" and tc.city_code='"+dd+"'";
 		}
@@ -486,7 +486,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		/**
 		 * @author wuxinxin 2018年6月6日
 		 */
-		String sumRebateSql = "select insert(tc.mobilephone, 4, 5, '*****') tcphone,tmi.sum_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id and tc.white!='QA' ";
+		String sumRebateSql = "select tc.mobilephone tcphone,tmi.sum_rebate cou from t_mebmer_info tmi,t_customer tc where tmi.customer_id=tc.id and tc.white!='QA' ";
 		if(!"0000".equals(dd)) {
 			sumRebateSql = sumRebateSql+" and tc.city_code='"+dd+"'";
 		}

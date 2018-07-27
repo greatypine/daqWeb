@@ -1929,7 +1929,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		if (rebateList!=null&&!rebateList.isEmpty()) {
 
 			for (int i = 0; i < rebateList.size(); i++) {
-				rebatePhone.add(rebateList.get(i).get("tcphone").toString());
+				rebatePhone.add(rebateList.get(i).get("tcphone").toString().substring(0, 3) + "****" + rebateList.get(i).get("tcphone").toString().substring(7, rebateList.get(i).get("tcphone").toString().length()));
 				//查询社员注册门店 城市
                 List<Map<String, Object>> cmList = commDao.getCmReStoreCity(rebateList.get(i).get("tcphone").toString());
                 if(cmList!=null&&!cmList.isEmpty()){
@@ -1970,9 +1970,9 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		if (usedRebateList!=null&&!usedRebateList.isEmpty()) {
 
 			for (int i = 0; i < usedRebateList.size(); i++) {
-				usedRebatePhone.add(usedRebateList.get(i).get("tcphone").toString());
+                usedRebatePhone.add(usedRebateList.get(i).get("tcphone").toString().substring(0, 3) + "****" + usedRebateList.get(i).get("tcphone").toString().substring(7, usedRebateList.get(i).get("tcphone").toString().length()));
                 //查询社员注册门店 城市
-                List<Map<String, Object>> cmList = commDao.getCmReStoreCity(rebateList.get(i).get("tcphone").toString());
+                List<Map<String, Object>> cmList = commDao.getCmReStoreCity(usedRebateList.get(i).get("tcphone").toString());
                 if(cmList!=null&&!cmList.isEmpty()){
                     if(cmList.get(0).get("storename").toString()!=null){
                         usedRebateStoreName.add(cmList.get(0).get("storename"));
