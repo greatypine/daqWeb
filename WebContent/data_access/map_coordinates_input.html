@@ -780,8 +780,11 @@
         var bSuccess = false;
         var areaname = areaAry[idx].areaname;
 
-        if(areaname != ""){
+        if(areaname != "null"){
             $("#deletevillageInfo span").html("此小区被"+areaname+"片区使用，删除后对应的片区关系将被解除，确认删除吗？");
+        }else{
+            $("#deletevillageInfo span").html("是否删除已选中绿色小区？");
+
         }
 
         $("#deletevillageInfo").dialog({
