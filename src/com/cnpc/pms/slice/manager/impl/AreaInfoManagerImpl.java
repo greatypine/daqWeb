@@ -132,6 +132,23 @@ public class AreaInfoManagerImpl extends BizBaseCommonManager implements AreaInf
 		return null;
 	}
     
-    
-    
+    public void  deleteAreaInfoByAreaId(Long areaId){
+		Map<String,Object> result = new HashMap<String,Object>();
+		List<?> list_area_info = (List<?>)super.getList(FilterFactory.getSimpleFilter("area_id",areaId));
+		if(list_area_info != null && list_area_info.size() > 0){
+			for(Object areaInfo : list_area_info){
+				super.removeObject(areaInfo);
+			}
+		}
+	}
+
+	@Override
+	public List<Map<String, Object>> findAreaInfo(String areNo) {
+		List<?> list_area_info = (List<?>)super.getList(FilterFactory.getSimpleFilter("area_no",areNo));
+		if(list_area_info != null && list_area_info.size() > 0){
+			return (List<Map<String,Object>>)list_area_info;
+		}
+		return null;
+	}
+
 }
