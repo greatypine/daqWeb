@@ -29,6 +29,20 @@ public interface AreaInfoManager extends IManager {
      */
     TinyVillage findTinyVillageAreaByTinyId(Long tinyId);
     List<TinyVillage> findTinyVillageAreaByTindIds(String tinyIds);
-    
-    
+
+    /**
+     * @Description 删除片区某一小区
+     * @author gbl
+     * @date 2018/7/27 13:24
+     **/
+
+    public void deleteAreaInfoByAreaId(Long areaId);
+
+    /**
+     * @Description 查询片区详情
+     * @author gbl
+     * @date 2018/7/27 14:21
+     **/
+
+    public List<Map<String,Object>> findAreaInfo(String  areaNo);
 }

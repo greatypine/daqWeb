@@ -1546,8 +1546,6 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		AreaInfoManager areaInfoManager = (AreaInfoManager) SpringHelper.getBean("areaInfoManager");
 		AreaHistoryManager areaHistoryManager = (AreaHistoryManager) SpringHelper.getBean("areaHistoryManager");
 		AreaInfoHistoryManager areaInfoHistoryManager = (AreaInfoHistoryManager) SpringHelper.getBean("areaInfoHistoryManager");
-		MongoDBManager mongoDBManager = (MongoDBManager) SpringHelper.getBean("mongoDBManager");
-
 		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
 		Area save_area = null;
 		AreaHistory areaHistory = null;
@@ -1578,20 +1576,16 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 				}
 
 
-				areaInfoManager.deleteAreaInfoByAreaId(save_area);// 删除原始片区详情
+				areaInfoManager.deleteAreaInfoByAreaId(save_area.getId());// 删除原始片区详情
 
 
 				for (AreaInfo info : new_areaInfoList) {//重建片区详情
-
-					preObject(info);
-					areaInfoManager.saveObject(info);
+					AreaInfo ai = new AreaInfo();
+					BeanUtils.copyProperties(info, ai, new String[] { "id" });
+					preObject(ai);
+					areaInfoManager.saveObject(ai);
 				}
-				save_area.setChildrens(new_areaInfoList);
-				Map<String, Object> result = mongoDBManager.updateTinyAreaOfEmployee(save_area);//重新设置小区负责人
 
-				if (Integer.parseInt(String.valueOf(result.get("code"))) != CodeEnum.success.getValue()) {
-					throw new MyException("更新tiny_area或者mongodb国安侠失败");
-				}
 
 			}
 

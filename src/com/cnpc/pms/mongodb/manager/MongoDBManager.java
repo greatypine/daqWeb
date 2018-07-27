@@ -278,6 +278,6 @@ public interface MongoDBManager extends IManager{
 	* @throws
 	 */
 	public Map<String,Object> updateTinyAreaBelong(String storeNo,String townIds,String belong);
-	
-	
+
+
 }
