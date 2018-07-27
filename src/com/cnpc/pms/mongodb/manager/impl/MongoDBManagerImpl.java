@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.cnpc.pms.slice.manager.AreaInfoManager;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONObject;
@@ -502,11 +503,21 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		UserDTO userDTO = umanager.getCurrentUserDTO();
 		TinyVillageCodeManager tinyVillageCodeManager = (TinyVillageCodeManager)SpringHelper.getBean("tinyVillageCodeManager");
 		AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
+		AreaInfoManager areaInfoManager = (AreaInfoManager)SpringHelper.getBean("areaInfoManager");
 		try {
 
-//			if(tCoordDto.getArea_no()!=null&&!"".equals(tCoordDto.getArea_no())){
-//				areaManager.deleteTinyVillageOfArea(tCoordDto.getTiny_village_id(),tCoordDto.getArea_no());//解除小区和片区的绑定
-//			}
+
+			if(tCoordDto.getArea_no()!=null&&!"".equals(tCoordDto.getArea_no())){
+				List<Map<String,Object>> aiList = areaInfoManager.findAreaInfo(tCoordDto.getArea_no());
+				if(aiList==null||aiList.size()==1){
+					result.put("code",CodeEnum.nullData.getValue());
+					result.put("message","当前小区绑定的片区只有唯一的一个小区，不能删除，请到'门店划片'编辑片区");
+					return result;
+				}else if(aiList.size()>1){
+					areaManager.deleteTinyVillageOfArea(tCoordDto.getTiny_village_id(),tCoordDto.getArea_no());//解除小区和片区的绑定
+				}
+
+			}
 
 
 			TinyVillageCode tinyVillageCode = tinyVillageCodeManager.findTinyVillageCodeByTinyId(tCoordDto.getTiny_village_id());
@@ -517,14 +528,14 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				return result;
 			}else{
 				TinyArea tArea = tinyAreaManager.findTinyAreaByTinyId(tCoordDto.getTiny_village_id());
-				
+
 				if(tArea!=null){
 					//删除tiny_area
 					tArea.setStatus(1);
 					preObject(tArea);
 					tinyAreaManager.saveObject(tArea);
 				}
-				
+
 				//删除mongodb
 				MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 				MongoDatabase database = mDbUtil.getDatabase();
@@ -695,7 +706,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 						query.append("storeNo",store.getStoreno());
 						Document updateDoc = new Document("employee_a_no",tinyArea.getEmployee_a_no()).append("employee_b_no", tinyArea.getEmployee_b_no());
 						collection.updateMany(query, new Document("$set",updateDoc)); 
-						
+						preObject(tinyArea);
 						tinyAreaManager.saveObject(tinyArea);
 					}
 					

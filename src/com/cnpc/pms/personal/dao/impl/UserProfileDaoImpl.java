@@ -30,7 +30,11 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 				+ "dup.first_order_time, dup.last_order_time, IFNULL(dup.area_code,'') as area_code, IFNULL(dup.tiny_village_code,'') as tiny_village_code, dup.regist_time,"
 				+ "DATEDIFF(now(), dup.last_order_time) as slient_time,CASE WHEN dup.user_model='1' THEN '有'  ELSE '无' END AS user_model,CASE WHEN tag.usertag='B' THEN '集采用户' ELSE '' END usertag_b,"
 				+ "CASE WHEN tag.usertag = 'V' THEN '合作社社员' ELSE '' END usertag_v,IFNULL(dup.trading_price_max,0) as trading_price_max "
-				+ "FROM df_user_profile dup LEFT JOIN df_userprofile_tag tag ON dup.customer_id=tag.customer_id where 1=1 ";
+				+ "FROM df_user_profile dup LEFT JOIN df_userprofile_tag tag ON dup.customer_id=tag.customer_id ";
+		if(StringUtils.isNotEmpty(userProfile.getOpen_card_time_begin())){
+			sql = sql + "LEFT JOIN df_user_member dum ON dup.customer_id=dum.customer_id ";
+		}
+		sql = sql + "where 1=1 ";
 		if(StringUtils.isNotEmpty(userProfile.getCity_name()) || StringUtils.isNotEmpty(userProfile.getStore_no())){
 			sql = sql + " AND dup.customer_id IN (SELECT dus.customer_id FROM df_user_store dus WHERE 1=1 ";
 			if(StringUtils.isNotEmpty(userProfile.getCity_name())){
@@ -58,6 +62,10 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getLast_order_time_begin())){
 			sql = sql + " AND (dup.last_order_time between '" + userProfile.getLast_order_time_begin() + " 00:00:00' and '"
 					+ userProfile.getLast_order_time_end() + " 23:59:59')";
+		}
+		if(StringUtils.isNotEmpty(userProfile.getOpen_card_time_begin())){
+			sql = sql + " AND (dum.opencard_time between '" + userProfile.getOpen_card_time_begin() + " 00:00:00' and '"
+					+ userProfile.getOpen_card_time_end() + " 23:59:59')";
 		}
 		if(StringUtils.isNotEmpty(userProfile.getTrading_price_min())){
 			sql=sql+" AND dup.trading_price_sum >="+userProfile.getTrading_price_min();
@@ -122,7 +130,11 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 				+ "CASE WHEN tag.usertag = 'B' THEN	'是' ELSE '否' END is_b_tag,CASE WHEN tag.usertag = 'V' THEN	'是' ELSE '否' END is_v_tag,"
 				+ "CASE WHEN DATEDIFF(now(), dup.last_order_time)>=60 THEN '是' ELSE '否' END is_sixty_tag,"
 				+ "CASE WHEN DATEDIFF(now(), dup.last_order_time)>=30 THEN '是' ELSE '否' END is_thirty_tag FROM df_user_profile dup LEFT JOIN df_userprofile_tag tag "
-				+ "ON dup.customer_id=tag.customer_id where 1=1 ";
+				+ "ON dup.customer_id=tag.customer_id ";
+		if(StringUtils.isNotEmpty(userProfile.getOpen_card_time_begin())){
+			sql = sql + "LEFT JOIN df_user_member dum ON dup.customer_id=dum.customer_id ";
+		}
+		sql = sql + "where 1=1 ";
 		if(StringUtils.isNotEmpty(userProfile.getCity_name()) || StringUtils.isNotEmpty(userProfile.getStore_no())){
 			sql = sql + " AND dup.customer_id IN (SELECT dus.customer_id FROM df_user_store dus WHERE 1=1 ";
 			if(StringUtils.isNotEmpty(userProfile.getCity_name())){
@@ -150,6 +162,10 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getLast_order_time_begin())){
 			sql = sql + " AND (dup.last_order_time between '" + userProfile.getLast_order_time_begin() + " 00:00:00' and '"
 					+ userProfile.getLast_order_time_end() + " 23:59:59')";
+		}
+		if(StringUtils.isNotEmpty(userProfile.getOpen_card_time_begin())){
+			sql = sql + " AND (dum.opencard_time between '" + userProfile.getOpen_card_time_begin() + " 00:00:00' and '"
+					+ userProfile.getOpen_card_time_end() + " 23:59:59')";
 		}
 		if(StringUtils.isNotEmpty(userProfile.getTrading_price_min())){
 			sql=sql+" AND dup.trading_price_sum >="+userProfile.getTrading_price_min();

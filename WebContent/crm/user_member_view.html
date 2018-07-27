@@ -48,6 +48,7 @@
     .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
     .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
     .table button{padding: 3px 20px; margin: 0 5px;}
+	/*.table a{color:#f00;}*/
     
     
     .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
@@ -104,6 +105,7 @@
     .sx_type{margin-top: 5px;}
     .sx_type span{padding-right: 5px;}
     .sx_type span .icheckbox_minimal-blue{margin-right: 2px;}
+
     
     
     
@@ -647,6 +649,7 @@
 	    }
  	    var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
+
 	    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
            if(data.result){
            	   var result= JSON.parse(data.data);
@@ -688,8 +691,9 @@
 	        		   
 	        		   infoStr= "<tr>"
 		                       +"<td>"+cityname+"</td>"
-		                       +"<td>"+jData[i].nowcount+"</td>"
-		                       +"<td>"+jData[i].count199+"</td>"
+		                      // +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
+                           +"<td>"+jData[i].nowcount+"</td>"
+                           +"<td>"+jData[i].count199+"</td>"
 		                       +"<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";
 		                       /* <a href=""></a> */
@@ -840,7 +844,8 @@
 		                       +"<td>"+cityname+"</td>"
 		                       +"<td>"+jData[i].name+"</td>"
 		                       +"<td>"+jData[i].storeno+"</td>"
-		                       +"<td>"+jData[i].nowcount+"</td>"
+						       +"<td>"+jData[i].nowcount+"</td>"
+                          // +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
 		                       +"<td>"+jData[i].count199+"</td>"
 		                       +"<td>"+jData[i].opencount+"</td>"
 		                       +"</tr>";

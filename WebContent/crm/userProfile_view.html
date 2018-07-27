@@ -256,6 +256,40 @@
                      </div>
                      </div>
                     </div>
+                   <div class="selectorLine clearfix" id="memeber_opencard" style="display:none;">
+                		<div class="pull-left search-title" style="top:25px">社员信息：</div>
+                		<div class="search-con">
+							<div class="time" style="width: 325px;z-index: 99999;margin:3px 15px;">
+							    <div class="time_endbg" id="time_endbg">
+							        <p>社员开卡日期选择 <span class="data_choice" id="data_choice"></span></p>
+							        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
+							    </div>
+							</div>
+							<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px 0 0;">	
+							    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
+							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>
+							        <input class="ui-date-quick-button" type="button" value="全部" alt="1" name="">
+							        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
+							    </div>
+							    <div class="ui-datepicker-choose">
+							        <!--<p>自选日期</p>-->
+							        <div class="ui-datepicker-date">
+								       	<input name="startDate" id="startOpenCardDate" class="startDate" readonly value="2018/05/21" type="text">
+								           到
+							            <input name="endDate" id="endOpenCardDate" class="endDate" readonly  value="2018/05/21" type="text" disabled>
+							        </div>
+							        <div class="opeDiv">
+							            <span class="Confirm" id="Confirm" onclick="datePickersOpenCard()">确定</span>
+							            <span class="Cancel" id="Cancel">取消</span>
+							        </div>
+							    </div>
+							</div>
+						</div>
+                	</div>
 <!--                 	<div class="selectorLine clearfix"> -->
 <!--                 		<div class="pull-left search-title" style="top:25px">注册时间：</div> -->
 <!--                 		<div class="search-con"> -->
@@ -359,10 +393,10 @@
 		                  <div class="pull-left search-title">用户标签：</div>
 		                  <div class="search-con">
 		                    <div class="sl-v-list">
-		                      <a onclick="slientSelection('3')" style="cursor:pointer;">沉默超3月</a>
-		                      <a onclick="slientSelection('6')" style="cursor:pointer;">沉默超6月</a>
-		                      <a onclick="slientSelection('B')" style="cursor:pointer;">集采用户</a>
-		                      <a onclick="slientSelection('V')" style="cursor:pointer;">合作社社员</a>
+		                      <a id="tag_3" onclick="slientSelection('3')" style="cursor:pointer;">沉默超3月</a>
+		                      <a id="tag_6" onclick="slientSelection('6')" style="cursor:pointer;">沉默超6月</a>
+		                      <a id="tag_B" onclick="slientSelection('B')" style="cursor:pointer;">集采用户</a>
+		                      <a id="tag_V" onclick="slientSelection('V')" style="cursor:pointer;">合作社社员</a>
 		                      <input type="text" style="display:none" class="form-control" placeholder="快捷沉默"  id="slient_private_manual" value="0"/>
 		                    </div>
 		                  </div>
@@ -534,8 +568,9 @@ Date.prototype.format=function(fmt) {
 	var role = decode64(getUrlParamByKey("r"));//角色 code
 	var cityname = decode64(getUrlParamByKey("cn"));//城市名称
 	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
-	//从门店GMV、国安侠GMV 跳转过来（Editor:gaobaolei）
-	var tag = decode64(getUrlParamByKey("tag"));//订单标签
+	//从社员统计 跳转过来
+	var tag = decode64(getUrlParamByKey("tag"));//社员标签
+	var time = decode64(getUrlParamByKey("time"));//开卡时间
 	
   $(function () {
     $(".logo-lg > ul > li").mouseenter(function(){
@@ -607,7 +642,7 @@ Date.prototype.format=function(fmt) {
     
   	//更多显示
     $(".how-more").click(function(){
-        var sl_open = $(".fold-con").css("display");
+       var sl_open = $(".fold-con").css("display");
        if(sl_open == 'none'){
          $(this).parent().prev().children().next(".fold-con").show();
          $(this).children("span").html("收起更多选项");
@@ -618,18 +653,18 @@ Date.prototype.format=function(fmt) {
          $(this).children("span").removeClass("search-more-open");
        }
       });
-      $(".sl-ext").click(function(){
-        var is_open = $(".sl-btns").css("display");
-        if(is_open == 'none'){
-          $(this).prev().children(".sl-btns").show();
-          $(this).children(".search-more").children("span").html("收起");
-          $(".search-more").addClass("search-more-open");
-        }else if(is_open == 'block'){
-          $(this).prev().children(".sl-btns").hide();
-          $(this).children(".search-more").children("span").html("更多");
-          $(this).children(".search-more").removeClass("search-more-open");
-        }
-      });
+//       $(".sl-ext").click(function(){
+//         var is_open = $(".sl-btns").css("display");
+//         if(is_open == 'none'){
+//           $(this).prev().children(".sl-btns").show();
+//           $(this).children(".search-more").children("span").html("收起");
+//           $(".search-more").addClass("search-more-open");
+//         }else if(is_open == 'block'){
+//           $(this).prev().children(".sl-btns").hide();
+//           $(this).children(".search-more").children("span").html("更多");
+//           $(this).children(".search-more").removeClass("search-more-open");
+//         }
+//       });
       
       $(".sl-v-list a").click(function(){
     	  $(".breadcrumb .search-con .condition").remove();
@@ -800,6 +835,58 @@ Date.prototype.format=function(fmt) {
         checkboxClass: 'icheckbox_flat-green',
         radioClass: 'iradio_flat-green'
       });
+      
+      //从社员统计页跳转携带社员标签
+      if(tag!="" && tag!=null){
+      	var opencard=document.getElementById("memeber_opencard");
+      	opencard.style.display="block";
+      	
+      	if(time!="" && time!=null){
+			$("#first_date").val(time);
+			$("#startDateFirst").val(time.split('-')[0]);
+			$("#endDateFirst").val(time.split('-')[1]);
+			
+			$("#searchTime").val(time);
+			$("#startOpenCardDate").val(time.split('-')[0]);
+			$("#endOpenCardDate").val(time.split('-')[1]);
+      	}
+      	
+       	$("#tag_"+tag).addClass("bg-orange-active");
+        var filter = $("<a href='javascript:;' class='condition'><span>" + "合作社社员" + "</span><i class='fa fa-times'></i></a>");
+         $(".breadcrumb .search-con").append(filter);
+         var ui =document.getElementById("clear_all");
+         ui.style.display="";
+         filter.on("click",function(){
+        	 $("#tag_"+tag).removeClass("bg-orange-active");
+             filter.remove();
+             var curValue = $(this).text();
+             var name = "";
+          	if(curValue=='集采用户'){
+          		name="B";
+          	}else if(curValue=='合作社社员'){
+          		name="V";
+          	}else{
+          		name = curValue.substring(3,curValue.length-1);
+          	}
+     		var deptName = $("#slient_private_manual").val();
+     		$("#slient_private_manual").val(deptName.replace(name,""));
+             var aobj = $(".breadcrumb .search-con a");
+             if(aobj.length==1){
+               $(".all").addClass("bg-orange-active");
+               ui.style.display="none";
+             }else{
+               ui.style.display="";
+             }
+           });
+          slientSelection('V');
+       	  var sl_open = $(".fold-con").css("display");
+       	  if(sl_open == 'none'){
+	         $(".how-more").parent().prev().children().next(".fold-con").show();
+	         $(".how-more").children("span").html("收起更多选项");
+	         $(".how-more").children("span").addClass("search-more-open");
+       	  }
+      }
+      
   });
 	
   /**
@@ -992,6 +1079,19 @@ Date.prototype.format=function(fmt) {
 	  	if(fdate!=""){
 	  		 first_begin_end_date = fdate.split("-");
 	   	}
+	  	
+	    //社员开卡时间
+	    var opencard_begin_time = '';
+	    var opencard_end_time = '';
+	    if(tag!="" && tag!=null){
+		  	var ocdate = $("#searchTime").val();
+		    var opencard_begin_end_date=["",""];
+		  	if(ocdate!=""){
+		  		opencard_begin_end_date = ocdate.split("-");
+		   	}
+		  	opencard_begin_time = opencard_begin_end_date[0].trim();
+		  	opencard_end_time = opencard_begin_end_date[1].trim();	
+	    }
 	  	//最后消费时间
 // 	  	var ldate = $("#last_date").val();
 // 	    var last_begin_end_date=["",""];
@@ -1070,6 +1170,8 @@ Date.prototype.format=function(fmt) {
 	    		regist_time_end:'',
 	    		first_order_time_begin:first_begin_end_date[0].trim(),
 	    		first_order_time_end:first_begin_end_date[1].trim(),
+	    		open_card_time_begin:opencard_begin_time,
+	    		open_card_time_end:opencard_end_time,
 	    		last_order_time_begin:'',
 	    		last_order_time_end:'',
 	    		customer_phone:customer_phone,
@@ -1238,6 +1340,20 @@ Date.prototype.format=function(fmt) {
 	  	if(fdate!=""){
 	  		 first_begin_end_date = fdate.split("-");
 	   	}
+	  	
+	    //社员开卡时间
+	    var opencard_begin_time = '';
+	    var opencard_end_time = '';
+	    if(tag!="" && tag!=null){
+		  	var ocdate = $("#searchTime").val();
+		    var opencard_begin_end_date=["",""];
+		  	if(ocdate!=""){
+		  		opencard_begin_end_date = ocdate.split("-");
+		   	}
+		  	opencard_begin_time = opencard_begin_end_date[0].trim();
+		  	opencard_end_time = opencard_begin_end_date[1].trim();	
+	    }
+	    
 	  	//最后消费时间
 // 	  	var ldate = $("#last_date").val();
 // 	    var last_begin_end_date=["",""];
@@ -1316,6 +1432,8 @@ Date.prototype.format=function(fmt) {
 	    		regist_time_end:'',
 	    		first_order_time_begin:first_begin_end_date[0].trim(),
 	    		first_order_time_end:first_begin_end_date[1].trim(),
+	    		open_card_time_begin:opencard_begin_time,
+	    		open_card_time_end:opencard_end_time,
 	    		last_order_time_begin:'',
 	    		last_order_time_end:'',
 	    		customer_phone:customer_phone,
@@ -1476,6 +1594,11 @@ Date.prototype.format=function(fmt) {
 	$("#startDateFirst").val(startDateStr);
 	$("#endDateFirst").val(timeStr);
 	$("#first_data_choice").html("默认时期");
+	
+	$("#searchTime").val(startDateStr +"-"+ timeStr);
+	$("#startOpenCardDate").val(startDateStr);
+	$("#endOpenCardDate").val(timeStr);
+	$("#data_choice").html("默认时期");
 	
 // 	$("#last_date").val(startDateStr +"-"+ timeStr);
 // 	$("#startDateLast").val(startDateStr);
