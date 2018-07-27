@@ -67,6 +67,9 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 			sql = sql + " AND (dum.opencard_time between '" + userProfile.getOpen_card_time_begin() + " 00:00:00' and '"
 					+ userProfile.getOpen_card_time_end() + " 23:59:59')";
 		}
+		if(StringUtils.isNotEmpty(userProfile.getMt_flag())){
+			sql=sql+" AND dum.member_type ='"+userProfile.getMt_flag()+"' ";
+		}
 		if(StringUtils.isNotEmpty(userProfile.getTrading_price_min())){
 			sql=sql+" AND dup.trading_price_sum >="+userProfile.getTrading_price_min();
 		}
@@ -166,6 +169,9 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getOpen_card_time_begin())){
 			sql = sql + " AND (dum.opencard_time between '" + userProfile.getOpen_card_time_begin() + " 00:00:00' and '"
 					+ userProfile.getOpen_card_time_end() + " 23:59:59')";
+		}
+		if(StringUtils.isNotEmpty(userProfile.getMt_flag())){
+			sql=sql+" AND dum.member_type ='"+userProfile.getMt_flag()+"' ";
 		}
 		if(StringUtils.isNotEmpty(userProfile.getTrading_price_min())){
 			sql=sql+" AND dup.trading_price_sum >="+userProfile.getTrading_price_min();

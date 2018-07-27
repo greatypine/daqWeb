@@ -31,6 +31,7 @@ public class UserProfileDto {
 	private String slient_time_min;
 	private String slient_time_max;
 	private String hidden_flag;
+	private String mt_flag;
 	
 	
 	public String getStore_no() {
@@ -158,6 +159,12 @@ public class UserProfileDto {
 	}
 	public void setHidden_flag(String hidden_flag) {
 		this.hidden_flag = hidden_flag;
+	}
+	public String getMt_flag() {
+		return mt_flag;
+	}
+	public void setMt_flag(String mt_flag) {
+		this.mt_flag = mt_flag;
 	}
 	
 }
