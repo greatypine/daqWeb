@@ -511,7 +511,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				List<Map<String,Object>> aiList = areaInfoManager.findAreaInfo(tCoordDto.getArea_no());
 				if(aiList==null||aiList.size()==1){
 					result.put("code",CodeEnum.nullData.getValue());
-					result.put("message","当前小区绑定的片区只有唯一的一个小区，不能删除，请到'门店划片'编辑片区。");
+					result.put("message","当前小区绑定的片区只有唯一的一个小区，不能删除，请到'门店划片'编辑片区");
 					return result;
 				}else if(aiList.size()>1){
 					areaManager.deleteTinyVillageOfArea(tCoordDto.getTiny_village_id(),tCoordDto.getArea_no());//解除小区和片区的绑定
