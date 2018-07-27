@@ -304,7 +304,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 		if(StringUtils.isNotEmpty(store_no)){
 			sql = sql + "AND das.store_no='"+store_no+"'";
 		}
-		sql = sql + ") WHERE 1=1 and tor.channel_id = '8ac29e835fed0a10015fed493fb10010' and tor.order_tag2 ='1' ";
+		sql = sql + ") WHERE 1=1 and (tor.channel_id = '8ac29e835fed0a10015fed493fb10010' or tor.channel_id ='8ad8f18264c93c0b0164cf853bbb16e9' ) and tor.order_tag2 ='1' ";
 		
 		if(StringUtils.isNotEmpty(start_time)){
 			sql = sql + " AND date(tor.sign_time) >= '"+start_time+"' ";
