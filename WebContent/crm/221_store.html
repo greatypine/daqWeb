@@ -116,6 +116,8 @@
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
 <!-- Site wrapper -->
 <div class="wrapper">
 <header class="main-header">
@@ -840,6 +842,8 @@
 						$("#gmv_store_up_data").append(yyStr); 
 					}
 				}
+				$("#process_div").hide();
+				$("#process_div_pic").hide();
 		});
 		
 	   var jwsStr="";
@@ -882,6 +886,8 @@
 						$("#gmv_store_down_data").append(jwsStr); 
 					}
 				}
+				$("#process_div").hide();
+				$("#process_div_pic").hide();
 		});
 	}
 	
@@ -1096,6 +1102,7 @@
 						yyStr = "<tr>没有符合条件的数据</tr>";
 						$("#groupon_store_up_data").append(yyStr); 
 					}
+					
 				}
 		});
 		
@@ -1228,6 +1235,8 @@
 	var array=new Array();
  	//初始化所有门店 
  	function initallstore() {
+ 		$("#process_div").show();
+ 	 	$("#process_div_pic").show();
  		doManager("strategyActivityManager","queryActivityScope", null,
  			function(data, textStatus, XMLHttpRequest) {
  				if (data.result) {
