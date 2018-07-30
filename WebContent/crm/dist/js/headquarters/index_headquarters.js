@@ -2,6 +2,7 @@ var pageStatusInfo = {};
 var mapChart;
 var statisticExtendInfo;
 var timerId;
+var refreshId;
 // 城市排名(GMV)柱状图
 var cityRankChartGmv;
 var cityRankGmvOption;
@@ -56,10 +57,14 @@ function loginShow(){
 $(document).ready(function () {
 	//获得闪图数据
 	getBeatJson();
+	//首次进入清除缓存
+	clearFirstCache();
 	loginShow();
 	//鼠标放概要统计展开
 	showMoreSummaryStatistics();
 	getStoreKindsNumber();
+	//页面长期打开的情况下,早晨7点定时刷新
+	excuteRefreshTask();
     var startTime = new Date().getTime();
     // 获取请求参数
     var requestParameters = getReauestParameters();
@@ -122,7 +127,6 @@ var showPageContent = function (pageStatusInfo) {
     // 显示本月新增开卡用户和历史总社员数
     getOpenCardUser(pageStatusInfo);
     getDailyData();
-
     // 显示统计概要
     pageStatusInfo.currentPage=1;
     getStatisticInfo(pageStatusInfo);
@@ -5017,5 +5021,21 @@ function goToMemberInvitation(){
 	  }
       window.open(url,"dynamicData_member_invitation");
 }
-
-
+function refreshCurrentData(){
+        var date=new Date();
+        var h=date.getHours();
+        var m=date.getMinutes();
+        var s=date.getSeconds();
+        if(h==7&&m==0&&s==0){
+		    localStorage.clear();
+	        showPageContent(pageStatusInfo);  
+        }
+}
+function excuteRefreshTask() {
+	refreshCurrentData();
+	clearTimeout(refreshId);
+    refreshId= setTimeout("excuteRefreshTask()",1000);
+}
+function  clearFirstCache(){
+	localStorage.clear();
+}
