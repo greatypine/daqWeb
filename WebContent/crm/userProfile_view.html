@@ -862,32 +862,9 @@ Date.prototype.format=function(fmt) {
       	}
       	
        	$("#tag_"+tag).addClass("bg-orange-active");
+       	$("#slient_private_manual").val("V");
         var filter = $("<a href='javascript:;' class='condition'><span>" + "合作社社员" + "</span><i class='fa fa-times'></i></a>");
          $(".breadcrumb .search-con").append(filter);
-         var ui =document.getElementById("clear_all");
-         ui.style.display="";
-         filter.on("click",function(){
-        	 $("#tag_"+tag).removeClass("bg-orange-active");
-             filter.remove();
-             var curValue = $(this).text();
-             var name = "";
-          	if(curValue=='集采用户'){
-          		name="B";
-          	}else if(curValue=='合作社社员'){
-          		name="V";
-          	}else{
-          		name = curValue.substring(3,curValue.length-1);
-          	}
-     		var deptName = $("#slient_private_manual").val();
-     		$("#slient_private_manual").val(deptName.replace(name,""));
-             var aobj = $(".breadcrumb .search-con a");
-             if(aobj.length==1){
-               $(".all").addClass("bg-orange-active");
-               ui.style.display="none";
-             }else{
-               ui.style.display="";
-             }
-           });
        	  var sl_open = $(".fold-con").css("display");
        	  if(sl_open == 'none'){
 	         $(".how-more").parent().prev().children().next(".fold-con").show();
