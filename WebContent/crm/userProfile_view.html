@@ -852,13 +852,9 @@ Date.prototype.format=function(fmt) {
       	opencard.style.display="block";
       	
       	if(time!="" && time!=null){
-      		var nowDate = new Date();
-      		var month = nowDate.getMonth()+1;
-      	    var date = nowDate.getDate();
-      	    timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
-			$("#first_date").val('2015/12/22' + "-" + timeStr);
-			$("#startDateFirst").val('2015/12/22');
-			$("#endDateFirst").val(timeStr);
+			$("#first_date").val(time);
+			$("#startDateFirst").val(time.split('-')[0]);
+			$("#endDateFirst").val(time.split('-')[1]);
 			
 			$("#searchTime").val(time);
 			$("#startOpenCardDate").val(time.split('-')[0]);
