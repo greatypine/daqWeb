@@ -326,7 +326,7 @@ public class UserDAOImpl extends BaseDAOHibernate implements UserDAO {
 	
 	@Override
 	public Map<String, Object> getStoreKeeperInfo(Long storeId) {
-		String sql="select u.name,u.mobilephone,s.name as storeName,s.storeno from tb_bizbase_user as u right JOIN t_store as s on u.id = s.skid and s.store_id="+storeId;
+		String sql="select u.name,u.mobilephone,s.name as storeName,s.storeno from tb_bizbase_user as u right JOIN t_store as s on u.id = s.skid where s.store_id="+storeId;
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 
