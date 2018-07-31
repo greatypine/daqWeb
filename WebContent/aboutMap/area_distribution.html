@@ -64,6 +64,7 @@
             background-color:transparent;
             color:#5f6477;
         }
+        .button-group .button:hover{color:#66B3FF}
 
 	.content-header{padding-top: 0;}
     .form-group{line-height: 34px;}
@@ -277,7 +278,7 @@
 <script type="text/javascript">
 	$("#mask-header>button").click(function(){ 
 		$("#mask").css('display',"none");
-        $(".button-group").show();
+        $(".pull-right-fullscreen").show();
 		document.getElementById("mapHeight").style.height= "600px";
 		$("#mapHeight").removeAttr("style");
 	    $("#mapHeight").css({"position":"relative","top":"0px"});
@@ -484,6 +485,7 @@
                         strokeWeight: 2,    //线宽
                         fillColor: $fillColor, //填充色
                         fillOpacity: 0.45,//填充透明度
+                        bubble:true,
                         extData:{"areaNo":coordinate[i].areaNo} 
                     });
                 
@@ -839,7 +841,7 @@ function fullscreen(){
    	$("#mapHeight").show();
    	var copyMap = $("#mapHeight");
    	$("#mask-body").html(copyMap);
-    $(".button-group").hide();
+    $(".pull-right-fullscreen").hide();
 }
 
 

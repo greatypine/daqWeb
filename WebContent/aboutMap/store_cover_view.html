@@ -356,11 +356,16 @@ $(function(){
 });
 
 function initData(){
+    map.clearMap();
 	draw();
 	$("#process_div").show();
 	$("#process_div_pic").show();
      doManager("TinyAreaManager", "getTinyVillageCoordAndServiceArea",[cityId], function(data, textStatus,XMLHttpRequest) {
         if(data.result){
+            serviceCoordinatesArray = [];
+            vallageCoordinatesArray = [];
+            divideAreaCoordinatesArray = [];
+            areaCoordinatesArray = [];
                 jsonData = JSON.parse(data.data);
                 //服务范围展示
                 var serviceArea = jsonData.serviceArea;
