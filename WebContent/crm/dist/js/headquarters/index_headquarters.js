@@ -5028,4 +5028,17 @@ function goToMemberInvitation(){
       window.open(url,"dynamicData_member_invitation");
 }
 
+//221GMV统计
+function goTo221GMV(){
 
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "dynamicData_gmv_tto.html?t="+encode64('0')+"&c=&cn=&s=&e="+encode64(curr_user.id)+"&r="+encode64(role)
+    }else if(target==1){
+        url = "dynamicData_gmv_tto.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);;
+    }
+
+    window.open(url,"dynamicData_gmv_tto");
+}

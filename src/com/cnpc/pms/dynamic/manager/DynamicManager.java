@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import B.DD;
 import org.json.JSONObject;
 
 import com.cnpc.pms.base.manager.IManager;
@@ -152,7 +153,7 @@ public interface DynamicManager extends IManager{
 
 	/**
 	 *
-	 * TODO 交易额（根据交易类型）查询 
+	 * TODO 门店交易额（根据交易类型）查询
 	 * 2017年8月3日
 	 * @author gaobaolei
 	 * @param dynamicDto
@@ -163,7 +164,7 @@ public interface DynamicManager extends IManager{
 
 	/**
 	 *
-	 * TODO 交易额（根据交易类型）导出 
+	 * TODO 门店交易额（根据交易类型）导出
 	 * 2017年8月8日
 	 * @author gaobaolei
 	 * @param dynamicDto
@@ -1108,4 +1109,36 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public Map<String, Object> getTwoTwoOneGMVRangeForWeek(DynamicDto dd);
+
+	/**
+	 * @Description 查询221 门店gmv
+	 * @author gbl
+	 * @date 2018/7/28 15:41
+	 **/
+
+	public Map<String, Object> queryStoreTradeByType_221(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * @Description 导出221 门店gmv
+	 * @author gbl
+	 * @date 2018/7/28 15:41
+	 **/
+
+	public Map<String, Object> exportStoreTradeByType_221(DynamicDto dynamicDto);
+
+	/**
+	 * @Description 查询221 国安侠gmv
+	 * @author gbl
+	 * @date 2018/7/28 16:20
+	 **/
+
+	public Map<String, Object> queryEmployeeOfAreaGmv_221(DynamicDto dynamicDto, PageInfo pageInfo);
+
+	/**
+	 * @Description 导出221 国安侠gmv
+	 * @author gbl
+	 * @date 2018/7/28 16:21
+	 **/
+
+	public Map<String, Object> exportEmployeeOfAreaGmv_221(DynamicDto dynamicDto, PageInfo pageInfo);
 }

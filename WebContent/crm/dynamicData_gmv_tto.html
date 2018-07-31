@@ -356,7 +356,6 @@
     <!-- /.content-wrapper -->
 </div>
 
-<!-- ./wrapper -->
 <!-- jQuery 2.2.0 -->
 <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
 <script type="text/javascript" src="laydate/laydate.js"></script>
@@ -426,18 +425,21 @@
 
         }else if(target==1){//城市
             $("#city_name_tradetype").val(cityName);
-            $("#city_name_channel").val(cityName);
+            $("#city_name_customer").val(cityName);
             $("#city_name_tradetype").attr("readonly",true);
-            $("#city_name_channel").attr("readonly",true);
+            $("#city_name_customer").attr("readonly",true);
+
+
+
         }else if(target==2){//店长
             $("#city_name_tradetype").val(cityName);
-            $("#city_name_channel").val(cityName);
+            $("#city_name_customer").val(cityName);
             $("#city_name_tradetype").attr("readonly",true);
-            $("#city_name_channel").attr("readonly",true);
+            $("#city_name_customer").attr("readonly",true);
             $("#store_name_tradetype").val(storeName);
-            $("#store_name_channel").val(storeName);
+            $("#store_name_customer").val(storeName);
             $("#store_name_tradetype").attr("readonly",true);
-            $("#store_name_channel").attr("readonly",true);
+            $("#store_name_customer").attr("readonly",true);
         }
 
         $(".logo-lg > ul > li").hover(function(){
@@ -486,7 +488,7 @@
                         cityNameArray.push(lst_select_city[i].cityname);
                         cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
                     }
-                    var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
+                    var autoComplete = new AutoComplete("city_name_tradetype","auto_city_tradetype",cityNameArray);
                     autoComplete.start(event);
                 }else{
 
@@ -551,7 +553,7 @@
                         storeNameArray.push(lst_select_store[i].name);
                         storeIdMap[lst_select_store[i].name] = lst_select_store[i].store_id;
                     }
-                    var autoComplete = new AutoComplete("store_name_tradetype","auto_store",storeNameArray);
+                    var autoComplete = new AutoComplete("store_name_tradetype","auto_store_tradetype",storeNameArray);
                     autoComplete.start(event);
                 }else{
 
@@ -844,7 +846,7 @@
                         cityNameArray.push(lst_select_city[i].cityname);
                         cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
                     }
-                    var autoComplete = new AutoComplete("city_name_customer","auto_city",cityNameArray);
+                    var autoComplete = new AutoComplete("city_name_customer","auto_city_customer",cityNameArray);
                     autoComplete.start(event);
                 }else{
 
@@ -901,7 +903,7 @@
                         storeNameArray.push(lst_select_store[i].name);
                         storeIdMap[lst_select_store[i].name] = lst_select_store[i].store_id;
                     }
-                    var autoComplete = new AutoComplete("store_name_customer","auto_store",storeNameArray);
+                    var autoComplete = new AutoComplete("store_name_customer","auto_store_customer",storeNameArray);
                     autoComplete.start(event);
                 }else{
 
@@ -910,7 +912,7 @@
         }
     });
 
-    $('#auto_store').on("click",function(){
+    $('#auto_store_customer').on("click",function(){
         var temp_store = document.getElementById("store_name_customer").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
         $("#store_id_customer").val(storeIdMap[temp_store]);
     });

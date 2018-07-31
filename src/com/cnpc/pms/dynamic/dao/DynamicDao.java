@@ -975,4 +975,20 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> getTwoTwoOneGMVRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+
+	/**
+	 * @Description 门店221gmv
+	 * @author gbl
+	 * @date 2018/7/28 15:50
+	 **/
+
+	public Map<String, Object> getStoreGmv_221(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * @Description
+	 * @author gbl
+	 * @date 2018/7/28 16:08
+	 **/
+
+	public Map<String,Object> getEmployeeGmv_221(DynamicDto dynamicDto,PageInfo pageInfo);
 }
