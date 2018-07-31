@@ -304,6 +304,7 @@ map.plugin(["AMap.ToolBar"],function(){
 var servicePolygon;
 var vallagePolygon;
 var areaPolygon;
+var mouseoverPolygon;
 function draw(){
 	//画服务范围多边形
 	servicePolygon = servicePolygon = new AMap.Polygon({
@@ -336,6 +337,17 @@ function draw(){
 	   //	extData:{"code":code}
 	});
 	areaPolygon.setMap(map);
+
+    mouseoverPolygon = new AMap.Polygon({
+        //path: villageCoordinates,//设置多边形边界路径
+        strokeColor: "#5c69cc", //线颜色
+        strokeOpacity: 0.9, //线透明度
+        strokeWeight: 1,    //线宽
+        fillColor: "#6efdea", //填充色
+        fillOpacity: 0.6,//填充透明度
+        //	extData:{"code":code}
+    });
+    mouseoverPolygon.setMap(map);
 }
 
 $(function(){
@@ -375,19 +387,25 @@ function initData(){
                     		        position: position, //基点位置
                     		        icon:"dist/img/splogo.png",
                     		        offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
-                    		        extData:{"storeName":storeName}
+                    		        extData:{"storeName":storeName,"storeIndex":i}
                     		       // draggable: true,  //是否可拖动
                     		        //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
-                    		    }); 
+                    		    });
                     			polygonArray["marker"] = storeMarker;
                     			storeMarker.on("click",function(e){
                     				map.setCenter(e.target.getPosition());
                     				map.setZoom(14);
                     			});
                     			storeMarker.on("mouseover",function(e){
+                    			    var storeIndex = e.target.getExtData().storeIndex;
+                                    var coordinates = serviceCoordinatesArray[storeIndex];
+                                    mouseoverPolygon.setPath(coordinates);
                     				var storeName = e.target.getExtData().storeName;
                     				e.target.setTitle(storeName);
                     			});
+                                storeMarker.on("mouseout",function(e){
+                                    mouseoverPolygon.setPath([]);
+                                });
                     		}
                     	}
                     	servicePolygon.setPath(serviceCoordinatesArray);
