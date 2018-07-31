@@ -1336,7 +1336,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 						" FROM (select * from df_mass_order_monthly  " +
 						" where sign_time >='"+dynamicDto.getBeginDate()+" 00:00:00' and sign_time<'"+dynamicDto.getEndDate()+"'" +
 						" and area_code is not null and store_code='"+dynamicDto.getStoreNo()+"'"+
-						" and store_id=" +dynamicDto.getStoreId()+" ) a LEFT JOIN t_area  b on a.area_code = b.area_no"+
+						" ) a LEFT JOIN t_area  b on a.area_code = b.area_no"+
 						" and b.status=0"+ 
 						" GROUP BY a.area_code ORDER BY amount desc";
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
@@ -3476,5 +3476,71 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	     }
 		map_all.put("lst_data", lst_data);
 		return map_all;
+	}
+
+	@Override
+	public Map<String, Object> getStoreGmv_221(DynamicDto dynamicDto, PageInfo pageInfo) {
+		List<?> list=null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+
+		String sql=" select city_name,storeno,store_name, pesgmv "+
+				" from ds_pes_gmv_activity_store_month where year="+dynamicDto.getYear()+" and month="+dynamicDto.getMonth()+" and storeno in ("+dynamicDto.getStoreNo()+")";
+		Query query = this.getHibernateTemplate().getSessionFactory()
+				.getCurrentSession().createSQLQuery(sql);
+
+		if(pageInfo!=null){
+			String sql_count = "SELECT count(1) from ("+sql+") c ";
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+
+			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+					.setFirstResult(
+							pageInfo.getRecordsPerPage()
+									* (pageInfo.getCurrentPage() - 1))
+					.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}else{
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}
+		map_result.put("gmv", list);
+		return map_result;
+	}
+
+	@Override
+	public Map<String, Object> getEmployeeGmv_221(DynamicDto dynamicDto, PageInfo pageInfo) {
+		String sql=" select city_name,storeno,store_name,employee_no,employee_name,pesgmv"+
+				" from ds_pes_gmv_activity_emp_month where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" and storeno in ("+dynamicDto.getStoreNo()+")";
+		if(dynamicDto.getEmployeeNo()!=null&&!"".equals(dynamicDto.getEmployeeNo())){
+			sql=sql+" and employee_no like '%"+dynamicDto.getEmployeeNo()+"%'";
+		}
+
+		if(dynamicDto.getEmployeeName()!=null&&!"".equals(dynamicDto.getEmployeeName())){
+			sql=sql+" and employee_name like '%"+dynamicDto.getEmployeeName()+"%'";
+		}
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		List<?> list=null;
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		if(pageInfo!=null){
+			String sql_count = "SELECT count(1) as total from ("+sql+") c";
+			Query query_count = this.getHibernateTemplate().getSessionFactory()
+					.getCurrentSession().createSQLQuery(sql_count);
+			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+					.setFirstResult(pageInfo.getRecordsPerPage()*(pageInfo.getCurrentPage() - 1)).setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}else{
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}
+		map_result.put("gmv", list);
+		return map_result;
 	}
 }

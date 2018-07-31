@@ -571,6 +571,7 @@ Date.prototype.format=function(fmt) {
 	//从社员统计 跳转过来
 	var tag = decode64(getUrlParamByKey("tag"));//社员标签
 	var time = decode64(getUrlParamByKey("time"));//开卡时间
+	var mt = decode64(getUrlParamByKey("mt"));//开卡标识
 	
   $(function () {
     $(".logo-lg > ul > li").mouseenter(function(){
@@ -608,18 +609,27 @@ Date.prototype.format=function(fmt) {
     }else if(target==1){//城市
     	initcurcity();
     	$("#citySelect").prop("disabled", true);
-    	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
     	initStoreSelectcomplate();
     }else if(target==2) {//门店
     	initcurcity();
     	$("#citySelect").prop("disabled", true);
-		$("#citySelect option[value='"+cityname+"']").attr('selected',true);
     	initStoreSelectcomplate();
-    	$("#store_id_manual").val(storeNo);
-    	$("#store_name_manual").val(storeName);
 		$("#store_name_manual").attr("readonly",true);
     }
     
+    //社员统计跳转 参数'无'处理
+    if(cityname=='无'){
+  		cityname = '';
+  	}
+    if(storeName=='无'){
+    	storeNo = '';
+    	storeName = '';
+    }
+    
+    $("#citySelect option[value='"+cityname+"']").attr('selected',true);
+    $("#store_id_manual").val(storeNo);
+	$("#store_name_manual").val(storeName);
+	
     var autoComplete = new AutoComplete("store_name_manual","auto",array);
   	document.getElementById("store_name_manual").onkeyup = function(event){
   		autoComplete.start(event);
@@ -852,39 +862,17 @@ Date.prototype.format=function(fmt) {
       	}
       	
        	$("#tag_"+tag).addClass("bg-orange-active");
+       	$("#slient_private_manual").val("V");
         var filter = $("<a href='javascript:;' class='condition'><span>" + "合作社社员" + "</span><i class='fa fa-times'></i></a>");
          $(".breadcrumb .search-con").append(filter);
-         var ui =document.getElementById("clear_all");
-         ui.style.display="";
-         filter.on("click",function(){
-        	 $("#tag_"+tag).removeClass("bg-orange-active");
-             filter.remove();
-             var curValue = $(this).text();
-             var name = "";
-          	if(curValue=='集采用户'){
-          		name="B";
-          	}else if(curValue=='合作社社员'){
-          		name="V";
-          	}else{
-          		name = curValue.substring(3,curValue.length-1);
-          	}
-     		var deptName = $("#slient_private_manual").val();
-     		$("#slient_private_manual").val(deptName.replace(name,""));
-             var aobj = $(".breadcrumb .search-con a");
-             if(aobj.length==1){
-               $(".all").addClass("bg-orange-active");
-               ui.style.display="none";
-             }else{
-               ui.style.display="";
-             }
-           });
-          slientSelection('V');
        	  var sl_open = $(".fold-con").css("display");
        	  if(sl_open == 'none'){
 	         $(".how-more").parent().prev().children().next(".fold-con").show();
 	         $(".how-more").children("span").html("收起更多选项");
 	         $(".how-more").children("span").addClass("search-more-open");
        	  }
+       	  
+       	search_manual_userProfile(1);
       }
       
   });
@@ -919,7 +907,7 @@ Date.prototype.format=function(fmt) {
 						$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
                    });
 				}
-		});
+		},false);
 	} 
    
   var array=new Array();
@@ -1183,7 +1171,8 @@ Date.prototype.format=function(fmt) {
 	    		slient_time_min:slient_time_min_select,
 	    		slient_time_max:slient_time_max,
 	    		user_label:userLabels,
-	    		user_model:user_model
+	    		user_model:user_model,
+	    		mt_flag:mt
 			}
 	    var pageInfo = new Object();
 	    pageInfo.currentPage = cur_page;
@@ -1446,7 +1435,8 @@ Date.prototype.format=function(fmt) {
 	    		slient_time_max:slient_time_max,
 	    		user_label:userLabels,
 	    		user_model:user_model,
-	    		hidden_flag:hiddenvalue
+	    		hidden_flag:hiddenvalue,
+	    		mt_flag:mt
 			}
 		    
 		    doManager('userProfileManager','exportUserProfile',[userProfileDto],function(data){

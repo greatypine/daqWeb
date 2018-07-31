@@ -725,6 +725,7 @@ Date.prototype.format=function(fmt) {
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
        			       var s="";
+       			       var a="";
        			       var c="";
        			       var r="";
        			       if(jData[i].sign_time!=null){
@@ -742,6 +743,11 @@ Date.prototype.format=function(fmt) {
        			     		d.setTime(jData[i].return_time);
        			   		 	r=d.format('yyyy-MM-dd HH:mm:ss')
        			        }
+                       if(jData[i].appointment_start_time!=null){
+                           var d=	new Date();
+                           d.setTime(jData[i].appointment_start_time);
+                           a=d.format('yyyy-MM-dd HH:mm:ss')
+                       }
        			    		
        			    var customer_name = jData[i].customer_name==null?'':jData[i].customer_name;
        			    var addr_name = jData[i].addr_name==null?'':jData[i].addr_name;
@@ -765,9 +771,14 @@ Date.prototype.format=function(fmt) {
 			        var customerid = "customertips"+i;
 			        
        			    var ctime="<strong>下单时间：</strong>"+c+"<br>";
+       			    var atime="<strong>预约时间：</strong>"+a+"<br>";
  			       	var stime="<strong>签收时间：</strong>"+s+"<br>";
  			       	var rtime="<strong>退货时间：</strong>"+r+"<br>";
- 			        var tcontent = ctime+stime+rtime+"@timetips"+i;
+ 			       	var tcontent = ctime;
+ 			       	if(a!=null && a!=""){
+                        tcontent = tcontent + atime;
+                    }
+ 			        tcontent = tcontent+stime+rtime+"@timetips"+i;
  			       	
 			        var tid = "timetips"+i;
 			        

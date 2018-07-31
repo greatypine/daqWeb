@@ -2,6 +2,7 @@ var pageStatusInfo = {};
 var mapChart;
 var statisticExtendInfo;
 var timerId;
+var refreshId;
 // 城市排名(GMV)柱状图
 var cityRankChartGmv;
 var cityRankGmvOption;
@@ -56,10 +57,14 @@ function loginShow(){
 $(document).ready(function () {
 	//获得闪图数据
 	getBeatJson();
+	//首次进入清除缓存
+	clearFirstCache();
 	loginShow();
 	//鼠标放概要统计展开
 	showMoreSummaryStatistics();
 	getStoreKindsNumber();
+	//页面长期打开的情况下,早晨7点定时刷新
+	excuteRefreshTask();
     var startTime = new Date().getTime();
     // 获取请求参数
     var requestParameters = getReauestParameters();
@@ -122,7 +127,6 @@ var showPageContent = function (pageStatusInfo) {
     // 显示本月新增开卡用户和历史总社员数
     getOpenCardUser(pageStatusInfo);
     getDailyData();
-
     // 显示统计概要
     pageStatusInfo.currentPage=1;
     getStatisticInfo(pageStatusInfo);
@@ -3597,7 +3601,8 @@ var getReauestParameters = function () {
 		    $("#currentCity").after(span);
   	}
   	var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
-  	if(regex_zb.test(curr_user.usergroup.code)){
+    var regex_gly = new RegExp("^(GLY|gly)\w*");//管理员
+  	if(regex_zb.test(curr_user.usergroup.code)||regex_gly.test(curr_user.usergroup.code)){
 		targets = 0;
 		// 城市ID
 		    cityId = (decode64(getUrlParamByKey("c")) == 'null'||decode64(getUrlParamByKey("c")) == null) ? '' : decode64(getUrlParamByKey("c"));
@@ -3629,17 +3634,7 @@ var getReauestParameters = function () {
     };
     return rtnData;
 };
-  var curr_user;
-  function initcurruser(){
-  		//取得当前登录人的门店
-		doManager("UserManager", "getCurrentUserDTO",null,
-    				function(data, textStatus, XMLHttpRequest) {
-    					if (data.result) {
-    						var employeeID="";
-    						 curr_user = JSON.parse(data.data);
-    					}
-    			},false);
-  	}
+
 	  //获取城市总监的城市名称
   var cityId = "";
   var curCity= "";
@@ -4135,7 +4130,12 @@ var curr_user;
     							 employeeID = curr_user.employeeId;
     						 }
     						 $("#card_no").html(zw+" "+employeeID);
-    						 
+                            //暂时控制管理员查看221gmv，以后删除（高宝磊）
+    						 if(curr_user.usergroup.code=="GLY"){
+                                $("#221_gmv").show();
+                            }else{
+                                $("#221_gmv").hide();
+                            }
     					}
     			},false);
   	}
@@ -5028,4 +5028,40 @@ function goToMemberInvitation(){
       window.open(url,"dynamicData_member_invitation");
 }
 
+function refreshCurrentData(){
+        var date=new Date();
+        var h=date.getHours();
+        var m=date.getMinutes();
+        var s=date.getSeconds();
+        if(h==7&&m==0&&s==0){
+		    localStorage.clear();
+	        showPageContent(pageStatusInfo);  
+        }
+}
+function excuteRefreshTask() {
+	refreshCurrentData();
+	clearTimeout(refreshId);
+    refreshId= setTimeout("excuteRefreshTask()",1000);
+}
+function  clearFirstCache(){
+	localStorage.clear();
+}
+
+
+
+
+//221GMV统计
+function goTo221GMV(){
+
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "dynamicData_gmv_tto.html?t="+encode64('0')+"&c=&cn=&s=&e="+encode64(curr_user.id)+"&r="+encode64(role)
+    }else if(target==1){
+        url = "dynamicData_gmv_tto.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);;
+    }
+
+    window.open(url,"dynamicData_gmv_tto");
+}
 

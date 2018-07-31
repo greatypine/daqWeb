@@ -190,8 +190,8 @@
                                         <dd><a href="javascript:goToRewardtimes()"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>
                                         <dd style="position: relative;"><a href="javascript:goToInvitationMember()"><span class="fa fa-credit-card"></span>社员邀请统计</a>
                                         <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
-                                        <!--<dd style="position: relative;"><a href="javascript:goTo221GMV()"><span class="fa fa-thumbs-o-up"></span>221GMV</a>
-                                            <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>-->
+                                        <!--<dd style="position: relative;"><a href="javascript:goTo221GMV()"><span class="fa fa-thumbs-o-up"></span>221GMV</a>-->
+                                            <!--<img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>-->
                                     </dl>
                                     <dl class="col-sm-3">
                                         <dt><i></i>档案数据</dt>
@@ -414,7 +414,7 @@
                   <dd id="fdz_name"></dd>
                   <dt>事务管理</dt>
                   <dd id="zhgl_num"></dd>
-                  <dt>服务专员</dt>
+                  <dt>综合专员</dt>
                   <dd id="fwzy_num"></dd>
                   <dt>国安侠</dt>
                   <dd id="gax_num"></dd>
@@ -1064,10 +1064,10 @@ function showStoreAllInfo(){
 								$("#zhgl_num").html("<a href='javascript:initZhglInfo()'>"+t.total+"</a>人");
 							}else if(t.zw=="副店长"){
 								$("#fdz_name").html(t.name);
-							}else if(t.zw=="服务专员"){
+							}else if(t.zw=="综合专员"){
 								$("#fwzy_num").html("<a href='javascript:initFWZYInfo()'>"+t.total+"</a>人");
 							}else if(t.zw=='店长'){
-								$("#dz_name").html(t.name+"<span>"+(t.phone==null?"":t.phone)+"</span>");
+								$("#dz_name").html((t.name==null?"无":t.name)+"<span>"+(t.phone==null?"":t.phone)+"</span>");
 							}
 						})
 						$("#address_text").html(info[0].address);
@@ -2881,7 +2881,7 @@ function initStoreHistoryGMV(){
 	
 	  var user={
 			  store_id:STORE_ID,
-			  zw:'服务专员'
+			  zw:'综合专员'
 	  }
 	  var infoStr="";
 	  doManager("UserManager", "getEmployeeByStore",user,

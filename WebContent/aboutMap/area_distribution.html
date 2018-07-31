@@ -15,7 +15,7 @@
 	  <!-- AdminLTE Skins. Choose a skin from the css/skins
 	       folder instead of downloading all of them to reduce the load. -->
 	  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
-    <script src="https://webapi.amap.com/maps?v=1.4.2&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.8&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
     <script type="text/javascript" src="../scripts/custom_color.js"></script>
     <!-- <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script> -->
     <style type="text/css">
@@ -45,13 +45,26 @@
 		padding: 0 4px;
 	}
 
-	.button-group {
-		position: absolute;
-		/* top: 20px; */
-		right: 20px;
-		font-size: 12px;
-		padding: 10px;
-	}
+        .button-group{
+            position:absolute;
+            top:20px;
+            right:20px;
+            font-size:12px;
+            padding:0px;
+            bottom:0px;
+            border-radius:3px;
+            height:35px;
+            box-shadow:0 2px 2px rgba(0,0,0,.15);
+            background:#fff;
+        }
+        .button-group .button{
+            height:35px;
+            padding:0 10px;
+            display:inline-block;
+            background-color:transparent;
+            color:#5f6477;
+        }
+        .button-group .button:hover{color:#66B3FF}
 
 	.content-header{padding-top: 0;}
     .form-group{line-height: 34px;}
@@ -127,11 +140,13 @@
 		color: #fff;
 	}
 	/*全屏按钮*/
-    .pull-right-fullscreen {
-    	position:absolute;
-    	z-index:10;
-    	right:20px;
-    }
+        .pull-right-fullscreen{
+            /* position: absolute; */
+            /* z-index: 10; */
+            /* right: 20px; */
+            height:35px;
+            padding:0 10px;
+        }
     /*全屏样式*/
     #mask{width:100%; height:100%; position:fixed; top:0; left:0; display: none; z-index:9999999; background-color: rgba(0,0,0,0.7);}
     #mask-body{ position: absolute; top: 50px; left: 50px; height: 600px; opacity: 1; z-index: 99; }
@@ -171,12 +186,16 @@
             <button type="button" class="btn btn-block btn-primary btn-sm" onclick="showArea()">查看</button>
           </div>
         </div>
-        <span class="pull-right-fullscreen" onclick="fullscreen();">
-        	<img src="dist/img/fullscreen.png">
-        </span>
+
         <input id="fscreen" hidden="hidden">
         <div class="box-body" style="position:relative" id="mapHeight">
           <div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
+            <div class="button-group">
+                <input type="button" class="button" value="测距" onClick="javascript:startRuler1()"/>
+                <span class="pull-right-fullscreen" onclick="fullscreen();">
+        	        <img src="dist/img/fullscreen.png">
+                </span>
+            </div>
 		  <!--左侧列表-->
 		  <div class="menu">
 		    <div class="menu_list" id="test">
@@ -259,12 +278,12 @@
 <script type="text/javascript">
 	$("#mask-header>button").click(function(){ 
 		$("#mask").css('display',"none");
+        $(".pull-right-fullscreen").show();
 		document.getElementById("mapHeight").style.height= "600px";
 		$("#mapHeight").removeAttr("style");
 	    $("#mapHeight").css({"position":"relative","top":"0px"});
 	    automapheight();
 		$("#fscreen").after($("#mapHeight"));
-	  
 	});
     //保存时存放area的数组
     var c = getUrlParamByKey("c");
@@ -298,6 +317,17 @@
         zoom : 15
     });
 
+    var ruler1;
+    map.plugin(["AMap.RangingTool"], function() {
+        ruler1 = new AMap.RangingTool(map);
+        AMap.event.addListener(ruler1, "end", function(e) {
+            ruler1.turnOff();
+        });
+    });
+    //启用默认样式测距
+    function startRuler1() {
+        ruler1.turnOn();
+    }
 
     map.plugin(["AMap.ToolBar"],function(){
         //加载工具条
@@ -356,9 +386,9 @@
             })
         });
 
-        $(".result_hide").hover(function(){
+        /*$(".result_hide").hover(function(){
             setNavListVisible(true);
-        });
+        });*/
 
         $("#search").keyup();
        
@@ -424,12 +454,13 @@
             strokeOpacity: 0.9, //线透明度
             strokeWeight: 2,    //线宽
             fillColor: "#00DD00", //填充色
-            fillOpacity: 0//填充透明度
+            fillOpacity: 0,//填充透明度
+            bubble:true
         });
         serviceRange.setMap(map);
-        serviceRange.on("click", function () {
+        /*serviceRange.on("click", function () {
             setNavListVisible(false);
-        });
+        });*/
 
         var areaTinyVillage;//小区坐标范围
         var tinyVillageMarker;
@@ -454,6 +485,7 @@
                         strokeWeight: 2,    //线宽
                         fillColor: $fillColor, //填充色
                         fillOpacity: 0.45,//填充透明度
+                        bubble:true,
                         extData:{"areaNo":coordinate[i].areaNo} 
                     });
                 
@@ -809,6 +841,7 @@ function fullscreen(){
    	$("#mapHeight").show();
    	var copyMap = $("#mapHeight");
    	$("#mask-body").html(copyMap);
+    $(".pull-right-fullscreen").hide();
 }
 
 
