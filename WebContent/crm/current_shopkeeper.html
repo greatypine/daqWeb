@@ -414,7 +414,7 @@
                   <dd id="fdz_name"></dd>
                   <dt>事务管理</dt>
                   <dd id="zhgl_num"></dd>
-                  <dt>服务专员</dt>
+                  <dt>综合专员</dt>
                   <dd id="fwzy_num"></dd>
                   <dt>国安侠</dt>
                   <dd id="gax_num"></dd>
@@ -1064,10 +1064,10 @@ function showStoreAllInfo(){
 								$("#zhgl_num").html("<a href='javascript:initZhglInfo()'>"+t.total+"</a>人");
 							}else if(t.zw=="副店长"){
 								$("#fdz_name").html(t.name);
-							}else if(t.zw=="服务专员"){
+							}else if(t.zw=="综合专员"){
 								$("#fwzy_num").html("<a href='javascript:initFWZYInfo()'>"+t.total+"</a>人");
 							}else if(t.zw=='店长'){
-								$("#dz_name").html(t.name+"<span>"+(t.phone==null?"":t.phone)+"</span>");
+								$("#dz_name").html((t.name==null?"无":t.name)+"<span>"+(t.phone==null?"":t.phone)+"</span>");
 							}
 						})
 						$("#address_text").html(info[0].address);
@@ -2881,7 +2881,7 @@ function initStoreHistoryGMV(){
 	
 	  var user={
 			  store_id:STORE_ID,
-			  zw:'服务专员'
+			  zw:'综合专员'
 	  }
 	  var infoStr="";
 	  doManager("UserManager", "getEmployeeByStore",user,
