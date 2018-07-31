@@ -1336,7 +1336,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 						" FROM (select * from df_mass_order_monthly  " +
 						" where sign_time >='"+dynamicDto.getBeginDate()+" 00:00:00' and sign_time<'"+dynamicDto.getEndDate()+"'" +
 						" and area_code is not null and store_code='"+dynamicDto.getStoreNo()+"'"+
-						" and store_id=" +dynamicDto.getStoreId()+" ) a LEFT JOIN t_area  b on a.area_code = b.area_no"+
+						" ) a LEFT JOIN t_area  b on a.area_code = b.area_no"+
 						" and b.status=0"+ 
 						" GROUP BY a.area_code ORDER BY amount desc";
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
