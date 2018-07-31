@@ -3633,17 +3633,7 @@ var getReauestParameters = function () {
     };
     return rtnData;
 };
-  var curr_user;
-  function initcurruser(){
-  		//取得当前登录人的门店
-		doManager("UserManager", "getCurrentUserDTO",null,
-    				function(data, textStatus, XMLHttpRequest) {
-    					if (data.result) {
-    						var employeeID="";
-    						 curr_user = JSON.parse(data.data);
-    					}
-    			},false);
-  	}
+
 	  //获取城市总监的城市名称
   var cityId = "";
   var curCity= "";
@@ -4139,7 +4129,12 @@ var curr_user;
     							 employeeID = curr_user.employeeId;
     						 }
     						 $("#card_no").html(zw+" "+employeeID);
-    						 
+                            //暂时控制管理员查看221gmv，以后删除（高宝磊）
+    						 if(curr_user.usergroup.code=="GLY"){
+                                $("#221_gmv").show();
+                            }else{
+                                $("#221_gmv").hide();
+                            }
     					}
     			},false);
   	}
@@ -5031,6 +5026,7 @@ function goToMemberInvitation(){
 	  }
       window.open(url,"dynamicData_member_invitation");
 }
+
 function refreshCurrentData(){
         var date=new Date();
         var h=date.getHours();
@@ -5049,3 +5045,22 @@ function excuteRefreshTask() {
 function  clearFirstCache(){
 	localStorage.clear();
 }
+
+
+
+
+//221GMV统计
+function goTo221GMV(){
+
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "dynamicData_gmv_tto.html?t="+encode64('0')+"&c=&cn=&s=&e="+encode64(curr_user.id)+"&r="+encode64(role)
+    }else if(target==1){
+        url = "dynamicData_gmv_tto.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);;
+    }
+
+    window.open(url,"dynamicData_gmv_tto");
+}
+

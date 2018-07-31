@@ -7157,4 +7157,338 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		}
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> queryStoreTradeByType_221(DynamicDto dynamicDto, PageInfo pageInfo) {
+		Map<String, Object> result = new HashedMap();
+		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		try {
+			if(dynamicDto.getTarget()==0){//总部
+				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+
+					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+
+					StringBuilder storeNO = new StringBuilder();
+					for(Map<String, Object> map:storeList){
+
+						if(map.get("storeno")==null||"".equals(map.get("storeno"))){
+							continue;
+						}
+
+						storeNO.append(",'"+map.get("storeno")+"'");
+					}
+					if(storeNO.length()>0){
+
+						storeNO = storeNO.deleteCharAt(0);
+
+					}else{
+						JSONObject temp = new JSONObject();
+						temp.put("data", "");
+						temp.put("message", "系统查无此条件的数据！");
+						result.put("status","storefail");
+						result.put("data",temp.toString());
+						return result;
+					}
+
+
+					dynamicDto.setStoreNo(storeNO.toString());
+				}else  if(dynamicDto.getStoreId()==-10000){
+					dynamicDto.setStoreNo("-10000");
+				}else{
+
+					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+					dynamicDto.setStoreNumer(store.getNumber()==null?"-10000":String.valueOf(store.getNumber()));
+					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
+				}
+			}else if(dynamicDto.getTarget()==1){//城市总监
+				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+
+					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+
+					StringBuilder storeNO = new StringBuilder();
+					for(Map<String, Object> map:storeList){
+
+						if(map.get("storeno")==null||"".equals(map.get("storeno"))){
+							continue;
+						}
+
+						storeNO.append(",'"+map.get("storeno")+"'");
+					}
+					if(storeNO.length()>0){
+
+						storeNO = storeNO.deleteCharAt(0);
+
+					}else{
+						JSONObject temp = new JSONObject();
+						temp.put("data", "");
+						temp.put("message", "系统查无此条件的数据！");
+						result.put("status","storefail");
+						result.put("data",temp.toString());
+						return result;
+					}
+
+					dynamicDto.setStoreNo(storeNO.toString());
+				}else  if(dynamicDto.getStoreId()==-10000){
+					dynamicDto.setStoreNumer("-10000");
+					dynamicDto.setStoreNo("-10000");
+				}else{
+
+					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+					dynamicDto.setStoreNumer(store.getNumber()==null?"-10000":String.valueOf(store.getNumber()));
+					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
+				}
+			}else if(dynamicDto.getTarget()==2){//店长
+				Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
+			}
+
+
+			String[] dateArr = dynamicDto.getBeginDate().split("-");
+			dynamicDto.setYear(Integer.parseInt(dateArr[0]));
+			dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
+
+			result= dynamicDao.getStoreGmv_221(dynamicDto, pageInfo);
+			result.put("status","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status","fail");
+			return result;
+
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> exportStoreTradeByType_221(DynamicDto dynamicDto) {
+		Map<String,Object> result  = new HashMap<String,Object>();
+		Map<String,Object> map  = this.queryStoreTradeByType_221(dynamicDto, null);
+		if("success".equals(map.get("status"))){//成功返回数据
+			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("gmv");
+			if(list==null||list.size()==0){
+				result.put("message","没有符合条件的数据！");
+				result.put("status","null");
+				return result;
+			}
+			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			String str_web_path = PropertiesUtil.getValue("file.web.root");
+
+			HSSFWorkbook wb = new HSSFWorkbook();
+			// 创建Excel的工作sheet,对应到一个excel文档的tab
+
+			setCellStyle_common(wb);
+			setHeaderStyle(wb);
+			HSSFSheet sheet = wb.createSheet("门店GMV");
+			HSSFRow row = sheet.createRow(0);
+			String[] str_headers = {"城市","门店名称","门店编号","绩效GMV"};
+			String[] headers_key = {"city_name","store_name","storeno","pesgmv"};
+			for(int i = 0;i < str_headers.length;i++){
+				HSSFCell cell = row.createCell(i);
+				cell.setCellStyle(getHeaderStyle());
+				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
+			}
+
+			for(int i = 0;i < list.size();i++){
+				row = sheet.createRow(i+1);
+				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+				}
+			}
+
+
+
+			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_store221gmv.xls");
+			if(file_xls.exists()){
+				file_xls.delete();
+			}
+			FileOutputStream os = null;
+			try {
+				os = new FileOutputStream(file_xls.getAbsoluteFile());
+				wb.write(os);
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if(os != null){
+					try {
+						os.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			result.put("message","导出成功！");
+			result.put("status","success");
+			result.put("data", str_web_path.concat(file_xls.getName()));
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+
+
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> queryEmployeeOfAreaGmv_221(DynamicDto dynamicDto, PageInfo pageInfo) {
+		Map<String, Object> result = new HashedMap();
+		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		try {
+			if(dynamicDto.getTarget()==0){//总部
+				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+
+					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+
+					StringBuilder storeNO = new StringBuilder();
+					for(Map<String, Object> map:storeList){
+
+						if(map.get("storeno")==null||"".equals(map.get("storeno"))){
+							continue;
+						}
+
+						storeNO.append(",'"+map.get("storeno")+"'");
+					}
+					if(storeNO.length()>0){
+
+						storeNO = storeNO.deleteCharAt(0);
+
+					}else{
+						JSONObject temp = new JSONObject();
+						temp.put("data", "");
+						temp.put("message", "系统查无此条件的数据！");
+						result.put("status","storefail");
+						result.put("data",temp.toString());
+						return result;
+					}
+
+
+					dynamicDto.setStoreNo(storeNO.toString());
+				}else  if(dynamicDto.getStoreId()==-10000){
+					dynamicDto.setStoreNo("-10000");
+				}else{
+
+					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
+				}
+			}else if(dynamicDto.getTarget()==1){//城市总监
+				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
+
+					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+
+					StringBuilder storeNO = new StringBuilder();
+					for(Map<String, Object> map:storeList){
+
+						if(map.get("storeno")==null||"".equals(map.get("storeno"))){
+							continue;
+						}
+
+						storeNO.append(",'"+map.get("storeno")+"'");
+					}
+					if(storeNO.length()>0){
+
+						storeNO = storeNO.deleteCharAt(0);
+
+					}else{
+						JSONObject temp = new JSONObject();
+						temp.put("data", "");
+						temp.put("message", "系统查无此条件的数据！");
+						result.put("status","storefail");
+						result.put("data",temp.toString());
+						return result;
+					}
+
+					dynamicDto.setStoreNo(storeNO.toString());
+				}else  if(dynamicDto.getStoreId()==-10000){
+					dynamicDto.setStoreNumer("-10000");
+					dynamicDto.setStoreNo("-10000");
+				}else{
+
+					Store  store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+					dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno()==null?"-10000":store.getStoreno())+"'");
+				}
+			}else if(dynamicDto.getTarget()==2){//店长
+				Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+				dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
+			}
+
+
+			String[] dateArr = dynamicDto.getBeginDate().split("-");
+			dynamicDto.setYear(Integer.parseInt(dateArr[0]));
+			dynamicDto.setMonth(Integer.parseInt(dateArr[1]));
+			result= dynamicDao.getEmployeeGmv_221(dynamicDto, pageInfo);
+			result.put("status","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status","fail");
+			return result;
+
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> exportEmployeeOfAreaGmv_221(DynamicDto dynamicDto) {
+		Map<String,Object> result  = new HashMap<String,Object>();
+		Map<String,Object> map  = this.queryEmployeeOfAreaGmv_221(dynamicDto, null);
+		if("success".equals(map.get("status"))){//成功返回数据
+			List<Map<String, Object>> list  = (List<Map<String, Object>>)map.get("gmv");
+			if(list==null||list.size()==0){
+				result.put("message","没有符合条件的数据！");
+				result.put("status","null");
+				return result;
+			}
+			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			String str_web_path = PropertiesUtil.getValue("file.web.root");
+			HSSFWorkbook wb = new HSSFWorkbook();
+			// 创建Excel的工作sheet,对应到一个excel文档的tab
+			setCellStyle_common(wb);
+			setHeaderStyle(wb);
+			HSSFSheet sheet = wb.createSheet("国安侠GMV");
+			HSSFRow row = sheet.createRow(0);
+			String[] str_headers = {"城市","门店名称","门店编码","员工姓名","员工编号","绩效GMV"};
+			String[] headers_key = {"city_name","store_name","storeno","employee_name","employee_no","pesgmv"};
+			for(int i = 0;i < str_headers.length;i++){
+				HSSFCell cell = row.createCell(i);
+				cell.setCellStyle(getHeaderStyle());
+				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
+			}
+			for(int i = 0;i < list.size();i++){
+				row = sheet.createRow(i+1);
+				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+				}
+			}
+			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_employee221gmv.xls");
+			if(file_xls.exists()){
+				file_xls.delete();
+			}
+			FileOutputStream os = null;
+			try {
+				os = new FileOutputStream(file_xls.getAbsoluteFile());
+				wb.write(os);
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if(os != null){
+					try {
+						os.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			result.put("message","导出成功！");
+			result.put("status","success");
+			result.put("data", str_web_path.concat(file_xls.getName()));
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+		return result;
+	}
 }
