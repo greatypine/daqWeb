@@ -494,7 +494,7 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 					.getSimpleFilter("code", userCode).appendOr(FilterFactory
 							.getSimpleFilter("phone", userCode)).appendOr(FilterFactory
 							.getSimpleFilter("mobilephone", userCode)).appendOr(FilterFactory
-							.getSimpleFilter("employeeId", userCode))).appendAnd(FilterFactory
+							.getSimpleFilter("employeeId", userCode))).appendAnd(FilterFactory.getSimpleFilter("disabledFlag=1")).appendAnd(FilterFactory
 					.getSimpleFilter("password", password))));
 		}
 		
