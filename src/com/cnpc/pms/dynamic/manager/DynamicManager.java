@@ -1140,5 +1140,5 @@ public interface DynamicManager extends IManager{
 	 * @date 2018/7/28 16:21
 	 **/
 
-	public Map<String, Object> exportEmployeeOfAreaGmv_221(DynamicDto dynamicDto, PageInfo pageInfo);
+	public Map<String, Object> exportEmployeeOfAreaGmv_221(DynamicDto dynamicDto);
 }

@@ -103,7 +103,7 @@
                 <div class="pull-left">
                     <div class="logo-lg">
                         <ul class="no-margin">
-                            <li class="current"><em>门店GMV</em></li>
+                            <li class="current"><em>221 GMV统计</em></li>
                         </ul>
                     </div>
                 </div>
@@ -321,7 +321,7 @@
                             <button type="button" onclick="export_AreaGMV()" class="btn btn-block btn-warning">导出</button>
                         </div>
                         <div class="col-lg-2" style="margin-top: 20px; padding: 0 25px;">
-                            <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+                            <button type="button" onclick="resetSerachParam_employee()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                         </div>
                     </div>
                     <div class="box-body">
@@ -338,9 +338,9 @@
                                             <th width="10%">员工编号</th>
                                             <th width="10%">绩效GMV</th>
                                             <!--                                             <th width="10%">服务GMV</th> -->
-                                            <th width="10%">片区GMV</th>
+                                            <!--<th width="10%">片区GMV</th>
                                             <th width="10%">手动分配GMV</th>
-                                            <th width="10%">人均分配GMV</th>
+                                            <th width="10%">人均分配GMV</th>-->
                                         </tr>
                                         </tbody>
                                     </table>
@@ -658,7 +658,7 @@
         }
         var pageInfo = new Object();
         pageInfo.currentPage = cur_page;
-        doManager('dynamicManager','queryStoreTradeByType',[dynamicDto,pageInfo],function(data){
+        doManager('dynamicManager','queryStoreTradeByType_221',[dynamicDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -788,7 +788,7 @@
             }
         }
 
-        doManager('dynamicManager','exportStoreTradeByType',[dynamicDto],function(data){
+        doManager('dynamicManager','exportStoreTradeByType_221',[dynamicDto],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -997,7 +997,7 @@
         }
         var pageInfo = new Object();
         pageInfo.currentPage = cur_page;
-        doManager('dynamicManager','employeeOfAreaGmv',[dynamicDto,pageInfo],function(data){
+        doManager('dynamicManager','queryEmployeeOfAreaGmv_221',[dynamicDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -1040,9 +1040,9 @@
                             +"<td>"+jData[i].employee_no+"</td>"
                             +"<td>"+jData[i].pesgmv+"</td>"
                             //                             +"<td>"+jData[i].pes_sendgmv+"</td>"
-                            +"<td>"+jData[i].pes_areagmv+"</td>"
+                           /* +"<td>"+jData[i].pes_areagmv+"</td>"
                             +"<td>"+jData[i].pes_assigngmv+"</td>"
-                            +"<td>"+jData[i].pes_pergmv+"</td>"
+                            +"<td>"+jData[i].pes_pergmv+"</td>"*/
                             +"</tr>";
                         $("#customer_tbody").append(infoStr);
                     }
@@ -1128,7 +1128,7 @@
                 employeeName:employeeName
             }
         }
-        doManager('dynamicManager','exportAreaGMV',[dynamicDto],function(data){
+        doManager('dynamicManager','exportEmployeeOfAreaGmv_221',[dynamicDto],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -1231,6 +1231,28 @@
         }
     }
 
+
+    function resetSerachParam_employee(){
+        $("#auto_store").empty();
+        if(target==0){//总部
+            $("#store_id_customer").val("");
+            $("#store_name_customer").val("");
+            $("#city_id_customer").val("");
+            $("#city_name_customer").val("");
+            $("#employee_no").val("");
+            $("#employee_name").val("");
+        }else if(target==1){//城市级别
+
+            $("#store_id_customer").val("");
+            $("#store_name_customer").val("");
+            $("#employee_no").val("");
+            $("#employee_name").val("");
+
+        }else if(target==2){//店长
+            $("#employee_no").val("");
+            $("#employee_name").val("");
+        }
+    }
 </script>
 
 </body>

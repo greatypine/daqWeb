@@ -3629,17 +3629,7 @@ var getReauestParameters = function () {
     };
     return rtnData;
 };
-  var curr_user;
-  function initcurruser(){
-  		//取得当前登录人的门店
-		doManager("UserManager", "getCurrentUserDTO",null,
-    				function(data, textStatus, XMLHttpRequest) {
-    					if (data.result) {
-    						var employeeID="";
-    						 curr_user = JSON.parse(data.data);
-    					}
-    			},false);
-  	}
+
 	  //获取城市总监的城市名称
   var cityId = "";
   var curCity= "";
@@ -4135,7 +4125,12 @@ var curr_user;
     							 employeeID = curr_user.employeeId;
     						 }
     						 $("#card_no").html(zw+" "+employeeID);
-    						 
+                            //暂时控制管理员查看221gmv，以后删除（高宝磊）
+    						 if(curr_user.usergroup.code=="GLY"){
+                                $("#221_gmv").show();
+                            }else{
+                                $("#221_gmv").hide();
+                            }
     					}
     			},false);
   	}
@@ -5027,6 +5022,8 @@ function goToMemberInvitation(){
 	  }
       window.open(url,"dynamicData_member_invitation");
 }
+
+
 
 //221GMV统计
 function goTo221GMV(){

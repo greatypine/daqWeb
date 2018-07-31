@@ -7299,7 +7299,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 
 
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_storetrade.xls");
+			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_store221gmv.xls");
 			if(file_xls.exists()){
 				file_xls.delete();
 			}
@@ -7432,7 +7432,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	}
 
 	@Override
-	public Map<String, Object> exportEmployeeOfAreaGmv_221(DynamicDto dynamicDto, PageInfo pageInfo) {
+	public Map<String, Object> exportEmployeeOfAreaGmv_221(DynamicDto dynamicDto) {
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryEmployeeOfAreaGmv_221(dynamicDto, null);
 		if("success".equals(map.get("status"))){//成功返回数据
@@ -7463,7 +7463,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
 				}
 			}
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"areaGMV.xls");
+			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_employee221gmv.xls");
 			if(file_xls.exists()){
 				file_xls.delete();
 			}
