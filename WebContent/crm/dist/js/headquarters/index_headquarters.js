@@ -3601,7 +3601,8 @@ var getReauestParameters = function () {
 		    $("#currentCity").after(span);
   	}
   	var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
-  	if(regex_zb.test(curr_user.usergroup.code)){
+    var regex_gly = new RegExp("^(GLY|gly)\w*");//管理员
+  	if(regex_zb.test(curr_user.usergroup.code)||regex_gly.test(curr_user.usergroup.code)){
 		targets = 0;
 		// 城市ID
 		    cityId = (decode64(getUrlParamByKey("c")) == 'null'||decode64(getUrlParamByKey("c")) == null) ? '' : decode64(getUrlParamByKey("c"));
