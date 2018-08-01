@@ -88,7 +88,7 @@ $(function () {
              	   city_id=null;
                 }
               }
-              doManager('dynamicManager','getStoreByCity',[0,employeeId,city_id,str_name],function(data){
+              doManager('dynamicManager','getStoreByCity',[target,employeeId,city_id,str_name],function(data){
                   if(data.result){
                   	lst_select_store = JSON.parse(data.data).storelist;
                       
