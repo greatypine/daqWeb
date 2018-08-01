@@ -131,6 +131,7 @@
             <div class="container" style="width: 1300px;">
                 <input type="hidden" id="selDay" value="1"/>
                 <input type="hidden" id="setadd" value="0"/>
+                <input type="hidden" id="setBig" value="0"/>
                 <!-- Main content -->
                 <section class="content-header">
                     <div class="box box-default report">
@@ -161,23 +162,34 @@
                                         <div class="col-sm-8">今日订单量：<br><span id="dayDealCount" ></span><small></small></div>
                                         <div class="col-sm-4"><i class="fa  fa-bar-chart"></i></div>
                                     </li>
+                                    <div class="add_citymember">
                                     <li>
                                         <div>
-                                            <div class="add_citymember">
+                                            
                                                 <div class="col-sm-8">今日新增社员：<br><span  id="dayNewMem"></span><small></small></div>
                                                 <div class="col-sm-4"><i class="fa fa-user-plus"></i></div>
-                                            </div>
+                                            
                                         </div>
                                     </li>
+                                    </div>
                                 </ul>
                                 <div id="cityMember" class="toast" style="display: none">
                                     <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
+                                   	<div id="cmBigDay" style="margin-left: 5%;display: none">
+                                   	<ul class='clearfix'>
+                                   	<li >大客户社员:<span id="cmBigDayVal" ></span></li>
+                                   	</ul>
+                                   	 </div>
                                     <div style="margin-left: 5%" id="addCityMem">
                                     </div>
                                 </div>
                                 <!-- </div>-->
                                 <ul class="clearfix no-padding">
-                                    <li class="col-sm-3"><i class="fa fa-group"></i>社员总数：<br><span id="memAll"></span></li>
+                                <li class="col-sm-3">
+                                <div class="show_cmBig"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><span id="memAll"></span>
+	                               <font id="bigMember"  style="font-size: 14px;margin-left: 15px;display: none; "><br>大客户社员：</font><span id="cmBig" style="font-size: 16px;margin-left: 5px;display: none; "></span>
+                                </div>
+                                </li>
                                     <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-fire"></i>周消费频次：<br><span id="jsonEshopWeekCou"></span></li>
@@ -414,6 +426,14 @@
                             <div class="col-sm-5" id="main9" style="height: 480px;"></div>
                         </div>
                     </div>
+<!--                    <div class="box box-default">
+                        <div class="box-body">
+                            <div class="col-sm-12">
+                                <h4 class="text-light-blue"><strong>门店活跃度</strong></h4>
+                                <div class="col-sm-12 no-padding" id="main25" style="height: 460px;"></div>
+                            </div>
+                        </div>
+                    </div>-->
                 </section>
 
             </div>
@@ -464,7 +484,7 @@
     <!-- AdminLTE for demo purposes -->
     <script src="dist/js/nav-scroll.js"></script>
     <!-- 引入 ECharts 文件 -->
-    <script src="dist/js/echarts.common.min.js"></script>
+     <script src="dist/js/echarts.common.min.js"></script>
     <script src="dist/js/nav-scroll.js"></script>
     <script src="dist/js/demo.js"></script>
     <script src="dist/js/nav-scroll.js"></script>
@@ -497,6 +517,31 @@
                 $("#cityMember").hide();
             });
         }
+        
+        function showMemberBig(){
+            $(".show_cmBig").click(function(){
+                if($("#setBig").val()=="0"){
+                    $("#setBig").val("1");
+                    $("#bigMember").show();
+                    $("#cmBig").show();
+                }else{
+                    $("#setBig").val("0");
+                    $("#bigMember").hide();
+                    $("#cmBig").hide();
+                }
+
+            });
+            $(".show_cmBig").mouseover(function(){
+                $("#setBig").val("1");
+                $("#bigMember").show();
+                $("#cmBig").show();
+            });
+            $(".show_cmBig").mouseleave(function(){
+                $("#setBig").val("0");
+                $("#bigMember").hide();
+                $("#cmBig").hide();
+            });
+        }
         function doCityMem(citycode){
             //跳转城市页面
             var url = "member_analysis_city.html?c="+encode64(citycode);
@@ -515,6 +560,14 @@
                     $("#dayDealSum").html(changeMoney(parseInt(resultJson.dayDealSum==null?'0':resultJson.dayDealSum)));
                     //新增社员
                     $("#dayNewMem").html(parseInt(resultJson.dayAddMem==null?'0':resultJson.dayAddMem));
+                    
+                    var bigdayCou = parseInt(resultJson.bigUpDaycou==null?'0':resultJson.bigUpDaycou);
+                    if(bigdayCou!=0){
+                    	$("#cmBigDayVal").html(bigdayCou);
+                    	$("#cmBigDay").show();
+                    }else{
+                    	$("#cmBigDay").hide();
+                    } 
                     setCityAddMem(resultJson);
                 }
             });
@@ -545,6 +598,17 @@
             }
             window.open(url,"user_member_view");
         }
+        function doK_Mem(){
+            var url = "";
+            if(target==0){
+                url = "index_K_member.html?t="+encode64(target)+"&c=&cn=&e="+encode64(employeeId)+"&#fg";
+            }else if(target==1){
+                url = "index_K_member.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&e="+encode64(employeeId)+"&#fg";
+            }else{
+                url = "index_K_member.html?t="+encode64(0);
+            }
+            window.open(url,"user_member_view");
+        }
         var screenlogin=getUrlParamByKey("su");
 
         function loginShow(){
@@ -563,6 +627,7 @@
                     //最新方式
 
                     doMemberInfo1();
+                    doMemberInfo1_1();
                     doMemberInfo2();
                     doMemberInfo3();
                     doMemberInfo4();
@@ -576,6 +641,8 @@
                     doArtelInfo4();
                     doArtelInfo5();
 
+                    //未开发完成...
+                    //showStoreGmv("1");
                     //doMemberInfo();
                     //selectCmDealInfo();
                     //doMemberSum();
@@ -644,6 +711,7 @@
                 //最新方式
 
                 doMemberInfo1();
+                doMemberInfo1_1();
                 doMemberInfo2();
                 doMemberInfo3();
                 doMemberInfo4();
@@ -656,6 +724,8 @@
                 doArtelInfo3();
                 doArtelInfo4();
                 doArtelInfo5();
+                //未开发完成...
+                //showStoreGmv("1");
 
                 //	doMemberInfo();
                 //doMemberSum();
@@ -1283,6 +1353,17 @@
                 }
             },false);
         }
+ 	   function doMemberInfo1_1(){
+	       //直接赋值---基本信息加载
+	       doManager('communeMember','selectCmBigInfo',"0000",function(data){
+	           if(data.result){
+	               var resultJson= JSON.parse(data.data);
+	               showCmBigData(resultJson);
+	           }else{
+	               alert("暂无社员相关信息");
+	           }
+	       },false);
+	   }
         function doMemberInfo2(){
             //直接赋值---基本信息加载
             doManager('communeMember','selectCmOpenInfo',"0000",function(data){
@@ -1470,7 +1551,7 @@
                     setCityAddMem(resultJson);
 
                     setLoadingMark(false);
-                    //设置10分钟刷新页面600
+                    //设置1分钟刷新页面600
                     setInterval("doUpdate()","60000");
                 }else{
                     alert("暂无社员相关信息");
@@ -1558,6 +1639,7 @@
             localStorage.clear();
             loginShow();
             showAddMember();
+            showMemberBig();
 
 
 
@@ -1948,7 +2030,18 @@
                 $("#coolPro_data").append(coolStr);
             }
         };
-
+        var showCmBigData = function (dataServer) {
+            //大客户社员量
+            $("#cmBig").html(parseInt(dataServer.bigCou==null?'0':dataServer.bigCou));
+            //当天新增大客户社员量
+            var bigdayCou = parseInt(dataServer.bigDaycou==null?'0':dataServer.bigDaycou);
+            if(bigdayCou!=0){
+            	$("#cmBigDayVal").html(bigdayCou);
+            	$("#cmBigDay").show();
+            }else{
+            	$("#cmBigDay").hide();
+            }
+        }
         var showHistoryData = function (dataServer) {
             //社员量
             $("#memAll").html(parseInt(dataServer.cmCount==null?'0':dataServer.cmCount));
@@ -3585,6 +3678,228 @@
 
 
             myChart22.setOption(option22);
+        }
+
+        var showStoreGmv = function(dataServer){
+            var myChart25= echarts.init(document.getElementById('main25'));
+            option25 = {
+                timeline: {
+                    axisType: 'category',
+                    autoPlay: true,
+                    playInterval: 3000,
+                    data: [
+                        '07-21','07-22','07-23','07-24','07-25','07-26','07-27',
+
+                    ],
+                    label: {
+                        formatter : function(s) {
+                            return (s);
+                        }
+                    }
+                },
+                options:[
+                    {
+                        title: {
+                            text: "7月21",
+                            left: "10",
+                            y: "10",
+                            textStyle: {
+                                color: "#666"
+                            }
+                        },
+                        color: [
+                            '#dd4444', '#fec42c', '#80F1BE'
+                        ],
+                        legend: {
+                            y: 'top',
+                            data: ['GMV'],
+                            textStyle: {
+                                color: '#666',
+                                fontSize: 16
+                            }
+                        },
+                        grid: {
+                            x: '40%',
+                            //x2: 80,
+                            y: '28%',
+                            y2: '20%',
+                            bottom: '25%',
+                            left:'5%',
+                            right:'15%'
+                        },
+                        tooltip: {
+                            padding: 10,
+                            backgroundColor: '#222',
+                            borderColor: '#777',
+                            borderWidth: 1,
+                            formatter: '{b}<br/>{a}: {c}[0] <br/>社员: {c}[1]'
+                        },
+                        xAxis: {
+                            type: 'value',
+                            name: '社员量',
+                            nameGap: 16,
+                            nameTextStyle: {
+                                color: '#666',
+                                fontSize: 14
+                            },
+                            min: function(value){
+                                return parseInt(value.min);
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#666'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            type: 'value',
+                            name: 'GMV',
+                            nameLocation: 'end',
+                            nameGap: 20,
+                            min: function(value){
+                                return parseInt(value.min);
+                            },
+                            nameTextStyle: {
+                                color: '#666',
+                                fontSize: 16
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#666'
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        },
+                        visualMap: [
+                            {
+                                left: 'right',
+                                top: '2%',
+                                dimension: 1,
+                                min: 0,
+                                max: 10000,
+                                itemWidth: 30,
+                                itemHeight: 100,
+                                calculable: true,
+                                precision: 0.1,
+                                text: ['圆形大小：门店GMV'],
+                                textGap: 30,
+                                textStyle: {
+                                    color: '#666'
+                                },
+                                inRange: {
+                                    symbolSize: [10, 70]
+                                },
+                                outOfRange: {
+                                    symbolSize: [10, 70],
+                                    color: ['rgba(255,255,255,.2)']
+                                },
+                                controller: {
+                                    inRange: {
+                                        color: ['#c23531']
+                                    },
+                                    outOfRange: {
+                                        color: ['#666']
+                                    }
+                                }
+                            },
+                            {
+                                left: 'right',
+                                bottom: '10%',
+                                dimension: 0,
+                                min: 0,
+                                max: 500,
+                                itemHeight: 100,
+                                calculable: true,
+                                precision: 0.1,
+                                text: ['明暗：社员数'],
+                                textGap: 30,
+                                textStyle: {
+                                    color: '#666'
+                                },
+                                inRange: {
+                                    colorLightness: [1, 0.5]
+                                },
+                                outOfRange: {
+                                    color: ['rgba(255,255,255,.2)']
+                                },
+                                controller: {
+                                    inRange: {
+                                        color: ['#c23531']
+                                    },
+                                    outOfRange: {
+                                        color: ['#666']
+                                    }
+                                }
+                            }
+                        ],
+                        series : [
+                            {
+                                'name':'GMV',
+                                'type':'scatter',
+                                markLine : {
+                                    data : [
+                                        {type : 'average', name: 'y平均值', itemStyle:{normal:{borderColor:'red'}}},
+                                        {type : 'average', name: 'x平均值', valueIndex : 0, itemStyle:{normal:{borderColor:'red'}}}
+                                    ]
+                                },
+                                symbolSize : 5,
+                                itemStyle: {
+                                    normal: {
+                                        opacity: 0.8,
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowOffsetY: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                },
+                                'data': [{'name':'北京','value':['100','1']},{'name':'香港','value':['200','2']},{'name':'澳门','value':['300','3']},{'name':'上海','value':['400','4']},{'name':'重庆','value':['500','5']},{'name':'呼家楼','value':['1300','6']},{'name':'宾馆','value':['700','7']}]
+                            }
+                        ]
+                    },
+                    {
+                        title : {'text':'7月22'},
+                        series : [
+                            { 'data': [{'name':'北京','value':['100','1']},{'name':'香港','value':['1700','199']},{'name':'澳门','value':['1600','499']},{'name':'上海','value':['1500','99']},{'name':'重庆','value':['1040','929']},{'name':'呼家楼','value':['1300','919']},{'name':'宾馆','value':['1200','199']}]}
+                        ]
+                    },
+                    {
+                        title : {'text':'7月23'},
+                        series : [
+                            { 'data': [{'name':'北京','value':['100','1']},{'name':'香港','value':['1700','599']},{'name':'澳门','value':['1600','99']},{'name':'上海','value':['1500','99']},{'name':'重庆','value':['1040','929']},{'name':'呼家楼','value':['1300','919']},{'name':'宾馆','value':['1200','199']}]}
+                        ]
+                    },
+                    {
+                        title : {'text':'7月24'},
+                        series : [
+                            { 'data': [{'name':'北京','value':['100','1']},{'name':'香港','value':['1700','996']},{'name':'澳门','value':['1600','399']},{'name':'上海','value':['1500','99']},{'name':'重庆','value':['1040','929']},{'name':'呼家楼','value':['1300','919']},{'name':'宾馆','value':['1200','199']}]}
+                        ]
+                    },
+                    {
+                        title : {'text':'7月25'},
+                        series : [
+                            { 'data': [{'name':'北京','value':['100','1']},{'name':'香港','value':['1700','199']},{'name':'澳门','value':['1600','799']},{'name':'上海','value':['1500','99']},{'name':'重庆','value':['1040','929']},{'name':'呼家楼','value':['1300','919']},{'name':'宾馆','value':['1200','199']}]}
+                        ]
+                    },
+                    {
+                        title : {'text':'7月26'},
+                        series : [
+                            { 'data': [{'name':'北京','value':['100','1']},{'name':'香港','value':['1700','99']},{'name':'澳门','value':['1600','99']},{'name':'上海','value':['1500','99']},{'name':'重庆','value':['1040','929']},{'name':'呼家楼','value':['1300','919']},{'name':'宾馆','value':['1200','199']}]}
+                        ]
+                    },
+                    {
+                        title : {'text':'7月27'},
+                        series : [
+                            { 'data': [{'name':'北京','value':['100','1']},{'name':'香港','value':['1700','899']},{'name':'澳门','value':['1600','99']},{'name':'上海','value':['1500','99']},{'name':'重庆','value':['1040','929']},{'name':'呼家楼','value':['1300','919']},{'name':'宾馆','value':['1200','199']}]}
+                        ]
+                    }
+                ]
+            };
+           myChart25.setOption(option25);
         }
         var setCityAddMem = function(dataServer){
             var cityName = dataServer.jsonCityNames;

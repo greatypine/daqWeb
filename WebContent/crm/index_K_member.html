@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>营业额分析</title>
+   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+	   folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/iCheck/all.css">
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script><![endif]-->
+  <style>
+  html,body,.skin-blue .wrapper{background-color: #f1f1f1; min-height: 100%;}
+  p{margin: 0;}
+  .content-wrapper{background-color: #fff;}
+  /*tab切换*/
+  .nav-tabs1{background-color: #f55a44; padding: 10px 0 0 20px;}
+  .nav-tabs1 > li{ margin: 0; background-color: rgba(0,0,0,0.5); width: 60px; height: 26px; line-height: 26px; text-align: center; margin-right: 5px; border-radius: 5px; cursor: pointer;}
+  .nav-tabs1 > li.active{background-color: #fff;}
+  .nav-tabs1 > li > a{color: rgba(255,255,255,1); padding: 0; display: block; width: 100%; height: 100%;line-height: 26px;}
+  .nav-tabs1 > li > a:hover{border-color: transparent; color: #fff;}
+  .nav-tabs1 > li.active > a, .nav-tabs1 > li.active > a:focus, .nav-tabs1 > li.active > a:hover{ background-color: transparent; border: 0; color: #f55a44;}
+  /*tab切换 end*/
+  .dmodule1{ color: #fff; padding: 10px 0 0 10px;}
+  .dmodule1 p:nth-child(2){font-size: 30px; font-weight: bold; line-height: 70px;}
+  .dmodule2{ color: #fff; height: 155px; padding: 10px 0 0 10px;}
+  .dmodule2 p:nth-child(2){font-size: 30px; font-weight: bold; line-height: 110px;}
+  .data_module3{background-color: #666;}
+  .data_module4{margin-top: 10px; background-color: #f55a44;}
+  .skin-blue .sidebar-form{border-color: #ddd;}
+  .skin-blue .sidebar-form input[type="text"], .skin-blue .sidebar-form .btn{background-color: transparent;}
+  .zbsearch{font-size: 12px; margin-bottom: 10px;}
+  .skin-blue .sidebar-form{margin: 0 0 10px 0;}
+  .select2-results__options::-webkit-scrollbar{width: 8px; background-color: #fff;}
+  .select2-results__options::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+  .select2-results__options::-webkit-scrollbar-track{background-color: #fff;}
+  .has-error .select2-selection--single{border-color: #dd4b39; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
+  .has-error button{background-color: #dd4b39; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
+  .has-warning .select2-selection--single{border-color: #f39c12; box-shadow: 0 0 2px rgba(0,0,0,0.4);}
+  .has-warning button{background-color: #f39c12; color: #fff; box-shadow: 0 0 2px rgba(0,0,0,0.4)!important;}
+  /*对比*/
+  .main-sidebar{ padding-top: 80px; right: 0; left: auto; box-shadow: -5px 0 5px rgba(0,0,0,0.5); color: #fff;}
+  .main-sidebar .mybtn{width: 80px; font-size: 14px; position: absolute; bottom: 30px; left: 50%; margin-left: -40px;}
+  .sidebar{padding: 0 15px;}
+  .contrast{position: absolute; background-color: #222d32; left: -30px;; top: 50%; margin-top: -30px; padding: 5px 10px; color: #fff;}
+  .contrast:after{content: ''; width: 0; height: 0; border-bottom: 20px solid #222d32; border-left: 40px solid transparent; position: absolute; top: 50%; left: 0px; margin-top: -45px;}
+  .contrast:before{content: ''; width: 0; height: 0; border-top: 20px solid #222d32; border-left: 40px solid transparent; position: absolute; top: 50%; left: 0px; margin-top: 25px;}
+  .sidebar p{line-height: 30px;}
+  .sidebar p i{margin-top: 10px;}
+	#process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+	#process_div_pic{
+		position:fixed;
+		top:50%;
+		left:50%; 
+		z-index:100000000; 
+		margin:-16px 0 0 -50px; 
+		width:100px; 
+		height:32px;
+		color: #fff;
+	}
+	.auto{max-height:200px; overflow-y:scroll;}
+	.nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
+    .nav-tabs-custom > .nav-tabs2 > li > a{font-size: 14px; padding: 8px 15px;}
+    .nav-tabs-custom > .nav-tabs2 > li > a:hover{color: #f39c12;}
+    .nav-tabs-custom > .nav-tabs2 > li.active > a,.nav-tabs-custom > .nav-tabs2 > li.active > a:hover{background: #fff; color: #f39c12;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #f39c12; border-left: 1px solid #f39c12; border-right:1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs2 > li:first-of-type.active > a{border-left: 1px solid #f39c12;}
+    .nav-tabs-custom > .nav-tabs2{border-bottom: 1px solid #f39c12; margin: 5px 0; padding-left: 5px;}
+    .nav-tabs-custom > .nav-tabs2 > li{margin-bottom: -1px;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+  <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+		<div class="logo_img pull-left">
+			<img src="dist/img/logo.png" height="30">
+			<img src="dist/img/title.png" height="20">
+		</div>
+		<div class="pull-left">
+			<div class="logo-lg">
+				<ul class="no-margin">
+					<li class="current" onclick="excuteRefresh()"><em>营业额分析</em></li>
+				</ul>
+			</div>
+		</div>
+      </div>
+    </nav>
+  </header>
+  
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+	  <div class="nav-tabs-custom">
+       <ul class="nav nav-tabs nav-tabs2">
+         <li><a href="javascript:void(0);" onclick="toIndex()" data-toggle="tab">全部GMV</a></li>
+         <li><a href="javascript:void(0);" onclick="toBussiness()" data-toggle="tab">221GMV</a></li>
+         <li class="active"><a href="javascript:void(0);" data-toggle="tab">社员GMV</a></li>
+       </ul>
+      <div class="tab-content no-padding">
+      <div class="tab-pane active" id="tab_1">
+      	  <!-- Main content -->
+	  <section style="margin-top: 10px;">
+		<div class="clearfix">
+		  <div class="col-sm-12">
+			<div class="zbsearch clearfix">
+              <form name="lineandstation">
+                <div class="col-sm-5 has-warning form-group" style="padding: 0 5px 0 0;">
+                  <select class="form-control select2" id="citySelect">
+                  </select>
+                </div>
+                <div class="col-sm-2 has-warning no-padding form-group">
+						<span class="input-group-btn">
+							<button type="button" name="search" id="search-btn2" class="btn btn-flat"><i class="fa fa-search"></i></button>
+						</span>
+                </div>
+              </form>
+            </div>
+		  </div>
+		</div>
+		
+		<div class="clearfix" style="margin-top: 10px;">
+				  <div class="col-sm-12" style="padding-left: 0;">
+			<div class="nav_l" id="nav_l">
+			  <!-- Tabs within a box -->
+			  <ul class="nav nav-tabs no-border nav-tabs1">
+<!-- 				<li class="active"><a href="#revenue-chart" data-toggle="tab">实时</a></li> -->
+				<!-- <li><a href="#sales-chart" data-toggle="tab" onclick="javascript:chartresize1()">时</a></li> -->
+                <li><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
+				<li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li>
+                <li  class="active"><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li>
+			  </ul>
+			  <div class="tab-content no-padding" id="tab-content">
+				<!-- Morris chart - Sales -->
+<!-- 				<div class="chart tab-pane active" id="revenue-chart"> -->
+<!-- 				  <div id="main1" style="width: 100%; height: 300px;"></div> -->
+<!-- 				</div> -->
+				<div class="chart tab-pane" id="sales-chart">
+				  <div id="main4" style="width: 100%; height: 411px;"></div>
+				</div>
+                <div class="chart tab-pane" id="day-chart">
+                  <div id="main5" style="width: 100%; height: 411px;"></div>
+                </div>
+				<div class="chart tab-pane" id="week-chart">
+				  <div id="main7" style="width: 100%; height: 411px;"></div>
+				</div>
+                <div class="chart tab-pane active" id="month-chart">
+                  <div id="main6" style="width: 100%; height: 411px;"></div>
+                </div>
+			  </div>
+
+			</div>
+		  </div>
+		</div>
+		<div class="clearfix" style="margin-top: 10px;">
+		  <div class="col-sm-12" style="padding-left: 0;">
+              <div id="main3" style="height: 320px;"></div>
+          </div>
+		</div>
+	  </section>
+      </div>
+      </div>
+  </div>
+  <!-- /.content-wrapper -->
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+    <script src="dist/js/base64.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<!-- 总部首页 script -->
+<!-- <script src="dist/js/headquarters/index_K.js"></script> -->
+<script type="text/javascript">
+
+
+Date.prototype.format = function() {  
+    var s = '';  
+    var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
+    var day = this.getDate()>=10?this.getDate():('0'+this.getDate());  
+    s += this.getFullYear() + '-'; // 获取年份。  
+    s += mouth + "-"; // 获取月份。  
+    s += day; // 获取日。  
+    return (s); // 返回日期。  
+};
+
+  autodivheight();
+  function autodivheight(){ //函数：获取尺寸
+	//获取浏览器窗口高度
+	var winHeight=0;
+	if (window.innerHeight)
+	  winHeight = window.innerHeight;
+	else if ((document.body) && (document.body.clientHeight))
+	  winHeight = document.body.clientHeight;
+	//通过深入Document内部对body进行检测，获取浏览器窗口高度
+	if (document.documentElement && document.documentElement.clientHeight)
+	  winHeight = document.documentElement.clientHeight;
+	//DIV高度为浏览器窗口的高度
+	document.getElementById("main4").style.height= winHeight/2 - 60  +"px";
+	document.getElementById("main5").style.height= winHeight/2 - 60  +"px";
+	document.getElementById("main6").style.height= winHeight/2 - 60  +"px";
+	document.getElementById("main7").style.height= winHeight/2 - 60  +"px";
+	document.getElementById("main3").style.height= winHeight/2 - 60  +"px";
+  }
+  window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+
+</script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script>
+ var storeNo = decode64(getUrlParamByKey("so"));//门店no
+ var target = decode64(getUrlParamByKey("t"));//执行人级别 
+ var storeName=decode64(getUrlParamByKey("sn"));//门店名称
+ var cityname = decode64(getUrlParamByKey("cn"));//城市名称
+ var screenlogin=getUrlParamByKey("su");
+ var storeNo_ = (decode64(getUrlParamByKey("so")) == 'null'||decode64(getUrlParamByKey("so")) == null) ? '' : decode64(getUrlParamByKey("so"));//门店no
+ var ordertype = (decode64(getUrlParamByKey("ordertype")) == 'null'||decode64(getUrlParamByKey("ordertype")) == null) ? '' : decode64(getUrlParamByKey("ordertype"));//商品服务团购 全部:0;商品1服务2团购3
+ var storeName_ = (decode64(getUrlParamByKey("store_name")) == 'null'||decode64(getUrlParamByKey("store_name")) == null) ? '' : decode64(getUrlParamByKey("store_name"));//商品服务团购 全部:0;商品1服务2团购3
+ //var ta = getUrlParamByKey("ta");
+ 
+ function loginShow(){
+		
+		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+            var b = new Base64();
+            screenlogin=b.decode(screenlogin);
+            var obj=JSON.parse(screenlogin);
+            var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
+		    var callback = function callback(data, textStatus, XMLHttpRequest) {
+		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
+		    	var stateObject = {};
+		    	var newUrl = "/daqWeb/crm/index_K.html?ta=0";
+		    	history.pushState(stateObject,null,newUrl);
+			};
+		    var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+				alert("登录信息错误，请确认输入或联系管理员!");
+				return false;
+			}
+		    var url = "../login.do";
+		    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
+		}else{
+			getUser();
+		}
+		
+	}
+
+//   var myChart1 = echarts.init(document.getElementById('main1'));
+  var myChart3 = echarts.init(document.getElementById('main3'));
+
+  //K线图
+  function randomData(data_value) {
+      now = new Date(+now + 5000);
+      return {
+          name: now.toString(),
+          value: [
+              now,
+              data_value
+              //Math.round(value)
+          ]
+      }
+  }
+ 
+  var data = [];
+  var now = new Date();
+  now.setMinutes (now.getMinutes () - 7);//设置起始时间为当前时间的前2分钟
+  
+
+  var lastData = 11;
+  var axisData;
+  
+
+  //门店GMV散点图
+  var dataBJ = [];
+
+  var schema = [
+    {name: 'order', index: 0, text: '订单量'},
+    {name: 'gmv', index: 1, text: 'GMV'},
+    {name: 'city', index: 2, text: '城市'},
+    {name: 'store', index: 3, text: '门店'},
+    {name: 'month', index: 3, text: '月份'}
+  ];
+
+
+  var itemStyle = {
+    normal: {
+      opacity: 0.8,
+      shadowBlur: 10,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0,
+      shadowColor: 'rgba(0, 0, 0, 0.5)'
+    }
+  };
+
+  option3 = {
+    backgroundColor: '#e1e1e1',
+    title: {
+      text: "社员GMV分布",
+      left: "10",
+      y: "10",
+      textStyle: {
+        color: "#666"
+      }
+    },
+    color: [
+      '#dd4444', '#fec42c', '#80F1BE'
+    ],
+    legend: {
+      y: 'top',
+      data: ['社员GMV'],
+      textStyle: {
+        color: '#666',
+        fontSize: 16
+      }
+    },
+    grid: {
+      //x: '10%',
+      //x2: 80,
+      y: '28%',
+      y2: '20%',
+      bottom:'10%',
+      left:'5%'
+    },
+    tooltip: {
+      padding: 10,
+      backgroundColor: '#222',
+      borderColor: '#777',
+      borderWidth: 1,
+      formatter: function (obj) {
+        var value = obj.value;
+        return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
+          + schema[1].text + '：' + value[1] + '万元</div>'
+          + schema[0].text + '：' + value[0] + '<br>'
+          + schema[2].text + '：' + value[2] + '<br>';
+      }
+    },
+    xAxis: {
+      type: 'value',
+      name: '订单量',
+      nameGap: 16,
+      nameTextStyle: {
+        color: '#666',
+        fontSize: 14
+      },
+      min: function(value){
+  	   	 return parseInt(value.min);
+  	   },
+      splitLine: {
+        show: false
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#666'
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      name: 'GMV（万元）',
+      nameLocation: 'end',
+      nameGap: 20,
+      min: function(value){
+ 	   	 return parseInt(value.min);
+   	   },
+      nameTextStyle: {
+        color: '#666',
+        fontSize: 16
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#666'
+        }
+      },
+      splitLine: {
+        show: false
+      }
+    },
+    visualMap: [
+      {
+        left: 'right',
+        top: '10%',
+        dimension: 1,
+        min: 0,
+        max: 500,
+        itemWidth: 30,
+        itemHeight: 100,
+        calculable: true,
+        precision: 0.1,
+        text: ['圆形大小：GMV'],
+        textGap: 30,
+        textStyle: {
+          color: '#666'
+        },
+        inRange: {
+          symbolSize: [10, 70]
+        },
+        outOfRange: {
+          symbolSize: [10, 70],
+          color: ['rgba(255,255,255,.2)']
+        },
+        controller: {
+          inRange: {
+            color: ['#c23531']
+          },
+          outOfRange: {
+            color: ['#666']
+          }
+        }
+      },
+      {
+        left: 'right',
+        bottom: '5%',
+        dimension: 0,
+        min: 0,
+        max: 5000,
+        itemHeight: 100,
+        calculable: true,
+        precision: 0.1,
+        text: ['明暗：订单量'],
+        textGap: 30,
+        textStyle: {
+          color: '#666'
+        },
+        inRange: {
+          colorLightness: [1, 0.5]
+        },
+        outOfRange: {
+          color: ['rgba(255,255,255,.2)']
+        },
+        controller: {
+          inRange: {
+            color: ['#c23531']
+          },
+          outOfRange: {
+            color: ['#666']
+          }
+        }
+      }
+    ],
+    series: [
+      {
+        name: 'GMV',
+        type: 'scatter',
+        itemStyle: itemStyle,
+        data: dataBJ,
+      },
+    ]
+  };
+  
+  myChart3.setOption(option3,true);
+
+</script>
+<script>
+  var chart4;
+  var chart4_option;
+  function chartresize1(){
+	var temp1 = new initchart1();
+	temp1.resize();
+  }
+  var initchart1 = function(){
+	chart4 = echarts.init(document.getElementById('main4'));
+
+    //K线图--分时
+    var xData = function() {
+      var data = [];
+      for (var i = 0; i < 24; i++) {
+        data.push(i + "时");
+      }
+      return data;
+    }();
+
+    chart4_option = {
+      backgroundColor: "#f55a44",
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          textStyle: {
+            color: '#fff'
+          }
+
+        },
+      },
+      grid: {
+        borderWidth: '0',
+        left: '5%',
+        right: '5%',
+        bottom: '30%',
+        top: '10%',
+
+      },
+      calculable: true,
+      xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        axisTick: {
+          show: true
+        },
+        splitArea: {
+          show: false
+        },
+        axisLabel: {
+          interval: 0,
+
+        },
+        data: xData,
+      }],
+      yAxis: [{
+        type: 'value',
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          interval: 1,
+
+        },
+        splitArea: {
+          show: false
+        },
+
+      }],
+      dataZoom: [{
+        show: true,
+        height: '30',
+        xAxisIndex: [0],
+        bottom: '30',
+        start: '0',
+        end: '100',
+        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+        handleSize: '110%',
+        handleStyle:{
+          color:"#d3dee5",
+        },
+        textStyle:{color:'#fff'},
+        borderColor:"#90979c",
+        //backgroundColor:'#fff'
+      }],
+      series: [{
+        name: "总数",
+        type: "line",
+        stack: "总量",
+		smooth: true,
+		showAllSymbol: true,
+		symbol: 'emptyCircle',
+		symbolSize: 15,
+        itemStyle: {
+          normal: {
+			color: '#2ec7c9',
+            lineStyle: {
+                color: "#fff"
+            }
+/*             ,label: {
+              show: true,
+              position: 'top',
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            } */
+          }
+        },
+        data:hourData
+      },
+      ]
+    }
+
+
+   chart4.setOption(chart4_option);
+	$(function(){
+	  window.onresize = function(){
+		chart4.resize();
+		/*chart5.resize();
+		chart6.resize();*/
+	  }
+	})
+	this.resize = function size(){
+	  var chart4div=document.getElementById('main4');
+	  var tabcontent = document.getElementById('tab-content');
+	  width=tabcontent.offsetWidth;
+	  chart4div.style.width=width+'px';
+	  chart4.resize(width);
+	}
+  }
+</script>
+<script>
+   var xData = [];
+   var yData = [];
+   var chart5;
+   var chart5_option;
+  function chartresize2(){
+    //console.log("chartresize");
+    var temp2 = new initchart2();
+    temp2.resize();
+  }
+  var initchart2 = function(){
+  	chart5 = echarts.init(document.getElementById('main5'));
+
+    //K线图--日
+    var xData = function() {
+      var data = [];
+      var fistDay = getFirstDayOfYear();
+      var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + (now.getDate()-1);
+      data = getAllDate(fistDay,curDay);
+      return data;
+    }();
+  	
+    chart5_option = {
+      backgroundColor: "#f55a44",
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          textStyle: {
+            color: '#fff'
+          }
+
+        },
+      },
+      grid: {
+        borderWidth: '0',
+        left: '5%',
+        right: '5%',
+        bottom: '30%',
+        top: '10%',
+
+      },
+      calculable: true,
+      xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        splitLine: {
+          show: false
+        },
+        axisTick: {
+          show: true
+        },
+        splitArea: {
+          show: false
+        },
+//         axisLabel: {
+//           interval: 0,
+//         },
+        data: xData,
+      }],
+      yAxis: [{
+        type: 'value',
+        splitLine: {
+          show: false
+        },
+        axisLine: {
+          lineStyle: {
+            color: '#333'
+          }
+        },
+        axisTick: {
+          show: false
+        },
+        axisLabel: {
+          interval: 0,
+
+        },
+        splitArea: {
+          show: false
+        },
+
+      }],
+      dataZoom: [{
+        show: true,
+        height: '30',
+        xAxisIndex: [0],
+        bottom: '30',
+        start: '50',
+        end: '100',
+        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+        handleSize: '110%',
+        handleStyle:{
+          color:"#d3dee5",
+        },
+        textStyle:{color:'#fff'},
+        borderColor:"#90979c",
+        //backgroundColor:'#fff'
+      }],
+      series: [{
+        name: "总数",
+        type: "line",
+        stack: "总量",
+        symbolSize:10,
+        symbol:'circle',
+        itemStyle: {
+          normal: {
+			color: '#2ec7c9',
+			barBorderRadius: 0,
+            lineStyle: {
+                color: "#fff"
+            }
+/*            ,label: {
+              show: true,
+              position: 'top',
+              formatter: function(p) {
+                return p.value > 0 ? (p.value) : '';
+              }
+            } */
+          }
+        },
+        data:yData
+        ,markLine : {
+        	itemStyle: {
+                normal: { lineStyle: { color:'#000' }}
+            },
+            data : [
+                {type : 'average', name: '平均值'},
+            ]
+        }
+		,markPoint: {
+            data: [
+                {type: 'max', name: '最大值'},
+                {type: 'min', name: '最小值'}
+            ]
+        }
+      },
+      ]
+    }
+
+    chart5.setOption(chart5_option);
+    $(function(){
+      window.onresize = function(){
+        chart5.resize();
+      }
+    })
+    this.resize = function size(){
+      var chart5div=document.getElementById('main5');
+      var tabcontent = document.getElementById('tab-content');
+      width=tabcontent.offsetWidth;
+      //height=tabcontent.offsetHeight;
+      chart5div.style.width=width+'px';
+      chart5.resize(width);
+    }
+  }
+</script>
+<script>
+	var chart7 ;
+	var chart7_option;
+	var xData_week=[];
+	function chartresize4(){
+		//console.log("chartresize");
+		var temp4 = new initchart4();
+		temp4.resize();
+	}
+	var initchart4 = function(){
+		chart7 = echarts.init(document.getElementById('main7'));
+
+// 		//K线图--周
+
+		chart7_option = {
+			backgroundColor: "#f55a44",
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					textStyle: {
+						color: '#fff'
+					}
+
+				},
+			},
+			grid: {
+				borderWidth: '0',
+				left: '5%',
+				right: '5%',
+				bottom: '30%',
+				top: '10%',
+
+			},
+			calculable: true,
+			xAxis: [{
+				type: 'category',
+				boundaryGap: false,
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				splitLine: {
+					show: false
+				},
+				axisTick: {
+					show: true
+				},
+				splitArea: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				data: xData_week,
+			}],
+			yAxis: [{
+				type: 'value',
+				splitLine: {
+					show: false
+				},
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				splitArea: {
+					show: false
+				},
+				
+			}],
+			dataZoom: [{
+			 show: true,
+			 height: '30',
+			 xAxisIndex: [0],
+			 bottom: '30',
+			 start: '10',
+			 end: '100',
+			 handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+			 handleSize: '110%',
+			 handleStyle:{
+			 color:"#d3dee5",
+			 },
+			 textStyle:{color:'#fff'},
+			 borderColor:"#90979c",
+			 //backgroundColor:'#fff'
+			 }],
+			series: [{
+				name: "总数",
+				type: "line",
+				stack: "总量",
+				symbolSize:10,
+				symbol:'circle',
+				itemStyle: {
+					normal: {
+						color: '#2ec7c9',
+			            lineStyle: {
+			                color: "#fff"
+			            }
+/* 						,label: {
+							show: true,
+							position: 'top',
+							formatter: function(p) {
+								return p.value > 0 ? (p.value) : '';
+							}
+						} */
+					}
+				},
+				data: weekData
+		        ,markLine : {
+		        	itemStyle: {
+		        		 normal: { lineStyle: { color:'#000' }}
+		            },
+		            data : [
+		                {type : 'average', name: '平均值'},
+		            ]
+		        }
+				,markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                }
+			},
+			]
+		}
+
+		chart7.setOption(chart7_option);
+		$(function(){
+			window.onresize = function(){
+				chart7.resize();
+			}
+		})
+		this.resize = function size(){
+			var chart7div=document.getElementById('main7');
+			var tabcontent = document.getElementById('tab-content');
+			width=tabcontent.offsetWidth;
+			//height=tabcontent.offsetHeight;
+			chart7div.style.width=width+'px';
+			chart7.resize(width);
+		}
+	}
+</script>
+<script>
+	var yData_month = [];
+	var yData_month_target = [];
+	var chart6;
+	var chart6_option;
+	function chartresize3(){
+		//console.log("chartresize");
+		var temp3 = new initchart3();
+		temp3.resize();
+	}
+	var initchart3 = function(){
+		chart6 = echarts.init(document.getElementById('main6'));
+
+		//K线图--月
+		var xData_month = function() {
+			var data = [];
+			var curMonth = now.getFullYear()+'-12-31';
+			data = getYearAndMonth('2018-4-1',curMonth);
+			return data;
+		}();
+
+		chart6_option = {
+			backgroundColor: "#f55a44",
+			tooltip: {
+				trigger: 'axis',
+				axisPointer: {
+					textStyle: {
+						color: '#fff'
+					}
+
+				},
+			},
+			grid: {
+				borderWidth: '0',
+				left: '6%',
+				right: '5%',
+				bottom: '30%',
+				top: '10%',
+
+			},
+			legend: {
+				x: '78%',
+				top: '1%',
+				data: ['月GMV']
+			},
+
+
+			calculable: true,
+			xAxis: [{
+				type: 'category',
+				boundaryGap: false,
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				splitLine: {
+					show: false
+				},
+				axisTick: {
+					show: true
+				},
+				splitArea: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				data: xData_month,
+			}],
+			yAxis: [{
+				type: 'value',
+				splitLine: {
+					show: false
+				},
+				axisLine: {
+					lineStyle: {
+						color: '#333'
+					}
+				},
+				axisTick: {
+					show: false
+				},
+				axisLabel: {
+					interval: 0,
+
+				},
+				splitArea: {
+					show: false
+				},
+
+			}],
+			dataZoom: [{
+				show: true,
+				height: '30',
+				xAxisIndex: [0],
+				bottom: '30',
+				start: '0',
+				end: '45',
+				handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+				handleSize: '110%',
+				handleStyle:{
+					color:"#d3dee5",
+				},
+				textStyle:{color:'#fff'},
+				borderColor:"#90979c",
+				//backgroundColor:'#fff'
+			}],
+			series: [{
+				name: "月GMV",
+				type: "line",
+				symbolSize:10,
+				symbol:'circle',
+				itemStyle: {
+					normal: {
+						color: '#2ec7c9',
+			            lineStyle: {
+			                color: "#fff"
+			            }
+/* 						,label: {
+							show: true,
+							position: 'top',
+							formatter: function(p) {
+								return p.value > 0 ? (p.value) : '';
+							}
+						} */
+					}
+				},
+				data:yData_month
+		        ,markLine : {
+		        	itemStyle: {
+		        		 normal: { lineStyle: { color:'#000' }}
+		            },
+		            data : [
+		                {type : 'average', name: '平均值'},
+		            ]
+		        }
+				,markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                }
+			}
+			]
+		}
+
+
+		chart6.setOption(chart6_option);
+		$(function(){
+			window.onresize = function(){
+				chart6.resize();
+			}
+		})
+		this.resize = function size(){
+			var chart6div=document.getElementById('main6');
+			var tabcontent = document.getElementById('tab-content');
+			width=tabcontent.offsetWidth;
+			//height=tabcontent.offsetHeight;
+			chart6div.style.width=width+'px';
+			chart6.resize(width);
+		}
+	}
+	
+	var xData_week_temp = function() {
+		var dataTemp = [];
+		doManager("chartMemManager","getDateByWeek",null,
+	   			function(data,textStatus,XmlHttpRequest){
+	   				if (data.result) {
+	   					var jsonData = $.fromJSON(data.data);
+	   					dataTemp = jsonData;
+	   				}
+	   		},false);	
+		return dataTemp;
+	};
+  
+  var shareChartStatDto=null; //全局参数变量	
+  $(function(){
+	  loginShow();
+	  if(target==0){//总部
+	  	initallcity(); 
+	  }else if(target==1){//城市
+	  	initcurcity();
+	  	$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+	  	initStoreSelectcomplate();
+	  }else if(target==2) {//门店
+	  	initcurcity();
+	  	$("#citySelect").prop("disabled", true);
+		$("#citySelect option[value='"+cityname+"']").attr('selected',true);
+	  	initStoreSelectcomplate();
+	  }else{
+		  initallcity(); 
+	  }
+	  
+	  	
+	  xData_week = xData_week_temp();
+	  chartresize1();
+	  chartresize2();
+	  chartresize3();
+	  chartresize4();
+	  search_manual_k();
+	  
+	  
+	  $("#search-btn2").click(function(){
+		 excuteChart();
+	 }); 
+	 $("#citySelect").change(function(){
+		 $('#cbLabel').children("div").addClass('checked'); 
+		 excuteChart();
+	 });
+	  
+  })
+  
+  function getUser(){
+	doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+		if (data.result) {
+			var employeeID="";
+			var curr_user = JSON.parse(data.data);
+			if(curr_user == null){
+				urlStr = "../logout.do";
+				window.location.href = urlStr;
+			}
+		}
+  	},false);
+}
+  
+  //初始化实时图数据
+  
+  
+  var hourData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+/*   function initHourData(){
+ 		doManager("chartMemManager","queryTurnoverByHour",[shareChartStatDto],
+ 			function(data,textStatus,XmlHttpRequest){
+ 				if (data.result) {
+ 					var nowHour = now.getHours();
+ 					hourData=new Array(nowHour+2).join(0).split('');
+ 					var jsonData = $.fromJSON(data.data);
+ 					if(jsonData.length!=0){
+ 						$(jsonData).each(function(index,element){
+ 	 						hourData[parseInt(element.time)]=element.turnover;
+ 	                     });
+ 						chart4_option.series[0].data=hourData;
+ 						chart4.setOption(chart4_option);
+ 					}else{
+ 						hourData = [];
+ 						chart4_option.series[0].data=hourData;
+ 						chart4.setOption(chart4_option);
+ 					}
+ 				}
+ 		});
+ 	}  */
+  
+  function initDayData(){
+	  var fistDay = getFirstDayOfYear();
+	  var curDay = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + (now.getDate()-1);
+	  xData = getAllDate(fistDay,curDay);
+	  doManager("chartMemManager","queryTurnoverByDay",[shareChartStatDto],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					yData=new Array(xData.length+1).join(0).split('');
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var indexTemp = jQuery.inArray(element.day_time,xData);
+							yData[indexTemp]=element.turnover;
+		                });
+						chart5_option.series[0].data=yData;
+						chart5.setOption(chart5_option);
+					}else{
+						yData = [];
+						chart5_option.series[0].data=yData;
+						chart5.setOption(chart5_option);
+					}
+				}
+		});
+  }
+  
+  var weekData = [];  //0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+  function initWeekData(){
+	  weekData = new Array(xData_week.length+1).join(0).split('');
+		doManager("chartMemManager","queryTurnoverByWeek",[shareChartStatDto],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+							var indexTemp = jQuery.inArray(dateTemp,xData_week);
+							weekData[indexTemp]=element.week_amount;
+	                    });
+						chart7_option.series[0].data=weekData;
+						chart7.setOption(chart7_option);
+					}else{
+						weekData = [];
+						chart7_option.series[0].data=weekData;
+						chart7.setOption(chart7_option);
+					}
+				}
+		});
+	} 
+  
+  Date.prototype.toLocaleString = function() {
+      return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate();
+  }; 
+  
+  function initMonthData(){
+	    var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
+	    var months = getYearAndMonth('2018-04-01',curMonth);
+		yData_month = new Array(months.length+1).join(0).split('');
+		doManager("chartMemManager","queryTurnoverByMonth",[shareChartStatDto],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var indexTemp = jQuery.inArray(element.months,months);
+							yData_month[indexTemp]=element.mon_amount;
+	               		});
+						chart6_option.series[0].data=yData_month;
+						chart6.setOption(chart6_option);
+					}else{
+						yData_month = [];
+						chart6_option.series[0].data=yData_month;
+						chart6.setOption(chart6_option);
+					}
+				}
+		},false);
+		$("#process_div").hide();
+		$("#process_div_pic").hide();
+	} 
+  
+  function initScatterplot(){
+	  doManager("chartMemManager","queryDataOfScatterplot",[shareChartStatDto],
+			function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					if(jsonData.length!=0){
+						$(jsonData).each(function(index,element){
+							var temp = [];
+							temp.push(element.order_count);
+							temp.push((element.order_amount/10000).toFixed(2));
+							temp.push(element.city_name);
+							temp.push(element.cityno);
+							dataBJ.push(temp);
+	                 	});
+						option3.series[0].data = dataBJ;
+						myChart3.setOption(option3,true);
+					}else{
+						dataBJ = [];
+						option3.series[0].data = dataBJ;
+						myChart3.setOption(option3,true);	
+					}
+				}
+		});
+  }
+  
+  
+  function initallcity(){
+	   var effectiveCity = [];
+	   doManager("chartMemManager","queryContainsStoreDistCityList",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						effectiveCity.push(element.cityname);
+                   });
+				}
+		},false);
+	  
+		doManager("distCityCodeManager","queryAllDistCityList",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$("#citySelect").append("<option value=''>全部城市</option>");
+					$(jsonData).each(function(index,element){
+						var indexTemp = jQuery.inArray(element.cityname,effectiveCity);
+						if(indexTemp>=0){
+							$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+						}
+                   });
+				}
+		});
+	} 
+   
+  var array=new Array();
+   function initcurcity(){
+	   var effectiveCity = [];
+	   doManager("chartMemManager","queryContainsStoreDistCityList",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						effectiveCity.push(element.cityname);
+                   });
+				}
+		},false);
+	   
+		doManager("userManager","getCurrentUserCity",null,
+		    function(data,textStatus,XmlHttpRequest){
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					$(jsonData).each(function(index,element){
+						var indexTemp = jQuery.inArray(element.cityname,effectiveCity);
+						if(indexTemp>=0){
+							$("#citySelect").append('<option value="'+element.cityname+'">'+element.cityname+'</option>');
+						}
+                   });
+					
+				}
+		},false);
+	}
+  
+   $("#citySelect").change(function(){
+		initStoreSelectcomplate();
+	});
+   
+	
+   var storeJson;
+	function initStoreSelectcomplate(){
+		var citySelect = $("#citySelect  option:selected").val();
+		$("#auto").val("");
+		if(citySelect==""){
+		}
+	}
+	
+	var storeJsonContrast;
+	var iCheckStr = "cb";
+	var iCheckMaxStr = "";
+	function getShareParam(){
+		 var cLabel=0;
+		 var maxBLabel=0;
+		 var smallBLabel=0;
+		 if(iCheckStr=='cb') {
+			 cLabel=1;
+			 smallBLabel=1;
+		 }
+		 if(iCheckMaxStr=='maxb') {
+			 maxBLabel=1;
+		 }
+		 var storeno = $("#store_id_manual").val()==""?null:$("#store_id_manual").val();
+		  var cityName = $("#citySelect  option:selected").val();
+		  if(cityName!="" && cityName!=undefined){
+		    if(cityName=="黔东南苗族侗族自治州"){
+		    	cityName="黔东南";
+		  	}
+		  }else{
+		    cityName = null;
+		  }
+		  
+		  return shareChartStatDto = {				
+				storeno:storeno,
+				cityname:cityName,
+				cLabel:cLabel,
+				maxBLabel:maxBLabel,
+				smallBLabel:smallBLabel
+			}
+	}
+	
+	
+	//搜索
+	function search_manual_k(){
+		//检测数据正确性
+		
+		 $("#process_div").show();
+	 	 $("#process_div_pic").show();
+	 	 
+	 	  
+	 	  shareChartStatDto = getShareParam();
+	 	  data = [];
+		  //实时营业额
+// 		  setInterval(inintCurDayData, 5000);
+		  //分时GMV
+		  hourData = [];
+		  //initHourData();
+		  //日GMV
+   		  yData = [];
+		  initDayData();
+		  //周GMV
+		  weekData = [];
+		  initWeekData();
+		  //月GMV
+		  yData_month = [];
+		  yData_month_target = [];
+		  initMonthData();
+		  //门店GMV散点分布
+		  dataBJ = [];
+		  initScatterplot();		  
+    }
+	
+	function excuteChart(){
+		chartresize1();
+	  	chartresize2();
+	  	chartresize3();
+	  	chartresize4();
+	  	search_manual_k();
+	}
+	
+	function changeMoney (x) {
+	    x=x/10000;
+	    var y = '';
+	    if(parseInt(x)/10000<=1){
+	    	y=ForDight(x,2)+"万";
+	    }else if(parseInt(x)/10000>1){
+	    	x=x/10000+'';
+	    	y=ForDight(x,2)+"亿";
+	    }
+	    return y;
+	}
+	function ForDight(str,How){  
+	    Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
+	    return Dight;  
+	 }
+  //获取当前日期为今年的第几天
+//   function getCurDay(){
+// 	  var dateArr = new Array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);  
+// 	  var date = new Date();  
+// 	  var day = date.getDate();  
+// 	  var month = date.getMonth(); //getMonth()是从0开始  
+// 	  var year = date.getFullYear();  
+// 	  var result = 0;  
+// 	  for ( var i = 0; i < month; i++) {  
+// 	      result += dateArr[i];  
+// 	  }  
+// 	  result += day;  
+// 	  //判断是否闰年  
+// 	  if (month > 1 && (year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {  
+// 	      result += 1;  
+// 	  }  
+// 	  return result;
+//   }
+  
+  //获取当年第一天
+  function getFirstDayOfYear() {
+	 
+	 var nowTime = new Date();
+	 nowTime.setDate(1);
+	 nowTime.setMonth(0);
+     return timeFormat(nowTime);
+  }
+   //日期格式化，返回值形式为yy-mm-dd
+   function timeFormat(date) {
+       if (!date || typeof(date) === "string") {
+           this.error("参数异常，请检查...");
+      }
+      var y = date.getFullYear(); //年
+      if(y=="2018"){
+    	  return  "2018-05-18";  
+      }
+      var m = date.getMonth() + 1; //月
+      var d = date.getDate(); //日
+      return y + "-" + m + "-" + d;
+   }
+  //获取两个时间段内的月份数据
+  function getYearAndMonth(start, end) {
+	    var result = [];
+	    var starts = start.split('-');
+	    var ends = end.split('-');
+	    var staYear = parseInt(starts[0]);
+	    var staMon = parseInt(starts[1]);
+	    var endYear = parseInt(ends[0]);
+	    var endMon = parseInt(ends[1]);
+	    while (staYear <= endYear) {
+	        if (staYear === endYear) {
+	            while (staMon < endMon) {
+	                staMon++;
+	                result.push(staYear+"-"+staMon);
+	            }
+	            staYear++;
+	        } else {
+	            staMon++;
+	            if (staMon > 12) {
+	                staMon = 1;
+	                staYear++;
+	            }
+	            result.push(staYear+"-"+staMon);
+	        }
+	    }
+	    return result;
+	}
+  
+  //获取当年所有的日期
+  function getAllDate(begin, end) {  
+	  var result = [];
+      var ab = begin.split("-");  
+      var ae = end.split("-");  
+      var db = new Date();  
+      db.setUTCFullYear(ab[0], ab[1] - 1, ab[2]);  
+      var de = new Date();  
+      de.setUTCFullYear(ae[0], ae[1] - 1, ae[2]);  
+      var unixDb = db.getTime();  
+      var unixDe = de.getTime();  
+      for (var k = unixDb; k <= unixDe;) {  
+          result.push((new Date(parseInt(k))).format());
+          k = k + 24 * 60 * 60 * 1000;  
+      }  
+      return result;
+  } 
+  
+  function excuteRefresh(){
+	  location.reload();
+  }
+  function toBussiness(){
+	  var url = "";
+	  if(target==0){
+		  	url = "index_K_221.html?t="+encode64('0')+"&s=&sn=&c=&cn=";
+		  }else if(target==1){
+		  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+		  }
+ 		window.location.href=url;
+  }
+  function toIndex(){
+		if(target==0){
+			window.location.href="index_K.html?t="+encode64('0')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+		}else if(target==1){
+			window.location.href="index_K.html?t="+encode64('1')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
+		}
+}
+</script>
+
+</body>
+</html>

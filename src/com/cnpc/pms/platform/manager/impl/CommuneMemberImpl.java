@@ -1326,6 +1326,16 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 			result.put("jsonCityNames", jsonCityNames);
 			result.put("jsonCityAdds", jsonCityAdds);
 		}
+		
+		// 查询当日大客户社员量
+        List<Map<String, Object>> CmBigDayCountList = new ArrayList<Map<String, Object>>();
+        CmBigDayCountList = commDao.getBigByDayCount(dd);
+        if (CmBigDayCountList != null && CmBigDayCountList.size() > 0) {
+            result.put("bigUpDaycou", CmBigDayCountList.get(0).get("cou"));
+        } else {
+            result.put("bigUpDaycou", "0");
+        }
+		
 		return result;
 	}
 
@@ -2332,11 +2342,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		 * @author wuxinxin 2018年7月21日
 		 */
 		Map<String, Object> result = new HashMap<String, Object>();
-		
+
 		PlatformStoreDao cmDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
 		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
-		
-		
+
+
 		// 查询老用户转社员总量
 		List<Map<String, Object>> oldCmCountList = new ArrayList<Map<String, Object>>();
 		oldCmCountList = commDao.getOldCount(dd);
@@ -2355,7 +2365,38 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 			result.put("newCmCount", "0");
 		}
 		return result;
-		
+
 	}
 
+    @Override
+    public Map<String, Object> selectCmBigInfo(String dd) {
+        // TODO Auto-generated method stub
+        /**
+         * @author wuxinxin 2018年7月21日
+         */
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+
+
+        // 查询累计大客户社员数量
+        List<Map<String, Object>> CmBigCountList = new ArrayList<Map<String, Object>>();
+        CmBigCountList = commDao.getBigCount(dd);
+        if (CmBigCountList != null && CmBigCountList.size() > 0) {
+            result.put("bigCou", CmBigCountList.get(0).get("cou"));
+        } else {
+            result.put("bigCou", "0");
+        }
+
+        // 查询当日大客户社员量
+        List<Map<String, Object>> CmBigDayCountList = new ArrayList<Map<String, Object>>();
+        CmBigDayCountList = commDao.getBigByDayCount(dd);
+        if (CmBigDayCountList != null && CmBigDayCountList.size() > 0) {
+            result.put("bigDaycou", CmBigDayCountList.get(0).get("cou"));
+        } else {
+            result.put("bigDaycou", "0");
+        }
+        return result;
+
+    }
 }

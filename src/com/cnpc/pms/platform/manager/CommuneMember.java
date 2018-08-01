@@ -118,15 +118,21 @@ public interface CommuneMember extends IManager{
 	public Map<String, Object> selectArtelCityGmvInfo(String dd);
 	/**
 	 * 安心合作社排行榜
-	 * 
+	 *
 	 * @author wuxinxin
 	 */
 	public Map<String, Object> selectArtelRankingInfo(String dd);
 	/**
 	 * 社员开卡信息
-	 * 
+	 *
 	 * @author wuxinxin
 	 */
 	public Map<String, Object> selectCmOpenInfo(String dd);
-	
+    /**
+	 * 大客户社员统计
+	 *
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmBigInfo(String dd);
+
 }

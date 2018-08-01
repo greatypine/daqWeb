@@ -1427,6 +1427,41 @@ public List<Map<String, Object>> getMembersArea(String dd) {
         }
         return null;
     }
+	@Override
+	public List<Map<String, Object>> getBigCount(String dd) {
+		/**
+		 * @author wuxinxin
+		 * 2018年7月30日
+		 */
+        String daySumSql = "select count(1) cou from df_user_member dum where dum.opencard_time is null";
+
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return lst_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+		
+	}
+	@Override
+	public List<Map<String, Object>> getBigByDayCount(String dd) {
+		/**
+		 * @author wuxinxin
+		 * 2018年7月30日
+		 */
+        String daySumSql = "select count(1) cou from df_user_member dum where dum.opencard_time is null and date(dum.create_time) = curdate()";
+
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return lst_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+	}
 
 
 }
