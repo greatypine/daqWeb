@@ -60,7 +60,7 @@ public interface ObserveParameterManager extends IManager{
 	 */
 	public Map<String,Object> queryObserveParameterSummaryByCity(String cityname,String store_id,String observe_month,String employeeId);
 
-	public File exportObserveParamterSummary(String cityname);
+	public File exportObserveParamterSummarys(String cityname);
 	
 	public Map<String,Object> exportObserveParamterSummary(StoreDTO storeDTO);
 	

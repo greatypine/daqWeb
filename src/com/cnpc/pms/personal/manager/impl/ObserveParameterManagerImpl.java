@@ -190,7 +190,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public File exportObserveParamterSummary(String cityname) {
+	public File exportObserveParamterSummarys(String cityname) {
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryObserveParameterSummaryByCity(cityname,null,null,null);
 		List<String> storenameList = new ArrayList<>();
