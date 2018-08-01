@@ -1,4 +1,4 @@
-package com.cnpc.pms.personal.dao;
+package com.cnpc.pms.employeeMoreInfo.dao;
 
 import com.cnpc.pms.base.dao.IDAO;
 
@@ -12,7 +12,7 @@ import java.util.Map;
  * @Author: gbl
  * @CreateDate: 2018/7/10 14:34
  */
-public interface EmployeeMoreInfoDao extends IDAO {
+public interface EmployeeMoreInfoDao{
 
     /**
      * @Description 查询国安侠信息
@@ -20,7 +20,7 @@ public interface EmployeeMoreInfoDao extends IDAO {
      * @date 2018/7/10 14:44
      **/
 
-    public List<Map<String,Object>> queryHumanresource();
+    public List<Map<String,Object>> queryValidHumanresource();
 
     /**
      * @Description  查询店长
@@ -28,7 +28,7 @@ public interface EmployeeMoreInfoDao extends IDAO {
      * @date 2018/7/10 14:45
      **/
 
-    public List<Map<String,Object>> queryStoreKepeer();
+    public List<Map<String,Object>> selectValidStoreKepeer();
 
     /**
      * @Description  更新国安侠工龄

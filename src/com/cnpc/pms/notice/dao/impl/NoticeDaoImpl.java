@@ -279,5 +279,6 @@ public class NoticeDaoImpl extends BaseDAOHibernate implements NoticeDao{
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		return query.executeUpdate();
 	}
+
 	 
 }
