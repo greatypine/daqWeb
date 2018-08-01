@@ -138,11 +138,6 @@
                   <select class="form-control select2" id="citySelect">
                   </select>
                 </div>
-                <div class="col-sm-2 has-warning no-padding form-group">
-						<span class="input-group-btn">
-							<button type="button" name="search" id="search-btn2" class="btn btn-flat"><i class="fa fa-search"></i></button>
-						</span>
-                </div>
               </form>
             </div>
 		  </div>
@@ -325,7 +320,7 @@ Date.prototype.format = function() {
     {name: 'gmv', index: 1, text: 'GMV'},
     {name: 'city', index: 2, text: '城市'},
     {name: 'store', index: 3, text: '门店'},
-    {name: 'month', index: 3, text: '月份'}
+    {name: 'month', index: 4, text: '月份'}
   ];
 
 
@@ -378,7 +373,8 @@ Date.prototype.format = function() {
         return '<div style="border-bottom: 1px solid rgba(255,255,255,.3); font-size: 18px;padding-bottom: 7px;margin-bottom: 7px">'
           + schema[1].text + '：' + value[1] + '万元</div>'
           + schema[0].text + '：' + value[0] + '<br>'
-          + schema[2].text + '：' + value[2] + '<br>';
+          + schema[2].text + '：' + value[2] + '<br>'
+          + schema[4].text + '：' + value[4] + '<br>';
       }
     },
     xAxis: {
@@ -768,14 +764,14 @@ Date.prototype.format = function() {
           }
         },
         data:yData
-        ,markLine : {
+/*        ,markLine : {
         	itemStyle: {
                 normal: { lineStyle: { color:'#000' }}
             },
             data : [
                 {type : 'average', name: '平均值'},
             ]
-        }
+        }*/
 		,markPoint: {
             data: [
                 {type: 'max', name: '最大值'},
@@ -919,14 +915,14 @@ Date.prototype.format = function() {
 					}
 				},
 				data: weekData
-		        ,markLine : {
+/*		        ,markLine : {
 		        	itemStyle: {
 		        		 normal: { lineStyle: { color:'#000' }}
 		            },
 		            data : [
 		                {type : 'average', name: '平均值'},
 		            ]
-		        }
+		        }*/
 				,markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
@@ -1083,14 +1079,14 @@ Date.prototype.format = function() {
 					}
 				},
 				data:yData_month
-		        ,markLine : {
+/*		        ,markLine : {
 		        	itemStyle: {
 		        		 normal: { lineStyle: { color:'#000' }}
 		            },
 		            data : [
 		                {type : 'average', name: '平均值'},
 		            ]
-		        }
+		        }*/
 				,markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
@@ -1155,15 +1151,13 @@ Date.prototype.format = function() {
 	  chartresize3();
 	  chartresize4();
 	  search_manual_k();
-	  
-	  
-	  $("#search-btn2").click(function(){
-		 excuteChart();
-	 }); 
-	 $("#citySelect").change(function(){
-		 $('#cbLabel').children("div").addClass('checked'); 
-		 excuteChart();
-	 });
+
+
+      $("#citySelect").change(function(){
+          $('#cbLabel').children("div").addClass('checked');
+          iCheckStr = $('#cbClick').val();
+          excuteChart();
+      });
 	  
   })
   
@@ -1240,7 +1234,7 @@ Date.prototype.format = function() {
 					var jsonData = $.fromJSON(data.data);
 					if(jsonData.length!=0){
 						$(jsonData).each(function(index,element){
-							var dateTemp = new Date(parseInt(element.week_time)).format("yyyy-MM-dd");
+							var dateTemp = element.week_time;
 							var indexTemp = jQuery.inArray(dateTemp,xData_week);
 							weekData[indexTemp]=element.week_amount;
 	                    });
@@ -1297,6 +1291,7 @@ Date.prototype.format = function() {
 							temp.push((element.order_amount/10000).toFixed(2));
 							temp.push(element.city_name);
 							temp.push(element.cityno);
+							temp.push(element.months);
 							dataBJ.push(temp);
 	                 	});
 						option3.series[0].data = dataBJ;
@@ -1374,9 +1369,6 @@ Date.prototype.format = function() {
    var storeJson;
 	function initStoreSelectcomplate(){
 		var citySelect = $("#citySelect  option:selected").val();
-		$("#auto").val("");
-		if(citySelect==""){
-		}
 	}
 	
 	var storeJsonContrast;
