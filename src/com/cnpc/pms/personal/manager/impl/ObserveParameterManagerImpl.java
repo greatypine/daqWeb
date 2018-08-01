@@ -617,7 +617,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 				}
 			}
 
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"明查台账问题汇总.xls");
+			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"observe.xls");
 			if(file_xls.exists()){
 				file_xls.delete();
 			}
