@@ -975,4 +975,14 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> getTwoTwoOneGMVRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+
+	/**
+	 * 查询近七日221GMV走势图
+	 * @author gaoll
+	 * 2018年7月11日
+	 * @param dynamicDto
+	 * @param pageInfo
+	 * @return
+	 */
+    Map<String,Object> getCustomerMember(DynamicDto dynamicDto, PageInfo pageInfo);
 }

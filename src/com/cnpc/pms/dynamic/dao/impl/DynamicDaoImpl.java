@@ -3460,4 +3460,44 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		map_all.put("lst_data", lst_data);
 		return map_all;
 	}
+
+	@Override
+	public Map<String, Object> getCustomerMember(DynamicDto dynamicDto, PageInfo pageInfo) {
+		List<?> list=null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+
+		String sql="select t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
+					+"select count(member.customer_id) as opencount from df_user_member member where member.opencard_time is not null"
+					+") t1 LEFT JOIN ( "
+					+"select count(member.customer_id) as nowcount from df_user_member member where "
+					+"member.create_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59') t4 "
+					+"ON (t1.regist_cityno = t2.regist_cityno))";
+
+
+		Query query = this.getHibernateTemplate().getSessionFactory()
+				.getCurrentSession().createSQLQuery(sql);
+
+		if(pageInfo!=null){
+			String sql_count = "SELECT count(1) from ("+sql+") c ";
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+
+			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+					.setFirstResult(
+							pageInfo.getRecordsPerPage()
+									* (pageInfo.getCurrentPage() - 1))
+					.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}else{
+			list =query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}
+		map_result.put("member", list);
+		return map_result;
+	}
+
 }

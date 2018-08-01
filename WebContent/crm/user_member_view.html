@@ -159,11 +159,13 @@
 
       <section class="content-header">
         <div class="nav-tabs-custom no-margin">
-        <div class="pull-right text-red" style="padding-left:15px;font-size:75%">统计数据每10分钟更新一次</div>
+        	<div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">统计数据每10分钟更新一次</div>
+			<div class="pull-right" style="padding: 0 25px;float: right">
+				<a href="#tab_3" class="btn btn-block btn-warning" data-toggle="tab" aria-expanded="false">大客户社员查询</a>
+			</div>
           <ul class="nav nav-tabs">
 		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
 		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
-			  		  <li class="" id="tab_3_avtive"><a href="#tab_3" data-toggle="tab" aria-expanded="false">大客户单位统计</a></li>
 		  </ul>
 		  <div class="tab-content">
 			  <div class="tab-pane active" id="tab_1">
@@ -987,75 +989,64 @@ function searchInfo_customer(cur_page){
         dynamicDto = {
             beginDate:begin_end_date[0].trim(),
             endDate:begin_end_date[1].trim(),
-            searchstr:"city"
+            searchstr:"customer"
         }
     }else if(target==1){//城市
         dynamicDto = {
             beginDate:begin_end_date[0].trim(),
             endDate:begin_end_date[1].trim(),
-            searchstr:"city"
+            searchstr:"customer"
         }
     }
     var pageInfo = new Object();
     pageInfo.currentPage = cur_page;
-
     doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
         if(data.result){
             var result= JSON.parse(data.data);
             if(result.status=='success'){
-                $("#tradeType_tbody_city").find("tr:gt(0)").remove();
+                $("#tradeType_tbody_customer").find("tr:gt(0)").remove();
                 var jData = result.member;
                 if(jData==null||jData.length==0){
                     crm_alert(5,"没有符合条件的数据！");
-                    $("#page_city").createPage({
+                    $("#page_customer").createPage({
                         pageCount:0,
                         current:0,
                         backFn:function(p){
-
                         }
                     });
                     $("#process_div").hide();
                     $("#process_div_pic").hide();
                     return;
                 }
-                totalPage_city = result.total_pages;
+                totalPage_customer = result.total_pages;
 
-                if(!isCityCreatePage1){
-                    $("#page_city").createPage({
+                if(!isCustomerCreatePage1){
+                    $("#page_customer").createPage({
                         pageCount:totalPage_city,
                         current:cur_page,
                         backFn:function(p){
-                            searchInfo_step2(p,begin_end_date);
+                            searchInfo_customer(p,begin_end_date);
                         }
                     });
-                    isCityCreatePage1=true;
+                    isCustomerCreatePage1=true;
                 }
 
                 var infoStr="";
                 for(var i=0;i<jData.length;i++){
-                    var cityname = jData[i].city_name;
-                    if(cityname == '无'){
-                        cityname = $("#city_name").val() == "" ? cityname : $("#city_name").val();
-                    }
                     infoStr="";
                     infoStr += "<tr>"
-                        +"<td>"+cityname+"</td>";
-                    if(cityname == '无'){
-                        infoStr += "<td>"+jData[i].nowcount+"</td>"
-                            +"<td>"+jData[i].count199+"</td>"
-                    }else{
-                        infoStr += "<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].nowcount+"</a></td>"
-                            +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"\">"+jData[i].count199+"</a></td>"
-                    }
-                    infoStr += "<td>"+jData[i].opencount+"</td>"
+                        +"<td>"+cityname+"</td>"
+                        +"<td>"+jData[i].nowcount+"</td>"
+						+"<td>"+jData[i].count199+"</td>"
+                    	+"<td>"+jData[i].opencount+"</td>"
                         +"</tr>";
 
-                    $("#tradeType_tbody_city").append(infoStr);
+                    $("#tradeType_tbody_customer").append(infoStr);
                 }
             }else if(result.status=='storefail'){
-                $("#tradeType_tbody_city").find("tr:gt(0)").remove();
+                $("#tradeType_tbody_customer").find("tr:gt(0)").remove();
                 crm_alert(5,JSON.parse(result.data).message);
-                $("#page_city").createPage({
+                $("#page_customer").createPage({
                     pageCount:0,
                     current:0,
                     backFn:function(p){
