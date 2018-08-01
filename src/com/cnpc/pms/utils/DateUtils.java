@@ -394,6 +394,47 @@ public class DateUtils {
 		
 		return list;  
 	}
+	/**
+	 * 获取当年的周，从周日开始
+	 * @param weeks
+	 * @return
+	 */
+	public static List<String> getMemDateByWeek(){
+		String today = "2018-05-17";  
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+		Date date1 = null;  
+		try {  
+		    date1 = format.parse(today);  
+		} catch (ParseException e) {  
+		    e.printStackTrace();  
+		}  
+		  
+		Calendar calendar = Calendar.getInstance();  
+		String year = String.valueOf(calendar.get(Calendar.YEAR));
+		calendar.setFirstDayOfWeek(Calendar.MONDAY);  
+		calendar.setTime(date1);  
+		int begin = calendar.get(Calendar.WEEK_OF_YEAR)-1;
+		int weeks = getWeekOfYear(new Date());
+        if("2018".equals(year)) {
+        	weeks = weeks - begin;
+        }
+		List<String> list = new ArrayList<String>();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = new GregorianCalendar();
+		c.setFirstDayOfWeek(Calendar.MONDAY);
+		c.setTime(new Date());
+		c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+		Date date = c.getTime();
+		Date date2 = getDateBeforeOneDate(date);
+		for (int i = 0; i < weeks; i++) {
+			Date weekBefore = getWeekBefore(i, date2);
+			list.add(dateFormat.format(weekBefore));
+		}
+		
+		Collections.sort(list);
+		
+		return list;  
+	}
 	
 	public static Date getWeekBefore(int n, Date date) {
 		Calendar c = Calendar.getInstance();
