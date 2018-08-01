@@ -2399,4 +2399,5 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         return result;
 
     }
+
 }

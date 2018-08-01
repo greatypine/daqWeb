@@ -101,11 +101,11 @@ public class ChartMemberDaoImpl extends BaseDAOHibernate implements ChartMemberD
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByDay(ChartMemberDto csd){
-		String sql="SELECT IFNULL(FLOOR(sum(dom.trading_price)), 0) AS turnover,DATE(dom.sign_time) as day_time FROM df_mass_order_total dom WHERE dom.sign_time>'2018-05-17'  and dom.sign_time<CURDATE() and dom.order_tag1 like '%E%'  and dom.order_tag1 like '%M%' ";
+		String sql="SELECT IFNULL(FLOOR(sum(mem_gmv)), 0) AS turnover,DATE(date) as day_time FROM ds_ope_member_city_day dom WHERE 1=1";
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dom.store_city_name like '"+csd.getCityname()+"%' ";
+			sql = sql + " AND city_name like '"+csd.getCityname()+"%' ";
 		}
-		sql = sql + " GROUP BY DATE(dom.sign_time) ";
+		sql = sql + " GROUP BY DATE(date) ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -115,9 +115,9 @@ public class ChartMemberDaoImpl extends BaseDAOHibernate implements ChartMemberD
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByWeek(ChartMemberDto csd){
-		String sql = "SELECT YEARWEEK(sign_time) as week_date ,	subdate(sign_time,date_format(sign_time,'%w')) as week_time, IFNULL(FLOOR(SUM(trading_price)),0) AS week_amount FROM df_mass_order_total WHERE sign_time>'2018-05-17'  and order_tag1 like '%E%'  and order_tag1 like '%M%' ";
+		String sql = "SELECT YEARWEEK(date) as week_date ,subdate(date,date_format(date,'%w')) as week_time, IFNULL(FLOOR(SUM(mem_gmv)),0) AS week_amount FROM ds_ope_member_city_day WHERE 1=1 ";
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND store_city_name like '"+csd.getCityname()+"%' ";
+			sql = sql + " AND city_name like '"+csd.getCityname()+"%' ";
 		}
 		sql = sql + " GROUP BY week_date";
 		
@@ -130,9 +130,9 @@ public class ChartMemberDaoImpl extends BaseDAOHibernate implements ChartMemberD
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByMonth(ChartMemberDto csd){
-		String sql = "select CONCAT(YEAR(sign_time),'-',MONTH(sign_time))  months,IFNULL(FLOOR(SUM(trading_price)),0) AS mon_amount from df_mass_order_total where sign_time>'2018-05-17'  and order_tag1 like '%E%'  and order_tag1 like '%M%'";
+		String sql = "select CONCAT(YEAR(date),'-',MONTH(date))  months,IFNULL(FLOOR(SUM(mem_gmv)),0) AS mon_amount from ds_ope_member_city_day where 1=1";
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND store_city_name like '"+csd.getCityname()+"%' ";
+			sql = sql + " AND city_name like '"+csd.getCityname()+"%' ";
 		}
 		sql = sql + " GROUP BY months ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -144,11 +144,11 @@ public class ChartMemberDaoImpl extends BaseDAOHibernate implements ChartMemberD
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartMemberDto csd){
-		String sql = "select IFNULL(FLOOR(sum(dom.trading_price)), 0) order_amount,count(dom.sign_time) order_count,dom.store_city_code cityno,dom.store_city_name city_name from  df_mass_order_total dom where dom.sign_time>'2018-05-17' and dom.order_tag1 like '%E%'  and dom.order_tag1 like '%M%' ";
+		String sql = "select IFNULL(FLOOR(sum(dom.mem_gmv)), 0) order_amount, count(dom.date) order_count, dom.city_code cityno, dom.city_name city_name, CONCAT( YEAR (dom.date), '-', MONTH (dom.date)) months from ds_ope_member_city_day dom where 1 = 1 ";
 		if(StringUtils.isNotEmpty(csd.getCityname())){
-			sql = sql + " AND dom.store_city_name like '"+csd.getCityname()+"%' ";
+			sql = sql + " AND dom.city_name like '"+csd.getCityname()+"%' ";
 		}
-		sql = sql + " group by dom.store_city_code";
+		sql = sql + " group by dom.city_code, months";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
