@@ -144,7 +144,7 @@ public class ChartMemberDaoImpl extends BaseDAOHibernate implements ChartMemberD
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartMemberDto csd){
-		String sql = "select IFNULL(FLOOR(sum(dom.mem_gmv)), 0) order_amount, count(dom.date) order_count, dom.city_code cityno, dom.city_name city_name, CONCAT( YEAR (dom.date), '-', MONTH (dom.date)) months from ds_ope_member_city_day dom where 1 = 1 ";
+		String sql = "select IFNULL(FLOOR(sum(dom.mem_gmv)), 0) order_amount, IFNULL(FLOOR(sum(dom.mem_count)), 0) order_count, dom.city_code cityno, dom.city_name city_name, CONCAT( YEAR (dom.date), '-', MONTH (dom.date)) months from ds_ope_member_city_day dom where 1 = 1 ";
 		if(StringUtils.isNotEmpty(csd.getCityname())){
 			sql = sql + " AND dom.city_name like '"+csd.getCityname()+"%' ";
 		}
