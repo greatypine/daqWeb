@@ -46,8 +46,8 @@
         .report dt:after{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; left: -7px;}
         .report dt:before{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; right: -7px;}
         .report_jr li{width: 31%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
-        .report_jr li i{font-size: 70px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
-        .report_jr li span{font-size: 30px; color: #ffde00;}
+        .report_jr li i{font-size: 50px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
+        .report_jr li span{font-size: 22px; color: #ffde00;}
 
         .vertical-example{
             position: absolute;
@@ -86,8 +86,22 @@
             /* Opera: */
             -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
         .add_citymember{wposition: absolute;}
+        .show_cmBig{wposition: absolute;}
+        .add_TestMember{wposition: absolute;}
         .toast{
             width:450px;
+            height:240px;
+            background:transparent;
+            background-color:rgba(241,241,241,1);
+            box-shadow: 0 1px 1px rgba(0,0,0,1);
+            border-radius:10px;
+            position: fixed;
+            margin:auto;left:36%; top:50%;
+            z-index: 1;
+        }
+        .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
+        .bigtoast{
+            width:350px;
             height:240px;
             background:transparent;
             background-color:rgba(241,241,241,1);
@@ -97,7 +111,6 @@
             margin:auto;left:36%; top:30%;
             z-index: 1;
         }
-        .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -172,6 +185,19 @@
                                         </div>
                                     </li>
                                     </div>
+<!--                                    <div class="add_TestMember">
+                                        <li>
+                                            <div class="col-sm-9" style="padding-right:0px;">试用社员：<span>1111</span><br>
+                                                <small>GMV：</small>
+                                                <small id="dayNe11wMem" style="color: #ffde00;">1111</small>&nbsp;<small>
+                                                    客单价：
+                                                </small>
+                                                <small style="color: #ffde00;">1111</small>
+                                            </div>
+                                            <div class="col-sm-3"><i class="fa fa-retweet" style="font-size: 40px;"></i>
+                                            </div>
+                                        </li>
+                                    </div>-->
                                 </ul>
                                 <div id="cityMember" class="toast" style="display: none">
                                     <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
@@ -187,13 +213,16 @@
                                 <ul class="clearfix no-padding">
                                 <li class="col-sm-3">
                                 <div class="show_cmBig"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><span id="memAll"></span>
-	                               <font id="bigMember"  style="font-size: 14px;margin-left: 15px;display: none; "><br>大客户社员：</font><span id="cmBig" style="font-size: 16px;margin-left: 5px;display: none; "></span>
+	                               <!--<font id="bigMember"  style="font-size: 14px;margin-left: 15px;display: none; "><br>大客户社员：</font><span id="cmBig" style="font-size: 16px;margin-left: 5px;display: none; "></span>-->
                                 </div>
                                 </li>
                                     <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-fire"></i>周消费频次：<br><span id="jsonEshopWeekCou"></span></li>
                                 </ul>
+                                <div id="bigMember2" class="bigtoast" style="display: none">
+                                    <div class="col-sm-12 no-padding" id="main0" style="height: 200px;"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -447,7 +476,16 @@
         </div>
     </div>
     <!-- ./wrapper -->
-
+    <div id="city_detail_div" style="height:350px;display:none">
+        <table id="city_detail_table" style="width:100%;text-align:center;border-collapse:separate;border-spacing:2px" border="0" cellspacing="3" cellpadding="2"  >
+            <tr style="height:25px;background-color:#00c0ef;color:white" id="city_detail_title">
+                <td width="30px">序号</td>
+                <td>名称</td>
+                <!-- <td>代码</td>
+                <td>编号</td> -->
+            </tr>
+        </table>
+    </div>
 
     <!-- jQuery 2.2.0 -->
     <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
@@ -495,8 +533,11 @@
         var cityId = decode64(getUrlParamByKey("c"));//城市ID
         var cityName = decode64(getUrlParamByKey("cn"));//城市名称
         var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+        var loadIndex = null;
         var option1_1 = null;
         var option1 = null;
+        var mem_all = 0;
+        var mem_big = 0;
         function showAddMember(){
             $(".add_citymember").click(function(){
                 if($("#setadd").val()=="0"){
@@ -517,29 +558,53 @@
                 $("#cityMember").hide();
             });
         }
-        
+
         function showMemberBig(){
             $(".show_cmBig").click(function(){
                 if($("#setBig").val()=="0"){
                     $("#setBig").val("1");
-                    $("#bigMember").show();
+                   // $("#bigMember").show();
+                    var myChart0 = echarts.init(document.getElementById('main0'));
+                    myChart0.clear();
+                    var chart7div=document.getElementById('main0');
+                    chart7div.style.width=350+'px';
+                    myChart0.resize(350);
+                    myChart0.setOption(option0);
+
+                    $("#bigMember2").show();
                     $("#cmBig").show();
                 }else{
                     $("#setBig").val("0");
                     $("#bigMember").hide();
+                    $("#bigMember2").hide();
                     $("#cmBig").hide();
                 }
 
             });
             $(".show_cmBig").mouseover(function(){
                 $("#setBig").val("1");
-                $("#bigMember").show();
+               // $("#bigMember").show();
+                var myChart0 = echarts.init(document.getElementById('main0'));
+                myChart0.clear();
+                var chart7div=document.getElementById('main0');
+                chart7div.style.width=350+'px';
+                myChart0.resize(350);
+                myChart0.setOption(option0);
+
+                $("#bigMember2").show();
                 $("#cmBig").show();
             });
             $(".show_cmBig").mouseleave(function(){
                 $("#setBig").val("0");
-                $("#bigMember").hide();
+                //$("#bigMember").hide();
+                $("#bigMember2").hide();
                 $("#cmBig").hide();
+            });
+        }
+
+        function showTestMem(){
+            $(".add_TestMember").click(function(){
+                initTestMemInfo();
             });
         }
         function doCityMem(citycode){
@@ -628,6 +693,7 @@
 
                     doMemberInfo1();
                     doMemberInfo1_1();
+                    showBigInfo();
                     doMemberInfo2();
                     doMemberInfo3();
                     doMemberInfo4();
@@ -712,6 +778,7 @@
 
                 doMemberInfo1();
                 doMemberInfo1_1();
+                showBigInfo();
                 doMemberInfo2();
                 doMemberInfo3();
                 doMemberInfo4();
@@ -724,6 +791,7 @@
                 doArtelInfo3();
                 doArtelInfo4();
                 doArtelInfo5();
+
                 //未开发完成...
                 //showStoreGmv("1");
 
@@ -944,6 +1012,71 @@
             };
             myChart1_1.setOption(option1_1);
 
+        }
+
+        var showBigInfo = function (dataServer){
+            var myChart0 = echarts.init(document.getElementById('main0'));
+            //合作社社员
+            option0 = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{b} : {c} ({d}%)"
+                },
+                legend: {
+                    selectedMode:false,
+                    right:10,
+                    top: 10,
+                    orient:'vertical',
+                    data:['老会员升级', '新会员开卡']
+                }
+                ,series: [
+                    {
+                        type: 'pie',
+                        radius: '60%',
+                        center: ['50%', '50%'],
+                        //clockwise: false,
+                        data: [{
+                            value: mem_big,
+                            name: '大客户社员'
+                        }, {
+                            value: (mem_all-mem_big),
+                            name: '普通开卡社员'
+                        }],
+                        label: {
+                            normal: {
+                                position: 'out', //标签的位置
+                                formatter: '{b}\n{d}%',
+                                color: '#59ADF3'
+
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: true
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                borderWidth: 4,
+                                borderColor: '#FFCC67',
+                                labelLine: {
+                                    show: true
+                                }
+                            },
+                            emphasis: {
+                                borderWidth: 0,
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }] ,
+                color: [
+                    '#00acee',
+                    '#52cdd5',
+                ],
+            };
+            myChart0.setOption(option0);
         }
 
         var showMember = function (dataServer){
@@ -1342,6 +1475,7 @@
             doManager('communeMember','selectCmBaseInfo',"0000",function(data){
                 if(data.result){
                     var resultJson= JSON.parse(data.data);
+                   mem_all = resultJson.cmCount;
                     showHistoryData(resultJson);
                     setCityAddMem(resultJson);
                     setLoadingMark(false);
@@ -1358,6 +1492,7 @@
 	       doManager('communeMember','selectCmBigInfo',"0000",function(data){
 	           if(data.result){
 	               var resultJson= JSON.parse(data.data);
+                   mem_big = resultJson.bigCou;
 	               showCmBigData(resultJson);
 	           }else{
 	               alert("暂无社员相关信息");
@@ -1640,6 +1775,7 @@
             loginShow();
             showAddMember();
             showMemberBig();
+            showTestMem();
 
 
 
@@ -3928,6 +4064,50 @@
                 $("#process_div_pic").hide();
             }
         };
+
+
+        //初始化城市数据
+        var initTestMemInfo = function () {
+            // var citylist = statisticExtendInfo.cityCountList;
+            loadIndex = layer.load(0, {
+                shade: [0.1, '#393D49'] //0.1透明度的黑色背景
+            });
+            var infoStr = "";
+
+            for (var i = 0; i < 10; i++) {
+                var cityname = i;
+                var cityId = i;
+                infoStr = infoStr + "<tr style='cursor:pointer'  onclick='aboutCityData(this)' id='tr_" + cityId + "'><td>" + parseInt(i + 1) + "</td><td>" + cityname + "</td>/tr>";
+            }
+            $("#city_detail_title").nextAll().remove();
+            $("#city_detail_title").after(infoStr);
+            $("#city_detail_title").nextAll("tr:even").css("background-color", "aliceblue");
+            $("#city_detail_title").nextAll("tr:odd").css("background-color", "mintcream");
+            showTestMemInfo();
+        };
+        //展示城市
+        var showTestMemInfo = function () {
+            layer.close(loadIndex);
+            layer.open({
+                type: 1,
+                closeBtn:1,
+                title: ['城市信息', 'color:#fff'],
+                shadeClose: true,
+                shade: [0.1, '#393D49'],
+                moveOut: false,
+                skin: 'layer-ext-crmskin',
+                area: ['800px', '340px'],
+                offset: ['100px', '27%'],
+                content: $("#city_detail_div"),
+                success: function (layer, index) {
+
+                },
+                cancel: function (index, layero) {
+                    layer.close(index);
+                }
+            });
+        };
+
     </script>
 </body>
-</html>Git
+</html>
