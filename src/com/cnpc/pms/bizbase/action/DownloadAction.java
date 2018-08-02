@@ -431,10 +431,10 @@ public class DownloadAction extends HttpServlet {
 				String employeeId = new String(req.getParameter("employeeId").getBytes("iso8859-1"), "UTF-8");
 				ObserveParameterManager observeParameterManager = (ObserveParameterManager)SpringHelper.getBean("observeParameterManager");
 					//File exportObserveParamterSummary = observeParameterManager.exportObserveParamterSummary(null);
-					File exportObserveParamterSummary = observeParameterManager.exportObserveParamterSummary(city_name,observe_month,store_id,employeeId);
+					//File exportObserveParamterSummary = observeParameterManager.exportObserveParamterSummary(city_name,observe_month,store_id,employeeId);
 
-					DownloadUtil.downLoadFile(exportObserveParamterSummary.getAbsolutePath(), resp,
-							"明查台账汇总" + DateUtils.dateFormat(new Date()) + ".xls", "xls");
+					//DownloadUtil.downLoadFile(exportObserveParamterSummary.getAbsolutePath(), resp,
+							//"明查台账汇总" + DateUtils.dateFormat(new Date()) + ".xls", "xls");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

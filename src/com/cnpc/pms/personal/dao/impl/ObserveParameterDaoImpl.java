@@ -56,19 +56,19 @@ public class ObserveParameterDaoImpl extends BaseDAOHibernate  implements Observ
 	public List<Map<String, Object>> queryExitObserveParameter(String store_id, String observe_month,String save_type,String cityname,String employeeId) {
 		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();	
 		String where = "";
-		if(!"".equals(store_id) && store_id != null){
+		if(!"".equals(store_id) && store_id != null && !"null".equals(store_id)){
 			where += " AND st.store_id = '"+store_id+"'";
 		}
-		if(!"".equals(observe_month) && observe_month != null){
+		if(!"".equals(observe_month) && observe_month != null && !"null".equals(observe_month)){
 			where += " and st.observe_month = '"+observe_month+"'";
 		}
-		if(!"".equals(save_type) && save_type != null){
+		if(!"".equals(save_type) && save_type != null && !"null".equals(save_type)){
 			where += " and st.type = '"+save_type+"'";
 		}
-		if(!"".equals(cityname) && cityname != null){
+		if(!"".equals(cityname) && cityname != null && !"null".equals(cityname)){
 			where += " and st.city_name = '"+cityname+"'";
 		}
-		if(!"".equals(employeeId) && employeeId != null){
+		if(!"".equals(employeeId) && employeeId != null && !"null".equals(employeeId)){
 			where += " and city.pk_userid = '"+employeeId+"'";
 		}
 		String find_sql = "select st.* from t_store_observe_parameter st inner join t_dist_city city on (st.city_name = city.cityname) where st.status = 0 "+where;
@@ -81,16 +81,16 @@ public class ObserveParameterDaoImpl extends BaseDAOHibernate  implements Observ
 	@Override
 	public List<String> queryObserveMonthByCity(String cityname,String store_id,String observe_month,String employeeId) {
 		String where = "";
-		if(!"".equals(cityname) && cityname != null){
+		if(!"".equals(cityname) && cityname != null && !"null".equals(cityname)){
 			where += " and st.city_name = '"+cityname+"'";
 		}
-		if(!"".equals(store_id) && store_id != null){
+		if(!"".equals(store_id) && store_id != null  && !"null".equals(store_id)){
 			where += " AND st.store_id = '"+store_id+"'";
 		}
-		if(!"-".equals(observe_month) && observe_month != null){
+		if(!"-".equals(observe_month) && observe_month != null  && !"null".equals(observe_month)){
 			where += " and st.observe_month <= '"+observe_month+"'";
 		}
-		if(!"".equals(employeeId) && employeeId != null){
+		if(!"".equals(employeeId) && employeeId != null  && !"null".equals(employeeId)){
 			where += " and city.pk_userid = '"+employeeId+"'";
 		}
 		String find_sql = "select st.observe_month from t_store_observe_parameter st inner join t_dist_city city on (st.city_name = city.cityname) where 1=1 "+where+" GROUP BY st.observe_month";
@@ -103,16 +103,16 @@ public class ObserveParameterDaoImpl extends BaseDAOHibernate  implements Observ
 	@Override
 	public List<Map<String, Object>> queryObserveParameterSummaryByCity(String cityname,String store_id,String observe_month,String employeeId) {
 		String where = "";
-		if(!"".equals(cityname) && cityname != null){
+		if(!"".equals(cityname) && cityname != null  && !"null".equals(cityname)){
 			where += " and top.city_name = '"+cityname+"'";
 		}
-		if(!"".equals(store_id) && store_id != null){
+		if(!"".equals(store_id) && store_id != null  && !"null".equals(store_id)){
 			where += " AND top.store_id = '"+store_id+"'";
 		}
-		if(!"".equals(observe_month) && observe_month != null){
+		if(!"".equals(observe_month) && observe_month != null  && !"null".equals(observe_month)){
 			where += " and top.observe_month <= '"+observe_month+"'";
 		}
-		if(!"".equals(employeeId) && employeeId != null){
+		if(!"".equals(employeeId) && employeeId != null  && !"null".equals(employeeId)){
 			where += " and city.pk_userid = '"+employeeId+"'";
 		}
 		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();	

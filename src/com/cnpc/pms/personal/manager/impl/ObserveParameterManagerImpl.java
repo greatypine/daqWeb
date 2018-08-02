@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.personal.dto.StoreDTO;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -189,7 +190,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public File exportObserveParamterSummary(String cityname) {
+	public File exportObserveParamterSummarys(String cityname) {
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryObserveParameterSummaryByCity(cityname,null,null,null);
 		List<String> storenameList = new ArrayList<>();
@@ -459,13 +460,22 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public File exportObserveParamterSummary(String cityname,String observe_month,String store_id,String employeeId) {
+	public Map<String,Object> exportObserveParamterSummary(StoreDTO storeDTO) {
 		Map<String,Object> result  = new HashMap<String,Object>();
+		String cityname = storeDTO.getCityname();
+		String store_id = storeDTO.getStore_id();
+		String observe_month = storeDTO.getObserve_month();
+		String employeeId = storeDTO.getEmployeeId();
 		Map<String,Object> map  = this.queryObserveParameterSummaryByCity(cityname,store_id,observe_month,employeeId);
 		List<String> storenameList = new ArrayList<>();
 			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("queryObserveParameterSummary");
 			List<String> listmonth = (List<String>)map.get("queryObserveMonth");
 			List<Map<String,Object>> storeInfoList = new ArrayList<Map<String,Object>>();
+			if(list==null||list.size()==0){
+				result.put("message","没有符合条件的数据！");
+				result.put("status","null");
+				return result;
+			}
 			for(int i = 0; i<list.size(); i++){
 				Map<String, Object> mapobj = list.get(i);
 				String storename = mapobj.get("store_name").toString();
@@ -504,11 +514,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 			String replace1 = join1.replace("-", "年");
 			String join2 = StringUtils.join(listmonth.toArray(), "月份问题数量,")+"月份问题数量";
 			String replace2 = join2.replace("-", "年");
-			if(list==null||list.size()==0){
-				result.put("message","没有符合条件的数据！");
-				result.put("status","null");
-				return null;
-			}
+
 			String str_file_dir_path = PropertiesUtil.getValue("file.root");
 			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
@@ -611,7 +617,7 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 				}
 			}
 
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"明查台账问题汇总.xls");
+			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"observe.xls");
 			if(file_xls.exists()){
 				file_xls.delete();
 			}
@@ -630,13 +636,11 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 					}
 				}
 			}
-			return file_xls;
-			/*result.put("message","导出成功！");
+			//return file_xls;
+			result.put("message","导出成功！");
 			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));*/
-
-
-		
+			result.put("data", str_web_path.concat(file_xls.getName()));
+			return result;
 	}
 	
 
