@@ -2344,7 +2344,7 @@ function doK_Mem(){
     }else{
         url = "index_K_member.html?t="+encode64(0);
     }
-    window.open(url,"index_K_member");
+    window.location.href=url;
 }
   function queryTwoTwoOneStoreCount(){
   	 var reqestParameter = {
