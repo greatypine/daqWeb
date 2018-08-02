@@ -6620,6 +6620,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result= dynamicDao.getCityMember(dynamicDto,cityNo, pageInfo);
 			}else if(dynamicDto.getSearchstr().equals("store")){
 				result= dynamicDao.getStoreMember(dynamicDto,cityNo, pageInfo);
+			}else if(dynamicDto.getSearchstr().equals("customer")){
+				result= dynamicDao.getCustomerMember(dynamicDto, pageInfo);
 			}
 			
 			result.put("status","success");

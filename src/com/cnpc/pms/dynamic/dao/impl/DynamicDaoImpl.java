@@ -3011,7 +3011,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			}
 			sql = "select t1.storeno,ifnull(t1.name,'无') as name,ifnull(t1.city_name,'无') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
 					+"select ifnull(storeno,'无') as storeno,name,city_name,sum(opencount) as opencount from (select store.storeno,store.name,store.city_name,member.regist_storeid,count(member.customer_id) as opencount from df_user_member member LEFT  JOIN t_store store ON "
-					+"(member.regist_storeid = store.platformid) "+join_sql+" where 1=1 "+condition_sql+" group by member.regist_storeid "
+					+"(member.regist_storeid = store.platformid) "+join_sql+" where member.associator_expiry_date>now() and  member.opencard_time is not null "+condition_sql+" group by member.regist_storeid "
 					+") mem_store GROUP BY mem_store.storeno) t1 LEFT JOIN ( "
 					+"select ifnull(storeno,'无') as storeno,sum(nowcount) as nowcount from (select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_member member LEFT JOIN t_store store ON "
 					+"(member.regist_storeid = store.platformid) "+join_sql+" where member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' "+condition_sql+" group by member.regist_storeid "
@@ -3024,7 +3024,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else{
 			sql = "select t1.storeno,t1.name,ifnull(t1.city_name,'无') as city_name,ifnull(t1.opencount,0) as opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
 					+"select store.storeno,store.name,store.city_name,count(member.customer_id) as opencount from df_user_member member LEFT  JOIN t_store store ON "
-					+"(member.regist_storeid = store.platformid) where 1=1 and store.storeno = '"+dynamicDto.getStoreNo()+"' group by member.regist_storeid ) t1 LEFT JOIN ( "
+					+"(member.regist_storeid = store.platformid) where member.associator_expiry_date>now() and  member.opencard_time is not null and store.storeno = '"+dynamicDto.getStoreNo()+"' group by member.regist_storeid ) t1 LEFT JOIN ( "
 					+"select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_member member LEFT JOIN t_store store ON "
 					+"(member.regist_storeid = store.platformid) where store.storeno = '"+dynamicDto.getStoreNo()+"' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59') t2 "
 					+"ON t1.storeno = t2.storeno LEFT JOIN ( "
@@ -3032,23 +3032,6 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					+"(member.regist_storeid = store.platformid) where member_type = 'associator_start_2' and store.storeno = '"+dynamicDto.getStoreNo()+"' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59') t3 "
 					+"ON t1.storeno = t3.storeno";
 		}
-		
-		/*String sql= "";
-		if(cityNo.equals("")){
-			sql="select city.cityname as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
-					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member GROUP BY  member.regist_cityno "
-					+") t1 LEFT JOIN ( "
-					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where "
-					+"member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
-					+"ON t1.regist_cityno = t2.regist_cityno INNER JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
-		}else{
-			sql="select city.cityname as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( "
-					+"select count(member.customer_id) as opencount ,member.regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'  GROUP BY  member.regist_cityno "
-					+") t1 LEFT JOIN ( "
-					+"select count(member.customer_id) as nowcount,member.regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'"
-					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
-					+"ON t1.regist_cityno = t2.regist_cityno INNER JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
-		}*/
 		
 		Query query = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql);
@@ -3085,7 +3068,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String sql= "";
 		if(cityNo == null || "".equals(cityNo) ){
 			sql="select ifnull(city.cityname,'无') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
-					+"select count(member.customer_id) as opencount ,ifnull(member.regist_cityno,'无') as regist_cityno from df_user_member member GROUP BY  member.regist_cityno "
+					+"select count(member.customer_id) as opencount ,ifnull(member.regist_cityno,'无') as regist_cityno from df_user_member member where  member.associator_expiry_date>now() and  member.opencard_time is not null GROUP BY  member.regist_cityno "
 					+") t1 LEFT JOIN ( "
 					+"select count(member.customer_id) as nowcount,ifnull(member.regist_cityno,'无') as regist_cityno from df_user_member member where "
 					+"member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
@@ -3095,7 +3078,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					+"ON (t1.regist_cityno = t3.regist_cityno) LEFT JOIN t_dist_citycode city ON (lpad(t1.regist_cityno,4,'0') = city.cityno)";
 		}else{
 			sql="select ifnull(city.cityname,'无') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
-					+"select count(member.customer_id) as opencount ,ifnull(member.regist_cityno,'无') as regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'  GROUP BY  member.regist_cityno "
+					+"select count(member.customer_id) as opencount ,ifnull(member.regist_cityno,'无') as regist_cityno from df_user_member member where  member.associator_expiry_date>now() and  member.opencard_time is not null and lpad(member.regist_cityno,4,'0') = '"+cityNo+"'  GROUP BY  member.regist_cityno "
 					+") t1 LEFT JOIN ( "
 					+"select count(member.customer_id) as nowcount,ifnull(member.regist_cityno,'无') as regist_cityno from df_user_member member where lpad(member.regist_cityno,4,'0') = '"+cityNo+"'"
 					+"and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' GROUP BY  member.regist_cityno) t2 "
@@ -3543,4 +3526,41 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		map_result.put("gmv", list);
 		return map_result;
 	}
+
+	@Override
+	public Map<String, Object> getCustomerMember(DynamicDto dynamicDto, PageInfo pageInfo) {
+		List<?> list = null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+
+		String sql = "select t1.opencount,ifnull(t2.nowcount,0) as nowcount from (select count(member.customer_id) as opencount from df_user_member member where  member.associator_expiry_date>now() and  member.opencard_time is null) t1,(" +
+				"select count(member.customer_id) as nowcount from df_user_member member where member.opencard_time is null and member.create_time BETWEEN '" + dynamicDto.getBeginDate() + " 00:00:00' and '" + dynamicDto.getEndDate() + " 23:59:59') t2";
+
+		Query query = this.getHibernateTemplate().getSessionFactory()
+				.getCurrentSession().createSQLQuery(sql);
+
+		if (pageInfo != null) {
+			String sql_count = "SELECT count(1) from (" + sql + ") c ";
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+
+			pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+
+			list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+					.setFirstResult(
+							pageInfo.getRecordsPerPage()
+									* (pageInfo.getCurrentPage() - 1))
+					.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+
+			Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		} else {
+			list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}
+
+		map_result.put("member", list);
+		return map_result;
+	}
+
+
 }

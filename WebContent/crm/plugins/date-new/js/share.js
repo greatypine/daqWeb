@@ -205,8 +205,8 @@ $(function(){
     
 //    $("#last_date").attr("value",startDateStr +'-'+ timeStr)
 //    $("#startDateLast").attr("value",startDateStr)
-    $("#last_date").attr("value",timeStr +'-'+ timeStr)
-    $("#startDateLast").attr("value",timeStr)
+    $("#last_date").attr("value",startDateStr +'-'+ timeStr)
+    $("#startDateLast").attr("value",startDateStr)
     $("#endDateLast").attr("value",timeStr)
     
     var start_DateStr = "2018/01/01";
