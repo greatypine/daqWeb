@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>合作社社员统计</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link rel="stylesheet" href="plugins/date-new/css/jquery-ui-1.9.2.custom.css" type="text/css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-default{border-bottom: 1px solid #e1e1e1;height:100%; width:100%;}
+    .info_head{padding: 25px 0 35px 0;}
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom{padding: 35px 20px 0 35px; font-size: 12px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .nav-tabs-custom > .nav-tabs > li.active{border-top-color:#3c8dbc!important}
+	.nav-tabs-custom > .nav-tabs > li.active > a{background-color:#fff;color:#000;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown{ position: absolute;z-index: 10000; top: 70px; left: -10px; line-height: 22px; padding: 15px 25px; background-color: #15b092; display: none;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    .table button{padding: 3px 20px; margin: 0 5px;}
+	.table a{color:#194dc4;}
+    
+    
+    .tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+ 
+	 #process_div{ 
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+		#process_div_pic{
+			position:fixed;
+			top:50%;
+			left:50%; 
+			z-index:100000000; 
+			margin:-16px 0 0 -50px; 
+			width:100px; 
+			height:32px;
+			color: #fff;
+		}
+		
+		/*搜索框*/
+    .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
+    small span:hover{
+    	color:#337ab7;
+    	}
+    	
+    	
+    	
+    /*时间控件*/
+    .show-more-line{width: 100%; height: 40px; border-top: 1px dashed #e6e6e6; position: relative; background-color: #f5f5f5;}
+    .how-more{position: absolute; top: -1px; left: 50%; background-color: #fff; border-left: 1px solid #e6e6e6; border-right: 1px solid #e6e6e6; border-bottom: 1px solid #e6e6e6;  padding: 5px 15px; margin: 0 0 0 -40px; color: #888; cursor: pointer; font-size: 12px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
+    .how-more i{padding-left: 5px; font-size: 14px;}
+    .fold-con,.sl-btns{display: none;}
+    .selectorLine{border-top: 1px dashed #e6e6e6; padding: 10px 0 0 0; position: relative;}
+    .selectorLine a{float: left; height: 18px; line-height: 18px; padding: 0 3px; margin: 2px 12px 12px 0; white-space: nowrap;}
+    .selectorLine a:nth-child(1){margin-left: 15px;}
+    .selectorLine a:hover{background-color: #ff7701; color: #fff;}
+    .search-title{width: 100px; color: #777; white-space: nowrap; overflow: hidden; position: absolute; top: 10px; left: 0; text-align: right;}
+    .search-con{margin-left: 0px; padding-right: 80px; overflow: hidden;}
+    .sl-ext {position: absolute; top: 10px; right: 10px; width: 60px; height: auto; line-height: 22px; overflow: hidden; zoom: 1;}
+    .search-more{width: 60px; height: 25px; line-height: 25px; padding: 0 7px 0 0; background: #fff; color: #333; border: 1px solid #ddd; font-size: 12px; position: relative; right: 0; top: 0;}
+    .search-more i{position: absolute; top: 3px; right: 0; display: block; width: 20px; height: 20px; background-position: 4px 7px; font-size: 18px;}
+    .search-more:hover{color: #e4393c;}
+    .search-more-open i{ -webkit-transform: rotateX(180deg); -o-transform: rotateX(180deg); -moz-transform: rotateX(180deg);}
+    .sx_type{margin-top: 5px;}
+    .sx_type span{padding-right: 5px;}
+    .sx_type span .icheckbox_minimal-blue{margin-right: 2px;}
+
+    
+    
+    
+    /*类型*/
+    .leixing div{display: inline-block; position: relative; cursor: pointer;}
+    .type_con{width: 65px; height: 45px; line-height: 45px; color: #fff; display: block; position: absolute; bottom: 20px; left: -20px; display: none;}
+    .gonghai .type_con{background: url("dist/img/gonghai(1).png") no-repeat; background-size: 100% 100%;}
+    .yichang .type_con{background: url("dist/img/gonghai(2).png") no-repeat; background-size: 100% 100%;}
+    .gonghai:hover .type_con,.yichang:hover .type_con{display: block;}
+    .fold-con{display: none;}
+    .auto{max-height:200px; overflow-y:scroll;}
+    .opeDiv span{float: right;width: 46px;height: 24px;line-height: 24px;text-align: center;font-size: 12px;border: 1px solid #9fa3a8;border-radius: 3px;color: #616d73;margin: 0 13px 12px 0;box-shadow: 0 1px 5px rgba(0,0,0,0.3);cursor: pointer;}
+	.Confirm{ background: linear-gradient(#83c56a, #63b254); border: 1px solid #46975d!important;; color: #fff!important;}
+	.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
+	.ui-datepicker-quick span{height: 30px; line-height: 35px}
+	.ui-datepicker-time{background-color:transparent}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper">
+
+
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>合作社社员统计</em></li>
+							</ul>
+						</div>
+					</div>
+      </div>
+    </nav>
+  </header>
+
+
+  <!-- =============================================== -->
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <div>
+      <!-- Main content -->
+
+      <section class="content-header">
+        <div class="nav-tabs-custom no-margin">
+        	<div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">统计数据每10分钟更新一次</div>
+          <!--<ul class="nav nav-tabs">
+		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
+		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
+		  </ul>-->
+		  <div class="tab-content">
+			  <div class="tab-pane active" id="tab_3">
+				  <div class="box-body">
+					  <div class="clearfix search-criteria">
+						  <div id="selectorLine clearfix no-border" class="clearfix">
+							  <div class="form-group col-lg-4">
+								  <label>创建时间</label>
+								  <div class="search-con">
+									  <div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:3px 15px;">
+										  <div class="time_endbg" id="last_time_endbg">
+											  <p>日期选择：<span class="data_choice" id="last_data_choice">默认时期</span></p>
+											  <input type="text" class="ui-datepicker-time" id="last_date" readonly="" value="">
+										  </div>
+									  </div>
+									  <div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin: 0px 15px; display: none;">
+										  <div class="ui-datepicker-quick" id="last-ui-datepicker-quick">
+											  <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+											  <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name="">
+											  <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name="">
+											  <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name="">
+											  <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name="">
+											  <input class="ui-date-quick-button" type="button" value="全部" alt="1" name="">
+											  <span class="ui-close-date" id="last-ui-close-date" style="cursor:pointer;">X</span>
+										  </div>
+										  <div class="ui-datepicker-choose">
+											  <!--<p>自选日期</p>-->
+											  <div class="ui-datepicker-date">
+												  <input name="startDateLast" id="startDateLast" class="startDate" readonly="" value="2018/07/01" type="text">
+												  到
+												  <input name="endDateLast" id="endDateLast" class="endDate" readonly="" value="2018/07/23" type="text">
+											  </div>
+											  <div class="opeDiv">
+												  <span class="Confirm" id="ConfirmLast" onclick="datePickersLast()">确定</span>
+												  <span class="Cancel" id="CancelLast">取消</span>
+											  </div>
+										  </div>
+									  </div>
+								  </div>
+							  </div>
+						  </div>
+					  </div>
+
+					  <div class="clearfix">
+						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+							  <button type="button" onclick="export_customer()" class="btn btn-block btn-warning">导出</button>
+						  </div>
+						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+							  <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_step_customer(1)">查询</button>
+						  </div>
+
+					  </div>
+
+				  </div>
+				  <div class="box-body">
+					  <div class="tab-content">
+						  <div>
+							  <table class="table table-striped">
+								  <tbody id="tradeType_tbody_customer">
+								  <tr>
+									  <th width="12%">创建时间</th>
+									  <th width="12%">大客户社员数</th>
+									  <th width="12%">累计开卡数</th>
+								  </tr>
+								  </tbody>
+							  </table>
+						  </div>
+						  <!-- /.tab-pane -->
+					  </div>
+					  <!-- /.tab-content -->
+					  <div class="tcdPageCode" id="page_customer"></div>
+				  </div>
+			  </div>
+        </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+
+<!-- ./wrapper -->
+<script src="plugins/date-new/js/jQuery-2.2.0.min.js"></script>
+<script src="plugins/date-new/js/jquery-ui-1.9.2.custom.js" type = "text/javascript"></script>
+<script src="plugins/date-new/js/share.js" type = "text/javascript"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+<script type="text/javascript">
+
+
+<!--target(数据查询层级标识) 0:总部  1:城市级别 2:门店-->
+	layer.config({
+	  extend: 'skin/crmskin/style.css' //加载新皮肤
+	});
+	var cityId = decode64(getUrlParamByKey("c"));//城市ID
+	var initCity = cityId;
+	var cityName = decode64(getUrlParamByKey("cn"));//城市名称
+	var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+	var storeId = decode64(getUrlParamByKey("s"));//门店编号
+	var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
+	var storeName=decode64(getUrlParamByKey("sn"));
+	var storeNo=decode64(getUrlParamByKey("so"));
+	var role = decode64(getUrlParamByKey("r"));
+	var fromBar = decode64(getUrlParamByKey("fb"));
+	var beti = decode64(getUrlParamByKey("beTi"));
+	var endt = decode64(getUrlParamByKey("endT"));
+	
+	$(function () {
+        $("#last-ui-datepicker-quick input").click(function(){
+            var buttonValue= $(this).val();
+            $('#last_data_choice').html(buttonValue);
+        });
+		if(target==0){//总部
+
+		}else if(target==1){//城市
+
+		}else if(target==2){//店长
+
+		}
+	    $(".logo-lg > ul > li").hover(function(){
+	      $(this).children(".nav_dropdown").toggle('1000');
+	    });
+	    
+
+  });
+    <!-------------------------------------------------------点击查询----------------------------------------------------------------->
+
+	var isCustomerCreatePage1=false;
+	function searchInfo_step_customer(cur_page){
+		isCustomerCreatePage1=false;
+		searchInfo_step_customer(cur_page);
+	}
+	var currentPage_customer = 1;
+	var totalPage_customer = 1;
+	function searchInfo_customer(cur_page){
+		//注册时间
+		var sdate = $("#last_date").val();
+		var begin_end_date=["",""];
+		if(sdate!=""){
+			begin_end_date = sdate.split("-");
+		}
+		$("#process_div").show();
+		$("#process_div_pic").show();
+
+		var dynamicDto=null;
+		if(target==0){//总部
+			dynamicDto = {
+				beginDate:begin_end_date[0].trim(),
+				endDate:begin_end_date[1].trim(),
+				searchstr:"customer"
+			}
+		}else if(target==1){//城市
+			dynamicDto = {
+				beginDate:begin_end_date[0].trim(),
+				endDate:begin_end_date[1].trim(),
+				searchstr:"customer"
+			}
+		}
+		var pageInfo = new Object();
+		pageInfo.currentPage = cur_page;
+		doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
+			if(data.result){
+				var result= JSON.parse(data.data);
+				if(result.status=='success'){
+					$("#tradeType_tbody_customer").find("tr:gt(0)").remove();
+					var jData = result.member;
+					if(jData==null||jData.length==0){
+						crm_alert(5,"没有符合条件的数据！");
+						$("#page_customer").createPage({
+							pageCount:0,
+							current:0,
+							backFn:function(p){
+							}
+						});
+						$("#process_div").hide();
+						$("#process_div_pic").hide();
+						return;
+					}
+					totalPage_customer = result.total_pages;
+
+					if(!isCustomerCreatePage1){
+						$("#page_customer").createPage({
+							pageCount:totalPage_city,
+							current:cur_page,
+							backFn:function(p){
+								searchInfo_customer(p,begin_end_date);
+							}
+						});
+						isCustomerCreatePage1=true;
+					}
+
+					var infoStr="";
+					for(var i=0;i<jData.length;i++){
+						infoStr="";
+						infoStr += "<tr>"
+							+"<td>"+cityname+"</td>"
+							+"<td>"+jData[i].nowcount+"</td>"
+							+"<td>"+jData[i].count199+"</td>"
+							+"<td>"+jData[i].opencount+"</td>"
+							+"</tr>";
+
+						$("#tradeType_tbody_customer").append(infoStr);
+					}
+				}else if(result.status=='storefail'){
+					$("#tradeType_tbody_customer").find("tr:gt(0)").remove();
+					crm_alert(5,JSON.parse(result.data).message);
+					$("#page_customer").createPage({
+						pageCount:0,
+						current:0,
+						backFn:function(p){
+
+						}
+					});
+					$("#process_div").hide();
+					$("#process_div_pic").hide();
+					return;
+				}else{
+					crm_alert(5,"请稍后重新请求！");
+					$("#process_div").hide();
+					$("#process_div_pic").hide();
+					return;
+				}
+
+			}else{
+				crm_alert(5,"请稍后重新请求！");
+			}
+			$("#process_div").hide();
+			$("#process_div_pic").hide();
+		});
+	}
+    
+    
+
+  //导出城市
+    function export_customer(){
+    	//注册时间
+	    var sdate = $("#last_date").val();
+	    var begin_end_date=["",""];
+	  	if(sdate!=""){
+	  		begin_end_date = sdate.split("-");
+	   	}
+    	$("#process_div").show();
+  	 	$("#process_div_pic").show();
+  	 	var dynamicDto=null;
+  	   if(target==0){//总部
+  		  dynamicDto = {
+  	  				beginDate:begin_end_date[0].trim(),
+  	  				endDate:begin_end_date[1].trim(),
+  	  		  		searchstr:"customer"
+  	  			}
+  	   }else if(target==1){//城市
+ 	    	 dynamicDto = {
+ 	    		beginDate:begin_end_date[0].trim(),
+ 	 	  		endDate:begin_end_date[1].trim(),
+   		  		searchstr:"customer"
+   			}
+ 	    }
+	   
+	    doManager('dynamicManager','exportUserMemberInfo',[dynamicDto],function(data){
+          if(data.result){
+          	   var result= JSON.parse(data.data);
+	           if(result.status=='success'){
+	        	   window.location.href=result.data;
+	           }else if(result.status=='null'){
+	        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	        	   return;
+	           }else{
+	        	   crm_alert(5,"请稍后重新请求！");
+	        	   $("#process_div").hide();
+        	       $("#process_div_pic").hide();
+	           }
+          
+          }else{
+       	   crm_alert(5,"请稍后重新请求！");
+          }
+         $("#process_div").hide();
+    	 $("#process_div_pic").hide();
+      }); 
+    }
+
+</script>
+
+</body>
+</html>
