@@ -216,9 +216,10 @@
 <!-- 总部首页 script -->
 <!-- <script src="dist/js/headquarters/index_K.js"></script> -->
 <script type="text/javascript">
-
-
-Date.prototype.format = function() {  
+var storeNo_ = (decode64(getUrlParamByKey("so")) == 'null'||decode64(getUrlParamByKey("so")) == null) ? '' : decode64(getUrlParamByKey("so"));//门店no
+var ordertype = (decode64(getUrlParamByKey("ordertype")) == 'null'||decode64(getUrlParamByKey("ordertype")) == null) ? '' : decode64(getUrlParamByKey("ordertype"));//商品服务团购 全部:0;商品1服务2团购3
+var storeName_ = (decode64(getUrlParamByKey("store_name")) == 'null'||decode64(getUrlParamByKey("store_name")) == null) ? '' : decode64(getUrlParamByKey("store_name"));//商品服务团购 全部:0;商品1服务2团购3
+Date.prototype.format = function() {
     var s = '';  
     var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));  
     var day = this.getDate()>=10?this.getDate():('0'+this.getDate());  
@@ -1550,7 +1551,7 @@ Date.prototype.format = function() {
   function toBussiness(){
 	  var url = "";
 	  if(target==0){
-		  	url = "index_K_221.html?t="+encode64('0')+"&s=&sn=&c=&cn=";
+		  	url = "index_K_221.html?t="+encode64('0')+"&s=&sn=&c=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
 		  }else if(target==1){
 		  	url = "index_K_221.html?t="+encode64(1)+"&s=&sn=&c=cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
 		  }

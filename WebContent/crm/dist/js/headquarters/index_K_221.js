@@ -2338,9 +2338,9 @@ Date.prototype.format = function() {
 function doK_Mem(){
     var url = "";
     if(target==0){
-        url = "index_K_member.html?t="+encode64(target)+"&c=&cn=&e=";
+        url = "index_K_member.html?t="+encode64(target)+"&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_)+"&c=&cn=&e=";
     }else if(target==1){
-        url = "index_K_member.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&e=";
+        url = "index_K_member.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_)+"&cn="+encode64(cityName)+"&e=";
     }else{
         url = "index_K_member.html?t="+encode64(0);
     }
