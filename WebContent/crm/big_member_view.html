@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>合作社社员统计</title>
+  <title>大客户社员统计</title>
     <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -141,7 +141,7 @@
 					<div class="pull-left">
 						<div class="logo-lg">
 							<ul class="no-margin">
-								<li class="current"><em>合作社社员统计</em></li>
+								<li class="current"><em>大客户社员统计</em></li>
 							</ul>
 						</div>
 					</div>
@@ -159,11 +159,10 @@
 
       <section class="content-header">
         <div class="nav-tabs-custom no-margin">
-        	<div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">统计数据每10分钟更新一次</div>
-          <!--<ul class="nav nav-tabs">
-		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
-		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
-		  </ul>-->
+        	<div class="pull-right text-red" style="padding-top:10px;padding-right:10px;float: right">统计数据每10分钟更新一次</div>
+			<div class="box-header h4 text-light-blue">
+				<div class="pull-left "><strong>大客户社员统计</strong></div>
+			</div>
 		  <div class="tab-content">
 			  <div class="tab-pane active" id="tab_3">
 				  <div class="box-body">
@@ -172,13 +171,13 @@
 							  <div class="form-group col-lg-4">
 								  <label>创建时间</label>
 								  <div class="search-con">
-									  <div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:3px 15px;">
+									  <div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
 										  <div class="time_endbg" id="last_time_endbg">
 											  <p>日期选择：<span class="data_choice" id="last_data_choice">默认时期</span></p>
 											  <input type="text" class="ui-datepicker-time" id="last_date" readonly="" value="">
 										  </div>
 									  </div>
-									  <div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin: 0px 15px; display: none;">
+									  <div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin: 0px 15px 0 0; display: none;">
 										  <div class="ui-datepicker-quick" id="last-ui-datepicker-quick">
 											  <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
 											  <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name="">
@@ -207,9 +206,9 @@
 					  </div>
 
 					  <div class="clearfix">
-						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+						  <!--<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
 							  <button type="button" onclick="export_customer()" class="btn btn-block btn-warning">导出</button>
-						  </div>
+						  </div>-->
 						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
 							  <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_step_customer(1)">查询</button>
 						  </div>
@@ -223,9 +222,8 @@
 							  <table class="table table-striped">
 								  <tbody id="tradeType_tbody_customer">
 								  <tr>
-									  <th width="12%">创建时间</th>
-									  <th width="12%">大客户社员数</th>
-									  <th width="12%">累计开卡数</th>
+									  <th width="12%">新增大客户社员数</th>
+									  <th width="12%">累计大客户社员数</th>
 								  </tr>
 								  </tbody>
 							  </table>
@@ -310,7 +308,7 @@
 	var isCustomerCreatePage1=false;
 	function searchInfo_step_customer(cur_page){
 		isCustomerCreatePage1=false;
-		searchInfo_step_customer(cur_page);
+        searchInfo_customer(cur_page);
 	}
 	var currentPage_customer = 1;
 	var totalPage_customer = 1;
@@ -329,12 +327,14 @@
 			dynamicDto = {
 				beginDate:begin_end_date[0].trim(),
 				endDate:begin_end_date[1].trim(),
+                target:target,
 				searchstr:"customer"
 			}
 		}else if(target==1){//城市
 			dynamicDto = {
 				beginDate:begin_end_date[0].trim(),
 				endDate:begin_end_date[1].trim(),
+                target:target,
 				searchstr:"customer"
 			}
 		}
@@ -362,7 +362,7 @@
 
 					if(!isCustomerCreatePage1){
 						$("#page_customer").createPage({
-							pageCount:totalPage_city,
+							pageCount:totalPage_customer,
 							current:cur_page,
 							backFn:function(p){
 								searchInfo_customer(p,begin_end_date);
@@ -375,9 +375,7 @@
 					for(var i=0;i<jData.length;i++){
 						infoStr="";
 						infoStr += "<tr>"
-							+"<td>"+cityname+"</td>"
 							+"<td>"+jData[i].nowcount+"</td>"
-							+"<td>"+jData[i].count199+"</td>"
 							+"<td>"+jData[i].opencount+"</td>"
 							+"</tr>";
 

@@ -3466,12 +3466,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		List<?> list=null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
 
-		String sql="select t1.opencount,ifnull(t2.nowcount,0) as nowcount,ifnull(t3.199count,0) as count199 from ( "
-					+"select count(member.customer_id) as opencount from df_user_member member where member.opencard_time is not null"
-					+") t1 LEFT JOIN ( "
-					+"select count(member.customer_id) as nowcount from df_user_member member where "
-					+"member.create_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59') t4 "
-					+"ON (t1.regist_cityno = t2.regist_cityno))";
+		String sql="select t1.opencount,ifnull(t2.nowcount,0) as nowcount from (select count(member.customer_id) as opencount from df_user_member member where member.opencard_time is null) t1,(" +
+				"select count(member.customer_id) as nowcount from df_user_member member where member.opencard_time is null and member.create_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59') t2";
 
 
 		Query query = this.getHibernateTemplate().getSessionFactory()

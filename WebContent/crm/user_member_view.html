@@ -159,9 +159,9 @@
 
       <section class="content-header">
         <div class="nav-tabs-custom no-margin">
-        	<div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">统计数据每10分钟更新一次</div>
-			<div class="pull-right" style="padding: 0 25px;float: right">
-				<a href="big_member_view.html" class="btn btn-block btn-warning" data-toggle="tab" aria-expanded="false">大客户社员查询</a>
+        	<div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">
+				<!--<p>统计数据每10分钟更新一次</p>-->
+				<p style="margin-top: 6px;margin-right: 10px;margin-bottom: 6px;"><button onclick="customer_member()" class="btn btn-block btn-warning">大客户社员查询</button></p>
 			</div>
           <ul class="nav nav-tabs">
 		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
@@ -170,6 +170,9 @@
 
 		  </ul>
 		  <div class="tab-content">
+			  <div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">
+				  <p>统计数据每10分钟更新一次</p>
+			  </div>
 			  <div class="tab-pane active" id="tab_1">
 	          <div class="box-body">
 	          <div class="clearfix search-criteria">
@@ -275,13 +278,13 @@
 	            <div class="form-group col-lg-4">
 	              <label>开卡时间</label>
 	             	<div class="search-con">
-							<div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:3px 15px;">
+							<div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
 							    <div class="time_endbg" id="first_time_endbg">
 							        <p>日期选择：<span class="data_choice" id="first_data_choice">默认时期</span></p>
 							        <input type="text" class="ui-datepicker-time" id="first_date" readonly="" value="">
 							    </div>
 							</div>
-							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin: 0px 15px; display: none;">	
+							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin: 0px 15px 0 0; display: none;">
 							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
  							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> 
 							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name="">
@@ -360,13 +363,13 @@
 							  <div class="form-group col-lg-4">
 								  <label>创建时间</label>
 								  <div class="search-con">
-									  <div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:3px 15px;">
+									  <div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
 										  <div class="time_endbg" id="last_time_endbg">
 											  <p>日期选择：<span class="data_choice" id="last_data_choice">默认时期</span></p>
 											  <input type="text" class="ui-datepicker-time" id="last_date" readonly="" value="">
 										  </div>
 									  </div>
-									  <div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin: 0px 15px; display: none;">
+									  <div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin: 0px 15px 0 0; display: none;">
 										  <div class="ui-datepicker-quick" id="last-ui-datepicker-quick">
 											  <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
 											  <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name="">
@@ -694,7 +697,7 @@
 var isCustomerCreatePage1=false;
 function searchInfo_step_customer(cur_page){
     isCustomerCreatePage1=false;
-    searchInfo_step_customer(cur_page);
+    searchInfo_customer(cur_page);
 }
     
     var currentPage_city = 1;
@@ -1247,6 +1250,10 @@ function resetSerachParam(){
 
 }
 
+function customer_member(){
+    var URL="big_member_view.html?"+"t="+encode64(target);
+    window.open(URL,"_self");
+}
 </script>
 
 </body>
