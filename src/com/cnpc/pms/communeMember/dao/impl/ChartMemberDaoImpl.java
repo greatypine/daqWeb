@@ -93,7 +93,7 @@ public class ChartMemberDaoImpl extends BaseDAOHibernate implements ChartMemberD
 		}
 		sql = sql + " GROUP BY DATE_FORMAT(dom.sign_time,'%H') ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		// 获得查询数据
+		// 获得 查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 	}
