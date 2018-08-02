@@ -166,12 +166,12 @@
           <ul class="nav nav-tabs">
 		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
 		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
-			  		  <li class="" id="tab_3_avtive"><a href="#tab_3" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>
+			  		  <!--<li class="" id="tab_3_avtive"><a href="#tab_3" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>-->
 
 		  </ul>
 		  <div class="tab-content">
-			  <div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">
-				  <p>统计数据每10分钟更新一次</p>
+			  <div class="col-sm-12 text-right text-red no-padding" style="padding-left:15px;font-size:75%;float: right">
+				  <p >统计数据每10分钟更新一次</p>
 			  </div>
 			  <div class="tab-pane active" id="tab_1">
 	          <div class="box-body">
@@ -1252,7 +1252,7 @@ function resetSerachParam(){
 
 function customer_member(){
     var URL="big_member_view.html?"+"t="+encode64(target);
-    window.open(URL,"_self");
+    window.open(URL,"big_member");
 }
 </script>
 
