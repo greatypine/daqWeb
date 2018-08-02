@@ -610,7 +610,7 @@
 		var store_name = params.data[2]
 		var storeNo = params.data[3];
 		var store_no = params.data[3];
-		initStoreCompleteInfo(storeNo);
+		searchStoreInfo(storeNo);
 		var url = "";
 		if(target==0){
 			  	url = "index_K_221.html?t="+encode64(0)+"&s=&sn=&c=&so="+encode64(store_no)+"&ordertype="+encode64(0)+"&store_name="+encode64(store_name);
@@ -658,8 +658,8 @@
 					document.getElementById("store_id_manual").value=storeJson[key];
 				}
 			}
-			var storeNo = $("#store_id_manual").val(); 
-			initStoreCompleteInfo(storeNo);
+			var storeNo = $("#store_id_manual").val();
+            searchStoreInfo(storeNo);
 		});
 		
 	});
@@ -737,9 +737,10 @@
 		  $("#yestodayAvgGmv").html(changeMoney(((parseInt(yestoday_yyGMV)+parseInt(yestoday_jwsGMV)+parseInt(yestoday_grouponGMV))/96).toFixed(2)));
 		  
 	}
-	
-	function initStoreCompleteInfo(store_no){
-		  doManager("strategyActivityManager","queryStoreCompleteInfo",[store_no],
+
+	var storeDataList = [];
+	function initStoreCompleteInfo(){
+		  doManager("strategyActivityManager","queryStoreCompleteInfo",[null],
 			function(datax,textStatus,XmlHttpRequest){
 				if (datax.result) {
 					var jsonData = $.fromJSON(datax.data);
@@ -747,7 +748,8 @@
 						$("#image-galle").find("li").remove(); 
 						var infoStr="";
 						for(var i=0;i<jsonData.length;i++){
-							infoStr=infoStr+ '<li data-thumb="img/thumb/cS-1.jpg" id="store_info">';
+                            storeDataList.push(jsonData[i].store_no);
+							infoStr=infoStr+ '<li data-thumb="img/thumb/cS-1.jpg" id=\"'+jsonData[i].store_no+'\">';
 							infoStr=infoStr+'<h4 onclick="javascript:goTo221Kline(\''+jsonData[i].store_no+'\',\''+0+'\',\''+jsonData[i].store_name+'\')">'+jsonData[i].store_name+'<span class="pull-right">店长：'+jsonData[i].store_user+'</span></h4>';
 							infoStr=infoStr+'<div class="col-sm-12">';
 							infoStr=infoStr+'<div class="col-sm-6 no-padding"><i class="fa fa-cube"></i>昨日GMV：<span>￥'+(jsonData[i].pro_total_gmv+jsonData[i].ser_total_gmv+jsonData[i].gro_total_gmv).toFixed(2)+'</span></div>';
@@ -768,7 +770,19 @@
 		},false);
 		loadingsize();
 	}
-	
+
+	//显示当前搜索门店信息
+	function searchStoreInfo(store_no){
+        var indexTemp = jQuery.inArray(store_no,storeDataList);
+        var storeposition = 530*indexTemp;
+        var storeinfo = document.getElementById("image-galle");
+        storeinfo.style.transform = 'translate3d(-'+storeposition+'px, 0px, 0px)';
+        var info = $("#image-galle").find("li.active");
+        info.removeClass("active");
+        var storeli = document.getElementById(store_no);
+        $('#'+store_no).addClass("active");
+    }
+
 	function loadingsize(){
 		var storeinfo=document.getElementById('image-galle');
 		storeinfo.style.width='530px';
