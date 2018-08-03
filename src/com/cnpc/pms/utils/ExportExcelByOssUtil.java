@@ -134,6 +134,7 @@ public class ExportExcelByOssUtil {
         FileOutputStream os = null;
         try {
             File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_"+fileName_part+".xls");
+            System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<"+file_xls.getPath()+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             if(file_xls.exists()){
                 file_xls.delete();
             }
