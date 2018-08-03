@@ -10,6 +10,7 @@ public class ObserveDTO {
     private String point_deduction_standard;
     private String check_details_id;
     private String id;
+    private String model_name;
 
     public String getCheck_item_id() {
         return check_item_id;
@@ -57,5 +58,13 @@ public class ObserveDTO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getModel_name() {
+        return model_name;
+    }
+
+    public void setModel_name(String model_name) {
+        this.model_name = model_name;
     }
 }
