@@ -616,8 +616,9 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 					if(addAll2_key[cellIndex].equals("a1_1")){
 						z = cellIndex;
 					}
+					Object a  = storeInfoList1.get(i-1).get(addAll2_key[cellIndex]);
 					if(cellIndex >=z){
-						setCellValue(row, cellIndex, storeInfoList1.get(i-1).get(addAll2_key[cellIndex]) == "" ? "" : "1");
+						setCellValue(row, cellIndex, storeInfoList1.get(i-1).get(addAll2_key[cellIndex]) == null ? "" : "1");
 					}else{
 						setCellValue(row, cellIndex, storeInfoList1.get(i-1).get(addAll2_key[cellIndex]));
 					}
