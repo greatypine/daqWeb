@@ -9,8 +9,55 @@ public class ObserveDTO {
     private String observe_content;
     private String point_deduction_standard;
     private String check_details_id;
-    private String id;
     private String model_name;
+
+    /** 功能节点主键. */
+    private Long id;
+
+    /** 功能节点名称,用于列表查询. */
+    private String activityName;
+
+    /** 功能节点名称,用于显示功能菜单树. */
+    private String name;
+
+    /** url显示位置. */
+    private String target = "appFrame";
+
+    /** 功能节点编码 与I2的activityID对应的字段. */
+    private String activityCode;
+
+    /** 功能节点的父节点编码. */
+    private Long parentCode;
+
+    /** 功能节点所属模块 module=1 招标模块 module=2 专家模块. */
+    private String module;
+
+    /**
+     * 功能节点权限控制类型 功能树的目录节点 功能树的非目录节点 默认的功能节点 功能权限的菜单组 type=0 查看权限的功能节点 type=1
+     * 修改权限的功能节点.
+     */
+    private int type;
+
+    /** 功能节点权限控制扩展. */
+    private String typeExt;
+
+    /** 功能节点实际跳转路径. */
+    private String url;
+
+    /** 功能节点图标. */
+    private String icon;
+
+    /** The checked. */
+    private boolean checked;
+    /** The version. */
+    private Long version;
+    /** 备注 */
+    private String remark;
+    /** The is parent. */
+    public boolean isParent;
+
+    /** 排序字段. */
+    private Integer orderNo;
 
     public String getCheck_item_id() {
         return check_item_id;
@@ -52,19 +99,139 @@ public class ObserveDTO {
         this.check_details_id = check_details_id;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getModel_name() {
         return model_name;
     }
 
     public void setModel_name(String model_name) {
         this.model_name = model_name;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getActivityCode() {
+        return activityCode;
+    }
+
+    public void setActivityCode(String activityCode) {
+        this.activityCode = activityCode;
+    }
+
+    public Long getParentCode() {
+        return parentCode;
+    }
+
+    public void setParentCode(Long parentCode) {
+        this.parentCode = parentCode;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getTypeExt() {
+        return typeExt;
+    }
+
+    public void setTypeExt(String typeExt) {
+        this.typeExt = typeExt;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public boolean isParent() {
+        return isParent;
+    }
+
+    public void setParent(boolean parent) {
+        isParent = parent;
+    }
+
+    public Integer getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(Integer orderNo) {
+        this.orderNo = orderNo;
     }
 }
