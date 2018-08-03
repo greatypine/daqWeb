@@ -209,16 +209,17 @@
               <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                 <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
               </div>
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+                    <button type="button" style="display:none" id="export_auto_abnormalOrder_button" onclick="export_auto_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
+                </div>
+                <div class=" col-lg-2 pull-right" style="padding-top: 25px;display: none">
+                    <button type="button" style="display:none" id="uploadButton_auto" onclick="showUploadWindow(1)" class="btn btn-block btn-danger">导入</button>
+                </div>
               <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                 <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
               </div>
               
-              <div class="col-lg-2 pull-right" style="padding-top: 25px;">
-                <button type="button" style="display:none" id="export_auto_abnormalOrder_button" onclick="export_auto_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
-              </div>
-				<div class=" col-lg-2 pull-right" style="padding-top: 25px;">
-                <button type="button" style="display:none" id="uploadButton_auto" onclick="showUploadWindow(1)" class="btn btn-block btn-danger">导入</button>
-              </div>
+
 
 
             </div>
@@ -348,16 +349,17 @@
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                     <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
                 </div>
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
+                    <button type="button" style="display:none" id="export_manual_abnormalOrder_button" onclick="export_manual_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
+                </div>
+                <div class=" col-lg-2 pull-right" style="padding-top: 25px;display: none">
+                    <button type="button" style="display:none" id="uploadButton_manual" onclick="showUploadWindow(2)" class="btn btn-block btn-danger">导入</button>
+                </div>
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                     <button type="button" onclick="search_manual_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
                 </div>
                 
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;">
-                    <button type="button" style="display:none" id="export_manual_abnormalOrder_button" onclick="export_manual_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
-                </div>
-				<div class=" col-lg-2 pull-right" style="padding-top: 25px;">
-                    <button type="button" style="display:none" id="uploadButton_manual" onclick="showUploadWindow(2)" class="btn btn-block btn-danger">导入</button>
-                </div>
+
             </div>
           </div>
           <div class="box-body">
@@ -509,13 +511,15 @@ Date.prototype.format=function(fmt) {
     	$("#manualcity").show();
     	$("#autocity").show();
     	$("#export_auto_abnormalOrder_button").show();
+        $("#export_auto_abnormalOrder_button").parent("div").show();
     	$("#export_manual_abnormalOrder_button").show();
     	if(role=="PTYYZXYCDDZ"){//异常订单角色组
     		$("#all_pass_can_appeal").show();
     		$("#all_pass_cannot_appeal").show();
         	$("#uploadButton_auto").show();
         	$("#uploadButton_manual").show();
-        	
+            $("#uploadButton_auto").parent().show();
+            $("#uploadButton_manual").parent().show();
         	$("#downOrdersButton").show();
         	$("#eshopPurchaseButton").show();
     		$("#export_auto_abnormalOrder_button").show();
@@ -535,7 +539,8 @@ Date.prototype.format=function(fmt) {
     		$("#all_pass_cannot_appeal").show();
         	$("#uploadButton_auto").show();
         	$("#uploadButton_manual").show();
-        	
+            $("#uploadButton_auto").parent().show();
+            $("#uploadButton_manual").parent().show();
         	$("#downOrdersButton").show();
         	$("#eshopPurchaseButton").show();
     		$("#export_auto_abnormalOrder_button").show();
@@ -566,7 +571,8 @@ Date.prototype.format=function(fmt) {
     	$("#city_name_manualOrder").val("");
     	$("#city_id_autoOrder").val("");
     	$("#city_name_autoOrder").val("");
-
+        $("#export_auto_abnormalOrder_button").parent().hide();
+        $("#export_manual_abnormalOrder_button").parent().hide();
         initStore();
 
     }else if(target==3){//事业群级别

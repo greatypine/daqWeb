@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -411,53 +412,11 @@ public class DsAbnormalOrderManagerImpl extends BizBaseCommonManager implements 
 
 		if(list!=null&&list.size()>0){//成功返回数据
 
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-	        setCellStyle_common(wb);
-	        setHeaderStyle(wb);
-	        HSSFSheet sheet = wb.createSheet("异常订单基础数据");
-	        HSSFRow row = sheet.createRow(0);
 	        String[] str_headers = {"城市","门店编号","门店名称","E店名称","事业部","频道","订单签收日期","订单号","订单金额","应付金额","异常类型"};
 	        String[] headers_key = {"cityname","storeno","storename","eshopname","deptname","channelname","signedtime","ordersn","tradingprice","payableprice","description"};
-	        for(int i = 0;i < str_headers.length;i++){
-	            HSSFCell cell = row.createCell(i);
-	            cell.setCellStyle(getHeaderStyle());
-	            cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-	        }
-	        
-	        for(int i = 0;i < list.size();i++){
-	        	 row = sheet.createRow(i+1);
-	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-	                 setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-	             }
-	        }
-
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_base_abnormalorder.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("异常订单基础数据",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");

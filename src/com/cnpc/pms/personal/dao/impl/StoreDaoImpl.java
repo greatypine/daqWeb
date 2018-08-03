@@ -436,7 +436,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			}
 			if (employeeId != null && !"".equals(employeeId)) {
 				searchSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc "
-						+ "   INNER JOIN t_dist_city a on a.citycode = tdc.citycode and a.pk_userid=" + employeeId
+						+ "   INNER JOIN t_dist_city a on a.citycode = tdc.citycode and a.pk_userid=" + employeeId+" where tdc.status=0 "
 						+ cityStr + ") t1"
 						+ "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(estate,'')!='闭店中' " + storeStr
 						+ " limit 10";

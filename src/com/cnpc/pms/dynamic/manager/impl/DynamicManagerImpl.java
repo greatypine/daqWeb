@@ -27,6 +27,8 @@ import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
 import com.cnpc.pms.personal.entity.*;
 import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.slice.manager.AreaManager;
+import com.cnpc.pms.utils.ExportExcelByOssUtil;
+import net.sf.json.JsonConfig;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -1179,56 +1181,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
-
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("门店GMV");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店名称","门店编号","绩效GMV"};
 			String[] headers_key = {"city_name","store_name","storeno","pesgmv"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_storetrade.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("门店GMV",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -1490,58 +1446,16 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryRewardTimes(dynamicDto, null);
 		if("2000000".equals(map.get("code"))){//成功返回数据
+
 			JSONObject jObject = new JSONObject(map.get("data").toString());
-			JSONArray storeTrade = jObject.getJSONArray("data");
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
+			Map<String,Object> element = new HashMap<String,Object>();
+			net.sf.json.JSONArray ja = net.sf.json.JSONArray.fromObject(jObject.get("data").toString());
+			List<Map<String,Object>> list = net.sf.json.JSONArray.toList(ja,element,new JsonConfig());
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("国安侠好评次数");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店","国安侠","客户ID","订单编号","打赏次数"};
 			String[] headers_key = {"cityname","storename","employeename","cusid","ordersn","dashang"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i < storeTrade.length();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, storeTrade.getJSONObject(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_rewardtimes.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠好评次数",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -1880,56 +1794,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("门店用户");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店名称","门店编号","拉新用户超10元","消费用户","消费用户超10元"};
 			String[] headers_key = {"cityname","storename","storeno","new_cusnum_ten","cusnum","cusnum_ten"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i <list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_store_newaddcus.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("门店用户",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -2214,9 +2083,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
             param.put("app_key", "1002");
             //String time = DateUtil2.curDate();
 			String yearmonth = this.getCurDate();
-            param.put("yearmonth", yearmonth);
-            param.put("year", String.valueOf(calendar.get(Calendar.YEAR)));
-            param.put("month",String.valueOf(calendar.get(Calendar.MONTH)+1));
+            param.put("yearmonth",yearmonth);
+			param.put("year", String.valueOf(calendar.get(Calendar.YEAR)));
+			param.put("month",String.valueOf(calendar.get(Calendar.MONTH)+1));
             param.put("stamp",System.currentTimeMillis());
             param.put("nonce",UUID.randomUUID().toString());
             param.put("grade", "2");
@@ -2317,53 +2186,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 		if(list!=null&&list.size()>0){//成功返回数据
 
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-	        setCellStyle_common(wb);
-	        setHeaderStyle(wb);
-	        HSSFSheet sheet = wb.createSheet("异常订单");
-	        HSSFRow row = sheet.createRow(0);
 	        String[] str_headers = {"状态","城市","门店编号","门店名称","E店名称","事业部","频道","订单签收日期","订单号","订单金额","应付金额","有效金额","异常类型"};
 	        String[] headers_key = {"state","cityname","storeno","storename","eshopname","deptname","channelname","signedtime","ordersn","tradingprice","payableprice","gmv_price","description"};
-	        for(int i = 0;i < str_headers.length;i++){
-	            HSSFCell cell = row.createCell(i);
-	            cell.setCellStyle(getHeaderStyle());
-	            cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-	        }
-	        
-	        for(int i = 0;i < list.size();i++){
-	        	 row = sheet.createRow(i+1);
-	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-	                 setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-	             }
-	        }
-
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_abnormalorder.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("异常订单",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -3628,49 +3455,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("国安侠GMV");
-			HSSFRow row = sheet.createRow(0);
+
 			String[] str_headers = {"城市","门店名称","门店编码","员工姓名","员工编号","绩效GMV","片区GMV","手动分配GMV","人均分配GMV"};
 			String[] headers_key = {"city_name","store_name","storeno","employee_name","employee_no","pesgmv","pes_areagmv","pes_assigngmv","pes_pergmv"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"areaGMV.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠GMV",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -3695,49 +3484,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("国安侠用户");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店名称","门店编号","员工姓名","员工编号","拉新用户超10元","消费用户","消费用户超10元"};
 			String[] headers_key = {"cityname","storename","storeno","name","employeeno","new_cusnum_ten","cusnum","cusnum_ten"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-			for(int i = 0;i <list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"employee_newAddCus.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠用户",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -6104,56 +5854,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("国安侠送单");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店名称","门店编号","员工姓名","员工编号","事业部","频道","送单量"};
 			String[] headers_key = {"cityname","storename","storeno","username","employee_no","deptname","channelname","total"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_department_gmv.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠送单量",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -6242,56 +5947,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("事业群GMV");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店编号","门店名称","事业群","绩效GMV"};
 			String[] headers_key = {"cityname","storeno","storename","deptname","pesgmv"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_department_gmv.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群GMV",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -6314,56 +5974,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("事业群用户");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店编号","门店名称","事业群","消费用户","消费用户超10元"};
 			String[] headers_key = {"cityname","storeno","storename","deptname","cusnum","cusnum_ten"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_department_consumer.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群用户",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -6855,57 +6470,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("城市会员");
-			HSSFRow row = sheet.createRow(0);
-			
 			String[] str_headers = {"员工编号","员工姓名","城市","门店","邀请码","邀请人数"};
 			String[] headers_key = {"employee_no","name","city_name","storename","inviteCode","total"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_member_invitation.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("社员邀请",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
