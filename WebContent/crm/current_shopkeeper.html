@@ -195,6 +195,8 @@
                                     </dl>
                                     <dl class="pull-left">
                                         <dt><i></i>档案数据</dt>
+                                        <dd style="position:relative"><a href="javascript:goToMemberDataStat()"><span class="fa fa-vimeo"></span>社员档案 </a>
+                                        <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
                                         <dd><a href="javascript:goToUserProfileStat()"><span class="fa fa-user"></span>用户档案</a></dd>
                                         <dd><a href="javascript:searchData()"><span class="fa fa-file-o"></span>订单档案</a></dd>
                                         <dd><a href="javascript:searchArea()"><span class="fa fa-copy"></span>片区档案</a></dd>
@@ -1925,7 +1927,13 @@ function initStoreHistoryGMV(){
 		  var url = "humanresources_list.html?t="+encode64(2)+"&e="+encode64(EMPLOYEE_ID)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName);
 		  window.open(url,"searchEmployeeData_view");
 	} */
-	
+
+    //社员档案
+    function goToMemberDataStat(){
+        var url = "memberData_list.html?t="+encode64(2)+"&s="+encode64(currentStore.store_id)+"&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName)+"&e=&r=&#ff";
+        window.open(url,"memberData_list");
+    }
+
 	//用户档案
 	function goToUserProfileStat(){
 		 var url = "userProfile_view.html?t="+encode64(2)+"&s=&sn="+encode64(currentStore.name)+"&c=&cn="+encode64(currentStore.cityName)+"&so="+encode64(currentStore.storeno)+"&e=&r=&#ff";
