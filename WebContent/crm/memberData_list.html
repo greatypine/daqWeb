@@ -559,9 +559,14 @@
                             opencard=d.format('yyyy-MM-dd HH:mm:ss')
                         }
 
+                        var mobilephone = jData[i].mobilephone;
+                        var cphone="<strong>手机号：</strong>"+mobilephone+"<br>";
+                        var phonecontent =cphone+"@phonetips"+i;
+                        var phoneid = "phonetips"+i;
+
                         infoStr= "<tr>";
                         infoStr= infoStr
-                            +"<td>"+jData[i].mobilephone+"</td>"
+                            +"<td><a href=\"#\" onmouseover=\"showphone('"+phonecontent+"');\" id=\""+phoneid+"\">"+mobilephone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')+"</a></td>"
                             +"<td>"+regist+"</td>"
                             +"<td>"+opencard+"</a></td>"
                             +"<td>"+jData[i].inviteCode+"</td>"
@@ -584,6 +589,16 @@
             $("#process_div_pic").hide();
         });
 
+    }
+
+    //社员手机号信息显示
+    function showphone(obj){
+        var msg = obj.split("@")[0];
+        var id = obj.split("@")[1];
+        layer.tips(msg, '#'+id, {
+            tips: [4, '#0FA6D8'], //还可配置颜色
+            time:5000
+        });
     }
 
     function isnull(str) {
