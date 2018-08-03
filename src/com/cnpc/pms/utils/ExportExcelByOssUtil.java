@@ -1,5 +1,6 @@
 package com.cnpc.pms.utils;
 
+import com.cnpc.pms.base.common.manager.UtilityManager;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
@@ -95,9 +96,9 @@ public class ExportExcelByOssUtil {
     public Map<String,Object> exportFile(){
         Map<String,Object> result = new HashMap<String,Object>();
         OssRefFileManager ossRefFileManager  = (OssRefFileManager)SpringHelper.getBean("ossRefFileManager");
-
-        String str_file_dir_path = this.getClass().getClassLoader().getResource("").getPath()+ File.separator + UPLOAD_DIRECTORY;
-
+        UtilityManager utilityManager = (UtilityManager)SpringHelper.getBean("utilityManager");
+        String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+ File.separator + UPLOAD_DIRECTORY;
+        String fileName_part = utilityManager.getPYIndexStr(sheetName,true);
         // 如果目录不存在则创建
         File uploadDir = new File(str_file_dir_path);
         if (!uploadDir.exists()) {
@@ -132,7 +133,7 @@ public class ExportExcelByOssUtil {
 
         FileOutputStream os = null;
         try {
-            File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_"+new String(sheetName.getBytes(),"iso-8859-1")+".xls");
+            File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_"+fileName_part+".xls");
             if(file_xls.exists()){
                 file_xls.delete();
             }
