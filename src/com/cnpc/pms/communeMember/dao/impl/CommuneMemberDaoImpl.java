@@ -1,20 +1,17 @@
 package com.cnpc.pms.communeMember.dao.impl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
+import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.communeMember.dao.CommuneMemberDao;
+import com.cnpc.pms.platform.entity.MemberDataDto;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.transform.Transformers;
 
-import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
-import com.cnpc.pms.communeMember.dao.CommuneMemberDao;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author wuxinxin
@@ -1463,5 +1460,153 @@ public List<Map<String, Object>> getMembersArea(String dd) {
         return null;
 	}
 
+	@Override
+	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo){
+		String sql = "select dum.mobilephone,dum.regist_time,dum.opencard_time,dum.inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum,t_humanresources th  where dum.inviteCode=th.inviteCode ";
+
+		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
+			sql = sql + " AND th.store_id=CAST('"+memberDataDto.getStoreNo()+"' as SIGNED) ";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
+			sql = sql + " AND th.citySelect='"+memberDataDto.getCityName()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getMemberName())){
+			sql = sql + " AND th.name='"+memberDataDto.getMemberName()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getMemberNo())){
+			sql = sql + " AND th.employee_no='"+memberDataDto.getMemberNo()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getMemberPhone())){
+			sql = sql + " AND th.phone='"+memberDataDto.getMemberPhone()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
+			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+		}
+
+		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
+
+		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+		Object total = query_count.uniqueResult();
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+
+		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+		int recordsPerPage = pageInfo.getRecordsPerPage();
+		sql = sql + " LIMIT " + startData + "," + recordsPerPage;
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		if (list != null && list.size() > 0) {
+			for (Map map : list) {
+				String cityNo = (String) map.get("regist_cityno");
+				if (StringUtils.isNotEmpty(cityNo)) {
+					Map result = this.queryCitynameByNo(cityNo);
+					if(result!=null){
+						map.put("city_name", result.get("cityname"));
+					}else{
+						map.put("city_name", "");
+					}
+				}
+				String storeId = (String) map.get("regist_storeid");
+				if (StringUtils.isNotEmpty(storeId)) {
+					Map result = this.queryStorenameById(storeId);
+					if(result!=null){
+						map.put("store_name", result.get("storename"));
+					}else{
+						map.put("store_name", "");
+					}
+				}
+			}
+		}
+
+		Map<String,Object> map_result = new HashMap<String,Object>();
+		Integer total_pages = (pageInfo.getTotalRecords()-1)/pageInfo.getRecordsPerPage()+1;
+		map_result.put("pageinfo",pageInfo);
+		map_result.put("data", list);
+		map_result.put("total_pages", total_pages);
+		return map_result;
+	}
+
+	public List<Map<String, Object>> exportMemeData(MemberDataDto memberDataDto){
+		String sql = "select dum.mobilephone,dum.regist_time,dum.opencard_time,,dum.inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum,t_humanresources th  where dum.inviteCode=th.inviteCode ";
+
+		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
+			sql = sql + " AND th.store_id=CAST('"+memberDataDto.getStoreNo()+"' as SIGNED) ";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
+			sql = sql + " AND th.citySelect='"+memberDataDto.getCityName()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getMemberName())){
+			sql = sql + " AND th.name='"+memberDataDto.getMemberName()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getMemberNo())){
+			sql = sql + " AND th.employee_no='"+memberDataDto.getMemberNo()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getMemberPhone())){
+			sql = sql + " AND th.phone='"+memberDataDto.getMemberPhone()+"'";
+		}
+		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
+			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+		}
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		if (list != null && list.size() > 0) {
+			for (Map map : list) {
+				String cityNo = (String) map.get("regist_cityno");
+				if (StringUtils.isNotEmpty(cityNo)) {
+					Map result = this.queryCitynameByNo(cityNo);
+					if(result!=null){
+						map.put("city_name", result.get("cityname"));
+					}else{
+						map.put("city_name", "");
+					}
+				}
+				String storeId = (String) map.get("regist_storeid");
+				if (StringUtils.isNotEmpty(storeId)) {
+					Map result = this.queryStorenameById(storeId);
+					if(result!=null){
+						map.put("store_name", result.get("storename"));
+					}else{
+						map.put("store_name", "");
+					}
+				}
+			}
+		}
+
+		return list;
+	}
+
+	public Map<String, Object> queryCitynameByNo(String cityno){
+		String sql = "select cityname from t_dist_citycode where 1=1 ";
+		if(StringUtils.isNotEmpty(cityno)){
+			sql = sql + " AND CAST(cityno as SIGNED) =CAST('"+cityno+"' as SIGNED) ";
+		}
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		Map<String, Object> order_obj = null;
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if (lst_data != null && lst_data.size() > 0) {
+			order_obj = (Map<String, Object>) lst_data.get(0);
+		}
+		return order_obj;
+	}
+
+	public Map<String, Object> queryStorenameById(String storeId){
+		String sql = "select name as storename from t_store where 1=1 ";
+		if(StringUtils.isNotEmpty(storeId)){
+			sql = sql + " AND platformid = '"+storeId+"'";
+		}
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		Map<String, Object> order_obj = null;
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if (lst_data != null && lst_data.size() > 0) {
+			order_obj = (Map<String, Object>) lst_data.get(0);
+		}
+		return order_obj;
+	}
 
 }

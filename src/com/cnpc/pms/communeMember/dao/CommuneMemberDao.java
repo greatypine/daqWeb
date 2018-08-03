@@ -1,10 +1,12 @@
 
 package com.cnpc.pms.communeMember.dao;
 
+import com.cnpc.pms.base.dao.IDAO;
+import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.platform.entity.MemberDataDto;
+
 import java.util.List;
 import java.util.Map;
-
-import com.cnpc.pms.base.dao.IDAO;
 
 /**
  * 社员操作dao
@@ -353,6 +355,16 @@ public interface CommuneMemberDao extends IDAO {
      */
     public List<Map<String, Object>> getBigByDayCount(String dd);
 
+	/**
+	 * TODO 查询社员档案列表数据
+	 * @author chenchuang
+	 */
+	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo);
 
+	/**
+	 * TODO 社员档案导出
+	 * @author chenchuang
+	 */
+	public List<Map<String, Object>> exportMemeData(MemberDataDto memberDataDto);
 
 }
