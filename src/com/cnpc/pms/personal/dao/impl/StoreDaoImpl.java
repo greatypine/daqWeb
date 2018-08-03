@@ -273,7 +273,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "   INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id";
 		} else {
 			sql = "select tbu.name as keeperName,tbu.employeeId,tbu.mobilephone,tbu.id from (select distinct skid from t_store t  inner join  (select tdc.id,tdc.cityname from "
-					+ "    t_dist_citycode tdc where tdc.id=" + cityId + ") t1" + "	on t.city_name  = t1.cityname ) t2"
+					+ "    t_dist_citycode tdc where  tdc.status=0 " + whereStr + ") t1" + "	on t.city_name  = t1.cityname ) t2"
 					+ "   INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id";
 		}
 
@@ -303,7 +303,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中' and storetype!='V') t  inner join  (select tdc.id,tdc.cityname from "
 						+
 
-						"   t_dist_citycode tdc where tdc.id=" + cityId + " ) t1" + "	on t.city_name  = t1.cityname "
+						"   t_dist_citycode tdc  where tdc.status=0  " + cityStr + " ) t1" + "	on t.city_name  = t1.cityname "
 						+ "   left join tb_bizbase_user as tbu on t.skid = tbu.id order by convert(t.name using gbk) asc";
 			}
 
@@ -441,8 +441,8 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 						+ "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(estate,'')!='闭店中' " + storeStr
 						+ " limit 10";
 			} else {
-				searchSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc "
-						+ "   where tdc.id=" + cityId + ") t1"
+				searchSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc where tdc.status=0 "
+						+ cityStr + ") t1"
 						+ "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(t.estate,'')!='闭店中' " + storeStr
 						+ " limit 10";
 			}
