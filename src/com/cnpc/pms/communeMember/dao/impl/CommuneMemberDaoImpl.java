@@ -1462,25 +1462,30 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 
 	@Override
 	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo){
-		String sql = "select dum.mobilephone,dum.regist_time,dum.opencard_time,dum.inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum,t_humanresources th  where dum.inviteCode=th.inviteCode ";
+		String sql = "select dum.mobilephone,dum.regist_time,dum.opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
 
-		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
-			sql = sql + " AND th.store_id=CAST('"+memberDataDto.getStoreNo()+"' as SIGNED) ";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
-			sql = sql + " AND th.citySelect='"+memberDataDto.getCityName()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getMemberName())){
-			sql = sql + " AND th.name='"+memberDataDto.getMemberName()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getMemberNo())){
-			sql = sql + " AND th.employee_no='"+memberDataDto.getMemberNo()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getMemberPhone())){
-			sql = sql + " AND th.phone='"+memberDataDto.getMemberPhone()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
-			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo()) || StringUtils.isNotEmpty(memberDataDto.getCityName()) || StringUtils.isNotEmpty(memberDataDto.getMemberName())
+			|| StringUtils.isNotEmpty(memberDataDto.getMemberNo()) || StringUtils.isNotEmpty(memberDataDto.getMemberPhone()) || StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
+			sql = sql + " AND dum.inviteCode IN (select inviteCode from t_humanresources th where 1=1 ";
+			if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
+				sql = sql + " AND th.store_id=CAST('"+memberDataDto.getStoreNo()+"' as SIGNED) ";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
+				sql = sql + " AND th.citySelect='"+memberDataDto.getCityName()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getMemberName())){
+				sql = sql + " AND th.name='"+memberDataDto.getMemberName()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getMemberNo())){
+				sql = sql + " AND th.employee_no='"+memberDataDto.getMemberNo()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getMemberPhone())){
+				sql = sql + " AND th.phone='"+memberDataDto.getMemberPhone()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
+				sql = sql + " AND th.inviteCode='"+memberDataDto.getInviteCode()+"'";
+			}
+			sql = sql +")";
 		}
 
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
@@ -1529,25 +1534,30 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	}
 
 	public List<Map<String, Object>> exportMemeData(MemberDataDto memberDataDto){
-		String sql = "select dum.mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,dum.inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum,t_humanresources th  where dum.inviteCode=th.inviteCode ";
+		String sql = "select IFNULL(INSERT(dum.mobilephone,4,4,'****'),'') as mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
 
-		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
-			sql = sql + " AND th.store_id=CAST('"+memberDataDto.getStoreNo()+"' as SIGNED) ";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
-			sql = sql + " AND th.citySelect='"+memberDataDto.getCityName()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getMemberName())){
-			sql = sql + " AND th.name='"+memberDataDto.getMemberName()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getMemberNo())){
-			sql = sql + " AND th.employee_no='"+memberDataDto.getMemberNo()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getMemberPhone())){
-			sql = sql + " AND th.phone='"+memberDataDto.getMemberPhone()+"'";
-		}
-		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
-			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo()) || StringUtils.isNotEmpty(memberDataDto.getCityName()) || StringUtils.isNotEmpty(memberDataDto.getMemberName())
+				|| StringUtils.isNotEmpty(memberDataDto.getMemberNo()) || StringUtils.isNotEmpty(memberDataDto.getMemberPhone()) || StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
+			sql = sql + " AND dum.inviteCode IN (select inviteCode from t_humanresources th where 1=1 ";
+			if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
+				sql = sql + " AND th.store_id=CAST('"+memberDataDto.getStoreNo()+"' as SIGNED) ";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getCityName())){
+				sql = sql + " AND th.citySelect='"+memberDataDto.getCityName()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getMemberName())){
+				sql = sql + " AND th.name='"+memberDataDto.getMemberName()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getMemberNo())){
+				sql = sql + " AND th.employee_no='"+memberDataDto.getMemberNo()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getMemberPhone())){
+				sql = sql + " AND th.phone='"+memberDataDto.getMemberPhone()+"'";
+			}
+			if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
+				sql = sql + " AND th.inviteCode='"+memberDataDto.getInviteCode()+"'";
+			}
+			sql = sql +")";
 		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
