@@ -609,11 +609,18 @@ public class ObserveParameterManagerImpl  extends BizBaseCommonManager implement
 				cell.setCellStyle(getHeaderStyle());
 				cell.setCellValue(new HSSFRichTextString(addAll2[i]));
 			}
-			
+			int z = addAll2_key.length;
 			for(int i = 1;i <= storeInfoList1.size();i++){
 				row = sheet.createRow(i+1);
 				for(int cellIndex = 0;cellIndex < addAll2_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, storeInfoList1.get(i-1).get(addAll2_key[cellIndex]));
+					if(addAll2_key[cellIndex].equals("a1_1")){
+						z = cellIndex;
+					}
+					if(cellIndex >=z){
+						setCellValue(row, cellIndex, storeInfoList1.get(i-1).get(addAll2_key[cellIndex]) == "" ? "" : "1");
+					}else{
+						setCellValue(row, cellIndex, storeInfoList1.get(i-1).get(addAll2_key[cellIndex]));
+					}
 				}
 			}
 
