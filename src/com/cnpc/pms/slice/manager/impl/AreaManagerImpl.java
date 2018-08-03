@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -440,8 +441,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 
 	@Override
 	public String exportAreaInfo(AreaDto areaDto) throws Exception {
-		String str_file_dir_path = PropertiesUtil.getValue("file.root");
-		String str_web_path = PropertiesUtil.getValue("file.web.root");
+
 		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
 		StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
 		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
@@ -501,44 +501,11 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			e.printStackTrace();
 		}
 
-		HSSFWorkbook wb = new HSSFWorkbook();
-		// 创建Excel的工作sheet,对应到一个excel文档的tab
 
-		setCellStyle_common(wb);
-		setHeaderStyle(wb);
-		HSSFSheet sheet = wb.createSheet("门店划片信息");
-		HSSFRow row = sheet.createRow(0);
 		String[] str_headers = { "城市", "门店编号", "门店名称", "片区名称", "片区编号", "街道", "社区", "小区", "A国安侠", "B国安侠" };
-		for (int i = 0; i < str_headers.length; i++) {
-			HSSFCell cell = row.createCell(i);
-			cell.setCellStyle(getHeaderStyle());
-			cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-		}
-
-		int index = 1;
-
-		for (Map<String, Object> map_row : list) {
-			HSSFRow row_data = sheet.createRow(index);
-			for (int cellIndex = 0; cellIndex < str_headers.length; cellIndex++) {
-				setCellValue(row_data, cellIndex, map_row.get(str_headers[cellIndex]));
-			}
-			index++;
-		}
-
-		File file_xls = new File(str_file_dir_path + File.separator + "huapian.xls");
-		if (file_xls.exists()) {
-			file_xls.delete();
-		}
-		FileOutputStream os = null;
-		try {
-			os = new FileOutputStream(file_xls.getAbsoluteFile());
-			wb.write(os);
-		} finally {
-			if (os != null) {
-				os.close();
-			}
-		}
-		return str_web_path.concat(file_xls.getName());
+		ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群用户",list,str_headers,str_headers);
+		Map<String,Object> result = eeuo.exportFile();
+		return result.get("data").toString();
 
 	}
 
