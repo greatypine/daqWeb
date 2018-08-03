@@ -44,9 +44,12 @@ Date.prototype.format = function() {
  var ordertype = (decode64(getUrlParamByKey("ordertype")) == 'null'||decode64(getUrlParamByKey("ordertype")) == null) ? '' : decode64(getUrlParamByKey("ordertype"));//商品服务团购 全部:0;商品1服务2团购3
  var storeName_ = (decode64(getUrlParamByKey("store_name")) == 'null'||decode64(getUrlParamByKey("store_name")) == null) ? '' : decode64(getUrlParamByKey("store_name"));//商品服务团购 全部:0;商品1服务2团购3
  function loginShow(){
-		
+
 		if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
-			var reObj = new PMSRequestObject("userManager", "isScreenUser", [ screenlogin ]);
+            var b = new Base64();
+            screenlogin=b.decode(screenlogin);
+            var obj=JSON.parse(screenlogin);
+            var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
 		    var callback = function callback(data, textStatus, XMLHttpRequest) {
 		    	//window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
 		    	var stateObject = {};
@@ -2332,6 +2335,17 @@ Date.prototype.format = function() {
 			window.location.href="index_K.html?t="+encode64('1')+"&s=&sn=&c=&e=&r=&cn=&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_);
 		}
   }
+function doK_Mem(){
+    var url = "";
+    if(target==0){
+        url = "index_K_member.html?t="+encode64(target)+"&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_)+"&c=&cn=&e=";
+    }else if(target==1){
+        url = "index_K_member.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&so="+encode64(storeNo_)+"&ordertype="+encode64(ordertype)+"&store_name="+encode64(storeName_)+"&cn="+encode64(cityName)+"&e=";
+    }else{
+        url = "index_K_member.html?t="+encode64(0);
+    }
+    window.location.href=url;
+}
   function queryTwoTwoOneStoreCount(){
   	 var reqestParameter = {
         cityName: "北京",

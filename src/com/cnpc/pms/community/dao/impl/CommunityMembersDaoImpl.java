@@ -22,6 +22,7 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
 		String dateSql = "";
 		String isNewSql = "";
+		String expirySql = "";
 		if("0".equals(flag)){
 			dateSql = " and date_format(dum.opencard_time,'%Y-%m')=date_format(now(),'%Y-%m') ";
 			//isNewSql = " and dum.isnew_member=1 ";
@@ -44,7 +45,10 @@ public class CommunityMembersDaoImpl extends BaseDAOHibernate implements Communi
 					"ts.cityno LEFT JOIN t_dist_citycode d ON d.cityname=ts.city_name " +
 						"where d.id='"+province_id+"' ";
 		}
-		sql+=isNewSql+dateSql;
+		if("1".equals(flag)){
+			expirySql = " and date_format(dum.associator_expiry_date,'%Y-%m-%d') >= date_format(now(),'%Y-%m-%d') ";
+		}
+		sql+=expirySql+isNewSql+dateSql;
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()

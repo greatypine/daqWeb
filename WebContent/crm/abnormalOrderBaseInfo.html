@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
   <!-- Select2 -->
   <link rel="stylesheet" href="plugins/select2/select2.min.css">
+    <link href="../scripts/css/auto.css" rel="stylesheet">
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -75,6 +76,8 @@
 			height:32px;
 			color: #fff;
 		}
+    .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
+
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -90,23 +93,17 @@
     <nav class="navbar navbar-static-top">
       <!-- Sidebar toggle button-->
       <div class="container">
-
-        <div class="pull-left">
-           <nav class="navbar navbar-static-top no-margin">
-            <!-- Sidebar toggle button-->
-
-            <div class="logo-lg clearfix">
-              <div class="logo-lg clearfix">
-	            <ul>
-	              <li><a href="javascript:parent.location.reload();" class="h2"> <img src="dist/img/logo.png"> </a></li>
-	              <li class="nav-mark"><a href="#">异常订单基础数据</a> </li>
-	              <li><!-- <a href="user.html#user">片区信息</a> --> </li>
-	              <li></li>
-	            </ul>
-	          </div>
-            </div>
-          </nav>
-        </div>
+          <div class="logo_img pull-left">
+              <img src="dist/img/logo.png" height="30">
+              <img src="dist/img/title.png" height="20">
+          </div>
+          <div class="pull-left">
+              <div class="logo-lg">
+                  <ul class="no-margin">
+                      <li class="current"><em>异常订单基础数据</em></li>
+                  </ul>
+              </div>
+          </div>
       </div>
     </nav>
   </header>
@@ -153,15 +150,20 @@
 	            <input type="text" class="form-control"  placeholder="最大金额"  id="max_money_auto" style="width:30%;display:inline"/></div></td>
            </tr>
            <tr>
-	            <td><span style="font-weight:700">城市</span>：<input id="city_id_autoOrder" name="city_id_autoOrder" type="hidden" bidTableFlag="true" value=""/>
-	             	<input id="city_name_autoOrder" name="city_name_autoOrder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="city_name-search_autoOrder" />
-	             	<datalist id="city_name-search_autoOrder">
-	             	</datalist></td>
-	            <td><span style="font-weight:700">门店</span>：<input id="store_id_autoOrder" name="store_id_autoOrder" type="hidden" bidTableFlag="true" value=""/>
-	             	<input id="store_name_autoOrder" name="store_name_autoOrder" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="store_name-search_autoOrder" />
-	             	<datalist id="store_name-search_autoOrder">
-	
-	             	</datalist></td>
+	            <td><span style="font-weight:700">城市</span>：
+                    <input id="city_id_autoOrder" name="city_id_autoOrder" type="hidden" value=""/>
+                    <input type="text" class="form-control"  placeholder="城市" id="city_name_autoOrder" style="display: inherit;width: 100%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+                    <div class="auto hidden" id="auto_city" style="border:1px solid #dedede;width:23%;left:7px;top:0px;z-index: 99999;">
+                        <!-- /.input group -->
+                    </div>
+                </td>
+	            <td><span style="font-weight:700">门店</span>：
+                    <input id="store_id_autoOrder" name="store_id_autoOrder" type="hidden" value=""/>
+                    <input type="text" class="form-control"  placeholder="门店" id="store_name_autoOrder" style="display: inherit;width: 100%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+                    <div class="auto hidden" id="auto_store" >
+                        <!-- /.input group -->
+                    </div>
+                </td>
      	    	<td><span style="font-weight:700">事业部</span>：&nbsp; <input type="text" class="form-control"   id="dept_auto"/></td>
      	    	<td><span style="font-weight:700">频道</span>：&nbsp; <input type="text" class="form-control" style="width:64%"  id="channel_auto"/></td>
              </tr>
@@ -170,15 +172,16 @@
            </form> 
               <div class="form-group col-lg-6" style="padding-top: 25px;">
               </div>
-              <div class="col-lg-2" style="padding-top: 25px;">
-                <button type="button" style="display:inline" id="export_auto_abnormalOrder_button" onclick="export_auto_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
-              </div>
+
 <!--               <div class=" col-lg-2" style="padding-top: 25px;"> -->
 <!--                 <button type="button" style="display:none" id="uploadButton_auto" onclick="showUploadWindow(1)" class="btn btn-block btn-danger">导入</button> -->
 <!--               </div> -->
               <div class="form-group col-lg-2" style="padding-top: 25px;">
                 <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
               </div>
+            <div class="col-lg-2" style="padding-top: 25px;">
+                <button type="button" style="display:inline" id="export_auto_abnormalOrder_button" onclick="export_auto_abnormalOrder()" class="btn btn-block btn-warning">导出</button>
+            </div>
                <div class="form-group col-lg-2" style="padding-top: 25px;">
                 <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
               </div>
@@ -249,6 +252,7 @@
 <script type="text/javascript" src="plugins/moment.min.js"></script>
 <script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
 <script tyle="text/javascript">
 Date.prototype.format=function(fmt) {        
     var o = {        
@@ -509,12 +513,18 @@ Date.prototype.format=function(fmt) {
   
   /**--------------------------------自动搜索城市---------------------------------------------------------------**/
   var lst_select_city1=null;
+  var cityNameArray=new Array();
+  var cityIdMap = {};
+  var cityNameIdMap={};
   $('#city_name_autoOrder').keyup(function(event){
-		
+
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
         	$("#city_id_autoOrder").val("");
-            $('#city_name-search_autoOrder').children().remove();
+            $("#store_id_autoOrder").val("");
+            $("#store_name_autoOrder").val("");
+            $("#auto_city").empty();
+            $("#auto_store").empty();
             if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                 return;
             }
@@ -525,9 +535,15 @@ Date.prototype.format=function(fmt) {
                 	lst_select_city1 = JSON.parse(data.data);
                 	
                     $(lst_select_city1).each(function(index,element){
-                    	
-                        $('#city_name-search_autoOrder').append('<option value="'+element.name+'">');
+
+                        cityNameArray.push(lst_select_city1[index].name);
+                        cityIdMap[lst_select_city1[index].name] = lst_select_city1[index].name;
+                        cityNameIdMap[lst_select_city1[index].name] = lst_select_city1[index].ctid;
+
                     });
+                    var autoComplete = new AutoComplete("city_name_autoOrder","auto_city",cityNameArray);
+                    autoComplete.start(event);
+                    $("#auto_city").attr("style","width:25.7%;z-index:999999");
                 }else{
                 	
                 }
@@ -535,84 +551,50 @@ Date.prototype.format=function(fmt) {
         }
     });
 
-     $('#city_name_autoOrder').change(function(){
-    	
-         $(lst_select_city1).each(function(index,element){
-            if(element.name == $('#city_name_autoOrder').val()){
-            	
-                $('#city_id_autoOrder').val(element.name);
-                return;
-            }
-         });
-    }); 
-     
-     
-     
-     /**--------------------------------手动搜索城市---------------------------------------------------------------**/
-     var lst_select_city2=null;
-     $('#city_name_manualOrder').keyup(function(event){
-   		
-           var str_name = $(this).val();
-           if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-           	   $("#city_id_manualOrder").val("");
-               $('#city_name-search_manualOrder').children().remove();
-               if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-                   return;
-               }
-             
-               doManager('dynamicManager','getCityByUser',[1,employeeId,str_name],function(data){
-                   if(data.result){
-                   	
-                	   lst_select_city2 = JSON.parse(data.data);
-                       $(lst_select_city2).each(function(index,element){
-                           $('#city_name-search_manualOrder').append('<option value="'+element.name+'">');
-                       });
-                   }else{
-                   	
-                   }
-               });
-           }
-       });
+    $('#auto_city').on("click",function(){
+         var temp_city = document.getElementById("city_name_autoOrder").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+         $("#city_id_autoOrder").val(cityIdMap[temp_city]);
+    });
 
-        $('#city_name_manualOrder').change(function(){
-       	
-            $(lst_select_city2).each(function(index,element){
-               if(element.name == $('#city_name_manualOrder').val()){
-                   $('#city_id_manualOrder').val(element.name);
-                   return;
-               }
-            });
-       }); 
-     
      
      
   
   
   /**-----------------------------------自动异常订单搜索门店------------------------------------------------------**/
   var lst_select_store1=null;
+  var storeNameArray=new Array();
+  var storeIdMap = {};
   $('#store_name_autoOrder').keyup(function(event){
-		
+      $("#auto_store").empty();
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
         	$("#store_id_autoOrder").val("");
-            $('#store_name-search_autoOrder').children().remove();
+
             if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                 return;
             }
+            var city_name = $("#city_id_autoOrder").val();
             var city_id = null;
-            if(target==1){
-            	if(role!="PTYYZXYCDDZ"){
-            		city_id = cityId;
-            	}
+            if(city_name!=""){
+                city_id = cityNameIdMap[city_name];
+                if(city_id==null){
+                    city_id=-1000;
+                }
             }
+
+
             doManager('dynamicManager','getStoreByCity',[1,employeeId,city_id,str_name],function(data){
                 if(data.result){
                 	
                 	lst_select_store1 = JSON.parse(data.data).storelist;
                     $(lst_select_store1).each(function(index,element){
-                    	
-                        $('#store_name-search_autoOrder').append('<option value="'+element.name+'">');
+
+                        storeNameArray.push(lst_select_store1[index].name);
+                        storeIdMap[lst_select_store1[index].name] = lst_select_store1[index].storeno;
                     });
+                    var autoComplete = new AutoComplete("store_name_autoOrder","auto_store",storeNameArray);
+                    autoComplete.start(event);
+                    $("#auto_store").attr("style","width:17.5%;z-index:999999");
                 }else{
                 	
                 }
@@ -620,63 +602,18 @@ Date.prototype.format=function(fmt) {
         }
     });
 
-     $('#store_name_autoOrder').change(function(){
-    	
-         $(lst_select_store1).each(function(index,element){
-            if(element.name == $('#store_name_autoOrder').val()){
-            	
-                $('#store_id_autoOrder').val(element.storeno);
-                return;
-            }
-         });
+     $('#auto_store').on("click",function(){
+
+         var temp_store = document.getElementById("store_name_autoOrder").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+         $("#store_id_autoOrder").val(storeIdMap[temp_store]);
     }); 
      
      
-     /**----------------------------------手动异常订单搜索门店------------------------------------------------------**/
-     var lst_select_store2=null;
-     $('#store_name_handOrder').keyup(function(event){
-   		
-           var str_name = $(this).val();
-           if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-           	$("#store_id_handOrder").val("");
-               $('#store_name-search_handOrder').children().remove();
-               if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-                   return;
-               }
-              var city_id = null;
-               if(target==1){
-	               	if(role!="PTYYZXYCDDZ"){
-	               		city_id = cityId;
-	               	}
-               }
-               doManager('dynamicManager','getStoreByCity',[1,employeeId,city_id,str_name],function(data){
-                   if(data.result){
-                   	
-                   	lst_select_store2 = JSON.parse(data.data).storelist;
-                       $(lst_select_store2).each(function(index,element){
-                           $('#store_name-search_handOrder').append('<option value="'+element.name+'">');
-                       });
-                   }else{
-                   	
-                   }
-               });
-           }
-       });
 
-        $('#store_name_handOrder').change(function(){
-       	
-            $(lst_select_store2).each(function(index,element){
-               if(element.name == $('#store_name_handOrder').val()){
-               	
-                   $('#store_id_handOrder').val(element.storeno);
-                   return;
-               }
-            });
-       }); 
      
      
   
-  //导出自动异常订单
+  //导出基础异常订单
   function export_auto_abnormalOrder(){
 	  var sdate = $("#auto_date").val();
 	  var begin_end_date=["",""];
@@ -750,7 +687,7 @@ Date.prototype.format=function(fmt) {
   		search_auto_abnormalOrder1(cur_page);
    }
   
-  //查询上
+  //查询基础异常订单
   var currentPage_auto= 1;
   var totalPage_auto = 1;
   function   search_auto_abnormalOrder1(cur_page){
@@ -899,254 +836,15 @@ Date.prototype.format=function(fmt) {
   
   
   
-  
-  
-  
- 
-  
-  //导出手动异常订单
-  function export_manual_abnormalOrder(){
-	    var sdate = $("#manual_date").val();
-	    var begin_end_date=["",""];
-	  	if(sdate!=""){
-	  		 begin_end_date = sdate.split("-");
-	   	}
-	  	
-	    $("#process_div").show();
-	 	$("#process_div_pic").show();
-	 	var number_str = $("#store_id_handOrder").val(); 
-  	    var storeName = $("#store_name_handOrder").val();
-  	    var city = $("#city_id_manualOrder").val();
-  	    var city_name = $("#city_name_manualOrder").val();
-  	    if(number_str==""&&storeName!=""){
-  	    	number_str=-10000;
-  	    }
-  	   
-  	    if(city==""&&city_name!=""){
-  	    	city="-1000";
-  	    }
-	    var status = $("#manual_status").val(); 
-	    var type = $("#abnormalType_manual").val();
-	    var ordersn = $("#orderSn_manual").val();
-	    var productName = $("#product_manual").val();
-	    var dept = $("#dept_manual").val();
-	    var channel = $("#channel_manual").val();
-	    var min_money_manual = $("#min_money_manual").val();
-	    var max_money_manual = $("#max_money_manual").val();
-	    var abnormalOrderDto=null;
-	   if(target==1){
-		   abnormalOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
-				ordersn:ordersn,
-				abnortype:"",
-				status:"0",
-		  		target:target,
-		  		datatype:"cannot_appeal",
-		  		storeno:number_str,
-		  		cityname:city,
-		  		dept:dept,
-		  		channel:channel,
-		  		product:productName,
-		  		minPrice:min_money_manual,
-		  		maxPrice:max_money_manual
-			}
-	    }else if(target==2){
-	    	 abnormalOrderDto = {
-	    			beginDate:begin_end_date[0].trim(),
-		 			endDate:begin_end_date[1].trim(),
-	 				ordersn:ordersn,
-	 				abnortype:"",
-	 				status:"0",
-	 		  		target:target,
-	 		  		storeno:storeno,
-	 		  		datatype:"cannot_appeal",
-	 		  		cityname:"",
-	 		  		dept:dept,
-			  		channel:channel,
-			  		product:productName,
-			  		minPrice:min_money_manual,
-			  		maxPrice:max_money_manual
-	 			}
-	    }
-	   
-	  
-	    doManager('dynamicManager','exportAbnormalOrder',[abnormalOrderDto],function(data){
-	          if(data.result){
-	          	   var result= JSON.parse(data.data);
-		           if(result.status=='success'){
-		        	   window.location.href=result.data;
-		           }else{
-		        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
-		        	   $("#process_div").hide();
-	        	       $("#process_div_pic").hide();
-		        	   return;
-		           }
-	          
-	          }else{
-	       	   crm_alert(5,"请稍后重新请求！");
-	          }
-	         $("#process_div").hide();
-	    	 $("#process_div_pic").hide();
-	     });
-  }
-  
-  
-   var isCreatePage=false;
-   function search_manual_abnormalOrder(cur_page){
-  		isCreatePage=false;
-  		search_manual_abnormalOrder1(cur_page);
-   }
-  
-  //查询上
-  var currentPage_manual= 1;
-  var totalPage_manual = 1;
-  function   search_manual_abnormalOrder1(cur_page){
-	  	
-	    var sdate = $("#manual_date").val();
-	    var begin_end_date=["",""];
-	  	if(sdate!=""){
-	  		 begin_end_date = sdate.split("-");
-	   	}
-	  	
-  	    $("#process_div").show();
- 	 	$("#process_div_pic").show();
- 	 	var number_str = $("#store_id_handOrder").val(); 
-  	    var storeName = $("#store_name_handOrder").val();
-  	    var city = $("#city_id_manualOrder").val();
-  	    var city_name = $("#city_name_manualOrder").val();
-  	    if(number_str==""&&storeName!=""){
-  	    	number_str=-10000;
-  	    }
-  	   
-  	    if(city==""&&city_name!=""){
-  	    	city = "-1000";
-  	    }
-	    //var status = $("#manual_status").val(); 
-	    var type = $("#abnormalType_manual").val();
-	    var ordersn = $("#orderSn_manual").val();
-	    var productName = $("#product_manual").val();
-	    var dept = $("#dept_manual").val();
-	    var channel = $("#channel_manual").val();
-	    var min_money_manual = $("#min_money_manual").val();
-	    var max_money_manual = $("#max_money_manual").val();
-	    var abnormalOrderDto=null;
-	   if(target==1){
-		   abnormalOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
-				ordersn:ordersn,
-				abnortype:type,
-				status:"0",
-		  		target:target,
-		  		datatype:"cannot_appeal",
-		  		storeno:number_str,
-		  		cityname:city,
-		  		dept:dept,
-		  		channel:channel,
-		  		product:productName,
-		  		minPrice:min_money_manual,
-		  		maxPrice:max_money_manual
-			}
-	    }else if(target==2){
-	    	 abnormalOrderDto = {
-	    			beginDate:begin_end_date[0].trim(),
-		 			endDate:begin_end_date[1].trim(),
-	 				ordersn:ordersn,
-	 				abnortype:type,
-	 				status:"0",
-	 		  		target:target,
-	 		  		storeno:storeno,
-	 		  		datatype:"cannot_appeal",
-	 		  		cityname:"",
-	 		  		dept:dept,
-			  		channel:channel,
-			  		product:productName,
-			  		minPrice:min_money_manual,
-			  		maxPrice:max_money_manual
-	 			}
-	    }
-	   
-	    var pageInfo = new Object();
-	    pageInfo.currentPage = cur_page;
-	    
-	    doManager('dynamicManager','queryAbnormalOrder',[abnormalOrderDto,pageInfo],function(data){
-         if(data.result){
-         	   var result= JSON.parse(data.data);
-	           if(result.status=='success'){
-	        	   $("#manual_tbody").find("tr:gt(0)").remove(); 
-	        	   var jData = result.data;
-	        	   if(jData==null||jData.length==0){
-	        		   crm_alert(5,"系统查无此条件的数据");
-	        		   $("#page_manual").createPage({
-	        	 	  	    pageCount:0,
-	        	 	  	    current:0,
-	        	 	  	    backFn:function(p){
-	        	 	  	    	
-	        	 	  	    }
-	        	 	  	});
-	        		   $("#process_div").hide();
-	        	       $("#process_div_pic").hide();
-	        		   return;
-	        	   }
-	        	   totalPage_manual = result.total_pages;
-	        	   if(!isCreatePage){
-	        		   $("#page_manual").createPage({
-	        	 	  	    pageCount:totalPage_manual,
-	        	 	  	    current:1,
-	        	 	  	    backFn:function(p){
-	        	 	  	    	search_manual_abnormalOrder1(p);
-	        	 	  	    }
-	        	 	  	});
-	        		   isCreatePage=true;
-	        	   }
-	        	  
-	        	   var infoStr="";
-	        	   for(var i=0;i<jData.length;i++){
-	        		   infoStr= "<tr>";
-       			    if(role=="PTYYZXYCDDZ"){//异常订单管理者
-       			    	if(jData[i].status==0||jData[i].status==2){
-	        			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"cannot_appeal_checkbox_"+jData[i].status+"_"+jData[i].id+"\" onclick=\"selectCheckbox(this,2)\" type=\"checkbox\"></td>";
-       			    	}else{
-	        			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"><input id=\"cannot_appeal_checkbox_"+jData[i].status+"_"+jData[i].id+"\" disabled=\"disabled\" type=\"checkbox\"></td>";
-       			    	}
-       		   		}else{
-       			    	infoStr  = infoStr+"<td style=\"text-align: left; padding-left: 20px;\"></td>";
-       		   		}
-       			       var s="";
-       			       if(jData[i].signedtime!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].signedtime);
-       			   		 	s=d.format('yyyy-MM-dd HH:mm:ss')
-       			       }
-	        		   infoStr= infoStr
-	        			       +"<td>"+jData[i].cityname+"</td>"
-	        			   	   +"<td>"+jData[i].storename+"</td>"
-	                       	   +"<td>"+jData[i].deptname+"</td>"
-	                       	   +"<td>"+jData[i].channelname+"</td>"
-		                       +"<td>"+jData[i].ordersn+"</td>"
-		                       +"<td>"+jData[i].tradingprice+"</td>"
-		                       +"<td>"+jData[i].description+"</td>"
-		                       +"<td>"+s+"</td>"
-		                       +"<td><button type=\"button\" onclick=\"showorderdetail('"+jData[i].ordersn+"')\" class=\"btn btn-default\">订单详情</button></td>"
-		                       +"</tr>";
-		                       
-		                  $("#manual_title").after(infoStr);     
-	        	   }
-	           }else{
-	        	   crm_alert(5,"请稍后重新请求！");
-	        	   return;
-	           }
-         
-         }else{
-      	   crm_alert(5,"请稍后重新请求！");
-         }
-        $("#process_div").hide();
-   	    $("#process_div_pic").hide();
-     }); 
-  	   
-  }
-  
+
+
+
+
+
+
+
+
+
   var source_upload_type="manual_can_appeal";
   function showUploadWindow(t){
 	  if(t==1){

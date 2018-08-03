@@ -991,4 +991,14 @@ public interface DynamicDao extends IDAO{
 	 **/
 
 	public Map<String,Object> getEmployeeGmv_221(DynamicDto dynamicDto,PageInfo pageInfo);
+	/**
+	 * 查询近七日221GMV走势图
+	 * @author gaoll
+	 * 2018年7月11日
+	 * @param dynamicDto
+	 * @param pageInfo
+	 * @return
+	 */
+    Map<String,Object> getCustomerMember(DynamicDto dynamicDto, PageInfo pageInfo);
+
 }

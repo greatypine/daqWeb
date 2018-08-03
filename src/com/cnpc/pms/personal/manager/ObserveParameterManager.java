@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.query.json.QueryConditions;
+import com.cnpc.pms.personal.dto.StoreDTO;
 import com.cnpc.pms.personal.entity.ObserveParameter;
 
 public interface ObserveParameterManager extends IManager{
@@ -44,7 +45,7 @@ public interface ObserveParameterManager extends IManager{
 	 * 按门店id,明查月份查询台账信息
 	 * 2018年06月27日
 	 * @author gaoll
-	 * @param store_id
+	 * @param storeid
 	 * @param observemonth
 	 * @return
 	 */
@@ -59,9 +60,9 @@ public interface ObserveParameterManager extends IManager{
 	 */
 	public Map<String,Object> queryObserveParameterSummaryByCity(String cityname,String store_id,String observe_month,String employeeId);
 
-	public File exportObserveParamterSummary(String cityname);
+	public File exportObserveParamterSummarys(String cityname);
 	
-	public File exportObserveParamterSummary(String cityname,String observe_month,String store_id,String employeeId);
+	public Map<String,Object> exportObserveParamterSummary(StoreDTO storeDTO);
 	
 	public File exportObserveParamter(String cityname);
 	

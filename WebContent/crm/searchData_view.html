@@ -247,13 +247,10 @@
 	                  <div class="pull-left search-title">事业群：</div>
 	                  <div class="search-con">
 	                    <div class="sl-v-list">
-	                      <a onclick="deptSelection('家务事')" style="cursor:pointer;">家务事</a>
-	                      <a onclick="deptSelection('老年之家')" style="cursor:pointer;">老年之家</a>
 	                      <a onclick="deptSelection('国安优易')" style="cursor:pointer;">国安优易</a>
-	                      <a onclick="deptSelection('公共')" style="cursor:pointer;">公共</a>
+                          <a onclick="deptSelection('家务事')" style="cursor:pointer;">家务事</a>
+	                      <a onclick="deptSelection('社区驿站')" style="cursor:pointer;">社区驿站</a>
 	                      <a onclick="deptSelection('商业创新')" style="cursor:pointer;">商业创新</a>
-	                      <a onclick="deptSelection('旅游')" style="cursor:pointer;">旅游</a>
-	                      <a onclick="deptSelection('健康')" style="cursor:pointer;">健康</a>
 	                    </div>
 	                  </div>
 	                 </div>
@@ -1395,7 +1392,7 @@ Date.prototype.format=function(fmt) {
 		   	  if(result!=null){
 			       var ename = "<strong>送单侠名称：</strong>"+result.employee_name+"<br>";
  			       var ephone = "<strong>送单侠电话：</strong><a style=\"color:#000\" href=\"javascript:searchEmployee('"+result.employee_phone+"')\">"+result.employee_phone+"</a><br>";
- 			       var eAname = "<strong>片区A国安侠名：</strong><a style=\"color:#000\" href=\"javascript:searchEmployee('"+result.employee_phone+"')\">"+result.employee_a_name+"</a><br>";
+ 			       var eAname = "<strong>片区A国安侠名：</strong><a style=\"color:#000\" href=\"javascript:searchEmployee('"+result.employee_a_phone+"')\">"+result.employee_a_name+"</a><br>";
  			   	   var eAphone = "<strong>片区A国安侠电话：</strong><a style=\"color:#000\" href=\"javascript:searchEmployee('"+result.employee_a_phone+"')\">"+result.employee_a_phone+"</a><br>";
 			       var employeecontent = ename+ephone+eAname+eAphone;
 				   	  
@@ -1838,8 +1835,10 @@ Date.prototype.format=function(fmt) {
   		var a = document.getElementById("citySelect");
   	  	a.options[0].selected = true;
   	  	$("#store_name_manual").val("");
+        initallstore();
   	  }else if(target==1){
   		$("#store_name_manual").val("");
+  		initStoreSelectcomplate();
   	  }
   	$("#store_id_manual").val("");  
  	$("#customer_phone_manual").val("");

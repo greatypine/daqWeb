@@ -782,6 +782,11 @@ var citydata = [{value:500, name:'北京'},{value:310, name:'上海'},
 function queryOrderAmountByGroupCity(career_group){
 var temp_career_group = career_group.substr(0,career_group.indexOf("事业部"));
 
+if(career_group=="社区驿站"||career_group=="爱科"){
+	temp_career_group=career_group;
+}
+
+
 doManager("OrderManager", "queryOrderAmountByGroupCity",[temp_career_group],
  				function(data, textStatus, XMLHttpRequest) {
  					if (data.result) {
@@ -795,6 +800,11 @@ doManager("OrderManager", "queryOrderAmountByGroupCity",[temp_career_group],
 
 function queryOrderAmountByChannel(career_group){
 var temp_career_group = career_group.substr(0,career_group.indexOf("事业部"));
+
+if(career_group=="社区驿站"||career_group=="爱科"){
+	temp_career_group=career_group;
+}
+
 doManager("OrderManager", "queryOrderAmountByChannel",[temp_career_group],
  				function(data, textStatus, XMLHttpRequest) {
  					if (data.result) {
@@ -896,6 +906,10 @@ var totalcount=100; //100为5分钟
         //$('.dataStatistics').dataStatistics({min:0,max:15,time:10,len:6});
         var temp_career_group = career_group.substr(0,career_group.indexOf("事业部"));
 
+        if(career_group=="社区驿站"||career_group=="爱科"){
+        	temp_career_group=career_group;
+        }
+        
         doManager("OrderManager", "queryOrderAmountByMonth",[temp_career_group],
   				function(data, textStatus, XMLHttpRequest) {
   					if (data.result) {
@@ -943,6 +957,11 @@ var totalcount=100; //100为5分钟
   		  stopclock();
 	  }
 	  var temp_career_group = career_group.substr(0,career_group.indexOf("事业部"));
+	  
+	  if(career_group=="社区驿站"||career_group=="爱科"){
+			temp_career_group=career_group;
+		}
+	  
   	 //查询当日累计营业额
   	 doManager("OrderManager", "queryOrderSetInterval",[temp_career_group],
   				function(data, textStatus, XMLHttpRequest) {

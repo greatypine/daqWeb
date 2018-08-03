@@ -1,13 +1,10 @@
 package com.cnpc.pms.platform.manager;
 
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONObject;
-
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.platform.entity.MemberDataDto;
 
-import ar.com.fdvs.dj.domain.constants.Page;
+import java.util.Map;
 
 
 /**
@@ -118,15 +115,33 @@ public interface CommuneMember extends IManager{
 	public Map<String, Object> selectArtelCityGmvInfo(String dd);
 	/**
 	 * 安心合作社排行榜
-	 * 
+	 *
 	 * @author wuxinxin
 	 */
 	public Map<String, Object> selectArtelRankingInfo(String dd);
 	/**
 	 * 社员开卡信息
-	 * 
+	 *
 	 * @author wuxinxin
 	 */
 	public Map<String, Object> selectCmOpenInfo(String dd);
-	
+    /**
+	 * 大客户社员统计
+	 *
+	 * @author wuxinxin
+	 */
+	public Map<String, Object> selectCmBigInfo(String dd);
+
+	/**
+	 * 社员档案查询列表
+	 * @author chenchuang
+	 */
+	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo);
+
+	/**
+	 * 社员档案导出
+	 * @author chenchuang
+	 */
+	public Map<String, Object> exportMemeData(MemberDataDto memberDataDto);
+
 }

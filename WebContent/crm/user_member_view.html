@@ -159,12 +159,20 @@
 
       <section class="content-header">
         <div class="nav-tabs-custom no-margin">
-        <div class="pull-right text-red" style="padding-left:15px;font-size:75%">统计数据每10分钟更新一次</div>
+        	<div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">
+				<!--<p>统计数据每10分钟更新一次</p>-->
+				<p style="margin-top: 6px;margin-right: 10px;margin-bottom: 6px;"><button onclick="customer_member()" class="btn btn-block btn-warning">大客户社员查询</button></p>
+			</div>
           <ul class="nav nav-tabs">
 		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
 		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
+			  		  <!--<li class="" id="tab_3_avtive"><a href="#tab_3" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>-->
+
 		  </ul>
 		  <div class="tab-content">
+			  <div class="col-sm-12 text-right text-red no-padding" style="padding-left:15px;font-size:75%;float: right">
+				  <p >统计数据每10分钟更新一次</p>
+			  </div>
 			  <div class="tab-pane active" id="tab_1">
 	          <div class="box-body">
 	          <div class="clearfix search-criteria">
@@ -270,13 +278,13 @@
 	            <div class="form-group col-lg-4">
 	              <label>开卡时间</label>
 	             	<div class="search-con">
-							<div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:3px 15px;">
+							<div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
 							    <div class="time_endbg" id="first_time_endbg">
 							        <p>日期选择：<span class="data_choice" id="first_data_choice">默认时期</span></p>
 							        <input type="text" class="ui-datepicker-time" id="first_date" readonly="" value="">
 							    </div>
 							</div>
-							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin: 0px 15px; display: none;">	
+							<div class="ui-datepicker-css" id="first-ui-datepicker-css" style="margin: 0px 15px 0 0; display: none;">
 							    <div class="ui-datepicker-quick" id="first-ui-datepicker-quick">
  							        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/> 
 							        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name="">
@@ -347,6 +355,78 @@
 	            <div class="tcdPageCode" id="page_city"></div>
 	          </div>
 	        </div>
+
+			  <div class="tab-pane" id="tab_3">
+				  <div class="box-body">
+					  <div class="clearfix search-criteria">
+						  <div id="selectorLine clearfix no-border" class="clearfix">
+							  <div class="form-group col-lg-4">
+								  <label>创建时间</label>
+								  <div class="search-con">
+									  <div class="time" id="time_flag" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
+										  <div class="time_endbg" id="last_time_endbg">
+											  <p>日期选择：<span class="data_choice" id="last_data_choice">默认时期</span></p>
+											  <input type="text" class="ui-datepicker-time" id="last_date" readonly="" value="">
+										  </div>
+									  </div>
+									  <div class="ui-datepicker-css" id="last-ui-datepicker-css" style="margin: 0px 15px 0 0; display: none;">
+										  <div class="ui-datepicker-quick" id="last-ui-datepicker-quick">
+											  <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
+											  <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name="">
+											  <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name="">
+											  <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name="">
+											  <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name="">
+											  <input class="ui-date-quick-button" type="button" value="全部" alt="1" name="">
+											  <span class="ui-close-date" id="last-ui-close-date" style="cursor:pointer;">X</span>
+										  </div>
+										  <div class="ui-datepicker-choose">
+											  <!--<p>自选日期</p>-->
+											  <div class="ui-datepicker-date">
+												  <input name="startDateLast" id="startDateLast" class="startDate" readonly="" value="2018/07/01" type="text">
+												  到
+												  <input name="endDateLast" id="endDateLast" class="endDate" readonly="" value="2018/07/23" type="text">
+											  </div>
+											  <div class="opeDiv">
+												  <span class="Confirm" id="ConfirmLast" onclick="datePickersLast()">确定</span>
+												  <span class="Cancel" id="CancelLast">取消</span>
+											  </div>
+										  </div>
+									  </div>
+								  </div>
+							  </div>
+						  </div>
+					  </div>
+
+					  <div class="clearfix">
+						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+							  <button type="button" onclick="export_customer()" class="btn btn-block btn-warning">导出</button>
+						  </div>
+						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+							  <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_step_customer(1)">查询</button>
+						  </div>
+
+					  </div>
+
+				  </div>
+				  <div class="box-body">
+					  <div class="tab-content">
+						  <div>
+							  <table class="table table-striped">
+								  <tbody id="tradeType_tbody_customer">
+								  <tr>
+									  <th width="12%">创建时间</th>
+									  <th width="12%">大客户社员数</th>
+									  <th width="12%">累计开卡数</th>
+								  </tr>
+								  </tbody>
+							  </table>
+						  </div>
+						  <!-- /.tab-pane -->
+					  </div>
+					  <!-- /.tab-content -->
+					  <div class="tcdPageCode" id="page_customer"></div>
+				  </div>
+			  </div>
         </div>
         </div>
       </section>
@@ -381,7 +461,7 @@
 <script type="text/javascript">
 
 
-<!--target(数据查询层级标识) 0：总部  1:城市级别 2：门店-->
+<!--target(数据查询层级标识) 0:总部  1:城市级别 2:门店-->
 	layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
 	});
@@ -407,6 +487,10 @@
 		    var buttonValue= $(this).val();
 		    $('#first_data_choice').html(buttonValue);
 		});
+        $("#last-ui-datepicker-quick input").click(function(){
+            var buttonValue= $(this).val();
+            $('#last_data_choice').html(buttonValue);
+        });
 		if(target==0){//总部
 			if(cityName!=""){
 				$("#city_name_tradetype").val(cityName);
@@ -609,9 +693,15 @@
     	isCityCreatePage1=false;
     	searchInfo_step2(cur_page);
   	}
+
+var isCustomerCreatePage1=false;
+function searchInfo_step_customer(cur_page){
+    isCustomerCreatePage1=false;
+    searchInfo_customer(cur_page);
+}
     
     var currentPage_city = 1;
-    var totalPage_city = 1; 
+    var totalPage_city = 1;
     function searchInfo_step2(cur_page){
     	//注册时间
 	    var sdate = $("#first_date").val();
@@ -886,6 +976,105 @@
      	  $("#process_div_pic").hide();
        }); 
     }
+
+var currentPage_customer = 1;
+var totalPage_customer = 1;
+function searchInfo_customer(cur_page){
+    //注册时间
+    var sdate = $("#last_date").val();
+    var begin_end_date=["",""];
+    if(sdate!=""){
+        begin_end_date = sdate.split("-");
+    }
+    $("#process_div").show();
+    $("#process_div_pic").show();
+
+    var dynamicDto=null;
+    if(target==0){//总部
+        dynamicDto = {
+            beginDate:begin_end_date[0].trim(),
+            endDate:begin_end_date[1].trim(),
+            searchstr:"customer"
+        }
+    }else if(target==1){//城市
+        dynamicDto = {
+            beginDate:begin_end_date[0].trim(),
+            endDate:begin_end_date[1].trim(),
+            searchstr:"customer"
+        }
+    }
+    var pageInfo = new Object();
+    pageInfo.currentPage = cur_page;
+    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
+        if(data.result){
+            var result= JSON.parse(data.data);
+            if(result.status=='success'){
+                $("#tradeType_tbody_customer").find("tr:gt(0)").remove();
+                var jData = result.member;
+                if(jData==null||jData.length==0){
+                    crm_alert(5,"没有符合条件的数据！");
+                    $("#page_customer").createPage({
+                        pageCount:0,
+                        current:0,
+                        backFn:function(p){
+                        }
+                    });
+                    $("#process_div").hide();
+                    $("#process_div_pic").hide();
+                    return;
+                }
+                totalPage_customer = result.total_pages;
+
+                if(!isCustomerCreatePage1){
+                    $("#page_customer").createPage({
+                        pageCount:totalPage_city,
+                        current:cur_page,
+                        backFn:function(p){
+                            searchInfo_customer(p,begin_end_date);
+                        }
+                    });
+                    isCustomerCreatePage1=true;
+                }
+
+                var infoStr="";
+                for(var i=0;i<jData.length;i++){
+                    infoStr="";
+                    infoStr += "<tr>"
+                        +"<td>"+cityname+"</td>"
+                        +"<td>"+jData[i].nowcount+"</td>"
+						+"<td>"+jData[i].count199+"</td>"
+                    	+"<td>"+jData[i].opencount+"</td>"
+                        +"</tr>";
+
+                    $("#tradeType_tbody_customer").append(infoStr);
+                }
+            }else if(result.status=='storefail'){
+                $("#tradeType_tbody_customer").find("tr:gt(0)").remove();
+                crm_alert(5,JSON.parse(result.data).message);
+                $("#page_customer").createPage({
+                    pageCount:0,
+                    current:0,
+                    backFn:function(p){
+
+                    }
+                });
+                $("#process_div").hide();
+                $("#process_div_pic").hide();
+                return;
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+                $("#process_div").hide();
+                $("#process_div_pic").hide();
+                return;
+            }
+
+        }else{
+            crm_alert(5,"请稍后重新请求！");
+        }
+        $("#process_div").hide();
+        $("#process_div_pic").hide();
+    });
+}
     
     
     //导出上第二步
@@ -1061,6 +1250,10 @@ function resetSerachParam(){
 
 }
 
+function customer_member(){
+    var URL="big_member_view.html?"+"t="+encode64(target);
+    window.open(URL,"big_member");
+}
 </script>
 
 </body>

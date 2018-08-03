@@ -19,7 +19,7 @@
 <!--     <link rel="stylesheet" href="../bizbase/css/preview/print.css" type="text/css" media="print" /> -->
 <!--     <link rel="stylesheet" href="../bizbase/css/preview/print-preview.css" type="text/css" media="screen"> -->
     
-    <script src="https://webapi.amap.com/maps?v=1.4.2&key=您申请的key值&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.8&key=您申请的key值&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
    
    
 </head>
@@ -36,13 +36,15 @@
 			<input type="button" class="button" value="打印地图" id="print_btn" onclick="printAreaMap()"/>
 		</div>
 	</div> -->
-	
-	
+
+    <div class="button-group" style="top:20px;left:20px">
+        <input type="button" class="button" value="测距" onClick="javascript:startRuler1()"/>
+    </div>
 	<div class="menu" id="TULI">
 	 <div class="legend"><b>--</b></div>
 	 <div class="menu_list clearfix" id="test">
 	  <ul id="areas_ul">
-	  
+
 	  </ul>
 	 </div>
 	 <div></div>
@@ -254,6 +256,18 @@
         map.addControl(type);
     });
 
+    var ruler1;
+    map.plugin(["AMap.RangingTool"], function() {
+        ruler1 = new AMap.RangingTool(map);
+        AMap.event.addListener(ruler1, "end", function(e) {
+            ruler1.turnOff();
+        });
+    });
+    //启用默认样式测距
+    function startRuler1() {
+        ruler1.turnOn();
+    }
+
 //     map.plugin(["AMap.ToolBar"],function(){
 //         //加载工具条
 //         var toolBaropt = {
@@ -302,7 +316,8 @@
             strokeOpacity: 0.9, //线透明度
             strokeWeight: 2,    //线宽
             fillColor: "#00DD00", //填充色
-            fillOpacity: 0//填充透明度
+            fillOpacity: 0,//填充透明度
+            bubble:true
         });
         serviceRange.setMap(map);
         serviceRange.on("click", function () {

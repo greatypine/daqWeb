@@ -88,7 +88,7 @@ $(function () {
              	   city_id=null;
                 }
               }
-              doManager('dynamicManager','getStoreByCity',[0,employeeId,city_id,str_name],function(data){
+              doManager('dynamicManager','getStoreByCity',[target,employeeId,city_id,str_name],function(data){
                   if(data.result){
                   	lst_select_store = JSON.parse(data.data).storelist;
                       
@@ -159,7 +159,7 @@ function getUser(){
 			var citylistLength = citylist.length;
 			if(citylistLength == 0){
 				$("#city_name").attr("disabled",true);
-				crm_alert(0,"该账号未分配城市！");
+                $$.showMessage("系统信息","该账号未分配城市！");
 			}
 			if(citylistLength == 1){
 				var cityName = citylist[0].cityname==null?"":citylist[0].cityname;
@@ -198,17 +198,17 @@ function doClean() {
 function insertObserve(){
 	var observe_month = $("#observe_month").val();
 	if(observe_month == null||observe_month.trim() == ""){
-		alert("请选择明查月份后进行添加！");
+        $$.showMessage("系统信息","请选择明查月份后进行添加！");
 		return;
 	}
 	var store_name = $("#store_name").val();
 	if(store_name == null||store_name.trim() == ""){
-		alert("请选择门店后进行添加！");
+        $$.showMessage("系统信息","请选择门店后进行添加！");
 		return;
 	}
 	var store_id = $("#store_id").val();
 	if(store_id == null||store_id.trim() == ""){
-		alert("请选择存在门店进行添加！");
+        $$.showMessage("系统信息","请选择存在门店进行添加！");
 		return;
 	}
 	//判断是否该门店该月份是否已录入
@@ -216,12 +216,12 @@ function insertObserve(){
         if(data.result){
         	var queryObserveParameterList = JSON.parse(data.data).queryObserveParameterList;
         	if(queryObserveParameterList.length >0 &&　queryObserveParameterList != null){
-        		alert("该门店已录入过当前月明查台账，请查询后编辑！");
+                $$.showMessage("系统信息","该门店已录入过当前月明查台账，请查询后编辑！");
         	}else{
         		window.location.href="observe_paramter_add.html?om="+encode64(observe_month)+"&t="+encode64("add")+"&sn="+encode64(store_name)+"&si="+encode64(store_id);	
         	}
         }else{
-        	alert("请求失败，请稍后重新请求！");
+            $$.showMessage("系统信息","请求失败，请稍后重新请求！");
         	return;
         }
     },false);
@@ -243,13 +243,28 @@ $pmspage.opArr = [ editObj];
 	var path = getRootPath();
 	var observe_month = $("#observe_month").val();
      if(observe_month == null||observe_month.trim() == ""){
-         alert("请选择明查月份！");
+         $$.showMessage("系统信息","请选择明查月份！");
          return;
      }
 	var store_id = $("#store_id").val();
 	var cityname = $("#city_name").val();
-	window.open(path + "/downloadExcel.action"
-			  +"?fileName=observe_question&observe_month="+observe_month+"&store_id="+store_id+"&city_name="+cityname+"&employeeId="+employeeId);
+	var param = {
+        cityname:cityname,
+        store_id:store_id,
+        observe_month:observe_month,
+        employeeId:employeeId
+    }
+     doManager('observeParameterManager','exportObserveParamterSummary',[param],function(data){
+         var result= JSON.parse(data.data);
+         if(result.status=='success'){
+             window.location.href=result.data;
+         }else if(result.status=='null'){
+             $$.showMessage("系统信息",result.message);
+             return;
+         }else{
+             $$.showMessage("系统信息","请稍后重新请求！");
+         }
+     },false);
 
 }
 /* function questioncount(){
