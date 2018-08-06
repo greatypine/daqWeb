@@ -1498,6 +1498,8 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 					}else{
 						map.put("city_name", "");
 					}
+				}else{
+					map.put("city_name", "");
 				}
 				String storeId = (String) map.get("regist_storeid");
 				if (StringUtils.isNotEmpty(storeId)) {
@@ -1507,6 +1509,8 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 					}else{
 						map.put("store_name", "");
 					}
+				}else{
+					map.put("store_name", "");
 				}
 			}
 		}
@@ -1545,6 +1549,8 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 					}else{
 						map.put("city_name", "");
 					}
+				}else{
+					map.put("city_name", "");
 				}
 				String storeId = (String) map.get("regist_storeid");
 				if (StringUtils.isNotEmpty(storeId)) {
@@ -1554,6 +1560,8 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 					}else{
 						map.put("store_name", "");
 					}
+				}else{
+					map.put("store_name", "");
 				}
 			}
 		}
