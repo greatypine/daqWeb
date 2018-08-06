@@ -145,7 +145,7 @@
                             </div>
 
                             <div class="col-lg-2 pull-right" style="padding-top: 0px;" id="exportnormal">
-                                <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human()" class="btn btn-block btn-warning">导出</button>
+                                <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human('normal')" class="btn btn-block btn-warning">导出</button>
                             </div>
                             <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
                                 <button type="button" id="export_manual_massOrder_button" onclick="export_auto_human('all')" class="btn btn-block btn-warning">完整数据导出</button>
@@ -615,7 +615,7 @@
         search_manual_abnormalOrder(1);
     }
 
-    function export_auto_human(){
+    function export_auto_human(hiddenvalue){
 
         var cityName = $("#citySelect option:selected").val();
         var number_str = $("#store_id_manual").val();
@@ -639,7 +639,8 @@
         memberDataDto = {
             cityName:cityName,
             storeNo:number_str,
-            inviteCode:memberInviteCode
+            inviteCode:memberInviteCode,
+            hidden_flag:hiddenvalue
         }
 
         doManager('communeMember','exportMemeData',[memberDataDto],function(data){

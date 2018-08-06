@@ -2461,11 +2461,23 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				cell.setCellValue(new XSSFRichTextString(str_headers[i]));
 			}
 
+//			for(int i = 0;i < list.size();i++){
+//				row = sheet.createRow(i+1);
+//				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+//					String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+//					setCellValueall(row, cellIndex, value);
+//				}
+//			}
+
 			for(int i = 0;i < list.size();i++){
 				row = sheet.createRow(i+1);
 				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
 					String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-					setCellValueall(row, cellIndex, value);
+					if(cellIndex==0 && "normal".equals(memberDataDto.getHidden_flag())){
+						setCellValueall(row, cellIndex, value.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+					}else{
+						setCellValueall(row, cellIndex, value);
+					}
 				}
 			}
 

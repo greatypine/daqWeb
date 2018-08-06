@@ -1524,7 +1524,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	}
 
 	public List<Map<String, Object>> exportMemeData(MemberDataDto memberDataDto){
-		String sql = "select IFNULL(INSERT(dum.mobilephone,4,4,'****'),'') as mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
+		String sql = "select IFNULL(dum.mobilephone,'') as mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
 			sql = sql + " AND dum.regist_storeid='"+memberDataDto.getStoreNo()+"' ";
