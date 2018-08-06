@@ -18,8 +18,8 @@
 <!--     <link rel="stylesheet" href="../bizbase/css/preview/screen.css" type="text/css" media="screen" /> -->
 <!--     <link rel="stylesheet" href="../bizbase/css/preview/print.css" type="text/css" media="print" /> -->
 <!--     <link rel="stylesheet" href="../bizbase/css/preview/print-preview.css" type="text/css" media="screen"> -->
-    
-    <script src="https://webapi.amap.com/maps?v=1.4.8&key=您申请的key值&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
+
+    <script src="https://webapi.amap.com/maps?v=1.4.8&key=f52a1bb11408e8a46dc884b2aaa44edc&plugin=AMap.PolyEditor,AMap.CircleEditor"></script>
    
    
 </head>
@@ -30,16 +30,13 @@
 	<div id="process_div" ></div>
 	<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="../dist/images/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
 	<div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
-	<!-- <div>
+	 <div>
 		<div class="button-group" style="position:absolute;left:10px">
-			<input type="button" class="button" value="打印预览" id="preview_btn" onclick="printPreview()"/>
-			<input type="button" class="button" value="打印地图" id="print_btn" onclick="printAreaMap()"/>
+            <input type="button" class="button" value="测距" onClick="javascript:startRuler1()"/>
 		</div>
-	</div> -->
+	</div>
 
-    <div class="button-group" style="top:20px;left:20px">
-        <input type="button" class="button" value="测距" onClick="javascript:startRuler1()"/>
-    </div>
+
 	<div class="menu" id="TULI">
 	 <div class="legend"><b>--</b></div>
 	 <div class="menu_list clearfix" id="test">
@@ -49,6 +46,7 @@
 	 </div>
 	 <div></div>
 	</div>
+
  <style  type="text/css">
  
     *{margin: 0; padding: 0;}
@@ -126,15 +124,22 @@
 		color: #fff;
 	}
     </style>
-<script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script> 
-<!-- <script type="text/javascript" src="../bizbase/js/html2canvas.js"></script>
-<script type="text/javascript" src="../bizbase/js/canvas2image.js"></script>
-<script type="text/javascript" src="../bizbase/js/jquery.base64.js"></script> -->
-<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
-<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
-<!-- <script type="text/javascript" src="../scripts/custom_color.js"></script> -->
-<!-- <script type="text/javascript" src="../bizbase/js/printThis.js"></script> -->
-<!-- <script type="text/javascript" src="../bizbase/js/jquery.print-preview.js"></script> -->
+    <!-- jQuery 2.2.0 -->
+    <script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="../crm/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Morris.js charts -->
+    <script src="../crm/bootstrap/js/raphael-min.js"></script>
+    <!-- FastClick -->
+    <script src="../crm/plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../crm/dist/js/app.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="../crm/dist/js/demo.js"></script>
+    <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/custom_color.js"></script>
+
 <script type="text/javascript">
     var windowHeight = 0;
     var windowWidth = 0;
