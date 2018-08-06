@@ -127,6 +127,9 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			if(humanresources!=null&&humanresources.getEmployee_no()!=null&&humanresources.getEmployee_no().length()>0){
 				sqlwhere +=" and employee_no = '"+humanresources.getEmployee_no().trim()+"'";
 			}
+			if(humanresources!=null&&humanresources.getInviteCode()!=null&&humanresources.getInviteCode().length()>0) {
+				sqlwhere+=" and inviteCode = '"+humanresources.getInviteCode()+"'";
+			}
 			
 			//String sql = "SELECT * FROM t_humanresources a where "+sqlwhere ;
 			String sql = "SELECT * FROM (SELECT leavedate,zw,inviteCode,humanstatus,topostdate,citySelect,storename,name,phone,employee_no,career_group FROM t_humanresources "+
@@ -194,6 +197,9 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}
 			if(humanresources!=null&&humanresources.getEmployee_no()!=null&&humanresources.getEmployee_no().length()>0){
 				sqlwhere +=" and employee_no = '"+humanresources.getEmployee_no().trim()+"'";
+			}
+			if(humanresources!=null&&humanresources.getInviteCode()!=null&&humanresources.getInviteCode().length()>0) {
+				sqlwhere+=" and inviteCode = '"+humanresources.getInviteCode()+"'";
 			}
 			
 			String sql = "SELECT * FROM t_online_humanresources a where "+sqlwhere ;
@@ -353,6 +359,9 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			if(humanresources!=null&&humanresources.getEmployee_no()!=null&&humanresources.getEmployee_no().length()>0){
 				sqlwhere +=" and a.employee_no = '"+humanresources.getEmployee_no().trim()+"'";
 			}
+			if(humanresources!=null&&humanresources.getInviteCode()!=null&&humanresources.getInviteCode().length()>0) {
+				sqlwhere+=" and a.inviteCode = '"+humanresources.getInviteCode()+"'";
+			}
 			
 			//String sql = "SELECT a.name,a.employee_no,a.inviteCode,a.storename,a.citySelect,a.zw,a.career_group,a.topostdate,s.storeno FROM t_humanresources a LEFT JOIN t_store s ON a.store_id=s.store_id where "+sqlwhere ;
 			
@@ -392,6 +401,9 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}
 			if(humanresources!=null&&humanresources.getEmployee_no()!=null&&humanresources.getEmployee_no().length()>0){
 				sqlwhere +=" and employee_no = '"+humanresources.getEmployee_no().trim()+"'";
+			}
+			if(humanresources!=null&&humanresources.getInviteCode()!=null&&humanresources.getInviteCode().length()>0) {
+				sqlwhere+=" and inviteCode = '"+humanresources.getInviteCode()+"'";
 			}
 			
 			String sql = "SELECT citySelect,deptname,name,employee_no,inviteCode,phone,work_no,cardnumber FROM t_online_humanresources where "+sqlwhere ;

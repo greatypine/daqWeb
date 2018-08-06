@@ -135,12 +135,6 @@
                             </div>
 
                             <div class="clearfix">
-                                <div class="form-group col-lg-3"><span style="font-weight:700">姓名</span>：&nbsp; <input type="text" class="form-control" id="member_name"  placeholder="姓名" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
-                                </div>
-                                <div class="form-group col-lg-3"><span style="font-weight:700">手机号</span>：&nbsp; <input type="text" class="form-control" id="member_phone"  placeholder="手机号" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
-                                </div>
-                                <div class="form-group col-lg-3"><span style="font-weight:700">员工编号</span>：&nbsp; <input type="text" class="form-control" id="member_no"  placeholder="员工编号" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
-                                </div>
                                 <div class="form-group col-lg-3"><span style="font-weight:700">邀请码</span>：&nbsp; <input type="text" class="form-control" id="member_invite_code"  placeholder="邀请码" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
                                 </div>
                             </div>
@@ -150,8 +144,11 @@
                                 <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                             </div>
 
-                            <div class="col-lg-2 pull-right" style="padding-top: 0px;">
+                            <div class="col-lg-2 pull-right" style="padding-top: 0px;" id="exportnormal">
                                 <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human()" class="btn btn-block btn-warning">导出</button>
+                            </div>
+                            <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
+                                <button type="button" id="export_manual_massOrder_button" onclick="export_auto_human('all')" class="btn btn-block btn-warning">完整数据导出</button>
                             </div>
                             <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
                                 <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
@@ -214,7 +211,6 @@
 <script type="text/javascript" src="plugins/moment.min.js"></script>
 <script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
-<script type="text/javascript" src="../scripts/jedate/jedate.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script>
 
 <script tyle="text/javascript">
@@ -470,11 +466,7 @@
     var totalPage_auto = 1;
     function  search_auto_abnormalOrder1(cur_page){
 
-        //var cityName = $("#citySelect option:selected").val();
-        var cityName = $("#citySelect option:selected").html();
-        if(cityName=='全部城市'){
-            cityName = '';
-        }
+        var cityName = $("#citySelect option:selected").val();
         var number_str = $("#store_id_manual").val();
         var storeName = $("#store_name_manual").val();
         if(storeName!=""){
@@ -490,18 +482,12 @@
         $("#process_div").show();
         $("#process_div_pic").show();
 
-        var memberName = $("#member_name").val();
-        var memberNo = $("#member_no").val();
-        var memberPhone = $("#member_phone").val();
         var memberInviteCode = $("#member_invite_code").val();
 
         var memberDataDto=null;
         memberDataDto = {
             cityName:cityName,
             storeNo:number_str,
-            memberName:memberName,
-            memberNo:memberNo,
-            memberPhone:memberPhone,
             inviteCode:memberInviteCode
         }
 
@@ -617,9 +603,6 @@
             initStoreSelectcomplate();
         }
         $("#store_id_manual").val("");
-        $("#member_name").val("");
-        $("#member_phone").val("");
-        $("#member_no").val("");
         $("#member_invite_code").val("");
     }
 
@@ -634,10 +617,7 @@
 
     function export_auto_human(){
 
-        var cityName = $("#citySelect option:selected").html();
-        if(cityName=='全部城市'){
-            cityName = '';
-        }
+        var cityName = $("#citySelect option:selected").val();
         var number_str = $("#store_id_manual").val();
         var storeName = $("#store_name_manual").val();
         if(storeName!=""){
@@ -653,18 +633,12 @@
         $("#process_div").show();
         $("#process_div_pic").show();
 
-        var memberName = $("#member_name").val();
-        var memberNo = $("#member_no").val();
-        var memberPhone = $("#member_phone").val();
         var memberInviteCode = $("#member_invite_code").val();
 
         var memberDataDto=null;
         memberDataDto = {
             cityName:cityName,
             storeNo:number_str,
-            memberName:memberName,
-            memberNo:memberNo,
-            memberPhone:memberPhone,
             inviteCode:memberInviteCode
         }
 

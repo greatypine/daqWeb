@@ -1,29 +1,5 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -34,6 +10,20 @@ import com.cnpc.pms.personal.manager.MassOrderManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOrderManager {
 
@@ -115,10 +105,10 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
+  	        String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","下单时间","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
   	        		"门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是否开卡礼订单","是否试用礼订单",
   	        		"是否积分订单","是否221商品类订单","是否221服务类订单","是否221团购订单"};
-  	        String[] headers_key = {"order_sn","area_code","village_code","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","appointment_start_time","sign_time","return_time",
+  	        String[] headers_key = {"order_sn","area_code","village_code","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","create_time","appointment_start_time","sign_time","return_time",
   	        		"employee_name","employee_phone","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label",
   	        		"return_label","loan_label","quick_label","gift_label","customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s","score","order_tag_product","order_tag_service","order_tag_groupon"};
   	       
@@ -229,9 +219,9 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"订单号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","退款金额","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称","门店编号",
+  	        String[] str_headers = {"订单号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","退款金额","下单时间","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称","门店编号",
   	        		"事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是开卡礼采订单","是否试用礼订单","是否积分订单"};
-  	        String[] headers_key = {"order_sn","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","returned_amount","appointment_start_time","sign_time","return_time",
+  	        String[] headers_key = {"order_sn","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","returned_amount","create_time","appointment_start_time","sign_time","return_time",
   	        		"employee_name","employee_phone","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label",
   	        		"return_label","loan_label","quick_label","gift_label","customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s","score"};
   	       
