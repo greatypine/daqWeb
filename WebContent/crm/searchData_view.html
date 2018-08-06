@@ -182,10 +182,19 @@
                       <a onclick="busiSelection('商品类')" style="cursor:pointer;">商品类</a>
                       <a onclick="busiSelection('服务类')" style="cursor:pointer;">服务类</a>
                       <a onclick="busiSelection('团购')" style="cursor:pointer;">团购</a>
-                      <input type="text" style="display:none" class="form-control" placeholder="订单标签"  id="busi_private_manual"/>
+                      <input type="text" style="display:none" class="form-control" placeholder="221标签"  id="busi_private_manual"/>
                     </div>
                   </div>
                  </div>
+                <div class="selectorLine clearfix">
+                    <div class="pull-left search-title">社员标签：</div>
+                    <div class="search-con">
+                        <div class="sl-v-list-member">
+                            <a onclick="memberSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
+                            <a onclick="memberSelection('社员订单')" style="cursor:pointer;">社员订单</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="selectorLine clearfix">
 	                  <div class="pull-left search-title">订单标签：</div>
 	                  <div class="search-con">
@@ -199,8 +208,6 @@
 	                      <a id="tag_汽车订单" onclick="orderTypeSelection('汽车订单')" style="cursor:pointer;">汽车订单</a>
 	                      <a id="tag_微信礼品卡" onclick="orderTypeSelection('微信礼品卡')" style="cursor:pointer;">微信礼品卡</a>
 	                      <a id="tag_集采订单" onclick="orderTypeSelection('集采订单')" style="cursor:pointer;">集采订单</a>
-	                      <a id="tag_开卡礼订单" onclick="orderTypeSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
-	                      <a id="tag_试用礼订单" onclick="orderTypeSelection('试用礼订单')" style="cursor:pointer;">试用礼订单</a>
 	                      <a id="tag_积分订单" onclick="orderTypeSelection('积分订单')" style="cursor:pointer;">积分订单</a>
 	                      <input type="text" style="display:none" class="form-control" placeholder="订单标签"  id="label_private_manual"/>
 	                    </div>
@@ -703,6 +710,62 @@ Date.prototype.format=function(fmt) {
           });
 
       });
+
+      $(".sl-v-list-member a").click(function(){
+          var screen = $(this).text();
+          var filter = $("<a href='javascript:;' class='condition'><span>" + screen + "</span><i class='fa fa-times'></i></a>");
+          var ui =document.getElementById("clear_all");
+
+          if($(this).hasClass('bg-orange-active')){
+              $(".breadcrumb .search-con").append();
+              $(this).removeClass('bg-orange-active');
+
+              $(".breadcrumb .search-con").find('a').each(function(){
+                  var selectedcareer_group = $(this);
+                  if(selectedcareer_group.text()==screen){
+                      selectedcareer_group.remove();
+                  }
+              });
+
+              var curValue = $(this).text();
+              var name = curValue.substring(0,curValue.length)+",";
+              var labelName = $("#label_private_manual").val();
+              $("#label_private_manual").val(labelName.replace(name,""));
+
+              var selectObj = $(".breadcrumb .search-con").find('a');
+
+              if(selectObj.length==1){
+                  $(".sl-v-list-label .all").addClass("bg-orange-active");
+                  ui.style.display="none";
+              }else{
+                  ui.style.display="";
+              }
+          }else {
+              $(this).addClass("bg-orange-active");
+              $(".breadcrumb .search-con").append(filter);
+              $(".sl-v-list-label .all").removeClass("bg-orange-active");
+              ui.style.display="";
+          }
+
+          var obj=$(this);
+          filter.on("click",function(){
+              obj.removeClass("bg-orange-active");
+              filter.remove();
+              var curValue = $(this).text();
+              var name = curValue.substring(0,curValue.length)+",";
+              var labelName = $("#label_private_manual").val();
+              $("#label_private_manual").val(labelName.replace(name,""));
+
+              var aobj = $(".breadcrumb .search-con a");
+              if(aobj.length==1){
+                  $(".sl-v-list-label .all").addClass("bg-orange-active");
+                  ui.style.display="none";
+              }else{
+                  ui.style.display="";
+              }
+
+          });
+      });
       
       	//清空所有条件
         $(".breadcrumb .pull-right").click(function(){
@@ -713,6 +776,7 @@ Date.prototype.format=function(fmt) {
           $(".sl-v-list a").removeClass("bg-orange-active");
           $(".sl-v-list-label a").removeClass("bg-orange-active");
           $(".sl-v-list-busi a").removeClass("bg-orange-active");
+          $(".sl-v-list-member a").removeClass("bg-orange-active");
           var ui =document.getElementById("clear_all");
           ui.style.display="none";
           resetSerachParam(2);
@@ -989,7 +1053,17 @@ Date.prototype.format=function(fmt) {
     		$("#busi_private_manual").val($("#busi_private_manual").val()+labelname+",");
     	}
     }
-	
+
+    //社员标签快速选择
+    function  memberSelection(labelname) {
+        var labelName = $("#label_private_manual").val();
+        if(labelName.indexOf(labelname)>=0){
+            $("#label_private_manual").val($("#label_private_manual").val());
+        }else{
+            $("#label_private_manual").val($("#label_private_manual").val()+labelname+",");
+        }
+    }
+
     //订单标签快速选择
     function orderTypeSelection(labelname){
     	var labelName = $("#label_private_manual").val();
@@ -1340,9 +1414,9 @@ Date.prototype.format=function(fmt) {
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180228.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">开卡礼订单</span>";
 						}
-						if(jData[i].order_tag1.indexOf("S") != -1){
+						if(jData[i].order_tag1.indexOf("M") != -1){
 							infoStr= infoStr
-								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180147.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">试用礼订单</span>";
+								+"<span style=\"background:url('../data_access/imgmouse_files/20180601180147.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">社员订单</span>";
 						}
 						if(jData[i].score !=''){
 							infoStr= infoStr

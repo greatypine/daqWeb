@@ -108,8 +108,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag1 like '%B%'  ";
 				} else if ("开卡礼订单".equals(names[i].trim())) {
 					sql = sql + " a.order_tag1 like '%K%'  ";
-				} else if ("试用礼订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag1 like '%S%'  ";
+				} else if ("社员订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%M%'  ";
 				} else if ("积分订单".equals(names[i].trim())) {
 					sql = sql + " a.score is not null  ";
 				}
@@ -310,8 +310,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag1 like '%B%'  ";
 				} else if ("开卡礼订单".equals(names[i].trim())) {
 					sql = sql + " a.order_tag1 like '%K%'  ";
-				} else if ("试用礼订单".equals(names[i].trim())) {
-					sql = sql + " a.order_tag1 like '%S%'  ";
+				} else if ("社员订单".equals(names[i].trim())) {
+					sql = sql + " a.order_tag1 like '%M%'  ";
 				} else if ("积分订单".equals(names[i].trim())) {
 					sql = sql + " a.score is not null  ";
 				}
