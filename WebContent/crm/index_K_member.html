@@ -604,7 +604,7 @@ Date.prototype.format = function() {
 		symbolSize: 15,
         itemStyle: {
           normal: {
-			color: '#2ec7c9',
+			color: '#fff',
             lineStyle: {
                 color: "#fff"
             }
@@ -750,35 +750,35 @@ Date.prototype.format = function() {
         symbol:'circle',
         itemStyle: {
           normal: {
-			color: '#2ec7c9',
+			color: '#fff',
 			barBorderRadius: 0,
             lineStyle: {
                 color: "#fff"
             }
-/*            ,label: {
+            ,label: {
               show: true,
               position: 'top',
               formatter: function(p) {
                 return p.value > 0 ? (p.value) : '';
               }
-            } */
+            }
           }
         },
         data:yData
-/*        ,markLine : {
-        	itemStyle: {
-                normal: { lineStyle: { color:'#000' }}
-            },
-            data : [
-                {type : 'average', name: '平均值'},
-            ]
+          /*          ,markLine : {
+                      itemStyle: {
+                          normal: { lineStyle: { color:'#000' }}
+                      }
+                      ,data : [
+                          {type : 'average', name: '平均值'},
+                      ]
         }*/
-		,markPoint: {
+/*		,markPoint: {
             data: [
                 {type: 'max', name: '最大值'},
                 {type: 'min', name: '最小值'}
             ]
-        }
+        }*/
       },
       ]
     }
@@ -902,34 +902,34 @@ Date.prototype.format = function() {
 				symbol:'circle',
 				itemStyle: {
 					normal: {
-						color: '#2ec7c9',
+						color: '#fff',
 			            lineStyle: {
 			                color: "#fff"
 			            }
-/* 						,label: {
+ 						,label: {
 							show: true,
 							position: 'top',
 							formatter: function(p) {
 								return p.value > 0 ? (p.value) : '';
 							}
-						} */
+						}
 					}
 				},
 				data: weekData
-/*		        ,markLine : {
-		        	itemStyle: {
-		        		 normal: { lineStyle: { color:'#000' }}
-		            },
-		            data : [
-		                {type : 'average', name: '平均值'},
-		            ]
+                /* 		        ,markLine : {
+                                    itemStyle: {
+                                         normal: { lineStyle: { color:'#000' }}
+                                    }
+                                   , data : [
+                                        {type : 'average', name: '平均值'},
+                                    ]
 		        }*/
-				,markPoint: {
+/*				,markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
                         {type: 'min', name: '最小值'}
                     ]
-                }
+                }*/
 			},
 			]
 		}
@@ -1066,34 +1066,34 @@ Date.prototype.format = function() {
 				symbol:'circle',
 				itemStyle: {
 					normal: {
-						color: '#2ec7c9',
+						color: '#fff',
 			            lineStyle: {
 			                color: "#fff"
 			            }
-/* 						,label: {
+ 						,label: {
 							show: true,
 							position: 'top',
 							formatter: function(p) {
 								return p.value > 0 ? (p.value) : '';
 							}
-						} */
+						}
 					}
 				},
 				data:yData_month
-/*		        ,markLine : {
-		        	itemStyle: {
-		        		 normal: { lineStyle: { color:'#000' }}
-		            },
-		            data : [
-		                {type : 'average', name: '平均值'},
-		            ]
+                /* 		        ,markLine : {
+                                    itemStyle: {
+                                         normal: { lineStyle: { color:'#000' }}
+                                    }
+                                   ,data : [
+                                        {type : 'average', name: '平均值'},
+                                    ]
 		        }*/
-				,markPoint: {
+/*				,markPoint: {
                     data: [
                         {type: 'max', name: '最大值'},
                         {type: 'min', name: '最小值'}
                     ]
-                }
+                }*/
 			}
 			]
 		}
