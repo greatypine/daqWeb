@@ -323,6 +323,7 @@ Date.prototype.format=function(fmt) {
 	var deptname = decode64(getUrlParamByKey("dn"));//事业部名称
 	var employeeName = decode64(getUrlParamByKey("en"));//员工姓名
 	var employeePhone = decode64(getUrlParamByKey("ep"));//员工手机号
+    var inviteCode = decode64(getUrlParamByKey("ic"));//员工邀请码
 	
 /* 	$('#sign_time').datepicker({
 		  autoclose: true
@@ -402,6 +403,7 @@ Date.prototype.format=function(fmt) {
     
     $("#name").val(employeeName);
     $("#phone").val(employeePhone);
+    $("#inviteCode").val(inviteCode);
     search_auto_abnormalOrder(1);
     
     

@@ -561,8 +561,15 @@
                         infoStr= infoStr
                             +"<td><a href=\"#\" onmouseover=\"showphone('"+phonecontent+"');\" id=\""+phoneid+"\">"+mobilephone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')+"</a></td>"
                             +"<td>"+regist+"</td>"
-                            +"<td>"+opencard+"</a></td>"
-                            +"<td>"+jData[i].inviteCode+"</td>"
+                            +"<td>"+opencard+"</a></td>";
+                        if(target==0 || target==1){
+                            infoStr= infoStr
+                                +"<td><a href=\"javascript:showemployee('"+jData[i].inviteCode+"')\">"+jData[i].inviteCode+"</a></td>";
+                        }else{
+                            infoStr= infoStr
+                                +"<td>"+jData[i].inviteCode+"</td>";
+                        }
+                        infoStr= infoStr
                             +"<td>"+jData[i].city_name+"</td>"
                             +"<td>"+jData[i].store_name+"</td>";
 
@@ -592,6 +599,12 @@
             tips: [4, '#0FA6D8'], //还可配置颜色
             time:5000
         });
+    }
+
+    //数据查找-员工数据
+    function showemployee(inviteCode){
+        var url = "humanresources_list.html?t="+encode64(target)+"&sn="+encode64(storeName)+"&cn="+encode64(cityname)+"&ic="+encode64(inviteCode);
+        window.open(url,"humanresources_list");
     }
 
     function isnull(str) {
