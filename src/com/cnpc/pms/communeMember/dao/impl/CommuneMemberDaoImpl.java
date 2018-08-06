@@ -1529,7 +1529,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 			sql = sql + " AND LPAD(dum.regist_cityno,4,0) = '" + memberDataDto.getCityName().trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
-			sql = sql + " AND th.inviteCode='"+memberDataDto.getInviteCode()+"'";
+			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
 		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
