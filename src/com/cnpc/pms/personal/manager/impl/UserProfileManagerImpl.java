@@ -1,26 +1,5 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -29,6 +8,22 @@ import com.cnpc.pms.personal.dao.UserProfileDao;
 import com.cnpc.pms.personal.dto.UserProfileDto;
 import com.cnpc.pms.personal.manager.UserProfileManager;
 import com.cnpc.pms.utils.PropertiesValueUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Function：用户档案Manager实现
@@ -99,10 +94,11 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
   	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
   	            	String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
   	            	if(cellIndex==1 && "normal".equals(userProfile.getHidden_flag())){
-  	  	            	setCellValueall(row, cellIndex, value.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
-  	  	            }else{
-  	  	            	setCellValueall(row, cellIndex, value);
-  	  	            } 
+						if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
+							value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+						}
+  	  	            }
+  	  	            setCellValueall(row, cellIndex, value);
   	             }
   	        }
 

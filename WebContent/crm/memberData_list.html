@@ -147,7 +147,7 @@
                             <div class="col-lg-2 pull-right" style="padding-top: 0px;" id="exportnormal">
                                 <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human('normal')" class="btn btn-block btn-warning">导出</button>
                             </div>
-                            <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
+                            <div class="col-lg-2 pull-right" style="padding-top: 0px;display:none" id="exportall">
                                 <button type="button" id="export_manual_massOrder_button" onclick="export_auto_human('all')" class="btn btn-block btn-warning">完整数据导出</button>
                             </div>
                             <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
@@ -280,6 +280,14 @@
             $(this).children(".nav_dropdown").hide();
         });
 
+        initcurruser();//初始化登录人信息
+        var isManager = currentUser.usergroup.code;
+        if(isManager=="GLY"){
+            var exportnormal = document.getElementById("exportnormal");
+            exportnormal.style.display = "none";
+            var exportall = document.getElementById("exportall");
+            exportall.style.display = "block";
+        }
 
         if(target==0){//总部
             initallcity();
@@ -452,7 +460,6 @@
                 }
             },false);
     }
-
 
     var isCreatePage=false;
     function search_auto_abnormalOrder(cur_page){
