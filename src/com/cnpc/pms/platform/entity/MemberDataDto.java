@@ -5,6 +5,7 @@ public class MemberDataDto {
     String cityName;
     String storeNo;
     String inviteCode;
+    String hidden_flag;
 
     public String getCityName() {
         return cityName;
@@ -30,4 +31,11 @@ public class MemberDataDto {
         this.inviteCode = inviteCode;
     }
 
+    public String getHidden_flag() {
+        return hidden_flag;
+    }
+
+    public void setHidden_flag(String hidden_flag) {
+        this.hidden_flag = hidden_flag;
+    }
 }
