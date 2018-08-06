@@ -2448,7 +2448,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 			XSSFWorkbook wb = new XSSFWorkbook();
 			setCellStyle_common(wb);
 			setHeaderStyle(wb);
-			XSSFSheet sheet = wb.createSheet("退货订单数据");
+			XSSFSheet sheet = wb.createSheet("社员档案数据");
 			XSSFRow row = sheet.createRow(0);
 
 			//定义表头 以及 要填入的 字段
