@@ -363,6 +363,7 @@ Date.prototype.format=function(fmt) {
 				function(data, textStatus, XMLHttpRequest) {
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
+						$("#career_group").append("<option></option>");
 						$("#career_group2").append("<option></option>");
 						for (i = 0; i < jsonData.length; i++) {
 							$("#career_group").append("<option>" + jsonData[i].career_group + "</option>");
@@ -513,7 +514,7 @@ Date.prototype.format=function(fmt) {
 		if(fwzw=="服务专员"||fwzw=="线上服务专员"||fwzw=="副店长"||fwzw=="综合专员"){
 			var career_group=$("#career_group  option:selected").val();
 			var career_group2=$("#career_group2  option:selected").val();
-			if(career_group==career_group2){
+			if(career_group!=""&&career_group2!=""&&career_group==career_group2){
 				$("#btnSave").attr("disabled",""); 
 				$$.showMessage("系统信息","请选择不同事业群！ ");
 				return;
