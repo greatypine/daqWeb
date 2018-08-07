@@ -1459,6 +1459,73 @@ public List<Map<String, Object>> getMembersArea(String dd) {
         }
         return null;
 	}
+    @Override
+    public List<Map<String, Object>> getTryMemGmv(String dd) {
+        /**
+         * @author wuxinxin
+         * 2018年7月30日
+         */
+        String daySumSql = "select sum(dmom.trading_price) trygmv from  df_mass_order_monthly dmom,df_user_try_member dutm  where dmom.customer_id=dutm.customer_id and dmom.sign_time> '2018-07-26' and dutm.associator_expiry_date> '2018-07-26'  and dmom.sign_time<dutm.associator_expiry_date";
+
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return lst_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }	@Override
+    public List<Map<String, Object>> getTryMemCount(String dd) {
+        /**
+         * @author wuxinxin
+         * 2018年7月30日
+         */
+        String daySumSql = "select count(1) cou from  df_user_try_member dutm  where dutm.associator_expiry_date>curdate()";
+
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return lst_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }	@Override
+    public List<Map<String, Object>> getTryMemDayGmv(String dd) {
+        /**
+         * @author wuxinxin
+         * 2018年7月30日
+         */
+        String daySumSql = "select  " +
+                "ifnull(sum(CASE when  date(dmom.sign_time)= DATE_SUB(curdate(),INTERVAL 7 DAY) and dmom.customer_id in (select dutm.customer_id from df_user_try_member dutm where dutm.associator_expiry_date>DATE_SUB(curdate(),INTERVAL 7 DAY) ) then dmom.trading_price else 0 end),0) as day1, " +
+                "ifnull(sum(CASE when  date(dmom.sign_time)= DATE_SUB(curdate(),INTERVAL 6 DAY) and dmom.customer_id in (select dutm.customer_id from df_user_try_member dutm where dutm.associator_expiry_date>DATE_SUB(curdate(),INTERVAL 6 DAY) ) then dmom.trading_price else 0 end),0) as day2, " +
+                "ifnull(sum(CASE when  date(dmom.sign_time)= DATE_SUB(curdate(),INTERVAL 5 DAY) and dmom.customer_id in (select dutm.customer_id from df_user_try_member dutm where dutm.associator_expiry_date>DATE_SUB(curdate(),INTERVAL 5 DAY) ) then dmom.trading_price else 0 end),0) as day3, " +
+                "ifnull(sum(CASE when  date(dmom.sign_time)= DATE_SUB(curdate(),INTERVAL 4 DAY) and dmom.customer_id in (select dutm.customer_id from df_user_try_member dutm where dutm.associator_expiry_date>DATE_SUB(curdate(),INTERVAL 4 DAY) ) then dmom.trading_price else 0 end),0) as day4, " +
+                "ifnull(sum(CASE when  date(dmom.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY) and dmom.customer_id in (select dutm.customer_id from df_user_try_member dutm where dutm.associator_expiry_date>DATE_SUB(curdate(),INTERVAL 3 DAY) ) then dmom.trading_price else 0 end),0) as day5, " +
+                "ifnull(sum(CASE when  date(dmom.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY) and dmom.customer_id in (select dutm.customer_id from df_user_try_member dutm where dutm.associator_expiry_date>DATE_SUB(curdate(),INTERVAL 2 DAY) ) then dmom.trading_price else 0 end),0) as day6, " +
+                "ifnull(sum(CASE when  date(dmom.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY) and dmom.customer_id in (select dutm.customer_id from df_user_try_member dutm where dutm.associator_expiry_date>DATE_SUB(curdate(),INTERVAL 1 DAY) ) then dmom.trading_price else 0 end),0) as day7 " +
+                "from df_mass_order_monthly dmom";
+
+
+        List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            if (!lst_data.isEmpty()) {
+
+                Map<String, Object> map_data = (Map<String, Object>) lst_data.get(0);
+                for (int i = 1; i <= 7; i++) {
+                    Map<String, Object> map_content = new HashMap<String, Object>();
+                    map_content.put("tryMemDayGmv", map_data.get("day" + i));
+                    lst_result.add(map_content);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lst_result;
+    }
 
 	@Override
 	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo){
