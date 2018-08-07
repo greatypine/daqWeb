@@ -258,9 +258,14 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         //第1行表头
         String[] addAll_add_pre = ArrayUtils.addAll(addAll_add,observeContentpre);
         String[] addAll2_header = ArrayUtils.addAll(addAll_add_pre,observeContent);
-        addAll2_header[0] = observe_month+cityname+"社区门店明查问题汇总统计表(大表)（B表）";
+        String city = "";
+        if(cityname != null && !"null".equals(cityname)){
+            city = cityname;
+        }
+        addAll2_header[0] = observe_month+city+"社区门店明查问题汇总统计表(大表)（B表）";
         addAll2_header[addAll_add.length] = beforeMonth + "未整改问题";
         addAll2_header[addAll_add_pre.length] = observe_month + "新出现问题";
+        addAll2_header[addAll2_header.length-2] = "严查专项/特殊检查";
         //第二行表头
         String[] addAll2 = ArrayUtils.addAll(addAll_add_pre,observeContent);
         addAll2[0] = "";
@@ -270,7 +275,8 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         //第一行合并单元格
         sheet.addMergedRegion(new CellRangeAddress(0,0,0,addAll_add.length-1));
         sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length,addAll_add.length+observeContentpre.length-1));
-        sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length+observeContentpre.length,addAll_add.length+observeContentpre.length+observeContent.length-1));
+        sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length+observeContentpre.length,addAll_add.length+observeContentpre.length+observeContent.length-3));
+        sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length+observeContentpre.length+observeContent.length-2,addAll_add.length+observeContentpre.length+observeContent.length-1));
         //第二行合并单元格
         List<Map<String, Object>> observeModelList = observeModelDao.getObserveModelList();
         int end_length = 0;
@@ -295,19 +301,6 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
                 addAll2[end_length] = observeModelList.get(z).get("model_name").toString();
                 end_length = end_length+count;
         }
-        /*sheet.addMergedRegion(new CellRangeAddress(1,1,0,addAll_add.length-1));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,0+addAll_add.length,19+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,20+addAll_add.length,29+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,30+addAll_add.length,40+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,41+addAll_add.length,66+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,67+addAll_add.length,78+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,79+addAll_add.length,91+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,92+addAll_add.length,96+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,97+addAll_add.length,119+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,120+addAll_add.length,131+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,132+addAll_add.length,135+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,136+addAll_add.length,146+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,147+addAll_add.length,151+addAll_add.length));*/
         //第一行
         for(int i = 0;i < addAll2_header.length;i++){
             XSSFCell cell = row0.createCell(i);
@@ -337,20 +330,25 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
                 setCellValue(row2, cellIndex, storeInfoList.get(i-2).get(addAll2_key_add[cellIndex]));
             }
             String storeno = storeInfoList.get(i-2).get("storeno").toString();
-            List<Map<String, Object>> maps_pre = storeObserveParameterDaoImp.queryObserveParameterListByStoreNo(storeno, beforeMonth);
+            List<Map<String, Object>> maps_pre = storeObserveParameterDaoImp.queryObserveParameterListByStoreNo(storeno,observe_month, beforeMonth);
             for(int x = addAll2_key_add.length; x < maps_pre.size()+addAll2_key_add.length-2; x++){
                 int index = x-addAll2_key_add.length;
-                Object obj =(maps_pre.get(index).get("content_score")== null || maps_pre.get(index).get("content_score").equals(""))?null:"1";
+                Object obj =(maps_pre.get(index).get("content_score_pre")== null || maps_pre.get(index).get("content_score_pre").equals(""))?null:"1";
                 setCellValue(row2, x,obj);
             }
             setCellValue(row2, addAll2_key_add.length+maps_pre.size()-2,"岛屿");
-            List<Map<String, Object>> maps = storeObserveParameterDaoImp.queryObserveParameterListByStoreNo(storeno, observe_month);
-            for(int x = addAll2_key_add.length+maps_pre.size()-1; x < maps.size()+addAll2_key_add.length+maps_pre.size()-1; x++){
+            for(int x = addAll2_key_add.length+maps_pre.size()-1; x < maps_pre.size()+addAll2_key_add.length+maps_pre.size()-3; x++){
                 int index = x-addAll2_key_add.length-maps_pre.size()+1;
+                Object obj =(maps_pre.get(index).get("content_score")== null || maps_pre.get(index).get("content_score").equals(""))?null:"1";
+                setCellValue(row2, x,obj);
+            }
+            short num = row2.getLastCellNum();
+            List<Map<String, Object>> maps = storeObserveParameterDaoImp.queryCityObserveParameterListByStoreNo(storeno, observe_month);
+            for(int x = num; x <num+maps.size(); x++){
+                int index = x-num;
                 Object obj =(maps.get(index).get("content_score")== null || maps.get(index).get("content_score").equals(""))?null:"1";
                 setCellValue(row2, x,obj);
             }
-
 
         }
 
