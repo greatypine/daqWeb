@@ -175,10 +175,12 @@
 		var points_combined = $("#points_combined").val();
 		if(observe_person == null||observe_person.trim() == ""){
 			alert("检查人不能为空");
+            $("#saveclick").attr("disabled","false");
 			return;
 		}
 		if(observe_date == null || observe_date.trim() == ""){
 			alert("检查日期不能为空");
+            $("#saveclick").attr("disabled","false");
 			return;
 		}
 		doSave();		
@@ -265,7 +267,7 @@
 		.ui-dialog .ui-dialog-titlebar-close span {
     		display: none;
     	}
-    table th,table td{border: 1px solid #e1e1e1; line-height: 30px; padding: 0 5px;}
+    table th,table td{border: 1px solid #e1e1e1; line-height: 30px; padding: 0 5px;word-wrap:break-word ;}
     table span{color: #f00;}
     table .trbg1{background-color: #f2d4d4;}
     table .trbg2{background-color: #cff1aa;}

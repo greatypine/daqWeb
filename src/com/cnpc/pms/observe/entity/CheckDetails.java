@@ -25,6 +25,9 @@ public class CheckDetails extends DataEntity{
         @Column(name = "point_deduction_standard",columnDefinition="varchar(1000) COMMENT '扣分明细'")
         private String point_deduction_standard;
 
+        @Column(name = "type",columnDefinition="int(11) COMMENT '0普通检查项，1城市专项检查'")
+        private Integer type;
+
         public Long getCheck_item_id() {
                 return check_item_id;
         }

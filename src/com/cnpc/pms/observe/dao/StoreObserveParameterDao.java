@@ -9,7 +9,9 @@ import java.util.Map;
 public interface StoreObserveParameterDao {
 
     //点击编辑后查询
-    public List<Map<String, Object>> queryObserveParameterList(Long store_id,String observe_month);
+    public List<Map<String, Object>> queryObserveParameterList(Long store_id, String observe_month);
 
-    public List<Map<String, Object>> queryObserveParameterListByStoreNo(String storeno,String observe_month);
+    public List<Map<String, Object>> queryObserveParameterListByStoreNo(String storeno, String observe_month, String beforMonth);
+
+    public List<Map<String, Object>> queryCityObserveParameterListByStoreNo(String storeno, String observe_month);
 }

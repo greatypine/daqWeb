@@ -183,6 +183,24 @@
             <label></label>
             <button type="button" class="btn btn-block btn-primary btn-sm" onclick="showCover()">查看</button>
           </div>
+            <div class='button-group' style="background-color: #66b3ff;box-shadow: 1px 2px 1px rgba(0,0,0,.15);border-radius: 2px; padding: 7px 10px 10px 10px;bottom:25px;right:0;color:#fff">
+                <span class="checkboxFive">
+                    <input type='checkbox' id="storeNameClick" onclick='storeNameClick()' checked="checked" value='storeName'>门店位置显示
+                    <label for="storeNameClick"></label>
+                </span>
+                <span class="checkboxFive">
+                    <input type='checkbox' id="serviceClick" onclick='operatedCoverage()' checked="checked" name='bg'>运营覆盖范围
+                    <label for="serviceClick"></label>
+                </span>
+                <span class="checkboxFive">
+                    <input type='checkbox' id="landminingClick" onclick='landMiningAreaCoverage(id)' checked="checked" value='landmining'>地采覆盖范围
+                    <label for="landminingClick"></label>
+                </span>
+                <span class="checkboxFive">
+                    <input type='checkbox' id="areaClick" onclick='landMiningAreaCoverage(id)' value='area'>混片覆盖范围
+                    <label for="areaClick"></label>
+                </span>
+            </div>
 
 
         </div>
@@ -193,24 +211,6 @@
         <div class="box-body" style="position:relative" id="mapHeight">
 
           <div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
-			<div class='button-group' style="background-color: #fff;box-shadow: 1px 2px 1px rgba(0,0,0,.15);border-radius: 2px; padding: 7px 10px 10px 10px;">
-			    <span class="checkboxFive">
-			        <input type='checkbox' id="storeNameClick" onclick='storeNameClick()' checked="checked" value='storeName'>门店位置显示
-			        <label for="storeNameClick"></label>
-			    </span>
-			    <span class="checkboxFive">
-			        <input type='checkbox' id="serviceClick" onclick='operatedCoverage()' checked="checked" name='bg'>运营覆盖范围
-			        <label for="serviceClick"></label>
-			    </span>
-			    <span class="checkboxFive">
-			        <input type='checkbox' id="landminingClick" onclick='landMiningAreaCoverage(id)' checked="checked" value='landmining'>地采覆盖范围
-			        <label for="landminingClick"></label>
-			    </span>
-			    <span class="checkboxFive">
-			        <input type='checkbox' id="areaClick" onclick='landMiningAreaCoverage(id)' value='area'>混片覆盖范围
-			        <label for="areaClick"></label>
-			    </span>
-			</div>
 
         </div>
 

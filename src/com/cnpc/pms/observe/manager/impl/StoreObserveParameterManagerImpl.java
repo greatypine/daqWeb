@@ -8,24 +8,17 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.observe.dao.ObserveModelDao;
 import com.cnpc.pms.observe.dao.StoreObserveParameterDao;
 import com.cnpc.pms.observe.dao.StoreObserveParameterScoreDao;
-import com.cnpc.pms.observe.dao.impl.StoreObserveParameterDaoImp;
 import com.cnpc.pms.observe.dto.ObserveDTO;
 import com.cnpc.pms.observe.entity.StoreObserveParameter;
 import com.cnpc.pms.observe.entity.StoreObserveParameterScore;
 import com.cnpc.pms.observe.manager.StoreObserveParameterManager;
 import com.cnpc.pms.observe.manager.StoreObserveParameterScoreManager;
-import com.cnpc.pms.personal.dao.ObserveParameterDao;
 import com.cnpc.pms.personal.dto.StoreDTO;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.utils.DateUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.beans.BeanUtils;
@@ -40,7 +33,7 @@ import java.util.*;
  */
 public class StoreObserveParameterManagerImpl extends BizBaseCommonManager implements StoreObserveParameterManager {
 
-    private XSSFCellStyle style_header = null;
+   private CellStyle style_header = null;
     private CellStyle cellStyle_common = null;
 
     @Override
@@ -125,32 +118,33 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         return null;
     }
 
-    private XSSFCellStyle getHeaderStyle(){
+    private CellStyle getHeaderStyle(){
         return style_header;
     }
 
-    private void setHeaderStyle(XSSFWorkbook wb){
+    private void setHeaderStyle(Workbook wb){
 
         // 创建单元格样式
-        XSSFCellStyle style_header = wb.createCellStyle();
-        style_header.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        style_header.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        style_header.setFillForegroundColor(HSSFColor.LIGHT_TURQUOISE.index);
-        style_header.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        style_header = wb.createCellStyle();
+        style_header.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+        style_header.setAlignment(CellStyle.ALIGN_CENTER);
+        style_header.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+        style_header.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+        style_header.setFillPattern(CellStyle.SOLID_FOREGROUND);
 
         // 设置边框
-        style_header.setBottomBorderColor(HSSFColor.BLACK.index);
-        style_header.setBorderBottom(HSSFCellStyle.BORDER_THIN);
-        style_header.setBorderLeft(HSSFCellStyle.BORDER_THIN);
-        style_header.setBorderRight(HSSFCellStyle.BORDER_THIN);
-        style_header.setBorderTop(HSSFCellStyle.BORDER_THIN);
+        style_header.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+        style_header.setBorderBottom(CellStyle.BORDER_THIN);
+        style_header.setBorderLeft(CellStyle.BORDER_THIN);
+        style_header.setBorderRight(CellStyle.BORDER_THIN);
+        style_header.setBorderTop(CellStyle.BORDER_THIN);
 
     }
 
     private void setCellStyle_common(Workbook wb){
         cellStyle_common=wb.createCellStyle();
-        cellStyle_common.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 水平居中
-        cellStyle_common.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);//垂直居中
+        cellStyle_common.setAlignment(CellStyle.ALIGN_CENTER); // 水平居中
+        cellStyle_common.setVerticalAlignment(CellStyle.VERTICAL_TOP);//垂直居中
 
     }
 
@@ -258,9 +252,14 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         //第1行表头
         String[] addAll_add_pre = ArrayUtils.addAll(addAll_add,observeContentpre);
         String[] addAll2_header = ArrayUtils.addAll(addAll_add_pre,observeContent);
-        addAll2_header[0] = observe_month+cityname+"社区门店明查问题汇总统计表(大表)（B表）";
+        String city = "";
+        if(cityname != null && !"null".equals(cityname)){
+            city = cityname;
+        }
+        addAll2_header[0] = observe_month+city+"社区门店明查问题汇总统计表(大表)（B表）";
         addAll2_header[addAll_add.length] = beforeMonth + "未整改问题";
         addAll2_header[addAll_add_pre.length] = observe_month + "新出现问题";
+        addAll2_header[addAll2_header.length-2] = "严查专项/特殊检查";
         //第二行表头
         String[] addAll2 = ArrayUtils.addAll(addAll_add_pre,observeContent);
         addAll2[0] = "";
@@ -270,7 +269,8 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         //第一行合并单元格
         sheet.addMergedRegion(new CellRangeAddress(0,0,0,addAll_add.length-1));
         sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length,addAll_add.length+observeContentpre.length-1));
-        sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length+observeContentpre.length,addAll_add.length+observeContentpre.length+observeContent.length-1));
+        sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length+observeContentpre.length,addAll_add.length+observeContentpre.length+observeContent.length-3));
+        sheet.addMergedRegion(new CellRangeAddress(0,0,addAll_add.length+observeContentpre.length+observeContent.length-2,addAll_add.length+observeContentpre.length+observeContent.length-1));
         //第二行合并单元格
         List<Map<String, Object>> observeModelList = observeModelDao.getObserveModelList();
         int end_length = 0;
@@ -295,29 +295,16 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
                 addAll2[end_length] = observeModelList.get(z).get("model_name").toString();
                 end_length = end_length+count;
         }
-        /*sheet.addMergedRegion(new CellRangeAddress(1,1,0,addAll_add.length-1));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,0+addAll_add.length,19+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,20+addAll_add.length,29+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,30+addAll_add.length,40+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,41+addAll_add.length,66+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,67+addAll_add.length,78+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,79+addAll_add.length,91+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,92+addAll_add.length,96+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,97+addAll_add.length,119+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,120+addAll_add.length,131+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,132+addAll_add.length,135+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,136+addAll_add.length,146+addAll_add.length));
-        sheet.addMergedRegion(new CellRangeAddress(1,1,147+addAll_add.length,151+addAll_add.length));*/
         //第一行
         for(int i = 0;i < addAll2_header.length;i++){
             XSSFCell cell = row0.createCell(i);
-            cell.setCellStyle(style_header);
+            cell.setCellStyle(getHeaderStyle());
             cell.setCellValue(new XSSFRichTextString(addAll2_header[i]));
         }
         //第二行
         for(int i = 0;i < addAll2.length;i++){
             XSSFCell cell = row1.createCell(i);
-            cell.setCellStyle(style_header);
+            cell.setCellStyle(getHeaderStyle());
             cell.setCellValue(new XSSFRichTextString(addAll2[i]));
         }
         //第三行
@@ -337,20 +324,25 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
                 setCellValue(row2, cellIndex, storeInfoList.get(i-2).get(addAll2_key_add[cellIndex]));
             }
             String storeno = storeInfoList.get(i-2).get("storeno").toString();
-            List<Map<String, Object>> maps_pre = storeObserveParameterDaoImp.queryObserveParameterListByStoreNo(storeno, beforeMonth);
+            List<Map<String, Object>> maps_pre = storeObserveParameterDaoImp.queryObserveParameterListByStoreNo(storeno,observe_month, beforeMonth);
             for(int x = addAll2_key_add.length; x < maps_pre.size()+addAll2_key_add.length-2; x++){
                 int index = x-addAll2_key_add.length;
-                Object obj =(maps_pre.get(index).get("content_score")== null || maps_pre.get(index).get("content_score").equals(""))?null:"1";
+                Object obj =(maps_pre.get(index).get("content_score_pre")== null || maps_pre.get(index).get("content_score_pre").equals(""))?null:"1";
                 setCellValue(row2, x,obj);
             }
             setCellValue(row2, addAll2_key_add.length+maps_pre.size()-2,"岛屿");
-            List<Map<String, Object>> maps = storeObserveParameterDaoImp.queryObserveParameterListByStoreNo(storeno, observe_month);
-            for(int x = addAll2_key_add.length+maps_pre.size()-1; x < maps.size()+addAll2_key_add.length+maps_pre.size()-1; x++){
+            for(int x = addAll2_key_add.length+maps_pre.size()-1; x < maps_pre.size()+addAll2_key_add.length+maps_pre.size()-3; x++){
                 int index = x-addAll2_key_add.length-maps_pre.size()+1;
+                Object obj =(maps_pre.get(index).get("content_score")== null || maps_pre.get(index).get("content_score").equals(""))?null:"1";
+                setCellValue(row2, x,obj);
+            }
+            short num = row2.getLastCellNum();
+            List<Map<String, Object>> maps = storeObserveParameterDaoImp.queryCityObserveParameterListByStoreNo(storeno, observe_month);
+            for(int x = num; x <num+maps.size(); x++){
+                int index = x-num;
                 Object obj =(maps.get(index).get("content_score")== null || maps.get(index).get("content_score").equals(""))?null:"1";
                 setCellValue(row2, x,obj);
             }
-
 
         }
 
