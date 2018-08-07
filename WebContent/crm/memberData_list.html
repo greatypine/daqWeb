@@ -669,25 +669,22 @@
 
     //数据查询-用户档案
     function showuserprofile(customer_id,mobilephone){
-        // doManager('userProfileManager','queryRecentlyOrder',[customer_id],function(data){
-        //     if(data.result){
-        //         var result= JSON.parse(data.data);
-        //         if(result!=null){
-        //             var jData = result.data;
-        //             if(jData!=null && jData.length>0){
-        //                 var url = "userProfile_view.html?t="+encode64(target)+"&sn="+encode64(storeName)+"&cn="+encode64(cityname)+"&c="+encode64(cityId)+"&so="+encode64(storeno)+"&mp="+encode64(mobilephone);
-        //                 window.open(url,"userProfile_view");
-        //             }else{
-        //                 crm_alert(5,"暂无消费信息！");
-        //             }
-        //
-        //         }
-        //     }
-        // });
         var ocdate = $("#searchTime").val();
-        var url = "userProfile_view.html?t="+encode64(target)+"&sn="+encode64(storeName)+"&cn="+encode64(cityname)+"&c="+encode64(cityId)+"&so="+encode64(storeno)+"&mp="+encode64(mobilephone)+"&tag="+encode64("V")+"&time="+encode64(ocdate);
-        window.open(url,"userProfile_view");
+        doManager('userProfileManager','queryRecentlyOrder',[customer_id],function(data){
+            if(data.result){
+                var result= JSON.parse(data.data);
+                if(result!=null){
+                    var jData = result.data;
+                    if(jData!=null && jData.length>0){
+                        var url = "userProfile_view.html?t="+encode64(target)+"&sn="+encode64(storeName)+"&cn="+encode64(cityname)+"&c="+encode64(cityId)+"&so="+encode64(storeno)+"&mp="+encode64(mobilephone)+"&tag="+encode64("V")+"&time="+encode64(ocdate);
+                        window.open(url,"userProfile_view");
+                    }else{
+                        crm_alert(5,"暂无消费信息！");
+                    }
 
+                }
+            }
+        });
     }
     
     //数据查找-员工数据
