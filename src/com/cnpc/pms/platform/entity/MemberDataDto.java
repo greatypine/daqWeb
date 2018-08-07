@@ -6,6 +6,8 @@ public class MemberDataDto {
     String storeNo;
     String inviteCode;
     String hidden_flag;
+    String open_card_time_begin;
+    String open_card_time_end;
 
     public String getCityName() {
         return cityName;
@@ -37,5 +39,21 @@ public class MemberDataDto {
 
     public void setHidden_flag(String hidden_flag) {
         this.hidden_flag = hidden_flag;
+    }
+
+    public String getOpen_card_time_begin() {
+        return open_card_time_begin;
+    }
+
+    public void setOpen_card_time_begin(String open_card_time_begin) {
+        this.open_card_time_begin = open_card_time_begin;
+    }
+
+    public String getOpen_card_time_end() {
+        return open_card_time_end;
+    }
+
+    public void setOpen_card_time_end(String open_card_time_end) {
+        this.open_card_time_end = open_card_time_end;
     }
 }
