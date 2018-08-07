@@ -212,10 +212,10 @@ function insertObserve(){
 		return;
 	}
 	//判断是否该门店该月份是否已录入
-	doManager('observeParameterManager','queryExitObserveParameter',[store_id,observe_month],function(data){
+	doManager('storeObserveParameterScoreManager','queryExitObserveParameter',[store_id,observe_month],function(data){
         if(data.result){
         	var queryObserveParameterList = JSON.parse(data.data).queryObserveParameterList;
-        	if(queryObserveParameterList.length >0 &&　queryObserveParameterList != null){
+        	if(queryObserveParameterList != null){
                 $$.showMessage("系统信息","该门店已录入过当前月明查台账，请查询后编辑！");
         	}else{
         		window.location.href="observe_paramter_add.html?om="+encode64(observe_month)+"&t="+encode64("add")+"&sn="+encode64(store_name)+"&si="+encode64(store_id);	
@@ -254,7 +254,7 @@ $pmspage.opArr = [ editObj];
         observe_month:observe_month,
         employeeId:employeeId
     }
-     doManager('observeParameterManager','exportObserveParamterSummary',[param],function(data){
+     doManager('storeObserveParameterManager','exportObserveParamterSummary',[param],function(data){
          var result= JSON.parse(data.data);
          if(result.status=='success'){
              window.location.href=result.data;
