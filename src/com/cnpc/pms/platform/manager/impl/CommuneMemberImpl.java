@@ -2414,65 +2414,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 
     }
 
-    @Override
-    public Map<String, Object> selectTryMemInfo(String dd) {
-        /**
-         * @author wuxinxin 2018年8月6日
-         */
-        Map<String, Object> result = new HashMap<String, Object>();
-
-        CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
-
-
-        // 查询试用社员数量
-        List<Map<String, Object>> tryMemCountList = new ArrayList<Map<String, Object>>();
-        tryMemCountList = commDao.getTryMemCount(dd);
-        if (tryMemCountList != null && tryMemCountList.size() > 0) {
-            result.put("tryMemCou", tryMemCountList.get(0).get("cou"));
-        } else {
-            result.put("tryMemCou", "0");
-        }
-
-        // 查询试用社员GMV
-        List<Map<String, Object>> tryMemGmvList = new ArrayList<Map<String, Object>>();
-        tryMemGmvList = commDao.getTryMemGmv(dd);
-        if (tryMemGmvList != null && tryMemGmvList.size() > 0) {
-            result.put("tryMemGmv", tryMemGmvList.get(0).get("trygmv"));
-        } else {
-            result.put("tryMemGmv", "0");
-        }
-        //计算客单价
-        if(tryMemCountList.get(0).get("cou")!=null&&Double.valueOf(tryMemCountList.get(0).get("cou").toString())>0){
-            result.put("tryMemGmvAvg", String.format("%.2f",Double.valueOf(tryMemGmvList.get(0).get("trygmv").toString())/Double.valueOf(tryMemCountList.get(0).get("cou").toString())));
-        }else{
-
-            result.put("tryMemGmvAvg","0");
-        }
-        ;
-        //查询试用社员7日GMV
-        List<Map<String, Object>> tryMemDayGmvList = new ArrayList<Map<String, Object>>();
-        tryMemDayGmvList = commDao.getTryMemDayGmv(dd);
-        List tryDayGmvs = new ArrayList();
-        for (Map<String, Object> stringObjectMap : tryMemDayGmvList) {
-            tryDayGmvs.add(Double.valueOf(stringObjectMap.get("tryMemDayGmv").toString()).intValue());
-        }
-        JSONArray tryDayGmv = (JSONArray) JSONArray.fromObject(tryDayGmvs);
-        result.put("tryDayGmv",tryDayGmv);
-
-
-        List dateMemCounts = new ArrayList();
-        try {
-            //生成X轴坐标
-            dateMemCounts = reDate(7);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
-        result.put("jsonDateMem",jsonDateMem);
-        return result;
-    }
-
-    @Override
+	@Override
 	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo){
 		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
 		Map<String, Object> result =new HashMap<String,Object>();

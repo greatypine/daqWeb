@@ -571,9 +571,12 @@ Date.prototype.format=function(fmt) {
 	//从社员统计 跳转过来
 	var tag = decode64(getUrlParamByKey("tag"));//社员标签
 	var time = decode64(getUrlParamByKey("time"));//开卡时间
-	var mt = decode64(getUrlParamByKey("mt"));//开卡标识
-	
-  $(function () {
+	var mt = decode64(getUrlParamByKey("mt"));///开卡标识
+	//从社员档案 跳转过来
+	var mobilephone = decode64(getUrlParamByKey("mp"));//用户手机号
+
+
+$(function () {
     $(".logo-lg > ul > li").mouseenter(function(){
       $(this).children(".nav_dropdown").show();
     });
@@ -629,7 +632,10 @@ Date.prototype.format=function(fmt) {
     $("#citySelect option[value='"+cityname+"']").attr('selected',true);
     $("#store_id_manual").val(storeNo);
 	$("#store_name_manual").val(storeName);
-	
+    if(mobilephone!=null && mobilephone!=''){
+        $("#customer_phone_manual").val(mobilephone);
+	}
+
     var autoComplete = new AutoComplete("store_name_manual","auto",array);
   	document.getElementById("store_name_manual").onkeyup = function(event){
   		autoComplete.start(event);
@@ -820,13 +826,6 @@ Date.prototype.format=function(fmt) {
 
       	//清空所有条件
         $(".breadcrumb .pull-right").click(function(){
-      	  $("#label_private_manual").val("");
-      	  $("#slient_private_manual").val("");
-          $(".breadcrumb .search-con .condition").remove();
-          $(".sl-v-list a").removeClass("bg-orange-active");
-          $(".sl-v-list-label a").removeClass("bg-orange-active");
-          var ui =document.getElementById("clear_all");
-          ui.style.display="none";
           resetSerachParam(2);
         });
       
@@ -863,7 +862,7 @@ Date.prototype.format=function(fmt) {
       	
        	$("#tag_"+tag).addClass("bg-orange-active");
        	$("#slient_private_manual").val("V");
-        var filter = $("<a href='javascript:;' class='condition'><span>" + "合作社社员" + "</span><i class='fa fa-times'></i></a>");
+        var filter = $("<a href='cursor:pointer;' class='condition'><span>" + "合作社社员" + "</span><i class='fa fa-times'></i></a>");
          $(".breadcrumb .search-con").append(filter);
        	  var sl_open = $(".fold-con").css("display");
        	  if(sl_open == 'none'){
@@ -871,10 +870,21 @@ Date.prototype.format=function(fmt) {
 	         $(".how-more").children("span").html("收起更多选项");
 	         $(".how-more").children("span").addClass("search-more-open");
        	  }
-       	  
+          var ui = document.getElementById("clear_all");
+          ui.style.display="";
+
+          var obj=$(this);
+          filter.on("click",function(){
+              obj.removeClass("bg-orange-active");
+              filter.remove();
+              var deptName = $("#slient_private_manual").val();
+              $("#slient_private_manual").val(deptName.replace(name,""));
+              $("#tag_"+tag).removeClass("bg-orange-active");
+			  ui.style.display="none";
+          });
        	search_manual_userProfile(1);
       }
-      
+
   });
 	
   /**
@@ -998,7 +1008,7 @@ Date.prototype.format=function(fmt) {
 							document.getElementById("store_name_manual").value=document.getElementById("store_name_manual").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 						}
 					}
-			});
+			},false);
 		}
 		
 	}
@@ -1589,7 +1599,13 @@ Date.prototype.format=function(fmt) {
 	$("#startOpenCardDate").val(startDateStr);
 	$("#endOpenCardDate").val(timeStr);
 	$("#data_choice").html("默认时期");
-	
+
+	$(".breadcrumb .search-con .condition").remove();
+	$(".sl-v-list a").removeClass("bg-orange-active");
+	$(".sl-v-list-label a").removeClass("bg-orange-active");
+	var ui =document.getElementById("clear_all");
+	ui.style.display="none";
+
 // 	$("#last_date").val(startDateStr +"-"+ timeStr);
 // 	$("#startDateLast").val(startDateStr);
 // 	$("#last_date").val(timeStr +"-"+ timeStr);

@@ -132,13 +132,6 @@ public interface CommuneMember extends IManager{
 	 */
 	public Map<String, Object> selectCmBigInfo(String dd);
 
-    /**
-     * 试用社员总量、GMV、客单价查询
-     *
-     * @author wuxinxin
-     */
-    public Map<String, Object> selectTryMemInfo(String dd);
-
 	/**
 	 * 社员档案查询列表
 	 * @author chenchuang

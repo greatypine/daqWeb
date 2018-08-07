@@ -64,7 +64,7 @@ $(document).ready(function () {
 	showMoreSummaryStatistics();
 	getStoreKindsNumber();
 	//页面长期打开的情况下,早晨7点定时刷新
-	startRefreshPage();
+	excuteRefreshTask();
     var startTime = new Date().getTime();
     // 获取请求参数
     var requestParameters = getReauestParameters();
@@ -4468,9 +4468,9 @@ var curr_user;
         var url = "";
         var target=pageStatusInfo.targets;
         if(target==0){
-            url = "memberData_list.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+            url = "memberData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
         }else if(target==1){
-            url = "memberData_list.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+            url = "memberData_list.html?t="+encode64(1)+"&so=&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
         }
         window.open(url,"memberData_list");
     }
@@ -5050,7 +5050,11 @@ function refreshCurrentData(){
 		    localStorage.clear();
 	        showPageContent(pageStatusInfo);  
         }
-        return true;
+}
+function excuteRefreshTask() {
+	refreshCurrentData();
+	clearTimeout(refreshId);
+    refreshId= setTimeout("excuteRefreshTask()",1000);
 }
 function  clearFirstCache(){
 	localStorage.clear();
@@ -5074,36 +5078,3 @@ function goTo221GMV(){
     window.open(url,"dynamicData_gmv_tto");
 }
 
-function settingClockByTimeOut(_args1, _args2) {
-    var _type = 0,
-        timeFn, _flag = true,
-        ms = _args2,
-        callBackFn = _args1,
-        self = this;
-    this.getTimeOut = function() {
-        var _callee = arguments.callee;
-        if (_flag) { //内部错误,内部强制中断，终止递归
-            if (_type == 0) { //外部终止递归
-                timeFn = setTimeout(function() {
-                    //console.log("定时任务开始执行："+new Date().getSeconds());
-                    _flag = callBackFn();
-                    //console.log("定时任务结束执行："+new Date().getSeconds());
-                    _callee();
-                }, ms);
-            } else {
-                if (timeFn) clearTimeout(timeFn);
-                console.error(500, "定时器已终止,外部终止...");
-            }
-        } else {
-            if (timeFn) clearTimeout(timeFn);
-            console.error(500, "定时器已终止,回调函数出现错误或内部强制终止...");
-        }
-    };
-    this.close = function(_args1) {
-        _type = _args1 || 1;
-    };
-    self.getTimeOut();
-}
-function startRefreshPage() {
-    refreshId = new settingClockByTimeOut(refreshCurrentData,1000);
-}
