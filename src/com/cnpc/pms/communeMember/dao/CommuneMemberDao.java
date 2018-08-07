@@ -354,6 +354,24 @@ public interface CommuneMemberDao extends IDAO {
      * @author wuxinxin
      */
     public List<Map<String, Object>> getBigByDayCount(String dd);
+    /**
+     * TODO 查询查询试用期有效社员GMV
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getTryMemGmv(String dd);
+    /**
+     * TODO 查询试用社员量
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getTryMemCount(String dd);
+    /**
+     * TODO 查询7日试用社员GMV走势
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getTryMemDayGmv(String dd);
 
 	/**
 	 * TODO 查询社员档案列表数据

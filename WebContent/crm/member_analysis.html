@@ -45,7 +45,7 @@
         .report dt{border-bottom: 1px dashed rgba(255,255,255,1); padding: 0 5px 5px 5px; position: relative; margin: 0 10px;}
         .report dt:after{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; left: -7px;}
         .report dt:before{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; right: -7px;}
-        .report_jr li{width: 31%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
+        .report_jr li{width: 23%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
         .report_jr li i{font-size: 50px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
         .report_jr li span{font-size: 22px; color: #ffde00;}
 
@@ -185,19 +185,19 @@
                                         </div>
                                     </li>
                                     </div>
-<!--                                    <div class="add_TestMember">
+                                    <div class="add_TestMember">
                                         <li>
-                                            <div class="col-sm-9" style="padding-right:0px;">试用社员：<span>1111</span><br>
+                                            <div class="col-sm-9" style="padding-right:0px;">试用社员：<span id="tryMemSum"></span><br>
                                                 <small>GMV：</small>
-                                                <small id="dayNe11wMem" style="color: #ffde00;">1111</small>&nbsp;<small>
+                                                <small id="tryMemGmvSum" style="color: #ffde00;"></small>&nbsp;<small>
                                                     客单价：
                                                 </small>
-                                                <small style="color: #ffde00;">1111</small>
+                                                <small style="color: #ffde00;"id="tryMemGmvAvg" ></small>
                                             </div>
                                             <div class="col-sm-3"><i class="fa fa-retweet" style="font-size: 40px;"></i>
                                             </div>
                                         </li>
-                                    </div>-->
+                                    </div>
                                 </ul>
                                 <div id="cityMember" class="toast" style="display: none">
                                     <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
@@ -477,14 +477,7 @@
     </div>
     <!-- ./wrapper -->
     <div id="city_detail_div" style="height:350px;display:none">
-        <table id="city_detail_table" style="width:100%;text-align:center;border-collapse:separate;border-spacing:2px" border="0" cellspacing="3" cellpadding="2"  >
-            <tr style="height:25px;background-color:#00c0ef;color:white" id="city_detail_title">
-                <td width="30px">序号</td>
-                <td>名称</td>
-                <!-- <td>代码</td>
-                <td>编号</td> -->
-            </tr>
-        </table>
+        <div class="col-sm-12 no-padding" id="mainTry" style="height: 260px;"></div>
     </div>
 
     <!-- jQuery 2.2.0 -->
@@ -692,6 +685,7 @@
 
                     doMemberInfo1();
                     doMemberInfo1_1();
+                    doTryMem();
                     showBigInfo();
                     doMemberInfo2();
                     doMemberInfo3();
@@ -777,6 +771,7 @@
 
                 doMemberInfo1();
                 doMemberInfo1_1();
+                doTryMem();
                 showBigInfo();
                 doMemberInfo2();
                 doMemberInfo3();
@@ -1142,7 +1137,73 @@
             };
             myChart2.setOption(option2);
         }
-
+        var showTryMem = function (dataServer){
+            var myChartTry = echarts.init(document.getElementById('mainTry'));
+            //社员人数
+            optionTry = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    data: [ '试用社员GMV'],
+                    right:'35%',
+                    selectedMode:false,
+                    textStyle: {color: '#404a59'}
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: dataServer.jsonDateMem,
+                    axisLabel:{
+                        textStyle:{color:'#404a59',}
+                    },
+                    axisLine:{
+                        lineStyle:{color:'#404a59',}
+                    },
+                }],
+                yAxis: [{
+                    type: 'value',
+                    name: '试用社员GMV',
+                    splitLine: {show: false},
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle:{color:'#404a59'}
+                    },
+                    axisLine:{
+                        lineStyle:{color:'#404a59'}
+                    }
+                }],
+                series: [ {
+                    name: '试用社员GMV',
+                    type: 'bar',
+                    itemStyle:{normal:{color:'#ffae00'}},
+                    data: dataServer.tryDayGmv,
+                    label: {
+                        normal: {
+                            show:true,
+                            position: 'top',
+                            textStyle:{
+                                color:'#ffae00'
+                            }
+                        },
+                        emphasis: {
+                            textStyle:{
+                                color:'#ffae00',
+                            }
+                        }
+                    }
+                }]
+            };
+            myChartTry.setOption(optionTry);
+        }
         var showMemberInfo = function(dataServer){
             var myChart3 = echarts.init(document.getElementById('main3'));
             var myChart4 = echarts.init(document.getElementById('main4'));
@@ -1482,7 +1543,6 @@
                     showMember(resultJson);
                     setInterval("doUpdate()","60000");
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1494,7 +1554,23 @@
                    mem_big = resultJson.bigCou;
 	               showCmBigData(resultJson);
 	           }else{
-	               alert("暂无社员相关信息");
+	           }
+	       },false);
+	   }
+ 	   function doTryMem(){
+	       //直接赋值---基本信息加载
+	       doManager('communeMember','selectTryMemInfo',"0000",function(data){
+	           if(data.result){
+	               var resultJson= JSON.parse(data.data);
+                   //试用社员
+                   $("#tryMemSum").html(parseInt(resultJson.tryMemCou==null?'0':resultJson.tryMemCou));
+                   //试用社员GMV
+
+                   $("#tryMemGmvSum").html(changeMoney(parseInt(resultJson.tryMemGmv==null?'0':resultJson.tryMemGmv)));
+                   //客单价
+                   $("#tryMemGmvAvg").html(changeMoney(parseInt(resultJson.tryMemGmvAvg==null?'0':resultJson.tryMemGmvAvg)));
+                   showTryMem(resultJson);
+	           }else{
 	           }
 	       },false);
 	   }
@@ -1506,7 +1582,6 @@
                     //社员饼图
                     showMember(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1518,7 +1593,6 @@
                     //7日社员增长
                     showMemberGrow(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1531,7 +1605,6 @@
                     setCmDealInfo(resultJson);
                     //
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1542,7 +1615,6 @@
                     //社员成交额
                     showDeal(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1553,7 +1625,6 @@
                     //社员分析
                     showMemberInfo(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1565,7 +1636,6 @@
                     showMemberRegist(resultJson);
                     showCityMember(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1576,7 +1646,6 @@
                     //粮票
                     showRebateMoney(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1587,7 +1656,6 @@
                     //订单时段性分布
                     showTimeOrder(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1598,7 +1666,6 @@
                     //7大场景订单分布
                     showOrderType(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1609,7 +1676,6 @@
                     //完成订单/取消订单走势，订单均价走势
                     showEshopCount(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1620,7 +1686,6 @@
                     //安心合作社成交额、城市成交额
                     showEshopMemSum(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1631,7 +1696,6 @@
                     //安心合作社情况
                     showEshop(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1664,7 +1728,6 @@
                     var resultJson= JSON.parse(data.data);
                     setCmDealInfo(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1688,7 +1751,6 @@
                     //设置1分钟刷新页面600
                     setInterval("doUpdate()","60000");
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1719,7 +1781,6 @@
                     //粮票
                     showRebateMoney(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -4072,12 +4133,6 @@
                 shade: [0.1, '#393D49'] //0.1透明度的黑色背景
             });
             var infoStr = "";
-
-            for (var i = 0; i < 10; i++) {
-                var cityname = i;
-                var cityId = i;
-                infoStr = infoStr + "<tr style='cursor:pointer'  onclick='aboutCityData(this)' id='tr_" + cityId + "'><td>" + parseInt(i + 1) + "</td><td>" + cityname + "</td>/tr>";
-            }
             $("#city_detail_title").nextAll().remove();
             $("#city_detail_title").after(infoStr);
             $("#city_detail_title").nextAll("tr:even").css("background-color", "aliceblue");
@@ -4090,7 +4145,7 @@
             layer.open({
                 type: 1,
                 closeBtn:1,
-                title: ['城市信息', 'color:#fff'],
+                title: ['试用社员信息', 'color:#000'],
                 shadeClose: true,
                 shade: [0.1, '#393D49'],
                 moveOut: false,
@@ -4105,6 +4160,11 @@
                     layer.close(index);
                 }
             });
+            var chartTry = echarts.init(document.getElementById('mainTry'));
+            chartTry.clear();
+            var chart7div=document.getElementById('mainTry');
+            chartTry.resize(260);
+            chartTry.setOption(optionTry);
         };
 
     </script>
