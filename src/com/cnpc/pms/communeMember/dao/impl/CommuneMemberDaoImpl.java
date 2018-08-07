@@ -1474,6 +1474,13 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
 		}
 
+		if(StringUtils.isNotEmpty(memberDataDto.getOpen_card_time_begin())){
+			sql = sql + " AND (dum.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
+					+ memberDataDto.getOpen_card_time_end() + " 23:59:59')";
+		}
+
+		sql = sql + " ORDER BY dum.opencard_time desc ";
+
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
 
 		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
@@ -1534,6 +1541,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		}
 		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
 			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+		}
+
+		if(StringUtils.isNotEmpty(memberDataDto.getOpen_card_time_begin())){
+			sql = sql + " AND (dum.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
+					+ memberDataDto.getOpen_card_time_end() + " 23:59:59')";
 		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
