@@ -1,5 +1,6 @@
 package com.cnpc.pms.platform.manager.impl;
 
+import com.cnpc.pms.base.file.comm.utils.StringUtils;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -13,8 +14,11 @@ import com.cnpc.pms.utils.PropertiesValueUtil;
 import net.sf.json.JSONArray;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.*;
-import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -2465,6 +2469,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				row = sheet.createRow(i+1);
 				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
 					String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+					if(cellIndex==0 && "normal".equals(memberDataDto.getHidden_flag())){
+						if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
+							value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+						}
+					}
 					setCellValueall(row, cellIndex, value);
 				}
 			}

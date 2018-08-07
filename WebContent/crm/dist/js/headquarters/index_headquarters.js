@@ -4468,9 +4468,9 @@ var curr_user;
         var url = "";
         var target=pageStatusInfo.targets;
         if(target==0){
-            url = "memberData_list.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+            url = "memberData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
         }else if(target==1){
-            url = "memberData_list.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+            url = "memberData_list.html?t="+encode64(1)+"&so=&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
         }
         window.open(url,"memberData_list");
     }

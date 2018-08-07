@@ -1462,7 +1462,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 
 	@Override
 	public Map<String, Object> queryMemberDataList(MemberDataDto memberDataDto, PageInfo pageInfo){
-		String sql = "select dum.mobilephone,dum.regist_time,dum.opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
+		String sql = "select dum.customer_id,dum.mobilephone,dum.regist_time,dum.opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
 			sql = sql + " AND dum.regist_storeid='"+memberDataDto.getStoreNo()+"' ";
@@ -1473,6 +1473,13 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
 			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
 		}
+
+		if(StringUtils.isNotEmpty(memberDataDto.getOpen_card_time_begin())){
+			sql = sql + " AND (dum.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
+					+ memberDataDto.getOpen_card_time_end() + " 23:59:59')";
+		}
+
+		sql = sql + " ORDER BY dum.opencard_time desc ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
 
@@ -1524,7 +1531,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	}
 
 	public List<Map<String, Object>> exportMemeData(MemberDataDto memberDataDto){
-		String sql = "select IFNULL(INSERT(dum.mobilephone,4,4,'****'),'') as mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
+		String sql = "select IFNULL(dum.mobilephone,'') as mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
 			sql = sql + " AND dum.regist_storeid='"+memberDataDto.getStoreNo()+"' ";
@@ -1534,6 +1541,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		}
 		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
 			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+		}
+
+		if(StringUtils.isNotEmpty(memberDataDto.getOpen_card_time_begin())){
+			sql = sql + " AND (dum.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
+					+ memberDataDto.getOpen_card_time_end() + " 23:59:59')";
 		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
