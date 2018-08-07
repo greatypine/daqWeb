@@ -10,6 +10,12 @@ public class ObserveDTO {
     private String point_deduction_standard;
     private String check_details_id;
     private String model_name;
+    private String add_or_edit;
+    private String city_name;
+    private String store_name;
+    private String storeno;
+    private Long store_id;
+    private String observe_month;
 
     /** 功能节点主键. */
     private Long id;
@@ -233,5 +239,53 @@ public class ObserveDTO {
 
     public void setOrderNo(Integer orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getAdd_or_edit() {
+        return add_or_edit;
+    }
+
+    public void setAdd_or_edit(String add_or_edit) {
+        this.add_or_edit = add_or_edit;
+    }
+
+    public String getCity_name() {
+        return city_name;
+    }
+
+    public void setCity_name(String city_name) {
+        this.city_name = city_name;
+    }
+
+    public String getStore_name() {
+        return store_name;
+    }
+
+    public void setStore_name(String store_name) {
+        this.store_name = store_name;
+    }
+
+    public String getStoreno() {
+        return storeno;
+    }
+
+    public void setStoreno(String storeno) {
+        this.storeno = storeno;
+    }
+
+    public Long getStore_id() {
+        return store_id;
+    }
+
+    public void setStore_id(Long store_id) {
+        this.store_id = store_id;
+    }
+
+    public String getObserve_month() {
+        return observe_month;
+    }
+
+    public void setObserve_month(String observe_month) {
+        this.observe_month = observe_month;
     }
 }

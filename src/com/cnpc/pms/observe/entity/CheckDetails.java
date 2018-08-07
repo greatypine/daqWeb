@@ -13,31 +13,31 @@ import javax.persistence.Table;
 @Table(name = "t_observe_check_details")
 public class CheckDetails extends DataEntity{
 
-        @Column(name = "check_item_id",length=1000)
-        private String check_item_id;
+        @Column(name = "check_item_id",columnDefinition="bigint(11) COMMENT '检查项id'")
+        private Long check_item_id;
 
-        @Column(name = "model_id",length=1000)
-        private String model_id;
+        @Column(name = "model_id",length=11, columnDefinition="bigint(11) COMMENT '检查模块id'")
+        private Long model_id;
 
-        @Column(name = "observe_content",length=1000)
+        @Column(name = "observe_content",columnDefinition="varchar(2000) COMMENT '明查内容'")
         private String observe_content;
 
-        @Column(name = "point_deduction_standard",length=1000)
+        @Column(name = "point_deduction_standard",columnDefinition="varchar(1000) COMMENT '扣分明细'")
         private String point_deduction_standard;
 
-        public String getCheck_item_id() {
+        public Long getCheck_item_id() {
                 return check_item_id;
         }
 
-        public void setCheck_item_id(String check_item_id) {
+        public void setCheck_item_id(Long check_item_id) {
                 this.check_item_id = check_item_id;
         }
 
-        public String getModel_id() {
+        public Long getModel_id() {
                 return model_id;
         }
 
-        public void setModel_id(String model_id) {
+        public void setModel_id(Long model_id) {
                 this.model_id = model_id;
         }
 

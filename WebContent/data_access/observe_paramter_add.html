@@ -20,6 +20,7 @@
     var store_name=decode64(getUrlParamByKey("sn"));
     var store_id=decode64(getUrlParamByKey("si"));
     var observe_question_number = 0;
+    var colorStyleArray = ["trbg1","trbg2","trbg3","trbg4","trbg5","trbg6","trbg7","trbg8","trbg9","trbg10","trbg11","trbg12"];
     
     function latetime(){
     	var today = new Date();
@@ -36,51 +37,127 @@
     	$( "#observe_date" ).datepicker({
     		maxDate:"+0m"+latetime()+"d"
     	});
-    	/* var emparray = [];
-    	$("#observebaseInfo tr:gt(1)").each(function(i,t){
-	    		 var a = $(t).find("th").html();
-	    		 emparray.push(a);
-	   });
-    	console.log(emparray);
-    	alert(emparray); */
     	$("#observe_month").val(observe_month);	
 		$("#observe_month_info").html(observe_month.replace('-', '年'));
 		$("#store_name").html(store_name);
+
+        var observeDTO = {
+            add_or_edit:add_edit,
+            store_id:store_id,
+            observe_month:observe_month
+		}
     	if(add_edit == 'add'){
     		$("#buckle_points_combined").val(0);
     		$("#points_combined").val(100);
+            doManager("storeObserveParameterManager", "queryObserveParameterList", [observeDTO], function(data,textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var observeParameterList = $.fromJSON(data.data).observeParameterList;
+                    var observeModelList = $.fromJSON(data.data).observeModelList;
+                    var observeParameterString = "";
+					for(var z = 0; z < observeParameterList.length; z++){
+                        var observeParameter = observeParameterList[z];
+                        var observe_content = observeParameter.observe_content;
+                        if(z == 0 ||　observeParameter.model_id != observeParameterList[z-1].model_id){
+                            for(var i = 0; i < observeModelList.length; i++){
+                                var observeModel = observeModelList[i];
+                                var count = observeModel.count;
+                                var model_name = observeModel.model_name;
+                                var model_id = observeModel.model_id;
+                                if(observeModel.model_id == observeParameter.model_id){
+                                    observeParameterString += '<tr><td rowspan="'+count+'" class="'+colorStyleArray[model_id-1]+'" >'+model_name+'</td>'
+                                        +'<th id="'+observeParameter.id+'" class="'+colorStyleArray[model_id-1]+'">'+observe_content+'</th>'
+                                        +'<td><input class="form-control" type="text"></td><td><input class="form-control" type="text"></td>'
+                                        +'<td><input class="form-control" type="text"></td></tr>';
+                                    break;
+                                }
+                            }
+						}else{
+                            observeParameterString += '<tr><th id="'+observeParameter.id+'" class="'+colorStyleArray[observeParameter.model_id-1]+'">'+observe_content+'</th><td><input class="form-control" type="text"></td>'
+                                +'<td><input class="form-control" type="text"></td><td><input class="form-control" type="text"></td></tr>';
+						}
+                    }
+                    $("#observebaseInfo").append(observeParameterString);
+                    $("#observebaseInfo tr input").keyup(function(t){
+                        var tdnum = 	$($(this).parent().parent()).find("td").length;
+                        var tdIndex = $($(this).parent()).index();
+                        if(tdIndex==(tdnum-1)){
+                            $(this).val($(this).val().replace(/[^\d.]/g,''));
+                            var sum = 0;
+                            var count = 0;
+                            $("#observebaseInfo tr").each(function(i,t){
+                                var tempV = isNaN(parseFloat($(t).find("input:eq(1)").val())) ? 0 : parseFloat($(t).find("input:eq(1)").val());
+                                sum+=tempV;
+                                if(!isNaN(parseFloat($(t).find("input:eq(1)").val())) &&　parseFloat($(t).find("input:eq(1)").val()) != 0){
+                                    count += 1;
+                                }
+                            });
+                            $("#buckle_points_combined").val(sum);
+                            $("#points_combined").val(100-sum);
+                            observe_question_number = count;
+                        }
+                    });
+                } else {
+                    $$.showMessage("系统信息", "请求失败!");
+                }
+            });
     	}else if(add_edit == 'edit'){
-    		doManager("observeParameterManager", "queryExitObserveParameter", [store_id,observe_month], function(data,
-    				textStatus, XMLHttpRequest) {
+    		doManager("storeObserveParameterManager", "queryObserveParameterList", [observeDTO], function(data,textStatus, XMLHttpRequest) {
     			if (data.result) {
-    				var jsonData = $.fromJSON(data.data).queryObserveParameterList;
-    				var secondTr = $("#observebaseInfo tr").eq(1);
-    				for(var i = 0; i < jsonData.length; i++){
-    					var observeParamter = jsonData[i];
-    					if(i == 0){
-    						var buckle_points_combined =  observeParamter.buckle_points_combined;
-    						var points_combined = observeParamter.points_combined;
-    						var observe_person = observeParamter.observe_person;
-    						var observe_date = observeParamter.observe_date;
-    						$("#buckle_points_combined").val(buckle_points_combined);
-    			    		$("#points_combined").val(points_combined);
-    			    		$("#observe_person").val(observe_person);
-    			    		$("#observe_date").val(observe_date);
-    					}
-    					if(observeParamter.type == "0"){
-    						$("#observebaseInfo tr:gt(1)").each(function(z,t){
-    		      				$(t).find("input:eq(1)").val(observeParamter[$(t).find("th").attr("id")]);
-        			     	});
-    					}else if(observeParamter.type == "1"){
-    						$("#observebaseInfo tr:gt(1)").each(function(z,t){
-        						$(t).find("input:eq(0)").val(observeParamter[$(t).find("th").attr("id")]);
-        			     	});
-    					}else if(observeParamter.type == "2"){
-    						$("#observebaseInfo tr:gt(1)").each(function(z,t){
-    		      				var value = $(t).find("input:eq(2)").val(observeParamter[$(t).find("th").attr("id")]);
-        			     	});
-    					}
-    				}
+                    var observeParameterList = $.fromJSON(data.data).observeParameterList;
+                    var observeModelList = $.fromJSON(data.data).observeModelList;
+                    var observeScore = $.fromJSON(data.data).observeScore;
+                    var buckle_points_combined =  observeScore[0].buckle_points_combined;
+                    var points_combined = observeScore[0].points_combined;
+                    var observe_person = observeScore[0].observe_person;
+                    var observe_date = observeScore[0].observe_date;
+                    $("#buckle_points_combined").val(buckle_points_combined);
+                    $("#points_combined").val(points_combined);
+                    $("#observe_person").val(observe_person);
+                    $("#observe_date").val(observe_date);
+
+                    var observeParameterString = "";
+                    for(var z = 0; z < observeParameterList.length; z++){
+                        var observeParameter = observeParameterList[z];
+                        var observe_content = observeParameter.observe_content;
+                        if(z == 0 ||　observeParameter.model_id != observeParameterList[z-1].model_id){
+                            for(var i = 0; i < observeModelList.length; i++){
+                                var observeModel = observeModelList[i];
+                                var count = observeModel.count;
+                                var model_name = observeModel.model_name;
+                                var model_id = observeModel.model_id;
+                                if(observeModel.model_id == observeParameter.model_id){
+                                    observeParameterString += '<tr><td rowspan="'+count+'" class="'+colorStyleArray[model_id-1]+'" >'+model_name+'</td>'
+                                        +'<th id="'+observeParameter.id+'" class="'+colorStyleArray[model_id-1]+'">'+observe_content+'</th>'
+                                        +'<td><input class="form-control" type="text" value="'+observeParameter.points_deduction_description+'"></td><td><input class="form-control" type="text" value="'+observeParameter.content_score+'"></td>'
+                                        +'<td><input class="form-control" type="text" value="'+observeParameter.score_empno_empname+'"></td></tr>';
+                                    break;
+                                }
+                            }
+                        }else{
+                            observeParameterString += '<tr><th id="'+observeParameter.id+'" class="'+colorStyleArray[observeParameter.model_id-1]+'">'+observe_content+'</th><td><input class="form-control" type="text" value="'+observeParameter.points_deduction_description+'"></td>'
+                                +'<td><input class="form-control" type="text" value="'+observeParameter.content_score+'"></td><td><input class="form-control" type="text" value="'+observeParameter.score_empno_empname+'"></td></tr>';
+                        }
+                    }
+                    $("#observebaseInfo").append(observeParameterString);
+                    $("#observebaseInfo tr input").keyup(function(t){
+                        var tdnum = 	$($(this).parent().parent()).find("td").length;
+                        var tdIndex = $($(this).parent()).index();
+                        if(tdIndex==(tdnum-1)){
+                            $(this).val($(this).val().replace(/[^\d.]/g,''));
+                            var sum = 0;
+                            var count = 0;
+                            $("#observebaseInfo tr").each(function(i,t){
+                                var tempV = isNaN(parseFloat($(t).find("input:eq(1)").val())) ? 0 : parseFloat($(t).find("input:eq(1)").val());
+                                sum+=tempV;
+                                if(!isNaN(parseFloat($(t).find("input:eq(1)").val())) &&　parseFloat($(t).find("input:eq(1)").val()) != 0){
+                                    count += 1;
+                                }
+                            });
+                            $("#buckle_points_combined").val(sum);
+                            $("#points_combined").val(100-sum);
+                            observe_question_number = count;
+                        }
+                    });
     				
     			} else {
     				$$.showMessage("系统信息", "请求失败!");
@@ -88,29 +165,10 @@
     		});
     		
     	}
-    	$("#observebaseInfo tr input").keyup(function(t){
-	    	 var tdnum = 	$($(this).parent().parent()).find("td").length;
-	    	 var tdIndex = $($(this).parent()).index();
-	    	 if(tdIndex==(tdnum-1)){
-	    		 $(this).val($(this).val().replace(/[^\d.]/g,''));
-	       		 var sum = 0;
-	       		 var count = 0;
-	       		 $("#observebaseInfo tr").each(function(i,t){
-	       			     var tempV = isNaN(parseFloat($(t).find("input:eq(1)").val())) ? 0 : parseFloat($(t).find("input:eq(1)").val());
-	       	    		 sum+=tempV;
-	       	    		 if(!isNaN(parseFloat($(t).find("input:eq(1)").val())) &&　parseFloat($(t).find("input:eq(1)").val()) != 0){
-	       	    			count += 1;
-	       	    		 }
-	       	     });
-	       		 $("#buckle_points_combined").val(sum);
-	       		 $("#points_combined").val(100-sum);
-	       		observe_question_number = count;
-	    	 }
-     	});
     	
     });
 	function yanzhen(){
-		//var observe_month = $("#observe_month").val();
+        $("#saveclick").attr("disabled","true");
 		var observe_person = $("#observe_person").val();
 		var observe_date = $("#observe_date").val();
 		var buckle_points_combined = $("#buckle_points_combined").val();
@@ -135,35 +193,33 @@
        
       
        var objectList = new Array();
-       $("#observebaseInfo tr:gt(1)").each(function(i,t){
-			var id = $(t).find("th").attr("id");
-			arr.push(id);
-	   });
-       console.log(arr);
-       $("#observebaseInfo").find("tr:eq(1)").children("th:gt(0):lt("+(cellnumber-2)+")").each(function(i,t){
-    	var o = {};
-   	    var col_index = i;
-   	 	o["observe_month"]= $("#observe_month").val();
-		o["observe_person"] = $("#observe_person").val();
-		o["observe_date"] = $("#observe_date").val();
-		o["buckle_points_combined"] = $("#buckle_points_combined").val();
-		o["points_combined"] = $("#points_combined").val();
-		o["store_name"] = $("#store_name").html();
-		o["store_id"] = store_id;
-		o["observe_question_number"] = observe_question_number;
-   	 	if(i == 0)o["type"] = "1";
-   	 	if(i == 1)o["type"] = "0";
-   	 	if(i == 2)o["type"] = "2";
-      		$(t).parent().nextAll().not(secondTr).each(function(z,t){
-      				var value = $(t).find("input:eq("+col_index+")").val();
-    	    	    var v = arr[z];
-    	    	    o[v] = value;
-      		}); 
-      		objectList.push(o);
-     });
+       var observeScoreInfo = {
+           observe_month : $("#observe_month").val(),
+           observe_person : $("#observe_person").val(),
+           observe_date : $("#observe_date").val(),
+           buckle_points_combined : $("#buckle_points_combined").val(),
+           points_combined : $("#points_combined").val(),
+           store_name : $("#store_name").html(),
+           store_id : store_id,
+           observe_question_number : observe_question_number
+       }
+        $("#observebaseInfo").find("tr:gt(1)").each(function(i,t){
+            var o = {};
+            o["observe_month"]= $("#observe_month").val();
+            o["store_id"] = store_id;
+            o["id"] = $(t).find("th").attr("id");
+            $(t).find("td").find("input").each(function(z,t){
+                var value = $(t).val();
+                if(z==0)o["points_deduction_description"] = value;
+                if(z==1)o["content_score"] = value;
+                if(z==2)o["score_empno_empname"] = value;
+            });
+            objectList.push(o);
+        });
        debugger;
+        console.log(observeScoreInfo);
        console.log(objectList);
-	doManager("observeParameterManager", "saveObserveParameter", [objectList[0],objectList[1],objectList[2]], function(data,
+	doManager("StoreObserveParameterManager", "saveObserveParameter", [objectList,observeScoreInfo], function(data,
 			textStatus, XMLHttpRequest) {
 		if (data.result) {
 			var jsonData = $.fromJSON(data.data);
@@ -184,7 +240,8 @@
 		} else {
 			$$.showMessage("系统信息", "请求失败!");
 		}
-	});
+        $("#saveclick").attr("disabled","false");
+	},false);
 }
 </script>
 </head>
@@ -227,7 +284,7 @@
 	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
     <div class="panel-heading">明查台账
         <span class="but">
-			<input name="" type="submit" onclick="yanzhen();" value="保存">
+			<input name="" id="saveclick" type="submit" onclick="yanzhen();" value="保存">
 			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
 		</span>
     </div>
@@ -274,7 +331,7 @@
 	    <th>扣分</th>
 	    <th>被扣分人员姓名、工号、扣分数</th>
 	  </tr>
-	  <tr>
+	  <!--<tr>
 	    <td rowspan="20" class="trbg1" >1、人员</td>
 	    <th id="a1_1" class="trbg1">A1-1员工工装不符合规范</th>
 	    <td><input class="form-control" type="text"></td>
@@ -282,11 +339,11 @@
 	    <td><input class="form-control" type="text"></td>
 	  </tr>
 	 <tr>
-	    <th id="a1_2" class="trbg1">A1-2员工工装丢失无申报记录(5个工作日内)</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
+		<th id="a1_2" class="trbg1">A1-2员工工装丢失无申报记录(5个工作日内)</th>
+		<td><input class="form-control" type="text"></td>
+		<td><input class="form-control" type="text"></td>
+		<td><input class="form-control" type="text"></td>
+	</tr>
 	  <tr>
 	    <th id="a2_1" class="trbg1">A2-1员工胸牌不符合规范</th>
 	    <td><input class="form-control" type="text"></td>
@@ -1197,7 +1254,7 @@
 	    <td><input class="form-control" type="text"></td>
 	    <td><input class="form-control" type="text"></td>
 	    <td><input class="form-control" type="text"></td>
-	  </tr>
+	  </tr>-->
 	</table>
 </form>
 

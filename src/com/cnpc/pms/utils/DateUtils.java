@@ -309,6 +309,24 @@ public class DateUtils {
 		return null;
 	}
 
+	// 获得当前月的前一个月
+	public static String getBeforeMonth(String dateStr, int count) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		String maxDateStr = dateStr;
+		String minDateStr = "";
+		Calendar calc = Calendar.getInstance();
+		try {
+			calc.setTime(sdf.parse(maxDateStr));
+			calc.add(calc.MONTH, count);
+			Date minDate = calc.getTime();
+			minDateStr = sdf.format(minDate);
+			return minDateStr;
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
 	 * 
 	 * @author sunning 获取当前时间前6周的日期书包含当前时间所在周从周日开始

@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "t_observe_model")
 public class ObserveModel extends DataEntity{
 
-    @Column(name = "model_name",length=1000)
+    @Column(name = "model_name",columnDefinition="varchar(100) COMMENT '检查模块名'")
     private String model_name;
 
     public String getModel_name() {
