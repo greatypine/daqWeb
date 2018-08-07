@@ -168,19 +168,19 @@
     	
     });
 	function yanzhen(){
-        $("#saveclick").attr("disabled","true");
+        $("#saveclick").attr("disabled","disabled");
 		var observe_person = $("#observe_person").val();
 		var observe_date = $("#observe_date").val();
 		var buckle_points_combined = $("#buckle_points_combined").val();
 		var points_combined = $("#points_combined").val();
 		if(observe_person == null||observe_person.trim() == ""){
 			alert("检查人不能为空");
-            $("#saveclick").attr("disabled","false");
+            $("#saveclick").removeAttr("disabled");
 			return;
 		}
 		if(observe_date == null || observe_date.trim() == ""){
 			alert("检查日期不能为空");
-            $("#saveclick").attr("disabled","false");
+            $("#saveclick").removeAttr("disabled");
 			return;
 		}
 		doSave();		
@@ -242,7 +242,7 @@
 		} else {
 			$$.showMessage("系统信息", "请求失败!");
 		}
-        $("#saveclick").attr("disabled","false");
+        $("#saveclick").removeAttr("disabled");
 	},false);
 }
 </script>
