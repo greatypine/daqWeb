@@ -8,6 +8,7 @@ import com.cnpc.pms.inter.manager.InterManager;
 import com.cnpc.pms.personal.entity.SendMessage;
 import com.cnpc.pms.personal.manager.SendMessageManager;
 import com.cnpc.pms.shortMessage.entity.ShortMessage;
+import com.cnpc.pms.shortMessage.manager.ShortMessageManager;
 
 public class SendShortMessageTask implements Runnable{
 	
@@ -23,7 +24,7 @@ public class SendShortMessageTask implements Runnable{
 	}
 	@Override
 	public void run() {
-		InterManager interManager = (InterManager)SpringHelper.getBean("interManager");
+		ShortMessageManager shortMessageManager = (ShortMessageManager) SpringHelper.getBean("shortMessageManager");
 		SendMessageManager sendMessageManager = (SendMessageManager)SpringHelper.getBean("sendMessageManager");
 		for(int i=0;i<useres.size();i++){
 			Object InvitationCode = useres.get(i).get("inviteCode");
@@ -44,7 +45,7 @@ public class SendShortMessageTask implements Runnable{
 				content = shortMessage.getContent();
 			}
 			
-			String resultString = interManager.commonSendMessage(String.valueOf(mobilephone),content, null);
+			String resultString = shortMessageManager.sendShortMessage(String.valueOf(mobilephone),content, null,shortMessage.getSignature());
 			SendMessage sendMessage = new SendMessage();
 			sendMessage.setFunctionname(shortMessage.getTitle());
 			sendMessage.setMobilephone(String.valueOf(mobilephone));
