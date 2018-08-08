@@ -660,7 +660,7 @@ $('#city_name').keyup(function(event){//门店交易额统计
 	   $("#auto_city_try").empty();
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        	$("#city_id_rty").val("");
+        	$("#city_id_try").val("");
             if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                 return;
             }
