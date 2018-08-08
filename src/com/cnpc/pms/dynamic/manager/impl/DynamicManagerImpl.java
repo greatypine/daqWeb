@@ -6311,7 +6311,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else if(dynamicDto.getSearchstr().equals("try_member")){
 				HSSFSheet sheet = wb.createSheet("门店试用会员");
 				HSSFRow row = sheet.createRow(0);
-				String[] str_headers = {"城市","门店名称","门店编号","新增社员数","累计社员总数"};
+				String[] str_headers = {"城市","门店名称","门店编号","新增试用社员数","累计试用社员总数"};
 				String[] headers_key = {"city_name","name","storeno","nowcount","opencount"};
 				for(int i = 0;i < str_headers.length;i++){
 					HSSFCell cell = row.createCell(i);

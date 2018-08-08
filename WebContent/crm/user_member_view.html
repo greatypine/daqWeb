@@ -1192,7 +1192,7 @@ function searchInfo_customer(cur_page){
                 for(var i=0;i<jData.length;i++){
                     var cityname = jData[i].city_name;
                     if(cityname == '无'){
-                        cityname = $("#city_name_tradetype").val() == "" ? cityname : $("#city_name_tradetype").val();
+                        cityname = $("#city_name_try").val() == "" ? cityname : $("#city_name_try").val();
                     }
                     infoStr="";
                     infoStr += "<tr>"
