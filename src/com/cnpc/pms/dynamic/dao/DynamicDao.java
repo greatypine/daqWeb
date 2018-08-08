@@ -844,7 +844,7 @@ public interface DynamicDao extends IDAO{
 	 * 分页查询门店社员
 	 * 2018年5月21日
 	 * @author gaoll
-	 * @param dd
+	 * @param dynamicDto
 	 * @return
 	 */
 	public Map<String, Object> getStoreMember(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo);
@@ -853,10 +853,19 @@ public interface DynamicDao extends IDAO{
 	 * 分页查询城市社员
 	 * 2018年7月20日
 	 * @author gaoll
-	 * @param dd
+	 * @param dynamicDto
 	 * @return
 	 */
 	public Map<String, Object> getCityMember(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo);
+
+	/**
+	 * 分页查询门店社员
+	 * 2018年8月8日
+	 * @author gaoll
+	 * @param dynamicDto
+	 * @return
+	 */
+	public Map<String, Object> getStoreTryMember(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo);
 	
 	/**
 	 * 根据用户id查询用户所管理的城市
