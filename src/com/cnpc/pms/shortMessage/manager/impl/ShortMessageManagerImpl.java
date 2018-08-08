@@ -1,5 +1,6 @@
 package com.cnpc.pms.shortMessage.manager.impl;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.regex.Pattern;
 
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
+import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.inter.common.CodeEnum;
@@ -21,6 +23,13 @@ import com.cnpc.pms.shortMessage.entity.ShortMessage;
 import com.cnpc.pms.shortMessage.manager.SMSUserGroupManager;
 import com.cnpc.pms.shortMessage.manager.ShortMessageManager;
 import com.cnpc.pms.shortMessage.utility.SendShortMessageTask;
+import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 public class ShortMessageManagerImpl extends BizBaseCommonManager implements ShortMessageManager{
 
@@ -398,7 +407,7 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 
 		try {
 			String type= param.get("type")==null?"":String.valueOf(param.get("type"));//短信类型
-			String signature = param.get("signature")==null?"":String.valueOf(param.get("signature"));//短信签名
+			//String signature = param.get("signature")==null?"":String.valueOf(param.get("signature"));//短信签名
 			String timestamp = String.valueOf(System.currentTimeMillis());
 
 			list.add(param);
@@ -411,7 +420,7 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 				sm.setType(type);
 				sm.setTitle("社员邀请码");
 				sm.setContent(content);
-				sm.setSignature(signature);
+				sm.setSignature("123743");
 				sm.setUserGroupCode("only one");
 				preObject(sm);
 				saveObject(sm);//保存短信
@@ -429,6 +438,75 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 			return result;
 		}
 		return result;
+	}
+
+	@Override
+	public Map<String, Object> getAllOutSider() {
+		ShortMessageDao shortMessageDao = (ShortMessageDao)SpringHelper.getBean(ShortMessageDao.class.getName());
+		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Map<String,Object> result = new HashMap<String,Object>();
+
+		try {
+			list = shortMessageDao.getAllOutSider();
+
+			result.put("data", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("data",list);
+			return result;
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getOutSider(QueryConditions queryConditions) {
+		ShortMessageDao shortMessageDao = (ShortMessageDao)SpringHelper.getBean(ShortMessageDao.class.getName());
+		//查询的数据条件
+		StringBuilder sb_where = new StringBuilder();
+		//分页对象
+		PageInfo obj_page = queryConditions.getPageinfo();
+		//返回的对象，包含数据集合、分页对象等
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		StringBuilder citySb = new StringBuilder();
+		for (Map<String, Object> map_where : queryConditions.getConditions()) {
+			if("name".equals(map_where.get("key"))
+					&& null != map_where.get("value") && !"".equals(map_where.get("value"))){
+				sb_where.append(" and name like '"+map_where.get("value")+"'");
+			}
+		}
+		try {
+			map_result.put("data",shortMessageDao.getStoreKeeperEmployee(sb_where.toString(), obj_page));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map_result.put("pageinfo", obj_page);
+
+		return map_result;
+	}
+
+	@Override
+	public String sendShortMessage(String mobilephone, String content, String functionname, String epid) {
+		String resultString = "";
+		String proxyip = PropertiesUtil.getValue("iproxy.sendip");
+		int proxyport = Integer.parseInt(PropertiesUtil.getValue("iproxy.sendport"));
+		String setcode = PropertiesUtil.getValue("iproxy.set");
+		try {
+			if(setcode!=null&&setcode.equals("OFF")){
+				String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
+				String url = "http://datatest.guoanshequ.top/eprj/smsSend.action?phone=%s&sendcode=%s&epid=%s";
+				CloseableHttpClient httpclient = HttpClients.createDefault();
+				HttpGet httpGet = new HttpGet(String.format(url, new Object[]{mobilephone,sendcode_gb2312,epid}));
+				CloseableHttpResponse response = httpclient.execute(httpGet);
+				resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+			}
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultString="Error:"+e.getMessage();
+		}
+
+		return resultString;
 	}
 
 
