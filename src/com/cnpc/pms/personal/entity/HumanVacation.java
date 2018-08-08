@@ -1,11 +1,14 @@
 package com.cnpc.pms.personal.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.cnpc.pms.base.entity.DataEntity;
+import com.cnpc.pms.personal.dto.CommentDto;
 
 @Entity
 @Table(name = "t_human_vacation")
@@ -63,6 +66,11 @@ public class HumanVacation extends DataEntity{
 	
 	@Transient
 	private String re_content;
+	
+	
+	@Transient
+	private List<CommentDto> processlog;
+	
 	
 	
 	public Long getStore_id() {
@@ -183,6 +191,14 @@ public class HumanVacation extends DataEntity{
 
 	public void setApp_name(String app_name) {
 		this.app_name = app_name;
+	}
+
+	public List<CommentDto> getProcesslog() {
+		return processlog;
+	}
+
+	public void setProcesslog(List<CommentDto> processlog) {
+		this.processlog = processlog;
 	}
 
 	

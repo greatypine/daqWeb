@@ -1,5 +1,13 @@
 package com.cnpc.pms.personal.manager.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,12 +21,17 @@ import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
+import com.cnpc.pms.personal.dto.CommentDto;
 import com.cnpc.pms.personal.entity.HumanVacation;
 import com.cnpc.pms.personal.manager.HumanVacationManager;
+import com.gexin.fastjson.JSONArray;
+import com.gexin.fastjson.JSONObject;
 
 @SuppressWarnings("all")
 public class HumanVacationManagerImpl extends BizBaseCommonManager implements HumanVacationManager {
     
+	
+	static final String URL = "http://localhost:8889/GASM/dispatcher.action";
     /**
      * 查询列表 
      */
@@ -84,10 +97,104 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
 	public HumanVacation queryHumanVacationInfo(Long id) {
 		HumanVacation humanVacation = (HumanVacation) this.getObject(id);
 		String processInstanceId=humanVacation.getProcessInstanceId();
-		/*List<Comment> comments = findCommentByProcessId(processInstanceId);
-		humanVacation.setProcesslog(comments);*/
+		List<CommentDto> comments = findCommentByProcessId(processInstanceId);
+		humanVacation.setProcesslog(comments);
 		return humanVacation;
 	}
     
-	    
+	  
+    
+    public List<CommentDto> findCommentByProcessId(String processId) {
+    	String httpurl = URL+"?requestString={\"managerName\":\"InterManager\",\"methodName\":\"queryProcessCommentByProcessId\",\"parameters\":[\""+processId+"\"]}";
+    	String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	JSONObject jsonObject = JSONObject.parseObject(ret);
+    	JSONArray jo = (JSONArray) JSONObject.parseObject(jsonObject.get("data").toString()).get("data");
+    	List<CommentDto> commentDtos = new ArrayList<CommentDto>();
+    	System.out.println("-------------------------------");
+    	for(Object o:jo) {
+    		CommentDto commentDto = new CommentDto();
+    		Long time = (Long) ((JSONObject)o).get("createtime");
+    		String message=(String) ((JSONObject)o).get("message");
+    		commentDto.setMessage(message);
+    		commentDto.setTime(time);
+    		commentDtos.add(commentDto);
+    		System.out.println(((JSONObject)o).get("createtime"));
+    		System.out.println(((JSONObject)o).get("message"));
+    	}
+    	System.out.println("-------------------------------");
+    	return commentDtos;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public static String doGet(String httpurl) {
+        HttpURLConnection connection = null;
+        InputStream is = null;
+        BufferedReader br = null;
+        String result = null;// 返回结果字符串
+        try {
+            // 创建远程url连接对象
+            URL url = new URL(httpurl);
+            // 通过远程url连接对象打开一个连接，强转成httpURLConnection类
+            connection = (HttpURLConnection) url.openConnection();
+            // 设置连接方式：get
+            connection.setRequestMethod("GET");
+            // 设置连接主机服务器的超时时间：15000毫秒
+            connection.setConnectTimeout(15000);
+            // 设置读取远程返回的数据时间：60000毫秒
+            connection.setReadTimeout(60000);
+            // 发送请求
+            connection.connect();
+            // 通过connection连接，获取输入流
+            if (connection.getResponseCode() == 200) {
+                is = connection.getInputStream();
+                // 封装输入流is，并指定字符集
+                br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                // 存放数据
+                StringBuffer sbf = new StringBuffer();
+                String temp = null;
+                while ((temp = br.readLine()) != null) {
+                    sbf.append(temp);
+                    sbf.append("\r\n");
+                }
+                result = sbf.toString();
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 关闭资源
+            if (null != br) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (null != is) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            connection.disconnect();// 关闭远程连接
+        }
+
+        return result;
+    }
+    
 }
