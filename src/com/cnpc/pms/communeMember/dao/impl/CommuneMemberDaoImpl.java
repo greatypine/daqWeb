@@ -125,7 +125,7 @@ public class CommuneMemberDaoImpl extends BaseDAOHibernate implements CommuneMem
 				"COUNT(case when birthday>'19991231'  then 1 else null end) as ageNow " + 
 				" from df_user_member duuf where duuf.associator_expiry_date>now()";
 		if(!"0000".equals(dd)) {
-			ageSql = ageSql+" where duuf.regist_cityno='"+dd+"'";
+			ageSql = ageSql+" and duuf.regist_cityno='"+dd+"'";
 		}
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
@@ -440,9 +440,6 @@ public String getAllCmIds(String dd) {
 	 * 2018年5月18日
 	 */
 	String sql = "select replace(idds,\",\",\"','\") as ids  from (select group_concat(customer_id) as idds from  df_user_member dum where dum.associator_expiry_date>now()) as idtable";
-	
-	
-	 ;
 	try{
 		Query query = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql);

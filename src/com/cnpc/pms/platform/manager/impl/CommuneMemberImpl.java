@@ -835,7 +835,12 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 					result.put("age00", cmAgeList.get(0).get("age00"));
 					result.put("ageNow", cmAgeList.get(0).get("ageNow"));
 				} else {
-					result.put("oldCmCount", "0");
+                    result.put("age60", "0");
+                    result.put("age70", "0");
+                    result.put("age80", "0");
+                    result.put("age90", "0");
+                    result.put("age00", "0");
+                    result.put("ageNow", "0");
 				}
 				// 查询社员生日分布
 				List<Map<String, Object>> birList = commDao.getCmBirthday(dd);// getCmBirthday
