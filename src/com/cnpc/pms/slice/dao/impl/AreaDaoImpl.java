@@ -401,7 +401,7 @@ public class AreaDaoImpl extends BaseDAOHibernate implements AreaDao {
 
 	@Override
 	public Map<String, Object> queryAboutOfArea(DynamicDto dynamicDto, PageInfo pageInfo) {
-		//String sql = "select a.name,a.area_no,ifnull(a.employee_a_no,'') as employee_a_no ,ifnull(a.employee_b_no,'') as employee_b_no,ifnull(a.employee_a_name,'') as employee_a_name,ifnull(a.employee_b_name,'') as employee_b_name,b.city_name,b.name as storeName from t_area a inner join t_store b on a.store_id = b.store_id where a.status=0 and ifnull(b.estate,'')!='闭店中' ";
+		//String sql = "select a.name,a.area_no,ifnull(a.employee_a_no,'') as employee_a_no ,ifnull(a.employee_b_no,'') as employee_b_no,ifnull(a.employee_a_name,'') as employee_a_name,ifnull(a.employee_b_name,'') as employee_b_name,b.city_name,b.name as storeName from t_area a inner join t_store b on a.store_id = b.store_id where a.status=0 and ifnull(b.estate,'') not like '%闭店%' ";
 		String whereStr1="";
 		String whereStr2="";
         if (dynamicDto.getAreaName() != null && !"".equals(dynamicDto.getAreaName())) {
@@ -443,7 +443,7 @@ public class AreaDaoImpl extends BaseDAOHibernate implements AreaDao {
 					" INNER JOIN t_tiny_village ttv ON tai.village_id = ttv.village_id "+whereStr2+
 					" AND ttv. STATUS = 0 "+
 					" AND (ttv.dellable <> 1 	OR ttv.dellable IS NULL ) ) t1 "+
-					" inner JOIN t_store t2 on t1.store_id = t2.store_id and ifnull(t2.estate,'')!='闭店中' group by t1.area_no";
+					" inner JOIN t_store t2 on t1.store_id = t2.store_id and ifnull(t2.estate,'') not like '%闭店%' group by t1.area_no";
 		
 
 		Map<String, Object> map_result = new HashMap<String, Object>();
@@ -676,7 +676,7 @@ public class AreaDaoImpl extends BaseDAOHibernate implements AreaDao {
 	public List<Map<String, Object>> queryAreaCountByCity() {
 		String sql = "select city_name,count(DISTINCT store.store_id) as store_count,count(DISTINCT area.area_no) as area_count,count(DISTINCT area.employee_a_no) as employee_count "
 				+"from t_store store INNER JOIN t_area area ON store.store_id = area.store_id where area.`status` = 0 "
-				+"and store.flag = 0 and store.estate != '闭店中' and store.name not like '%办公室%' and store.name not like '%储备%' and store.name not like '%测试%' and "
+				+"and store.flag = 0 and store.estate not like  '%闭店%' and store.name not like '%办公室%' and store.name not like '%储备%' and store.name not like '%测试%' and "
 				+"store.storetype != 'V' GROUP BY store.city_name";
 
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);

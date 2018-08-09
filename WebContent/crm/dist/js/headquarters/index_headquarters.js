@@ -64,7 +64,7 @@ $(document).ready(function () {
 	showMoreSummaryStatistics();
 	getStoreKindsNumber();
 	//页面长期打开的情况下,早晨7点定时刷新
-	excuteRefreshTask();
+	startRefreshPage();
     var startTime = new Date().getTime();
     // 获取请求参数
     var requestParameters = getReauestParameters();
@@ -2559,7 +2559,7 @@ var showCommodityRank = function (commodityRankData) {
 	    	commodityDataStr = commodityDataStr.substring(0,commodityDataStr.lastIndexOf(","));
 	    }
 	    commodityDataStr+="]}";
-	    var commodityDataObject = JSON.parse(commodityDataStr);
+	    var commodityDataObject = JSON.parse(formatString(commodityDataStr));
 	    maskImage.onload = function() {
 			commodityRankOption.series[0].maskImage;
 			commodityRankChart.setOption(commodityRankOption);//生成云图
@@ -5050,11 +5050,7 @@ function refreshCurrentData(){
 		    localStorage.clear();
 	        showPageContent(pageStatusInfo);  
         }
-}
-function excuteRefreshTask() {
-	refreshCurrentData();
-	clearTimeout(refreshId);
-    refreshId= setTimeout("excuteRefreshTask()",1000);
+        return true;
 }
 function  clearFirstCache(){
 	localStorage.clear();
@@ -5078,3 +5074,44 @@ function goTo221GMV(){
     window.open(url,"dynamicData_gmv_tto");
 }
 
+function settingClockByTimeOut(_args1, _args2) {
+    var _type = 0,
+        timeFn, _flag = true,
+        ms = _args2,
+        callBackFn = _args1,
+        self = this;
+    this.getTimeOut = function() {
+        var _callee = arguments.callee;
+        if (_flag) { //内部错误,内部强制中断，终止递归
+            if (_type == 0) { //外部终止递归
+                timeFn = setTimeout(function() {
+                    //console.log("定时任务开始执行："+new Date().getSeconds());
+                    _flag = callBackFn();
+                    //console.log("定时任务结束执行："+new Date().getSeconds());
+                    _callee();
+                }, ms);
+            } else {
+                if (timeFn) clearTimeout(timeFn);
+                console.error(500, "定时器已终止,外部终止...");
+            }
+        } else {
+            if (timeFn) clearTimeout(timeFn);
+            console.error(500, "定时器已终止,回调函数出现错误或内部强制终止...");
+        }
+    };
+    this.close = function(_args1) {
+        _type = _args1 || 1;
+    };
+    self.getTimeOut();
+}
+function startRefreshPage() {
+    refreshId = new settingClockByTimeOut(refreshCurrentData,1000);
+}
+//去除 空格,回车符,全角符
+function formatString(s) {
+    if (s != null) {
+		  s = String(s);
+          s = s.replace(/([\s\u3000]*|[\r\n\u3000]*)/ig,''); 
+    }
+    return s;
+}

@@ -45,16 +45,16 @@
         .report dt{border-bottom: 1px dashed rgba(255,255,255,1); padding: 0 5px 5px 5px; position: relative; margin: 0 10px;}
         .report dt:after{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; left: -7px;}
         .report dt:before{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; right: -7px;}
-        .report_jr li{width: 31%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
+        .report_jr li{width: 23%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
         .report_jr li i{font-size: 50px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
         .report_jr li span{font-size: 22px; color: #ffde00;}
 
         .vertical-example{
             position: absolute;
-            top: 50px;
-            right: 40px;
-            width: 100px;}
-        .navimenu{min-height: 800px; padding-top: 0;}
+            top: 140px;
+            right: 5px;
+            width: 70px;}
+        .navimenu{min-height: 800px;width: 70px; padding-top: 0;}
         #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
         #process_div{
             background-color:#292a2b;
@@ -76,7 +76,7 @@
             height:32px;
             color: #fff;
         }
-        .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
+        .download{position: fixed; right: 20px; top: 120px; height: 100px; overflow: hidden; z-index: 1000;}
         .download p{font-size: 12px;}
         .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
             /* Firefox: */
@@ -96,7 +96,6 @@
             box-shadow: 0 1px 1px rgba(0,0,0,1);
             border-radius:10px;
             position: fixed;
-            margin:auto;left:36%; top:50%;
             z-index: 1;
         }
         .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
@@ -111,6 +110,18 @@
             /*margin:auto;left:25%; top:60%;*/
             z-index: 1;
         }
+
+        .trytoast{
+            width:450px;
+            height:240px;
+            background:transparent;
+            background-color:rgba(241,241,241,1);
+            box-shadow: 0 1px 1px rgba(0,0,0,1);
+            border-radius:10px;
+            position: fixed;
+            z-index: 1;
+        }
+        .trytoast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -145,6 +156,7 @@
                 <input type="hidden" id="selDay" value="1"/>
                 <input type="hidden" id="setadd" value="0"/>
                 <input type="hidden" id="setBig" value="0"/>
+                <input type="hidden" id="setTry" value="0"/>
                 <!-- Main content -->
                 <section class="content-header">
                     <div class="box box-default report">
@@ -175,7 +187,7 @@
                                         <div class="col-sm-8">今日订单量：<br><span id="dayDealCount" ></span><small></small></div>
                                         <div class="col-sm-4"><i class="fa  fa-bar-chart"></i></div>
                                     </li>
-                                    <div class="add_citymember">
+                                    <div class="add_citymember" style="cursor:pointer;">
                                     <li>
                                         <div>
                                             
@@ -185,21 +197,32 @@
                                         </div>
                                     </li>
                                     </div>
-<!--                                    <div class="add_TestMember">
+                                    <div class="add_TestMember" style="cursor:pointer;">
+
                                         <li>
-                                            <div class="col-sm-9" style="padding-right:0px;">试用社员：<span>1111</span><br>
+                                            <div>
+
+                                                <div class="col-sm-8">试用社员：<br><span  id="tryMemSum"></span><small></small></div>
+                                                <div class="col-sm-4"><i class="fa fa-retweet"></i></div>
+
+                                            </div>
+                                        </li>
+
+<!--                                        <li>
+                                            <div class="col-sm-9" style="padding-right:0px;">试用社员：<span id="tryMemSum"></span><br>
                                                 <small>GMV：</small>
-                                                <small id="dayNe11wMem" style="color: #ffde00;">1111</small>&nbsp;<small>
+                                                <small id="tryMemGmvSum" style="color: #ffde00;"></small>&nbsp;<small>
                                                     客单价：
                                                 </small>
-                                                <small style="color: #ffde00;">1111</small>
+                                                <small style="color: #ffde00;"id="tryMemGmvAvg" ></small>
                                             </div>
                                             <div class="col-sm-3"><i class="fa fa-retweet" style="font-size: 40px;"></i>
                                             </div>
-                                        </li>
-                                    </div>-->
+                                        </li>-->
+                                    </div>
                                 </ul>
                                 <div id="cityMember" class="toast" style="display: none">
+                                    <span class="layui-layer-setwin" ><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:close_DayMem();;"></a></span><br/>
                                     <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
                                    	<div id="cmBigDay" style="margin-left: 5%;display: none">
                                    	<ul class='clearfix'>
@@ -209,14 +232,24 @@
                                     <div style="margin-left: 5%" id="addCityMem">
                                     </div>
                                 </div>
+                                <div id="try_Member" class="trytoast" style="display: none">
+                                    <span class="layui-layer-setwin" ><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:close_TryMem();;"></a></span><br/><br/><span style="margin-left: 15px;">试用社员:</span><a style="float: right;margin-right: 15px;color:#00acee;font-size: 12px;" href="javascript:do_TryMem();">更多</a><br/>
+                                    <div style="margin-left: 5%" id="try_Mem">
+                                        <ul class='clearfix'>
+                                            <li style='width: 50%'>GMV:<span id="tryMemGmvSum" ></span>&nbsp;&nbsp;&nbsp;</li>
+                                            <li style='width: 50%'>客单价:<span id="tryMemGmvAvg" ></span>&nbsp;&nbsp;&nbsp;</li>
+
+                                        </ul>
+                                    </div>
+                                </div>
                                 <!-- </div>-->
                                 <ul class="clearfix no-padding">
                                 <li class="col-sm-3">
-                                <div class="show_cmBig"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><span id="memAll"></span>
+                                <div class="show_cmBig" style="cursor:pointer;"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doUserMem();">更多</a><br><span id="memAll"></span>
 	                               <!--<font id="bigMember"  style="font-size: 14px;margin-left: 15px;display: none; "><br>大客户社员：</font><span id="cmBig" style="font-size: 16px;margin-left: 5px;display: none; "></span>-->
                                 </div>
                                 </li>
-                                    <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
+                                    <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-fire"></i>周消费频次：<br><span id="jsonEshopWeekCou"></span></li>
                                 </ul>
@@ -477,14 +510,7 @@
     </div>
     <!-- ./wrapper -->
     <div id="city_detail_div" style="height:350px;display:none">
-        <table id="city_detail_table" style="width:100%;text-align:center;border-collapse:separate;border-spacing:2px" border="0" cellspacing="3" cellpadding="2"  >
-            <tr style="height:25px;background-color:#00c0ef;color:white" id="city_detail_title">
-                <td width="30px">序号</td>
-                <td>名称</td>
-                <!-- <td>代码</td>
-                <td>编号</td> -->
-            </tr>
-        </table>
+        <div class="col-sm-12 no-padding" id="mainTry" style="height: 260px;"></div>
     </div>
 
     <!-- jQuery 2.2.0 -->
@@ -542,21 +568,24 @@
             $(".add_citymember").click(function(){
                 if($("#setadd").val()=="0"){
                     $("#setadd").val("1");
-                    $("#cityMember").show();
+                    $("#cityMember").css("display", "block");
+                    $("#cityMember").css("left", event.clientX - 160);
+                    $("#cityMember").css("top", event.clientY + 10);
+                  //  $("#cityMember").show();
                 }else{
                     $("#setadd").val("0");
                     $("#cityMember").hide();
                 }
 
             });
-            $(".add_citymember").mouseover(function(){
+/*            $(".add_citymember").mouseover(function(){
                 $("#setadd").val("1");
                 $("#cityMember").show();
-            });
-            $(".add_citymember").mouseleave(function(){
+            });*/
+/*            $(".add_citymember").mouseleave(function(){
                 $("#setadd").val("0");
                 $("#cityMember").hide();
-            });
+            });*/
         }
 
         function showMemberBig(){
@@ -603,9 +632,42 @@
 
         function showTestMem(){
             $(".add_TestMember").click(function(){
+                if($("#setTry").val()=="0"){
+                    $("#setTry").val("1");
+                    $("#try_Member").css("display", "block");
+                    $("#try_Member").css("left", event.clientX - 300);
+                    $("#try_Member").css("top", event.clientY + 10);
+                   // $("#try_Member").show();
+                }else{
+                    $("#setTry").val("0");
+                    $("#try_Member").hide();
+                }
+
+           });
+            /*             $(".add_TestMember").mouseover(function(){
+                            $("#setTry").val("1");
+                            $("#try_Member").show();
+                        });*/
+            /*            $(".add_TestMember").mouseleave(function(){
+                            $("#setTry").val("0");
+                            $("#try_Member").hide();
+                        });*/
+        }
+
+        function close_DayMem(){
+            $("#setadd").val("0");
+            $("#cityMember").hide();
+        }
+        function close_TryMem(){
+            $("#setTry").val("0");
+            $("#try_Member").hide();
+        }
+
+/*        function showTestMem(){
+            $(".add_TestMember").click(function(){
                 initTestMemInfo();
             });
-        }
+        }*/
         function doCityMem(citycode){
             //跳转城市页面
             var url = "member_analysis_city.html?c="+encode64(citycode);
@@ -673,6 +735,17 @@
             }
             window.open(url,"user_member_view");
         }
+        function do_TryMem(){
+            var url = "";
+            if(target==0){
+                url = "user_member_view.html?t="+encode64(target)+"&c=&cn=&e="+encode64(employeeId)+"&fb="+encode64('3')+"&#fg";
+            }else if(target==1){
+                url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&fb="+encode64(3)+"&e="+encode64(employeeId)+"&#fg";
+            }else{
+                url = "user_member_view.html?t="+encode64(0)+"&fb="+encode64('3');
+            }
+            window.open(url,"user_member_view");
+        }
         var screenlogin=getUrlParamByKey("su");
 
         function loginShow(){
@@ -687,11 +760,13 @@
                     var stateObject = {};
                     var newUrl = "/daqWeb/crm/member_analysis?ta=0";
                     target = null;
+                    showCitys();
                     getUser();
                     //最新方式
 
                     doMemberInfo1();
                     doMemberInfo1_1();
+                    doTryMem();
                     showBigInfo();
                     doMemberInfo2();
                     doMemberInfo3();
@@ -770,13 +845,14 @@
                     })
                 }
 
-
+                showCitys();
                 getUser();
 
                 //最新方式
 
                 doMemberInfo1();
                 doMemberInfo1_1();
+                doTryMem();
                 showBigInfo();
                 doMemberInfo2();
                 doMemberInfo3();
@@ -1142,7 +1218,73 @@
             };
             myChart2.setOption(option2);
         }
-
+        var showTryMem = function (dataServer){
+            var myChartTry = echarts.init(document.getElementById('mainTry'));
+            //社员人数
+            optionTry = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    data: [ '试用社员GMV'],
+                    right:'35%',
+                    selectedMode:false,
+                    textStyle: {color: '#404a59'}
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: dataServer.jsonDateMem,
+                    axisLabel:{
+                        textStyle:{color:'#404a59',}
+                    },
+                    axisLine:{
+                        lineStyle:{color:'#404a59',}
+                    },
+                }],
+                yAxis: [{
+                    type: 'value',
+                    name: '试用社员GMV',
+                    splitLine: {show: false},
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle:{color:'#404a59'}
+                    },
+                    axisLine:{
+                        lineStyle:{color:'#404a59'}
+                    }
+                }],
+                series: [ {
+                    name: '试用社员GMV',
+                    type: 'bar',
+                    itemStyle:{normal:{color:'#ffae00'}},
+                    data: dataServer.tryDayGmv,
+                    label: {
+                        normal: {
+                            show:true,
+                            position: 'top',
+                            textStyle:{
+                                color:'#ffae00'
+                            }
+                        },
+                        emphasis: {
+                            textStyle:{
+                                color:'#ffae00',
+                            }
+                        }
+                    }
+                }]
+            };
+            myChartTry.setOption(optionTry);
+        }
         var showMemberInfo = function(dataServer){
             var myChart3 = echarts.init(document.getElementById('main3'));
             var myChart4 = echarts.init(document.getElementById('main4'));
@@ -1482,7 +1624,6 @@
                     showMember(resultJson);
                     setInterval("doUpdate()","60000");
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1494,7 +1635,23 @@
                    mem_big = resultJson.bigCou;
 	               showCmBigData(resultJson);
 	           }else{
-	               alert("暂无社员相关信息");
+	           }
+	       },false);
+	   }
+ 	   function doTryMem(){
+	       //直接赋值---基本信息加载
+	       doManager('communeMember','selectTryMemInfo',"0000",function(data){
+	           if(data.result){
+	               var resultJson= JSON.parse(data.data);
+                   //试用社员
+                   $("#tryMemSum").html(parseInt(resultJson.tryMemCou==null?'0':resultJson.tryMemCou));
+                   //试用社员GMV
+
+                   $("#tryMemGmvSum").html(changeMoney(parseInt(resultJson.tryMemGmv==null?'0':resultJson.tryMemGmv)));
+                   //客单价
+                   $("#tryMemGmvAvg").html(changeMoney(parseInt(resultJson.tryMemGmvAvg==null?'0':resultJson.tryMemGmvAvg)));
+                   showTryMem(resultJson);
+	           }else{
 	           }
 	       },false);
 	   }
@@ -1506,7 +1663,6 @@
                     //社员饼图
                     showMember(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1518,7 +1674,6 @@
                     //7日社员增长
                     showMemberGrow(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1531,7 +1686,6 @@
                     setCmDealInfo(resultJson);
                     //
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1542,7 +1696,6 @@
                     //社员成交额
                     showDeal(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1553,7 +1706,6 @@
                     //社员分析
                     showMemberInfo(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1565,7 +1717,6 @@
                     showMemberRegist(resultJson);
                     showCityMember(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1576,7 +1727,6 @@
                     //粮票
                     showRebateMoney(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1587,7 +1737,6 @@
                     //订单时段性分布
                     showTimeOrder(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1598,7 +1747,6 @@
                     //7大场景订单分布
                     showOrderType(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1609,7 +1757,6 @@
                     //完成订单/取消订单走势，订单均价走势
                     showEshopCount(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1620,7 +1767,6 @@
                     //安心合作社成交额、城市成交额
                     showEshopMemSum(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1631,7 +1777,6 @@
                     //安心合作社情况
                     showEshop(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1664,7 +1809,6 @@
                     var resultJson= JSON.parse(data.data);
                     setCmDealInfo(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1688,7 +1832,6 @@
                     //设置1分钟刷新页面600
                     setInterval("doUpdate()","60000");
                 }else{
-                    alert("暂无社员相关信息");
                 }
             },false);
         }
@@ -1719,7 +1862,6 @@
                     //粮票
                     showRebateMoney(resultJson);
                 }else{
-                    alert("暂无社员相关信息");
                 }
             });
         }
@@ -1739,38 +1881,41 @@
                 }
             });
         }
-        $(function () {
+
+        function showCitys(){
             doManager('communeMember','getCityCode',"0000",function(data) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
                     if(resultJson != null){
                         showCityInfo(resultJson);
+                        $("#gooey-v").gooeymenu({
+                            bgColor: "#68d099",
+                            contentColor: "white",
+                            style: "vertical",
+                            horizontal: {
+                                menuItemPosition: "glue"
+                            },
+                            vertical: {
+                                menuItemPosition: "glue",
+                                direction: "down"
+                            },
+                            circle: {
+                                radius: 90
+                            },
+                            margin: "small",
+                            size: 60,
+                            bounce: true,
+                            bounceLength: "small",
+                            transitionStep: 100,
+                            hover: "#68d099"
+                        });
+                        $('#citySelect').css('display','block');
+
                     }
                 }
             },false);
-            $("#gooey-v").gooeymenu({
-                bgColor: "#68d099",
-                contentColor: "white",
-                style: "vertical",
-                horizontal: {
-                    menuItemPosition: "glue"
-                },
-                vertical: {
-                    menuItemPosition: "glue",
-                    direction: "down"
-                },
-                circle: {
-                    radius: 90
-                },
-                margin: "small",
-                size: 60,
-                bounce: true,
-                bounceLength: "small",
-                transitionStep: 100,
-                hover: "#68d099"
-            });
-            $('#citySelect').css('display','block');
-            localStorage.clear();
+        }
+        $(function () {
             loginShow();
             showAddMember();
             showMemberBig();
@@ -2200,13 +2345,14 @@
             //当日成交额
             $("#dayDealSum").html(changeMoney(parseInt(dataServer.dayDealSum==null?'0':dataServer.dayDealSum)));
             //客单价
-            if(dataServer.dayDealCount==null||dataServer.dayDealCount==0){
+            $("#dayOneSum").html(dataServer.jsonEshopWeekDeal);
+/*            if(dataServer.dayDealCount==null||dataServer.dayDealCount==0){
                 $("#dayOneSum").html("0");
             }else{
                 $("#dayOneSum").html(dataServer.dayDealSum/dataServer.dayDealCount==null?'0':(dataServer.dayDealSum/dataServer.dayDealCount).toFixed(2));
-            }
+            }*/
             //客单量
-            $("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
+            //$("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
             //新增社员
             $("#dayNewMem").html(parseInt(dataServer.dayAddMem==null?'0':dataServer.dayAddMem));
             if(dataServer.cmGoodsDealCount==null||dataServer.cmGoodsDealCount==0){
@@ -4072,12 +4218,6 @@
                 shade: [0.1, '#393D49'] //0.1透明度的黑色背景
             });
             var infoStr = "";
-
-            for (var i = 0; i < 10; i++) {
-                var cityname = i;
-                var cityId = i;
-                infoStr = infoStr + "<tr style='cursor:pointer'  onclick='aboutCityData(this)' id='tr_" + cityId + "'><td>" + parseInt(i + 1) + "</td><td>" + cityname + "</td>/tr>";
-            }
             $("#city_detail_title").nextAll().remove();
             $("#city_detail_title").after(infoStr);
             $("#city_detail_title").nextAll("tr:even").css("background-color", "aliceblue");
@@ -4090,7 +4230,7 @@
             layer.open({
                 type: 1,
                 closeBtn:1,
-                title: ['城市信息', 'color:#fff'],
+                title: ['试用社员信息', 'color:#000'],
                 shadeClose: true,
                 shade: [0.1, '#393D49'],
                 moveOut: false,
@@ -4105,6 +4245,11 @@
                     layer.close(index);
                 }
             });
+            var chartTry = echarts.init(document.getElementById('mainTry'));
+            chartTry.clear();
+            var chart7div=document.getElementById('mainTry');
+            chartTry.resize(260);
+            chartTry.setOption(optionTry);
         };
 
     </script>

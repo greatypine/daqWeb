@@ -194,7 +194,55 @@ public class ShortMessageDaoImpl extends BaseDAOHibernate implements ShortMessag
         return (List<Map<String,Object>>)lst_data;
 	}
 
-	@Override
+    @Override
+    public List<Map<String, Object>> getOutSider(String name, PageInfo pageInfo) {
+        String sql= "";
+        //SQL查询对象
+        SQLQuery query = getHibernateTemplate().getSessionFactory()
+                .getCurrentSession().createSQLQuery(sql);
+
+
+        pageInfo.setTotalRecords(query.list().size());
+        //获得查询数据
+        List<Map<String, Object>> lst_data = query
+                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+                .setFirstResult(
+                        pageInfo.getRecordsPerPage()
+                                * (pageInfo.getCurrentPage() - 1))
+                .setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+
+        //如果没有数据返回
+        if(lst_data == null || lst_data.size() == 0){
+            return new ArrayList<Map<String, Object>>();
+        }
+
+        return (List<Map<String,Object>>)lst_data;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllOutSider() {
+        String sql="";
+        //SQL查询对象
+        SQLQuery query = getHibernateTemplate().getSessionFactory()
+                .getCurrentSession().createSQLQuery(sql);
+
+
+
+        //获得查询数据
+        List<Map<String, Object>> lst_data = query
+                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+
+        //如果没有数据返回
+        if(lst_data == null || lst_data.size() == 0){
+            return new ArrayList<Map<String, Object>>();
+        }
+
+        return (List<Map<String,Object>>)lst_data;
+    }
+
+    @Override
 	public List<Map<String, Object>> getStoreKeeperEmployee(String whereStr, PageInfo pageInfo) {
 		String sql= " select name,phone as mobilephone,employee_no,inviteCode from t_storekeeper where humanstatus=1 and phone is not null and phone!='' and cardnumber is not null and cardnumber!='' and inviteCode is not null and inviteCode!='' "+whereStr;
 		//SQL查询对象

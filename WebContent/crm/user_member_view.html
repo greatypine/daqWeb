@@ -166,7 +166,7 @@
           <ul class="nav nav-tabs">
 		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
 		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
-			  		  <!--<li class="" id="tab_3_avtive"><a href="#tab_3" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>-->
+			  		  <li class="" id="tab_3_avtive"><a href="#tab_3" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>
 
 		  </ul>
 		  <div class="tab-content">
@@ -394,10 +394,30 @@
 									  </div>
 								  </div>
 							  </div>
+							  <div class="form-group col-lg-4">
+								  <label>城市</label>
+								  <input id="city_id_try" name="city_id_try" type="hidden" value=""/>
+								  <input type="text" class="form-control"  placeholder="城市" id="city_name_try" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+								  <div class="auto hidden" id="auto_city_try" style="width:85%;z-index: 99999;">
+									  <!-- /.input group -->
+								  </div>
+							  </div>
+							  <div class="form-group col-lg-4">
+								  <label>门店</label>
+								  <input id="store_id_try" name="store_id_try" type="hidden" value=""/>
+								  <input type="text" class="form-control"  placeholder="门店" id="store_name_try" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%"/>
+								  <div class="auto hidden" id="auto_store_try" style="width:85%;z-index: 99999;">
+								  </div>
+								  <!-- /.input group -->
+							  </div>
 						  </div>
 					  </div>
 
+
 					  <div class="clearfix">
+						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+							  <button type="button" onclick="resetSerachParamTry()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+						  </div>
 						  <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
 							  <button type="button" onclick="export_customer()" class="btn btn-block btn-warning">导出</button>
 						  </div>
@@ -414,9 +434,11 @@
 							  <table class="table table-striped">
 								  <tbody id="tradeType_tbody_customer">
 								  <tr>
-									  <th width="12%">创建时间</th>
-									  <th width="12%">大客户社员数</th>
-									  <th width="12%">累计开卡数</th>
+									  <th width="8%">城市</th>
+									  <th width="10%">门店名称</th>
+									  <th width="10%">门店编号</th>
+									  <th width="12%">新增试用社员数</th>
+									  <th width="12%">累计试用社员总数</th>
 								  </tr>
 								  </tbody>
 							  </table>
@@ -493,18 +515,27 @@
         });
 		if(target==0){//总部
 			if(cityName!=""){
+			    //门店单位社员
 				$("#city_name_tradetype").val(cityName);
-				$("#city_id_tradetype").val(cityId);
+                $("#city_name_tradetype").attr("readonly",true);
+                $("#city_id_tradetype").val(cityId);
+                //城市单位社员
 				$("#city_name").val(cityName);
-				$("#city_id").val(cityId);
-				$("#city_name_tradetype").attr("readonly",true);
-				$("#city_name").attr("readonly",true);
+                $("#city_name").attr("readonly",true);
+                $("#city_id").val(cityId);
+                //试用社员
+                $("#city_name_try").val(cityName);
+                $("#city_name_try").attr("readonly",true);
+                $("#city_id_try").val(cityId);
+
 			}
 		}else if(target==1){//城市
 			$("#city_name_tradetype").val(cityName);
 			$("#city_name_tradetype").attr("readonly",true);
 			$("#city_name").val(cityName);
 			$("#city_name").attr("readonly",true);
+            $("#city_name_try").val(cityName);
+            $("#city_name_try").attr("readonly",true);
 		}else if(target==2){//店长
 			$("#tab_2_avtive").hide();
 			$("#tab_2").hide();
@@ -512,6 +543,8 @@
 			$("#city_name_tradetype").attr("readonly",true);
 			$("#store_name_tradetype").val(storeName);
 			$("#store_name_tradetype").attr("readonly",true);
+            $("#city_name_try").val(cityName);
+            $("#city_name_try").attr("readonly",true);
 		}
 		if(fromBar == "1"){
 			$("#first_date").attr("value",beti +'-'+ endt);
@@ -527,6 +560,11 @@
 		    $("#startOpenCardDate").attr("value",beti);
 		    $("#endOpenCardDate").attr("value",endt);
 			searchInfo_tradetype_step2();
+		}else if(fromBar == "3"){
+            $("#tab_3_avtive").addClass("active");
+            $("#tab_3").addClass("active");
+            $("#tab_1_avtive").removeClass("active");
+            $("#tab_1").removeClass("active");
 		}
 	    $(".logo-lg > ul > li").hover(function(){
 	      $(this).children(".nav_dropdown").toggle('1000');
@@ -573,7 +611,7 @@
                 if(data.result){
                 	
                 	lst_select_city = JSON.parse(data.data);
-                	 for(i=0;i<lst_select_city.length;i++){
+                	 for(var i=0;i<lst_select_city.length;i++){
                 		 cityNameArray.push(lst_select_city[i].cityname);
                      	 cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
        			  	 }
@@ -585,13 +623,44 @@
             });
         }
     });
+
+$('#city_name').keyup(function(event){//门店交易额统计
+    cityNameArray=new Array();
+    $("#auto_city_member").empty();
+    var str_name = $(this).val();
+    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        $("#city_id").val("");
+        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+            return;
+        }
+        var city_id = null;
+        if(target==1){
+            city_id = cityId;
+
+        }
+        doManager('dynamicManager','selectAllCity',null,function(data){
+            if(data.result){
+
+                lst_select_city = JSON.parse(data.data);
+                for(var i=0;i<lst_select_city.length;i++){
+                    cityNameArray.push(lst_select_city[i].cityname);
+                    cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
+                }
+                var autoComplete = new AutoComplete("city_name","auto_city_member",cityNameArray);
+                autoComplete.start(event);
+            }else{
+
+            }
+        });
+    }
+});
   
-  $('#city_name').keyup(function(event){//门店交易额统计
+  $('#city_name_try').keyup(function(event){//门店交易额统计
 	  cityNameArray=new Array();
-	   $("#auto_city_member").empty();
+	   $("#auto_city_try").empty();
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        	$("#city_id").val("");
+        	$("#city_id_try").val("");
             if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
                 return;
             }
@@ -602,13 +671,12 @@
             }
             doManager('dynamicManager','selectAllCity',null,function(data){
                 if(data.result){
-                	
                 	lst_select_city = JSON.parse(data.data);
-                	 for(i=0;i<lst_select_city.length;i++){
+                	 for(var i=0;i<lst_select_city.length;i++){
                 		 cityNameArray.push(lst_select_city[i].cityname);
                      	 cityIdMap[lst_select_city[i].cityname] = lst_select_city[i].id;
        			  	 }
-       			  	var autoComplete = new AutoComplete("city_name","auto_city_member",cityNameArray);
+       			  	var autoComplete = new AutoComplete("city_name_try","auto_city_try",cityNameArray);
        			    autoComplete.start(event);
                 }else{
                 	
@@ -626,6 +694,10 @@
 		  var temp_city = document.getElementById("city_name").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 		  $("#city_id").val(cityIdMap[temp_city]);
 	  });
+	$('#auto_city_try').on("click",function(){
+		var temp_city = document.getElementById("city_name_try").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+		$("#city_id_try").val(cityIdMap[temp_city]);
+	});
      
      
      
@@ -672,10 +744,50 @@
         }
     });
 
+$('#store_name_try').keyup(function(event){
+    storeNameArray=new Array();
+    $("#auto_store_try").empty();
+    var str_name = $(this).val();
+    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        $("#store_id_try").val("");
+        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+            return;
+        }
+        var city_id = null;
+        if(target==0){//总部
+            city_id = ($("#city_id_try").val())==""?null:($("#city_id_try").val());
+            var city_name =  $("#city_name_try").val();
+            if(city_id==null&&city_name!=""){
+                city_id=-10000;
+            }
+        }else if(target==1){//城市
+            city_id = cityId;
+        }
+
+        doManager('dynamicManager','getStoreByCity',[target,employeeId,city_id,str_name],function(data){
+            if(data.result){
+                lst_select_store = JSON.parse(data.data).storelist;
+                for(var i=0;i<lst_select_store.length;i++){
+                    storeNameArray.push(lst_select_store[i].name);
+                    storeIdMap[lst_select_store[i].name] = lst_select_store[i].store_id;
+                }
+                var autoComplete = new AutoComplete("store_name_try","auto_store_try",storeNameArray);
+                autoComplete.start(event);
+            }else{
+
+            }
+        });
+    }
+});
+
 	  $('#auto_store').on("click",function(){
 		  var temp_store = document.getElementById("store_name_tradetype").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 		  $("#store_id_tradetype").val(storeIdMap[temp_store]);
-	 }); 
+	 });
+	$('#auto_store_try').on("click",function(){
+		var temp_store = document.getElementById("store_name_try").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+		$("#store_id_try").val(storeIdMap[temp_store]);
+	});
      
      
     
@@ -988,19 +1100,59 @@ function searchInfo_customer(cur_page){
     }
     $("#process_div").show();
     $("#process_div_pic").show();
+    var number_str = $("#store_id_try").val();
+    var storeName = $("#store_name_try").val();
 
+    if(number_str==""&&storeName!=""){
+        number_str=-10000;
+    }
     var dynamicDto=null;
     if(target==0){//总部
+        var cityId = $("#city_id_try").val();
+        var cityName = $("#city_name_try").val();
+        if(cityId==""&&cityName!=""){
+            cityId="-10000";
+        }
         dynamicDto = {
             beginDate:begin_end_date[0].trim(),
             endDate:begin_end_date[1].trim(),
-            searchstr:"customer"
+            storeNumer:number_str,
+            cityId:cityId,
+            employeeId:employeeId,
+            target:target,
+            storeId:number_str,
+            searchstr:"try_member"
         }
     }else if(target==1){//城市
         dynamicDto = {
             beginDate:begin_end_date[0].trim(),
             endDate:begin_end_date[1].trim(),
-            searchstr:"customer"
+            storeNumer:number_str,
+            cityId:initCity,
+            employeeId:employeeId,
+            target:target,
+            storeId:number_str,
+            searchstr:"try_member"
+        }
+    }else if(target==2){//店长
+        dynamicDto = {
+            beginDate:begin_end_date[0].trim(),
+            endDate:begin_end_date[1].trim(),
+            storeNumer:number_str,
+            employeeNo:employeeId,
+            storeId:storeId,
+            target:target,
+            searchstr:"try_member"
+        }
+    }else if(target==3){//事业部
+        dynamicDto = {
+            beginDate:begin_end_date[0].trim(),
+            endDate:begin_end_date[1].trim(),
+            storeNumer:number_str,
+            employeeNo:employeeId,
+            storeId:number_str,
+            target:target,
+            searchstr:"try_member"
         }
     }
     var pageInfo = new Object();
@@ -1027,7 +1179,7 @@ function searchInfo_customer(cur_page){
 
                 if(!isCustomerCreatePage1){
                     $("#page_customer").createPage({
-                        pageCount:totalPage_city,
+                        pageCount:totalPage_customer,
                         current:cur_page,
                         backFn:function(p){
                             searchInfo_customer(p,begin_end_date);
@@ -1038,16 +1190,24 @@ function searchInfo_customer(cur_page){
 
                 var infoStr="";
                 for(var i=0;i<jData.length;i++){
+                    var cityname = jData[i].city_name;
+                    if(cityname == '无'){
+                        cityname = $("#city_name_try").val() == "" ? cityname : $("#city_name_try").val();
+                    }
                     infoStr="";
                     infoStr += "<tr>"
                         +"<td>"+cityname+"</td>"
-                        +"<td>"+jData[i].nowcount+"</td>"
-						+"<td>"+jData[i].count199+"</td>"
-                    	+"<td>"+jData[i].opencount+"</td>"
-                        +"</tr>";
+                        +"<td>"+jData[i].name+"</td>"
+                        +"<td>"+jData[i].storeno+"</td>";
+                    //if(jData[i].name == '无'){
+                        infoStr += "<td>"+jData[i].nowcount+"</td>";
+                    /*}else{
+                        infoStr += "<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].nowcount+"</a></td>"
+                            +"<td><a target=\"userProfile_view\" href=\"userProfile_view.html?t="+encode64(target)+"&mt="+encode64("associator_start_2")+"&tag="+encode64("V")+"&time="+encode64(sdate)+"&cn="+encode64(cityname)+"&so="+encode64(jData[i].storeno)+"&sn="+encode64(jData[i].name)+"\">"+jData[i].count199+"</a></td>"
+                    }*/
+                    infoStr += "<td>"+jData[i].opencount+"</td></tr>";
 
-                    $("#tradeType_tbody_customer").append(infoStr);
-                }
+                    $("#tradeType_tbody_customer").append(infoStr);                }
             }else if(result.status=='storefail'){
                 $("#tradeType_tbody_customer").find("tr:gt(0)").remove();
                 crm_alert(5,JSON.parse(result.data).message);
@@ -1219,6 +1379,88 @@ function searchInfo_customer(cur_page){
     	 $("#process_div_pic").hide();
       }); 
     }
+
+
+//导出上第二步
+function export_customer(){
+    //注册时间
+    var sdate = $("#last_date").val();
+    var begin_end_date=["",""];
+    if(sdate!=""){
+        begin_end_date = sdate.split("-");
+    }
+    $("#process_div").show();
+    $("#process_div_pic").show();
+
+    var number_str = $("#store_id_try").val();
+    var storeName = $("#store_name_try").val();
+
+    if(number_str==""&&storeName!=""){
+        number_str=-10000;
+    }
+    var dynamicDto=null;
+    if(target==0){//总部
+        var cityId = $("#city_id_try").val();
+        var cityName = $("#city_name_try").val();
+        if(cityId==""&&cityName!=""){
+            cityId="-10000";
+        }
+        dynamicDto = {
+            beginDate:begin_end_date[0].trim(),
+            endDate:begin_end_date[1].trim(),
+            storeNumer:number_str,
+            cityId:cityId,
+            employeeId:employeeId,
+            target:target,
+            storeId:number_str,
+            searchstr:"try_member"
+        }
+    }else if(target==1){//城市
+        dynamicDto = {
+            beginDate:begin_end_date[0].trim(),
+            endDate:begin_end_date[1].trim(),
+            storeNumer:number_str,
+            cityId:initCity,
+            employeeId:employeeId,
+            target:target,
+            storeId:number_str,
+            searchstr:"try_member"
+        }
+    }else if(target==2){//店长
+        dynamicDto = {
+            beginDate:begin_end_date[0].trim(),
+            endDate:begin_end_date[1].trim(),
+            storeNumer:number_str,
+            employeeNo:employeeId,
+            storeId:storeId,
+            target:target,
+            searchstr:"try_member"
+        }
+    }
+
+    doManager('dynamicManager','exportUserMemberInfo',[dynamicDto],function(data){
+        if(data.result){
+            var result= JSON.parse(data.data);
+            if(result.status=='success'){
+                window.location.href=result.data;
+            }else if(result.status=='null'){
+                crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+                $("#process_div").hide();
+                $("#process_div_pic").hide();
+                return;
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+                $("#process_div").hide();
+                $("#process_div_pic").hide();
+            }
+
+        }else{
+            crm_alert(5,"请稍后重新请求！");
+        }
+        $("#process_div").hide();
+        $("#process_div_pic").hide();
+    });
+}
  
 function resetSerachParam(){
 	 $("#auto_store").empty();
@@ -1247,6 +1489,36 @@ function resetSerachParam(){
     var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01'; 
 	$("#searchTime").val(startDateStr +"-"+ timeStr);
 	$("#data_choice").html("默认时期");
+
+}
+
+function resetSerachParamTry(){
+    $("#auto_store_try").empty();
+    if(target==0){//总部
+        if(fromBar != "1" && fromBar != "3"){
+            $("#city_id_try").val("");
+            $("#city_name_try").val("");
+        }
+        $("#store_id_try").val("");
+        $("#store_name_try").val("");
+
+
+    }else if(target==1){//城市级别
+
+        $("#store_id_try").val("");
+        $("#store_name_try").val("");
+
+    }else if(target==2){//店长
+
+    }
+    var nowDate = new Date();
+    var month = nowDate.getMonth()+1;
+    var date = nowDate.getDate();
+    timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
+    nowDate.setDate(nowDate.getDate()+parseInt(-1));
+    var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01';
+    $("#last_date").val(startDateStr +"-"+ timeStr);
+    $("#data_choice").html("默认时期");
 
 }
 

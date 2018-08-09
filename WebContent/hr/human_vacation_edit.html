@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>请假申请</title>
+<link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../scripts/css/auto.css" rel="stylesheet">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+<script type="text/javascript"> 
+
+
+Date.prototype.format = function(format) {
+    var o = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "h+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        "S": this.getMilliseconds()
+    }
+    if (/(y+)/.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+        }
+    }
+    return format;
+}
+function getFormatDate(date, pattern) {
+    if (date == undefined) {
+        date = new Date();
+    }
+    if (pattern == undefined) {
+        pattern = "yyyy-MM-dd hh:mm:ss";
+    }
+    return date.format(pattern);
+}
+
+
+
+
+var id = getUrlParamByKey("id");
+
+var curr_user;
+
+function initcurruser(){
+		//取得当前登录人的门店
+	doManager("UserManager", "getCurrentUserDTO",null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						 curr_user = JSON.parse(data.data);
+					}
+	},false);
+	}
+	
+	
+	function yanzhen(){
+		
+		/* var employee_no = $("#employee_no  option:selected").val();
+		if(employee_no==null||employee_no==""){
+			alert("请选择员工！ ");
+			return;
+		}
+		
+		var wcontent = $("#wcontent").val();
+		if(wcontent==null||wcontent.trim()==""){
+			alert("请填写工单内容！ ");
+			return;
+		}
+		
+		var username=$("#username").val();
+		if(username==null||username.trim()==""){
+			alert("请填写客户姓名！ ");
+			return;
+		}
+		
+		var phone=$("#phone").val();
+		if(phone==null||phone.trim()==""){
+			alert("请填写客户电话！ ");
+			return;
+		}
+		
+		if(phone.length!=11){
+			alert("客户电话格式不正确！ ");
+			return;
+		}
+		
+		var rcv_name=$("#rcv_name").val();
+		if(rcv_name==null||rcv_name.trim()==""){
+			alert("请填写收货人姓名！ ");
+			return;
+		}
+		
+		
+		var rcv_phone=$("#rcv_phone").val();
+		if(rcv_phone==null||rcv_phone.trim()==""){
+			alert("请填写收货电话！ ");
+			return;
+		}
+		
+		if(rcv_phone.length!=11){
+			alert("收货电话格式不正确！ ");
+			return;
+		}
+		
+		
+		
+		var address=$("#address").val();
+		if(address==null||address.trim()==""){
+			alert("请填写收货地址！ ");
+			return;
+		} */
+		
+		
+		
+		doSave();		
+	}
+	
+	
+	function doSave(){
+		var arr = ["processInstanceId","store_id", "store_name","employee_no","employee_name","work_date","topostdate","vacation_reason","start_date","end_date","work_relay"];
+			var o = {};
+			for ( var i in arr) {
+				var v = arr[i];
+				var va = $("#" + v).val();
+				o[v] = va;
+			}
+			
+			o["vacation_type"] = $("#vacation_type  option:selected").val();
+			o["id"] = id;
+			
+			doManager("HumanVacationManager", "saveHumanVacation2", o, function(data,
+					textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					window.location.href = 'human_vacation_list.html';
+				} else {
+					$$.showMessage("系统信息", "申请失败!");
+				}
+			});
+			
+}
+	var processid="";
+	
+	$(function(){
+		initcurruser();
+		
+		doManager("HumanVacationManager", "queryHumanVacationInfo",[id],
+  				function(data, textStatus, XMLHttpRequest) {
+  					if (data.result) {
+  						var humanObj = JSON.parse(data.data);
+  						
+  						$("#employee_name_show").html(humanObj.employee_name+"【"+humanObj.employee_no+"】");
+  						$("#store_name_show").html(humanObj.store_name);
+  						
+  						$("#topostdate").val(humanObj.topostdate);
+  						$("#work_date").val(humanObj.work_date);
+  						$("#vacation_type").val(humanObj.vacation_type);
+  						$("#vacation_reason").val(humanObj.vacation_reason);
+  						$("#start_date").val(humanObj.start_date);
+  						$("#end_date").val(humanObj.end_date);
+  						$("#work_relay").val(humanObj.work_relay);
+						
+  						processid=humanObj.processInstanceId;
+  						
+  						$("#employee_no").val(humanObj.employee_no);
+  						$("#employee_name").val(humanObj.employee_name);
+  						$("#store_id").val(humanObj.store_id);
+  						$("#store_name").val(humanObj.store_name);
+  						$("#processInstanceId").val(humanObj.processInstanceId);
+  						
+  						var ps = humanObj.processlog;
+  						var lastmsg = ps[0].message;
+  						//显示审批历史记录   
+  						var processlog="";
+  						for(i=0;i<ps.length;i++){
+  							var obj = ps[i];
+  							var s = new Date(obj.time);
+  							var oneLine = getFormatDate(s)+" -- "+obj.message;
+  							processlog+=oneLine+"<br>";
+  						}
+  						$("#processlog").html(processlog);
+  						
+  						var status = humanObj.process_status;
+  						
+  						var groupcode=curr_user.usergroup.code;
+  						if("YGGXJSZ"==groupcode){
+  							$("#btnHR").show();
+							$("#btnHRRe").show();
+							 $(".sp_content").show();
+  						}else{
+  							$("#btnHR").hide();
+							$("#btnHRRe").hide();
+							 $(".sp_content").hide();
+  						}
+  						
+  						
+  						if(curr_user!=null&&curr_user.zw=="店长"){
+  							if(status==3||status==2){
+  								 $("#btnDZ").hide();
+  								 $("#btnDZRe").hide();
+  								 //审批意见 
+  								 $(".sp_content").hide();
+  							}else{
+  								//如果最后一个为自己审批的 则已经审批过了 
+  								if(lastmsg.indexOf(curr_user.name)>-1){
+  									 $("#btnDZ").hide();
+  	  								 $("#btnDZRe").hide();
+  	  								 //审批意见 
+  	  								 $(".sp_content").hide();
+  								}else{
+  									 $("#btnDZ").show();
+  	  								 $("#btnDZRe").show();
+  	  								 //$("#btnHR").show();
+  	  								 //$("#btnHRRe").show();
+  	  								 //审批意见 
+  	  								 $(".sp_content").show();
+  								}
+  							}
+							 
+						 }
+						 if(curr_user!=null&&curr_user.zw=="国安侠"){
+							 	if(status!=1&&status!=2){
+		  							$("#btnEMSave").show();
+		  							//填写或是驳回状态 可以编辑 和再提交 
+		  							$("#vacation_reason").attr("readonly",false);
+		  							$("#work_relay").attr("readonly",false);
+		  							$("#vacation_type").attr("disabled",false);
+		  							
+		  						}else{
+		  							$("#btnEMSave").hide();
+		  						}
+						 }
+						 
+  						
+  					}
+		});
+		
+		
+		
+		//加载当前登录人 
+		/* doManager("UserManager", "getCurrentUserDTO",null,
+  				function(data, textStatus, XMLHttpRequest) {
+  					if (data.result) {
+  						var userObj = JSON.parse(data.data);
+  						var store_id=userObj.store_id==null?"":userObj.store_id;
+  						//initStoreEmployee(store_id);
+  						$("#employee_name_show").html(userObj.name+"【"+userObj.employeeId+"】");
+  						$("#store_name_show").html(userObj.store_name);
+  						
+  						$("#employee_no").val(userObj.employeeId);
+  						$("#employee_name").val(userObj.name);
+  						$("#store_id").val(userObj.store_id);
+  						$("#store_name").val(userObj.store_name);
+  						
+  					}
+		}); */
+		
+		
+		
+		
+	});
+
+	   
+	
+	
+	/**************请假相关 ****************/
+	function doYes(){
+	  /***************店长审批 ********************/
+	  var o = {};
+	  if(processid!=""&&processid.length>0){
+		  o["processInstanceId"] = processid;
+		  o["id"]=id;
+		  o["re_content"]=$("#re_content").val();
+		  o["employee_no"]=curr_user.employeeId;
+		  doManager("HumanVacationManager", "update_storekeeper_Audit", o, function(data,
+					textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					window.location.href = 'human_vacation_list.html';
+				} else {
+					$$.showMessage("系统信息", "申请失败!");
+				}
+			});
+	  }else{
+		  $$.showMessage("系统信息", "流程编号 为空！ !");
+	  }
+	}
+	function doNo(){
+		  /***************店长驳回 ********************/
+		  var o = {};
+		  if(processid!=""&&processid.length>0){
+			  o["processInstanceId"] = processid;
+			  o["id"]=id;
+			  o["re_content"]=$("#re_content").val();
+			  o["employee_no"]=curr_user.employeeId;
+			  doManager("HumanVacationManager", "update_storekeeper_Audit_Re", o, function(data,
+						textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						window.location.href = 'human_vacation_list.html';
+					} else {
+						$$.showMessage("系统信息", "申请失败!");
+					}
+				});
+		  }else{
+			  $$.showMessage("系统信息", "流程编号 为空！ !");
+		  }
+		}
+	
+	
+	
+	
+	function doHrYes(){
+		  /***************Hr 审批 ********************/
+		  var o = {};
+		  if(processid!=""&&processid.length>0){
+			  o["processInstanceId"] = processid;
+			  o["id"]=id;
+			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
+			  doManager("HumanVacationManager", "update_hr_Audit", o, function(data,
+						textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.id!=null){
+							updateprocessstatus(jsonData.id);
+						}
+					} else {
+						$$.showMessage("系统信息", "申请失败!");
+					}
+				});
+		  }else{
+			  $$.showMessage("系统信息", "流程编号 为空！ !");
+		  }
+		 
+		}
+	
+	function updateprocessstatus(vacationid){
+		doManager("HumanVacationManager", "update_process_status", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	function doHrNo(){
+		  /***************HR 驳回 ********************/
+		  var o = {};
+		  if(processid!=""&&processid.length>0){
+			  o["processInstanceId"] = processid;
+			  o["id"]=id;
+			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
+			  doManager("HumanVacationManager", "update_hr_Audit_Re", o, function(data,
+						textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.id!=null){
+							updateprocessstatusre(jsonData.id);
+						}
+					} else {
+						$$.showMessage("系统信息", "申请失败!");
+					}
+				});
+		  }else{
+			  $$.showMessage("系统信息", "流程编号 为空！ !");
+		  }
+		}
+	function updateprocessstatusre(vacationid){
+		doManager("HumanVacationManager", "update_process_status_re", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
+ 
+	
+	
+	
+</script>
+</head>
+<style type="text/css">
+	td {
+		width=50%;
+	}
+
+	p{
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:200px;}
+	.panel-heading .but{float:right; text-align: center;}
+	.but input {
+		background-color: transparent;
+		border: 1px solid #fff;
+		border-radius: 3px;
+		padding: 0 13px;
+		margin-right: 30px;}
+		.ui-dialog .ui-dialog-titlebar-close span {
+    		display: none;
+    	}
+    	
+    .sp_content{
+    	display: none;
+    }
+</style>
+<body>
+	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
+    <div class="panel-heading">请假申请
+    
+    	<span id="btnDZRe" style="display: none;" onclick="doNo();" disabled="false">店长驳回</span>
+    	<span id="btnDZ" style="display: none;" onclick="doYes();" disabled="false">店长通过</span>
+    	<span id="btnHR" style="display: none;" onclick="doHrYes();" disabled="false">HR通过</span>
+    	<span id="btnHRRe" style="display: none;" onclick="doHrNo();" disabled="false">HR驳回</span>
+    	
+        <span id="btnEMSave" style="display: none;" onclick="yanzhen();" disabled="false">员工提交</span>
+    	<span id="btnBack" onclick="javascript:history.go(-1);" disabled="false"> 返回</span>
+        
+        <!-- <span class="but">
+			<input name="" type="submit" onclick="yanzhen();" value="保存">
+			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
+		</span> -->
+    </div>
+    <div class="panel-body" id="temp1">
+	<form action="" method="post" class="pmsForm">
+	<input type="hidden" name="id" id="id"/>
+	<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td colspan="2">
+					<p></p>
+					<p>
+						姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：<label id="employee_name_show"></label>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<p></p>
+					<p>
+						门&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;店：<label id="store_name_show"></label>
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<p></p>
+					<p>
+					
+						入职日期：
+						<input id="topostdate" revalidate="true" type="text"
+								likeOption="false" name="topostdate"
+								validate="formatDate:true" class="pmsDateField form-control"
+								yearRange="-100:+10" style="width: 15%; display: inline; height:40px;"
+								readonly />
+								
+						参加工作时间：
+						<input id="work_date" revalidate="true" type="text"
+								likeOption="false" name="work_date"
+								validate="formatDate:true" class="pmsDateField form-control"
+								yearRange="-100:+10" style="width: 15%; display: inline; height:40px;"
+								readonly />
+								
+						
+					</p>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">
+					<p></p>
+					<p>
+						假期类别：
+						<select id="vacation_type" disabled="disabled">
+							<option value="事假">事假</option>
+							<option value="病假">病假</option>
+							<option value="婚假">婚假</option>
+							<option value="产假">产假</option>
+							<option value="年休假">年休假</option>
+							<option value="丧假">丧假</option>
+							<option value="补休">补休</option>
+							<option value="其它">其它</option>
+						</select>
+					</p>
+				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="2">
+					<p style="float: left;"><!-- <font color="red">*</font> -->请假原因：&nbsp;</p>
+					<p style="float: none;">
+						<textarea class="form-control" id="vacation_reason" readonly="readonly" maxlength="1000" style="display: inline-block;width:59%;height:50px;resize:none;" ></textarea>
+					</p>
+				</td>
+			</tr>
+			
+			
+			<tr>
+				<td colspan="2">
+					<p></p>
+					<p>
+						请假日期：
+						<input id="start_date" revalidate="true" type="text"
+								likeOption="false" name="start_date"
+								validate="formatDate:true" class="pmsDateField form-control"
+								yearRange="-100:+10" style="width: 15%; display: inline; height:40px;"
+								readonly />
+						至<input id="end_date" revalidate="true" type="text"
+								likeOption="false" name="end_date"
+								validate="formatDate:true" class="pmsDateField form-control"
+								yearRange="-100:+10" style="width: 15%; display: inline; height:40px;"
+								readonly />
+					</p>
+				</td>
+			</tr>
+			
+			
+			
+			<tr>
+				<td colspan="2">
+					<p style="float: left;">假期工作<br>交接情况：&nbsp;</p>
+					<p style="float: none;">
+						<textarea class="form-control" id="work_relay" readonly="readonly" maxlength="1000" style="display: inline-block;width:59%;height:50px;resize:none;" ></textarea>
+					</p>
+				</td>
+			</tr>
+			
+			 <input type="hidden" id="employee_no" value=""/>
+			 <input type="hidden" id="employee_name" value=""/>
+			 <input type="hidden" id="store_name" value=""/>
+             <input type="hidden" id="store_id" value=""/>
+             <input type="hidden" id="processInstanceId" value=""/>
+               
+               
+            <tr class="sp_content">
+				<td colspan="2">
+					<p style="float: left;">审批意见：&nbsp;</p>
+					<p style="float: none;">
+						<textarea class="form-control" id="re_content" maxlength="1000" style="display: inline-block;width:59%;height:50px;resize:none;" ></textarea>
+					</p>
+				</td>
+			</tr>  
+		      
+		</table>
+		
+		<label id="processlog">
+		<br>
+		<br>
+		<br>
+		<br>
+		</label>
+	</form>
+
+</div></div>
+</body>
+</html>

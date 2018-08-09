@@ -88,6 +88,13 @@ public interface ShortMessageDao {
 	 */
 	public List<Map<String, Object>> getCustomer(String name, PageInfo pageInfo);
 	public List<Map<String, Object>> getAllCustomer();
-	
-	
+
+	/**
+	 * @Description  获取外部人员
+	 * @author gbl
+	 * @date 2018/8/7 9:55
+	 **/
+
+	public List<Map<String, Object>> getOutSider(String name, PageInfo pageInfo);
+	public List<Map<String, Object>> getAllOutSider();
 }

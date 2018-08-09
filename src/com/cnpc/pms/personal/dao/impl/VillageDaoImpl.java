@@ -235,7 +235,7 @@ public class VillageDaoImpl extends BaseDAOHibernate implements VillageDao {
 	@Override
 	public Integer findConVillageCountByCityName(String cityName) {
 		String findSql = "select count(tv.id) from t_village tv INNER JOIN (SELECT town.id as id FROM t_store store INNER JOIN t_town town ON FIND_IN_SET(store.town_id,town.id)"
-				+" WHERE town.id is not NULL and store.flag = 0 and ifnull(store.estate,'')!='闭店中' and store.city_name like '%"+cityName+"%' GROUP BY town.id) t ON tv.town_id = t.id";
+				+" WHERE town.id is not NULL and store.flag = 0 and ifnull(store.estate,'') not like '%闭店%' and store.city_name like '%"+cityName+"%' GROUP BY town.id) t ON tv.town_id = t.id";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();
 		 Session session = sessionFactory.getCurrentSession();
@@ -279,7 +279,7 @@ public class VillageDaoImpl extends BaseDAOHibernate implements VillageDao {
 	@Override
 	public List<Map<String,Object>> findConVillageCountOfCity() {
 		String sql="select count(tv.id) as count,t.city_name as city_name from t_village tv INNER JOIN (SELECT DISTINCT town.id as id,store.city_name as city_name FROM "
-				+"t_store store INNER JOIN t_town town ON FIND_IN_SET(store.town_id,town.id)WHERE town.id is not NULL and store.flag = 0 and ifnull(store.estate,'')!='闭店中') t "
+				+"t_store store INNER JOIN t_town town ON FIND_IN_SET(store.town_id,town.id) WHERE town.id is not NULL and store.flag = 0 and ifnull(store.estate,'') not like '%闭店%') t "
 				+"ON tv.town_id = t.id GROUP BY t.city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

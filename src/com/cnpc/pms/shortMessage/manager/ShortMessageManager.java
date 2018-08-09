@@ -157,5 +157,28 @@ public interface ShortMessageManager extends IManager{
 	 **/
 
 	public Map<String,Object> commonSendShortMessage(Map<String,Object> param);
-	
+
+	/**
+	 * @Description 获取全部外部人员
+	 * @author gbl
+	 * @date 2018/8/7 9:52
+	 **/
+
+	public Map<String,Object> getAllOutSider();
+
+	/**
+	 * @Description 获取外部人员
+	 * @author gbl
+	 * @date 2018/8/7 10:49
+	 **/
+
+	public Map<String, Object> getOutSider(QueryConditions queryConditions);
+
+	/**
+	 * @Description 根据epid发送短信
+	 * @author gbl
+	 * @date 2018/8/7 14:58
+	 **/
+
+	public String sendShortMessage(String mobilephone,String content,String functionname,String epid);
 }

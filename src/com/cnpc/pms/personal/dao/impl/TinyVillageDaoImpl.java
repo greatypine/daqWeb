@@ -727,7 +727,7 @@ public class TinyVillageDaoImpl extends BaseDAOHibernate implements TinyVillageD
 				+ " LEFT JOIN (SELECT * FROM tiny_area WHERE `status`=0) area ON area.tiny_village_id=tiny.id "
 				+ " LEFT JOIN t_town town ON town.id=tiny.town_id left join t_county county on county.id=town.county_id left join t_city city on city.id=county.city_id "
 				+ " LEFT JOIN tiny_village_code codd ON codd.tiny_village_id = tiny.id"
-				+ " LEFT JOIN (SELECT * FROM t_store WHERE IFNULL(estate,'')!='闭店中' AND flag=0) store ON store.storeno=area.store_no"
+				+ " LEFT JOIN (SELECT * FROM t_store WHERE IFNULL(estate,'') not like '%闭店%' AND flag=0) store ON store.storeno=area.store_no"
 				+ " where 1=1 and tiny.status=0 AND codd.`code` is not NULL " + where;
 
 		Map<String, Object> map_result = new HashMap<String, Object>();

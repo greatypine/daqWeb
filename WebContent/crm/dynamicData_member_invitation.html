@@ -269,11 +269,13 @@
 		}else if(target==1){//城市
 			$("#city_name_customer").val(cityName);
 			$("#city_name_customer").attr("readonly",true);
+            initCityInfo();
 		}else if(target==2){//店长
 			$("#city_name_customer").val(cityName);
 			$("#city_name_customer").attr("readonly",true);
             $("#store_name_customer").val(storeName);
             $("#store_name_customer").attr("readonly",true);
+            initStore();
         }
         /* if(target==1){
             $("#store_name_customer").attr("readonly",true);
@@ -285,6 +287,28 @@
 //    $('#be_date1').daterangepicker();
     });
 
+    var currentCity;
+    function initCityInfo(){
+        doManager("DistCityCodeManager", "queryDistCityCodeByCode",[cityId],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var city = JSON.parse(data.data);
+
+                    currentCity = city;
+                }
+            },false);
+    }
+
+    var currentStore;
+    function initStore(){
+        doManager("StoreManager", "findStore",[storeId],
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var store = JSON.parse(data.data);
+                    currentStore = store;
+                }
+            },false);
+    }
     /**-----------------------------------搜索城市------------------------------------------------------**/
     var lst_select_city=null;
     var cityNameArray=new Array();
@@ -386,6 +410,7 @@
     <!-------------------------------------------------------点击查询----------------------------------------------------------------->
     
     var isCreatePage=false;
+    var searchDate = "";
     function search_customer(cur_page){
         
     	isCreatePage=false;
@@ -396,13 +421,14 @@
      	}
 
 
-        	 search_customer1(cur_page,begin_end_date);
-
+        search_customer1(cur_page,begin_end_date);
+        searchDate = begin_end_date;
     }
 
     //查询上
     var currentPage= 1;
     var totalPage = 1;
+
     function   search_customer1(cur_page,begin_end_date){
        
         $("#process_div").show();
@@ -497,7 +523,7 @@
                             +"<td>"+jData[i].storename+"</td>"
                             /*+"<td>"+jData[i].mobilephone+"</td>"*/
                             +"<td>"+jData[i].inviteCode+"</td>"
-                            +"<td>"+jData[i].total+"</td>"
+                            +"<td><a href=\'javascript:gotoMemberData("+jData[i].inviteCode+")\'>"+jData[i].total+"</a></td>"
                             +"</tr>";
                         $("#customer_tbody").append(infoStr);
                     }
@@ -634,6 +660,30 @@
 
     	$("#employee_no").val("");
     	$("#employee_name").val("");
+    }
+
+    //跳转至社员档案
+    function gotoMemberData(code){
+        var year_month= searchDate.split("-");
+
+        var s_date = new Date(year_month[0],year_month[1],0);
+        var startDate = year_month[0]+"/"+year_month[1]+"/01";
+        var endDate = year_month[0]+"/"+year_month[1]+"/"+s_date.getDate();
+        var time= startDate+"-"+endDate;
+        var temp_storeId = "";
+        var temp_cityId="";
+        var temp_storeName="";
+        if(target==1){//城市
+            temp_cityId = currentCity.cityno;
+        }else if(target==2){//门店
+            temp_storeId = currentStore.platformid;
+            temp_storeName = storeName;
+        }else if(target==0){
+
+        }
+        var url = "memberData_list.html?t="+encode64(target)+"&s="+encode64(temp_storeId)+"&sn="+encode64(temp_storeName)+"&so=&c="+encode64(temp_cityId)+"&cn="+encode64(cityName)+"&ic="+encode64(code)+"&time="+encode64(time);
+        window.open(url,"memberData_list");
+
     }
 </script>
 

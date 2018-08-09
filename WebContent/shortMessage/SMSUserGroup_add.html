@@ -207,7 +207,9 @@
         		$$.showMessage('提示',"暂不提供,敬请期待!");
         		return;
         		//page="SMSUserGroupUser_customer.html";
-        	}
+        	}else if("outsider"==type){
+                page="SMSUserGroupUser_outsider.html";
+            }
     	}
     	
     	
@@ -458,8 +460,9 @@ function getCode(){
                                     <option value="">请选择</option>
                                     <option value="online">线上用户组</option>
                                     <option value="offline">线下用户组</option>
-                                     <option value="storekeeper">店长组</option>
+                                    <option value="storekeeper">店长组</option>
                                     <option value="customer">客户用户组</option>
+                                    <!--<option value="outsider">外部人员组</option>-->
                                 </select>
                             </td>
                         </tr>

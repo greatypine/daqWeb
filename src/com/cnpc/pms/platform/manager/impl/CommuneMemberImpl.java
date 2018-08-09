@@ -233,8 +233,13 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		if(memWeekList!=null&&!memWeekList.isEmpty()) { 
 			memWeek = Integer.parseInt(memWeekList.get(0).get("memcou").toString());
 		}*/
-		List eshopWeekCount = new ArrayList();
-		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
+        //查询周活跃社员数
+        List<Map<String, Object>> eMemWeekList = commDao.getMemweekCount(dd);
+
+        // 周消费频次=周订单量/社员总数
+        List eshopWeekCount = new ArrayList();
+        int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
+        int playMem = Integer.parseInt(eMemWeekList.get(0).get("memcou").toString());
 		if (eshopWeekList!=null&&!eshopWeekList.isEmpty()) {
 			for (int i = 0; i < eshopWeekList.size(); i++) {
 				int eshopCou = Integer.parseInt(eshopWeekList.get(i).get("eweekcou").toString());
@@ -242,11 +247,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if(eshopCou!=0) {
 					eshopWeekDeal.add(String.format("%.2f",eshopGmv/eshopCou));
 				}else {
-					eshopWeekDeal.add("0.0");
+					eshopWeekDeal.add("0");
 
 				}
-				if(memCou!=0){
-                    eshopWeekCount.add(String.format("%.2f",Double.parseDouble(eshopCou/memCou+"")));
+				if(playMem!=0){
+                    eshopWeekCount.add(String.format("%.2f",Double.parseDouble(eshopCou/playMem+"")));
                 }else{
                     eshopWeekCount.add("0");
                 }
@@ -594,7 +599,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if (eshopCou != 0) {
 					eshopOneDeal.add(String.format("%.2f", eshopGmv / eshopCou));
 				} else {
-					eshopOneDeal.add("0.0");
+					eshopOneDeal.add("0");
 				}
 
 			}
@@ -835,7 +840,12 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 					result.put("age00", cmAgeList.get(0).get("age00"));
 					result.put("ageNow", cmAgeList.get(0).get("ageNow"));
 				} else {
-					result.put("oldCmCount", "0");
+                    result.put("age60", "0");
+                    result.put("age70", "0");
+                    result.put("age80", "0");
+                    result.put("age90", "0");
+                    result.put("age00", "0");
+                    result.put("ageNow", "0");
 				}
 				// 查询社员生日分布
 				List<Map<String, Object>> birList = commDao.getCmBirthday(dd);// getCmBirthday
@@ -1476,11 +1486,14 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 
 		// 查询平均客单价,周消费频次----getEshopWeekCount
 		List<Map<String, Object>> eshopWeekList = commDao.getEshopWeekCount(dd);
+		//查询周活跃社员数
+        List<Map<String, Object>> eMemWeekList = commDao.getMemweekCount(dd);
 		// 平均客单价=周成交额/周订单量
 		List eshopWeekDeal = new ArrayList();
 		// 周消费频次=周订单量/社员总数
 		List eshopWeekCount = new ArrayList();
 		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
+		int playMem = Integer.parseInt(eMemWeekList.get(0).get("memcou").toString());
 		if (eshopWeekList != null && !eshopWeekList.isEmpty()) {
 			for (int i = 0; i < eshopWeekList.size(); i++) {
 				int eshopCou = Integer.parseInt(eshopWeekList.get(i).get("eweekcou").toString());
@@ -1488,11 +1501,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if (eshopCou != 0) {
 					eshopWeekDeal.add(String.format("%.2f", eshopGmv / eshopCou));
 				} else {
-					eshopWeekDeal.add("0.0");
+					eshopWeekDeal.add("0");
 
 				}
-				if (memCou != 0) {
-					eshopWeekCount.add(String.format("%.2f", Double.parseDouble(eshopCou / memCou + "")));
+				if (playMem != 0) {
+					eshopWeekCount.add(String.format("%.2f", Double.parseDouble(eshopCou / playMem + "")));
 				} else {
 					eshopWeekCount.add("0");
 				}
@@ -2188,7 +2201,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if (eshopCou != 0) {
 					eshopOneDeal.add(String.format("%.2f", eshopGmv / eshopCou));
 				} else {
-					eshopOneDeal.add("0.0");
+					eshopOneDeal.add("0");
 				}
 
 			}
@@ -2412,6 +2425,64 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         }
         return result;
 
+    }
+
+    @Override
+    public Map<String, Object> selectTryMemInfo(String dd) {
+        /**
+         * @author wuxinxin 2018年8月6日
+         */
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+
+
+        // 查询试用社员数量
+        List<Map<String, Object>> tryMemCountList = new ArrayList<Map<String, Object>>();
+        tryMemCountList = commDao.getTryMemCount(dd);
+        if (tryMemCountList != null && tryMemCountList.size() > 0) {
+            result.put("tryMemCou", tryMemCountList.get(0).get("cou"));
+        } else {
+            result.put("tryMemCou", "0");
+        }
+
+        // 查询试用社员GMV
+        List<Map<String, Object>> tryMemGmvList = new ArrayList<Map<String, Object>>();
+        tryMemGmvList = commDao.getTryMemGmv(dd);
+        if (tryMemGmvList != null && tryMemGmvList.size() > 0) {
+            result.put("tryMemGmv", tryMemGmvList.get(0).get("trygmv"));
+        } else {
+            result.put("tryMemGmv", "0");
+        }
+        //计算客单价
+        if(tryMemCountList.get(0).get("cou")!=null&&Double.valueOf(tryMemCountList.get(0).get("cou").toString())>0){
+            result.put("tryMemGmvAvg", String.format("%.2f",Double.valueOf(tryMemGmvList.get(0).get("trygmv").toString())/Double.valueOf(tryMemCountList.get(0).get("cou").toString())));
+        }else{
+
+            result.put("tryMemGmvAvg","0");
+        }
+        ;
+        //查询试用社员7日GMV
+        List<Map<String, Object>> tryMemDayGmvList = new ArrayList<Map<String, Object>>();
+        tryMemDayGmvList = commDao.getTryMemDayGmv(dd);
+        List tryDayGmvs = new ArrayList();
+        for (Map<String, Object> stringObjectMap : tryMemDayGmvList) {
+            tryDayGmvs.add(Double.valueOf(stringObjectMap.get("tryMemDayGmv").toString()).intValue());
+        }
+        JSONArray tryDayGmv = (JSONArray) JSONArray.fromObject(tryDayGmvs);
+        result.put("tryDayGmv",tryDayGmv);
+
+
+        List dateMemCounts = new ArrayList();
+        try {
+            //生成X轴坐标
+            dateMemCounts = reDate(7);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        JSONArray jsonDateMem = (JSONArray) JSONArray.fromObject(dateMemCounts);
+        result.put("jsonDateMem",jsonDateMem);
+        return result;
     }
 
 	@Override

@@ -293,7 +293,7 @@
 	        if(data.result){
 	            var result = JSON.parse(data.data).cost;
 	            $("#userGroup_s").val(saveUserGroup.join(","));
-	            $("#signature_s").html("【"+$("#signature").val()+"】");
+	            $("#signature_s").html("【"+$("#signature").text()+"】");
 	            $("#content_s").val( $("#content").val());
 	            $("#cost_s").html(result+" 元");
 	            $('#shortMessage_preview_div').dialog({
@@ -376,7 +376,38 @@ function isInArray(arr,value){
     return false;
 }
 
+//社员邀请码内容要求
+function showContentRequire(){
+      var type=$("#type").val();
+      if("SYYQM"==type){//社员邀请码
+            $("#content").attr("placeholder","短信内容中请使用三个英文字母‘X’即'XXX'代表收信人，使用六个英文字母‘X’即‘XXXXXX’代表邀请码！")
+      }else{
+          $("#content").attr("placeholder","");
+      }
+}
 
+//短信内容模板
+function showMessageContentDemo(){
+      var type=$("#type").val();
+      if(type==""){
+          $$.showMessage('提示',"请选择短信类型！");
+          return;
+      }
+      if(type=="SYYQM"){
+          $('#smscontentdemo').dialog({
+              bgiframe : true,
+              title : "短信内容模板",
+              width : 500,
+              height : 300,
+              modal : true
+          });
+      }else{
+          $$.showMessage('提示',"暂无模板！");
+      }
+
+
+
+}
 </script>
 <body style="height: 100%">
     <div class="rightcont clear">
@@ -410,14 +441,15 @@ function isInArray(arr,value){
                             <td>
                                 <select id="signature" name="signature" class="form-control"  style="width: 60%" >
                                     <option value="">请选择</option>
-                                    <option value="国安管家">国安管家</option>
+                                    <option value="123742">国安管家</option>
+                                    <option value="123743">国安数据</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td style="width:12%">短信类型<span style="color:red">*</span></td>
                             <td>
-                                <select id="type" name="type" class="form-control"  style="width: 60%" >
+                                <select id="type" name="type" class="form-control"  style="width: 60%" onchange="showContentRequire()">
                                     <option value="">请选择</option>
                                 </select>
                             </td>
@@ -425,7 +457,8 @@ function isInArray(arr,value){
                         <tr>
                             <td>短信内容<span style="color:red">*</span></td>
                             <td>
-                            	<textarea id="content" name="content" class="form-control" style="width:60%;height:80px"></textarea>
+                            	<div><textarea id="content" name="content" class="form-control" style="width:60%;height:80px;padding:0px 0px 0px 0px"></textarea>
+                                    <a href="#" onclick="showMessageContentDemo()" style="position:absolute;left:58%;bottom:-5px;cursor: pointer;text-decoration:underline">内容模板</a></div>
                             </td>
                         </tr>
                        
@@ -467,7 +500,7 @@ function isInArray(arr,value){
         	<tr>
        			<td width="8px"><span>短信内容：</span></td>
         		<td>
-        			<textarea id="content_s" cols="40" style="height:100px;resize:none;background-color:#d3d3d3c7;border-radius:8px;" readonly="readonly"></textarea>
+        			<textarea id="content_s" cols="40" placeholder="" style="height:100px;resize:none;background-color:#d3d3d3c7;border-radius:8px;" readonly="readonly"></textarea>
         		</td>
         	</tr>
        		<tr>
@@ -482,4 +515,14 @@ function isInArray(arr,value){
         	</tr>
        	 </table>
       </div>	
-</div> 
+</div>
+
+
+<div id="smscontentdemo" style="display:none">
+    <div class="panel-body">
+        <table  style="min-width: 80%;width: auto; height: auto;border-collapse:separate; border-spacing:0px 10px;">
+            <tr><td style="width:10px">模板1：</td><td><textarea class="form-control" style="width:130%;height:80px;padding:0px 0px 0px 0px;" readonly="readonly">亲爱的同事XXX：国安社区全员社员卡开卡推荐激励开启啦！请牢记您的推荐码XXXXXX，务必要求被推荐人在线填写，以此认定推荐人！</textarea></td></tr>
+            <tr><td style="width:10px">模板2：</td><td><textarea class="form-control" style="width:130%;height:100px;padding:0px 0px 0px 0px" readonly="readonly">XXX，您好。您的国安社区安心合作社社员卡开卡邀请码生成完毕，请牢记您的推荐码：XXXXXX。邀请被推荐人开通社员卡时，务必要求被邀请人在线准确填写您的邀请码，以此认定邀请人！感谢您的支持。</textarea></td></tr>
+        </table>
+    </div>
+</div>
