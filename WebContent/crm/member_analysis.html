@@ -51,7 +51,7 @@
 
         .vertical-example{
             position: absolute;
-            top: 50px;
+            top: 70px;
             right: 40px;
             width: 100px;}
         .navimenu{min-height: 800px; padding-top: 0;}
@@ -76,7 +76,7 @@
             height:32px;
             color: #fff;
         }
-        .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
+        .download{position: fixed; right: 20px; top: 120px; height: 100px; overflow: hidden; z-index: 1000;}
         .download p{font-size: 12px;}
         .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
             /* Firefox: */
@@ -111,6 +111,19 @@
             /*margin:auto;left:25%; top:60%;*/
             z-index: 1;
         }
+
+        .trytoast{
+            width:450px;
+            height:240px;
+            background:transparent;
+            background-color:rgba(241,241,241,1);
+            box-shadow: 0 1px 1px rgba(0,0,0,1);
+            border-radius:10px;
+            position: fixed;
+            margin:auto;left:36%; top:50%;
+            z-index: 1;
+        }
+        .trytoast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -145,6 +158,7 @@
                 <input type="hidden" id="selDay" value="1"/>
                 <input type="hidden" id="setadd" value="0"/>
                 <input type="hidden" id="setBig" value="0"/>
+                <input type="hidden" id="setTry" value="0"/>
                 <!-- Main content -->
                 <section class="content-header">
                     <div class="box box-default report">
@@ -186,7 +200,17 @@
                                     </li>
                                     </div>
                                     <div class="add_TestMember" style="cursor:pointer;">
+
                                         <li>
+                                            <div>
+
+                                                <div class="col-sm-8">试用社员：<br><span  id="tryMemSum"></span><small></small></div>
+                                                <div class="col-sm-4"><i class="fa fa-retweet"></i></div>
+
+                                            </div>
+                                        </li>
+
+<!--                                        <li>
                                             <div class="col-sm-9" style="padding-right:0px;">试用社员：<span id="tryMemSum"></span><br>
                                                 <small>GMV：</small>
                                                 <small id="tryMemGmvSum" style="color: #ffde00;"></small>&nbsp;<small>
@@ -196,10 +220,11 @@
                                             </div>
                                             <div class="col-sm-3"><i class="fa fa-retweet" style="font-size: 40px;"></i>
                                             </div>
-                                        </li>
+                                        </li>-->
                                     </div>
                                 </ul>
                                 <div id="cityMember" class="toast" style="display: none">
+                                    <span class="layui-layer-setwin" ><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:close_DayMem();;"></a></span><br/>
                                     <br/><span style="margin-left: 15px;">今日社员增长情况:</span><br/>
                                    	<div id="cmBigDay" style="margin-left: 5%;display: none">
                                    	<ul class='clearfix'>
@@ -207,6 +232,16 @@
                                    	</ul>
                                    	 </div>
                                     <div style="margin-left: 5%" id="addCityMem">
+                                    </div>
+                                </div>
+                                <div id="try_Member" class="trytoast" style="display: none">
+                                    <span class="layui-layer-setwin" ><a class="layui-layer-ico layui-layer-close layui-layer-close1" href="javascript:close_TryMem();;"></a></span><br/><br/><span style="margin-left: 15px;">试用社员:</span><a style="float: right;margin-right: 15px;color:#00acee;font-size: 12px;" href="javascript:do_TryMem();">更多</a><br/>
+                                    <div style="margin-left: 5%" id="try_Mem">
+                                        <ul class='clearfix'>
+                                            <li style='width: 50%'>GMV:<span id="tryMemGmvSum" ></span>&nbsp;&nbsp;&nbsp;</li>
+                                            <li style='width: 50%'>客单价:<span id="tryMemGmvAvg" ></span>&nbsp;&nbsp;&nbsp;</li>
+
+                                        </ul>
                                     </div>
                                 </div>
                                 <!-- </div>-->
@@ -546,10 +581,10 @@
                 $("#setadd").val("1");
                 $("#cityMember").show();
             });
-            $(".add_citymember").mouseleave(function(){
+/*            $(".add_citymember").mouseleave(function(){
                 $("#setadd").val("0");
                 $("#cityMember").hide();
-            });
+            });*/
         }
 
         function showMemberBig(){
@@ -596,9 +631,39 @@
 
         function showTestMem(){
             $(".add_TestMember").click(function(){
+                if($("#setTry").val()=="0"){
+                    $("#setTry").val("1");
+                    $("#try_Member").show();
+                }else{
+                    $("#setTry").val("0");
+                    $("#try_Member").hide();
+                }
+
+            });
+            $(".add_TestMember").mouseover(function(){
+                $("#setTry").val("1");
+                $("#try_Member").show();
+            });
+            /*            $(".add_TestMember").mouseleave(function(){
+                            $("#setTry").val("0");
+                            $("#try_Member").hide();
+                        });*/
+        }
+
+        function close_DayMem(){
+            $("#setadd").val("0");
+            $("#cityMember").hide();
+        }
+        function close_TryMem(){
+            $("#setTry").val("0");
+            $("#try_Member").hide();
+        }
+
+/*        function showTestMem(){
+            $(".add_TestMember").click(function(){
                 initTestMemInfo();
             });
-        }
+        }*/
         function doCityMem(citycode){
             //跳转城市页面
             var url = "member_analysis_city.html?c="+encode64(citycode);
@@ -663,6 +728,17 @@
                 url = "index_K_member.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&e="+encode64(employeeId)+"&#fg";
             }else{
                 url = "index_K_member.html?t="+encode64(0);
+            }
+            window.open(url,"user_member_view");
+        }
+        function do_TryMem(){
+            var url = "";
+            if(target==0){
+                url = "user_member_view.html?t="+encode64(target)+"&c=&cn=&e="+encode64(employeeId)+"&fb="+encode64('3')+"&#fg";
+            }else if(target==1){
+                url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(cityId)+"&cn="+encode64(cityName)+"&fb="+encode64(3)+"&e="+encode64(employeeId)+"&#fg";
+            }else{
+                url = "user_member_view.html?t="+encode64(0)+"&fb="+encode64('3');
             }
             window.open(url,"user_member_view");
         }
@@ -1806,31 +1882,33 @@
                     var resultJson = JSON.parse(data.data);
                     if(resultJson != null){
                         showCityInfo(resultJson);
+                        $("#gooey-v").gooeymenu({
+                            bgColor: "#68d099",
+                            contentColor: "white",
+                            style: "vertical",
+                            horizontal: {
+                                menuItemPosition: "glue"
+                            },
+                            vertical: {
+                                menuItemPosition: "glue",
+                                direction: "down"
+                            },
+                            circle: {
+                                radius: 90
+                            },
+                            margin: "small",
+                            size: 60,
+                            bounce: true,
+                            bounceLength: "small",
+                            transitionStep: 100,
+                            hover: "#68d099"
+                        });
+                        $('#citySelect').css('display','block');
+
                     }
                 }
             },false);
-            $("#gooey-v").gooeymenu({
-                bgColor: "#68d099",
-                contentColor: "white",
-                style: "vertical",
-                horizontal: {
-                    menuItemPosition: "glue"
-                },
-                vertical: {
-                    menuItemPosition: "glue",
-                    direction: "down"
-                },
-                circle: {
-                    radius: 90
-                },
-                margin: "small",
-                size: 60,
-                bounce: true,
-                bounceLength: "small",
-                transitionStep: 100,
-                hover: "#68d099"
-            });
-            $('#citySelect').css('display','block');
+
             localStorage.clear();
             loginShow();
             showAddMember();
