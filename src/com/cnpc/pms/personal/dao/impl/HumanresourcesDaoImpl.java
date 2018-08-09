@@ -488,11 +488,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}else {
 				return null;
 			}
-			/*String sql = "select sum(count) as count,CONCAT(week_time,'') as week_time from ("
-					+"select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_storekeeper where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time "
-					+"UNION ALL "
-					+"select count(*) as count,subdate(DATE_FORMAT(topostdate,'%Y-%m-%d'),date_format(topostdate, '%w')) AS week_time from t_humanresources where YEARWEEK(date_format(topostdate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time "
-					+") t where 1=1 GROUP BY t.week_time;";*/
+
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;
@@ -525,11 +521,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}else {
 				return null;
 			}
-			/*String sql = "select SUM(count) as count,CONCAT(week_time,'') as week_time from "
-					+"(select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_storekeeper where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time "
-					+"UNION ALL "
-					+"select count(*) as count,subdate(DATE_FORMAT(leavedate,'%Y-%m-%d'),date_format(leavedate, '%w')) AS week_time from t_humanresources where humanstatus = 2 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) > YEARWEEK(now())-6 and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) GROUP BY week_time) t3 "
-					+"where 1=1 GROUP BY t3.week_time;";*/
+
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;
@@ -589,21 +581,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			}else {
 				return null;
 			}
-			
-			/*String sql = "select SUM(a) as week1,SUM(b) as week2,SUM(c) as week3,SUM(d) as week4,SUM(e) as week5,SUM(f) as week6 from( "
-					+"select sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-4 then 1 else 0 end) as b,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-3 then 1 else 0 end) as c,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-2 then 1 else 0 end) as d,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-1 then 1 else 0 end) as e,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) then 1 else 0 end) as f from t_storekeeper "
-					+"UNION ALL "
-					+"select sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-5 then 1 else 0 end) as a,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-4 then 1 else 0 end) as b,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-3 then 1 else 0 end) as c,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-2 then 1 else 0 end) as d,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())-1 then 1 else 0 end) as e,"
-					+"sum(CASE when humanstatus != 2 and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) then 1 else 0 end) as f from t_humanresources) t;";*/
+
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;
@@ -638,6 +616,49 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 					+"where YEARWEEK(date_format(human.leavedate,'%Y-%m-%d')) = YEARWEEK(now()) and humanstatus = 2 GROUP BY sto.city_name UNION ALL select citySelect as city_name,count(*) as count "
 					+"from t_storekeeper where YEARWEEK(date_format(leavedate,'%Y-%m-%d')) = YEARWEEK(now()) and humanstatus  = 2 GROUP BY citySelect) t GROUP BY t.city_name) bb "
 					+"ON bb.city_name = dist.cityname";
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return list;
+		}
+
+		@Override
+		public List<Map<String, Object>> querySixWeekHuman(String leaveorpost) {
+			int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+			int settime = 0;
+			if(i<5){
+				settime = 3;
+			}else{
+				settime = 10;
+			}
+			String sql = "";
+			if("leave".equals(leaveorpost)){
+				sql = "select count(employee_no) as leavecount, citySelect as cityname from " +
+						"(select employee_no,citySelect from t_humanresources where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) UNION " +
+						"select employee_no,citySelect from t_storekeeper where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) and zw = '店长') " +
+						"t GROUP BY t.citySelect";
+			}else if("post".equals(leaveorpost)){
+				sql="select count(employee_no) as topostcount, citySelect as cityname from " +
+						"(select employee_no,citySelect from t_storekeeper where date_format(topostdate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -\"+settime+\"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) and zw = '店长' UNION " +
+						"select employee_no,citySelect from t_humanresources where date_format(topostdate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -\"+settime+\"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())) " +
+						"t GROUP BY t.citySelect";
+			}
+
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			return list;
+		}
+
+		@Override
+		public List<Map<String, Object>> queryHumanByStoreType(String leaveorpost) {
+			String sql = "select count(empcount),storetypename,storetype from (SELECT a.employee_no as empcount,b.storetypename,b.storetype FROM " +
+					"t_humanresources a INNER JOIN (select t.storetypename,t.store_id,name as storeName,t.city_name,t.storetype from t_store t inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc ) " +
+					"t1 on t.city_name  = t1.cityname AND t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
+					"on a.store_id = b.store_id and  a.humanstatus =1 where a.name not like '%测试%'  UNION " +
+					"select tbu.employeeId as empcount,t2.storetypename,storetype from (select t.skid,t.name,t.city_name,t.storetypename,t.storetype " +
+					"from t_store t  inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc ) on (t.city_name  = t1.cityname) WHERE t.name NOT LIKE '%测试%' " +
+					"AND t.name NOT LIKE '%储备%' AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' AND t.storetype != 'V' AND t.storetype != 'W' ) t2 " +
+					"INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id ) emp GROUP BY emp.storetype";
+
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;

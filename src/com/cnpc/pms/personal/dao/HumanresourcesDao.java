@@ -71,4 +71,22 @@ public interface HumanresourcesDao {
 	public Map<String, Object> queryOnLineHumanresourcesList(Humanresources humanresources, PageInfo pageInfo);
 	//线上人员导出 
 	public List<Map<String, Object>> exportOnLineHuman(Humanresources humanresources);
+
+
+	/**
+	 *
+	 * TODO  查询近六周离职，或入职线下人员总人数（含店长）
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String, Object>> querySixWeekHuman(String leaveorpost);
+
+	/**
+	 *
+	 * TODO  查询不同门店类型线下人员总人数（含店长）
+	 * @author gaoll
+	 * @return
+	 */
+	public List<Map<String, Object>> queryHumanByStoreType(String leaveorpost);
+
 }
