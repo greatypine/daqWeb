@@ -189,6 +189,18 @@ function initcurruser(){
   						
   						var status = humanObj.process_status;
   						
+  						var groupcode=curr_user.usergroup.code;
+  						if("YGGXJSZ"==groupcode){
+  							$("#btnHR").show();
+							$("#btnHRRe").show();
+							 $(".sp_content").show();
+  						}else{
+  							$("#btnHR").hide();
+							$("#btnHRRe").hide();
+							 $(".sp_content").hide();
+  						}
+  						
+  						
   						if(curr_user!=null&&curr_user.zw=="店长"){
   							if(status==3||status==2){
   								 $("#btnDZ").hide();
@@ -312,11 +324,14 @@ function initcurruser(){
 			  o["processInstanceId"] = processid;
 			  o["id"]=id;
 			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
 			  doManager("HumanVacationManager", "update_hr_Audit", o, function(data,
 						textStatus, XMLHttpRequest) {
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
-						window.location.href = 'human_vacation_list.html';
+						if(jsonData.id!=null){
+							updateprocessstatus(jsonData.id);
+						}
 					} else {
 						$$.showMessage("系统信息", "申请失败!");
 					}
@@ -326,6 +341,38 @@ function initcurruser(){
 		  }
 		 
 		}
+	
+	function updateprocessstatus(vacationid){
+		doManager("HumanVacationManager", "update_process_status", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	function doHrNo(){
 		  /***************HR 驳回 ********************/
 		  var o = {};
@@ -333,11 +380,14 @@ function initcurruser(){
 			  o["processInstanceId"] = processid;
 			  o["id"]=id;
 			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
 			  doManager("HumanVacationManager", "update_hr_Audit_Re", o, function(data,
 						textStatus, XMLHttpRequest) {
 					if (data.result) {
 						var jsonData = $.fromJSON(data.data);
-						window.location.href = 'human_vacation_list.html';
+						if(jsonData.id!=null){
+							updateprocessstatusre(jsonData.id);
+						}
 					} else {
 						$$.showMessage("系统信息", "申请失败!");
 					}
@@ -346,6 +396,21 @@ function initcurruser(){
 			  $$.showMessage("系统信息", "流程编号 为空！ !");
 		  }
 		}
+	function updateprocessstatusre(vacationid){
+		doManager("HumanVacationManager", "update_process_status_re", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
  
 	
 	
@@ -385,7 +450,6 @@ function initcurruser(){
     	<span id="btnDZ" style="display: none;" onclick="doYes();" disabled="false">店长通过</span>
     	<span id="btnHR" style="display: none;" onclick="doHrYes();" disabled="false">HR通过</span>
     	<span id="btnHRRe" style="display: none;" onclick="doHrNo();" disabled="false">HR驳回</span>
-    	
     	
         <span id="btnEMSave" style="display: none;" onclick="yanzhen();" disabled="false">员工提交</span>
     	<span id="btnBack" onclick="javascript:history.go(-1);" disabled="false"> 返回</span>
@@ -517,10 +581,10 @@ function initcurruser(){
 		</table>
 		
 		<label id="processlog">
-		张三:填写<br>
-		店长:通过<br>
-		HR：驳回<br>
-		这里是审批历史记录。<br>
+		<br>
+		<br>
+		<br>
+		<br>
 		</label>
 	</form>
 

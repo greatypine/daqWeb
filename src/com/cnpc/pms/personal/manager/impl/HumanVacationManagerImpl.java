@@ -4,13 +4,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+import com.cnpc.pms.base.message.SMSStatusCode;
 import com.cnpc.pms.base.paging.FSP;
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
@@ -21,8 +38,11 @@ import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
+import com.cnpc.pms.dynamic.common.SSLClient;
 import com.cnpc.pms.personal.dto.CommentDto;
+import com.cnpc.pms.personal.entity.HumanReContent;
 import com.cnpc.pms.personal.entity.HumanVacation;
+import com.cnpc.pms.personal.manager.HumanReContentManager;
 import com.cnpc.pms.personal.manager.HumanVacationManager;
 import com.gexin.fastjson.JSONArray;
 import com.gexin.fastjson.JSONObject;
@@ -131,6 +151,88 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     
     
     
+    /**
+     * HR通过
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_hr_Audit(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_process_status(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_hr_audit_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
+    
+    
+    
+    
+    /**
+     * HR驳回 
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_hr_Audit_Re(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_process_status_re(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_hr_audit_re_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
+    
+    
     
     
     
@@ -196,5 +298,101 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
 
         return result;
     }
+    
+    
+    
+    
+    public static String doPost(String url, String param) {
+    	HttpClient client = null;
+		HttpPost httpPost  = null;
+		String result="";
+		try {
+			client = new SSLClient();
+			httpPost = new HttpPost(url);
+			httpPost.addHeader("Content-type","application/json; charset=utf-8"); 
+			httpPost.addHeader("requestString", param.toString());
+			//httpPost.setEntity(new StringEntity(param.toString(), Charset.forName("UTF-8")));  
+			 HttpResponse response = client.execute(httpPost);  
+		        if(response != null){  
+		            HttpEntity resEntity = response.getEntity();  
+		            if(resEntity != null){  
+		                result = EntityUtils.toString(resEntity,"UTF-8");  
+		            }  
+		        }  
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+    }
+    
+    
+    
+    
+    
+    public static String sendPost(String url, String param) {
+        PrintWriter out = null;
+        BufferedReader in = null;
+        String result = "";
+        try {
+            URL realUrl = new URL(url);
+            // 打开和URL之间的连接
+            URLConnection conn = realUrl.openConnection();
+            // 设置通用的请求属性
+           
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8"); 
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // 获取URLConnection对象对应的输出流
+            out = new PrintWriter(conn.getOutputStream());
+            // 发送请求参数
+            out.print(param);
+            // flush输出流的缓冲
+            out.flush();
+            // 定义BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            System.out.println("发送 POST 请求出现异常！"+e);
+            e.printStackTrace();
+        }
+        //使用finally块来关闭输出流、输入流
+        finally{
+            try{
+                if(out!=null){
+                    out.close();
+                }
+                if(in!=null){
+                    in.close();
+                }
+            }
+            catch(IOException ex){
+                ex.printStackTrace();
+            }
+        }
+        return result;
+    }    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 }
