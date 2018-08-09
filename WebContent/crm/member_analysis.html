@@ -760,6 +760,7 @@
                     var stateObject = {};
                     var newUrl = "/daqWeb/crm/member_analysis?ta=0";
                     target = null;
+                    showCitys();
                     getUser();
                     //最新方式
 
@@ -844,7 +845,7 @@
                     })
                 }
 
-
+                showCitys();
                 getUser();
 
                 //最新方式
@@ -1880,7 +1881,8 @@
                 }
             });
         }
-        $(function () {
+
+        function showCitys(){
             doManager('communeMember','getCityCode',"0000",function(data) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
@@ -1912,8 +1914,8 @@
                     }
                 }
             },false);
-
-            localStorage.clear();
+        }
+        $(function () {
             loginShow();
             showAddMember();
             showMemberBig();
