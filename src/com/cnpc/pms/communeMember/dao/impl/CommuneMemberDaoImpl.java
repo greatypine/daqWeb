@@ -847,7 +847,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then 1 else 0 end),0) as day5," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then 1 else 0 end),0) as day6," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)  then 1 else 0 end),0) as day7" + 
-				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 like '%K%'";
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 like '%M%'";
         if(!"0000".equals(string)) {
             sql = sql+ " and dmod.store_city_code='"+string+"'";
         }
@@ -885,7 +885,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then dmod.trading_price else 0 end),0) as day5," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then dmod.trading_price else 0 end),0) as day6," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)  then dmod.trading_price else 0 end),0) as day7" + 
-				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 like '%K%'";
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 like '%M%'";
         if(!"0000".equals(string)) {
             sql = sql+ " and dmod.store_city_code='"+string+"'";
         }
@@ -924,7 +924,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then 1 else 0 end),0) as day5," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then 1 else 0 end),0) as day6," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)  then 1 else 0 end),0) as day7" + 
-				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 not like '%K%'";
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1 not like '%M%'";
         if(!"0000".equals(string)) {
             sql = sql+ " and dmod.store_city_code='"+string+"'";
         }
@@ -963,7 +963,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 3 DAY)   then dmod.trading_price else 0 end),0) as day5," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 2 DAY)   then dmod.trading_price else 0 end),0) as day6," + 
 				"ifnull(sum(CASE when  date(dmod.sign_time)= DATE_SUB(curdate(),INTERVAL 1 DAY)  then dmod.trading_price else 0 end),0) as day7" + 
-				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1  not like '%K%'";
+				" from df_mass_order_monthly dmod  where dmod.order_tag1 like '%E%' and  dmod.order_tag1  not like '%M%'";
         if(!"0000".equals(string)) {
             sql = sql+ " and dmod.store_city_code='"+string+"'";
         }
@@ -993,7 +993,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月12日
 		 */
-		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then dmod.trading_price else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then dmod.trading_price else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 like '%M%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(daySumSql);
@@ -1012,7 +1012,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月12日
 		 */
-		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then 1 else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then 1 else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 like '%M%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(daySumSql);
@@ -1031,7 +1031,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月12日
 		 */
-		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then dmod.trading_price else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 not like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then dmod.trading_price else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 not like '%M%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(daySumSql);
@@ -1050,7 +1050,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月12日
 		 */
-		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then 1 else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 not like '%K%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
+		String daySumSql = "select dfmod.store_city_name cname,ifnull(dfmo.daypri,0) citypri from df_mass_order_daily  dfmod left join (select dmod.store_city_name, sum( CASE when curdate() = date(dmod.sign_time) then 1 else 0 end ) as daypri,dmod.store_city_name as cityname from df_mass_order_daily dmod where dmod.order_tag1 like '%E%' and dmod.order_tag1 not like '%M%'  group by dmod.store_city_name) dfmo on dfmod.store_city_name= dfmo.cityname group by dfmod.store_city_name";
 		try{
 			Query query = this.getHibernateTemplate().getSessionFactory()
 					.getCurrentSession().createSQLQuery(daySumSql);
@@ -1109,7 +1109,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月13日
 		 */
-		String daySumSql = "select ifnull(sum(domcd.eshop_count),0) eweekcou,ifnull(sum(domcd.eshop_gmv),0) eweekgmv from ds_ope_member_city_day domcd where domcd.date >=DATE_SUB(curdate(),INTERVAL 7 DAY) and domcd.date <curdate()";
+		String daySumSql = "select ifnull(sum(domcd.mem_count),0) eweekcou,ifnull(sum(domcd.mem_gmv),0) eweekgmv from ds_ope_member_city_day domcd where domcd.date >=DATE_SUB(curdate(),INTERVAL 7 DAY) and domcd.date <curdate()";
         if(!"0000".equals(string)) {
             daySumSql = daySumSql+ " and domcd.city_code='"+string+"'";
         }
@@ -1152,7 +1152,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * @author wuxinxin
 		 * 2018年6月13日
 		 */
-		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where dmod.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.sign_time<curdate() and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
+		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where dmod.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.sign_time<curdate() and dmod.order_tag1  like '%E%' and  dmod.order_tag1  like '%M%'";
         if(!"0000".equals(string)) {
             daySumSql = daySumSql+" and dmod.store_city_code='"+string+"'";
         }
