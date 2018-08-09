@@ -1327,9 +1327,9 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				"ifnull( sum( CASE when c2.picou > 300 and c2.picou <= 1000 then 1 else 0 end ), 0 ) as sum3, " + 
 				"ifnull( sum( CASE when c2.picou > 1000 then 1 else 0 end ), 0 ) as sum4 " + 
 				"from  " + 
-				"(select ifnull(sum(dmom.trading_price),0) picou from df_user_member dum left join df_mass_order_monthly dmom on (dum.customer_id=dmom.customer_id and dmom.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmom.sign_time<curdate()) where dum.associator_expiry_date>now() ";
+				"(select ifnull(sum(trading_price), 0) picou from df_mass_order_monthly dum where dum.sign_time >= DATE_SUB(curdate(), INTERVAL 7 DAY) and dum.sign_time < curdate() and dum.order_tag1 like '%E%' and dum.order_tag1 like '%M%' ";
         if(!"0000".equals(dd)) {
-            sql = sql+ "  and dum.regist_cityno='"+dd+"'";
+            sql = sql+ "  and dum.store_city_code='"+dd+"'";
         }
         sql = sql+" group by dum.customer_id) c2";
 		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
@@ -1375,9 +1375,9 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 				"ifnull( sum( CASE when c1.idcou > 5 and c1.idcou <= 10 then 1 else 0 end ), 0 ) as count2, " + 
 				"ifnull( sum( CASE when c1.idcou > 10 then 1 else 0 end ), 0 ) as count3 " + 
 				"from  " + 
-				"(select ifnull(count(dmom.id),0) idcou from df_user_member dum left join df_mass_order_monthly dmom on (dum.customer_id=dmom.customer_id and dmom.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmom.sign_time<curdate())  where dum.associator_expiry_date>now() ";
+				"(select ifnull(count(dum.id), 0) idcou from df_mass_order_monthly dum where dum.sign_time >= DATE_SUB(curdate(), INTERVAL 7 DAY) and dum.sign_time < curdate() and dum.order_tag1 like '%E%' and dum.order_tag1 like '%M%' ";
         if(!"0000".equals(dd)) {
-            sql = sql+ "  and dum.regist_cityno='"+dd+"'";
+            sql = sql+ "  and dum.store_city_code='"+dd+"'";
         }
         sql = sql+" group by dum.customer_id) c1";
 		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
@@ -1391,7 +1391,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 					Map<String, Object> map_content = new HashMap<String, Object>();
 					map_content.put("memCount", map_data.get("count" + i));
 				     if(0==i) {
-				    	 map_content.put("memCountName", "1次以下");
+				    	 map_content.put("memCountName", "1次");
 				     }else if(1==i){
 				    	 map_content.put("memCountName", "2-5次");
 				     }else if(2==i){
