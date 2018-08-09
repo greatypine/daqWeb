@@ -672,12 +672,16 @@
         var time= startDate+"-"+endDate;
         var temp_storeId = "";
         var temp_cityId="";
+        var temp_storeName="";
         if(target==1){//城市
             temp_cityId = currentCity.cityno;
         }else if(target==2){//门店
             temp_storeId = currentStore.platformid;
+            temp_storeName = storeName;
+        }else if(target==0){
+
         }
-        var url = "memberData_list.html?t="+encode64(target)+"&s="+encode64(temp_storeId)+"&sn="+encode64(storeName)+"&so=&c="+encode64(temp_cityId)+"&cn="+encode64(cityName)+"&ic="+encode64(code)+"&time="+encode64(time);
+        var url = "memberData_list.html?t="+encode64(target)+"&s="+encode64(temp_storeId)+"&sn="+encode64(temp_storeName)+"&so=&c="+encode64(temp_cityId)+"&cn="+encode64(cityName)+"&ic="+encode64(code)+"&time="+encode64(time);
         window.open(url,"memberData_list");
 
     }
