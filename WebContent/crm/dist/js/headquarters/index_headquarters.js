@@ -5111,7 +5111,7 @@ function startRefreshPage() {
 function formatString(s) {
     if (s != null) {
 		  s = String(s);
-          s = s.replace(/([\s\u3000]*|[\r\n\u3000]*)/ig,'');
+          s = s.replace(/([\s\u3000]*|[\r\n\u3000]*)/ig,''); 
     }
     return s;
 }
