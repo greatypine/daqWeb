@@ -1120,11 +1120,13 @@ var showHistoryData = function (dataServer) {
     //当日成交额
 	$("#dayDealSum").html(changeMoney(parseInt(dataServer.dayDealSum==null?'0':dataServer.dayDealSum)));
     //客单价
+    $("#dayOneSum").html(dataServer.jsonEshopWeekDeal);
+/*    //客单价
     if(dataServer.dayDealCount==null||dataServer.dayDealCount==0){
     	$("#dayOneSum").html("0");
     }else{
     	$("#dayOneSum").html(dataServer.dayDealSum/dataServer.dayDealCount==null?'0':(dataServer.dayDealSum/dataServer.dayDealCount).toFixed(2));
-    }
+    }*/
     //客单量
 	$("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
     //新增社员
