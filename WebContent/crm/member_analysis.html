@@ -51,10 +51,10 @@
 
         .vertical-example{
             position: absolute;
-            top: 70px;
-            right: 40px;
-            width: 100px;}
-        .navimenu{min-height: 800px; padding-top: 0;}
+            top: 140px;
+            right: 5px;
+            width: 70px;}
+        .navimenu{min-height: 800px;width: 70px; padding-top: 0;}
         #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
         #process_div{
             background-color:#292a2b;
@@ -96,7 +96,6 @@
             box-shadow: 0 1px 1px rgba(0,0,0,1);
             border-radius:10px;
             position: fixed;
-            margin:auto;left:36%; top:50%;
             z-index: 1;
         }
         .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
@@ -120,7 +119,6 @@
             box-shadow: 0 1px 1px rgba(0,0,0,1);
             border-radius:10px;
             position: fixed;
-            margin:auto;left:56%; top:50%;
             z-index: 1;
         }
         .trytoast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
@@ -570,7 +568,10 @@
             $(".add_citymember").click(function(){
                 if($("#setadd").val()=="0"){
                     $("#setadd").val("1");
-                    $("#cityMember").show();
+                    $("#cityMember").css("display", "block");
+                    $("#cityMember").css("left", event.clientX - 160);
+                    $("#cityMember").css("top", event.clientY + 10);
+                  //  $("#cityMember").show();
                 }else{
                     $("#setadd").val("0");
                     $("#cityMember").hide();
@@ -633,7 +634,10 @@
             $(".add_TestMember").click(function(){
                 if($("#setTry").val()=="0"){
                     $("#setTry").val("1");
-                    $("#try_Member").show();
+                    $("#try_Member").css("display", "block");
+                    $("#try_Member").css("left", event.clientX - 300);
+                    $("#try_Member").css("top", event.clientY + 10);
+                   // $("#try_Member").show();
                 }else{
                     $("#setTry").val("0");
                     $("#try_Member").hide();
