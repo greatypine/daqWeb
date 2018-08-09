@@ -2559,7 +2559,7 @@ var showCommodityRank = function (commodityRankData) {
 	    	commodityDataStr = commodityDataStr.substring(0,commodityDataStr.lastIndexOf(","));
 	    }
 	    commodityDataStr+="]}";
-	    var commodityDataObject = JSON.parse(commodityDataStr);
+	    var commodityDataObject = JSON.parse(formatString(commodityDataStr));
 	    maskImage.onload = function() {
 			commodityRankOption.series[0].maskImage;
 			commodityRankChart.setOption(commodityRankOption);//生成云图
@@ -5106,4 +5106,12 @@ function settingClockByTimeOut(_args1, _args2) {
 }
 function startRefreshPage() {
     refreshId = new settingClockByTimeOut(refreshCurrentData,1000);
+}
+//去除 空格,回车符,全角符
+function formatString(s) {
+    if (s != null) {
+		  s = String(s);
+          s = s.replace(/([\s\u3000]*|[\r\n\u3000]*)/ig,''); 
+    }
+    return s;
 }
