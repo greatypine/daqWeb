@@ -233,8 +233,13 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		if(memWeekList!=null&&!memWeekList.isEmpty()) { 
 			memWeek = Integer.parseInt(memWeekList.get(0).get("memcou").toString());
 		}*/
-		List eshopWeekCount = new ArrayList();
-		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
+        //查询周活跃社员数
+        List<Map<String, Object>> eMemWeekList = commDao.getMemweekCount(dd);
+
+        // 周消费频次=周订单量/社员总数
+        List eshopWeekCount = new ArrayList();
+        int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
+        int playMem = Integer.parseInt(eMemWeekList.get(0).get("memcou").toString());
 		if (eshopWeekList!=null&&!eshopWeekList.isEmpty()) {
 			for (int i = 0; i < eshopWeekList.size(); i++) {
 				int eshopCou = Integer.parseInt(eshopWeekList.get(i).get("eweekcou").toString());
@@ -245,8 +250,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 					eshopWeekDeal.add("0");
 
 				}
-				if(memCou!=0){
-                    eshopWeekCount.add(String.format("%.2f",Double.parseDouble(eshopCou/memCou+"")));
+				if(playMem!=0){
+                    eshopWeekCount.add(String.format("%.2f",Double.parseDouble(eshopCou/playMem+"")));
                 }else{
                     eshopWeekCount.add("0");
                 }
