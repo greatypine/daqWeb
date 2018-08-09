@@ -242,7 +242,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if(eshopCou!=0) {
 					eshopWeekDeal.add(String.format("%.2f",eshopGmv/eshopCou));
 				}else {
-					eshopWeekDeal.add("0.0");
+					eshopWeekDeal.add("0");
 
 				}
 				if(memCou!=0){
@@ -594,7 +594,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if (eshopCou != 0) {
 					eshopOneDeal.add(String.format("%.2f", eshopGmv / eshopCou));
 				} else {
-					eshopOneDeal.add("0.0");
+					eshopOneDeal.add("0");
 				}
 
 			}
@@ -1481,11 +1481,14 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 
 		// 查询平均客单价,周消费频次----getEshopWeekCount
 		List<Map<String, Object>> eshopWeekList = commDao.getEshopWeekCount(dd);
+		//查询周活跃社员数
+        List<Map<String, Object>> eMemWeekList = commDao.getMemweekCount(dd);
 		// 平均客单价=周成交额/周订单量
 		List eshopWeekDeal = new ArrayList();
 		// 周消费频次=周订单量/社员总数
 		List eshopWeekCount = new ArrayList();
 		int memCou = Integer.parseInt(cmCountList.get(0).get("allCount").toString());
+		int playMem = Integer.parseInt(eMemWeekList.get(0).get("memcou").toString());
 		if (eshopWeekList != null && !eshopWeekList.isEmpty()) {
 			for (int i = 0; i < eshopWeekList.size(); i++) {
 				int eshopCou = Integer.parseInt(eshopWeekList.get(i).get("eweekcou").toString());
@@ -1493,11 +1496,11 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if (eshopCou != 0) {
 					eshopWeekDeal.add(String.format("%.2f", eshopGmv / eshopCou));
 				} else {
-					eshopWeekDeal.add("0.0");
+					eshopWeekDeal.add("0");
 
 				}
-				if (memCou != 0) {
-					eshopWeekCount.add(String.format("%.2f", Double.parseDouble(eshopCou / memCou + "")));
+				if (playMem != 0) {
+					eshopWeekCount.add(String.format("%.2f", Double.parseDouble(eshopCou / playMem + "")));
 				} else {
 					eshopWeekCount.add("0");
 				}
@@ -2193,7 +2196,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				if (eshopCou != 0) {
 					eshopOneDeal.add(String.format("%.2f", eshopGmv / eshopCou));
 				} else {
-					eshopOneDeal.add("0.0");
+					eshopOneDeal.add("0");
 				}
 
 			}

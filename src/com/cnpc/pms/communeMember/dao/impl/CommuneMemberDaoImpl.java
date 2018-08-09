@@ -1153,6 +1153,10 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 		 * 2018年6月13日
 		 */
 		 String daySumSql = "select count(distinct dmod.customer_id) memcou from df_mass_order_monthly dmod  where dmod.sign_time>=DATE_SUB(curdate(),INTERVAL 7 DAY) and dmod.sign_time<curdate() and dmod.order_tag1   not like '%E%' and  dmod.order_tag1  not like '%K%'";
+        if(!"0000".equals(string)) {
+            daySumSql = daySumSql+" and dmod.store_city_code='"+string+"'";
+        }
+
 			try{
 				Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
 				List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

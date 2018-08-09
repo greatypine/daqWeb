@@ -120,7 +120,7 @@
             box-shadow: 0 1px 1px rgba(0,0,0,1);
             border-radius:10px;
             position: fixed;
-            margin:auto;left:36%; top:50%;
+            margin:auto;left:56%; top:50%;
             z-index: 1;
         }
         .trytoast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
@@ -189,7 +189,7 @@
                                         <div class="col-sm-8">今日订单量：<br><span id="dayDealCount" ></span><small></small></div>
                                         <div class="col-sm-4"><i class="fa  fa-bar-chart"></i></div>
                                     </li>
-                                    <div class="add_citymember">
+                                    <div class="add_citymember" style="cursor:pointer;">
                                     <li>
                                         <div>
                                             
@@ -247,11 +247,11 @@
                                 <!-- </div>-->
                                 <ul class="clearfix no-padding">
                                 <li class="col-sm-3">
-                                <div class="show_cmBig"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><span id="memAll"></span>
+                                <div class="show_cmBig" style="cursor:pointer;"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doUserMem();">更多</a><br><span id="memAll"></span>
 	                               <!--<font id="bigMember"  style="font-size: 14px;margin-left: 15px;display: none; "><br>大客户社员：</font><span id="cmBig" style="font-size: 16px;margin-left: 5px;display: none; "></span>-->
                                 </div>
                                 </li>
-                                    <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
+                                    <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></li>
                                     <li class="col-sm-3"><i class="fa fa-fire"></i>周消费频次：<br><span id="jsonEshopWeekCou"></span></li>
                                 </ul>
@@ -577,10 +577,10 @@
                 }
 
             });
-            $(".add_citymember").mouseover(function(){
+/*            $(".add_citymember").mouseover(function(){
                 $("#setadd").val("1");
                 $("#cityMember").show();
-            });
+            });*/
 /*            $(".add_citymember").mouseleave(function(){
                 $("#setadd").val("0");
                 $("#cityMember").hide();
@@ -639,11 +639,11 @@
                     $("#try_Member").hide();
                 }
 
-            });
-            $(".add_TestMember").mouseover(function(){
-                $("#setTry").val("1");
-                $("#try_Member").show();
-            });
+           });
+            /*             $(".add_TestMember").mouseover(function(){
+                            $("#setTry").val("1");
+                            $("#try_Member").show();
+                        });*/
             /*            $(".add_TestMember").mouseleave(function(){
                             $("#setTry").val("0");
                             $("#try_Member").hide();
@@ -2339,13 +2339,14 @@
             //当日成交额
             $("#dayDealSum").html(changeMoney(parseInt(dataServer.dayDealSum==null?'0':dataServer.dayDealSum)));
             //客单价
-            if(dataServer.dayDealCount==null||dataServer.dayDealCount==0){
+            $("#dayOneSum").html(dataServer.jsonEshopWeekDeal);
+/*            if(dataServer.dayDealCount==null||dataServer.dayDealCount==0){
                 $("#dayOneSum").html("0");
             }else{
                 $("#dayOneSum").html(dataServer.dayDealSum/dataServer.dayDealCount==null?'0':(dataServer.dayDealSum/dataServer.dayDealCount).toFixed(2));
-            }
+            }*/
             //客单量
-            $("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
+            //$("#dayOneCount").html(dataServer.dayDealCount/dataServer.cmCount==null?'0':(dataServer.dayDealCount/dataServer.cmCount).toFixed(2));
             //新增社员
             $("#dayNewMem").html(parseInt(dataServer.dayAddMem==null?'0':dataServer.dayAddMem));
             if(dataServer.cmGoodsDealCount==null||dataServer.cmGoodsDealCount==0){
