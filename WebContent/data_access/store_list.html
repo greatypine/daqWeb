@@ -326,7 +326,7 @@ var COLUMNS = {
 	     					if(data.data!="null"){
 	     						var jsonData = $.fromJSON(data.data);
 	     						var estate=jsonData.estate;
-	     						if(estate=='运营中'||estate=='闭店中'){
+	     						if(estate=='运营中'||estate=='闭店中'||estate=="闭店"){
 	     							$$.showMessage("系统信息", "门店已运营或已闭店！");
 	     						}else{
 	     							doManager("StoreDynamicManager", "updateStoreEstate", [store_id], function(

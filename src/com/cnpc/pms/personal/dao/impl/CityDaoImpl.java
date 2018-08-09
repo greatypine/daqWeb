@@ -29,7 +29,7 @@ public class CityDaoImpl extends BaseDAOHibernate implements CityDao{
 
 	@Override
 	public Integer getConCityByProvinceId(Long province_id) {
-		String sql = "select count(*) from (select city_id from t_store where province_id = '"+province_id+"' and flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and ifnull(estate,'')!='闭店中'  GROUP BY city_id) t where t.city_id is not null";
+		String sql = "select count(*) from (select city_id from t_store where province_id = '"+province_id+"' and flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and ifnull(estate,'') not like '%闭店%'  GROUP BY city_id) t where t.city_id is not null";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();
 		 Session session = sessionFactory.getCurrentSession();
@@ -57,7 +57,7 @@ public class CityDaoImpl extends BaseDAOHibernate implements CityDao{
 
 	@Override
 	public Integer getConCityCount() {
-		String sql = "select count(*) from (select city_id from t_store where city_id is not null and flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and ifnull(estate,'')!='闭店中' GROUP BY city_id) t";
+		String sql = "select count(*) from (select city_id from t_store where city_id is not null and flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' and ifnull(estate,'') not like '%闭店%' GROUP BY city_id) t";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();
 		 Session session = sessionFactory.getCurrentSession();

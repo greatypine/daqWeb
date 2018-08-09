@@ -23,7 +23,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		System.out.println(str_count_sql);
 		// sql查询列，用于页面展示所有的数据
 		String find_sql = "SELECT sto.auditor_status, "
-				+ "case WHEN sto.estate='运营中' THEN '运营中' WHEN sto.estate='筹备中' THEN '筹备中' WHEN sto.estate='闭店中' THEN '闭店中' ELSE '待开业' END as estate,sto.store_id,sto.storeno,sto.storetypename,sto.city_name,sto.`name`,GROUP_CONCAT(town.name) as town_name,sto.detail_address,sto.address,sto.platformname,sto.number,sto.id,CONCAT('第',sto.ordnumber,'家店') as ordnumber,DATE_FORMAT(sto.create_time,'%Y-%m-%d %H:%i:%s') as create_time from t_store sto left join t_town town ON FIND_IN_SET(town.id,sto.town_id)  WHERE 1=1 and sto.flag=0 "
+				+ "case WHEN sto.estate='运营中' THEN '运营中' WHEN sto.estate='筹备中' THEN '筹备中' WHEN (sto.estate='闭店中' or sto.estate='闭店') THEN '闭店中' ELSE '待开业' END as estate,sto.store_id,sto.storeno,sto.storetypename,sto.city_name,sto.`name`,GROUP_CONCAT(town.name) as town_name,sto.detail_address,sto.address,sto.platformname,sto.number,sto.id,CONCAT('第',sto.ordnumber,'家店') as ordnumber,DATE_FORMAT(sto.create_time,'%Y-%m-%d %H:%i:%s') as create_time from t_store sto left join t_town town ON FIND_IN_SET(town.id,sto.town_id)  WHERE 1=1 and sto.flag=0 "
 				+ where + " GROUP BY sto.store_id order by sto.store_id desc";
 		// SQL查询对象
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(find_sql);
@@ -243,12 +243,12 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			whereStr = " and tdc.id=" + cityId;
 		}
 		if (employee_no != null && !"".equals(employee_no)) {
-			sql = "select t.platformid,t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中') t  inner join  (select tdc.id,tdc.cityname from t_dist_city a"
+			sql = "select t.platformid,t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'') not like '%闭店%') t  inner join  (select tdc.id,tdc.cityname from t_dist_city a"
 					+ "   INNER JOIN t_dist_citycode tdc on a.citycode = tdc.citycode and a.pk_userid=" + employee_no
 					+ whereStr + " ) t1" + "	on t.city_name  = t1.cityname "
 					+ " left JOIN tb_bizbase_user as tbu on t.skid = tbu.id";
 		} else {
-			sql = "select t.platformid,t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中') t  inner join  "
+			sql = "select t.platformid,t.store_id,t.name,ifnull(tbu.name,'') as keeperName,tbu.employeeId,t.storeno from (select * from t_store where flag=0 and ifnull(estate,'') not like '%闭店%') t  inner join  "
 					+ " (select tdc.id,tdc.cityname from    t_dist_citycode tdc where tdc.status=0  " + whereStr + " ) t1"
 					+ " on t.city_name  = t1.cityname " + " left JOIN tb_bizbase_user as tbu on t.skid = tbu.id";
 		}
@@ -293,14 +293,14 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				cityStr = " and  tdc.id=" + cityId;
 			}
 			if (employee_no != null && !"".equals(employee_no)) {
-				whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中' and storetype!='V') t  inner join  (select tdc.id,tdc.cityname from t_dist_city a"
+				whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and ifnull(estate,'') not like '%闭店%' and storetype!='V') t  inner join  (select tdc.id,tdc.cityname from t_dist_city a"
 						+
 
 						"   INNER JOIN t_dist_citycode tdc on a.citycode = tdc.citycode and a.pk_userid=" + employee_no
 						+ cityStr + " ) t1" + "	 on t.city_name  = t1.cityname "
 						+ " left join tb_bizbase_user as tbu on t.skid = tbu.id order by convert(t.name using gbk) asc";
 			} else {
-				whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中' and storetype!='V') t  inner join  (select tdc.id,tdc.cityname from "
+				whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and ifnull(estate,'') not like '%闭店%' and storetype!='V') t  inner join  (select tdc.id,tdc.cityname from "
 						+
 
 						"   t_dist_citycode tdc  where tdc.status=0  " + cityStr + " ) t1" + "	on t.city_name  = t1.cityname "
@@ -308,13 +308,13 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			}
 
 		} else if ("QYJL".equals(role)) {// 区域经理
-			whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.store_id,t.storeno,t.skid,t.number from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中'and storetype!='V') t left join tb_bizbase_user as tbu on t.rmid = tbu.id where  t.rmid = "
+			whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.store_id,t.storeno,t.skid,t.number from (select * from t_store where flag=0 and ifnull(estate,'') not like '%闭店%' and storetype!='V') t left join tb_bizbase_user as tbu on t.rmid = tbu.id where  t.rmid = "
 					+ employee_no + " order by convert(t.name using gbk) asc";
 		} else if ("ZB".equals(role)) {// 总部
 			if (cityId != null) {
 				cityStr = " where   tdc.id=" + cityId;
 			}
-			whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and ifnull(estate,'')!='闭店中' and storetype!='V') t inner join (select *  from t_dist_citycode tdc "
+			whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and ifnull(estate,'') not like '%闭店%' and storetype!='V') t inner join (select *  from t_dist_citycode tdc "
 					+ cityStr + ") t1 on t.city_name  = t1.cityname"
 					+ " left join tb_bizbase_user as tbu on t.skid = tbu.id order by convert(t.name using gbk) asc";
 		}
@@ -366,7 +366,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getStoreDate(String where) {
-		String find_sql = "SELECT sto.`name`,sto.storeno,sto.platformname,sto.platformid,sto.storetypename,sto.city_name FROM t_store sto LEFT JOIN t_town town ON FIND_IN_SET(town.id,sto.town_id) where 1=1 and sto.storetype!='W' AND sto.storeno is not NULL and sto.flag=0 and (sto.name not like '%办公室%' and sto.name not like '%储备店%' and sto.name not like '%测试%') and ifnull(sto.estate,'')!='闭店中'"
+		String find_sql = "SELECT sto.`name`,sto.storeno,sto.platformname,sto.platformid,sto.storetypename,sto.city_name FROM t_store sto LEFT JOIN t_town town ON FIND_IN_SET(town.id,sto.town_id) where 1=1 and sto.storetype!='W' AND sto.storeno is not NULL and sto.flag=0 and (sto.name not like '%办公室%' and sto.name not like '%储备店%' and sto.name not like '%测试%') and ifnull(sto.estate,'') not like '%闭店%'"
 				+ where + "GROUP BY sto.store_id ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(find_sql);
 		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -390,7 +390,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ " ,if(store.formattype='请选择','',store.formattype) as formattype,store.usable_area,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins"
 				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
 				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id	"
-				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%') AND store.storetype!='V' AND ifnull(store.estate,null)!='闭店中'  AND store.storeno is not NULL and store.flag=0  "
+				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%') AND store.storetype!='V' AND ifnull(store.estate,null) not like '%闭店%'  AND store.storeno is not NULL and store.flag=0  "
 				+ where + " order by store.city_name desc,store.ordnumber";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(find_sql);
 		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -422,7 +422,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				storeStr = " and t.name like '%" + search_str + "%'";
 			}
 			searchSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode from t_store t  inner join  (select * from t_dist_citycode "
-					+ cityStr + ") t1" + " on t.city_name  = t1.cityname  and t.flag=0 and ifnull(t.estate,'')!='闭店中' "
+					+ cityStr + ") t1" + " on t.city_name  = t1.cityname  and t.flag=0 and ifnull(t.estate,'') not like '%闭店%' "
 					+ storeStr + " limit 10";
 
 		} else if (target == 1) {// 城市
@@ -438,12 +438,12 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				searchSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc "
 						+ "   INNER JOIN t_dist_city a on a.citycode = tdc.citycode and a.pk_userid=" + employeeId+" where tdc.status=0 "
 						+ cityStr + ") t1"
-						+ "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(estate,'')!='闭店中' " + storeStr
+						+ "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(estate,'') not like '%闭店%' " + storeStr
 						+ " limit 10";
 			} else {
 				searchSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc where tdc.status=0 "
 						+ cityStr + ") t1"
-						+ "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(t.estate,'')!='闭店中' " + storeStr
+						+ "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(t.estate,'') not like '%闭店%' " + storeStr
 						+ " limit 10";
 			}
 
@@ -532,7 +532,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public List<Store> findStoreDateEstate() {
 		List<Store> list = null;
-		String sql = "SELECT * FROM t_store WHERE (estate not in ('闭店中','试运营','运营中','试营业') or estate is NULL) and open_shop_time is not NULL AND DATE_FORMAT(open_shop_time,'%Y-%m-%d')<=DATE_FORMAT(NOW(),'%Y-%m-%d')";
+		String sql = "SELECT * FROM t_store WHERE (estate not in ('闭店中','闭店','试运营','运营中','试营业') or estate is NULL) and open_shop_time is not NULL AND DATE_FORMAT(open_shop_time,'%Y-%m-%d')<=DATE_FORMAT(NOW(),'%Y-%m-%d')";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {
 			SQLQuery sqlQuery = session.createSQLQuery(sql);
@@ -872,7 +872,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> findStoreXuanZhi(String where, PageInfo pageInfo) {
 		// sql查询列，用于页面展示所有的数据
 		String find_sql = "SELECT sto.store_id,sto.storetypename,sto.city_name,sto.`name`,GROUP_CONCAT(town.name) as town_name  from t_store sto left join t_town town ON FIND_IN_SET(town.id,sto.town_id) "
-				+ " WHERE sto.store_id not in (SELECT store_id FROM t_store_document_info) AND sto.storetype!='V' and IFNULL(sto.estate,'')!='闭店中' AND (sto.`name` NOT LIKE '%储备店%' AND sto.name NOT LIKE '%办公室%' AND sto.name NOT LIKE '%测试%') and sto.flag=0 "
+				+ " WHERE sto.store_id not in (SELECT store_id FROM t_store_document_info) AND sto.storetype!='V' and IFNULL(sto.estate,'') not like '%闭店%' AND (sto.`name` NOT LIKE '%储备店%' AND sto.name NOT LIKE '%办公室%' AND sto.name NOT LIKE '%测试%') and sto.flag=0 "
 				+ where + " GROUP BY sto.store_id";
 		// SQL查询对象
 		String str_count_sql = "SELECT count(1) from (" + find_sql + ") cc";
@@ -1089,7 +1089,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> find2018Date() {
-		String sql = "SELECT city_name,COUNT(1) as newStore FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'')!='闭店中' AND DATE_FORMAT(create_time,'%Y')='2018' "
+		String sql = "SELECT city_name,COUNT(1) as newStore FROM t_store WHERE flag=0 AND `name` NOT  LIKE '%测试%' and `name` NOT  LIKE '%储备%' and `name` NOT  LIKE '%办公室%' and storetype!='V' AND ifnull(estate,'') not like '%闭店%' AND DATE_FORMAT(create_time,'%Y')='2018' "
 				+ "GROUP BY city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
@@ -1229,7 +1229,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> getStoreStateCount() {
-		String sql = "select city_name,count(1) as count from t_store where estate = '筹备中' and flag = 0 and ifnull(estate,'')!='闭店中' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' GROUP BY city_name;";
+		String sql = "select city_name,count(1) as count from t_store where estate = '筹备中' and flag = 0 and ifnull(estate,'') not like '%闭店%' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='V' GROUP BY city_name;";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -1241,7 +1241,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		String sql = "select t.city_name as city_name,count(t.store_id) as store_count,count(if(t1.file_type =7 and t2.file_type = 8,true,null)) as double_card,"
 				+"count(if(t1.file_type =7 and t2.file_type is null,true,null)) as business_license,count(if(t1.file_type is null and t2.file_type is null,true,null)) as no_card "
 				+"from (select DISTINCT store.store_id as store_id,city_name from t_store store INNER JOIN t_area area ON store.store_id = area.store_id where area.`status` = 0 "
-				+"and store.flag = 0 and store.estate != '闭店中' and store.name not like '%办公室%' and store.name not like '%储备%' and store.name not like '%测试%' and "
+				+"and store.flag = 0 and store.estate not like  '%闭店%' and store.name not like '%办公室%' and store.name not like '%储备%' and store.name not like '%测试%' and "
 				+"store.storetype != 'V') t LEFT JOIN (select DISTINCT store_id,file_type from t_attachment where  t_attachment.file_type = 7) t1 ON (t.store_id = t1.store_id) "
 				+"LEFT JOIN (select DISTINCT store_id,file_type from t_attachment where  t_attachment.file_type = 8 ) t2 ON (t.store_id = t2.store_id) GROUP BY t.city_name";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -1257,7 +1257,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ " ,cc.audit_date,cc.enter_date,cc.enter_end_date,cc.submit_date,cc.card_content,store.rent_area,store.agency_fee,store.increase_fee,store.rent_free,store.taxes,store.increase,IF(cc.store_id is null,'无','有') as if_bussins "
 				+ " FROM	t_store store LEFT JOIN tb_bizbase_user usee ON store.skid = usee.id LEFT JOIN t_town town ON town.id IN (store.town_id) LEFT JOIN t_county coun ON coun.id = town.county_id  "
 				+ " LEFT JOIN (SELECT audit_date,enter_date,enter_end_date,submit_date,card_content,store_id FROM t_store_document_info WHERE audit_status=3) cc ON cc.store_id=store.store_id "
-				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0 AND store.storetype!='V' AND store.storetype!='W' AND IFNULL(store.estate,'')!='闭店中' "
+				+ " WHERE (store.`name` not LIKE '%储备店%' and store.`name` not LIKE '%测试%' and store.`name` not LIKE '%办公室%')  AND store.storeno is not NULL and store.flag=0 AND store.storetype!='V' AND store.storetype!='W' AND IFNULL(store.estate,'') not like '%闭店%' "
 				+ where + " order by store.city_name desc,store.ordnumber";
 
 		Map<String, Object> map_result = new HashMap<String, Object>();

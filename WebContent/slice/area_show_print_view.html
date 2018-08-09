@@ -325,9 +325,6 @@
             bubble:true
         });
         serviceRange.setMap(map);
-        serviceRange.on("click", function () {
-            setNavListVisible(false);
-        });
 
         var areaTinyVillage;//小区坐标范围
         var tinyVillageMarker;
@@ -352,7 +349,8 @@
                         strokeWeight: 2,    //线宽
                         fillColor: $fillColor, //填充色
                         fillOpacity: 0.45,//填充透明度
-                        extData:{"areaNo":coordinate[i].areaNo} 
+                        extData:{"areaNo":coordinate[i].areaNo} ,
+                        bubble:true
                     });
                 
             	var tmp_tinyVillageCoordinate={

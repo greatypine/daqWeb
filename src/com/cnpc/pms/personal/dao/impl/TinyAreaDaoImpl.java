@@ -96,10 +96,10 @@ public class TinyAreaDaoImpl extends BaseDAOHibernate implements TinyAreaDao {
 		if (city_name != null && city_name.length() > 0) {
 			sql = "SELECT ifnull(area.vallage_area,0),area.tiny_village_id,store.`name` as store_name FROM tiny_area area LEFT JOIN t_store store ON area.store_no=store.storeno where store.name='"
 					+ storeName + "' and store.city_name='" + city_name
-					+ "'  and area.status=0 and IFNULL(store.estate,'')!='闭店中' AND store.flag=0";
+					+ "'  and area.status=0 and IFNULL(store.estate,'') not like '%闭店%' AND store.flag=0";
 		} else {
 			sql = "SELECT area.vallage_area,area.tiny_village_id,store.`name` as store_name FROM tiny_area area LEFT JOIN t_store store ON area.store_no=store.storeno where store.name='"
-					+ storeName + "' and area.status=0 and IFNULL(store.estate,'')!='闭店中' AND store.flag=0";
+					+ storeName + "' and area.status=0 and IFNULL(store.estate,'') not like '%闭店%' AND store.flag=0";
 		}
 
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
