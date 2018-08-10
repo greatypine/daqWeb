@@ -1466,7 +1466,8 @@ public List<Map<String, Object>> getMembersArea(String dd) {
          * @author wuxinxin
          * 2018年7月30日
          */
-        String daySumSql = "select sum(dmom.trading_price) trygmv from  df_mass_order_monthly dmom,df_user_try_member dutm  where dmom.customer_id=dutm.customer_id and dmom.sign_time> '2018-07-26' and dutm.associator_expiry_date> '2018-07-26'  and dmom.sign_time<dutm.associator_expiry_date";
+        String daySumSql = "select sum(dmom.trading_price) trygmv from  df_mass_order_monthly dmom,df_user_try_member dutm  where dmom.customer_id=dutm.customer_id " +
+				"and dmom.sign_time> '2018-07-26' and dutm.associator_expiry_date> '2018-07-26'  and dmom.sign_time<dutm.associator_expiry_date and dmom.order_tag1 like '%E%' ";
 
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(daySumSql);
