@@ -650,7 +650,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		public List<Map<String, Object>> queryHumanByStoreType() {
 			String sql = "select count(empcount) as empcount,storetypename,storetype from (SELECT a.employee_no as empcount,b.storetypename,b.storetype FROM " +
 					"t_humanresources a INNER JOIN (select t.storetypename,t.store_id,name as storeName,t.city_name,t.storetype from t_store t inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc ) " +
-					"t1 on t.city_name  = t1.cityname AND t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
+					"t1 on t.city_name  = t1.cityname AND t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' AND t.storetype != 'V' AND t.storetype != 'W' ) b " +
 					"on a.store_id = b.store_id and  a.humanstatus =1 where a.name not like '%测试%'  UNION " +
 					"select tbu.employeeId as empcount,t2.storetypename,storetype from (select t.skid,t.name,t.city_name,t.storetypename,t.storetype " +
 					"from t_store t  inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc ) t1 on (t.city_name  = t1.cityname) WHERE t.name NOT LIKE '%测试%' " +
