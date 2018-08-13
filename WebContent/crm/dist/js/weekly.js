@@ -2595,16 +2595,7 @@ optionempbycity = {
 
 optionempbystore = {
     title: [{
-        text: '人员在门店分布',
-        left: '45%',
-        top: '2%',
-        textAlign: 'center',
-        textBaseline: 'middle',
-        textStyle: {
-            color: '#666',
-            fontWeight: 'normal',
-            fontSize: 16
-        }
+        text: '门店人员分布',x:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
     }],
     tooltip: {
         trigger: 'item',
@@ -2613,7 +2604,7 @@ optionempbystore = {
     series: [{
         type: 'pie',
         //selectedMode: 'single',
-        radius: ['0%', '60%'],
+        radius: ['0%', '70%'],
       //  color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
 
         label: {

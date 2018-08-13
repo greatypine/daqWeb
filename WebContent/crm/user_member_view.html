@@ -159,14 +159,14 @@
 
       <section class="content-header">
         <div class="nav-tabs-custom no-margin">
-        	<div class="pull-right text-red" style="padding-left:15px;font-size:75%;float: right">
+        	<div class="pull-right text-red" id="bigmember" style="padding-left:15px;font-size:75%;float: right">
 				<!--<p>统计数据每10分钟更新一次</p>-->
 				<p style="margin-top: 6px;margin-right: 10px;margin-bottom: 6px;"><button onclick="customer_member()" class="btn btn-block btn-warning">大客户社员查询</button></p>
 			</div>
           <ul class="nav nav-tabs">
-		              <li class="active" id="tab_1_avtive"><a href="#tab_1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
-		              <li class="" id="tab_2_avtive"><a href="#tab_2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
-			  		  <li class="" id="tab_3_avtive"><a href="#tab_3" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>
+		              <li class="active" id="tab_1_avtive"><a href="#tab_1" id="bigshow1" data-toggle="tab" aria-expanded="true">门店单位统计</a></li>
+		              <li class="" id="tab_2_avtive"><a href="#tab_2" id="bigshow2" data-toggle="tab" aria-expanded="false">城市单位统计</a></li>
+			  		  <li class="" id="tab_3_avtive"><a href="#tab_3" id="bighide" data-toggle="tab" aria-expanded="false">试用社员统计</a></li>
 
 		  </ul>
 		  <div class="tab-content">
@@ -569,6 +569,17 @@
 	    $(".logo-lg > ul > li").hover(function(){
 	      $(this).children(".nav_dropdown").toggle('1000');
 	    });
+
+        $("#bighide").on("click",function(event){
+            $("#bigmember").hide();
+        });
+        $("#bigshow1").on("click",function(event){
+            $("#bigmember").show();
+        });
+        $("#bigshow2").on("click",function(event){
+            $("#bigmember").show();
+        });
+
 	    
 	    //门店纬度
 	    $("#showattention").on("mouseover",function(event){
@@ -584,6 +595,7 @@
 	  	$("#showattentioncity").on("mouseout",function(event){
 	  		$("#attentioncity").hide();
 	  	});
+
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
   var lst_select_city=null;
