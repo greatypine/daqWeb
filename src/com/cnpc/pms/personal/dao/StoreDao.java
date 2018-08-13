@@ -427,6 +427,39 @@ public interface StoreDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String, Object>> getStoreTypeNatureOfCity(String nature,String storetype);
-	
+	/**
+	 * 全国月店数据分析
+	 * @return
+	 */
+	public  List<Map<String ,Object>> findStoreDataByCity();
+
+	/**
+	 * 支付方式统计
+	 * @return
+	 */
+	public List<Map<String,Object>> findStorePaymentData();
+
+	/**
+	 * 星店数据分析
+	 * @return
+	 */
+	public List<Map<String,Object>> findStarStoreData();
+
+	/**
+	 * 星店数据详情
+	 * @return
+	 */
+	public List<Map<String,Object>> findStarStoreInfo();
+	/**
+	 * 校园店数据分析
+	 * @return
+	 */
+	public List<Map<String,Object>> findSchoolStoreData();
+
+	/**
+	 * 校园店数据详情
+	 * @return
+	 */
+	public List<Map<String,Object>> findSchoolStoreInfo();
 	
 }
