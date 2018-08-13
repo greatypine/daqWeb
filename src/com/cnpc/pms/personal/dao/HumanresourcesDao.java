@@ -79,7 +79,7 @@ public interface HumanresourcesDao {
 	 * @author gaoll
 	 * @return
 	 */
-	public List<Map<String, Object>> querySixWeekHuman(String leaveorpost);
+	public List<Map<String, Object>> querySixWeekHuman();
 
 	/**
 	 *
@@ -87,6 +87,6 @@ public interface HumanresourcesDao {
 	 * @author gaoll
 	 * @return
 	 */
-	public List<Map<String, Object>> queryHumanByStoreType(String leaveorpost);
+	public List<Map<String, Object>> queryHumanByStoreType();
 
 }

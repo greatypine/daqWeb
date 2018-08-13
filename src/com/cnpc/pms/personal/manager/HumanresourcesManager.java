@@ -179,6 +179,15 @@ public interface HumanresourcesManager extends IManager {
      * @return
      */
     public Map<String,Object> getEmployeeInfoByWeek();
+
+    /**
+     *
+     * TODO 获得近六周各城市人员动态，及门店人员分布状况
+     * 2018年4月12日
+     * @author gaoll
+     * @return
+     */
+    public Map<String,Object> getEmployeeByCityAndStore();
     
     public Map<String,Object> getWeekPoint();
     

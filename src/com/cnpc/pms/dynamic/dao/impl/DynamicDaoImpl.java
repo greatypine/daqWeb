@@ -3120,25 +3120,22 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String sql = "";
 		if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){
 			if(!cityNo.equals("")){
-				join_sql = " INNER JOIN t_dist_citycode city ON (lpad(mem_store.regist_cityno,4,'0') = city.cityno) ";
-				condition_sql = " and lpad(member.regist_cityno,4,'0') = '"+cityNo+"' ";
+				join_sql = " INNER JOIN t_dist_citycode city ON (lpad(dutm.regist_cityno,4,'0') = city.cityno) ";
+				condition_sql = " where lpad(member.regist_cityno,4,'0') = '"+cityNo+"' ";
 			}
-			sql = "select t1.storeno,ifnull(t1.name,'无') as name,ifnull(t1.city_name,'无') as city_name,t1.opencount,ifnull(t2.nowcount,0) as nowcount from ( " +
-					"select ifnull(storeno,'无') as storeno,name,city_name,sum(opencount) as opencount from ( select ifnull(member.regist_storeid,'') as regist_storeid, " +
-					"count(member.customer_id) as opencount,ifnull(member.regist_cityno,'') as regist_cityno from df_user_try_member member where member.associator_expiry_date>now() and  member.opencard_time is not null "+condition_sql+" group by member.regist_storeid ) mem_store LEFT JOIN t_store store ON " +
-					"(mem_store.regist_storeid = store.platformid) "+join_sql+" GROUP BY store.storeno) t1 LEFT JOIN ( " +
-					"select ifnull(storeno,'无') as storeno,sum(nowcount) as nowcount from (select ifnull(member.regist_cityno,'') as regist_cityno,ifnull(member.regist_storeid,'') as regist_storeid," +
-					"count(member.customer_id) as nowcount from df_user_try_member member  where member.opencard_time " +
-					"BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' "+condition_sql+" group by member.regist_storeid " +
-					") mem_store LEFT JOIN t_store store ON (mem_store.regist_storeid = store.platformid) "+join_sql+" GROUP BY store.storeno) t2 " +
-					"ON (t1.storeno = t2.storeno )";
+			sql = "select ifnull(ts.storeno,'无') as storeno,ifnull(ts.name, '无') AS name,ifnull(ts.city_name, '无') AS city_name,sum(dutm.opencount) as opencount,sum(dutm.nowcount) as nowcount " +
+					"from (select regist_storeid,regist_cityno, " +
+					"sum(case when member.associator_expiry_date>now() and  member.opencard_time is not null then 1 else 0 end ) as opencount, " +
+					"sum(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount " +
+					"from df_user_try_member member "+condition_sql+" group by member.regist_storeid ) dutm   " +
+					"left join t_store ts  on (dutm.regist_storeid = ts.platformid) "+join_sql+" GROUP BY ts.storeno";
 		}else{
-			sql = "select t1.storeno,t1.name,ifnull(t1.city_name,'无') as city_name,ifnull(t1.opencount,0) as opencount,ifnull(t2.nowcount,0) as nowcount from ( "
-					+"select store.storeno,store.name,store.city_name,count(DISTINCT member.customer_id) as opencount from df_user_try_member member LEFT  JOIN t_store store ON "
-					+"(member.regist_storeid = store.platformid) where member.associator_expiry_date>now() and  member.opencard_time is not null and store.storeno = '"+dynamicDto.getStoreNo()+"') t1 LEFT JOIN ( "
-					+"select store.storeno,member.regist_storeid,count(member.customer_id) as nowcount from df_user_try_member member LEFT JOIN t_store store ON "
-					+"(member.regist_storeid = store.platformid) where store.storeno = '"+dynamicDto.getStoreNo()+"' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59') t2 "
-					+"ON (t1.storeno = t2.storeno )";
+			sql = "select ifnull(ts.storeno,'无') as storeno,ifnull(ts.name, '无') AS name,ifnull(ts.city_name, '无') AS city_name,dutm.opencount as opencount,dutm.nowcount as nowcount " +
+					"from (select regist_storeid," +
+					"sum(case when member.associator_expiry_date>now() and  member.opencard_time is not null then 1 else 0 end ) as opencount," +
+					"sum(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount " +
+					"from df_user_try_member member group by member.regist_storeid ) dutm  " +
+					"left join t_store ts  on (dutm.regist_storeid = ts.platformid) where ts.storeno = '"+dynamicDto.getStoreNo()+"'";
 		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory()

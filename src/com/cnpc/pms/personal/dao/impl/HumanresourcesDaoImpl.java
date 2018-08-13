@@ -622,7 +622,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		}
 
 		@Override
-		public List<Map<String, Object>> querySixWeekHuman(String leaveorpost) {
+		public List<Map<String, Object>> querySixWeekHuman() {
 			int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 			int settime = 0;
 			if(i<5){
@@ -631,17 +631,15 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 				settime = 10;
 			}
 			String sql = "";
-			if("leave".equals(leaveorpost)){
-				sql = "select count(employee_no) as leavecount, citySelect as cityname from " +
+				String sql_a = "select count(employee_no) as leavecount, citySelect as cityname,'' as topostcount from " +
 						"(select employee_no,citySelect from t_humanresources where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) UNION " +
 						"select employee_no,citySelect from t_storekeeper where humanstatus = 2 and date_format(leavedate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*5 DAY) and YEARWEEK(date_format(leavedate,'%Y-%m-%d')) <= YEARWEEK(now()) and zw = '店长') " +
 						"t GROUP BY t.citySelect";
-			}else if("post".equals(leaveorpost)){
-				sql="select count(employee_no) as topostcount, citySelect as cityname from " +
-						"(select employee_no,citySelect from t_storekeeper where date_format(topostdate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -\"+settime+\"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) and zw = '店长' UNION " +
-						"select employee_no,citySelect from t_humanresources where date_format(topostdate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -\"+settime+\"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())) " +
+				String sql_b="select count(employee_no) as topostcount, citySelect as cityname,'' as leavecount from " +
+						"(select employee_no,citySelect from t_storekeeper where date_format(topostdate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now()) and zw = '店长' UNION " +
+						"select employee_no,citySelect from t_humanresources where date_format(topostdate,'%Y-%m-%d') >= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and YEARWEEK(date_format(topostdate,'%Y-%m-%d')) <= YEARWEEK(now())) " +
 						"t GROUP BY t.citySelect";
-			}
+			sql = "select ifnull(a.leavecount,0) as leavecount,citycode.cityname,ifnull(b.topostcount,0) as postcount from t_dist_citycode citycode LEFT JOIN ("+sql_a+") a ON a.cityname = citycode.cityname LEFT JOIN ("+sql_b+") b ON b.cityname = citycode.cityname where a.leavecount is not null or b.topostcount is not null";
 
 			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -649,13 +647,13 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		}
 
 		@Override
-		public List<Map<String, Object>> queryHumanByStoreType(String leaveorpost) {
-			String sql = "select count(empcount),storetypename,storetype from (SELECT a.employee_no as empcount,b.storetypename,b.storetype FROM " +
+		public List<Map<String, Object>> queryHumanByStoreType() {
+			String sql = "select count(empcount) as empcount,storetypename,storetype from (SELECT a.employee_no as empcount,b.storetypename,b.storetype FROM " +
 					"t_humanresources a INNER JOIN (select t.storetypename,t.store_id,name as storeName,t.city_name,t.storetype from t_store t inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc ) " +
 					"t1 on t.city_name  = t1.cityname AND t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
 					"on a.store_id = b.store_id and  a.humanstatus =1 where a.name not like '%测试%'  UNION " +
 					"select tbu.employeeId as empcount,t2.storetypename,storetype from (select t.skid,t.name,t.city_name,t.storetypename,t.storetype " +
-					"from t_store t  inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc ) on (t.city_name  = t1.cityname) WHERE t.name NOT LIKE '%测试%' " +
+					"from t_store t  inner join  (select tdc.id,tdc.cityname from t_dist_citycode tdc ) t1 on (t.city_name  = t1.cityname) WHERE t.name NOT LIKE '%测试%' " +
 					"AND t.name NOT LIKE '%储备%' AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' AND t.storetype != 'V' AND t.storetype != 'W' ) t2 " +
 					"INNER JOIN tb_bizbase_user as tbu on t2.skid = tbu.id ) emp GROUP BY emp.storetype";
 
