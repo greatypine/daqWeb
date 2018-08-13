@@ -4352,7 +4352,17 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	}
     	return null;
     }
-    
+
+
+	public Map<String,Object> getEmployeeByCityAndStore(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		HumanresourcesDao humanresourcesDao = (HumanresourcesDao) SpringHelper.getBean(HumanresourcesDao.class.getName());
+		List<Map<String, Object>> leaveorpost = humanresourcesDao.querySixWeekHuman();
+		List<Map<String, Object>> maps = humanresourcesDao.queryHumanByStoreType();
+		result.put("leaveorpost",leaveorpost);
+		result.put("empByStoreType",maps);
+		return result;
+	}
     
     
     
