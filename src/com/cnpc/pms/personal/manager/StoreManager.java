@@ -339,4 +339,6 @@ public interface StoreManager extends IManager {
      */
 	Store updateStoreTown(Store store);
 
+	//门店租赁信息
+	Map<String,Object> findStoreRentDataByCity();
 }

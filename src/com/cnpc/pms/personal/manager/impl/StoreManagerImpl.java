@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -2783,4 +2784,137 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		storeManager.save(updateStore);
 		return updateStore;
 	}
+	@Override
+	public Map<String, Object> findStoreRentDataByCity() {
+		Map<String,Object> mapData=new HashMap<>();
+		StoreDao storeDao=(StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> list = storeDao.findStoreDataByCity();
+		//全国门店数量
+		int rpovince_store_total=0;
+		//全国门店使用面积总数
+		float users_area_total=0;
+		//全国计租面积总数
+		float jizu_area_total=0;
+		//计租面积的平均值和
+		float jizu_avg_total=0;
+		//使用面积的平均值和
+		float usable_avg_total=0;
+		//面积使用率之和
+		float store_avg_total=0;
+		//单价计租面积总和
+		float rental_avg_jizu_total=0;
+		//单价使用面积总和
+		float rental_avg_usable_total=0;
+		//中介成交店铺数据
+		int china_agent_store=0;
+		//中介费总额
+		float china_agent_price=0;
+		//单店平均中介费
+		float china_avg_agent_price=0;
+		for(Map<String, Object> map:list){
+			rpovince_store_total+=Integer.parseInt(map.get("city_total")+"");
+			jizu_area_total+=Float.parseFloat(map.get("jizu_area")+"");
+			users_area_total+=Float.parseFloat(map.get("usable_area")+"");
+			jizu_avg_total+=Float.parseFloat(map.get("jizu_avg_area")+"");
+			usable_avg_total+=Float.parseFloat(map.get("usable_avg_area")+"");
+			store_avg_total+=Float.parseFloat(map.get("store_avg_PCT")+"");
+			rental_avg_jizu_total+=Float.parseFloat(map.get("city_avg_rental_jizu")+"");
+			rental_avg_usable_total+=Float.parseFloat(map.get("city_avg_rental_usable")+"");
+			china_agent_store+=Integer.parseInt(map.get("store_zhongjie")+"");
+			china_agent_price+=Float.parseFloat(map.get("agency_fee_total")+"");
+			china_avg_agent_price+=Float.parseFloat(map.get("store_price")+"");
+		}
+
+		for(int i=0;i<list.size();i++){
+			Map<String, Object> map=list.get(i);
+			//求门店数量占比
+			double f1 = new BigDecimal((float)(Integer.parseInt(map.get("city_total")+"")/rpovince_store_total)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			map.put("store_PCT",f1);
+			//计租面积占比
+			if(Float.parseFloat(map.get("jizu_area")+"")>0){
+				double f2 = new BigDecimal((float)(Float.parseFloat(map.get("jizu_area")+"")/jizu_area_total)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				map.put("jizu_PCT",f2);
+			}else{
+				map.put("jizu_PCT",0);
+			}
+			//使用面积占比
+			if(Float.parseFloat(map.get("usable_area")+"")>0){
+				double f2 = new BigDecimal((float)(Float.parseFloat(map.get("usable_area")+"")/users_area_total)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				map.put("usable_PCT",f2);
+			}else{
+				map.put("usable_PCT",0);
+			}
+			list.set(i,map);
+		}
+		//月店数据
+		mapData.put("storeData",list);
+		//总数据
+		Map<String,Object> map=new HashMap<>();
+		//门店总数
+		map.put("china_store_total",rpovince_store_total);
+		//计租面积总数
+		map.put("china_jizu_total",jizu_area_total);
+		//使用面积总数
+		map.put("china_usable_total",users_area_total);
+		double china_avg_jizu = new BigDecimal((float)(jizu_avg_total/list.size())).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		double china_avg_usable = new BigDecimal((float)(usable_avg_total/list.size())).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		double china_avg_PCT = new BigDecimal((float)(store_avg_total/list.size())).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		//单店平均计租面积
+		map.put("china_avg_jizu",china_avg_jizu);
+		//单店平均使用面积
+		map.put("china_avg_usable",china_avg_usable);
+		//平均使用率
+		map.put("china_avg_PCT",china_avg_PCT);
+		//全国平均计租面积平均单价
+		double china_avg_rental_jizu = new BigDecimal((float)(rental_avg_jizu_total/list.size())).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		map.put("china_avg_rental_jizu",china_avg_rental_jizu);
+		//全国平均使用面积平均单价
+		double china_avg_rental_usable = new BigDecimal((float)(rental_avg_usable_total/list.size())).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		map.put("china_avg_rental_usable",china_avg_rental_usable);
+		//中介成交店铺总数
+		map.put("china_agent_store",china_agent_store);
+		//中介费总额
+		map.put("china_agent_price",china_agent_price);
+		//单店平均中介费
+		map.put("china_avg_agent_price",china_avg_agent_price);
+		mapData.put("totalData",map);
+		//支付方式统计
+		List<Map<String, Object>> storePaymentData = storeDao.findStorePaymentData();
+		Map<String, Object> mapPaymentData=new HashMap<>();
+		int mouthPayment=0;
+		int quarterlyPayment=0;
+		int semiAnnualPayment=0;
+		int annualPayment=0;
+		String cityName="";
+		for (Map<String, Object> mapPayment:storePaymentData
+				) {
+			mouthPayment+=Integer.parseInt(mapPayment.get("mouthPayment")+"");
+			quarterlyPayment+=Integer.parseInt(mapPayment.get("quarterlyPayment")+"");
+			semiAnnualPayment+=Integer.parseInt(mapPayment.get("semiAnnualPayment")+"");
+			annualPayment+=Integer.parseInt(mapPayment.get("annualPayment")+"");
+		}
+		mapPaymentData.put("mouthPayment",mouthPayment);
+		mapPaymentData.put("quarterlyPayment",quarterlyPayment);
+		mapPaymentData.put("semiAnnualPayment",semiAnnualPayment);
+		mapPaymentData.put("annualPayment",annualPayment);
+		//支付方式统计
+		mapData.put("mapPaymentData",mapPaymentData);
+		//支付方式
+		mapData.put("storePaymentData",storePaymentData);
+
+		//全国星店数据分析
+		List<Map<String, Object>> starStoreData = storeDao.findStarStoreData();
+		mapData.put("starStoreData",starStoreData);
+		//北京星店详情
+		List<Map<String, Object>> starStoreInfo = storeDao.findStarStoreInfo();
+		mapData.put("starStoreInfo",starStoreInfo);
+		//全国校园店数据分析
+		List<Map<String, Object>> schoolStoreData = storeDao.findSchoolStoreData();
+		mapData.put("schoolStoreData",schoolStoreData);
+		//全国校园店详情
+		List<Map<String, Object>> schoolStoreInfo = storeDao.findSchoolStoreInfo();
+		mapData.put("schoolStoreInfo",schoolStoreInfo);
+		return mapData;
+	}
+
 }
