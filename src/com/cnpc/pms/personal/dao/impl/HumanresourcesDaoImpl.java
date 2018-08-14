@@ -637,7 +637,7 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 						"t GROUP BY t.citySelect";
 				String sql_b="select count(employee_no) as topostcount, citySelect as cityname,'' as leavecount from " +
 						"(select employee_no,citySelect from t_storekeeper where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and date_format(topostdate,'%Y-%m-%d') <= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY) and zw = '店长' UNION " +
-						"select employee_no,citySelect from t_humanresources where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and date_format(topostdate,'%Y-%m-%d') <= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY) " +
+						"select employee_no,citySelect from t_humanresources where date_format(topostdate,'%Y-%m-%d') > date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+"+7*6 DAY) and date_format(topostdate,'%Y-%m-%d') <= date_sub(NOW(),INTERVAL date_format(NOW(), '%w') -"+settime+" DAY)) " +
 						"t GROUP BY t.citySelect";
 			sql = "select ifnull(a.leavecount,0) as leavecount,citycode.cityname,ifnull(b.topostcount,0) as postcount from t_dist_citycode citycode LEFT JOIN ("+sql_a+") a ON a.cityname = citycode.cityname LEFT JOIN ("+sql_b+") b ON b.cityname = citycode.cityname where a.leavecount is not null or b.topostcount is not null";
 
