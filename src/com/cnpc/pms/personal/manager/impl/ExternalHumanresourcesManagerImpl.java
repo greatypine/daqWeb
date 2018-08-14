@@ -71,6 +71,43 @@ public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager impl
             Set<String> sets = new HashSet<String>();
             List<ExternalHumanresources> saveExternalHuman = new ArrayList<ExternalHumanresources>();
             
+            
+            //判断表头格式是否正确
+            Row validTitle = sheet_data.getRow(2);
+            String title1=getCellValue(validTitle.getCell(0));  //序号
+            String title2=getCellValue(validTitle.getCell(1));  //姓名
+            String title3=getCellValue(validTitle.getCell(2));  //手机号
+            String title4=getCellValue(validTitle.getCell(3));  //身份证号
+            
+            if(!title1.equals("序号")) {
+            	rcvmsg="导入文件格式不正确！导入失败！";
+             	return rcvmsg;
+            }
+            if(!title2.equals("姓名")) {
+            	rcvmsg="导入文件格式不正确！导入失败！";
+             	return rcvmsg;
+            }
+            if(!title3.equals("手机号")) {
+            	rcvmsg="导入文件格式不正确！导入失败！";
+             	return rcvmsg;
+            }
+            if(!title4.equals("身份证号")) {
+            	rcvmsg="导入文件格式不正确！导入失败！";
+             	return rcvmsg;
+            }
+            
+            Row validTitle2 = sheet_data.getRow(3);
+            String title5=getCellValue(validTitle2.getCell(5));  ///	
+            String title6=getCellValue(validTitle2.getCell(6));  //
+            if(!title5.equals("门店编号")) {
+            	rcvmsg="导入文件格式不正确！导入失败！";
+             	return rcvmsg;
+            }
+            if(!title6.equals("门店名称")) {
+            	rcvmsg="导入文件格式不正确！导入失败！";
+             	return rcvmsg;
+            }
+            
             for(int nRowIndex = 4;nRowIndex < sheet_data.getPhysicalNumberOfRows();nRowIndex++){
             	Row row_human = sheet_data.getRow(nRowIndex);
             	 if(row_human == null){
