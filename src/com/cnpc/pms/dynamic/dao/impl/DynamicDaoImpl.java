@@ -3199,7 +3199,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				+" (select t.name,t.phone as mobilephone,t.employee_no,t.inviteCode,ts.name as storename,ts.city_name from t_humanresources t LEFT JOIN t_store ts ON t.store_id = ts.store_id where t.humanstatus=1  and t.inviteCode is not null and t.inviteCode!='' "+whereStoreId
 
 				+" UNION"
-				+" select tst.name,tst.phone as mobilephone,tst.employee_no,tst.inviteCode,c.storename,c.city_name from t_storekeeper tst  inner join (select tbu.employeeId,t.name as storename,t.city_name from t_store  t INNER JOIN tb_bizbase_user tbu  on t.skid = tbu.id  where t.skid is not null  "+whereStoreId+") c on tst.employee_no = c.employeeId where tst.humanstatus=1  and tst.inviteCode is not null and tst.inviteCode!=''"
+				+" select tst.name,tst.phone as mobilephone,tst.employee_no,tst.inviteCode,c.storename,c.city_name from t_storekeeper tst  LEFT join (select tbu.employeeId,t.name as storename,t.city_name from t_store  t INNER JOIN tb_bizbase_user tbu  on t.skid = tbu.id  where t.skid is not null  "+whereStoreId+") c on tst.employee_no = c.employeeId where tst.humanstatus=1  and tst.inviteCode is not null and tst.inviteCode!=''"
 				+ whereOnline+" ) b"
 				+" on a.inviteCode = b.inviteCode   GROUP BY b.inviteCode,b.employee_no having 1=1 ";
 		if(dynamicDto.getEmployeeName()!=null&&!"".equals(dynamicDto.getEmployeeName())){
