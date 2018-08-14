@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-table.css">
     <link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-table-fixed-columns.css">
+    <link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-editable.css">
     <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../crm/plugins/date-new/css/jquery-ui-1.9.2.custom.css" type="text/css">
     <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -19,6 +20,11 @@
     <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap-table.js"></script>
     <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap-table-fixed-columns.js"></script>
+    <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap-table-zh-CN.min.js.js"></script>
+    <!---行内编辑使用的 1.1.5-->
+    <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap-editable.js"></script>
+    <!--封装了bootstrap-table对x-editable的使用-->
+    <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap-table-editable.js"></script>
     <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
     <script src="../crm/dist/js/headquarters/conversion_utils.js"></script>
     <script src="../crm/plugins/date-new/js/jquery-ui-1.9.2.custom.js" type = "text/javascript"></script>
@@ -50,7 +56,9 @@
 
 
 
-
+        // $(window).resize(function () {
+        //     $('#cost_labor').bootstrapTable('resetView');
+        // });
         /**
          * 获取人工成本
          * **/
@@ -59,7 +67,7 @@
             var storeNo=null;
             var storeName=null;
             var year = 2018;
-            var month = 6;
+            var month = null;
 
             doManager('costStatisticsManager','queryCostLabor',[storeNo,storeName,year,month],function (data) {
                 if(data.result){
@@ -73,9 +81,10 @@
 
         function buildLaborTable($el,data) {
             var columns = [];
-
             var firstRowTitle=[];
             var secondTitle=[];
+
+
 
             firstRowTitle.push({
                 title:"序号",
@@ -83,7 +92,7 @@
                 valign: "middle",
                 halign: "center",
                 formatter: function (value, row, index){
-                    return  index;
+                    return  index+1;
                 }
             });
 
@@ -129,16 +138,29 @@
 
             for(var j=0;j<12;j++){
                 secondTitle.push({
-                    filed:"emolument",
+                    field:"emolument"+(j+1),
                     title:"员工薪酬",
                     valign: "middle",
                     halign: "center",
                     colspan:1,
-                    rowspan:1
+                    rowspan:1,
+                    editable: {
+                        type: 'text',
+                        title: '员工薪酬',
+                        validate: function (v) {
+                            var reg=/^[1-9]+(.[0-9]{1,3})?$/
+
+
+                            if (!reg.test(v)) {
+
+                                return "请输入正确的薪酬";
+                            }
+                        }
+                    }
                 });
 
                 secondTitle.push({
-                    filed:"uniform_amortize",
+                    field:"uniform_amortize"+(j+1),
                     title:"工服摊销",
                     valign: "middle",
                     halign: "center",
@@ -146,7 +168,7 @@
                     rowspan:1
                 });
                 secondTitle.push({
-                    filed:"accommodation",
+                    field:"accommodation"+(j+1),
                     title:"住宿星店房租",
                     valign: "middle",
                     halign: "center",
@@ -154,12 +176,13 @@
                     rowspan:1
                 });
                 secondTitle.push({
-                    filed:"subtotal",
+                    field:"subtotal"+(j+1),
                     title:"小计（元）",
                     valign: "middle",
                     halign: "center",
                     colspan:1,
                     rowspan:1
+
                 });
 
             }
@@ -196,20 +219,20 @@
     .ui-dialog .ui-dialog-titlebar-close span {
         display: none;
     }
-    /*table th,table td{border: 1px solid #e1e1e1; line-height: 30px; padding: 0 5px;word-wrap:break-word ;}*/
-    /*table span{color: #f00;}*/
-    /*table .trbg1{background-color: #f2d4d4;}*/
-    /*table .trbg2{background-color: #cff1aa;}*/
-    /*table .trbg3{background-color: #e2d7f0;}*/
-    /*table .trbg4{background-color: #f4f45a;}*/
-    /*table .trbg5{background-color: #3ed783;}*/
-    /*table .trbg6{background-color: #00b0f0;}*/
-    /*table .trbg7{background-color: #c4bd97;}*/
-    /*table .trbg8{background-color: #f00;}*/
-    /*table .trbg9{background-color: #ffc000;}*/
-    /*table .trbg10{background-color: #bfbfbf;}*/
-    /*table .trbg11{background-color: #92cddc;}*/
-    /*table .trbg12{background-color: #ff99ff;}*/
+    table th,table td{border: 1px solid #e1e1e1; line-height: 30px; padding: 0 5px;word-wrap:break-word ;}
+    table span{color: #f00;}
+    table .trbg1{background-color: #f2d4d4;}
+    table .trbg2{background-color: #cff1aa;}
+    table .trbg3{background-color: #e2d7f0;}
+    table .trbg4{background-color: #f4f45a;}
+    table .trbg5{background-color: #3ed783;}
+    table .trbg6{background-color: #00b0f0;}
+    table .trbg7{background-color: #c4bd97;}
+    table .trbg8{background-color: #f00;}
+    table .trbg9{background-color: #ffc000;}
+    table .trbg10{background-color: #bfbfbf;}
+    table .trbg11{background-color: #92cddc;}
+    table .trbg12{background-color: #ff99ff;}
 
     .content-wrapper{background: #fff;}
     .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
@@ -219,7 +242,9 @@
     .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #3a90cb;}
     .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #3a90cb; margin: 5px 0; }
     .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
-
+    .table_list_box{
+        table-layout:fixed !important;
+    }
 </style>
 <body style="height: 100%">
 <div class="panel panel-primary" style="margin: 10px 5px 0 5px">
