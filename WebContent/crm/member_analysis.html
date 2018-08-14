@@ -567,6 +567,10 @@
         function showAddMember(){
             $(".add_citymember").click(function(){
                 if($("#setadd").val()=="0"){
+                    if($("#setTry").val()=="1"){
+                        $("#setTry").val("0");
+                        $("#try_Member").hide();
+                    }
                     $("#setadd").val("1");
                     $("#cityMember").css("display", "block");
                     $("#cityMember").css("left", event.clientX - 160);
@@ -578,10 +582,16 @@
                 }
 
             });
-/*            $(".add_citymember").mouseover(function(){
+            $(".add_citymember").mouseover(function(){
+                if($("#setTry").val()=="1"){
+                    $("#setTry").val("0");
+                    $("#try_Member").hide();
+                }
                 $("#setadd").val("1");
-                $("#cityMember").show();
-            });*/
+                $("#cityMember").css("display", "block");
+                $("#cityMember").css("left", event.clientX - 160);
+                $("#cityMember").css("top", event.clientY + 10);
+            });
 /*            $(".add_citymember").mouseleave(function(){
                 $("#setadd").val("0");
                 $("#cityMember").hide();
@@ -633,6 +643,10 @@
         function showTestMem(){
             $(".add_TestMember").click(function(){
                 if($("#setTry").val()=="0"){
+                    if($("#setadd").val()=="1"){
+                        $("#setadd").val("0");
+                        $("#cityMember").hide();
+                    }
                     $("#setTry").val("1");
                     $("#try_Member").css("display", "block");
                     $("#try_Member").css("left", event.clientX - 300);
@@ -644,10 +658,17 @@
                 }
 
            });
-            /*             $(".add_TestMember").mouseover(function(){
+                         $(".add_TestMember").mouseover(function(){
+                             if($("#setadd").val()=="1"){
+                                 $("#setadd").val("0");
+                                 $("#cityMember").hide();
+                             }
+
                             $("#setTry").val("1");
-                            $("#try_Member").show();
-                        });*/
+                             $("#try_Member").css("display", "block");
+                             $("#try_Member").css("left", event.clientX - 300);
+                             $("#try_Member").css("top", event.clientY + 10);
+                        });
             /*            $(".add_TestMember").mouseleave(function(){
                             $("#setTry").val("0");
                             $("#try_Member").hide();
@@ -4251,6 +4272,20 @@
             chartTry.resize(260);
             chartTry.setOption(optionTry);
         };
+        function hideDiv(){
+            var o1 = document.getElementById("cityMember");
+            var o2 = document.getElementById("try_Member");
+            if($("#setadd").val()=="1"){
+                o1.style.display = "none";
+            }
+            if($("#setTry").val()=="1"){
+                o2.style.display = "none";
+            }
+            $("#setadd").val("0");
+            $("#setTry").val("0");
+        }
+
+        // document.onclick=function(){hideDiv();}
 
     </script>
 </body>
