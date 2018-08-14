@@ -2549,6 +2549,9 @@ optionempbycity = {
     xAxis: [{
         type: 'category',
         boundaryGap: false,
+        axisLabel: {
+            interval: 0
+        },
         data: []
     }],
     yAxis:
@@ -5599,7 +5602,7 @@ function oneyearorsixweek(){
                     var postcountArray = new Array();
                 	for (var i = 0; i < leaveorpost.length; i ++){
                         var leaveorpostinfo =  leaveorpost[i];
-                        var cityname = leaveorpostinfo.cityname;
+                        var cityname = leaveorpostinfo.cityname.length>4? leaveorpostinfo.cityname.substring(0,5)+'\n'+ leaveorpostinfo.cityname.substring(5, leaveorpostinfo.cityname.length): leaveorpostinfo.cityname;
                         optionempbycityXArray.push(cityname);
                         var leavecount = leaveorpostinfo.leavecount;
                         leavecountArray.push(leavecount);

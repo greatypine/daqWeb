@@ -96,6 +96,7 @@
   .pf-frequency,.pf-operate,.pf-resource,.pf-field{display: none;}
   
     .box-body .alert-warning{font-size: 16px; border-bottom: 1px dashed #f39c12; padding: 0 0 3px 3px; margin: 0 10px 10px 10px; display: inline-block; line-height: 24px;}
+  .box-body .bg-teal-active{font-size: 16px; border-bottom: 1px dashed #30bbbb; padding: 0 0 3px 3px; margin: 0 10px 10px 10px; display: inline-block; line-height: 24px;}
 
   
   
@@ -285,7 +286,10 @@
         <div class="box box-default" style="margin-top: 50px;">
           <div class="box-header h1 text-light-blue"><strong>公司人员体系</strong></div>
           <div class="box-body">
-          <div><span class="alert-warning">线下人员总体（店长、国安侠、综合管理、专员、副店长等）</span></div>
+            <div><span class="alert-warning">线下人员动态及分布（含店长）</span></div>
+            <div class="col-sm-6" id="mainempbycity" style="height: 300px;"></div>
+            <div class="col-sm-6" id="mainempbystore" style="height: 300px;"></div>
+            <div><span class="alert-warning">线下人员总体（店长、国安侠、综合管理、专员、副店长等）</span></div>
             <div class="col-sm-6" id="main7" style="height: 300px;"></div>
             <div class="col-sm-6" id="mainemp" style="height: 300px;"></div>
             <div><span class="alert-warning">店长&nbsp;</span></div>
@@ -300,12 +304,9 @@
             <div><span class="alert-warning">专员（综合管理，副店长）</span></div>
             <div class="col-sm-6" id="mainzongguan" style="height: 300px;"></div>
             <div class="col-sm-6" id="mainempzongguan" style="height: 300px;"></div>
-            <div><span class="alert-warning">线上人员</span></div>
+            <div><span class="bg-teal-active">线上人员</span></div>
             <div class="col-sm-6" id="mainzongbu" style="height: 300px;"></div>
             <div class="col-sm-6" id="mainempzongbu" style="height: 300px;"></div>
-            <div><span class="alert-warning">线下人员动态及分布（含店长）</span></div>
-            <div class="col-sm-6" id="mainempbycity" style="height: 300px;"></div>
-            <div class="col-sm-6" id="mainempbystore" style="height: 300px;"></div>
             <div class="col-sm-12" style="display:none;">
               <table class="table table-bordered" id="weekcount">
               <tr>
