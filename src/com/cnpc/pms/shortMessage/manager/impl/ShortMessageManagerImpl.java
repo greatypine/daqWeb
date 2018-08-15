@@ -475,7 +475,7 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 			}
 		}
 		try {
-			map_result.put("data",shortMessageDao.getStoreKeeperEmployee(sb_where.toString(), obj_page));
+			map_result.put("data",shortMessageDao.getOutSider(sb_where.toString(), obj_page));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

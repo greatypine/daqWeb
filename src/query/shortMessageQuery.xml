@@ -72,4 +72,12 @@
   		<column key="messageType" header="短信类型" type="java.lang.String" align="center" allowSearch="true" operator="like" allowSort="false" display="true" width="15%"/>
   		<column key="create_time" header="回复时间" type="java.util.Date" format="yyyy-MM-dd HH:mm:ss" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
     </query>
+
+    <query id="querySMSUserGroupUserOutSider" header="外部人员"  method="shortMessageManager.getOutSider">
+        <column key="id" header="选择" type="java.lang.Long" operator="in" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="name" header="名称" type="java.lang.String" allowSearch="true" operator="like" align="center" allowSort="false" display="true"  width="5%"/>
+        <column key="phone" header="手机" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/>
+        <!--         <column key="storename" header="门店" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="15%"/> -->
+        <column key="inviteCode" header="" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" width="15%"/>
+    </query>
 </pmsquery>

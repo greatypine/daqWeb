@@ -48,12 +48,12 @@
 
         var COLUMNS = {
             "id": function(aData, iColumn, sColumnName, map){
-                var employeeNo=map["employee_no"];
+
                 var name=map["name"];
                 var checkStatus = $("#checkStatus").val();
-                var phone =map["mobilephone"];
+                var phone =map["phone"];
                 var inviteCode = map["inviteCode"];
-                var en = employeeNo+"_"+name+"_"+phone+"_"+inviteCode;
+                var en = name+"_"+phone+"_"+inviteCode;
                 if(checkStatus=="0"){
                     return '<input type="checkbox" name="chkbox" onclick="userCheck(this)" id=""  value="'+en+'" />';
                 }else if(checkStatus=="1"){
@@ -79,17 +79,16 @@
         function userCheck(ug){
             if(ug.checked){
                 var user = {
-                    name:ug.value.split("_")[1],
-                    employee_no:ug.value.split("_")[0],
-                    mobilephone:ug.value.split("_")[2],
-                    inviteCode:ug.value.split("_")[3]
+                    name:ug.value.split("_")[0],
+                    mobilephone:ug.value.split("_")[1],
+                    inviteCode:ug.value.split("_")[2]
                 }
                 selectUserArray.push(user);
 
             }else{
 
                 for(n in selectUserArray){
-                    if(selectUserArray[n].employee_no==ug.value.split("_")[0]){
+                    if(selectUserArray[n].inviteCode==ug.value.split("_")[2]){
                         selectUserArray.splice(n,1);
                     }
                 }
@@ -112,7 +111,8 @@
         }
         //记载页面时请求数据列表默认的方法
         function searchList() {
-            $$.executeSearch('querySMSUserGroupUserStorekeeper', 'conditionsDiv');
+            $$.executeSearch('querySMSUserGroupUserOutSider', 'conditionsDiv');
+
         }
 
         function doSubmit(){
@@ -175,7 +175,7 @@
             <input type="hidden" id="checkStatus" value="0"/>
         </div>
     </div>
-    <div id="gridContainer" searchDiv="conditionsDiv" queryid="querySMSUserGroupUserStorekeeper" class="panel panel-primary"
+    <div id="gridContainer" searchDiv="conditionsDiv" queryid="querySMSUserGroupUserOutSider" class="panel panel-primary"
          titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="false"
          showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="false"
          checkmode="multiple" autoload="false" showno="false">

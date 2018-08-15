@@ -195,8 +195,8 @@ public class ShortMessageDaoImpl extends BaseDAOHibernate implements ShortMessag
 	}
 
     @Override
-    public List<Map<String, Object>> getOutSider(String name, PageInfo pageInfo) {
-        String sql= "";
+    public List<Map<String, Object>> getOutSider(String whereStr, PageInfo pageInfo) {
+        String sql= "select * from t_external_humanresources where status=0 "+whereStr;
         //SQL查询对象
         SQLQuery query = getHibernateTemplate().getSessionFactory()
                 .getCurrentSession().createSQLQuery(sql);
@@ -222,7 +222,7 @@ public class ShortMessageDaoImpl extends BaseDAOHibernate implements ShortMessag
 
     @Override
     public List<Map<String, Object>> getAllOutSider() {
-        String sql="";
+        String sql="select * from t_external_humanresources where phone is not null and inviteCode is not null";
         //SQL查询对象
         SQLQuery query = getHibernateTemplate().getSessionFactory()
                 .getCurrentSession().createSQLQuery(sql);
