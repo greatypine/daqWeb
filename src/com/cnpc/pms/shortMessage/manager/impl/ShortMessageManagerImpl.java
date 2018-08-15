@@ -430,10 +430,10 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 				String content_out = "XXX，您好。您的国安社区安心合作社社员卡开卡邀请码生成完毕，请牢记您的推荐码：XXXXXX。邀请被推荐人开通社员卡时，务必要求被邀请人在线准确填写您的邀请码，以此认定邀请人！感谢您的支持。";
 				if(rs){
                     sm.setContent(content_out);
-                    sm.setSignature("123743");//国安管家
+                    sm.setSignature("123742");//国安管家
                 }else{
                     sm.setContent(content_in);
-                    sm.setSignature("123742");//国安数据
+                    sm.setSignature("123743");//国安数据
                 }
 				sm.setCheckStatus(0);
 				sm.setCode(timestamp);
