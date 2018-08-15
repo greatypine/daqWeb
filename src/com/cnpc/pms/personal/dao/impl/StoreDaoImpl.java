@@ -1390,7 +1390,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public List<Map<String, Object>> findStarStoreInfo() {
 		String sql="SELECT coun.`name` as county_name,store.`name` as store_name,store.city_name,store.rental ,store.estate,store.storeno,store.agency_fee  ,town.`name` as town_name  " +
-				",store.rent_area  ,store.usable_area , " +
+				",store.rent_area  ,store.usable_area ,ROUND(store.rental*store.rent_area/store.usable_area,2) as usable_rental, " +
 				"CONCAT(ROUND(store.rent_area/store.usable_area*100,2),'%') as use_PRC, " +
 				"store.payment_method, " +
 				"case WHEN store.rent_free is NULL or store.rent_free='' then 0 WHEN to_days(RIGHT(store.rent_free,10))-to_days(LEFT(store.rent_free,10))=0 then 0 ELSE  " +
@@ -1425,7 +1425,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public List<Map<String, Object>> findSchoolStoreInfo() {
 		String sql="SELECT coun.`name` as county_name,store.`name` as store_name,store.city_name,store.rental ,store.estate,store.storeno,store.agency_fee  ,town.`name` as town_name  " +
-				",store.rent_area  ,store.usable_area , " +
+				",store.rent_area  ,store.usable_area ,ROUND(store.rental*store.rent_area/store.usable_area,2) as usable_rental, " +
 				"CONCAT(ROUND(store.rent_area/store.usable_area*100,2),'%') as use_PRC, " +
 				"store.payment_method, " +
 				"case WHEN store.rent_free is NULL or store.rent_free='' then 0 WHEN to_days(RIGHT(store.rent_free,10))-to_days(LEFT(store.rent_free,10))=0 then 0 ELSE  " +

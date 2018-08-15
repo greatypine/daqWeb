@@ -4232,16 +4232,17 @@ var curr_user;
   	  }
   	  window.open(url,"index_city_net"); 
   }
-  //门店租赁统计
-function goToStoreRent(){
-    var role = curr_rr_user.usergroup.code;
-    var url = "";
-    var target=et=pageStatusInfo.targets;
-    if(target==0){
-        url = "store_rent_nt_info.html";
+    //门店租赁统计
+    function goToStoreRent(){
+        var role = curr_rr_user.usergroup.code;
+        var url = "";
+        var target=et=pageStatusInfo.targets;
+        if(target==0){
+            url = "store_rent_nt_info.html";
+        }
+        window.open(url,"store_rent_info");
     }
-    window.open(url(url,"store_rent_info");
-}
+
   //交易额 （按门店） 
   function goToStoretrade(){
 	  var role = curr_user.usergroup.code;
