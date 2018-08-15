@@ -2828,18 +2828,18 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		for(int i=0;i<list.size();i++){
 			Map<String, Object> map=list.get(i);
 			//求门店数量占比
-			double f1 = new BigDecimal((float)(Integer.parseInt(map.get("city_total")+"")/rpovince_store_total)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+			double f1 = new BigDecimal((float)(Float.parseFloat(map.get("city_total")+"")/rpovince_store_total*100)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			map.put("store_PCT",f1);
 			//计租面积占比
 			if(Float.parseFloat(map.get("jizu_area")+"")>0){
-				double f2 = new BigDecimal((float)(Float.parseFloat(map.get("jizu_area")+"")/jizu_area_total)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				double f2 = new BigDecimal((float)(Float.parseFloat(map.get("jizu_area")+"")/jizu_area_total*100)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 				map.put("jizu_PCT",f2);
 			}else{
 				map.put("jizu_PCT",0);
 			}
 			//使用面积占比
 			if(Float.parseFloat(map.get("usable_area")+"")>0){
-				double f2 = new BigDecimal((float)(Float.parseFloat(map.get("usable_area")+"")/users_area_total)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+				double f2 = new BigDecimal((float)(Float.parseFloat(map.get("usable_area")+"")/users_area_total*100)).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 				map.put("usable_PCT",f2);
 			}else{
 				map.put("usable_PCT",0);
@@ -2874,7 +2874,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		//中介成交店铺总数
 		map.put("china_agent_store",china_agent_store);
 		//中介费总额
-		map.put("china_agent_price",china_agent_price);
+		map.put("china_agent_price",new BigDecimal(china_agent_price).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		//单店平均中介费
 		map.put("china_avg_agent_price",china_avg_agent_price);
 		mapData.put("totalData",map);

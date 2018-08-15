@@ -4232,6 +4232,7 @@ var curr_user;
   	  }
   	  window.open(url,"index_city_net"); 
   }
+
   //交易额 （按门店） 
   function goToStoretrade(){
 	  var role = curr_user.usergroup.code;

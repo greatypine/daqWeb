@@ -573,6 +573,16 @@ public class AuthFilter extends OncePerRequestFilter {
 				return;
 			}
 			/**
+			 * 2018-03-22 门店租赁
+			 *
+			 * @author sunning
+			 */
+			if (url.contains("store_rent_info.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+
+			/**
 			 * 2018-05-23 安心合作社
 			 * 
 			 * @author wuxinxin
