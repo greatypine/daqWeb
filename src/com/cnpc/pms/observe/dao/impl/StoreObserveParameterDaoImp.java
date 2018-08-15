@@ -56,4 +56,12 @@ public class StoreObserveParameterDaoImp extends BaseDAOHibernate implements Sto
         return lst_data;
     }
 
+    @Override
+    public Integer deleteObserveParameter(Long store_id, String observe_month) {
+        String sql = "delete from t_observe_parameter where store_id = "+store_id+" and observe_month = '"+observe_month+"'";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        int i = query.executeUpdate();
+        return i;
+    }
+
 }
