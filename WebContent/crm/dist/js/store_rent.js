@@ -728,10 +728,10 @@ function initStoreData() {
             myChart11.setOption(option11);
             //支付方式(表)
             var mapPaymentData=allData.mapPaymentData;
-            store_payment_method_str="<tr><td>年付:</td><td>"+mapPaymentData.annualPayment+"</td></tr>" +
-                "<tr><td>半年付:</td><td>"+mapPaymentData.semiAnnualPayment+"</td></tr>" +
+            store_payment_method_str="<tr><td>月付:</td><td>"+mapPaymentData.mouthPayment+"</td></tr>" +
                 "<tr><td>季付:</td><td>"+mapPaymentData.quarterlyPayment+"</td></tr>" +
-                "<tr><td>月付:</td><td>"+mapPaymentData.mouthPayment+"</td></tr>";
+                "<tr><td>半年付:</td><td>"+mapPaymentData.semiAnnualPayment+"</td></tr>" +
+                "<tr><td>年付:</td><td>"+mapPaymentData.annualPayment+"</td></tr>";
             store_payment_method_str+="<tr class='text-red'><th>总计:</th><th>"+allData.totalData.china_store_total+"</th></tr>";
             $("#store_payment_method").append(store_payment_method_str);
             //支付方式(图)
