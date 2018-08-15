@@ -4238,7 +4238,7 @@ var curr_user;
         var url = "";
         var target=et=pageStatusInfo.targets;
         if(target==0){
-            url = "store_rent_nt_info.html";
+            url = "store_rent_info.html";
         }
         window.open(url,"store_rent_info");
     }
