@@ -35,6 +35,7 @@ import com.cnpc.pms.personal.entity.DistCityCode;
 import com.cnpc.pms.personal.entity.ExternalHumanresources;
 import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.ExternalHumanresourcesManager;
+import com.cnpc.pms.shortMessage.manager.ShortMessageManager;
 
 @SuppressWarnings("all")
 public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager implements ExternalHumanresourcesManager {
@@ -167,6 +168,10 @@ public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager impl
                 	rcvmsg="电话存在空值！ 导入失败！ ";
 	             	return rcvmsg;
                 }
+                if(phone.length()!=11) {
+                	rcvmsg="电话号码格式错误！ 导入失败！ ";
+	             	return rcvmsg;
+                }
                 if(name=="") {
                 	rcvmsg="名字存在空值！ 导入失败！ ";
 	             	return rcvmsg;
@@ -202,15 +207,34 @@ public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager impl
 				rcvmsg = "邀请码为空异常！";
 				return rcvmsg;
 			}
+			
+			List<ExternalHumanresources> sendMsgs = new ArrayList<ExternalHumanresources>();
 			// 保存操作
 			for (int i = 0; i < saveExternalHuman.size(); i++) {
 				ExternalHumanresources saveExt = saveExternalHuman.get(i);
-				newInviteCodeNum=newInviteCodeNum += i;
+				newInviteCodeNum=newInviteCodeNum + i;
 				saveExt.setInviteCode(newInviteCodeNum+"");
+				sendMsgs.add(saveExt);
 				preSaveObject(saveExt);
 				this.saveObject(saveExt);
 			}
             
+			
+			//循环发送邀请码
+			if(sendMsgs!=null&&sendMsgs.size()>0) {
+				for(ExternalHumanresources eh:sendMsgs) {
+					//循环发送短信  
+					ShortMessageManager shortMessageManager = (ShortMessageManager) SpringHelper.getBean("shortMessageManager");
+    	    		Map<String, Object> param = new HashMap<String, Object>();
+    	    		param.put("inviteCode", eh.getInviteCode());
+    	    		param.put("mobilePhone", eh.getPhone());
+    	    		param.put("userName", eh.getName());
+    	    		param.put("type", "SYYQM");
+    	    		param.put("signature", "国安管家");
+    	    		shortMessageManager.commonSendShortMessage(param);
+				}
+			}
+			
         }
         return rcvmsg;
     }
