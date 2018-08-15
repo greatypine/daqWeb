@@ -18,4 +18,6 @@ public interface StoreObserveParameterScoreManager  extends IManager {
     public Map<String,Object> queryExitObserveParameter(Long storeid, String observemonth);
 
     public Map<String, Object> updateStoreObserveParameterScore(StoreObserveParameterScore observeParameter);
+
+    public Map<String,Object> deleteStoreObserve(Long storeid, String observemonth);
 }

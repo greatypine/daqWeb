@@ -19,4 +19,6 @@ public interface StoreObserveParameterScoreDao {
     public List<Map<String, Object>> queryObserveParameterSummaryByCity(String cityname,String store_id,String observe_month,String employeeId);
 
     public List<String> queryObserveMonthByCity(String cityname,String store_id,String observe_month,String employeeId);
+
+    public Integer deleteObserveParameterScore(Long store_id,String observe_month);
 }
