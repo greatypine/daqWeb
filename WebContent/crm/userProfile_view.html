@@ -207,8 +207,8 @@
 							            <input name="endDateFirst" id="endDateFirst" class="endDate" readonly  value="2017/12/20" type="text" disabled>
 							        </div>
 							        <div class="opeDiv">
+										<span class="Cancel" id="CancelFirst">取消</span>
 							            <span class="Confirm" id="ConfirmFirst" onclick="datePickersFirst()">确定</span>
-							            <span class="Cancel" id="CancelFirst">取消</span>
 							        </div>
 							    </div>
 							</div>
@@ -237,10 +237,16 @@
 	                    <div class="sl-v-list">
 	                      <div class="form-group has-success col-lg-3">
 			                <div style="display:block">
-		                      <input type="text" class="form-control"  placeholder="历史消费最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
-		                      <input type="text" class="form-control"  placeholder="历史消费最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+		                      <input type="text" class="form-control"  placeholder="历史总消费最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
+		                      <input type="text" class="form-control"  placeholder="历史总消费最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
 			                </div>
 		                  </div>
+							<div class="form-group has-success col-lg-3">
+								<div style="display:block">
+									<input type="text" class="form-control"  placeholder="最大交易金额最小值"  id="max_money_down_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
+									<input type="text" class="form-control"  placeholder="最大交易金额最大值"  id="max_money_up_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+								</div>
+							</div>
 	                      <div class="form-group has-success col-lg-3">
 			                <div style="display:block">
 		                      <input type="text" class="form-control"  onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="历史消费最小次数"  id="min_count_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
@@ -283,8 +289,8 @@
 							            <input name="endDate" id="endOpenCardDate" class="endDate" readonly  value="2018/05/21" type="text" disabled>
 							        </div>
 							        <div class="opeDiv">
+										<span class="Cancel" id="Cancel">取消</span>
 							            <span class="Confirm" id="Confirm" onclick="datePickersOpenCard()">确定</span>
-							            <span class="Cancel" id="Cancel">取消</span>
 							        </div>
 							    </div>
 							</div>
@@ -1101,6 +1107,8 @@ $(function () {
 	    var customer_name = $("#customer_name_manual").val();
 	    var trading_price_min = $("#min_money_auto").val();
 	    var trading_price_max= $("#max_money_auto").val();
+        var trading_price_max_up= $("#max_money_up_auto").val();
+        var trading_price_max_down= $("#max_money_down_auto").val();
 	    var order_count_min = $("#min_count_auto").val();
 	    var order_count_max = $("#max_count_auto").val();
 	    var slient_time_min = $("#min_slient_auto").val();
@@ -1178,6 +1186,8 @@ $(function () {
 	    		trading_price_max:trading_price_max,
 	    		order_count_min:order_count_min,
 	    		order_count_max:order_count_max,
+            	trading_price_max_up:trading_price_max_up,
+            	trading_price_max_down:trading_price_max_down,
 	    		slient_time_min:slient_time_min_select,
 	    		slient_time_max:slient_time_max,
 	    		user_label:userLabels,
@@ -1364,6 +1374,8 @@ $(function () {
 	    var customer_name = $("#customer_name_manual").val();
 	    var trading_price_min = $("#min_money_auto").val();
 	    var trading_price_max= $("#max_money_auto").val();
+        var trading_price_max_up= $("#max_money_up_auto").val();
+        var trading_price_max_down= $("#max_money_down_auto").val();
 	    var order_count_min = $("#min_count_auto").val();
 	    var order_count_max = $("#max_count_auto").val();
 	    var slient_time_min = $("#min_slient_auto").val();
@@ -1443,6 +1455,8 @@ $(function () {
 	    		order_count_max:order_count_max,
 	    		slient_time_min:slient_time_min_select,
 	    		slient_time_max:slient_time_max,
+                trading_price_max_up:trading_price_max_up,
+                trading_price_max_down:trading_price_max_down,
 	    		user_label:userLabels,
 	    		user_model:user_model,
 	    		hidden_flag:hiddenvalue,

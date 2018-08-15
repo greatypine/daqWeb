@@ -80,6 +80,29 @@
             color: #fff;
         }
 
+        /*搜索框*/
+        .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
+        /*更多显示*/
+        .show-more-line{width: 100%; height: 40px; border-top: 1px dashed #e6e6e6; position: relative; background-color: #f5f5f5;}
+        .how-more{position: absolute; top: -1px; left: 50%; background-color: #fff; border-left: 1px solid #e6e6e6; border-right: 1px solid #e6e6e6; border-bottom: 1px solid #e6e6e6;  padding: 5px 15px; margin: 0 0 0 -40px; color: #888; cursor: pointer; font-size: 12px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;}
+        .how-more i{padding-left: 5px; font-size: 14px;}
+        .fold-con,.sl-btns{display: none;}
+        .selectorLine{border-top: 1px dashed #e6e6e6; padding: 10px 0 0 0; position: relative;}
+        .selectorLine a{float: left; height: 18px; line-height: 18px; padding: 0 3px; margin: 2px 12px 12px 0; white-space: nowrap;}
+        .selectorLine a:nth-child(1){margin-left: 15px;}
+        .selectorLine a:hover{background-color: #ff7701; color: #fff;}
+        .search-title{width: 100px; color: #777; white-space: nowrap; overflow: hidden; position: absolute; top: 10px; left: 0; text-align: right;}
+        .search-con{margin-left: 100px; padding-right: 80px; overflow: hidden;}
+        .search-time-con{margin-left: 0px; padding-right: 80px; overflow: hidden;}
+        .sl-ext {position: absolute; top: 10px; right: 10px; width: 60px; height: auto; line-height: 22px; overflow: hidden; zoom: 1;}
+        .search-more{width: 60px; height: 25px; line-height: 25px; padding: 0 7px 0 0; background: #fff; color: #333; border: 1px solid #ddd; font-size: 12px; position: relative; right: 0; top: 0;}
+        .search-more i{position: absolute; top: 3px; right: 0; display: block; width: 20px; height: 20px; background-position: 4px 7px; font-size: 18px;}
+        .search-more:hover{color: #e4393c;}
+        .search-more-open i{ -webkit-transform: rotateX(180deg); -o-transform: rotateX(180deg); -moz-transform: rotateX(180deg);}
+        .sx_type{margin-top: 5px;}
+        .sx_type span{padding-right: 5px;}
+        .sx_type span .icheckbox_minimal-blue{margin-right: 2px;}
+
         .auto{max-height:200px; overflow-y:scroll;}
         .opeDiv span{float: right;width: 46px;height: 24px;line-height: 24px;text-align: center;font-size: 12px;border: 1px solid #9fa3a8;border-radius: 3px;color: #616d73;margin: 0 13px 12px 0;box-shadow: 0 1px 5px rgba(0,0,0,0.3);cursor: pointer;}
         .Confirm{ background: linear-gradient(#83c56a, #63b254); border: 1px solid #46975d!important;; color: #fff!important;}
@@ -127,23 +150,30 @@
                         <div class="pull-left "><strong>社员档案查询</strong></div>
                     </div>
                     <div class="box-body">
-                        <form id="can_appeal_form" class="clearfix">
-                            <div class="clearfix">
-                                <div class="form-group col-lg-3">
-                                    <select class="form-control select2" id="citySelect">
-                                    </select>
-                                </div>
-                                <div class="form-group col-lg-3"><input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
-                                    <input type="text" class="form-control"  placeholder="门店" id="store_name_manual" />
-                                    <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+                        <div class="clearfix search-criteria">
+                            <div class="selectorLine clearfix no-border">
+                            <div class="search-title">查询条件：</div>
+                            <div class="search-con" style="overflow:visible;">
+                            <div class="sl-v-list">
+                                <div class="clearfix">
+                                    <div class="form-group col-lg-3">
+                                        <select class="form-control select2" id="citySelect">
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-3"><input id="store_id_manual" name="store_id_manual" type="hidden" bidTableFlag="true" value=""/>
+                                        <input type="text" class="form-control"  placeholder="门店" id="store_name_manual" />
+                                        <div class="auto hidden" id="auto" style="width: 94%;z-index: 99999;">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            </div>
 
+                            <div class="search-time-con" style="overflow:visible;">
+                            <div class="sl-v-list">
                             <div class="clearfix">
-                                <div class="form-group col-lg-3">
                                     <div class="search-con">
-                                        <div class="time" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
+                                        <div class="time" style="width: 325px;z-index: 99999;margin:3px 15px;">
                                             <div class="time_endbg" id="time_endbg">
                                                 <p>开卡日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
                                                 <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
@@ -166,32 +196,47 @@
                                                     <input name="endDate" id="endOpenCardDate" class="endDate" readonly  value="2018/05/21" type="text" disabled>
                                                 </div>
                                                 <div class="opeDiv">
-                                                    <span class="Confirm" id="Confirm" onclick="datePickersOpenCard()">确定</span>
                                                     <span class="Cancel" id="Cancel">取消</span>
+                                                    <span class="Confirm" id="Confirm" onclick="datePickersOpenCard()">确定</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group col-lg-3"><input type="text" class="form-control" id="member_invite_code"  placeholder="邀请码" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')" style="margin-top:10px;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+                            </div>
+                            </div>
+                            </div>
+
+                            <div class="fold-con">
+                                <div class="selectorLine clearfix">
+                                    <div class="pull-left search-title">社员信息：</div>
+                                    <div class="search-con">
+                                        <div class="sl-v-list">
+                                            <div class="form-group has-success col-lg-3">
+                                                <input type="text" class="form-control" id="member_invite_code"  placeholder="邀请码" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                        <div class="show-more-line">
+                            <div class="how-more"><span>更多搜索选项</span><i class="fa fa-angle-down"></i></div>
+                        </div>
+                        </div>
                         <div class="clearfix">
-                            <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
+                            <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                                 <button type="button" onclick="resetSerachParam(1)" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                             </div>
 
-                            <div class="col-lg-2 pull-right" style="padding-top: 0px;" id="exportnormal">
+                            <div class="col-lg-2 pull-right" style="padding-top: 25px;" id="exportnormal">
                                 <button type="button" style="display:block" id="export_auto_publicOrder_button" onclick="export_auto_human('normal')" class="btn btn-block btn-warning">导出</button>
                             </div>
-                            <div class="col-lg-2 pull-right" style="padding-top: 0px;display:none" id="exportall">
+                            <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
                                 <button type="button" id="export_manual_massOrder_button" onclick="export_auto_human('all')" class="btn btn-block btn-warning">完整数据导出</button>
                             </div>
-                            <div class="form-group col-lg-2 pull-right" style="padding-top: 0px;">
+                            <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                                 <button type="button" onclick="search_auto_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
                             </div>
-
                         </div>
 
                     </div>
@@ -202,7 +247,7 @@
                                 <tbody id="manual_tbody">
                                 <tr id="auto_title">
                                     <th width="10%">社员手机号</th>
-                                    <th width="10%">社员注册时间</th>
+                                    <th width="10%">注册国安社区时间</th>
                                     <th width="10%">社员开卡时间</th>
                                     <th width="10%">邀请码</th>
                                     <th width="10%">城市</th>
@@ -369,6 +414,20 @@
                 if(document.getElementById("store_name_manual").value==key){
                     document.getElementById("store_id_manual").value=storeJson[key];
                 }
+            }
+        });
+
+        //更多显示
+        $(".how-more").click(function(){
+            var sl_open = $(".fold-con").css("display");
+            if(sl_open == 'none'){
+                $(this).parent().prev().children().next(".fold-con").show();
+                $(this).children("span").html("收起更多选项");
+                $(this).children("span").addClass("search-more-open");
+            } else if(sl_open == 'block'){
+                $(this).parent().prev().children().next(".fold-con").hide();
+                $(this).children("span").html("更多搜索选项");
+                $(this).children("span").removeClass("search-more-open");
             }
         });
 
