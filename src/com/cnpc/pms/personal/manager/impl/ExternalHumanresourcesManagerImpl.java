@@ -212,11 +212,12 @@ public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager impl
 			// 保存操作
 			for (int i = 0; i < saveExternalHuman.size(); i++) {
 				ExternalHumanresources saveExt = saveExternalHuman.get(i);
-				newInviteCodeNum=newInviteCodeNum + i;
 				saveExt.setInviteCode(newInviteCodeNum+"");
 				sendMsgs.add(saveExt);
 				preSaveObject(saveExt);
 				this.saveObject(saveExt);
+				
+				newInviteCodeNum=newInviteCodeNum + 1;
 			}
             
 			
