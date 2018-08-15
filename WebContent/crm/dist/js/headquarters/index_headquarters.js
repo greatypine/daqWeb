@@ -4234,7 +4234,7 @@ var curr_user;
   }
     //门店租赁统计
     function goToStoreRent(){
-        var role = curr_rr_user.usergroup.code;
+        var role = curr_user.usergroup.code;
         var url = "";
         var target=et=pageStatusInfo.targets;
         if(target==0){
