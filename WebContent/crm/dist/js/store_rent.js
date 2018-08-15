@@ -827,7 +827,7 @@ function initStoreData() {
             var schoolStoreData_str_ss="";
             var schoolStoreData1=allData.schoolStoreInfo;
             for(var a=0;a<schoolStoreData1.length;a++){
-                schoolStoreData_str_ss+=("<tr><td>"+schoolStoreData1[a].county_name+"</td><td>"+schoolStoreData1[a].town_name+"</td>" +
+                schoolStoreData_str_ss+=("<tr><td>"+schoolStoreData1[a].city_name+"</td><td>"+schoolStoreData1[a].store_name+"</td>" +
                 "<td>"+schoolStoreData1[a].rent_area+"</td><td>"+schoolStoreData1[a].usable_area+"</td>" +
                 "<td>"+schoolStoreData1[a].use_PRC+"</td><td>"+schoolStoreData1[a].rental+"</td>" +
                 "<td>"+schoolStoreData1[a].usable_rental+"</td><td>"+schoolStoreData1[a].agency_fee+"</td>" +
