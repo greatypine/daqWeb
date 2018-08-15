@@ -179,9 +179,9 @@
                   <div class="pull-left search-title">221标签：</div>
                   <div class="search-con">
                     <div class="sl-v-list-busi">
-                      <a onclick="busiSelection('商品类')" style="cursor:pointer;">商品类</a>
-                      <a onclick="busiSelection('服务类')" style="cursor:pointer;">服务类</a>
-                      <a onclick="busiSelection('团购')" style="cursor:pointer;">团购</a>
+                      <a id="tag_商品类" onclick="busiSelection('商品类')" style="cursor:pointer;">商品类</a>
+                      <a id="tag_服务类" onclick="busiSelection('服务类')" style="cursor:pointer;">服务类</a>
+                      <a id="tag_团购" onclick="busiSelection('团购')" style="cursor:pointer;">团购</a>
                       <input type="text" style="display:none" class="form-control" placeholder="221标签"  id="busi_private_manual"/>
                     </div>
                   </div>
@@ -190,8 +190,8 @@
                     <div class="pull-left search-title">社员标签：</div>
                     <div class="search-con">
                         <div class="sl-v-list-member">
-                            <a onclick="memberSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
-                            <a onclick="memberSelection('社员订单')" style="cursor:pointer;">社员订单</a>
+                            <a id="tag_开卡礼订单" onclick="memberSelection('开卡礼订单')" style="cursor:pointer;">开卡礼订单</a>
+                            <a id="tag_社员订单" onclick="memberSelection('社员订单')" style="cursor:pointer;">社员订单</a>
                         </div>
                     </div>
                 </div>
@@ -889,6 +889,42 @@ Date.prototype.format=function(fmt) {
   	if(time!=null && redirectTag!=null){
   		search_manual_abnormalOrder(1);
   	}
+
+  	//失去焦点事件
+    $("#ordersn_manual").blur(function() {
+        var ordersn = $("#ordersn_manual").val();
+        if(ordersn!=""){
+            ordersn = ordersn.replace(/\s+/g,"");
+            if(ordersn.match(/\d/g).length<20){
+                crm_alert(0,"订单号输入不足20位，请认真核对!");
+                return;
+            }else{
+                blurDate();
+            }
+        }
+    });
+
+  	//以tag_为前缀的快速标签均为晚上定时更新，除积分订单外
+  	$("[id^='tag_']").click(function(event) {
+        var id = event.target.id;
+        if($(this).hasClass('bg-orange-active') && id!='tag_积分订单'){
+            blurDate();
+        }
+    });
+
+  //签收日期变更
+  function blurDate(){
+      var sdate = $("#auto_date").val();
+      var begin_end_date=["",""];
+      if(sdate!=""){
+          begin_end_date = sdate.split("-");
+      }
+      var start_date = begin_end_date[0];
+      if(start_date.replace(/\s+/g,"")==cDate){//如果时间是今天则变更时间
+          $("#auto_date").val("2018/01/01"+"-"+begin_end_date[1]);
+      }
+  }
+
   });
 	
   /**
@@ -1164,7 +1200,7 @@ Date.prototype.format=function(fmt) {
 	    }
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
-	    	ordersn = ordersn.replace(/\s+/g,"");  
+	    	ordersn = ordersn.replace(/\s+/g,"");
 	    }
 	    var cityName = $("#citySelect  option:selected").val();
 	    var dept = $("#dept_manual").val();
@@ -1958,13 +1994,13 @@ Date.prototype.format=function(fmt) {
 	  var new_date = new Date(new_year,new_month,1);        //取当年当月中的第一天   
 	  return (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月最后一天日期   
  } 
-  
+
 </script>
 </body>
 
  <div class="audit_process" id="taskDetailDiv" style="display:none">
  </div>
- 
+
  
  <div id="errorOrder_detail_div" style="height:247px;display:none">
   

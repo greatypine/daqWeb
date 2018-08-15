@@ -30,6 +30,8 @@ public class UserProfileDto {
 	private String order_count_max;
 	private String slient_time_min;
 	private String slient_time_max;
+	private String trading_price_max_up;
+	private String trading_price_max_down;
 	private String hidden_flag;
 	private String mt_flag;
 	
@@ -154,6 +156,23 @@ public class UserProfileDto {
 	public void setSlient_time_max(String slient_time_max) {
 		this.slient_time_max = slient_time_max;
 	}
+
+	public String getTrading_price_max_up() {
+		return trading_price_max_up;
+	}
+
+	public void setTrading_price_max_up(String trading_price_max_up) {
+		this.trading_price_max_up = trading_price_max_up;
+	}
+
+	public String getTrading_price_max_down() {
+		return trading_price_max_down;
+	}
+
+	public void setTrading_price_max_down(String trading_price_max_down) {
+		this.trading_price_max_down = trading_price_max_down;
+	}
+
 	public String getHidden_flag() {
 		return hidden_flag;
 	}
