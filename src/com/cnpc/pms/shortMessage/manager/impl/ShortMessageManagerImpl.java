@@ -409,18 +409,36 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 			String type= param.get("type")==null?"":String.valueOf(param.get("type"));//短信类型
 			//String signature = param.get("signature")==null?"":String.valueOf(param.get("signature"));//短信签名
 			String timestamp = String.valueOf(System.currentTimeMillis());
-
+            String inviteCode = param.get("inviteCode")==null?"":String.valueOf(param.get("inviteCode"));
 			list.add(param);
+
+
 
 			ShortMessage sm = new ShortMessage();
 			if("SYYQM".equals(type)){//社员邀请码
-				String content = "亲爱的同事XXX：国安社区全员社员卡开卡推荐激励开启啦！请牢记您的推荐码XXXXXX，务必要求被推荐人在线填写，以此认定推荐人！";
+
+
+                // 外部人员邀请码以8或者9开头
+                String regEx = "(8|9)[0-9]{5}";
+                // 编译正则表达式
+                Pattern pattern = Pattern.compile(regEx);
+                // 忽略大小写的写法
+                Matcher matcher = pattern.matcher(inviteCode);
+                // 字符串是否与正则表达式相匹配
+                boolean rs = matcher.matches();
+				String content_in = "亲爱的同事XXX：国安社区全员社员卡开卡推荐激励开启啦！请牢记您的推荐码XXXXXX，务必要求被推荐人在线填写，以此认定推荐人！";
+				String content_out = "XXX，您好。您的国安社区安心合作社社员卡开卡邀请码生成完毕，请牢记您的推荐码：XXXXXX。邀请被推荐人开通社员卡时，务必要求被邀请人在线准确填写您的邀请码，以此认定邀请人！感谢您的支持。";
+				if(rs){
+                    sm.setContent(content_out);
+                    sm.setSignature("123743");//国安管家
+                }else{
+                    sm.setContent(content_in);
+                    sm.setSignature("123742");//国安数据
+                }
 				sm.setCheckStatus(0);
 				sm.setCode(timestamp);
 				sm.setType(type);
 				sm.setTitle("社员邀请码");
-				sm.setContent(content);
-				sm.setSignature("123743");
 				sm.setUserGroupCode("only one");
 				preObject(sm);
 				saveObject(sm);//保存短信
@@ -508,6 +526,7 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 
 		return resultString;
 	}
+
 
 
 }
