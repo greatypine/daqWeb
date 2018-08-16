@@ -13,11 +13,19 @@ public interface HumanVacationManager extends IManager{
 	
 	public HumanVacation queryHumanVacationInfo(Long id);
 	
+	//HR驳回
 	public HumanReContent update_hr_Audit_Re(HumanVacation humanVacation);
 	public String update_process_status_re(Long vacationid);
-	
+	//HR通过
 	public HumanReContent update_hr_Audit(HumanVacation humanVacation);
 	public String update_process_status(Long vacationid);
+	
+	//运营经理 驳回
+	public HumanReContent update_rm_Audit_Re(HumanVacation humanVacation);
+	public String update_rm_process_status_re(Long vacationid);
+	//运营经理通过 
+	public HumanReContent update_rm_Audit(HumanVacation humanVacation);
+	public String update_rm_process_status(Long vacationid);
 	
 	
 }

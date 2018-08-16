@@ -63,6 +63,14 @@ public class HumanVacation extends DataEntity{
 	private String app_name;
 	
 	
+	//城市名称 
+	@Column(name = "city_name",length=64)
+	private String city_name;//城市名称
+	
+	
+	//天数
+	@Column(name = "days")
+	private Integer days;
 	
 	@Transient
 	private String re_content;
@@ -199,6 +207,22 @@ public class HumanVacation extends DataEntity{
 
 	public void setProcesslog(List<CommentDto> processlog) {
 		this.processlog = processlog;
+	}
+
+	public String getCity_name() {
+		return city_name;
+	}
+
+	public void setCity_name(String city_name) {
+		this.city_name = city_name;
+	}
+
+	public Integer getDays() {
+		return days;
+	}
+
+	public void setDays(Integer days) {
+		this.days = days;
 	}
 
 	

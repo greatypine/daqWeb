@@ -169,7 +169,14 @@
                                 <input id="employee_name" name="employee_name" type="text" style="width:50%" class="form-control" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')"/>
                             </td>
                       		
-                            
+                            <td width="5%">状态:</td>
+                             <td>
+                                <select id="process_status" name="process_status" style="width:80%;" class="form-control">
+                                	<option value="1">审批中</option>
+                                	<option value="2">通过</option>
+                                	<option value="3">驳回</option>
+                                </select>
+                            </td>
                             
                         </tr>
                        
