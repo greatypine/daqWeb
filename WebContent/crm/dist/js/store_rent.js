@@ -30,7 +30,7 @@ var markLineSetting4 = {
 option1 = {
     title: {
         text: '门店数量占比',
-        left: 'center'
+        left: 'left'
     },
     tooltip: {
         trigger: 'item',
@@ -70,7 +70,7 @@ option1 = {
 option2 = {
     title: {
         text: '计租面积占比',
-        left: 'center'
+        left: 'left'
     },
     tooltip: {
         trigger: 'item',
@@ -110,7 +110,7 @@ option2 = {
 option3 = {
     title: {
         text: '使用面积总和',
-        left: 'center'
+        left: 'left'
     },
     tooltip: {
         trigger: 'item',
@@ -150,7 +150,7 @@ option3 = {
 option4 = {
     title: {
         text: '单店平均计租面积',
-        x: 'center'
+        x: 'left'
     },
     color: ['#3398DB'],
     tooltip: {
@@ -199,7 +199,7 @@ option4 = {
 option5 = {
     title: {
         text: '单店平均使用面积',
-        x: 'center'
+        x: 'left'
     },
     color: ['#3398DB'],
     tooltip: {
@@ -248,7 +248,7 @@ option5 = {
 option6 = {
     title: {
         text: '计租面积平均使用率',
-        x: 'center'
+        x: 'left'
     },
     color: ['#3398DB'],
     tooltip: {
@@ -297,7 +297,7 @@ option6 = {
 option7 = {
     title: {
         text: '计租面积平均单价',
-        x: 'center'
+        x: 'left'
     },
     color: ['#3398DB'],
     tooltip: {
@@ -346,7 +346,7 @@ option7 = {
 option8 = {
     title: {
         text: '使用面积平均单价',
-        x: 'center'
+        x: 'left'
     },
     color: ['#3398DB'],
     tooltip: {
@@ -395,7 +395,7 @@ option8 = {
 option9 = {
     title: {
         text: '中介成交店铺数量占比',
-        left: 'center'
+        left: 'left'
     },
     tooltip: {
         trigger: 'item',
@@ -434,7 +434,7 @@ option9 = {
 option10 = {
     title: {
         text: '中介费金额占比',
-        left: 'center'
+        left: 'left'
     },
     tooltip: {
         trigger: 'item',
@@ -473,7 +473,7 @@ option10 = {
 option11 = {
     title: {
         text: '单店平均中介费',
-        x: 'center'
+        x: 'left'
     },
     color: ['#3398DB'],
     tooltip: {
@@ -521,8 +521,8 @@ option11 = {
 };
 option12 = {
     title: {
-        text: '付款方式',
-        left: 'center'
+        text: '付款方式分布(全国)',
+        left: 'left'
     },
     tooltip: {
         trigger: 'item',
