@@ -295,15 +295,7 @@ public interface OrderDao {
      */
     public Map<String, Object> queryOrderOfAreaForApp(String employee_no,PageInfo pageInfo,String order_sn);
 	
-	/**
-	 * 
-	 * TODO 查询门店E店gmv 
-	 * 2017年12月20日
-	 * @author gaobaolei
-	 * @param platformId
-	 * @return
-	 */
-	public Map<String, Object> selectEStoreRankingOfStore(DynamicDto dynamicDto,PageInfo pageInfo);
+
 	
     /**
 	 * 

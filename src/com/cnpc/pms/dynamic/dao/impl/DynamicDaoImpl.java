@@ -15,6 +15,7 @@ import java.util.Map;
 import com.cnpc.pms.utils.ImpalaUtil;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
@@ -3601,5 +3602,39 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		return map_result;
 	}
 
+	@Override
+	public Map<String, Object> selectEStoreRankingOfStore(DynamicDto dynamicDto,PageInfo pageInfo) {
+		String  sql ="select SUM(IFNULL(gmv_price,0)) as amount,eshop_name as name,eshop_id from df_mass_order_monthly a where store_id='"+dynamicDto.getStoreIds()+"'  and sign_time>='"+dynamicDto.getBeginDate()+" 00:00:00' and  sign_time<'"+dynamicDto.getEndDate()+"' GROUP BY eshop_id order by amount desc ";
+
+
+		Map<String,Object> map_result = new HashMap<String,Object>();
+		List<?> list=null;
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		try {
+			String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
+			if(pageInfo!=null){
+				Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+
+				pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+				list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).setFirstResult(
+						pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1)).setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+				Integer total_pages = (pageInfo.getTotalRecords()-1)/pageInfo.getRecordsPerPage()+1;
+				map_result.put("pageinfo",pageInfo);
+				map_result.put("totalPage", total_pages);
+				map_result.put("totalRecords", pageInfo.getTotalRecords());
+			}else{
+
+				list= query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			}
+
+			map_result.put("gmv", list);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		return map_result;
+	}
 
 }

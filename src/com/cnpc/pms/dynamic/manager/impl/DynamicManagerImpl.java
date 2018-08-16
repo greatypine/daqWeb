@@ -4368,7 +4368,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	@Override
 	public Map<String, Object> selectEStoreRankingOfStore(Long storeId,PageInfo pageInfo) {
 		Map<String,Object> result = new HashMap<String,Object>();
-		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -4395,7 +4395,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			dynamicDto.setBeginDate(beginDate);
 			dynamicDto.setEndDate(endDate);
 			dynamicDto.setStoreIds(store.getPlatformid());
-			result = orderDao.selectEStoreRankingOfStore(dynamicDto,pageInfo);
+			result = dynamicDao.selectEStoreRankingOfStore(dynamicDto,pageInfo);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
