@@ -127,6 +127,10 @@
 					                <select class="form-control select2" id="citySelect" onchange="search_data();"> 
 					 	              	</select> 
 					                </div>
+					                <div class="form-group col-lg-3" style="padding-left: 0px;"><input type="hidden" id="currentMonth" value="" />
+					                <select class="form-control select2" id="crm_date_gmv" onchange="reloadGMVByDate()" > 
+					 	              	</select> 
+					                </div>
 					                <div class="form-group col-lg-3" id="store_dep">
 						            </div>
 				                </div>
@@ -177,10 +181,14 @@
 						              <select class="form-control select2" id="be_date1" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" disabled="true">
 						                <option value="cur_month" selected >本月新增（截止到昨日24点）</option>
 						              </select>
-						              <!-- /.input group -->
 						            </div-->
+						              <!-- /.input group -->
 					                <div class="form-group col-lg-3" style="padding-left: 0px;">
 					                	<select class="form-control select2" id="citySelect2" onchange="search_data2();" > 
+					 	              	</select> 
+					                </div>
+					                <div class="form-group col-lg-3" style="padding-left: 0px;"><input type="hidden" id="currentMonth2" value="" />
+					                	<select class="form-control select2" id="crm_date_gmv2" onchange="reloadGMVByDate2();" > 
 					 	              	</select> 
 					                </div>
 					                <div class="form-group col-lg-3" id="store_dep2">
