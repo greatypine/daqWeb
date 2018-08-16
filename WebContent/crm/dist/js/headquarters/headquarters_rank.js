@@ -6,6 +6,7 @@ var select_data2 = "";
 	    var requestParameters = getReauestParameters();
 		pageStatusInfo = initPageStatusInfo(requestParameters);
 		initCityData();
+		initGMVDate();
 		getPageRankData();
 	});
 	// 设置系统时间
@@ -33,9 +34,10 @@ var select_data2 = "";
  function chnagePageRecords(t){
  	var citySelected = $("#citySelected").val();
  	var citySelectedName = $("#citySelectedName").val();
+ 	var currentMonth = $("#currentMonth").val();
 	 if(t==1){
 		 autoPageRecordes  = $("#pageRecords_auto").val();
-		 getPageRankData(1,citySelected,citySelectedName);
+		 getPageRankData(1,citySelected,citySelectedName,currentMonth);
 	 }else if(t==2){
 		 $("#page_manual").empty();
 		 manualPageRecordes  = $("#pageRecords_manual").val();
@@ -44,9 +46,10 @@ var select_data2 = "";
  function chnagePageRecords2(t){
 	 var citySelected = $("#citySelected").val();
  	var citySelectedName = $("#citySelectedName").val();
+ 	var currentMonth = $("#currentMonth2").val();
 	 if(t==1){
 		 autoPageRecordes  = $("#pageRecords_auto2").val();
-		 getPageOtherRankData(1,citySelected,citySelectedName);
+		 getPageOtherRankData(1,citySelected,citySelectedName,currentMonth);
 	 }else if(t==2){
 		 $("#page_manual").empty();
 		 manualPageRecordes  = $("#pageRecords_manual2").val();
@@ -89,7 +92,7 @@ var select_data2 = "";
 	//查询上
     var currentPage_auto= 1;
     var totalPage_auto = 1;
-	var getPageRankData = function(cur_page,cityId_,cityname_){//获取页面排名数据
+	var getPageRankData = function(cur_page,cityId_,cityname_,month){//获取页面排名数据
 	var typeOfRank = pageStatusInfo.typeRank;
 	//var typeOfRank = "channel_order";
 	var method = "";
@@ -107,6 +110,12 @@ var select_data2 = "";
 	if(cityId_==0&&cityname_=='全部城市'){
 		cityId = "";
 		cityName="";	
+	}
+	var requestMonth = "";
+	if(month!=null&&month!=""){
+		requestMonth = month;
+	}else{
+		requestMonth = pageStatusInfo.currentMonth;
 	}
 	$("#store_dep").empty();
 	if(typeOfRank == 'city_gmv'){//城市(GMV)排名
@@ -172,7 +181,7 @@ var select_data2 = "";
 	pageStatusInfo.target = type_from;
 	// 准备服务端数据请求参数
     var reqestParameter = {
-        month:pageStatusInfo.currentMonth,
+        month:requestMonth,
         year:pageStatusInfo.currentYear, 
         provinceId:pageStatusInfo.provinceId,
         cityId:cityId,
@@ -204,7 +213,7 @@ var select_data2 = "";
 	        	 	  	    pageCount:totalPage_auto,
 	        	 	  	    current:pageInfo.currentPage,
 	        	 	  	    backFn:function(p){
-	        	 	  	    	getPageRankData(p,cityId_,cityname_);
+	        	 	  	    	getPageRankData(p,cityId_,cityname_,requestMonth);
 	        	 	  	    }
 	        	 	  	});
 	        	   }
@@ -333,9 +342,16 @@ var export_data = function(){
 	var cityId_o = pageStatusInfo.select_data;
 	var cityName_o = pageStatusInfo.select_data_city_name;
 	var typeOfRank = pageStatusInfo.typeRank;
+	var s_date = $("#crm_date_gmv").val();
+	var export_month = "";
+	if(s_date!=null&&s_date!=""){
+		export_month = s_date;
+	}else{
+		export_month = pageStatusInfo.currentMonth;
+	}
 	// 准备服务端数据请求参数
     var reqestParameter = {
-        month:pageStatusInfo.currentMonth,
+        month:export_month,
         year:pageStatusInfo.currentYear,
         provinceId:pageStatusInfo.provinceId,
         cityId:cityId_o,
@@ -373,9 +389,16 @@ var export_data2 = function(){
 	$("#process_div_pic").show();
 	var cityId_o = pageStatusInfo.select_data2;
 	var typeOfRank = pageStatusInfo.typeRank;
+	var s_date = $("#crm_date_gmv2").val();
+	var export_month = "";
+	if(s_date!=null&&s_date!=""){
+		export_month = s_date;
+	}else{
+		export_month = pageStatusInfo.currentMonth;
+	}
 	// 准备服务端数据请求参数
     var reqestParameter = {
-        month:pageStatusInfo.currentMonth,
+        month:export_month,
         year:pageStatusInfo.currentYear,
         provinceId:pageStatusInfo.provinceId,
         cityId:cityId_o,
@@ -408,7 +431,7 @@ var export_data2 = function(){
   $("#process_div_pic").hide();
   });
 }
-var getPageOtherRankData = function(cur_page,cityId_,cityname_){//获取页面排名数据
+var getPageOtherRankData = function(cur_page,cityId_,cityname_,month){//获取页面排名数据
 	var typeOfRank = pageStatusInfo.typeRank;
 	var method = "";
 	var managerName = "dynamicManager";
@@ -429,12 +452,18 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_){//获取页面�
 		cityId = "";
 		cityName="";	
 	}
+	var requestMonth = "";
+	if(month!=null&&month!=""){
+		requestMonth = month;
+	}else{
+		requestMonth = pageStatusInfo.currentMonth;
+	}
 	$("#search-title2").html(search_title2);
 	$("#title_sum").html(type_title);
 	$("head >title").html(type_title);
 	// 准备服务端数据请求参数
     var reqestParameter = {
-        month:pageStatusInfo.currentMonth,
+        month:requestMonth,
         year:pageStatusInfo.currentYear, 
         provinceId:pageStatusInfo.provinceId,
         cityId:cityId,
@@ -464,7 +493,7 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_){//获取页面�
 	        	 	  	    pageCount:totalPage_auto,
 	        	 	  	    current:pageInfo.currentPage,
 	        	 	  	    backFn:function(p){
-	        	 	  	    	getPageOtherRankData(p,cityId_,cityname_);
+	        	 	  	    	getPageOtherRankData(p,cityId_,cityname_,requestMonth);
 	        	 	  	    }
 	        	 	  	});
 	        	   }
@@ -604,6 +633,7 @@ function initallcity(){
  	var cityId = $("#citySelect2").val();
  	var index=$("#citySelect2")[0].selectedIndex ;
  	var cityname = $("#citySelect2")[0].options[index].text;
+ 	var s_date = $("#crm_date_gmv2").val();
  	$("#citySelected2").val(cityId);
  	$("#citySelectedName2").val(cityname);
  	if(cityId!=0){
@@ -613,7 +643,7 @@ function initallcity(){
  		pageStatusInfo.select_data2 = "";
  		pageStatusInfo.select_data_city_name2="";
  	}
- 	getPageOtherRankData(1,cityId,cityname)
+ 	getPageOtherRankData(1,cityId,cityname,s_date)
  }
   function search_data(){
  	var cityId = $("#citySelect").val();
@@ -621,6 +651,7 @@ function initallcity(){
  	var cityname = $("#citySelect")[0].options[index].text;
  	$("#citySelected").val(cityId);
  	$("#citySelectedName").val(cityname);
+ 	var s_date = $("#crm_date_gmv").val();
  	if(cityId!=0){
  		pageStatusInfo.select_data = cityId;
  		pageStatusInfo.select_data_city_name=cityname;
@@ -628,7 +659,7 @@ function initallcity(){
  		pageStatusInfo.select_data = "";
  		pageStatusInfo.select_data_city_name="";
  	}
- 	getPageRankData(1,cityId,cityname)
+ 	getPageRankData(1,cityId,cityname,s_date);
  }
  function resetSerachParam(str){
  	if(str==1){
@@ -637,3 +668,47 @@ function initallcity(){
  		$("#citySelect2").val('');
  	}
  }
+   var initGMVDate = function(){
+   	  var typeOfRank = pageStatusInfo.typeRank;
+	  var c_year = pageStatusInfo.curYear; //当前年
+	  var c_month = pageStatusInfo.currentMonth;//当前月
+	  $("#crm_date_gmv").val(parseInt(c_month));
+	  $("#crm_date_gmv2").val(parseInt(c_month));
+	  var date_option = "";
+	  for(var i=1;i<=c_month;i++){
+		  var year_month = i;
+		  var y_m =i+"月";
+		  if(i==(c_month)){//上一个月
+			  date_option=date_option+"<option value='"+i+"' selected>"+y_m+"</option>";
+		  }else if(c_month==1){//当前月是一月
+			  date_option=date_option+"<option value='"+i+"' selected>"+y_m+"</option>";
+		  }else{
+			  date_option=date_option+"<option value='"+i+"' >"+y_m+"</option>";
+		  }
+	  }
+	  if(typeOfRank == 'commodity_gmv'){
+   	  	 date_option="<option value='"+c_month+"' selected>"+(c_month+'月')+"</option>";
+   	  }
+	  $("#crm_date_gmv").append(date_option);
+	  $("#crm_date_gmv2").append(date_option);
+	  if(c_month!=null){
+		  $("#crm_date_gmv").val(parseInt(c_month));
+		  $("#crm_date_gmv2").val(parseInt(c_month));
+	  }
+  }
+ var  reloadGMVByDate = function (){
+	  var s_date = $("#crm_date_gmv").val();
+	  var cityId = $("#citySelect").val();
+ 	  var index=$("#citySelect")[0].selectedIndex ;
+ 	  var cityname = $("#citySelect")[0].options[index].text;
+	  $("#currentMonth").val(s_date);
+ 	  getPageRankData(1,cityId,cityname,s_date);
+  }
+ var  reloadGMVByDate2 = function (){
+	  var s_date = $("#crm_date_gmv2").val();
+	  var cityId = $("#citySelect2").val();
+ 	  var index=$("#citySelect2")[0].selectedIndex ;
+ 	  var cityname = $("#citySelect2")[0].options[index].text;
+	  $("#currentMonth2").val(s_date);
+ 	  getPageOtherRankData(1,cityId,cityname,s_date);
+  }
