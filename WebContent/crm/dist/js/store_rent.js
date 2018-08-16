@@ -109,7 +109,7 @@ option2 = {
 
 option3 = {
     title: {
-        text: '使用面积总和',
+        text: '使用面积占比',
         left: 'left'
     },
     tooltip: {
@@ -411,13 +411,13 @@ option9 = {
     series: [
         {
             type: 'pie',
-            radius: '50%',
+            radius: '55%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             label: {
                 normal: {
                     position: 'out', //标签的位置
-                    formatter: "{b} : {c} ({d}%)"
+                    formatter: "{b} : {d}%"
                 }
             },
             data: [],
@@ -450,13 +450,13 @@ option10 = {
     series: [
         {
             type: 'pie',
-            radius: '50%',
+            radius: '55%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             label: {
                 normal: {
                     position: 'out', //标签的位置
-                    formatter: "{b} : {c} ({d}%)"
+                    formatter: "{b} : {d}%"
                 }
             },
             data: [],
@@ -538,7 +538,7 @@ option12 = {
     series: [
         {
             type: 'pie',
-            radius: '55%',
+            radius: '50%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             label: {
