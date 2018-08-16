@@ -30,10 +30,14 @@
             border: 1px solid #999;
             table-layout: fixed;
         }
+
         .table-bordered > tbody > tr > th, .table-bordered > tbody > tr > td {
             border: 1px solid #999;
         }
-        .table tr td .progress{width: 70%;}
+
+        .table tr td .progress {
+            width: 70%;
+        }
 
     </style>
 </head>
@@ -64,8 +68,9 @@
             <!-- Main content -->
             <section class="content-header">
                 <div class="box box-default">
-                    <div class="box-header h1 text-light-blue"><strong>全国月店数据分析</strong></div>
+                    <div class="box-header h1 text-light-blue"><strong>门店租赁统计</strong></div>
                     <div class="box-body" style="padding: 0 10px 10px 10px">
+                        <div class="col-sm-6 no-padding" id="main1" style="height: 550px;"></div>
                         <div class="col-sm-6 no-padding">
                             <!--<div class="col-sm-12">
                                 <h5 class="text-yellow"><b>数据分析原则：</b></h5>
@@ -73,8 +78,9 @@
                                 <p>湖南公司数据包含一家需要支付租金的合作店（树木岭店）</p>
                                 <p>湖北公司数据包含一家需要支付租金的合作店（香港路店）</p>
                             </div>-->
-                            <table class="table table-striped table-bordered" id="city_store_yue" >
-                                <tbody><tr class="bg-light-blue">
+                            <table class="table table-striped table-bordered" id="city_store_yue">
+                                <tbody>
+                                <tr class="bg-light-blue">
                                     <th>城市公司</th>
                                     <th>门店数量</th>
                                     <th>占比</th>
@@ -83,13 +89,17 @@
                             </table>
                         </div>
                         <!-- 门店数量占比 -->
-                        <div class="col-sm-6 no-padding" id="main1" style="height: 550px;"></div>
+
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 计租面积 -->
                     <div class="box-body">
+                        <div class="col-sm-6 no-padding" id="main2" style="height: 550px;"></div>
                         <div class="col-sm-6 no-padding">
                             <table class="table table-striped table-bordered" id="store_jizu_table">
-                                <tbody><tr class="bg-light-blue">
+                                <tbody>
+                                <tr class="bg-light-blue">
                                     <th>城市公司</th>
                                     <th>计租面积(m<sup>2</sup>)</th>
                                     <th>占比</th>
@@ -97,13 +107,17 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-sm-6 no-padding" id="main2" style="height: 550px;"></div>
+
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 使用面积 -->
                     <div class="box-body">
+                        <div class="col-sm-6 no-padding" id="main3" style="height: 550px;"></div>
                         <div class="col-sm-6 no-padding">
                             <table class="table table-striped table-bordered" id="store_usable_table">
-                                <tbody><tr class="bg-light-blue">
+                                <tbody>
+                                <tr class="bg-light-blue">
                                     <th>城市公司</th>
                                     <th>使用面积(m<sup>2</sup>)</th>
                                     <th>占比</th>
@@ -111,235 +125,185 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="col-sm-6 no-padding" id="main3" style="height: 550px;"></div>
+
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 单店平均计租面积 -->
                     <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="unit_store_jizu">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>单店平均计租面积(m<sup>2</sup>)</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-6 no-padding" id="main4" style="height: 550px;"></div>
+                        <div class="col-sm-12 no-padding" id="main4" style="height: 550px;"></div>
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 单店平均使用面积 -->
                     <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="unit_store_usable">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>单店平均使用面积(m<sup>2</sup>)</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-6 no-padding" id="main5" style="height: 550px;"></div>
+                        <div class="col-sm-12 no-padding" id="main5" style="height: 550px;"></div>
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 计租面积平均使用率 -->
                     <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="store_jizu_PCT">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>平均使用率</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-6 no-padding" id="main6" style="height: 550px;"></div>
+                        <div class="col-sm-12 no-padding" id="main6" style="height: 550px;"></div>
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 计租面积平均单价 -->
                     <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="store_jizu_unit_price">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>计租面积平均单价</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-6 no-padding" id="main7" style="height: 550px;"></div>
+                        <div class="col-sm-12 no-padding" id="main7" style="height: 550px;"></div>
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 计租面积平均使用率 -->
                     <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="store_usable_unit_price">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>使用面积平均单价</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-6 no-padding" id="main8" style="height: 550px;"></div>
+                        <div class="col-sm-12 no-padding" id="main8" style="height: 550px;"></div>
                     </div>
-
+                </div>
+                <div class="box box-default">
                     <!-- 中介成交店铺数量占比 -->
                     <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="store_zhongjie">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>中介成交店铺数量</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
                         <div class="col-sm-6 no-padding" id="main9" style="height: 550px;"></div>
-                    </div>
-                    <!-- 中介费总额占比 -->
-                    <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="store_zhongjie_money">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>中介费总额(万元)</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <!-- 中介费总额占比 -->
                         <div class="col-sm-6 no-padding" id="main10" style="height: 550px;"></div>
                     </div>
+                </div>
+                <div class="box box-default">
                     <!-- 单店平均中介费 -->
                     <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="store_zhongjie_unit_money">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>单店平均中介费(元)</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-6 no-padding" id="main11" style="height: 550px;"></div>
-                    </div>
-                    <!-- 付款方式 -->
-                    <div class="box-body">
-                        <div class="col-sm-6 no-padding">
-                            <table class="table table-striped table-bordered" id="store_payment_method">
-                                <tbody>
-                                <tr class="bg-light-blue"><td colspan="2">全国范围统计</td></tr>
-                                <tr class="bg-light-blue">
-                                    <th>付款方式</th>
-                                    <th>门店数量</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-6 no-padding" id="main12" style="height: 300px;"></div>
-                    </div>
+                            <div class="col-sm-12 no-padding" id="main11" style="height: 550px;"></div>
 
-                    <!-- 支付方式详细数据-->
-                    <div class="box-body">
-                        <div >
-                            <table class="table table-striped table-bordered" id="store_payment_method_info">
-                                <tbody>
-                                <tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>城市总计</th>
-                                    <th>年付</th>
-                                    <th>半年付</th>
-                                    <th>季付</th>
-                                    <th>月付</th>
-                                </tr>
-                                </tbody>
-                            </table>
+                    </div>
+                    </div>
+                    <div class="box box-default">
+                        <!-- 付款方式 -->
+                        <div class="box-body">
+                            <div class="col-sm-6 no-padding" id="main12" style="height: 350px;"></div>
+                            <div class="col-sm-6 no-padding">
+                                <table class="table table-striped table-bordered" id="store_payment_method">
+                                    <tbody>
+                                    <tr class="bg-light-blue">
+                                        <td colspan="2">全国范围统计</td>
+                                    </tr>
+                                    <tr class="bg-light-blue">
+                                        <th>付款方式</th>
+                                        <th>门店数量</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- 支付方式详细数据-->
+                        <div class="box-body">
+                            <div>
+                                <h3 class="text-center">城市付款方式统计</h3>
+                                <table class="table table-striped table-bordered" id="store_payment_method_info">
+                                    <tbody>
+                                    <tr class="bg-light-blue">
+                                        <th>城市公司</th>
+                                        <th>门店数量</th>
+                                        <th>月付</th>
+                                        <th>季付</th>
+                                        <th>半年付</th>
+                                        <th>年付</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="box box-default">
-                    <div class="box-header h1 text-light-blue"><strong>全国星店数据分析</strong></div>
-                    <div class="box-body" style="padding: 0 10px 10px 10px">
-                        <!--<div class="col-sm-12">
-                            <h5 class="text-yellow" style="margin: 0 0 10px 0"><b>数据分析原则及情况简介：</b></h5>
-                            <p>仅分析需支付租金的星店，不包含月店、校园店；</p>
-                            <p>全国共有24家星店符合上述条件，北京22家，天津和云南各1家；</p>
-                            <p>由于星店主要集中在北京，下面仅对北京星店的明细数据进行展示，只有北京22家星店中的12家支付过中介费，共计22.63万元，平均每家支付1.89万元。</p>
-                        </div>-->
-                        <div class="col-sm-12">
-                            <table class="table table-striped table-bordered" id="star_store_analyze">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>星店数量</th>
-                                    <th>计租面积合计</th>
-                                    <th>单店平均计租面积</th>
-                                    <th>计租面积平均租金</th>
-                                    <th>使用面积合计</th>
-                                    <th>单店平均使用面积</th>
-                                    <th>使用面积平均租金</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-12">
-                            <h3 class="text-center">北京星店数据明细</h3>
-                            <table class="table table-striped table-bordered" id="star_store_info">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>区域</th>
-                                    <th>所属街道</th>
-                                    <th>计租面积</th>
-                                    <th>使用面积</th>
-                                    <th>使用率</th>
-                                    <th>计租面积单价</th>
-                                    <th>使用面积单价</th>
-                                    <th>中介费</th>
-                                    <th>免租期</th>
-                                    <th>付款方式</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="box box-default">
-                    <div class="box-header h1 text-light-blue"><strong>全国校园店数据分析</strong></div>
-                    <div class="box-body" style="padding: 0 10px 10px 10px">
-                        <!--<div class="col-sm-12">
-                            <h5 class="text-yellow" style="margin: 0 0 10px 0"><b>数据分析原则及情况简介：</b></h5>
-                            <p>仅分析需支付租金的校园店，不包含月店、星店；</p>
-                            <p>全国共9家校园店符合上述要求，北京7家，上海和云南各1家；</p>
-                            <p>所有校园店中只有北京的林业大学店支付过中介费，计19666元。</p>
-                        </div>-->
-                        <div class="col-sm-12">
-                            <table class="table table-striped table-bordered" id="school_store_analyze">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市公司</th>
-                                    <th>校园店数量</th>
-                                    <th>计租面积合计</th>
-                                    <th>单店平均计租面积</th>
-                                    <th>计租面积平均租金</th>
-                                    <th>使用面积合计</th>
-                                    <th>单店平均使用面积</th>
-                                    <th>使用面积平均租金</th>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-sm-12">
-                            <h3 class="text-center">全国校园店数据明细</h3>
-                            <table class="table table-striped table-bordered" id="school_store_info">
-                                <tbody><tr class="bg-light-blue">
-                                    <th>城市</th>
-                                    <th>店名</th>
-                                    <th>计租面积</th>
-                                    <th>使用面积</th>
-                                    <th>使用率</th>
-                                    <th>计租面积单价</th>
-                                    <th>使用面积单价</th>
-                                    <th>中介费</th>
-                                    <th>免租期</th>
-                                    <th>付款方式</th>
-                                </tr>
-                                </tbody>
-                            </table>
+                    <div class="box box-default">
+                        <div class="box-header h1 text-light-blue"><strong>全国星店数据分析</strong></div>
+                        <div class="box-body" style="padding: 0 10px 10px 10px">
+                            <!--<div class="col-sm-12">
+                                <h5 class="text-yellow" style="margin: 0 0 10px 0"><b>数据分析原则及情况简介：</b></h5>
+                                <p>仅分析需支付租金的星店，不包含月店、校园店；</p>
+                                <p>全国共有24家星店符合上述条件，北京22家，天津和云南各1家；</p>
+                                <p>由于星店主要集中在北京，下面仅对北京星店的明细数据进行展示，只有北京22家星店中的12家支付过中介费，共计22.63万元，平均每家支付1.89万元。</p>
+                            </div>-->
+                            <div class="col-sm-12">
+                                <table class="table table-striped table-bordered" id="star_store_analyze">
+                                    <tbody>
+                                    <tr class="bg-light-blue">
+                                        <th>城市公司</th>
+                                        <th>星店数量</th>
+                                        <th>计租面积合计</th>
+                                        <th>单店平均计租面积</th>
+                                        <th>计租面积平均租金</th>
+                                        <th>使用面积合计</th>
+                                        <th>单店平均使用面积</th>
+                                        <th>使用面积平均租金</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-12">
+                                <h3 class="text-center">北京星店数据明细</h3>
+                                <table class="table table-striped table-bordered" id="star_store_info">
+                                    <tbody>
+                                    <tr class="bg-light-blue">
+                                        <th>区域</th>
+                                        <th>所属街道</th>
+                                        <th>计租面积</th>
+                                        <th>使用面积</th>
+                                        <th>使用率</th>
+                                        <th>计租面积单价</th>
+                                        <th>使用面积单价</th>
+                                        <th>中介费</th>
+                                        <th>免租期</th>
+                                        <th>付款方式</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="box box-default">
+                        <div class="box-header h1 text-light-blue"><strong>全国校园店数据分析</strong></div>
+                        <div class="box-body" style="padding: 0 10px 10px 10px">
+                            <!--<div class="col-sm-12">
+                                <h5 class="text-yellow" style="margin: 0 0 10px 0"><b>数据分析原则及情况简介：</b></h5>
+                                <p>仅分析需支付租金的校园店，不包含月店、星店；</p>
+                                <p>全国共9家校园店符合上述要求，北京7家，上海和云南各1家；</p>
+                                <p>所有校园店中只有北京的林业大学店支付过中介费，计19666元。</p>
+                            </div>-->
+                            <div class="col-sm-12">
+                                <table class="table table-striped table-bordered" id="school_store_analyze">
+                                    <tbody>
+                                    <tr class="bg-light-blue">
+                                        <th>城市公司</th>
+                                        <th>校园店数量</th>
+                                        <th>计租面积合计</th>
+                                        <th>单店平均计租面积</th>
+                                        <th>计租面积平均租金</th>
+                                        <th>使用面积合计</th>
+                                        <th>单店平均使用面积</th>
+                                        <th>使用面积平均租金</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-12">
+                                <h3 class="text-center">全国校园店数据明细</h3>
+                                <table class="table table-striped table-bordered" id="school_store_info">
+                                    <tbody>
+                                    <tr class="bg-light-blue">
+                                        <th>城市</th>
+                                        <th>店名</th>
+                                        <th>计租面积</th>
+                                        <th>使用面积</th>
+                                        <th>使用率</th>
+                                        <th>计租面积单价</th>
+                                        <th>使用面积单价</th>
+                                        <th>中介费</th>
+                                        <th>免租期</th>
+                                        <th>付款方式</th>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
             </section>
 
         </div>
