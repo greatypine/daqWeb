@@ -148,7 +148,12 @@
             </div>
         </nav>
     </header>
-
+    <div id="tishidiv1" style="position: absolute; display: none; border: 1px solid silver;background: silver;z-index: 888;">
+        平均客单价=周活跃社员在合作社E店GMV÷周活跃社员
+    </div>
+    <div id="tishidiv2" style="position: absolute; display: none; border: 1px solid silver;background: silver;z-index: 888;">
+        周消费频次=周活跃社员在合作社E店订单数÷周活跃社员
+    </div>
     <!-- Content Wrapper. Contains page content -->
     <div id="page">
         <div class="content-wrapper">
@@ -250,8 +255,8 @@
                                 </div>
                                 </li>
                                     <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
-                                    <li class="col-sm-3"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></li>
-                                    <li class="col-sm-3"><i class="fa fa-fire"></i>周消费频次：<br><span id="jsonEshopWeekCou"></span></li>
+                                    <li class="col-sm-3"><div onmouseover="javascript:showTishi1();" onmouseout="hideTishi1();" onclick="showOrHideTishi1();"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></div></li>
+                                    <li class="col-sm-3"><div onmouseover="javascript:showTishi2();" onmouseout="hideTishi2();" onclick="showOrHideTishi2();"><i class="fa fa-fire"></i>周消费频次：<br><span id="jsonEshopWeekCou"></span></div></li>
                                 </ul>
                                 <div id="bigMember2" class="bigtoast" style="display: none">
                                     <div class="col-sm-12 no-padding" id="main0" style="height: 200px;"></div>
@@ -564,6 +569,47 @@
         var option1 = null;
         var mem_all = 0;
         var mem_big = 0;
+
+        function showTishi1() {
+            var objDiv = $("#tishidiv1");
+            $(objDiv).css("display", "block");
+            $(objDiv).css("left", event.clientX);
+            $(objDiv).css("top", event.clientY + 10);
+        }
+        function hideTishi1() {
+            var objDiv = $("#tishidiv1");
+            $(objDiv).css("display", "none");
+        }
+        function showOrHideTishi1() {
+            var objDiv = $("#tishidiv1");
+            if($(objDiv).css("display")=="block"){
+                $(objDiv).css("display", "none");
+            }else{
+                $(objDiv).css("display", "block");
+                $(objDiv).css("left", event.clientX);
+                $(objDiv).css("top", event.clientY + 10);
+            }
+        }
+        function showOrHideTishi2() {
+            var objDiv = $("#tishidiv2");
+            if($(objDiv).css("display")=="block"){
+                $(objDiv).css("display", "none");
+            }else{
+                $(objDiv).css("display", "block");
+                $(objDiv).css("left", event.clientX);
+                $(objDiv).css("top", event.clientY + 10);
+            }
+        }
+        function showTishi2() {
+            var objDiv = $("#tishidiv2");
+            $(objDiv).css("display", "block");
+            $(objDiv).css("left", event.clientX);
+            $(objDiv).css("top", event.clientY + 10);
+        }
+        function hideTishi2() {
+            var objDiv = $("#tishidiv2");
+            $(objDiv).css("display", "none");
+        }
         function showAddMember(){
             $(".add_citymember").click(function(){
                 if($("#setadd").val()=="0"){
