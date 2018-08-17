@@ -1778,12 +1778,12 @@ function initStoreHistoryGMV(){
 	function goToNewaddcus(){
 		 
 		  var url = "dynamicData_newaddcus_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
-		  window.open(url,"dynamicData_newaddcus_analysis");
+		  window.open(url,"_blank");
 	}
     //社员开卡
 	function goToInvitationMember(){
         var url = "dynamicData_member_invitation.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#ff";
-        window.open(url,"dynamicData_member_invitation");
+        window.open(url,"_blank");
     }
 
 	/**
@@ -1792,7 +1792,7 @@ function initStoreHistoryGMV(){
 	  function goToNewAddCustomerGMVToSend() {
 	   	
 	      var url = "dynamicData_newAddCustomer_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name)+"&#fg";
-	      window.open(url,"dynamicData_newAddCustomer_GMV");
+	      window.open(url,"_blank");
 	  }
 // 	//复购用户
 // 	function goToRebuycus(){
@@ -1802,7 +1802,7 @@ function initStoreHistoryGMV(){
 	//交易额  
 	function goToStoretrade(){
 		  var url = "dynamicData_storetrade_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_storetrade_analysis");
+		  window.open(url,"_blank");
 	}
 	//送单量
 // 	function goToSendorders(){
@@ -1813,14 +1813,14 @@ function initStoreHistoryGMV(){
 	//好评次数
 	function goToRewardtimes(){
 		  var url = "dynamicData_rewardtimes_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_rewardtimes_analysis");
+		  window.open(url,"_blank");
 	}
 	
 	 //异常订单
 	function goToAbnormalOrder(){
 		  //t:职务 s:门店ID c:城市ID
 		  var url = "abnormal_order.html?t="+encode64(2)+"&c=&s=&e="+encode64(EMPLOYEE_NO)+"&so="+encode64(currentStore.storeno)+"&sn="+encode64(currentStore.name);
-		  window.open(url,"abnormal_order"); 
+		  window.open(url,"_blank");
 	}
 	 
 	//跳转公海 订单界面 
@@ -1835,7 +1835,7 @@ function initStoreHistoryGMV(){
 	function goToRelation(){
 		 
 		  var url = "dynamicData_relation_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_relation_analysis"); 
+		  window.open(url,"_blank");
 	}
 	
 	/**
@@ -1843,7 +1843,7 @@ function initStoreHistoryGMV(){
 	 **/
 	function goToCustomer(){
 		  var url = "dynamicData_customer_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-		  window.open(url,"dynamicData_customer_analysis");
+		  window.open(url,"_blank");
 	}
 
   /**
@@ -1851,7 +1851,7 @@ function initStoreHistoryGMV(){
    */
   function goToExpressToSend() {
     var url = "dynamicData_express_send.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-    window.open(url,"dynamicData_express_analysis");
+    window.open(url,"_blank");
   }
 
 
@@ -1861,13 +1861,13 @@ function initStoreHistoryGMV(){
   function goToAreaGMVToSend() {
    
       var url = "dynamicData_area_GMV.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-      window.open(url,"dynamicData_area_GMV");
+      window.open(url,"_blank");
   }
 
   function goToSendOrders() {
 	   
       var url = "dynamicData_employee_sendOrders.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
-      window.open(url,"dynamicData_employee_sendOrders");
+      window.open(url,"_blank");
   }
 
 
@@ -1911,7 +1911,7 @@ function initStoreHistoryGMV(){
 	//数据查找-片区数据
     function searchArea(){
 	   var url = "dynamicData_areaInfo.html";
- 	   window.open(url,"dynamicData_areaInfo");
+ 	   window.open(url,"_blank");
     }
 	
 	//订单档案

@@ -4253,7 +4253,7 @@ var curr_user;
 	  }else if(target==1){
 	  	url = "dynamicData_storetrade_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 	  }
-	  window.open(url,"dynamicData_storetrade_analysis2");
+	  window.open(url,"_blank");
   }
   
   //交易额 （按片区） 
@@ -4266,7 +4266,7 @@ var curr_user;
 		  }else if(target==1){
 		  	url = url = "dynamicData_area_GMV.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 		  }
-	      window.open(url,"dynamicData_area_GMV");
+	      window.open(url,"_blank");
   }
   
   //付费用户(按门店)
@@ -4278,7 +4278,7 @@ var curr_user;
 	  }else if(target==1){
 	  	url = "dynamicData_newaddcus_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
 	  }
-	  window.open(url,"dynamicData_newaddcus_analysis");
+	  window.open(url,"_blank");
   }
   
   /**
@@ -4292,7 +4292,7 @@ var curr_user;
 	  }else if(target==1){
 	  	url = "dynamicData_newAddCustomer_GMV.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
 	  }
-	  window.open(url,"dynamicData_newAddCustomer_GMV");
+	  window.open(url,"_blank");
   }
   
   //重点产品gmv(门店)
@@ -4355,7 +4355,7 @@ var curr_user;
 	  }else if(target==1){
 	  	url = url = "dynamicData_employee_sendOrders.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
 	  }
-      window.open(url,"dynamicData_employee_sendOrders");
+      window.open(url,"_blank");
 }
   
   
@@ -4368,7 +4368,7 @@ var curr_user;
 	  }else if(target==1){
 	  	url = "dynamicData_rewardtimes_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
 	  }
-	  window.open(url,"dynamicData_rewardtimes_analysis");
+	  window.open(url,"_blank");
   }
   //拜访记录
   function goToRelation(){
@@ -4442,7 +4442,7 @@ var curr_user;
 	  }else if(target==1){
 	  	url = "abnormal_order.html?t="+encode64(1)+"&s=&sn=&c="+ encode64(pageStatusInfo.cityId)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn="+encode64(pageStatusInfo.cityName);
 	  }
-	  window.open(url,"abnormal_order"); 
+	  window.open(url,"_blank");
   }
   
   function useData(){
@@ -4532,7 +4532,7 @@ var curr_user;
   //数据查找-片区数据
   function searchArea(){
   	  var url = "dynamicData_areaInfo.html";
-	  window.open(url,"dynamicData_areaInfo");
+	  window.open(url,"_blank");
   }
   
   //数据查找-小区数据
@@ -4944,7 +4944,7 @@ function goToDeptGMV(){
 	  }else if(target==1){
 	  	url =  "dynamicData_department_gmv.html?t="+encode64(1)+"&r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&dn=&e="+encode64(curr_user.id);
 	  }
-      window.open(url,"dynamicData_dept_GMV");
+      window.open(url,"_blank");
 }
 
 //跳转事业群用户
@@ -4957,7 +4957,7 @@ function goToDeptConsumer(){
 	  }else if(target==1){
 	  	url =  "dynamicData_department_consumer.html?t="+encode64(1)+"&r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&dn=&e="+encode64(curr_user.id);
 	  }
-      window.open(url,"dynamicData_dept_consumer");
+      window.open(url,"_blank");
 }
 
 function findArray(array, feature, all) {
@@ -5049,7 +5049,7 @@ function goToMemberInvitation(){
 	  }else if(target==1){ 
 	  	url  = "dynamicData_member_invitation.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);
 	  }
-      window.open(url,"dynamicData_member_invitation");
+      window.open(url,"_blank");
 }
 
 function refreshCurrentData(){
@@ -5082,7 +5082,7 @@ function goTo221GMV(){
         url = "dynamicData_gmv_tto.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);;
     }
 
-    window.open(url,"dynamicData_gmv_tto");
+    window.open(url,"_blank");
 }
 
 function settingClockByTimeOut(_args1, _args2) {
