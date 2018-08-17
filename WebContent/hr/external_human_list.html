@@ -95,7 +95,7 @@
 			resourceId : "humanstore_List_update",
 			func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
 				var id = allColumnsDataMap.id;
-				window.location.href = "dist_city_edit.html?id="+id;
+				window.location.href = "external_human_edit.html?id="+id;
 			}
 		}
     var publishObj = {
@@ -103,10 +103,10 @@
 			resourceId : "humanstore_List_detail",
 			func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
 				var id = allColumnsDataMap.id;
-				window.location.href = "human_store_detail.html?id="+id;
+				window.location.href = "external_human_edit.html.html?id="+id;
 			}
 		}
-    $pmspage.opArr = [ /*editObj , publishObj  , deleteObj*/ ];
+    $pmspage.opArr = [ editObj /*, publishObj  , deleteObj*/ ];
     
     
     

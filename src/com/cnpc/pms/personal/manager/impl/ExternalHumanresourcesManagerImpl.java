@@ -36,6 +36,7 @@ import com.cnpc.pms.personal.entity.ExternalHumanresources;
 import com.cnpc.pms.personal.manager.DistCityCodeManager;
 import com.cnpc.pms.personal.manager.ExternalHumanresourcesManager;
 import com.cnpc.pms.shortMessage.manager.ShortMessageManager;
+import com.sun.org.apache.bcel.internal.generic.ReturnInstruction;
 
 @SuppressWarnings("all")
 public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager implements ExternalHumanresourcesManager {
@@ -178,6 +179,10 @@ public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager impl
                 }
                 if(cardnumber=="") {
                 	rcvmsg="身份证号存在空值！ 导入失败！ ";
+	             	return rcvmsg;
+                }
+                if(cardnumber.length()!=18) {
+                	rcvmsg="身份证号码格式错误！ 导入失败！ ";
 	             	return rcvmsg;
                 }
                 
@@ -340,4 +345,26 @@ public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager impl
 		return "800000";
 	}
     
+	
+	@Override
+	public ExternalHumanresources queryExternalHumanresourcesById(Long id) {
+		return (ExternalHumanresources) this.getObject(id);
+	}
+	
+	@Override
+	public ExternalHumanresources updateExternalHumanresources(ExternalHumanresources externalHumanresources) {
+		ExternalHumanresources updateExternalHuman = (ExternalHumanresources) this.getObject(externalHumanresources.getId());
+		updateExternalHuman.setName(externalHumanresources.getName());
+		updateExternalHuman.setPhone(externalHumanresources.getPhone());
+		updateExternalHuman.setCardnumber(externalHumanresources.getCardnumber());
+		updateExternalHuman.setCitySelect(externalHumanresources.getCitySelect());
+		updateExternalHuman.setStore_no(externalHumanresources.getStore_no());
+		updateExternalHuman.setStore_name(externalHumanresources.getStore_name());
+		preSaveObject(updateExternalHuman);
+		this.saveObject(updateExternalHuman);
+		return updateExternalHuman;
+	}
+	
+	
+	
 }

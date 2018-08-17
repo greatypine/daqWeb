@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>外部人员导入修改</title>
+<link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../scripts/css/auto.css" rel="stylesheet">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script> 
+
+<!-- 引入css和js即可 -->
+<link rel="stylesheet" href="../scripts/css/cityselect.css">
+<script type="text/javascript" src="../scripts/cityselect.js"></script>
+
+<style type="text/css">
+* {
+	margin: 0;
+	padding: 0;
+}
+.panel{border-radius:0; border:0; margin:0;}
+form{border:1px solid #337ab7;background-color:#fff;}
+.express_img {
+	width: 100%;
+	height: 200px;
+	background-color: #fff;
+	position: fixed;
+	top: 0;
+	left: 0;
+	overflow: hidden;
+}
+
+.express_img img {
+	height: 100%;
+}
+
+.express_con {
+	font-size: 16px;
+	border: 1px solid #337ab7;
+	padding-top: 240px;
+}
+
+.express_con_tit {
+	width: 98%;
+	height: 40px;
+	line-height: 40px;
+	color: #fff;
+	background-color: #337ab7;
+	padding-left: 2%;
+	position: fixed;
+	top: 200px;
+	left: 0;
+}
+
+.express_con_tit a {
+	float: right;
+	display: inline-block;
+	color: #fff;
+	margin-right: 30px;
+}
+
+table td {
+	width: 50%;
+	height:55px; line-height:55px; padding:5px 0;
+}
+table tr:nth-child(2n){background-color:#f2f2f2;}
+table td p {
+	padding-left: 30px;
+}
+
+table td input,table td select {
+	width: 58%;
+	height: 35px;
+	line-height: 35px;
+	border: 1px solid #e2e2e2;
+	margin-top: 5px;
+	margin-left:10px;
+	padding-left:5px;outline:none; border-radius:3px;
+}
+table td label{padding-left:10px; color:#999;}
+table te .letter{ letter-spacing:2em;}
+.other {
+	width: 76%;
+}
+
+.but {
+	float: right;
+	text-align: center;
+}
+.but input{background-color:transparent; border:1px solid #fff; border-radius:3px; padding:0 13px; margin-right:30px;}
+.form-control{margin:0; height:40px;}
+.input-group-btn button{height:40px;}
+</style>
+
+<script type="text/javascript">
+	
+	function doBack(){
+		
+	}
+	
+	
+	var id = getUrlParamByKey("id");
+
+	$(function() {
+		doManager("ExternalHumanresourcesManager", "queryExternalHumanresourcesById", id , function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				$("#id").val(jsonData.id);
+				
+				$("#name").val(jsonData.name);
+				$("#phone").val(jsonData.phone);
+				$("#cardnumber").val(jsonData.cardnumber);
+				$("#citySelect").val(jsonData.citySelect);
+				$("#store_no").val(jsonData.store_no);
+				$("#store_name").val(jsonData.store_name);
+				
+			}
+		}); 
+		
+		
+	});
+	
+	
+	function doSave(){
+		var name = $("#name").val();
+		var phone= $("#phone").val();
+		var cardnumber= $("#cardnumber").val();
+		var citySelect= $("#citySelect").val();
+		var store_no = $("#store_no").val();
+		var store_name = $("#store_name").val();
+		
+		if(name==null||name.trim()==""){
+			$$.showMessage("系统信息", "姓名不能为空");
+			return;
+		}
+		if(phone==null||phone.trim()==""){
+			$$.showMessage("系统信息", "电话不能为空");
+			return;
+		}
+		if(phone.length!=11){
+			$$.showMessage("系统信息", "电话号格式不正确 ");
+			return;
+		}
+		if(cardnumber==null||cardnumber.trim()==""){
+			$$.showMessage("系统信息", "身份证号不能为空");
+			return;
+		}
+		if(cardnumber.length!=18){
+			$$.showMessage("系统信息", "身份证号格式错误");
+			return;
+		}
+		if(citySelect==null||citySelect.trim()==""){
+			$$.showMessage("系统信息", "城市不能为空");
+			return;
+		}
+		
+		var id=$("#id").val();
+		var obj = new Object();
+		obj.name=name;
+		obj.phone=phone;
+		obj.cardnumber=cardnumber;
+		obj.citySelect=citySelect;
+		obj.store_no=store_no;
+		obj.store_name=store_name;
+		obj.id=id;
+		doManager("ExternalHumanresourcesManager", "updateExternalHumanresources", obj,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData==null){
+							$$.showMessage("系统信息", "更改失败  ！");
+						}else{
+							window.location.href = 'external_human_list.html';
+						}
+					}
+		}, false);
+		
+		
+	}
+	
+    
+</script>
+
+</head>
+
+<body>
+	<div class="panel panel-primary">
+		<div class="panel-heading">城市数据维护 :导入外部人员编辑
+        	<span class="but">
+        		<input name="" type="button" onclick="doSave();" value="保存"/>
+                <input name="" type="button" onclick="javascript:history.go(-1);" value="返回"/>
+            </span>
+        </div>
+	</div>
+	<form class="pmsForm" validate="true" clientvalidate="true" displaynumber="7">
+		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+				<td>
+					<p></p>
+					<p>
+						<font color="red">*</font>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：<input type="text" id="name"  style="width: 40%;" />
+					</p>
+				</td>
+			</tr>
+			
+			
+			<tr>
+				<td>
+					<p></p>
+					<p>
+						<font color="red">*</font>手&nbsp;&nbsp;机&nbsp;&nbsp;号：<input type="text" id="phone"  style="width: 40%;" />
+					</p>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<p></p>
+					<p>
+						<font color="red">*</font>身份证号：<input type="text" id="cardnumber"  style="width: 40%;" />
+					</p>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<p></p>
+					<p>
+						<font color="red">*</font>所属城市：<input type="text" id="citySelect"  style="width: 40%;" />
+					</p>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<p></p>
+					<p>
+						门店编号：<input type="text" id="store_no"  style="width: 40%;" />
+					</p>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<p></p>
+					<p>
+						门店名称： <input type="text" id="store_name"  style="width: 40%;" /> 
+					</p>
+				</td>
+			</tr>
+            
+                  <input type="hidden" id="id"  style="width: 40%;" />     
+		</table>
+	</form>
+	
+	
+</body>
+
+
+</html>
