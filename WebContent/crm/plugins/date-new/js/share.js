@@ -125,6 +125,8 @@
             var dateList = timeConfig(thisAlt);
             $("#regist_date").val(dateList);
             $("#searchTime").val(dateList);
+            $("#startOpenCardDate").val(dateList.split('-')[0]);
+            $("#endOpenCardDate").val(dateList.split('-')[1]);
             $("#ui-datepicker-css").slideUp(500);
 			$("#ui-datepicker-div").css("display","none")
         });
@@ -148,6 +150,8 @@
             var thisAlt = $(this).attr("alt");
             var dateList = timeConfig(thisAlt);
             $("#first_date").val(dateList);
+            $("#startDateFirst").val(dateList.split('-')[0]);
+            $("#endDateFirst").val(dateList.split('-')[1]);
             $("#first-ui-datepicker-css").slideUp(500);
 			$("#ui-datepicker-div").css("display","none")
         });
@@ -168,6 +172,8 @@
             var thisAlt = $(this).attr("alt");
             var dateList = timeConfig(thisAlt);
             $("#last_date").val(dateList);
+            $("#startDateLast").val(dateList.split('-')[0]);
+            $("#endDateLast").val(dateList.split('-')[1]);
             $("#last-ui-datepicker-css").slideUp(500);
 			$("#ui-datepicker-div").css("display","none")
         });

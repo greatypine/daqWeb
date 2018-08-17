@@ -2528,6 +2528,116 @@ optionEmpgongsi = {
   ]
 };
 
+//近六周各城市离职人员动态
+optionempbycity = {
+    title: {
+        text: '近六周各城市人员动态',textAlign:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+    },
+    color:["#d06e92","#639d92"],
+    tooltip: {trigger: 'axis'},
+    legend: {
+        data:['离职数量','入职数量'],left:"right",y:"8%",
+        itemWidth:18,itemHeight:12,textStyle:{fontSize:14},
+    },
+    grid: {
+        left: '3%',
+        right: '5.6%',
+        bottom: '3%',
+        top:'20%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        axisLabel: {
+            interval: 0
+        },
+        data: []
+    }],
+    yAxis:
+        {
+            axisTick : {show: false},
+            splitLine: {show:true},
+            axisLabel:{textStyle:{color:'#9ea7c4',fontSize:14} },
+            axisLine: { show: true,lineStyle:{ color:'#6173A3'}},
+        },
+    series: [
+        {
+            name:'离职数量',
+            type:'line',
+            data:[],
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            }
+        },
+        {
+            name:'入职数量',
+            type:'line',
+            data:[],
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        formatter: function(p) {
+                            return p.value > 0 ? (p.value) : '';
+                        }
+                    }
+                }
+            }
+        }
+    ]
+};
+
+
+optionempbystore = {
+    title: [{
+        text: '门店人员分布',x:'left',textStyle:{fontSize:"16",fontWeight:"normal"},
+    }],
+    tooltip: {
+        trigger: 'item',
+        formatter: "{b}: {c} ({d}%)"
+    },
+    series: [{
+        type: 'pie',
+        //selectedMode: 'single',
+        radius: ['0%', '70%'],
+      //  color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
+
+        label: {
+            normal: {
+                position: 'out', //标签的位置
+                formatter: '{b} {c}'
+            }
+        },
+        labelLine: {
+            normal: {
+                show: true
+            }
+        },
+        itemStyle: {
+            normal: {
+                borderWidth: 1,
+                borderColor: '#FFCC67',
+                labelLine: {
+                    show: true
+                }
+            },
+            emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        },
+        data:[]
+    }]
+};
 
 //人员编制动态
 /* option8 = {
@@ -4369,6 +4479,7 @@ function showData(){
 	storeDevelopmentProgress();
 	progressOfNetworkConstruction();
 	humanresourseInfo();
+    humanbyCityAndStore();
 	customerInfo();
 	areaInfo();
 	GMVInfo();
@@ -5475,6 +5586,55 @@ function oneyearorsixweek(){
 		                }
 		         });
 	}
+
+	var humanbyCityAndStore = function() {
+		var myChartmpbycity = echarts.init(document.getElementById('mainempbycity'));
+		var myChartempbystore = echarts.init(document.getElementById('mainempbystore'));
+        myChartmpbycity.setOption(optionempbycity);
+        myChartempbystore.setOption(optionempbystore);
+        doManager("humanresourcesManager", "getEmployeeByCityAndStore",null,function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var resultJson = JSON.parse(data.data);
+                var leaveorpost =  resultJson.leaveorpost;
+                if(leaveorpost.length > 0){
+                	var optionempbycityXArray = new Array();
+                	var leavecountArray = new Array();
+                    var postcountArray = new Array();
+                	for (var i = 0; i < leaveorpost.length; i ++){
+                        var leaveorpostinfo =  leaveorpost[i];
+                        var cityname = leaveorpostinfo.cityname.length>4? leaveorpostinfo.cityname.substring(0,5)+'\n'+ leaveorpostinfo.cityname.substring(5, leaveorpostinfo.cityname.length): leaveorpostinfo.cityname;
+                        optionempbycityXArray.push(cityname);
+                        var leavecount = leaveorpostinfo.leavecount;
+                        leavecountArray.push(leavecount);
+                        var postcount = leaveorpostinfo.postcount;
+                        postcountArray.push(postcount);
+                        optionempbycity.xAxis[0]["data"] = optionempbycityXArray;
+                        optionempbycity.series[0].data=leavecountArray;
+                        optionempbycity.series[1].data=postcountArray;
+					}
+                    myChartmpbycity.setOption(optionempbycity);
+				}
+                console.log(leaveorpost);
+                var empByStoreType = resultJson.empByStoreType;
+                if(empByStoreType.length > 0){
+                	var optionempbystoreArray = new Array();
+                    for (var i = 0; i < empByStoreType.length; i ++){
+						var empByStoreTypeinfo = empByStoreType[i];
+                        var empcount = empByStoreTypeinfo.empcount;
+                        var storetypename = empByStoreTypeinfo.storetypename;
+                        var datainfo = {
+                            value:empcount,
+							name: storetypename
+						}
+                        optionempbystoreArray.push(datainfo);
+                    }
+                    optionempbystore.series[0].data=optionempbystoreArray;
+                    myChartempbystore.setOption(optionempbystore);
+                }
+                console.log(empByStoreType);
+            }
+		})
+	}
 	
 	var customerInfo = function(){
 
@@ -5678,32 +5838,6 @@ function oneyearorsixweek(){
 		
 		var iCheckStr = "cb";
 		function getShareParam(){
-			 /*var cLabel=0;
-			 var smallBLabel=0;
-			 if(iCheckStr=='cb') {
-				 cLabel=1;
-				 smallBLabel=1;
-			 }
-			 var storeno = $("#store_id_manual").val()==""?null:$("#store_id_manual").val();
-			  var cityName = $("#citySelect  option:selected").val();
-			  if(cityName!="" && cityName!=undefined){
-			    if(cityName=="黔东南苗族侗族自治州"){
-			    	cityName="黔东南州";
-			  	}else{
-			    	cityName=cityName+"市";
-			    	}
-			  }else{
-			    cityName = null;
-			  }
-		      var deptname = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
-		      if(deptname!="" && deptname=="全部事业群"){
-		    	  deptname = null;
-		      }
-		      var channelname = $("#channelSelect option:selected").html()==""?null:$("#channelSelect option:selected").html();
-		      if(channelname!="" && channelname=="全部频道"){
-		    	  channelname = null;
-		      }*/
-			  
 			  return shareChartStatDto = {				
 					storeno:null,
 					cityname:null,
@@ -5774,24 +5908,6 @@ function oneyearorsixweek(){
 				var x_data_option18 = new Array();
 				var activities_sum_array = new Array();
 				var count_sum = 0;
-				//去掉覆盖社区
-				/*if(findConVillageCountOfCity.length > 0){
-					for(var i = 0;i < findConVillageCountOfCity.length; i++){
-						var villageInfo = findConVillageCountOfCity[i];
-						var count = villageInfo.count;
-						var cityname = villageInfo.city_name;
-						$('#pf-fre1 tr').eq(0).find("th").each(function(z,t){
-							if(cityname == $(t).html()){
-								var m = z-1;
-								count_sum += count;
-								$('#pf-fre1 tr').eq(1).find("td:eq("+m+")").text(count);
-							}
-						});
-					}
-				}
-				$('#pf-fre1 tr').eq(1).find("td:last").text(count_sum);
-				activities_sum_array.push(count_sum);*/
-				//x_data_option18.push('覆盖社区');
 				if(newActivitiesInfo.length > 0){
 					var secondTr = $("#pf-fre1 tr").eq(1);
 					var table =document.getElementById("pf-fre1");

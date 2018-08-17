@@ -1479,44 +1479,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 
 	
-	@Override
-	public Map<String, Object> selectEStoreRankingOfStore(DynamicDto dynamicDto,PageInfo pageInfo) {
-		String  sql ="select SUM(IFNULL(trading_price,0)) as amount,eshop_name as name,eshop_id from df_order_signed_monthly a where store_id='"+dynamicDto.getStoreIds()+"'  and df_signed_time>='"+dynamicDto.getBeginDate()+" 00:00:00' and  df_signed_time<'"+dynamicDto.getEndDate()+"' GROUP BY eshop_id order by amount desc ";
-		//String sql ="select SUM(IFNULL(trading_price,0)) as amount,eshop_name as name,eshop_id from df_order_signed_monthly a where store_id='"+dynamicDto.getStoreIds()+"'  and DATE_FORMAT(df_signed_time,'%Y-%m')='2017-12'  GROUP BY eshop_id order by amount desc ";
 
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
-		Map<String,Object> map_result = new HashMap<String,Object>();
-		List<?> list=null;
-		try {
-			String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
-			if(pageInfo!=null){
-				Query query_count = session.createSQLQuery(sql_count);
-				Object total = query_count.uniqueResult();
-				pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
-
-				Query query = session.createSQLQuery(sql);
-
-				list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).setFirstResult(
-						pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1)).setMaxResults(pageInfo.getRecordsPerPage()).list();
-			
-				Integer total_pages = (pageInfo.getTotalRecords()-1)/pageInfo.getRecordsPerPage()+1;
-				map_result.put("pageinfo",pageInfo);
-				map_result.put("totalPage", total_pages);
-				map_result.put("totalRecords", total);
-			}else{
-				Query query = session.createSQLQuery(sql);
-				list= query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			}
-			
-			map_result.put("gmv", list);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			session.close();
-		}
-       return map_result;
-	}
 
 
 	@Override

@@ -144,6 +144,11 @@ public class UpLoadExcelAction extends HttpServlet {
             	if(retmsg!=null){
             		throw new Exception(retmsg);
             	}
+            }else if("human_template_ext".equals(model)){
+            	String retmsg = importHumanExt(lst_excelfile);
+            	if(retmsg!=null){
+            		throw new Exception(retmsg);
+            	}
             }else if("human_template_cshuman".equals(model)){
             	String retmsg = importHumanCSHuman(lst_excelfile);
             	if(retmsg!=null){
@@ -233,6 +238,13 @@ public class UpLoadExcelAction extends HttpServlet {
         return null;
     }
     
+    public String importHumanExt(List<File> lst_excelfile) throws Exception {
+        if(lst_excelfile.size() > 0){
+        	ExternalHumanresourcesManager externalHumanresourcesManager = (ExternalHumanresourcesManager) SpringHelper.getBean("externalHumanresourcesManager");
+        	return externalHumanresourcesManager.saveHumanresourceExt(lst_excelfile);
+        }
+        return null;
+    }
     
     public String importHumanCSHuman(List<File> lst_excelfile) throws Exception {
         if(lst_excelfile.size() > 0){

@@ -40,6 +40,7 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.common.SSLClient;
 import com.cnpc.pms.personal.dto.CommentDto;
+import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.HumanReContent;
 import com.cnpc.pms.personal.entity.HumanVacation;
 import com.cnpc.pms.personal.manager.HumanReContentManager;
@@ -60,10 +61,16 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     	Map<String,Object> returnMap = new java.util.HashMap<String, Object>();
 		PageInfo pageInfo = condition.getPageinfo();
 		String employee_name = null;
+		String process_status = "";
 		for(Map<String, Object> map : condition.getConditions()){
 			if("employee_name".equals(map.get("key"))&&map.get("value")!=null){//查询条件
 				employee_name = map.get("value").toString();
 			}
+			
+			if("process_status".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				process_status = map.get("value").toString();
+			}
+			
 		}
 		List<?> lst_data = null;
 		FSP fsp = new FSP();
@@ -81,7 +88,31 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
 			sbfCondition.append(" and employee_name like '%"+employee_name+"%'");	
 
 		}
-
+		if(process_status!=null&&process_status.length()>0) {
+			sbfCondition.append(" and process_status="+Integer.parseInt(process_status));
+		}
+		
+		
+		List<DistCity> distCityList = userManager.getCurrentUserCity();
+		if(distCityList!=null&&distCityList.size()>0) {
+			String cityssql = "";
+			//根据城市查询所有门店 id 然后过滤所有门店id
+			if (distCityList != null && distCityList.size() > 0) {
+				for (DistCity d : distCityList) {
+					cityssql += "'" + d.getCityname() + "',";
+				}
+				cityssql = cityssql.substring(0, cityssql.length() - 1);
+			}
+			if(cityssql!=null&&cityssql.length()>0) {
+				sbfCondition.append(" and city_name in("+cityssql+") ");
+			}else {
+				sbfCondition.append(" and 1=0 ");
+			}
+			
+		}else {
+			sbfCondition.append(" and 1=0 ");
+		}
+		
 		
 		/*if(userGroupCode!=null&&userGroupCode.length()>0) {
 			if(userGroupCode.equals("GAX")) {
@@ -189,10 +220,6 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     	System.out.println("============================================");
     	return ret;
     }
-    
-    
-    
-    
     /**
      * HR驳回 
      * @param humanVacation
@@ -234,6 +261,91 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * 运营经理通过
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_rm_Audit(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContent.setEmployee_no(humanVacation.getEmployee_no());
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_rm_process_status(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_rm_audit_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
+    /**
+     * 运营经理驳回 
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_rm_Audit_Re(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContent.setEmployee_no(humanVacation.getEmployee_no());
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_rm_process_status_re(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_rm_audit_re_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
     
     
     

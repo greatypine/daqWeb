@@ -14,4 +14,6 @@ public interface StoreObserveParameterDao {
     public List<Map<String, Object>> queryObserveParameterListByStoreNo(String storeno, String observe_month, String beforMonth);
 
     public List<Map<String, Object>> queryCityObserveParameterListByStoreNo(String storeno, String observe_month);
+
+    public Integer deleteObserveParameter(Long store_id, String observe_month);
 }

@@ -1351,4 +1351,94 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			return lst_data;
 	}
 
+	@Override
+	public List<Map<String, Object>> findStoreDataByCity() {
+		String sql="SELECT city_name,COUNT(*) as city_total,ROUND(SUM(IFNULL(rent_area,0)),2) as jizu_area,ROUND(SUM(IFNULL(usable_area,0)),2) as usable_area,ROUND(AVG(IFNULL(rent_area,0)),2) as jizu_avg_area,ROUND(AVG(IFNULL(usable_area,0)),2) as usable_avg_area,ROUND(AVG(IFNULL(usable_area,0))/AVG(IFNULL(rent_area,0))*100,2) as store_avg_PCT,ROUND(AVG(IFNULL(rental,0)),2)  as city_avg_rental_jizu,ROUND(AVG(IFNULL(rental,0))/(AVG(IFNULL(usable_area,0))/AVG(IFNULL(rent_area,0))),2) as city_avg_rental_usable,sum(CASE WHEN  (agency_fee is not NULL and agency_fee>0) THEN 1 else 0 END ) as store_zhongjie,ROUND(SUM(agency_fee)/10000,2) as agency_fee_total,IFNULL(ROUND(SUM(agency_fee)/sum(CASE WHEN  (agency_fee is not NULL and agency_fee>0) THEN 1 else 0 END ),2),0) as store_price FROM t_store WHERE (storetype='Y' or `name` LIKE '%树木岭店%' or `name` LIKE '%香港路店%') AND IFNULL(rental,0)>0 and status=0 GROUP BY city_name ORDER BY usable_area desc";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> findStorePaymentData() {
+		String sql="SELECT city_name,sum(case WHEN payment_method='月付' then 1 else 0 END ) as mouthPayment,sum(case WHEN payment_method='季付' then 1 else 0 END ) as quarterlyPayment,sum(case WHEN payment_method='半年付' then 1 else 0 END ) as semiAnnualPayment,sum(case WHEN payment_method='年付' then 1 else 0 END ) as annualPayment FROM t_store WHERE (storetype='Y' or `name` LIKE '%树木岭店%' or `name` LIKE '%香港路店%') AND IFNULL(rental,0)>0 and estate not LIKE '%闭店%' and status=0  GROUP BY city_name";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> findStarStoreData() {
+		String sql="SELECT store.city_name,COUNT(1) as city_count, " +
+				"ROUND(SUM(IFNULL(store.rent_area,0)),2) as jizu_area_total, " +
+				"ROUND(AVG(IFNULL(store.rent_area,0)),2) as jizu_area_avg, " +
+				"ROUND(AVG(IFNULL(store.rental,0)),2) as jizu_area_rental, " +
+				"ROUND(SUM(IFNULL(store.usable_area,0)),2) as usable_area_total, " +
+				"ROUND(AVG(IFNULL(store.usable_area,0)),2) as usable_area_avg, " +
+				"ROUND(AVG(IFNULL(store.rental,0))*AVG(IFNULL(store.rent_area,0))/AVG(IFNULL(store.usable_area,0)),2) as usable_area_rental " +
+				"FROM t_store store " +
+				"LEFT JOIN t_town town  ON town.id=store.place_town_id " +
+				"WHERE store.storetype='X' AND IFNULL(store.rental,0)>0 AND store.estate not LIKE '%闭店%' GROUP BY store.city_name";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> findStarStoreInfo() {
+		String sql="SELECT coun.`name` as county_name,store.`name` as store_name,store.city_name,store.rental ,store.estate,store.storeno,store.agency_fee  ,town.`name` as town_name  " +
+				",store.rent_area  ,store.usable_area ,ROUND(store.rental*store.rent_area/store.usable_area,2) as usable_rental, " +
+				"CONCAT(ROUND(store.usable_area/store.rent_area*100,2),'%') as use_PRC, " +
+				"store.payment_method, " +
+				"case WHEN store.rent_free is NULL or store.rent_free='' then 0 WHEN to_days(RIGHT(store.rent_free,10))-to_days(LEFT(store.rent_free,10))=0 then 0 ELSE  " +
+				"to_days(RIGHT(store.rent_free,10))-to_days(LEFT(store.rent_free,10)) END as rent_free " +
+				"FROM t_store store  " +
+				"LEFT JOIN t_town town  ON town.id=store.place_town_id " +
+				"LEFT JOIN t_county coun ON coun.id=town.county_id " +
+				"WHERE store.storetype='X' AND IFNULL(store.rental,0)>0 AND store.estate not LIKE '%闭店%' AND store.city_name='北京'";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+	@Override
+	public List<Map<String, Object>> findSchoolStoreData() {
+		String sql="SELECT store.city_name,COUNT(1) as city_count, " +
+				"ROUND(SUM(IFNULL(store.rent_area,0)),2) as jizu_area_total, " +
+				"ROUND(AVG(IFNULL(store.rent_area,0)),2) as jizu_area_avg, " +
+				"ROUND(AVG(IFNULL(store.rental,0)),2) as jizu_area_rental, " +
+				"ROUND(SUM(IFNULL(store.usable_area,0)),2) as usable_area_total, " +
+				"ROUND(AVG(IFNULL(store.usable_area,0)),2) as usable_area_avg, " +
+				"ROUND(AVG(IFNULL(store.rental,0))*AVG(IFNULL(store.rent_area,0))/AVG(IFNULL(store.usable_area,0)),2) as usable_area_rental " +
+				"FROM t_store store " +
+				"LEFT JOIN t_town town  ON town.id=store.place_town_id " +
+				"WHERE store.storetype='E' AND IFNULL(store.rental,0)>0 AND store.estate not LIKE '%闭店%' GROUP BY store.city_name";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> findSchoolStoreInfo() {
+		String sql="SELECT coun.`name` as county_name,store.`name` as store_name,store.city_name,store.rental ,store.estate,store.storeno,store.agency_fee  ,town.`name` as town_name  " +
+				",store.rent_area  ,store.usable_area ,ROUND(store.rental*store.rent_area/store.usable_area,2) as usable_rental, " +
+				"CONCAT(ROUND(store.usable_area/store.rent_area*100,2),'%') as use_PRC, " +
+				"store.payment_method, " +
+				"case WHEN store.rent_free is NULL or store.rent_free='' then 0 WHEN to_days(RIGHT(store.rent_free,10))-to_days(LEFT(store.rent_free,10))=0 then 0 ELSE  " +
+				"to_days(RIGHT(store.rent_free,10))-to_days(LEFT(store.rent_free,10)) END as rent_free " +
+				"FROM t_store store  " +
+				"LEFT JOIN t_town town  ON town.id=store.place_town_id " +
+				"LEFT JOIN t_county coun ON coun.id=town.county_id " +
+				"WHERE store.storetype='E' AND IFNULL(store.rental,0)>0 AND store.estate not LIKE '%闭店%' ";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+
 }

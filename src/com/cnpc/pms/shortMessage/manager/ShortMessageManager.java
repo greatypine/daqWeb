@@ -181,4 +181,5 @@ public interface ShortMessageManager extends IManager{
 	 **/
 
 	public String sendShortMessage(String mobilephone,String content,String functionname,String epid);
+
 }

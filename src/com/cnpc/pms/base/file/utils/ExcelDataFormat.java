@@ -912,7 +912,7 @@ public class ExcelDataFormat {
 		village.setHousehold_number(getIntFromStr(cell1.toString()));
 		// village.setResident_population_number(new
 		// Double(getIntFromStr(cell3.toString())));
-		village.setResident_population_number(getIntFromStr(cell3.toString()));
+		village.setResident_population_number(getDouble(cell3.toString()));
 		village.setSquare_area(new BigDecimal(getIntFromStr(cell5.toString())) + "");
 		villageRow = sheet.getRow(7);
 		cell1 = villageRow.getCell(1);
@@ -1292,6 +1292,11 @@ public class ExcelDataFormat {
 			return 0;
 		return Double.valueOf(str).intValue();
 	}
+
+	private static double getDouble(String str){
+		return Double.valueOf(str);
+	}
+
 
 	/**
 	 * 数值变换成字符串

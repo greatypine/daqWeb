@@ -1,18 +1,17 @@
 package com.cnpc.pms.dynamic.dao.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.dao.TurnoverStatDao;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.TurnoverStatDto;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverStatDao {
 
@@ -258,7 +257,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.department_name like '%" + storeStatDto.getDeptName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.department_id ";
+		sql = sql + " GROUP BY a.store_code,a.bussiness_group_id ";
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
@@ -315,7 +314,7 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 			sql = sql + " and a.department_name like '%" + storeStatDto.getDeptName().trim() + "%'";
 		}
 		
-		sql = sql + " GROUP BY a.store_code,a.department_id ";
+		sql = sql + " GROUP BY a.store_code,a.bussiness_group_id ";
 		
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

@@ -772,6 +772,19 @@
     </query>
     
     
+    <!-- 外部人员列表 -->
+    <query id="externalHumanresourcesQuery" header="外部人员列表 " baseclass="com.cnpc.pms.personal.entity.ExternalHumanresources" order="inviteCode desc">
+        <column key="id" header="编号ID" type="java.lang.Long" allowSort="true" allowSearch="true" operator="between" display="false"/>
+        <column key="name" header="员工姓名" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+        <column key="citySelect" header="城市" type="java.lang.String" align="left" operator="eq" allowSort="false" display="true"/>
+        <column key="cardnumber" header="身份证号" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+    	<column key="phone" header="移动电话" type="java.lang.String" align="left" allowSearch="true" operator="eq" allowSort="false" display="true"/>
+    	<column key="store_name" header="门店名称" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+    	<column key="store_no" header="门店编号" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+    	<column key="inviteCode" header="邀请码" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="false" display="true"/>
+    </query>
+    
+    
     <!-- 请假审批列表 -->
     <query id="queryMyProcessList" header="请假审批列表" baseclass="com.cnpc.pms.personal.entity.HumanVacation"  method="humanVacationManager.queryMyProcessList">
 		<column key="id" header="序号" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"  width="5%"/>

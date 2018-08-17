@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>添加定时任务信息</title>
+<link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link href="../scripts/css/auto.css" rel="stylesheet">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+<script src="dist/js/headquarters/conversion_utils.js"></script>
+<script type="text/javascript">
+var datas = [];
+	function yanzhen(){
+		var citySelect = $("#tasksn").val();
+		if(citySelect == null||citySelect == "0"){
+			alert("城市不能为空");
+			return;
+		}
+		doSave();
+	}
+	
+	function doSave(){
+		var arr = [ "tasksn", "classify","description","runtime","frequency","datatable","taskmethod"];
+			var o = {};
+			for ( var i in arr) {
+				var v = arr[i];
+				var va = $("#" + v).val();
+				o[v] = va;
+			}
+			doManager("cronTaskManager", "saveOrUpdateCronTask", o, function(data,
+					textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					alert("添加成功！");
+					window.location.href = 'searchDsTaskList_view.html';
+				} else {
+					$$.showMessage("系统信息", "添加失败!");
+				}
+			});
+}
+</script>
+</head>
+<style type="text/css">
+	td {
+		width=50%;
+	}
+
+	p{
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:200px;}
+	.panel-heading .but{float:right; text-align: center;}
+	.but input {
+		background-color: transparent;
+		border: 1px solid #fff;
+		border-radius: 3px;
+		padding: 0 13px;
+		margin-right: 30px;}
+		.ui-dialog .ui-dialog-titlebar-close span {
+    		display: none;
+    	}
+</style>
+<body>
+	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
+    <div class="panel-heading">添加定时任务信息
+        <span class="but">
+			<input name="" type="submit" onclick="yanzhen();" value="保存">
+			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
+		</span>
+    </div>
+    <div class="panel-body" id="temp1">
+	<form action="" method="post" class="pmsForm">
+	<input type="hidden" name="id" id="id"/>
+	<table width="100%">
+		<tr>
+			<td width="33.33%">
+				<p>序号：<span style="color: red">*</span></p>
+				<p><input type="text" name="tasksn" id="tasksn" /></p>
+			</td>
+			<td width="33.33%">
+				<p class="read">任务分类：<span style="color: red">*</span></p>
+				<p class="read"><input type="text"  maxlength="12" name="classify" id="classify"/></p>
+			</td>
+			<td width="33.33%">
+				<p class="read">任务描述：<span style="color: red">*</span></p>
+				<p class="read"><input type="text"  maxlength="12" name="description" id="description"/></p>
+			</td>			
+		</tr>
+ 		<tr>
+			<td width="33.33%">
+				<p>执行时间：<span style="color: red">*</span></p>
+				<p><input type="text" name="runtime" id="runtime"/></p>
+			</td>
+			<td width="33.33%">
+				<p>执行频率：<span style="color: red">*</span></p>
+				<p><input type="text" name="frequency" id="frequency"/></p>
+			</td>
+			<td width="33.33%">
+				<p>生成数据表：<span style="color: red">*</span></p>
+				<p><input type="text" name="datatable" id="datatable"/></p>
+			</td>
+		</tr> 
+		<tr>
+			<td width="33.33%">
+				<p>任务执行方法：<span style="color: red">*</span></p>
+				<p><input type="text" name="taskmethod" id="taskmethod"/></p>
+			</td>		
+		</tr>   
+	</table>
+	</form>
+
+</div>
+</body>
+</html>

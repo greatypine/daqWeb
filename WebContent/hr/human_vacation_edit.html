@@ -166,7 +166,8 @@ function initcurruser(){
   						$("#start_date").val(humanObj.start_date);
   						$("#end_date").val(humanObj.end_date);
   						$("#work_relay").val(humanObj.work_relay);
-						
+						$("#totaldays").html("共"+humanObj.days+"天");
+  						
   						processid=humanObj.processInstanceId;
   						
   						$("#employee_no").val(humanObj.employee_no);
@@ -190,7 +191,7 @@ function initcurruser(){
   						var status = humanObj.process_status;
   						
   						var groupcode=curr_user.usergroup.code;
-  						if("YGGXJSZ"==groupcode){
+  						/* if("YGGXJSZ"==groupcode){
   							$("#btnHR").show();
 							$("#btnHRRe").show();
 							 $(".sp_content").show();
@@ -198,33 +199,74 @@ function initcurruser(){
   							$("#btnHR").hide();
 							$("#btnHRRe").hide();
 							 $(".sp_content").hide();
-  						}
+  						} */
   						
   						
-  						if(curr_user!=null&&curr_user.zw=="店长"){
+  						
+  						if(curr_user!=null&&curr_user.usergroup.code=="YGGXJSZ"){
   							if(status==3||status==2){
-  								 $("#btnDZ").hide();
-  								 $("#btnDZRe").hide();
+  								 $("#btnHR").hide();
+  								 $("#btnHRRe").hide();
   								 //审批意见 
   								 $(".sp_content").hide();
   							}else{
   								//如果最后一个为自己审批的 则已经审批过了 
-  								if(lastmsg.indexOf(curr_user.name)>-1){
-  									 $("#btnDZ").hide();
-  	  								 $("#btnDZRe").hide();
+  								var app_names = humanObj.app_name;
+  								if(app_names.indexOf(curr_user.name)>-1){
+  									$("#btnHR").show();
+ 	  								 $("#btnHRRe").show();
+ 	  								 //$("#btnHR").show();
+ 	  								 //$("#btnHRRe").show();
+ 	  								 //审批意见 
+ 	  								 $(".sp_content").show();
+  								}else{
+  									 $("#btnHR").hide();
+  	  								 $("#btnHRRe").hide();
   	  								 //审批意见 
   	  								 $(".sp_content").hide();
-  								}else{
-  									 $("#btnDZ").show();
-  	  								 $("#btnDZRe").show();
-  	  								 //$("#btnHR").show();
-  	  								 //$("#btnHRRe").show();
-  	  								 //审批意见 
-  	  								 $(".sp_content").show();
   								}
   							}
-							 
 						 }
+  						
+  						
+  						
+  						if(curr_user!=null&&curr_user.usergroup.code=="QYJL"){
+  							if(status==3||status==2){
+  								 $("#btnRM").hide();
+  								 $("#btnRMRe").hide();
+  								 //审批意见 
+  								 $(".sp_content").hide();
+  							}else{
+  								//如果最后一个为自己审批的 则已经审批过了 
+  								var app_names = humanObj.app_name;
+  								if(app_names.indexOf(curr_user.name)>-1){
+  									$("#btnRM").show();
+ 	  								 $("#btnRMRe").show();
+ 	  								 //$("#btnHR").show();
+ 	  								 //$("#btnHRRe").show();
+ 	  								 //审批意见 
+ 	  								 $(".sp_content").show();
+  								}else{
+  									 $("#btnRM").hide();
+  	  								 $("#btnRMRe").hide();
+  	  								 //审批意见 
+  	  								 $(".sp_content").hide();
+  								}
+  							}
+						 }
+  						
+  						
+  						
+  						
+  						
+  						
+  						
+  						
+  						
+  						
+  						
+  						
+  						
 						 if(curr_user!=null&&curr_user.zw=="国安侠"){
 							 	if(status!=1&&status!=2){
 		  							$("#btnEMSave").show();
@@ -415,6 +457,98 @@ function initcurruser(){
 	
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	//运营经理通过 
+	function doRmYes(){
+		  var o = {};
+		  if(processid!=""&&processid.length>0){
+			  o["processInstanceId"] = processid;
+			  o["id"]=id;
+			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
+			  o["employee_no"]=curr_user.employeeId;
+			  doManager("HumanVacationManager", "update_rm_Audit", o, function(data,
+						textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.id!=null){
+							updatermprocessstatus(jsonData.id);
+						}
+					} else {
+						$$.showMessage("系统信息", "失败!");
+					}
+				});
+		  }else{
+			  $$.showMessage("系统信息", "流程编号 为空！ !");
+		  }
+		 
+		}
+	
+	function updatermprocessstatus(vacationid){
+		doManager("HumanVacationManager", "update_rm_process_status", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
+	
+	
+	
+	//运营经理驳回 
+	function doRmNo(){
+		  var o = {};
+		  if(processid!=""&&processid.length>0){
+			  o["processInstanceId"] = processid;
+			  o["id"]=id;
+			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
+			  o["employee_no"]=curr_user.employeeId;
+			  doManager("HumanVacationManager", "update_rm_Audit_Re", o, function(data,
+						textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.id!=null){
+							updatermprocessstatusre(jsonData.id);
+						}
+					} else {
+						$$.showMessage("系统信息", "失败!");
+					}
+				});
+		  }else{
+			  $$.showMessage("系统信息", "流程编号 为空！ !");
+		  }
+		}
+	function updatermprocessstatusre(vacationid){
+		doManager("HumanVacationManager", "update_rm_process_status_re", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
+	
 </script>
 </head>
 <style type="text/css">
@@ -444,15 +578,22 @@ function initcurruser(){
 </style>
 <body>
 	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
-    <div class="panel-heading">请假申请
+    <div class="panel-heading" style="padding-bottom:15px;">请假申请
     
     	<span id="btnDZRe" style="display: none;" onclick="doNo();" disabled="false">店长驳回</span>
     	<span id="btnDZ" style="display: none;" onclick="doYes();" disabled="false">店长通过</span>
-    	<span id="btnHR" style="display: none;" onclick="doHrYes();" disabled="false">HR通过</span>
-    	<span id="btnHRRe" style="display: none;" onclick="doHrNo();" disabled="false">HR驳回</span>
+    	
+    	<span id="btnBack" class="btn btn-default"  style="cursor:pointer;float:right;margin-right:5px;" onclick="javascript:history.go(-1);" disabled="false"> 返回</span>
+    	
+    	<span id="btnHRRe" class="btn btn-default"  style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doHrNo();" disabled="false">驳回</span>
+    	<span id="btnRMRe" class="btn btn-default"  style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doRmNo();" disabled="false">驳回</span>
+    	
+    	
     	
         <span id="btnEMSave" style="display: none;" onclick="yanzhen();" disabled="false">员工提交</span>
-    	<span id="btnBack" onclick="javascript:history.go(-1);" disabled="false"> 返回</span>
+        
+        <span id="btnHR" class="btn btn-default" style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doHrYes();" disabled="false">通过</span>
+        <span id="btnRM" class="btn btn-default" style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doRmYes();" disabled="false">通过</span>
         
         <!-- <span class="but">
 			<input name="" type="submit" onclick="yanzhen();" value="保存">
@@ -547,6 +688,8 @@ function initcurruser(){
 								validate="formatDate:true" class="pmsDateField form-control"
 								yearRange="-100:+10" style="width: 15%; display: inline; height:40px;"
 								readonly />
+								
+								<label id="totaldays"></label> 
 					</p>
 				</td>
 			</tr>

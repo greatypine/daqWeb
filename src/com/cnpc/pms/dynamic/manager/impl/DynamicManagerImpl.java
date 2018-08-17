@@ -4368,7 +4368,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	@Override
 	public Map<String, Object> selectEStoreRankingOfStore(Long storeId,PageInfo pageInfo) {
 		Map<String,Object> result = new HashMap<String,Object>();
-		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -4395,7 +4395,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			dynamicDto.setBeginDate(beginDate);
 			dynamicDto.setEndDate(endDate);
 			dynamicDto.setStoreIds(store.getPlatformid());
-			result = orderDao.selectEStoreRankingOfStore(dynamicDto,pageInfo);
+			result = dynamicDao.selectEStoreRankingOfStore(dynamicDto,pageInfo);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -6311,7 +6311,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else if(dynamicDto.getSearchstr().equals("try_member")){
 				HSSFSheet sheet = wb.createSheet("门店试用会员");
 				HSSFRow row = sheet.createRow(0);
-				String[] str_headers = {"城市","门店名称","门店编号","新增试用社员数","累计试用社员总数"};
+				String[] str_headers = {"城市","门店名称","门店编号","新增试用社员数（含过期）","累计试用社员总数（有效期内）"};
 				String[] headers_key = {"city_name","name","storeno","nowcount","opencount"};
 				for(int i = 0;i < str_headers.length;i++){
 					HSSFCell cell = row.createCell(i);

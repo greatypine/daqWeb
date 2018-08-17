@@ -236,7 +236,37 @@ var editObj = {
 		}
 	}
 
-$pmspage.opArr = [ editObj];  
+var deleteObj = {
+    html : '<a href="#" class="blue">删除</a>',
+    resourceId: "observe_paramter_delete",
+    func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+        var store_id = allColumnsDataMap.store_id;
+        var observe_month =  allColumnsDataMap.observe_month;
+        var store_name = allColumnsDataMap.store_name;
+        $$.showConfirm("提示","是否删除？",function () {
+            $$.showConfirm("提示","删除后该条记录将无法恢复，确认删除？",function () {
+                doManager('storeObserveParameterScoreManager','deleteStoreObserve',[store_id,observe_month],function(data){
+                    if(data.result){
+                        var jsondate = JSON.parse(data.data);
+                        if(jsondate.code == 1){
+                            $$.showMessage("系统信息","删除成功");
+                            searchList();
+                        }else{
+                            $$.showMessage("系统信息","删除失败");
+                        }
+                    }else{
+                        $$.showMessage("系统信息","请求失败，请稍后重新请求！");
+                        return;
+                    }
+                },false);
+            });
+        });
+
+
+    }
+}
+
+$pmspage.opArr = [ editObj,deleteObj];
 
 
  function questioncount(){

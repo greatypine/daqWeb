@@ -165,7 +165,7 @@
                             <div class="col-sm-12">
                                 <dt style="margin-top: 20px;">安心合作社<em><img src="dist/img/member1.png"></em></dt>
                                 <ul class="clearfix">
-                                    <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-home"></i>安心合作社：<span id="eShopCount"></span></li>
+                                    <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-home"></i>合作社E店：<span id="eShopCount"></span></li>
                                     <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-equalizer"></i>SKU总数：<span id="skuCount"></span></li>
                                     <li class="col-sm-4 no-padding"><i class="fa fa-hourglass-half"></i>SKU动销：<span id="movingPinCount"></span></li>
                                 </ul>
@@ -431,7 +431,7 @@
                     <div class="box box-default">
                         <div class="box-body">
                             <div class="col-sm-5">
-                                <h4 class="text-light-blue"><strong>安心合作社成交额</strong></h4>
+                                <h4 class="text-light-blue"><strong>安心合作社E店成交额</strong></h4>
                                 <div class="col-sm-12 no-padding" id="main16" style="height: 260px;"></div>
                             </div>
                             <div class="col-sm-7">
@@ -473,11 +473,11 @@
                     <div class="box box-default">
                         <div class="box-body">
                             <div class="col-sm-7 no-padding">
-                                <h4 class="box-header h4 text-light-blue"><strong>安心合作社排行榜</strong></h4>
+                                <h4 class="box-header h4 text-light-blue"><strong>安心合作社E店排行榜</strong></h4>
                                 <table class="table table-bordered">
                                     <tbody id="eshop_data">
                                     <tr>
-                                        <th>安心合作社名称</th>
+                                        <th>合作社E店名称</th>
                                         <th>成交额</th>
                                         <th>订单量</th>
                                         <th>排名</th>
@@ -567,10 +567,14 @@
         function showAddMember(){
             $(".add_citymember").click(function(){
                 if($("#setadd").val()=="0"){
+                    if($("#setTry").val()=="1"){
+                        $("#setTry").val("0");
+                        $("#try_Member").hide();
+                    }
                     $("#setadd").val("1");
                     $("#cityMember").css("display", "block");
                     $("#cityMember").css("left", event.clientX - 160);
-                    $("#cityMember").css("top", event.clientY + 10);
+                    $("#cityMember").css("top", event.clientY + 60);
                   //  $("#cityMember").show();
                 }else{
                     $("#setadd").val("0");
@@ -578,10 +582,19 @@
                 }
 
             });
-/*            $(".add_citymember").mouseover(function(){
-                $("#setadd").val("1");
-                $("#cityMember").show();
-            });*/
+            $(".add_citymember").mouseover(function(){
+                if($("#setTry").val()=="1"){
+                    $("#setTry").val("0");
+                    $("#try_Member").hide();
+                }
+                if($("#setadd").val()!="1"){
+                    $("#setadd").val("1");
+                    $("#cityMember").css("display", "block");
+                    $("#cityMember").css("left", event.clientX - 160);
+                    $("#cityMember").css("top", event.clientY + 60);
+                }
+
+            });
 /*            $(".add_citymember").mouseleave(function(){
                 $("#setadd").val("0");
                 $("#cityMember").hide();
@@ -633,10 +646,14 @@
         function showTestMem(){
             $(".add_TestMember").click(function(){
                 if($("#setTry").val()=="0"){
+                    if($("#setadd").val()=="1"){
+                        $("#setadd").val("0");
+                        $("#cityMember").hide();
+                    }
                     $("#setTry").val("1");
                     $("#try_Member").css("display", "block");
                     $("#try_Member").css("left", event.clientX - 300);
-                    $("#try_Member").css("top", event.clientY + 10);
+                    $("#try_Member").css("top", event.clientY + 60);
                    // $("#try_Member").show();
                 }else{
                     $("#setTry").val("0");
@@ -644,10 +661,19 @@
                 }
 
            });
-            /*             $(".add_TestMember").mouseover(function(){
-                            $("#setTry").val("1");
-                            $("#try_Member").show();
-                        });*/
+                         $(".add_TestMember").mouseover(function(){
+                             if($("#setadd").val()=="1"){
+                                 $("#setadd").val("0");
+                                 $("#cityMember").hide();
+                             }
+                            if($("#setTry").val()!="1"){
+                                $("#setTry").val("1");
+                                $("#try_Member").css("display", "block");
+                                $("#try_Member").css("left", event.clientX - 300);
+                                $("#try_Member").css("top", event.clientY + 60);
+                            }
+
+                        });
             /*            $(".add_TestMember").mouseleave(function(){
                             $("#setTry").val("0");
                             $("#try_Member").hide();
@@ -4251,6 +4277,20 @@
             chartTry.resize(260);
             chartTry.setOption(optionTry);
         };
+        function hideDiv(){
+            var o1 = document.getElementById("cityMember");
+            var o2 = document.getElementById("try_Member");
+            if($("#setadd").val()=="1"){
+                o1.style.display = "none";
+            }
+            if($("#setTry").val()=="1"){
+                o2.style.display = "none";
+            }
+            $("#setadd").val("0");
+            $("#setTry").val("0");
+        }
+
+        // document.onclick=function(){hideDiv();}
 
     </script>
 </body>

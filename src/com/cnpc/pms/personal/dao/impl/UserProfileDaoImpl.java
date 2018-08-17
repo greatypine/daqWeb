@@ -1,17 +1,16 @@
 package com.cnpc.pms.personal.dao.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.personal.dao.UserProfileDao;
 import com.cnpc.pms.personal.dto.UserProfileDto;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Function：用户档案Dao实现
@@ -76,6 +75,12 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getTrading_price_max())){
 			sql=sql+" AND dup.trading_price_sum <="+userProfile.getTrading_price_max();
 		}
+		if(StringUtils.isNotEmpty(userProfile.getTrading_price_max_down())){
+			sql=sql+" AND dup.trading_price_max >="+userProfile.getTrading_price_max_down();
+		}
+		if(StringUtils.isNotEmpty(userProfile.getTrading_price_max_up())){
+			sql=sql+" AND dup.trading_price_max <="+userProfile.getTrading_price_max_up();
+		}
 		if(StringUtils.isNotEmpty(userProfile.getOrder_count_min())){
 			sql=sql+" AND dup.order_count >="+userProfile.getOrder_count_min();
 		}
@@ -124,8 +129,8 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportUserProfile(UserProfileDto userProfile){
-		String sql = "select customer_name,customer_phone,customer_id,trading_price_sum,trading_price_max,order_count,first_order_time,last_order_time,area_code,"
-				+ "tiny_village_code,regist_time,slient_time,user_model,max(IFNULL(is_b_tag,'')) is_b_tag,max(IFNULL(is_v_tag,'')) is_v_tag,is_sixty_tag,"
+		String sql = "select customer_name,customer_phone,customer_id,trading_price_sum,trading_price_max,order_count,TRUNCATE(trading_price_sum/order_count,2) as cus_sigle_price,"
+				+ "first_order_time,last_order_time,area_code,tiny_village_code,regist_time,slient_time,user_model,max(IFNULL(is_b_tag,'')) is_b_tag,max(IFNULL(is_v_tag,'')) is_v_tag,is_sixty_tag,"
 				+ "is_thirty_tag from (SELECT IFNULL(dup.customer_name,'未填写') as customer_name, dup.customer_phone, dup.customer_id, IFNULL(dup.trading_price_sum,0) as trading_price_sum,"
 				+ "IFNULL(dup.trading_price_max,0) as trading_price_max,IFNULL(dup.order_count,0) as order_count,DATE_FORMAT(dup.first_order_time,'%Y-%m-%d %H:%i:%S') as first_order_time, "
 				+ "DATE_FORMAT(dup.last_order_time,'%Y-%m-%d %H:%i:%S') as last_order_time, IFNULL(dup.area_code,'') as area_code, IFNULL(dup.tiny_village_code,'') as tiny_village_code, "
@@ -178,6 +183,12 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		}
 		if(StringUtils.isNotEmpty(userProfile.getTrading_price_max())){
 			sql=sql+" AND dup.trading_price_sum <="+userProfile.getTrading_price_max();
+		}
+		if(StringUtils.isNotEmpty(userProfile.getTrading_price_max_down())){
+			sql=sql+" AND dup.trading_price_max >="+userProfile.getTrading_price_max_down();
+		}
+		if(StringUtils.isNotEmpty(userProfile.getTrading_price_max_up())){
+			sql=sql+" AND dup.trading_price_max <="+userProfile.getTrading_price_max_up();
 		}
 		if(StringUtils.isNotEmpty(userProfile.getOrder_count_min())){
 			sql=sql+" AND dup.order_count >="+userProfile.getOrder_count_min();

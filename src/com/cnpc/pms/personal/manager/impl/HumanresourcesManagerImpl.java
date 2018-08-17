@@ -976,7 +976,10 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		
 		List<Humanresources> lst_humanList = (List<Humanresources>)this.getList(fsp);
 
-		String str_file_dir_path = PropertiesUtil.getValue("file.root");
+		//String str_file_dir_path = PropertiesUtil.getValue("file.root");.....
+		
+		String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+		
 		String str_newfilepath = str_file_dir_path + "human_list.xls";
 		File file_new = new File(str_newfilepath);
 		if(file_new.exists()){
@@ -1051,12 +1054,16 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getLeavetype()));//离职类型
 					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getLeavercvlistdate()));//收单日期
 					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCareer_group()));//事业群
+					
+					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCareer_group2()));//事业群2
+					
 					nQuitIndex ++;
 				}else{
 					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getOffername()));//推荐人姓名
-					
 					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCareer_group()));//事业群
 					
+					setCellValue(obj_row, cellIndex ++, ValueUtil.getStringValue(humanresources.getCareer_group2()));//事业群2
+
 					nJobIndex++;
 				}
 
@@ -4352,7 +4359,17 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	}
     	return null;
     }
-    
+
+
+	public Map<String,Object> getEmployeeByCityAndStore(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		HumanresourcesDao humanresourcesDao = (HumanresourcesDao) SpringHelper.getBean(HumanresourcesDao.class.getName());
+		List<Map<String, Object>> leaveorpost = humanresourcesDao.querySixWeekHuman();
+		List<Map<String, Object>> maps = humanresourcesDao.queryHumanByStoreType();
+		result.put("leaveorpost",leaveorpost);
+		result.put("empByStoreType",maps);
+		return result;
+	}
     
     
     

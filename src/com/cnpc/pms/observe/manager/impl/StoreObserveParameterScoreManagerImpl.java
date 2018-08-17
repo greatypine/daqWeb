@@ -5,6 +5,7 @@ import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.observe.dao.StoreObserveParameterDao;
 import com.cnpc.pms.observe.dao.StoreObserveParameterScoreDao;
 import com.cnpc.pms.observe.entity.StoreObserveParameterScore;
 import com.cnpc.pms.observe.manager.StoreObserveParameterScoreManager;
@@ -109,7 +110,22 @@ public class StoreObserveParameterScoreManagerImpl extends BizBaseCommonManager 
         return result;
     }
 
-
-
-
+    @Override
+    public Map<String, Object> deleteStoreObserve(Long storeid, String observemonth) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        try {
+            StoreObserveParameterScoreDao observeParameterScoreDao = (StoreObserveParameterScoreDao) SpringHelper.getBean(StoreObserveParameterScoreDao.class.getName());
+            StoreObserveParameterDao observeParameterDao = (StoreObserveParameterDao) SpringHelper.getBean(StoreObserveParameterDao.class.getName());
+            Integer integer = observeParameterScoreDao.deleteObserveParameterScore(storeid, observemonth);
+            Integer integer1 = observeParameterDao.deleteObserveParameter(storeid, observemonth);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("code", "-1");
+            result.put("message", "delete fail");
+            return result;
+        }
+        result.put("code", "1");
+        result.put("message", "delete success");
+        return result;
+    }
 }

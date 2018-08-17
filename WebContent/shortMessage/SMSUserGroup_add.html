@@ -236,7 +236,7 @@
     			if(name!=null&&name.length>6){
     				name = name.substring(0,5)+"...";
     			}
-    			userGroupDiv=userGroupDiv+'<div class="tag" id="'+data[i].employee_no+'"+>'+name+'</div>';
+    			userGroupDiv=userGroupDiv+'<div class="tag" id="'+data[i].mobilephone+'">'+name+'</div>';
     		}
     		selectUserGroup[i] = data[i].code;
     		saveUserGroup[i] = data[i].name;
@@ -462,7 +462,7 @@ function getCode(){
                                     <option value="offline">线下用户组</option>
                                     <option value="storekeeper">店长组</option>
                                     <option value="customer">客户用户组</option>
-                                    <!--<option value="outsider">外部人员组</option>-->
+                                    <option value="outsider">外部人员组</option>
                                 </select>
                             </td>
                         </tr>

@@ -2,12 +2,8 @@ package com.cnpc.pms.personal.entity;
 
 import com.cnpc.pms.base.entity.DataEntity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -43,7 +39,7 @@ public class Village extends DataEntity{
 	 * 常住人口数
 	 */
 	@Column(name = "resident_population_number")
-	private Integer resident_population_number;
+	private Double resident_population_number;
 	
 	/**
 	 * 地图信息X 百度
@@ -308,13 +304,12 @@ public class Village extends DataEntity{
 		this.household_number = household_number;
 	}
 
-	
 
-	public Integer getResident_population_number() {
+	public Double getResident_population_number() {
 		return resident_population_number;
 	}
 
-	public void setResident_population_number(Integer resident_population_number) {
+	public void setResident_population_number(Double resident_population_number) {
 		this.resident_population_number = resident_population_number;
 	}
 

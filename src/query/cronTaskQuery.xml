@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmsquery>
+ 
+    <query id="queryTaskList" header="定时任务"  order="id desc" method="cronTaskManager.queryCronTaskResult">
+    	<column key="id" header="编号"  align="center" display="false" allowSort="false"/>
+        <column key="classify" type="java.lang.String" header="任务分类" operator="like" display="true" width="10%" allowSearch="true" allowSort="true" align="left"/>
+        <column key="description" type="java.lang.String" header="任务描述" operator="eq"  display="true" align="left" allowSort="true" width="15%"/>
+        <column key="runtime" type="java.lang.String" header="执行时间" operator="eq"  display="true" align="center" allowSort="true" width="10%"/>
+        <column key="frequency" type="java.lang.String" header="执行频率" operator="eq"  display="true" align="left" allowSort="true" width="5%"/>
+        <column key="datatable" type="java.lang.String" header="生成数据表" operator="eq"  display="true" align="left" allowSort="true" width="10%"/>
+        <column key="taskmethod" type="java.lang.String" header="任务执行方法" operator="eq"  display="true" align="left" allowSort="true" width="15%"/>
+        <column key="status" type="java.lang.Integer" header="状态" operator="eq"  display="true" align="center" allowSort="true" width="5%"/>
+        <column key="caozuo" header="操作" width="5%" align="center" allowSort="false"/>
+    </query>
+    
+</pmsquery>

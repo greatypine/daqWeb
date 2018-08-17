@@ -1010,4 +1010,14 @@ public interface DynamicDao extends IDAO{
 	 */
     Map<String,Object> getCustomerMember(DynamicDto dynamicDto, PageInfo pageInfo);
 
+
+	/**
+	 *
+	 * TODO 查询门店E店gmv
+	 * 2017年12月20日
+	 * @author gaobaolei
+	 * @param platformId
+	 * @return
+	 */
+	public Map<String, Object> selectEStoreRankingOfStore(DynamicDto dynamicDto,PageInfo pageInfo);
 }

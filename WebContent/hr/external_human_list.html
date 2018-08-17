@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>任务审批</title>
+    <title>外部人员列表</title>
     <script type="text/javascript" src="../scripts/bidLib.js"></script>
     <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
@@ -35,7 +35,7 @@
 
     //记载页面时请求数据列表默认的方法
     function searchList() {
-        $$.executeSearch('queryMyProcessList', 'conditionsDiv');
+        $$.executeSearch('externalHumanresourcesQuery', 'conditionsDiv');
         $(".ui-helper-clearfix").eq(0).remove();
     }
 
@@ -47,37 +47,31 @@
 
 
     //列表中 列的处理
-    //列表中 列的处理
-    var COLUMNS = {
-            "process_status": function(aData, iColumn, sColumnName, map){
+    /* var COLUMNS = {
+            "humanstatus": function(aData, iColumn, sColumnName, map){
                 var value = map[sColumnName];
                 var ret = "";
-                if(value!=null&&value==1){
-                	ret="审批中";
+                if(value!=null&&value!=""&&value==0){
+                	ret="<font color='red'>未分配门店</font>";
                 }
-                if(value!=null&&value==2){
-                	ret="通过";
+                if(value!=null&&value!=""&&value==1){
+                	ret="<font color='green'>在职</font>";
                 }
-				if(value!=null&&value==3){
-                	ret="驳回";
+				if(value!=null&&value!=""&&value==2){
+                	ret="<font color='grey'>离职</font>";
                 }
                 return ret;
-            },
-            "editdelete": function(aData, iColumn, sColumnName, map){
+            },"storenames": function(aData, iColumn, sColumnName, map){
                 var value = map[sColumnName];
-                var id = map['id'];
-                var editbtn = "<a href='javascript:toEditVacation("+id+")'>详情</a>";
-                return editbtn;
-            },
-            "vacation_reason": function(aData, iColumn, sColumnName, map){
-                var value = map[sColumnName];
-                if(value!=null&&value.length>10){
-                	value=value.substring(0,9)+"...";
+                var ret = "";
+                if(value!=null&&value.length>20){
+                	ret=value.substring(0,20)+"...";
+                }else{
+                	ret=value;
                 }
-                return value;
+                return ret;
             }
-            
-        }
+        } */
     
     var deleteObj = {
 			html : '<a href="#">删除</a>',
@@ -115,11 +109,40 @@
     $pmspage.opArr = [ /*editObj , publishObj  , deleteObj*/ ];
     
     
-	function toEditVacation(id){
-		  window.location.href="human_vacation_edit.html?id="+id;	
-
-	  }
-	
+    
+    
+  //自定义一个上传Excel的方法
+    function uploadExtExcel() {
+	  	$('button[name="uploadExt"]').attr("disabled",true);
+        var content = $('input[name="fileext"]').val();
+        //文件不能为空
+        if (isnull(content)) {
+            $$.showMessage("${system.info}", "请选择文件!");
+            $('button[name="uploadExt"]').attr("disabled",false);
+            return false;
+        }
+        //后缀必须为xls,不支持2007
+        var suffix = content.match(/^(.*)(\.)(.{1,8})$/)[3];
+        if ("xls" != suffix && "xlsx" != suffix) {
+            $$.showMessage("${system.info}", "请上传xls,xlsx文件");
+            $('button[name="uploadExt"]').attr("disabled",false);
+            return false;
+        }
+        var path = getRootPath();
+        var $form_upload = $("#uploadFromext");
+        $form_upload.attr("action", path + "/excelUpload.action?model=human_template_ext");
+        $form_upload.submit();
+        $('button[name="uploadExt"]').attr("disabled",false);
+        $('input[name="fileext"]').val('');
+    }
+  
+  
+    function importSuccess() {
+        $$.showMessage("系统信息", "导入成功");
+        $('input[name="fileext"]').val("");
+        searchList();
+    }
+    
 </script>
 <style type="text/css">
     .but {
@@ -132,33 +155,63 @@
 <div class="panel panel-default" style="margin: 10px">
     <div class="panel-heading">
         <h4 class="panel-title">
-              任务管理:请假审批
+              门店数据维护:外部人员列表
         </h4>
     </div>
 </div>
 <div class="rightcont clear">
-    <div class="panel panel-primary">
+
+
+
+
+<div class="panel panel-primary">
+        <div class="panel-heading"><label id="display_base_div">-</label>&nbsp;导入外部人员数据 &nbsp;&nbsp;<font color="red"></font></div>
+        <div class="panel-body" id="base_data_div" style="padding-top: 0px;">
+            <div id="uploadDiv">
+                <input type="hidden" value="" id="inviteCode"/>
+                <form action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadFromext" target="hframeext" style="width:100%; float:left;">
+                    <div class="form-group">
+                        <div class="form-group input-group">
+                            	<table>
+                            	<tr><td>&nbsp;</td></tr>
+                            		<tr>
+                            			<td>
+                            				<input type="file" isuploadtable="true" name="fileext" class="form-control" style="width:75%; height:35px;">
+			                                <span class="input-group-btn" style="width:10%; display:inline-block;">
+			                                    <button type="button" class="btn btn-default" onclick="uploadExtExcel();" name="uploadExt">
+			                                        <img src="../scripts/images/upload_to_cloud.png" alt="导入" style="height: 20px"/>
+			                                    </button>
+			                                </span>
+                            			</td>
+                            			<td>
+                            			</td>
+                            		<tr>
+                            	</table>
+                        </div>
+                    </div>
+                    <iframe name="hframeext" id="hframeext" style="display: none"></iframe>
+                </form>
+                
+                
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+ 
+    <div class="panel panel-primary" style="display:none;">
         <div class="panel-heading">
-            <label id="imp_base_div">-</label>&nbsp;查询
+            <label id="imp_base_div">-</label>&nbsp;人员查询
         </div>
         <div class="panel-body" id="imp_data_div">
-            <!-- <div id="uploadDiv" style="border-bottom: 1px solid #eee">
-                <form action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadFrom"
-                      target="hframe">
-                    <div class="form-group">
-                        <div class="form-group input-group" style="width: 300px;float: left;margin-right: 20px">
-                            <input type="file" isuploadtable="true" name="file" class="form-control">
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" onclick="();" name="upload">
-                                    <img src="../scripts/images/upload_to_cloud.png" alt="导入" style="height: 20px"/>
-                                </button>
-                            </span>
-                        </div>
-                        <iframe name="hframe" id="hframe" style=" display: none"></iframe>
-                        <button name="download" class="btn btn-outline btn-default" onclick="downloadTemplate();">下载模板</button>
-                    </div>
-                </form>
-            </div> -->
             <div id="conditionsDiv" style="margin-top: 0px">
                 <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
                       displaynumber="7">
@@ -166,18 +219,8 @@
                         <tr>
                             <td width="5%">员工姓名:</td>
                             <td>
-                                <input id="employee_name" name="employee_name" type="text" style="width:50%" class="form-control" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')"/>
+                                <input id="name" name="name" type="text" style="width:50%" class="form-control" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')"/>
                             </td>
-                      		
-                            <td width="5%">状态:</td>
-                             <td>
-                                <select id="process_status" name="process_status" style="width:80%;" class="form-control">
-                                	<option value="1">审批中</option>
-                                	<option value="2">通过</option>
-                                	<option value="3">驳回</option>
-                                </select>
-                            </td>
-                            
                         </tr>
                        
                     </table>
@@ -189,8 +232,15 @@
             <button class="btn btn-primary" onclick="doClean();">重置</button>
         </div>
     </div>
+    
+    
+    
+    
+    
+    
+    
     <input type="hidden" id="store_id" isautotab="true" />
-    <div id="centerQueryGridContainer" class="panel panel-primary" queryid="queryMyProcessList" operators="$pmspage.opArr"
+    <div id="centerQueryGridContainer" class="panel panel-primary" queryid="externalHumanresourcesQuery" operators="$pmspage.opArr"
          titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="true"
          showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
          showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
