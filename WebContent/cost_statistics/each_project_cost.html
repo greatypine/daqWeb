@@ -17,6 +17,7 @@
 
     <!-- jQuery 2.2.0 -->
     <script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="../crm/laydate/laydate.js"></script>
     <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap.min.js"></script>
     <!--<script type="text/javascript" src="plugins/fixed-columns/js/bootstrap-table.js"></script>-->
     <!--<script type="text/javascript" src="plugins/fixed-columns/js/bootstrap-table-fixed-columns.js"></script>-->
@@ -28,7 +29,7 @@
     <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
     <script src="../crm/dist/js/headquarters/conversion_utils.js"></script>
     <script src="../crm/plugins/date-new/js/jquery-ui-1.9.2.custom.js" type = "text/javascript"></script>
-
+    <script src="js/cost_labor.js" type = "text/javascript"></script>
 
     <script type="text/javascript">
         var observe_month=decode64(getUrlParamByKey("om"));
@@ -54,54 +55,22 @@
             getCostLabor();//获取人工成本
         });
 
-        $(function(){
-            $("input").on("keyup",function(i,obj){
-                var
-                var reg = /^[1-9]+(.[0-9]{2})?$/;
-                var v= $(this).val();
-                if(!reg.test(v)){
-                    $(this).val(this.value.replace(/\D/g,''));
-                }
-
-            });
-        })
 
 
-
-        /**
-         * 获取人工成本
-         * **/
-        function getCostLabor(){
-
-            var storeNo=null;
-            var storeName=null;
-            var year = 2018;
-            var month = null;
-
-            doManager('costStatisticsManager','queryCostLabor',[storeNo,storeName,year,month],function (data) {
-                if(data.result){
-                    var costLabor = JSON.parse(data.data).labor;
+        var cur_date = new Date();
+        var year = cur_date.getFullYear();
+        laydate.render({//月份控件
+            elem:'#year_labor',
+            value:new Date(),
+            type:"year",
+            btns: ['confirm','now'],
+            theme: '#428bca'
+        });
 
 
-                    for(var i=0;i<costLabor.length;i++){
-                        $("#labor_tb_1").append("<tr><td style='text-align: center'>"+(i+1)+"</td><td style='text-align: center'>"+costLabor[i].storeNo+"</td><td>"+costLabor[i].storeName+"</td></tr>");
-                        var labor_td="";
-                        for(var j=1;j<=12;j++){
-                           var emolument =  costLabor[i]["emolument"+j]==null?"":costLabor[i]["emolument"+j];
-                           var uniform_amortize = costLabor[i]["uniform_amortize"+j]==null?"":costLabor[i]["uniform_amortize"+j];
-                           var accommodation = costLabor[i]["accommodation"+j]==null?"":costLabor[i]["accommodation"+j];
-                           var subtotal = costLabor[i]["subtotal"+j]==null?"":costLabor[i]["subtotal"+j];
-                           labor_td=labor_td+"<td><input type='text' value='"+emolument+"'/></td><td><input type='text' value='"+uniform_amortize+"'/></td><td><input type='text' value='"+accommodation+"'></td><td><input readonly type='text' value='"+subtotal+"'></td>";
-                        }
-
-                        $("#labor_tb_2").append("<tr>"+labor_td+"<td><input type='text' value='"+costLabor[i].uniform_charge+"'></td></tr>");
-                    }
 
 
-                }
-            },false);
 
-        }
 
 
     </script>
@@ -139,6 +108,7 @@
     .no-padding{padding: 0;}
     .table > tbody > tr > td{padding: 0;line-height: 35px}
     .table > tbody > tr > td input{border: 0}
+    .table > tbody > tr > th p{font-weight: bold}
 </style>
 <body style="height: 100%">
 <div class="panel panel-primary" style="margin: 10px 5px 0 5px">
@@ -162,30 +132,30 @@
                             <tr>
                                 <td width="10%">
                                     <p>门店编码：</p>
-                                    <p><input type="text" id="storeNo_s" name="observe_month"></p>
+                                    <p><input type="text" id="storeNo_labor" name="observe_month"></p>
                                 </td>
                                 <td width="10%">
                                     <p>门店名称：</p>
-                                    <p><input type="text" name="observe_person" id="storeName_s"/></p>
+                                    <p><input type="text" name="" id="storeName_labor"/></p>
                                 </td>
                                 <td width="10%">
                                     <p class="read">日期：</p>
-                                    <p class="read"><input type="text" readonly  maxlength="12" name="observe_date" id="observe_date"/></p>
+                                    <p class="read"><input type="text" readonly  maxlength="12"  id="year_labor"/></p>
                                 </td>
                                 <td width="10%" style="text-align: center">
                                    <button  class="btn btn-primary" style="margin-bottom:-20px" >保存</button>
                                 </td>
                                 <td width="10%">
-                                    <button  class="btn btn-primary" style="margin-bottom:-20px" >导出</button>
+                                    <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostLabor()">导出</button>
                                 </td>
                             </tr>
                         </table>
                         <div class="col-sm-3 no-padding">
                             <table class="table" cellspacing="0" cellpadding="0" id="labor_tb_1">
                                 <tr>
-                                    <th style="line-height: 57px;text-align: center;background-color: #1ab7ea">序号</th>
-                                    <th style="line-height: 57px;text-align: center;background-color: #1ab7ea">编码</th>
-                                    <th style="line-height: 57px;text-align: center;background-color: #1ab7ea">门店名称</th>
+                                    <th style="line-height: 57px;text-align: center;background-color:#A9A9A9">序号</th>
+                                    <th style="line-height: 57px;text-align: center;background-color: #A9A9A9">编码</th>
+                                    <th style="line-height: 57px;text-align: center;background-color: #A9A9A9">门店名称</th>
                                 </tr>
                                 <tr id="labor_tr_1">
                                 </tr>

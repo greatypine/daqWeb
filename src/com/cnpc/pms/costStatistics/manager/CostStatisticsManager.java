@@ -20,4 +20,12 @@ public interface CostStatisticsManager extends IManager {
      **/
 
     public Map<String,Object> queryCostLabor(String storeNo,String storeName,Integer year,Integer month);
+
+    /**
+     * @Description 导出人工成本
+     * @author gbl
+     * @date 2018/8/16 13:32
+     **/
+
+    public Map<String,Object> exportCostLabor(String storeNo,String storeName,Integer year,Integer month);
 }
