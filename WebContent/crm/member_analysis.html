@@ -574,7 +574,7 @@
                     $("#setadd").val("1");
                     $("#cityMember").css("display", "block");
                     $("#cityMember").css("left", event.clientX - 160);
-                    $("#cityMember").css("top", event.clientY + 10);
+                    $("#cityMember").css("top", event.clientY + 60);
                   //  $("#cityMember").show();
                 }else{
                     $("#setadd").val("0");
@@ -587,10 +587,13 @@
                     $("#setTry").val("0");
                     $("#try_Member").hide();
                 }
-                $("#setadd").val("1");
-                $("#cityMember").css("display", "block");
-                $("#cityMember").css("left", event.clientX - 160);
-                $("#cityMember").css("top", event.clientY + 10);
+                if($("#setadd").val()!="1"){
+                    $("#setadd").val("1");
+                    $("#cityMember").css("display", "block");
+                    $("#cityMember").css("left", event.clientX - 160);
+                    $("#cityMember").css("top", event.clientY + 60);
+                }
+
             });
 /*            $(".add_citymember").mouseleave(function(){
                 $("#setadd").val("0");
@@ -650,7 +653,7 @@
                     $("#setTry").val("1");
                     $("#try_Member").css("display", "block");
                     $("#try_Member").css("left", event.clientX - 300);
-                    $("#try_Member").css("top", event.clientY + 10);
+                    $("#try_Member").css("top", event.clientY + 60);
                    // $("#try_Member").show();
                 }else{
                     $("#setTry").val("0");
@@ -663,11 +666,13 @@
                                  $("#setadd").val("0");
                                  $("#cityMember").hide();
                              }
+                            if($("#setTry").val()!="1"){
+                                $("#setTry").val("1");
+                                $("#try_Member").css("display", "block");
+                                $("#try_Member").css("left", event.clientX - 300);
+                                $("#try_Member").css("top", event.clientY + 60);
+                            }
 
-                            $("#setTry").val("1");
-                             $("#try_Member").css("display", "block");
-                             $("#try_Member").css("left", event.clientX - 300);
-                             $("#try_Member").css("top", event.clientY + 10);
                         });
             /*            $(".add_TestMember").mouseleave(function(){
                             $("#setTry").val("0");
