@@ -106,7 +106,6 @@ var select_data2 = "";
 	var inputElement_tab2 = $("<input id='store_id_manual_dept' name='store_id_manual_dept' type='hidden' bidTableFlag='true' value=''>")
 	//var inputElement2_tab2 = $("<input type='text' class='form-control'  placeholder='门店' id='store_name_manual_dept' style='border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);'>")
 	var divElement2_tab2 = $("<div class='auto hidden' id='auto_dept' style='width: 397px;z-index: 99999;'>");
-	var search_title1 = "查询口径："+pageStatusInfo['currentMonth']+"月GMV（截止到昨日24点）";
 	if(cityId_==0&&cityname_=='全部城市'){
 		cityId = "";
 		cityName="";	
@@ -117,6 +116,7 @@ var select_data2 = "";
 	}else{
 		requestMonth = pageStatusInfo.currentMonth;
 	}
+	var search_title1 = "查询口径："+requestMonth+"月GMV（截止到昨日24点）";
 	$("#store_dep").empty();
 	if(typeOfRank == 'city_gmv'){//城市(GMV)排名
 		method = "getLastMonthCityRankingTop10";
@@ -439,7 +439,6 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_,month){//获取�
 	var type_title = "";
 	var cityId = (cityId_==null||cityId_=="") ? pageStatusInfo.cityId : cityId_;
 	var cityName = (cityname_==null||cityname_=="") ? pageStatusInfo.cityName : cityname_;
-	var search_title2 = "查询口径："+pageStatusInfo['currentMonth']+"月订单量（截止到昨日24点）";
 	if(typeOfRank == 'store_gmv'){//门店(订单量)排名
 		managerName = "OrderManager";
 		method = "queryCustomerCount";
@@ -457,6 +456,12 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_,month){//获取�
 		requestMonth = month;
 	}else{
 		requestMonth = pageStatusInfo.currentMonth;
+	}
+	var search_title2 = "";
+	if(type_from == '2'){
+		search_title2 = "查询口径："+requestMonth+"月用户量（截止到昨日24点）";
+	}else{
+		search_title2 = "查询口径："+requestMonth+"月订单量（截止到昨日24点）";
 	}
 	$("#search-title2").html(search_title2);
 	$("#title_sum").html(type_title);
