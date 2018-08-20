@@ -250,9 +250,12 @@
                                 <!-- </div>-->
                                 <ul class="clearfix no-padding">
                                 <li class="col-sm-3">
-                                <div class="show_cmBig" style="cursor:pointer;"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doUserMem();">更多</a><br><span id="memAll"></span>
-	                               <!--<font id="bigMember"  style="font-size: 14px;margin-left: 15px;display: none; "><br>大客户社员：</font><span id="cmBig" style="font-size: 16px;margin-left: 5px;display: none; "></span>-->
-                                </div>
+                                    <div class="show_cmBig" >
+                                        <div style="cursor:pointer;"><i class="fa fa-group"></i>社员总数：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doUserMem();">更多</a><br><span id="memAll"></span>
+                                            <!--<font id="bigMember"  style="font-size: 14px;margin-left: 15px;display: none; "><br>大客户社员：</font><span id="cmBig" style="font-size: 16px;margin-left: 5px;display: none; "></span>-->
+                                        </div>
+                                    </div>
+
                                 </li>
                                     <li class="col-sm-3"><i class="glyphicon glyphicon-yen"></i>累计成交额：<a style="float: right;margin-right: 5px;color:#00acee;font-size: 12px;" href="javascript:doK_Mem();">更多</a><br><small>￥</small> <span id="cmGoodsTurnover"></span></li>
                                     <li class="col-sm-3"><div onmouseover="javascript:showTishi1();" onmouseout="hideTishi1();" onclick="showOrHideTishi1();"><i class="fa fa-database"></i>平均客单价：<br><small>￥</small> <span id="dayOneSum"></span></div></li>
@@ -621,6 +624,7 @@
                     $("#cityMember").css("display", "block");
                     $("#cityMember").css("left", event.clientX - 160);
                     $("#cityMember").css("top", event.clientY + 60);
+                    return;
                   //  $("#cityMember").show();
                 }else{
                     $("#setadd").val("0");
@@ -647,6 +651,22 @@
             });*/
         }
 
+        document.addEventListener('click',function (e) {
+            var parent=$(e.target).parents('.add_citymember,.add_TestMember,.show_cmBig');
+            if(parent.length===0){
+                $("#setadd").val("0");
+                $("#cityMember").hide();
+                $("#setTry").val("0");
+                $("#try_Member").hide();
+                $("#setBig").val("0");
+                $("#bigMember2").hide();
+            }
+        });
+/*        document.onclick=function(){
+            alert($(this).id);
+
+                hideDiv();
+        }*/
         function showMemberBig(){
             $(".show_cmBig").click(function(){
                 if($("#setBig").val()=="0"){
@@ -659,12 +679,13 @@
                     myChart0.resize(350);
                     myChart0.setOption(option0);
                     $("#bigMember2").show();
-                    $("#cmBig").show();
+                   // $("#cmBig").show();
+                    return;
                 }else{
                     $("#setBig").val("0");
-                    $("#bigMember").hide();
+                    //$("#bigMember").hide();
                     $("#bigMember2").hide();
-                    $("#cmBig").hide();
+                   // $("#cmBig").hide();
                 }
 
             });
@@ -681,12 +702,12 @@
                 $("#bigMember2").show();
                 $("#cmBig").show();
             });
-            $(".show_cmBig").mouseleave(function(){
+/*            $(".show_cmBig").mouseleave(function(){
                 $("#setBig").val("0");
                 //$("#bigMember").hide();
                 $("#bigMember2").hide();
                 $("#cmBig").hide();
-            });
+            });*/
         }
 
         function showTestMem(){
@@ -701,6 +722,7 @@
                     $("#try_Member").css("left", event.clientX - 300);
                     $("#try_Member").css("top", event.clientY + 60);
                    // $("#try_Member").show();
+                    return;
                 }else{
                     $("#setTry").val("0");
                     $("#try_Member").hide();
@@ -2433,7 +2455,7 @@
                 $("#oneDeal").html(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount==null?'0':(dataServer.cmGoodsTurnover/dataServer.cmGoodsDealCount).toFixed(2));
             }
             //周消费频次
-            $("#jsonEshopWeekCou").html(parseInt(dataServer.jsonEshopWeekCou==null?'0':dataServer.jsonEshopWeekCou));
+            $("#jsonEshopWeekCou").html(dataServer.jsonEshopWeekCou==null?'0':dataServer.jsonEshopWeekCou);
             //E店累计成交额
             $("#cmEshopGmv").html(changeMoney(parseInt(dataServer.allEshopSum==null?'0':dataServer.allEshopSum)));
 
@@ -4336,7 +4358,6 @@
             $("#setTry").val("0");
         }
 
-        // document.onclick=function(){hideDiv();}
 
     </script>
 </body>
