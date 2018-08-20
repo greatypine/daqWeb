@@ -1,3 +1,4 @@
+var screenlogin=getUrlParamByKey("su");
 var myChart1 = echarts.init(document.getElementById('main1'));
 var myChart2 = echarts.init(document.getElementById('main2'));
 var myChart3 = echarts.init(document.getElementById('main3'));
@@ -24,7 +25,7 @@ var markLineSetting4 = {
             normal:{
                 position:'left'
             }
-         }
+        }
     }]
 };
 option1 = {
@@ -573,8 +574,54 @@ myChart12.setOption(option12);
 
 
 $(function () {
-    initStoreData();
+    loginShow();
 })
+
+function showData(){
+    getUser();
+    initStoreData();
+}
+
+
+
+function getUser(){
+    doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var employeeID="";
+            var curr_user = JSON.parse(data.data);
+            if(curr_user == null){
+                urlStr = "../logout.do";
+                window.location.href = urlStr;
+            }
+        }
+    },false);
+}
+function loginShow(){
+
+    if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+        var b = new Base64();
+        screenlogin=b.decode(screenlogin);
+        var obj=JSON.parse(screenlogin);
+        var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
+        var callback = function callback(data, textStatus, XMLHttpRequest) {
+            //window.parent.location=getRootPath() + "/crm/index_city_net.html";
+            var stateObject = {};
+            var newUrl = "/daqWeb/crm/store_rent_info.html";
+            //target = 1;
+            history.replaceState(stateObject,null,newUrl);
+            showData();
+        };
+        var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+            alert("登录信息错误，请确认输入或联系管理员!");
+            return false;
+        }
+        var url = "../login.do";
+        $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback);
+    }else{
+        showData();
+    }
+}
+
 function initStoreData() {
     doManager("storeManager", "findStoreRentDataByCity", null, function (data, textStatus, XMLHttpRequest) {
         if (data.result) {
