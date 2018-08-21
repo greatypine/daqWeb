@@ -1551,7 +1551,7 @@ Date.prototype.format=function(fmt) {
 			       var villagemap = "";
 			       if(result.latitude!='' && result.longitude!=''){
 			    	   position = result.longitude + "," + result.latitude;
-			    	   villagemap = "<strong>地理位置：</strong><a style=\"color:#000\" target=\"myFrameId\" href=\"javascript:showIframe('"+result.village_code+"','"+result.village_id+"','"+position+"','"+ordersn+"')\">查看</a><br>";
+			    	   villagemap = "<strong>地理位置：</strong><a style=\"color:#000\" target=\"_self\" href=\"javascript:showIframe('"+result.village_code+"','"+result.village_id+"','"+position+"','"+ordersn+"')\">查看</a><br>";
 			       }else{
 			    	   villagemap = "<strong>地理位置：</strong>无<br>";
 			       }
