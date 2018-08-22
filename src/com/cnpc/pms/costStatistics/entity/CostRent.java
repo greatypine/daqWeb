@@ -30,6 +30,8 @@ public class CostRent extends DataEntity {
     @Column(name="contract_grand_total",columnDefinition="decimal(20,2) COMMENT '合同总金额'")
     private String contractGrandTotal;
 
+
+
     @Column(name="structure_acreage",columnDefinition="decimal(10,2) COMMENT '建筑面积'")
     private String structureAcreage;
 
