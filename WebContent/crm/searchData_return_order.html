@@ -756,6 +756,7 @@ Date.prototype.format=function(fmt) {
        			    var channel_name = jData[i].channel_name==null?'':jData[i].channel_name;
        			    var department_name = jData[i].department_name==null?'':jData[i].department_name;
        			    var customer_mobile_phone = jData[i].customer_mobile_phone==null?'':jData[i].customer_mobile_phone;
+       			    var customer_mobile_phone_show=customer_mobile_phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
        			    var employee_name = jData[i].employee_name==null?'':jData[i].employee_name;
        			    var trading_price = jData[i].trading_price;
        			    var payable_price = jData[i].payable_price;
@@ -800,7 +801,7 @@ Date.prototype.format=function(fmt) {
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
                     	+"<td><a href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
- 			   	   	    +"<td><a href=\"#\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone+"</a></td>"
+ 			   	   	    +"<td><a href=\"#\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
  			   	        +"<td><a href=\"#\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+returned_amount+"</a></td>"
                 	   	+"<td><a href=\"#\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+r+"</a></td>"
  			   	   	    +"<td><a href=\"#\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
