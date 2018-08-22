@@ -9,9 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +16,9 @@ import java.util.Map;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.cnpc.pms.base.message.SMSStatusCode;
 import com.cnpc.pms.base.paging.FSP;
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
@@ -35,9 +26,11 @@ import com.cnpc.pms.base.paging.ISort;
 import com.cnpc.pms.base.paging.SortFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
+import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
+import com.cnpc.pms.dynamic.common.HttpClientUtil;
 import com.cnpc.pms.dynamic.common.SSLClient;
 import com.cnpc.pms.personal.dto.CommentDto;
 import com.cnpc.pms.personal.entity.DistCity;
@@ -52,7 +45,7 @@ import com.gexin.fastjson.JSONObject;
 public class HumanVacationManagerImpl extends BizBaseCommonManager implements HumanVacationManager {
     
 	
-	static final String URL = "http://10.16.31.242:8888/GASM/dispatcher.action";
+	static String URL = PropertiesUtil.getValue("vacation.interface");
     /**
      * 查询列表 
      */
@@ -81,8 +74,14 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
 		//这里根据当前登录人 过滤 显示所能看到的数据 
 		sbfCondition.append(" 1=1 ");
 		String curr_name = userManager.getCurrentUserDTO().getName();
+		String curr_group = userManager.getCurrentUserDTO().getUsergroup().getCode();
 		if(curr_name!=null&&process_status.equals("1")) {
-			sbfCondition.append(" and app_name like '%"+curr_name+",%' ");
+			if(curr_group.equals("QYJL")) {
+				sbfCondition.append(" and app_name like '%"+curr_name+"%' ");
+			}else {
+				sbfCondition.append(" and app_name like '%"+curr_name+",%' ");
+			}
+			
 		}
 		
 		//根据登录角色过滤显示
@@ -159,9 +158,27 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     
 	  
     
+    public String validateUser(String param){
+		HttpClientUtil hClientUtil = new HttpClientUtil();
+		net.sf.json.JSONObject jsonObject = new net.sf.json.JSONObject();
+		String[] arr = {param};
+		jsonObject.put("managerName", "InterManager");
+		jsonObject.put("methodName", "queryProcessCommentByProcessId");
+		jsonObject.put("parameters", arr);
+		System.out.println("param -> "+jsonObject.toString());
+		String rtObj = hClientUtil.validateRemoteData(URL, "requestString="+jsonObject.toString());
+		return rtObj;
+	}
+    
+    
+    
     public List<CommentDto> findCommentByProcessId(String processId) {
-    	String httpurl = URL+"?requestString={\"managerName\":\"InterManager\",\"methodName\":\"queryProcessCommentByProcessId\",\"parameters\":[\""+processId+"\"]}";
-    	String ret = doGet(httpurl);
+    	//String httpurl = URL+"?requestString={\"managerName\":\"InterManager\",\"methodName\":\"queryProcessCommentByProcessId\",\"parameters\":[\""+processId+"\"]}";
+    	/*String url= URL;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"queryProcessCommentByProcessId\",\"parameters\":["+processId+"\"]}";
+    	String ret = sendPost(url, param);*/
+    	//String ret = doGet(httpurl);
+    	String ret = validateUser(processId);
     	System.out.println("============================================");
     	System.out.println(ret);
     	System.out.println("============================================");

@@ -130,4 +130,49 @@ public class HttpClientUtil {
 		}
 		return result;
 	} 
+	
+	
+	public String validateRemoteData(String url,String param){
+		HttpClient client = null;
+		HttpPost httpPost  = null;
+		String result="";
+		try {
+			client = new SSLClient();
+			httpPost = new HttpPost(url);
+			httpPost.addHeader("Content-type","application/x-www-form-urlencoded");  
+			//设置参数  
+			httpPost.setEntity(new StringEntity(param.toString(), Charset.forName("UTF-8")));  
+	       /* List<NameValuePair> list = new ArrayList<NameValuePair>();  
+	        Iterator iterator = param.entrySet().iterator();  
+	        while(iterator.hasNext()){  
+	            Entry<String,String> elem = (Entry<String, String>) iterator.next();  
+	            list.add(new BasicNameValuePair(elem.getKey(),elem.getValue()));  
+	        }  
+	        if(list.size() > 0){  
+	            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list,"UTF-8");  
+	            httpPost.setEntity(entity);  
+	        }  */
+	        
+	        HttpResponse response = client.execute(httpPost);  
+	        if(response != null){  
+	            HttpEntity resEntity = response.getEntity();  
+	            if(resEntity != null){  
+	                result = EntityUtils.toString(resEntity,"UTF-8");  
+	            }  
+	        }  
+		} catch (ConnectTimeoutException e) {
+			result = "connectTimeout";
+			return result;
+		}catch (SocketTimeoutException e) {
+			result = "socketTimeout";
+			return result;
+		}catch (Exception e) {
+			result = "other";
+			return result;
+		}
+		return result;
+	} 
+	
+	
+	
 }
