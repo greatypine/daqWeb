@@ -37,6 +37,8 @@
     function searchList() {
         $$.executeSearch('queryMyProcessList', 'conditionsDiv');
         $(".ui-helper-clearfix").eq(0).remove();
+        
+        $(".display").css("width","100%");
     }
 
     //验证是不是空
