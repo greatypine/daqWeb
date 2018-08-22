@@ -130,6 +130,7 @@ public class MongoDbUtil {
 			   
 		     }catch(Exception e){
 		    	  mongoClient.close();
+		    	  mongoClient = null;
 		     }
 		  
 	         database = mongoClient.getDatabase("gemini");

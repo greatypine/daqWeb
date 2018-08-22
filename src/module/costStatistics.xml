@@ -2,7 +2,7 @@
 <application xsi:schemaLocation="http://www.cnpc.com/2010/pmsconfig pmsconfig.xsd"
              xmlns="http://www.cnpc.com/2010/pmsconfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <module id="costStatistics">
-        <package id="costStatistics">
+        <package id="costLabor">
             <managerpackage interfacePackage="com.cnpc.pms.costStatistics.manager"
                             implementPackage="com.cnpc.pms.costStatistics.manager.impl"/>
             <daopackage interfacePackage="com.cnpc.pms.costStatistics.dao"

@@ -5,6 +5,7 @@ import com.cnpc.pms.base.entity.DataEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * @ProjectName: daqWeb
@@ -22,7 +23,7 @@ public class CostRenovation extends DataEntity {
     @Column(name="storeName",columnDefinition="varchar(100) COMMENT '门店名称'")
     private String storeName;
 
-    @Column(name="decoration_company",columnDefinition="varchar(200) COMMENT '装修公司'")
+    @Column(name="decoration_company",columnDefinition="varchar(100) COMMENT '装修公司'")
     private String decorationCompany ;
 
     @Column(name="structure_acreage",columnDefinition="decimal(10,2) COMMENT '建筑面积'")
@@ -65,8 +66,9 @@ public class CostRenovation extends DataEntity {
     @Column(name="amortize_money",columnDefinition="decimal(10,2) COMMENT '摊销金额'")
     private double amortizeMoney;
 
-    @Column(name="completed_date",columnDefinition="datetime(0,0) COMMENT '竣工日期'")
-    private double completedDate;
+    //,columnDefinition="datetime(0,0) COMMENT '竣工日期'"
+    @Column(name="completed_date")
+    private Date completedDate;
 
 
     public String getStoreNo() {
@@ -197,11 +199,11 @@ public class CostRenovation extends DataEntity {
         this.amortizeMoney = amortizeMoney;
     }
 
-    public double getCompletedDate() {
+    public Date getCompletedDate() {
         return completedDate;
     }
 
-    public void setCompletedDate(double completedDate) {
+    public void setCompletedDate(Date completedDate) {
         this.completedDate = completedDate;
     }
 }

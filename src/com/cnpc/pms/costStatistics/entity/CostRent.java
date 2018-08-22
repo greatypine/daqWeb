@@ -34,27 +34,143 @@ public class CostRent extends DataEntity {
     private String structureAcreage;
 
     @Column(name="lease_unit_price",columnDefinition="decimal(10,2) COMMENT '租赁单价'")
-    private double leaseUnitPrice;
+    private Double leaseUnitPrice;
+
+    @Column(name="year",columnDefinition="int(4) COMMENT '年份'")
+    private int year;
 
     @Column(name="deposit",columnDefinition="decimal(10,2) COMMENT '押金'")
-    private double deposit;
+    private Double deposit;
 
     @Column(name="agency_fee",columnDefinition="decimal(10,2) COMMENT '中介费'")
-    private double agencyFee;
+    private Double agencyFee;
 
-    @Column(name="property_fee",columnDefinition="decimal(10,2) COMMENT '物业费/年'")
-    private double propertyFee;
+    @Column(name="property_fee",columnDefinition="decimal(10,2) COMMENT '物业费/月'")
+    private Double propertyFee;
 
     @Column(name="property_deadline",columnDefinition="int(2) COMMENT '物业期限/月 '")
     private Integer propertyDeadline;
 
-    @Column(name="free_lease_start_date",columnDefinition="datetime(0,0) COMMENT '起租日（含免租期）'")
+    //,columnDefinition="COMMENT '起租日 含免租期'"
+    @Column(name="free_lease_start_date")
     private Date freeLeaseStartDate;
 
-    @Column(name="lease_start_date",columnDefinition="datetime(0,0) COMMENT '起租日（免租期截止日）'")
+    //,columnDefinition="COMMENT '起租日 免租期截止）'"
+    @Column(name="lease_start_date")
     private Date leaseStartDate;
-
-    @Column(name="lease_stop_date",columnDefinition="datetime(0,0) COMMENT '到期日'")
+    //,columnDefinition="COMMENT '到期日'"
+    @Column(name="lease_stop_date")
     private Date leaseStopDate;
 
+    public String getStoreNo() {
+        return storeNo;
+    }
+
+    public void setStoreNo(String storeNo) {
+        this.storeNo = storeNo;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getAddr() {
+        return addr;
+    }
+
+    public void setAddr(String addr) {
+        this.addr = addr;
+    }
+
+    public String getContractGrandTotal() {
+        return contractGrandTotal;
+    }
+
+    public void setContractGrandTotal(String contractGrandTotal) {
+        this.contractGrandTotal = contractGrandTotal;
+    }
+
+    public String getStructureAcreage() {
+        return structureAcreage;
+    }
+
+    public void setStructureAcreage(String structureAcreage) {
+        this.structureAcreage = structureAcreage;
+    }
+
+    public Integer getPropertyDeadline() {
+        return propertyDeadline;
+    }
+
+    public void setPropertyDeadline(Integer propertyDeadline) {
+        this.propertyDeadline = propertyDeadline;
+    }
+
+    public Date getFreeLeaseStartDate() {
+        return freeLeaseStartDate;
+    }
+
+    public void setFreeLeaseStartDate(Date freeLeaseStartDate) {
+        this.freeLeaseStartDate = freeLeaseStartDate;
+    }
+
+    public Date getLeaseStartDate() {
+        return leaseStartDate;
+    }
+
+    public void setLeaseStartDate(Date leaseStartDate) {
+        this.leaseStartDate = leaseStartDate;
+    }
+
+    public Date getLeaseStopDate() {
+        return leaseStopDate;
+    }
+
+    public void setLeaseStopDate(Date leaseStopDate) {
+        this.leaseStopDate = leaseStopDate;
+    }
+
+    public Double getLeaseUnitPrice() {
+        return leaseUnitPrice;
+    }
+
+    public void setLeaseUnitPrice(Double leaseUnitPrice) {
+        this.leaseUnitPrice = leaseUnitPrice;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public Double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(Double deposit) {
+        this.deposit = deposit;
+    }
+
+    public Double getAgencyFee() {
+        return agencyFee;
+    }
+
+    public void setAgencyFee(Double agencyFee) {
+        this.agencyFee = agencyFee;
+    }
+
+    public Double getPropertyFee() {
+        return propertyFee;
+    }
+
+    public void setPropertyFee(Double propertyFee) {
+        this.propertyFee = propertyFee;
+    }
 }

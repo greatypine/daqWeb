@@ -2,6 +2,7 @@ package com.cnpc.pms.costStatistics.dao.impl;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.costStatistics.dao.CostStatisticsDao;
+import com.cnpc.pms.costStatistics.entity.CostLabor;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStatisticsDao {
     @Override
     public List<Map<String, Object>> queryCostLabor(String storeNo, String storeName, Integer year, Integer month) {
-        String sql="SELECT storeNo,storeName ,uniform_charge,status,year," +
+        String sql="SELECT ts.storeno as storeNo,ts.name as storeName ,ts.storeType,uniform_charge,ts.estate,year," +
                 "sum(case when month=1 then emolument end) as emolument1,sum(case when month=1 then accommodation end) as accommodation1,uniform_amortize as uniform_amortize1,subtotal as subtotal1," +
                 "sum(case when month=2 then emolument end) as emolument2,sum(case when month=2 then accommodation end) as accommodation2,uniform_amortize as uniform_amortize2,subtotal as subtotal2," +
                 "sum(case when month=3 then emolument end) as emolument3,sum(case when month=3 then accommodation end) as accommodation3,uniform_amortize as uniform_amortize3,subtotal as subtotal3," +
@@ -31,18 +32,15 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
                 "sum(case when month=10 then emolument end) as emolument10,sum(case when month=10 then accommodation end) as accommodation10,uniform_amortize as uniform_amortize10,subtotal as subtotal10," +
                 "sum(case when month=11 then emolument end) as emolument11,sum(case when month=1 then accommodation end) as accommodation11,uniform_amortize as uniform_amortize11,subtotal as subtotal11," +
                 "sum(case when month=12 then emolument end) as emolument12,sum(case when month=12 then accommodation end) as accommodation12,uniform_amortize as uniform_amortize12,subtotal as subtotal12" +
-                " FROM `t_cost_labor` group by storeNo having status=0 ";
+                " FROM t_store ts left join  (select * from `t_cost_labor` where year="+year+") tc on ts.storeno=tc.storeNo  group by storeNo having ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
         if(storeNo!=null&&!"".equals(storeNo)){
-            sql+=" and storeNo like '%"+storeNo+"%'";
+            sql+=" and ts.storeno like '%"+storeNo+"%'";
         }
 
         if(storeName!=null&&!"".equals(storeName)){
-            sql+=" and storeName like '%"+storeName+"%'";
+            sql+=" and ts.name like '%"+storeName+"%'";
         }
 
-        if(year!=null){
-            sql+=" and year="+year;
-        }
 
          List<Map<String,Object>> list = null;
         try{
@@ -54,5 +52,57 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
         }
 
         return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> selectCostLabor(String storeNo, Integer year, Integer month) {
+        String sql = " select * from t_cost_labor where storeNo='"+storeNo+"' and year="+year+" and month="+month;
+        List<Map<String,Object>> list = null;
+        try{
+            SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+            list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return list;
+    }
+
+    @Override
+    public void updateCostLabor(CostLabor costLabor) {
+        String sql = "update t_cost_labor set emolument="+costLabor.getEmolument()+",uniform_amortize ="+costLabor.getUniformAmortize()+",accommodation="+costLabor.getSubtotal();
+    }
+
+    @Override
+    public List<Map<String, Object>> queryCostRent(String storeNo, String storeName, Integer year) {
+       String sql ="select ts.storeno as store_no,ts.name as store_name ,tcr.addr,(ifnull(tcr.contract_grand_total,0)/60) as rent_monthly,property_fee,(ifnull(property_fee,0)+(ifnull(tcr.contract_grand_total,0)/60)) as cost_monthly, tcr.contract_grand_total,tcr.structure_acreage,tcr.lease_unit_price,tcr.deposit,tcr.agency_fee,tcr.property_fee,tcr.property_deadline,tcr.free_lease_start_date,tcr.lease_start_date,tcr.lease_stop_date from  t_store ts left join t_cost_rent tcr on  ts.storeno = tcr.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+        if(storeNo!=null&&!"".equals(storeNo)){
+            sql+=" and ts.storeno like '%"+storeNo+"%'";
+        }
+
+        if(storeName!=null&&!"".equals(storeName)){
+            sql+=" and ts.name like '%"+storeName+"%'";
+        }
+
+        if(year!=null&&!"".equals(year)){
+            sql+=" and tcr.year= "+year;
+        }
+
+        List<Map<String,Object>> list = null;
+        try{
+            SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+            list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> selectCostRent(String storeNo, Integer year) {
+        return null;
     }
 }

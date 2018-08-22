@@ -30,19 +30,19 @@ public class CostLabor extends DataEntity {
     private int month;
 
     @Column(name="emolument",columnDefinition="decimal(20,2) COMMENT '员工薪酬'")
-    private double emolument;
+    private Double emolument;
 
     @Column(name="uniform_charge",columnDefinition="decimal(20,2) COMMENT '工服年费'")
-    private double uniformCharge;
+    private Double uniformCharge;
 
     @Column(name="uniform_amortize",columnDefinition="decimal(20,2) COMMENT '工服摊销'")
-    private double uniformAmortize;
+    private Double uniformAmortize;
 
     @Column(name="accommodation",columnDefinition="decimal(20,2) COMMENT '住宿星店房租'")
-    private double accommodation;
+    private Double accommodation;
 
     @Column(name="subtotal",columnDefinition="decimal(20,2) COMMENT '小计'")
-    private double subtotal;
+    private Double subtotal;
 
 
     public String getStoreNo() {
@@ -77,43 +77,43 @@ public class CostLabor extends DataEntity {
         this.month = month;
     }
 
-    public double getEmolument() {
+    public Double getEmolument() {
         return emolument;
     }
 
-    public void setEmolument(double emolument) {
+    public void setEmolument(Double emolument) {
         this.emolument = emolument;
     }
 
-    public double getUniformAmortize() {
-        return uniformAmortize;
-    }
-
-    public void setUniformAmortize(double uniformAmortize) {
-        this.uniformAmortize = uniformAmortize;
-    }
-
-    public double getAccommodation() {
-        return accommodation;
-    }
-
-    public void setAccommodation(double accommodation) {
-        this.accommodation = accommodation;
-    }
-
-    public double getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    public double getUniformCharge() {
+    public Double getUniformCharge() {
         return uniformCharge;
     }
 
-    public void setUniformCharge(double uniformCharge) {
+    public void setUniformCharge(Double uniformCharge) {
         this.uniformCharge = uniformCharge;
+    }
+
+    public Double getUniformAmortize() {
+        return uniformAmortize;
+    }
+
+    public void setUniformAmortize(Double uniformAmortize) {
+        this.uniformAmortize = uniformAmortize;
+    }
+
+    public Double getAccommodation() {
+        return accommodation;
+    }
+
+    public void setAccommodation(Double accommodation) {
+        this.accommodation = accommodation;
+    }
+
+    public Double getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Double subtotal) {
+        this.subtotal = subtotal;
     }
 }
