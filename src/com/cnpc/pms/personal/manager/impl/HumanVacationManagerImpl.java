@@ -77,11 +77,15 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
 		fsp.setSort(SortFactory.createSort("id", ISort.DESC));
 		StringBuffer sbfCondition = new StringBuffer(); 
 		
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
 		//这里根据当前登录人 过滤 显示所能看到的数据 
 		sbfCondition.append(" 1=1 ");
+		String curr_name = userManager.getCurrentUserDTO().getName();
+		if(curr_name!=null&&process_status.equals("1")) {
+			sbfCondition.append(" and app_name like '%"+curr_name+",%' ");
+		}
 		
 		//根据登录角色过滤显示
-		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
 		String userGroupCode = userManager.getCurrentUserDTO().getUsergroup().getCode();
 		
 		if(employee_name!=null&&employee_name.length()>0) {
@@ -346,6 +350,98 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     	System.out.println("============================================");
     	return ret;
     }
+    
+    
+    
+    
+    
+    
+    /**
+     * 门店总监通过
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_zj_Audit(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContent.setEmployee_no(humanVacation.getEmployee_no());
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_zj_process_status(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_zj_audit_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
+    
+    
+    
+    
+    
+    /**
+     * 门店总监驳回 
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_zj_Audit_Re(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContent.setEmployee_no(humanVacation.getEmployee_no());
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_zj_process_status_re(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_zj_audit_re_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
+    
+    
+    
     
     
     
