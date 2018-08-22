@@ -52,7 +52,7 @@ import com.gexin.fastjson.JSONObject;
 public class HumanVacationManagerImpl extends BizBaseCommonManager implements HumanVacationManager {
     
 	
-	static final String URL = "http://localhost:8889/GASM/dispatcher.action";
+	static final String URL = "http://10.16.31.242:8888/GASM/dispatcher.action";
     /**
      * 查询列表 
      */
