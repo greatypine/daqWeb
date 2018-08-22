@@ -168,6 +168,14 @@ function initcurruser(){
   						$("#work_relay").val(humanObj.work_relay);
 						$("#totaldays").html("共"+humanObj.days+"天");
   						
+						
+						var filename="<a href=\""+humanObj.ossurl+"\">"+humanObj.filename+"</a>";
+						if(humanObj.filename==null||humanObj.filename=="null"||humanObj.filename==""){
+							filename="无";
+						}
+						$("#filenameshow").html(filename);
+						
+						
   						processid=humanObj.processInstanceId;
   						
   						$("#employee_no").val(humanObj.employee_no);
@@ -258,6 +266,33 @@ function initcurruser(){
   						
   						
   						
+  						
+  						
+  						
+  						if(curr_user!=null&&curr_user.usergroup.code=="MDYYZXZJJSZ"){
+  							if(status==3||status==2){
+  								 $("#btnZJ").hide();
+  								 $("#btnZJRe").hide();
+  								 //审批意见 
+  								 $(".sp_content").hide();
+  							}else{
+  								//如果最后一个为自己审批的 则已经审批过了 
+  								var app_names = humanObj.app_name;
+  								if(app_names.indexOf(curr_user.name)>-1){
+  									$("#btnZJ").show();
+ 	  								 $("#btnZJRe").show();
+ 	  								 //$("#btnHR").show();
+ 	  								 //$("#btnHRRe").show();
+ 	  								 //审批意见 
+ 	  								 $(".sp_content").show();
+  								}else{
+  									 $("#btnZJ").hide();
+  	  								 $("#btnZJRe").hide();
+  	  								 //审批意见 
+  	  								 $(".sp_content").hide();
+  								}
+  							}
+						 }
   						
   						
   						
@@ -549,6 +584,106 @@ function initcurruser(){
 		});
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//门店总监通过 
+	function doZjYes(){
+		  var o = {};
+		  if(processid!=""&&processid.length>0){
+			  o["processInstanceId"] = processid;
+			  o["id"]=id;
+			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
+			  o["employee_no"]=curr_user.employeeId;
+			  doManager("HumanVacationManager", "update_zj_Audit", o, function(data,
+						textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.id!=null){
+							updatezjprocessstatus(jsonData.id);
+						}
+					} else {
+						$$.showMessage("系统信息", "失败!");
+					}
+				});
+		  }else{
+			  $$.showMessage("系统信息", "流程编号 为空！ !");
+		  }
+		 
+		}
+	
+	function updatezjprocessstatus(vacationid){
+		doManager("HumanVacationManager", "update_zj_process_status", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	//总监驳回 
+	function doZjNo(){
+		  var o = {};
+		  if(processid!=""&&processid.length>0){
+			  o["processInstanceId"] = processid;
+			  o["id"]=id;
+			  o["re_content"]=$("#re_content").val();
+			  o["employee_name"]=curr_user.name;
+			  o["employee_no"]=curr_user.employeeId;
+			  doManager("HumanVacationManager", "update_zj_Audit_Re", o, function(data,
+						textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						if(jsonData.id!=null){
+							updatezjprocessstatusre(jsonData.id);
+						}
+					} else {
+						$$.showMessage("系统信息", "失败!");
+					}
+				});
+		  }else{
+			  $$.showMessage("系统信息", "流程编号 为空！ !");
+		  }
+		}
+	function updatezjprocessstatusre(vacationid){
+		doManager("HumanVacationManager", "update_zj_process_status_re", [vacationid], function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var jsonData = $.fromJSON(data.data);
+				if(jsonData==null){
+					$$.showMessage("系统信息", "操作失败!");
+				}else{
+					window.location.href = 'human_vacation_list.html';
+				}
+			} else {
+				$$.showMessage("系统信息", "操作失败!");
+			}
+		});
+	}
+	
 </script>
 </head>
 <style type="text/css">
@@ -587,6 +722,7 @@ function initcurruser(){
     	
     	<span id="btnHRRe" class="btn btn-default"  style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doHrNo();" disabled="false">驳回</span>
     	<span id="btnRMRe" class="btn btn-default"  style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doRmNo();" disabled="false">驳回</span>
+    	<span id="btnZJRe" class="btn btn-default"  style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doZjNo();" disabled="false">驳回</span>
     	
     	
     	
@@ -594,6 +730,7 @@ function initcurruser(){
         
         <span id="btnHR" class="btn btn-default" style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doHrYes();" disabled="false">通过</span>
         <span id="btnRM" class="btn btn-default" style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doRmYes();" disabled="false">通过</span>
+        <span id="btnZJ" class="btn btn-default" style="display: none;cursor:pointer;float:right;margin-right:5px;" onclick="doZjYes();" disabled="false">通过</span>
         
         <!-- <span class="but">
 			<input name="" type="submit" onclick="yanzhen();" value="保存">
@@ -704,6 +841,17 @@ function initcurruser(){
 					</p>
 				</td>
 			</tr>
+			
+			
+			<tr>
+				<td colspan="2">
+					<p style="float: left;">附件：&nbsp;</p>
+					<p style="float: none;" id="filenameshow">
+						
+					</p>
+				</td>
+			</tr>
+			
 			
 			 <input type="hidden" id="employee_no" value=""/>
 			 <input type="hidden" id="employee_name" value=""/>

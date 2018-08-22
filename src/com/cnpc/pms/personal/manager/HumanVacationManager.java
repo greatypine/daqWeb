@@ -28,4 +28,12 @@ public interface HumanVacationManager extends IManager{
 	public String update_rm_process_status(Long vacationid);
 	
 	
+	
+	//门店总监通过
+	public HumanReContent update_zj_Audit(HumanVacation humanVacation);
+	public String update_zj_process_status(Long vacationid);
+	//门店总监驳回
+	public HumanReContent update_zj_Audit_Re(HumanVacation humanVacation);
+	public String update_zj_process_status_re(Long vacationid);
+	
 }

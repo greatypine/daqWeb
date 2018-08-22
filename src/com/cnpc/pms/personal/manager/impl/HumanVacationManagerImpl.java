@@ -9,9 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +16,9 @@ import java.util.Map;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import com.cnpc.pms.base.message.SMSStatusCode;
 import com.cnpc.pms.base.paging.FSP;
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
@@ -35,9 +26,11 @@ import com.cnpc.pms.base.paging.ISort;
 import com.cnpc.pms.base.paging.SortFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
+import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
+import com.cnpc.pms.dynamic.common.HttpClientUtil;
 import com.cnpc.pms.dynamic.common.SSLClient;
 import com.cnpc.pms.personal.dto.CommentDto;
 import com.cnpc.pms.personal.entity.DistCity;
@@ -52,7 +45,7 @@ import com.gexin.fastjson.JSONObject;
 public class HumanVacationManagerImpl extends BizBaseCommonManager implements HumanVacationManager {
     
 	
-	static final String URL = "http://localhost:8889/GASM/dispatcher.action";
+	static String URL = PropertiesUtil.getValue("vacation.interface");
     /**
      * 查询列表 
      */
@@ -77,11 +70,21 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
 		fsp.setSort(SortFactory.createSort("id", ISort.DESC));
 		StringBuffer sbfCondition = new StringBuffer(); 
 		
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
 		//这里根据当前登录人 过滤 显示所能看到的数据 
 		sbfCondition.append(" 1=1 ");
+		String curr_name = userManager.getCurrentUserDTO().getName();
+		String curr_group = userManager.getCurrentUserDTO().getUsergroup().getCode();
+		if(curr_name!=null&&process_status.equals("1")) {
+			if(curr_group.equals("QYJL")) {
+				sbfCondition.append(" and app_name like '%"+curr_name+"%' ");
+			}else {
+				sbfCondition.append(" and app_name like '%"+curr_name+",%' ");
+			}
+			
+		}
 		
 		//根据登录角色过滤显示
-		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
 		String userGroupCode = userManager.getCurrentUserDTO().getUsergroup().getCode();
 		
 		if(employee_name!=null&&employee_name.length()>0) {
@@ -155,9 +158,27 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     
 	  
     
+    public String validateUser(String param){
+		HttpClientUtil hClientUtil = new HttpClientUtil();
+		net.sf.json.JSONObject jsonObject = new net.sf.json.JSONObject();
+		String[] arr = {param};
+		jsonObject.put("managerName", "InterManager");
+		jsonObject.put("methodName", "queryProcessCommentByProcessId");
+		jsonObject.put("parameters", arr);
+		System.out.println("param -> "+jsonObject.toString());
+		String rtObj = hClientUtil.validateRemoteData(URL, "requestString="+jsonObject.toString());
+		return rtObj;
+	}
+    
+    
+    
     public List<CommentDto> findCommentByProcessId(String processId) {
-    	String httpurl = URL+"?requestString={\"managerName\":\"InterManager\",\"methodName\":\"queryProcessCommentByProcessId\",\"parameters\":[\""+processId+"\"]}";
-    	String ret = doGet(httpurl);
+    	//String httpurl = URL+"?requestString={\"managerName\":\"InterManager\",\"methodName\":\"queryProcessCommentByProcessId\",\"parameters\":[\""+processId+"\"]}";
+    	/*String url= URL;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"queryProcessCommentByProcessId\",\"parameters\":["+processId+"\"]}";
+    	String ret = sendPost(url, param);*/
+    	//String ret = doGet(httpurl);
+    	String ret = validateUser(processId);
     	System.out.println("============================================");
     	System.out.println(ret);
     	System.out.println("============================================");
@@ -346,6 +367,98 @@ public class HumanVacationManagerImpl extends BizBaseCommonManager implements Hu
     	System.out.println("============================================");
     	return ret;
     }
+    
+    
+    
+    
+    
+    
+    /**
+     * 门店总监通过
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_zj_Audit(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContent.setEmployee_no(humanVacation.getEmployee_no());
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_zj_process_status(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_zj_audit_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
+    
+    
+    
+    
+    
+    /**
+     * 门店总监驳回 
+     * @param humanVacation
+     * @return
+     */
+    @Override
+    public HumanReContent update_zj_Audit_Re(HumanVacation humanVacation) {
+    	//processInstanceId,re_content,id,employee_name
+    	HumanReContent humanReContent = new HumanReContent();
+    	try {
+    		String processInstanceId=humanVacation.getProcessInstanceId();
+        	String re_content=humanVacation.getRe_content();
+        	Long id = humanVacation.getId();
+        	String employee_name=humanVacation.getEmployee_name();
+        	HumanReContentManager humanReContentManager = (HumanReContentManager) SpringHelper.getBean("humanReContentManager");
+        	humanReContent.setProcessInstanceId(processInstanceId);
+        	humanReContent.setRe_content(re_content);
+        	humanReContent.setVacationid(id);
+        	humanReContent.setEmployee_name(employee_name);
+        	humanReContent.setEmployee_no(humanVacation.getEmployee_no());
+        	humanReContentManager.saveObject(humanReContent);
+        	//String re_content=URLEncoder.encode(humanVacation.getRe_content(),"UTF-8");
+        	//String employee_name=URLEncoder.encode(humanVacation.getEmployee_name(),"UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return humanReContent;
+    }
+    @Override
+    public String update_zj_process_status_re(Long vacationid) {
+    	Long reContentId=vacationid;
+    	String param = "requestString={\"managerName\":\"InterManager\",\"methodName\":\"update_zj_audit_re_cn\",\"parameters\":[\""+reContentId+"\"]}";
+    	String ret = sendPost(URL,param);
+    	//String ret = doGet(httpurl);
+    	System.out.println("============================================");
+    	System.out.println(ret);
+    	System.out.println("============================================");
+    	return ret;
+    }
+    
+    
+    
     
     
     

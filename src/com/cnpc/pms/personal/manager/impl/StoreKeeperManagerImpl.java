@@ -73,7 +73,7 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 	 */
 	@Override
 	public StoreKeeper queryStoreKeeperByPhone(String phone) {
-		IFilter iFilter = FilterFactory.getSimpleFilter("phone", phone);
+		IFilter iFilter = FilterFactory.getSimpleFilter("phone", phone).appendAnd(FilterFactory.getSimpleFilter("humanstatus",1));
 		List<?> lst_groupList = this.getList(iFilter);
 		if (lst_groupList != null && lst_groupList.size() > 0) {
 			return (StoreKeeper) lst_groupList.get(0);

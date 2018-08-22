@@ -251,7 +251,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 
 				}
 				if(playMem!=0){
-                    eshopWeekCount.add(String.format("%.2f",Double.parseDouble(eshopCou/playMem+"")));
+                    eshopWeekCount.add(String.format("%.1f",Double.parseDouble(eshopCou/playMem+"")));
                 }else{
                     eshopWeekCount.add("0");
                 }
@@ -1505,7 +1505,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 
 				}
 				if (playMem != 0) {
-					eshopWeekCount.add(String.format("%.2f", Double.parseDouble(eshopCou / playMem + "")));
+					eshopWeekCount.add(String.format("%.1f", Double.parseDouble(eshopCou / playMem + "")));
 				} else {
 					eshopWeekCount.add("0");
 				}

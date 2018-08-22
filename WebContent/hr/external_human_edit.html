@@ -156,6 +156,10 @@ table te .letter{ letter-spacing:2em;}
 			$$.showMessage("系统信息", "城市不能为空");
 			return;
 		}
+		if(citySelect=="对不起"||citySelect.indexOf('对不起')>-1){
+			$$.showMessage("系统信息", "城市格式错误");
+			return;
+		}
 		
 		var id=$("#id").val();
 		var obj = new Object();
@@ -211,7 +215,7 @@ table te .letter{ letter-spacing:2em;}
 				<td>
 					<p></p>
 					<p>
-						<font color="red">*</font>手&nbsp;&nbsp;机&nbsp;&nbsp;号：<input type="text" id="phone"  style="width: 40%;" />
+						<font color="red">*</font>手&nbsp;&nbsp;机&nbsp;&nbsp;号：<input type="text" id="phone"  style="width: 40%;"  onkeyup="value=this.value.replace(/\D+/g,'')" maxlength="11" />
 					</p>
 				</td>
 			</tr>
@@ -220,7 +224,7 @@ table te .letter{ letter-spacing:2em;}
 				<td>
 					<p></p>
 					<p>
-						<font color="red">*</font>身份证号：<input type="text" id="cardnumber"  style="width: 40%;" />
+						<font color="red">*</font>身份证号：<input type="text" id="cardnumber"  style="width: 40%;"  maxlength="18" />
 					</p>
 				</td>
 			</tr>
@@ -229,7 +233,7 @@ table te .letter{ letter-spacing:2em;}
 				<td>
 					<p></p>
 					<p>
-						<font color="red">*</font>所属城市：<input type="text" id="citySelect"  style="width: 40%;" />
+						<font color="red">*</font>所属城市：<input type="text" class="cityinput"  id="citySelect"  style="width: 40%;" />
 					</p>
 				</td>
 			</tr>
@@ -238,7 +242,7 @@ table te .letter{ letter-spacing:2em;}
 				<td>
 					<p></p>
 					<p>
-						门店编号：<input type="text" id="store_no"  style="width: 40%;" />
+						门店编号：<input type="text" id="store_no"  style="width: 40%;" maxlength="9" />
 					</p>
 				</td>
 			</tr>
@@ -258,6 +262,14 @@ table te .letter{ letter-spacing:2em;}
 	
 	
 </body>
+
+
+<script>
+	
+	
+	var test=new Vcity.CitySelector({input:'citySelect'});
+	
+</script>
 
 
 </html>

@@ -185,6 +185,10 @@ public class ExternalHumanresourcesManagerImpl extends BizBaseCommonManager impl
                 	rcvmsg="身份证号码格式错误！ 导入失败！ ";
 	             	return rcvmsg;
                 }
+                if(citySelect=="") {
+                	rcvmsg="城市存在空值！ 导入失败！ ";
+	             	return rcvmsg;
+                }
                 
                 externalHumanresources.setName(name);
                 externalHumanresources.setPhone(phone);

@@ -469,7 +469,7 @@
                 <tbody id="manual_tbody">
                 <tr id="manual_title">
                   <th width="10%">用户信息</th>
-                  <th width="10%">历史消费信息</th>
+                  <th width="10%">历史消费信息（次）</th>
                   <th width="10%">沉默时间（天）</th>
                   <th width="10%">用户所属区域</th>
                   <th width="10%">用户最近订单</th>
@@ -1258,7 +1258,7 @@ $(function () {
 	       			 	var customer_phone_show=customer_phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
 	       			    
 	       			 	var cname="<strong>用户姓名：</strong>"+jData[i].customer_name+"<br>";
-				       	var cphone="<strong>用户电话：</strong>"+customer_phone_show+"<br>";
+				       	var cphone="<strong>用户电话：</strong>"+customer_phone+"<br>";
 				       	var customercontent =cname+cphone+"@customertips"+i;
 				        var customerid = "customertips"+i;
 				        
