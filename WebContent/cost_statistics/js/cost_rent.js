@@ -78,8 +78,8 @@ function getCostRent(){
             var uniform_charge_sum=0;
 
             for(var i=0;i<costRent.length;i++){
-                $("#rent_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+costLabor[i].storeNo+"</td><td style='background-color:#A9A9A9'>"+costLabor[i].storeName+"</td></tr>");
-                var labor_td = "";
+                $("#rent_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+costRent[i].storeNo+"</td><td style='background-color:#A9A9A9'>"+costRent[i].storeName+"</td><td style='background-color:#A9A9A9'>\"+costRent[i].addr+\"</td></tr>");
+                var labor_td = "<td><input type='text' readonly  value='"+rent_monthly+"'/></td>";
 
                 for(var j=1;j<=12;j++){
 
