@@ -60,8 +60,21 @@
         })
 
 
+        /**
+         * 切换tag
+         * @param t
+         */
+    function showCostTag(t){
+            if(t==1){
 
+                getCostLabor();//获取人工成本
 
+            }else if(t==1){
+
+                getCostRent();//获取租金成本
+
+            }
+    }
 
 
 
@@ -114,8 +127,8 @@
     <div class="panel-body" id="temp1">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab_1" data-toggle="tab">人工成本</a></li>
-                <li><a href="#tab_2" data-toggle="tab">租金成本</a></li>
+                <li class="active"><a href="#tab_1" data-toggle="tab" onclick="showCostTag(1)">人工成本</a></li>
+                <li><a href="#tab_2" data-toggle="tab" onclick="showCostTag(2)">租金成本</a></li>
                 <li><a href="#tab_3" data-toggle="tab">装修摊销</a></li>
             </ul>
             <div class="tab-content no-padding">
@@ -232,48 +245,82 @@
                 </div>
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="tab_2">
-                    <form action="" method="post" class="pmsForm">
-                        <table width="100%">
-                            <tr>
-                                <td width="20%">
-                                    <p>明查月份1：</p>
-                                    <p><input type="text" readonly style="background:#CCCCCC" id="observe_month" name="observe_month"></p>
-                                </td>
-                                <td width="20%">
-                                    <p>检查人：<span style="color: red">*</span></p>
-                                    <p><input type="text" name="observe_person" id="observe_person"/></p>
-                                </td>
-                                <td width="20%">
-                                    <p class="read">进店日期：<span style="color: red">*</span></p>
-                                    <p class="read"><input type="text" readonly  maxlength="12" name="observe_date" id="observe_date"/></p>
-                                </td>
-                                <td width="20%">
-                                    <p class="read">扣分合计：</p>
-                                    <p class="read"><input type="text" readonly style="background:#CCCCCC"  maxlength="12" name="buckle_points_combined" id="buckle_points_combined"/></p>
-                                </td>
-                                <td width="20%">
-                                    <p class="read">本次明查得分：</p>
-                                    <p class="read"><input type="text" readonly style="background:#CCCCCC" maxlength="12" name="points_combined" id="points_combined"/></p>
-                                </td>
+                    <table width="50%">
+                        <tr>
+                            <td width="10%">
+                                <p>门店编码：</p>
+                                <p><input type="text" id="storeNo_rent" name="observe_month"></p>
+                            </td>
+                            <td width="10%">
+                                <p>门店名称：</p>
+                                <p><input type="text" name="" id="storeName_rent"/></p>
+                            </td>
+                            <td width="10%">
+                                <p class="read">日期：</p>
+                                <p class="read"><input type="text" readonly  maxlength="12"  id="year_rent"/></p>
+                            </td>
+                            <td width="10%" style="text-align: center">
+                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostRent()">查询</button>
+                            </td>
+                            <td width="10%" style="text-align: center">
+                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostRent()">保存</button>
+                            </td>
+                            <td width="10%" style="text-align:center">
+                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostLabor()">导出</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="col-sm-3 no-padding">
+                        <table class="table" cellspacing="0" cellpadding="0" id="rent_tb_1">
+                            <tr id="rent_tr_1">
+                                <th style="line-height: 57px;text-align: center;background-color:#A9A9A9">序号</th>
+                                <th style="line-height: 57px;text-align: center;background-color: #A9A9A9">门店编码</th>
+                                <th style="line-height: 57px;text-align: center;background-color: #A9A9A9">门店名称</th>
+                                <th style="line-height: 57px;text-align: center;background-color: #A9A9A9">门店地址</th>
                             </tr>
+
+
                         </table>
-                        <table class="easyui-datagrid" title="Frozen Columns in DataGrid" style="width:700px;height:250px">
-                            <thead data-options="frozen:true">
-                            <tr>
-                                <th data-options="field:'itemid',width:100">Item ID</th>
-                                <th data-options="field:'productid',width:120">Product</th>
+                    </div>
+                    <div class="col-sm-9 no-padding" style="overflow-x: scroll;margin-left:-1px">
+                        <table class="table table_x" cellspacing="0" cellpadding="0" id="rent_tb_2">
+
+                            <tr id="rent_tr_2">
+                                <th><p style="text-align: center">年月租金</p></th>
+                                <th><p style="text-align: center">年物业月费用</p></th>
+                                <th><p style="text-align: center">年每月费用</p></th>
+                                <th><p style="text-align: center">1月</p></th>
+                                <th><p style="text-align: center">2月</p></th>
+                                <th><p style="text-align: center">3月</p></th>
+                                <th><p style="text-align: center">4月</p></th>
+                                <th><p style="text-align: center">5月</p></th>
+                                <th><p style="text-align: center">6月</p></th>
+                                <th><p style="text-align: center">7月</p></th>
+                                <th><p style="text-align: center">8月</p></th>
+                                <th><p style="text-align: center">9月</p></th>
+                                <th><p style="text-align: center">10月</p></th>
+                                <th><p style="text-align: center">11月</p></th>
+                                <th><p style="text-align: center">12月</p></th>
+                                <th><p style="text-align: center">合同总金额</p></th>
+                                <th><p style="text-align: center">建筑面积</p></th>
+                                <th><p style="text-align: center">租赁单价</p></th>
+                                <th><p style="text-align: center">第一年租金</p></th>
+                                <th><p style="text-align: center">第二年租金</p></th>
+                                <th><p style="text-align: center">第三年租金</p></th>
+                                <th><p style="text-align: center">第四年租金</p></th>
+                                <th><p style="text-align: center">第五年租金</p></th>
+                                <th><p style="text-align: center">押金</p></th>
+                                <th><p style="text-align: center">中介费</p></th>
+                                <th><p style="text-align: center">物业费</p></th>
+                                <th><p style="text-align: center">物业期限（月）</p></th>
+                                <th><p style="text-align: center">物业每月费用</p></th>
+                                <th><p style="text-align: center">起租日（免租期截止日）</p></th>
+                                <th><p style="text-align: center">到期日</p></th>
+                                <th><p style="text-align: center">起租日（含免租期）</p></th>
                             </tr>
-                            </thead>
-                            <thead>
-                            <tr>
-                                <th data-options="field:'listprice',width:90,align:'right'">List Price</th>
-                                <th data-options="field:'unitcost',width:90,align:'right'">Unit Cost</th>
-                                <th data-options="field:'attr1',width:250">Attribute</th>
-                                <th data-options="field:'status',width:60,align:'center'">Status</th>
-                            </tr>
-                            </thead>
+
                         </table>
-                    </form>
+                    </div>
                 </div>
                 <!-- /.tab-pane -->
                 <div class="tab-pane" id="tab_3">

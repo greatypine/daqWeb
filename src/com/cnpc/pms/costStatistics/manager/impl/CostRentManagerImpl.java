@@ -5,6 +5,7 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.costStatistics.dao.CostStatisticsDao;
 import com.cnpc.pms.costStatistics.manager.CostRentManager;
 import com.cnpc.pms.costStatistics.util.CostLaborExcel;
+import com.cnpc.pms.costStatistics.util.CostRentExcel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +40,8 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
             result.put("status","null");
             return result;
         }
-        CostLaborExcel costLaborExcel = new CostLaborExcel(list);
-        result = costLaborExcel.exportFile();
+        CostRentExcel costRentExcel = new CostRentExcel(list);
+        result = costRentExcel.exportFile();
         return result;
     }
 

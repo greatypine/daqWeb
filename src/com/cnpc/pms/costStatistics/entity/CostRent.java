@@ -30,6 +30,20 @@ public class CostRent extends DataEntity {
     @Column(name="contract_grand_total",columnDefinition="decimal(20,2) COMMENT '合同总金额'")
     private String contractGrandTotal;
 
+    @Column(name="first_year_rent",columnDefinition="decimal(20,2) COMMENT '第一年租金'")
+    private String firstYearRent;
+
+    @Column(name="second_year_rent",columnDefinition="decimal(20,2) COMMENT '第二年租金'")
+    private String secondYearRent;
+
+    @Column(name="third_year_rent",columnDefinition="decimal(20,2) COMMENT '第三年租金'")
+    private String thirtYearRent;
+
+    @Column(name="fourth_year_rent",columnDefinition="decimal(20,2) COMMENT '第四年租金'")
+    private String fourthYearRent;
+
+    @Column(name="fifth_year_rent",columnDefinition="decimal(20,2) COMMENT '第五年租金'")
+    private String fifthYearRent;
 
 
     @Column(name="structure_acreage",columnDefinition="decimal(10,2) COMMENT '建筑面积'")
@@ -174,5 +188,46 @@ public class CostRent extends DataEntity {
 
     public void setPropertyFee(Double propertyFee) {
         this.propertyFee = propertyFee;
+    }
+
+
+    public String getFirstYearRent() {
+        return firstYearRent;
+    }
+
+    public void setFirstYearRent(String firstYearRent) {
+        this.firstYearRent = firstYearRent;
+    }
+
+    public String getSecondYearRent() {
+        return secondYearRent;
+    }
+
+    public void setSecondYearRent(String secondYearRent) {
+        this.secondYearRent = secondYearRent;
+    }
+
+    public String getThirtYearRent() {
+        return thirtYearRent;
+    }
+
+    public void setThirtYearRent(String thirtYearRent) {
+        this.thirtYearRent = thirtYearRent;
+    }
+
+    public String getFourthYearRent() {
+        return fourthYearRent;
+    }
+
+    public void setFourthYearRent(String fourthYearRent) {
+        this.fourthYearRent = fourthYearRent;
+    }
+
+    public String getFifthYearRent() {
+        return fifthYearRent;
+    }
+
+    public void setFifthYearRent(String fifthYearRent) {
+        this.fifthYearRent = fifthYearRent;
     }
 }
