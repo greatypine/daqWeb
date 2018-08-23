@@ -33,7 +33,7 @@ public class UploadFolderManagerImpl extends BizBaseCommonManager implements Upl
 
     private String folder_path = null;
 
-    /**
+    /**uploadObjects
      *  新增一个上传文件夹
      * @param uploadFolder 保存的文件夹
      */
