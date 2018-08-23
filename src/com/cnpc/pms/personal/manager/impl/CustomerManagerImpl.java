@@ -1064,7 +1064,7 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
 //                          	obj_customer.getCustomer_address().setHouse_pic(web_house.concat(obj_customer.getCustomer_address().getHouse_pic()));
 //                          }
 
-                          obj_customer.setCus_pic(houseImagepath.concat(obj_customer.getCustomer_pic()));
+                          obj_customer.getCustomer_address().setHouse_pic(houseImagepath.concat(obj_customer.getCustomer_address().getHouse_pic()));
                       }
                 }
               
@@ -1106,13 +1106,15 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
         
         List<?> lst_result = this.getList(FilterFactory.getSimpleFilter("mobilephone",phone));
        
-        String web = PropertiesUtil.getValue("file.web.root").concat("user_image").concat(File.separator);
-
-        String picPath = PropertiesUtil.getValue("file.root").concat("user_image").concat(File.separator);
-        
-        String web_house = PropertiesUtil.getValue("file.web.root").concat("house_type_image").concat(File.separator);
-
-        String picPath_house = PropertiesUtil.getValue("file.root").concat("house_type_image").concat(File.separator);
+//        String web = PropertiesUtil.getValue("file.web.root").concat("user_image").concat(File.separator);
+//
+//        String picPath = PropertiesUtil.getValue("file.root").concat("user_image").concat(File.separator);
+//
+//        String web_house = PropertiesUtil.getValue("file.web.root").concat("house_type_image").concat(File.separator);
+//
+//        String picPath_house = PropertiesUtil.getValue("file.root").concat("house_type_image").concat(File.separator);
+        String userImagepath = PropertiesUtil.getValue("file.oss.root").concat("user_image/");
+        String houseImagepath = PropertiesUtil.getValue("file.oss.root").concat("house_type_image/");
         if(lst_result != null && lst_result.size() > 0){
             Customer obj_customer =  (Customer) lst_result.get(0);
             obj_customer.setRelations(obj_customer.getRelations());
@@ -1142,38 +1144,13 @@ public class CustomerManagerImpl extends BizBaseCommonManager implements Custome
                 }
                 
                 if(obj_customer.getCustomer_address().getHouse_pic() != null && !"".equals(obj_customer.getCustomer_address().getHouse_pic())){
-                    File pic_dir = new File(picPath_house);
-                    final String house_pic = obj_customer.getCustomer_address().getHouse_pic();
-                    File[] file_pics = pic_dir.listFiles(new FileFilter() {
-                        @Override
-                        public boolean accept(File pathname) {
-                            return pathname.getName().contains(house_pic);
-                        }
-                    });
-                    obj_customer.getCustomer_address().setHouse_pic(file_pics == null || file_pics.length == 0 ? null : file_pics[0].getName());
-                    if( obj_customer.getCustomer_address().getHouse_pic() != null) {
-                    	obj_customer.getCustomer_address().setHouse_pic(web_house.concat(obj_customer.getCustomer_address().getHouse_pic()));
-                    }
-                    
-                    
+
+                    obj_customer.getCustomer_address().setHouse_pic(houseImagepath.concat(obj_customer.getCustomer_address().getHouse_pic()));
                 }
             }
 
             if(obj_customer.getCustomer_pic() != null && !"".equals(obj_customer.getCustomer_pic())){
-                File pic_dir = new File(picPath);
-                final String customer_pic = obj_customer.getCustomer_pic();
-                File[] file_pics = pic_dir.listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File pathname) {
-                        return pathname.getName().contains(customer_pic);
-                    }
-                });
-                obj_customer.setCus_pic(file_pics == null || file_pics.length == 0 ? null : file_pics[0].getName());
-                if(obj_customer.getCus_pic() != null) {
-                    obj_customer.setCus_pic(web.concat(obj_customer.getCus_pic()));
-                }
-                
-                
+                obj_customer.setCus_pic(userImagepath.concat(obj_customer.getCustomer_pic()));
             }
             
            
