@@ -181,4 +181,16 @@
         <column key="city_name" header="所属城市" display="true" allowSearch="true" operator="eq" allowSort="true" align="center" width="20%"/>
         <column key="observe_month" header="明查月份"  align="center" operator="eq" allowSort="true" width="20%"/>
     </query>
+    <query id="observeParameterContainer" header="明查台账列表"  order="id desc" method="observeModelManager.queryObserveParameterByModelId">
+        <column key="id" header="" display="false" allowSearch="true" allowSort="true" align="center" width="0%"/>
+        <column key="model_id" header="" display="false" allowSearch="true" allowSort="true" align="center" width="0%"/>
+        <column key="model_name" header="明查模块" display="true" allowSearch="true" operator="eq" allowSort="true" align="center" width="15%"/>
+        <column key="observe_content" header="明查内容" display="true" allowSearch="true" operator="eq" allowSort="true" align="center" width="50%"/>
+        <column key="is_used" header="是否停用"  align="center" operator="eq" allowSort="true" width="10%"/>
+    </query>
+    <query id="observeModelContainer" header="明查模块列表"  order="id desc" method="observeModelManager.queryObserveParameterByModelId">
+        <column key="id" header="" display="false" allowSearch="true" allowSort="true" align="center" width="0%"/>
+        <column key="model_name" header="明查模块" display="true" allowSearch="true" operator="eq" allowSort="true" align="center" width="30%"/>
+        <column key="is_used" header="是否停用"  align="center" operator="eq" allowSort="true" width="30%"/>
+    </query>
 </pmsquery>

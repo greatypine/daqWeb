@@ -86,8 +86,8 @@ public class StoreObserveParameterScoreDaoImpl extends BaseDAOHibernate implemen
             where += " and city.pk_userid = '"+employeeId+"'";
         }
         List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
-        String find_sql = "select top.storeno,top.store_name,ifnull(ts.rmname,'') as rmname,ifnull(ts.skname,'') as skname,top.observe_date,top.observe_person,top.points_combined,top.observe_question_number,top.observe_month from t_observe_parameter_score top INNER JOIN "
-                +"t_dist_city city on (top.city_name = city.cityname) inner join (select(select name from tb_bizbase_user t1 where t1.id = t.rmid) as rmname,(select name from tb_bizbase_user t2 where t2.id = t.skid) as skname,t.store_id from t_store t) ts "
+        String find_sql = "select top.storeno,top.observe_store_no,top.store_name,top.rm_name as rmname,top.sk_name as skname,top.observe_date,top.observe_person,top.points_combined,top.observe_question_number,top.observe_month from t_observe_parameter_score top INNER JOIN "
+                +"t_dist_city city on (top.city_name = city.cityname) inner join (select t.store_id from t_store t) ts "
                 +"ON (ts.store_id = top.store_id) WHERE top.status = 0 "+where+"  GROUP BY top.store_id,top.observe_month ORDER  BY  top.observe_month ASC";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
                 .createSQLQuery(find_sql);

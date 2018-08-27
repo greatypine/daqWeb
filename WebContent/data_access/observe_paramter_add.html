@@ -110,10 +110,16 @@
                     var points_combined = observeScore[0].points_combined;
                     var observe_person = observeScore[0].observe_person;
                     var observe_date = observeScore[0].observe_date;
+                    var observe_store_no = observeScore[0].observe_store_no;
+                    var sk_name = observeScore[0].sk_name;
+                    var rm_name = observeScore[0].rm_name;
                     $("#buckle_points_combined").val(buckle_points_combined);
                     $("#points_combined").val(points_combined);
                     $("#observe_person").val(observe_person);
                     $("#observe_date").val(observe_date);
+                    $("#observe_store_no").val(observe_store_no);
+                    $("#sk_name").val(sk_name);
+                    $("#rm_name").val(rm_name);
 
                     var observeParameterString = "";
                     for(var z = 0; z < observeParameterList.length; z++){
@@ -171,6 +177,9 @@
         $("#saveclick").attr("disabled","disabled");
 		var observe_person = $("#observe_person").val();
 		var observe_date = $("#observe_date").val();
+        var observe_store_no = $("#observe_store_no").val();
+        var sk_name = $("#sk_name").val();
+        var rm_name = $("#rm_name").val();
 		var buckle_points_combined = $("#buckle_points_combined").val();
 		var points_combined = $("#points_combined").val();
 		if(observe_person == null||observe_person.trim() == ""){
@@ -183,6 +192,21 @@
             $("#saveclick").removeAttr("disabled");
 			return;
 		}
+        if(observe_store_no == null || observe_store_no.trim() == ""){
+            alert("明查门店编号不能为空");
+            $("#saveclick").removeAttr("disabled");
+            return;
+        }
+        if(sk_name == null || sk_name.trim() == ""){
+            alert("店长不能为空");
+            $("#saveclick").removeAttr("disabled");
+            return;
+        }
+        if(rm_name == null || rm_name.trim() == ""){
+            alert("部门经理不能为空" );
+            $("#saveclick").removeAttr("disabled");
+            return;
+        }
 		doSave();		
 	}
 	
@@ -203,7 +227,10 @@
            points_combined : $("#points_combined").val(),
            store_name : $("#store_name").html(),
            store_id : store_id,
-           observe_question_number : observe_question_number
+           observe_question_number : observe_question_number,
+		   observe_store_no: $("#observe_store_no").val(),
+		   rm_name:$("#rm_name").val(),
+		   sk_name:$("#sk_name").val(),
        }
         $("#observebaseInfo").find("tr:gt(1)").each(function(i,t){
             var o = {};
@@ -249,14 +276,14 @@
 </head>
 <style type="text/css">
 	td {
-		width=50%;
+		width:50%;
 	}
 
 	p{
 		margin-top: 10px;
 		margin-bottom: 10px;
 	}
-	//table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:200px;}
+	/*table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:200px;}*/
 	.panel-heading .but{float:right; text-align: center;}
 	.but input {
 		background-color: transparent;
@@ -267,7 +294,7 @@
 		.ui-dialog .ui-dialog-titlebar-close span {
     		display: none;
     	}
-    table th,table td{border: 1px solid #e1e1e1; line-height: 30px; padding: 0 5px;word-wrap:break-word ;}
+    table th,table td{border: 1px solid #e1e1e1; line-height: 30px; padding: 0 5px;word-wrap:break-word;white-space:normal;}
     table span{color: #f00;}
     table .trbg1{background-color: #f2d4d4;}
     table .trbg2{background-color: #cff1aa;}
@@ -299,12 +326,26 @@
 				<p><input type="text" readonly style="background:#CCCCCC" id="observe_month" name="observe_month"></p>
 			</td>
 			<td width="20%">
+				<p>明查门店编号：<span style="color: red">*</span></p>
+				<p><input type="text" name="observe_store_no" id="observe_store_no"/></p>
+			</td>
+			<td width="20%">
 				<p>检查人：<span style="color: red">*</span></p>
 				<p><input type="text" name="observe_person" id="observe_person"/></p>
 			</td>
 			<td width="20%">
 				<p class="read">进店日期：<span style="color: red">*</span></p>
 				<p class="read"><input type="text" readonly  maxlength="12" name="observe_date" id="observe_date"/></p>
+			</td>
+		</tr>
+		<tr>
+			<td width="20%">
+				<p>店长签字：<span style="color: red">*</span></p>
+				<p><input type="text" id="sk_name" name="sk_name"></p>
+			</td>
+			<td width="20%">
+				<p>部门经理：<span style="color: red">*</span></p>
+				<p><input type="text" name="rm_name" id="rm_name"/></p>
 			</td>
 			<td width="20%">
 				<p class="read">扣分合计：</p>
@@ -316,7 +357,7 @@
 			</td>
 		</tr>
 	</table>
-	<table id="observebaseInfo" cellpadding="0" cellspacing="0" border="1" width="100%" style="border: 1px solid #e1e1e1;">
+	<table id="observebaseInfo" cellpadding="0" cellspacing="0" border="1" width="100%" style="border: 1px solid #e1e1e1;table-layout:fixed;">
 	  <col width="5%" align="center">
 	  <col width="40%">
 	  <col width="20%">
@@ -333,930 +374,6 @@
 	    <th>扣分</th>
 	    <th>被扣分人员姓名、工号、扣分数</th>
 	  </tr>
-	  <!--<tr>
-	    <td rowspan="20" class="trbg1" >1、人员</td>
-	    <th id="a1_1" class="trbg1">A1-1员工工装不符合规范</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	 <tr>
-		<th id="a1_2" class="trbg1">A1-2员工工装丢失无申报记录(5个工作日内)</th>
-		<td><input class="form-control" type="text"></td>
-		<td><input class="form-control" type="text"></td>
-		<td><input class="form-control" type="text"></td>
-	</tr>
-	  <tr>
-	    <th id="a2_1" class="trbg1">A2-1员工胸牌不符合规范</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a2_2" class="trbg1">A2-2员工胸牌丢失无申报记录(5个工作日内)</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a3_1" class="trbg1">A3-1女员工丝巾佩戴不符合规范</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a3_2" class="trbg1">A3-2女员工丝巾丢失无申报记录(5个工作日内)</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a4_1" class="trbg1">A4-1员工个人卫生不符合标准手册要求的</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a4_2" class="trbg1">A4-2女员工未化淡妆的（孕妇和哺乳期除外）</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a4_3" class="trbg1">A4-3员工佩戴多余饰品</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a5_1" class="trbg1">A5.1无迎宾语</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a5_2" class="trbg1">A5.2 无道别语</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a5_3" class="trbg1">A5.3 5秒钟内未及时给客户提供服务</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a6" class="trbg1">A6 排班表未张贴<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a7_1" class="trbg1">A7-1 无指纹打卡记录<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a7_2" class="trbg1">A7-2 指纹打卡记录有缺失<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a8" class="trbg1">A8 出勤与排班表不一致<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a9" class="trbg1">A9 店长外出未填《出行表》<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a10_1" class="trbg1">A10-1 每日工作交接表有缺失</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a10_2" class="trbg1">A10-2 未使用最新交接表模板</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="a11" class="trbg1">A11 工作交接表填写不完整</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="10" class="trbg2">2、资产</td>
-	    <th id="b1_1" class="trbg2">B1-1 无每月门店资产盘点表</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b1_2" class="trbg2">B1-2 门店资产盘点表填写不完整</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b2" class="trbg2">B2 实物与门店资产盘点表不一致</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b3" class="trbg2">B3 抽查固定资产不能使用且无报修记录(5个工作日内)</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b4" class="trbg2">B4 电动车摆放不整齐<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b5_1" class="trbg2">B5-1 电动车不能使用且未报修(3个工作日内)<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b5_2" class="trbg2">B5-2 电动车车胎亏气<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b6_1" class="trbg2">B6-1 员工外出未佩戴头盔<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b6_2" class="trbg2">B6-2 员工外出私自搭载<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="b7" class="trbg2">B7 店内有待维修未提报<span>（5月5-18日此项不检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="11" class="trbg3">3、财务</td>
-	    <th id="c1" class="trbg3">C1保险柜不在监控范围</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c2" class="trbg3">C2人员不在场情况下保险柜门未锁</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c3_1" class="trbg3">C3-1现金日报表有缺失</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c3_2" class="trbg3">C3-2现金报表填写不正确</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c4" class="trbg3">C4现金报表未按时上报财务</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c5" class="trbg3">C5现金未分类存放</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c6" class="trbg3">C6台账与实际现金不符</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c7_1" class="trbg3">C7-1未及时缴存门店营业款现金</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c7_2" class="trbg3">C7-2门店营业款缴存金额与台账不符</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c8_1" class="trbg3">C8-1门店入库单未及时录入中台</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="c8_2" class="trbg3">C8-2门店中台入库数量与入库单不一致</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="26" class="trbg4">4、库房</td>
-	    <th id="d1" class="trbg4">D1库房门无警示语</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d2_1" class="trbg4">D2-1库房门未关闭</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d2_2" class="trbg4">D2-2独立库房没有专人负责或未锁门</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d3_1" class="trbg4">D3-1库房内货品摆放不整齐</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d3_2" class="trbg4">D3-2货品无托盘落地摆放</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d3_3" class="trbg4">D3-3商品未按包装要求摆放<span>（如倒置等）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d3_4" class="trbg4">D3-4<span>货品距离照明灯20cm以内</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d4_1" class="trbg4">"D4-1货架未正确标识</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d4_2" class="trbg4">D4-2周转箱未正确标识</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d4_3" class="trbg4">D4-3货位未正确标识</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d5_1" class="trbg4">D5-1门店无货品存放台账</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d5_2" class="trbg4">"D5-2门店货品存放台账填写不完整</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d6" class="trbg4">D6SKU实际库存与台账不符</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d7_1" class="trbg4">D7-1快递未全部放于库房</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d7_2" class="trbg4">D7-2快递临时停放收银台区域堆放凌乱的</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d8" class="trbg4">D8寄件、派件未分开存放</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d9_1" class="trbg4">D9-1库房无摄像头</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d9_2" class="trbg4">D9-2库房摄像头被人旋转照射不合理区域且无报修记录(3个工作日内)</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d10" class="trbg4">D10入库单未按照时间顺序填写</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d11_1" class="trbg4">D11-1库房没有进销存表、出入库表</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d11_2" class="trbg4">D11-2进销存表、出入库表填写不完整</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d11_3" class="trbg4">"D11-3进销存表未每周至少更新一次</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d11_4" class="trbg4">D11-4出入库表未随时更新</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d12" class="trbg4">D12进销存、出入库表与中台记录有差异且不能说明原因</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d13_1" class="trbg4">D13-1未遵守小盘、大盘制度</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="d13_2" class="trbg4">D13-2盘点表填写不完整</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="12" class="trbg5">5、能源</td>
-	    <th id="e1_1" class="trbg5">E1-1未使用水电台账</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e1_2" class="trbg5">E1-2水电使用台账记录不完整</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e2" class="trbg5">E2非客户区域无人时灯未关</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e3" class="trbg5">E3轨道灯没有正确开关</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e4_1" class="trbg5">E4-1显示屏没有正确开关</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e4_2" class="trbg5">E4-2<span>智能终端设备没有正确开关</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e5" class="trbg5">E5空调未正确开关</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e6" class="trbg5">E6饮水机未正常开启</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e7" class="trbg5">E7水龙头有跑冒滴漏且未报修</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e8_1" class="trbg5">E8-1冰柜未及时除霜或有冷凝水外溢</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e8_2" class="trbg5">E8-2冰柜温度与柜内商品冷藏要求不符</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="e9" class="trbg5">E9有非公司用电设备</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="13" class="trbg6">6、环境</td>
-	    <th id="f1" class="trbg6">F1垃圾篓内垃圾超过2/3</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f2" class="trbg6">F2店内部分区域不干净</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f3" class="trbg6">F3清洁工具摆放杂乱</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f4_1" class="trbg6">F4-1收银台上文件或办公用品摆放不整齐</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f4_2" class="trbg6">F4-2在顾客能看到的展示区域粘贴了门店内部管理类表单</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f4_3" class="trbg6">F4-3收银台上存放私人物品</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f5" class="trbg6">F5卫生间内的卷纸、纸巾、洗手液的剩余量无法使用</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f6" class="trbg6">F6空调设置温度不标准（24-28度以外，集中供暖除外）</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f7" class="trbg6">F7店内有异味</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f8_1" class="trbg6">F8-1店内未播放背景音乐</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f8_2" class="trbg6">F8-2背景音乐音量不适中</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f9_1" class="trbg6">F9-1播放短片无音效</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="f9_2" class="trbg6">F9-2播放短片音量不标准</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="5" class="trbg7">7、会议</td>
-	    <th id="g1" class="trbg7">G1门店未每天组织召开一次短会</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="g2_1" class="trbg7">G2-1缺少培训材料</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="g2_2" class="trbg7">G2-2缺少培训签到表</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="g2_3" class="trbg7">G2-3培训签到表缺少员工签字</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="g3" class="trbg7">G3抽查国安大学“<span>日日</span>学”培训内容未答对</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="23" class="trbg8">8、安全</td>
-	    <th id="h1_1" class="trbg8">H1-1当班人员手中无钥匙</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h1_2" class="trbg8">H1-2钥匙打不开门禁</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h2" class="trbg8">H2后门无故未关闭</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h3" class="trbg8">H3上墙张贴的健康证已过期</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h4_1" class="trbg8">H4-1过期、损坏、变形商品未独立存放</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h4_2" class="trbg8">H4-2过期、损坏、变形商品独立存放但缺少标识</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h4_3" class="trbg8">H4-3陈列了过期变质的水果、蔬菜</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h5_1" class="trbg8">H5-1食品保质期已过</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h5_2" class="trbg8">H5-2食品缺QS或SC标识（豆米面除外）</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h6" class="trbg8">H6灭火器不易拿、被遮挡、堵塞消火栓、防火卷帘门、消防通道及电闸箱等</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h7_1" class="trbg8">H7-1员工不知道灭火器的位置</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h7_2" class="trbg8">H7-2员工不会正确使用灭火器</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h8" class="trbg8">H8灭火器旁堆放杂物</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h9_1" class="trbg8">H9-1灭火器质保过期</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h9_2" class="trbg8">H9-2灭火器压力异常</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h9_3" class="trbg8">H9-3灭火器保质期标签缺失</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h9_4" class="trbg8">H9-4灭火器零部件未正常连接或有破损</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h9_5" class="trbg8">H9-5灭火器不可正常使用且无申报记录(5个工作日内)</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h9_6" class="trbg8">H9-6灭火器自检台账未按要求填写</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h10_1" class="trbg8">H10-1<span style="color:#fff;">门店无消防预案（纸质版）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h10_2" class="trbg8">H10-2消防预案（纸质版）未张贴在库房或办公室显著位置</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h11_1" class="trbg8">H11-1插座、插头绝缘体有破损且无报修记录(3个工作日内)</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="h11_2" class="trbg8">H11-2多个排插串联</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="12" class="trbg9">9、陈列</td>
-	    <th id="i1_1" class="trbg9">I1-1货品摆放不整齐</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i1_2" class="trbg9">I1-2未及时补充货架</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i2" class="trbg9">I2商品摆放不符合上小下大原则</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i3" class="trbg9">I3商品陈列不符合分类摆放原则</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i4_1" class="trbg9">I4-1海报超过<span>6</span>张</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i4_2" class="trbg9">I4-2海报张贴不符合标准，影响门店外观视觉</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i5_1" class="trbg9">I5-1展架数量超过<span>6</span>个</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i5_2" class="trbg9">I5-2展架摆放不符合标准，影响门店外观视觉</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i5_3" class="trbg9">I5-3<span>客户体验区DM单有过期情况</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i6_1" class="trbg9">I6-1业绩版展板未挂在非客户体验区</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i6_2" class="trbg9">I6-2业绩展板内容超过1天未更新或填写不正确</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="i7" class="trbg9">I7海报、展架、电子屏等未按北京公司门店点位布置</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="4" class="trbg10">10、档案</td>
-	    <th id="j1" class="trbg10">J1门店未下载国安社区门店标准管理手册电子档</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="j2_1" class="trbg10">J2-1各类资料散乱，没有归档</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="j2_2" class="trbg10">J2-2纸质版文件没有明确标识</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="j3" class="trbg10">J3电子版资料未按规定存档</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="12" class="trbg11">11、产品<br/>检查 </td>
-	    <th id="k1" class="trbg11">K1进口食品无中文标识 </th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_1" class="trbg11">K2.1 门店绿植订单备注中未拍照上传照片</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_2" class="trbg11">K2.2门店收衣服检查项目发现的问题未在APP备注</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_3_1" class="trbg11">K2.3-1门店保洁订单用户体验报告未上传中台</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_3_2" class="trbg11">K2.3-2门店保洁订单中台上显示有用户不满意</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_4" class="trbg11">K2.4门店维修业务《维修服务单》未上传中台</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_5" class="trbg11">K2.5洗后净衣回店后超过2天未配送给客人</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_6" class="trbg11">K2.6门店有一星期以上的超时未完成订单</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_7" class="trbg11">K2.7收银台或明显位置未粘贴“快递禁忌品”、“邮政寄递出示身份证”图片</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_8" class="trbg11">K2.8门店揽收快件外包装上没有加盖国安社区快递验视章</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k2_9" class="trbg11">K2.9门店揽收快件外包装已被封口、无法二次验视</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="k3" class="trbg11">K3门店划片数量不正确</th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <td rowspan="4" class="trbg12">12、518<br/>专项检查</td>
-	    <th id="l1" class="trbg12"><span>L1、门店518联盟商家未落实宣传物料的摆放</span><span style="color:#138e39;">（仅限5.5-18检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="l2" class="trbg12"><span>L2、门店未按计划开展地推</span><span style="color:#138e39;">（仅限5.5-18检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="l3_1" class="trbg12"><span>L3-1门店地推点员工仪容仪表不符合规范</span><span style="color:#138e39;">（仅限5.5-18检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>
-	  <tr>
-	    <th id="l3_2" class="trbg12"><span>L3-2门店地推点未按要求摆放宣传物料</span><span style="color:#138e39;">（仅限5.5-18检查）</span></th>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	    <td><input class="form-control" type="text"></td>
-	  </tr>-->
 	</table>
 </form>
 
