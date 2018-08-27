@@ -28,6 +28,9 @@ public class CheckDetails extends DataEntity{
         @Column(name = "type",columnDefinition="int(11) COMMENT '0普通检查项，1城市专项检查'")
         private Integer type;
 
+        @Column(name = "order_no",columnDefinition="int(11) COMMENT '模块排序'")
+        private Integer order_no;
+
         public Long getCheck_item_id() {
                 return check_item_id;
         }
@@ -58,5 +61,21 @@ public class CheckDetails extends DataEntity{
 
         public void setPoint_deduction_standard(String point_deduction_standard) {
                 this.point_deduction_standard = point_deduction_standard;
+        }
+
+        public Integer getType() {
+                return type;
+        }
+
+        public void setType(Integer type) {
+                this.type = type;
+        }
+
+        public Integer getOrder_no() {
+                return order_no;
+        }
+
+        public void setOrder_no(Integer order_no) {
+                this.order_no = order_no;
         }
 }

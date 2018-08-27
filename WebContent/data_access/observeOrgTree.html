@@ -24,7 +24,7 @@
 				{
 					checkable: false,
 					async: true,
-					asyncParam: ["model_name", "id"], //获取节点数据时，必须的数据名称，例如：id、name
+					asyncParam: ["name", "id"], //获取节点数据时，必须的数据名称，例如：id、name
 					asyncParamOther: ["requestString", myData], //其它参数 ( key, value 键值对格式)
 					callback: 
 						{
@@ -33,13 +33,13 @@
 						}
 				}
 			function zTreeOnClick(event, treeId, treeNode) {
-				window.parent.observeManagementApp.location = "userGroupManagement.html?orgId=" + treeNode.id;
+				window.parent.observeManagementApp.location = "observeManagement.html?orgId=" + treeNode.id;
 			}
 			
 			function beforeExpand(treeId, treeNode) {
 				if (treeNode.nodes == null || treeNode.nodes.length == 0) {
 					if (treeNode.flag != true) {
-						var data = new PMSRequestObject("purStruOrgManager", "getValidOrgsByParentId", [treeNode.id]);
+						var data = new PMSRequestObject("observeModelManager", "getObserveByModelId", [treeNode.id]);
 						$$.ajax($$.PMSDispatchActionUrl, "requestString=" + encodeURIComponent(data.toJsonString()), function(data, textStatus, XMLHttpRequest) {
 							if (data.result) {
 								newNodes = eval("(" + data.data + ")");
