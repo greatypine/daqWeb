@@ -1,27 +1,26 @@
 package com.cnpc.pms.bizbase.action;
 
+import com.cnpc.pms.base.util.PropertiesUtil;
+import com.cnpc.pms.base.util.SpringHelper;
+import com.cnpc.pms.bid.manager.AttachmentManager;
+import com.cnpc.pms.personal.entity.Attachment;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
+import com.cnpc.pms.personal.util.DataTransfromUtil;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-
-import com.cnpc.pms.base.util.PropertiesUtil;
-import com.cnpc.pms.base.util.SpringHelper;
-import com.cnpc.pms.bid.manager.AttachmentManager;
-import com.cnpc.pms.personal.entity.Attachment;
-import com.cnpc.pms.personal.util.DataTransfromUtil;
 
 public class UploadStoreFileAction extends HttpServlet {
 	String FILE_ROOT = PropertiesUtil.getValue("file.root");
@@ -47,6 +46,7 @@ public class UploadStoreFileAction extends HttpServlet {
 			fileLoad = "card";
 		}
 		AttachmentManager attachmentManager = (AttachmentManager) SpringHelper.getBean("attachmentManager");
+		OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
 		Attachment attachment = null;
 		// 创建文件项目工厂对象
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -106,9 +106,13 @@ public class UploadStoreFileAction extends HttpServlet {
 						item.write(file_upload);
 						String file_url = "";
 						if ("contract".equals(model)) {
-							file_url = copyFile(file_upload, "contract");
+							//file_url = copyFile(file_upload, "contract");
+							//修改文件上传到oss
+							file_url = ossRefFileManager.uploadOssFile(file_upload, file_type.substring(1,file_type.length()), "daqWeb/contract/");
 						} else {
-							file_url = copyFile(file_upload, "card");
+							//file_url = copyFile(file_upload, "card");
+							//修改文件上传到oss
+							file_url = ossRefFileManager.uploadOssFile(file_upload, file_type.substring(1,file_type.length()), "daqWeb/card/");
 						}
 
 						String[] split = item.getName().split("-");
