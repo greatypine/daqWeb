@@ -1396,9 +1396,12 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 					file_xls.delete();
 				}
 				FileOutputStream os = null;
+				String url=null;
 				try {
 					os = new FileOutputStream(file_xls.getAbsoluteFile());
 					wb.write(os);
+					OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+					 url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -1410,10 +1413,10 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 						}
 					}
 				}
-
 				result.put("message", "导出成功！");
 				result.put("status", "success");
-				result.put("data", str_web_path.concat(file_xls.getName()));// 测试环境修改str_file_dir_path
+				result.put("data", url);
+				//result.put("data", str_web_path.concat(file_xls.getName()));// 测试环境修改str_file_dir_path
 			} else {
 				result.put("message", "没有数据！");
 				result.put("status", "null");

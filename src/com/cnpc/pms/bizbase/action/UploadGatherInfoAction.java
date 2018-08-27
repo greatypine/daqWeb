@@ -1,19 +1,5 @@
 package com.cnpc.pms.bizbase.action;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-
 import com.cnpc.pms.base.file.collection.ReadCompanyInfo;
 import com.cnpc.pms.base.file.collection.ReadExcel;
 import com.cnpc.pms.base.file.manager.ExcelManager;
@@ -26,6 +12,20 @@ import com.cnpc.pms.personal.entity.Village;
 import com.cnpc.pms.personal.manager.TownManager;
 import com.cnpc.pms.personal.manager.VillageManager;
 import com.cnpc.pms.personal.util.DataTransfromUtil;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UploadGatherInfoAction extends HttpServlet{
 	String FILE_ROOT = PropertiesUtil.getValue("file.root");
@@ -212,38 +212,72 @@ public class UploadGatherInfoAction extends HttpServlet{
 				 
 				 try {
 					new ReadExcel().batchExcelData(file2, str, attachment);
-					copyFile(file2,"house");
+					 if(file2.exists()){
+						 System.gc();
+						  file2.delete();
+					 }
+					//copyFile(file2,"house");
 				}catch (NullPointerException e){
-					attachment.setUploadType("上传失败");
-					attachment.setMessage("NullPointerException");
-					attachmentManager.saveObject(attachment);
-					attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(),null);
+					 if(attachment!=null){
+						 attachment.setUploadType("上传失败");
+						 attachment.setMessage("NullPointerException");
+						 attachmentManager.saveObject(attachment);
+						 attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(),null);
+					 }
 					try {
-						copyFile(file2,"error");
+						if(file2.exists()){
+							System.gc();
+							 file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}catch(RuntimeException e){
-					attachment.setUploadType("上传失败");
-					attachment.setMessage(e.getMessage());
-					attachmentManager.saveObject(attachment);
-					attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(),null);
-					try {
-						copyFile(file2,"error");
+					 if(attachment!=null) {
+						 attachment.setUploadType("上传失败");
+						 attachment.setMessage(e.getMessage());
+						 attachmentManager.saveObject(attachment);
+						 attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(), null);
+					 }
+						 try {
+						if(file2.exists()){
+							System.gc();
+							 file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				} catch (Exception e) {
 					try {
-						copyFile(file2,"error");
+						if(attachment!=null) {
+							attachment.setUploadType("上传失败");
+							attachment.setMessage(e.getMessage());
+							attachmentManager.saveObject(attachment);
+							attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(), null);
+						}
+						if(file2.exists()){
+							System.gc();
+							 file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
+						if(file2.exists()){
+							System.gc();
+							file2.delete();
+						}
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 					e.printStackTrace();
 				}
+				 if(file2.exists()){
+					 System.gc();
+					 file2.delete();
+				 }
 			}
 		 }
 	}
@@ -269,14 +303,20 @@ public class UploadGatherInfoAction extends HttpServlet{
 				 Attachment attachment = attachmentManager.findAttachmentByName(file2.getName(),"写字楼文件");
 				 try {
 					 new ReadCompanyInfo().readOfficeExcel(file2,attachment);
-					copyFile(file2,"office");
+					 if(file2.exists()){
+						  file2.delete();
+					 }
+					//copyFile(file2,"office");
 				}catch (NullPointerException e){
 					attachment.setUploadType("上传失败");
 					attachment.setMessage("NullPointerException");
 					attachmentManager.saveObject(attachment);
 					attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(),null);
 					try {
-						copyFile(file2,"error");
+						if(file2.exists()){
+							bResult= file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -287,14 +327,20 @@ public class UploadGatherInfoAction extends HttpServlet{
 					attachmentManager.saveObject(attachment);
 					attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(),null);
 					try {
-						copyFile(file2,"error");
+						if(file2.exists()){
+							bResult= file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				} catch (Exception e) {
 					try {
-						copyFile(file2,"error");
+						if(file2.exists()){
+							bResult= file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -327,14 +373,20 @@ public class UploadGatherInfoAction extends HttpServlet{
 				 Attachment attachment = attachmentManager.findAttachmentByName(file2.getName(),"商业信息文件");
 				 try {
 					 new ReadCompanyInfo().readBusinessDataExcel(file2,attachment);
-					copyFile(file2,"business");
+					 if(file2.exists()){
+						 bResult= file2.delete();
+					 }
+					//copyFile(file2,"business");
 				} catch (NullPointerException e){
 					attachment.setUploadType("上传失败");
 					attachment.setMessage("NullPointerException");
 					attachmentManager.saveObject(attachment);
 					attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(),null);
 					try {
-						copyFile(file2,"error");
+						if(file2.exists()){
+							bResult= file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -345,14 +397,20 @@ public class UploadGatherInfoAction extends HttpServlet{
 					attachmentManager.saveObject(attachment);
 					attachmentManager.updateAttachmentUploadType(attachment.getFile_name(), attachment.getFile_type_name(), attachment.getMessage(), attachment.getUploadType(),null);
 					try {
-						copyFile(file2,"error");
+						if(file2.exists()){
+							bResult= file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}catch (Exception e) {
 					try {
-						copyFile(file2,"error");
+						if(file2.exists()){
+							bResult= file2.delete();
+						}
+						//copyFile(file2,"error");
 					} catch (Exception e1) {
 						System.out.println(e.getMessage());
 						e1.printStackTrace();
