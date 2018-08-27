@@ -2767,10 +2767,10 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
         BufferedReader in = null;  
         try {  
             URL realUrl = new URL(url);  
-            InetSocketAddress addr = new InetSocketAddress("10.0.1.11",3128);
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, addr); // http 代理 
+            //InetSocketAddress addr = new InetSocketAddress("10.0.1.11",3128);
+            //Proxy proxy = new Proxy(Proxy.Type.HTTP, addr); // http 代理 
             // 打开和URL之间的连接  
-            URLConnection connection = realUrl.openConnection(proxy);  
+            URLConnection connection = realUrl.openConnection();  
             // 设置通用的请求属性  
             connection.setRequestProperty("accept", "*/*");  
             connection.setRequestProperty("connection", "Keep-Alive");  
@@ -3459,7 +3459,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			int proxyport = Integer.parseInt(PropertiesUtil.getValue("iproxy.sendport"));
 			String setcode = PropertiesUtil.getValue("iproxy.set");
 			try {
-				if(setcode!=null&&setcode.equals("ON")){
+				if(setcode!=null&&setcode.equals("OFF")){
 					String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
 					System.out.println(sendcode_gb2312);
 					//String url = "http://q.hl95.com:8061/?username=gasjyz&password=Gasj0121&message="+sendcode_gb2312+"&phone="+mobilephone+"&epid=123743&linkid=&subcode=";
