@@ -2759,7 +2759,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	}
 	
 	public String getFileRoot() {
-        return PropertiesUtil.getValue("file.web.root");
+        return PropertiesUtil.getValue("file.oss.root");
     }
 	
 	
