@@ -1916,7 +1916,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				
 				JSONObject jsonObject = dynamicManager.insertNewStore(store.getStoreno(), store.getName(),
 						store.getGaode_provinceCode(), store.getGaode_cityCode(), store.getGaode_adCode(),
-						store.getAddress(),lat,nat,type);
+						store.getAddress(),lat,nat,type,store.getMobilephone());
 				rt = jsonObject.toString();
 			}
 
