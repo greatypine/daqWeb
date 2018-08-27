@@ -76,7 +76,12 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
     @Override
     public List<Map<String, Object>> queryCostRent(String storeNo, String storeName, Integer year) {
-       String sql ="select ts.storeno as store_no,ts.name as store_name ,tcr.addr,(ifnull(tcr.contract_grand_total,0)/60) as rent_monthly,property_fee,(ifnull(property_fee,0)+(ifnull(tcr.contract_grand_total,0)/60)) as cost_monthly, tcr.contract_grand_total,tcr.structure_acreage,tcr.year,tcr.first_year_rent,tcr.second_year_rent,tcr.third_year_rent,tcr.fourth_year_rent,tcr.fifth_year_rent,tcr.lease_unit_price,tcr.deposit,tcr.agency_fee,tcr.property_fee,tcr.property_deadline,tcr.free_lease_start_date,tcr.lease_start_date,tcr.lease_stop_date from  t_store ts left join t_cost_rent tcr on  ts.storeno = tcr.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+
+        String sqlSub = "select * from t_cost_rent ";
+        if(year!=null&&!"".equals(year)){
+            sqlSub+=" where year= "+year;
+        }
+        String sql ="select ts.storeno as store_no,ts.name as store_name ,tcr.addr,(ifnull(tcr.contract_grand_total,0)/60) as rent_monthly,property_fee,(ifnull(property_fee,0)+(ifnull(tcr.contract_grand_total,0)/60)) as cost_monthly, tcr.contract_grand_total,tcr.structure_acreage,tcr.year,tcr.first_year_rent,tcr.second_year_rent,tcr.third_year_rent,tcr.fourth_year_rent,tcr.fifth_year_rent,tcr.lease_unit_price,tcr.deposit,tcr.agency_fee,tcr.property_fee,tcr.property_deadline,tcr.free_lease_start_date,tcr.lease_start_date,tcr.lease_stop_date from  t_store ts left join ("+sqlSub+") tcr on  ts.storeno = tcr.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
         if(storeNo!=null&&!"".equals(storeNo)){
             sql+=" and ts.storeno like '%"+storeNo+"%'";
         }
@@ -85,9 +90,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
             sql+=" and ts.name like '%"+storeName+"%'";
         }
 
-        if(year!=null&&!"".equals(year)){
-            sql+=" and tcr.year= "+year;
-        }
+
 
         List<Map<String,Object>> list = null;
         try{
