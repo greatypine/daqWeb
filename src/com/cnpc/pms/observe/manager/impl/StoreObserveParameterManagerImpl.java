@@ -15,6 +15,7 @@ import com.cnpc.pms.observe.manager.StoreObserveParameterManager;
 import com.cnpc.pms.observe.manager.StoreObserveParameterScoreManager;
 import com.cnpc.pms.personal.dto.StoreDTO;
 import com.cnpc.pms.personal.entity.Store;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.utils.DateUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -207,6 +208,10 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
             Map<String, Object> map2 = storeInfoList.get(index);
             map2.put(mapobj.get("observe_month").toString(), mapobj.get("points_combined"));
             map2.put(mapobj.get("observe_month").toString()+"quest", mapobj.get("observe_question_number"));
+            map2.put("rmname", mapobj.get("rmname"));
+            map2.put("skname", mapobj.get("skname"));
+            map2.put("observe_date", mapobj.get("observe_date"));
+            map2.put("observe_person", mapobj.get("observe_person"));
         }
         String str_file_dir_path = PropertiesUtil.getValue("file.root");
         String str_web_path = PropertiesUtil.getValue("file.web.root");
@@ -234,14 +239,14 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         String join2 = StringUtils.join(listmonth.toArray(), "月份问题数量,")+"月份问题数量";
         String replace2 = join2.replace("-", "年");
         //基本信息表头
-        String[] str_headers = {"门店编号","门店名称","店长姓名","运营经理","检查日期","检查人"};
+        String[] str_headers = {"明查门店编号","门店名称","店长姓名","运营经理","检查日期","检查人"};
         String[] arr1 = replace1.split(",");
         String[] arr3 = replace2.split(",");
         String[] addAll = ArrayUtils.addAll(str_headers, arr1);
         //基本信息表头+获得哪个月份有数据作为表头
         String[] addAll_add = ArrayUtils.addAll(addAll,arr3);
         //基本信息key
-        String[] headers_key = {"storeno","storename","skname","rmname","observe_date","observe_person"};
+        String[] headers_key = {"observe_store_no","storename","skname","rmname","observe_date","observe_person"};
         String[] array1 = StringUtils.join(listmonth.toArray(),",").split(",");
         String array2 = StringUtils.join(listmonth.toArray(), "quest,")+"quest";
         String[] array3 = array2.split(",");
@@ -351,9 +356,13 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
             file_xls.delete();
         }
         FileOutputStream os = null;
+        String url = null;
         try {
             os = new FileOutputStream(file_xls.getAbsoluteFile());
             wb.write(os);
+            OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+            url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+
         }catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -368,7 +377,7 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         //return file_xls;
         result.put("message","导出成功！");
         result.put("status","success");
-        result.put("data", str_web_path.concat(file_xls.getName()));
+        result.put("data", url);
         return result;
     }
 }

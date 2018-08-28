@@ -302,8 +302,8 @@ public class ExpressManagerImpl extends BizBaseCommonManager implements ExpressM
         if(express_object != null ){
 
             //处理图片连接
-            String imgUrlBase = PropertiesUtil.getValue("file.web.root");
-            express_object.setExpressURL(imgUrlBase+express_object.getExpressURL());
+            //String imgUrlBase = PropertiesUtil.getValue("file.web.root");
+            express_object.setExpressURL(express_object.getExpressURL());
 
             result.setExitExpress(express_object);
 
@@ -807,8 +807,8 @@ public class ExpressManagerImpl extends BizBaseCommonManager implements ExpressM
 
 
             //处理图片连接
-            String imgUrlBase = PropertiesUtil.getValue("file.web.root");
-            express.setExpressURL(imgUrlBase+express.getExpressURL());
+            //String imgUrlBase = PropertiesUtil.getValue("file.web.root");
+            express.setExpressURL(express.getExpressURL());
 
         }
         return express;
@@ -827,8 +827,8 @@ public class ExpressManagerImpl extends BizBaseCommonManager implements ExpressM
         express.setStore_name(store_name);
 
         //处理图片连接
-        String imgUrlBase = PropertiesUtil.getValue("file.web.root");
-        express.setExpressURL(imgUrlBase+express.getExpressURL());
+        //String imgUrlBase = PropertiesUtil.getValue("file.web.root");
+        express.setExpressURL(express.getExpressURL());
 
         return express;
     }
@@ -845,9 +845,9 @@ public class ExpressManagerImpl extends BizBaseCommonManager implements ExpressM
         String imgUrl = express_object.getExpressURL();
         //如果图片信息不为空 则物理删除该图片
         if(imgUrl!=null&&imgUrl.length()>0){
-            String imgUrlBase = PropertiesUtil.getValue("file.root");
+            /*String imgUrlBase = PropertiesUtil.getValue("file.root");
             String deleteImg = imgUrlBase+imgUrl;
-            deleteFile(deleteImg);
+            deleteFile(deleteImg);*/
         }
         expressManager.removeObject(express_object);
     }

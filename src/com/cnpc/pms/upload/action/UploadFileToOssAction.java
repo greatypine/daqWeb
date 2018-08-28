@@ -103,15 +103,17 @@ public class UploadFileToOssAction extends DispatcherAction {
                         // 保存文件到硬盘
                         item.write(storeFile);
                         String url = ossRefFileManager.uploadOssFile(storeFile,suffix,storeDir);
+                        String newFileName = url.substring(url.lastIndexOf("/")+1);
                         //返回结果
                         obj.put("downLoadUrl",url);
-                        obj.put("fileName",fileName);
+                        obj.put("fileName",newFileName);
                         obj.put("status","success");
                         writer.print(obj.toJSONString());
                     }
                 }
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             obj.put("status","fail");
             obj.put("message",ex.getMessage());
             writer.print(obj.toJSONString());

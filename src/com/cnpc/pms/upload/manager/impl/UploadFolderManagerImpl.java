@@ -10,6 +10,7 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.inter.common.Result;
 import com.cnpc.pms.personal.dto.PMSFileDto;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.upload.entity.UploadFolder;
 import com.cnpc.pms.upload.manager.UploadFolderManager;
 import com.cnpc.pms.utils.DateUtils;
@@ -33,7 +34,7 @@ public class UploadFolderManagerImpl extends BizBaseCommonManager implements Upl
 
     private String folder_path = null;
 
-    /**
+    /**uploadObjects
      *  新增一个上传文件夹
      * @param uploadFolder 保存的文件夹
      */
@@ -256,6 +257,13 @@ public class UploadFolderManagerImpl extends BizBaseCommonManager implements Upl
                     throw new PMSManagerException("Error that the file was writen in the disk.");
                 }
 
+                
+                
+                //上传oss
+		        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+		        String url = ossRefFileManager.uploadOssFile(uploadFile, fileSuffix, "daqWeb/upload_folder/siteselection/");
+                
+                
                 uploadedFile = new PMSFile();
                 uploadedFile.setId(id);
                 uploadedFile.setName(name);
@@ -264,7 +272,8 @@ public class UploadFolderManagerImpl extends BizBaseCommonManager implements Upl
                 uploadedFile.setLastUploaded(new Date());
                 uploadedFile.setFilePath(folderName.concat(File.separator).concat(uploadFile.getName()));
                 pmsFileManager.saveObject(uploadedFile);
-                uploadedFile.setFilePath(getFileRoot()+"upload_folder"+File.separator+uploadedFile.getFilePath());
+                //uploadedFile.setFilePath(getFileRoot()+"upload_folder"+File.separator+uploadedFile.getFilePath());
+                uploadedFile.setFilePath(url);
                 
                 pmsFileDto = new PMSFileDto();
                 pmsFileDto.setId(uploadedFile.getId());

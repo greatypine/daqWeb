@@ -404,7 +404,7 @@
 	  var fileNameID = "fileName"+t;
 	  $('#fileName'+t).val(fileName);
 	  var lay_index = layer.load("2");
-/*	  var url = getRootPath()+ "/uploadFileToOss.action?storeDir=daqWeb/notice_file/";
+	  var url = getRootPath()+ "/uploadFileToOss.action?storeDir=daqWeb/notice_file/";
       var elementsId = [fileID];
       $.ajaxFileUpload({
           url: url,
@@ -425,10 +425,10 @@
           error: function(data, status, e){
               $$.showMessage("提示",e);
           }
-      });*/
+      });
 
 
-      var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=notice_file";
+/*      var url = getRootPath()+ "/fileUpload.action?img_type=1&file_name=notice_file";
       var elementsId = [fileID];
       $.ajaxFileUpload({
           url: url,
@@ -452,7 +452,7 @@
           error: function(data, status, e){
               $$.showMessage("提示",e);
           }
-      });
+      });*/
 	  
 	  
   }

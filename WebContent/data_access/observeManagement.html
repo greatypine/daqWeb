@@ -29,120 +29,35 @@
 			var request = getRequestParams();
 			var id = request['orgId'];
 			
-			function addUserGroup() {
-				window.location = "usergroupAdd.html?orgId=" + id;
-			}
-			
 			function userAdd() {
-				window.location = "userAdd.html?orgId=" + id;
+				window.location = "observeModify.html?id=" + id;
 			}
-			
-			var userAddObj = 
-				{
-					html: '<a href="#" class="blue">查看用户</a>',
-					func: function(queryid, data, nTr, allColumns,allColumnsDataMap) {
-						
-						window.location = "userManagement.html?userGroupId=" + allColumnsDataMap.id+"&orgId="+id+"&userGroupName="+allColumnsDataMap.name;
-					}
-				}
-			
-			var viewObj = 
-				{
-					html: '<a href="#" class="blue">新增用户</a>',
-					func: function(queryid, data, nTr, allColumns,allColumnsDataMap) {
-						doManager("userGroupManager", "getUserGroupDTO", allColumnsDataMap.id, function(datas, textStatus, XMLHttpRequest) {
-							if (datas.result) {
-								var userGroup = $.fromJSON(datas.data);
-								if(userGroup.disabledFlag == 0){
-									  $$.showMessage("${system.info}", "该角色组已被停用!");
-									  return false;
-								}
-								window.location = "userAdd.html?userGroupId=" + allColumnsDataMap.id+"&orgId=" + id+"&userGroupName="+allColumnsDataMap.name;
-							}
-						});
-					}
-				}
-			
+            function modelAdd() {
+                window.location = "observeModify.html";
+            }
+
 			var editObj = 
 				{
-					html: '<a href="#" class="blue">编辑角色组</a>',
+					html: '<a href="#" class="blue">编辑</a>',
 					func: function(queryid, data, nTr, allColumns,allColumnsDataMap) {
-						doManager("userGroupManager", "getUserGroupDTO", allColumnsDataMap.id, function(datas, textStatus, XMLHttpRequest) {
-							if (datas.result) {
-								window.location = "userGroupInformation_update.html?userGroupId=" + allColumnsDataMap.id;
-							}
-						});
+								window.location = "observeModify.html?model_id=" + allColumnsDataMap.model_id+"&id=" + allColumnsDataMap.id;
 					}
 				}
-			var authObj = 
-				{
-					html: '<a href="#" class="blue">分配角色</a>',
-					func: function(queryid, data, nTr, allColumns,allColumnsDataMap) {
-						doManager("userGroupManager", "getUserGroupDTO",allColumnsDataMap.id, function(datas, textStatus, XMLHttpRequest) {
-							if (datas.result) {
-								window.location = "usergroupAuth.html?userGroupId=" + allColumnsDataMap.id+"&orgId="+ id;
-							}
-						});
-					}
-				}
-			var privilege =
-				{
-					html: '<a href="#" class="blue">数据权限分配</a>',
-					func: function(queryid, data, nTr, allColumns,allColumnsDataMap) {
-						doManager("userGroupManager", "getUserGroupDTO", allColumnsDataMap.id, function(datas, textStatus, XMLHttpRequest) {
-							if (datas.result) {
-								var userGroup = $.fromJSON(datas.data);
-								var hasPrivilege = userGroup.hasPrivilege;
-								var privilegeId = userGroup.privilegeId;
-								if(hasPrivilege == "true"){
-									window.location = "privilege_edit.html?userGroupId=" + allColumnsDataMap.id+"&orgId="+ id+"&priId="+ privilegeId;
-								}else{
-									window.location = "privilege_add.html?userGroupId=" + allColumnsDataMap.id+"&orgId="+ id;
-								}
-							}
-						});
-					}
-				}
-				
-//			var delObj = 
-//				{
-//					html: '<a href="#" class="blue">删除</a>',
-//					func: function(queryid, data, nTr, allColumns,allColumnsDataMap) {
-//						var div = $("<div></div>");
-//						div.html("确定删除？");
-//						var doDelete = function(data) {
-//							var url = $$.PMSDispatchActionUrl;
-//							var data = new PMSRequestObject("baseManager", "removeObj", [queryid, allColumnsDataMap.id]);
-//							$$.ajax(url, "requestString=" + encodeURIComponent(data.toJsonString()), function(data, textStatus, XMLHttpRequest) {
-//								div.dialog("close");
-//								if (data.result) {
-//									$(nTr).remove();
-//								}
-//							});
-//						}
-//						div.dialog(
-//							{
-//								bgiframe: true,
-//								title: "提示",
-//								width: 320,
-//								buttons: 
-//									{
-//										"确定": function() {
-//											doDelete(data);
-//										},
-//										"取消": function() {
-//											$(this).dialog("close");
-//										}
-//									},
-//								modal: true
-//							});
-//					}
-//				}
-			var opArr = [editObj,viewObj,userAddObj,authObj,privilege];
-           // var opArr = [editObj,viewObj,userAddObj,authObj];
+
+			var opArr = [editObj];
 			$(function(){
 				$("#orgId").val(id);
-				$$.executeSearch('userGroupQuery','conditionDiv');
+				if(id == "null" || id == null){
+					$("#observeModelContainer").show();
+                    $("#model").show();
+                    $$.executeSearch('observeModelContainer','conditionDiv');
+				}else{
+                    $("#observeParameterContainer").show();
+                    $("#paramter").show();
+                    $$.executeSearch('observeParameterContainer','conditionDiv');
+				}
+
+
 			});
 			function showDiffUserGroup(obj,index){
 				if(obj[3]==0&&index!=3&&index!=0){
@@ -155,9 +70,16 @@
 				$("#disabledFlag").val($(":radio[name=disabledUser][checked]").val());
 			}
 			function doSearch() {
-				$$.executeSearch('userGroupQuery','conditionDiv');
+                if(id == "null" || id == null){
+                    $$.executeSearch('observeModelContainer','conditionDiv');
+                }else{
+                    $$.executeSearch('observeParameterContainer','conditionDiv');
+                }
 			}
 		</script>
+		<style type="text/css">
+			table.display td{white-space:normal;}
+		</style>
 	</head>
 	<body>
 		<div class="rightcont body_bg clear">
@@ -169,21 +91,27 @@
 				<div id="conditionDiv" class="panel-body">
 					<input name="orgEntity.id" id="orgId" type="hidden" operator="1"/>
 					停用标记:
-					<input type="radio" name = "disabledUser" value="0" onclick="setDisabledFlag();"/>是
-					<input type="radio" name = "disabledUser" value="1" onclick="setDisabledFlag();" checked="checked"/>否
-					<input type="hidden" name="disabledFlag" id="disabledFlag" value="1"/>
+					<input type="radio" name = "disabledUser" value="1" onclick="setDisabledFlag();"/>是
+					<input type="radio" name = "disabledUser" value="0" onclick="setDisabledFlag();" checked="checked"/>否
+					<input type="hidden" name="disabledFlag" id="disabledFlag" value="0"/>
 				</div>
 				<div class="panel-footer" style="text-align: right">
 					<input class="btn btn-primary" type="button" value="查询" onclick="doSearch();"/>
-					<input class="btn btn-primary" type="button" value="新增角色组" onclick="addUserGroup();"/>
-					<input class="btn btn-primary" type="button" value="新增用户" onclick="userAdd();"/>
+					<input id="paramter" style="display: none" class="btn btn-primary" type="button" value="新增明查明细" onclick="userAdd();"/>
+					<input id="model" style="display: none" class="btn btn-primary" type="button" value="新增明查模块" onclick="modelAdd();"/>
 				</div>
 			</div>
-			<div id="gridContainer" queryid="userGroupQuery" class="panel panel-primary"
+			<div style="display: none" id="observeParameterContainer" queryid="observeParameterContainer" class="panel panel-primary"
 				searchDiv="conditionDiv" queryformat="simple" fnRender="showDiffUserGroup"
 				autoload="false" showsearch="false" showdisplay="false" 
 				showtitle="true" showprint="false" showpaging="true"
 				showcheckbox="false" operators=opArr>
+			</div>
+			<div style="display: none" id="observeModelContainer" queryid="observeModelContainer" class="panel panel-primary"
+				 searchDiv="conditionDiv" queryformat="simple" fnRender="showDiffUserGroup"
+				 autoload="false" showsearch="false" showdisplay="false"
+				 showtitle="true" showprint="false" showpaging="true"
+				 showcheckbox="false" operators=opArr>
 			</div>
 		</div>
 	</body>

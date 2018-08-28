@@ -4788,7 +4788,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	 * 同步门店的方法
 	 */
 	@Override
-	public JSONObject insertNewStore(String storeCode,String storeName,String provinceCode,String cityCode,String adCode,String address,String longitude,String latitude,String type){
+	public JSONObject insertNewStore(String storeCode,String storeName,String provinceCode,String cityCode,String adCode,String address,String longitude,String latitude,String type,String phone){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		HttpClientUtil hClientUtil = null;
 		JSONObject jsonObject = new JSONObject();
@@ -4800,6 +4800,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		jsonObject.put("address", address==null?"":address);
 		
 		jsonObject.put("type", type);
+		jsonObject.put("phone", phone==null?"":phone);
 		
 		//------------暂时注释----------
 		//jsonObject.put("longitude", longitude==null?"":longitude);
@@ -4866,7 +4867,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				type="normal";
 			}
 			
-			insertNewStore(storeCode, store.getName(),store.getGaode_provinceCode(),store.getGaode_cityCode(),store.getGaode_adCode(),store.getAddress(),longitude,latitude,type);
+			insertNewStore(storeCode, store.getName(),store.getGaode_provinceCode(),store.getGaode_cityCode(),store.getGaode_adCode(),store.getAddress(),longitude,latitude,type,store.getMobilephone());
 			String newRtObj = hClientUtil.insRemoteData(THIRD_PART_EMP_URL, md5code, body);
 			savesynclog(employeeCode,storeCode,"",telephone,store.getGaode_provinceCode(),store.getGaode_cityCode(),store.getGaode_adCode(),store.getAddress(),jsonObject.toString(), newRtObj);
 		}
@@ -6331,9 +6332,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				file_xls.delete();
 			}
 			FileOutputStream os = null;
+			String url = null;
 			try {
 				os = new FileOutputStream(file_xls.getAbsoluteFile());
 				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
 			}catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -6348,7 +6352,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 			result.put("message","导出成功！");
 			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");

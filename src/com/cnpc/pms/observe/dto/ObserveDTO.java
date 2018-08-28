@@ -5,7 +5,7 @@ package com.cnpc.pms.observe.dto;
  */
 public class ObserveDTO {
     private String check_item_id;
-    private String model_id;
+    private Long model_id;
     private String observe_content;
     private String point_deduction_standard;
     private String check_details_id;
@@ -16,6 +16,8 @@ public class ObserveDTO {
     private String storeno;
     private Long store_id;
     private String observe_month;
+    private Integer status;
+    private Integer order_no;
 
     /** 功能节点主键. */
     private Long id;
@@ -73,11 +75,11 @@ public class ObserveDTO {
         this.check_item_id = check_item_id;
     }
 
-    public String getModel_id() {
+    public Long getModel_id() {
         return model_id;
     }
 
-    public void setModel_id(String model_id) {
+    public void setModel_id(Long model_id) {
         this.model_id = model_id;
     }
 
@@ -287,5 +289,21 @@ public class ObserveDTO {
 
     public void setObserve_month(String observe_month) {
         this.observe_month = observe_month;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getOrder_no() {
+        return order_no;
+    }
+
+    public void setOrder_no(Integer order_no) {
+        this.order_no = order_no;
     }
 }

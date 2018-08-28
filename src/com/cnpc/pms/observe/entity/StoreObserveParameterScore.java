@@ -43,6 +43,16 @@ public class StoreObserveParameterScore extends DataEntity {
     @Column(name="observe_date",columnDefinition="varchar(45) COMMENT '本次明查时间'")
     private String observe_date;
 
+    @Column(name="observe_store_no",columnDefinition="varchar(45) COMMENT '明查专用门店编号'")
+    private String observe_store_no;
+
+    @Column(name="sk_name",columnDefinition="varchar(45) COMMENT '店长名'")
+    private String sk_name;
+
+    @Column(name="rm_name",columnDefinition="varchar(45) COMMENT '运营经理名'")
+    private String rm_name;
+
+
     public Long getStore_id() {
         return store_id;
     }
@@ -121,5 +131,29 @@ public class StoreObserveParameterScore extends DataEntity {
 
     public void setObserve_date(String observe_date) {
         this.observe_date = observe_date;
+    }
+
+    public String getObserve_store_no() {
+        return observe_store_no;
+    }
+
+    public void setObserve_store_no(String observe_store_no) {
+        this.observe_store_no = observe_store_no;
+    }
+
+    public String getSk_name() {
+        return sk_name;
+    }
+
+    public void setSk_name(String sk_name) {
+        this.sk_name = sk_name;
+    }
+
+    public String getRm_name() {
+        return rm_name;
+    }
+
+    public void setRm_name(String rm_name) {
+        this.rm_name = rm_name;
     }
 }

@@ -196,8 +196,7 @@ Date.prototype.format=function(fmt) {
     
     function showcardinfo(file_name){
 		  
-		  var rootPath = getRootPath().replace("daqWeb","file_manager/upload_folder/banner/");
-		  $("#showcard").attr("src",rootPath+file_name);
+		  $("#showcard").attr("src","https://cdn.guoanshuju.com/upload_folder/banner/"+file_name);
 		  
 		  var imgdiv = $("#showcarddiv");
 		  imgdiv.dialog({

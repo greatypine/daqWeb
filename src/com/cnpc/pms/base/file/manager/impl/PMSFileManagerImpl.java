@@ -4,7 +4,10 @@ import com.cnpc.pms.base.file.entity.PMSFile;
 import com.cnpc.pms.base.file.manager.PMSFileManager;
 import com.cnpc.pms.base.manager.impl.BaseManagerImpl;
 import com.cnpc.pms.base.util.PMSPropertyUtil;
+import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.base.util.StrUtil;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.slf4j.Logger;
@@ -44,9 +47,11 @@ public class PMSFileManagerImpl extends BaseManagerImpl implements PMSFileManage
 	 */
 	public String createFolder() throws IOException {
 
-		String key = "file.root";
-		String root = PMSPropertyUtil.getValueOfProperties(key);
+		//String root = PMSPropertyUtil.getValueOfProperties(key);
 
+		String root=this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+
+		
 		String folderPath = root + generateFolderPath();
 
 		File folder = new File(folderPath);
@@ -177,6 +182,11 @@ public class PMSFileManagerImpl extends BaseManagerImpl implements PMSFileManage
 					throw new FileUploadException("Error that the file was writen in the disk.");
 				}
 
+				//上传oss导出员工档案
+		        OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+		        String url = ossRefFileManager.uploadOssFile(uploadFile, fileSuffix, "daqWeb/express/");
+				
+				
 				uploadedFile = new PMSFile();
 				uploadedFile.setId(id);
 				uploadedFile.setName(name);
@@ -184,7 +194,8 @@ public class PMSFileManagerImpl extends BaseManagerImpl implements PMSFileManage
 				uploadedFile.setFileSize(sizeInBytes);
 				uploadedFile.setLastUploaded(new Date());
 				uploadedFile.setBusinessId(businessId);
-				uploadedFile.setFilePath(generateFolderPath() + id + "." + fileSuffix);
+				//uploadedFile.setFilePath(generateFolderPath() + id + "." + fileSuffix);
+				uploadedFile.setFilePath(url);
 				this.saveObject(uploadedFile);
 			}
 		}

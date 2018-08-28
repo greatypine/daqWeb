@@ -894,13 +894,8 @@ Date.prototype.format=function(fmt) {
     $("#ordersn_manual").blur(function() {
         var ordersn = $("#ordersn_manual").val();
         if(ordersn!=""){
-            ordersn = ordersn.replace(/\s+/g,"");
-            if(ordersn.match(/\d/g).length<20){
-                crm_alert(0,"订单号输入不足20位，请认真核对!");
-                return;
-            }else{
-                blurDate();
-            }
+
+            blurDate();
         }
     });
 
@@ -1191,9 +1186,7 @@ Date.prototype.format=function(fmt) {
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-  	   
-  	    $("#process_div").show();
- 	 	$("#process_div_pic").show();
+
 		var orderLabels = $("#label_private_manual").val();
 		if(orderLabels!=null && orderLabels!='' && orderLabels.indexOf(',') >= 0){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
@@ -1201,7 +1194,13 @@ Date.prototype.format=function(fmt) {
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
 	    	ordersn = ordersn.replace(/\s+/g,"");
+            if(ordersn.match(/\d/g).length<20){
+                crm_alert(0,"订单号输入不足20位，请认真核对!");
+                return;
+            }
 	    }
+        $("#process_div").show();
+        $("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
 	    var dept = $("#dept_manual").val();
 	    var eshopId = $("#eshop_id_manual").val();
@@ -1667,9 +1666,7 @@ Date.prototype.format=function(fmt) {
 	  	if(sdate!=""){
 	  		 begin_end_date = sdate.split("-");
 	   	}
-	  	
-	    $("#process_div").show();
-	 	$("#process_div_pic").show();
+
 	 	var number_str = $("#store_id_manual").val(); 
 	    var storeName = $("#store_name_manual").val();
 	    if(number_str==""&&storeName!=""){
@@ -1682,8 +1679,14 @@ Date.prototype.format=function(fmt) {
 	    }
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
-	    	ordersn = ordersn.replace(/\s+/g,"");  
+	    	ordersn = ordersn.replace(/\s+/g,"");
+            if(ordersn.match(/\d/g).length<20){
+                crm_alert(0,"订单号输入不足20位，请认真核对!");
+                return;
+            }
 	    }
+        $("#process_div").show();
+        $("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
 	    var dept = $("#dept_manual").val();
 	    var eshopId = $("#eshop_id_manual").val();
