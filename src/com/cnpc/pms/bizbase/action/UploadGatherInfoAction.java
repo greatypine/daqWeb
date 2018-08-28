@@ -68,6 +68,7 @@ public class UploadGatherInfoAction extends HttpServlet{
         factory.setRepository(new File(upload));
         // 用工厂实例化上传组件,ServletFileUpload 用来解析文件上传请求 
         ServletFileUpload servletFileUpload = new ServletFileUpload(factory);
+		servletFileUpload.setHeaderEncoding("utf-8");
         //获取参数,拿到要进行插入的表名称
         //获取要使用的dao对象
         try {
@@ -85,7 +86,8 @@ public class UploadGatherInfoAction extends HttpServlet{
                      if(!file_dir_upload.exists()){//判断文件夹是否存在
                          bResult = file_dir_upload.mkdir();
                      }
-                     File file_upload = new File(str_filepath + name);
+					 System.out.println(name+"");
+					 File file_upload = new File(str_filepath + new String(name.getBytes("ISO8859-1")));
                      if(!file_upload.exists()){
                          bResult = file_upload.createNewFile();
                      }
