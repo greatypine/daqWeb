@@ -59,7 +59,7 @@ public class UploadGatherInfoAction extends HttpServlet{
         DiskFileItemFactory factory = new DiskFileItemFactory();
         //设置文件上传路径
         //String upload = this.getServletContext().getRealPath(File.separator + fileLoad);
-		String upload=this.getClass().getClassLoader().getResource("../../").getPath()+"house";
+		String upload=this.getClass().getClassLoader().getResource("../../").getPath()+fileLoad;
         // 获取系统默认的临时文件保存路径，该路径为Tomcat根目录下的temp文件夹
         String temp = System.getProperty("java.io.tmpdir");
         // 设置缓冲区大小为 5M
@@ -278,10 +278,6 @@ public class UploadGatherInfoAction extends HttpServlet{
 					}
 					e.printStackTrace();
 				}
-				 if(file2.exists()){
-					 System.gc();
-					 file2.delete();
-				 }
 			}
 		 }
 	}
