@@ -658,6 +658,7 @@
  	    var areaNo = $("#area_no_s").val();
  	    var employeeName = $("#employee_name_s").val();
  	    var employeeNo = $("#employee_no_s").val();
+        var tinyvillage_name = $("#tinyVillage_name").val();
  	    if(number_str==""&&storeName!=""){
  	    	number_str=-10000;
  	    }
@@ -678,7 +679,8 @@
 		  		areaName:areaName,
 		  		areaNo:areaNo,
 		  		employeeName:employeeName,
-		  		employeeNo:employeeNo
+		  		employeeNo:employeeNo,
+                tinyvillageName:tinyvillage_name
 		   }
 		}else if(regex_cs.test(curr_user.usergroup.code)){//城市
 	    	 dynamicDto = {
@@ -690,7 +692,8 @@
 		  		areaName:areaName,
 		  		areaNo:areaNo,
 		  		employeeName:employeeName,
-		  		employeeNo:employeeNo
+		  		employeeNo:employeeNo,
+                 tinyvillageName:tinyvillage_name
   			}
 	    }else if(regex_dz.test(curr_user.usergroup.code)){//店长
 	    	dynamicDto = {
@@ -701,7 +704,8 @@
 		  		areaName:areaName,
 		  		areaNo:areaNo,
 		  		employeeName:employeeName,
-		  		employeeNo:employeeNo
+		  		employeeNo:employeeNo,
+                tinyvillageName:tinyvillage_name
   			}
 	    }
 	   
