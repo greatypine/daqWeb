@@ -26,10 +26,10 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
 
 
     @Override
-    public Map<String, Object> queryCostRent(String storeNo, String storeName,Integer version) {
+    public Map<String, Object> queryCostRent(String storeNo, String storeName,Integer year) {
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
-        List<Map<String,Object>> list = costStatisticsDao.queryCostRent(storeNo,storeName,version);
+        List<Map<String,Object>> list = costStatisticsDao.queryCostRent(storeNo,storeName,year);
         result.put("rent",list);
         return result;
     }

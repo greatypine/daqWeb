@@ -51,13 +51,12 @@ public interface CostStatisticsDao extends IDAO {
 
 
     /**
-     * @Description 查询某个店某年某月的租金成本
+     * @Description 查询装修摊销
      * @author gbl
-     * @date 2018/8/21 17:31
+     * @date 2018/8/28 15:17
      **/
 
-    public List<Map<String,Object>> selectCostRent(String storeNo,Integer year);
-
+    public List<Map<String,Object>> queryCostRenovation(String storeNo,String storeName);
 
 
 

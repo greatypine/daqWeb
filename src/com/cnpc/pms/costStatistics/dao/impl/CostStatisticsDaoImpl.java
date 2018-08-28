@@ -104,8 +104,32 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
         return list;
     }
 
+
+
     @Override
-    public List<Map<String, Object>> selectCostRent(String storeNo, Integer year) {
-        return null;
+    public List<Map<String, Object>> queryCostRenovation(String storeNo, String storeName) {
+        String sqlSub = "select * from t_cost_renovation";
+
+        String sql ="select ts.storeno as store_no,ts.name as store_name ,ts.address as addr,tcr.decoration_company,tcr.structure_acreage,tcr.renovation_unit_price,tcr.business_screen,tcr.furniture,tcr.light_box,tcr.process_manage,tcr.process_manage_surcharge,tcr.air_conditioner,tcr.air_conditioner_surcharge,tcr.design,tcr.total,tcr.amortize_month,tcr.amortize_money,tcr.completed_date,tcr.contract_date from  t_store ts left join ("+sqlSub+") tcr on  ts.storeno = tcr.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+        if(storeNo!=null&&!"".equals(storeNo)){
+            sql+=" and ts.storeno like '%"+storeNo+"%'";
+        }
+
+        if(storeName!=null&&!"".equals(storeName)){
+            sql+=" and ts.name like '%"+storeName+"%'";
+        }
+
+
+
+        List<Map<String,Object>> list = null;
+        try{
+            SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+            list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return list;
     }
 }

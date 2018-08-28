@@ -66,9 +66,12 @@ public class CostRenovation extends DataEntity {
     @Column(name="amortize_money",columnDefinition="decimal(10,2) COMMENT '摊销金额'")
     private double amortizeMoney;
 
-    //,columnDefinition="datetime(0,0) COMMENT '竣工日期'"
-    @Column(name="completed_date")
-    private Date completedDate;
+
+    @Column(name="completed_date",columnDefinition="varchar(100) COMMENT '竣工日期'")
+    private String completedDate;
+
+    @Column(name="contract_date",columnDefinition="varchar(100) COMMENT '合同日期'")
+    private String contractDate;
 
 
     public String getStoreNo() {
@@ -199,11 +202,19 @@ public class CostRenovation extends DataEntity {
         this.amortizeMoney = amortizeMoney;
     }
 
-    public Date getCompletedDate() {
+    public String getCompletedDate() {
         return completedDate;
     }
 
-    public void setCompletedDate(Date completedDate) {
+    public void setCompletedDate(String completedDate) {
         this.completedDate = completedDate;
+    }
+
+    public String getContractDate() {
+        return contractDate;
+    }
+
+    public void setContractDate(String contractDate) {
+        this.contractDate = contractDate;
     }
 }

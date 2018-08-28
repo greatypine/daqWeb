@@ -24,7 +24,7 @@ function showWholeContent(t){
  *
  * **/
 var editStore = new Set();
-function checkCostRent(t){
+function checkcostRenovation(t){
     //eidtStore.push($(t).parent().parent().attr("id"));
     $(t).parent().parent().attr("editable",true);
     //人工成本录入
@@ -211,9 +211,9 @@ function checkPropertyDeadLine(t){
 
 
 /**
- * 获取租金成本
+ * 获取装修摊销
  * **/
-function getCostRent(){
+function getCostRenovation(){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -221,52 +221,46 @@ function getCostRent(){
     var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
     var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
     var year = $("#year_rent").val();
-    $("#rt1").html(year+"年月租金");
-    $("#rt2").html(year+"年物业月费用");
-    $("#rt3").html(year+"年每月费用");
-    $("#rent_tb_1").find("tr:gt(0)").remove();
-    $("#rent_tb_2").find("tr:gt(0)").remove();
 
-    doManager('costRentManager','queryCostRent',[storeNo,storeName,year],function (data) {
+    $("#renovation_tb_1").find("tr:gt(0)").remove();
+    $("#renovation_tb_2").find("tr:gt(0)").remove();
+
+    doManager('costRenovationManager','queryCostRenovation',[storeNo,storeName,year],function (data) {
 
 
         if(data.result){
-            var costRent = JSON.parse(data.data).rent;
+            var costRenovation = JSON.parse(data.data).rent;
 
 
             var rent_td_sum = "";
             var uniform_charge_sum=0;
 
-            for(var i=0;i<costRent.length;i++){
+            for(var i=0;i<costRenovation.length;i++){
+                var storeNo = costRenovation[i].store_no==null?"":costRenovation[i].store_no;
+                var storeName = costRenovation[i].store_name==null?"":costRenovation[i].store_name;
+                var decoration_company = costRenovation[i].decoration_company==null?"":costRenovation[i].decoration_company;//装修公司
+                var structure_acreage = costRenovation[i].structure_acreage==null?"":costRenovation[i].structure_acreage;//建筑面积
+                var renovation_unit_price = costRenovation[i].renovation_unit_price==null?"":costRenovation[i].renovation_unit_price;//装修单价
+                var business_screen = costRenovation[i].business_screen==null?"":costRenovation[i].business_screen;//商业展屏
+                var furniture = costRenovation[i].furniture==null?"":costRenovation[i].furniture;//家具
+                var light_box = costRenovation[i].light_box==null?"":costRenovation[i].light_box;//灯箱
+                var process_manage = costRenovation[i].process_manage==null?"":costRenovation[i].process_manage;//过程管理
+                var process_manage_surcharge = costRenovation[i].process_manage_surcharge==null?"":costRenovation[i].process_manage_surcharge;//过程管理费
+                var air_conditioner = costRenovation[i].air_conditioner==null?"":costRenovation[i].air_conditioner;//空调设备
+                var air_conditioner_surcharge = costRenovation[i].air_conditioner_surcharge==null?"":costRenovation[i].air_conditioner_surcharge;//空调设备费
+                var design = costRenovation[i].design==null?"":costRenovation[i].design;//设计
+                var deposit = costRenovation[i].total==null?"":costRenovation[i].total;//押金
+                var agency_fee = costRenovation[i].amortize_month==null?"":costRenovation[i].amortize_month;//摊销月
+                var amortize_money = costRenovation[i].amortize_money==null?"":costRenovation[i].amortize_money;//摊销金额
+                var completed_date = costRenovation[i].completed_date==null?"":costRenovation[i].completed_date;//竣工日期
+                var contract_date = costRenovation[i].contract_date==null?"":costRenovation[i].contract_date;//合同日期
 
-                var storeNo = costRent[i].store_no==null?"":costRent[i].store_no;
-                var storeName = costRent[i].store_name==null?"":costRent[i].store_name;
-                var addr = costRent[i].addr==null?"":costRent[i].addr;
-                var rent_monthly = costRent[i].rent_monthly==null?"":costRent[i].rent_monthly;//月租
-                var cost_monthly = costRent[i].cost_monthly==null?"":costRent[i].cost_monthly;//月成本
-                var contract_grand_total = costRent[i].contract_grand_total==null?"":costRent[i].contract_grand_total;//合同总金额
-                var structure_acreage = costRent[i].structure_acreage==null?"":costRent[i].structure_acreage;//建筑面积
-                var lease_unit_price = costRent[i].lease_unit_price==null?"":costRent[i].lease_unit_price;//租赁单价
-                var first_year_rent = costRent[i].first_year_rent==null?"":costRent[i].first_year_rent;
-                var second_year_rent = costRent[i].second_year_rent==null?"":costRent[i].second_year_rent;
-                var third_year_rent = costRent[i].third_year_rent==null?"":costRent[i].third_year_rent;
-                var fourth_year_rent = costRent[i].fourth_year_rent==null?"":costRent[i].fourth_year_rent;
-                var fifth_year_rent = costRent[i].fifth_year_rent==null?"":costRent[i].fifth_year_rent;
-                var deposit = costRent[i].deposit==null?"":costRent[i].deposit;//押金
-                var agency_fee = costRent[i].agency_fee==null?"":costRent[i].agency_fee;//中介费
-                var property_fee_year = "";//年物业费
-                if(costRent[i].property_fee!=null&&costRent[i].property_deadline!=null){
-                    property_fee_year = parseFloat(costRent[i].property_fee)*parseFloat(costRent[i].property_deadline);
-                }
-                var property_fee = costRent[i].property_fee==null?"":costRent[i].property_fee;//月物业费
-                var property_deadline = costRent[i].property_deadline==null?"":costRent[i].property_deadline;//租期
-                var lease_start_date = costRent[i].lease_start_date==null?"":costRent[i].lease_start_date;//起租日不含免租期
-                var lease_stop_date = costRent[i].lease_stop_date==null?"":costRent[i].lease_stop_date;//到租日
-                var free_lease_start_date = costRent[i].free_lease_start_date==null?"":costRent[i].free_lease_start_date;//起租日含免租期
 
-                $("#rent_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td><td style='background-color:#A9A9A9' onclick='showWholeContent(this)'><p>"+addr+"</p></td></tr>");
+                $("#renovation_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
 
-                var labor_td = "<td><input type='text' readonly  style='background-color: #e8e8e8' id='rentMonthly_"+i+"' value='"+rent_monthly+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8' id='curYearPropertyFee_"+i+"'  value='"+property_fee+"'/></td><td><input type='text' id='costMonthly_"+i+"' readonly style='background-color: #e8e8e8'  value='"+cost_monthly+"'/></td>";
+                var renovation_td = "<td><input type='text'   style='background-color: #e8e8e8' id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='renovationUnitPrice_"+i+"'    value='"+cost_monthly+"'/></td>";
 
                 for(var j=1;j<=12;j++){
                     labor_td=labor_td+"<td><input type='text' id='costMonthly_"+i+"'  readonly  style='background-color: #e8e8e8' value='"+cost_monthly+"'/></td>";
@@ -328,12 +322,12 @@ function getCostRent(){
  * 导出租金成本
  *
  * **/
-function   exportCostRent(){
+function   exportcostRenovation(){
     var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
     var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
     var year = $("#year_rent").val();
 
-    doManager('costRentManager','exportCostRent',[storeNo,storeName,year],function (data) {
+    doManager('costRenovationManager','exportcostRenovation',[storeNo,storeName,year],function (data) {
         if(data.result){
             var result= JSON.parse(data.data);
             if(result.status=='success'){
@@ -360,10 +354,10 @@ function   exportCostRent(){
  * 保存租金成本
  *
  * **/
-function saveCostRent(){
+function savecostRenovation(){
 
     var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
-    var costRentArray = [];
+    var costRenovationArray = [];
     var year= $("#year_rent").val();
     for(var i=0;i<store_cost_tr.length;i++){
         var storeNo= $(store_cost_tr[i]).attr("id");
@@ -386,7 +380,7 @@ function saveCostRent(){
         var lease_stop_date = $(store_cost_tr[i]).find('input[id^="lease_stop_date_"]').val();//到租日
         var free_lease_start_date = $(store_cost_tr[i]).find('input[id^="free_lease_start_date_"]').val();//起租日含免租期
 
-        var costRent = {
+        var costRenovation = {
             year:year,
             storeNo:storeNo,
             storeName:storeName,
@@ -408,11 +402,11 @@ function saveCostRent(){
             leaseStopDate:lease_stop_date
 
         }
-        costRentArray.push(costRent);
+        costRenovationArray.push(costRenovation);
 
     }
 
-    doManager('costRentManager','saveCostRent',[costRentArray],function (data) {
+    doManager('costRenovationManager','savecostRenovation',[costRenovationArray],function (data) {
         if(data.result){
             var result= JSON.parse(data.data);
 
