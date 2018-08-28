@@ -87,7 +87,7 @@ public class UploadGatherInfoAction extends HttpServlet{
                          bResult = file_dir_upload.mkdir();
                      }
 					 System.out.println(name+"");
-					 File file_upload = new File(str_filepath + new String(name.getBytes("UTF-8"), "ISO8859-1"));
+					 File file_upload = new File(str_filepath + new String(name.getBytes("utf-8"),"utf-8"));
                      if(!file_upload.exists()){
                          bResult = file_upload.createNewFile();
                      }
