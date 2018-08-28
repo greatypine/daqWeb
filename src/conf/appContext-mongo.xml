@@ -5,11 +5,11 @@
 		
 	
     <bean id ="mongodb" class="com.cnpc.pms.mongodb.common.MongoDbUtil" init-method="connectMongo" >
-		<property name="userName" value="gemini" />
-		<property name="password" value="zxgasq2018@!341%^" />
-		<property name="host1" value="10.10.20.7:27017" />
- 		<property name="host2" value="10.10.20.8:27017" />
- 		<property name="host3" value="10.10.20.9:27017" />
+		<property name="userName" value="${mongodb.userName}" />
+		<property name="password" value="${mongodb.password}" />
+		<property name="host1" value="${mongodb.host1}" />
+ 		<property name="host2" value="${mongodb.host2}" />
+ 		<property name="host3" value="${mongodb.host3}" />
 		
 	</bean>
 	
