@@ -6,7 +6,7 @@
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">   
       
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">   
-      <fileNamePattern>/tomcat/logs/daqWeb.%d{yyyy-MM-dd}.log</fileNamePattern>   
+      <fileNamePattern>/tomcat/logs/daqWeb.log</fileNamePattern>   
       <maxHistory>30</maxHistory>    
     </rollingPolicy>   
    
@@ -168,7 +168,7 @@
 	</root>
 	
 	
-  <root level="DEBUG">   
+  <root level="INFO">   
     <appender-ref ref="FILE" />   
   </root> 
   

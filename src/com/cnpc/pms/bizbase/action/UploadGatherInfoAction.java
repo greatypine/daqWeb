@@ -3,7 +3,6 @@ package com.cnpc.pms.bizbase.action;
 import com.cnpc.pms.base.file.collection.ReadCompanyInfo;
 import com.cnpc.pms.base.file.collection.ReadExcel;
 import com.cnpc.pms.base.file.manager.ExcelManager;
-import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bid.manager.AttachmentManager;
 import com.cnpc.pms.personal.entity.Attachment;
@@ -27,9 +26,11 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.cnpc.pms.base.file.manager.PMSFileManager.FILE_ROOT;
+
 public class UploadGatherInfoAction extends HttpServlet{
-	String FILE_ROOT = PropertiesUtil.getValue("file.root");
-	String picPath = PropertiesUtil.getValue("file.root").concat("user_image").concat(File.separator);
+	/*String FILE_ROOT = PropertiesUtil.getValue("file.root");
+	String picPath = PropertiesUtil.getValue("file.root").concat("user_image").concat(File.separator);*/
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
@@ -57,7 +58,8 @@ public class UploadGatherInfoAction extends HttpServlet{
       //创建文件项目工厂对象
         DiskFileItemFactory factory = new DiskFileItemFactory();
         //设置文件上传路径
-        String upload = this.getServletContext().getRealPath(File.separator + fileLoad);
+        //String upload = this.getServletContext().getRealPath(File.separator + fileLoad);
+		String upload=this.getClass().getClassLoader().getResource("../../").getPath()+fileLoad;
         // 获取系统默认的临时文件保存路径，该路径为Tomcat根目录下的temp文件夹
         String temp = System.getProperty("java.io.tmpdir");
         // 设置缓冲区大小为 5M
@@ -194,6 +196,7 @@ public class UploadGatherInfoAction extends HttpServlet{
 		ExcelManager excelManager =(ExcelManager)SpringHelper.getBean("excelManager");
 		//扫描文件夹下是否有文件
 		String upload = this.getClass().getClassLoader().getResource("../../").getPath()+"house";
+		System.out.println(upload+"-----------------读取的文件夹路径-----------------");
 		File file=new File(upload);
 		boolean bResult = true;
 		 if(!file.exists()){
@@ -204,6 +207,7 @@ public class UploadGatherInfoAction extends HttpServlet{
 		 File[] listFiles = file.listFiles();
 		 if(listFiles.length>0){
 			 for (File file2 : listFiles) {//读取文件
+				 System.out.println(file2.getAbsolutePath()+"-----------------读取的文件夹路径-----------------");
 				 String str=null;
 				//文件是Excel
 				 String village = excelManager.getTinyVillageByVillage(file2.getName());
@@ -274,10 +278,6 @@ public class UploadGatherInfoAction extends HttpServlet{
 					}
 					e.printStackTrace();
 				}
-				 if(file2.exists()){
-					 System.gc();
-					 file2.delete();
-				 }
 			}
 		 }
 	}
