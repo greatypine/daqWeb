@@ -12,7 +12,7 @@ import com.mongodb.client.MongoDatabase;
  *
  */
 public class MongoDbUtil {
-	
+
 	private MongoDatabase database;
 	
 	private MongoClient mongoClient;
@@ -124,7 +124,7 @@ public class MongoDbUtil {
 			 
 			 //urlSb.append(host1).append("/gemini?safe=true;socketTimeoutMS=150000");
 			 urlSb.append(host1).append(",").append(host2).append(",").append(host3).append("/gemini?safe=true;socketTimeoutMS=150000");
-			 
+
 		       // 连接到 mongodb 服务
 			     mongoClient =  new MongoClient(new MongoClientURI(urlSb.toString()));
 			   
