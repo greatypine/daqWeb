@@ -62,8 +62,8 @@
                 theme: '#428bca'
             });
 
-
             //getCostLabor();//获取人工成本
+
 
         })
 
@@ -81,6 +81,8 @@
 
                 getCostRent();//获取租金成本
 
+            }else if(t==3){
+                getCostRenovation();
             }
     }
 
@@ -166,7 +168,7 @@
                                     <p><input type="text" name="" id="storeName_labor"/></p>
                                 </td>
                                 <td width="10%">
-                                    <p class="read">版本：</p>
+                                    <p class="read">年份：</p>
                                     <p class="read"><input type="text" readonly  maxlength="12"  id="year_labor"/></p>
                                 </td>
                                 <td width="10%" style="text-align: center">
@@ -270,7 +272,7 @@
                         <tr>
                             <td width="10%">
                                 <p>门店编码：</p>
-                                <p><input type="text" id="storeNo_rent" name="observe_month"></p>
+                                <p><input type="text" id="storeNo_rent" name="storeNo_rent"></p>
                             </td>
                             <td width="10%">
                                 <p>门店名称：</p>
@@ -287,7 +289,7 @@
                                 <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostRent()">保存</button>
                             </td>
                             <td width="10%" style="text-align:center">
-                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostLabor()">导出</button>
+                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostRent()">导出</button>
                             </td>
                         </tr>
                     </table>

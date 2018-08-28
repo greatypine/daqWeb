@@ -193,7 +193,7 @@ public class CostRentExcel {
             cell = row.createCell(i);
             cell.setCellValue(header0[i]);
 
-            if(i>2){
+            if(i>3){
                 cell.setCellStyle(headstyle2);
             }else{
                 cell.setCellStyle(headstyle);
@@ -214,7 +214,7 @@ public class CostRentExcel {
                 Object data = tempmap.get(colName[j]);
                 cell = row.createCell(j+1);
 
-                if(j<2){
+                if(j<3||j>30){
                     cell.setCellStyle(fixedStyle);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
@@ -234,12 +234,16 @@ public class CostRentExcel {
         row = sheet.createRow(data.size()+1);
         for(int i=0;i<35;i++){
             cell = row.createCell(i);
-            cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+
             cell.setCellStyle(sumstyle);
             if(i<7){
+                cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                 cell.setCellValue("合计");
             }else if(i>6&&i<19){
-                cell.setCellFormula("SUM("+rowColNum[i]+2+":"+rowColNum[i]+(data.size()+2)+")");//合计添加公式
+                cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+                cell.setCellFormula("SUM("+rowColNum[i]+2+":"+rowColNum[i]+(data.size()+1)+")");//合计添加公式
+            }else if(i>18){
+                cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
             }
 
         }

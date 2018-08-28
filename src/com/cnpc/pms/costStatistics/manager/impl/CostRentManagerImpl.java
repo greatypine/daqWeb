@@ -30,7 +30,7 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
         List<Map<String,Object>> list = costStatisticsDao.queryCostRent(storeNo,storeName,version);
-
+        result.put("rent",list);
         return result;
     }
 
@@ -108,6 +108,7 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
                     cr.setStoreNo(storeNo);
                     cr.setStoreName(storeName);
                     cr.setAddr(addr);
+                    cr.setYear(year);
                     cr.setContractGrandTotal(contractGrandTotal);
                     cr.setFirstYearRent(firstYearRent);
                     cr.setSecondYearRent(secondYearRent);
