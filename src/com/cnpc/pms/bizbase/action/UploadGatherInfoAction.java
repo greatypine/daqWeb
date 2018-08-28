@@ -86,7 +86,8 @@ public class UploadGatherInfoAction extends HttpServlet{
                      if(!file_dir_upload.exists()){//判断文件夹是否存在
                          bResult = file_dir_upload.mkdir();
                      }
-                     File file_upload = new File(str_filepath + name);
+					 System.out.println(name+"");
+					 File file_upload = new File(str_filepath + new String(name.getBytes("UTF-8"), "GBK"));
                      if(!file_upload.exists()){
                          bResult = file_upload.createNewFile();
                      }
