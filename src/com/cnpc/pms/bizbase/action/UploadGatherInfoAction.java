@@ -77,7 +77,7 @@ public class UploadGatherInfoAction extends HttpServlet{
         	for (Object obj_item : list) {
         		 FileItem item = (FileItem)obj_item;
                  if(!item.isFormField()){//验证是否为文件类型
-                	 String name = item.getName();
+                	 String name = new String(item.getName().getBytes("ISO8859_1"),"utf-8");
                      //新建文件
                      String str_filepath = upload + File.separator;//File.separator 在windows是 \  unix是 / 
                      File file_dir_upload = new File(str_filepath);
