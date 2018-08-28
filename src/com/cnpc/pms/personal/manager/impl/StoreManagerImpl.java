@@ -6,7 +6,6 @@ import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
-import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bid.manager.AttachmentManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.dao.UserDAO;
@@ -1297,7 +1296,9 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 
 	@Override
 	public File exportExcelStore(Map<String, Object> param) throws Exception {
-		String str_file_dir_path = PropertiesUtil.getValue("file.root");
+		/*String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_web_path = PropertiesUtil.getValue("file.web.root");*/
+		String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 		String str_newfilepath = str_file_dir_path + "store_list.xls";
 		File file_new = new File(str_newfilepath);
 		if (file_new.exists()) {
@@ -1472,7 +1473,9 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				.concat(getPropertiesValueUtil().getStringValue(str_file_name).replace("/", File.separator));
 		File file_template = new File(str_filepath);
 
-		String str_file_dir_path = PropertiesUtil.getValue("file.root");
+		/*String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_web_path = PropertiesUtil.getValue("file.web.root");*/
+		String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 		String str_newfilepath = str_file_dir_path + "store_list_info.xls";
 		File file_new = new File(str_newfilepath);
 		if (file_new.exists()) {
@@ -2528,9 +2531,9 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 
 			List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("data");
 			if (list != null && list.size() > 0) {
-				String str_file_dir_path = PropertiesUtil.getValue("file.root");
-				String str_web_path = PropertiesUtil.getValue("file.web.root");
-
+				/*String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_web_path = PropertiesUtil.getValue("file.web.root");*/
+				String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 				HSSFWorkbook wb = new HSSFWorkbook();
 				// 创建Excel的工作sheet,对应到一个excel文档的tab
 
