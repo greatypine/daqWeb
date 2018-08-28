@@ -7,12 +7,14 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 
+import java.sql.SQLOutput;
+
 /**
  * @author gaobaolei
  *
  */
 public class MongoDbUtil {
-	
+
 	private MongoDatabase database;
 	
 	private MongoClient mongoClient;
@@ -116,7 +118,8 @@ public class MongoDbUtil {
 
 
 	public void connectMongo(){
-		 try{   
+		 try{
+			 System.out.println("-------------------------"+userName+"::::::::::::::::::"+password+"---------------------------------------------------------");
 			 StringBuilder urlSb = new StringBuilder("mongodb://");
 			 if(userName!=null&&!"".equals(userName)&&password!=null&&!"".equals(password)){
 				 urlSb.append(userName).append(":").append(password).append("@");
@@ -124,10 +127,10 @@ public class MongoDbUtil {
 			 
 			 //urlSb.append(host1).append("/gemini?safe=true;socketTimeoutMS=150000");
 			 urlSb.append(host1).append(",").append(host2).append(",").append(host3).append("/gemini?safe=true;socketTimeoutMS=150000");
-			 
+			 System.out.println("-------------------------"+urlSb+"---------------------------------------------------------");
 		       // 连接到 mongodb 服务
 			     mongoClient =  new MongoClient(new MongoClientURI(urlSb.toString()));
-			   
+
 		     }catch(Exception e){
 		    	  mongoClient.close();
 		     }
