@@ -1,35 +1,12 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.util.FileCopyUtils;
-
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
-import com.cnpc.pms.base.security.SessionManager;
-import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
-import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
-import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.dao.StoreDetailDao;
 import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.Store;
@@ -38,6 +15,19 @@ import com.cnpc.pms.personal.manager.StoreDetailManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import com.cnpc.pms.utils.ValueUtil;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.*;
+import org.springframework.util.FileCopyUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StoreDetailManagerImpl extends BizBaseCommonManager implements StoreDetailManager{
 	PropertiesValueUtil propertiesValueUtil = null;
@@ -173,7 +163,9 @@ public class StoreDetailManagerImpl extends BizBaseCommonManager implements Stor
 		String str_filepath = strRootpath.concat(getPropertiesValueUtil().getStringValue(str_file_name).replace("/", File.separator));
 		File file_template = new File(str_filepath);
 		
-		String str_file_dir_path = PropertiesUtil.getValue("file.root");
+		/*String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_web_path = PropertiesUtil.getValue("file.web.root");*/
+		String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 		String str_newfilepath = str_file_dir_path + "storedetail_list_info.xls";
 		File file_new = new File(str_newfilepath);
 		if (file_new.exists()) {

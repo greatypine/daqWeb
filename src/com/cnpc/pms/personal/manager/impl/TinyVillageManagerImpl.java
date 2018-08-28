@@ -4,7 +4,6 @@ import com.cnpc.pms.base.paging.*;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
-import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
@@ -1362,9 +1361,9 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 
 			List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("data");
 			if (list != null && list.size() > 0) {
-				String str_file_dir_path = PropertiesUtil.getValue("file.root");
-				String str_web_path = PropertiesUtil.getValue("file.web.root");
-
+				/*String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_web_path = PropertiesUtil.getValue("file.web.root");*/
+				String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 				HSSFWorkbook wb = new HSSFWorkbook();
 				// 创建Excel的工作sheet,对应到一个excel文档的tab
 
@@ -1391,7 +1390,8 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 				}
 
 				File file_xls = new File(
-						str_file_dir_path + File.separator + System.currentTimeMillis() + "_aboutTinyvillage.xls");
+						str_file_dir_path + File
+								.separator + System.currentTimeMillis() + "_aboutTinyvillage.xls");
 				if (file_xls.exists()) {
 					file_xls.delete();
 				}
