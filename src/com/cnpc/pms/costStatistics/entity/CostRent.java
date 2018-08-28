@@ -28,32 +28,32 @@ public class CostRent extends DataEntity {
     private String addr;
 
     @Column(name="contract_grand_total",columnDefinition="decimal(20,2) COMMENT '合同总金额'")
-    private String contractGrandTotal;
+    private Double contractGrandTotal;
 
     @Column(name="first_year_rent",columnDefinition="decimal(20,2) COMMENT '第一年租金'")
-    private String firstYearRent;
+    private Double firstYearRent;
 
     @Column(name="second_year_rent",columnDefinition="decimal(20,2) COMMENT '第二年租金'")
-    private String secondYearRent;
+    private Double secondYearRent;
 
     @Column(name="third_year_rent",columnDefinition="decimal(20,2) COMMENT '第三年租金'")
-    private String thirtYearRent;
+    private Double thirtYearRent;
 
     @Column(name="fourth_year_rent",columnDefinition="decimal(20,2) COMMENT '第四年租金'")
-    private String fourthYearRent;
+    private Double fourthYearRent;
 
     @Column(name="fifth_year_rent",columnDefinition="decimal(20,2) COMMENT '第五年租金'")
-    private String fifthYearRent;
+    private Double fifthYearRent;
 
 
     @Column(name="structure_acreage",columnDefinition="decimal(10,2) COMMENT '建筑面积'")
-    private String structureAcreage;
+    private Double structureAcreage;
 
     @Column(name="lease_unit_price",columnDefinition="decimal(10,2) COMMENT '租赁单价'")
     private Double leaseUnitPrice;
 
     @Column(name="year",columnDefinition="int(4) COMMENT '年份'")
-    private int year;
+    private Integer year;
 
     @Column(name="deposit",columnDefinition="decimal(10,2) COMMENT '押金'")
     private Double deposit;
@@ -67,16 +67,16 @@ public class CostRent extends DataEntity {
     @Column(name="property_deadline",columnDefinition="int(2) COMMENT '物业期限/月 '")
     private Integer propertyDeadline;
 
-    //,columnDefinition="COMMENT '起租日 含免租期'"
-    @Column(name="free_lease_start_date")
-    private Date freeLeaseStartDate;
 
-    //,columnDefinition="COMMENT '起租日 免租期截止）'"
-    @Column(name="lease_start_date")
-    private Date leaseStartDate;
-    //,columnDefinition="COMMENT '到期日'"
-    @Column(name="lease_stop_date")
-    private Date leaseStopDate;
+    @Column(name="free_lease_start_date",columnDefinition="varchar(12) COMMENT '起租日 含免租期'")
+    private String  freeLeaseStartDate;
+
+
+    @Column(name="lease_start_date",columnDefinition="varchar(12) COMMENT '起租日 免租期截止）'")
+    private String  leaseStartDate;
+
+    @Column(name="lease_stop_date",columnDefinition="varchar(12) COMMENT '到期日'")
+    private String  leaseStopDate;
 
     public String getStoreNo() {
         return storeNo;
@@ -102,22 +102,6 @@ public class CostRent extends DataEntity {
         this.addr = addr;
     }
 
-    public String getContractGrandTotal() {
-        return contractGrandTotal;
-    }
-
-    public void setContractGrandTotal(String contractGrandTotal) {
-        this.contractGrandTotal = contractGrandTotal;
-    }
-
-    public String getStructureAcreage() {
-        return structureAcreage;
-    }
-
-    public void setStructureAcreage(String structureAcreage) {
-        this.structureAcreage = structureAcreage;
-    }
-
     public Integer getPropertyDeadline() {
         return propertyDeadline;
     }
@@ -126,27 +110,27 @@ public class CostRent extends DataEntity {
         this.propertyDeadline = propertyDeadline;
     }
 
-    public Date getFreeLeaseStartDate() {
+    public String getFreeLeaseStartDate() {
         return freeLeaseStartDate;
     }
 
-    public void setFreeLeaseStartDate(Date freeLeaseStartDate) {
+    public void setFreeLeaseStartDate(String freeLeaseStartDate) {
         this.freeLeaseStartDate = freeLeaseStartDate;
     }
 
-    public Date getLeaseStartDate() {
+    public String getLeaseStartDate() {
         return leaseStartDate;
     }
 
-    public void setLeaseStartDate(Date leaseStartDate) {
+    public void setLeaseStartDate(String leaseStartDate) {
         this.leaseStartDate = leaseStartDate;
     }
 
-    public Date getLeaseStopDate() {
+    public String getLeaseStopDate() {
         return leaseStopDate;
     }
 
-    public void setLeaseStopDate(Date leaseStopDate) {
+    public void setLeaseStopDate(String leaseStopDate) {
         this.leaseStopDate = leaseStopDate;
     }
 
@@ -156,14 +140,6 @@ public class CostRent extends DataEntity {
 
     public void setLeaseUnitPrice(Double leaseUnitPrice) {
         this.leaseUnitPrice = leaseUnitPrice;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
     }
 
     public Double getDeposit() {
@@ -190,44 +166,67 @@ public class CostRent extends DataEntity {
         this.propertyFee = propertyFee;
     }
 
+    public Double getContractGrandTotal() {
+        return contractGrandTotal;
+    }
 
-    public String getFirstYearRent() {
+    public void setContractGrandTotal(Double contractGrandTotal) {
+        this.contractGrandTotal = contractGrandTotal;
+    }
+
+    public Double getFirstYearRent() {
         return firstYearRent;
     }
 
-    public void setFirstYearRent(String firstYearRent) {
+    public void setFirstYearRent(Double firstYearRent) {
         this.firstYearRent = firstYearRent;
     }
 
-    public String getSecondYearRent() {
+    public Double getSecondYearRent() {
         return secondYearRent;
     }
 
-    public void setSecondYearRent(String secondYearRent) {
+    public void setSecondYearRent(Double secondYearRent) {
         this.secondYearRent = secondYearRent;
     }
 
-    public String getThirtYearRent() {
+    public Double getThirtYearRent() {
         return thirtYearRent;
     }
 
-    public void setThirtYearRent(String thirtYearRent) {
+    public void setThirtYearRent(Double thirtYearRent) {
         this.thirtYearRent = thirtYearRent;
     }
 
-    public String getFourthYearRent() {
+    public Double getFourthYearRent() {
         return fourthYearRent;
     }
 
-    public void setFourthYearRent(String fourthYearRent) {
+    public void setFourthYearRent(Double fourthYearRent) {
         this.fourthYearRent = fourthYearRent;
     }
 
-    public String getFifthYearRent() {
+    public Double getFifthYearRent() {
         return fifthYearRent;
     }
 
-    public void setFifthYearRent(String fifthYearRent) {
+    public void setFifthYearRent(Double fifthYearRent) {
         this.fifthYearRent = fifthYearRent;
+    }
+
+    public Double getStructureAcreage() {
+        return structureAcreage;
+    }
+
+    public void setStructureAcreage(Double structureAcreage) {
+        this.structureAcreage = structureAcreage;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 }

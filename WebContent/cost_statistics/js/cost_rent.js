@@ -9,6 +9,8 @@
 //     });
 // }
 
+
+
 /**
  * 检测租金成本数据并记录编辑的门店
  *
@@ -192,6 +194,7 @@ function getCostRent(){
     });
     var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
     var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
+    var version_flag = $("#version_flag").val();
     var year = $("#year_rent").val();
     $("#rt1").html(year+"年月租金");
     $("#rt2").html(year+"年物业月费用");
@@ -238,54 +241,57 @@ function getCostRent(){
 
                 $("#rent_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td><td style='background-color:#A9A9A9' onmouseover='showWholeContent(this)'><p>"+addr+"</p></td></tr>");
 
-                var labor_td = "<td><input type='text' readonly  style='background-color: #e8e8e8' value='"+rent_monthly+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8'  value='"+property_fee+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8'  value='"+cost_monthly+"'/></td>";
+                var labor_td = "<td><input type='text' readonly  style='background-color: #e8e8e8' id='rentMonthly_"+i+"' value='"+rent_monthly+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8'  value='"+property_fee+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8'  value='"+cost_monthly+"'/></td>";
 
                 for(var j=1;j<=12;j++){
                     labor_td=labor_td+"<td><input type='text'  readonly  style='background-color: #e8e8e8' value='"+cost_monthly+"'/></td>";
                 }
 
-                labor_td=labor_td+"<td><input type='text' readonly style='background-color: #e8e8e8' id='contractGrandTotal_"+i+"'  value='"+contract_grand_total+"'/></td><td><input type='text' onkeyup='checkContentValid(this)'  value='"+structure_acreage+"'/></td><td><input type='text'  onkeyup='checkContentValid(this)'  value='"+lease_unit_price+"'/></td><td><input type='text'  onkeyup='checkEveryYearRent(this)' id='firstYearRent_"+i+"' value='"+first_year_rent+"'/></td><td><input type='text' id='secondYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+second_year_rent+"'/></td><td><input type='text'  id='thirdYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+third_year_rent+"'/></td><td><input type='text' id='fourthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+fourth_year_rent+"'/></td><td><input type='text'  id='fifthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+fifth_year_rent+"'/></td><td><input type='text'  onkeyup='checkContentValid(this)' value='"+deposit+"'/></td><td><input type='text' onkeyup='checkContentValid(this)'   value='"+agency_fee+"'/></td><td><input type='text' id='propertyFeeYear_"+i+"'  readonly style='background-color: #e8e8e8' value='"+property_fee_year+"'/></td><td><input type='text' id='propertyDeadLine_"+i+"'  onkeyup='checkPropertyDeadLine(this)'  value='"+ property_deadline+"'/></td><td><input type='text' id='propertyFee_"+i+"' onkeyup='checkPropertyFee(this)'   value='"+property_fee+"'/></td><td><input type='text'   value='"+lease_start_date+"'/></td><td><input type='text'   value='"+lease_stop_date+"'/></td><td><input type='text'   value='"+free_lease_start_date+"'/></td>";
+                labor_td=labor_td+"<td><input type='text' readonly style='background-color: #e8e8e8' id='contractGrandTotal_"+i+"'  value='"+contract_grand_total+"'/></td><td><input type='text' onkeyup='checkContentValid(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td><td><input type='text' id='leaseUnitPrice_"+i+"' onkeyup='checkContentValid(this)'  value='"+lease_unit_price+"'/></td><td><input type='text'  onkeyup='checkEveryYearRent(this)' id='firstYearRent_"+i+"' value='"+first_year_rent+"'/></td><td><input type='text' id='secondYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+second_year_rent+"'/></td><td><input type='text'  id='thirdYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+third_year_rent+"'/></td><td><input type='text' id='fourthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+fourth_year_rent+"'/></td><td><input type='text'  id='fifthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+fifth_year_rent+"'/></td><td><input type='text'  id='deposi_"+i+"' onkeyup='checkContentValid(this)' value='"+deposit+"'/></td><td><input type='text' onkeyup='checkContentValid(this)' id='agencyFee_"+i+"'  value='"+agency_fee+"'/></td><td><input type='text' id='propertyFeeYear_"+i+"'  readonly style='background-color: #e8e8e8' value='"+property_fee_year+"'/></td><td><input type='text' id='propertyDeadLine_"+i+"'  onkeyup='checkPropertyDeadLine(this)'  value='"+ property_deadline+"'/></td><td><input type='text' id='propertyFee_"+i+"' onkeyup='checkPropertyFee(this)'   value='"+property_fee+"'/></td><td><input type='text' readonly id='lease_start_date_"+i+"'  value='"+lease_start_date+"'/></td><td><input type='text' readonly id='lease_stop_date_"+i+"'  value='"+lease_stop_date+"'/></td><td><input type='text'  id='free_lease_start_date_"+i+"' readonly value='"+free_lease_start_date+"'/></td>";
 
-                $("#rent_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+labor_td+"</tr>");
+                $("#rent_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+labor_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden' id='addr' value='"+addr+"'/></tr>");
 
+                laydate.render({//月份控件
+                    elem:"#lease_start_date_"+i,
+                    value:lease_start_date==""?"":new Date(lease_start_date),
+                    format: 'yyyy/MM/dd',
+                    btns: ['confirm','now',"clear"],
+                    theme: '#428bca',
+                    done: function(value, date, endDate){
+                        console.log(value)
+                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
+                    }
+                });
+
+                laydate.render({//月份控件
+                    elem:"#lease_stop_date_"+i,
+                    value:lease_stop_date==""?"":new Date(lease_stop_date),
+                    format: 'yyyy/MM/dd',
+                    btns: ['confirm','now',"clear"],
+                    theme: '#428bca',
+                    change: function(value, date, endDate){
+                        // console.log(value); //得到日期生成的值，如：2017-08-18
+                        // console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
+                        // console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
+                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
+                    }
+                });
+
+                laydate.render({//月份控件
+                    elem:"#free_lease_start_date_"+i,
+                    value:free_lease_start_date==""?"":new Date(free_lease_start_date),
+                    format: 'yyyy/MM/dd',
+                    btns: ['confirm','now',"clear"],
+                    theme: '#428bca',
+                    change: function(value, date, endDate){
+                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
+                    }
+                });
 
             }
-            // for(var m=1;m<=12;m++){
-            //     var emolument_sum =0;
-            //     var uniform_amortize_sum = 0;
-            //     var accommodation_sum = 0;
-            //     var subtotal_sum = 0;
-            //     var emolumentId = "emolument_"+m+"_";
-            //     $("input[id^='"+emolumentId+"']").each(function () {
-            //         emolument_sum+=parseFloat($(this).val()==""?0:$(this).val());
-            //
-            //     })
-            //
-            //     var uniformAmortizeId ="uniformAmortize_"+m+"_";
-            //     $("input[id^='"+uniformAmortizeId+"']").each(function () {
-            //         uniform_amortize_sum+=parseFloat($(this).val()==""?0:$(this).val());
-            //
-            //     })
-            //
-            //     var  accommodationId = "accommodation_"+m+"_";
-            //     $("input[id^='"+accommodationId+"']").each(function () {
-            //         accommodation_sum+=parseFloat($(this).val()==""?0:$(this).val());
-            //
-            //     })
-            //
-            //     var subtotalId = "subtotal_"+m+"_";
-            //     $("input[id^='"+subtotalId+"']").each(function () {
-            //         subtotal_sum+=parseFloat($(this).val()==""?0:$(this).val());
-            //
-            //     })
-            //
-            //     labor_td_sum=labor_td_sum+"<td><input type='text' readonly style='background-color: #e8e8e8' onkeyup='checkCostLabor()' id='emolumentSum"+m+"' value='"+emolument_sum.toFixed(2)+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8' onkeyup='checkCostLabor()' id='uniformAmortizeSum"+m+"' value='"+uniform_amortize_sum.toFixed(2)+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8' onkeyup='checkCostLabor()' id='accommodationSum"+m+"' value='"+accommodation_sum.toFixed(2)+"'></td><td><input readonly type='text' style='background-color: #e8e8e8' id='subtotalSum"+m+"' value='"+subtotal_sum.toFixed(2)+"'></td>";
-            //
-            // }
-            //
-            // $("#labor_tb_1").append("<tr><td  colspan='3' style='text-align: center;background-color:#A9A9A9'>合计</td></tr>");
-            // $("#labor_tb_2").append("<tr>"+labor_td_sum+"<td><input style='background-color: #e8e8e8' readonly value='"+uniform_charge_sum.toFixed(2)+"'/></td></tr>");
+
             layer.close(index);
+
 
 
 
@@ -330,33 +336,57 @@ function   exportCostRent(){
  *
  * **/
 function saveCostRent(){
-    var year = $("#year_labor").val();
-    var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
-    var costLaborArray = [];
+    var version_flag = $("#version_flag").val();
+    var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
+    var costRentArray = [];
     for(var i=0;i<store_cost_tr.length;i++){
         var storeNo= $(store_cost_tr[i]).attr("id");
-        var storeName = $(store_cost_tr[i]).find("input:hidden").val();
-        for(var j=1;j<=12;j++){
-            var emolument = $(store_cost_tr[i]).find('input[id^="emolument_'+j+'_"]').val();
-            var uniformAmortize = $(store_cost_tr[i]).find('input[id^="uniformAmortize_'+j+'_"]').val();
-            var accommodation = $(store_cost_tr[i]).find('input[id^="accommodation_'+j+'_"]').val();
-            var subtotal = $(store_cost_tr[i]).find('input[id^="subtotal_'+j+'_"]').val();
-            var costLabor = {
-                storeNo:storeNo,
-                storeName:storeName,
-                year:year,
-                month:j,
-                emolument:emolument,
-                uniformAmortize:uniformAmortize,
-                accommodation:accommodation,
-                subtotal:subtotal
-            };
+        var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();
+        var addr = $(store_cost_tr[i]).find("input[id='addr']").val();
+        var contractGrandTotal = $(store_cost_tr[i]).find('input[id="contractGrandTotal_'+i+'"]').val();
+        var rent_monthly = $(store_cost_tr[i]).find('input[id="rentMonthly_'+i+'"]').val();//月租
+        var structure_acreage = $(store_cost_tr[i]).find('input[id="structureAcreage_'+i+'"]').val();//建筑面积
+        var lease_unit_price = $(store_cost_tr[i]).find('input[id="leaseUnitPrice_'+i+'"]').val();//租赁单价
+        var first_year_rent = $(store_cost_tr[i]).find('input[id="firstYearRent_'+i+'"]').val();
+        var second_year_rent = $(store_cost_tr[i]).find('input[id="secondYearRent_'+i+'"]').val();
+        var third_year_rent = $(store_cost_tr[i]).find('input[id="thirdYearRent_'+i+'"]').val();
+        var fourth_year_rent = $(store_cost_tr[i]).find('input[id="fourthYearRent_'+i+'"]').val();
+        var fifth_year_rent = $(store_cost_tr[i]).find('input[id="fifthYearRent_'+i+'"]').val();
+        var deposit = $(store_cost_tr[i]).find('input[id="deposit_'+i+'"]').val();//押金
+        var agency_fee = $(store_cost_tr[i]).find('input[id="agencyFee_'+i+'"]').val();//中介费
+        var property_fee = $(store_cost_tr[i]).find('input[id="propertyFee_'+i+'"]').val();//月物业费
+        var property_deadline = $(store_cost_tr[i]).find('input[id="propertyDeadline_'+i+'"]').val();//租期
+        var lease_start_date = $(store_cost_tr[i]).find('input[id="lease_start_date_'+i+'"]').val();//起租日不含免租期
+        var lease_stop_date = $(store_cost_tr[i]).find('input[id="lease_stop_date_'+i+'"]').val();//到租日
+        var free_lease_start_date = $(store_cost_tr[i]).find('input[id="free_lease_start_date_'+i+'"]').val();//起租日含免租期
 
-            costLaborArray.push(costLabor);
+        var costRent = {
+            storeNo:storeNo,
+            storeName:storeName,
+            addr:addr,
+            contractGrandTotal:contractGrandTotal,
+            firstYearRent:fifth_year_rent,
+            secondYearRent:second_year_rent,
+            thirtYearRent:third_year_rent,
+            fourthYearRent:fourth_year_rent,
+            fifthYearRent:fifth_year_rent,
+            structureAcreage:structure_acreage,
+            leaseUnitPrice:lease_unit_price,
+            deposit:deposit,
+            agencyFee:agency_fee,
+            propertyFee:property_fee,
+            propertyDeadline:property_deadline,
+            freeLeaseStartDate:free_lease_start_date,
+            leaseStartDate:lease_start_date,
+            leaseStopDate:lease_stop_date,
+            versionFlag:version_flag
+
         }
+        costRentArray.push(costRent);
+
     }
 
-    doManager('costLaborManager','saveCostLabor',[costLaborArray],function (data) {
+    doManager('costRentManager','saveCostRent',[costRentArray],function (data) {
         if(data.result){
             var result= JSON.parse(data.data);
 
