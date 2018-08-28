@@ -1281,59 +1281,14 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 
 			List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("data");
 			if (list != null && list.size() > 0) {
-				String str_file_dir_path = PropertiesUtil.getValue("file.root");
-				String str_web_path = PropertiesUtil.getValue("file.web.root");
-
-				HSSFWorkbook wb = new HSSFWorkbook();
-				// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-				setCellStyle_common(wb);
-				setHeaderStyle(wb);
-				HSSFSheet sheet = wb.createSheet("片区信息");
-				HSSFRow row = sheet.createRow(0);
 				String[] str_headers = { "城市", "门店", "片区名称", "片区编号", "国安侠姓名（A）", "国安侠编号（A）", "国安侠姓名（B）", "国安侠编号（B）" };
-				String[] headers_key = { "city_name", "storeName", "name", "area_no", "employee_a_name",
-						"employee_a_no", "employee_b_name", "employee_b_no" };
-				for (int i = 0; i < str_headers.length; i++) {
-					HSSFCell cell = row.createCell(i);
-					cell.setCellStyle(getHeaderStyle());
-					cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-				}
-
-				for (int i = 0; i < list.size(); i++) {
-					row = sheet.createRow(i + 1);
-					for (int cellIndex = 0; cellIndex < headers_key.length; cellIndex++) {
-						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-					}
-				}
-
-				File file_xls = new File(
-						str_file_dir_path + File.separator + System.currentTimeMillis() + "_aboutArea.xls");
-				if (file_xls.exists()) {
-					file_xls.delete();
-				}
-				FileOutputStream os = null;
-				try {
-					os = new FileOutputStream(file_xls.getAbsoluteFile());
-					wb.write(os);
-				} catch (Exception e) {
-					e.printStackTrace();
-				} finally {
-					if (os != null) {
-						try {
-							os.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-
-				result.put("message", "导出成功！");
-				result.put("status", "success");
-				result.put("data", str_web_path.concat(file_xls.getName()));
+				String[] headers_key = { "city_name", "storeName", "name", "area_no", "employee_a_name","employee_a_no", "employee_b_name", "employee_b_no" };
+				ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("片区档案",list,str_headers,headers_key);
+				result = eeuo.exportFile();
 			} else {
-				result.put("message", "没有数据！");
-				result.put("status", "null");
+				result.put("message","没有符合条件的数据！");
+				result.put("status","null");
+				return result;
 			}
 
 		} else {
