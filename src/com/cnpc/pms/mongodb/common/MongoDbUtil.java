@@ -159,7 +159,7 @@ public class MongoDbUtil {
 
 		List<MongoCredential> mongoCredentialList = new ArrayList<MongoCredential>();
 
-		mongoCredentialList.add(MongoCredential.createMongoCRCredential(userName, "gemini",password.toCharArray()));
+		mongoCredentialList.add(MongoCredential.createScramSha1Credential(userName, "gemini",password.toCharArray()));
 
 		database = new MongoClient(sends,mongoCredentialList).getDatabase("gemini");
 	}
