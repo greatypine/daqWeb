@@ -213,7 +213,7 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
             map2.put("observe_date", mapobj.get("observe_date"));
             map2.put("observe_person", mapobj.get("observe_person"));
         }
-        String str_file_dir_path = PropertiesUtil.getValue("file.root");
+        String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";;
         String str_web_path = PropertiesUtil.getValue("file.web.root");
 
         XSSFWorkbook wb = new XSSFWorkbook();

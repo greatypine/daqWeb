@@ -6264,7 +6264,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";;
 			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
 			HSSFWorkbook wb = new HSSFWorkbook();
