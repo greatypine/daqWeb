@@ -6332,9 +6332,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				file_xls.delete();
 			}
 			FileOutputStream os = null;
+			String url = null;
 			try {
 				os = new FileOutputStream(file_xls.getAbsoluteFile());
 				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
 			}catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -6349,7 +6352,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 			result.put("message","导出成功！");
 			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
