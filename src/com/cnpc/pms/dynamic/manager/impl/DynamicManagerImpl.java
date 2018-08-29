@@ -4,50 +4,8 @@
 package com.cnpc.pms.dynamic.manager.impl;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import com.cnpc.pms.base.paging.IFilter;
-import com.cnpc.pms.employeeMoreInfo.dao.EmployeeMoreInfoDao;
-import com.cnpc.pms.employeeMoreInfo.entity.EmployeeMoreInfo;
-import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
-import com.cnpc.pms.personal.entity.*;
-import com.cnpc.pms.personal.manager.*;
-import com.cnpc.pms.slice.manager.AreaManager;
-import com.cnpc.pms.utils.ExportExcelByOssUtil;
-import net.sf.json.JsonConfig;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.cnpc.pms.base.paging.FilterFactory;
+import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -60,14 +18,38 @@ import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.manager.DynamicManager;
+import com.cnpc.pms.employeeMoreInfo.dao.EmployeeMoreInfoDao;
+import com.cnpc.pms.employeeMoreInfo.entity.EmployeeMoreInfo;
+import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
 import com.cnpc.pms.inter.dao.InterDao;
 import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.entity.DsAbnormalOrder;
+import com.cnpc.pms.personal.entity.Humanresources;
+import com.cnpc.pms.personal.entity.Store;
+import com.cnpc.pms.personal.entity.SyncDataLog;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.slice.dao.AreaDao;
+import com.cnpc.pms.slice.manager.AreaManager;
 import com.cnpc.pms.utils.Base64Encoder;
 import com.cnpc.pms.utils.DateUtils;
+import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.MD5Utils;
+import net.sf.json.JsonConfig;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.*;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author gaobaolei
@@ -6264,7 +6246,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";;
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
 			HSSFWorkbook wb = new HSSFWorkbook();

@@ -7,6 +7,7 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.manager.MassOrderManager;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
@@ -95,7 +96,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
   			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
@@ -136,9 +137,12 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
+			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -153,7 +157,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
@@ -210,7 +214,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
   			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
@@ -250,9 +254,12 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
+			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -267,7 +274,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");

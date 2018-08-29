@@ -6,6 +6,7 @@ import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.personal.dao.UserProfileDao;
 import com.cnpc.pms.personal.dto.UserProfileDto;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.UserProfileManager;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import org.apache.commons.lang.StringUtils;
@@ -71,7 +72,7 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
   			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
@@ -107,9 +108,12 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
+			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -124,7 +128,7 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
