@@ -7,7 +7,6 @@
       
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">   
       <fileNamePattern>/tomcat/logs/daqWeb.log</fileNamePattern>   
-      <maxHistory>30</maxHistory>    
     </rollingPolicy>   
    
     <encoder>   
