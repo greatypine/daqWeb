@@ -5103,8 +5103,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
   			return null;
   		}
 		if(list!=null&&list.size()>0){//成功返回数据
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-  			String str_web_path = PropertiesUtil.getValue("file.web.root");
+  			//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+  			//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   			HSSFWorkbook wb = new HSSFWorkbook();   
   	        setCellStyle_common(wb);
@@ -5131,9 +5132,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	              file_xls.delete();
 	          }
   			FileOutputStream os = null;
+  			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+  				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -5148,7 +5153,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+  			//result.put("data", str_web_path.concat(file_xls.getName()));
+  			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
@@ -5210,8 +5216,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		if(result.get("gmv")!=null){//成功返回数据
 			List<Map<String, Object>> list = (List<Map<String, Object>>)result.get("gmv");
 			if(list!=null&&list.size()>0){
-				String str_file_dir_path = PropertiesUtil.getValue("file.root");
-				String str_web_path = PropertiesUtil.getValue("file.web.root");
+				//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+				//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
 				HSSFWorkbook wb = new HSSFWorkbook();
 				// 创建Excel的工作sheet,对应到一个excel文档的tab
@@ -5240,9 +5247,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					file_xls.delete();
 				}
 				FileOutputStream os = null;
+				String url = null;
 				try {
 					os = new FileOutputStream(file_xls.getAbsoluteFile());
 					wb.write(os);
+					OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+					url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+
 				}catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -5257,7 +5268,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 				returnData.put("message","导出成功！");
 				returnData.put("status","success");
-				returnData.put("data", str_web_path.concat(file_xls.getName()));
+				//returnData.put("data", str_web_path.concat(file_xls.getName()));
+				returnData.put("data", url);
 			}else{
 				returnData.put("message","请重新操作！");
 				returnData.put("status","fail");
