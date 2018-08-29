@@ -1140,14 +1140,14 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 //					+" (select b.employee_name,b.order_sn,b.id,b.create_time,b.customer_id,b.df_signed_time,c.placename,c.address from df_order_signed_monthly b LEFT JOIN t_order_address c on b.order_address_id = c.id "+whereStr+" ) d" 
 //					+" on a.order_placename = d.placename LEFT JOIN t_order_item toi on d.id = toi.order_id "
 //					+ " LEFT JOIN t_customer tc ON tc.id=d.customer_id GROUP BY d.id  ORDER BY d.df_signed_time desc";
-	  
+
 		String sql="SELECT dosm.order_sn,dosm.placename,CONCAT(dosm.order_address_id,'') as order_address_id,dosm.employee_name,CONCAT(dosm.id,'') as id,dosm.create_time,dosm.customer_id,dosm.df_signed_time,tc.mobilephone,tc.short_name AS customer_name, CONCAT(GROUP_CONCAT(toi.eshop_pro_name),'') AS eshop_pro_name,CONCAT('https://imgcdn.guoanshequ.com/',ifnull(first_url,'')) as jpgUrl "+
-					"FROM df_order_signed_monthly dosm "+
-					"LEFT JOIN t_order_item toi ON dosm.id = toi.order_id "+
-					"LEFT JOIN t_customer tc ON tc.id=dosm.customer_id "+
-					"where dosm.placename in "+
-					"(select order_placename from tmp_area_to_order_block where employee_a_no = '"+employee_no+"' and order_placename is not null) "+whereStr+
-					"GROUP BY dosm.id ORDER BY dosm.df_signed_time DESC ";
+				"FROM df_order_signed_monthly dosm "+
+				"LEFT JOIN t_order_item toi ON dosm.id = toi.order_id "+
+				"LEFT JOIN t_customer tc ON tc.id=dosm.customer_id "+
+				"where dosm.employee_id in "+
+				"(select id from t_employee where code = '"+employee_no+"') "+whereStr+
+				"GROUP BY dosm.id ORDER BY dosm.df_signed_time DESC ";
 					
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 	    List<Map<String, Object>> lst_data = new ArrayList<Map<String,Object>>();
