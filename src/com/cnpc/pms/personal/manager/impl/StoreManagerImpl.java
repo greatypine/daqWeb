@@ -631,7 +631,12 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			Attachment attachment = attachmentManager.findAttachmentByStoreIdType(store.getStore_id(), 3);
 			if (attachment != null) {
 				map.put("contract", attachment.getFile_name());
-				map.put("url", attachment.getFile_path());
+				if(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1){
+					map.put("url", attachment.getFile_path());
+				}else{
+					String url="https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("contract")[1];
+					map.put("url", url);
+				}
 			} else {
 				map.put("contract", "");
 			}
