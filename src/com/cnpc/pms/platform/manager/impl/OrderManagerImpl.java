@@ -1,7 +1,5 @@
 package com.cnpc.pms.platform.manager.impl;
 
-import com.cnpc.pms.base.paging.FilterFactory;
-import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
@@ -20,22 +18,14 @@ import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.manager.OrderManager;
 import com.cnpc.pms.slice.dao.AreaDao;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.*;
 
 
 /**
@@ -43,6 +33,8 @@ import org.json.JSONObject;
  * Created by liuxiao on 2016/10/25.
  */
 public class OrderManagerImpl extends BizBaseCommonManager implements OrderManager {
+
+	private static Log logger = LogFactory.getLog(OrderManagerImpl.class);
 
     @Override
     public int getOrderCount(String store_id,String employee_id,String year_month) {
@@ -171,19 +163,24 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
      */
     @Override
     public Map<String, Object> queryOrderInfoBySN(String order_sn){
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	Map<String,Object> order_obj = orderDao.queryOrderInfoBySN(order_sn);
-    	String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
-    	List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
-    	Map<String, Object> orderFlow = orderDao.getOrderFlow(order_id, "signed");
-    	if(orderFlow==null){
-    		order_obj.put("receivedTime","");
-    	}else{
-    		order_obj.put("receivedTime",orderFlow.get("create_time"));
-    	}
-    	order_obj.put("item_list", item_list);
-    	order_obj.put("create_time", order_obj.get("create_time"));
-    	
+		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+		Map<String,Object> order_obj = orderDao.queryOrderInfoBySN(order_sn);
+    	try {
+			String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
+			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
+			Map<String, Object> orderFlow = orderDao.getOrderFlow(order_id, "signed");
+			if(orderFlow==null){
+				order_obj.put("receivedTime","");
+			}else{
+				order_obj.put("receivedTime",orderFlow.get("create_time"));
+			}
+			order_obj.put("item_list", item_list);
+			order_obj.put("create_time", order_obj.get("create_time"));
+		}catch (Exception e){
+    		e.printStackTrace();
+			logger.info("query order detail info:"+order_sn,e);
+		}
+
     	return order_obj;
     }
     
