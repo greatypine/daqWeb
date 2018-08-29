@@ -728,7 +728,11 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	            	}else{
   	            		NumberFormat percent = NumberFormat.getPercentInstance();     //建立百分比格式化用  
   	            		percent.setMaximumFractionDigits(2);
-  	            		setCellValueall(row, cellIndex, percent.format(comparecus.divide(customers, 6, BigDecimal.ROUND_HALF_UP)));
+  	            		if(BigDecimal.ZERO.equals(customers)){
+							setCellValueall(row, cellIndex, "0.00");
+						}else{
+							setCellValueall(row, cellIndex, percent.format(comparecus.divide(customers, 6, BigDecimal.ROUND_HALF_UP)));
+						}
   	            	}
   	             }
   	        }
