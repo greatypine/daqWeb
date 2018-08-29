@@ -631,7 +631,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			Attachment attachment = attachmentManager.findAttachmentByStoreIdType(store.getStore_id(), 3);
 			if (attachment != null) {
 				map.put("contract", attachment.getFile_name());
-				map.put("url", attachment.getFile_path().split("contract")[1]);
+				map.put("url", attachment.getFile_path());
 			} else {
 				map.put("contract", "");
 			}

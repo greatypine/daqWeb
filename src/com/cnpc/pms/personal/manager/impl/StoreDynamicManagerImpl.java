@@ -469,7 +469,7 @@ public class StoreDynamicManagerImpl extends BaseManagerImpl implements StoreDyn
 			Attachment attachment = attachmentManager.findAttachmentByStoreIdType(storeDynamic.getStore_id(), 3);
 			if (attachment != null) {
 				map.put("contract", attachment.getFile_name());
-				map.put("url", attachment.getFile_path().split("contract")[1]);
+				map.put("url", attachment.getFile_path());
 			} else {
 				map.put("contract", "");
 			}

@@ -119,23 +119,23 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 						i);
 				if (attachment != null) {
 					if ("other_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setOther_pic(attachment.getFile_name());
+						storeDocumentInfo.setOther_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("xx_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setXx_pic(attachment.getFile_name());
+						storeDocumentInfo.setXx_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("book_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBook_pic(attachment.getFile_name());
+						storeDocumentInfo.setBook_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("tobacco_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setTobacco_pic(attachment.getFile_name());
+						storeDocumentInfo.setTobacco_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("food_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setFood_pic(attachment.getFile_name());
+						storeDocumentInfo.setFood_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("business_license".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBusiness_pic(attachment.getFile_name());
+						storeDocumentInfo.setBusiness_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("record_drawing".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setRecord_pic(attachment.getFile_name());
+						storeDocumentInfo.setRecord_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("plane_plan".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setPlane_pic(attachment.getFile_name());
+						storeDocumentInfo.setPlane_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("audit_file".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setAudit_pic(attachment.getFile_name());
+						storeDocumentInfo.setAudit_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					}
 				}
 			}
@@ -158,23 +158,23 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 						i);
 				if (attachment != null) {
 					if ("other_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setOther_pic(attachment.getFile_name());
+						storeDocumentInfo.setOther_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("xx_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setXx_pic(attachment.getFile_name());
+						storeDocumentInfo.setXx_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("book_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBook_pic(attachment.getFile_name());
+						storeDocumentInfo.setBook_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("tobacco_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setTobacco_pic(attachment.getFile_name());
+						storeDocumentInfo.setTobacco_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("food_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setFood_pic(attachment.getFile_name());
+						storeDocumentInfo.setFood_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("business_license".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBusiness_pic(attachment.getFile_name());
+						storeDocumentInfo.setBusiness_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("record_drawing".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setRecord_pic(attachment.getFile_name());
+						storeDocumentInfo.setRecord_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("plane_plan".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setPlane_pic(attachment.getFile_name());
+						storeDocumentInfo.setPlane_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("audit_file".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setAudit_pic(attachment.getFile_name());
+						storeDocumentInfo.setAudit_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					}
 				}
 			}
@@ -392,23 +392,23 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 						i);
 				if (attachment != null) {
 					if ("other_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setOther_pic(attachment.getFile_name());
+						storeDocumentInfo.setOther_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("xx_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setXx_pic(attachment.getFile_name());
+						storeDocumentInfo.setXx_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("book_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBook_pic(attachment.getFile_name());
+						storeDocumentInfo.setBook_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("tobacco_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setTobacco_pic(attachment.getFile_name());
+						storeDocumentInfo.setTobacco_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("food_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setFood_pic(attachment.getFile_name());
+						storeDocumentInfo.setFood_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("business_license".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBusiness_pic(attachment.getFile_name());
+						storeDocumentInfo.setBusiness_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("record_drawing".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setRecord_pic(attachment.getFile_name());
+						storeDocumentInfo.setRecord_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("plane_plan".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setPlane_pic(attachment.getFile_name());
+						storeDocumentInfo.setPlane_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					} else if ("audit_file".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setAudit_pic(attachment.getFile_name());
+						storeDocumentInfo.setAudit_pic(attachment.getFile_name()+","+attachment.getFile_path());
 					}
 				}
 			}

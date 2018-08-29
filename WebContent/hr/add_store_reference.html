@@ -253,7 +253,8 @@ function initview(){
 					}else if(key=="contract"){
 						if(va!=null&&va!=''){
 							$("#contract").show();
-							$("#contract").html('<a href="javascript:void(0);" onclick="downloadFile(contract_file);">'+va.substring(0,25)+'</a>');
+							var file_path=jsonData['url'];
+							$("#contract").html('<a href="'+file_path+'" >'+va.substring(0,25)+'</a>');
 						}
 					}else if(key=="tenancyTerm"){
 						if(va!=null&&va!=''){

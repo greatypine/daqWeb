@@ -128,7 +128,7 @@ public class UploadStoreFileAction extends HttpServlet {
 						 */
 						attachment = new Attachment();
 						attachment.setFile_name(item.getName());
-						attachment.setFile_path(file_url.replaceAll("-", ""));
+						attachment.setFile_path(file_url);
 						attachment.setApprove_status(0);
 						attachment.setStoreId(Long.parseLong(store_id));
 						if ("contract".equals(model)) {
