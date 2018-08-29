@@ -1,11 +1,11 @@
 package com.cnpc.pms.bid.manager;
 
-import java.util.List;
-
 import com.cnpc.pms.base.exception.InvalidFilterException;
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.bid.manager.dto.AttachmentDTO;
 import com.cnpc.pms.personal.entity.Attachment;
+
+import java.util.List;
 
 /**
  * Attachment Interface.
@@ -73,6 +73,12 @@ public interface AttachmentManager extends IManager {
 	 */
 	public AttachmentDTO addAttachment(AttachmentDTO attachmentDTO);
 
+	/**
+	 * 根据文件名去查找
+	 * @param name
+	 * @param file_type_name
+     * @return
+     */
 	Attachment findAttachmentByName(String name, String file_type_name);
 
 	List<Attachment> getAttachmentByName(String name, String file_type_name);
@@ -83,5 +89,13 @@ public interface AttachmentManager extends IManager {
 	public List<Attachment> findAttachmentByOrderSN(String businessType, int file_type);
 
 	public Attachment findAttachmentByStoreIdType(Long store_id, int file_type);
+
+	/**
+	 * 定时任务执行上传地采数据时使用文件路径中的文件名去查找
+	 * @param file_path_name
+	 * @param file_type_name
+     * @return
+     */
+	Attachment findAttachmentByFilePathName(String file_path_name, String file_type_name);
 
 }

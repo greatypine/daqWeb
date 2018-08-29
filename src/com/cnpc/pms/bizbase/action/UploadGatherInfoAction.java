@@ -11,6 +11,7 @@ import com.cnpc.pms.personal.entity.Village;
 import com.cnpc.pms.personal.manager.TownManager;
 import com.cnpc.pms.personal.manager.VillageManager;
 import com.cnpc.pms.personal.util.DataTransfromUtil;
+import com.cnpc.pms.utils.excel.ChangeToPinYin;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -44,6 +45,7 @@ public class UploadGatherInfoAction extends HttpServlet{
        String remark= req.getParameter("remark");
         String model = req.getParameter("model");
         String fileLoad="";
+		ChangeToPinYin changeToPinYin = new ChangeToPinYin();
         TownManager townManager=(TownManager)SpringHelper.getBean("townManager");
         VillageManager villageManager=(VillageManager)SpringHelper.getBean("villageManager");
         if("t_commtity".equals(model)){
@@ -87,7 +89,8 @@ public class UploadGatherInfoAction extends HttpServlet{
                          bResult = file_dir_upload.mkdir();
                      }
 					 System.out.println(name+"---------------------------------");
-					 File file_upload = new File(str_filepath + new String(name.getBytes(),"utf-8"));
+					 String stringPinYin = changeToPinYin.getStringPinYin(name);
+					 File file_upload = new File(str_filepath + stringPinYin);
                      if(!file_upload.exists()){
                          bResult = file_upload.createNewFile();
                      }
@@ -105,7 +108,7 @@ public class UploadGatherInfoAction extends HttpServlet{
                      String[] split = item.getName().split("-");
                      attachment = new Attachment();
                      attachment.setFile_name(item.getName());
-                     attachment.setFile_path(file_upload.getPath());
+                     attachment.setFile_path(stringPinYin);
                      attachment.setApprove_status(0);
                      attachment.setMessage("上传中");
                      attachment.setRemark(remark);
@@ -213,7 +216,7 @@ public class UploadGatherInfoAction extends HttpServlet{
 				 String str=null;
 				//文件是Excel
 				 String village = excelManager.getTinyVillageByVillage(file2.getName());
-				 Attachment attachment = attachmentManager.findAttachmentByName(file2.getName(),"地址文件");
+				 Attachment attachment = attachmentManager.findAttachmentByFilePathName(file2.getName(),"地址文件");
 				 if(village!=null){str="thod";}
 				 
 				 try {
