@@ -2072,6 +2072,34 @@ var drawGaodeMap = function (pageStatusInfo) {
         var storeId = val.store_id;
         var storeNo = val.storeNo;
         var storeName = val.storeName;
+        var storePosition = val.position;//门店位置
+            //展示门店位置==
+		var storePositionMarker = new AMap.Marker({ //添加自定义点标记
+	        map: amap,
+	        position: storePosition, //基点位置
+	        icon:"../aboutMap/dist/img/splogo.png",
+	        offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
+	        extData:{"storeName":storeName,"storeId":storeId}
+	       // draggable: true,  //是否可拖动
+	        //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
+	    });
+        storePositionMarker.on("mouseover",function(e){
+			var storeName = e.target.getExtData().storeName;
+			e.target.setTitle(storeName);
+		});
+        storePositionMarker.on("click",function(e){
+			  var storeId = e.target.getExtData().storeId;
+			  var provinceId = pageStatusInfo.provinceId == ""?"":pageStatusInfo.provinceId;
+			  var url = "current_shopkeeper.html?p=" + encode64(provinceId) + "&c=" + encode64(cityId) + "&s=" + encode64(storeId) + "&cn=" + encode64(cityName) + "&zm=" + encode64(amap.getZoom()) + "&ln="+encode64(curr_user.name)+"&f=" + encode64("1")+"&fs="+encode64(pageStatusInfo.targets);
+			  window.location.href=url; 
+		});
+    });
+    $.each(storeServiceRange, function (idx, val) {
+        var serviceCoordinates = val.vertex;
+        var storeId = val.store_id;
+        var storeNo = val.storeNo;
+        var storeName = val.storeName;
+        var storePosition = val.position;//门店位置
         //服务范围多边形
         var servicePolygon = new AMap.Polygon({
             map: amap,
@@ -2083,7 +2111,6 @@ var drawGaodeMap = function (pageStatusInfo) {
             path: serviceCoordinates
             // extData:{"storeName":storeName,"marker":storeMarker,"storeId":storeId}
         });
-
         var storeMarker = new AMap.Marker({ //添加自定义点标记
             visible: false,
             map: amap,
@@ -5028,11 +5055,13 @@ function getStoreKindsNumber(){
             });
 }
 function menuShowByRole(){
+	/*
 	  if(pageStatusInfo.targets==0){
 		$("#city_net").show();
 	  }else if(pageStatusInfo.targets==1){
 		  $("#city_net").hide();
 	  }
+	  */
 }
 function  clearCache(){
 	localStorage.clear();
