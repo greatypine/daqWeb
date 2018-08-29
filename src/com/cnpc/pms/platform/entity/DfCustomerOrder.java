@@ -1,14 +1,13 @@
 package com.cnpc.pms.platform.entity;
 
-import java.util.Date;
+import com.cnpc.pms.base.entity.AlternativeDS;
+import com.cnpc.pms.base.entity.OptLockEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.cnpc.pms.base.entity.AlternativeDS;
-import com.cnpc.pms.base.entity.OptLockEntity;
+import java.util.Date;
 
 @Entity
 @Table(name = "df_customer_order_month_trade")

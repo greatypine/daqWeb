@@ -1,29 +1,5 @@
 package com.cnpc.pms.dynamic.manager.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -32,8 +8,23 @@ import com.cnpc.pms.dynamic.dao.TurnoverStatDao;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.TurnoverStatDto;
 import com.cnpc.pms.dynamic.manager.TurnoverStatManager;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.*;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements TurnoverStatManager {
 	
@@ -90,7 +81,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
   			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
@@ -121,9 +112,12 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
+			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -138,7 +132,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
@@ -193,7 +187,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
   			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
@@ -224,9 +218,12 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
+			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -241,7 +238,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
@@ -296,8 +293,8 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-  			String str_web_path = PropertiesUtil.getValue("file.web.root");
+  			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
   	        setCellStyle_common(wb);
@@ -327,9 +324,12 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
-  			try {
+			String url = null;
+			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -344,7 +344,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
@@ -399,7 +399,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
   			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
@@ -430,9 +430,12 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
+			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -447,7 +450,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
@@ -502,7 +505,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	  			result.put("status","more");
   	  			return result;
   			}
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
   			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   	        XSSFWorkbook wb = new XSSFWorkbook();   
@@ -533,9 +536,12 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				file_xls.delete();
   			}
   			FileOutputStream os = null;
-  			try {
+			String url = null;
+			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -550,7 +556,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");

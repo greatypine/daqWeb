@@ -509,14 +509,14 @@ public class ShortMessageManagerImpl extends BizBaseCommonManager implements Sho
 		int proxyport = Integer.parseInt(PropertiesUtil.getValue("iproxy.sendport"));
 		String setcode = PropertiesUtil.getValue("iproxy.set");
 		try {
-			if(setcode!=null&&setcode.equals("ON")){
+			//if(setcode!=null&&setcode.equals("ON")){
 				String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
 				String url = "http://datatest.guoanshequ.top/eprj/smsSend.action?phone=%s&sendcode=%s&epid=%s";
 				CloseableHttpClient httpclient = HttpClients.createDefault();
 				HttpGet httpGet = new HttpGet(String.format(url, new Object[]{mobilephone,sendcode_gb2312,epid}));
 				CloseableHttpResponse response = httpclient.execute(httpGet);
 				resultString = EntityUtils.toString(response.getEntity(), "utf-8");
-			}
+			//}
 
 
 		} catch (Exception e) {

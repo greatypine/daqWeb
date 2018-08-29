@@ -4,50 +4,8 @@
 package com.cnpc.pms.dynamic.manager.impl;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import com.cnpc.pms.base.paging.IFilter;
-import com.cnpc.pms.employeeMoreInfo.dao.EmployeeMoreInfoDao;
-import com.cnpc.pms.employeeMoreInfo.entity.EmployeeMoreInfo;
-import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
-import com.cnpc.pms.personal.entity.*;
-import com.cnpc.pms.personal.manager.*;
-import com.cnpc.pms.slice.manager.AreaManager;
-import com.cnpc.pms.utils.ExportExcelByOssUtil;
-import net.sf.json.JsonConfig;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRichTextString;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import com.cnpc.pms.base.paging.FilterFactory;
+import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -60,14 +18,38 @@ import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.manager.DynamicManager;
+import com.cnpc.pms.employeeMoreInfo.dao.EmployeeMoreInfoDao;
+import com.cnpc.pms.employeeMoreInfo.entity.EmployeeMoreInfo;
+import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
 import com.cnpc.pms.inter.dao.InterDao;
 import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.entity.DsAbnormalOrder;
+import com.cnpc.pms.personal.entity.Humanresources;
+import com.cnpc.pms.personal.entity.Store;
+import com.cnpc.pms.personal.entity.SyncDataLog;
+import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.slice.dao.AreaDao;
+import com.cnpc.pms.slice.manager.AreaManager;
 import com.cnpc.pms.utils.Base64Encoder;
 import com.cnpc.pms.utils.DateUtils;
+import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.MD5Utils;
+import net.sf.json.JsonConfig;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.hssf.util.HSSFColor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.*;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author gaobaolei
@@ -5104,8 +5086,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
   			return null;
   		}
 		if(list!=null&&list.size()>0){//成功返回数据
-  			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-  			String str_web_path = PropertiesUtil.getValue("file.web.root");
+  			//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+  			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+  			//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
   			HSSFWorkbook wb = new HSSFWorkbook();   
   	        setCellStyle_common(wb);
@@ -5132,9 +5115,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	              file_xls.delete();
 	          }
   			FileOutputStream os = null;
+  			String url = null;
   			try {
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
+  				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -5149,7 +5136,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
   			result.put("message","导出成功！");
   			result.put("status","success");
-  			result.put("data", str_web_path.concat(file_xls.getName()));
+  			//result.put("data", str_web_path.concat(file_xls.getName()));
+  			result.put("data", url);
   		}else{
   			result.put("message","请重新操作！");
   			result.put("status","fail");
@@ -5211,8 +5199,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		if(result.get("gmv")!=null){//成功返回数据
 			List<Map<String, Object>> list = (List<Map<String, Object>>)result.get("gmv");
 			if(list!=null&&list.size()>0){
-				String str_file_dir_path = PropertiesUtil.getValue("file.root");
-				String str_web_path = PropertiesUtil.getValue("file.web.root");
+				//String str_file_dir_path = PropertiesUtil.getValue("file.root");
+				String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+				//String str_web_path = PropertiesUtil.getValue("file.web.root");
 
 				HSSFWorkbook wb = new HSSFWorkbook();
 				// 创建Excel的工作sheet,对应到一个excel文档的tab
@@ -5241,9 +5230,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					file_xls.delete();
 				}
 				FileOutputStream os = null;
+				String url = null;
 				try {
 					os = new FileOutputStream(file_xls.getAbsoluteFile());
 					wb.write(os);
+					OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+					url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+
 				}catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -5258,7 +5251,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 				returnData.put("message","导出成功！");
 				returnData.put("status","success");
-				returnData.put("data", str_web_path.concat(file_xls.getName()));
+				//returnData.put("data", str_web_path.concat(file_xls.getName()));
+				returnData.put("data", url);
 			}else{
 				returnData.put("message","请重新操作！");
 				returnData.put("status","fail");
@@ -6264,7 +6258,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";;
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
 			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
 			HSSFWorkbook wb = new HSSFWorkbook();
@@ -6867,56 +6861,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("门店GMV");
-			HSSFRow row = sheet.createRow(0);
 			String[] str_headers = {"城市","门店名称","门店编号","绩效GMV"};
 			String[] headers_key = {"city_name","store_name","storeno","pesgmv"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("门店GMV",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-
-
-
-			File file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_store221gmv.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
@@ -7037,49 +6987,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				result.put("status","null");
 				return result;
 			}
-			String str_file_dir_path = PropertiesUtil.getValue("file.root");
-			String str_web_path = PropertiesUtil.getValue("file.web.root");
-			HSSFWorkbook wb = new HSSFWorkbook();
-			// 创建Excel的工作sheet,对应到一个excel文档的tab
-			setCellStyle_common(wb);
-			setHeaderStyle(wb);
-			HSSFSheet sheet = wb.createSheet("国安侠GMV");
-			HSSFRow row = sheet.createRow(0);
+
 			String[] str_headers = {"城市","门店名称","门店编码","员工姓名","员工编号","绩效GMV"};
 			String[] headers_key = {"city_name","store_name","storeno","employee_name","employee_no","pesgmv"};
-			for(int i = 0;i < str_headers.length;i++){
-				HSSFCell cell = row.createCell(i);
-				cell.setCellStyle(getHeaderStyle());
-				cell.setCellValue(new HSSFRichTextString(str_headers[i]));
-			}
-			for(int i = 0;i < list.size();i++){
-				row = sheet.createRow(i+1);
-				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-					setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
-				}
-			}
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_employee221gmv.xls");
-			if(file_xls.exists()){
-				file_xls.delete();
-			}
-			FileOutputStream os = null;
-			try {
-				os = new FileOutputStream(file_xls.getAbsoluteFile());
-				wb.write(os);
-			}catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if(os != null){
-					try {
-						os.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			result.put("message","导出成功！");
-			result.put("status","success");
-			result.put("data", str_web_path.concat(file_xls.getName()));
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠GMV",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");
