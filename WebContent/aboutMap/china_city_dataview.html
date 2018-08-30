@@ -449,8 +449,6 @@ var initPageStatusInfo = function (reqData) {
 
 //显示页面统计数据
 var showPageContent = function(pageStatusInfo){
-	//获得地图数据
-	showData(pageStatusInfo);
 	// 显示地图
     showMap(pageStatusInfo);
 	//设置导航样式
@@ -468,6 +466,8 @@ var showPageContent = function(pageStatusInfo){
 	}
     //解除加载中图标
 	setLoadMark(false);
+    //获得地图数据
+    showData(pageStatusInfo);
 }
 var i = 1;
 function showData(pageStatusInfo){
@@ -497,8 +497,8 @@ var showChinaData =  function (){
             if (jsonData.code == 200) {
             	var provinceCount = jsonData.provinceCount;
             	var conProvinceCount = jsonData.conProvinceCount;
-            	var residentsHouseCount = jsonData.residentsHouseCount;
-            	var customerCount = jsonData.customerCount;
+            	//var residentsHouseCount = jsonData.residentsHouseCount;
+            	//var customerCount = jsonData.customerCount;
             	var cityCount = jsonData.cityCount;
             	var conCityCount = jsonData.conCityCount;
             	//省信息
@@ -516,17 +516,35 @@ var showChinaData =  function (){
             	$("#cityserviceCoverage").html(cityserviceCoverage+"%");
             	$("#cityserviceCoverage").addClass("text-aqua");
             	//用户信息
-            	$("#cityResidentsHouseCount").html(residentsHouseCount);
+            	/*$("#cityResidentsHouseCount").html(residentsHouseCount);
             	var residentsCount = residentsHouseCount*3;
             	$("#cityResidentsCount").html(residentsCount);
             	$("#cityCustomerCount").html(customerCount);
             	var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
             	var residentsCoverage = peopleCount.toFixed(2);
             	$("#cityResidentsCoverage").html(residentsCoverage+"%");
-            	$("#cityResidentsCoverage").addClass("text-aqua");
+            	$("#cityResidentsCoverage").addClass("text-aqua");*/
             }
         }
     });
+    doManager("MapBasicDataManager", "getChinaBasicDataCustomer", null, function (data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var jsonData = JSON.parse(data.data);
+            if (jsonData.code == 200) {
+                var residentsHouseCount = jsonData.residentsHouseCount;
+                var customerCount = jsonData.customerCount;
+                //用户信息
+                $("#cityResidentsHouseCount").html(residentsHouseCount);
+                var residentsCount = residentsHouseCount*3;
+                $("#cityResidentsCount").html(residentsCount);
+                $("#cityCustomerCount").html(customerCount);
+                var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
+                var residentsCoverage = peopleCount.toFixed(2);
+                $("#cityResidentsCoverage").html(residentsCoverage+"%");
+                $("#cityResidentsCoverage").addClass("text-aqua");
+            }
+        }
+    },false);
 }
 
 var showProvinceData = function (pageStatusInfo){
@@ -545,8 +563,8 @@ var showProvinceData = function (pageStatusInfo){
             	
             	var cityCount = jsonData.cityCount;
             	var conCityCount = jsonData.conCityCount;
-            	var residentsHouseCount = jsonData.residentsHouseCount;
-            	var customerCount = jsonData.customerCount;
+            	//var residentsHouseCount = jsonData.residentsHouseCount;
+            	//var customerCount = jsonData.customerCount;
             	//省信息
             	$("#provinceCount").html(1);
             	$("#conProvinceCount").html(1);
@@ -559,17 +577,34 @@ var showProvinceData = function (pageStatusInfo){
             	var serviceCoverage = serviceCount.toFixed(2);
             	$("#cityserviceCoverage").html(serviceCoverage+"%");
             	$("#cityserviceCoverage").addClass("text-aqua");
-            	$("#cityResidentsHouseCount").html(residentsHouseCount);
+            	/*$("#cityResidentsHouseCount").html(residentsHouseCount);
             	var residentsCount = residentsHouseCount*3;
                	$("#cityResidentsCount").html(residentsCount);
             	$("#cityCustomerCount").html(customerCount);
             	var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
             	var residentsCoverage = peopleCount.toFixed(2);
             	$("#cityResidentsCoverage").html(residentsCoverage+"%");
-            	$("#cityResidentsCoverage").addClass("text-aqua");
+            	$("#cityResidentsCoverage").addClass("text-aqua");*/
             }
         }
     });
+    doManager("MapBasicDataManager", "getProvinceBasicDataCustomer", pageStatusInfo.provinceId+"", function (data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var jsonData = JSON.parse(data.data);
+            if (jsonData.code == 200) {
+                var residentsHouseCount = jsonData.residentsHouseCount;
+                var customerCount = jsonData.customerCount;
+                $("#cityResidentsHouseCount").html(residentsHouseCount);
+                var residentsCount = residentsHouseCount*3;
+                $("#cityResidentsCount").html(residentsCount);
+                $("#cityCustomerCount").html(customerCount);
+                var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
+                var residentsCoverage = peopleCount.toFixed(2);
+                $("#cityResidentsCoverage").html(residentsCoverage+"%");
+                $("#cityResidentsCoverage").addClass("text-aqua");
+            }
+        }
+    },false);
 }
 
 var showCityData = function (pageStatusInfo){
@@ -581,6 +616,21 @@ var showCityData = function (pageStatusInfo){
 	$("#village").hide();
 	$("#building").hide();
 	$("#house").hide();
+    //省信息
+    $("#provinceCount").html(1);
+    $("#conProvinceCount").html(1);
+    $("#serviceCoverage").html("100.00%");
+    $("#serviceCoverage").addClass("text-aqua");
+    //市信息
+    $("#cityCount").html(1);
+    $("#conCityCount").html(1);
+    $("#cityserviceCoverage").html("100.00%");
+    $("#cityserviceCoverage").addClass("text-aqua");
+    $("#cityResidentsHouseCount").html("--");
+    $("#cityResidentsCount").html("--");
+    $("#cityCustomerCount").html("--");
+    $("#cityResidentsCoverage").html("--");
+    $("#cityResidentsCoverage").removeClass("text-aqua");
 	doManager("MapBasicDataManager", "getCityBasicData", pageStatusInfo.cityId+"", function (data, textStatus, XMLHttpRequest) {
         if (data.result) {
             var jsonData = JSON.parse(data.data);
@@ -591,23 +641,8 @@ var showCityData = function (pageStatusInfo){
             	var conTownCount = jsonData.conTownCount;
             	var villageCount = jsonData.villageCount;
             	var conVillageCount = jsonData.conVillageCount;
-            	var residentsHouseCount = jsonData.residentsHouseCount;
-            	var customerCount = jsonData.customerCount;
-            	//省信息
-            	$("#provinceCount").html(1);
-            	$("#conProvinceCount").html(1);
-            	$("#serviceCoverage").html("100.00%");
-            	$("#serviceCoverage").addClass("text-aqua");
-            	//市信息
-            	$("#cityCount").html(1);
-            	$("#conCityCount").html(1);
-            	$("#cityserviceCoverage").html("100.00%");
-            	$("#cityserviceCoverage").addClass("text-aqua");
-            	$("#cityResidentsHouseCount").html("--");
-               	$("#cityResidentsCount").html("--");
-            	$("#cityCustomerCount").html("--");
-            	$("#cityResidentsCoverage").html("--");
-            	$("#cityResidentsCoverage").removeClass("text-aqua");
+            	//var residentsHouseCount = jsonData.residentsHouseCount;
+            	//var customerCount = jsonData.customerCount;
             	//区信息
             	$("#countyCount").html(countyCount);
             	$("#conCountyCount").html(conCountyCount);
@@ -630,17 +665,35 @@ var showCityData = function (pageStatusInfo){
             	$("#villageServiceCoverage").html(villageServiceCoverage+"%");
             	$("#villageServiceCoverage").addClass("text-aqua");
             	//居民消费信息
-            	$("#villageResidentsHouseCount").html(residentsHouseCount);
+            	/*$("#villageResidentsHouseCount").html(residentsHouseCount);
             	var residentsCount = residentsHouseCount*3;
                	$("#villageResidentsCount").html(residentsCount);
             	$("#villageCustomerCount").html(customerCount);
             	var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
             	var residentsCoverage = peopleCount.toFixed(2);
             	$("#villageResidentsCoverage").html(residentsCoverage+"%");
-            	$("#villageResidentsCoverage").addClass("text-aqua");
+            	$("#villageResidentsCoverage").addClass("text-aqua");*/
             }
         }
     });
+    doManager("MapBasicDataManager", "getCityBasicDataCustomer", pageStatusInfo.cityId+"", function (data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var jsonData = JSON.parse(data.data);
+            if (jsonData.code == 200) {
+                var residentsHouseCount = jsonData.residentsHouseCount;
+                var customerCount = jsonData.customerCount;
+                //居民消费信息
+                $("#villageResidentsHouseCount").html(residentsHouseCount);
+                var residentsCount = residentsHouseCount*3;
+                $("#villageResidentsCount").html(residentsCount);
+                $("#villageCustomerCount").html(customerCount);
+                var peopleCount = residentsCount == 0 ? 0:(customerCount/residentsCount)*100;
+                var residentsCoverage = peopleCount.toFixed(2);
+                $("#villageResidentsCoverage").html(residentsCoverage+"%");
+                $("#villageResidentsCoverage").addClass("text-aqua");
+            }
+        }
+    },false);
 }
 
 
