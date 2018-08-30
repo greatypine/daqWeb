@@ -1786,7 +1786,10 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     			r_map.put("data", orderList2);
     			System.out.println("结束");
     			
-    		}
+    		}else{
+
+                r_map.put("data",orderList2);
+            }
     		
     		
         	result.setDataMap(r_map);
