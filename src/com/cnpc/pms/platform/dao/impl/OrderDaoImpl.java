@@ -1145,8 +1145,8 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 				"FROM df_order_signed_monthly dosm "+
 				"LEFT JOIN t_order_item toi ON dosm.id = toi.order_id "+
 				"LEFT JOIN t_customer tc ON tc.id=dosm.customer_id "+
-				"where dosm.employee_id in "+
-				"(select id from t_employee where code = '"+employee_no+"') "+whereStr+
+				"INNER JOIN t_employee te ON dosm.employee_id = te.id "+
+				"where te.code = '"+employee_no+"'"+whereStr+
 				"GROUP BY dosm.id ORDER BY dosm.df_signed_time DESC ";
 					
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
