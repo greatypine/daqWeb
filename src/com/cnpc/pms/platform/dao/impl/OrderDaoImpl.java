@@ -1,19 +1,5 @@
 package com.cnpc.pms.platform.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.core.impl.DAORootHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
@@ -21,6 +7,15 @@ import com.cnpc.pms.dynamic.entity.EshopPurchaseDto;
 import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.ValueUtil;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 接口数据库层实现类
@@ -478,32 +473,12 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 					"			GROUP_CONCAT(ti.eshop_pro_name),"+
 					"			''"+
 					"		) AS eshop_pro_name"+
-					"	FROM"+
-					"		("+
-					"			SELECT"+
-					"				t_order.id,"+
-					"				t_order.order_sn,"+
-					"				t_order.customer_id,"+
-					"				t_order.order_address_id,"+
-					"				t_order.total_quantity,"+
-					"				t_order.trading_price,"+
-					"				t_order.payable_price,"+
-					"				t_order.order_status,"+
-					"				t_order.order_type,"+
-					"				t_order.employee_name,"+
-					"				t_order.employee_phone,"+
-					"				t_order.appointment_start_time,"+
-					"				t_order.create_time,"+
-					"				t_order.appointment_end_time,"+
-					"				t_order.seller_remark"+
-					"			FROM"+
-					"				t_order"+
-					"			WHERE"+
-					"				t_order.order_sn = '"+order_sn+"'"+
-					"		) a"+
+					"	FROM t_order a "+
 					"	LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
 					
 					"	LEFT JOIN t_order_item ti ON ti.order_id = a.id"+
+					"			WHERE"+
+					"				a.order_sn = '"+order_sn+"'"+
 					"	GROUP BY"+
 					"		a.order_sn";
     	
@@ -1145,8 +1120,8 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 				"FROM df_order_signed_monthly dosm "+
 				"LEFT JOIN t_order_item toi ON dosm.id = toi.order_id "+
 				"LEFT JOIN t_customer tc ON tc.id=dosm.customer_id "+
-				"where dosm.employee_id in "+
-				"(select id from t_employee where code = '"+employee_no+"') "+whereStr+
+				"INNER JOIN t_employee te ON dosm.employee_id = te.id "+
+				"where te.code = '"+employee_no+"'"+whereStr+
 				"GROUP BY dosm.id ORDER BY dosm.df_signed_time DESC ";
 					
 		Session session = getHibernateTemplate().getSessionFactory().openSession();

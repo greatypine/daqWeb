@@ -178,7 +178,7 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 			order_obj.put("create_time", order_obj.get("create_time"));
 		}catch (Exception e){
     		e.printStackTrace();
-			logger.info("query order detail info:"+order_sn,e);
+			logger.info("根据订单sn编号查询明细信息:"+order_sn,e);
 		}
 
     	return order_obj;
