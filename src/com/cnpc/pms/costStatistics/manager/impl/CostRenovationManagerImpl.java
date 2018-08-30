@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class CostRenovationManagerImpl extends BizBaseCommonManager implements CostRenovationManager {
     @Override
-    public Map<String, Object> queryCostRent(String storeNo, String storeName) {
+    public Map<String, Object> queryCostRenovation(String storeNo, String storeName) {
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
         List<Map<String,Object>> list = costStatisticsDao.queryCostRenovation(storeNo,storeName);
@@ -29,7 +29,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
     }
 
     @Override
-    public Map<String, Object> exportCostRent(String storeNo, String storeName) {
+    public Map<String, Object> exportCostRenovation(String storeNo, String storeName) {
 
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
@@ -46,7 +46,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
     }
 
     @Override
-    public Map<String, Object> saveCostRent(List<Map<String, Object>> list) {
+    public Map<String, Object> saveCostRenovation(List<Map<String, Object>> list) {
         return null;
     }
 }

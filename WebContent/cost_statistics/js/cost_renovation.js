@@ -220,16 +220,16 @@ function getCostRenovation(){
     });
     var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
     var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
-    var year = $("#year_rent").val();
+
 
     $("#renovation_tb_1").find("tr:gt(0)").remove();
     $("#renovation_tb_2").find("tr:gt(0)").remove();
 
-    doManager('costRenovationManager','queryCostRenovation',[storeNo,storeName,year],function (data) {
+    doManager('costRenovationManager','queryCostRenovation',[storeNo,storeName],function (data) {
 
 
         if(data.result){
-            var costRenovation = JSON.parse(data.data).rent;
+            var costRenovation = JSON.parse(data.data).renovation;
 
 
             var rent_td_sum = "";
@@ -249,8 +249,8 @@ function getCostRenovation(){
                 var air_conditioner = costRenovation[i].air_conditioner==null?"":costRenovation[i].air_conditioner;//空调设备
                 var air_conditioner_surcharge = costRenovation[i].air_conditioner_surcharge==null?"":costRenovation[i].air_conditioner_surcharge;//空调设备费
                 var design = costRenovation[i].design==null?"":costRenovation[i].design;//设计
-                var deposit = costRenovation[i].total==null?"":costRenovation[i].total;//押金
-                var agency_fee = costRenovation[i].amortize_month==null?"":costRenovation[i].amortize_month;//摊销月
+                var total = costRenovation[i].total==null?"":costRenovation[i].total;//单店总装修花销
+                var amortize_month = costRenovation[i].amortize_month==null?"":costRenovation[i].amortize_month;//摊销月
                 var amortize_money = costRenovation[i].amortize_money==null?"":costRenovation[i].amortize_money;//摊销金额
                 var completed_date = costRenovation[i].completed_date==null?"":costRenovation[i].completed_date;//竣工日期
                 var contract_date = costRenovation[i].contract_date==null?"":costRenovation[i].contract_date;//合同日期
@@ -258,21 +258,44 @@ function getCostRenovation(){
 
                 $("#renovation_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
 
-                var renovation_td = "<td><input type='text'   style='background-color: #e8e8e8' id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='renovationUnitPrice_"+i+"'    value='"+cost_monthly+"'/></td>";
+                var renovation_td = "<td><input type='text'     id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
+                                    "<td><input type='text'     id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
+                                    "<td><input type='text'     id='renovationUnitPrice_"+i+"'    value='"+renovation_unit_price+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='decorateCost_"+i+"'    value=''/></td>"+
+                                    "<td><input type='text'     id='businessScreen_"+i+"'    value='"+business_screen+"'/></td>"+
+                                    "<td><input type='text'     id='furniture_"+i+"'    value='"+furniture+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='lightBox_"+i+"'    value=''/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManage_"+i+"'    value=''/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManageSurcharge_"+i+"'    value=''/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditioner_"+i+"'    value='"+air_conditioner+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='airConditionerSurcharge_"+i+"'    value='"+air_conditioner_surcharge+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='design_"+i+"'    value='"+design+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='total_"+i+"'    value='"+total+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMonth_"+i+"'    value='"+amortize_month+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoney_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='completedDate_"+i+"'    value='"+completed_date+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'   style='background-color: #e8e8e8' id='contractDate_"+i+"'    value='"+contract_date+"'/></td>";
 
-                for(var j=1;j<=12;j++){
-                    labor_td=labor_td+"<td><input type='text' id='costMonthly_"+i+"'  readonly  style='background-color: #e8e8e8' value='"+cost_monthly+"'/></td>";
-                }
 
-                labor_td=labor_td+"<td><input type='text' readonly style='background-color: #e8e8e8' id='contractGrandTotal_"+i+"'  value='"+contract_grand_total+"'/></td><td><input type='text' onkeyup='checkContentValid(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td><td><input type='text' id='leaseUnitPrice_"+i+"' onkeyup='checkContentValid(this)'  value='"+lease_unit_price+"'/></td><td><input type='text'  onkeyup='checkEveryYearRent(this)' id='firstYearRent_"+i+"' value='"+first_year_rent+"'/></td><td><input type='text' id='secondYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+second_year_rent+"'/></td><td><input type='text'  id='thirdYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+third_year_rent+"'/></td><td><input type='text' id='fourthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+fourth_year_rent+"'/></td><td><input type='text'  id='fifthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+fifth_year_rent+"'/></td><td><input type='text'  id='deposit_"+i+"' onkeyup='checkContentValid(this)' value='"+deposit+"'/></td><td><input type='text' onkeyup='checkContentValid(this)' id='agencyFee_"+i+"'  value='"+agency_fee+"'/></td><td><input type='text' id='propertyFeeYear_"+i+"'  readonly style='background-color: #e8e8e8' value='"+property_fee_year+"'/></td><td><input type='text' id='propertyDeadLine_"+i+"'  onkeyup='checkPropertyDeadLine(this)'  value='"+ property_deadline+"'/></td><td><input type='text' id='propertyFee_"+i+"' onkeyup='checkPropertyFee(this)'   value='"+property_fee+"'/></td><td><input type='text' readonly id='lease_start_date_"+i+"'  value='"+lease_start_date+"'/></td><td><input type='text' readonly id='lease_stop_date_"+i+"'  value='"+lease_stop_date+"'/></td><td><input type='text'  id='free_lease_start_date_"+i+"' readonly value='"+free_lease_start_date+"'/></td>";
-
-                $("#rent_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+labor_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden' id='addr' value='"+addr+"'/></tr>");
+                $("#renovation_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+renovation_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/></tr>");
 
                 laydate.render({//月份控件
-                    elem:"#lease_start_date_"+i,
-                    value:lease_start_date==""?"":new Date(lease_start_date),
+                    elem:"#completedDate_"+i,
+                    value:completed_date==""?"":new Date(completed_date),
                     format: 'yyyy/MM/dd',
                     btns: ['confirm','now',"clear"],
                     theme: '#428bca',
@@ -283,8 +306,8 @@ function getCostRenovation(){
                 });
 
                 laydate.render({//月份控件
-                    elem:"#lease_stop_date_"+i,
-                    value:lease_stop_date==""?"":new Date(lease_stop_date),
+                    elem:"#contractDate_"+i,
+                    value:contract_date==""?"":new Date(contract_date),
                     format: 'yyyy/MM/dd',
                     btns: ['confirm','now',"clear"],
                     theme: '#428bca',
@@ -296,30 +319,16 @@ function getCostRenovation(){
                     }
                 });
 
-                laydate.render({//月份控件
-                    elem:"#free_lease_start_date_"+i,
-                    value:free_lease_start_date==""?"":new Date(free_lease_start_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    change: function(value, date, endDate){
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
-                });
-
             }
 
             layer.close(index);
-
-
-
 
         }
     },false);
 
 }
 /**
- * 导出租金成本
+ * 导出装修摊销
  *
  * **/
 function   exportcostRenovation(){

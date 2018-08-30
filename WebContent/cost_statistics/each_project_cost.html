@@ -24,6 +24,7 @@
     <script type="text/javascript" src="js/bidLib2.0.js"></script>
     <script src="js/cost_labor.js" type = "text/javascript"></script>
     <script src="js/cost_rent.js" type = "text/javascript"></script>
+    <script src="js/cost_renovation.js" type = "text/javascript"></script>
     <script type="text/javascript">
 
         var observe_question_number = 0;
@@ -79,7 +80,7 @@
 
             }else if(t==2){
 
-                getCostRent();//获取租金成本
+                //getCostRent();//获取租金成本
 
             }else if(t==3){
 
@@ -153,7 +154,7 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_1" data-toggle="tab" onclick="showCostTag(1)">人工成本</a></li>
                 <li><a href="#tab_2" data-toggle="tab" onclick="showCostTag(2)">租金成本</a></li>
-                <li><a href="#tab_3" data-toggle="tab">装修摊销</a></li>
+                <li><a href="#tab_3" data-toggle="tab" onclick="showCostTag(3)">装修摊销</a></li>
             </ul>
             <div class="tab-content no-padding">
                 <div class="tab-pane active" id="tab_1">
@@ -359,10 +360,7 @@
                                     <p>门店名称：</p>
                                     <p><input type="text" name="" id="storeName_renovation"/></p>
                                 </td>
-                                <td width="10%">
-                                    <p class="read">日期：</p>
-                                    <p class="read"><input type="text" readonly  maxlength="12"  id="year_renovation"/></p>
-                                </td>
+
                                 <td width="10%" style="text-align: center">
                                     <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostRenovation()">查询</button>
                                 </td>

@@ -20,7 +20,7 @@ public interface CostRenovationManager extends IManager {
      * @date 2018/8/28 16:40
      **/
 
-    public Map<String,Object> queryCostRent(String storeNo, String storeName);
+    public Map<String,Object> queryCostRenovation(String storeNo, String storeName);
 
 
    /**
@@ -30,7 +30,7 @@ public interface CostRenovationManager extends IManager {
     **/
 
 
-    public Map<String,Object>  exportCostRent(String storeNo,String storeName);
+    public Map<String,Object>  exportCostRenovation(String storeNo,String storeName);
 
     /**
      * @Description 保存装修摊销
@@ -38,5 +38,5 @@ public interface CostRenovationManager extends IManager {
      * @date 2018/8/22 9:23
      **/
 
-    public Map<String,Object> saveCostRent(List<Map<String,Object>> list);
+    public Map<String,Object> saveCostRenovation(List<Map<String,Object>> list);
 }
