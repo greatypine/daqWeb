@@ -63,7 +63,7 @@ public class ObserveModelDaoImpl  extends BaseDAOHibernate implements ObserveMod
     public List<Map<String, Object>> queryObserveParameterList(Integer status,Long id, PageInfo pageInfo) {
         List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
         // sql查询列，用于页面展示所有的数据
-        String find_sql = "select (CASE when status = 1 then '是' else '否' end) as is_used,model_id,observe_content,(select model_name from t_observe_model where id = "+id+") as model_name from t_observe_check_details where  model_id = "+id+" and status = "+status;
+        String find_sql = "select (CASE when status = 1 then '是' else '否' end) as is_used,model_id,observe_content,id,(select model_name from t_observe_model where id = "+id+") as model_name from t_observe_check_details where  model_id = "+id+" and status = "+status;
         if(id == 0){
             find_sql = "select (CASE when status = 1 then '是' else '否' end) as is_used,id,model_name from t_observe_model where status =" + status;
         }

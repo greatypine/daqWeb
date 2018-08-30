@@ -42,8 +42,6 @@ public class OrderHeatManagerImpl extends BizBaseCommonManager implements OrderH
 		OrderDao orderHeatDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		MongoDBManager mongoDBManager = (MongoDBManager)SpringHelper.getBean("mongoDBManager");
-		DfCustomerOrderDao dfCustomerOrderDao = (DfCustomerOrderDao)SpringHelper.getBean(DfCustomerOrderDao.class.getName());
-		DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
 		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
 		AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
 		Map<String, Object> mapStr = new HashMap<String, Object>();

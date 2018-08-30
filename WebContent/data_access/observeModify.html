@@ -38,43 +38,60 @@
             var model_id = request['model_id'];
             var parentName = '';
             $(function(){
-                if(model_id == null){//明查模块添加及编辑
+                console.log(id+model_id);
+                if(model_id == 'undefined' || model_id == null){//明查模块添加及编辑
                     $("#model").show();
-                    if (id || "" == id) {
+                    if (id == "undefined" || id == null) {//添加
+
+                    }else{//编辑
                         var url = $$.PMSDispatchActionUrl;
                         var data = new PMSRequestObject("observeModelManager", "getModelById", [id]);
                         $$.ajax(url, "requestString=" + encodeURIComponent(data.toJsonString()), function(datas, textStatus, XMLHttpRequest){
                             var func = $.fromJSON(datas.data);
                             var model_name = func.model_name;
-                            console.log(model_name+"=="+func.status);
-                            $("#model_name1").val(model_name);
+                            $("#model_name").val(model_name);
+                            $("#model_name").attr("readonly",true);
+                            var order_no = func.order_no;
+                            var remark = func.remark;
+                            $("#orderNum").val(order_no);
+                            $("#remark_model").val(remark);
+
                             if (func.status == 1) {
-                                $("input[name=radioF]").eq(0).attr("checked", true);
+                                $("input[name=radioF1]").eq(0).attr("checked", true);
                             }else{
-                                $("input[name=radioF]").eq(1).attr("checked", true);
+                                $("input[name=radioF1]").eq(1).attr("checked", true);
                             }
                         });
-                    }else{
-
                     }
                 }else{//明查内容添加及编辑
                     $("#paramter").show();
-                    if (id || "" == id) {//当id是空时证明是添加
+                    if (id == "undefined" || id == null) {//当id是空时证明是添加
                         var url = $$.PMSDispatchActionUrl;
-                        var data = new PMSRequestObject("observeModelManager", "getModelById", [id]);
+                        var data = new PMSRequestObject("observeModelManager", "getModelById", [model_id]);
                         $$.ajax(url, "requestString=" + encodeURIComponent(data.toJsonString()), function(datas, textStatus, XMLHttpRequest){
                             var func = $.fromJSON(datas.data);
                             var model_name = func.model_name;
-                            console.log(model_name+"=="+func.status);
                             $("#model_name1").val(model_name);
+                        });
+                    }else{//当id不是空时证明是编辑
+                        var url = $$.PMSDispatchActionUrl;
+                        var data = new PMSRequestObject("CheckDetailsManager", "getObserveCheckDetailsById", [id]);
+                        $$.ajax(url, "requestString=" + encodeURIComponent(data.toJsonString()), function(datas, textStatus, XMLHttpRequest){
+                            var func = $.fromJSON(datas.data).checkDetails[0];
+                            var model_name = func.model_name;
+                            var observe_content = func.observe_content;
+                            var order_no = func.order_no;
+                            var remark = func.remark;
+                            $("#model_name1").val(model_name);
+                            $("#observe_content").val(observe_content);
+                            $("#remark").val(remark);
+                            $("#orderNo").val(order_no);
                             if (func.status == 1) {
                                 $("input[name=radioF]").eq(0).attr("checked", true);
                             }else{
                                 $("input[name=radioF]").eq(1).attr("checked", true);
                             }
-                        });
-                    }else{//当id不是空时证明是编辑
-
+                        })
                     }
                 }
 				     
@@ -83,6 +100,19 @@
 
             
             function save1(){
+                if(model_id == 'undefined' || model_id == null){//明查模块添加及编辑
+                    var orgUnit = {
+                        id:$("#functionId").val(),
+                        type:getRadioVal("radioF"),
+                        remark:$("#remark").val()
+                    };
+                }else{
+                    var orgUnit = {
+                        id:$("#functionId").val(),
+                        type:getRadioVal("radioF"),
+                        remark:$("#remark").val()
+                    };
+                }
                 var $validator = new PMSValidator($("#funcModify")[0], {
                     bNormalDisplay: false,
                     iDisplayLength: 999
@@ -98,7 +128,6 @@
                     parentCode:$("#parentCode").val(),
 					orderNo:$("#orderNo").val(),
 					module:$("#module").val(),
-                    url:$("#url").val(),
 					type:getRadioVal("radioF"),
 					remark:$("#remark").val()
                 };
@@ -178,7 +207,7 @@
                                     </font>
                                 </td>
                                 <td width="40%">
-                                    <input type="text" id="module" name="observe_content" class="form-control" style="width: 50%"/>
+                                    <input type="text" id="observe_content" name="observe_content" class="form-control" style="width: 50%"/>
                                 </td>
                             </tr>
 							<tr>
@@ -205,7 +234,7 @@
                                     是否停用:
                                 </td>
                                 <td width="40%">
-                                    <input class="pmsRadio" name="radioF" data="[['1','是'],['2','否']]" />
+                                    <input class="pmsRadio" name="radioF" data="[['1','是'],['0','否']]" />
                                 </td>
                             </tr>
                         </table>
@@ -250,7 +279,7 @@
                                     是否停用:
                                 </td>
                                 <td width="40%">
-                                    <input class="pmsRadio" name="radioF" data="[['1','是'],['2','否']]" />
+                                    <input class="pmsRadio" name="radioF1" data="[['1','是'],['0','否']]" />
                                 </td>
                             </tr>
                         </table>

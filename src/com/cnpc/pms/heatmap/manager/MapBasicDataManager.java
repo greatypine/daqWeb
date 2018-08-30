@@ -12,6 +12,15 @@ public interface MapBasicDataManager {
 	 * @return
 	 */
 	public Map<String, Object> getChinaBasicData();
+
+	/**
+	 *
+	 * TODO  全国基础数据展示
+	 * 2018年1月22日
+	 * @author gaoll
+	 * @return
+	 */
+	public Map<String, Object> getChinaBasicDataCustomer();
 	
 	/**
 	 * 
@@ -22,6 +31,8 @@ public interface MapBasicDataManager {
 	 * @return
 	 */
 	public Map<String,Object> getProvinceBasicData(Long province_id);
+
+	public Map<String,Object> getProvinceBasicDataCustomer(Long province_id);
 	
 	/**
 	 * 
@@ -32,7 +43,9 @@ public interface MapBasicDataManager {
 	 * @return
 	 */
 	public Map<String,Object> getCityBasicData(Long city_id);
-	
+
+	public Map<String,Object> getCityBasicDataCustomer(Long city_id);
+
 	/**
 	 * 
 	 * TODO  门店基础数据展示
@@ -42,6 +55,8 @@ public interface MapBasicDataManager {
 	 * @return
 	 */
 	public Map<String,Object> getStoreBasicData(Long store_id);
+
+	public Map<String,Object> getStoreBasicDataCustomer(Long store_id);
 	
 	/**
 	 * 

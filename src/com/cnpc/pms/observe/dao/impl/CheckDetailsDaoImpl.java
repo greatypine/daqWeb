@@ -15,7 +15,7 @@ public class CheckDetailsDaoImpl  extends BaseDAOHibernate implements CheckDetai
 
     @Override
     public List<Map<String, Object>> getCheckDetailsById(Long id) {
-        String sql="select model.model_name,details.observe_content,details.model_id,details.id from t_observe_model model INNER JOIN t_observe_check_details details ON (model.id = details.model_id) where details.id = "+id;
+        String sql="select model.model_name,details.observe_content,details.model_id,details.id,details.order_no,details.remark,details.status from t_observe_model model INNER JOIN t_observe_check_details details ON (model.id = details.model_id) where details.id = "+id;
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
         return lst_data;

@@ -1,7 +1,9 @@
 package com.cnpc.pms.observe.manager.impl;
 
 import com.cnpc.pms.base.paging.FilterFactory;
+import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.observe.dao.CheckDetailsDao;
 import com.cnpc.pms.observe.dto.ObserveDTO;
 import com.cnpc.pms.observe.entity.CheckDetails;
 import com.cnpc.pms.observe.entity.ObserveModel;
@@ -65,4 +67,12 @@ public class CheckDetailsManagerImpl extends BizBaseCommonManager implements Che
         return result;
     }
 
+    @Override
+    public Map<String, Object> getObserveCheckDetailsById(Long id) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        CheckDetailsDao checkDetailsDao = (CheckDetailsDao) SpringHelper.getBean(CheckDetailsDao.class.getName());
+        List<Map<String, Object>> checkDetailsById = checkDetailsDao.getCheckDetailsById(id);
+        result.put("checkDetails",checkDetailsById);
+        return result;
+    }
 }

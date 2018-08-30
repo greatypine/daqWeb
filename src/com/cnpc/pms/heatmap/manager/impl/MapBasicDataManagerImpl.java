@@ -62,6 +62,24 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 	}
 
 	@Override
+	public Map<String, Object> getChinaBasicDataCustomer() {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findAllCustomer();
+			result.put("customerCount", customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+	}
+
+	@Override
 	public Map<String, Object> getProvinceBasicData(Long province_id) {
 		Map<String,Object> result = new HashMap<String, Object>();
 		try {
@@ -91,6 +109,25 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			result.put("cityCount", cityCount);
 			result.put("conCityCount", conCityCount);
 			result.put("residentsHouseCount", residentsHouseCount);
+			result.put("customerCount", customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+	}
+
+
+	@Override
+	public Map<String, Object> getProvinceBasicDataCustomer(Long province_id) {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findCustomerByProvinceId(province_id);
 			result.put("customerCount", customerCount);
 			result.put("code", CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
@@ -157,6 +194,24 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 	}
 
 	@Override
+	public Map<String, Object> getCityBasicDataCustomer(Long city_id) {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findCustomerByCityId(city_id);
+			result.put("customerCount", customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+	}
+
+	@Override
 	public Map<String, Object> getStoreBasicData(Long store_id) {
 		Map<String,Object> result = new HashMap<String, Object>();
 		try {
@@ -187,6 +242,25 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			result.put("tinyVillageCount", tinyVillageCount);
 			result.put("conTinyVillageCount", conTinyVillageCount);
 			result.put("residentsHouseCount",residentsHouseCount);
+			result.put("customerCount",customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		} finally {
+		}
+	}
+
+	@Override
+	public Map<String, Object> getStoreBasicDataCustomer(Long store_id) {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findCustomerByStoreId(store_id);
 			result.put("customerCount",customerCount);
 			result.put("code", CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
