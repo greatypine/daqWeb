@@ -2184,7 +2184,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 					System.out.println(sendcode_gb2312);
 					//您的验证码是111111，十分钟内有效。
 					//String url = "http://q.hl95.com:8061/?username=gasjyz&password=Gasj0121&message="+sendcode_gb2312+"&phone="+mobilephone+"&epid=123743&linkid=&subcode=";
-					String url = "https://datatest.guoanshequ.top/eprj/dispatcher.action?phone="+mobilephone+"&sendcode="+sendcode_gb2312;
+					String url = "http://datatest.guoanshequ.top/eprj/dispatcher.action?phone="+mobilephone+"&sendcode="+sendcode_gb2312;
 					System.out.println(url);
 					rt = get(url);
 					if(rt==null||rt==""){
@@ -3463,7 +3463,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 					String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
 					System.out.println(sendcode_gb2312);
 					//String url = "http://q.hl95.com:8061/?username=gasjyz&password=Gasj0121&message="+sendcode_gb2312+"&phone="+mobilephone+"&epid=123743&linkid=&subcode=";
-					String url = "https://datatest.guoanshequ.top/eprj/dispatcher.action?phone=%s&sendcode=%s";
+					String url = "http://datatest.guoanshequ.top/eprj/dispatcher.action?phone=%s&sendcode=%s";
 					HttpHost proxy = new HttpHost(proxyip, proxyport, "http");
 					RequestConfig requestConfig = RequestConfig.custom().setProxy(proxy).build();
 					/** 上线时，添加代理设置 **/
