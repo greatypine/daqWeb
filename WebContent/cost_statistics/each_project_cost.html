@@ -100,7 +100,32 @@
         });
     }
 
+        /**
+         * 检测录入数据有效性
+         * @param t
+         */
+    function checkDataValid(t){
 
+        $(t).parent().parent().attr("editable",true);
+
+        var reg = /^[1-9]+(.[0-9]{2})?$/;
+        var v= $(t).val();
+        if(!reg.test(v)&&v!=""&&v!="."){
+
+            t.value = t.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
+            t.value = t.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的
+            t.value = t.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+            t.value = t.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入两个小数
+            if(t.value.indexOf(".")< 0 && t.value !=""){//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
+                t.value= parseFloat(t.value);
+            }
+
+            $(t).val(t.value);
+        }else if(v=="."){
+            $(t).val("");
+        }
+
+    }
 
     </script>
 </head>

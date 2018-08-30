@@ -208,6 +208,21 @@ function checkPropertyDeadLine(t){
 
 }
 
+/**
+ * 计算装修施工
+ * @param t
+ */
+function calculateDecorateCost(t){
+    var id = $(t).attr("id").split("_");
+    var structureAcreage = $("#structureAcreage_"+id[1]).val();
+    var renovationUnitPrice = $("#renovationUnitPrice_"+id[1]).val();
+    if(structureAcreage==""||renovationUnitPrice==""){
+        $("#decorateCost_"+id[1]).val("");
+    }else{
+        $("#decorateCost_"+id[1]).val((parseFloat(structureAcreage)*parseFloat(renovationUnitPrice)).toFixed(2));
+    }
+
+}
 
 
 /**
@@ -259,8 +274,8 @@ function getCostRenovation(){
                 $("#renovation_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
 
                 var renovation_td = "<td><input type='text'     id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
-                                    "<td><input type='text'     id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
-                                    "<td><input type='text'     id='renovationUnitPrice_"+i+"'    value='"+renovation_unit_price+"'/></td>"+
+                                    "<td><input type='text'     onkeyup='calculateDecorateCost()' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
+                                    "<td><input type='text'     onkeyup='calculateDecorateCost()' id='renovationUnitPrice_"+i+"'    value='"+renovation_unit_price+"'/></td>"+
                                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='decorateCost_"+i+"'    value=''/></td>"+
                                     "<td><input type='text'     id='businessScreen_"+i+"'    value='"+business_screen+"'/></td>"+
                                     "<td><input type='text'     id='furniture_"+i+"'    value='"+furniture+"'/></td>"+
@@ -268,27 +283,27 @@ function getCostRenovation(){
                                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManage_"+i+"'    value=''/></td>"+
                                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManageSurcharge_"+i+"'    value=''/></td>"+
                                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditioner_"+i+"'    value='"+air_conditioner+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='airConditionerSurcharge_"+i+"'    value='"+air_conditioner_surcharge+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='design_"+i+"'    value='"+design+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='total_"+i+"'    value='"+total+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMonth_"+i+"'    value='"+amortize_month+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoney_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='completedDate_"+i+"'    value='"+completed_date+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'   style='background-color: #e8e8e8' id='contractDate_"+i+"'    value='"+contract_date+"'/></td>";
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditionerSurcharge_"+i+"'    value='"+air_conditioner_surcharge+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='design_"+i+"'    value='"+design+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='total_"+i+"'    value='"+total+"'/></td>"+
+                                    "<td><input type='text'     id='amortizeMonth_"+i+"'    value='"+amortize_month+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' id='amortizeMoney_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     id='completedDate_"+i+"'    value='"+completed_date+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                                    "<td><input type='text'     id='contractDate_"+i+"'    value='"+contract_date+"'/></td>";
 
 
                 $("#renovation_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+renovation_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/></tr>");
