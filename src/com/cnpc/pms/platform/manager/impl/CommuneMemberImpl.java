@@ -2560,7 +2560,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				os = new FileOutputStream(file_xls.getAbsoluteFile());
 				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
 			}catch (Exception e) {
 				e.printStackTrace();
 			} finally {

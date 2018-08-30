@@ -106,48 +106,40 @@ var work_id = getUrlParamByKey("work_id");
 						if(key=='audit_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(audit_file);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=='plane_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(plane_plan);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=='record_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(record_drawing);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=='business_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(business_license);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=='food_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(food_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=='tobacco_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(tobacco_card);">'+va.substring(0,25)+'</a>')
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')
 							}
 						}else if(key=='book_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(book_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=='xx_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(xx_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=='other_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(other_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}else if(key=="name"){
 							$("#"+key).val(va);
 							$("#id1").text(va);
@@ -174,48 +166,47 @@ var work_id = getUrlParamByKey("work_id");
 						if(key=='audit_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(audit_file);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
+
 						}else if(key=='plane_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(plane_plan);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>');							}
+
 						}else if(key=='record_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(record_drawing);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>');						}
+
 						}else if(key=='business_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(business_license);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')	;						}
+
 						}else if(key=='food_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(food_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')	;						}
+
 						}else if(key=='tobacco_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(tobacco_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
+
 						}else if(key=='book_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(book_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
+
 						}else if(key=='xx_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(xx_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
+
 						}else if(key=='other_pic'){
 							if(va!=null&&va!=''){
 								$("#"+key).show();
-								$("#"+key).html('<a href="javascript:void(0);" onclick="downloadFile(other_card);">'+va.substring(0,25)+'</a>')
-							}
+								$("#"+key).html('<a href="'+va.split(",")[1]+'">'+va.split(",")[0].substring(0,25)+'</a>')							}
 						}
 					}
 				}
@@ -433,6 +424,8 @@ var work_id = getUrlParamByKey("work_id");
 	</table>
 	<div style="height: 30px;"></div>
 	</div>
+
+
 
 </div>
 
