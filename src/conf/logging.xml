@@ -3,9 +3,9 @@
 <configuration>
   
 <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>D:/log/daqWeb.log</file>
+		<file>/tomcat/log/daqWeb.log</file>
     	<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>D:/log/daqWeb.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>/tomcat/log/daqWeb.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>30</maxHistory>
     	</rollingPolicy>
 		<append>true</append>
