@@ -2276,4 +2276,24 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	     }
 	    return map_r;
 	}
+
+	@Override
+	public Map<String, Object> queryOrderProductName(String order_id){
+		String sql="SELECT concat(GROUP_CONCAT(ti.eshop_pro_name), '') AS eshop_pro_name FROM t_order_item ti WHERE ti.order_id = '"+order_id+"' GROUP BY ti.order_id";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		List<Map<String, Object>> lst_data = null;
+		Map<String, Object> map_r = null;
+		try{
+			SQLQuery query = session.createSQLQuery(sql);
+			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if(lst_data!=null&&lst_data.size()>0){
+				map_r =  lst_data.get(0);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			session.close();
+		}
+		return map_r;
+	}
 }

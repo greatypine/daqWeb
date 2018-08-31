@@ -1,11 +1,11 @@
 package com.cnpc.pms.personal.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Function：清洗出的订单Dao
@@ -81,5 +81,12 @@ public interface MassOrderDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> queryPlatformidByCode(String storeno);
+
+	/**
+	 * 根据订单sn查询订单明细
+	 * @param order_sn
+	 * @return
+	 */
+	public Map<String, Object> queryOrderDetailBySN(String order_sn);
 	
 }

@@ -446,4 +446,11 @@ public interface OrderDao {
 	  * 查询E店合同信息
 	  */
 	 public Map<String, Object> queryContractById(String contract_id);
+
+	/**
+	 * 查询订单明细的商品名称
+	 * @param order_id
+	 * @return
+	 */
+	public Map<String, Object> queryOrderProductName(String order_id);
 }

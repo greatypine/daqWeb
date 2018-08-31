@@ -9,9 +9,12 @@ import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.manager.MassOrderManager;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.platform.dao.OrderDao;
+import com.cnpc.pms.platform.manager.impl.OrderManagerImpl;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -31,6 +34,8 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
 	PropertiesValueUtil propertiesValueUtil = null;
 
     private XSSFCellStyle style_header = null;
+
+	private static Log logger = LogFactory.getLog(OrderManagerImpl.class);
     
     /**
      * excel单元格公共样式
@@ -391,4 +396,30 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
     	
     	return order_obj;
     }
+
+    @Override
+	public Map<String, Object> queryOrderDetailBySN(String order_sn){
+
+		logger.info("查询订单明细信息开始:"+order_sn);
+
+		MassOrderDao massOrderDao = (MassOrderDao)SpringHelper.getBean(MassOrderDao.class.getName());
+		Map<String,Object> order_obj = massOrderDao.queryOrderDetailBySN(order_sn);
+		String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
+
+		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+
+		Map<String,Object> order_name_obj = orderDao.queryOrderProductName(order_id);
+		if(order_name_obj==null){
+			order_obj.put("eshop_pro_name","");
+		}else{
+			order_obj.put("eshop_pro_name",order_name_obj.get("eshop_pro_name"));
+		}
+		List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
+		order_obj.put("item_list", item_list);
+		order_obj.put("create_time", order_obj.get("create_time"));
+
+		logger.info("查询订单明细信息结束:"+order_sn);
+
+		return order_obj;
+	}
 }
