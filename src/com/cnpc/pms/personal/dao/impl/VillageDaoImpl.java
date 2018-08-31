@@ -220,7 +220,7 @@ public class VillageDaoImpl extends BaseDAOHibernate implements VillageDao {
 	public Integer findVillageCountByCityName(String cityName) {
 		String findSql = "select count(tv.id) from t_village tv INNER JOIN ("
 				+" select tt.id as id from t_town tt INNER JOIN t_county tc ON tt.county_id  = tc.id INNER JOIN t_city city ON city.id = tc.city_id and city.name like '%"+cityName+"%'"
-				+" INNER JOIN t_tiny_village ttv ON ttv.town_id = tt.id and ttv.`status`=0 AND ttv.town_id is not NULL GROUP BY ttv.town_id) t ON tv.town_id = t.id";
+				+" ) t ON tv.town_id = t.id";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();
 		 Session session = sessionFactory.getCurrentSession();
