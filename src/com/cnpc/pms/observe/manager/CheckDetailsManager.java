@@ -14,4 +14,6 @@ public interface CheckDetailsManager  extends IManager {
     public CheckDetails getCheckDetailsById(Long id);
 
     public Map<String,Object> saveOrUpdateCheckDetails(ObserveDTO observeDTO);
+
+    public Map<String,Object> getObserveCheckDetailsById(Long id);
 }

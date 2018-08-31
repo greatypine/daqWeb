@@ -35,8 +35,8 @@ public class DfCustomerMonthOrderDaoImpl extends DAORootHibernate implements DfC
 
 	@Override
 	public Integer findCustomerByProvinceId(Long province_id) {
-		String sql = "select count(1) from (select customer_id from df_customer_order_month_trade_new customer INNER JOIN (select t_store.platformid from t_store where province_id = "+province_id+") t "
-				+ "ON t.platformid = customer.store_id GROUP BY customer.customer_id) t1";
+		String sql = "select count(1) from (select * from (select customer_id from df_customer_order_month_trade_new customer INNER JOIN (select t_store.platformid from t_store where province_id = "+province_id+") t "
+				+ "ON t.platformid = customer.store_id ) a GROUP BY a.customer_id) t1";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();
 		Session session = sessionFactory.getCurrentSession();
@@ -50,8 +50,8 @@ public class DfCustomerMonthOrderDaoImpl extends DAORootHibernate implements DfC
 
 	@Override
 	public Integer findCustomerByCityId(Long city_id) {
-		String sql = "select count(1) from (select customer_id from df_customer_order_month_trade_new customer INNER JOIN t_store store ON store.platformid = customer.store_id"
-				+" INNER JOIN t_dist_citycode citycode ON store.city_name = citycode.cityname where citycode.id = "+city_id+" GROUP BY customer.customer_id) t";
+		String sql = "select count(1) from (select * from (select customer_id from df_customer_order_month_trade_new customer INNER JOIN t_store store ON store.platformid = customer.store_id"
+				+" INNER JOIN t_dist_citycode citycode ON store.city_name = citycode.cityname where citycode.id = "+city_id+") a GROUP BY a.customer_id) t";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();
 		Session session = sessionFactory.getCurrentSession();
@@ -65,8 +65,8 @@ public class DfCustomerMonthOrderDaoImpl extends DAORootHibernate implements DfC
 
 	@Override
 	public Integer findCustomerByStoreId(Long store_id) {
-		String sql = "select COUNT(1) from (select customer_id from df_customer_order_month_trade_new customer INNER JOIN t_store store ON "
-				+ "store.platformid = customer.store_id and store.store_id = "+store_id+" GROUP BY customer.customer_id) t";
+		String sql = "select COUNT(1) from (select * from (select customer_id from df_customer_order_month_trade_new customer INNER JOIN t_store store ON "
+				+ "store.platformid = customer.store_id and store.store_id = "+store_id+") a  GROUP BY a.customer_id) t";
 		HibernateTemplate template = getHibernateTemplate();
 		SessionFactory sessionFactory = template.getSessionFactory();
 		Session session = sessionFactory.getCurrentSession();

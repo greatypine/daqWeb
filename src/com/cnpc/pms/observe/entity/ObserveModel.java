@@ -19,6 +19,11 @@ public class ObserveModel extends DataEntity{
     @Column(name = "order_no",columnDefinition="int(11) COMMENT '模块排序'")
     private Integer order_no;
 
+    @Column(name = "remark",columnDefinition="varchar(1000) COMMENT '备注'")
+    private String remark;
+
+
+
     public String getModel_name() {
         return model_name;
     }
@@ -33,5 +38,13 @@ public class ObserveModel extends DataEntity{
 
     public void setOrder_no(Integer order_no) {
         this.order_no = order_no;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

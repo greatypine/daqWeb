@@ -34,20 +34,41 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 		try {
 			ProvinceDao provinceDao = (ProvinceDao)SpringHelper.getBean(ProvinceDao.class.getName());
 			CityDao cityDao = (CityDao)SpringHelper.getBean(CityDao.class.getName());
-			TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+			//TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
 			//DfCustomerOrderDao dfCustomerOrderDao = (DfCustomerOrderDao)SpringHelper.getBean(DfCustomerOrderDao.class.getName());
-			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			//DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
 			Integer provinceCount = provinceDao.getProvinceCount();
 			Integer conProvinceCount = provinceDao.getProvinceCountByStore();
-			Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCount();
+			//Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCount();
 			//Integer customerCount = dfCustomerOrderDao.findCustomerCount();
-			Integer customerCount = dfCustomerMonthOrderDao.findAllCustomer();
+			//Integer customerCount = dfCustomerMonthOrderDao.findAllCustomer();
 			Integer cityCount = cityDao.getCityCount();
 			Integer conCityCount = cityDao.getConCityCount();
 			result.put("provinceCount", provinceCount);
 			result.put("conProvinceCount", conProvinceCount);
 			result.put("cityCount", cityCount);
 			result.put("conCityCount", conCityCount);
+			//result.put("residentsHouseCount", residentsHouseCount);
+			//result.put("customerCount", customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+	}
+
+	@Override
+	public Map<String, Object> getChinaBasicDataCustomer() {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findAllCustomer();
+			Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCount();
 			result.put("residentsHouseCount", residentsHouseCount);
 			result.put("customerCount", customerCount);
 			result.put("code", CodeEnum.success.getValue());
@@ -68,12 +89,12 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			//ProvinceDao provinceDao = (ProvinceDao)SpringHelper.getBean(ProvinceDao.class.getName());
 			//StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
 			CityDao cityDao = (CityDao)SpringHelper.getBean(CityDao.class.getName());
-			TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+			//TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
 			//DfCustomerOrderDao dfCustomerOrderDao = (DfCustomerOrderDao)SpringHelper.getBean(DfCustomerOrderDao.class.getName());
 			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
 			Integer cityCount = cityDao.getCityCountByProvinceId(province_id);
 			Integer conCityCount = cityDao.getConCityByProvinceId(province_id);
-			Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCountByProvince(province_id);
+			//Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCountByProvince(province_id);
 			/*List<Store> storeList = storeManager.findStoreByProvinceId(province_id);
 			StringBuilder sb = new StringBuilder();
 			if(storeList != null && storeList.size()>0){
@@ -90,8 +111,30 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			Integer customerCount = dfCustomerMonthOrderDao.findCustomerByProvinceId(province_id);
 			result.put("cityCount", cityCount);
 			result.put("conCityCount", conCityCount);
-			result.put("residentsHouseCount", residentsHouseCount);
+			//result.put("residentsHouseCount", residentsHouseCount);
 			result.put("customerCount", customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+	}
+
+
+	@Override
+	public Map<String, Object> getProvinceBasicDataCustomer(Long province_id) {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findCustomerByProvinceId(province_id);
+			Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCountByProvince(province_id);
+			result.put("customerCount", customerCount);
+			result.put("residentsHouseCount", residentsHouseCount);
 			result.put("code", CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
 			return result;
@@ -111,7 +154,7 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			String cityName = cityDao.getCityByCityId(city_id);
 			//StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 			CountyDao countyDao = (CountyDao)SpringHelper.getBean(CountyDao.class.getName());
-			TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+			//TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
 			//DfCustomerOrderDao dfCustomerOrderDao = (DfCustomerOrderDao)SpringHelper.getBean(DfCustomerOrderDao.class.getName());
 			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
 			VillageDao villageDao = (VillageDao)SpringHelper.getBean(VillageDao.class.getName());
@@ -120,7 +163,7 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			Integer conCountyCount = countyDao.getConCountyCountByCityId(city_id);
 			Integer townCount = townDao.findTownCountByCityId(city_id);
 			Integer conTownCount = townDao.findConTownCountByCityId(city_id);
-			Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCountByCity(city_id);
+			//Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCountByCity(city_id);
 			Integer villageCount = villageDao.findVillageCountByCityName(cityName);
 			Integer conVillageCount = villageDao.findConVillageCountByCityName(cityName);
 			/*List<Map<String,Object>> storeList = storeDao.selectStoreByCityId(city_id);
@@ -143,6 +186,27 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			result.put("conTownCount", conTownCount);
 			result.put("villageCount", villageCount);
 			result.put("conVillageCount", conVillageCount);
+			//result.put("residentsHouseCount", residentsHouseCount);
+			result.put("customerCount", customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+	}
+
+	@Override
+	public Map<String, Object> getCityBasicDataCustomer(Long city_id) {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findCustomerByCityId(city_id);
+			Integer residentsHouseCount = tinyVillageDao.findResidentsHouseCountByCity(city_id);
 			result.put("residentsHouseCount", residentsHouseCount);
 			result.put("customerCount", customerCount);
 			result.put("code", CodeEnum.success.getValue());
@@ -187,6 +251,25 @@ public class MapBasicDataManagerImpl extends BizBaseCommonManager implements Map
 			result.put("tinyVillageCount", tinyVillageCount);
 			result.put("conTinyVillageCount", conTinyVillageCount);
 			result.put("residentsHouseCount",residentsHouseCount);
+			result.put("customerCount",customerCount);
+			result.put("code", CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		} finally {
+		}
+	}
+
+	@Override
+	public Map<String, Object> getStoreBasicDataCustomer(Long store_id) {
+		Map<String,Object> result = new HashMap<String, Object>();
+		try {
+			DfCustomerMonthOrderDao dfCustomerMonthOrderDao = (DfCustomerMonthOrderDao)SpringHelper.getBean(DfCustomerMonthOrderDao.class.getName());
+			Integer customerCount = dfCustomerMonthOrderDao.findCustomerByStoreId(store_id);
 			result.put("customerCount",customerCount);
 			result.put("code", CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
