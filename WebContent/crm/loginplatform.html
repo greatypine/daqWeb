@@ -596,25 +596,6 @@ $(document).ready(function(){
   							window.location=getRootPath() +  "/demo/index_headquarters_demo.html";
   							return;
   						}
-  						 doManager("DefaultConfigManager", "getDefaultConfig",[curr_user.employeeId,curr_user.name],
-  									function(data, textStatus, XMLHttpRequest) {
-  										if (data.result) {
-  											var defaultInfo = $.fromJSON(data.data);
-  											if(defaultInfo!=null){
-  												if(defaultInfo.default_system==0){//crm
-  													/* $("#redio2").removeAttr("checked");
-  													$("#redio1").attr("checked","checked"); */
-  													//$("#default_check").attr("checked","checked");
-  												}else if(defaultInfo.default_system==1){
-  													/* $("#redio1").removeAttr("checked");
-  													$("#redio2").attr("checked","checked"); */
-  													//$("#default_check").attr("checked","checked");
-  												}
-  												
-  												
-  											}
-  										}
-  								},false);
   						 
   						var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
   						if(regex_zb.test(curr_user.usergroup.code)){
