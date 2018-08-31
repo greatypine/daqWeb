@@ -181,17 +181,17 @@ public class RelationManagerImpl extends BaseManagerImpl implements RelationMana
 	}
 
 	
-	@Override
-	public Map<String, Object> findRelation_chart_crm(String employeeNo,Long area_id) {
-		 Map<String, Object> maps =new HashMap<String, Object>();
-		 OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-		 List<Map<String, Object>> orderList = orderManager.queryOrderFourMonth(employeeNo,area_id);
-		 RelationDao relationDao = (RelationDao) SpringHelper.getBean(RelationDao.class.getName());
-		 List<Map<String, Object>> relationList = relationDao.findRelation_chart_crm(employeeNo,area_id);
-		 maps.put("orderList", orderList);
-		 maps.put("relationList", relationList);
-	     return maps;
-	}
+//	@Override
+//	public Map<String, Object> findRelation_chart_crm(String employeeNo,Long area_id) {
+//		 Map<String, Object> maps =new HashMap<String, Object>();
+//		 OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//		 List<Map<String, Object>> orderList = orderManager.queryOrderFourMonth(employeeNo,area_id);
+//		 RelationDao relationDao = (RelationDao) SpringHelper.getBean(RelationDao.class.getName());
+//		 List<Map<String, Object>> relationList = relationDao.findRelation_chart_crm(employeeNo,area_id);
+//		 maps.put("orderList", orderList);
+//		 maps.put("relationList", relationList);
+//	     return maps;
+//	}
 
 	
 	@Override

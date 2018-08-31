@@ -81,5 +81,14 @@ public interface MassOrderDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> queryPlatformidByCode(String storeno);
+
+	/**
+	 * @Description app 查询门店国安侠的送单量
+	 * @author gbl
+	 * @date 2018/8/31 15:39
+	 **/
+
+	public List<Map<String, Object>> queryEmployeeOrderCountByStore(String storeId);
+
 	
 }

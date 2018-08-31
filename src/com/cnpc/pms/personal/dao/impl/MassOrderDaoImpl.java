@@ -656,4 +656,27 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 		return order_obj;
 	}
 
+	@Override
+	public List<Map<String, Object>> queryEmployeeOrderCountByStore(String storeId) {
+		String sql = "select a.info_employee_a_no,th.name as employee_name,count(1) AS count from (select  tor.info_employee_a_no,tor.order_sn" +
+				" from df_mass_order_monthly tor where  tor.customer_id not like 'fakecustomer%'" +
+				" and DATE_FORMAT(tor.sign_time,'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')"+
+				" and tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA' and tor.info_employee_a_no is not null" +
+				" and tor.store_name NOT LIKE '%测试%' and tor.store_white!='QA' AND tor.store_status =0 and " +
+				" tor.store_id='"+storeId+"'" +
+				" union all" +
+				" select  tor.info_employee_a_no,tor.order_sn" +
+				" from df_mass_order_monthly tor where  tor.customer_id not like 'fakecustomer%'" +
+				" and DATE_FORMAT(tor.sign_time,'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')" +
+				" and tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA' and tor.info_employee_a_no is not null" +
+				" and tor.store_name NOT LIKE '%测试%' and tor.store_white!='QA' AND tor.store_status =0 AND tor.normal_store_id ='"+storeId+"'" +
+				") a left join t_humanresources th on   a.info_employee_a_no = th.employee_no group by a.info_employee_a_no ";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		Map<String, Object> order_obj = null;
+		List<Map<String,Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
 }

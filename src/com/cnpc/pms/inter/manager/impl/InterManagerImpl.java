@@ -237,23 +237,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
         return map;
     }
 //查询门店的所有数据
-    @Override
-    public Map<String, Object> getExpressAndCustomerStoreCount(Long store_id) {
-        Map<String,Object> map = new HashMap<String, Object>();
-        InterDao interDao = (InterDao) SpringHelper.getBean(InterDao.class.getName());
-        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-        map.put("Express",interDao.getExpressStoreCountByCurrentMonth(store_id));
-        map.put("Customer",interDao.getCustomerStoreCountByCurrentMonth(store_id,null));
-        map.put("Relation",interDao.getRelationStoreCountByCurrentMonth(store_id));
-        Store store = storeManager.findStore(store_id);
-        if(store != null && store.getPlatformid() != null){
-            map.put("Order",orderManager.getOrderCount(store.getPlatformid(),null,null));
-        }else{
-            map.put("Order",0);
-        }
-        return map;
-    }
+//    @Override
+//    public Map<String, Object> getExpressAndCustomerStoreCount(Long store_id) {
+//        Map<String,Object> map = new HashMap<String, Object>();
+//        InterDao interDao = (InterDao) SpringHelper.getBean(InterDao.class.getName());
+//        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//        map.put("Express",interDao.getExpressStoreCountByCurrentMonth(store_id));
+//        map.put("Customer",interDao.getCustomerStoreCountByCurrentMonth(store_id,null));
+//        map.put("Relation",interDao.getRelationStoreCountByCurrentMonth(store_id));
+//        Store store = storeManager.findStore(store_id);
+//        if(store != null && store.getPlatformid() != null){
+//            map.put("Order",orderManager.getOrderCount(store.getPlatformid(),null,null));
+//        }else{
+//            map.put("Order",0);
+//        }
+//        return map;
+//    }
     
     
     
@@ -276,25 +276,25 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
         return map;
     }
 
-    @Override
-    public Map<String, Object> getExpressAndCustomerStoreCountNew(Express express) {
-        Map<String,Object> map = new HashMap<String, Object>();
-        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-        InterDao interDao = (InterDao) SpringHelper.getBean(InterDao.class.getName());
-        map.put("Express",interDao.getExpressStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));//快递
-        map.put("Customer",interDao.getCustomerStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user(),express.getExpress_no()));//用户画像
-        map.put("Relation",interDao.getRelationStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));
-        map.put("XXExpress",interDao.getXXExpressStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));
-        map.put("SelfRelation",interDao.getSelfExpressStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));
-        Store store = storeManager.findStore(express.getStore_id());
-        if(store != null && store.getPlatformid() != null){
-            map.put("Order",orderManager.getOrderCount(store.getPlatformid(),null,express.getUpdate_user()));
-        }else{
-            map.put("Order",0);
-        }
-        return map;
-    }
+//    @Override
+//    public Map<String, Object> getExpressAndCustomerStoreCountNew(Express express) {
+//        Map<String,Object> map = new HashMap<String, Object>();
+//        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//        InterDao interDao = (InterDao) SpringHelper.getBean(InterDao.class.getName());
+//        map.put("Express",interDao.getExpressStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));//快递
+//        map.put("Customer",interDao.getCustomerStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user(),express.getExpress_no()));//用户画像
+//        map.put("Relation",interDao.getRelationStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));
+//        map.put("XXExpress",interDao.getXXExpressStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));
+//        map.put("SelfRelation",interDao.getSelfExpressStoreCountByCurrentMonth(express.getStore_id(),express.getUpdate_user()));
+//        Store store = storeManager.findStore(express.getStore_id());
+//        if(store != null && store.getPlatformid() != null){
+//            map.put("Order",orderManager.getOrderCount(store.getPlatformid(),null,express.getUpdate_user()));
+//        }else{
+//            map.put("Order",0);
+//        }
+//        return map;
+//    }
 
     @Override
     public Result getCustomerListForMonth(Customer customer) {
@@ -499,40 +499,40 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
         return map_result;
 	}
 
-    @Override
-    public Map<String, Object> queryOrderDataCardList(QueryConditions conditions) {
-
-        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-
-        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-        Long store_id = null;
-        String store_code = null;
-        String date_valler=null;
-        //分页对象
-        PageInfo obj_page = conditions.getPageinfo();
-
-        Store store = null;
-
-        for(Map<String,Object> map_condition : conditions.getConditions()){
-            if("store_id".equals(map_condition.get("key")) && ValueUtil.checkValue(map_condition.get("value"))){
-                store_id = Long.valueOf(map_condition.get("value").toString());
-                store = storeManager.findStore(store_id);
-            }
-
-            if("date_valler".equals(map_condition.get("key")) && ValueUtil.checkValue(map_condition.get("value"))){
-                date_valler = map_condition.get("value").toString();
-            }
-        }
-        if(store == null || store.getPlatformid() == null){
-            Map<String,Object> map_result = new HashMap<String, Object>();
-            map_result.put("pageinfo", obj_page);
-            map_result.put("header", "");
-            map_result.put("data", new ArrayList<Map<String,Object>>());
-            return map_result;
-        }
-        store_code = store.getPlatformid();
-        return orderManager.queryOrderEmployeeCountByStore(obj_page,store_code,date_valler);
-    }
+//    @Override
+//    public Map<String, Object> queryOrderDataCardList(QueryConditions conditions) {
+//
+//        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//
+//        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//        Long store_id = null;
+//        String store_code = null;
+//        String date_valler=null;
+//        //分页对象
+//        PageInfo obj_page = conditions.getPageinfo();
+//
+//        Store store = null;
+//
+//        for(Map<String,Object> map_condition : conditions.getConditions()){
+//            if("store_id".equals(map_condition.get("key")) && ValueUtil.checkValue(map_condition.get("value"))){
+//                store_id = Long.valueOf(map_condition.get("value").toString());
+//                store = storeManager.findStore(store_id);
+//            }
+//
+//            if("date_valler".equals(map_condition.get("key")) && ValueUtil.checkValue(map_condition.get("value"))){
+//                date_valler = map_condition.get("value").toString();
+//            }
+//        }
+//        if(store == null || store.getPlatformid() == null){
+//            Map<String,Object> map_result = new HashMap<String, Object>();
+//            map_result.put("pageinfo", obj_page);
+//            map_result.put("header", "");
+//            map_result.put("data", new ArrayList<Map<String,Object>>());
+//            return map_result;
+//        }
+//        store_code = store.getPlatformid();
+//        return orderManager.queryOrderEmployeeCountByStore(obj_page,store_code,date_valler);
+//    }
 
     
     /**
@@ -689,23 +689,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
         return lst_data;
 	}
 
-    @Override
-    public List<Map<String, Object>> queryOrderListDataByStore(Express express) {
-
-
-        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-
-        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-        //分页对象
-
-        Store store = storeManager.findStore(express.getStore_id());
-
-
-        if(store == null || store.getPlatformid() == null){
-            return new ArrayList<Map<String,Object>>();
-        }
-        return orderManager.getOrderEmployeeData(store.getPlatformid(),express.getUpdate_user());
-    }
+//    @Override
+//    public List<Map<String, Object>> queryOrderListDataByStore(Express express) {
+//
+//
+//        OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//
+//        StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//        //分页对象
+//
+//        Store store = storeManager.findStore(express.getStore_id());
+//
+//
+//        if(store == null || store.getPlatformid() == null){
+//            return new ArrayList<Map<String,Object>>();
+//        }
+//        return orderManager.getOrderEmployeeData(store.getPlatformid(),express.getUpdate_user());
+//    }
 
     @Override
 	public List<Map<String, Object>> queryRelationListDataByEmployee(Express express) {
@@ -1030,39 +1030,39 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
         return null;
     }
 	
-	/**
-     * APP 分片查询订单信息
-     * @param employee_no
-	 * @param pageInfo
-	 * @return
-	 */
-    @Override
-    public Result queryOrderListAppByArea(Long store_id,String employee_no,PageInfo pageInfo,Long area_id){
-    	Result result = new Result();
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	Map<String, Object> retMap = null;
-    	try {
-    		User user = null;
-    		if(employee_no==null){
-    			user = new User();
-    			user.setStore_id(store_id);
-    		}else{
-    			user = userManager.findEmployeeByEmployeeNo(employee_no);
-    		}
-        	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
-        	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
-        	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
-        	retMap = orderDao.queryOrderListByArea(store.get("platformid").toString(), area_names,pageInfo);
-        	result.setDataMap(retMap);
-        	result.setCode(CodeEnum.success.getValue()); 
-            result.setMessage(CodeEnum.success.getDescription());
-    	} catch (Exception e) {
-			e.printStackTrace();
-		}
-        return result;
-    }
+//	/**
+//     * APP 分片查询订单信息
+//     * @param employee_no
+//	 * @param pageInfo
+//	 * @return
+//	 */
+//    @Override
+//    public Result queryOrderListAppByArea(Long store_id,String employee_no,PageInfo pageInfo,Long area_id){
+//    	Result result = new Result();
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	Map<String, Object> retMap = null;
+//    	try {
+//    		User user = null;
+//    		if(employee_no==null){
+//    			user = new User();
+//    			user.setStore_id(store_id);
+//    		}else{
+//    			user = userManager.findEmployeeByEmployeeNo(employee_no);
+//    		}
+//        	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
+//        	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+//        	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
+//        	retMap = orderDao.queryOrderListByArea(store.get("platformid").toString(), area_names,pageInfo);
+//        	result.setDataMap(retMap);
+//        	result.setCode(CodeEnum.success.getValue());
+//            result.setMessage(CodeEnum.success.getDescription());
+//    	} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//        return result;
+//    }
 	
 	/**
 	 * APP 查询当前登录国安侠a的 当月的  所有快递信息
@@ -1300,29 +1300,29 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	}
 	
     
-    /**
-     * APP手机国安侠分片 查询五个月的图表
-     */
-    @Override
-    public Result queryOrderFiveMonth(Long store_id,String employee_no,Long area_id){
-    	Result result = new Result();
-    	Map<String,Object> map = new HashMap<String,Object>();
-    	try {
-    		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-    		List<Map<String, Object>> mapList = orderManager.queryOrderFiveMonth(store_id,employee_no,area_id);
-    		map.put("order_count", mapList);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.setDataMap(null);
-			result.setCode(CodeEnum.error.getValue());
-			result.setMessage(CodeEnum.error.getDescription());
-			return result;
-		}
-    	result.setDataMap(map);
-		result.setCode(CodeEnum.success.getValue());
-		result.setMessage(CodeEnum.success.getDescription());
-    	return result;
-    }
+//    /**
+//     * APP手机国安侠分片 查询五个月的图表
+//     */
+//    @Override
+//    public Result queryOrderFiveMonth(Long store_id,String employee_no,Long area_id){
+//    	Result result = new Result();
+//    	Map<String,Object> map = new HashMap<String,Object>();
+//    	try {
+//    		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//    		List<Map<String, Object>> mapList = orderManager.queryOrderFiveMonth(store_id,employee_no,area_id);
+//    		map.put("order_count", mapList);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			result.setDataMap(null);
+//			result.setCode(CodeEnum.error.getValue());
+//			result.setMessage(CodeEnum.error.getDescription());
+//			return result;
+//		}
+//    	result.setDataMap(map);
+//		result.setCode(CodeEnum.success.getValue());
+//		result.setMessage(CodeEnum.success.getDescription());
+//    	return result;
+//    }
 
     
     
@@ -1352,31 +1352,31 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     	return result;
     }
     
-    /**
-     * APP端，个人中心 根据员工号 查询订单图表 
-     * @param employee_no
-     * @return
-     */
-    @Override
-    public Result queryOrderFiveMonthOrderApp(String employee_no){
-    	Result result = new Result();
-    	Map<String,Object> map = new HashMap<String, Object>();
-    	try {
-    		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-    		List<Map<String, Object>> mapList = orderManager.queryOrderFiveMonthOrderApp(employee_no);
-    		map.put("order_list", mapList);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.setDataMap(null);
-			result.setCode(CodeEnum.error.getValue());
-			result.setMessage(CodeEnum.error.getDescription());
-			return result;
-		}
-    	result.setDataMap(map);
-		result.setCode(CodeEnum.success.getValue());
-		result.setMessage(CodeEnum.success.getDescription());
-    	return result;
-    }
+//    /**
+//     * APP端，个人中心 根据员工号 查询订单图表
+//     * @param employee_no
+//     * @return
+//     */
+//    @Override
+//    public Result queryOrderFiveMonthOrderApp(String employee_no){
+//    	Result result = new Result();
+//    	Map<String,Object> map = new HashMap<String, Object>();
+//    	try {
+//    		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//    		List<Map<String, Object>> mapList = orderManager.queryOrderFiveMonthOrderApp(employee_no);
+//    		map.put("order_list", mapList);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			result.setDataMap(null);
+//			result.setCode(CodeEnum.error.getValue());
+//			result.setMessage(CodeEnum.error.getDescription());
+//			return result;
+//		}
+//    	result.setDataMap(map);
+//		result.setCode(CodeEnum.success.getValue());
+//		result.setMessage(CodeEnum.success.getDescription());
+//    	return result;
+//    }
     
     
 
@@ -1592,34 +1592,34 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 		
 	}
 
+
 	
-	
-	/**
-	 * app_CRM店长 查询 当年 每月 订单数量及金额 图表用
-	 * @param store_id
-	 * @return
-	 */
-	@Override
-	public Result queryOrderInfoOfYear_crm_app(Long storeId) {
-		Result result = new Result();
-		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-		Map<String, Object> teMap = orderManager.queryOrderCountByMonthStoreId(storeId);
-		result.setData(teMap);
-		return result;
-	}
+//	/**
+//	 * app_CRM店长 查询 当年 每月 订单数量及金额 图表用
+//	 * @param store_id
+//	 * @return
+//	 */
+//	@Override
+//	public Result queryOrderInfoOfYear_crm_app(Long storeId) {
+//		Result result = new Result();
+//		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//		Map<String, Object> teMap = orderManager.queryOrderCountByMonthStoreId(storeId);
+//		result.setData(teMap);
+//		return result;
+//	}
 	/**
 	 * app_CRM店长 查询 分片区订单统计数量 以及 统计金额 图表用
 	 * @param store_id
 	 * @return
 	 */
-	@Override
-	public Result queryOrderTotalByArea_crm_app(Long store_id){
-		Result result = new Result();
-		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-		Map<String, Object> teMap = orderManager.queryOrderTotalByArea(store_id);
-		result.setData(teMap);
-		return result;
-	}
+//	@Override
+//	public Result queryOrderTotalByArea_crm_app(Long store_id){
+//		Result result = new Result();
+//		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//		Map<String, Object> teMap = orderManager.queryOrderTotalByArea(store_id);
+//		result.setData(teMap);
+//		return result;
+//	}
 	
 	/**
 	 * app_crm店长 根据门店 查询 送单量 图表用

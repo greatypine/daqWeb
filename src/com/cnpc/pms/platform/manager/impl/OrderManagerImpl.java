@@ -10,6 +10,7 @@ import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.inter.dao.InterDao;
 import com.cnpc.pms.personal.dao.DsAbnormalOrderDao;
+import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.entity.Humanresources;
 import com.cnpc.pms.personal.entity.Store;
@@ -36,45 +37,45 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 
 	private static Log logger = LogFactory.getLog(OrderManagerImpl.class);
 
-    @Override
-    public int getOrderCount(String store_id,String employee_id,String year_month) {
-        OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
-        return orderDao.getOrderCount(store_id,employee_id,year_month);
-    }
+//    @Override
+//    public int getOrderCount(String store_id,String employee_id,String year_month) {
+//        OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+//        return orderDao.getOrderCount(store_id,employee_id,year_month);
+//    }
 
-    @Override
-    public Map<String, Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value) {
-        OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
-        return orderDao.queryOrderEmployeeCountByStore(pageInfo,store_id,date_value);
-    }
+//    @Override
+//    public Map<String, Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value) {
+//        OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+//        return orderDao.queryOrderEmployeeCountByStore(pageInfo,store_id,date_value);
+//    }
 
-    @Override
-    public List<Map<String, Object>> getOrderEmployeeData(String store_id, String date_value) {
-        OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
-        return orderDao.getOrderEmployeeData(store_id,date_value);
-    }
+//    @Override
+//    public List<Map<String, Object>> getOrderEmployeeData(String store_id, String date_value) {
+//        OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+//        return orderDao.getOrderEmployeeData(store_id,date_value);
+//    }
     
-    /**
-     * PC 分片查询订单信息
-     */
-    @Override
-    public Map<String, Object> queryOrderListByArea(String employee_no,PageInfo pageInfo,Long area_id){
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	
-    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	User user = null;
-    	if(employee_no==null){
-    		user = new User();
-    		user.setStore_id(userManager.getCurrentUserDTO().getStore_id());
-    	}else{
-    		user = userManager.findEmployeeByEmployeeNo(employee_no);
-    	}
-    	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
-    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
-    	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
-    	return orderDao.queryOrderListByArea(store.get("platformid").toString(), area_names,pageInfo);
-    }
+//    /**
+//     * PC 分片查询订单信息
+//     */
+//    @Override
+//    public Map<String, Object> queryOrderListByArea(String employee_no,PageInfo pageInfo,Long area_id){
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//
+//    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	User user = null;
+//    	if(employee_no==null){
+//    		user = new User();
+//    		user.setStore_id(userManager.getCurrentUserDTO().getStore_id());
+//    	}else{
+//    		user = userManager.findEmployeeByEmployeeNo(employee_no);
+//    	}
+//    	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
+//    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+//    	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
+//    	return orderDao.queryOrderListByArea(store.get("platformid").toString(), area_names,pageInfo);
+//    }
     
     
     
@@ -100,58 +101,58 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     	
     }
     
-    @Override
-    public List<Map<String, Object>> queryOrderFourMonth(String employee_no,Long area_id){
-    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-    	UserDTO userDTO = userManager.getCurrentUserDTO();
-    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
-    	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	Map<String, Object> store = storeManager.getStoreById(userDTO.getStore_id());
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	List<Map<String, Object>> lst_list = orderDao.queryOrderFourMonth(store.get("platformid").toString(), area_names);
-    	return lst_list;
-    }
+//    @Override
+//    public List<Map<String, Object>> queryOrderFourMonth(String employee_no,Long area_id){
+//    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+//    	UserDTO userDTO = userManager.getCurrentUserDTO();
+//    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+//    	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	Map<String, Object> store = storeManager.getStoreById(userDTO.getStore_id());
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	List<Map<String, Object>> lst_list = orderDao.queryOrderFourMonth(store.get("platformid").toString(), area_names);
+//    	return lst_list;
+//    }
     
     
     
-    /**
-     * APP手机国安侠分片 查询五个月的图表
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderFiveMonth(Long store_id,String employee_no,Long area_id){
-    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
-    	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	User user = null;
-    	if(employee_no==null){
-    		user = new User();
-    		user.setStore_id(store_id);
-    	}else{
-    		user = userManager.findEmployeeByEmployeeNo(employee_no);
-    	}
-    	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	List<Map<String, Object>> lst_list = orderDao.queryOrderFiveMonth(store.get("platformid").toString(), area_names);
-    	return lst_list;
-    }
+//    /**
+//     * APP手机国安侠分片 查询五个月的图表
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderFiveMonth(Long store_id,String employee_no,Long area_id){
+//    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+//    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+//    	String area_names = areaDao.querytinvillagebyemployeeno(employee_no,area_id);
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	User user = null;
+//    	if(employee_no==null){
+//    		user = new User();
+//    		user.setStore_id(store_id);
+//    	}else{
+//    		user = userManager.findEmployeeByEmployeeNo(employee_no);
+//    	}
+//    	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	List<Map<String, Object>> lst_list = orderDao.queryOrderFiveMonth(store.get("platformid").toString(), area_names);
+//    	return lst_list;
+//    }
     
     
     
-    /**
-     * APP手机国安侠 个人中心 不分片 查询五个月的图表
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String employee_no){
-    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	User user = userManager.findEmployeeByEmployeeNo(employee_no);
-    	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	List<Map<String, Object>> lst_list = orderDao.queryOrderFiveMonthOrderApp(store.get("platformid").toString(), employee_no);
-    	return lst_list;
-    }
+//    /**
+//     * APP手机国安侠 个人中心 不分片 查询五个月的图表
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String employee_no){
+//    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	User user = userManager.findEmployeeByEmployeeNo(employee_no);
+//    	Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	List<Map<String, Object>> lst_list = orderDao.queryOrderFiveMonthOrderApp(store.get("platformid").toString(), employee_no);
+//    	return lst_list;
+//    }
     
     
     
@@ -168,12 +169,12 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     	try {
 			String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
 			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
-			Map<String, Object> orderFlow = orderDao.getOrderFlow(order_id, "signed");
-			if(orderFlow==null){
-				order_obj.put("receivedTime","");
-			}else{
-				order_obj.put("receivedTime",orderFlow.get("create_time"));
-			}
+//			Map<String, Object> orderFlow = orderDao.getOrderFlow(order_id, "signed");
+//			if(orderFlow==null){
+//				order_obj.put("receivedTime","");
+//			}else{
+//				order_obj.put("receivedTime",orderFlow.get("create_time"));
+//			}
 			order_obj.put("item_list", item_list);
 			order_obj.put("create_time", order_obj.get("create_time"));
 		}catch (Exception e){
@@ -193,11 +194,11 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
      */
     @Override
     public Map<String, Object> queryOrderCountByStoreId(Long store_id){
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+		MassOrderDao massOrderDao = (MassOrderDao) SpringHelper.getBean(MassOrderDao.class.getName());
     	Map<String, Object> map = new HashMap<String, Object>();
     	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
     	Store store = storeManager.findStore(store_id);
-    	List<Map<String, Object>> order_List = orderDao.queryOrderCountByStoreId(store.getPlatformid());
+    	List<Map<String, Object>> order_List = massOrderDao.queryEmployeeOrderCountByStore(store.getPlatformid());
     	map.put("orders", order_List);
     	return map;
     	
@@ -205,183 +206,183 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     
     
     
-    /**
-     * CRM店长图表 根据门店及片区，查询所有订单数据
-     * @param store_id
-     */
-    @Override
-    public Map<String, Object> queryOrderTotalByArea(Long store_id){
-    	Map<String, Object> map = new HashMap<String, Object>();
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	Store store = storeManager.findStore(store_id);
-    	//门店下的 所有的 小区 名称
-    	List<Map<String, Object>> tinyList = areaDao.queryTinVillageByStoreId(store_id);
-    	StringBuffer ret = new StringBuffer();
-    	String area_name = null;
-    	Set<String> sets = new HashSet<String>();
-        if(tinyList!=null&&tinyList.size()>0){
-        	for(Map<String, Object> obj : tinyList){
-        		Object  o = obj.get("tiny_name");
-        		Object areaname = obj.get("name");
-        		if(o!=null&&o.toString().length()>0){
-        			ret.append("'");
-        			ret.append(o.toString());
-        			ret.append("',");
-        		}
-        		if(areaname!=null&&areaname.toString().length()>0){
-        			sets.add(areaname.toString());
-        		}
-        	}
-        }
-        if(ret!=null&&ret.length()>0){
-        	area_name = ret.toString().substring(0,ret.toString().length()-1);
-        }
-    	//根据门店及所有小区 的订单总数 及总钱数
-    	List<Map<String, Object>> orderList = orderDao.queryOrderListByArea(store.getPlatformid(), area_name);
-    	
-    	List<Map<String, Object>> retList = new ArrayList<Map<String,Object>>();
-    	for(String areaname:sets){
-    		Map<String, Object> onearea = new HashMap<String, Object>();
-    		int count = 0;
-    		double price = 0;
-    		for(Map<String, Object> obj:orderList){
-    			String place = obj.get("placename").toString();
-    			int ordercount = obj.get("ordercount")==null?0:Integer.parseInt(obj.get("ordercount").toString());
-    			double orderprice = obj.get("total_price")==null?0:Double.parseDouble(obj.get("total_price").toString());
-    			String areaplace = "";
-    			for(Map<String, Object> tinObj : tinyList){
-    				Object  o = tinObj.get("tiny_name");
-    				if(place!=null&&place.equals(o.toString())){
-    					areaplace = tinObj.get("name").toString();
-            		}
-    			}
-    			
-    			if(areaname.equals(areaplace)){
-    				count = count + ordercount;
-    				price = price + orderprice;
-    			}
-    		}
-    		
-    		BigDecimal b = new BigDecimal(price);
-    		int price_ret = b.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
-    		
-    		onearea.put("placename", areaname);
-    		onearea.put("ordercount", count);
-    		onearea.put("total_price", price_ret);
-    		retList.add(onearea);
-    	}
-    	map.put("areacount", retList);
-    	return map;
-    }
+//    /**
+//     * CRM店长图表 根据门店及片区，查询所有订单数据
+//     * @param store_id
+//     */
+//    @Override
+//    public Map<String, Object> queryOrderTotalByArea(Long store_id){
+//    	Map<String, Object> map = new HashMap<String, Object>();
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	Store store = storeManager.findStore(store_id);
+//    	//门店下的 所有的 小区 名称
+//    	List<Map<String, Object>> tinyList = areaDao.queryTinVillageByStoreId(store_id);
+//    	StringBuffer ret = new StringBuffer();
+//    	String area_name = null;
+//    	Set<String> sets = new HashSet<String>();
+//        if(tinyList!=null&&tinyList.size()>0){
+//        	for(Map<String, Object> obj : tinyList){
+//        		Object  o = obj.get("tiny_name");
+//        		Object areaname = obj.get("name");
+//        		if(o!=null&&o.toString().length()>0){
+//        			ret.append("'");
+//        			ret.append(o.toString());
+//        			ret.append("',");
+//        		}
+//        		if(areaname!=null&&areaname.toString().length()>0){
+//        			sets.add(areaname.toString());
+//        		}
+//        	}
+//        }
+//        if(ret!=null&&ret.length()>0){
+//        	area_name = ret.toString().substring(0,ret.toString().length()-1);
+//        }
+//    	//根据门店及所有小区 的订单总数 及总钱数
+//    	List<Map<String, Object>> orderList = orderDao.queryOrderListByArea(store.getPlatformid(), area_name);
+//
+//    	List<Map<String, Object>> retList = new ArrayList<Map<String,Object>>();
+//    	for(String areaname:sets){
+//    		Map<String, Object> onearea = new HashMap<String, Object>();
+//    		int count = 0;
+//    		double price = 0;
+//    		for(Map<String, Object> obj:orderList){
+//    			String place = obj.get("placename").toString();
+//    			int ordercount = obj.get("ordercount")==null?0:Integer.parseInt(obj.get("ordercount").toString());
+//    			double orderprice = obj.get("total_price")==null?0:Double.parseDouble(obj.get("total_price").toString());
+//    			String areaplace = "";
+//    			for(Map<String, Object> tinObj : tinyList){
+//    				Object  o = tinObj.get("tiny_name");
+//    				if(place!=null&&place.equals(o.toString())){
+//    					areaplace = tinObj.get("name").toString();
+//            		}
+//    			}
+//
+//    			if(areaname.equals(areaplace)){
+//    				count = count + ordercount;
+//    				price = price + orderprice;
+//    			}
+//    		}
+//
+//    		BigDecimal b = new BigDecimal(price);
+//    		int price_ret = b.setScale(0, BigDecimal.ROUND_HALF_UP).intValue();
+//
+//    		onearea.put("placename", areaname);
+//    		onearea.put("ordercount", count);
+//    		onearea.put("total_price", price_ret);
+//    		retList.add(onearea);
+//    	}
+//    	map.put("areacount", retList);
+//    	return map;
+//    }
     
     
-    /**
-     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
-     * @param store_id
-     */
-    @Override
-    public Map<String, Object> queryOrderCountByMonthStoreId(Long store_id){
-    	Map<String, Object> map = new HashMap<String, Object>();
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	Store store = storeManager.findStore(store_id);
-    	List<Map<String, Object>> maps = orderDao.queryOrderCountByMonthStoreId(store.getPlatformid());
-    	map.put("ordermonth", maps);
-    	return map;
-    }
+//    /**
+//     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
+//     * @param store_id
+//     */
+//    @Override
+//    public Map<String, Object> queryOrderCountByMonthStoreId(Long store_id){
+//    	Map<String, Object> map = new HashMap<String, Object>();
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	Store store = storeManager.findStore(store_id);
+//    	List<Map<String, Object>> maps = orderDao.queryOrderCountByMonthStoreId(store.getPlatformid());
+//    	map.put("ordermonth", maps);
+//    	return map;
+//    }
 
 	
-	@Override
-	public Map<String, Object> queryOrderTotalOfStore_CSZJ_QYJL(Long cityId,Long employee_no,String role,String q_date) {
-		Map<String, Object> map = new HashMap<String, Object>();
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
-    	List<Map<String, Object>> storeList = storeDao.getAllStoreOfCRM(employee_no, cityId, role);
-    	
-		StringBuilder storeIdSb = new StringBuilder();
-		storeIdSb.append("(");
-		
-		for(int i=0;i<storeList.size();i++){
-			storeIdSb.append("'"+storeList.get(i).get("platformid")+"',");
-		
-		}
-		if(storeIdSb.indexOf(",")>0){
-			storeIdSb = storeIdSb.deleteCharAt(storeIdSb.length()-1);
-		}else{
-			storeIdSb.append("''");
-		}
-		
-		storeIdSb.append(")");
-    	List<Map<String, Object>> orderList = orderDao.queryOrderListOfStore_CSZJ_QYJL(storeIdSb);
-    	for(int j=0;j<storeList.size();j++){
-    		Map<String,Object> storeMap = storeList.get(j);
-    		String platformid = storeMap.get("platformid").toString();
-    		storeMap.put("ordercount",0);
-			storeMap.put("total_price",0);
-    		for(int m=0;m<orderList.size();m++){
-    			Map<String,Object> tempMap = orderList.get(m);
-    			String storeId = tempMap.get("store_id").toString();
-    			
-    			if(platformid.equals(storeId)){
-    				storeMap.put("ordercount",tempMap.get("ordercount"));
-    				storeMap.put("total_price",tempMap.get("total_price"));
-    				break;
-    			}
-    		}
-        }
-    	map.put("ordercount", storeList);
-    	return map;
-	}
+//	@Override
+//	public Map<String, Object> queryOrderTotalOfStore_CSZJ_QYJL(Long cityId,Long employee_no,String role,String q_date) {
+//		Map<String, Object> map = new HashMap<String, Object>();
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+//    	List<Map<String, Object>> storeList = storeDao.getAllStoreOfCRM(employee_no, cityId, role);
+//
+//		StringBuilder storeIdSb = new StringBuilder();
+//		storeIdSb.append("(");
+//
+//		for(int i=0;i<storeList.size();i++){
+//			storeIdSb.append("'"+storeList.get(i).get("platformid")+"',");
+//
+//		}
+//		if(storeIdSb.indexOf(",")>0){
+//			storeIdSb = storeIdSb.deleteCharAt(storeIdSb.length()-1);
+//		}else{
+//			storeIdSb.append("''");
+//		}
+//
+//		storeIdSb.append(")");
+//    	List<Map<String, Object>> orderList = orderDao.queryOrderListOfStore_CSZJ_QYJL(storeIdSb);
+//    	for(int j=0;j<storeList.size();j++){
+//    		Map<String,Object> storeMap = storeList.get(j);
+//    		String platformid = storeMap.get("platformid").toString();
+//    		storeMap.put("ordercount",0);
+//			storeMap.put("total_price",0);
+//    		for(int m=0;m<orderList.size();m++){
+//    			Map<String,Object> tempMap = orderList.get(m);
+//    			String storeId = tempMap.get("store_id").toString();
+//
+//    			if(platformid.equals(storeId)){
+//    				storeMap.put("ordercount",tempMap.get("ordercount"));
+//    				storeMap.put("total_price",tempMap.get("total_price"));
+//    				break;
+//    			}
+//    		}
+//        }
+//    	map.put("ordercount", storeList);
+//    	return map;
+//	}
 
 	
-	@Override
-	public Map<String, Object> queryOrderCountOfMonth_CSZJ_QYJL(Long cityId, Long employee_no, String role) {
-		Map<String, Object> map = new HashMap<String, Object>();
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
-    	List<Map<String, Object>> storeList = storeDao.getAllStoreOfCRM(employee_no, cityId, role);
-    	
-		StringBuilder storeIdSb = new StringBuilder();
-		storeIdSb.append("(");
-		
-		for(int i=0;i<storeList.size();i++){
-			storeIdSb.append("'"+storeList.get(i).get("platformid")+"',");
-		
-		}
-		if(storeIdSb.indexOf(",")>0){
-			storeIdSb = storeIdSb.deleteCharAt(storeIdSb.length()-1);
-		}else{
-			storeIdSb.append("''");
-		}
-		
-		storeIdSb.append(")");
-    	List<Map<String, Object>> orderList = orderDao.queryOrderCountOfMonth_CSZJ_QYJL(storeIdSb);
-    	
-    	Calendar cal = Calendar.getInstance();
-		int month = cal.get(Calendar.MONTH) + 1;
-		List<Map<String, Object>> o_List = new ArrayList<Map<String,Object>>();
-		for(int i=1;i<=month;i++){
-			String monthStr = i+"月";
-			Map<String, Object> orderMap = new HashMap<String,Object>();
-			orderMap.put("total_count", 0);
-			orderMap.put("total_price", 0);
-			orderMap.put("date", monthStr);
-			o_List.add(orderMap);
-			for(Map rMap:orderList){
-				if(monthStr.equals(rMap.get("order_date"))){
-					orderMap.put("total_count", rMap.get("ordercount"));
-					orderMap.put("total_price", rMap.get("total_price"));
-					break;
-				}
-				
-			}
-		}
-		
-		map.put("ordermonth", o_List);
-		return map;
-	}
+//	@Override
+//	public Map<String, Object> queryOrderCountOfMonth_CSZJ_QYJL(Long cityId, Long employee_no, String role) {
+//		Map<String, Object> map = new HashMap<String, Object>();
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	StoreDao storeDao = (StoreDao) SpringHelper.getBean(StoreDao.class.getName());
+//    	List<Map<String, Object>> storeList = storeDao.getAllStoreOfCRM(employee_no, cityId, role);
+//
+//		StringBuilder storeIdSb = new StringBuilder();
+//		storeIdSb.append("(");
+//
+//		for(int i=0;i<storeList.size();i++){
+//			storeIdSb.append("'"+storeList.get(i).get("platformid")+"',");
+//
+//		}
+//		if(storeIdSb.indexOf(",")>0){
+//			storeIdSb = storeIdSb.deleteCharAt(storeIdSb.length()-1);
+//		}else{
+//			storeIdSb.append("''");
+//		}
+//
+//		storeIdSb.append(")");
+//    	List<Map<String, Object>> orderList = orderDao.queryOrderCountOfMonth_CSZJ_QYJL(storeIdSb);
+//
+//    	Calendar cal = Calendar.getInstance();
+//		int month = cal.get(Calendar.MONTH) + 1;
+//		List<Map<String, Object>> o_List = new ArrayList<Map<String,Object>>();
+//		for(int i=1;i<=month;i++){
+//			String monthStr = i+"月";
+//			Map<String, Object> orderMap = new HashMap<String,Object>();
+//			orderMap.put("total_count", 0);
+//			orderMap.put("total_price", 0);
+//			orderMap.put("date", monthStr);
+//			o_List.add(orderMap);
+//			for(Map rMap:orderList){
+//				if(monthStr.equals(rMap.get("order_date"))){
+//					orderMap.put("total_count", rMap.get("ordercount"));
+//					orderMap.put("total_price", rMap.get("total_price"));
+//					break;
+//				}
+//
+//			}
+//		}
+//
+//		map.put("ordermonth", o_List);
+//		return map;
+//	}
 
 	
 	@Override

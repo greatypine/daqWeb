@@ -885,27 +885,27 @@
   
   /*****************第一张图  区域经理当年订单汇总 开始*******************/
   function showChart_ordermonth(){
-	  var method="queryOrderCountOfMonth_CSZJ_QYJL";
-	  if("prev"==targetMonth){
-		  method="queryOrderCountOfMonth_CSZJ_QYJL_before";
-	  }
-	  doManager("OrderManager", method,[null,curr_user.employeeId,'QYJL'],
-				function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						var result = JSON.parse(data.data);
-						
-						var months = new Array();
-						var totalcounts = new Array();
-						var totalprices = new Array();
-						for(var i=0;i<result.ordermonth.length;i++){
-							months[i]=result.ordermonth[i].month;
-							totalcounts[i]=result.ordermonth[i].total_count;
-							totalprices[i]=result.ordermonth[i].total_price;
-						}
-						option1.series[0].data=totalcounts;
-						option1.series[1].data=totalprices;
-					}
-		},false);
+	  // var method="queryOrderCountOfMonth_CSZJ_QYJL";
+	  // if("prev"==targetMonth){
+		//   method="queryOrderCountOfMonth_CSZJ_QYJL_before";
+	  // }
+	  // doManager("OrderManager", method,[null,curr_user.employeeId,'QYJL'],
+		// 		function(data, textStatus, XMLHttpRequest) {
+		// 			if (data.result) {
+		// 				var result = JSON.parse(data.data);
+		//
+		// 				var months = new Array();
+		// 				var totalcounts = new Array();
+		// 				var totalprices = new Array();
+		// 				for(var i=0;i<result.ordermonth.length;i++){
+		// 					months[i]=result.ordermonth[i].month;
+		// 					totalcounts[i]=result.ordermonth[i].total_count;
+		// 					totalprices[i]=result.ordermonth[i].total_price;
+		// 				}
+		// 				option1.series[0].data=totalcounts;
+		// 				option1.series[1].data=totalprices;
+		// 			}
+		// },false);
   }
   /*****************第一张区域经理当年订单  结束*******************/
   
@@ -952,137 +952,137 @@
   var storeID_Array2 = new Array();
   var storeID_Array2_1 = new Array();
   function showPieChart_StoreOrder(){
-	  var method="queryOrderTotalOfStore_CSZJ_QYJL";
-	  if("prev"==targetMonth){
-		  method="queryOrderTotalOfStore_CSZJ_QYJL_before";
-	  }
-	  doManager("OrderManager", method,[null,curr_user.id,'QYJL',decode64(init_month)],
-				function(data, textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var result = JSON.parse(data.data);
-					var storenames1 = new Array();//前10
-					var storenames1_1 = new Array();//后10
-					var storenames2 = new Array();//前10
-					var storenames2_1 = new Array();//后10
-					var storenames1_storekeeper = new Array();
-					var storenames1_storekeeper_1 = new Array();//后10
-					var storenames2_storekeeper = new Array();//前10
-					var storenames2_storekeeper_1 = new Array();//后10
-					var ordercounts = new Array();//前10
-					var ordercounts_1 = new Array();//后10
-					var pricetotals = new Array();//前10
-					var pricetotals_1 = new Array();//后10
-					var ordercounts_storekeeper = new Array();//前10
-					var ordercounts_storekeeper_1 = new Array();//后10
-					var pricetotals_storekeeper = new Array();//前10
-					var pricetotals_storekeeper_1 = new Array();//后10
-					var orderLen = result.ordercount.length;
-					
-				    for(var i=0;i<orderLen;i++){
-				    	 
-				    	 if(i<10){//前十名
-				    		
-				    		 storenames1[i]=result.ordercount[i].name;
-					    	 ordercounts[i]=result.ordercount[i].ordercount;
-					    	 storeID_Array1[i] = result.ordercount[i].store_id;
-				    		 
-				    		 storenames1_storekeeper[i] = result.ordercount[i].employeeName+"("+result.ordercount[i].name+")";
-				    		 ordercounts_storekeeper[i] = result.ordercount[i].ordercount;
-				    	 }else if(i>9){
-				    		 break;
-				    	 }
-				    	 
-				    	 if(orderLen>10&&orderLen<20&&(orderLen-1-i)>9){//后十名
-				    		 storenames1_1[i]=result.ordercount[orderLen-1-i].name;
-					    	 ordercounts_1[i]=result.ordercount[orderLen-1-i].ordercount;
-					    	 storeID_Array1_1[i] = result.ordercount[orderLen-1-i].store_id;
-				    		 
-				    		 storenames1_storekeeper_1[i] = result.ordercount[orderLen-1-i].employeeName+"("+result.ordercount[i].name+")";
-				    		 ordercounts_storekeeper_1[i] = result.ordercount[orderLen-1-i].ordercount;
-				    	 }
-				    	 
-				    	 if(orderLen>=20){//后十名
-				    		 
-				    		 storenames1_1[i]=result.ordercount[orderLen-1-i].name;
-					    	 ordercounts_1[i]=result.ordercount[orderLen-1-i].ordercount;
-					    	 storeID_Array1_1[i] = result.ordercount[orderLen-1-i].store_id;
-				    		 
-				    		 storenames1_storekeeper_1[i] = result.ordercount[orderLen-1-i].employeeName+"("+result.ordercount[orderLen-1-i].name+")";
-				    		 ordercounts_storekeeper_1[i] = result.ordercount[orderLen-1-i].ordercount;
-				    		
-				    	 }
-				    	 
-				    	
-					}
-				    var orderpriceLen = result.orderprice.length;
-				    for(var i=0;i<result.orderprice.length;i++){
-				    	 
-				    	 if(i<10){
-				    		 storenames2[i]=result.orderprice[i].name;
-					    	 pricetotals[i]=result.orderprice[i].total_price;
-					    	 storeID_Array2[i] = result.orderprice[i].store_id;
-					    	 
-				    		 storenames2_storekeeper[i] = result.orderprice[i].employeeName+"("+result.orderprice[i].name+")";
-				    		 pricetotals_storekeeper[i] = result.orderprice[i].total_price;
-				    	 }else if(i>9){
-				    		 break;
-				    	 }
-				    	 
-				    	 if(orderpriceLen>10&&orderpriceLen<20&&(orderpriceLen-1-i)>9){
-				    		 storenames2_1[i]=result.orderprice[orderpriceLen-1-i].name;
-				    		 pricetotals_1[i]=result.orderprice[orderpriceLen-1-i].total_price;
-					    	 storeID_Array2_1[i] = result.orderprice[orderpriceLen-1-i].store_id;
-				    		 
-					    	 storenames2_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].employeeName+"("+result.orderprice[i].name+")";
-				    		 pricetotals_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].total_price;
-				    	 }
-				    	 
-				    	 if(orderpriceLen>=20){
-				    		 
-				    		 storenames2_1[i]=result.orderprice[orderpriceLen-1-i].name;
-				    		 pricetotals_1[i]=result.orderprice[orderpriceLen-1-i].total_price;
-					    	 storeID_Array2_1[i] = result.orderprice[orderpriceLen-1-i].store_id;
-				    		 
-					    	 storenames2_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].employeeName+"("+result.orderprice[i].name+")";
-				    		 pricetotals_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].total_price;
-				    		
-				    	 }
-					}
-				     
-				    option2.xAxis[0].data=storenames1;
-					option2.series[0].data=ordercounts;
-					myChart2.setOption(option2);  
-					
-					option2_1.xAxis[0].data=storenames1_1;
-					option2_1.series[0].data=ordercounts_1;
-					myChart2_1.setOption(option2_1);
-					
-					option3.xAxis[0].data=storenames2;
-					option3.series[0].data=pricetotals;
-					myChart3.setOption(option3); 
-					
-					option3_1.xAxis[0].data=storenames2_1;
-					option3_1.series[0].data=pricetotals_1;
-					myChart3_1.setOption(option3_1); 
-					
-					option7.xAxis[0].data=storenames1_storekeeper;
-					option7.series[0].data=ordercounts_storekeeper;
-					myChart7.setOption(option7); 
-					
-					option7_1.xAxis[0].data=storenames1_storekeeper_1;
-					option7_1.series[0].data=ordercounts_storekeeper_1;
-					myChart7_1.setOption(option7_1); 
-					
-					option8.xAxis[0].data=storenames2_storekeeper;
-					option8.series[0].data=pricetotals_storekeeper;
-					myChart8.setOption(option8);  
-					
-					option8_1.xAxis[0].data=storenames2_storekeeper_1;
-					option8_1.series[0].data=pricetotals_storekeeper_1;
-					myChart8_1.setOption(option8_1);
-					
-				}
-		},false);
+	  // var method="queryOrderTotalOfStore_CSZJ_QYJL";
+	  // if("prev"==targetMonth){
+		//   method="queryOrderTotalOfStore_CSZJ_QYJL_before";
+	  // }
+	  // doManager("OrderManager", method,[null,curr_user.id,'QYJL',decode64(init_month)],
+		// 		function(data, textStatus, XMLHttpRequest) {
+		// 		if (data.result) {
+		// 			var result = JSON.parse(data.data);
+		// 			var storenames1 = new Array();//前10
+		// 			var storenames1_1 = new Array();//后10
+		// 			var storenames2 = new Array();//前10
+		// 			var storenames2_1 = new Array();//后10
+		// 			var storenames1_storekeeper = new Array();
+		// 			var storenames1_storekeeper_1 = new Array();//后10
+		// 			var storenames2_storekeeper = new Array();//前10
+		// 			var storenames2_storekeeper_1 = new Array();//后10
+		// 			var ordercounts = new Array();//前10
+		// 			var ordercounts_1 = new Array();//后10
+		// 			var pricetotals = new Array();//前10
+		// 			var pricetotals_1 = new Array();//后10
+		// 			var ordercounts_storekeeper = new Array();//前10
+		// 			var ordercounts_storekeeper_1 = new Array();//后10
+		// 			var pricetotals_storekeeper = new Array();//前10
+		// 			var pricetotals_storekeeper_1 = new Array();//后10
+		// 			var orderLen = result.ordercount.length;
+		//
+		// 		    for(var i=0;i<orderLen;i++){
+		//
+		// 		    	 if(i<10){//前十名
+		//
+		// 		    		 storenames1[i]=result.ordercount[i].name;
+		// 			    	 ordercounts[i]=result.ordercount[i].ordercount;
+		// 			    	 storeID_Array1[i] = result.ordercount[i].store_id;
+		//
+		// 		    		 storenames1_storekeeper[i] = result.ordercount[i].employeeName+"("+result.ordercount[i].name+")";
+		// 		    		 ordercounts_storekeeper[i] = result.ordercount[i].ordercount;
+		// 		    	 }else if(i>9){
+		// 		    		 break;
+		// 		    	 }
+		//
+		// 		    	 if(orderLen>10&&orderLen<20&&(orderLen-1-i)>9){//后十名
+		// 		    		 storenames1_1[i]=result.ordercount[orderLen-1-i].name;
+		// 			    	 ordercounts_1[i]=result.ordercount[orderLen-1-i].ordercount;
+		// 			    	 storeID_Array1_1[i] = result.ordercount[orderLen-1-i].store_id;
+		//
+		// 		    		 storenames1_storekeeper_1[i] = result.ordercount[orderLen-1-i].employeeName+"("+result.ordercount[i].name+")";
+		// 		    		 ordercounts_storekeeper_1[i] = result.ordercount[orderLen-1-i].ordercount;
+		// 		    	 }
+		//
+		// 		    	 if(orderLen>=20){//后十名
+		//
+		// 		    		 storenames1_1[i]=result.ordercount[orderLen-1-i].name;
+		// 			    	 ordercounts_1[i]=result.ordercount[orderLen-1-i].ordercount;
+		// 			    	 storeID_Array1_1[i] = result.ordercount[orderLen-1-i].store_id;
+		//
+		// 		    		 storenames1_storekeeper_1[i] = result.ordercount[orderLen-1-i].employeeName+"("+result.ordercount[orderLen-1-i].name+")";
+		// 		    		 ordercounts_storekeeper_1[i] = result.ordercount[orderLen-1-i].ordercount;
+		//
+		// 		    	 }
+		//
+		//
+		// 			}
+		// 		    var orderpriceLen = result.orderprice.length;
+		// 		    for(var i=0;i<result.orderprice.length;i++){
+		//
+		// 		    	 if(i<10){
+		// 		    		 storenames2[i]=result.orderprice[i].name;
+		// 			    	 pricetotals[i]=result.orderprice[i].total_price;
+		// 			    	 storeID_Array2[i] = result.orderprice[i].store_id;
+		//
+		// 		    		 storenames2_storekeeper[i] = result.orderprice[i].employeeName+"("+result.orderprice[i].name+")";
+		// 		    		 pricetotals_storekeeper[i] = result.orderprice[i].total_price;
+		// 		    	 }else if(i>9){
+		// 		    		 break;
+		// 		    	 }
+		//
+		// 		    	 if(orderpriceLen>10&&orderpriceLen<20&&(orderpriceLen-1-i)>9){
+		// 		    		 storenames2_1[i]=result.orderprice[orderpriceLen-1-i].name;
+		// 		    		 pricetotals_1[i]=result.orderprice[orderpriceLen-1-i].total_price;
+		// 			    	 storeID_Array2_1[i] = result.orderprice[orderpriceLen-1-i].store_id;
+		//
+		// 			    	 storenames2_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].employeeName+"("+result.orderprice[i].name+")";
+		// 		    		 pricetotals_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].total_price;
+		// 		    	 }
+		//
+		// 		    	 if(orderpriceLen>=20){
+		//
+		// 		    		 storenames2_1[i]=result.orderprice[orderpriceLen-1-i].name;
+		// 		    		 pricetotals_1[i]=result.orderprice[orderpriceLen-1-i].total_price;
+		// 			    	 storeID_Array2_1[i] = result.orderprice[orderpriceLen-1-i].store_id;
+		//
+		// 			    	 storenames2_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].employeeName+"("+result.orderprice[i].name+")";
+		// 		    		 pricetotals_storekeeper_1[i] = result.orderprice[orderpriceLen-1-i].total_price;
+		//
+		// 		    	 }
+		// 			}
+		//
+		// 		    option2.xAxis[0].data=storenames1;
+		// 			option2.series[0].data=ordercounts;
+		// 			myChart2.setOption(option2);
+		//
+		// 			option2_1.xAxis[0].data=storenames1_1;
+		// 			option2_1.series[0].data=ordercounts_1;
+		// 			myChart2_1.setOption(option2_1);
+		//
+		// 			option3.xAxis[0].data=storenames2;
+		// 			option3.series[0].data=pricetotals;
+		// 			myChart3.setOption(option3);
+		//
+		// 			option3_1.xAxis[0].data=storenames2_1;
+		// 			option3_1.series[0].data=pricetotals_1;
+		// 			myChart3_1.setOption(option3_1);
+		//
+		// 			option7.xAxis[0].data=storenames1_storekeeper;
+		// 			option7.series[0].data=ordercounts_storekeeper;
+		// 			myChart7.setOption(option7);
+		//
+		// 			option7_1.xAxis[0].data=storenames1_storekeeper_1;
+		// 			option7_1.series[0].data=ordercounts_storekeeper_1;
+		// 			myChart7_1.setOption(option7_1);
+		//
+		// 			option8.xAxis[0].data=storenames2_storekeeper;
+		// 			option8.series[0].data=pricetotals_storekeeper;
+		// 			myChart8.setOption(option8);
+		//
+		// 			option8_1.xAxis[0].data=storenames2_storekeeper_1;
+		// 			option8_1.series[0].data=pricetotals_storekeeper_1;
+		// 			myChart8_1.setOption(option8_1);
+		//
+		// 		}
+		// },false);
   }
   /*****************订单数量（按片区排序）柱状图  结束*******************/
   

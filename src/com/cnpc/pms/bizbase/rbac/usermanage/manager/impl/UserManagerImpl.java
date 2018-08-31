@@ -2124,12 +2124,12 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		Integer customerAmount = customerDao.getAllCustomerOfStore(storeIdSb.toString());
 		Integer expressAmount = expressDao.getAllExpressOfStore(storeIdSb.toString());
 		Integer relationAmount = relationDao.getAllRelationOfStore(storeIdSb.toString());
-		Map<String, Object> orderMap = orderDao.getAllOrderOfStore(platformidSb.toString());
+//		Map<String, Object> orderMap = orderDao.getAllOrderOfStore(platformidSb.toString());
 		result.put("customerAmount", customerAmount);
 		result.put("expressAmount", expressAmount);
 		result.put("relationAmount", relationAmount);
-		result.put("orderAmount", orderMap.get("total"));
-		result.put("orderPriceAmount", orderMap.get("total_price"));
+//		result.put("orderAmount", orderMap.get("total"));
+//		result.put("orderPriceAmount", orderMap.get("total_price"));
 		result.put("storeKeeper", storeKeeper);
 		result.put("store", storeSb);
 		return result;

@@ -14,16 +14,16 @@ import java.util.Map;
  */
 public interface OrderDao {
 
-    Integer getOrderCount(String store_id,String employee_id,String year_month);
+//    Integer getOrderCount(String store_id,String employee_id,String year_month);
 
-    Map<String,Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value);
+//    Map<String,Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value);
 
-    List<Map<String,Object>> getOrderEmployeeData(String store_id, String date_value);
+//    List<Map<String,Object>> getOrderEmployeeData(String store_id, String date_value);
     
-    /**
-     * crm 根据划片信息查询 当月的 订单详情列表
-     */
-    public Map<String, Object> queryOrderListByArea(String store_id,String area,PageInfo pageInfo);
+//    /**
+//     * crm 根据划片信息查询 当月的 订单详情列表
+//     */
+//    public Map<String, Object> queryOrderListByArea(String store_id,String area,PageInfo pageInfo);
     
     /**
      * 根据订单sn编号 查询明细信息 
@@ -33,90 +33,90 @@ public interface OrderDao {
     public Map<String, Object> queryOrderInfoBySN(String order_sn);
     
     
-    public Integer gettotalOrderCount(String store_id,String employee_id);
+//    public Integer gettotalOrderCount(String store_id,String employee_id);
    
     
-    public Map<String, Object> queryOrderListByEmployeeNo(String store_id,String employee_no,String area_names,PageInfo pageInfo);
+//    public Map<String, Object> queryOrderListByEmployeeNo(String store_id,String employee_no,String area_names,PageInfo pageInfo);
     
-    public List<Map<String, Object>> queryOrderFourMonth(String store_id,String areaInfo);
+//    public List<Map<String, Object>> queryOrderFourMonth(String store_id,String areaInfo);
     
     
     public List<Map<String, Object>> queryOrderItemInfoById(String order_sn);
     
     
-    /**
-     * CRM店长 根据门店 查询 送单量排序  图表的方法  
-     * @param store_id
-     * @return
-     */
-    public List<Map<String, Object>> queryOrderCountByStoreId(String store_id);
+//    /**
+//     * CRM店长 根据门店 查询 送单量排序  图表的方法
+//     * @param store_id
+//     * @return
+//     */
+//    public List<Map<String, Object>> queryOrderCountByStoreId(String store_id);
     
-    public List<Map<String, Object>> queryOrderListByArea(String store_id,String area_name);
+//    public List<Map<String, Object>> queryOrderListByArea(String store_id,String area_name);
     
-    /**
-     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
-     * @param store_id
-     */
-    public List<Map<String, Object>> queryOrderCountByMonthStoreId(String store_id);
-    
-    
-    /**
-     * APP 个人中心 不分片 查询订单 图表 
-     * @param store_id
-     * @param employee_no
-     * @return
-     */
-    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String store_id,String employee_no);
+//    /**
+//     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
+//     * @param store_id
+//     */
+//    public List<Map<String, Object>> queryOrderCountByMonthStoreId(String store_id);
     
     
-    /**
-     * 查询统计图 近五个月的数据
-     * @return
-     */
-    public List<Map<String, Object>> queryOrderFiveMonth(String store_id,String areaInfo);
+//    /**
+//     * APP 个人中心 不分片 查询订单 图表
+//     * @param store_id
+//     * @param employee_no
+//     * @return
+//     */
+//    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String store_id,String employee_no);
     
-    /**
-     * 
-     * TODO crm-城市总监、区域经理查询各个门店的订单等信息 
-     * 2017年6月21日
-     * @author gaobaolei
-     * @param employee_no
-     * @param role
-     * @param cityId
-     * @return
-     */
-    public List<Map<String, Object>> queryOrderListOfStore_CSZJ_QYJL(Object store);
     
-    /**
-     * 
-     * TODO crm-城市总监、区域经理查询当年的订单 
-     * 2017年6月21日
-     * @author gaobaolei
-     * @param store
-     * @return
-     */
-    public List<Map<String, Object>> queryOrderCountOfMonth_CSZJ_QYJL(Object store);
+//    /**
+//     * 查询统计图 近五个月的数据
+//     * @return
+//     */
+//    public List<Map<String, Object>> queryOrderFiveMonth(String store_id,String areaInfo);
     
-    /**
-     * 
-     * TODO 查询门店的所有订单 
-     * 2017年6月29日
-     * @author gaobaolei
-     * @param storeId
-     * @return
-     */
-    public Map<String, Object> getAllOrderOfStore(String storeId);
+//    /**
+//     *
+//     * TODO crm-城市总监、区域经理查询各个门店的订单等信息
+//     * 2017年6月21日
+//     * @author gaobaolei
+//     * @param employee_no
+//     * @param role
+//     * @param cityId
+//     * @return
+//     */
+//    public List<Map<String, Object>> queryOrderListOfStore_CSZJ_QYJL(Object store);
     
-    /**
-     * 
-     * TODO 查找订单的物流信息 
-     * 2017年9月18日
-     * @author gaobaolei
-     * @param order_id
-     * @param status
-     * @return
-     */
-    public Map<String, Object> getOrderFlow(String order_id,String status);
+//    /**
+//     *
+//     * TODO crm-城市总监、区域经理查询当年的订单
+//     * 2017年6月21日
+//     * @author gaobaolei
+//     * @param store
+//     * @return
+//     */
+//    public List<Map<String, Object>> queryOrderCountOfMonth_CSZJ_QYJL(Object store);
+    
+//    /**
+//     *
+//     * TODO 查询门店的所有订单
+//     * 2017年6月29日
+//     * @author gaobaolei
+//     * @param storeId
+//     * @return
+//     */
+//    public Map<String, Object> getAllOrderOfStore(String storeId);
+    
+//    /**
+//     *
+//     * TODO 查找订单的物流信息
+//     * 2017年9月18日
+//     * @author gaobaolei
+//     * @param order_id
+//     * @param status
+//     * @return
+//     */
+//    public Map<String, Object> getOrderFlow(String order_id,String status);
     
     
     public List<Map<String, Object>> queryOrderSetInterval(String store_ids,String nowDate);
