@@ -101,12 +101,10 @@
     }
 
         /**
-         * 检测录入数据有效性
+         * 检测录入非整数数字数据有效性
          * @param t
          */
-    function checkDataValid(t){
-
-        $(t).parent().parent().attr("editable",true);
+    function checkFloatDataValid(t){
 
         var reg = /^[1-9]+(.[0-9]{2})?$/;
         var v= $(t).val();
