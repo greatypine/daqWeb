@@ -464,6 +464,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 				"				a.employee_phone,"+
 				"				a.appointment_start_time,"+
 				"				a.create_time,"+
+				"				a.sign_time AS receivedTime,"+
 				"				a.appointment_end_time,"+
 				"				a.seller_remark,"+
 					"		toa.address,"+
@@ -1079,7 +1080,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	     }finally {
 	         session.close();
 	     }
-	    
+
 		return (lst_data==null||lst_data.size()==0)?null:lst_data.get(0);
 	}
 

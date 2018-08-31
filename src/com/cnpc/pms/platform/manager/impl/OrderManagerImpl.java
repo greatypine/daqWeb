@@ -168,12 +168,6 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     	try {
 			String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
 			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
-			Map<String, Object> orderFlow = orderDao.getOrderFlow(order_id, "signed");
-			if(orderFlow==null){
-				order_obj.put("receivedTime","");
-			}else{
-				order_obj.put("receivedTime",orderFlow.get("create_time"));
-			}
 			order_obj.put("item_list", item_list);
 			order_obj.put("create_time", order_obj.get("create_time"));
 		}catch (Exception e){
