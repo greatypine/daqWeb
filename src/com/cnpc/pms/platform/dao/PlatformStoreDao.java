@@ -81,15 +81,15 @@ public interface PlatformStoreDao {
     */
    public List<Map<String, Object>> getGoodsTypeCount(String dd);
    /**
-    * TODO 社员商品成交量
-    * @author wuxinxin
-    */
-   public List<Map<String, Object>> getCmGoodsDealCount(String dd);
-   /**
-    * TODO 社员商品成交额
-    * @author wuxinxin
-    */
-   public List<Map<String, Object>> getCmGoodsTurnover(String dd);
+//    * TODO 社员商品成交量
+//    * @author wuxinxin
+//    */
+//   public List<Map<String, Object>> getCmGoodsDealCount(String dd);
+//   /**
+//    * TODO 社员商品成交额
+//    * @author wuxinxin
+//    */
+//   public List<Map<String, Object>> getCmGoodsTurnover(String dd);
    
    /**
     * TODO 获取省钱排名前十的社员

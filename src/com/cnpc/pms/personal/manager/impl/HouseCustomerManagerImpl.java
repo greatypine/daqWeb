@@ -266,30 +266,30 @@ public class HouseCustomerManagerImpl extends BizBaseCommonManager implements Ho
 
 	
 	
-	public void changeCustomerPayStatus() {
-		log.info("定时任务设置用户支付状态");
-		System.out.println("定时任务设置用户支付状态");
-		HouseCustomerDao houseCustomerDao = (HouseCustomerDao) SpringHelper.getBean(HouseCustomerDao.class.getName());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM"); 
-		Calendar calendar_month  =  Calendar.getInstance();
-        calendar_month.set(Calendar.DAY_OF_MONTH,1);
-        calendar_month.add(Calendar.DATE, -1);// 日期减1
-
-        sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String str_month = sdf.format(calendar_month.getTime());
-        System.out.println(str_month);
-        try {
-			houseCustomerDao.updateOnePayStatus(str_month);//设置满足6个条件的
-			houseCustomerDao.updateSixPayStatus(str_month);//设置满足18个条件的
-		    houseCustomerDao.updateThirdGradePayStatus(str_month);//设置满足35个条件的
-		} catch (Exception e) {
-			
-			e.printStackTrace();
-			log.error("定时任务设置用户支付状态"+e.getMessage());
-		}
-       
-		
-	}
+//	public void changeCustomerPayStatus() {
+//		log.info("定时任务设置用户支付状态");
+//		System.out.println("定时任务设置用户支付状态");
+//		HouseCustomerDao houseCustomerDao = (HouseCustomerDao) SpringHelper.getBean(HouseCustomerDao.class.getName());
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+//		Calendar calendar_month  =  Calendar.getInstance();
+//        calendar_month.set(Calendar.DAY_OF_MONTH,1);
+//        calendar_month.add(Calendar.DATE, -1);// 日期减1
+//
+//        sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        String str_month = sdf.format(calendar_month.getTime());
+//        System.out.println(str_month);
+//        try {
+//			houseCustomerDao.updateOnePayStatus(str_month);//设置满足6个条件的
+//			houseCustomerDao.updateSixPayStatus(str_month);//设置满足18个条件的
+//		    houseCustomerDao.updateThirdGradePayStatus(str_month);//设置满足35个条件的
+//		} catch (Exception e) {
+//
+//			e.printStackTrace();
+//			log.error("定时任务设置用户支付状态"+e.getMessage());
+//		}
+//
+//
+//	}
 
 	@Override
 	public HouseCustomer findHouseCustomerByHouseId(Long house_id) {

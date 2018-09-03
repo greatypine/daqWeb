@@ -351,54 +351,54 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		return null;
 	}
 
-	@Override
-	public List<Map<String, Object>> getCmGoodsDealCount(String dd) {
-		// TODO Auto-generated method stub
-		/**
-		 * @author wuxinxin 2018年5月17日
-		 */
-		String dealCouSql = "select count(1) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes'";
-		
-		if(!"0000".equals(dd)) {
-			dealCouSql = dealCouSql+" and te.city_code='"+dd+"'";
-		}
-		dealCouSql = dealCouSql+")";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
-		try {
-			SQLQuery sqlQuery = session.createSQLQuery(dealCouSql);
-			// 获得查询数据
-			List<Map<String, Object>> dealCou_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			return dealCou_data;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return null;
+//	@Override
+//	public List<Map<String, Object>> getCmGoodsDealCount(String dd) {
+//		// TODO Auto-generated method stub
+//		/**
+//		 * @author wuxinxin 2018年5月17日
+//		 */
+//		String dealCouSql = "select count(1) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes'";
+//
+//		if(!"0000".equals(dd)) {
+//			dealCouSql = dealCouSql+" and te.city_code='"+dd+"'";
+//		}
+//		dealCouSql = dealCouSql+")";
+//		Session session = getHibernateTemplate().getSessionFactory().openSession();
+//		try {
+//			SQLQuery sqlQuery = session.createSQLQuery(dealCouSql);
+//			// 获得查询数据
+//			List<Map<String, Object>> dealCou_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//			return dealCou_data;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			session.close();
+//		}
+//		return null;
+//
+//	}
 
-	}
-
-	@Override
-	public List<Map<String, Object>> getCmGoodsTurnover(String dd) {
-		// TODO Auto-generated method stub
-		/**
-		 * @author wuxinxin 2018年5月17日
-		 */
-		String turnoverSql = "select ifnull(sum(tor.trading_price),0) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
-		try {
-			SQLQuery sqlQuery = session.createSQLQuery(turnoverSql);
-			// 获得查询数据
-			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			return turnover_data;
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			session.close();
-		}
-		return null;
-
-	}
+//	@Override
+//	public List<Map<String, Object>> getCmGoodsTurnover(String dd) {
+//		// TODO Auto-generated method stub
+//		/**
+//		 * @author wuxinxin 2018年5月17日
+//		 */
+//		String turnoverSql = "select ifnull(sum(tor.trading_price),0) as cou from t_order tor join t_eshop te on (tor.eshop_id = te.id and te.super_member = 'yes')";
+//		Session session = getHibernateTemplate().getSessionFactory().openSession();
+//		try {
+//			SQLQuery sqlQuery = session.createSQLQuery(turnoverSql);
+//			// 获得查询数据
+//			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//			return turnover_data;
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			session.close();
+//		}
+//		return null;
+//
+//	}
 
 	@Override
 	public List<Map<String, Object>> getRetrenchMoney(String dd) {
