@@ -15,18 +15,18 @@ import java.util.Map;
  */
 public interface OrderManager extends IManager {
 
-    int getOrderCount(String store_id,String employee_id,String year_month);
+//    int getOrderCount(String store_id,String employee_id,String year_month);
 
-    Map<String,Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value);
+//    Map<String,Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value);
 
-    List<Map<String,Object>> getOrderEmployeeData(String store_id, String date_value);
+//    List<Map<String,Object>> getOrderEmployeeData(String store_id, String date_value);
     
-    public Map<String, Object> queryOrderListByArea(String employee_no,PageInfo pageInfo,Long area_id);
+//    public Map<String, Object> queryOrderListByArea(String employee_no,PageInfo pageInfo,Long area_id);
     
     public Map<String, Object> queryOrderListByEmployeeNo(String employee_no,PageInfo pageInfo,Long area_id);
     
     
-    public List<Map<String, Object>> queryOrderFourMonth(String employee_no,Long area_id);
+//    public List<Map<String, Object>> queryOrderFourMonth(String employee_no,Long area_id);
     
     /**
      * 根据订单sn编号 查询明细信息 
@@ -44,52 +44,52 @@ public interface OrderManager extends IManager {
     public Map<String, Object> queryOrderCountByStoreId(Long store_id);
     
     
-    /**
-     * CRM店长图表 根据门店及片区，查询所有订单数据
-     * @param store_id
-     * @param area_name
-     */
-    public Map<String, Object> queryOrderTotalByArea(Long store_id);
+//    /**
+//     * CRM店长图表 根据门店及片区，查询所有订单数据
+//     * @param store_id
+//     * @param area_name
+//     */
+//    public Map<String, Object> queryOrderTotalByArea(Long store_id);
     
-    /**
-     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
-     * @param store_id
-     */
-    public Map<String, Object> queryOrderCountByMonthStoreId(Long store_id);
-    
-    
-    /**
-     * APP手机国安侠分片 查询五个月的图表
-     */
-    public List<Map<String, Object>> queryOrderFiveMonth(Long store_id,String employee_no,Long area_id);
+//    /**
+//     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
+//     * @param store_id
+//     */
+//    public Map<String, Object> queryOrderCountByMonthStoreId(Long store_id);
     
     
-    /**
-     * APP手机国安侠 个人中心 不分片 查询五个月的图表
-     */
-    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String employee_no);
+//    /**
+//     * APP手机国安侠分片 查询五个月的图表
+//     */
+//    public List<Map<String, Object>> queryOrderFiveMonth(Long store_id,String employee_no,Long area_id);
     
-    /**
-     * 
-     * TODO crm-城市总监、区域经理查询各个门店的订单等信息 
-     * 2017年6月21日
-     * @author gaobaolei
-     * @param store_id
-     * @return
-     */
-    public Map<String, Object> queryOrderTotalOfStore_CSZJ_QYJL(Long cityId,Long employee_no,String role,String q_date);
     
-    /**
-     * 
-     * TODO crm-城市总监、区域经理查询当年的订单信息
-     * 2017年6月21日
-     * @author gaobaolei
-     * @param cityId
-     * @param employee_no
-     * @param role
-     * @return
-     */
-    public Map<String, Object> queryOrderCountOfMonth_CSZJ_QYJL(Long cityId,Long employee_no,String role);
+//    /**
+//     * APP手机国安侠 个人中心 不分片 查询五个月的图表
+//     */
+//    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String employee_no);
+    
+//    /**
+//     *
+//     * TODO crm-城市总监、区域经理查询各个门店的订单等信息
+//     * 2017年6月21日
+//     * @author gaobaolei
+//     * @param store_id
+//     * @return
+//     */
+//    public Map<String, Object> queryOrderTotalOfStore_CSZJ_QYJL(Long cityId,Long employee_no,String role,String q_date);
+    
+//    /**
+//     *
+//     * TODO crm-城市总监、区域经理查询当年的订单信息
+//     * 2017年6月21日
+//     * @author gaobaolei
+//     * @param cityId
+//     * @param employee_no
+//     * @param role
+//     * @return
+//     */
+//    public Map<String, Object> queryOrderCountOfMonth_CSZJ_QYJL(Long cityId,Long employee_no,String role);
     
     /**
      * 

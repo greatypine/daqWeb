@@ -66,7 +66,7 @@ public class Notice extends DataEntity{
 	private String fileName3;
 	
 	@Column(name="touchRate")
-	private float touchRate;//触达率
+	private Float touchRate;//触达率
 	
 	public String getTitle() {
 		return title;
@@ -164,11 +164,11 @@ public class Notice extends DataEntity{
 		this.fileName = fileName;
 	}
 
-	public float getTouchRate() {
+	public Float getTouchRate() {
 		return touchRate;
 	}
 
-	public void setTouchRate(float touchRate) {
+	public void setTouchRate(Float touchRate) {
 		this.touchRate = touchRate;
 	}
 

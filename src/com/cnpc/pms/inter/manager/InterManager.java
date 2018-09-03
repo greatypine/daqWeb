@@ -37,7 +37,7 @@ public interface InterManager extends IManager {
 
     Map<String,Object> getExpressAndCustomerCount(String employee_no);
 
-    Map<String,Object> getExpressAndCustomerStoreCount(Long store_id);
+   // Map<String,Object> getExpressAndCustomerStoreCount(Long store_id);
     
     /**
      * 
@@ -50,16 +50,16 @@ public interface InterManager extends IManager {
      */
     Map<String,Object> getExpressAndCustomerCountNew(Express express);
     
-    /**
-     * 
-     * TODO 门店数据卡（用户画像、快递代送、订单等）
-     * 2017年3月8日
-     * @author liuxiao
-     * @update gaobaolei
-     * @param express
-     * @return
-     */
-    Map<String,Object> getExpressAndCustomerStoreCountNew(Express express);
+//    /**
+//     *
+//     * TODO 门店数据卡（用户画像、快递代送、订单等）
+//     * 2017年3月8日
+//     * @author liuxiao
+//     * @update gaobaolei
+//     * @param express
+//     * @return
+//     */
+//    Map<String,Object> getExpressAndCustomerStoreCountNew(Express express);
 
     Result getCustomerListForMonth(Customer customer);
 
@@ -80,7 +80,7 @@ public interface InterManager extends IManager {
   
     Map<String,Object> queryExpressDataCardList(QueryConditions conditions);
 
-    Map<String,Object> queryOrderDataCardList(QueryConditions conditions);
+//    Map<String,Object> queryOrderDataCardList(QueryConditions conditions);
     
     List<Map<String,Object>> queryRelationListDataByStore(Express express);
     
@@ -96,7 +96,7 @@ public interface InterManager extends IManager {
     
     List<Map<String,Object>> queryExpressListDataByStore(Express express);
 
-    List<Map<String,Object>> queryOrderListDataByStore(Express express);
+//    List<Map<String,Object>> queryOrderListDataByStore(Express express);
     
     List<Map<String,Object>> queryRelationListDataByEmployee(Express express);
     
@@ -129,13 +129,13 @@ public interface InterManager extends IManager {
      */
     List<Map<String,Object>> getCustomerListForMonthData(Customer customer);
     
-    /**
-     * APP 分片查询订单信息
-     * @param employee_no
-	 * @param pageInfo
-	 * @return
-	 */
-    public Result queryOrderListAppByArea(Long store_id,String employee_no,PageInfo pageInfo,Long area_id);
+//    /**
+//     * APP 分片查询订单信息
+//     * @param employee_no
+//	 * @param pageInfo
+//	 * @return
+//	 */
+//    public Result queryOrderListAppByArea(Long store_id,String employee_no,PageInfo pageInfo,Long area_id);
     
     public Result queryExpressAPPByEmployeeNo(String employee_no,PageInfo pageInfo);
     
@@ -175,7 +175,7 @@ public interface InterManager extends IManager {
      * @param employeeNo
      * @return
      */
-    public Result queryOrderFiveMonth(Long store_id,String employee_no,Long area_id);
+//    public Result queryOrderFiveMonth(Long store_id,String employee_no,Long area_id);
     
     /**
      * TODO 查询国安侠五个月的拜访记录
@@ -239,12 +239,12 @@ public interface InterManager extends IManager {
     public Result queryOrderListByEmployeeNo(String employee_no, PageInfo pageInfo,Long area_id);
     
     
-    /**
-     * APP端，个人中心 根据员工号 查询 五个月的订单图表 
-     * @param employee_no
-     * @return
-     */
-    public Result queryOrderFiveMonthOrderApp(String employee_no);
+//    /**
+//     * APP端，个人中心 根据员工号 查询 五个月的订单图表
+//     * @param employee_no
+//     * @return
+//     */
+//    public Result queryOrderFiveMonthOrderApp(String employee_no);
     
     /**
      * 
@@ -300,22 +300,22 @@ public interface InterManager extends IManager {
     public Result queryRelationAndCustomerOfYear_crm_app(Long storeId);
     
     
-    /**
-     * 
-     * TODOapp-crm店长（现状图） 订单数量及金额
-     * 2017年6月6日
-     * @author zhaoxg
-     * @param storeId
-     * @return
-     */
-    public Result queryOrderInfoOfYear_crm_app(Long storeId);
+//    /**
+//     *
+//     * TODOapp-crm店长（现状图） 订单数量及金额
+//     * 2017年6月6日
+//     * @author zhaoxg
+//     * @param storeId
+//     * @return
+//     */
+//    public Result queryOrderInfoOfYear_crm_app(Long storeId);
     
-    /**
-	 * app_CRM店长 查询 分片区订单统计数量 以及 统计金额 图表用ss
-	 * @param store_id
-	 * @return
-	 */
-	public Result queryOrderTotalByArea_crm_app(Long store_id);
+//    /**
+//	 * app_CRM店长 查询 分片区订单统计数量 以及 统计金额 图表用ss
+//	 * @param store_id
+//	 * @return
+//	 */
+//	public Result queryOrderTotalByArea_crm_app(Long store_id);
 	
 	
 	/**

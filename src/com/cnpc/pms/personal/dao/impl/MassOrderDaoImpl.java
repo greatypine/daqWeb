@@ -657,20 +657,43 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	}
 
 	@Override
-	public Map<String, Object> queryOrderDetailBySN(String order_sn){
+	public Map<String, Object> queryOrderDetailBySN(String order_sn) {
 		String sql = "SELECT CONCAT(a.id, '') AS id, a.order_sn, CONCAT(a.customer_id, '') AS customer_id, CONCAT(a.order_address_id, '') AS order_address_id, " +
 				"a.total_quantity, a.trading_price, a.payable_price, CONCAT(a.order_status, '') AS order_status, CONCAT(a.order_type, '') AS order_type, a.employee_name, " +
 				"a.employee_phone, a.appointment_start_time, a.create_time, a.sign_time AS receivedTime, a.appointment_end_time, a.seller_remark, a.addr_address AS address, " +
-				"a.addr_name AS short_name, a.addr_mobilephone AS mobilephone FROM df_mass_order_total a WHERE a.order_sn = '"+order_sn+"'";
-
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+				"a.addr_name AS short_name, a.addr_mobilephone AS mobilephone FROM df_mass_order_total a WHERE a.order_sn = '" + order_sn + "'";
 		// 获得查询数据
 		Map<String, Object> order_obj = null;
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		if (lst_data != null && lst_data.size() > 0) {
 			order_obj = (Map<String, Object>) lst_data.get(0);
 		}
 		return order_obj;
+
+	}
+
+	public List<Map<String, Object>> queryEmployeeOrderCountByStore(String storeId) {
+		String sql = "select a.info_employee_a_no,th.name as employee_name,count(1) AS count from (select  tor.info_employee_a_no,tor.order_sn" +
+				" from df_mass_order_monthly tor where  tor.customer_id not like 'fakecustomer%'" +
+				" and DATE_FORMAT(tor.sign_time,'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')"+
+				" and tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA' and tor.info_employee_a_no is not null" +
+				" and tor.store_name NOT LIKE '%测试%' and tor.store_white!='QA' AND tor.store_status =0 and " +
+				" tor.store_id='"+storeId+"'" +
+				" union all" +
+				" select  tor.info_employee_a_no,tor.order_sn" +
+				" from df_mass_order_monthly tor where  tor.customer_id not like 'fakecustomer%'" +
+				" and DATE_FORMAT(tor.sign_time,'%Y-%m') = DATE_FORMAT(CURDATE(),'%Y-%m')" +
+				" and tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA' and tor.info_employee_a_no is not null" +
+				" and tor.store_name NOT LIKE '%测试%' and tor.store_white!='QA' AND tor.store_status =0 AND tor.normal_store_id ='"+storeId+"'" +
+				") a left join t_humanresources th on   a.info_employee_a_no = th.employee_no group by a.info_employee_a_no ";
+
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String,Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+
 	}
 
 }

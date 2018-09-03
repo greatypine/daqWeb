@@ -2413,27 +2413,27 @@
   /*****************第一张图 城市总监当年订单汇总 开始*******************/
   function showChart_ordermonth(){
 	  
-	  var method="queryOrderCountOfMonth_CSZJ_QYJL";
-	  if("prev"==targetMonth){
-		  method="queryOrderCountOfMonth_CSZJ_QYJL_before";
-	  }
-	  doManager("OrderManager",method,[cityId,curr_user.employeeId,'CSZJ'],
-				function(data, textStatus, XMLHttpRequest) {
-					if (data.result) {
-						var result = JSON.parse(data.data);
-						
-						var months = new Array();
-						var totalcounts = new Array();
-						var totalprices = new Array();
-						for(var i=0;i<result.ordermonth.length;i++){
-							months[i]=result.ordermonth[i].month;
-							totalcounts[i]=result.ordermonth[i].total_count;
-							totalprices[i]=result.ordermonth[i].total_price;
-						}
-						option1.series[0].data=totalcounts;
-						option1.series[1].data=totalprices;
-					}
-		},false);
+	  // var method="queryOrderCountOfMonth_CSZJ_QYJL";
+	  // if("prev"==targetMonth){
+		//   method="queryOrderCountOfMonth_CSZJ_QYJL_before";
+	  // }
+	  // doManager("OrderManager",method,[cityId,curr_user.employeeId,'CSZJ'],
+		// 		function(data, textStatus, XMLHttpRequest) {
+		// 			if (data.result) {
+		// 				var result = JSON.parse(data.data);
+		//
+		// 				var months = new Array();
+		// 				var totalcounts = new Array();
+		// 				var totalprices = new Array();
+		// 				for(var i=0;i<result.ordermonth.length;i++){
+		// 					months[i]=result.ordermonth[i].month;
+		// 					totalcounts[i]=result.ordermonth[i].total_count;
+		// 					totalprices[i]=result.ordermonth[i].total_price;
+		// 				}
+		// 				option1.series[0].data=totalcounts;
+		// 				option1.series[1].data=totalprices;
+		// 			}
+		// },false);
   }
   /*****************城市总监当年订单汇总  结束*******************/
   

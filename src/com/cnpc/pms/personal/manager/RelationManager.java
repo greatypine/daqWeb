@@ -39,15 +39,15 @@ public interface RelationManager extends IManager {
      */
     public Map<String, Object> findRelation_newestList_crm(String employeeNo,Integer pageSize,Integer currentPage,Long area_id);
     
-    /**
-     * 
-     * TODO 查找拜访记录柱状图数据 
-     * 2017年4月12日
-     * @author gaobaolei
-     * @param employeeNo
-     * @return
-     */
-    public Map<String, Object> findRelation_chart_crm(String employeeNo,Long area_id);
+//    /**
+//     *
+//     * TODO 查找拜访记录柱状图数据
+//     * 2017年4月12日
+//     * @author gaobaolei
+//     * @param employeeNo
+//     * @return
+//     */
+//    public Map<String, Object> findRelation_chart_crm(String employeeNo,Long area_id);
     
    
    /**

@@ -24,209 +24,209 @@ import java.util.*;
 public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 
-	public Integer getOrderCount(String store_id,String employee_id,String year_month){
-        if(year_month == null){
-            year_month = "DATE_FORMAT(curdate(),'%Y-%m')";
-        }else{
-            year_month = "'"+year_month+"'";
-        }
-        int result = 0;
-		String sql = "SELECT" +
-                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
-                "       FROM t_order tor" +
-                "      JOIN t_order_flow tof ON tor.id=tof.order_id" +
-                "      AND tof.order_status='signed'" +
-                "      AND DATE_FORMAT(tof.create_time,'%Y-%m') = "+year_month;
-        if(ValueUtil.checkValue(store_id)){
-            sql +="      AND tor.store_id = '"+store_id+"'";
-        }
-        if(ValueUtil.checkValue(employee_id)){
-            sql +="      AND tor.employee_id = '"+employee_id+"'";
-        }
+//	public Integer getOrderCount(String store_id,String employee_id,String year_month){
+//        if(year_month == null){
+//            year_month = "DATE_FORMAT(curdate(),'%Y-%m')";
+//        }else{
+//            year_month = "'"+year_month+"'";
+//        }
+//        int result = 0;
+//		String sql = "SELECT" +
+//                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
+//                "       FROM t_order tor" +
+//                "      JOIN t_order_flow tof ON tor.id=tof.order_id" +
+//                "      AND tof.order_status='signed'" +
+//                "      AND DATE_FORMAT(tof.create_time,'%Y-%m') = "+year_month;
+//        if(ValueUtil.checkValue(store_id)){
+//            sql +="      AND tor.store_id = '"+store_id+"'";
+//        }
+//        if(ValueUtil.checkValue(employee_id)){
+//            sql +="      AND tor.employee_id = '"+employee_id+"'";
+//        }
+//
+//        Session session = getHibernateTemplate().getSessionFactory().openSession();
+//        try{
+//            Query query = session.createSQLQuery(sql);
+//            result = Integer.valueOf(query.uniqueResult().toString());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }finally {
+//            session.close();
+//        }
+//        return result;
+//	}
 
-        Session session = getHibernateTemplate().getSessionFactory().openSession();
-        try{
-            Query query = session.createSQLQuery(sql);
-            result = Integer.valueOf(query.uniqueResult().toString());
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return result;
-	}
+//    @Override
+//    public Map<String, Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value) {
+//        if(date_value == null){
+//            date_value = "DATE_FORMAT(curdate(),'%Y-%m')";
+//        }else{
+//            date_value = "'"+date_value+"'";
+//        }
+//        String sql_header = "SELECT e.`name` AS employee_name,IFNULL(t.complete_count,0) AS complete_count ";
+//        String sql_from = "FROM t_employee e LEFT JOIN " +
+//                "(" +
+//                "   SELECT" +
+//                "       tor.employee_id," +
+//                "       tor.employee_name," +
+//                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
+//                "   FROM t_order tor" +
+//                "   JOIN t_order_flow tof ON tor.id=tof.order_id" +
+//                "   AND tof.order_status='signed'" +
+//                "   AND DATE_FORMAT(tof.create_time,'%Y-%m') = "+date_value+"" +
+//                "   AND store_id = '"+store_id+"'" +
+//                "   AND tor.employee_name IS NOT NULL" +
+//                "   GROUP BY tor.employee_id" +
+//                ") t ON t.employee_id = e.id WHERE e.status = 0 AND e.store_id = '"+store_id+"' ";
+//        String sql_order = "ORDER BY complete_count DESC";
+//        String sql_count = "SELECT COUNT(1) ";
+//        Session session = getHibernateTemplate().getSessionFactory().openSession();
+//        Map<String,Object> map_result = new HashMap<String,Object>();
+//        List<?> lst_data = null;
+//        try{
+//            SQLQuery countQuery = session.createSQLQuery(sql_count.concat(sql_from));
+//            pageInfo.setTotalRecords(Integer.valueOf(countQuery.list().get(0).toString()));
+//
+//            SQLQuery query = session.createSQLQuery(sql_header.concat(sql_from).concat(sql_order));
+//            lst_data = query
+//                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+//                    .setFirstResult(
+//                            pageInfo.getRecordsPerPage()
+//                                    * (pageInfo.getCurrentPage() - 1))
+//                    .setMaxResults(pageInfo.getRecordsPerPage()).list();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        } finally {
+//            session.close();
+//        }
+//        if(lst_data == null){
+//            lst_data = new ArrayList<Map<String,Object>>();
+//        }
+//        map_result.put("pageinfo", pageInfo);
+//        map_result.put("header", "");
+//        map_result.put("data", lst_data);
+//        return map_result;
+//    }
 
-    @Override
-    public Map<String, Object> queryOrderEmployeeCountByStore(PageInfo pageInfo, String store_id, String date_value) {
-        if(date_value == null){
-            date_value = "DATE_FORMAT(curdate(),'%Y-%m')";
-        }else{
-            date_value = "'"+date_value+"'";
-        }
-        String sql_header = "SELECT e.`name` AS employee_name,IFNULL(t.complete_count,0) AS complete_count ";
-        String sql_from = "FROM t_employee e LEFT JOIN " +
-                "(" +
-                "   SELECT" +
-                "       tor.employee_id," +
-                "       tor.employee_name," +
-                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
-                "   FROM t_order tor" +
-                "   JOIN t_order_flow tof ON tor.id=tof.order_id" +
-                "   AND tof.order_status='signed'" +
-                "   AND DATE_FORMAT(tof.create_time,'%Y-%m') = "+date_value+"" +
-                "   AND store_id = '"+store_id+"'" +
-                "   AND tor.employee_name IS NOT NULL" +
-                "   GROUP BY tor.employee_id" +
-                ") t ON t.employee_id = e.id WHERE e.status = 0 AND e.store_id = '"+store_id+"' ";
-        String sql_order = "ORDER BY complete_count DESC";
-        String sql_count = "SELECT COUNT(1) ";
-        Session session = getHibernateTemplate().getSessionFactory().openSession();
-        Map<String,Object> map_result = new HashMap<String,Object>();
-        List<?> lst_data = null;
-        try{
-            SQLQuery countQuery = session.createSQLQuery(sql_count.concat(sql_from));
-            pageInfo.setTotalRecords(Integer.valueOf(countQuery.list().get(0).toString()));
-
-            SQLQuery query = session.createSQLQuery(sql_header.concat(sql_from).concat(sql_order));
-            lst_data = query
-                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
-                    .setFirstResult(
-                            pageInfo.getRecordsPerPage()
-                                    * (pageInfo.getCurrentPage() - 1))
-                    .setMaxResults(pageInfo.getRecordsPerPage()).list();
-        }catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-        if(lst_data == null){
-            lst_data = new ArrayList<Map<String,Object>>();
-        }
-        map_result.put("pageinfo", pageInfo);
-        map_result.put("header", "");
-        map_result.put("data", lst_data);
-        return map_result;
-    }
-
-    @Override
-    public List<Map<String, Object>> getOrderEmployeeData(String store_id, String date_value) {
-        if(date_value == null){
-            date_value = "DATE_FORMAT(curdate(),'%Y-%m')";
-        }else{
-            date_value = "'"+date_value+"'";
-        }
-        String sql = "SELECT e.`name` AS employee_name,IFNULL(t.complete_count,0) AS complete_count "+
-                "FROM t_employee e LEFT JOIN " +
-                "(" +
-                "   SELECT" +
-                "       tor.employee_id," +
-                "       tor.employee_name," +
-                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
-                "   FROM t_order tor" +
-                "   JOIN t_order_flow tof ON tor.id=tof.order_id" +
-                "   AND tof.order_status='signed'" +
-                "   AND DATE_FORMAT(tof.create_time,'%Y-%m') = "+date_value+
-                "   AND store_id = '"+store_id+"'" +
-                "   AND tor.employee_name IS NOT NULL" +
-                "   GROUP BY tor.employee_id" +
-                ") t ON t.employee_id = e.id WHERE e.status = 0 AND e.store_id = '"+store_id+"' "+
-                "ORDER BY complete_count DESC";
-
-        Session session = getHibernateTemplate().getSessionFactory().openSession();
-        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
-        try{
-            SQLQuery query = session.createSQLQuery(sql);
-            List<?> lst_data = query
-                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-            if(lst_data != null){
-                for(Object obj : lst_data){
-                    Map<String,Object> map_data = (Map<String,Object>)obj;
-                    Map<String,Object> map_content = (Map<String,Object>)obj;
-                    map_content.put("name",map_data.get("employee_name"));
-                    map_content.put("value",map_data.get("complete_count"));
-                    lst_result.add(map_content);
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-        return lst_result;
-    }
+//    @Override
+//    public List<Map<String, Object>> getOrderEmployeeData(String store_id, String date_value) {
+//        if(date_value == null){
+//            date_value = "DATE_FORMAT(curdate(),'%Y-%m')";
+//        }else{
+//            date_value = "'"+date_value+"'";
+//        }
+//        String sql = "SELECT e.`name` AS employee_name,IFNULL(t.complete_count,0) AS complete_count "+
+//                "FROM t_employee e LEFT JOIN " +
+//                "(" +
+//                "   SELECT" +
+//                "       tor.employee_id," +
+//                "       tor.employee_name," +
+//                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
+//                "   FROM t_order tor" +
+//                "   JOIN t_order_flow tof ON tor.id=tof.order_id" +
+//                "   AND tof.order_status='signed'" +
+//                "   AND DATE_FORMAT(tof.create_time,'%Y-%m') = "+date_value+
+//                "   AND store_id = '"+store_id+"'" +
+//                "   AND tor.employee_name IS NOT NULL" +
+//                "   GROUP BY tor.employee_id" +
+//                ") t ON t.employee_id = e.id WHERE e.status = 0 AND e.store_id = '"+store_id+"' "+
+//                "ORDER BY complete_count DESC";
+//
+//        Session session = getHibernateTemplate().getSessionFactory().openSession();
+//        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+//        try{
+//            SQLQuery query = session.createSQLQuery(sql);
+//            List<?> lst_data = query
+//                    .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//            if(lst_data != null){
+//                for(Object obj : lst_data){
+//                    Map<String,Object> map_data = (Map<String,Object>)obj;
+//                    Map<String,Object> map_content = (Map<String,Object>)obj;
+//                    map_content.put("name",map_data.get("employee_name"));
+//                    map_content.put("value",map_data.get("complete_count"));
+//                    lst_result.add(map_content);
+//                }
+//            }
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        } finally {
+//            session.close();
+//        }
+//        return lst_result;
+//    }
     
  
     
-    /**
-     * crm 首页根据划片信息查询 订单详情列表
-     */
-    @Override
-    public Map<String, Object> queryOrderListByArea(String store_id,String area,PageInfo pageInfo){
-    	// 查询片区 里的 所有服务 
-    	String sql = "SELECT t.id,t.order_sn,t.customer_id,store_id,t.employee_name,t.placename,t.order_date,t.customer_name,t.mobilephone,concat(GROUP_CONCAT(t_order_item.eshop_pro_name),'') as eshop_pro_name from (SELECT "+
-    	"	a.*,toa.placename,t_customer.mobilephone,t_customer.short_name as customer_name "+
-    	"FROM	(		SELECT"+
-    	"			tor.*,tof.create_time as order_date"+
-    	"		FROM"+
-    	"			t_order tor"+
-    	"		JOIN t_order_flow tof ON tof.order_id = tor.id"+
-    	//"		AND DATE_FORMAT(tof.create_time, '%Y-%m') = DATE_FORMAT(DATE_ADD(CURDATE(),INTERVAL -0 MONTH),'%Y-%m') "+
-    	"		AND tor.store_id = '"+store_id+"'"+
-    	"		AND tof.order_status = 'signed'"+
-    	"    AND tor.employee_name is NOT NULL "+
-    	"	) a"+
-    	" LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
-    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
-    	" WHERE"+ 
-    	"	toa.placename IN ("+area+")) t JOIN t_order_item ON t_order_item.order_id = t.id  GROUP BY t.order_sn ORDER BY t.order_date desc";
-    	
-    	String sqlcount = "select count(1) as totalcount from (SELECT "+
-    	    	"	a.*,toa.placename,t_customer.short_name as customer_name "+
-    	    	"FROM	(SELECT"+
-    	    	"			tor.*,tof.create_time as order_date"+
-    	    	"		FROM"+
-    	    	"			t_order tor"+
-    	    	"		JOIN t_order_flow tof ON tof.order_id = tor.id"+
-    	    	//"		AND DATE_FORMAT(tof.create_time, '%Y-%m') =  DATE_FORMAT(DATE_ADD(CURDATE(),INTERVAL -0 MONTH),'%Y-%m') "+
-    	    	"		AND tor.store_id = '"+store_id+"'"+
-    	    	"		AND tof.order_status = 'signed'"+
-    	    	"    AND tor.employee_name is NOT NULL "+
-    	    	"	) a"+
-    	    	" LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
-    	    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
-    	    	" WHERE"+
-    	    	"	toa.placename IN ("+area+ ")) t JOIN t_order_item ON t_order_item.order_id = t.id  GROUP BY t.order_sn ORDER BY t.order_date desc";
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-    	Map<String, Object> maps = new HashMap<String, Object>();
-		try {
-			SQLQuery querycount = session.createSQLQuery(sqlcount);
-			String countnum = querycount.list().size()+"";
-			//SQL查询对象
-			String retSql = "select * from ("+sql+") z";
-			//SQL查询对象
-			SQLQuery query = session.createSQLQuery(retSql);
-			//获得查询数据
-			List<Map<String, Object>> lst_data  = query
-			        .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
-			        .setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
-			        .setMaxResults(pageInfo.getRecordsPerPage()).list();
-			
-			int pages = 0;
-			if(countnum!="0"){
-				pages = (Integer.parseInt(countnum)-1)/10+1;
-			}
-			maps.put("data", lst_data);
-			maps.put("totalpage", countnum);
-			maps.put("pagenum", pages);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-    	return maps;
-    }
+//    /**
+//     * crm 首页根据划片信息查询 订单详情列表
+//     */
+//    @Override
+//    public Map<String, Object> queryOrderListByArea(String store_id,String area,PageInfo pageInfo){
+//    	// 查询片区 里的 所有服务
+//    	String sql = "SELECT t.id,t.order_sn,t.customer_id,store_id,t.employee_name,t.placename,t.order_date,t.customer_name,t.mobilephone,concat(GROUP_CONCAT(t_order_item.eshop_pro_name),'') as eshop_pro_name from (SELECT "+
+//    	"	a.*,toa.placename,t_customer.mobilephone,t_customer.short_name as customer_name "+
+//    	"FROM	(		SELECT"+
+//    	"			tor.*,tof.create_time as order_date"+
+//    	"		FROM"+
+//    	"			t_order tor"+
+//    	"		JOIN t_order_flow tof ON tof.order_id = tor.id"+
+//    	//"		AND DATE_FORMAT(tof.create_time, '%Y-%m') = DATE_FORMAT(DATE_ADD(CURDATE(),INTERVAL -0 MONTH),'%Y-%m') "+
+//    	"		AND tor.store_id = '"+store_id+"'"+
+//    	"		AND tof.order_status = 'signed'"+
+//    	"    AND tor.employee_name is NOT NULL "+
+//    	"	) a"+
+//    	" LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
+//    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
+//    	" WHERE"+
+//    	"	toa.placename IN ("+area+")) t JOIN t_order_item ON t_order_item.order_id = t.id  GROUP BY t.order_sn ORDER BY t.order_date desc";
+//
+//    	String sqlcount = "select count(1) as totalcount from (SELECT "+
+//    	    	"	a.*,toa.placename,t_customer.short_name as customer_name "+
+//    	    	"FROM	(SELECT"+
+//    	    	"			tor.*,tof.create_time as order_date"+
+//    	    	"		FROM"+
+//    	    	"			t_order tor"+
+//    	    	"		JOIN t_order_flow tof ON tof.order_id = tor.id"+
+//    	    	//"		AND DATE_FORMAT(tof.create_time, '%Y-%m') =  DATE_FORMAT(DATE_ADD(CURDATE(),INTERVAL -0 MONTH),'%Y-%m') "+
+//    	    	"		AND tor.store_id = '"+store_id+"'"+
+//    	    	"		AND tof.order_status = 'signed'"+
+//    	    	"    AND tor.employee_name is NOT NULL "+
+//    	    	"	) a"+
+//    	    	" LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
+//    	    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
+//    	    	" WHERE"+
+//    	    	"	toa.placename IN ("+area+ ")) t JOIN t_order_item ON t_order_item.order_id = t.id  GROUP BY t.order_sn ORDER BY t.order_date desc";
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//    	Map<String, Object> maps = new HashMap<String, Object>();
+//		try {
+//			SQLQuery querycount = session.createSQLQuery(sqlcount);
+//			String countnum = querycount.list().size()+"";
+//			//SQL查询对象
+//			String retSql = "select * from ("+sql+") z";
+//			//SQL查询对象
+//			SQLQuery query = session.createSQLQuery(retSql);
+//			//获得查询数据
+//			List<Map<String, Object>> lst_data  = query
+//			        .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+//			        .setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
+//			        .setMaxResults(pageInfo.getRecordsPerPage()).list();
+//
+//			int pages = 0;
+//			if(countnum!="0"){
+//				pages = (Integer.parseInt(countnum)-1)/10+1;
+//			}
+//			maps.put("data", lst_data);
+//			maps.put("totalpage", countnum);
+//			maps.put("pagenum", pages);
+//		} catch (NumberFormatException e) {
+//			e.printStackTrace();
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//		}finally{
+//			session.close();
+//		}
+//    	return maps;
+//    }
     
     
     
@@ -234,213 +234,213 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
     /**
      * crm 根据员工编号 查询 订单详情列表
      */
-    @Override
-    public Map<String, Object> queryOrderListByEmployeeNo(String store_id,String employee_no,String area_names,PageInfo pageInfo){
-    	
-    	// 查询片区 里的 所有服务 
-    	String sqlwhere =" from (SELECT "+
-    	"	a.*,toa.placename,t_customer.mobilephone,t_customer.short_name as customer_name "+
-    	"FROM	(		SELECT"+
-    	"			tor.*,tof.create_time as order_date"+
-    	"		FROM"+
-    	"			t_order tor"+
-    	"		JOIN t_order_flow tof ON tof.order_id = tor.id"+
-    	//"		AND DATE_FORMAT(tof.create_time, '%Y-%m') = DATE_FORMAT(DATE_ADD(CURDATE(),INTERVAL -0 MONTH),'%Y-%m') "+
-    	"		AND tor.store_id = '"+store_id+"'"+
-    	"		AND tof.order_status = 'signed'"+
-    	"    AND tor.employee_name like '%"+ employee_no + "'"+
-    	"	) a"+
-    	" LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
-    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
-    	" WHERE"+ 
-    	"	1=1 ) t JOIN t_order_item ON t_order_item.order_id = t.id GROUP BY t.order_sn  ORDER BY t.order_date desc";
-    	
-    	String sql="SELECT t.id,t.order_sn,t.customer_id,store_id,t.employee_name,t.order_date,t.customer_name,t.mobilephone,concat(GROUP_CONCAT(t_order_item.eshop_pro_name),'') as eshop_pro_name  "+ sqlwhere;
-    	String sqlcount = "select count(1) as totalcount "+ sqlwhere;
-    	
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-    	
-    	Map<String, Object> maps = new HashMap<String, Object>();
-		try {
-			SQLQuery querycount = session.createSQLQuery(sqlcount);
-			String countnum = querycount.list().size()+"";
-			//SQL查询对象
-			String retSql = "select * from ("+sql+") z";
-			SQLQuery query = session.createSQLQuery(retSql);
-			//获得查询数据
-			List<Map<String, Object>> lst_data  = query
-			        .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
-			        .setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
-			        .setMaxResults(pageInfo.getRecordsPerPage()).list();
-			
-			
-			int pages = 0;
-			if(countnum!="0"){
-				pages =(Integer.parseInt(countnum)-1)/10+1;
-			}
-			maps.put("data", lst_data);
-			maps.put("totalpage", countnum);
-			maps.put("pagenum", pages);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-    	return maps;
-    }
+//    @Override
+//    public Map<String, Object> queryOrderListByEmployeeNo(String store_id,String employee_no,String area_names,PageInfo pageInfo){
+//
+//    	// 查询片区 里的 所有服务
+//    	String sqlwhere =" from (SELECT "+
+//    	"	a.*,toa.placename,t_customer.mobilephone,t_customer.short_name as customer_name "+
+//    	"FROM	(		SELECT"+
+//    	"			tor.*,tof.create_time as order_date"+
+//    	"		FROM"+
+//    	"			t_order tor"+
+//    	"		JOIN t_order_flow tof ON tof.order_id = tor.id"+
+//    	//"		AND DATE_FORMAT(tof.create_time, '%Y-%m') = DATE_FORMAT(DATE_ADD(CURDATE(),INTERVAL -0 MONTH),'%Y-%m') "+
+//    	"		AND tor.store_id = '"+store_id+"'"+
+//    	"		AND tof.order_status = 'signed'"+
+//    	"    AND tor.employee_name like '%"+ employee_no + "'"+
+//    	"	) a"+
+//    	" LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
+//    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
+//    	" WHERE"+
+//    	"	1=1 ) t JOIN t_order_item ON t_order_item.order_id = t.id GROUP BY t.order_sn  ORDER BY t.order_date desc";
+//
+//    	String sql="SELECT t.id,t.order_sn,t.customer_id,store_id,t.employee_name,t.order_date,t.customer_name,t.mobilephone,concat(GROUP_CONCAT(t_order_item.eshop_pro_name),'') as eshop_pro_name  "+ sqlwhere;
+//    	String sqlcount = "select count(1) as totalcount "+ sqlwhere;
+//
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//
+//    	Map<String, Object> maps = new HashMap<String, Object>();
+//		try {
+//			SQLQuery querycount = session.createSQLQuery(sqlcount);
+//			String countnum = querycount.list().size()+"";
+//			//SQL查询对象
+//			String retSql = "select * from ("+sql+") z";
+//			SQLQuery query = session.createSQLQuery(retSql);
+//			//获得查询数据
+//			List<Map<String, Object>> lst_data  = query
+//			        .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+//			        .setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
+//			        .setMaxResults(pageInfo.getRecordsPerPage()).list();
+//
+//
+//			int pages = 0;
+//			if(countnum!="0"){
+//				pages =(Integer.parseInt(countnum)-1)/10+1;
+//			}
+//			maps.put("data", lst_data);
+//			maps.put("totalpage", countnum);
+//			maps.put("pagenum", pages);
+//		} catch (NumberFormatException e) {
+//			e.printStackTrace();
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//		}finally{
+//			session.close();
+//		}
+//    	return maps;
+//    }
     
     
-    /**
-     * 查询统计图 近四个月的数据
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderFourMonth(String store_id,String areaInfo){
-    	List<String> curMonths = new ArrayList<String>();
-    	excnowdate(curMonths);
-    	
-    	String sql ="select b.curmonth as month,(CASE WHEN s.totalcount is null THEN 0 ELSE s.totalcount END) as totalcount  from " +
-    			" (SELECT '"+curMonths.get(0)+"' as curmonth " +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(1)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(2)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(3)+"' as curmonth) b LEFT JOIN (select" +
-    			" 		DATE_FORMAT(t.order_date,'%Y-%m') as month ," +
-    			" 		count(1) as totalcount  " +
-    			" 		from" +
-    			" 		(SELECT" +
-    			" 				a.order_date," +
-    			" 				toa.placename," +
-    			" 				t_customer.short_name as customer_name    " +    
-    			" 				FROM" +
-    			" 				(SELECT" +
-    			"        tor.order_address_id,tor.customer_id," +
-    			"        tof.create_time as order_date  " +
-    			"    FROM" +
-    			"        t_order tor  " +
-    			"    JOIN" +
-    			"        t_order_flow tof  " +
-    			"            ON tof.order_id = tor.id  " +
-    			"            AND DATE_FORMAT(tof.create_time," +
-    			"        '%Y-%m') in('"+curMonths.get(0)+"','"+curMonths.get(1)+"','"+curMonths.get(2)+"','"+curMonths.get(3)+"')  " +
-    			"        AND tor.store_id = '"+store_id+"'  " +              
-    			"        AND tof.order_status = 'signed'  " +
-    			"        AND tor.employee_name is NOT NULL  ) a " +
-    			" LEFT JOIN" +
-    			"    t_order_address toa " +
-    			"        ON toa.id = a.order_address_id     " +   
-    			" LEFT JOIN" +
-    			"    t_customer " +
-    			"        ON t_customer.id=a.customer_id  " +
-    			" WHERE" +
-    			"    toa.placename IN (" + areaInfo +
-    			"    )" +
-    			" ) t group by DATE_FORMAT(t.order_date,'%Y-%m')) s ON b.curmonth = s.month ";
-    	
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-    	
-        //获得查询数据
-		List<Map<String, Object>> lst_data  = null;
-		try {
-			SQLQuery query = session.createSQLQuery(sql);
-			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-    	
-        return lst_data;
-    	    	
-    }
+//    /**
+//     * 查询统计图 近四个月的数据
+//     * @return
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderFourMonth(String store_id,String areaInfo){
+//    	List<String> curMonths = new ArrayList<String>();
+//    	excnowdate(curMonths);
+//
+//    	String sql ="select b.curmonth as month,(CASE WHEN s.totalcount is null THEN 0 ELSE s.totalcount END) as totalcount  from " +
+//    			" (SELECT '"+curMonths.get(0)+"' as curmonth " +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(1)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(2)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(3)+"' as curmonth) b LEFT JOIN (select" +
+//    			" 		DATE_FORMAT(t.order_date,'%Y-%m') as month ," +
+//    			" 		count(1) as totalcount  " +
+//    			" 		from" +
+//    			" 		(SELECT" +
+//    			" 				a.order_date," +
+//    			" 				toa.placename," +
+//    			" 				t_customer.short_name as customer_name    " +
+//    			" 				FROM" +
+//    			" 				(SELECT" +
+//    			"        tor.order_address_id,tor.customer_id," +
+//    			"        tof.create_time as order_date  " +
+//    			"    FROM" +
+//    			"        t_order tor  " +
+//    			"    JOIN" +
+//    			"        t_order_flow tof  " +
+//    			"            ON tof.order_id = tor.id  " +
+//    			"            AND DATE_FORMAT(tof.create_time," +
+//    			"        '%Y-%m') in('"+curMonths.get(0)+"','"+curMonths.get(1)+"','"+curMonths.get(2)+"','"+curMonths.get(3)+"')  " +
+//    			"        AND tor.store_id = '"+store_id+"'  " +
+//    			"        AND tof.order_status = 'signed'  " +
+//    			"        AND tor.employee_name is NOT NULL  ) a " +
+//    			" LEFT JOIN" +
+//    			"    t_order_address toa " +
+//    			"        ON toa.id = a.order_address_id     " +
+//    			" LEFT JOIN" +
+//    			"    t_customer " +
+//    			"        ON t_customer.id=a.customer_id  " +
+//    			" WHERE" +
+//    			"    toa.placename IN (" + areaInfo +
+//    			"    )" +
+//    			" ) t group by DATE_FORMAT(t.order_date,'%Y-%m')) s ON b.curmonth = s.month ";
+//
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//
+//        //获得查询数据
+//		List<Map<String, Object>> lst_data  = null;
+//		try {
+//			SQLQuery query = session.createSQLQuery(sql);
+//			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//		}finally{
+//			session.close();
+//		}
+//
+//        return lst_data;
+//
+//    }
     
     
     
     
-    /**
-     * APP查询统计图 近五个月的数据
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderFiveMonth(String store_id,String areaInfo){
-    	List<String> curMonths = new ArrayList<String>();
-    	excnowdatefive(curMonths);
-    	
-    	String sql ="select b.curmonth as month,(CASE WHEN s.totalcount is null THEN 0 ELSE s.totalcount END) as totalcount, "+
-				" (CASE	WHEN s.totalprice IS NULL THEN 0 ELSE	 s.totalprice  END "+
-				" ) AS totalprice   from " +
-    			" (SELECT '"+curMonths.get(0)+"' as curmonth " +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(1)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(2)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(3)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(4)+"' as curmonth) b LEFT JOIN (select" +
-    			" 		DATE_FORMAT(t.order_date,'%Y-%m') as month ," +
-    			" 		count(1) as totalcount,sum(t.payable_price) as totalprice  " +
-    			" 		from" +
-    			" 		(SELECT" +
-    			" 				a.order_date," +
-    			" 				toa.placename," +
-    			" 				a.payable_price," +
-    			" 				t_customer.short_name as customer_name    " +    
-    			" 				FROM" +
-    			" 				(SELECT" +
-    			"        tor.order_address_id,tor.customer_id,tor.payable_price," +
-    			"        tof.create_time as order_date  " +
-    			"    FROM" +
-    			"        t_order tor  " +
-    			"    JOIN" +
-    			"        t_order_flow tof  " +
-    			"            ON tof.order_id = tor.id  " +
-    			"            AND DATE_FORMAT(tof.create_time," +
-    			"        '%Y-%m') in('"+curMonths.get(0)+"','"+curMonths.get(1)+"','"+curMonths.get(2)+"','"+curMonths.get(3)+"','"+curMonths.get(4)+"')  " +
-    			"        AND tor.store_id = '"+store_id+"'  " +              
-    			"        AND tof.order_status = 'signed'  " +
-    			"        AND tor.employee_name is NOT NULL  ) a " +
-    			" LEFT JOIN" +
-    			"    t_order_address toa " +
-    			"        ON toa.id = a.order_address_id     " +   
-    			" LEFT JOIN" +
-    			"    t_customer " +
-    			"        ON t_customer.id=a.customer_id  " +
-    			" WHERE" +
-    			"    toa.placename IN (" + areaInfo +
-    			"    )" +
-    			" ) t group by DATE_FORMAT(t.order_date,'%Y-%m')) s ON b.curmonth = s.month ";
-    	
-    	
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-    	
-        //获得查询数据
-		List<Map<String, Object>> retList  = new ArrayList<Map<String,Object>>();
-		try {
-			SQLQuery query = session.createSQLQuery(sql);
-			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			
-			if(lst_data!=null){
-				for(Map<String, Object> o:lst_data){
-					String month = Integer.parseInt(o.get("month").toString().split("-")[1].toString())+"月";
-					o.put("month", month);
-					retList.add(o);
-				}
-			}
-			
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-    	
-        return retList;
-    	    	
-    }
+//    /**
+//     * APP查询统计图 近五个月的数据
+//     * @return
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderFiveMonth(String store_id,String areaInfo){
+//    	List<String> curMonths = new ArrayList<String>();
+//    	excnowdatefive(curMonths);
+//
+//    	String sql ="select b.curmonth as month,(CASE WHEN s.totalcount is null THEN 0 ELSE s.totalcount END) as totalcount, "+
+//				" (CASE	WHEN s.totalprice IS NULL THEN 0 ELSE	 s.totalprice  END "+
+//				" ) AS totalprice   from " +
+//    			" (SELECT '"+curMonths.get(0)+"' as curmonth " +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(1)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(2)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(3)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(4)+"' as curmonth) b LEFT JOIN (select" +
+//    			" 		DATE_FORMAT(t.order_date,'%Y-%m') as month ," +
+//    			" 		count(1) as totalcount,sum(t.payable_price) as totalprice  " +
+//    			" 		from" +
+//    			" 		(SELECT" +
+//    			" 				a.order_date," +
+//    			" 				toa.placename," +
+//    			" 				a.payable_price," +
+//    			" 				t_customer.short_name as customer_name    " +
+//    			" 				FROM" +
+//    			" 				(SELECT" +
+//    			"        tor.order_address_id,tor.customer_id,tor.payable_price," +
+//    			"        tof.create_time as order_date  " +
+//    			"    FROM" +
+//    			"        t_order tor  " +
+//    			"    JOIN" +
+//    			"        t_order_flow tof  " +
+//    			"            ON tof.order_id = tor.id  " +
+//    			"            AND DATE_FORMAT(tof.create_time," +
+//    			"        '%Y-%m') in('"+curMonths.get(0)+"','"+curMonths.get(1)+"','"+curMonths.get(2)+"','"+curMonths.get(3)+"','"+curMonths.get(4)+"')  " +
+//    			"        AND tor.store_id = '"+store_id+"'  " +
+//    			"        AND tof.order_status = 'signed'  " +
+//    			"        AND tor.employee_name is NOT NULL  ) a " +
+//    			" LEFT JOIN" +
+//    			"    t_order_address toa " +
+//    			"        ON toa.id = a.order_address_id     " +
+//    			" LEFT JOIN" +
+//    			"    t_customer " +
+//    			"        ON t_customer.id=a.customer_id  " +
+//    			" WHERE" +
+//    			"    toa.placename IN (" + areaInfo +
+//    			"    )" +
+//    			" ) t group by DATE_FORMAT(t.order_date,'%Y-%m')) s ON b.curmonth = s.month ";
+//
+//
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//
+//        //获得查询数据
+//		List<Map<String, Object>> retList  = new ArrayList<Map<String,Object>>();
+//		try {
+//			SQLQuery query = session.createSQLQuery(sql);
+//			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//
+//			if(lst_data!=null){
+//				for(Map<String, Object> o:lst_data){
+//					String month = Integer.parseInt(o.get("month").toString().split("-")[1].toString())+"月";
+//					o.put("month", month);
+//					retList.add(o);
+//				}
+//			}
+//
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//		}finally{
+//			session.close();
+//		}
+//
+//        return retList;
+//
+//    }
     
     
     /**
@@ -638,303 +638,303 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	}
     
     
-    @Override
-    public Integer gettotalOrderCount(String store_id,String employee_id){
-        int result = 0;
-		String sql = "SELECT" +
-                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
-                "       FROM t_order tor" +
-                "      JOIN t_order_flow tof ON tor.id=tof.order_id" +
-                "      AND tof.order_status='signed'";
-        if(ValueUtil.checkValue(store_id)){
-            sql +="      AND tor.store_id = '"+store_id+"'";
-        }
-        if(ValueUtil.checkValue(employee_id)){
-            sql +="      AND tor.employee_id = '"+employee_id+"'";
-        }
+//    @Override
+//    public Integer gettotalOrderCount(String store_id,String employee_id){
+//        int result = 0;
+//		String sql = "SELECT" +
+//                "       COUNT(DISTINCT tor.group_id) AS complete_count" +
+//                "       FROM t_order tor" +
+//                "      JOIN t_order_flow tof ON tor.id=tof.order_id" +
+//                "      AND tof.order_status='signed'";
+//        if(ValueUtil.checkValue(store_id)){
+//            sql +="      AND tor.store_id = '"+store_id+"'";
+//        }
+//        if(ValueUtil.checkValue(employee_id)){
+//            sql +="      AND tor.employee_id = '"+employee_id+"'";
+//        }
+//
+//        Session session = getHibernateTemplate().getSessionFactory().openSession();
+//        try{
+//            Query query = session.createSQLQuery(sql);
+//            result = Integer.valueOf(query.uniqueResult().toString());
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }finally {
+//            session.close();
+//        }
+//        return result;
+//	}
 
-        Session session = getHibernateTemplate().getSessionFactory().openSession();
-        try{
-            Query query = session.createSQLQuery(sql);
-            result = Integer.valueOf(query.uniqueResult().toString());
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return result;
-	}
-   
     
-    /**
-     * CRM店长 根据门店 查询 送单量排序  图表的方法  
-     * @param store_id
-     * @return
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderCountByStoreId(String store_id){
-    	String sql = "select rt.employee_name,count(1) as count from (SELECT "+
-					"		t.employee_name,count(1) as count   "+
-					"	FROM "+
-					"		( "+
-					"			SELECT "+
-					"				a.*" +
-/*					"				, toa.placename, "+
-					"				t_customer.mobilephone, "+
-					"				t_customer.short_name AS customer_name "+*/
-					"			FROM "+
-					"				( "+
-					"					SELECT "+
-					"						tor.* " +
-	/*				"					, tof.create_time AS order_date "+*/
-					"					FROM "+
-					"						t_order tor "+
-					"					JOIN t_order_flow tof ON tof.order_id = tor.id "+
-					"					AND tor.store_id = '"+store_id+"' "+
-					"					AND tof.order_status = 'signed'  "+
-					"                   AND DATE_FORMAT(tof.create_time, '%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')  "+
-					//"                   AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03' "+
-					"				) a "+
-/*					"			LEFT JOIN t_order_address toa ON toa.id = a.order_address_id "+
-					"			LEFT JOIN t_customer ON t_customer.id = a.customer_id "+
-					"			WHERE "+
-					"				1 = 1 "+*/
-					"		) t "+
-					"	JOIN t_order_item ON t_order_item.order_id = t.id "+
-					"	GROUP BY "+
-					"		t.order_sn) rt GROUP BY rt.employee_name HAVING rt.employee_name is NOT NULL ";
-    	
-
-    	 Session session = getHibernateTemplate().getSessionFactory().openSession();
-    	 List<Map<String, Object>> lst_data = null;
-         try{
-             Query query = session.createSQLQuery(sql);
-             lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-         }catch (Exception e){
-             e.printStackTrace();
-         }finally {
-             session.close();
-         }
-		 return lst_data;
-		 
-    }
+//    /**
+//     * CRM店长 根据门店 查询 送单量排序  图表的方法
+//     * @param store_id
+//     * @return
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderCountByStoreId(String store_id){
+//    	String sql = "select rt.employee_name,count(1) as count from (SELECT "+
+//					"		t.employee_name,count(1) as count   "+
+//					"	FROM "+
+//					"		( "+
+//					"			SELECT "+
+//					"				a.*" +
+///*					"				, toa.placename, "+
+//					"				t_customer.mobilephone, "+
+//					"				t_customer.short_name AS customer_name "+*/
+//					"			FROM "+
+//					"				( "+
+//					"					SELECT "+
+//					"						tor.* " +
+//	/*				"					, tof.create_time AS order_date "+*/
+//					"					FROM "+
+//					"						t_order tor "+
+//					"					JOIN t_order_flow tof ON tof.order_id = tor.id "+
+//					"					AND tor.store_id = '"+store_id+"' "+
+//					"					AND tof.order_status = 'signed'  "+
+//					"                   AND DATE_FORMAT(tof.create_time, '%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')  "+
+//					//"                   AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03' "+
+//					"				) a "+
+///*					"			LEFT JOIN t_order_address toa ON toa.id = a.order_address_id "+
+//					"			LEFT JOIN t_customer ON t_customer.id = a.customer_id "+
+//					"			WHERE "+
+//					"				1 = 1 "+*/
+//					"		) t "+
+//					"	JOIN t_order_item ON t_order_item.order_id = t.id "+
+//					"	GROUP BY "+
+//					"		t.order_sn) rt GROUP BY rt.employee_name HAVING rt.employee_name is NOT NULL ";
+//
+//
+//    	 Session session = getHibernateTemplate().getSessionFactory().openSession();
+//    	 List<Map<String, Object>> lst_data = null;
+//         try{
+//             Query query = session.createSQLQuery(sql);
+//             lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//         }catch (Exception e){
+//             e.printStackTrace();
+//         }finally {
+//             session.close();
+//         }
+//		 return lst_data;
+//
+//    }
     
     
     
     
-    /**
-     * CRM店长图表 根据门店及片区，查询所有订单数据
-     * @param store_id
-     * @param area_name
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderListByArea(String store_id,String area_name){
-        String sql ="    SELECT "+
-				    "	z.placename,count(1) as ordercount,SUM(z.payable_price) as total_price  "+
-				    " FROM "+
-				    "	( "+
-				    "		SELECT "+
-				    "			t.id, "+
-				    "			t.order_sn, "+
-				    "			t.customer_id, "+
-				    "			store_id, "+
-				    "			t.employee_name, "+
-				    "			t.placename, "+
-				    "			t.order_date, "+
-/*				    "			t.customer_name, "+
-				    "			t.mobilephone, "+*/
-				    "			concat( "+
-				    "				GROUP_CONCAT( "+
-				    "					t_order_item.eshop_pro_name "+
-				    "				), "+
-				    "				'' "+
-				    "			) AS eshop_pro_name, "+
-				    "			t.payable_price  "+
-				    "		FROM "+
-				    "			( "+
-				    "				SELECT "+
-				    "					a.*, toa.placename "+
-/*				    "					t_customer.mobilephone, "+
-				    "					t_customer.short_name AS customer_name "+*/
-				    "				FROM "+
-				    "					( "+
-				    "						SELECT "+
-				    "							tor.*, tof.create_time AS order_date "+
-				    "						FROM "+
-				    "							t_order tor "+
-				    "						JOIN t_order_flow tof ON tof.order_id = tor.id "+
-				    "						AND tor.store_id = '"+store_id+"' "+
-				    "						AND tof.order_status = 'signed' "+
-				    //"                   	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
-				    "                   	AND DATE_FORMAT(tof.create_time, '%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')  "+
-				    "						AND tor.employee_name IS NOT NULL "+
-				    "					) a "+
-				    "				LEFT JOIN t_order_address toa ON toa.id = a.order_address_id "+
-/*				    "				LEFT JOIN t_customer ON t_customer.id = a.customer_id "+*/
-				    "				WHERE "+
-				    "					toa.placename IN ( "+
-				    						area_name +
-				    "					) "+
-				    "			) t "+
-				    "		JOIN t_order_item ON t_order_item.order_id = t.id "+
-				    "		GROUP BY "+
-				    "			t.order_sn "+
-				    "		ORDER BY "+
-				    "			t.order_date DESC "+
-				    "	) z  GROUP BY z.placename  ";
-        
-        Session session = getHibernateTemplate().getSessionFactory().openSession();
-   	 	List<Map<String, Object>> lst_data = null;
-        try{
-            Query query = session.createSQLQuery(sql);
-            lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-        return lst_data;
-    }
+//    /**
+//     * CRM店长图表 根据门店及片区，查询所有订单数据
+//     * @param store_id
+//     * @param area_name
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderListByArea(String store_id,String area_name){
+//        String sql ="    SELECT "+
+//				    "	z.placename,count(1) as ordercount,SUM(z.payable_price) as total_price  "+
+//				    " FROM "+
+//				    "	( "+
+//				    "		SELECT "+
+//				    "			t.id, "+
+//				    "			t.order_sn, "+
+//				    "			t.customer_id, "+
+//				    "			store_id, "+
+//				    "			t.employee_name, "+
+//				    "			t.placename, "+
+//				    "			t.order_date, "+
+///*				    "			t.customer_name, "+
+//				    "			t.mobilephone, "+*/
+//				    "			concat( "+
+//				    "				GROUP_CONCAT( "+
+//				    "					t_order_item.eshop_pro_name "+
+//				    "				), "+
+//				    "				'' "+
+//				    "			) AS eshop_pro_name, "+
+//				    "			t.payable_price  "+
+//				    "		FROM "+
+//				    "			( "+
+//				    "				SELECT "+
+//				    "					a.*, toa.placename "+
+///*				    "					t_customer.mobilephone, "+
+//				    "					t_customer.short_name AS customer_name "+*/
+//				    "				FROM "+
+//				    "					( "+
+//				    "						SELECT "+
+//				    "							tor.*, tof.create_time AS order_date "+
+//				    "						FROM "+
+//				    "							t_order tor "+
+//				    "						JOIN t_order_flow tof ON tof.order_id = tor.id "+
+//				    "						AND tor.store_id = '"+store_id+"' "+
+//				    "						AND tof.order_status = 'signed' "+
+//				    //"                   	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
+//				    "                   	AND DATE_FORMAT(tof.create_time, '%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')  "+
+//				    "						AND tor.employee_name IS NOT NULL "+
+//				    "					) a "+
+//				    "				LEFT JOIN t_order_address toa ON toa.id = a.order_address_id "+
+///*				    "				LEFT JOIN t_customer ON t_customer.id = a.customer_id "+*/
+//				    "				WHERE "+
+//				    "					toa.placename IN ( "+
+//				    						area_name +
+//				    "					) "+
+//				    "			) t "+
+//				    "		JOIN t_order_item ON t_order_item.order_id = t.id "+
+//				    "		GROUP BY "+
+//				    "			t.order_sn "+
+//				    "		ORDER BY "+
+//				    "			t.order_date DESC "+
+//				    "	) z  GROUP BY z.placename  ";
+//
+//        Session session = getHibernateTemplate().getSessionFactory().openSession();
+//   	 	List<Map<String, Object>> lst_data = null;
+//        try{
+//            Query query = session.createSQLQuery(sql);
+//            lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }finally {
+//            session.close();
+//        }
+//        return lst_data;
+//    }
     
     
-    /**
-     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
-     * @param store_id
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderCountByMonthStoreId(String store_id){
-    	String sql = "SELECT m.month,case when o.totalcount is NULL then 0 else o.totalcount END as total_count,ROUND(CASE when o.total_price is null then 0 else o.total_price end,0) as total_price from ( "+
-					execSqlMonth() +
-					"	) m LEFT JOIN (SELECT "+
-					"			DATE_FORMAT(t.order_date, '%Y-%m') AS MONTH, "+
-					"			count(1) AS totalcount, "+
-					"			SUM(t.payable_price) as total_price  "+
-					"		FROM "+
-					"			( "+
-					"				SELECT "+
-					"					a.order_date, "+
-					"					a.payable_price, "+
-					"					toa.placename, "+
-					"					t_customer.short_name AS customer_name "+
-					"				FROM "+
-					"					( "+
-					"						SELECT "+
-					"							tor.payable_price, "+
-					"							tor.order_address_id, "+
-					"							tor.customer_id, "+
-					"							tof.create_time AS order_date "+
-					"						FROM "+
-					"							t_order tor "+
-					"						JOIN t_order_flow tof ON tof.order_id = tor.id "+
-					"						AND DATE_FORMAT(tof.create_time, '%Y-%m') IN ("+execMonth()+") "+
-					"						AND tor.store_id = '"+store_id+"' "+
-					"						AND tof.order_status = 'signed' "+
-					"						AND tor.employee_name IS NOT NULL "+
-					"					) a "+
-					"				LEFT JOIN t_order_address toa ON toa.id = a.order_address_id "+
-					"				LEFT JOIN t_customer ON t_customer.id = a.customer_id "+
-					"				WHERE "+
-					"					1 = 1  "+
-					"			) t "+
-					"		GROUP BY "+
-					"			DATE_FORMAT(t.order_date, '%Y-%m') ) o ON o.MONTH = m.month ";
-    	
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-   	 	List<Map<String, Object>> lst_data = null;
-        try{
-            Query query = session.createSQLQuery(sql);
-            lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-		
-		return lst_data;
-    }
+//    /**
+//     * 店长CRM 根据门店ID取得今年的 每个月的订单数及金额
+//     * @param store_id
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderCountByMonthStoreId(String store_id){
+//    	String sql = "SELECT m.month,case when o.totalcount is NULL then 0 else o.totalcount END as total_count,ROUND(CASE when o.total_price is null then 0 else o.total_price end,0) as total_price from ( "+
+//					execSqlMonth() +
+//					"	) m LEFT JOIN (SELECT "+
+//					"			DATE_FORMAT(t.order_date, '%Y-%m') AS MONTH, "+
+//					"			count(1) AS totalcount, "+
+//					"			SUM(t.payable_price) as total_price  "+
+//					"		FROM "+
+//					"			( "+
+//					"				SELECT "+
+//					"					a.order_date, "+
+//					"					a.payable_price, "+
+//					"					toa.placename, "+
+//					"					t_customer.short_name AS customer_name "+
+//					"				FROM "+
+//					"					( "+
+//					"						SELECT "+
+//					"							tor.payable_price, "+
+//					"							tor.order_address_id, "+
+//					"							tor.customer_id, "+
+//					"							tof.create_time AS order_date "+
+//					"						FROM "+
+//					"							t_order tor "+
+//					"						JOIN t_order_flow tof ON tof.order_id = tor.id "+
+//					"						AND DATE_FORMAT(tof.create_time, '%Y-%m') IN ("+execMonth()+") "+
+//					"						AND tor.store_id = '"+store_id+"' "+
+//					"						AND tof.order_status = 'signed' "+
+//					"						AND tor.employee_name IS NOT NULL "+
+//					"					) a "+
+//					"				LEFT JOIN t_order_address toa ON toa.id = a.order_address_id "+
+//					"				LEFT JOIN t_customer ON t_customer.id = a.customer_id "+
+//					"				WHERE "+
+//					"					1 = 1  "+
+//					"			) t "+
+//					"		GROUP BY "+
+//					"			DATE_FORMAT(t.order_date, '%Y-%m') ) o ON o.MONTH = m.month ";
+//
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//   	 	List<Map<String, Object>> lst_data = null;
+//        try{
+//            Query query = session.createSQLQuery(sql);
+//            lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }finally {
+//            session.close();
+//        }
+//
+//		return lst_data;
+//    }
     
     
     
     
-    /**
-     * APP个人中心 不分片 查询订单记录
-     */
-    @Override
-    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String store_id,String employee_no){
-    	List<String> curMonths = new ArrayList<String>();
-    	excnowdatefive(curMonths);
-    	
-    	String sql ="select b.curmonth as month,(CASE WHEN s.totalcount is null THEN 0 ELSE s.totalcount END) as totalcount, "+
-				" (CASE	WHEN s.totalprice IS NULL THEN 0 ELSE	 s.totalprice  END "+
-				" ) AS totalprice   from " +
-    			" (SELECT '"+curMonths.get(0)+"' as curmonth " +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(1)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(2)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(3)+"' as curmonth" +
-    			" UNION " +
-    			" SELECT '"+curMonths.get(4)+"' as curmonth) b LEFT JOIN (select" +
-    			" 		DATE_FORMAT(t.order_date,'%Y-%m') as month ," +
-    			" 		count(1) as totalcount,sum(t.payable_price) as totalprice  " +
-    			" 		from" +
-    			" 		(SELECT" +
-    			" 				a.order_date," +
-    			" 				toa.placename," +
-    			" 				a.payable_price," +
-    			" 				t_customer.short_name as customer_name    " +    
-    			" 				FROM" +
-    			" 				(SELECT" +
-    			"        tor.order_address_id,tor.customer_id,tor.payable_price," +
-    			"        tof.create_time as order_date  " +
-    			"    FROM" +
-    			"        t_order tor  " +
-    			"    JOIN" +
-    			"        t_order_flow tof  " +
-    			"            ON tof.order_id = tor.id  " +
-    			"            AND DATE_FORMAT(tof.create_time," +
-    			"        '%Y-%m') in('"+curMonths.get(0)+"','"+curMonths.get(1)+"','"+curMonths.get(2)+"','"+curMonths.get(3)+"','"+curMonths.get(4)+"')  " +
-    			"        AND tor.store_id = '"+store_id+"'  " +              
-    			"        AND tof.order_status = 'signed'  " +
-    	    	"    	 AND tor.employee_name like '%"+ employee_no + "'"+
-    			"        AND tor.employee_name is NOT NULL  ) a " +
-    			" LEFT JOIN" +
-    			"    t_order_address toa " +
-    			"        ON toa.id = a.order_address_id     " +   
-    			" LEFT JOIN" +
-    			"    t_customer " +
-    			"        ON t_customer.id=a.customer_id  " +
-    			" WHERE" +
-    			"    1=1 " +
-    			" ) t group by DATE_FORMAT(t.order_date,'%Y-%m')) s ON b.curmonth = s.month ";
-    	
-    	
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-    	
-        //获得查询数据
-		List<Map<String, Object>> retList  = new ArrayList<Map<String,Object>>();
-		try {
-			SQLQuery query = session.createSQLQuery(sql);
-			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			
-			if(lst_data!=null){
-				for(Map<String, Object> o:lst_data){
-					String month = Integer.parseInt(o.get("month").toString().split("-")[1].toString())+"月";
-					o.put("month", month);
-					retList.add(o);
-				}
-			}
-			
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-    	
-        return retList;
-    	    	
-    }
+//    /**
+//     * APP个人中心 不分片 查询订单记录
+//     */
+//    @Override
+//    public List<Map<String, Object>> queryOrderFiveMonthOrderApp(String store_id,String employee_no){
+//    	List<String> curMonths = new ArrayList<String>();
+//    	excnowdatefive(curMonths);
+//
+//    	String sql ="select b.curmonth as month,(CASE WHEN s.totalcount is null THEN 0 ELSE s.totalcount END) as totalcount, "+
+//				" (CASE	WHEN s.totalprice IS NULL THEN 0 ELSE	 s.totalprice  END "+
+//				" ) AS totalprice   from " +
+//    			" (SELECT '"+curMonths.get(0)+"' as curmonth " +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(1)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(2)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(3)+"' as curmonth" +
+//    			" UNION " +
+//    			" SELECT '"+curMonths.get(4)+"' as curmonth) b LEFT JOIN (select" +
+//    			" 		DATE_FORMAT(t.order_date,'%Y-%m') as month ," +
+//    			" 		count(1) as totalcount,sum(t.payable_price) as totalprice  " +
+//    			" 		from" +
+//    			" 		(SELECT" +
+//    			" 				a.order_date," +
+//    			" 				toa.placename," +
+//    			" 				a.payable_price," +
+//    			" 				t_customer.short_name as customer_name    " +
+//    			" 				FROM" +
+//    			" 				(SELECT" +
+//    			"        tor.order_address_id,tor.customer_id,tor.payable_price," +
+//    			"        tof.create_time as order_date  " +
+//    			"    FROM" +
+//    			"        t_order tor  " +
+//    			"    JOIN" +
+//    			"        t_order_flow tof  " +
+//    			"            ON tof.order_id = tor.id  " +
+//    			"            AND DATE_FORMAT(tof.create_time," +
+//    			"        '%Y-%m') in('"+curMonths.get(0)+"','"+curMonths.get(1)+"','"+curMonths.get(2)+"','"+curMonths.get(3)+"','"+curMonths.get(4)+"')  " +
+//    			"        AND tor.store_id = '"+store_id+"'  " +
+//    			"        AND tof.order_status = 'signed'  " +
+//    	    	"    	 AND tor.employee_name like '%"+ employee_no + "'"+
+//    			"        AND tor.employee_name is NOT NULL  ) a " +
+//    			" LEFT JOIN" +
+//    			"    t_order_address toa " +
+//    			"        ON toa.id = a.order_address_id     " +
+//    			" LEFT JOIN" +
+//    			"    t_customer " +
+//    			"        ON t_customer.id=a.customer_id  " +
+//    			" WHERE" +
+//    			"    1=1 " +
+//    			" ) t group by DATE_FORMAT(t.order_date,'%Y-%m')) s ON b.curmonth = s.month ";
+//
+//
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//
+//        //获得查询数据
+//		List<Map<String, Object>> retList  = new ArrayList<Map<String,Object>>();
+//		try {
+//			SQLQuery query = session.createSQLQuery(sql);
+//			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//
+//			if(lst_data!=null){
+//				for(Map<String, Object> o:lst_data){
+//					String month = Integer.parseInt(o.get("month").toString().split("-")[1].toString())+"月";
+//					o.put("month", month);
+//					retList.add(o);
+//				}
+//			}
+//
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//		}finally{
+//			session.close();
+//		}
+//
+//        return retList;
+//
+//    }
     
     
     
@@ -976,113 +976,115 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
       }
 
 	
-	@Override
-	public List<Map<String, Object>> queryOrderListOfStore_CSZJ_QYJL(Object store) {
-		
-		
-		String sql ="    SELECT  t.store_id,count(1) as ordercount,round(SUM(t.payable_price),0) as total_price  "+
-				    "	 FROM	( "+
-				    "		SELECT 	tor.order_sn,tor.id,tor.store_id,tor.payable_price, tof.create_time AS order_date"+
-				    "		FROM t_order tor "+
-				    "		JOIN t_order_flow tof ON tof.order_id = tor.id "+
-				    "		AND tof.order_status = 'signed' "+
-				    //" 	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
-				    "   	AND DATE_FORMAT(tof.create_time, '%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')  "+
-				    "		AND tor.employee_name IS NOT NULL "+
-				    " 		AND tor.store_id IN "+store+
-				    "	) t  GROUP BY t.store_id order by ordercount desc limit 20";
-
-     
-     Session session = getHibernateTemplate().getSessionFactory().openSession();
-	 	List<Map<String, Object>> lst_data = null;
-     try{
-        SQLQuery query = session.createSQLQuery(sql);
-         lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-     }catch (Exception e){
-         e.printStackTrace();
-     }finally {
-         session.close();
-     }
-     
-     
-     return lst_data;
-	}
-
-	
-	@Override
-	public List<Map<String, Object>> queryOrderCountOfMonth_CSZJ_QYJL(Object store) {
-
-		String sql ="    SELECT  DATE_FORMAT(t.order_date, '%c月') AS order_date,count(1) as ordercount,round(SUM(t.payable_price),0) as total_price  "+
-				    "	 FROM	( "+
-				    "		SELECT 	tor.order_sn,tor.id,tor.store_id,tor.payable_price, tof.create_time AS order_date"+
-				    "		FROM t_order tor "+
-				    "		JOIN t_order_flow tof ON tof.order_id = tor.id "+
-				    "		AND tof.order_status = 'signed' "+
-				    //" 	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
-				    "   	AND YEAR(tof.create_time)=YEAR(CURDATE())  "+
-				    "		AND tor.employee_name IS NOT NULL "+
-				    " 		AND tor.store_id IN "+store+
-				    "	) t  GROUP BY DATE_FORMAT(t.order_date, '%Y-%m')";
-
-     
-     Session session = getHibernateTemplate().getSessionFactory().openSession();
-	 	List<Map<String, Object>> lst_data = null;
-     try{
-        SQLQuery query = session.createSQLQuery(sql);
-         lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-     }catch (Exception e){
-         e.printStackTrace();
-     }finally {
-         session.close();
-     }
-     return lst_data;
-	}
+//	@Override
+//	public List<Map<String, Object>> queryOrderListOfStore_CSZJ_QYJL(Object store) {
+//
+//
+//		String sql ="    SELECT  t.store_id,count(1) as ordercount,round(SUM(t.payable_price),0) as total_price  "+
+//				    "	 FROM	( "+
+//				    "		SELECT 	tor.order_sn,tor.id,tor.store_id,tor.payable_price, tof.create_time AS order_date"+
+//				    "		FROM t_order tor "+
+//				    "		JOIN t_order_flow tof ON tof.order_id = tor.id "+
+//				    "		AND tof.order_status = 'signed' "+
+//				    //" 	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
+//				    "   	AND DATE_FORMAT(tof.create_time, '%Y-%m')=DATE_FORMAT(CURDATE(),'%Y-%m')  "+
+//				    "		AND tor.employee_name IS NOT NULL "+
+//				    " 		AND tor.store_id IN "+store+
+//				    "	) t  GROUP BY t.store_id order by ordercount desc limit 20";
+//
+//
+//     Session session = getHibernateTemplate().getSessionFactory().openSession();
+//	 	List<Map<String, Object>> lst_data = null;
+//     try{
+//        SQLQuery query = session.createSQLQuery(sql);
+//         lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//     }catch (Exception e){
+//         e.printStackTrace();
+//     }finally {
+//         session.close();
+//     }
+//
+//
+//     return lst_data;
+//	}
 
 	
-	@Override
-	public Map<String, Object> getAllOrderOfStore(String storeId) {
-		String sql ="    SELECT  count(1) as total,round(SUM(t.payable_price),0) as total_price  "+
-			    "	 FROM	( "+
-			    "		SELECT 	tor.order_sn,tor.id,tor.store_id,tor.payable_price, tof.create_time AS order_date"+
-			    "		FROM t_order tor "+
-			    "		JOIN t_order_flow tof ON tof.order_id = tor.id "+
-			    "		AND tof.order_status = 'signed' "+
-			    //" 	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
-			    "		AND tor.employee_name IS NOT NULL "+
-			    " 		AND tor.store_id IN "+storeId+
-			    "	) t ";
-
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-		 List<Map<String, Object>> lst_data = null;
-	     try{
-	       SQLQuery query = session.createSQLQuery(sql);
-	       lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	     }catch (Exception e){
-	         e.printStackTrace();
-	     }finally {
-	         session.close();
-	     }
-	    
-		return (lst_data==null||lst_data.size()==0)?null:lst_data.get(0);
-	}
+//	@Override
+//	public List<Map<String, Object>> queryOrderCountOfMonth_CSZJ_QYJL(Object store) {
+//
+//		String sql ="    SELECT  DATE_FORMAT(t.order_date, '%c月') AS order_date,count(1) as ordercount,round(SUM(t.payable_price),0) as total_price  "+
+//				    "	 FROM	( "+
+//				    "		SELECT 	tor.order_sn,tor.id,tor.store_id,tor.payable_price, tof.create_time AS order_date"+
+//				    "		FROM t_order tor "+
+//				    "		JOIN t_order_flow tof ON tof.order_id = tor.id "+
+//				    "		AND tof.order_status = 'signed' "+
+//				    //" 	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
+//				    "   	AND YEAR(tof.create_time)=YEAR(CURDATE())  "+
+//				    "		AND tor.employee_name IS NOT NULL "+
+//				    " 		AND tor.store_id IN "+store+
+//				    "	) t  GROUP BY DATE_FORMAT(t.order_date, '%Y-%m')";
+//
+//
+//     Session session = getHibernateTemplate().getSessionFactory().openSession();
+//	 	List<Map<String, Object>> lst_data = null;
+//     try{
+//        SQLQuery query = session.createSQLQuery(sql);
+//         lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//     }catch (Exception e){
+//         e.printStackTrace();
+//     }finally {
+//         session.close();
+//     }
+//     return lst_data;
+//	}
 
 	
-	@Override
-	public Map<String, Object> getOrderFlow(String order_id, String status) {
-		String sql ="select * from t_order_flow where order_id='"+order_id+"' and order_status='"+status+"'";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
-		 List<Map<String, Object>> lst_data = null;
-	     try{
-	       SQLQuery query = session.createSQLQuery(sql);
-	       lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	     }catch (Exception e){
-	         e.printStackTrace();
-	     }finally {
-	         session.close();
-	     }
+//	@Override
+//	public Map<String, Object> getAllOrderOfStore(String storeId) {
+//		String sql ="    SELECT  count(1) as total,round(SUM(t.payable_price),0) as total_price  "+
+//			    "	 FROM	( "+
+//			    "		SELECT 	tor.order_sn,tor.id,tor.store_id,tor.payable_price, tof.create_time AS order_date"+
+//			    "		FROM t_order tor "+
+//			    "		JOIN t_order_flow tof ON tof.order_id = tor.id "+
+//			    "		AND tof.order_status = 'signed' "+
+//			    //" 	AND DATE_FORMAT(tof.create_time, '%Y-%m')='2017-03'  "+
+//			    "		AND tor.employee_name IS NOT NULL "+
+//			    " 		AND tor.store_id IN "+storeId+
+//			    "	) t ";
+//
+//		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+//		 List<Map<String, Object>> lst_data = null;
+//	     try{
+//	       SQLQuery query = session.createSQLQuery(sql);
+//	       lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//	     }catch (Exception e){
+//	         e.printStackTrace();
+//	     }finally {
+//	         session.close();
+//	     }
+//
+//		return (lst_data==null||lst_data.size()==0)?null:lst_data.get(0);
+//	}
 
-		return (lst_data==null||lst_data.size()==0)?null:lst_data.get(0);
-	}
+	
+
+//	@Override
+//	public Map<String, Object> getOrderFlow(String order_id, String status) {
+//		String sql ="select * from t_order_flow where order_id='"+order_id+"' and order_status='"+status+"'";
+//		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+//		 List<Map<String, Object>> lst_data = null;
+//	     try{
+//	       SQLQuery query = session.createSQLQuery(sql);
+//	       lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//	     }catch (Exception e){
+//	         e.printStackTrace();
+//	     }finally {
+//	         session.close();
+//	     }
+//
+//		return (lst_data==null||lst_data.size()==0)?null:lst_data.get(0);
+//	}
+
 
 	
 
