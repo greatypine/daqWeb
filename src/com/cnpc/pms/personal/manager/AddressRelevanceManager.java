@@ -1,15 +1,15 @@
 package com.cnpc.pms.personal.manager;
 
-import java.util.List;
-import java.util.Map;
-
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.personal.entity.AddressRelevance;
 
+import java.util.List;
+import java.util.Map;
+
 public interface AddressRelevanceManager extends IManager{
 	//同步订单地址数据
-	void syncOrderAddress();
+	//void syncOrderAddress();
 	//查找订单地址
 	AddressRelevance findAddressRelevanceByCountyIdAndPlaceName(String ad_code,String placename);
 	//根据片区id查询所有的片区
@@ -21,7 +21,7 @@ public interface AddressRelevanceManager extends IManager{
 	void UpdateNUmber(String pids);
 	
 	//清除重复数据
-	void syncdeleteOrderAddress();
+	//void syncdeleteOrderAddress();
 	
 	//查询所有片区信息（订单区块订单视角）
 	Map<String, Object> showOrderAddressRelevanceData(QueryConditions conditions);

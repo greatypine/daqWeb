@@ -767,7 +767,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 	}
 
 	// 同步平台3.0的t_store数据
-	public void updateSyncPlatStore() {
+	/*public void updateSyncPlatStore() {
 		List<Store> platIdisnullList = findStoreListByPlatIdisnull();
 		PlatformStoreManager platformStoreManager = (PlatformStoreManager) SpringHelper.getBean("platformStoreManager");
 		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
@@ -794,7 +794,7 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 			}
 
 		}
-	}
+	}*/
 
 	@Override
 	public List<Store> findStoreListByPlatIdisnull() {

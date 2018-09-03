@@ -719,7 +719,12 @@
           	   var result= JSON.parse(data.data);
 	           if(result.status=='success'){
 	        	   window.location.href=result.data;
-	           }else{
+	           }else if(result.status=='more'){
+				   crm_alert(0,"导出条目过多，请重新筛选条件导出！");
+				   $("#process_div").hide();
+				   $("#process_div_pic").hide();
+				   return;
+			   }else{
 	        	   crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
 	        	   $("#process_div").hide();
         	       $("#process_div_pic").hide();

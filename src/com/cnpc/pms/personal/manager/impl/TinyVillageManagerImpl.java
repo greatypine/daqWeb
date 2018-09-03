@@ -1360,6 +1360,11 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 		if (map.get("data") != null) {// 成功返回数据
 
 			List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("data");
+			if(list.size()>=50000){
+				result.put("message","导出条目过多，请重新筛选条件导出！");
+				result.put("status","more");
+				return result;
+			}
 			if (list != null && list.size() > 0) {
 				/*String str_file_dir_path = PropertiesUtil.getValue("file.root");
 				String str_web_path = PropertiesUtil.getValue("file.web.root");*/
