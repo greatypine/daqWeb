@@ -128,6 +128,7 @@ var pro_id;
 		$('#town_name').change(function(){
 	        $(lst_select_tiny).each(function(index,element){
 	            if(element.name == $('#town_name').val()){
+					console.log(element.id);
 	                $('#town_id').val(element.id);
 	               // $('#gb_code').val(element.gb_code);
 	               // building_option();
@@ -137,6 +138,7 @@ var pro_id;
 		$('#village_name').change(function(){
 	        $(lst_select_village).each(function(index,element){
 	            if(element.name == $('#village_name').val()){
+					console.log(element.id);
 	                $('#village_id').val(element.id);
 	               // $('#village_gb_code').val(element.gb_code);
 	                //building_option();
