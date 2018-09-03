@@ -111,7 +111,7 @@ public interface StoreManager extends IManager {
 	public void updateUserStoreId(Long store_id);
 
 	// 同步平台3.0的t_store数据
-	public void updateSyncPlatStore();
+	//public void updateSyncPlatStore();
 
 	// 获取未同步的门店数据
 	public List<Store> findStoreListByPlatIdisnull();

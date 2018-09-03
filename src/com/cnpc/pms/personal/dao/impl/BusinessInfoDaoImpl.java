@@ -1,15 +1,14 @@
 package com.cnpc.pms.personal.dao.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.hibernate.SQLQuery;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.personal.dao.BusinessInfoDao;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class BusinessInfoDaoImpl extends BaseDAOHibernate implements BusinessInfoDao{
 
@@ -22,8 +21,6 @@ public class BusinessInfoDaoImpl extends BaseDAOHibernate implements BusinessInf
         		"LEFT JOIN t_town town ON bus.town_id = town.id "+
         		"LEFT JOIN t_county coun ON town.county_id=coun.id "+
         		"LEFT JOIN t_city city ON coun.city_id=city.id "+
-        		"LEFT JOIN tb_bizbase_user user ON bus.employee_no=user.employeeId  "+
-        		"LEFT JOIN t_store store ON user.store_id=store.store_id  "+
         		"LEFT JOIN t_province pro ON city.province_id=pro.id WHERE 1=1 and bus.status=0 "+where;
         System.out.println(str_count_sql);
         //sql查询列，用于页面展示所有的数据
@@ -35,16 +32,14 @@ public class BusinessInfoDaoImpl extends BaseDAOHibernate implements BusinessInf
 	"bus.three_level_index, "+
 	"bus.four_level_index, "+
 	"bus.five_level_index, "+
-	"user.`name` as employee_name,"+
-	"store.`name` as store_name,"+
+	/*"user.`name` as employee_name,"+
+	"store.`name` as store_name,"+*/
 	"bus.shop_area "+
  "from t_town_business_info bus "+
 "LEFT JOIN t_village vill ON bus.village_id=vill.id "+
 "LEFT JOIN t_town town ON bus.town_id = town.id "+
 "LEFT JOIN t_county coun ON town.county_id=coun.id "+
 "LEFT JOIN t_city city ON coun.city_id=city.id "+
-"LEFT JOIN tb_bizbase_user user ON bus.employee_no=user.employeeId  "+
-"LEFT JOIN t_store store ON user.store_id=store.store_id  "+
 "LEFT JOIN t_province pro ON city.province_id=pro.id WHERE 1=1 and bus.status=0 ";
         StringBuilder sb_sql = new StringBuilder();
         sb_sql.append(find_sql);

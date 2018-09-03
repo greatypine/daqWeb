@@ -1,9 +1,5 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
@@ -13,17 +9,17 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.personal.dao.AddressRelevanceDao;
-import com.cnpc.pms.personal.dao.VillageDao;
 import com.cnpc.pms.personal.entity.AddressRelevance;
-import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.Store;
-import com.cnpc.pms.personal.entity.Village;
 import com.cnpc.pms.personal.manager.AddressRelevanceManager;
 import com.cnpc.pms.personal.manager.StoreManager;
-import com.cnpc.pms.platform.dao.OrderAddressDao;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AddressRelevanceManagerImpl extends BizBaseCommonManager implements AddressRelevanceManager{
-
+/*
 	@Override
 	public void syncOrderAddress() {
 		AddressRelevanceManager addressRelevanceManager=(AddressRelevanceManager)SpringHelper.getBean("addressRelevanceManager");
@@ -72,7 +68,7 @@ public class AddressRelevanceManagerImpl extends BizBaseCommonManager implements
 			}
 			
 		}
-	}
+	}*/
 
 	
 	@Override
@@ -174,12 +170,12 @@ public class AddressRelevanceManagerImpl extends BizBaseCommonManager implements
 	}
 
 
-	@Override
+	/*@Override
 	public void syncdeleteOrderAddress() {
 		AddressRelevanceDao addressRelevanceDao =(AddressRelevanceDao)SpringHelper.getBean(AddressRelevanceDao.class.getName());
 		addressRelevanceDao.deleteXiangtong();
 		addressRelevanceDao.deleteComnunityAreaData();
-	}
+	}*/
 
 
 	@Override
