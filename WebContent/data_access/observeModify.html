@@ -49,8 +49,8 @@
                         $$.ajax(url, "requestString=" + encodeURIComponent(data.toJsonString()), function(datas, textStatus, XMLHttpRequest){
                             var func = $.fromJSON(datas.data);
                             var model_name = func.model_name;
-                            $("#model_name").val(model_name);
-                            $("#model_name").attr("readonly",true);
+                            $("#model_name1").val(model_name);
+                            $("#model_name1").attr("readonly",true);
                             var order_no = func.order_no;
                             var remark = func.remark;
                             $("#orderNum").val(order_no);
@@ -71,7 +71,7 @@
                         $$.ajax(url, "requestString=" + encodeURIComponent(data.toJsonString()), function(datas, textStatus, XMLHttpRequest){
                             var func = $.fromJSON(datas.data);
                             var model_name = func.model_name;
-                            $("#model_name1").val(model_name);
+                            $("#model_name").val(model_name);
                         });
                     }else{//当id不是空时证明是编辑
                         var url = $$.PMSDispatchActionUrl;
@@ -82,7 +82,7 @@
                             var observe_content = func.observe_content;
                             var order_no = func.order_no;
                             var remark = func.remark;
-                            $("#model_name1").val(model_name);
+                            $("#model_name").val(model_name);
                             $("#observe_content").val(observe_content);
                             $("#remark").val(remark);
                             $("#orderNo").val(order_no);
@@ -100,20 +100,7 @@
 
             
             function save1(){
-                if(model_id == 'undefined' || model_id == null){//明查模块添加及编辑
-                    var orgUnit = {
-                        id:$("#functionId").val(),
-                        type:getRadioVal("radioF"),
-                        remark:$("#remark").val()
-                    };
-                }else{
-                    var orgUnit = {
-                        id:$("#functionId").val(),
-                        type:getRadioVal("radioF"),
-                        remark:$("#remark").val()
-                    };
-                }
-                var $validator = new PMSValidator($("#funcModify")[0], {
+                var $validator = new PMSValidator($("#observeModify")[0], {
                     bNormalDisplay: false,
                     iDisplayLength: 999
                 });
@@ -121,17 +108,53 @@
                 if (!flag) {
                     return false;
                 }
-                var orgUnit = {
-                    id:$("#functionId").val(),
-                    activityCode:$("#activityCode").val(),
-                    activityName: $("#activityName").val(),
-                    parentCode:$("#parentCode").val(),
-					orderNo:$("#orderNo").val(),
-					module:$("#module").val(),
-					type:getRadioVal("radioF"),
-					remark:$("#remark").val()
-                };
-                transportInformation(orgUnit);
+                if(model_id == 'undefined' || model_id == null){//明查模块添加及编辑
+                    var orgUnit = {
+                        id:$("#id1").val(),
+                        status:getRadioVal("radioF1"),
+                        remark:$("#remark_model").val(),
+                        model_name:$("#model_name1").val(),
+                        order_no:$("#orderNo1").val()
+                    };
+                    doManager("functionManager", "modify", orgUnit, function(data, textStatus, XMLHttpRequest){
+                        if (data.result) {
+                            var orgData = $.fromJSON(data.data);
+                            $$.showMessage("${system.info}", "修改功能成功!");
+                            window.setTimeout(function() {
+                                window.parent.appFrame.location = "functionModify.html?id=" + orgData.id;
+                            }, "1000");p''';/'
+                        }else{
+                            $$.showMessage("${system.info}", data.message);
+                            return false;
+                        }
+                    }, true, {
+                        showWaiting: true
+                    });
+                }else{
+                    var orgUnit = {
+                        id:$("#id").val(),
+                        status:getRadioVal("radioF"),
+                        remark:$("#remark_model").val(),
+                        model_id:$("#model_id").val(),
+                        observe_content:$("#observe_content").val(),
+                        order_no:$("#orderNo").val()
+                    };
+                    doManager("functionManager", "modify", orgUnit, function(data, textStatus, XMLHttpRequest){
+                        if (data.result) {
+                            var orgData = $.fromJSON(data.data);
+                            $$.showMessage("${system.info}", "修改功能成功!");
+                            window.setTimeout(function() {
+                                window.parent.appFrame.location = "functionModify.html?id=" + orgData.id;
+                            }, "1000");
+                        }else{
+                            $$.showMessage("${system.info}", data.message);
+                            return false;
+                        }
+                    }, true, {
+                        showWaiting: true
+                    });
+                }
+               // transportInformation(orgUnit);
             }
             
             function transportInformation(orgUnit){
@@ -196,7 +219,8 @@
                                     </label>
                                 </td>
 								 <td width="40%">
-									<input type="text" id="model_name1" readonly name="activityName" class="form-control" style="width: 50%" />
+                                     <input type="hidden" id="model_id">
+									<input type="text" id="model_name" readonly name="activityName" class="form-control" style="width: 50%" />
                                 </td>
                             </tr>
 							<tr>
@@ -207,6 +231,7 @@
                                     </font>
                                 </td>
                                 <td width="40%">
+                                    <input type="hidden" id="id">
                                     <input type="text" id="observe_content" name="observe_content" class="form-control" style="width: 50%"/>
                                 </td>
                             </tr>
@@ -252,7 +277,8 @@
                                     </font>
                                 </td>
                                 <td width="40%">
-                                    <input type="text" id="model_name" name="module" class="form-control" style="width: 50%"/>
+                                    <input type="hidden" id="id1">
+                                    <input type="text" id="model_name1" name="module" class="form-control" style="width: 50%"/>
                                 </td>
                             </tr>
                             <tr>
