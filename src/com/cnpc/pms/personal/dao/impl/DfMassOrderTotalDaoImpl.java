@@ -1,21 +1,20 @@
 package com.cnpc.pms.personal.dao.impl;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.classic.Session;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.personal.dao.DfMassOrderTotalDao;
 import com.cnpc.pms.personal.entity.TinyVillageCode;
 import com.cnpc.pms.personal.manager.TinyVillageCodeManager;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.classic.Session;
+import org.hibernate.transform.Transformers;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class DfMassOrderTotalDaoImpl extends BaseDAOHibernate implements DfMassOrderTotalDao {
 
@@ -82,7 +81,7 @@ public class DfMassOrderTotalDaoImpl extends BaseDAOHibernate implements DfMassO
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
+			session.close();
 		}
 
 	}
