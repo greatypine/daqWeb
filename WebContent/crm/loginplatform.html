@@ -246,15 +246,18 @@ var isfqzycareer=false;//门店 服务专员 事业群人员
 var iscrmzbjs = false;//总部人员
 
 function isLogincrm(){
-	doManager("AreaManager", "queryAreaByCurrEmployeeNo",null,
-			function(data, textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var curr_u = JSON.parse(data.data);
-					if(curr_u!=null&&curr_u.name!=null&&curr_u.employee_a_name!=null){
-						iscrmgax = true;
-					}
-				}
-	},false);
+    if(currentUser.usergroup.code=="GAX"){
+        doManager("AreaManager", "queryAreaByCurrEmployeeNo",null,
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var curr_u = JSON.parse(data.data);
+                    if(curr_u!=null&&curr_u.name!=null&&curr_u.employee_a_name!=null){
+                        iscrmgax = true;
+                    }
+                }
+            },false);
+    }
+
 }
 
 
