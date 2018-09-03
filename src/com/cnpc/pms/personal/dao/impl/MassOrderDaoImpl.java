@@ -656,4 +656,21 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 		return order_obj;
 	}
 
+	@Override
+	public Map<String, Object> queryOrderDetailBySN(String order_sn){
+		String sql = "SELECT CONCAT(a.id, '') AS id, a.order_sn, CONCAT(a.customer_id, '') AS customer_id, CONCAT(a.order_address_id, '') AS order_address_id, " +
+				"a.total_quantity, a.trading_price, a.payable_price, CONCAT(a.order_status, '') AS order_status, CONCAT(a.order_type, '') AS order_type, a.employee_name, " +
+				"a.employee_phone, a.appointment_start_time, a.create_time, a.sign_time AS receivedTime, a.appointment_end_time, a.seller_remark, a.addr_address AS address, " +
+				"a.addr_name AS short_name, a.addr_mobilephone AS mobilephone FROM df_mass_order_total a WHERE a.order_sn = '"+order_sn+"'";
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		Map<String, Object> order_obj = null;
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if (lst_data != null && lst_data.size() > 0) {
+			order_obj = (Map<String, Object>) lst_data.get(0);
+		}
+		return order_obj;
+	}
+
 }

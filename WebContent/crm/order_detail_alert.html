@@ -305,7 +305,7 @@ function initcurruser(){
 
 
 function initOrderDetail(order_sn){
-	doManager("OrderManager", "queryOrderInfoBySN",order_sn,
+	doManager("massOrderManager", "queryOrderDetailBySN",order_sn,
 			function(data, textStatus, XMLHttpRequest) {
 				if (data.result) {
 					var order_obj = JSON.parse(data.data);

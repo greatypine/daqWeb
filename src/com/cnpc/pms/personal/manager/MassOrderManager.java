@@ -1,10 +1,10 @@
 package com.cnpc.pms.personal.manager;
 
-import java.util.Map;
-
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
+
+import java.util.Map;
 
 /**
  * @Function：订单数据
@@ -78,5 +78,11 @@ public interface MassOrderManager extends IManager {
 	 * @return
 	 */
 	public Map<String, Object> queryContractById(String contract_id);
-	
+
+	/**
+	 * 根据订单sn查询订单明细
+	 * @aram order_sn
+	 * @return
+	 */
+	public Map<String, Object> queryOrderDetailBySN(String order_sn);
 }
