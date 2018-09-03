@@ -218,25 +218,25 @@ public interface InterManager extends IManager {
      */
     public Result findRelationOfEmployee_byFiveMonth(String employeeNo);
     
-    /**
-     * 
-     * TODO app个人动态 
-     * 2017年6月2日
-     * @author gaobaolei
-     * @param employeeNo
-     * @return
-     */
-    public Result findEmployee_areaInfo(String employeeNo,Long area_id);
+//    /**
+//     *
+//     * TODO app个人动态
+//     * 2017年6月2日
+//     * @author gaobaolei
+//     * @param employeeNo
+//     * @return
+//     */
+//    public Result findEmployee_areaInfo(String employeeNo,Long area_id);
 
     
     
-    /**
-     * APP个人动态 的送单记录 根据员工号 查询订单。
-     * @param employee_no
-     * @param pageInfo
-     * @return
-     */
-    public Result queryOrderListByEmployeeNo(String employee_no, PageInfo pageInfo,Long area_id);
+//    /**
+//     * APP个人动态 的送单记录 根据员工号 查询订单。
+//     * @param employee_no
+//     * @param pageInfo
+//     * @return
+//     */
+//    public Result queryOrderListByEmployeeNo(String employee_no, PageInfo pageInfo,Long area_id);
     
     
 //    /**

@@ -1326,31 +1326,31 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 
     
     
-    /**
-     * APP个人动态 的送单记录 根据员工号 查询订单。
-     * @param employee_no
-     * @param pageInfo
-     * @return
-     */
-    @Override
-    public Result queryOrderListByEmployeeNo(String employee_no, PageInfo pageInfo,Long area_id){
-    	Result result = new Result();
-    	Map<String,Object> map = null;
-    	try {
-    		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
-    		map = orderManager.queryOrderListByEmployeeNo(employee_no, pageInfo,area_id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.setDataMap(null);
-			result.setCode(CodeEnum.error.getValue());
-			result.setMessage(CodeEnum.error.getDescription());
-			return result;
-		}
-    	result.setDataMap(map);
-		result.setCode(CodeEnum.success.getValue());
-		result.setMessage(CodeEnum.success.getDescription());
-    	return result;
-    }
+//    /**
+//     * APP个人动态 的送单记录 根据员工号 查询订单。
+//     * @param employee_no
+//     * @param pageInfo
+//     * @return
+//     */
+//    @Override
+//    public Result queryOrderListByEmployeeNo(String employee_no, PageInfo pageInfo,Long area_id){
+//    	Result result = new Result();
+//    	Map<String,Object> map = null;
+//    	try {
+//    		OrderManager orderManager = (OrderManager) SpringHelper.getBean("orderManager");
+//    		map = orderManager.queryOrderListByEmployeeNo(employee_no, pageInfo,area_id);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			result.setDataMap(null);
+//			result.setCode(CodeEnum.error.getValue());
+//			result.setMessage(CodeEnum.error.getDescription());
+//			return result;
+//		}
+//    	result.setDataMap(map);
+//		result.setCode(CodeEnum.success.getValue());
+//		result.setMessage(CodeEnum.success.getDescription());
+//    	return result;
+//    }
     
 //    /**
 //     * APP端，个人中心 根据员工号 查询订单图表
@@ -1457,37 +1457,37 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     	return result;
 	}
 
-	
-	@Override
-	public Result findEmployee_areaInfo(String employeeNo,Long area_id) {
-		Result result = new Result();
-		Map<String, Object> resultMap = new HashMap<String,Object>();
-		try {
-			HumanresourcesManager humanresourcesManager = (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
-			Map<String, Object> map1 = humanresourcesManager.queryEmployeeInfoByNo(employeeNo);
-			AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
-			Map<String, Object> map2 = areaManager.queryAreaByEmployeeNo(employeeNo,area_id);
-			OrderManager orderManager = (OrderManager)SpringHelper.getBean("orderManager");
-			PageInfo pageInfo = new PageInfo();
-			pageInfo.setRecordsPerPage(10);
-			pageInfo.setCurrentPage(1);
-			Map<String, Object> map3 =  orderManager.queryOrderListByEmployeeNo(employeeNo,pageInfo,null);
-			map1.put("orderTotal", map3.get("totalpage"));
-			resultMap.put("allAreaInfo", map2);
-			resultMap.put("employeeInfo", map1);
-			result.setDataMap(resultMap);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.setDataMap(null);
-			result.setCode(CodeEnum.error.getValue());
-			result.setMessage(CodeEnum.error.getDescription());
-			return result;
-		}
-		
-		result.setCode(CodeEnum.success.getValue());
-		result.setMessage(CodeEnum.success.getDescription());
-    	return result;
-	}
+
+//	@Override
+//	public Result findEmployee_areaInfo(String employeeNo,Long area_id) {
+//		Result result = new Result();
+//		Map<String, Object> resultMap = new HashMap<String,Object>();
+//		try {
+//			HumanresourcesManager humanresourcesManager = (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
+//			Map<String, Object> map1 = humanresourcesManager.queryEmployeeInfoByNo(employeeNo);
+//			AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
+//			Map<String, Object> map2 = areaManager.queryAreaByEmployeeNo(employeeNo,area_id);
+//			OrderManager orderManager = (OrderManager)SpringHelper.getBean("orderManager");
+//			PageInfo pageInfo = new PageInfo();
+//			pageInfo.setRecordsPerPage(10);
+//			pageInfo.setCurrentPage(1);
+//			Map<String, Object> map3 =  orderManager.queryOrderListByEmployeeNo(employeeNo,pageInfo,null);
+//			map1.put("orderTotal", map3.get("totalpage"));
+//			resultMap.put("allAreaInfo", map2);
+//			resultMap.put("employeeInfo", map1);
+//			result.setDataMap(resultMap);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			result.setDataMap(null);
+//			result.setCode(CodeEnum.error.getValue());
+//			result.setMessage(CodeEnum.error.getDescription());
+//			return result;
+//		}
+//
+//		result.setCode(CodeEnum.success.getValue());
+//		result.setMessage(CodeEnum.success.getDescription());
+//    	return result;
+//	}
 
 	
 	

@@ -37,13 +37,13 @@ public interface HouseCustomerManager extends IManager {
      */
     public File queryUserHouseCount() throws Exception;
     
-    /**
-     * 
-     * TODO 定时任务设置用户画像的支付状态 
-     * 2017年5月9日
-     * @author gaobaolei
-     */
-    public void changeCustomerPayStatus();
+//    /**
+//     *
+//     * TODO 定时任务设置用户画像的支付状态
+//     * 2017年5月9日
+//     * @author gaobaolei
+//     */
+//    public void changeCustomerPayStatus();
     
     //根据房屋信息查找用户画像
     HouseCustomer findHouseCustomerByHouseId(Long house_id);
