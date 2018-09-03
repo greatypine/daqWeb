@@ -94,15 +94,13 @@ public class DefaultConfigManagerImpl extends BizBaseCommonManager implements De
 		
 		//判断是否是A国安侠
 		AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
-		Map<String, Object> map = areaManager.queryAreaByEmployeeNo(employee_no,null);
-		if(map!=null&&dcMap!=null){
-			String areaName = map.get("area")==null?"":map.get("area").toString();
-			if(areaName!=null&&areaName.length()>0){
-				dcMap.put("isA", "1");
-			}else{
-				dcMap.put("isA", "0");
-			}
+		List<Map<String, Object>> list = areaManager.queryAreaByEmployee(employee_no);
+		if(list!=null&&list.size()>0){
+			dcMap.put("isA", "1");
+		}else{
+			dcMap.put("isA", "0");
 		}
+
 		return dcMap;
 	}
 
