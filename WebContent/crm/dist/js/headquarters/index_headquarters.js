@@ -15,6 +15,9 @@ var storeRankOrderOption;
 // 门店排名(GMV)排名柱状图
 var storeRankChartGmv;
 var storeRankGmvOption;
+var guoanManRankChartGMV;
+// 柱状图属性：国安侠(GMV)排名
+var guoanManRankGMVOption;
 //事业群排名(GMV)排名柱状图
 var businessDepRankChartGMV;
 var businessDepRankGMVOption;
@@ -219,6 +222,8 @@ var initPageElements = function () {
     storeRankChartOrder = echarts.init(document.getElementById('main7'));
     // 初始化事业群排名(GMV)显示图
 	businessDepRankChartGMV = echarts.init(document.getElementById('main4'));
+	guoanManRankChartGMV = echarts.init(document.getElementById('main5'));
+	
 	cityRankGmvOption = {
     title:[
       //{text:"城市排名（GMV:元）",x: '2%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
@@ -840,7 +845,111 @@ var initPageElements = function () {
 	     //window.open("current_shopkeeper.html?s="+store_id+"&p=1&c=2","_self");
 		  window.location.href=url; 
     });
- 
+   // 柱状图属性：国安侠(GMV)排名
+    guoanManRankGMVOption = {
+        title:[
+      {x: '3%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
+    ],
+    grid: [
+      {x: '20%', y: '7%',},
+    ],
+    tooltip: {
+      formatter: '{b} ({c})',
+      show: "true",
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    xAxis: [
+      {
+        axisTick: {show:false},
+        axisLabel: {show:false},
+        splitLine: {show:false},
+        axisLine: {show:false }
+      },{}
+    ],
+    yAxis: [
+      {
+        gridIndex: 0,
+        interval:0,
+        data:[],
+        axisTick: {show:false},
+        axisLabel: {
+          show: true,
+          margin:65,
+          textStyle:{
+            color:'#fff',
+            align:'left',
+            baseline:'middle'
+          },
+          formatter: function(value) {
+            if ((typeof(value)!="undefined")&&(value.length > 6)) {
+              return value.substring(0, value.indexOf('-'));
+            } else {
+              return value;
+            }
+          }
+
+        },
+        splitLine: {show:false},
+        axisLine: {
+          show:false
+        },
+      }
+    ],
+    series: [
+
+      {
+      	cursor: 'pointer',
+        name: 'GMV',
+        type: 'bar',xAxisIndex: 0,yAxisIndex: 0,barWidth:'55%',
+        itemStyle:{
+          normal:{
+            barBorderRadius: 50,
+            borderWidth: 0,
+            color: function(params2) {
+              // build a color map as your need.
+              var colorList2 = [
+                //'#ff6600','#ca702d','#418ba1','#129bd3','#a0b6a4',
+               // '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
+                '#ffad43','#ffa940','#ffa13a','#ff8222','#ff6600',
+                '#ff6e0a','#ff720e','#ff720e','#ff9430','#ff6600',
+              ];
+              return colorList2[params2.dataIndex];
+            },
+          },
+        },
+        label:{normal:{show:true, position:"right",textStyle:{color:"#9EA7C4"}}},
+        data: [],
+      },
+    ]
+  };
+       // 事件绑定
+    guoanManRankChartGMV.on('click', function (params){
+	  var cName = guoanManRankGMVOption.yAxis[0].data[params.dataIndex].split('-')[1];
+	  var employeeNO = guoanManRankGMVOption.xAxis[0].extdata[params.dataIndex];
+	  var employeeName = guoanManRankGMVOption.yAxis[0].data[params.dataIndex].split('-')[0];
+	  var cityno = guoanManRankGMVOption.xAxis[1].extdata[params.dataIndex];
+	  var s1 = "";
+      //昨天日期
+      if(pageStatusInfo['currentDay']==1){
+      	s1 = findLastFirstDay();
+      	s2 = findLastEndDay();
+      }else{
+      	s1 = findTodayFirstDay();
+      	s2 = findTodayYesterdayDay();
+      }
+	  var dayTime = s1+"-"+s2
+	  var target=pageStatusInfo.targets;
+	  var url = "";
+	  if(target==0){
+	  	url = "searchData_view.html?t="+encode64(0)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("employee")+"&eo="+encode64(employeeNO);
+	  }else if(target==1){
+	  	url = "searchData_view.html?t="+encode64(1)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("employee")+"&eo="+encode64(employeeNO);
+	  }
+	  window.open(url);
+    });
     // 柱状图属性：事业群排名
     businessDepRankGMVOption = {
         title : {
@@ -1712,8 +1821,10 @@ var citySeries = function(){
                 name: 'city',
                 type: 'effectScatter',
                 coordinateSystem: 'geo',
-                symbolSize: 20,
+                symbolSize: 15,
 				showEffectOn: 'render',
+				animation: true,
+				//symbol: 'emptyCircle',
 				rippleEffect: {
 				  brushType: 'stroke'
 				},
@@ -1729,7 +1840,7 @@ var citySeries = function(){
 				  normal: {
 				    color: '#fb8800',
 				    shadowBlur: 10,
-				    shadowColor: '#fb8800'
+				    shadowColor: '#FFFFFF'
 				  }
 				},
               }
@@ -2405,94 +2516,19 @@ var getGuoanManRankDataGMV = function (pageStatusInfo) {
 // 显示国安侠排名(GMV)
 var showGuoanManRankGmv = function (guoanManRankDataGMV) {
  var guoanManRankChartGMV = echarts.init(document.getElementById('main5'));
-    // 柱状图属性：国安侠(GMV)排名
-    var guoanManRankGMVOption = {
-        title:[
-      {x: '3%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
-    ],
-    grid: [
-      {x: '20%', y: '7%',},
-    ],
-    tooltip: {
-      formatter: '{b} ({c})',
-      show: "true",
-      trigger: 'axis',
-      axisPointer: { // 坐标轴指示器，坐标轴触发有效
-        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-      }
-    },
-    xAxis: [
-      {
-        axisTick: {show:false},
-        axisLabel: {show:false},
-        splitLine: {show:false},
-        axisLine: {show:false }
-      },
-    ],
-    yAxis: [
-      {
-        gridIndex: 0,
-        interval:0,
-        data:[],
-        axisTick: {show:false},
-        axisLabel: {
-          show: true,
-          margin:65,
-          textStyle:{
-            color:'#fff',
-            align:'left',
-            baseline:'middle'
-          },
-          formatter: function(value) {
-            if ((typeof(value)!="undefined")&&(value.length > 6)) {
-              return value.substring(0, value.indexOf('-'));
-            } else {
-              return value;
-            }
-          }
-
-        },
-        splitLine: {show:false},
-        axisLine: {
-          show:false
-        },
-      }
-    ],
-    series: [
-
-      {
-      	cursor: 'default',
-        name: 'GMV',
-        type: 'bar',xAxisIndex: 0,yAxisIndex: 0,barWidth:'55%',
-        itemStyle:{
-          normal:{
-            barBorderRadius: 50,
-            borderWidth: 0,
-            color: function(params2) {
-              // build a color map as your need.
-              var colorList2 = [
-                //'#ff6600','#ca702d','#418ba1','#129bd3','#a0b6a4',
-               // '#C1232B','#B5C334','#FCCE10','#E87C25','#27727B',
-                '#ffad43','#ffa940','#ffa13a','#ff8222','#ff6600',
-                '#ff6e0a','#ff720e','#ff720e','#ff9430','#ff6600',
-              ];
-              return colorList2[params2.dataIndex];
-            },
-          },
-        },
-        label:{normal:{show:true, position:"right",textStyle:{color:"#9EA7C4"}}},
-        data: [],
-      },
-    ]
-  };
   var xAxis = [];
     var series = [];
     var extData = [];
+    var extData2 = [];
     $.each(eval(guoanManRankDataGMV['gmv']), function (idx, val) {
         xAxis.push(val['employee_a_name']+"-"+val['city_name']+"-"+val['store_name']);
         series.push(parseInt(val['pesgmv']));
+        extData.push(val['employee_a_no']);
+        extData2.push(val['cityno']);
     });
     guoanManRankGMVOption.yAxis[0].data = xAxis.reverse();
+    guoanManRankGMVOption.xAxis[0].extdata = extData;
+    guoanManRankGMVOption.xAxis[1].extdata = extData2;
     guoanManRankGMVOption.series[0].data = series.reverse();
     guoanManRankGMVOption.title[0].text="国安侠排名("+pageStatusInfo['currentMonth']+"月GMV)";
     guoanManRankChartGMV.setOption(guoanManRankGMVOption);

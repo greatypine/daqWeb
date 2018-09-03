@@ -4611,8 +4611,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				JSONObject jo = new JSONObject();
 				Map<String,Object> dynamic = (Map<String,Object>)dynamicList.get(i);
 				jo.put("city_name", dynamic.get("city_name"));
+				jo.put("cityno", dynamic.get("cityno"));
 				jo.put("store_name", dynamic.get("store_name"));
 				jo.put("employee_a_name", dynamic.get("employee_a_name"));
+				jo.put("employee_a_no", dynamic.get("employee_a_no"));
 	            jo.put("pesgmv", dynamic.get("pesgmv"));
 	            if(sign!=null){
 	            	jo.put("rank", i+1);
@@ -4625,8 +4627,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				JSONObject jo = new JSONObject();
 				Map<String,Object> dynamic = (Map<String,Object>)dynamicList.get(i);
 				jo.put("city_name", dynamic.get("city_name"));
+				jo.put("cityno", dynamic.get("cityno"));
 				jo.put("store_name", dynamic.get("store_name"));
 				jo.put("employee_a_name", dynamic.get("employee_a_name"));
+				jo.put("employee_a_no", dynamic.get("employee_no"));
 	            jo.put("pesgmv", dynamic.get("pesgmv"));
 	            if(sign!=null){
 	            	for (int j = 0; j < dynamicAllList.size(); j++) {
