@@ -17,15 +17,15 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryStoreStat(TurnoverStatDto storeStatDto,PageInfo pageInfo,String timeFlag){
-		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
-				+ "AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(SUM( CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '"
 				+ storeStatDto.getEndDate() + " 23:59:59') THEN	 gmv_price ELSE 0 END ),0) AS gmv_price_profit, "
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END ),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (return_label='1' and loan_label !='4' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END ),0) AS return_price_profit,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END,0) AS order_num,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS order_num,"
 				+ "IFNULL(SUM( CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END ),0) AS order_num_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END ),0) AS return_num,"
@@ -76,16 +76,16 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportStoreStat(TurnoverStatDto storeStatDto,String timeFlag){
-		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
-				+ "AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '"
 				+ storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END ),0) AS gmv_price_profit, "
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END ),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (return_label='1' and loan_label !='4' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END ),0) AS return_price_profit,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '"
 				+ storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END ),0) AS order_num_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num,"
@@ -119,15 +119,15 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public Map<String, Object>  queryAreaStat(TurnoverStatDto storeStatDto,PageInfo pageInfo,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,  IFNULL(a.area_code,'') as area_code, IFNULL(a.info_employee_a_no,'') as employee_a_no, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN gmv_price ELSE 0 END,0) AS gmv_price,IFNULL(SUM(CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN gmv_price ELSE 0 END),0) AS gmv_price,IFNULL(SUM(CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 				+ "AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END ),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (return_label='1' and loan_label !='4' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END),0) AS return_price_profit,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN loan_label !='4' THEN 1 ELSE 0 END),0) AS order_num_profit,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN loan_label !='4' THEN 1 ELSE 0 END),0) AS order_num_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' and loan_label !='4' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
@@ -181,15 +181,15 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportAreaStat(TurnoverStatDto storeStatDto,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,  IFNULL(a.area_code,'') as area_code, IFNULL(a.info_employee_a_no,'') as employee_a_no, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN gmv_price ELSE 0 END,0) AS gmv_price,IFNULL(SUM(CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN gmv_price ELSE 0 END),0) AS gmv_price,IFNULL(SUM(CASE WHEN (loan_label !='4' AND sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 				+ "AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END ),0) AS return_price,"
 				+ "IFNULL(SUM(CASE WHEN (return_label='1' and loan_label !='4' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END),0) AS return_price_profit,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN loan_label !='4' THEN 1 ELSE 0 END),0) AS order_num_profit,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN loan_label !='4' THEN 1 ELSE 0 END),0) AS order_num_profit,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' and loan_label !='4' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
@@ -225,10 +225,10 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryDeptStat(TurnoverStatDto storeStatDto,PageInfo pageInfo,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(a.department_name,'') as department_name, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END ),0) AS return_price,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END,0) "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) "
 				+ "AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END ),0) AS return_num FROM ";
 
@@ -280,11 +280,11 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportDeptStat(TurnoverStatDto storeStatDto,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(a.department_name,'') as department_name, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END),0) AS return_price,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num FROM ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
@@ -317,11 +317,11 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryChannelStat(TurnoverStatDto storeStatDto,PageInfo pageInfo,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(a.channel_name,'') as channel_name, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END),0) AS return_price,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num FROM ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
@@ -372,11 +372,11 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportChannelStat(TurnoverStatDto storeStatDto,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(a.channel_name,'') as channel_name, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END),0) AS return_price,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num FROM ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
@@ -409,11 +409,11 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryEshopStat(TurnoverStatDto storeStatDto,PageInfo pageInfo,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(a.eshop_name,'') as eshop_name, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END),0) AS return_price,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num FROM ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
@@ -464,11 +464,11 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportEshopStat(TurnoverStatDto storeStatDto,String timeFlag){
 		String sql = "SELECT a.store_city_name AS city_name, a.store_name,	a.store_code, IFNULL(a.eshop_name,'') as eshop_name, "
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END,0) AS gmv_price,"
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN gmv_price ELSE 0 END),0) AS gmv_price,"
 				+ "IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN returned_amount ELSE 0 END),0) AS return_price,"
-				+ "IFNULL(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
-				+ "THEN 1 ELSE 0 END,0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
+				+ "IFNULL(SUM(CASE WHEN (sign_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' AND sign_time <= '" + storeStatDto.getEndDate() + " 23:59:59') "
+				+ "THEN 1 ELSE 0 END),0) AS order_num,IFNULL(SUM( CASE WHEN (return_label='1' AND return_time >= '" + storeStatDto.getBeginDate() + " 00:00:00' "
 						+ "AND return_time <= '" + storeStatDto.getEndDate() + " 23:59:59') THEN 1 ELSE 0 END),0) AS return_num FROM ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
