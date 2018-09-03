@@ -138,13 +138,19 @@ public class DfCustomerOrderDaoImpl extends DAORootHibernate implements DfCustom
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		String str_sql = "SELECT COUNT(DISTINCT customer_id) as custom_totle FROM df_customer_order_month_trade WHERE tiny_village_code='"
 				+ tinycode + "'";
-		SQLQuery query = session.createSQLQuery(str_sql);
-		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		if (lst_data != null && lst_data.size() > 0) {
-			Map<String, Object> map = lst_data.get(0);
-			if (map != null) {
-				return Integer.parseInt(map.get("custom_totle") + "");
+		try {
+			SQLQuery query = session.createSQLQuery(str_sql);
+			List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (lst_data != null && lst_data.size() > 0) {
+				Map<String, Object> map = lst_data.get(0);
+				if (map != null) {
+					return Integer.parseInt(map.get("custom_totle") + "");
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
 		return null;
 	}
