@@ -192,3 +192,67 @@ function addzero(num){
 		    }
 		    return -1;
 		}
+function formatDate(date) {
+    var myyear = date.getFullYear();
+    var mymonth = date.getMonth()+1;
+    var myweekday = date.getDate();
+
+    if(mymonth < 10){
+        mymonth = "0" + mymonth;
+    }
+    if(myweekday < 10){
+        myweekday = "0" + myweekday;
+    }
+    return (myyear+"/"+mymonth + "/" + myweekday);
+}
+   //获得某月的天数
+function getMonthDays(myMonth){
+	var now = new Date();  
+	var nowYear = now.getFullYear(); //当前年
+    var monthStartDate = new Date(nowYear, myMonth, 1);
+    var monthEndDate = new Date(nowYear, myMonth + 1, 1);
+    var   days   =   (monthEndDate   -   monthStartDate)/(1000   *   60   *   60   *   24);
+    return   days;
+}
+//获取上个月一号的日期
+function findLastFirstDay(){
+	var now = new Date();  
+	var nowYear = now.getFullYear(); //当前年
+	var lastMonthDate = new Date();  //上月日期
+    lastMonthDate.setDate(1);
+    lastMonthDate.setMonth(lastMonthDate.getMonth()-1);
+    var lastYear = lastMonthDate.getYear();
+    var lastMonth = lastMonthDate.getMonth();
+	var getLastMonthStartDate = new Date(nowYear, lastMonth, 1);
+	var getLastMonthStartDate = formatDate(getLastMonthStartDate);
+	return getLastMonthStartDate;
+}
+//获取上个月最后一天的日期
+function findLastEndDay(){
+	var now = new Date();  
+	var nowYear = now.getFullYear(); //当前年
+	var lastMonthDate = new Date();  //上月日期
+    lastMonthDate.setDate(1);
+    lastMonthDate.setMonth(lastMonthDate.getMonth()-1);
+    var lastYear = lastMonthDate.getYear();
+    var lastMonth = lastMonthDate.getMonth();
+	var getLastMonthEndDate = new Date(nowYear, lastMonth, getMonthDays(lastMonth));
+    var getLastMonthEndDate = formatDate(getLastMonthEndDate);
+    return getLastMonthEndDate;
+}
+//获取当月开始时间
+function findTodayFirstDay(){
+	var now = new Date();  
+	var nowYear = now.getFullYear(); //当前年
+	var nowMonth = now.getMonth();//当前月
+	var getMonthStartDate = new Date(nowYear, nowMonth, 1);
+	var getMonthStartDate =  formatDate(getMonthStartDate);
+	return getMonthStartDate;
+}
+//获取当前月昨天的日期
+function findTodayYesterdayDay(){
+  var day1 = new Date();
+  day1.setTime(day1.getTime()-24*60*60*1000);
+  var getMonthYesterdayDay = day1.getFullYear()+"/" + ((day1.getMonth()+1)<10?('0'+(day1.getMonth()+1)):(day1.getMonth()+1)) + "/" + (day1.getDate()<10?('0'+day1.getDate()):day1.getDate());
+  return getMonthYesterdayDay;
+}

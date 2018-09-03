@@ -1727,11 +1727,11 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		}else if("yes".equals(zx)){
 			cityStr+=" and d.id='"+province_id+"' ";
 		}
-		String sql ="select dat.city_name as city_name,d.id as city_id,dat.store_name as store_name,dat.employee_name AS employee_a_name,dat.employee_no AS employee_no,pesgmv as pesgmv from ds_pes_gmv_emp_month dat "+
+		String sql ="select dat.city_name as city_name,d.id as city_id,d.cityno as cityno,dat.store_name as store_name,dat.employee_name AS employee_a_name,dat.employee_no AS employee_no,pesgmv as pesgmv from ds_pes_gmv_emp_month dat "+
 				"left join t_store ts on (dat.storeno = ts.storeno) left join t_dist_citycode d on d.cityname=ts.city_name "+
 				"where year ="+dynamicDto.getYear()+" and month = "+dynamicDto.getMonth()+" "+
 				 provinceStr + cityStr +"order by pesgmv desc ";
-		String sql_count = "SELECT count(tdd.employee_a_name) as employee_a_count  from ( "+sql+") tdd ";
+		String sql_count = "SELECT count(tdd.employee_no) as employee_a_count  from ( "+sql+") tdd ";
 		Query query_count = this.getHibernateTemplate().getSessionFactory()
 				.getCurrentSession().createSQLQuery(sql_count);
 		List<?> total = query_count
