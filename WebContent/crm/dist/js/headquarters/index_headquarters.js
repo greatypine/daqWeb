@@ -2527,8 +2527,8 @@ var showGuoanManRankGmv = function (guoanManRankDataGMV) {
         extData2.push(val['cityno']);
     });
     guoanManRankGMVOption.yAxis[0].data = xAxis.reverse();
-    guoanManRankGMVOption.xAxis[0].extdata = extData;
-    guoanManRankGMVOption.xAxis[1].extdata = extData2;
+    guoanManRankGMVOption.xAxis[0].extdata = extData.reverse();
+    guoanManRankGMVOption.xAxis[1].extdata = extData2.reverse();
     guoanManRankGMVOption.series[0].data = series.reverse();
     guoanManRankGMVOption.title[0].text="国安侠排名("+pageStatusInfo['currentMonth']+"月GMV)";
     guoanManRankChartGMV.setOption(guoanManRankGMVOption);
