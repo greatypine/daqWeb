@@ -1600,7 +1600,8 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	}
 
 	public List<Map<String, Object>> exportMemeData(MemberDataDto memberDataDto){
-		String sql = "select IFNULL(dum.mobilephone,'') as mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,IFNULL(dum.inviteCode,'') as inviteCode,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
+		String sql = "select IFNULL(dum.mobilephone,'') as mobilephone,IFNULL(dum.regist_time,'') as regist_time,IFNULL(dum.opencard_time,'') as opencard_time,"
+				+ "IFNULL(dum.inviteCode,'') as inviteCode,dum.customer_id,dum.regist_cityno,dum.regist_storeid from df_user_member dum where 1=1 ";
 
 		if(StringUtils.isNotEmpty(memberDataDto.getStoreNo())){
 			sql = sql + " AND dum.regist_storeid='"+memberDataDto.getStoreNo()+"' ";
@@ -1638,11 +1639,14 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 					Map result = this.queryStorenameById(storeId);
 					if(result!=null){
 						map.put("store_name", result.get("storename"));
+						map.put("store_no", result.get("storeno"));
 					}else{
 						map.put("store_name", "");
+						map.put("store_no", "");
 					}
 				}else{
 					map.put("store_name", "");
+					map.put("store_no", "");
 				}
 			}
 		}
@@ -1666,7 +1670,7 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 	}
 
 	public Map<String, Object> queryStorenameById(String storeId){
-		String sql = "select name as storename from t_store where 1=1 ";
+		String sql = "select name as storename,storeno from t_store where 1=1 ";
 		if(StringUtils.isNotEmpty(storeId)){
 			sql = sql + " AND platformid = '"+storeId+"'";
 		}
