@@ -111,5 +111,13 @@ public interface MassOrderDao extends IDAO{
 	 **/
 
 	public Map<String,Object> queryOrderListOfEmployee(String employeeNo,PageInfo pageInfo);
+
+	/**
+	 * @Description app查询国安侠送单
+	 * @author gbl
+	 * @date 2018/9/4 16:16
+	 **/
+
+	public Map<String,Object> queryOrderListOfApp(String employeeNo,PageInfo pageInfo,String orderSN);
 	
 }
