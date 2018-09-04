@@ -82,24 +82,24 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     
     
     
-    @Override
-    public Map<String, Object> queryOrderListByEmployeeNo(String employee_no,PageInfo pageInfo,Long area_id){
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
-    	User user = userManager.findEmployeeByEmployeeNo(employee_no);
-    	if(user!=null){
-    		Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
-        	if(store!=null){ 
-            	return orderDao.queryOrderByEmployeeNo(store.get("platformid").toString(), employee_no,pageInfo);
-        	}else{
-        		return null;
-        	}
-    	}else{
-    		return null;
-    	}
-    	
-    }
+//    @Override
+//    public Map<String, Object> queryOrderListByEmployeeNo(String employee_no,PageInfo pageInfo,Long area_id){
+//    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+//    	StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+//    	User user = userManager.findEmployeeByEmployeeNo(employee_no);
+//    	if(user!=null){
+//    		Map<String, Object> store = storeManager.getStoreById(user.getStore_id());
+//        	if(store!=null){
+//            	return orderDao.queryOrderByEmployeeNo(store.get("platformid").toString(), employee_no,pageInfo);
+//        	}else{
+//        		return null;
+//        	}
+//    	}else{
+//    		return null;
+//    	}
+//
+//    }
     
 //    @Override
 //    public List<Map<String, Object>> queryOrderFourMonth(String employee_no,Long area_id){
@@ -157,27 +157,27 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
     
     
     
-    /**
-     * 根据订单sn编号 查询明细信息 
-     * @param order_sn
-     * @return
-     */
-    @Override
-    public Map<String, Object> queryOrderInfoBySN(String order_sn){
-		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-		Map<String,Object> order_obj = orderDao.queryOrderInfoBySN(order_sn);
-    	try {
-			String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
-			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
-			order_obj.put("item_list", item_list);
-			order_obj.put("create_time", order_obj.get("create_time"));
-		}catch (Exception e){
-    		e.printStackTrace();
-			logger.info("根据订单sn编号查询明细信息:"+order_sn,e);
-		}
-
-    	return order_obj;
-    }
+//    /**
+//     * 根据订单sn编号 查询明细信息
+//     * @param order_sn
+//     * @return
+//     */
+//    @Override
+//    public Map<String, Object> queryOrderInfoBySN(String order_sn){
+//		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//		Map<String,Object> order_obj = orderDao.queryOrderInfoBySN(order_sn);
+//    	try {
+//			String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
+//			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
+//			order_obj.put("item_list", item_list);
+//			order_obj.put("create_time", order_obj.get("create_time"));
+//		}catch (Exception e){
+//    		e.printStackTrace();
+//			logger.info("根据订单sn编号查询明细信息:"+order_sn,e);
+//		}
+//
+//    	return order_obj;
+//    }
     
     
     

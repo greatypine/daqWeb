@@ -97,6 +97,19 @@ public interface MassOrderDao extends IDAO{
 
 	public List<Map<String, Object>> queryEmployeeOrderCountByStore(String storeId);
 
+	/**
+	 * @Description  根据订单号查询两个月内的订单信息
+	 * @author gbl
+	 * @date 2018/9/4 10:57
+	 **/
+	public Map<String, Object> queryOrderInfoByOrderSN(String order_sn);
 
+	/**
+	 * @Description 查询国安侠近两个月的送单
+	 * @author gbl
+	 * @date 2018/9/4 13:46
+	 **/
+
+	public Map<String,Object> queryOrderListOfEmployee(String employeeNo,PageInfo pageInfo);
 	
 }

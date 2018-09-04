@@ -141,6 +141,9 @@
          	<small class="text-red" style="padding-left: 10px;">注意：1.未申诉成功的异常订单将不会被计入GMV统计结果。</small></br>
          	<small class="text-red" style="padding-left: 218px;">
             2.申诉时间截止至次月2号18点。
+            </small><br>
+            <small class="text-red" style="padding-left: 218px;">
+              3.当前只提供近两月的异常订单数据。
             </small>
           </div>
           <div class="box-body">
@@ -278,7 +281,10 @@
           </small></br>
           <small class="text-red" style="padding-left: 232px;">
             2.申诉时间截止至次月2号18点。
-            </small>
+            </small><br>
+              <small class="text-red" style="padding-left: 232px;">
+                  3.当前只提供近两月的异常订单数据。
+              </small>
            <div class="clearfix"> 
 	         <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
 	          	<button type="button" style="display:none" id="downOrdersButton" onclick="downAbnormalOrders()" class="btn btn-default pull-right">下载手动异常订单基础数据</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -493,8 +499,17 @@ Date.prototype.format=function(fmt) {
     $(".logo-lg > ul > li").mouseleave(function(){
       $(this).children(".nav_dropdown").hide();
     });
-    $('#auto_date').daterangepicker();
-    $('#manual_date').daterangepicker();
+    var query_date= new Date();
+    var query_month = query_date.getMonth()-1;
+    var query_year = query_date.getFullYear();
+    $('#auto_date').daterangepicker({
+        minDate:new Date(query_year, query_month),
+        maxDate:new Date()
+    });
+    $('#manual_date').daterangepicker({
+        minDate:new Date(query_year, query_month),
+        maxDate:new Date()
+    });
     
     var firstDate = new Date();
     firstDate.setDate(1); //第一天

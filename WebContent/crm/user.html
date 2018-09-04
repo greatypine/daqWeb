@@ -277,61 +277,13 @@
                       <th width="7%">序号</th>
                       <th width="10%">姓名</th>
                       <th width="23%">购买时间</th>
-                      <th width="40%">商品类型</th>
                       <th width="20%">订单编号</th>
                     </tr>
-                    <!-- <tr>
-                      <td>1.</td>
-                      <td>3340466716059187</td>
-                      <td>王大爷<div class="pop"><a href="portrait.html"><p>王大爷</p><p>12345678901</p></a></div></td>
-                      <td>02-11 10:00</td>
-                      <td>洗衣</td>
-                    </tr>
-                    <tr>
-                      <td>2.</td>
-                      <td>3340466716059187</td>
-                      <td>李雪</td>
-                      <td>2017-02-10</td>
-                      <td>快递</td>
-                    </tr>
-                    <tr>
-                      <td>3.</td>
-                      <td>3340466716059187</td>
-                      <td>王大爷</td>
-                      <td>2017-02-11</td>
-                      <td>洗衣</td>
-                    </tr>
-                    <tr>
-                      <td>4.</td>
-                      <td>3340466716059187</td>
-                      <td>李雪</td>
-                      <td>2017-02-10</td>
-                      <td>快递</td>
-                    </tr>
-                    <tr>
-                      <td>5.</td>
-                      <td>3340466716059187</td>
-                      <td>王大爷</td>
-                      <td>2017-02-11</td>
-                      <td>洗衣</td>
-                    </tr>
-                    <tr>
-                      <td>6.</td>
-                      <td>3340466716059187</td>
-                      <td>李雪</td>
-                      <td>2017-02-10</td>
-                      <td>快递</td>
-                    </tr> -->
                     </tbody></table>
                     
                     <div class="clearfix box-footer">
 		              <ul class="pagination pagination-sm no-margin pull-right order_class">
 		              <div class="tcdPageCode" id="tcdPageCode_order"></div>
-		                <!-- <li><a href="#">«</a></li>
-		                <li><a href="#">1</a></li>
-		                <li><a href="#">2</a></li>
-		                <li><a href="#">3</a></li>
-		                <li><a href="#">»</a></li> -->
 		              </ul>
 		            </div>
 		            
@@ -653,14 +605,14 @@ function initStore(){
   		}
   		order_cur_no = curno;
   		pageinfo.currentPage=curno;
-  		doManager("OrderManager", "queryOrderListByEmployeeNo",[employee_no,pageinfo,null],
+  		doManager("MassOrderManager", "queryOrderListByEmployeeNo",[employee_no,pageinfo],
 				function(data, textStatus, XMLHttpRequest) {
 					if (data.result) {
 						var orderList = JSON.parse(data.data);
 						var pagenum = orderList.pagenum;
 						order_max_no = pagenum;
 						$("#ordercount").html(orderList.totalpage);
-						
+
 						$(".order_content").find('.orderdata').empty();
 						$.each(orderList.data, function(i,obj) {
 							 var id = obj['id'];
@@ -671,13 +623,13 @@ function initStore(){
 							 var order_date = obj['sign_time'];
 							 var mobilephone = obj['mobilephone'];
 							 var customer_name = obj['customer_name']==null?"":obj['customer_name'];
-							 var eshop_pro_name = obj['eshop_pro_name'];
-							 
-							 
-							 
+
+
+
+
 							employee_name = employee_name.split("+")[0];
 							order_date = new Date(order_date).format('yyyy-MM-dd');
-							var temp_html="";  
+							var temp_html="";
 							if(mobilephone==null){
 		                    	temp_html =  "  <td>"+customer_name+"<div class=\"pop\" style=\"width:170px;\"  onclick='getnullfunc(event)'><p>姓名:"+(customer_name==null?"暂无":customer_name)+"</p><p>电话:"+(mobilephone==null?"暂无":mobilephone)+"</p></div></td>";
 		                    }else{
@@ -688,13 +640,12 @@ function initStore(){
 							var html ="<tr class='orderdata' onclick='queryOrder(\""+order_sn+"\")'>"+
 		                    "  <td>"+index+".</td>"+temp_html+
 		                    "  <td>"+order_date+"</td>"+
-		                    "  <td>"+eshop_pro_name+"</td>"+
 		                    "  <td>"+order_sn+"</td>"+
 		                    "</tr>";
 		                    $(".order_content").append(html);
-							 
+
 						});
-						
+
 					}
 		},false);
   		

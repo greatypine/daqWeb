@@ -4,14 +4,18 @@ import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
+import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.manager.MassOrderManager;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
+import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.manager.impl.OrderManagerImpl;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -421,5 +425,36 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
 		logger.info("查询订单明细信息结束:"+order_sn);
 
 		return order_obj;
+	}
+
+	@Override
+	public Map<String, Object> queryOrderInfoByOrderSN(String order_sn) {
+		MassOrderDao massOrderDao = (MassOrderDao) SpringHelper.getBean(MassOrderDao.class.getName());
+		Map<String,Object> order_obj = new HashMap<String,Object>();
+		try {
+			order_obj = massOrderDao.queryOrderInfoByOrderSN(order_sn);
+			String order_id = order_obj.get("id")==null?"":order_obj.get("id").toString();
+			order_obj.put("create_time", order_obj.get("create_time"));
+		}catch (Exception e){
+			e.printStackTrace();
+			logger.info("根据订单sn编号查询近两月内的订单信息:"+order_sn,e);
+		}
+
+		return order_obj;
+	}
+
+	@Override
+	public Map<String, Object> queryOrderListByEmployeeNo(String employee_no, PageInfo pageInfo) {
+		MassOrderDao massOrderDao = (MassOrderDao) SpringHelper.getBean(MassOrderDao.class.getName());
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			result = massOrderDao.queryOrderListOfEmployee(employee_no, pageInfo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			log.info("国安侠个人动态送单：",e);
+			return result;
+		}
+		return result;
+
 	}
 }

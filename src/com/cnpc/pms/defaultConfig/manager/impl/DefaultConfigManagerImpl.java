@@ -91,14 +91,15 @@ public class DefaultConfigManagerImpl extends BizBaseCommonManager implements De
 	public Map<String, Object> getDefaultConfig(String employee_no,String employee_name) {
 		DefaultConfigDao dConfigDao = (DefaultConfigDao)SpringHelper.getBean(DefaultConfigDao.class.getName());
 		Map<String, Object> dcMap =  dConfigDao.checkDefaultConfig(employee_no,employee_name);
-		
-		//判断是否是A国安侠
-		AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
-		List<Map<String, Object>> list = areaManager.queryAreaByEmployee(employee_no);
-		if(list!=null&&list.size()>0){
-			dcMap.put("isA", "1");
-		}else{
-			dcMap.put("isA", "0");
+		if(dcMap!=null){
+			//判断是否是A国安侠
+			AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
+			List<Map<String, Object>> list = areaManager.queryAreaByEmployee(employee_no);
+			if(list!=null&&list.size()>0){
+				dcMap.put("isA", "1");
+			}else{
+				dcMap.put("isA", "0");
+			}
 		}
 
 		return dcMap;
