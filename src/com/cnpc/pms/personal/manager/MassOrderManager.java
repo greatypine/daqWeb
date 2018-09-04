@@ -85,4 +85,19 @@ public interface MassOrderManager extends IManager {
 	 * @return
 	 */
 	public Map<String, Object> queryOrderDetailBySN(String order_sn);
+
+	/**
+	 * @Description 根据订单号查询两个月内的订单信息
+	 * @author gbl
+	 * @date 2018/9/4 11:05
+	 **/
+	public Map<String, Object> queryOrderInfoByOrderSN(String order_sn);
+
+	/**
+	 * @Description 查询近两月的国安侠送单
+	 * @author gbl
+	 * @date 2018/9/4 13:56
+	 **/
+
+	public Map<String, Object> queryOrderListByEmployeeNo(String employee_no,PageInfo pageInfo);
 }

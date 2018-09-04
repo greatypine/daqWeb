@@ -443,62 +443,62 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 //    }
     
     
-    /**
-     * 根据订单sn编号 查询明细信息 
-     * @param order_sn
-     * @return
-     */
-    @Override
-    public Map<String, Object> queryOrderInfoBySN(String order_sn){
-    	String sql ="SELECT "+
-    			"				CONCAT(a.id,'') as id,"+
-				"				a.order_sn,"+
-				"				CONCAT(a.customer_id,'') as customer_id,"+
-				"				CONCAT(a.order_address_id,'') as order_address_id,"+
-				"				a.total_quantity,"+
-					"				a.trading_price,"+
-				"				a.payable_price,"+
-				"				CONCAT(a.order_status,'') as order_status,"+
-				"				CONCAT(a.order_type,'') as order_type,"+
-				"				a.employee_name,"+
-				"				a.employee_phone,"+
-				"				a.appointment_start_time,"+
-				"				a.create_time,"+
-				"				a.sign_time AS receivedTime,"+
-				"				a.appointment_end_time,"+
-				"				a.seller_remark,"+
-					"		toa.address,"+
-					"		toa.name as short_name,"+
-					"		toa.mobilephone,"+
-					"		concat("+
-					"			GROUP_CONCAT(ti.eshop_pro_name),"+
-					"			''"+
-					"		) AS eshop_pro_name"+
-					"	FROM t_order a "+
-					"	LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
-					
-					"	LEFT JOIN t_order_item ti ON ti.order_id = a.id"+
-					"			WHERE"+
-					"				a.order_sn = '"+order_sn+"'"+
-					"	GROUP BY"+
-					"		a.order_sn";
-    	
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-        //获得查询数据
-    	Map<String, Object> order_obj = null;
-		try { 
-			SQLQuery query = session.createSQLQuery(sql);
-			List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			if(lst_data!=null&&lst_data.size()>0){
-				order_obj = (Map<String, Object>) lst_data.get(0);
-			}
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-    	return order_obj;
-    }
+//    /**
+//     * 根据订单sn编号 查询明细信息
+//     * @param order_sn
+//     * @return
+//     */
+//    @Override
+//    public Map<String, Object> queryOrderInfoBySN(String order_sn){
+//    	String sql ="SELECT "+
+//    			"				CONCAT(a.id,'') as id,"+
+//				"				a.order_sn,"+
+//				"				CONCAT(a.customer_id,'') as customer_id,"+
+//				"				CONCAT(a.order_address_id,'') as order_address_id,"+
+//				"				a.total_quantity,"+
+//					"				a.trading_price,"+
+//				"				a.payable_price,"+
+//				"				CONCAT(a.order_status,'') as order_status,"+
+//				"				CONCAT(a.order_type,'') as order_type,"+
+//				"				a.employee_name,"+
+//				"				a.employee_phone,"+
+//				"				a.appointment_start_time,"+
+//				"				a.create_time,"+
+//				"				a.sign_time AS receivedTime,"+
+//				"				a.appointment_end_time,"+
+//				"				a.seller_remark "+
+////					"		toa.address,"+
+////					"		toa.name as short_name,"+
+////					"		toa.mobilephone,"+
+////					"		concat("+
+////					"			GROUP_CONCAT(ti.eshop_pro_name),"+
+////					"			''"+
+////					"		) AS eshop_pro_name"+
+//					"	FROM t_order a "+
+////					"	LEFT JOIN t_order_address toa ON toa.id = a.order_address_id"+
+////
+////					"	LEFT JOIN t_order_item ti ON ti.order_id = a.id"+
+//					"			WHERE"+
+//					"				a.order_sn = '"+order_sn+"'";
+////					"	GROUP BY"+
+////					"		a.order_sn";
+//
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//        //获得查询数据
+//    	Map<String, Object> order_obj = null;
+//		try {
+//			SQLQuery query = session.createSQLQuery(sql);
+//			List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//			if(lst_data!=null&&lst_data.size()>0){
+//				order_obj = (Map<String, Object>) lst_data.get(0);
+//			}
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//		}finally{
+//			session.close();
+//		}
+//    	return order_obj;
+//    }
     
     
     @Override
@@ -2113,54 +2113,54 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 		return lst_result;
 	}
 
-	@Override 
-	public Map<String, Object> queryOrderByEmployeeNo(String store_id, String employee_no, PageInfo pageInfo) {
-		// 查询片区 里的 所有服务 
-    	String sqlwhere =" from (SELECT "+
-    	"	a.*,t_customer.mobilephone,t_customer.short_name as customer_name "+
-    	"FROM	(		SELECT tor.* FROM t_order tor "+
-    	"		WHERE tor.sign_time >=concat(YEAR(CURDATE()),'-01-01')"+
-    	"		AND tor.store_id = '"+store_id+"'"+
-    	"	) a"+
-    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
-    	" INNER JOIN  t_employee te on a.employee_id = te.id and te.code='"+employee_no+"'"+
-        " ) t JOIN t_order_item ON t_order_item.order_id = t.id GROUP BY t.order_sn  ORDER BY t.sign_time desc";
-    	
-    	String sql="SELECT t.id,t.order_sn,t.customer_id,store_id,t.employee_name,t.sign_time,t.customer_name,t.mobilephone,concat(GROUP_CONCAT(t_order_item.eshop_pro_name),'') as eshop_pro_name  "+ sqlwhere;
-    	String sqlcount = "select count(1) as totalcount "+ sqlwhere;
-    	
-    	Session session = getHibernateTemplate().getSessionFactory().openSession();
-    	
-    	Map<String, Object> maps = new HashMap<String, Object>();
-		try {
-			SQLQuery querycount = session.createSQLQuery(sqlcount);
-			String countnum = querycount.list().size()+"";
-			//SQL查询对象
-			String retSql = "select * from ("+sql+") z";
-			SQLQuery query = session.createSQLQuery(retSql);
-			//获得查询数据
-			List<Map<String, Object>> lst_data  = query
-			        .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
-			        .setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
-			        .setMaxResults(pageInfo.getRecordsPerPage()).list();
-			
-			
-			int pages = 0;
-			if(countnum!="0"){
-				pages =(Integer.parseInt(countnum)-1)/10+1;
-			}
-			maps.put("data", lst_data);
-			maps.put("totalpage", countnum);
-			maps.put("pagenum", pages);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-    	return maps;
-	}
+//	@Override
+//	public Map<String, Object> queryOrderByEmployeeNo(String store_id, String employee_no, PageInfo pageInfo) {
+//		// 查询片区 里的 所有服务
+//    	String sqlwhere =" from (SELECT "+
+//    	"	a.*,t_customer.mobilephone,t_customer.short_name as customer_name "+
+//    	"FROM	(		SELECT tor.* FROM t_order tor "+
+//    	"		WHERE tor.sign_time >=concat(YEAR(CURDATE()),'-01-01')"+
+//    	"		AND tor.store_id = '"+store_id+"'"+
+//    	"	) a"+
+//    	" LEFT JOIN t_customer ON t_customer.id=a.customer_id "+
+//    	" INNER JOIN  t_employee te on a.employee_id = te.id and te.code='"+employee_no+"'"+
+//        " ) t JOIN t_order_item ON t_order_item.order_id = t.id GROUP BY t.order_sn  ORDER BY t.sign_time desc";
+//
+//    	String sql="SELECT t.id,t.order_sn,t.customer_id,store_id,t.employee_name,t.sign_time,t.customer_name,t.mobilephone,concat(GROUP_CONCAT(t_order_item.eshop_pro_name),'') as eshop_pro_name  "+ sqlwhere;
+//    	String sqlcount = "select count(1) as totalcount "+ sqlwhere;
+//
+//    	Session session = getHibernateTemplate().getSessionFactory().openSession();
+//
+//    	Map<String, Object> maps = new HashMap<String, Object>();
+//		try {
+//			SQLQuery querycount = session.createSQLQuery(sqlcount);
+//			String countnum = querycount.list().size()+"";
+//			//SQL查询对象
+//			String retSql = "select * from ("+sql+") z";
+//			SQLQuery query = session.createSQLQuery(retSql);
+//			//获得查询数据
+//			List<Map<String, Object>> lst_data  = query
+//			        .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+//			        .setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
+//			        .setMaxResults(pageInfo.getRecordsPerPage()).list();
+//
+//
+//			int pages = 0;
+//			if(countnum!="0"){
+//				pages =(Integer.parseInt(countnum)-1)/10+1;
+//			}
+//			maps.put("data", lst_data);
+//			maps.put("totalpage", countnum);
+//			maps.put("pagenum", pages);
+//		} catch (NumberFormatException e) {
+//			e.printStackTrace();
+//		} catch (HibernateException e) {
+//			e.printStackTrace();
+//		}finally{
+//			session.close();
+//		}
+//    	return maps;
+//	}
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryTurnover(String dateTime){

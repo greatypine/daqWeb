@@ -210,20 +210,39 @@ $(function(){
 
 
 function initOrderDetail(order_sn){
-	doManager("OrderManager", "queryOrderInfoBySN",order_sn,
-			function(data, textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var order_obj = JSON.parse(data.data);
-					$("#service_emp").html(order_obj.employee_name);
-					$("#service_emp_phone").html(order_obj.employee_phone);
-					$("#order_sn").html(order_obj.order_sn);
-					//var start_date_str=new Date(order_obj.create_time).format('yyyy-MM-dd HH:mm:ss');
-					//$("#start_time").html(start_date_str);
-					//总价 
-					$("#trading_price").html(order_obj.trading_price+" 元");
-					//$("#payable_price").html(order_obj.payable_price);
-				}
-	},false);
+	// doManager("OrderManager", "queryOrderInfoBySN",order_sn,
+	// 		function(data, textStatus, XMLHttpRequest) {
+	// 			if (data.result) {
+	// 				var order_obj = JSON.parse(data.data);
+	// 				$("#service_emp").html(order_obj.employee_name);
+	// 				$("#service_emp_phone").html(order_obj.employee_phone);
+	// 				$("#order_sn").html(order_obj.order_sn);
+	// 				//var start_date_str=new Date(order_obj.create_time).format('yyyy-MM-dd HH:mm:ss');
+	// 				//$("#start_time").html(start_date_str);
+	// 				//总价
+	// 				$("#trading_price").html(order_obj.trading_price+" 元");
+	// 				//$("#payable_price").html(order_obj.payable_price);
+	// 			}
+	// },false);
+
+    //从近两月表中查询订单详情
+    doManager("MassOrderManager", "queryOrderInfoByOrderSN",order_sn,
+        function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var order_obj = JSON.parse(data.data);
+                if(order_obj!=null){
+                    $("#service_emp").html(order_obj.employee_name);
+                    $("#service_emp_phone").html(order_obj.employee_phone);
+                    $("#order_sn").html(order_obj.order_sn);
+                    //var start_date_str=new Date(order_obj.create_time).format('yyyy-MM-dd HH:mm:ss');
+                    //$("#start_time").html(start_date_str);
+                    //总价
+                    $("#trading_price").html(order_obj.trading_price+" 元");
+                    //$("#payable_price").html(order_obj.payable_price);
+                }
+
+            }
+        },false);
 }
 
 

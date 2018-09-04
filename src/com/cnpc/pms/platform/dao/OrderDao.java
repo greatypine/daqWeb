@@ -25,12 +25,12 @@ public interface OrderDao {
 //     */
 //    public Map<String, Object> queryOrderListByArea(String store_id,String area,PageInfo pageInfo);
     
-    /**
-     * 根据订单sn编号 查询明细信息 
-     * @param order_sn
-     * @return
-     */
-    public Map<String, Object> queryOrderInfoBySN(String order_sn);
+//    /**
+//     * 根据订单sn编号 查询明细信息
+//     * @param order_sn
+//     * @return
+//     */
+//    public Map<String, Object> queryOrderInfoBySN(String order_sn);
     
     
 //    public Integer gettotalOrderCount(String store_id,String employee_id);
@@ -400,19 +400,19 @@ public interface OrderDao {
 	public List<Map<String, Object>>findChannelByDept(String deptId);
 
 	
-	/**
-	 * 
-	* @Title: queryOrderByEmployeeNo  
-	* @Description: TODO 国安侠送单 
-	* 2018年5月2日
-	* @param @param store_id
-	* @param @param employee_no
-	* @param @param pageInfo
-	* @param @return      
-	* @return Map<String,Object> 
-	* @throws
-	 */
-	 public Map<String, Object> queryOrderByEmployeeNo(String store_id,String employee_no,PageInfo pageInfo);
+//	/**
+//	 *
+//	* @Title: queryOrderByEmployeeNo
+//	* @Description: TODO 国安侠送单
+//	* 2018年5月2日
+//	* @param @param store_id
+//	* @param @param employee_no
+//	* @param @param pageInfo
+//	* @param @return
+//	* @return Map<String,Object>
+//	* @throws
+//	 */
+//	 public Map<String, Object> queryOrderByEmployeeNo(String store_id,String employee_no,PageInfo pageInfo);
 	 
 	 /**
 	  * 根据节日日期 统计销售额

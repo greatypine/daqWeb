@@ -23,17 +23,17 @@ public interface OrderManager extends IManager {
     
 //    public Map<String, Object> queryOrderListByArea(String employee_no,PageInfo pageInfo,Long area_id);
     
-    public Map<String, Object> queryOrderListByEmployeeNo(String employee_no,PageInfo pageInfo,Long area_id);
+//    public Map<String, Object> queryOrderListByEmployeeNo(String employee_no,PageInfo pageInfo,Long area_id);
     
     
 //    public List<Map<String, Object>> queryOrderFourMonth(String employee_no,Long area_id);
     
-    /**
-     * 根据订单sn编号 查询明细信息 
-     * @param order_sn
-     * @return
-     */
-    public Map<String, Object> queryOrderInfoBySN(String order_sn);
+//    /**
+//     * 根据订单sn编号 查询明细信息
+//     * @param order_sn
+//     * @return
+//     */
+//    public Map<String, Object> queryOrderInfoBySN(String order_sn);
     
     
     /**

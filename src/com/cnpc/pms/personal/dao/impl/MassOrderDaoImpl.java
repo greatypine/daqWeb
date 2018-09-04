@@ -5,9 +5,13 @@ import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -693,6 +697,42 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 
 		List<Map<String,Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
+
+	}
+
+	@Override
+	public Map<String, Object> queryOrderInfoByOrderSN(String order_sn) {
+		String sql = "select dom.*,tbu.name as employee_name,tbu.mobilephone as employee_phone from  df_mass_order_monthly dom left join tb_bizbase_user tbu on dom.info_employee_a_no = tbu.employeeId where order_sn='"+order_sn+"'";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String,Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		if(lst_data!=null&&lst_data.size()>0){
+			return  lst_data.get(0);
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public Map<String, Object> queryOrderListOfEmployee(String employeeNo,PageInfo pageInfo) {
+		String sql = "select dom.order_sn,dom.customer_id,tbu.name as employee_name,dom.customer_mobile_phone as mobilephone,dom.sign_time,dom.customer_name from df_mass_order_monthly dom left join tb_bizbase_user tbu on dom.info_employee_a_no = tbu.employeeId   where info_employee_a_no='"+employeeNo+"' order  by sign_time desc";
+
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		Integer countnum = query.list().size();
+		pageInfo.setTotalRecords(countnum);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+		Map<String, Object> maps = new HashMap<String, Object>();
+        int pages = 0;
+		if(countnum>0){
+			pages =(countnum-1)/10+1;
+		}
+		maps.put("data", lst_data);
+		maps.put("totalpage", countnum);
+		maps.put("pagenum", pages);
+		return maps;
 
 	}
 
