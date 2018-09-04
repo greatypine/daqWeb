@@ -267,7 +267,8 @@
 	                <!-- /.tab-pane -->
 	              </div>
 	              <!-- /.tab-content -->
-	            <div class="tcdPageCode" id="page_tradetype"></div>
+				  <div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_store" name="pageRecords_store" onchange="chnagePageRecords_Store(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_store"></span> 条</div>
+				  <div class="tcdPageCode" id="page_tradetype"></div>
 	          </div>
 	        </div>
 	        
@@ -352,7 +353,8 @@
 	                <!-- /.tab-pane -->
 	              </div>
 	              <!-- /.tab-content -->
-	            <div class="tcdPageCode" id="page_city"></div>
+				  <div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_city" name="pageRecords_city" onchange="chnagePageRecords_City(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_city"></span> 条</div>
+				  <div class="tcdPageCode" id="page_city"></div>
 	          </div>
 	        </div>
 
@@ -446,6 +448,7 @@
 						  <!-- /.tab-pane -->
 					  </div>
 					  <!-- /.tab-content -->
+					  <div style="position:absolute;bottom:20px;left:27px;width:25%">显示 <select id="pageRecords_customer" name="pageRecords_customer" onchange="chnagePageRecords_Customer(2)"  style="height:25px;line-height:25px;border-radius:4px;"><option value="10" selected="selected">10</option><option value="50">50</option><option value="100">100</option></select> 条 &nbsp;&nbsp; 共  <span id="totalRecord_customer"></span> 条</div>
 					  <div class="tcdPageCode" id="page_customer"></div>
 				  </div>
 			  </div>
@@ -812,6 +815,13 @@ $('#store_name_try').keyup(function(event){
     	isCreatePage1=false;
   		searchInfo_tradetype_step2(cur_page);
   	}
+
+	var manualPageRecordeStore=10;
+	function chnagePageRecords_Store(t){
+		$("#page_tradetype").empty();
+        manualPageRecordeStore  = $("#pageRecords_store").val();
+        searchInfo_tradetype_step1(1);
+	}
     //城市分页查询
     var isCityCreatePage1=false;
     function searchInfo_step1(cur_page){
@@ -819,11 +829,25 @@ $('#store_name_try').keyup(function(event){
     	searchInfo_step2(cur_page);
   	}
 
-var isCustomerCreatePage1=false;
-function searchInfo_step_customer(cur_page){
-    isCustomerCreatePage1=false;
-    searchInfo_customer(cur_page);
-}
+	var manualPageRecordeCity=10;
+	function chnagePageRecords_City(t){
+		$("#page_city").empty();
+        manualPageRecordeCity  = $("#pageRecords_city").val();
+        searchInfo_step1(1);
+	}
+
+	var isCustomerCreatePage1=false;
+	function searchInfo_step_customer(cur_page){
+		isCustomerCreatePage1=false;
+		searchInfo_customer(cur_page);
+	}
+
+	var manualPageRecordeCustomer=10;
+	function chnagePageRecords_Customer(t){
+		$("#page_customer").empty();
+        manualPageRecordeCustomer  = $("#pageRecords_customer").val();
+        searchInfo_step_customer(1);
+	}
     
     var currentPage_city = 1;
     var totalPage_city = 1;
@@ -864,7 +888,8 @@ function searchInfo_step_customer(cur_page){
 	    }
  	    var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
-
+        pageInfo.recordsPerPage = manualPageRecordeCity;
+        $("#totalRecord_city").html("0");
 	    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
            if(data.result){
            	   var result= JSON.parse(data.data);
@@ -885,6 +910,7 @@ function searchInfo_step_customer(cur_page){
 	        		   return;
 	        	   }
 	        	   totalPage_city = result.total_pages;
+                   $("#totalRecord_city").html(result.pageinfo.totalRecords);
 	        	  
 	        	   if(!isCityCreatePage1){
 	        		   $("#page_city").createPage({
@@ -1019,6 +1045,8 @@ function searchInfo_step_customer(cur_page){
 	    }
  	    var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
+        pageInfo.recordsPerPage = manualPageRecordeStore;
+        $("#totalRecord_store").html("0");
 	    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
            if(data.result){
            	   var result= JSON.parse(data.data);
@@ -1039,7 +1067,7 @@ function searchInfo_step_customer(cur_page){
 	        		   return;
 	        	   }
 	        	   totalPage_tradetype = result.total_pages;
-	        	  
+                   $("#totalRecord_store").html(result.pageinfo.totalRecords);
 	        	   if(!isCreatePage1){
 	        		   $("#page_tradetype").createPage({
 	   	       	  	    pageCount:totalPage_tradetype,
@@ -1170,6 +1198,9 @@ function searchInfo_customer(cur_page){
     }
     var pageInfo = new Object();
     pageInfo.currentPage = cur_page;
+    pageInfo.recordsPerPage = manualPageRecordeCustomer;
+    $("#totalRecord_customer").html("0");
+
     doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
         if(data.result){
             var result= JSON.parse(data.data);
@@ -1189,7 +1220,7 @@ function searchInfo_customer(cur_page){
                     return;
                 }
                 totalPage_customer = result.total_pages;
-
+                $("#totalRecord_customer").html(result.pageinfo.totalRecords);
                 if(!isCustomerCreatePage1){
                     $("#page_customer").createPage({
                         pageCount:totalPage_customer,

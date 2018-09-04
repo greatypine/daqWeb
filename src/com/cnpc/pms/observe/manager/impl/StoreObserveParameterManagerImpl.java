@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by h on 2018/8/6.
+ * Created by gaoll on 2018/8/6.
  */
 public class StoreObserveParameterManagerImpl extends BizBaseCommonManager implements StoreObserveParameterManager {
 

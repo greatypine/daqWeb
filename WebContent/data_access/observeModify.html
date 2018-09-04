@@ -94,8 +94,6 @@
                         })
                     }
                 }
-				     
-
             });
 
             
@@ -116,7 +114,7 @@
                         model_name:$("#model_name1").val(),
                         order_no:$("#orderNo1").val()
                     };
-                    doManager("functionManager", "modify", orgUnit, function(data, textStatus, XMLHttpRequest){
+                    doManager("ObserveModelManager", "saveorupdateobserveModel", orgUnit, function(data, textStatus, XMLHttpRequest){
                         if (data.result) {
                             var orgData = $.fromJSON(data.data);
                             $$.showMessage("${system.info}", "修改功能成功!");
@@ -139,7 +137,7 @@
                         observe_content:$("#observe_content").val(),
                         order_no:$("#orderNo").val()
                     };
-                    doManager("functionManager", "modify", orgUnit, function(data, textStatus, XMLHttpRequest){
+                    doManager("CheckDetailsManager", "saveOrUpdateCheckDetails", orgUnit, function(data, textStatus, XMLHttpRequest){
                         if (data.result) {
                             var orgData = $.fromJSON(data.data);
                             $$.showMessage("${system.info}", "修改功能成功!");
