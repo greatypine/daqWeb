@@ -1312,7 +1312,14 @@ Date.prototype.format=function(fmt) {
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-  	   
+
+      	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+      	if(days > 60){
+          if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
+              return ;
+          }
+      	}
+
   	    $("#process_div").show();
  	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
@@ -1435,7 +1442,14 @@ Date.prototype.format=function(fmt) {
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-  	   
+
+      	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+      	if(days > 60){
+          if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
+              return ;
+          }
+      	}
+
 	    $("#process_div").show();
 	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
@@ -1505,7 +1519,14 @@ Date.prototype.format=function(fmt) {
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-  	    
+
+     	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+     	if(days > 60){
+         if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
+             return ;
+         }
+     	}
+
  	    $("#process_div").show();
 	 	$("#process_div_pic").show();
   	  	var cityName = $("#citySelectArea  option:selected").val();
@@ -1668,6 +1689,14 @@ Date.prototype.format=function(fmt) {
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
+
+		 var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+		 if(days > 60){
+			 if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
+				 return ;
+			 }
+		 }
+
 	    $("#process_div").show();
 	 	$("#process_div_pic").show();
   	  	var cityName = $("#citySelectArea  option:selected").val();
@@ -1739,7 +1768,14 @@ function   search_manual_dept1(cur_page){
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-  	   
+
+    	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+    	if(days > 60){
+        	if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
+            	return ;
+        	}
+    	}
+
 	  	$("#process_div").show();
  	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelectDept  option:selected").val();
@@ -1859,7 +1895,14 @@ function export_manual_dept(){
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-  	   
+
+		var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+		if(days > 60){
+			if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
+				return ;
+			}
+		}
+
 	    $("#process_div").show();
 	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelectDept  option:selected").val();
@@ -1931,7 +1974,14 @@ function   search_manual_channel1(cur_page){
  	    if(number_str==""&&storeName!=""){
  	    	number_str=-10000;
  	    }
- 	   
+
+    	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+    	if(days > 60){
+       	 	if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
+            	return ;
+        	}
+    	}
+
 	  	$("#process_div").show();
 	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelectChannel  option:selected").val();
@@ -2050,7 +2100,14 @@ function export_manual_channel(){
 	if(number_str==""&&storeName!=""){
 	  	number_str=-10000;
 	}
- 	   
+
+    var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+    if(days > 60){
+        if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
+            return ;
+        }
+    }
+
     $("#process_div").show();
  	$("#process_div_pic").show();
     var cityName = $("#citySelectChannel  option:selected").val();
@@ -2122,7 +2179,14 @@ function   search_manual_eshop1(cur_page){
  	    if(number_str==""&&storeName!=""){
  	    	number_str=-10000;
  	    }
- 	   
+
+		var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+		if(days > 60){
+			if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
+				return ;
+			}
+		}
+
 	  	$("#process_div").show();
 	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelectEshop  option:selected").val();
@@ -2241,7 +2305,14 @@ function export_manual_eshop(){
  	if(number_str==""&&storeName!=""){
  		number_str=-10000;
  	}
- 	   
+
+    var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+    if(days > 60){
+        if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
+            return ;
+        }
+    }
+
     $("#process_div").show();
  	$("#process_div_pic").show();
     var cityName = $("#citySelectEshop  option:selected").val();
@@ -2361,7 +2432,17 @@ function export_manual_eshop(){
 	    $('#auto_date_eshop').data('daterangepicker').setStartDate(new Date());
 		$('#auto_date_eshop').data('daterangepicker').setEndDate(new Date());
  }
-  
+
+function DateDiff(Date1,Date2) { //Date1和Date2是2018-09-01格式
+    var sDate, newDate1, newDate2, Days
+    aDate = Date1.split("-");
+    newDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]); //转换为09-01-2018格式
+    aDate = Date2.split("-");
+    newDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+    Days = parseInt(Math.abs(newDate1 - newDate2) / 1000 / 60 / 60 / 24); //把差的毫秒数转换为天数
+    return Days;
+}
+
   var autoPageRecordes=10;
   var manualPageRecordes=10;
   //切换每页显示的数据量

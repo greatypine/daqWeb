@@ -1174,8 +1174,8 @@ Date.prototype.format=function(fmt) {
 	  	if(sdate!=""){
 	  		 begin_end_date = sdate.split("-");
 	   	}
-	  	
- 	 	var number_str = $("#store_id_manual").val(); 
+
+ 	 	var number_str = $("#store_id_manual").val();
   	    var storeName = $("#store_name_manual").val();
   	  	if(storeName!=""){
 	  	  	if($.inArray(storeName, array) == -1){
@@ -1191,6 +1191,7 @@ Date.prototype.format=function(fmt) {
 		if(orderLabels!=null && orderLabels!='' && orderLabels.indexOf(',') >= 0){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
+
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
 	    	ordersn = ordersn.replace(/\s+/g,"");
@@ -1199,6 +1200,14 @@ Date.prototype.format=function(fmt) {
                 return;
             }
 	    }
+
+        var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+        if(days > 60 && orderLabels!=null && orderLabels!=''){
+          if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
+              return ;
+          }
+        }
+
         $("#process_div").show();
         $("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
@@ -1677,6 +1686,7 @@ Date.prototype.format=function(fmt) {
 	    if(orderLabels!=null && orderLabels!='' && orderLabels.indexOf(',') >= 0){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
+
 	    var ordersn = $("#ordersn_manual").val();
 	    if(ordersn!=""){
 	    	ordersn = ordersn.replace(/\s+/g,"");
@@ -1685,6 +1695,14 @@ Date.prototype.format=function(fmt) {
                 return;
             }
 	    }
+
+        var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
+        if(days > 60 && orderLabels!=null && orderLabels!=''){
+          if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
+              return ;
+          }
+        }
+
         $("#process_div").show();
         $("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
@@ -1997,7 +2015,17 @@ Date.prototype.format=function(fmt) {
 	  }   
 	  var new_date = new Date(new_year,new_month,1);        //取当年当月中的第一天   
 	  return (new Date(new_date.getTime()-1000*60*60*24)).getDate();//获取当月最后一天日期   
- } 
+ }
+
+function DateDiff(Date1,Date2) { //Date1和Date2是2018-09-01格式
+    var sDate, newDate1, newDate2, Days
+    aDate = Date1.split("-");
+    newDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]); //转换为09-01-2018格式
+    aDate = Date2.split("-");
+    newDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+    Days = parseInt(Math.abs(newDate1 - newDate2) / 1000 / 60 / 60 / 24); //把差的毫秒数转换为天数
+    return Days;
+}
 
 </script>
 </body>
