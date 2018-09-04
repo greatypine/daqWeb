@@ -21,6 +21,7 @@ import java.util.Random;
 
 import javax.naming.InsufficientResourcesException;
 
+import com.cnpc.pms.personal.dao.*;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -55,13 +56,6 @@ import com.cnpc.pms.inter.manager.InterManager;
 import com.cnpc.pms.messageModel.entity.Message;
 import com.cnpc.pms.messageModel.manager.MessageNewManager;
 import com.cnpc.pms.mongodb.manager.MongoDBManager;
-import com.cnpc.pms.personal.dao.CustomerDao;
-import com.cnpc.pms.personal.dao.ExpressDao;
-import com.cnpc.pms.personal.dao.HouseCustomerDao;
-import com.cnpc.pms.personal.dao.RelationDao;
-import com.cnpc.pms.personal.dao.StoreDao;
-import com.cnpc.pms.personal.dao.StorexpandDao;
-import com.cnpc.pms.personal.dao.TinyVillageDao;
 import com.cnpc.pms.personal.dto.BannerInfoDto;
 import com.cnpc.pms.personal.dto.CityCodeDto;
 import com.cnpc.pms.personal.dto.SiteSelectionDto;
@@ -1745,7 +1739,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	public Result queryOrderOfAreaByApp(String employee_no, PageInfo pageInfo,String order_sn) {
 		
 		Result result = new Result();
-    	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+        MassOrderDao massOrderDao = (MassOrderDao) SpringHelper.getBean(MassOrderDao.class.getName());
+        OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
     	Map<String, Object> r_map = null;
     	StringBuilder orderSb= new StringBuilder();
     	StringBuilder orderSb2 = new StringBuilder();
@@ -1754,38 +1749,27 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     	List<Map<String, Object>> orderAddressList = new ArrayList<Map<String,Object>>();
     	try {
     		
-    		r_map = orderDao.queryOrderOfArea(employee_no, pageInfo,order_sn);
+
+            r_map = massOrderDao.queryOrderListOfApp(employee_no,pageInfo,order_sn);
     		if(r_map.get("data")!=null){
     			orderList = (List<Map<String,Object>>)r_map.get("data");
     			for(int i=0;i<orderList.size();i++){
-    				orderSb.append(",'").append(orderList.get(i).get("order_address_id")).append("'");
+
+                    Map<String,Object> order_name_obj = orderDao.queryOrderProductName(orderList.get(i).get("id").toString());
+                    if(order_name_obj==null){
+                        orderList.get(i).put("eshop_pro_name","");
+                    }else{
+                        orderList.get(i).put("eshop_pro_name",order_name_obj.get("eshop_pro_name"));
+                    }
+
+                    List<Map<String,Object>> orderitemes = orderDao.getOrderItemByOrderId("'"+orderList.get(i).get("id").toString()+"'");
+                    if(orderitemes!=null&&orderitemes.size()>0){
+                        orderList.get(i).put("jpgUrl",orderitemes.get(0).get("jpgUrl"));
+                    }else{
+                        orderList.get(i).put("jpgUrl","");
+                    }
         		}
-    			
-    			Map<String, Object> orderAddressMap = new HashMap<String,Object>();
-    			if(orderSb.length()>0){
-    				orderAddressList = orderDao.getOrderAddressByAddressId(orderSb.toString().substring(1));
-    				for(int j=0;j<orderAddressList.size();j++){
-        				Map<String, Object> tMap = orderAddressList.get(j);
-        				Object order_address_id_tmp = tMap.get("id");
-        				if(order_address_id_tmp!=null){
-        					orderAddressMap.put(order_address_id_tmp.toString(),tMap.get("address"));
-        				}
-        				
-        			}
-    			}
-    			
-    			System.out.println("获取订单地址addr----");
-    			
-    			for(int i=0;i<orderList.size();i++){
-    				Map<String, Object> tMap = orderList.get(i);
-    				
-    				tMap.put("address", orderAddressMap.get(tMap.get("order_address_id")));
-    				
-    				orderList2.add(tMap);
-        		}
-    			r_map.put("data", orderList2);
-    			System.out.println("结束");
-    			
+
     		}else{
 
                 r_map.put("data",orderList2);
@@ -1797,6 +1781,11 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
             result.setMessage(CodeEnum.success.getDescription());
     	} catch (Exception e) {
 			e.printStackTrace();
+			log.info("》》》》》》》》》》》》》》》》》》》》》》》》》》》》》》国安侠消费记录:",e.getMessage());
+            r_map.put("data",orderList2);
+            result.setDataMap(r_map);
+            result.setCode(CodeEnum.error.getValue());
+            result.setMessage(CodeEnum.error.getDescription());
 		}
         return result;
 	}

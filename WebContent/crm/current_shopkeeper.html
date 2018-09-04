@@ -2811,7 +2811,7 @@ function initStoreHistoryGMV(){
 						for(var i=0;i<result.length;i++){
 							var employee_name = result[i].name;
 							var employee_no = result[i].employee_no;
-							var employee_sex = result[i].sex;
+							var employee_sex = result[i].sex==null?"":result[i].sex;
 							var employee_authorizedtype = result[i].authorizedtype;
 							var employee_topostdate = result[i].topostdate;
 							infoStr = infoStr+"<tr style='cursor:pointer'  id='tr_"+employee_no+"' onclick='newEmployeeInfoHtml(this)'><td>"+parseInt(i+1)+"</td><td>"+employee_name+"</td><td>"+employee_sex+"</td><td>"+employee_topostdate+"</td><td>"+employee_authorizedtype+"</td></tr>"
