@@ -2178,6 +2178,7 @@ var drawGaodeMap = function (pageStatusInfo) {
     var storeServiceRange = getGaodeMapData(pageStatusInfo);
     var cityId = pageStatusInfo.cityId;
     var cityName = pageStatusInfo.cityName;
+    /*
     $.each(storeServiceRange, function (idx, val) {
         var serviceCoordinates = val.vertex;
         var storeId = val.store_id;
@@ -2195,8 +2196,9 @@ var drawGaodeMap = function (pageStatusInfo) {
 	        //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
 	    });
         storePositionMarker.on("mouseover",function(e){
-			var storeName = e.target.getExtData().storeName;
-			e.target.setTitle(storeName);
+			//var storeName = e.target.getExtData().storeName;
+			//e.target.setTitle(storeName);
+			e.target.getExtData().marker.show();
 		});
         storePositionMarker.on("click",function(e){
 			  var storeId = e.target.getExtData().storeId;
@@ -2205,7 +2207,8 @@ var drawGaodeMap = function (pageStatusInfo) {
 			  window.location.href=url; 
 		});
     });
-    $.each(storeServiceRange, function (idx, val) {
+    */
+        $.each(storeServiceRange, function (idx, val) {
         var serviceCoordinates = val.vertex;
         var storeId = val.store_id;
         var storeNo = val.storeNo;
@@ -2214,6 +2217,7 @@ var drawGaodeMap = function (pageStatusInfo) {
         //服务范围多边形
         var servicePolygon = new AMap.Polygon({
             map: amap,
+            zIndex:2000,
             strokeColor: "#5c69cc", //线颜色
             strokeOpacity: 0.9, //线透明度
             strokeWeight: 2,    //线宽
@@ -2222,14 +2226,25 @@ var drawGaodeMap = function (pageStatusInfo) {
             path: serviceCoordinates
             // extData:{"storeName":storeName,"marker":storeMarker,"storeId":storeId}
         });
+        var storePositionMarker = new AMap.Marker({ //添加自定义点标记
+            map: amap,
+            position: storePosition, //基点位置
+            icon:"../aboutMap/dist/img/splogo.png",
+            offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
+            extData:{"storeName":storeName,"storeId":storeId}
+            // draggable: true,  //是否可拖动
+            //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
+        });
         var storeMarker = new AMap.Marker({ //添加自定义点标记
             visible: false,
             map: amap,
+            zIndex:1000,
             position: servicePolygon.getBounds().getCenter(), //基点位置
             content: '<div class="marker-route marker-marker-bus-from">' + storeName + '</div>',
             extData:{"storeName":storeName,"marker":storeMarker,"storeId":storeId}
         });
         servicePolygon.setExtData({"storeName": storeName, "marker": storeMarker, "storeId": storeId});
+        storePositionMarker.setExtData({"storeName":storeName,"storeId":storeId,"marker": storeMarker,});
         servicePolygon.on("mouseover", function (e) {
                 e.target.getExtData().marker.show();
         });
@@ -2242,6 +2257,18 @@ var drawGaodeMap = function (pageStatusInfo) {
             var provinceId = pageStatusInfo.provinceId == ""?"":pageStatusInfo.provinceId;
             var url = "current_shopkeeper.html?p=" + encode64(provinceId) + "&c=" + encode64(cityId) + "&s=" + encode64(storeId) + "&cn=" + encode64(cityName) + "&zm=" + encode64(amap.getZoom()) + "&ln="+encode64(curr_user.name)+"&ln="+encode64(curr_user.name)+"&f=" + encode64("1")+"&fs="+encode64(pageStatusInfo.targets);
             window.location.href = url;
+        });
+        storePositionMarker.on("mouseover",function(e){
+            e.target.getExtData().marker.show();
+        });
+        storePositionMarker.on("mouseout",function(e){
+            e.target.getExtData().marker.hide();
+        });
+        storePositionMarker.on("click",function(e){
+            var storeId = e.target.getExtData().storeId;
+            var provinceId = pageStatusInfo.provinceId == ""?"":pageStatusInfo.provinceId;
+            var url = "current_shopkeeper.html?p=" + encode64(provinceId) + "&c=" + encode64(cityId) + "&s=" + encode64(storeId) + "&cn=" + encode64(cityName) + "&zm=" + encode64(amap.getZoom()) + "&ln="+encode64(curr_user.name)+"&f=" + encode64("1")+"&fs="+encode64(pageStatusInfo.targets);
+            window.location.href=url;
         });
         storeMarker.on("click",function(e){
 			  var storeId = e.target.getExtData().storeId;
@@ -5190,4 +5217,22 @@ function formatString(s) {
           s = s.replace(/([\s\u3000]*|[\r\n\u3000]*)/ig,''); 
     }
     return s;
+}
+function showTooltip(){
+	$("#attention").show();
+}
+function hideTooltip(){
+	$("#attention").hide();
+}
+function showTooltip2(){
+	$("#attention2").show();
+}
+function hideTooltip2(){
+	$("#attention2").hide();
+}
+function showTooltip3(){
+	$("#attention3").show();
+}
+function hideTooltip3(){
+	$("#attention3").hide();
 }
