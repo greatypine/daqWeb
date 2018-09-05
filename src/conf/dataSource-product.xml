@@ -7,11 +7,10 @@
 		<property name="user" value="geminiuser3" />
 		<property name="password" value="gmDx99tL9i2#DVEK#K!R6M1Ox7A^2gwS" />
 		<property name="initialPoolSize" value="5" />
-		<property name="maxPoolSize" value="5000" />
+		<property name="maxPoolSize" value="1000" />
 		<property name="minPoolSize" value="5" />
 		<property name="checkin" value="false" />
-		<property name="checkout" value="false" />
-		<property name="unreturnedConnectionTimeout" value="60" />
+		<property name="checkout" value="true" />
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 		<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
 		<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory" />
@@ -24,11 +23,10 @@
 		<property name="user" value="daquser3" />
 		<property name="password" value="FtYr4Xa*jzwAxuX92A5ClEm5H3zh9OxL" />
 		<property name="initialPoolSize" value="5" />
-		<property name="maxPoolSize" value="5000" />
+		<property name="maxPoolSize" value="1000" />
 		<property name="minPoolSize" value="5" />
 		<property name="checkin" value="false" />
-		<property name="checkout" value="false" />
-		<property name="unreturnedConnectionTimeout" value="60" />
+		<property name="checkout" value="true" />
 		<property name="hibernate.dialect" value="com.cnpc.pms.base.BlobMySQLDialect" />
 		<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
 		<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory" />

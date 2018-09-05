@@ -12,7 +12,6 @@
 		<property name="initialPoolSize" value="${initialPoolSize}" />
 		<property name="maxPoolSize" value="${maxPoolSize}" />
 		<property name="minPoolSize" value="${minPoolSize}" />
-		<property name="unreturnedConnectionTimeout" value="${unreturnedConnectionTimeout}" />
 		<property name="testConnectionOnCheckin" value="${checkin}"/>
 		<property name="testConnectionOnCheckout" value="${checkout}"/>
 	</bean>
