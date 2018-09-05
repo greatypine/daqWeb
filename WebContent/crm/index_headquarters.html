@@ -299,17 +299,20 @@
         <div class="gaugetb1 clearfix text-center">
           <div class="col-sm-4">
           	<input type="hidden" id="tradesumofcurmonthHid">
-            <h5 class="no-margin">当月营业额</h5>
+            <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip();" onmouseout="hideTooltip();">当月营业额</h5>
+            <font id="attention" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>	
             <p id="tradesumofcurmonths"></p>
           </div>
           <div class="col-sm-4">
           	<input type="hidden" id="tradesumofyearHid">
-            <h5 class="no-margin">当年营业额</h5>
+            <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip2();" onmouseout="hideTooltip2();">当年营业额</h5>
+            <font id="attention2" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>
             <p id="tradesumofCurYears"></p>
           </div>
           <div class="col-sm-4">
           	<input type="hidden" id="tradesumofhistoryHid">
-            <h5 class="no-margin">历史营业额</h5>
+            <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip3();" onmouseout="hideTooltip3();">历史营业额</h5>
+            <font id="attention3" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>
             <p id="tradesumofhistorys"></p>
           </div>
         </div>
