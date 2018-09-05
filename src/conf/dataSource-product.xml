@@ -7,10 +7,11 @@
 		<property name="user" value="DataCollection" />
 		<property name="password" value="ZXgasjZx2016_dateanPlant@WSX@7d" />
 		<property name="initialPoolSize" value="0" />
-		<property name="maxPoolSize" value="150" />
+		<property name="maxPoolSize" value="5000" />
 		<property name="minPoolSize" value="0" />
 		<property name="checkin" value="false" />
 		<property name="checkout" value="false" />
+		<property name="unreturnedConnectionTimeout" value="60" />
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 		<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
 		<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory" />
@@ -23,10 +24,11 @@
 		<property name="user" value="dataaq" />
 		<property name="password" value="fcnXoXFGgz@^*n9#" />
 		<property name="initialPoolSize" value="0" />
-		<property name="maxPoolSize" value="150" />
+		<property name="maxPoolSize" value="5000" />
 		<property name="minPoolSize" value="0" />
 		<property name="checkin" value="false" />
 		<property name="checkout" value="false" />
+		<property name="unreturnedConnectionTimeout" value="60" />
 		<property name="hibernate.dialect" value="com.cnpc.pms.base.BlobMySQLDialect" />
 		<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
 		<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory" />

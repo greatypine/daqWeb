@@ -11,6 +11,7 @@
 		<property name="minPoolSize" value="0" />
 		<property name="checkin" value="false" />
 		<property name="checkout" value="false" />
+		<property name="unreturnedConnectionTimeout" value="60" />
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 		<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
 		<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory" />
@@ -30,6 +31,7 @@
 		<property name="minPoolSize" value="0" />
 		<property name="checkin" value="false" />
 		<property name="checkout" value="false" />
+		<property name="unreturnedConnectionTimeout" value="60" />
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
 		<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
 		<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory" />
