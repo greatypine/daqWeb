@@ -4,8 +4,8 @@
 	<dataSource id="localdev">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl" value="jdbc:mysql://10.10.10.37:4006/gemini?useOldAliasMetadataBehavior=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true" />
-		<property name="user" value="DataCollection" />
-		<property name="password" value="ZXgasjZx2016_dateanPlant@WSX@7d" />
+		<property name="user" value="geminiuser3" />
+		<property name="password" value="gmDx99tL9i2#DVEK#K!R6M1Ox7A^2gwS" />
 		<property name="initialPoolSize" value="5" />
 		<property name="maxPoolSize" value="5000" />
 		<property name="minPoolSize" value="5" />
@@ -21,8 +21,8 @@
 	<dataSource id="localdevmysql">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl" value="jdbc:mysql://10.10.10.37:4006/daqWeb?useOldAliasMetadataBehavior=true&amp;useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true" />
-		<property name="user" value="dataaq" />
-		<property name="password" value="fcnXoXFGgz@^*n9#" />
+		<property name="user" value="daquser3" />
+		<property name="password" value="FtYr4Xa*jzwAxuX92A5ClEm5H3zh9OxL" />
 		<property name="initialPoolSize" value="5" />
 		<property name="maxPoolSize" value="5000" />
 		<property name="minPoolSize" value="5" />
