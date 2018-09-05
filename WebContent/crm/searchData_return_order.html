@@ -507,11 +507,14 @@ Date.prototype.format=function(fmt) {
  							var storeName = element.name;
  							var storeid = element.storeno;
  							array.push(storeName);
- 							if(index == 0){
-	 							storeString = "{'"+storeName+"'"+":"+"'"+storeid+"'"+",";
-	 						}else if(index == jsonData.length-1){
-	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+"}";
-	 						}else{
+                            if(index == 0 || index == jsonData.length-1){
+                                if(index == 0){
+                                    storeString = "{'"+storeName+"'"+":"+"'"+storeid+"'"+",";
+                                }
+                                if(index == jsonData.length-1){
+                                    storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+"}";
+                                }
+                            }else{
 	 							storeString = storeString+"'"+storeName+"'"+":"+"'"+storeid+"'"+",";
 	 						}
  						});
