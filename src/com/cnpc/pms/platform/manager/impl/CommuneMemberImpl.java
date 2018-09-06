@@ -2441,8 +2441,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
             e.printStackTrace();
         }
         JSONArray jsonMonMem = (JSONArray) JSONArray.fromObject(dateMonCounts);
-        result.put("jsonDateMon",jsonMonMem);
-	    //查询社员渠道来源分布
+        result.put("jsonDateMon", jsonMonMem);
+        //查询社员渠道来源分布
         List<Map<String, Object>> memFromList = new ArrayList<Map<String, Object>>();
         memFromList = commDao.getMemFrom(dd);
         //渠道类别
@@ -2451,25 +2451,25 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         List memFromCou = new ArrayList();
         if (memFromList != null && memFromList.size() > 0) {
             for (Map<String, Object> stringObjectMap : memFromList) {
-                if("app".equals(stringObjectMap.get("fromname").toString())){
+                if ("app".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("APP");
-                }else if("callcenter".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("callcenter".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("400客服");
-                }else if("store".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("store".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("门店");
-                }else if("wechat".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("wechat".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("微信");
-                }else if("pad".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("pad".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("智能终端");
-                }else if("web".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("web".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("WEB");
-                }else if("citic".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("citic".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("中信用户联盟");
-                }else if("tv".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("tv".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("电视");
-                }else if("third_party".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("third_party".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("第三方");
-                }else if("action".equals(stringObjectMap.get("fromname").toString())){
+                } else if ("action".equals(stringObjectMap.get("fromname").toString())) {
                     memFromNames.add("活动");
                 }
                 memFromCou.add(Double.valueOf(stringObjectMap.get("cou").toString()).intValue());
@@ -2506,7 +2506,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         List thirdPartyList = new ArrayList();
         //action-活动
         List actionList = new ArrayList();
-        if(memDayFromList.size()==30){
+        if (memDayFromList.size() == 30) {
             for (Map<String, Object> dayMap : memDayFromList) {
                 appList.add(Double.valueOf(dayMap.get("app").toString()).intValue());
                 callcenterList.add(Double.valueOf(dayMap.get("callcenter").toString()).intValue());
@@ -2519,36 +2519,44 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
                 thirdPartyList.add(Double.valueOf(dayMap.get("third_party").toString()).intValue());
                 actionList.add(Double.valueOf(dayMap.get("action").toString()).intValue());
             }
-        }else{
-            int m=0;
-            for (int j = 0;j< dateMonCounts.size();j++) {
-                int temp2=0;
-                if(m<memDayFromList.size()) {
-                    if( memDayFromList.get(m).get("mondate").toString().contains(dateMonCounts.get(j).toString())) {
-                        appList.add(Double.valueOf(memDayFromList.get(m).get("app").toString()).intValue());
-                        callcenterList.add(Double.valueOf(memDayFromList.get(m).get("callcenter").toString()).intValue());
-                        storeList.add(Double.valueOf(memDayFromList.get(m).get("store").toString()).intValue());
-                        wechatList.add(Double.valueOf(memDayFromList.get(m).get("wechat").toString()).intValue());
-                        padList.add(Double.valueOf(memDayFromList.get(m).get("pad").toString()).intValue());
-                        webList.add(Double.valueOf(memDayFromList.get(m).get("web").toString()).intValue());
-                        citicList.add(Double.valueOf(memDayFromList.get(m).get("citic").toString()).intValue());
-                        tvList.add(Double.valueOf(memDayFromList.get(m).get("tv").toString()).intValue());
-                        thirdPartyList.add(Double.valueOf(memDayFromList.get(m).get("third_party").toString()).intValue());
-                        actionList.add(Double.valueOf(memDayFromList.get(m).get("action").toString()).intValue());
+        } else {
+            int m = 0;
+            for (int j = 0; j < dateMonCounts.size(); j++) {
+                int app = 0;
+                int callcenter = 0;
+                int store = 0;
+                int wechat = 0;
+                int pad = 0;
+                int web = 0;
+                int citic = 0;
+                int tv = 0;
+                int third_party = 0;
+                int action = 0;
+                if (m < memDayFromList.size()) {
+                    if (memDayFromList.get(m).get("mondate").toString().contains(dateMonCounts.get(j).toString())) {
+                        app = Double.valueOf(memDayFromList.get(m).get("app").toString()).intValue();
+                        callcenter = Double.valueOf(memDayFromList.get(m).get("callcenter").toString()).intValue();
+                        store = Double.valueOf(memDayFromList.get(m).get("store").toString()).intValue();
+                        wechat = Double.valueOf(memDayFromList.get(m).get("wechat").toString()).intValue();
+                        pad = Double.valueOf(memDayFromList.get(m).get("pad").toString()).intValue();
+                        web = Double.valueOf(memDayFromList.get(m).get("web").toString()).intValue();
+                        citic = Double.valueOf(memDayFromList.get(m).get("citic").toString()).intValue();
+                        tv = Double.valueOf(memDayFromList.get(m).get("tv").toString()).intValue();
+                        third_party = Double.valueOf(memDayFromList.get(m).get("third_party").toString()).intValue();
+                        action = Double.valueOf(memDayFromList.get(m).get("action").toString()).intValue();
                         m++;
-                    }else{
-                        appList.add("0");
-                        callcenterList.add("0");
-                        storeList.add("0");
-                        wechatList.add("0");
-                        padList.add("0");
-                        webList.add("0");
-                        citicList.add("0");
-                        tvList.add("0");
-                        thirdPartyList.add("0");
-                        actionList.add("0");
                     }
                 }
+                appList.add(app);
+                callcenterList.add(callcenter);
+                storeList.add(store);
+                wechatList.add(wechat);
+                padList.add(pad);
+                webList.add(web);
+                citicList.add(citic);
+                tvList.add(tv);
+                thirdPartyList.add(third_party);
+                actionList.add(action);
             }
         }
         JSONArray jsonApp = (JSONArray) JSONArray.fromObject(appList);
@@ -2572,8 +2580,8 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         result.put("jsonThirdParty", jsonThirdParty);
         result.put("jsonAction", jsonAction);
         return result;
-    }
 
+    }
     @Override
     public Map<String, Object> selectTryMemInfo(String dd) {
         /**
