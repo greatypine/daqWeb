@@ -20,8 +20,6 @@ import com.cnpc.pms.base.entity.IEntity;
  * 
  */
 
-@Entity
-@Table(name = "view_wf_todoview_alltype")
 // @Table(name = "WF_view_NEWToDoView")原来指向该视图，现在先用上面的测试，待以后删除
 
 public class WFToDoView implements IEntity {

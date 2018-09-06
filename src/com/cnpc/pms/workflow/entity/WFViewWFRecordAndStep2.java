@@ -19,8 +19,6 @@ import com.cnpc.pms.base.entity.IEntity;
  * @author liujunsong
  *
  */
-@Entity
-@Table(name = "view_wf_recordstep2")
 
 public class WFViewWFRecordAndStep2 implements IEntity {
 

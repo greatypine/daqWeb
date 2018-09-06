@@ -9,8 +9,6 @@ import javax.persistence.Table;
 import com.cnpc.pms.base.entity.AlternativeDS;
 import com.cnpc.pms.base.entity.PMSAuditEntity;
 
-@Entity
-@Table(name = "WF_SendInfo")
 
 public class WFSendInfo extends PMSAuditEntity {
 

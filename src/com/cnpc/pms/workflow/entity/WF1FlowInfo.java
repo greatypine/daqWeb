@@ -9,8 +9,6 @@ import javax.persistence.Table;
 import com.cnpc.pms.base.entity.AlternativeDS;
 import com.cnpc.pms.base.entity.PMSAuditEntity;
 
-@Entity
-@Table(name = "WF1_FlowInfo")
 
 /**
  * WF1_FlowInfo是代表原来一期的流程执行记录，用以进行流程数据迁移使用。

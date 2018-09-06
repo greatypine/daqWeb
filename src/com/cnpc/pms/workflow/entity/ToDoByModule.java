@@ -9,8 +9,6 @@ import javax.persistence.Table;
 import com.cnpc.pms.base.entity.AlternativeDS;
 import com.cnpc.pms.base.entity.IEntity;
 
-@Entity
-@Table(name = "view_todobymodule")
 
 public class ToDoByModule implements IEntity {
 

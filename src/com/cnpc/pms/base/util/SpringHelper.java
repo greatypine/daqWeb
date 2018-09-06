@@ -216,7 +216,11 @@ public class SpringHelper
         }
         catch(ClassNotFoundException ex1)
         {
-            log.error("Fail to find the Entity: [{}].", entityName);
+        	String errorEntity="WFViewDoneView,WFToDoView,WFToDoMemo,WFStepInstance,WFSendInfo,WFModule,WFInstanceVariable,WFInstanceTransition,WFInstanceStepPos,WFInstanceRecord,WFInsPositionCopy,WFInsPersonCopy,WFFlowVariable,WFFlowTransition,WFFlowStepToPos,WFFlowStepPositionCopy,WFFlowStepPersonCopy,WFFlowStep,WFFlowOrg,WFFlow,WFFlowInstance,WFDelegateModule,WFDelegate,WFCopyInfo,WF1FlowMapping,WF1FlowInfo,ToDoByModule,FinishedByModule,DoneByModule,StrategyActivity,FestivalStat,CommuneMember,ChartMember,Batch,BatchTask,CommunityMembers,Commun,ChartMem,WorkLogStat,WorkLogQuery,BaseFile,Excel,ExcelUpload,EshopPurchase,MassOrder,UserProfile,AppDownLoadLog,Attachments,EshopPurchase,MassOrder,SyncData,UserProfile,ChartStat,Dynamic,TurnoverStat,"
+        			+ "UserOperationStat,UserOperationStat,DfCustomerMonthOrder,GAXDriveRecode,Inter,MessageNew,MongoDB,OrderHeat,MapBasicData,NxQuery,QueryConfig";
+        	if(errorEntity.indexOf(entityName)==-1) {
+                log.error("Fail to find the Entity: [{}].", entityName);
+        	}
         }
         catch(Exception e)
         {

@@ -16,8 +16,6 @@ import com.cnpc.pms.base.entity.IEntity;
  * @author zhaobinbin
  * @date 2013-12-3 下午04:13:26
  */
-@Entity
-@Table(name = "view_finishedbymodule")
 
 public class FinishedByModule implements IEntity {
 	private static final long serialVersionUID = -8049091322760607698L;

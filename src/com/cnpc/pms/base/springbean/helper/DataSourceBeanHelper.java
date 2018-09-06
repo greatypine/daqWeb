@@ -72,7 +72,9 @@ public class DataSourceBeanHelper
     {
         if(!originalBeanClasses.containsKey(type))
         {
-            log.error("Fail to find the Bean with type: {}", type);
+        	if(type.indexOf("AtomikosDataSourceBean")==-1) {
+        		log.error("Fail to find the Bean with type: {}", type);
+        	}
             return;
         }
         String templateBeanName = (String)originalBeanClasses.get(type);

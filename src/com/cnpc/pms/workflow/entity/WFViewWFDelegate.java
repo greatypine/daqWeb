@@ -13,9 +13,6 @@ import javax.persistence.Table;
 import com.cnpc.pms.base.entity.AlternativeDS;
 import com.cnpc.pms.base.entity.IEntity;
 
-@Entity
-@Table(name = "view_wf_delegate")
-
 public class WFViewWFDelegate implements IEntity {
 
 	/**

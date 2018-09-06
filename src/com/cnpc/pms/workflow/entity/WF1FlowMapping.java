@@ -8,8 +8,6 @@ import javax.persistence.Table;
 import com.cnpc.pms.base.entity.AlternativeDS;
 import com.cnpc.pms.base.entity.PMSAuditEntity;
 
-@Entity
-@Table(name = "WF1_FlowMapping")
 
 /**
  * WF1_FlowMapping代表一期流程数据与二期的对应关系,手工维护

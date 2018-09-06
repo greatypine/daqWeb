@@ -20,8 +20,6 @@ import com.cnpc.pms.base.entity.IEntity;
  * 
  */
 
-@Entity
-@Table(name = "view_wf_doneview_alltype")
 
 public class WFViewDoneView implements IEntity {
 

@@ -10,8 +10,6 @@ import javax.persistence.Table;
 import com.cnpc.pms.base.entity.AlternativeDS;
 import com.cnpc.pms.base.entity.IEntity;
 
-@Entity
-@Table(name="VIEW_WF_TODO_SEND")
 
 public class WFViewToDoSend implements IEntity{
 

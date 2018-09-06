@@ -461,6 +461,9 @@ function logoutsendbox(){
 
 $(document).ready(function(){
  	initcurruser();//初始化登录人信息 
+ 	if(currentUser==null){
+ 		window.location.href=getRootPath()+"/bizbase/login.html";
+ 	}
  	
  	isLogincrm();
  	
@@ -584,7 +587,7 @@ $(document).ready(function(){
   
   
   
-  var currentUser;
+  var currentUser=null;
 	function initcurruser(){
 		//取得当前登录人的门店
 		doManager("UserManager", "getCurrentUserDTO",null,

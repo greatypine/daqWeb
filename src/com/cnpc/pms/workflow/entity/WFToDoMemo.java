@@ -15,8 +15,6 @@ import com.cnpc.pms.base.entity.PMSAuditEntity;
  * @author jrn
  * 
  */
-@Entity
-@Table(name = "WF_ToDoMemo")
 
 public class WFToDoMemo extends PMSAuditEntity {
 

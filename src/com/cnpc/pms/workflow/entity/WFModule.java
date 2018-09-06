@@ -7,8 +7,6 @@ import javax.persistence.Table;
 import com.cnpc.pms.base.entity.AlternativeDS;
 import com.cnpc.pms.base.entity.PMSAuditEntity;
 
-@Entity
-@Table(name = "wf_module")
 
 
 public class WFModule extends PMSAuditEntity {

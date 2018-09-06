@@ -13,8 +13,6 @@ import com.cnpc.pms.base.entity.PMSAuditEntity;
  * @author jrn
  * 
  */
-@Entity
-@Table(name = "WF_InstanceStepToPos")
 
 public class WFInstanceStepPos extends PMSAuditEntity {
 

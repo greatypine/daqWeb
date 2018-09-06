@@ -23,8 +23,6 @@ import com.cnpc.pms.workflow.manager.WFStepInstanceManager;
  * @author jrn
  * 
  */
-@Entity
-@Table(name = "WF_FlowInstance")
 
 public class WFFlowInstance extends PMSAuditEntity {
 

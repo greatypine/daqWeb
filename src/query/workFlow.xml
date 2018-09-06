@@ -1,5 +1,5 @@
 <pmsquery>
-	<query id="workFlowQuery" header="${query.workFlowQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlow" order="id asc">
+	<!-- <query id="workFlowQuery" header="${query.workFlowQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlow" order="id asc">
 		<column key="id" header="${db.wfFlow.id}" type="java.lang.Long"  allowSearch="true" operator="eq" width="10%" ></column>
 		<column key="baseFlowId" header="${db.wfFlow.baseFlowId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="10%" />
 		<column key="moduleId" header="${db.wfFlow.moduleId}" type="java.lang.Long" allowSearch="true" operator="eq" width="10%" />
@@ -54,7 +54,7 @@
 		<column key="flowId" header="${db.wfArg.flowId}" type="java.lang.Long" allowSearch="true" operator="eq"  allowSort="true" width="25%" />
 		<column key="orgId" header="${db.wfArg.orgId}" type="java.lang.Long" allowSearch="true" operator="eq"   width="25%" />
 		<column key="orgName" header="${db.wfArg.orgName}" type="String" allowSearch="true" operator="eq"   width="25%" />
-	</query>
+	</query> -->
 	<!-- 
 	<query id="positionQuery" header="${query.positionQuery.header}" baseclass="com.cnpc.pms.bizbase.rbac.position.entity.CnpcPosition" order="id asc">
         <column key="id" header="${db.position.id}"  operator="eq" type="java.lang.Long"  width="33%">
@@ -64,7 +64,7 @@
         <column key="note" header="${db.position.note}" type="String" allowSearch="true"  width="30%"/>
 		
     </query> -->
-	<query id="stepToPosQuery" header="${query.stepToPosQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowStepToPos" order="id asc">
+	<!-- <query id="stepToPosQuery" header="${query.stepToPosQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFFlowStepToPos" order="id asc">
         <column key="id" header="${db.stepToPos.id}"  operator="eq" type="java.lang.Long"  width="25%">
         </column>
         <column key="stepId" header="${db.stepToPos.stepId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
@@ -88,11 +88,11 @@
         <column key="personId" header="${query.wfCopyToperson.personId}" type="java.lang.Long" allowSearch="true" operator="eq"  width="25%" />
         <column key="personName" header="${query.wfCopyToperson.personId}" type="java.lang.String" allowSearch="false"   width="25%" />
         <column key="isSameOrg" header="${query.wfCopyToperson.isSameOrg}" type="java.lang.Long" allowSearch="true" operator="eq" width="25%" />
-	</query>
+	</query> -->
 		
 	<!-- Begin of ToDo Query -->	
 	<!-- ToDo.1 Query Begin Query1-->	
-	<query id="wfToDoByModule" header="待办事项" 
+	<!-- <query id="wfToDoByModule" header="待办事项" 
 	    baseclass="com.cnpc.pms.workflow.dto.ToDoByModuleDTO" 
 	    order="dotime desc, id desc">
 		<column key="id" header="id" type="java.lang.String" display="false" />
@@ -104,10 +104,10 @@
 		<column key="moduleUrl" header="路径" type="java.lang.String" display="false"/>
         <column key="dotime" header="最近处理时间" allowSort="true" type="java.util.Date" align="center" format="yyyy-MM-dd" width="250px" />
 		<column key="docount" header="待办条数" type="java.lang.Integer" allowSort="true" align="center" width="150px" />
-	</query>
+	</query> -->
 	
 	<!-- Begin of Done Query -->
-	<query id="wfDoneByModule" header="已办事项" baseclass="com.cnpc.pms.workflow.dto.ToDoByModuleDTO" order="dotime desc">
+	<!-- <query id="wfDoneByModule" header="已办事项" baseclass="com.cnpc.pms.workflow.dto.ToDoByModuleDTO" order="dotime desc">
 		<column key="id" header="id" type="java.lang.String" display="false" />
 		<column key="orgId" header="orgId" type="java.lang.String" display="false" allowSearch="true" operator="eq" />	
 		<column key="moduleId" header="模块id" type="java.lang.Long" display="false" />
@@ -119,7 +119,7 @@
 		<column key="docount" header="已办条数" type="java.lang.Integer" allowSort="true" align="center" width="150px" />
 	</query>
 	
-	<!--finished QUERY-->
+	finished QUERY
 	<query id="wfFinishedByModule" header="办结事项" baseclass="com.cnpc.pms.workflow.dto.ToDoByModuleDTO" order="dotime desc">
 		<column key="id" header="id" type="java.lang.String" display="false" />
 		<column key="orgId" header="orgId" type="java.lang.String" display="false" allowSearch="true" operator="eq" />	
@@ -131,7 +131,7 @@
         <column key="dotime" header="最近处理时间" allowSort="true" type="java.util.Date" align="center" format="yyyy-MM-dd" width="250px" />
 		<column key="docount" header="办结条数" type="java.lang.Integer" allowSort="true" align="center" width="150px" />
 	</query>
-	<!--ToDo.2 ToDo List  Query2 -->
+	ToDo.2 ToDo List  Query2
 	<query id="wflistQuery" 
 		header="${query.WFToDoView.header}" 
 		baseclass="com.cnpc.pms.workflow.entity.WFToDoView"
@@ -156,11 +156,11 @@
 		<column key="toDoTypeName" header="${db.WFToDoView.toDoTypeName}" type="String" dict="WF_TODO_TYPE" display="true"/>
 		<column key="toDoType" header="toDoType" type="java.lang.Long" display="false"/>		
 	</query>
-	<!-- End of ToDo Query -->	
+	End of ToDo Query	
 
-	<!-- Begin of Module Part -->
+	Begin of Module Part
 
-	<!-- Module.3 WF_Module -->
+	Module.3 WF_Module
 	<query id="wfQueryModule" header="${query.wfQueryModule.header}" baseclass="com.cnpc.pms.workflow.entity.WFModule" order="moduleType asc,id asc">
         <column key="id" header="${query.wfQueryModule.id}" allowSearch="true" operator="eq" type="java.lang.Long"  width="10%" align="center"/>
 		<column key="moduleType" header="${query.wfQueryModule.moduleType}" allowSearch="true" dict="WF_MODULE_TYPE"  type="java.lang.String" operator="eq" width="10%" align="center"/>
@@ -170,7 +170,7 @@
 		<column key="urlStr2" header="${query.wfQueryModule.urlStr2}" type="java.lang.String" allowSearch="false"  width="50%" />
 		<column key="isWF" header="${query.wfQueryModule.isWF}" type="java.lang.Long" dict="WF_YESNO"  width="10%" align="center" />
 	</query>
-	<!--End of Module Part -->
+	End of Module Part
 
 	<query id = "submitStepQuery" header="${query.submitStepQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFViewWFRecordAndStep2" order="id asc" >
 		<column key="id" header="${query.submitStepQuery.id}" display="false" align="center" width="10%"/>	
@@ -182,8 +182,8 @@
 		<column key="flowInstanceId" header="${query.submitStepQuery.flowInstanceId}" align="center" type="java.lang.Long" allowSearch="true" operator="eq" display="false"/>
 	</query>
 	
-	<!-- Begin of Delegate Function -->
-	<!-- Deleget.1 This is delegate view-->
+	Begin of Delegate Function
+	Deleget.1 This is delegate view
 	<query id = "delegateQueryInfo" header="${query.delegateQueryInfo.header}"  baseclass="com.cnpc.pms.workflow.entity.WFViewWFDelegate"  >
 		<column key="id" header="${query.delegateQueryInfo.id}"  allowSearch="true" operator="like"   width="20%"/>	
 		<column key="owner" header="${query.delegateQueryInfo.owner}" type="java.lang.Long" allowSearch="true" operator="eq"   width="20%" display="false" />	
@@ -194,8 +194,8 @@
 		<column key="enddate" header="${query.delegateQueryInfo.enddate}"    type="java.util.Date" format="yyyy-MM-dd"  width="20%"/>	
 		<column key="isstop" header="${query.delegateQueryInfo.isstop}" type="java.lang.Long"   dict="WF_DELEGATE_ISSTOP" width="20%" />	
 	</query>
-	<!-- Delegate.2 This is delegateModule view -->
-	<!-- change it from view to entity with ManyToOne relationship -->
+	Delegate.2 This is delegateModule view
+	change it from view to entity with ManyToOne relationship
 	<query id = "delegateModuleInfo" header="${query.delegateModuleInfo.header}"  baseclass="com.cnpc.pms.workflow.entity.WFDelegateModule"  >
 		<column key="id" header="${query.delegateModuleInfo.id}"  allowSearch="true" operator="like"   width="20%"/>	
 		<column key="delegateId" header="${query.delegateModuleInfo.delegateId}" type="java.lang.Long" allowSearch="true" operator="eq"  display="false"  />	
@@ -205,7 +205,7 @@
 		<column key="module.level1Name" header="${query.delegateModuleInfo.moduleonename}" type="String" allowSearch="true" operator="like"    width="30%"/>	
 		<column key="module.level2Name" header="${query.delegateModuleInfo.moduletwoname}" type="String" allowSearch="true" operator="like"    width="30%"/>	
 	</query>
-	<!-- Delegate.3 This is the module view for select in delegate-->
+	Delegate.3 This is the module view for select in delegate
 	<query id="ModuleListQuery" header="${query.ModuleListQuery.header}" baseclass="com.cnpc.pms.workflow.entity.WFModule" order="id asc">
         <column key="id" header="${query.ModuleListQuery.id}" allowSearch="true" operator="eq" type="java.lang.Long"  width="30%"></column>
         <column key="name" header="${query.ModuleListQuery.modulename}" type="String" allowSearch="true" operator="like"  width="30%" />
@@ -213,7 +213,7 @@
         <column key="level1Name" header="${query.ModuleListQuery.moduleonename}" type="String" allowSearch="true" operator="like"  width="30%" />
         <column key="level2Name" header="${query.ModuleListQuery.moduletwoname}" type="String" allowSearch="true" operator="like"  width="30%" />
 	</query>
-	<!--  Endo of Delegate Function -->
+	 Endo of Delegate Function
 	
 	<query id="WF1FlowMappingQuery" header="一期流程对应查询" baseclass="com.cnpc.pms.workflow.entity.WF1FlowMapping" order="id asc">
         <column key="id" header="Id" allowSearch="true" operator="eq" type="java.lang.Long" allowSort="true" width="14%"></column>
@@ -231,5 +231,5 @@
         <column key="email" header="邮箱" type="String" allowSearch="true" operator="eq" allowSort="true" width="14%" />
         <column key="todocounts" header="待办条数" type="BigDecimal" allowSearch="true" operator="eq" allowSort="true"  width="14%" />
         <column key="issend" header="是否发送" type="String" allowSearch="true" operator="like" allowSort="true" width="14%" />
-	</query>
+	</query> -->
 </pmsquery>	      

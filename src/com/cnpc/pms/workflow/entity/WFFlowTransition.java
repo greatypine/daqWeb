@@ -12,8 +12,6 @@ import com.cnpc.pms.base.entity.PMSAuditEntity;
  * @author liujunsong
  *
  */
-@Entity
-@Table(name = "WF_FlowTransition")
 
 public class WFFlowTransition extends PMSAuditEntity {
 

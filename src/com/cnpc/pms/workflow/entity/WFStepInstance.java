@@ -21,8 +21,6 @@ import com.cnpc.pms.base.entity.PMSAuditEntity;
  * @author jrn
  * 
  */
-@Entity
-@Table(name = "WF_StepInstance")
 
 public class WFStepInstance extends PMSAuditEntity {
 
