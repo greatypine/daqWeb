@@ -507,7 +507,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
      		result.put("growNewCounts", jsonNew);
      		result.put("growAllCounts", jsonAllCounts);
      		result.put("jsonDateMem", jsonDateMem);
-     		result.put("jsonDateMon", dateMonCounts);
+     		result.put("jsonDateMon", jsonMonMem);
     		// 查询老用户转社员总量
     		List<Map<String, Object>> oldCmCountList = new ArrayList<Map<String, Object>>();
     		oldCmCountList = commDao.getOldCount(dd);
@@ -815,7 +815,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		result.put("growNewCounts", jsonNew);
 		result.put("growAllCounts", jsonAllCounts);
 		result.put("jsonDateMem", jsonDateMem);
-		result.put("jsonDateMon", dateMonCounts);
+		result.put("jsonDateMon", jsonMonMem);
 
 		// 查询男女比例
 				List<Map<String, Object>> cmSexList = new ArrayList<Map<String, Object>>();
@@ -1680,7 +1680,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		result.put("growNewCounts", jsonNew);
 		result.put("growAllCounts", jsonAllCounts);
 		result.put("jsonDateMem", jsonDateMem);
-		result.put("jsonDateMon", dateMonCounts);
+		result.put("jsonDateMon", jsonMonMem);
 		return result;
 	}
 
@@ -2426,6 +2426,119 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         }
         return result;
 
+    }
+
+    @Override
+    public Map<String, Object> selectMemFrom(String dd) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+        List dateMonCounts = new ArrayList();
+
+        try {
+            //生成30天X轴坐标Old
+            dateMonCounts = reDate(30);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        JSONArray jsonMonMem = (JSONArray) JSONArray.fromObject(dateMonCounts);
+        result.put("jsonDateMon",jsonMonMem);
+	    //查询社员渠道来源分布
+        List<Map<String, Object>> memFromList = new ArrayList<Map<String, Object>>();
+        memFromList = commDao.getMemFrom(dd);
+        //渠道类别
+        List memFromNames = new ArrayList();
+        //数量
+        List memFromCou = new ArrayList();
+        if (memFromList != null && memFromList.size() > 0) {
+            for (Map<String, Object> stringObjectMap : memFromList) {
+                if("app".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("APP");
+                }else if("callcenter".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("400客服");
+                }else if("store".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("门店");
+                }else if("wechat".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("微信");
+                }else if("pad".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("智能终端");
+                }else if("web".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("WEB");
+                }else if("citic".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("中信用户联盟");
+                }else if("tv".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("电视");
+                }else if("third_party".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("第三方");
+                }else if("action".equals(stringObjectMap.get("fromname").toString())){
+                    memFromNames.add("活动");
+                }
+                memFromCou.add(Double.valueOf(stringObjectMap.get("cou").toString()).intValue());
+            }
+        } else {
+            memFromNames.add("app");
+            memFromCou.add(0);
+        }
+        JSONArray jsonMemFromName = (JSONArray) JSONArray.fromObject(memFromNames);
+        JSONArray jsonMemFromCou = (JSONArray) JSONArray.fromObject(memFromCou);
+
+        result.put("jsonMemFromName", jsonMemFromName);
+        result.put("jsonMemFromCou", jsonMemFromCou);
+        //查询近30天渠道来源情况
+        List<Map<String, Object>> memDayFromList = new ArrayList<Map<String, Object>>();
+        memDayFromList = commDao.getDayMemFrom(dd);
+        //app-APP
+        List appList = new ArrayList();
+        //callcenter-400客服
+        List callcenterList = new ArrayList();
+        //store-门店
+        List storeList = new ArrayList();
+        //wechat-微信
+        List wechatList = new ArrayList();
+        //pad-智能终端
+        List padList = new ArrayList();
+        //web-WEB
+        List webList = new ArrayList();
+        //citic-中信用户联盟
+        List citicList = new ArrayList();
+        //tv-电视
+        List tvList = new ArrayList();
+        //third_party-第三方
+        List thirdPartyList = new ArrayList();
+        //action-活动
+        List actionList = new ArrayList();
+        for (Map<String, Object> dayMap : memDayFromList) {
+            appList.add(Double.valueOf(dayMap.get("app").toString()).intValue());
+            callcenterList.add(Double.valueOf(dayMap.get("callcenter").toString()).intValue());
+            storeList.add(Double.valueOf(dayMap.get("store").toString()).intValue());
+            wechatList.add(Double.valueOf(dayMap.get("wechat").toString()).intValue());
+            padList.add(Double.valueOf(dayMap.get("pad").toString()).intValue());
+            webList.add(Double.valueOf(dayMap.get("web").toString()).intValue());
+            citicList.add(Double.valueOf(dayMap.get("citic").toString()).intValue());
+            tvList.add(Double.valueOf(dayMap.get("tv").toString()).intValue());
+            thirdPartyList.add(Double.valueOf(dayMap.get("third_party").toString()).intValue());
+            actionList.add(Double.valueOf(dayMap.get("action").toString()).intValue());
+        }
+        JSONArray jsonApp = (JSONArray) JSONArray.fromObject(appList);
+        JSONArray jsonCallcenter = (JSONArray) JSONArray.fromObject(callcenterList);
+        JSONArray jsonStore = (JSONArray) JSONArray.fromObject(storeList);
+        JSONArray jsonWechat = (JSONArray) JSONArray.fromObject(wechatList);
+        JSONArray jsonPad = (JSONArray) JSONArray.fromObject(padList);
+        JSONArray jsonWeb = (JSONArray) JSONArray.fromObject(webList);
+        JSONArray jsonCitic = (JSONArray) JSONArray.fromObject(citicList);
+        JSONArray jsonTv = (JSONArray) JSONArray.fromObject(tvList);
+        JSONArray jsonThirdParty = (JSONArray) JSONArray.fromObject(thirdPartyList);
+        JSONArray jsonAction = (JSONArray) JSONArray.fromObject(actionList);
+        result.put("jsonApp", jsonApp);
+        result.put("jsonCallcenter", jsonCallcenter);
+        result.put("jsonStore", jsonStore);
+        result.put("jsonWechat", jsonWechat);
+        result.put("jsonPad", jsonPad);
+        result.put("jsonWeb", jsonWeb);
+        result.put("jsonCitic", jsonCitic);
+        result.put("jsonTv", jsonTv);
+        result.put("jsonThirdParty", jsonThirdParty);
+        result.put("jsonAction", jsonAction);
+        return result;
     }
 
     @Override
