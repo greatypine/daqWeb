@@ -682,7 +682,8 @@
 
                         var mobilephone = jData[i].mobilephone;
                         var cphone="<strong>手机号：</strong>"+mobilephone+"<br>";
-                        var phonecontent =cphone+"@phonetips"+i;
+                        var csource="<strong>用户来源：</strong>"+jData[i].customer_source;
+                        var phonecontent =cphone+csource+"@phonetips"+i;
                         var phoneid = "phonetips"+i;
 
                         infoStr= "<tr>";
