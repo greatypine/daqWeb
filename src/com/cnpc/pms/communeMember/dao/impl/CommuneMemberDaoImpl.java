@@ -1493,7 +1493,73 @@ public List<Map<String, Object>> getMembersArea(String dd) {
             e.printStackTrace();
         }
         return null;
-    }	@Override
+    }
+
+    @Override
+    public List<Map<String, Object>> getMemFrom(String dd) {
+        /**
+         * @author wuxinxin
+         * 2018年7月30日
+         */
+        String memFromSql = "select dum.customer_source fromname,count(1) cou from df_user_member dum where dum.customer_source is not null ";
+        if(!"0000".equals(dd)) {
+            memFromSql = memFromSql+ "  and dum.regist_cityno='"+dd+"'";
+        }
+        memFromSql = memFromSql+" group by dum.customer_source";
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(memFromSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return lst_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getDayMemFrom(String dd) {
+        /**
+         * @author wuxinxin
+         * 2018年9月05日
+         */
+        String dayFromSql = "select date1.seldate mondate, ifnull(data1.app, 0) as app," +
+                " ifnull(data1.callcenter, 0) as callcenter, ifnull(data1.store, 0) as store," +
+                " ifnull(data1.wechat, 0) as wechat, ifnull(data1.pad, 0) as pad," +
+                " ifnull(data1.web, 0) as web, ifnull(data1.citic, 0) as citic," +
+                " ifnull(data1.tv, 0) as tv, ifnull(data1.third_party, 0) as third_party," +
+                " ifnull(data1.action, 0) as action  from ( " +
+                " select DISTINCT DATE_FORMAT( duda.opencard_time, \"%Y-%m-%d\" ) seldate from df_user_member duda " +
+                " where duda.opencard_time >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) and CURDATE() > date(duda.opencard_time)) as date1 " +
+                " left join ( select ifnull( sum( CASE when dum.customer_source = 'app' then 1 else 0 end ), 0 ) as app," +
+                " ifnull( sum( CASE when dum.customer_source = 'callcenter' then 1 else 0 end ), 0 ) as callcenter," +
+                " ifnull( sum( CASE when dum.customer_source = 'store' then 1 else 0 end ), 0 ) as store, " +
+                " ifnull( sum( CASE when dum.customer_source = 'wechat' then 1 else 0 end ), 0 ) as wechat," +
+                " ifnull( sum( CASE when dum.customer_source = 'pad' then 1 else 0 end ), 0 ) as pad," +
+                " ifnull( sum( CASE when dum.customer_source = 'web' then 1 else 0 end ), 0 ) as web," +
+                " ifnull( sum( CASE when dum.customer_source = 'citic' then 1 else 0 end ), 0 ) as citic," +
+                " ifnull( sum( CASE when dum.customer_source = 'tv' then 1 else 0 end ), 0 ) as tv," +
+                " ifnull( sum( CASE when dum.customer_source = 'third_party' then 1 else 0 end ), 0 ) as third_party," +
+                " ifnull( sum( CASE when dum.customer_source = 'action' then 1 else 0 end ), 0 ) as action," +
+                " DATE_FORMAT( dum.opencard_time, \"%Y-%m-%d\" ) as crtime " +
+                " from df_user_member dum where DATE_SUB(CURDATE(), INTERVAL 30 DAY) <= date(dum.opencard_time) and CURDATE() > date(dum.opencard_time) " +
+                " and dum.associator_expiry_date > now() ";
+        if(!"0000".equals(dd)) {
+            dayFromSql = dayFromSql+ "  and dum.regist_cityno='"+dd+"'";
+        }
+        dayFromSql = dayFromSql+" group by DATE_FORMAT( dum.opencard_time, \"%Y-%m-%d\" )) as data1 on date1.seldate = data1.crtime order by date1.seldate";
+
+        List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+        try {
+            Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(dayFromSql);
+            List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return lst_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public List<Map<String, Object>> getTryMemDayGmv(String dd) {
         /**
          * @author wuxinxin

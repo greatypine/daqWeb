@@ -171,6 +171,22 @@
           </div>
           </div>
      </div>
+      <div class="box box-default">
+          <div class="box-body">
+              <div class="col-sm-7">
+                  <div class="form-group col-lg-6" style="padding: 0 25px;">
+                      <div class="box-header h4 text-light-blue" ><strong id="memDayFrom">渠道来源增长趋势</strong>
+                      </div></div>
+                  <div id="tab-content">
+                      <div class="col-sm-12 no-padding" id="main27" style="height: 350px;display: block"></div>
+                  </div>
+              </div>
+              <div class="col-sm-5">
+                  <div class="box-header h4 text-light-blue"><strong id="memFrom">渠道来源分布</strong></div>
+                  <div class="col-sm-12 no-padding" id="main28" style="height: 350px;"></div>
+              </div>
+          </div>
+      </div>
      <div class="box box-default">
           <div class="box-body">
             <div class="col-sm-6">
@@ -339,6 +355,7 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 		    	}
 		    	doMemberInfo();
 		    	doMemberSum();
+                doMemberInfo9();
 		    	//doEshopMemberSum();
 		    	history.pushState(stateObject,null,newUrl);
 			};
@@ -403,7 +420,8 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	    		getUserCitys();
 	    	}
 			doMemberInfo();
-			doMemberSum();
+            doMemberSum();
+            doMemberInfo9();
 			//doEshopMemberSum();
 		}
 		
@@ -894,6 +912,331 @@ var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	    }); */
 	  
   }
+
+var showMemFrom = function(dataServer){
+    var myChart27 = echarts.init(document.getElementById('main27'));
+    //社员30天渠道分布
+    option27 = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: [ 'APP','WEB','门店','电视','400客服','微信','智能终端','中信用户联盟','第三方','活动'],
+            right:'15%',
+            selectedMode:false,
+            textStyle: {color: '#404a59'}
+        },
+        grid: {
+            left: '10%',
+            right: '6%',
+            bottom: '15%',
+            top: '25%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: dataServer.jsonDateMon,
+            axisLabel:{
+                textStyle:{color:'#404a59',}
+            },
+            axisLine:{
+                lineStyle:{color:'#404a59',}
+            },
+        }],
+        yAxis: [{
+            type: 'value',
+            name: '人数',
+            splitLine: {show: false},
+            axisLabel: {
+                formatter: '{value}',
+                textStyle:{color:'#404a59'}
+            },
+            axisLine:{
+                lineStyle:{color:'#404a59'}
+            }
+        }],
+        dataZoom: [
+            {
+                type: 'inside',
+                start:50,
+                end: 100
+            },
+            {
+                show: true,
+                type: 'slider',
+                y: '90%',
+                start: 0,
+                end: 100
+            }
+        ],
+        series: [ {
+            name: 'APP',
+            type: 'line',
+            itemStyle:{normal:{color:'#C1232B'},},
+            data: dataServer.jsonApp,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#C1232B',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#C1232B',
+                    },
+                },
+            },
+        },{
+            name: '400客服',
+            type: 'line',
+            itemStyle:{normal:{color:'#ffae00'},},
+            data: dataServer.jsonCallcenter,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#ffae00',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#ffae00',
+                    },
+                },
+            },
+        },{
+            name: 'WEB',
+            type: 'line',
+            itemStyle:{normal:{color:'#B5C334'},},
+            data: dataServer.jsonWeb,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#B5C334',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#B5C334',
+                    },
+                },
+            },
+        },{
+            name: '门店',
+            type: 'line',
+            itemStyle:{normal:{color:'#FCCE10'},},
+            data: dataServer.jsonStore,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#FCCE10',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#FCCE10',
+                    },
+                },
+            },
+        },{
+            name: '微信',
+            type: 'line',
+            itemStyle:{normal:{color:'#E87C25'},},
+            data: dataServer.jsonWechat,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#E87C25',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#E87C25',
+                    },
+                },
+            },
+        },{
+            name: '智能终端',
+            type: 'line',
+            itemStyle:{normal:{color:'#27727B'},},
+            data: dataServer.jsonPad,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#27727B',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#27727B',
+                    },
+                },
+            },
+        },{
+            name: '中信用户联盟',
+            type: 'line',
+            itemStyle:{normal:{color:'#FE8463'},},
+            data: dataServer.jsonCitic,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#FE8463',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#FE8463',
+                    },
+                },
+            },
+        },{
+            name: '电视',
+            type: 'line',
+            itemStyle:{normal:{color:'#9BCA63'},},
+            data: dataServer.jsonTv,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#9BCA63',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#9BCA63',
+                    },
+                },
+            },
+        },{
+            name: '第三方',
+            type: 'line',
+            itemStyle:{normal:{color:'#60C0DD'},},
+            data: dataServer.jsonThirdParty,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#60C0DD',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#60C0DD',
+                    },
+                },
+            },
+        },{
+            name: '活动',
+            type: 'line',
+            itemStyle:{normal:{color:'#F3A43B'},},
+            data: dataServer.jsonAction,
+            label: {
+                normal: {
+                    show:true,
+                    position: 'top',
+                    textStyle:{
+                        color:'#F3A43B',
+                    },
+                },
+                emphasis: {
+                    textStyle:{
+                        color:'#F3A43B',
+                    },
+                },
+            },
+        }]
+    };
+    myChart27.setOption(option27);
+
+    var myChart28= echarts.init(document.getElementById('main28'));
+    option28 = {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{a}<br/>{b}: {c} ({d}%)'
+        },
+        calculable : true,
+        series : [
+            {
+                name:'渠道来源分布',
+                type:'pie',
+                radius : [30, 110],
+                center : ['40%', '60%'],
+                // roseType : 'radius',
+                width: '40%',       // for funnel
+                max: 40,            // for funnel
+                itemStyle : {
+                    normal : {
+                        label : {
+                            show : true
+                        },
+                        labelLine : {
+                            show : true
+                        }
+                    },
+                    emphasis : {
+                        label : {
+                            show : true
+                        },
+                        labelLine : {
+                            show : true
+                        }
+                    }
+                }
+                ,label: {
+                    normal: {
+                        position: 'out', //标签的位置
+                        formatter: '{b}\n{d}%',
+                        color: '#59ADF3'
+
+                    }
+                }
+            }
+        ]
+    };
+    var typeData = '[';
+    var ordTypeName = dataServer.jsonMemFromName;
+    var ordTypeSum = dataServer.jsonMemFromCou;
+    var  len = ordTypeName.length;
+    for(var i=0;i<len;i++){
+
+        if(len>0){
+            if((len-1)==i){
+                typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
+            }else{
+                typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"},';
+            }
+
+        }else{
+            typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
+        }
+    }
+    typeData+="]";
+    var memFromdata = JSON.parse(typeData);
+    option28.series[0].data = memFromdata;
+
+
+    myChart28.setOption(option28);
+
+}
+
 </script>
 <script type="text/javascript">
 
@@ -908,6 +1251,16 @@ function getUser(){
 			}
 		}
   	},false);
+}
+function doMemberInfo9(){
+    doManager('communeMember','selectMemFrom',[cityId],function(data){
+        if(data.result){
+            var resultJson= JSON.parse(data.data);
+            //社员渠道来源
+            showMemFrom(resultJson);
+        }else{
+        }
+    });
 }
 function getUserCitys(){
 	doManager("UserManager", "getCurrentUserCity",null,function(data) {

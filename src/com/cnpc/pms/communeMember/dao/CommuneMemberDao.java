@@ -4,6 +4,7 @@ package com.cnpc.pms.communeMember.dao;
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.platform.entity.MemberDataDto;
+import org.jfree.data.time.Day;
 
 import java.util.List;
 import java.util.Map;
@@ -316,7 +317,7 @@ public interface CommuneMemberDao extends IDAO {
 
 
     /**
-     * TODO 获取30天累计社员量
+     * TODO 查询城市当日新增社员数量
      *
      * @author wuxinxin
      */
@@ -366,6 +367,17 @@ public interface CommuneMemberDao extends IDAO {
      * @author wuxinxin
      */
     public List<Map<String, Object>> getTryMemCount(String dd);
+    /**
+     * TODO 查询社员渠道来源
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getMemFrom(String dd);
+    /**
+     * TODO 查询近30天社员渠道来源
+     *   * @author wuxinxin
+     */
+    public List<Map<String, Object>> getDayMemFrom(String dd);
     /**
      * TODO 查询7日试用社员GMV走势
      *
