@@ -1,18 +1,17 @@
 package com.cnpc.pms.dynamic.dao.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.dynamic.dao.ChartStatDao;
 import com.cnpc.pms.dynamic.entity.ChartStatDto;
 import com.cnpc.pms.utils.DateUtils;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.hibernate.transform.Transformers;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 
@@ -30,7 +29,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@Override
 	public Map<String, Object> queryDayTurnover(ChartStatDto csd) {
 		
-		String sql = "SELECT IFNULL(FLOOR(SUM(dod.trading_price)),0) AS day_amount FROM df_mass_order_daily dod WHERE DATE(dod.sign_time) = DATE(curdate()) "
+		String sql = "SELECT IFNULL(FLOOR(SUM(dod.gmv_price)),0) AS day_amount FROM df_mass_order_daily dod WHERE DATE(dod.sign_time) = DATE(curdate()) "
 				+ "AND dod.store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dod.store_code = '"+csd.getStoreno()+"' ";
@@ -67,7 +66,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByHour(ChartStatDto csd){
-		String sql = "SELECT IFNULL(FLOOR(sum(dom.trading_price)), 0) as turnover,DATE_FORMAT(dom.sign_time,'%H') as time FROM	df_mass_order_daily dom "
+		String sql = "SELECT IFNULL(FLOOR(sum(dom.gmv_price)), 0) as turnover,DATE_FORMAT(dom.sign_time,'%H') as time FROM	df_mass_order_daily dom "
 				+ "WHERE DATEDIFF(dom.sign_time,NOW())=0 AND dom.store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dom.store_code = '"+csd.getStoreno()+"' ";
@@ -101,7 +100,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByDay(ChartStatDto csd){
-		String sql="SELECT IFNULL(FLOOR(sum(dom.trading_price)), 0) AS turnover,DATE(dom.sign_time) as day_time FROM df_mass_order_total dom "
+		String sql="SELECT IFNULL(FLOOR(sum(dom.gmv_price)), 0) AS turnover,DATE(dom.sign_time) as day_time FROM df_mass_order_total dom "
 				+ "WHERE dom.store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dom.store_code = '"+csd.getStoreno()+"' ";
@@ -171,8 +170,8 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> queryOnlineOfflineTurnover(ChartStatDto csd){
-		String sql = "SELECT IFNULL(FLOOR(SUM(CASE WHEN (`delivery_type` = 'self' OR order_address_id IS NULL) THEN trading_price ELSE 0 END)),0) offline_amount,	"
-				+ "IFNULL(FLOOR(SUM(CASE WHEN (`delivery_type` != 'self' AND order_address_id IS NOT NULL) THEN trading_price ELSE 0 END ) ), 0 ) online_amount FROM df_mass_order_total dom "
+		String sql = "SELECT IFNULL(FLOOR(SUM(CASE WHEN (`delivery_type` = 'self' OR order_address_id IS NULL) THEN gmv_price ELSE 0 END)),0) offline_amount,	"
+				+ "IFNULL(FLOOR(SUM(CASE WHEN (`delivery_type` != 'self' AND order_address_id IS NOT NULL) THEN gmv_price ELSE 0 END ) ), 0 ) online_amount FROM df_mass_order_total dom "
 				+ "WHERE dom.store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND dom.store_code = '"+csd.getStoreno()+"' ";
@@ -209,7 +208,7 @@ public class ChartStatDaoImpl extends BaseDAOHibernate implements ChartStatDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Map<String, Object>> queryTurnoverByWeek(ChartStatDto csd){
-		String sql = "SELECT YEARWEEK(sign_time) as week_date ,	subdate(sign_time,date_format(sign_time,'%w')) as week_time, IFNULL(FLOOR(SUM(trading_price)),0) AS week_amount FROM df_mass_order_total WHERE store_name NOT LIKE '%测试%' ";
+		String sql = "SELECT YEARWEEK(sign_time) as week_date ,	subdate(sign_time,date_format(sign_time,'%w')) as week_time, IFNULL(FLOOR(SUM(gmv_price)),0) AS week_amount FROM df_mass_order_total WHERE store_name NOT LIKE '%测试%' ";
 		if(StringUtils.isNotEmpty(csd.getStoreno())){
 			sql = sql + " AND store_code = '"+csd.getStoreno()+"' ";
 		}
