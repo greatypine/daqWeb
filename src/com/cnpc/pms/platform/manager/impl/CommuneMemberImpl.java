@@ -1651,7 +1651,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
                     allMonCounts.add(total);
                 }
 
-            }else{ 
+            }else{
             	int m=0;
             	for (int j = 0;j< dateMonCounts.size();j++) {
             		int temp2=0;
@@ -1665,7 +1665,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
             		 newMonCounts.add(temp2);
                      total += temp2;
                      allMonCounts.add(total);
-            		
+
 				}
                     //当中某天未增加社员
             }
@@ -2506,17 +2506,50 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
         List thirdPartyList = new ArrayList();
         //action-活动
         List actionList = new ArrayList();
-        for (Map<String, Object> dayMap : memDayFromList) {
-            appList.add(Double.valueOf(dayMap.get("app").toString()).intValue());
-            callcenterList.add(Double.valueOf(dayMap.get("callcenter").toString()).intValue());
-            storeList.add(Double.valueOf(dayMap.get("store").toString()).intValue());
-            wechatList.add(Double.valueOf(dayMap.get("wechat").toString()).intValue());
-            padList.add(Double.valueOf(dayMap.get("pad").toString()).intValue());
-            webList.add(Double.valueOf(dayMap.get("web").toString()).intValue());
-            citicList.add(Double.valueOf(dayMap.get("citic").toString()).intValue());
-            tvList.add(Double.valueOf(dayMap.get("tv").toString()).intValue());
-            thirdPartyList.add(Double.valueOf(dayMap.get("third_party").toString()).intValue());
-            actionList.add(Double.valueOf(dayMap.get("action").toString()).intValue());
+        if(memDayFromList.size()==30){
+            for (Map<String, Object> dayMap : memDayFromList) {
+                appList.add(Double.valueOf(dayMap.get("app").toString()).intValue());
+                callcenterList.add(Double.valueOf(dayMap.get("callcenter").toString()).intValue());
+                storeList.add(Double.valueOf(dayMap.get("store").toString()).intValue());
+                wechatList.add(Double.valueOf(dayMap.get("wechat").toString()).intValue());
+                padList.add(Double.valueOf(dayMap.get("pad").toString()).intValue());
+                webList.add(Double.valueOf(dayMap.get("web").toString()).intValue());
+                citicList.add(Double.valueOf(dayMap.get("citic").toString()).intValue());
+                tvList.add(Double.valueOf(dayMap.get("tv").toString()).intValue());
+                thirdPartyList.add(Double.valueOf(dayMap.get("third_party").toString()).intValue());
+                actionList.add(Double.valueOf(dayMap.get("action").toString()).intValue());
+            }
+        }else{
+            int m=0;
+            for (int j = 0;j< dateMonCounts.size();j++) {
+                int temp2=0;
+                if(m<memDayFromList.size()) {
+                    if( memDayFromList.get(m).get("mondate").toString().contains(dateMonCounts.get(j).toString())) {
+                        appList.add(Double.valueOf(memDayFromList.get(m).get("app").toString()).intValue());
+                        callcenterList.add(Double.valueOf(memDayFromList.get(m).get("callcenter").toString()).intValue());
+                        storeList.add(Double.valueOf(memDayFromList.get(m).get("store").toString()).intValue());
+                        wechatList.add(Double.valueOf(memDayFromList.get(m).get("wechat").toString()).intValue());
+                        padList.add(Double.valueOf(memDayFromList.get(m).get("pad").toString()).intValue());
+                        webList.add(Double.valueOf(memDayFromList.get(m).get("web").toString()).intValue());
+                        citicList.add(Double.valueOf(memDayFromList.get(m).get("citic").toString()).intValue());
+                        tvList.add(Double.valueOf(memDayFromList.get(m).get("tv").toString()).intValue());
+                        thirdPartyList.add(Double.valueOf(memDayFromList.get(m).get("third_party").toString()).intValue());
+                        actionList.add(Double.valueOf(memDayFromList.get(m).get("action").toString()).intValue());
+                        m++;
+                    }else{
+                        appList.add("0");
+                        callcenterList.add("0");
+                        storeList.add("0");
+                        wechatList.add("0");
+                        padList.add("0");
+                        webList.add("0");
+                        citicList.add("0");
+                        tvList.add("0");
+                        thirdPartyList.add("0");
+                        actionList.add("0");
+                    }
+                }
+            }
         }
         JSONArray jsonApp = (JSONArray) JSONArray.fromObject(appList);
         JSONArray jsonCallcenter = (JSONArray) JSONArray.fromObject(callcenterList);
