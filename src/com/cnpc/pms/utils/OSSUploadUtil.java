@@ -226,30 +226,51 @@ public class OSSUploadUtil {
     
     public static List<String> queryOssListByPath(String rootPath) {
     	List<String> result = new ArrayList<String>();
-    	OSSConfig ossConfig = new OSSConfig();
-        OSSClient ossClient = new OSSClient(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());   
-    	// 构造ListObjectsRequest请求
-    	ListObjectsRequest listObjectsRequest = new ListObjectsRequest("guoanshuju");
-    	// "/" 为文件夹的分隔符
-    	listObjectsRequest.setDelimiter("/");
-    	// 列出fun目录下的所有文件和文件夹
-    	listObjectsRequest.setPrefix(rootPath);
-    	ObjectListing listing = ossClient.listObjects(listObjectsRequest);
-    	// 遍历所有Object
-    	//System.out.println("Objects:");
-    	//OSSobjectSummary下包含目录下所有的文件，不包含子目录
-    	for (OSSObjectSummary objectSummary : listing.getObjectSummaries()) {
-    		if(objectSummary.getKey()!=null&&!objectSummary.getKey().equals(rootPath)) {
-        		result.add(objectSummary.getKey());
-    		}
-    	    //System.out.println(objectSummary.getKey());
+    	if(rootPath.indexOf("house")>-1&&rootPath.indexOf("house_type")==-1) {
+        	OSSConfig ossConfig = new OSSConfig();
+            OSSClient ossClient = new OSSClient(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());   
+        	// 构造ListObjectsRequest请求
+        	ListObjectsRequest listObjectsRequest = new ListObjectsRequest("guoanshuju");
+        	// "/" 为文件夹的分隔符
+        	listObjectsRequest.setDelimiter("/");
+        	// 列出fun目录下的所有文件和文件夹
+        	listObjectsRequest.setPrefix(rootPath);
+        	ObjectListing listing = ossClient.listObjects(listObjectsRequest);
+        	// 遍历所有Object
+        	//System.out.println("Objects:");
+        	//OSSobjectSummary下包含目录下所有的文件，不包含子目录
+        	for (OSSObjectSummary objectSummary : listing.getObjectSummaries()) {
+        		if(objectSummary.getKey()!=null&&!objectSummary.getKey().equals(rootPath)) {
+            		result.add(objectSummary.getKey());
+        		}
+        	    //System.out.println(objectSummary.getKey());
+        	}
+        	// 遍历所有CommonPrefix
+        	/*System.out.println("\nCommonPrefixs:");
+        	for (String commonPrefix : listing.getCommonPrefixes()) {
+        	    System.out.println(commonPrefix);
+        	}*/
+        	return result;
     	}
-    	// 遍历所有CommonPrefix
-    	/*System.out.println("\nCommonPrefixs:");
-    	for (String commonPrefix : listing.getCommonPrefixes()) {
-    	    System.out.println(commonPrefix);
-    	}*/
     	return result;
+    }
+    
+    
+    
+    /**
+     * 根据文件路径 删除的方法  
+     * @param url  daqWeb/house/xxxxxxx.xls
+     */
+    public static void deleteObjectByUrl(String url) {
+    	if(url.indexOf("house")>-1&&url.indexOf("house_type")==-1) {
+    		// 初始化OSSClient
+        	OSSConfig ossConfig = new OSSConfig();
+            OSSClient ossClient = new OSSClient(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());   
+            // 删除Object
+            if(url.indexOf(".")>-1) {
+            	ossClient.deleteObject("guoanshuju", url);
+            }
+    	}
     }
     
     
