@@ -4,18 +4,14 @@ import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
-import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
-import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.manager.MassOrderManager;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
-import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.manager.impl.OrderManagerImpl;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -141,7 +137,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_orderlist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_orderlist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -151,7 +147,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -258,7 +254,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_returnorderlist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_returnorderlist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -268,7 +264,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {

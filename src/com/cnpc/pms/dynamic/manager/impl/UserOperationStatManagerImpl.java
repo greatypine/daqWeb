@@ -94,7 +94,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropsnewcuslist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropsnewcuslist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -104,7 +104,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -184,7 +184,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropspaylist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropspaylist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -194,7 +194,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -290,7 +290,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropsmorelist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropsmorelist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -300,7 +300,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -395,7 +395,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropsmorelist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_useropsmorelist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -405,7 +405,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -500,7 +500,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_massnewcuslist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_massnewcuslist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -510,7 +510,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -605,7 +605,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_masspaycuslist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_masspaycuslist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -615,7 +615,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -737,7 +737,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_comparelist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_comparelist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -747,7 +747,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -838,7 +838,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_masspaycuslist.xlsx");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_masspaycuslist.xls");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -848,7 +848,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
