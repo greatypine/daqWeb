@@ -1,5 +1,6 @@
 package com.cnpc.pms.personal.manager.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -87,9 +88,9 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 			saveStorexpand.setSurvey_quantity(storexpand.getSurvey_quantity());
 			saveStorexpand.setContract_quantity(storexpand.getContract_quantity());
 			saveStorexpand.setThrough_quantity(storexpand.getThrough_quantity());
-			saveStorexpand.setStart_time(DateUtils.str_to_date(storexpand.getStart_time(),"YYYY/MM/dd"));
-			saveStorexpand.setEnd_time(DateUtils.str_to_date(storexpand.getEnd_time(),"YYYY/MM/dd"));
-			saveStorexpand.setStatistical_time_period(storexpand.getStart_time()+"~"+storexpand.getEnd_time());
+			saveStorexpand.setStart_time(new SimpleDateFormat("yyyy/MM/dd").parse(storexpand.getStart_time()));
+			saveStorexpand.setEnd_time(new SimpleDateFormat("yyyy/MM/dd").parse(storexpand.getEnd_time()));
+			saveStorexpand.setStatistical_time_period(storexpand.getStart_time().replace("/", "-")+"~"+storexpand.getEnd_time().replace("/", "-"));
 			saveStorexpand.setType("store");
 			saveStorexpand.setPeriod_type("week");
 			preObject(saveStorexpand);
@@ -117,7 +118,7 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 			storexpandDTO.setEnd_time(DateUtils.dateFormat(storexpand.getEnd_time(), "YYYY/MM/dd"));
 			storexpandDTO.setPeriod_type(storexpand.getPeriod_type());
 			storexpandDTO.setStart_time(DateUtils.dateFormat(storexpand.getStart_time(), "YYYY/MM/dd"));
-			storexpandDTO.setStatistical_time_period(storexpand.getStatistical_time_period());
+			storexpandDTO.setStatistical_time_period(storexpand.getStatistical_time_period().replace("-", "/"));
 			storexpandDTO.setSurvey_quantity(storexpand.getSurvey_quantity());
 			storexpandDTO.setThrough_quantity(storexpand.getThrough_quantity());
 			return storexpandDTO;
@@ -171,7 +172,7 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 	public Map<String, Object> getStatistics(String statistics,String cityname) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		StorexpandDao storexpandDao = (StorexpandDao)SpringHelper.getBean(StorexpandDao.class.getName());
-		result = storexpandDao.getStatisticsExist(statistics,cityname);
+		result = storexpandDao.getStatisticsExist(statistics.replace("/", "-"),cityname);
 		return result;
 	}
 }
