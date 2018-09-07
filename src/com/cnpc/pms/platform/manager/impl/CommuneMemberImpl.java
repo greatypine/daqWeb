@@ -2704,7 +2704,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				}
 			}
 
-			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_memberdatalist.xls");
+			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_memberdatalist.xlsx");
 			if(file_xls.exists()){
 				file_xls.delete();
 			}
@@ -2714,7 +2714,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 				os = new FileOutputStream(file_xls.getAbsoluteFile());
 				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
 			}catch (Exception e) {
 				e.printStackTrace();
 			} finally {

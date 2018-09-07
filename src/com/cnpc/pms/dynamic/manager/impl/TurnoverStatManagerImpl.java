@@ -107,7 +107,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverstorelist.xls");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverstorelist.xlsx");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -117,7 +117,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -213,7 +213,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverarealist.xls");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverarealist.xlsx");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -223,7 +223,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -319,7 +319,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverarealist.xls");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverarealist.xlsx");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -329,7 +329,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -425,7 +425,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverchannellist.xls");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnoverchannellist.xlsx");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -435,7 +435,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
@@ -531,7 +531,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnovereshoplist.xls");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_turnovereshoplist.xlsx");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -541,7 +541,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {

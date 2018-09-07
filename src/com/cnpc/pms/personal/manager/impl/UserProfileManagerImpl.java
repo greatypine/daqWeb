@@ -103,7 +103,7 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
   	             }
   	        }
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_userprofilelist.xls");
+  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_userprofilelist.xlsx");
   			if(file_xls.exists()){
   				file_xls.delete();
   			}
@@ -113,7 +113,7 @@ public class UserProfileManagerImpl extends BizBaseCommonManager implements User
   				os = new FileOutputStream(file_xls.getAbsoluteFile());
   				wb.write(os);
 				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xls", "daqWeb/download/");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
   			}catch (Exception e) {
   				e.printStackTrace();
   			} finally {
