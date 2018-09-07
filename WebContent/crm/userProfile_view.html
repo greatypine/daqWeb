@@ -1262,7 +1262,8 @@ $(function () {
 	       			    
 	       			 	var cname="<strong>用户姓名：</strong>"+jData[i].customer_name+"<br>";
 				       	var cphone="<strong>用户电话：</strong>"+customer_phone+"<br>";
-				       	var customercontent =cname+cphone+"@customertips"+i;
+                        var csource="<strong>用户来源：</strong>"+jData[i].customer_source+"<br>";
+				       	var customercontent =cname+cphone+csource+"@customertips"+i;
 				        var customerid = "customertips"+i;
 				        
 				        var csum="<strong>历史消费金额：</strong>"+jData[i].trading_price_sum+"<br>";
