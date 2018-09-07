@@ -27,44 +27,46 @@ public class CostRenovation extends DataEntity {
     private String decorationCompany ;
 
     @Column(name="structure_acreage",columnDefinition="decimal(10,2) COMMENT '建筑面积'")
-    private double structureAcreage;
+    private Double structureAcreage;
 
     @Column(name="renovation_unit_price",columnDefinition="decimal(10,2) COMMENT '装修单价'")
-    private double renovationUnitPrice;
+    private Double renovationUnitPrice;
 
+    @Column(name="decorate_cost",columnDefinition="decimal(10,2) COMMENT '装修施工'")
+    private Double decorateCost;
 
     @Column(name="business_screen",columnDefinition="decimal(10,2) COMMENT '商业展屏'")
-    private double businessScreen;
+    private Double businessScreen;
 
     @Column(name="furniture",columnDefinition="decimal(10,2) COMMENT '家具'")
-    private double furniture ;
+    private Double furniture ;
 
     @Column(name="light_box",columnDefinition="decimal(10,2) COMMENT '标牌和灯箱'")
-    private double lightBox ;
+    private Double lightBox ;
 
     @Column(name="process_manage",columnDefinition="decimal(10,2) COMMENT '过程管理'")
-    private double processManage ;
+    private Double processManage ;
 
     @Column(name="process_manage_surcharge",columnDefinition="decimal(10,2) COMMENT '过程管理额外'")
-    private double processManageSurcharge ;
+    private Double processManageSurcharge ;
 
     @Column(name="air_conditioner",columnDefinition="decimal(10,2) COMMENT '空调设备'")
-    private double airConditioner;
+    private Double airConditioner;
 
     @Column(name="air_conditioner_surcharge",columnDefinition="decimal(10,2) COMMENT '空调设备额外'")
-    private double airConditionerSurcharge;
+    private Double airConditionerSurcharge;
 
     @Column(name="design",columnDefinition="decimal(10,2) COMMENT '设计'")
-    private double design;
+    private Double design;
 
     @Column(name="total",columnDefinition="decimal(10,2) COMMENT '单店总装修花销'")
-    private double total;
+    private Double total;
 
     @Column(name="amortize_month",columnDefinition="int(2) COMMENT '摊销月数'")
     private Integer amortizeMonth;
 
     @Column(name="amortize_money",columnDefinition="decimal(10,2) COMMENT '摊销金额'")
-    private double amortizeMoney;
+    private Double amortizeMoney;
 
 
     @Column(name="completed_date",columnDefinition="varchar(100) COMMENT '竣工日期'")
@@ -98,91 +100,99 @@ public class CostRenovation extends DataEntity {
         this.decorationCompany = decorationCompany;
     }
 
-    public double getStructureAcreage() {
+    public Double getStructureAcreage() {
         return structureAcreage;
     }
 
-    public void setStructureAcreage(double structureAcreage) {
+    public void setStructureAcreage(Double structureAcreage) {
         this.structureAcreage = structureAcreage;
     }
 
-    public double getRenovationUnitPrice() {
+    public Double getRenovationUnitPrice() {
         return renovationUnitPrice;
     }
 
-    public void setRenovationUnitPrice(double renovationUnitPrice) {
+    public void setRenovationUnitPrice(Double renovationUnitPrice) {
         this.renovationUnitPrice = renovationUnitPrice;
     }
 
-    public double getBusinessScreen() {
+    public Double getDecorateCost() {
+        return decorateCost;
+    }
+
+    public void setDecorateCost(Double decorateCost) {
+        this.decorateCost = decorateCost;
+    }
+
+    public Double getBusinessScreen() {
         return businessScreen;
     }
 
-    public void setBusinessScreen(double businessScreen) {
+    public void setBusinessScreen(Double businessScreen) {
         this.businessScreen = businessScreen;
     }
 
-    public double getFurniture() {
+    public Double getFurniture() {
         return furniture;
     }
 
-    public void setFurniture(double furniture) {
+    public void setFurniture(Double furniture) {
         this.furniture = furniture;
     }
 
-    public double getLightBox() {
+    public Double getLightBox() {
         return lightBox;
     }
 
-    public void setLightBox(double lightBox) {
+    public void setLightBox(Double lightBox) {
         this.lightBox = lightBox;
     }
 
-    public double getProcessManage() {
+    public Double getProcessManage() {
         return processManage;
     }
 
-    public void setProcessManage(double processManage) {
+    public void setProcessManage(Double processManage) {
         this.processManage = processManage;
     }
 
-    public double getProcessManageSurcharge() {
+    public Double getProcessManageSurcharge() {
         return processManageSurcharge;
     }
 
-    public void setProcessManageSurcharge(double processManageSurcharge) {
+    public void setProcessManageSurcharge(Double processManageSurcharge) {
         this.processManageSurcharge = processManageSurcharge;
     }
 
-    public double getAirConditioner() {
+    public Double getAirConditioner() {
         return airConditioner;
     }
 
-    public void setAirConditioner(double airConditioner) {
+    public void setAirConditioner(Double airConditioner) {
         this.airConditioner = airConditioner;
     }
 
-    public double getAirConditionerSurcharge() {
+    public Double getAirConditionerSurcharge() {
         return airConditionerSurcharge;
     }
 
-    public void setAirConditionerSurcharge(double airConditionerSurcharge) {
+    public void setAirConditionerSurcharge(Double airConditionerSurcharge) {
         this.airConditionerSurcharge = airConditionerSurcharge;
     }
 
-    public double getDesign() {
+    public Double getDesign() {
         return design;
     }
 
-    public void setDesign(double design) {
+    public void setDesign(Double design) {
         this.design = design;
     }
 
-    public double getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
@@ -194,11 +204,11 @@ public class CostRenovation extends DataEntity {
         this.amortizeMonth = amortizeMonth;
     }
 
-    public double getAmortizeMoney() {
+    public Double getAmortizeMoney() {
         return amortizeMoney;
     }
 
-    public void setAmortizeMoney(double amortizeMoney) {
+    public void setAmortizeMoney(Double amortizeMoney) {
         this.amortizeMoney = amortizeMoney;
     }
 

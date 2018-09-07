@@ -34,7 +34,7 @@ public class CostRenovationExcel {
         this.data = data;
     }
     //导出的文件标题
-    private final String[] header0={"序号","门店编码","门店名称","门店地址","年月租金","年物业月费用","年每月费用","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同总金额","建筑面积","租赁单价","第一年租金","第二年租金","第三年租金","第四年租金","第五年租金","押金","中介费","物业费","物业期限（月）","物业每月费用","起租日（免租期截止日）","到期日","起租日（含免租期）"};
+    private final String[] header0={"序号","门店编码","门店名称","施工单位","建筑面积","单方造价","装修施工","商业展屏","家具","标牌及灯箱","过程管理","费率：3.5%","空调设备","费率4.8%","设计","全过程项目管理","单店产值合计","摊销月份数","摊销月度成本","竣工时间","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同签订日期"};
 
     private final String[] colName = new String[] { "storeNo", "storeName","addr", "rent_monthly","property_fee","cost_monthly", "cost_monthly","cost_monthly","cost_monthly", "cost_monthly", "cost_monthly","cost_monthly","cost_monthly", "cost_monthly", "cost_monthly","cost_monthly","cost_monthly", "cost_monthly", "contract_grand_total","structure_acreage","lease_unit_price", "rent1", "rent2","rent3","rent4", "rent5", "deposit","agency_fee","property_fee_year", "property_deadline", "property_fee","lease_start_date","lease_stop_date", "free_lease_start_date"};
 
