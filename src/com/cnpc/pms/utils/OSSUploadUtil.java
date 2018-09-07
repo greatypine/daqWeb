@@ -14,6 +14,9 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.DeleteObjectsRequest;
 import com.aliyun.oss.model.DeleteObjectsResult;
 import com.aliyun.oss.model.GenericRequest;
+import com.aliyun.oss.model.ListObjectsRequest;
+import com.aliyun.oss.model.OSSObjectSummary;
+import com.aliyun.oss.model.ObjectListing;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.cnpc.pms.base.util.SpringHelper;
@@ -28,7 +31,15 @@ public class OSSUploadUtil {
         config.setPicLocation(remotedir);
         String fileName = config.getPicLocation()+UUID.randomUUID().toString().toUpperCase().replace("-", "")+"."+fileType;   
         return putObject(file,fileType,fileName);  
-    }  
+    }
+    
+    
+    public static String uploadFileResName(File file,String fileType,String remotedir){  
+        config = config==null?new OSSConfig():config;  
+        config.setPicLocation(remotedir);
+        String fileName = config.getPicLocation()+file.getName();   
+        return putObject(file,fileType,fileName);  
+    } 
       
     public static String updateFile(File file,String fileType,String oldUrl){  
         String fileName = getFileName(oldUrl);  
@@ -199,12 +210,47 @@ public class OSSUploadUtil {
     	return fileUrl;
     }
     
-    
+    //方法会重新生成文件名 随机码 
     public static String uploadOssFile(File f,String suffix,String urlLocation) {
     	String rt = uploadFile(f, suffix , urlLocation); 
     	return buildClientUrl(rt);
     }
     
+    //方法不会重新生成文件名
+    public static String uploadOssFileResName(File f,String suffix,String urlLocation) {
+    	String rt = uploadFileResName(f, suffix , urlLocation); 
+    	return buildClientUrl(rt);
+    }
+    
+    
+    
+    public static List<String> queryOssListByPath(String rootPath) {
+    	List<String> result = new ArrayList<String>();
+    	OSSConfig ossConfig = new OSSConfig();
+        OSSClient ossClient = new OSSClient(ossConfig.getEndpoint(), ossConfig.getAccessKeyId(), ossConfig.getAccessKeySecret());   
+    	// 构造ListObjectsRequest请求
+    	ListObjectsRequest listObjectsRequest = new ListObjectsRequest("guoanshuju");
+    	// "/" 为文件夹的分隔符
+    	listObjectsRequest.setDelimiter("/");
+    	// 列出fun目录下的所有文件和文件夹
+    	listObjectsRequest.setPrefix(rootPath);
+    	ObjectListing listing = ossClient.listObjects(listObjectsRequest);
+    	// 遍历所有Object
+    	//System.out.println("Objects:");
+    	//OSSobjectSummary下包含目录下所有的文件，不包含子目录
+    	for (OSSObjectSummary objectSummary : listing.getObjectSummaries()) {
+    		if(objectSummary.getKey()!=null&&!objectSummary.getKey().equals(rootPath)) {
+        		result.add(objectSummary.getKey());
+    		}
+    	    //System.out.println(objectSummary.getKey());
+    	}
+    	// 遍历所有CommonPrefix
+    	/*System.out.println("\nCommonPrefixs:");
+    	for (String commonPrefix : listing.getCommonPrefixes()) {
+    	    System.out.println(commonPrefix);
+    	}*/
+    	return result;
+    }
     
     
    /* public static void main(String[] args) {
