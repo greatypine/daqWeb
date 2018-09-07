@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.query.json.QueryConditions;
+import com.cnpc.pms.personal.dto.StorexpandDTO;
 import com.cnpc.pms.personal.entity.Storexpand;
 
 public interface StorexpandManager extends IManager {
@@ -14,7 +15,7 @@ public interface StorexpandManager extends IManager {
 	 */
 	Map<String, Object> showOfficeData(QueryConditions conditions);
 	
-	Storexpand saveOrUpdateOfficeNetwork(Storexpand storexpand);
+	Storexpand saveOrUpdateOfficeNetwork(StorexpandDTO storexpand);
 
 	
 	void insertOfficeNetwork(Storexpand saveStorexpand);
@@ -37,7 +38,8 @@ public interface StorexpandManager extends IManager {
 	 * @param id
 	 * @return
 	 */
-	Storexpand getStorexpandById(Long id);
+	StorexpandDTO getStorexpandById(Long id);
+	Storexpand getStorexpandByOriginId(Long id);
 	
 	/**
 	 * 网络建设进展

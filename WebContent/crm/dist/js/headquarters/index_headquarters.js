@@ -5149,7 +5149,7 @@ function refreshCurrentData(){
         var h=date.getHours();
         var m=date.getMinutes();
         var s=date.getSeconds();
-        if(h==7&&m==0&&s==0){
+        if((h==7&&m==0&&s==0)||(h==12&&m==0&&s==0)){
 		    localStorage.clear();
 	        showPageContent(pageStatusInfo);  
         }

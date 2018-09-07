@@ -12,6 +12,7 @@ import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.dao.StorexpandDao;
+import com.cnpc.pms.personal.dto.StorexpandDTO;
 import com.cnpc.pms.personal.entity.Storexpand;
 import com.cnpc.pms.personal.manager.StorexpandManager;
 import com.cnpc.pms.utils.DateUtils;
@@ -73,34 +74,58 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 	}
 
 	@Override
-	public Storexpand saveOrUpdateOfficeNetwork(Storexpand storexpand) {
+	public Storexpand saveOrUpdateOfficeNetwork(StorexpandDTO storexpand) {
 		Storexpand saveStorexpand = null;
 		if (storexpand.getId() != null) {
-			saveStorexpand = getStorexpandById(storexpand.getId());
+			saveStorexpand = getStorexpandByOriginId(storexpand.getId());
 		} else {
 			saveStorexpand = new Storexpand();
 		}
-		saveStorexpand.setCityname(storexpand.getCityname());
-		saveStorexpand.setCityno(storexpand.getCityno());
-		saveStorexpand.setSurvey_quantity(storexpand.getSurvey_quantity());
-		saveStorexpand.setContract_quantity(storexpand.getContract_quantity());
-		saveStorexpand.setThrough_quantity(storexpand.getThrough_quantity());
-		saveStorexpand.setStart_time(storexpand.getStart_time());
-		saveStorexpand.setEnd_time(storexpand.getEnd_time());
-		saveStorexpand.setStatistical_time_period(storexpand.getStart_time()+"~"+storexpand.getEnd_time());
-		saveStorexpand.setType("store");
-		saveStorexpand.setPeriod_type("week");
-		preObject(saveStorexpand);
-		StorexpandManager officeNetworkManager = (StorexpandManager) SpringHelper.getBean("storexpandManager");
-		if (storexpand.getId() == null) {
-			this.insertOfficeNetwork(saveStorexpand);
-		}else{
-			officeNetworkManager.saveObject(saveStorexpand);
+		try{
+			saveStorexpand.setCityname(storexpand.getCityname());
+			saveStorexpand.setCityno(storexpand.getCityno());
+			saveStorexpand.setSurvey_quantity(storexpand.getSurvey_quantity());
+			saveStorexpand.setContract_quantity(storexpand.getContract_quantity());
+			saveStorexpand.setThrough_quantity(storexpand.getThrough_quantity());
+			saveStorexpand.setStart_time(DateUtils.str_to_date(storexpand.getStart_time(),"YYYY/MM/dd"));
+			saveStorexpand.setEnd_time(DateUtils.str_to_date(storexpand.getEnd_time(),"YYYY/MM/dd"));
+			saveStorexpand.setStatistical_time_period(storexpand.getStart_time()+"~"+storexpand.getEnd_time());
+			saveStorexpand.setType("store");
+			saveStorexpand.setPeriod_type("week");
+			preObject(saveStorexpand);
+			StorexpandManager officeNetworkManager = (StorexpandManager) SpringHelper.getBean("storexpandManager");
+			if (storexpand.getId() == null) {
+				this.insertOfficeNetwork(saveStorexpand);
+			}else{
+				officeNetworkManager.saveObject(saveStorexpand);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
 		}
 		return saveStorexpand;
 	}
 	@Override
-	public Storexpand getStorexpandById(Long id) {
+	public StorexpandDTO getStorexpandById(Long id) {
+		List<?> list = this.getList(FilterFactory.getSimpleFilter("id", id));
+		StorexpandDTO storexpandDTO = new StorexpandDTO();
+		if (list != null && list.size() > 0) {
+			Storexpand storexpand = (Storexpand) list.get(0);
+			storexpandDTO.setId(storexpand.getId());
+			storexpandDTO.setCityname(storexpand.getCityname());
+			storexpandDTO.setCityno(storexpand.getCityno());
+			storexpandDTO.setContract_quantity(storexpand.getContract_quantity());
+			storexpandDTO.setEnd_time(DateUtils.dateFormat(storexpand.getEnd_time(), "YYYY/MM/dd"));
+			storexpandDTO.setPeriod_type(storexpand.getPeriod_type());
+			storexpandDTO.setStart_time(DateUtils.dateFormat(storexpand.getStart_time(), "YYYY/MM/dd"));
+			storexpandDTO.setStatistical_time_period(storexpand.getStatistical_time_period());
+			storexpandDTO.setSurvey_quantity(storexpand.getSurvey_quantity());
+			storexpandDTO.setThrough_quantity(storexpand.getThrough_quantity());
+			return storexpandDTO;
+		}
+		return null;
+	}
+	@Override
+	public Storexpand getStorexpandByOriginId(Long id) {
 		List<?> list = this.getList(FilterFactory.getSimpleFilter("id", id));
 		if (list != null && list.size() > 0) {
 			 Storexpand storexpand = (Storexpand) list.get(0);
@@ -113,21 +138,25 @@ public class StorexpandManagerImpl extends BizBaseCommonManager implements Store
 	public void insertOfficeNetwork(Storexpand saveStorexpand) {
 		StorexpandManager auditManager=(StorexpandManager)SpringHelper.getBean("storexpandManager");
 		Storexpand storexpand = new Storexpand();
-		storexpand.setCityname(saveStorexpand.getCityname());
-		storexpand.setCityno(saveStorexpand.getCityno());
-		storexpand.setContract_quantity(saveStorexpand.getContract_quantity());
-		storexpand.setSurvey_quantity(saveStorexpand.getSurvey_quantity());
-		storexpand.setThrough_quantity(saveStorexpand.getThrough_quantity());
-		storexpand.setType(saveStorexpand.getType());
-		storexpand.setPeriod_type(saveStorexpand.getPeriod_type());
-		if(saveStorexpand.getStatistical_time_period()!=null&&!"".equals(saveStorexpand.getStatistical_time_period())){
-			storexpand.setStart_time(saveStorexpand.getStart_time());
-			storexpand.setEnd_time(saveStorexpand.getEnd_time());
-			storexpand.setStatistical_time_period(saveStorexpand.getStart_time()+"~"+saveStorexpand.getEnd_time());
+		try {
+			storexpand.setCityname(saveStorexpand.getCityname());
+			storexpand.setCityno(saveStorexpand.getCityno());
+			storexpand.setContract_quantity(saveStorexpand.getContract_quantity());
+			storexpand.setSurvey_quantity(saveStorexpand.getSurvey_quantity());
+			storexpand.setThrough_quantity(saveStorexpand.getThrough_quantity());
+			storexpand.setType(saveStorexpand.getType());
+			storexpand.setPeriod_type(saveStorexpand.getPeriod_type());
+			if(saveStorexpand.getStatistical_time_period()!=null&&!"".equals(saveStorexpand.getStatistical_time_period())){
+				storexpand.setStart_time(saveStorexpand.getStart_time());
+				storexpand.setEnd_time(saveStorexpand.getEnd_time());
+				storexpand.setStatistical_time_period(saveStorexpand.getStart_time()+"~"+saveStorexpand.getEnd_time());
+			}
+			storexpand.setStatistical_time_period(saveStorexpand.getStatistical_time_period());
+			preObject(storexpand);
+			auditManager.saveObject(storexpand);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		storexpand.setStatistical_time_period(saveStorexpand.getStatistical_time_period());
-		preObject(storexpand);
-		auditManager.saveObject(storexpand);
 	}
 
 	@Override
