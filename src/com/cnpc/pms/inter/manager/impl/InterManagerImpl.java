@@ -100,6 +100,7 @@ import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.manager.StoreRequirementManager;
 import com.cnpc.pms.personal.manager.StoreStandardManager;
 import com.cnpc.pms.personal.manager.StorexpandManager;
+import com.cnpc.pms.personal.manager.SyncRecordManager;
 import com.cnpc.pms.personal.manager.TinyVillageManager;
 import com.cnpc.pms.personal.manager.UserLoginLogManager;
 import com.cnpc.pms.personal.manager.WorkRecordTotalManager;
@@ -3814,6 +3815,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			result.setCode(CodeEnum.success.getValue());
 			result.setMessage(CodeEnum.success.getDescription());
 			result.setData(validcode);
+			return result;
+		}
+		
+		
+		//ds定时任务调用一分钟一次 
+		@Override
+		public Result syncOnLineHuman() {
+			Result result = new Result();
+			SyncRecordManager syncRecordManager = (SyncRecordManager) SpringHelper.getBean("syncRecordManager");
+			try {
+				syncRecordManager.saveSearchWebServiceData();
+				result.setCode(CodeEnum.success.getValue());
+				result.setMessage(CodeEnum.success.getDescription());
+			} catch (Exception e) {
+				result.setCode(CodeEnum.error.getValue());
+				result.setMessage(CodeEnum.error.getDescription());
+			}
 			return result;
 		}
 }

@@ -567,4 +567,12 @@ public interface InterManager extends IManager {
   	public Result initReset(String inputcode);
   	public Result queryuserbyid(String id);
   	
+  	
+  	
+  	
+  	
+  	
+  	//******************ds调用同步线上人员  *********************//
+  	public Result syncOnLineHuman();
+  	
 }
