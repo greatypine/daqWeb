@@ -1650,11 +1650,14 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 					Map result = this.queryStorenameById(storeId);
 					if(result!=null){
 						map.put("store_name", result.get("storename"));
+						map.put("store_no", result.get("storeno"));
 					}else{
 						map.put("store_name", "");
+						map.put("store_no", "");
 					}
 				}else{
 					map.put("store_name", "");
+					map.put("store_no", "");
 				}
 			}
 		}

@@ -25,7 +25,7 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 	public Map<String, Object> queryUserProfile(UserProfileDto userProfile, PageInfo pageInfo) {
 		String sql = "select customer_name,customer_phone,customer_id,customer_source,trading_price_sum,order_count,first_order_time,last_order_time,area_code,tiny_village_code,regist_time,"
 				+ "slient_time,user_model,trading_price_max,max(IFNULL(usertag_b ,'')) usertag_b,max(IFNULL(usertag_v,'')) usertag_v from (SELECT IFNULL(dup.customer_name,'未填写') as customer_name, "
-				+ "dup.customer_phone, CONCAT(dup.customer_id,'') as customer_id, CASE customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
+				+ "dup.customer_phone, CONCAT(dup.customer_id,'') as customer_id, CASE dup.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' ELSE '无' END AS customer_source, "
 				+ "IFNULL(dup.trading_price_sum,0) as trading_price_sum,IFNULL(dup.order_count,0) as order_count,dup.first_order_time, dup.last_order_time, IFNULL(dup.area_code,'') as area_code, "
 				+ "IFNULL(dup.tiny_village_code,'') as tiny_village_code, dup.regist_time,DATEDIFF(now(), dup.last_order_time) as slient_time,CASE WHEN dup.user_model='1' THEN '有'  ELSE '无' END AS user_model,"
@@ -134,7 +134,7 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 				+ "trading_price_sum,trading_price_max,order_count,TRUNCATE(trading_price_sum/order_count,2) as cus_sigle_price,"
 				+ "first_order_time,last_order_time,area_code,tiny_village_code,regist_time,slient_time,user_model,max(IFNULL(is_b_tag,'')) is_b_tag,max(IFNULL(is_v_tag,'')) is_v_tag,is_sixty_tag,"
 				+ "is_thirty_tag from (SELECT IFNULL(dup.customer_name,'未填写') as customer_name, dup.customer_phone, CONCAT(dup.customer_id,'') AS customer_id, "
-				+ "CASE customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' "
+				+ "CASE dup.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' "
 				+ "WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' ELSE '无' END AS customer_source,IFNULL(dup.trading_price_sum,0) as trading_price_sum,"
 				+ "IFNULL(dup.trading_price_max,0) as trading_price_max,IFNULL(dup.order_count,0) as order_count,DATE_FORMAT(dup.first_order_time,'%Y-%m-%d %H:%i:%S') as first_order_time, "
 				+ "DATE_FORMAT(dup.last_order_time,'%Y-%m-%d %H:%i:%S') as last_order_time, IFNULL(dup.area_code,'') as area_code, IFNULL(dup.tiny_village_code,'') as tiny_village_code, "

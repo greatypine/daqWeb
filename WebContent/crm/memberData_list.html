@@ -685,10 +685,13 @@
                         var csource="<strong>用户来源：</strong>"+jData[i].customer_source;
                         var phonecontent =cphone+csource+"@phonetips"+i;
                         var phoneid = "phonetips"+i;
+                        var city_name = jData[i].city_name;
+                        var store_name = jData[i].store_name;
+                        var store_no = jData[i].store_no;
 
                         infoStr= "<tr>";
                         infoStr= infoStr
-                            +"<td><a href=\"javascript:showuserprofile('"+jData[i].customer_id+"','"+mobilephone+"')\" onmouseover=\"showphone('"+phonecontent+"');\" id=\""+phoneid+"\">"+mobilephone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')+"</a></td>"
+                            +"<td><a href=\"javascript:showuserprofile('"+jData[i].customer_id+"','"+mobilephone+"','"+city_name+"','"+store_name+"','"+store_no+"','"+ocdate+"')\" onmouseover=\"showphone('"+phonecontent+"');\" id=\""+phoneid+"\">"+mobilephone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')+"</a></td>"
                             +"<td>"+regist+"</td>"
                             +"<td>"+opencard+"</a></td>";
                         if(target==0 || target==1){
@@ -699,8 +702,8 @@
                                 +"<td>"+jData[i].inviteCode+"</td>";
                         }
                         infoStr= infoStr
-                            +"<td>"+jData[i].city_name+"</td>"
-                            +"<td>"+jData[i].store_name+"</td>";
+                            +"<td>"+city_name+"</td>"
+                            +"<td>"+store_name+"</td>";
 
                         infoStr= infoStr
                             +"</tr>";
@@ -731,15 +734,14 @@
     }
 
     //数据查询-用户档案
-    function showuserprofile(customer_id,mobilephone){
-        var ocdate = $("#searchTime").val();
+    function showuserprofile(customer_id,mobilephone,city_name,store_name,store_no,ocdate){
         doManager('userProfileManager','queryRecentlyOrder',[customer_id],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result!=null){
                     var jData = result.data;
                     if(jData!=null && jData.length>0){
-                        var url = "userProfile_view.html?t="+encode64(target)+"&sn="+encode64(storeName)+"&cn="+encode64(cityname)+"&c="+encode64(cityId)+"&so="+encode64(storeno)+"&mp="+encode64(mobilephone)+"&tag="+encode64("V")+"&time="+encode64(ocdate);
+                        var url = "userProfile_view.html?t="+encode64(target)+"&sn="+encode64(store_name)+"&cn="+encode64(city_name)+"&so="+encode64(store_no)+"&mp="+encode64(mobilephone)+"&tag="+encode64("V")+"&time="+encode64(ocdate);
                         window.open(url,"userProfile_view");
                     }else{
                         crm_alert(5,"暂无消费信息！");
