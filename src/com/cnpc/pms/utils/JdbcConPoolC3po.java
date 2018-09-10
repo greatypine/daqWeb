@@ -34,7 +34,7 @@ public class JdbcConPoolC3po {
 			String impala_port = PropertiesUtil.getValue("impala_port");
 			String impala_user =  PropertiesUtil.getValue("impala_user");
 			String impala_password = PropertiesUtil.getValue("impala_password");
-	        String connectionUrl = "jdbc:impala://" + impala_host + ':' + impala_port + "/daqWeb;auth=noSasl";  
+	        String connectionUrl = "jdbc:impala://" + impala_host + ':' + impala_port + "/datacube_kudu;auth=noSasl";
 	            
 			ds.setJdbcUrl(connectionUrl);
 			 
