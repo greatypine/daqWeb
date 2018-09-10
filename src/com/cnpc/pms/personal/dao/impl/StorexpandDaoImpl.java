@@ -38,7 +38,7 @@ public class StorexpandDaoImpl extends BaseDAOHibernate  implements StorexpandDa
 				}
 		// sql查询列，用于分页计算数据总数
 				String str_count_sql = "select COUNT(DISTINCT st.id) "
-						+ "from df_bussiness_target st WHERE 1=1  and type='store' and period_type='week' " + where;
+						+ "from df_bussiness_target st WHERE 1=1  and type='store' and period_type='week' " + where+sb_where;
 				System.out.println(str_count_sql);
 				// sql查询列，用于页面展示所有的数据
 				String find_sql = "select st.id,st.param_first,st.param_second,st.param_third" +
