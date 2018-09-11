@@ -744,7 +744,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			whereStr = " and dom.order_sn='"+orderSN+"' ";
 		}
 
-		String sql = "select CONCAT(dom.id, '') AS id,dom.order_sn,dom.addr_address as placename,tbu.name as employee_name,dom.customer_mobile_phone as mobilephone,dom.sign_time as df_signed_time,dom.customer_name from df_mass_order_monthly dom left join tb_bizbase_user tbu on dom.info_employee_a_no = tbu.employeeId   where info_employee_a_no='"+employeeNo+"'"+whereStr+" order  by sign_time desc";
+		String sql = "select CONCAT(dom.id, '') AS id,dom.order_sn,dom.addr_address as placename,tbu.name as employee_name,dom.customer_mobile_phone as mobilephone,dom.sign_time as df_signed_time,dom.customer_name,CONCAT(dom.customer_id,'') AS customer_id from df_mass_order_monthly dom left join tb_bizbase_user tbu on dom.info_employee_a_no = tbu.employeeId   where info_employee_a_no='"+employeeNo+"'"+whereStr+" order  by sign_time desc";
 		Session session =getHibernateTemplate().getSessionFactory().getCurrentSession();
 		List<Map<String, Object>> lst_data = new ArrayList<Map<String,Object>>();
 		Map<String, Object> map_result = new HashMap<String, Object>();

@@ -453,4 +453,12 @@ public interface OrderDao {
 	 * @return
 	 */
 	public Map<String, Object> queryOrderProductName(String order_id);
+
+	/**
+	 * @Description 查询订单下单客户
+	 * @author gbl
+	 * @date 2018/9/11 13:58
+	 **/
+
+	public Map<String,Object> queryOrderOfCustomer(String customerId);
 }
