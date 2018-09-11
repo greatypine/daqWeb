@@ -1211,13 +1211,13 @@ public class ScoreRecordTotalManagerImpl extends BizBaseCommonManager implements
 						StoreDynamic storeDynamic = storeDynamicManager
 								.findStoreDynamic(storeDocumentInfo.getStore_id());
 						if (storeDynamic != null) {
-							if (!"运营中".equals(storeDynamic.getEstate())&&!"试运营".equals(storeDynamic.getEstate())) {
+							if (!"运营中".equals(storeDynamic.getEstate())&&!"试运营".equals(storeDynamic.getEstate())&&!"闭店".equals(storeDynamic.getEstate())&&!"闭店中".equals(storeDynamic.getEstate())) {
 								storeDynamic.setEstate("待开业");
 							}
 							storeDynamicManager.saveObject(storeDynamic);
 							Store store = storeManager.findStore(storeDynamic.getStore_id());
 							if(store!=null){
-								if (!"运营中".equals(store.getEstate())&&!"试运营".equals(storeDynamic.getEstate())) {
+								if (!"运营中".equals(store.getEstate())&&!"试运营".equals(store.getEstate())&&!"闭店".equals(store.getEstate())&&!"闭店中".equals(store.getEstate())) {
 									store.setEstate("待开业");
 								}
 								storeManager.saveObject(store);
