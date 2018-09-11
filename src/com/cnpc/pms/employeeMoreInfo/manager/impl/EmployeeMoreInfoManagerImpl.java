@@ -4,6 +4,8 @@ import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.dynamic.dao.DynamicDao;
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.employeeMoreInfo.dao.EmployeeMoreInfoDao;
 import com.cnpc.pms.employeeMoreInfo.entity.EmployeeMoreInfo;
 import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
@@ -15,6 +17,7 @@ import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import org.apache.commons.collections.map.HashedMap;
 import org.bson.Document;
 import org.springframework.beans.BeanUtils;
 
@@ -451,6 +454,22 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 
 	}
 
+	@Override
+	public Map<String, Object> getEmployeeCount() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		DynamicDto dynamicDto = new DynamicDto();
+		dynamicDto.	setTarget(0);
+		List<Map<String, Object>> citylList = dynamicDao.selectAllCitySort(dynamicDto);
+		List<Map<String, Object>> storeList = dynamicDao.findStoreCount(dynamicDto);
+		result.put("cityCount",citylList.size());
+		result.put("storeCount",storeList.size());
+		return result;
+	}
 
-
+	@Override
+	public Map<String, Object> getEmployeeInfo() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		return null;
+	}
 }

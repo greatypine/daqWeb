@@ -3,6 +3,7 @@ package com.cnpc.pms.employeeMoreInfo.manager;
 import com.cnpc.pms.base.manager.IManager;
 
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeMoreInfoManager extends IManager {
 	
@@ -44,4 +45,18 @@ public interface EmployeeMoreInfoManager extends IManager {
 
 	public void  analyzeEmployeeWorkingAge();
 
+
+	/**
+	 * @Description  查询国安侠总人数，及城市门店总数量
+	 * @author gaoll
+	 * @date 2018/9/11 11:30
+	 **/
+	public Map<String,Object> getEmployeeCount();
+
+	/**
+	 * @Description  查询国安侠人均基本信息，包含人均工作时间，人均日单量，人均里程数
+	 * @author gaoll
+	 * @date 2018/9/11 11:44
+	 **/
+	public Map<String,Object> getEmployeeInfo();
 }
