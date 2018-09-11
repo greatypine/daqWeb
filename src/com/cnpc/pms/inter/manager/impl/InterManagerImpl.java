@@ -1752,6 +1752,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     		
 
             r_map = massOrderDao.queryOrderListOfApp(employee_no,pageInfo,order_sn);
+
     		if(r_map.get("data")!=null){
     			orderList = (List<Map<String,Object>>)r_map.get("data");
     			for(int i=0;i<orderList.size();i++){
@@ -1761,6 +1762,14 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
                         orderList.get(i).put("eshop_pro_name","");
                     }else{
                         orderList.get(i).put("eshop_pro_name",order_name_obj.get("eshop_pro_name"));
+                    }
+                    if(orderList.get(i).get("id")!=null){
+                        Map<String,Object> order_customer_obj = orderDao.queryOrderOfCustomer(orderList.get(i).get("customer_id").toString());
+                        if(order_customer_obj==null){
+                            orderList.get(i).put("customer_name","");
+                        }else{
+                            orderList.get(i).put("customer_name",order_customer_obj.get("short_name"));
+                        }
                     }
 
                     List<Map<String,Object>> orderitemes = orderDao.getOrderItemByOrderId("'"+orderList.get(i).get("id").toString()+"'");

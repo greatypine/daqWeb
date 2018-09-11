@@ -8,6 +8,8 @@ import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.ValueUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -23,7 +25,7 @@ import java.util.*;
  */
 public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
-
+	private static Log logger = LogFactory.getLog(OrderDaoImpl.class);
 //	public Integer getOrderCount(String store_id,String employee_id,String year_month){
 //        if(year_month == null){
 //            year_month = "DATE_FORMAT(curdate(),'%Y-%m')";
@@ -1143,7 +1145,10 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	 		 map_result.put("data", lst_data);
 	     }catch (Exception e){
 	         e.printStackTrace();
-	         
+
+			log.info("》》》》》》》》》》》》》》》》》》》》》》》APP 消费记录："+e.getMessage());
+			log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>APP 消费记录："+e);
+			log.info("------------------------------------------- APP 消费记录"+lst_data.size());
 	     }finally {
 	         session.close();
 	     }
@@ -1204,6 +1209,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	        
 	     }catch (Exception e){
 	         e.printStackTrace();
+	         log.info(">>>>>>>>>>>>>>APP 消费记录商品图片："+e.getMessage());
 	     }finally {
 	         session.close();
 	     }
@@ -2282,6 +2288,28 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	@Override
 	public Map<String, Object> queryOrderProductName(String order_id){
 		String sql="SELECT concat(GROUP_CONCAT(ti.eshop_pro_name), '') AS eshop_pro_name FROM t_order_item ti WHERE ti.order_id = '"+order_id+"' GROUP BY ti.order_id";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		List<Map<String, Object>> lst_data = null;
+		Map<String, Object> map_r = null;
+		try{
+			SQLQuery query = session.createSQLQuery(sql);
+			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if(lst_data!=null&&lst_data.size()>0){
+				map_r =  lst_data.get(0);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+			log.info(">>>>>>>>>>>>>>>>>>>>>>>APP消费记录商品名："+e.getMessage());
+			log.info(">>>>>>>>>>>>>>>>>>>>>>>APP消费记录商品名："+e);
+		}finally {
+			session.close();
+		}
+		return map_r;
+	}
+
+	@Override
+	public Map<String, Object> queryOrderOfCustomer(String customerId) {
+		String sql="select * from t_customer where id='"+customerId+"'";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		List<Map<String, Object>> lst_data = null;
 		Map<String, Object> map_r = null;
