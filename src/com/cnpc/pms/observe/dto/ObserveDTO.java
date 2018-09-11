@@ -18,6 +18,7 @@ public class ObserveDTO {
     private String observe_month;
     private Integer status;
     private Integer order_no;
+    private String model_color;
 
     /** 功能节点主键. */
     private Long id;
@@ -305,5 +306,13 @@ public class ObserveDTO {
 
     public void setOrder_no(Integer order_no) {
         this.order_no = order_no;
+    }
+
+    public String getModel_color() {
+        return model_color;
+    }
+
+    public void setModel_color(String model_color) {
+        this.model_color = model_color;
     }
 }

@@ -20,6 +20,8 @@ public interface ObserveModelDao {
 
     public List<ObserveModel> getObserveModel();
 
+    public List<Map<String, Object>> getObserveModelListByEdit(Long store_id,String observe_month);
+
     public List<CheckDetails> getObserveCheckdetailsByModelId(Long model_id);
 
     public List<Map<String, Object>> queryObserveParameterList(Integer status,Long id, PageInfo pageInfo);
