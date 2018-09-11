@@ -50,6 +50,9 @@ public class CostRenovation extends DataEntity {
     @Column(name="process_manage_surcharge",columnDefinition="decimal(10,2) COMMENT '过程管理额外'")
     private Double processManageSurcharge ;
 
+    @Column(name="whole_process_manage_surcharge",columnDefinition="decimal(10,2) COMMENT '全过程管理额外'")
+    private Double wholeProcessManageSurcharge ;
+
     @Column(name="air_conditioner",columnDefinition="decimal(10,2) COMMENT '空调设备'")
     private Double airConditioner;
 
@@ -75,6 +78,14 @@ public class CostRenovation extends DataEntity {
     @Column(name="contract_date",columnDefinition="varchar(100) COMMENT '合同日期'")
     private String contractDate;
 
+
+    public Double getWholeProcessManageSurcharge() {
+        return wholeProcessManageSurcharge;
+    }
+
+    public void setWholeProcessManageSurcharge(Double wholeProcessManageSurcharge) {
+        this.wholeProcessManageSurcharge = wholeProcessManageSurcharge;
+    }
 
     public String getStoreNo() {
         return storeNo;

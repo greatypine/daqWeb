@@ -247,7 +247,7 @@ function getCostRenovation(){
  * 导出装修摊销
  *
  * **/
-function   exportcostRenovation(){
+function   exportCostRenovation(){
     var storeNo=$("#storeNo_renovation").val()==""?null:$("#storeNo_renovation").val();
     var storeName=$("#storeName_renovation").val()==""?null:$("#storeName_renovation").val();
     doManager('costRenovationManager','exportCostRenovation',[storeNo,storeName],function (data) {
@@ -315,6 +315,7 @@ function saveCostRenovation(){
             lightBox:lightBox,
             processManage:processManage,
             processManageSurcharge:processManageSurcharge,
+            wholeProcessManageSurcharge:wholeProcessManager,
             airConditioner:airConditioner,
             airConditionerSurcharge:airConditionerSurcharge,
             design:design,

@@ -59,5 +59,11 @@ public interface CostStatisticsDao extends IDAO {
     public List<Map<String,Object>> queryCostRenovation(String storeNo,String storeName);
 
 
+    /**
+     * @Description 查询固定资产
+     * @author gbl
+     * @date 2018/9/11 10:29
+     **/
 
+    public List<Map<String,Object>> queryCostFixedAsset(String storeNo,String storeName);
 }

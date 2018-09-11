@@ -36,17 +36,17 @@ public class CostRenovationExcel {
     //导出的文件标题
     private final String[] header0={"序号","门店编码","门店名称","施工单位","建筑面积","单方造价","装修施工","商业展屏","家具","标牌及灯箱","过程管理","费率：3.5%","空调设备","费率4.8%","设计","全过程项目管理","单店产值合计","摊销月份数","摊销月度成本","竣工时间","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同签订日期"};
 
-    private final String[] colName = new String[] { "storeNo", "storeName","addr", "rent_monthly","property_fee","cost_monthly", "cost_monthly","cost_monthly","cost_monthly", "cost_monthly", "cost_monthly","cost_monthly","cost_monthly", "cost_monthly", "cost_monthly","cost_monthly","cost_monthly", "cost_monthly", "contract_grand_total","structure_acreage","lease_unit_price", "rent1", "rent2","rent3","rent4", "rent5", "deposit","agency_fee","property_fee_year", "property_deadline", "property_fee","lease_start_date","lease_stop_date", "free_lease_start_date"};
+    private final String[] colName = new String[] { "store_no", "store_name","decoration_company", "structure_acreage","renovation_unit_price","decorate_cost", "business_screen","furniture","light_box", "process_manage", "process_manage_surcharge","air_conditioner","air_conditioner_surcharge", "design", "whole_process_manage_surcharge","total","amortize_month","amortize_money", "completed_date", "amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","contract_date"};
 
 
-    private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI"};
+    private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG"};
 
     public Map<String,Object> exportFile(){
         Map<String,Object> result = new HashMap<String,Object>();
         OssRefFileManager ossRefFileManager  = (OssRefFileManager)SpringHelper.getBean("ossRefFileManager");
         UtilityManager utilityManager = (UtilityManager)SpringHelper.getBean("utilityManager");
         String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+ File.separator + UPLOAD_DIRECTORY;
-        String fileName_part = utilityManager.getPYIndexStr("租金成本",true);
+        String fileName_part = utilityManager.getPYIndexStr("装修摊销",true);
         // 如果目录不存在则创建
         File uploadDir = new File(str_file_dir_path);
         if (!uploadDir.exists()) {
@@ -57,7 +57,7 @@ public class CostRenovationExcel {
         HSSFWorkbook workbook = new HSSFWorkbook();
         // 创建Excel的工作sheet,对应到一个excel文档的tab
 
-        HSSFSheet sheet = workbook.createSheet("租金成本");
+        HSSFSheet sheet = workbook.createSheet("装修摊销");
 
         // 设置列宽  （第几列，宽度）
         sheet.setColumnWidth( 0, 1600);
@@ -173,7 +173,7 @@ public class CostRenovationExcel {
         HSSFFont font2 = workbook.createFont();
         font2.setFontName("宋体");
         font2.setFontHeightInPoints((short) 12);
-        font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        //font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         HSSFCellStyle style2 = workbook.createCellStyle();
         style2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
         style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
@@ -182,22 +182,17 @@ public class CostRenovationExcel {
         style2.setFont(font2);
         style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 左右居中
         style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 上下居中
-        style2.setFillForegroundColor(IndexedColors.LIME.getIndex());
-        style2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        //style2.setFillForegroundColor(IndexedColors.LIME.getIndex());
+        //style2.setFillPattern(CellStyle.SOLID_FOREGROUND);
         style2.setLocked(true);
 
         // 第一行表头标题
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
-        for (int i = 0; i < 35; i++) {
+        for (int i = 0; i <33; i++) {
             cell = row.createCell(i);
             cell.setCellValue(header0[i]);
-
-            if(i>3){
-                cell.setCellStyle(headstyle2);
-            }else{
-                cell.setCellStyle(headstyle);
-            }
+            cell.setCellStyle(headstyle);
         }
 
 
@@ -214,13 +209,25 @@ public class CostRenovationExcel {
                 Object data = tempmap.get(colName[j]);
                 cell = row.createCell(j+1);
 
-                if(j<3||j>30){
+                if(j<2){
                     cell.setCellStyle(fixedStyle);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
+                }else if(j==2||j==18||j==31){
+                    cell.setCellStyle(style2);
+                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
+                }else if(j>18&&j<31){
+                    cell.setCellStyle(style);
+                    if (data==null){
+                        cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
+                    }else{
+                        cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+                        cell.setCellValue(Double.parseDouble(data.toString()));
+                    }
                 }else{
 
-                    cell.setCellStyle(style);
+                    cell.setCellStyle(style2);
                     if (data==null){
                         cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
                     }else{
@@ -232,17 +239,17 @@ public class CostRenovationExcel {
             }
         }
         row = sheet.createRow(data.size()+1);
-        for(int i=0;i<35;i++){
+        for(int i=0;i<33;i++){
             cell = row.createCell(i);
 
             cell.setCellStyle(sumstyle);
-            if(i<7){
+            if(i<5){
                 cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                 cell.setCellValue("合计");
-            }else if(i>6&&i<19){
+            }else if(i>19&&i<32){
                 cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                 cell.setCellFormula("SUM("+rowColNum[i]+2+":"+rowColNum[i]+(data.size()+1)+")");//合计添加公式
-            }else if(i>18){
+            }else{
                 cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
             }
 
