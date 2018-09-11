@@ -7,6 +7,7 @@ import com.cnpc.pms.dynamic.entity.EshopPurchaseDto;
 import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.utils.ValueUtil;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -2287,7 +2288,9 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 	@Override
 	public Map<String, Object> queryOrderProductName(String order_id){
-		String sql="SELECT concat(GROUP_CONCAT(ti.eshop_pro_name), '') AS eshop_pro_name FROM t_order_item ti WHERE ti.order_id = '"+order_id+"' GROUP BY ti.order_id";
+		//String sql="SELECT concat(GROUP_CONCAT(ti.eshop_pro_name), '') AS eshop_pro_name FROM t_order_item ti WHERE ti.order_id = '"+order_id+"' GROUP BY ti.order_id";
+		String sql="SELECT ti.eshop_pro_name FROM t_order_item ti WHERE ti.order_id = '"+order_id+"'";
+
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		List<Map<String, Object>> lst_data = null;
 		Map<String, Object> map_r = null;
@@ -2295,7 +2298,14 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 			SQLQuery query = session.createSQLQuery(sql);
 			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			if(lst_data!=null&&lst_data.size()>0){
-				map_r =  lst_data.get(0);
+				//map_r =
+				StringBuilder sb = new StringBuilder();
+				for(int i=0;i<lst_data.size();i++){
+					String eshop_pro_name = lst_data.get(i).get("eshop_pro_name")==null?"":lst_data.get(i).get("eshop_pro_name").toString();
+					sb.append("、").append(eshop_pro_name);
+				}
+				map_r = new HashedMap();
+				map_r.put("eshop_pro_name",sb.substring(1));
 			}
 		}catch (Exception e){
 			e.printStackTrace();
