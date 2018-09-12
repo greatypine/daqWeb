@@ -1292,7 +1292,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		if(dd.getCityName()!=null&&!"".equals(dd.getCityName())){
 			sql = sql+" and b.city_name like '%"+dd.getCityName()+"%'";
 		}
-		
+		if(dd.getSearchstr()!=null&&!"".equals(dd.getSearchstr())){
+			sql = sql+" and a.zw = '"+dd.getSearchstr()+"'";
+		}
 		Map<String,Object> map_result = new HashMap<String,Object>();
 		
 		String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";

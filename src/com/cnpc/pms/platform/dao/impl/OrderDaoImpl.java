@@ -1927,7 +1927,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	public List<Map<String, Object>> getDailyUserOfCurDay(DynamicDto dd,List<Map<String, Object>> cityNO,
 			List<Map<String, Object>> provinceNO) {
 		String sqlStr = "";
-		String whereCustomerStr = "";
 		String whereStr = "";
 		String dateStr = "";
 		String beginDate = dd.getBeginDate();
@@ -1938,22 +1937,19 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 			if(cityNo!=null&&cityNo.startsWith("00")){
 				cityNo = cityNo.substring(1,cityNo.length());
 			}
-			whereStr+=" AND t.city_code='"+cityNo+"' ";
-			whereCustomerStr+=" AND t5.city_code='"+cityNo+"' ";
+			whereStr+=" AND t5.city_code='"+cityNo+"' ";
 		}
 		String endDate = dd.getEndDate();
 		if(provinceNO!=null&&provinceNO.size()>0){
 			provinceNo = String.valueOf(provinceNO.get(0).get("gb_code"));
-			whereCustomerStr+=" AND t5.province_code='"+provinceNo+"' ";
-			whereStr+=" and t.province_code='"+provinceNo+"' ";
+			whereStr+=" and t5.province_code='"+provinceNo+"' ";
 		}
 		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
 			dateStr = " WHERE df_signed_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
 //			dateStr = " WHERE df_signed_time BETWEEN '"+"2017-12-27"+" 00:00:00' and '"+"2017-12-27"+" 23:59:59' ";
 		}
-			sqlStr = "SELECT DISTINCT(SELECT IFNULL(count(DISTINCT(t4.customer_id)),0) AS customer_count FROM t_store t5 LEFT JOIN df_order_signed_daily t4 ON t4.store_id = t5.id " +
-					dateStr+ whereCustomerStr+" ) AS customer_count FROM t_store t LEFT JOIN df_order_signed_daily " +
-					"tor ON t.id = tor.store_id "+dateStr+whereStr;
+			sqlStr = "SELECT IFNULL(count(DISTINCT(t4.customer_id)),0) AS customer_count FROM t_store t5 LEFT JOIN df_order_signed_daily t4 ON t4.store_id = t5.id " +
+					dateStr+ whereStr+" ";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 		try{
