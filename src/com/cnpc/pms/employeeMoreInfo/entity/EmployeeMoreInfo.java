@@ -32,7 +32,10 @@ public class EmployeeMoreInfo extends DataEntity{
 	private Integer workingAge_day;//工龄 按天
 	
 	@Column(name="moveDistance")
-	private float moveDistance;//移动距离 /公里
+	private float moveDistance;//总移动距离 /公里
+
+	@Column(name="oneDay_moveDistance")
+	private Float oneDyMoveDistance;//一天的移动距离
 	
 	@Column(name="sendOrders")
 	private Integer sendOrders;//送单量
@@ -135,5 +138,13 @@ public class EmployeeMoreInfo extends DataEntity{
 
 	public void setWorkingAge_year_precise(String workingAge_year_precise) {
 		this.workingAge_year_precise = workingAge_year_precise;
+	}
+
+	public Float getOneDyMoveDistance() {
+		return oneDyMoveDistance;
+	}
+
+	public void setOneDyMoveDistance(Float oneDyMoveDistance) {
+		this.oneDyMoveDistance = oneDyMoveDistance;
 	}
 }
