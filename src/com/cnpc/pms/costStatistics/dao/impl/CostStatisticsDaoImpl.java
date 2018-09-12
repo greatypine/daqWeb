@@ -137,7 +137,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
     public List<Map<String, Object>> queryCostFixedAsset(String storeNo, String storeName) {
         String sqlSub = "select * from t_cost_fixed_asset";
 
-        String sql ="select ts.storeno as store_no,ts.name as store_name ,tcfa.amortize_money,tcfa.total,tcfa.aio,tcfa.mobile_phone,tcfa.iPad,tcfa.cash_register,tcfa.computer,tcfa.scanner_gun,tcfa.electronics_toal,tcfa.electronics_amortize,tcfa.electric_cars,tcfa.electric_ars_amortize,tcfa.cold_chain,tcfa.safe_box,tcfa.capsule_goods_shelf,tcfa.shopping_goods_shelf,tcfa.machine_total,tcfa.machine_amortize from  t_store ts left join ("+sqlSub+") tcfa on  ts.storeno = tcfa.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+        String sql ="select ts.storeno as store_no,ts.name as store_name ,tcfa.amortize_money,tcfa.total,tcfa.aio,tcfa.mobile_phone,tcfa.iPad,tcfa.cash_register,tcfa.computer,tcfa.scanner_gun,tcfa.electronics_total,tcfa.electronics_amortize,tcfa.electric_cars,tcfa.electric_cars_amortize,tcfa.cold_chain,tcfa.safe_box,tcfa.capsule_goods_shelf,tcfa.shopping_goods_shelf,tcfa.machine_total,tcfa.machine_amortize from  t_store ts left join ("+sqlSub+") tcfa on  ts.storeno = tcfa.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
         if(storeNo!=null&&!"".equals(storeNo)){
             sql+=" and ts.storeno like '%"+storeNo+"%'";
         }

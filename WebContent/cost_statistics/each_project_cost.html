@@ -70,10 +70,10 @@
         })
 
 
-        /**
-         * 切换tag
-         * @param t
-         */
+    /**
+     * 切换tag
+     * @param t
+     */
     function showCostTag(t){
             if(t==1){
 
@@ -87,26 +87,26 @@
 
                 getCostRenovation();//装修摊销
             }else if(t==4){
-
+                getCostFixedAsset();//固定资产
             }
     }
 
-        /**
-         * 展示完整信息
-         * @param t
-         */
+    /**
+     * 展示完整信息
+     * @param t
+     */
     function showWholeContent(t){
-        var id = $(t).attr("id")
+        var id = $(t).attr("id");
         layer.tips(t.value,"#"+id, {
             tips: [1, '#0ACC4C'],
             time: 1000
         });
     }
 
-        /**
-         * 检测录入非整数数字数据有效性
-         * @param t
-         */
+    /**
+     * 检测录入非整数数字数据有效性
+     * @param t
+     */
     function checkFloatDataValid(t){
 
         var reg = /^[1-9]+(.[0-9]{2})?$/;
@@ -476,8 +476,8 @@
                         </tr>
                     </table>
                     <div class="col-sm-4 no-padding">
-                        <table class="table" cellspacing="0" cellpadding="0" id="FixedAsset_tb_1">
-                            <tr id="FixedAsset_tr_1">
+                        <table class="table" cellspacing="0" cellpadding="0" id="fixedAsset_tb_1">
+                            <tr id="fixedAsset_tr_1">
                                 <th style="text-align: center;background-color:#A9A9A9">序号</th>
                                 <th style="text-align: center;background-color: #A9A9A9">门店编码</th>
                                 <th style="text-align: center;background-color: #A9A9A9">门店名称</th>
@@ -488,9 +488,9 @@
                         </table>
                     </div>
                     <div class="col-sm-8 no-padding" style="overflow-x: scroll;margin-left:-1px">
-                        <table class="table table_x" cellspacing="0" cellpadding="0" id="FixedAsset_tb_2">
+                        <table class="table table_x" cellspacing="0" cellpadding="0" id="fixedAsset_tb_2">
 
-                            <tr id="FixedAsset_tr_2">
+                            <tr id="fixedAsset_tr_2">
                                 <th style="text-align: center"><p style="width: auto" >月摊销成本（元/月）</p></th>
                                 <th style="text-align: center"><p style="width: auto" >固定资产合计（元）</p></th>
                                 <th style="text-align: center"><p style="width: auto" >多功能一体机</p></th>
@@ -498,17 +498,17 @@
                                 <th style="text-align: center"><p>IPADmini</p></th>
                                 <th style="text-align: center"><p>收银设备</p></th>
                                 <th style="text-align: center"><p>电脑</p></th>
-                                <th style="text-align: center"><p>扫描枪、热敏打印机</p></th>
+                                <th style="text-align: center"><p style="width: auto">扫描枪、热敏打印机</p></th>
                                 <th style="text-align: center"><p>电子类合计</p></th>
-                                <th style="text-align: center"><p>摊销金额（36个月）</p></th>
+                                <th style="text-align: center"><p style="width: auto">摊销金额（36个月）</p></th>
                                 <th style="text-align: center"><p>电动车</p></th>
-                                <th style="text-align: center"><p>摊销金额（48个月）</p></th>
+                                <th style="text-align: center"><p style="width: auto">摊销金额（48个月）</p></th>
                                 <th style="text-align: center"><p>卖场冷链设备</p></th>
                                 <th style="text-align: center"><p>保险柜</p></th>
                                 <th style="text-align: center"><p>微仓货架</p></th>
                                 <th style="text-align: center"><p>卖场货架</p></th>
-                                <th style="text-align: center"><p>机器设备合计</p></th>
-                                <th style="text-align: center"><p>摊销金额（120个月）</p></th>
+                                <th style="text-align: center"><p style="width: auto">机器设备合计</p></th>
+                                <th style="text-align: center"><p style="width: auto">摊销金额（120个月）</p></th>
                                 <th style="text-align: center"><p>1月</p></th>
                                 <th style="text-align: center"><p>2月</p></th>
                                 <th style="text-align: center"><p>3月</p></th>

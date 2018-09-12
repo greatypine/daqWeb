@@ -47,7 +47,7 @@ public class CostFixedAsset extends DataEntity {
     @Column(name="scanner_gun",columnDefinition="decimal(10,2) COMMENT '扫描仪'")
     private double scannerGun;
 
-    @Column(name="electronics_toal",columnDefinition="decimal(10,2) COMMENT '电子类合计'")
+    @Column(name="electronics_total",columnDefinition="decimal(10,2) COMMENT '电子类合计'")
     private double electronicsTotal;
 
     @Column(name="electronics_amortize",columnDefinition="decimal(10,2) COMMENT '电子类摊销'")
@@ -56,7 +56,7 @@ public class CostFixedAsset extends DataEntity {
     @Column(name="electric_cars",columnDefinition="decimal(10,2) COMMENT '电动车'")
     private double electricCars;
 
-    @Column(name="electric_ars_amortize",columnDefinition="decimal(10,2) COMMENT '电动车摊销'")
+    @Column(name="electric_cars_amortize",columnDefinition="decimal(10,2) COMMENT '电动车摊销'")
     private double electricCarsAmortize;
 
     @Column(name="cold_chain",columnDefinition="decimal(10,2) COMMENT '卖场冷链设备'")
