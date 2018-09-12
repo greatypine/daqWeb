@@ -4702,7 +4702,7 @@ var curr_user;
   }
   
 //数据模型-社区模型-基础数据模型  //全国
-  function toToMemberAnalysis(){
+  function goToMemberAnalysis(){
 	  var role = curr_user.usergroup.code;
 	  var url = "";
 	  var target=pageStatusInfo.targets;
@@ -4713,6 +4713,20 @@ var curr_user;
 	  }
 	  window.open(url,"member_analysis");  
   }
+
+
+//数据模型-优易模型-基础数据模型  //全国
+function goToYouyiInfo(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "youyi_product.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+    }else if(target==1){
+        url = "youyi_product_city.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+    }
+    window.open(url,"youyi_product");
+}
   
   //数据模型-社区模型-基础数据模型  //全国
   function toToBaseDataModule(){
