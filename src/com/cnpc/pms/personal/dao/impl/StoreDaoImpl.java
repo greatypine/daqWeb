@@ -1213,14 +1213,17 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		}else{
 			joinType = "inner join";
 		}
-		String sql = "select DISTINCT t1.cityname,DATE_FORMAT(t1.create_time,'%Y') AS create_year,t1.cityno,ifnull(t2.count,0) as ' cooperative_complete',ifnull(t3.count,0) as 'self_complete',"
+		String sql = "select cityname,create_year,cityno,sum(cooperative_complete) as cooperative_complete,sum(self_complete) as self_complete,sum(cooperative_task) as cooperative_task,"
+				+"sum(self_support_task) as self_support_task from ( "
+				+"select DISTINCT (case WHEN t1.cityname ='廊坊' then '北京' else t1.cityname end) as cityname,DATE_FORMAT(t1.create_time,'%Y') AS create_year,t1.cityno,ifnull(t2.count,0) as ' cooperative_complete',ifnull(t3.count,0) as 'self_complete',"
 				+ "ifnull(t4.cooperative_task,0) as cooperative_task,ifnull(t4.self_support_task,0) as self_support_task from t_dist_citycode t1 INNER JOIN t_store s on (t1.cityname = s.city_name and s.flag = 0 and s.name not like '%储备店%' and s.name not like '%测试%')"+joinType
 				+ " (select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')='运营中' and nature = '合作店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='H' and storetype!='W' AND storetype!='C' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t2 " + "ON t1.cityname = t2.city_name LEFT JOIN "
 				+ "(select count(*) as count,nature,city_name from t_store where nature is not null and flag = 0 and ifnull(estate,'')='运营中' and nature = '自营店' and name not like '%办公室%' and name not like '%储备%' and name not like '%测试%' AND storetype!='H' and storetype!='W' AND storetype!='C' AND storetype!='V' "+append_Stirng+" GROUP BY city_name) t3 " + "ON t1.cityname = t3.city_name INNER JOIN "
 				+ "(select city_name as cityname,sum(case when store_type = 'cooperative' and year = '"+year+"' then target_value else 0 end) as cooperative_task,"
 				+"sum(case when store_type = 'self_support' and year = '"+year+"' then target_value else 0 end) as self_support_task "
 				+"from df_bussiness_target where type = 'store' GROUP BY city_name) t4 "
-				+ "ON t1.cityname = t4.cityname;";
+				+ "ON t1.cityname = t4.cityname"
+				+") table_total GROUP BY cityname";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		// 获得查询数据
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
