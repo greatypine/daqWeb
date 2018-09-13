@@ -1402,7 +1402,11 @@ Date.prototype.format=function(fmt) {
 			        var trading="<strong>交易金额：</strong>"+trading_price+"<br>";
 			        var payable="<strong>应付金额：</strong>"+payable_price+"<br>";
  			        var pcontent =gmv+trading+payable+"@ptips"+i;
-			        var pid = "ptips"+i; 
+			        var pid = "ptips"+i;
+
+			        var ordersource = "<strong>订单来源：</strong>"+jData[i].order_source+"<br>";
+			        var sourcecontent =ordersource+"@sourcetips"+i;
+			        var sourceid = "sourcetips"+i;
 			        
 			        var employeeid = "employeetips"+i;  
 			        
@@ -1410,7 +1414,7 @@ Date.prototype.format=function(fmt) {
        			       
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
-                    	+"<td><a href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
+                    	+"<td><a style=\"text-decoration:underline\" onmouseover=\"showordersource('"+sourcecontent+"');\" id=\""+sourceid+"\" href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
  			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
  			   	        +"<td><a href=\"javascript:;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+gmv_price+"</a></td>"
                 	   	+"<td><a href=\"javascript:;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
@@ -1499,7 +1503,17 @@ Date.prototype.format=function(fmt) {
      }); 
   	   
   }
-  
+
+    //订单来源信息显示
+    function showordersource(obj){
+        var msg = obj.split("@")[0];
+        var id = obj.split("@")[1];
+        layer.tips(msg, '#'+id, {
+            tips: [4, '#0FA6D8'], //还可配置颜色
+            time:5000
+        });
+    }
+
   //员工信息显示
   function showemployee(ordersn,employeeid){
 	  var sdate = $("#auto_date").val();
