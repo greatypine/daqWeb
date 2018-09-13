@@ -68,15 +68,24 @@ public class YouyiProductImpl extends BizBaseCommonManager implements YouyiProdu
         List<Map<String, Object>> cmSexList = new ArrayList<Map<String, Object>>();
         cmSexList = youyiDao.getYouyiSku(dd);
 
+
+//        //查询上线数
+//        List<Map<String, Object>> onlineList = new ArrayList<Map<String, Object>>();
+//        onlineList = youyiDao.getonlineSku(dd);
+//        //查询动销数
+//        List<Map<String, Object>> sellList = new ArrayList<Map<String, Object>>();
+//        sellList = youyiDao.getMovingAll(dd);
+//        result.put("skuAll", onlineList.get(0).get("sku_online"));   //上线SKU
+//        result.put("skuMove", sellList.get(0).get("sku_onselling"));//动销SKU
         if (cmSexList != null && cmSexList.size() > 0) {
             //result.put("skuAll", cmSexList.get(0).get("cumulative_sku"));
             result.put("skuAll", cmSexList.get(0).get("sku_online"));   //上线SKU
             result.put("skuMove", cmSexList.get(0).get("sku_onselling"));//动销SKU
-            result.put("newSku", cmSexList.get(0).get("sku_new_count"));//上新SKU
+           // result.put("newSku", cmSexList.get(0).get("sku_new_count"));//上新SKU
         } else {
             result.put("skuAll", "0");
             result.put("skuMove", "0");
-            result.put("newSku", "0");
+           // result.put("newSku", "0");
         }
         return result;
     }
@@ -245,5 +254,15 @@ public class YouyiProductImpl extends BizBaseCommonManager implements YouyiProdu
             result.put("youyiGmv", "0");//动销SKU
         }
         return result;
+    }
+
+    @Override
+    public Map<String, Object> selectSellSku(String dd) {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> selectOnlineSku(String dd) {
+        return null;
     }
 }

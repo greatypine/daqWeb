@@ -22,6 +22,13 @@ public interface YouyiProductDao extends IDAO {
 	 */
 	public List<Map<String, Object>> getYouyiSku(String dd);
 
+    /**
+     * TODO 查询在线SKU数
+     *
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getonlineSku(String dd);
+
 	/**
 	 * TODO 按月查询动销数
 	 * 
@@ -30,7 +37,7 @@ public interface YouyiProductDao extends IDAO {
 	public List<Map<String, Object>> getMovingByMonth(String dd);
 
 	/**
-	 * TODO 查询新上商品数
+	 * TODO 查询城市动销数
 	 * 
 	 * @author wuxinxin
 	 */

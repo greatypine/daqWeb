@@ -19,16 +19,29 @@ public class YouyiProductDaoImpl extends BaseDAOHibernate implements YouyiProduc
     public List<Map<String, Object>> getYouyiSku(String dd) {
         //查询总的商品数  在线商品数  动销商品数   新上商品数
 
-        String sql = "SELECT sum(bb.cumulative_sku) AS cumulative_sku, sum(online .sku_online) AS sku_online," +
-                " sum(onselling.sku_onselling) AS sku_onselling, sum(newEshop.sku_new_count) AS sku_new_count" +
-                " FROM ( SELECT count(DISTINCT sku_id) AS cumulative_sku FROM bb_sku WHERE strleft(last_modify_time,7) >= '"+beginDate+"' and branch_id = '8ac28b935fed0bc8015fed4c76f60018'" +
-                " AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL" ;
+        String sql = " SELECT sum(online .sku_online) AS sku_online, sum(onselling.sku_onselling) AS sku_onselling FROM ( SELECT count(DISTINCT sku_id) AS sku_onselling FROM bb_sku WHERE sku_onselling = 'yes' AND branch_id = '8ac28b935fed0bc8015fed4c76f60018' AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL ";
 
 
         if(!"0000".equals(dd)) {
             sql = sql+ "   and city_code = '"+dd+"'";
         }
-        sql = sql+" ) bb LEFT OUTER JOIN ( SELECT count(DISTINCT sku_id) AS sku_onselling FROM bb_sku WHERE sku_onselling = 'yes' AND branch_id = '8ac28b935fed0bc8015fed4c76f60018' AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL ) onselling ON 1 = 1 LEFT OUTER JOIN ( SELECT count(DISTINCT sku_id) AS sku_online FROM bb_sku WHERE sku_online = 'yes' AND branch_id = '8ac28b935fed0bc8015fed4c76f60018' AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL ) ONLINE ON 1 = 1 LEFT OUTER JOIN ( SELECT count(DISTINCT sku_id) AS sku_new_count FROM bb_sku WHERE ( strleft (last_modify_time, 7) >= '"+beginDate+"' AND strleft (create_time, 7) >= '"+beginDate+"' AND branch_id = '8ac28b935fed0bc8015fed4c76f60018' AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL )) newEshop ON 1 = 1";
+        sql = sql+" ) onselling LEFT OUTER JOIN ( SELECT count(DISTINCT sku_id) AS sku_online FROM bb_sku WHERE sku_online = 'yes' AND branch_id = '8ac28b935fed0bc8015fed4c76f60018' AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL ";
+
+        if(!"0000".equals(dd)) {
+            sql = sql+ "   and city_code = '"+dd+"'";
+        }
+        sql = sql+ " ) online ON 1 = 1";
+        List<Map<String,Object>> list = ImpalaUtil.execute(sql);
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> getonlineSku(String dd) {
+        //查询在线商品数
+        String sql = "SELECT count(DISTINCT sku_id) AS sku_online FROM bb_sku WHERE sku_online = 'yes' AND branch_id = '8ac28b935fed0bc8015fed4c76f60018' AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL" ;
+        if(!"0000".equals(dd)) {
+            sql = sql+ "   and city_code = '"+dd+"'";
+        }
         List<Map<String,Object>> list = ImpalaUtil.execute(sql);
         return list;
     }
@@ -61,7 +74,14 @@ public class YouyiProductDaoImpl extends BaseDAOHibernate implements YouyiProduc
 
     @Override
     public List<Map<String, Object>> getMovingAll(String dd) {
-        return null;
+        //动销商品数
+
+        String sql = "SELECT count(DISTINCT sku_id) AS sku_onselling FROM bb_sku WHERE sku_onselling = 'yes' AND branch_id = '8ac28b935fed0bc8015fed4c76f60018' AND branch_id IS NOT NULL AND city_code IS NOT NULL AND department_id IS NOT NULL" ;
+        if(!"0000".equals(dd)) {
+            sql = sql+ "   and city_code = '"+dd+"'";
+        }
+        List<Map<String,Object>> list = ImpalaUtil.execute(sql);
+        return list;
     }
 
     @Override

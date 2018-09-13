@@ -49,5 +49,15 @@ public interface YouyiProduct extends IManager{
      * @author wuxinxin
      */
     public Map<String, Object> selectYouyiGmv(String dd);
+    /**
+     * 查询动销数
+     * @author wuxinxin
+     */
+    public Map<String, Object> selectSellSku(String dd);
+    /**
+     * 查询上线商品数
+     * @author wuxinxin
+     */
+    public Map<String, Object> selectOnlineSku(String dd);
 
 }
