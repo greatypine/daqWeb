@@ -42,11 +42,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		
 		sql = sql + " GROUP BY a.store_code ";
@@ -102,11 +103,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		
 		sql = sql + " GROUP BY a.store_code ";
@@ -142,12 +144,13 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 		}
 
 		sql = sql + " where area_code is not null AND a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
-		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
+
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getAreaNo())){
 			sql = sql + " and a.area_code ='" + storeStatDto.getAreaNo().trim()+ "'";
@@ -205,11 +208,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where area_code is not null AND a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA'  ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getAreaNo())){
 			sql = sql + " and a.area_code ='" + storeStatDto.getAreaNo().trim()+ "'";
@@ -242,11 +246,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getDeptName())){
 			sql = sql + " and a.department_name like '%" + storeStatDto.getDeptName().trim() + "%'";
@@ -297,11 +302,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getDeptName())){
 			sql = sql + " and a.department_name like '%" + storeStatDto.getDeptName().trim() + "%'";
@@ -334,11 +340,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getChannelName())){
 			sql = sql + " and a.channel_name like '%" + storeStatDto.getChannelName().trim() + "%'";
@@ -389,11 +396,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getChannelName())){
 			sql = sql + " and a.channel_name like '%" + storeStatDto.getChannelName().trim() + "%'";
@@ -426,11 +434,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getEshopName())){
 			sql = sql + " and a.eshop_name like '%" + storeStatDto.getEshopName().trim() + "%'";
@@ -481,11 +490,12 @@ public class TurnoverStatDaoImpl extends BaseDAOHibernate implements TurnoverSta
 
 		sql = sql + " where a.store_white!='QA' AND a.store_status=0 AND a.store_name NOT LIKE '%测试%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' ";
 		
-		if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
-			sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
-		}
 		if(StringUtils.isNotEmpty(storeStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + storeStatDto.getStoreNo().trim()+ "'";
+		}else{
+			if(StringUtils.isNotEmpty(storeStatDto.getCityName())){
+				sql = sql + " and a.store_city_name like '%" + storeStatDto.getCityName().trim() + "%'";
+			}
 		}
 		if(StringUtils.isNotEmpty(storeStatDto.getEshopName())){
 			sql = sql + " and a.eshop_name like '%" + storeStatDto.getEshopName().trim() + "%'";

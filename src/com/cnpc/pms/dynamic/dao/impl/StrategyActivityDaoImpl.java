@@ -20,7 +20,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 				+ "END as pro_total_gmv,CASE WHEN tor.order_tag2='2' THEN SUM(gmv_price) END as ser_total_gmv,CASE WHEN tor.order_tag2='3' "
 				+ "THEN SUM(gmv_price) END as gro_total_gmv "
 				+ "FROM df_mass_order_total tor JOIN df_activity_scope das ON (tor.store_id = das.platformid) "
-				+ "WHERE tor.order_tag2 IS NOT NULL  ";
+				+ "WHERE 1=1  ";
 		if(StringUtils.isNotEmpty(start_time)){
 			sql = sql + " AND date(tor.sign_time) >= '"+start_time+"' ";
 		}
@@ -119,7 +119,7 @@ public class StrategyActivityDaoImpl extends BaseDAOHibernate implements Strateg
 				+ "CASE WHEN tor.order_tag2 = '3' THEN	SUM(gmv_price) END AS gro_total_gmv, "
 				+ "das.store_name,das.store_id,das.store_no,"
 				+ "tor.order_tag2 FROM	df_mass_order_monthly tor JOIN df_activity_scope das ON (tor.store_id = das.platformid) "
-				+ "WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1 AND tor.order_tag2 IS NOT NULL ";
+				+ "WHERE TO_DAYS(NOW()) - TO_DAYS(tor.sign_time) <= 1  ";
 		if(StringUtils.isNotEmpty(store_no)){
 			sql = sql + "AND tor.store_code='"+store_no+"'";
 		}
