@@ -3331,7 +3331,7 @@ var getDailyData = function(){
   					$("#totle_price").html(totle_price);
   					day_curr = totle_price;
   					
-  					var totalprice = totle_price+'';
+  					var totalprice = 10000000+'';
 
   					if(totalprice.indexOf(".")>0){
   						totalprice = totalprice.substring(0,totalprice.lastIndexOf("."));
@@ -5254,11 +5254,14 @@ function hideTooltip3(){
 	$("#attention3").hide();
 }
 function getScreenWidth(){
+/*
   var screenWidth = screen.width;
   var screenHeight = screen.height;
-  if(screenWidth>=1600){//1600
+  if(screenWidth>=1280){//1600
   	$(".text-muted").removeClass("text-muted2").addClass("text-muted1");
   }else{
   	$(".text-muted").removeClass("text-muted1").addClass("text-muted2");
   }
+  */
+  $(".text-muted").removeClass("text-muted2").addClass("text-muted1");
 }
