@@ -3331,7 +3331,7 @@ var getDailyData = function(){
   					$("#totle_price").html(totle_price);
   					day_curr = totle_price;
   					
-  					var totalprice = 10000000+'';
+  					var totalprice = totle_price+'';
 
   					if(totalprice.indexOf(".")>0){
   						totalprice = totalprice.substring(0,totalprice.lastIndexOf("."));
