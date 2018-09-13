@@ -48,7 +48,7 @@
     .skin-blue .main-header li.user-header{background-color: #11214e;}
     /*翻页效果*/
     /*翻页效果一*/
-    .text-muted1 .dataStatistics{cursor: pointer; color: #fff; font-family: futura_mdcn_btmedium; text-align: center; font-size: 70px; position: relative; line-height: 80px;}
+    .text-muted1 .dataStatistics{cursor: pointer; color: #fff; font-family: futura_mdcn_btmedium; text-align: center; font-size: 80px; position: relative; line-height: 80px;}
         
     /*.data_new{position: relative; float: left; left: 50%;}*/
     .text-muted1 .data_new{position: relative; width: 100%}
