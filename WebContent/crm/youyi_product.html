@@ -130,7 +130,7 @@
 <div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
 <div class="wrapper">
     <!-- 新header -->
-    <div class="download text-center" id="showDown" style="display:none"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
+    <div class="download text-center" id="showDown" style="display:none"><div class="download_icon" style="cursor: pointer;" id="downloadPdf"><i class="fa fa-download" ></i></div><p>下载报告</p></div>
     <header class="main-header">
         <nav class="navbar navbar-static-top">
             <div class="container">
@@ -159,7 +159,7 @@
                 <!-- Main content -->
                 <section class="content-header">
                     <div class="box box-default report">
-                        <div class="box-header h4"><strong>国安优易(</strong><strong id="selyear"></strong><strong>)运营简报</strong></div>
+                        <div class="box-header h4"><strong>国安优易产品(</strong><strong id="selyear"></strong><strong>)运营简报</strong></div>
                         <div class="box-body">
                             <div class="col-sm-12">
                                 <ul class="clearfix">
@@ -206,7 +206,7 @@
                         <div class="box-body">
                             <div class="col-sm-12">
                                 <div class="form-group col-lg-6" style="padding: 0 25px;">
-                                    <div class="box-header h4 text-light-blue" ><strong id="cityFrom">城市动销率</strong>
+                                    <div class="box-header h4 text-light-blue" ><strong id="cityFrom">分城市动销率</strong>
                                     </div></div>
                                     <div class="col-sm-12 no-padding" id="main4" style="height: 350px;"></div>
                             </div>
@@ -215,7 +215,7 @@
                     <div class="box box-default">
                         <div class="box-body">
                             <div class="col-sm-7 no-padding">
-                                <h4 class="box-header h4 text-light-blue"><strong>国安优易销量TOP10</strong></h4>
+                                <h4 class="box-header h4 text-light-blue"><strong>国安优易(本年度)销量TOP10</strong></h4>
                                 <table class="table table-bordered">
                                     <tbody id="pro_data">
                                     <tr>
@@ -229,7 +229,7 @@
                                 </table>
                             </div>
                             <div class="col-sm-5">
-                                <div class="box-header h4 text-light-blue"><strong id="chanCount">频道销量</strong></div>
+                                <div class="box-header h4 text-light-blue"><strong id="chanCount">本年度频道销量</strong></div>
                                 <div class="col-sm-12 no-padding" id="main3" style="height: 400px;"></div>
                             </div>
                         </div>
@@ -543,8 +543,8 @@
                     trigger: 'axis',
                     axisPointer : {            // 坐标轴指示器，坐标轴触发有效
                         type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                    },
-                    formatter: function (params)
+                    }
+                    ,formatter: function (params)
                     {
                         return params[0].name + '<br/>'
                             + params[0].marker+params[0].seriesName + ' : ' + (params[0].value) + '%<br/>'
@@ -589,23 +589,23 @@
                                 borderRadius: 5,
                                 color :'#00a65a',
                                 label : {
-                                    show : false,
+                                    show : true,
                                     position: 'top',
-                                   // formatter: '{c}%',
+                                    formatter: '{c}%',
                                     textStyle : {
                                         fontSize : '14',
                                         fontFamily : '微软雅黑',
-                                        fontWeight : 'bold'
+                                        // fontWeight : 'bold'
                                     }
                                 }
                             }
                         },
                         data:dataServer.jsonTechan,
                         markPoint : {
-                            data : [
+                      /*      data : [
                                 {type : 'max',name:'最大值'},
                                 {type : 'min',name:'最小值'}
-                            ]
+                            ]*/
                         }
                     },
                     {
@@ -617,21 +617,23 @@
                                 borderRadius: 5,
                                 color : '#ffae00',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'bottom',
+                                    formatter: '{c}%',
                                     textStyle : {
                                         fontSize : '14',
                                         fontFamily : '微软雅黑',
-                                        fontWeight : 'bold'
+                                        // fontWeight : 'bold'
                                     }
                                 }
                             }
                         },
                         data:dataServer.jsonShengxian,
                         markPoint : {
-                            data : [
+                     /*       data : [
                                 {type : 'max',name:'最大值'},
                                 {type : 'min',name:'最小值'}
-                            ]
+                            ]*/
                         }
                     },
                     {
@@ -641,23 +643,25 @@
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
-                                color :'#E87C25',
+                                color :'#B03A5B',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'top',
+                                    formatter: '{c}%',
                                     textStyle : {
                                         fontSize : '14',
                                         fontFamily : '微软雅黑',
-                                        fontWeight : 'bold'
+                                        // fontWeight : 'bold'
                                     }
                                 }
                             }
                         },
                         data:dataServer.jsonRiyong,
                         markPoint : {
-                            data : [
+/*                            data : [
                                 {type : 'max',name:'最大值'},
                                 {type : 'min',name:'最小值'}
-                            ]
+                            ]*/
                         }
                     }
                 ]
@@ -743,7 +747,7 @@
                         type: 'bar',
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
-                                color :'#E87C25',
+                                color :'#B03A5B',
                                 label : {
                                     show : true,
                                     position: 'inside',
