@@ -58,6 +58,8 @@ function loginShow(){
 	
 }
 $(document).ready(function () {
+	//获取屏幕宽度(设置当日营业额显示样式)
+	getScreenWidth();
 	//获得闪图数据
 	getBeatJson();
 	//首次进入清除缓存
@@ -3330,6 +3332,7 @@ var getDailyData = function(){
   					day_curr = totle_price;
   					
   					var totalprice = totle_price+'';
+
   					if(totalprice.indexOf(".")>0){
   						totalprice = totalprice.substring(0,totalprice.lastIndexOf("."));
   					}
@@ -5249,4 +5252,13 @@ function showTooltip3(){
 }
 function hideTooltip3(){
 	$("#attention3").hide();
+}
+function getScreenWidth(){
+  var screenWidth = screen.width;
+  var screenHeight = screen.height;
+  if(screenWidth>=1600){//1600
+  	$(".text-muted").removeClass("text-muted2").addClass("text-muted1");
+  }else{
+  	$(".text-muted").removeClass("text-muted1").addClass("text-muted2");
+  }
 }

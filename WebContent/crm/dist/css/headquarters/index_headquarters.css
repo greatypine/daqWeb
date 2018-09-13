@@ -47,23 +47,38 @@
     .nav-mark > a,.nav-mark > i,.sidebar_active > a,.sidebar_active > a >i{color: #46a3ff!important;}
     .skin-blue .main-header li.user-header{background-color: #11214e;}
     /*翻页效果*/
-    /*翻页效果*/
-        .dataStatistics{cursor: pointer; color: #fff; font-family: futura_mdcn_btmedium; text-align: center; font-size: 80px; position: relative;}
+    /*翻页效果一*/
+    .text-muted1 .dataStatistics{cursor: pointer; color: #fff; font-family: futura_mdcn_btmedium; text-align: center; font-size: 70px; position: relative; line-height: 80px;}
+        
     /*.data_new{position: relative; float: left; left: 50%;}*/
-    .data_new{position: relative; width: 100%}
+    .text-muted1 .data_new{position: relative; width: 100%}
     /*.digit_set{border: 1px solid #078dff; border-radius: 4px; perspective: 200px; height: 90px!important; margin: 0 5px!important; width: 57px!important; right: 50%;}*/
-    .digit_set{float: none!important;border: 1px solid #078dff; border-radius: 4px; perspective: 200px; height: 80px!important; margin: 0 auto!important; width: 55px!important;}
-	.digit_wrap{line-height: 80px;}
+	    .text-muted1 .digit_set{float: none!important;border: 1px solid #078dff; border-radius: 4px; perspective: 200px; height: 80px!important; margin: 0 auto!important; width: 55px!important;}
+    .text-muted1 .digit_wrap{line-height: 80px;}
 
-
-    .dataStatistics .digit > div.digit_top, .dataStatistics .digit > div.shadow_top{background-color: #11214e; border-radius: 4px; width: 53px;}
-    .dataStatistics .digit > div.digit_bottom, .dataStatistics .digit > div.shadow_bottom{background-color: #11214e; border-radius: 4px; text-align: center; width: 53px;}
-    .dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}
-    .dataStatistics .digit > div.digit_bottom .digit_wrap, .dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -75%; line-height: 80px;}
+    .text-muted1 .dataStatistics .digit > div.digit_top, .text-muted1 .dataStatistics .digit > div.shadow_top{background-color: #11214e; border-radius: 4px; width: 53px;}
+    .text-muted1 .dataStatistics .digit > div.digit_bottom, .text-muted1 .dataStatistics .digit > div.shadow_bottom{background-color: #11214e; border-radius: 4px; text-align: center; width: 53px;}
+    .text-muted1 .dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}
+    .text-muted1 .dataStatistics .digit > div.digit_bottom .digit_wrap, .text-muted1 .dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -75%; line-height: 80px;}
     /*逗号*/
-    /*.douhao{width: 16px; height: 21px; background: url("../../img/douhao.png") no-repeat; float: left; position: relative; right: 50%;bottom: -70px;}*/
-    .douhao{width: 12px; height: 15px; background: url("../../img/douhao.png") no-repeat; display: inline-block; margin: 0 -10px}
+    /*.douhao{width: 16px; height: 21px; background: url("dist/img/douhao.png") no-repeat; float: left; position: relative; right: 50%;bottom: -70px;}*/
+    .text-muted1 .douhao{width: 12px; height: 15px; background: url("../../img/douhao.png") no-repeat; display: inline-block; margin: 0 -10px}
 
+    /*翻页效果二*/
+    .text-muted2 .dataStatistics{cursor: pointer; color: #fff; font-family: futura_mdcn_btmedium; text-align: center; font-size: 45px; position: relative; line-height: 65px; height: 65px;}
+    /*.data_new{position: relative; float: left; left: 50%;}*/
+    .text-muted2 .data_new{position: relative; width: 100%}
+    /*.digit_set{border: 1px solid #078dff; border-radius: 4px; perspective: 200px; height: 90px!important; margin: 0 5px!important; width: 57px!important; right: 50%;}*/
+    .text-muted2 .digit_set{float: none!important;border: 1px solid #078dff; border-radius: 4px; perspective: 200px; height: 64px!important; margin: 0 -3px!important; width: 40px!important;}
+    .text-muted2 .digit_wrap{line-height: 63px;}
+	
+	.text-muted2 .dataStatistics .digit > div.digit_top, .text-muted2 .dataStatistics .digit > div.shadow_top{background-color: #11214e; border-radius: 4px; width: 38px;}
+    .text-muted2 .dataStatistics .digit > div.digit_bottom, .text-muted2 .dataStatistics .digit > div.shadow_bottom{background-color: #11214e; border-radius: 4px; text-align: center; width: 38px;}
+    .text-muted2 .dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}
+    .text-muted2 .dataStatistics .digit > div.digit_bottom .digit_wrap, .text-muted2 .dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -82%; line-height: 63px;}
+	
+    /*逗号*/
+	.text-muted2 .douhao{width: 12px; height: 15px; background: url("../../img/douhao.png") no-repeat; display: inline-block; margin: 0 -10px}
     /*历史数据*/
     .info_bottom{color: #fff; font-size: 20px;}
     .info_bottom h4{border-bottom: 2px solid; padding-bottom: 5px; font-size: 16px;}
