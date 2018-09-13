@@ -593,6 +593,15 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+            /**
+             * 2018-09-13 国安优易
+             *
+             * @author wuxinxin
+             */
+            if (url.contains("youyi_product.html")) {
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
 			/**
 			 * 2018-07-20 安心合作社
 			 * 

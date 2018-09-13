@@ -293,6 +293,7 @@
     <script src="dist/js/base64.js"></script>
     <script src="plugins/gooey_menu/gooey.min.js"></script>
     <script type="text/javascript">
+        debugger;
         var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
         var cityId = decode64(getUrlParamByKey("c"));//城市ID
         var cityName = decode64(getUrlParamByKey("cn"));//城市名称
@@ -355,7 +356,7 @@
                 var callback = function callback(data, textStatus, XMLHttpRequest) {
                     //window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
                     var stateObject = {};
-                    var newUrl = "/daqWeb/crm/member_analysis?ta=0";
+                    var newUrl = "/daqWeb/crm/youyi_product?ta=0";
                     target = null;
                     //showCitys();
                     getUser();
