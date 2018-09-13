@@ -432,7 +432,6 @@
 	  initArea();
 	  setExample();
 	  getStorePosition();
-	  showTinyVillageHeat("gmv");//小区热力图
 	  showEmployeeDriverRecord();
   })
   
@@ -532,7 +531,7 @@
  					layer.msg("暂时无法定位门店")
  				}
  			}
- 		},false);
+ 		});
  }
   
   //获取片区小区信息
@@ -550,7 +549,7 @@
           	}
           }else{
               layer.msg("地图数据加载异常！");
-          }},false);
+          }});
   }
 
 
@@ -746,13 +745,13 @@
 						var channelData = resultJson.channelData;
 						showDeptChartData(deptData,dataType)//事业部
 						showChannelChartData(channelData,dataType);//频道
-						
+                        showTinyVillageHeat(dataType);//小区热力图
 					}
 					
 			}else{
 				layer.msg("暂时无法获取各事业部和频道营业额");
 			}
-		},false);
+		});
 	  $("#process_div").hide();
       $("#process_div_pic").hide();
   }
