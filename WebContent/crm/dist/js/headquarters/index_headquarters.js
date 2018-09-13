@@ -92,9 +92,9 @@ $(document).ready(function () {
     //console.log('show whole page in ' + (new Date().getTime() - startTime) + ' millisecond');
     initClick();
     //点击大屏幕数据进入到监控页
-    $(".data_new").click(function(){
-    	gotolive();
-	});
+    // $(".data_new").click(function(){
+    // 	gotolive();
+    // });
 });
 
 const CACHE_HEADER_STATISTIC = 'statistic_';
