@@ -167,7 +167,7 @@
     title: [ {
       text: '2018年人均日送单量分布图',
       x: 'center',
-      top: '10px',
+      top: '20px',
       textStyle: {
         color: '#333'
       }
@@ -179,24 +179,24 @@
     series: [{
       name: '2018年人均日送单量分布图',
       type: 'pie',
-      radius: '80%',
-      center: ['50%', '55%'],
+      radius: '65%',
+//      center: ['50%', '55%'],
       clockwise: false,
       data: disctrbtionArray,
       label: {
         normal: {
           textStyle: {
-            color: '#fff',
-            fontSize: 14,
+            color: '#26262a',
+            fontSize: 12,
           },
-          position: 'inner',
-          formatter: '{b} : {c}',
+          position: 'out',
+          formatter: '{b} :{c}',
         }
       },
 
       labelLine: {
         normal: {
-          show: false
+          show: true
         }
       },
       itemStyle: {
@@ -231,9 +231,14 @@
     }],
     tooltip: {
       trigger: 'axis',
-      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+      /*axisPointer: { // 坐标轴指示器，坐标轴触发有效
         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-      }
+      }*/
+        axisPointer: {
+            lineStyle: {
+                color: '#57617B'
+            }
+        }
     },
       legend: {
           x:'right',
@@ -302,10 +307,15 @@
     }],
     tooltip: {
       trigger: 'axis',
-      axisPointer: { // 坐标轴指示器，坐标轴触发有效
-        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-      }
+//      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+//        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+//      }
     },
+      legend: {
+          x:'right',
+          top:'6%',
+          data: ['送单量']
+      },
     grid: {
       left: '3%',
       right: '4%',
@@ -313,11 +323,6 @@
       top: '20%',
       containLabel: true
     },
-      legend: {
-          x:'right',
-          top:'6%',
-          data: ['送单量']
-      },
     xAxis: [{
       type: 'category',
       data: []
