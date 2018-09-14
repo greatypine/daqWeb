@@ -883,12 +883,11 @@ function showEmpAvgSendOrderInfo(){
                 for(var i = 0; i <avgSendOrderGroupByCity.length; i++){
                     var avgSendOrder = avgSendOrderGroupByCity[i];
                     var cityname =  avgSendOrder.cityname;
-                    if(cityname != '佛山市'){
+                    if(avgSendOrder.datanum != 0){
                         citynameArray.push(cityname);
                         var datanum = avgSendOrder.datanum;
-                        dataArray.push(datanum);
+                        dataArray.push(datanum)
                     }
-
                 }
                 option3.xAxis[0]["data"] = citynameArray;
                 option3.series[0].data=dataArray;
