@@ -192,7 +192,7 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
         }
 
         String sql = "select count(storeid) as count,yearmonth from (" +
-                "select yearmonth,zw,count(employeeno),storeid from t_topdata_human where" +
+                "select yearmonth,zw,count(employeeno),storeid from t_topdata_human where " +
                 "substring_index(yearmonth,'-',1) = '"+curYear+"' and humanstatus!= 2 and yearmonth !='"+curYearMonth+"' and t_topdata_human.zw = '国安侠' GROUP BY t_topdata_human.storeid,t_topdata_human.yearmonth " +append_sql+
                 ") table_total GROUP BY table_total.yearmonth";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
