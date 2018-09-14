@@ -203,23 +203,23 @@ public class StoreDocumentInfoManagerImpl extends BizBaseCommonManager implement
 						i);
 				if (attachment != null) {
 					if ("other_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setOther_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setOther_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("xx_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setXx_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setXx_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("book_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBook_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setBook_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("tobacco_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setTobacco_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setTobacco_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("food_card".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setFood_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setFood_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("business_license".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setBusiness_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setBusiness_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("record_drawing".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setRecord_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setRecord_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("plane_plan".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setPlane_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setPlane_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					} else if ("audit_file".equals(attachment.getFile_type_name())) {
-						storeDocumentInfo.setAudit_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/contract"+attachment.getFile_path().split("card")[1]));
+						storeDocumentInfo.setAudit_pic(attachment.getFile_name()+","+(attachment.getFile_path().indexOf("cdn.guoanshuju.com")>-1?attachment.getFile_path():"https://cdn.guoanshuju.com/daqWeb/card"+attachment.getFile_path().split("card")[1]));
 					}
 				}
 			}
