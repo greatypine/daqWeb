@@ -234,7 +234,7 @@ var select_data2 = "";
                 		var gmv_title = $("<th>").attr("width","25%").html("GMV（元）");
                 	}else if(type_from == '4'){
                 		var name_title = $("<th>").attr("width","30%").html("商品名称");
-                		var gmv_title = $("<th>").attr("width","25%").html("销售量");
+                		var gmv_title = $("<th>").attr("width","25%").html("销售量（件）");
                 	}else if(type_from == '5'){
                 		number_title = $("<th>排名</th>").attr("width","10%");
                 		var name_title = $("<th>").attr("width","30%").html("事业群名称");
