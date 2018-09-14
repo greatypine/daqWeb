@@ -148,7 +148,7 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
         String curYearMonth = DateUtils.dateFormat(new Date(), "yyyy-MM");
         String curYear = DateUtils.dateFormat(new Date(), "yyyy");
         Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
-        String sql = "select tab1.cityname,ROUND(tab1.datanum/tab2.workdays) as datanum from ( " +
+        String sql = "select tab1.cityname,ROUND(ifnull(tab1.datanum/tab2.workdays,0)) as datanum from ( " +
                 "select sum(datanum) as datanum,cityname from ds_pes_order_empchannel_month where year = '"+curYear+"' and employee_no is not null and employee_no != '' and month != "+curMonth+" GROUP BY cityname) tab1 " +
                 "LEFT JOIN ( " +
                 "select t1.cityname,sum(t2.workdays) as workdays from ( " +
