@@ -4245,6 +4245,18 @@ var curr_user;
 	  }
 	  window.open(url,"index_K"); 
   }
+
+  function gotogax_work(){
+      var role = curr_user.usergroup.code;
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "gax_working_load.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+      }else if(target==1){
+          url = "gax_working_load.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+      }
+      window.open(url,"index_gax_work");
+  }
   
   //221战略运营页
   function goto221(){

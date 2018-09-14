@@ -546,6 +546,10 @@ public class AuthFilter extends OncePerRequestFilter {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}
+			if (url.contains("gax_working_load.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
 			if (url.contains("221.html")) {
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
