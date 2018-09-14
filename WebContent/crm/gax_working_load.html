@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>国安侠工作分析简报</title>
+  <title>国安侠工作量分析</title>
+   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
   <!-- Bootstrap 3.3.6 -->
@@ -62,7 +63,7 @@
                 <div class="pull-left">
                     <div class="logo-lg">
                         <ul class="no-margin">
-                            <li class="current"><em>国安侠工作分析简报</em></li>
+                            <li class="current"><em>国安侠工作量分析</em></li>
                         </ul>
                     </div>
                 </div>
@@ -78,15 +79,15 @@
       <section class="content-header">
         <div class="box box-default ">
           <div class="box-body report">
-            <div class="box-header h4"><strong>2018年国安侠负荷量分析</strong></div>
+            <div class="box-header h4"><strong>2018年国安侠送单量分析</strong></div>
             <div class="gax-head">
               <p class="gax text-center">国安侠<span id="gaxcount">加载中...</span></p>
-              <p class="col-sm-6 no-padding"><span id="citycount">加载中...</span><span>/</span>城市</p>
-              <p class="col-sm-6 no-padding"><span id="storecount">加载中...</span><span>/</span>门店</p>
+              <p class="col-sm-6 no-padding">城市：<span id="citycount">加载中...</span>个</p>
+              <p class="col-sm-6 no-padding">门店：<span id="storecount">加载中...</span>个</p>
               <ul class="col-sm-12">
-                <li>人均日送单量：<span id="avgSendOrder">加载中...</span></li>
-                <li>人均日工作时间：<span id="avgWorkTime">加载中...</span></li>
-                <li>人均日送单里程：<span id="avgMileAge">加载中...</span></li>
+                <li>人均日送单量（个）：<span id="avgSendOrder">加载中...</span></li>
+                <li>人均日工作时间（h）：<span id="avgWorkTime">加载中...</span></li>
+                <li>人均日送单里程(公里)：<span id="avgMileAge">加载中...</span></li>
               </ul>
             </div>
           </div>
@@ -96,12 +97,12 @@
             <div class="col-sm-12 no-padding" id="main3" style="height: 450px;"></div>
           </div>
           <div class="box-body" style="padding: 0 50px;">
-            <h3 style="margin-bottom: 20px;">国安侠满编分析</h3>
+            <h3 style="margin-bottom: 20px;">国安侠饱和度分析</h3>
             <div class="col-sm-4 no-padding">在编人数：<span id="empcount">加载中...</span>人</div>
             <div class="col-sm-4 no-padding">满编人数：<span id="fullempcount">加载中...</span>人</div>
             <div class="col-sm-4 no-padding text-right">满编率：<span id="emprate">加载中...</span>%</div>
             <div class="progress col-sm-12 no-padding">
-              <div class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+              <div id="emprateview" class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                 <span class="sr-only">20% Complete</span>
               </div>
             </div>
@@ -189,7 +190,7 @@
             fontSize: 14,
           },
           position: 'inner',
-          formatter: '{d}%',
+          formatter: '{b} : {c}',
         }
       },
 
@@ -224,7 +225,7 @@
   //人均月送单量
   option2 = {
     title: [ {
-      text: '人均月送单量',
+      text: '2018年人均月送单量走势',
       left: '3%',
       top: '2%',
     }],
@@ -234,17 +235,23 @@
         type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
       }
     },
+      legend: {
+          x:'right',
+          top:'6%',
+          data: ['送单量']
+      },
     grid: {
       left: '3%',
-      right: '4%',
+      right: '8%',
       bottom: '13%',
+      top:'20%',
       containLabel: true
     },
     dataZoom: {
       show: true,
       start: 0,
       end: 50,
-      maxSpan: 80
+      maxSpan: 100
       // zoomLock: true
     },
     xAxis: [{
@@ -261,7 +268,7 @@
     }],
     yAxis: [{
       type: 'value',
-      //name: '人均月送单量',
+      name: '个',
 
     }],
     series: [{
@@ -289,7 +296,7 @@
   //城市人均送单量
   option3 = {
     title: [ {
-      text: '2018年各城市人均送单量',
+      text: '2018年各城市人均日送单量',
       left: '3%',
       top: '0',
     }],
@@ -306,13 +313,18 @@
       top: '20%',
       containLabel: true
     },
+      legend: {
+          x:'right',
+          top:'6%',
+          data: ['送单量']
+      },
     xAxis: [{
       type: 'category',
       data: []
     }],
     yAxis: [{
       type: 'value',
-      name: '人数',
+      name: '个',
       axisLabel: {
         formatter: '{value}'
       }
@@ -339,7 +351,7 @@
   //缺编门店占比
   option4 = {
     title: [{
-      text: '门店国安侠编制占比',
+      text: '国安侠满编/缺编占比（实时）',
       x: 'center',
       top: '2%',
       textBaseline: 'middle',
@@ -362,7 +374,7 @@
       label: {
         normal: {
           position: 'inside', //标签的位置
-          formatter: '{b}\n{d}%'
+          formatter: '{b}: {c}'
 
         }
       },
@@ -380,7 +392,7 @@
   //满编门店占比
   option5 = {
     title: [{
-      text: '近6个月门店编制分析',
+      text: '2018年国安侠满编/缺编分析',
       x: 'center',
       top: '2%',
       textBaseline: 'middle',
@@ -400,7 +412,7 @@
     },
     grid: {
       left: '5%',
-      right: '5%',
+      right: '8%',
       bottom: '5%',
       top: '20%',
       containLabel: true
@@ -411,7 +423,7 @@
       data: ['缺编', '满编', '超编']
     },
     xAxis: [
-      {
+      {name:'月',
         type: 'category',
         boundaryGap: false,
         axisLine: {
@@ -705,7 +717,7 @@ function loginShow(){
         var callback = function callback(data, textStatus, XMLHttpRequest) {
             //window.parent.location=getRootPath() + "/crm/index_city_net.html";
             var stateObject = {};
-            var newUrl = "/daqWeb/crm/index_city_net.html";
+            var newUrl = "/daqWeb/crm/gax_working_load.html";
             //target = 1;
             history.replaceState(stateObject,null,newUrl);
             showData();
@@ -759,8 +771,11 @@ function showEmployeeCount(){
             $("#storecount").html(storeCount);
             $("#empcount").html(humancount);
             $("#fullempcount").html(storeCount*10)
-            var emprate = humancount/(storeCount*10)*100;
+            var emprate =(storeCount*10)/ humancount*100;
             $("#emprate").html(emprate.toFixed(2));
+            $("#emprateview").attr("aria-valuenow",storeCount*10+"");
+            $("#emprateview").attr("aria-valuemax",humancount);
+            $("#emprateview").attr("style","width:"+emprate.toFixed(2)+"%;");
         }
     },false);
 }
