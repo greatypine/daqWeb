@@ -84,10 +84,10 @@
               <p class="gax text-center">国安侠<span id="gaxcount">加载中...</span></p>
               <p class="col-sm-6 no-padding">城市：<span id="citycount">加载中...</span>个</p>
               <p class="col-sm-6 no-padding">门店：<span id="storecount">加载中...</span>个</p>
-              <ul class="col-sm-12">
-                <li>人均日送单量（个）：<span id="avgSendOrder">加载中...</span></li>
+              <ul class="col-sm-12 no-padding">
+                <li>人均日送单量（单）：<span id="avgSendOrder">加载中...</span></li>
                 <li>人均日工作时间（h）：<span id="avgWorkTime">加载中...</span></li>
-                <li>人均日送单里程(公里)：<span id="avgMileAge">加载中...</span></li>
+                <li>人均日送单里程(km)：<span id="avgMileAge">加载中...</span></li>
               </ul>
             </div>
           </div>
@@ -138,6 +138,7 @@
 <script src="dist/js/echarts.common.min.js"></script>
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
+<script src="dist/js/base64.js"></script>
 
 <script>
   var myChart1 = echarts.init(document.getElementById('main1'));
@@ -260,9 +261,8 @@
       // zoomLock: true
     },
     xAxis: [{
-      name:'月',
       type: 'category',
-      data: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+      data: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
       axisLabel:{
         textStyle:{color:'#404a59',}
       },
@@ -273,11 +273,11 @@
     }],
     yAxis: [{
       type: 'value',
-      name: '个',
+      name: '单',
 
     }],
     series: [{
-      name: '人均送单量',
+      name: '送单量',
       type: 'line',
       itemStyle:{normal:{color:'#ffae00'},},
       data:avgSendOrderArray ,
@@ -329,13 +329,13 @@
     }],
     yAxis: [{
       type: 'value',
-      name: '个',
+      name: '单',
       axisLabel: {
         formatter: '{value}'
       }
     }],
     series: [{
-      name: '人均送单量',
+      name: '送单量',
       type: 'bar',
       itemStyle:{
         normal:{color:'#EBA954'},
@@ -356,7 +356,7 @@
   //缺编门店占比
   option4 = {
     title: [{
-      text: '国安侠满编/缺编占比（实时）',
+      text: '满编、缺编门店占比（实时）',
       x: 'center',
       top: '2%',
       textBaseline: 'middle',
@@ -397,7 +397,7 @@
   //满编门店占比
   option5 = {
     title: [{
-      text: '2018年国安侠满编/缺编分析',
+      text: '2018年满编、缺编门店走势',
       x: 'center',
       top: '2%',
       textBaseline: 'middle',
@@ -428,7 +428,7 @@
       data: ['缺编', '满编', '超编']
     },
     xAxis: [
-      {name:'月',
+      {
         type: 'category',
         boundaryGap: false,
         axisLine: {
@@ -442,7 +442,7 @@
           }
         },
         axisTick: {show: false},
-        data: [1,2,3,4,5,6,7,8,9,10,11,12]
+        data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
       }, {
         axisPointer: {show: false},
         axisLine: {
@@ -475,7 +475,6 @@
       name: '缺编',
       type: 'line',
       smooth: true,
-      stack: '总量',
       symbol: 'circle',
       symbolSize: 5,
       showSymbol: false,
@@ -535,7 +534,6 @@
       type: 'line',
       smooth: true,
       symbol: 'circle',
-      stack: '总量',
       symbolSize: 5,
       animationDelay: 1000,
       animationDuration: 1000,
@@ -591,7 +589,6 @@
     }, {
       name: '超编',
       type: 'line',
-      stack: '总量',
       smooth: true,
       symbol: 'circle',
       symbolSize: 5,
@@ -776,10 +773,10 @@ function showEmployeeCount(){
             $("#storecount").html(storeCount);
             $("#empcount").html(humancount);
             $("#fullempcount").html(storeCount*10)
-            var emprate =(storeCount*10)/ humancount*100;
+            var emprate =humancount*100/ (storeCount*10);
             $("#emprate").html(emprate.toFixed(2));
-            $("#emprateview").attr("aria-valuenow",storeCount*10+"");
-            $("#emprateview").attr("aria-valuemax",humancount);
+            $("#emprateview").attr("aria-valuenow",humancount);
+            $("#emprateview").attr("aria-valuemax",storeCount*10);
             $("#emprateview").attr("style","width:"+emprate.toFixed(2)+"%;");
         }
     },false);
