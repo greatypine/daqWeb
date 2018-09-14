@@ -602,6 +602,15 @@ public class AuthFilter extends OncePerRequestFilter {
                 filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
+            /**
+             * 2018-09-13 社员
+             *
+             * @author wuxinxin
+             */
+            if (url.contains("member_info.html")) {
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
 			/**
 			 * 2018-07-20 安心合作社
 			 * 
