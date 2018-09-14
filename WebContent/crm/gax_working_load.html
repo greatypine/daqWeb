@@ -393,7 +393,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
       type: 'pie',
       selectedMode: 'single',
       radius: ['40%', '80%'],
-      color: ['#37c255',"#37bbc2",'#e54747'],
+      color: ['#89bd1b',"#0088d4",'#db3233'],
 
       label: {
         normal: {
@@ -444,7 +444,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
     legend: {
       x:'right',
       top:'6%',
-      data: ['缺编', '满编', '超编']
+      data: ['满编', '超编','缺编',]
     },
     xAxis: [
       {
@@ -491,7 +491,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
       }
     }],
     series: [{
-      name: '缺编',
+      name: '满编',
       type: 'line',
       smooth: true,
       symbol: 'circle',
@@ -549,7 +549,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
       },
       data: dataarray1
     }, {
-      name: '满编',
+      name: '超编',
       type: 'line',
       smooth: true,
       symbol: 'circle',
@@ -606,7 +606,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
       },
       data: dataarray2
     }, {
-      name: '超编',
+      name: '缺编',
       type: 'line',
       smooth: true,
       symbol: 'circle',
@@ -921,7 +921,7 @@ function showEmpAvgAtAnalysisInfo(){
                     var empAtAnalysisByMonth = empAtAnalysisByMonthLose[i];
                     var count = empAtAnalysisByMonth.count;
                     var work_month = parseInt(empAtAnalysisByMonth.work_month);
-                    dataarray1[work_month-1] = count ;
+                    dataarray3[work_month-1] = count ;
                 }
             }
             if(empAtAnalysisByMonthFull != null && empAtAnalysisByMonthFull.length >0){
@@ -929,7 +929,7 @@ function showEmpAvgAtAnalysisInfo(){
                     var empAtAnalysisByMonth = empAtAnalysisByMonthFull[i];
                     var count = empAtAnalysisByMonth.count;
                     var work_month = parseInt(empAtAnalysisByMonth.work_month);
-                    dataarray2[work_month-1] = count;
+                    dataarray1[work_month-1] = count;
                 }
             }
             if(empAtAnalysisByMonthBeloy != null && empAtAnalysisByMonthBeloy.length >0){
@@ -937,7 +937,7 @@ function showEmpAvgAtAnalysisInfo(){
                     var empAtAnalysisByMonth = empAtAnalysisByMonthBeloy[i];
                     var count = empAtAnalysisByMonth.count;
                     var work_month = parseInt(empAtAnalysisByMonth.work_month);
-                    dataarray3[work_month-1] = count;
+                    dataarray2[work_month-1] = count;
                 }
             }
 
