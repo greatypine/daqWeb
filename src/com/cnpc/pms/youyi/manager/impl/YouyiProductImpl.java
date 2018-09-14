@@ -15,7 +15,6 @@ import com.cnpc.pms.youyi.dao.YouyiProductDao;
 import com.cnpc.pms.youyi.dao.impl.YouyiProductDaoImpl;
 import com.cnpc.pms.youyi.manager.YouyiProduct;
 import net.sf.json.JSONArray;
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
