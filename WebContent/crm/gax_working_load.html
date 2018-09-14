@@ -81,13 +81,13 @@
           <div class="box-body report">
             <div class="box-header h4"><strong>2018年国安侠送单量分析</strong></div>
             <div class="gax-head">
-              <p class="gax text-center">国安侠<span id="gaxcount">加载中...</span>人</p>
+              <p class="gax text-center">国安侠<span id="gaxcount">加载中...</span>&nbsp;人</p>
               <p class="col-sm-6 no-padding">城市：<span id="citycount">加载中...</span>个</p>
               <p class="col-sm-6 no-padding">门店：<span id="storecount">加载中...</span>个</p>
               <ul class="col-sm-12 no-padding">
-                <li>人均日送单量：<span id="avgSendOrder">加载中...</span>单</li>
-                <li>人均日工作时间：<span id="avgWorkTime">加载中...</span>小时</li>
-                <li>人均日送单里程：<span id="avgMileAge">加载中...</span>公里</li>
+                <li>人均日送单量：&nbsp;<span id="avgSendOrder">加载中...</span>&nbsp;单</li>
+                <li>人均日工作时间：&nbsp;<span id="avgWorkTime">加载中...</span>&nbsp;小时</li>
+                <li>人均日送单里程：&nbsp;<span id="avgMileAge">加载中...</span>&nbsp;公里</li>
               </ul>
             </div>
           </div>
@@ -227,7 +227,7 @@
     ],
   };
   var avgSendOrderArray = [0,0,0,0,0,0,0,0,0,0,0,0];
-
+var array1 = ['4月','5月','6月','7月','8月'];
   //人均月送单量
   option2 = {
     title: [ {
@@ -267,7 +267,7 @@
     },
     xAxis: [{
       type: 'category',
-      data: ['1月','2月','3月','4月','5月','6月','7月','8月'],
+      data: array1,
       axisLabel:{
         textStyle:{color:'#404a59',}
       },
@@ -393,7 +393,7 @@
       type: 'pie',
       selectedMode: 'single',
       radius: ['40%', '80%'],
-      color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
+      color: ['#37c255',"#37bbc2",'#e54747'],
 
       label: {
         normal: {
@@ -803,7 +803,7 @@ function showEmployeeCount(){
             $("#citycount").html(citycount);
             $("#storecount").html(360);
             $("#empcount").html(humancount);
-            $("#fullempcount").html(storeCount*10)
+            $("#fullempcount").html(360*10)
             var emprate =humancount*100/ (360*10);
             $("#emprate").html(emprate.toFixed(2)+"%");
             $("#emprateview").attr("aria-valuenow",humancount);
@@ -866,7 +866,8 @@ function showEmpAvgSendOrderInfo(){
             if(avgSendOrderMonthTrend != null && avgSendOrderMonthTrend.length >0){
                 for(var i = 0; i <avgSendOrderMonthTrend.length; i++){
                     var avgSendOrder = avgSendOrderMonthTrend[i];
-                    avgSendOrderArray[avgSendOrder.month-1] = avgSendOrder.avgcount;
+                    var index = jQuery.inArray(parseInt(avgSendOrder.month)+"月",array1);
+                    avgSendOrderArray[index] = avgSendOrder.avgcount;
                 }
             }
             myChart2.setOption(option2);

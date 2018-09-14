@@ -137,7 +137,7 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
         String curYearMonth = DateUtils.dateFormat(new Date(), "yyyy-MM");
         String curYear = DateUtils.dateFormat(new Date(), "yyyy");
         Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
-        String sql = "select ROUND(sum(datanum)/COUNT(DISTINCT username)) as avgcount,month from ds_pes_order_empchannel_month where year = '"+curYear+"' and month != "+curMonth+" GROUP BY month";
+        String sql = "select ROUND(sum(datanum)/COUNT(DISTINCT username)) as avgcount,month from ds_pes_order_empchannel_month where employee_no is not null and employee_no != '' and year = '"+curYear+"' and month != "+curMonth+" GROUP BY month";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
         return list;
