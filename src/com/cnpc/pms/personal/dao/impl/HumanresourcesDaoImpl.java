@@ -661,4 +661,19 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 			return list;
 		}
+
+	@Override
+	public Integer queryHumanresourceCountByZw(String zw, Long city_id) {
+		String sql_append = "";
+		/*if(city_id != null){
+			sql_append = "";
+		}*/
+		String sql = "select count(employee_no) from t_humanresources where zw = '"+zw+"' and humanstatus != 2";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List list = query.list();
+		if (list != null && list.size() > 0) {
+			return Integer.parseInt(list.get(0) + "");
+		}
+		return null;
+	}
 }

@@ -11,6 +11,7 @@ import com.cnpc.pms.employeeMoreInfo.entity.EmployeeMoreInfo;
 import com.cnpc.pms.employeeMoreInfo.manager.EmployeeMoreInfoManager;
 import com.cnpc.pms.mongodb.common.MongoDbUtil;
 
+import com.cnpc.pms.personal.dao.HumanresourcesDao;
 import com.cnpc.pms.platform.dao.PlatformEmployeeDao;
 import com.cnpc.pms.utils.DateUtils;
 import com.mongodb.client.AggregateIterable;
@@ -458,18 +459,91 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 	public Map<String, Object> getEmployeeCount() {
 		Map<String,Object> result = new HashMap<String,Object>();
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		HumanresourcesDao humanresourcesDao = (HumanresourcesDao)SpringHelper.getBean(HumanresourcesDao.class.getName());
 		DynamicDto dynamicDto = new DynamicDto();
 		dynamicDto.	setTarget(0);
 		List<Map<String, Object>> citylList = dynamicDao.selectAllCitySort(dynamicDto);
 		List<Map<String, Object>> storeList = dynamicDao.findStoreCount(dynamicDto);
+		Integer human_count = humanresourcesDao.queryHumanresourceCountByZw("国安侠", null);
 		result.put("cityCount",citylList.size());
 		result.put("storeCount",storeList.size());
+		result.put("humancount",human_count);
 		return result;
 	}
 
 	@Override
-	public Map<String, Object> getEmployeeInfo() {
+	public Map<String, Object> getAvgWorktime() {
 		Map<String,Object> result = new HashMap<String,Object>();
-		return null;
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> avgWorkTimeList = employeeMoreInfoDao.queryAvgWorkTime();
+		result.put("avgWorkTime",avgWorkTimeList);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getAvgSendOrder() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> avgSentOrderList = employeeMoreInfoDao.queryAvgSentOrder();
+		result.put("avgSentOrder",avgSentOrderList.get(0));
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getAvgMileAage() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> avgMileAgeList = employeeMoreInfoDao.queryAvgMileAge();
+		result.put("avgMileAge",avgMileAgeList);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getAvgSendOrderDistribution() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> avgSendOrderDistribution = employeeMoreInfoDao.queryAvgSendOrderDistribution();
+		result.put("avgSendOrderDistribution",avgSendOrderDistribution);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getAvgSendOrderMonthTrend() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> avgSendOrderMonthTrend = employeeMoreInfoDao.queryAvgSendOrderMonthTrend();
+		result.put("avgSendOrderMonthTrend",avgSendOrderMonthTrend);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getAvgSendOrderGroupByCity() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> avgSendOrderGroupByCity = employeeMoreInfoDao.queryAvgSendOrderGroupByCity();
+		result.put("avgSendOrderGroupByCity",avgSendOrderGroupByCity);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getEmpAvgAtAnalysis() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> empAtAnalysis = employeeMoreInfoDao.queryEmpAtAnalysis();
+		result.put("empAtAnalysis",empAtAnalysis);
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> getEmpAvgAtAnalysisMonth() {
+		Map<String,Object> result = new HashMap<String,Object>();
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
+		List<Map<String, Object>> empAtAnalysisByMonthFull = employeeMoreInfoDao.queryEmpAtAnalysisByMonth("满编");
+		List<Map<String, Object>> empAtAnalysisByMonthBeloy = employeeMoreInfoDao.queryEmpAtAnalysisByMonth("超编");
+		List<Map<String, Object>> empAtAnalysisByMonthLose = employeeMoreInfoDao.queryEmpAtAnalysisByMonth("缺编");
+		result.put("empAtAnalysisByMonthFull",empAtAnalysisByMonthFull);
+		result.put("empAtAnalysisByMonthBeloy",empAtAnalysisByMonthBeloy);
+		result.put("empAtAnalysisByMonthLose",empAtAnalysisByMonthLose);
+		return result;
 	}
 }

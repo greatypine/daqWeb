@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>国安侠工作分析简报</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="plugins/morris/morris.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .box-body img{width: 100%}
+    .report{background: url("dist/img/gax_fhbg.jpg") no-repeat center; min-height: 537px; color: #fff; font-size: 16px;}
+    .report .box-header{color: #fff;}
+    .report .gax-head{margin: 80px 0 0 100px; width: 300px;}
+    .report .gax{font-size: 24px; background-color: #fff; border-radius: 6px; color: #7e37ed; margin-bottom: 20px;}
+    .report .gax span{font-size: 40px; font-weight: bold; padding-left: 10px;}
+    .report .col-sm-6{font-size: 20px;}
+    .report .col-sm-6 span{padding: 0 5px;}
+    .report ul{margin: 40px 0 0 0; line-height: 30px;}
+    .progress{margin-top: 10px;}
+
+    .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
+    .download p{font-size: 12px;}
+    .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
+        /* Firefox: */
+        -moz-animation-name:myfirst; -moz-animation-duration:2s;-moz-animation-timing-function:linear;-moz-animation-iteration-count:infinite;-moz-animation-direction:alternate;-moz-animation-play-state:running;
+        /* Safari and Chrome: */
+        -webkit-animation-name:myfirst;-webkit-animation-duration:2s;-webkit-animation-timing-function:linear;-webkit-animation-iteration-count:infinite;-webkit-animation-direction:alternate;-webkit-animation-play-state:running;
+        /* Opera: */
+        -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
+    <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="logo_img pull-left">
+                    <img src="../crm/dist/img/logo.png" height="30">
+                    <img src="../crm/dist/img/title.png" height="20">
+                </div>
+                <div class="pull-left">
+                    <div class="logo-lg">
+                        <ul class="no-margin">
+                            <li class="current"><em>国安侠工作分析简报</em></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+  <!-- Content Wrapper. Contains page content -->
+    <div id="page">
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Main content -->
+      <section class="content-header">
+        <div class="box box-default ">
+          <div class="box-body report">
+            <div class="box-header h4"><strong>2018年国安侠负荷量分析</strong></div>
+            <div class="gax-head">
+              <p class="gax text-center">国安侠<span id="gaxcount">加载中...</span></p>
+              <p class="col-sm-6 no-padding"><span id="citycount">加载中...</span><span>/</span>城市</p>
+              <p class="col-sm-6 no-padding"><span id="storecount">加载中...</span><span>/</span>门店</p>
+              <ul class="col-sm-12">
+                <li>人均日送单量：<span id="avgSendOrder">加载中...</span></li>
+                <li>人均日工作时间：<span id="avgWorkTime">加载中...</span></li>
+                <li>人均日送单里程：<span id="avgMileAge">加载中...</span></li>
+              </ul>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="col-sm-6 no-padding" id="main1" style="height: 450px;"></div>
+            <div class="col-sm-6 no-padding" id="main2" style="height: 450px;"></div>
+            <div class="col-sm-12 no-padding" id="main3" style="height: 450px;"></div>
+          </div>
+          <div class="box-body" style="padding: 0 50px;">
+            <h3 style="margin-bottom: 20px;">国安侠满编分析</h3>
+            <div class="col-sm-4 no-padding">在编人数：<span id="empcount">加载中...</span>人</div>
+            <div class="col-sm-4 no-padding">满编人数：<span id="fullempcount">加载中...</span>人</div>
+            <div class="col-sm-4 no-padding text-right">满编率：<span id="emprate">加载中...</span>%</div>
+            <div class="progress col-sm-12 no-padding">
+              <div class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
+                <span class="sr-only">20% Complete</span>
+              </div>
+            </div>
+          </div>
+          <div class="box-body">
+            <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
+            <div class="col-sm-6 no-padding" id="main5" style="height: 450px;"></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+    </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
+
+<script>
+  var myChart1 = echarts.init(document.getElementById('main1'));
+  var myChart2 = echarts.init(document.getElementById('main2'));
+  var myChart3 = echarts.init(document.getElementById('main3'));
+  var myChart4 = echarts.init(document.getElementById('main4'));
+  var myChart5 = echarts.init(document.getElementById('main5'));
+  var disctrbtionArray = [{
+      value: 0,
+      name: '0-10单'
+  }, {
+      value: 0,
+      name: '11-20单'
+  },{
+      value: 0,
+      name: '21-30单'
+  }, {
+      value: 0,
+      name: '31-40单'
+  },{
+      value: 0,
+      name: '40单以上'
+  }]
+
+  //人均送单量分布图
+  option1 = {
+    title: [ {
+      text: '2018年人均日送单量分布图',
+      x: 'center',
+      top: '10px',
+      textStyle: {
+        color: '#333'
+      }
+    }],
+    tooltip: {
+      trigger: 'item',
+      formatter: "{b} : {c} ({d}%)"
+    },
+    series: [{
+      name: '2018年人均日送单量分布图',
+      type: 'pie',
+      radius: '80%',
+      center: ['50%', '55%'],
+      clockwise: false,
+      data: disctrbtionArray,
+      label: {
+        normal: {
+          textStyle: {
+            color: '#fff',
+            fontSize: 14,
+          },
+          position: 'inner',
+          formatter: '{d}%',
+        }
+      },
+
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      itemStyle: {
+        normal: {
+          borderWidth: 4,
+          borderColor: '#ffffff',
+        },
+        emphasis: {
+          borderWidth: 0,
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }],
+    color: [
+      "#a6e0f1",
+      '#52cdd5',
+      '#00acee',
+      '#7675b6',
+      '#e59f1d',
+    ],
+  };
+  var avgSendOrderArray = [0,0,0,0,0,0,0,0,0,0,0,0];
+
+  //人均月送单量
+  option2 = {
+    title: [ {
+      text: '人均月送单量',
+      left: '3%',
+      top: '2%',
+    }],
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '13%',
+      containLabel: true
+    },
+    dataZoom: {
+      show: true,
+      start: 0,
+      end: 50,
+      maxSpan: 80
+      // zoomLock: true
+    },
+    xAxis: [{
+      name:'月',
+      type: 'category',
+      data: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+      axisLabel:{
+        textStyle:{color:'#404a59',}
+      },
+      axisLine:{
+        lineStyle:{color:'#404a59',}
+      },
+      boundaryGap: false,
+    }],
+    yAxis: [{
+      type: 'value',
+      //name: '人均月送单量',
+
+    }],
+    series: [{
+      name: '人均送单量',
+      type: 'line',
+      itemStyle:{normal:{color:'#ffae00'},},
+      data:avgSendOrderArray ,
+      label: {
+        normal: {
+          show:true,
+          position: 'top',
+          textStyle:{
+            color:'#ffae00',
+          },
+        },
+        emphasis: {
+          textStyle:{
+            color:'#ffae00',
+          },
+        },
+      },
+    }]
+  };
+
+  //城市人均送单量
+  option3 = {
+    title: [ {
+      text: '2018年各城市人均送单量',
+      left: '3%',
+      top: '0',
+    }],
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { // 坐标轴指示器，坐标轴触发有效
+        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '20%',
+      containLabel: true
+    },
+    xAxis: [{
+      type: 'category',
+      data: []
+    }],
+    yAxis: [{
+      type: 'value',
+      name: '人数',
+      axisLabel: {
+        formatter: '{value}'
+      }
+    }],
+    series: [{
+      name: '人均送单量',
+      type: 'bar',
+      itemStyle:{
+        normal:{color:'#EBA954'},
+      },
+      data: []
+    }]
+  };
+    var empDiscribtionArray = [{
+        value:0,
+        name: '满编门店数'
+    }, {
+        value: 0,
+        name: '超编门店数'
+    }, {
+        value: 0,
+        name: '缺编门店数'
+    }]
+  //缺编门店占比
+  option4 = {
+    title: [{
+      text: '门店国安侠编制占比',
+      x: 'center',
+      top: '2%',
+      textBaseline: 'middle',
+      textStyle: {
+        color: '#666',
+        fontWeight: 'normal',
+        fontSize: 16
+      }
+    }],
+    tooltip: {
+      trigger: 'item',
+      formatter: "{b}: {c} ({d}%)"
+    },
+    series: [{
+      type: 'pie',
+      selectedMode: 'single',
+      radius: ['40%', '80%'],
+      color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
+
+      label: {
+        normal: {
+          position: 'inside', //标签的位置
+          formatter: '{b}\n{d}%'
+
+        }
+      },
+      labelLine: {
+        normal: {
+          show: false
+        }
+      },
+      data: empDiscribtionArray
+    }]
+  };
+ var dataarray1 = [0,0,0,0,0,0,0,0,0,0,0,0];
+  var dataarray2 = [0,0,0,0,0,0,0,0,0,0,0,0];
+  var dataarray3 = [0,0,0,0,0,0,0,0,0,0,0,0];
+  //满编门店占比
+  option5 = {
+    title: [{
+      text: '近6个月门店编制分析',
+      x: 'center',
+      top: '2%',
+      textBaseline: 'middle',
+      textStyle: {
+        color: '#666',
+        fontWeight: 'normal',
+        fontSize: 16
+      }
+    }],
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        lineStyle: {
+          color: '#57617B'
+        }
+      }
+    },
+    grid: {
+      left: '5%',
+      right: '5%',
+      bottom: '5%',
+      top: '20%',
+      containLabel: true
+    },
+    legend: {
+      x:'right',
+      top:'6%',
+      data: ['缺编', '满编', '超编']
+    },
+    xAxis: [
+      {
+        type: 'category',
+        boundaryGap: false,
+        axisLine: {
+          lineStyle: {color: '#666'}
+        },
+        axisLabel: {
+          margin: 10,
+          textStyle: {
+            fontSize: 14,
+            color: '#666'
+          }
+        },
+        axisTick: {show: false},
+        data: [1,2,3,4,5,6,7,8,9,10,11,12]
+      }, {
+        axisPointer: {show: false},
+        axisLine: {
+          lineStyle: {color: '#666'}
+        },
+        axisTick: {show: false},
+        position: 'bottom',
+        offset: 20
+      }],
+    yAxis: [{
+      type: 'value',
+      name: '门店数量',
+      axisTick: {show: false},
+      axisLine: {
+        lineStyle: {color: '#666'}
+      },
+      axisLabel: {
+        margin: 10,
+        textStyle: {
+          fontSize: 14,
+          color: '#666'
+        }
+      },
+      splitLine: {
+        show: false,
+        lineStyle: {color: '#666'}
+      }
+    }],
+    series: [{
+      name: '缺编',
+      type: 'line',
+      smooth: true,
+      stack: '总量',
+      symbol: 'circle',
+      symbolSize: 5,
+      showSymbol: false,
+      animationDelay: 2000,
+      animationDuration: 1000,
+      markPoint: {
+        // symbol: 'image://url',
+        data: [
+          {type: 'max', name: '最大值'}
+        ],
+        animationDelay: 3000,
+        animationDuration: 1000
+      },
+      lineStyle: {
+        normal: {
+          width: 1,
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            colorStops: [{
+              offset: 0, color: 'red' // 0% 处的颜色
+            }, {
+              offset: 1, color: 'grey' // 100% 处的颜色
+            }],
+            globalCoord: false // 缺省为 false
+          },
+          opacity: 0.9
+        }
+      },
+      areaStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+            offset: 0,
+            color: 'rgba(137, 189, 27, 0.3)'
+          }, {
+            offset: 0.8,
+            color: 'rgba(137, 189, 27, 0)'
+          }], false),
+          shadowColor: 'rgba(0, 0, 0, 0.1)',
+          shadowBlur: 10
+        }
+      },
+      itemStyle: {
+        normal: {
+          color: 'rgb(137,189,27)',
+          borderColor: 'rgba(137,189,2,0.27)',
+          borderWidth: 12
+
+        }
+      },
+      data: dataarray1
+    }, {
+      name: '满编',
+      type: 'line',
+      smooth: true,
+      symbol: 'circle',
+      stack: '总量',
+      symbolSize: 5,
+      animationDelay: 1000,
+      animationDuration: 1000,
+      markPoint: {
+        data: [
+          {type: 'max', name: '最大值'}
+        ],
+        animationDelay: 2000,
+        animationDuration: 1000
+      },
+      showSymbol: false,
+      lineStyle: {
+        normal: {
+          width: 1,
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            colorStops: [{
+              offset: 0, color: 'red' // 0% 处的颜色
+            }, {
+              offset: 1, color: 'yellow' // 100% 处的颜色
+            }],
+            globalCoord: false // 缺省为 false
+          },
+          opacity: 0.9
+        }
+      },
+      areaStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+            offset: 0,
+            color: 'rgba(0, 236, 212, 0.3)'
+          }, {
+            offset: 0.8,
+            color: 'rgba(0, 236, 212, 0)'
+          }], false),
+          shadowColor: 'rgba(0, 0, 0, 0.1)',
+          shadowBlur: 10
+        }
+      },
+      itemStyle: {
+        normal: {
+          color: 'rgb(0,136,212)',
+          borderColor: 'rgba(0,136,212,0.2)',
+          borderWidth: 12
+
+        }
+      },
+      data: dataarray2
+    }, {
+      name: '超编',
+      type: 'line',
+      stack: '总量',
+      smooth: true,
+      symbol: 'circle',
+      symbolSize: 5,
+      showSymbol: false,
+      animationDelay: 0,
+      animationDuration: 1000,
+      markPoint: {
+        data: [
+          {type: 'max', name: '最大值'}
+        ],
+        animationDelay: 1000,
+        animationDuration: 1000
+      },
+      lineStyle: {
+        normal: {
+          width: 1,
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            colorStops: [{
+              offset: 0, color: 'red' // 0% 处的颜色
+            }, {
+              offset: 1, color: 'yellowgreen' // 100% 处的颜色
+            }],
+            globalCoord: false // 缺省为 false
+          },
+          opacity: 0.9
+        }
+      },
+      areaStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+            offset: 0,
+            color: 'rgba(219, 50, 51, 0.3)'
+          }, {
+            offset: 0.8,
+            color: 'rgba(219, 50, 51, 0)'
+          }], false),
+          shadowColor: 'rgba(0, 0, 0, 0.1)',
+          shadowBlur: 10
+        }
+      },
+      itemStyle: {
+        normal: {
+
+          color: 'rgb(219,50,51)',
+          borderColor: 'rgba(219,50,51,0.2)',
+          borderWidth: 12
+        }
+      },
+      data: dataarray3
+    }, ]
+  };
+
+  myChart1.setOption(option1);
+  myChart2.setOption(option2);
+  myChart3.setOption(option3);
+  myChart4.setOption(option4);
+  myChart5.setOption(option5);
+
+
+  //pdf下载
+  $(document).ready(function () {
+
+      var downPdf = document.getElementById("downloadPdf");
+      var pagedom = $("#page");
+      downPdf.onclick = function() {
+          $("#process_div").show();
+          $("#process_div_pic").show();
+          scrollTo(0,0);
+          html2canvas(pagedom, {
+              onrendered : function(canvas) {
+                  var contentWidth = canvas.width;
+                  var contentHeight = canvas.height;
+                  //一页pdf显示html页面生成的canvas高度;
+                  var pageHeight = contentWidth / 592.28 * 841.89;
+                  //未生成pdf的html页面高度
+                  var leftHeight = contentHeight;
+                  //页面偏移
+                  var position = 0;
+                  //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                  var imgWidth = 595.28;
+                  var imgHeight = 592.28 / contentWidth
+                      * contentHeight;
+                  var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                  var pdf = new jsPDF('', 'pt', 'a4');
+                  //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                  //当内容未超过pdf一页显示的范围，无需分页
+                  if (leftHeight < pageHeight) {
+                      pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
+                          imgHeight);
+                  } else {
+                      while (leftHeight > 0) {
+                          pdf.addImage(pageData, 'JPEG', 0, position,
+                              imgWidth, imgHeight)
+                          leftHeight -= pageHeight;
+                          position -= 841.89;
+                          //避免添加空白页
+                          if (leftHeight > 0) {
+                              pdf.addPage();
+                          }
+                      }
+                  }
+                  pdf.save('城市网络体系概况.pdf');
+                  $("#process_div_pic").hide();
+                  $("#process_div").hide();
+              }
+          })
+      }
+  });
+</script>
+<script>
+var screenlogin=getUrlParamByKey("su");
+$(function(){
+    loginShow();
+});
+
+function loginShow(){
+
+    if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+        var b = new Base64();
+        screenlogin=b.decode(screenlogin);
+        var obj=JSON.parse(screenlogin);
+        var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
+        var callback = function callback(data, textStatus, XMLHttpRequest) {
+            //window.parent.location=getRootPath() + "/crm/index_city_net.html";
+            var stateObject = {};
+            var newUrl = "/daqWeb/crm/index_city_net.html";
+            //target = 1;
+            history.replaceState(stateObject,null,newUrl);
+            showData();
+        };
+        var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+            alert("登录信息错误，请确认输入或联系管理员!");
+            return false;
+        }
+        var url = "../login.do";
+        $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback);
+    }else{
+        showData();
+    }
+}
+
+function showData() {
+    getUser();
+    showEmployeeCount();
+    showEmpInfo();
+    showEmpAvgSendOrderInfo();
+    showEmpAvgAtAnalysisInfo();
+}
+
+function getUser(){
+    doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var employeeID="";
+            var curr_user = JSON.parse(data.data);
+            if(curr_user == null){
+                urlStr = "../logout.do";
+                window.location.href = urlStr;
+            }
+            if(curr_user.usergroup.code == "ZBXXWLBJJSZ"){
+                $("#pfedit_button").show();
+                $("#pfoperate_buttoon").show();
+                $("#resources_edit").show();
+            }
+        }
+    },false);
+}
+
+function showEmployeeCount(){
+    doManager("employeeMoreInfoManager", "getEmployeeCount",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var citycount = resultJson.cityCount;
+            var storeCount = resultJson.storeCount;
+            var humancount = resultJson.humancount;
+            $("#gaxcount").html(humancount);
+            $("#citycount").html(citycount);
+            $("#storecount").html(storeCount);
+            $("#empcount").html(humancount);
+            $("#fullempcount").html(storeCount*10)
+            var emprate = humancount/(storeCount*10)*100;
+            $("#emprate").html(emprate.toFixed(2));
+        }
+    },false);
+}
+
+function showEmpInfo(){
+    doManager("employeeMoreInfoManager", "getAvgWorktime",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var avgWorkTime = resultJson.avgWorkTime;
+            var avgtime = avgWorkTime[0].avgtime == null ? 0 : avgWorkTime[0].avgtime;
+            $("#avgWorkTime").html(avgtime);
+        }
+    });
+    /*doManager("employeeMoreInfoManager", "getAvgSendOrder",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var avgSentOrder = resultJson.avgSentOrder;
+            var avgorder = avgSentOrder[0].avgorder == null ? 0 : avgSentOrder[0].avgorder;
+            $("#avgSendOrder").html(avgorder);
+        }
+    });*/
+    $("#avgSendOrder").html(53);
+    doManager("employeeMoreInfoManager", "getAvgMileAage",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var avgMileAge = resultJson.avgMileAge;
+            var avgmile = avgMileAge[0].avgmile == null ? 0 : avgMileAge[0].avgmile;
+            $("#avgMileAge").html(avgmile);
+        }
+    });
+}
+
+function showEmpAvgSendOrderInfo(){
+    doManager("employeeMoreInfoManager", "getAvgSendOrderDistribution",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var avgSendOrderDistribution = resultJson.avgSendOrderDistribution;
+            var count10 =  avgSendOrderDistribution[0].count10;
+            disctrbtionArray[0].value = count10;
+            var count20 =  avgSendOrderDistribution[0].count20;
+            disctrbtionArray[1].value = count20;
+            var count30 = avgSendOrderDistribution[0].count30;
+            disctrbtionArray[2].value = count30;
+            var count40 =  avgSendOrderDistribution[0].count40;
+            disctrbtionArray[3].value = count40;
+            var count40add = avgSendOrderDistribution[0].count40add;
+            disctrbtionArray[4].value = count40add;
+            myChart1.setOption(option1);
+        }
+    });
+    doManager("employeeMoreInfoManager", "getAvgSendOrderMonthTrend",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var avgSendOrderMonthTrend = resultJson.avgSendOrderMonthTrend;
+            if(avgSendOrderMonthTrend != null && avgSendOrderMonthTrend.length >0){
+                for(var i = 0; i <avgSendOrderMonthTrend.length; i++){
+                    var avgSendOrder = avgSendOrderMonthTrend[i];
+                    avgSendOrderArray[avgSendOrder.month-1] = avgSendOrder.avgcount;
+                }
+            }
+            myChart2.setOption(option2);
+        }
+    });
+    doManager("employeeMoreInfoManager", "getAvgSendOrderGroupByCity",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+        var resultJson = JSON.parse(data.data);
+        var avgSendOrderGroupByCity = resultJson.avgSendOrderGroupByCity;
+            if(avgSendOrderGroupByCity != null && avgSendOrderGroupByCity.length >0){
+                var citynameArray = new Array();
+                var dataArray = new Array();
+                for(var i = 0; i <avgSendOrderGroupByCity.length; i++){
+                    var avgSendOrder = avgSendOrderGroupByCity[i];
+                    var cityname =  avgSendOrder.cityname;
+                    citynameArray.push(cityname);
+                    var datanum = avgSendOrder.datanum;
+                    dataArray.push(datanum)
+                }
+                option3.xAxis[0]["data"] = citynameArray;
+                option3.series[0].data=dataArray;
+                myChart3.setOption(option3);
+            }
+        }
+    });
+}
+
+function showEmpAvgAtAnalysisInfo(){
+    doManager("employeeMoreInfoManager", "getEmpAvgAtAnalysis",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var empAtAnalysis =  resultJson.empAtAnalysis;
+            empDiscribtionArray[0].value = empAtAnalysis[0].fullhuman == null ? 0 :empAtAnalysis[0].fullhuman;
+            empDiscribtionArray[1].value = empAtAnalysis[0].beyondhuman == null ? 0 :empAtAnalysis[0].beyondhuman;
+            empDiscribtionArray[2].value = empAtAnalysis[0].lackhuman == null ? 0 :empAtAnalysis[0].lackhuman;
+            console.log(resultJson);
+            myChart4.setOption(option4);
+        }
+    });
+    doManager("employeeMoreInfoManager", "getEmpAvgAtAnalysisMonth",null,function(data, textStatus, XMLHttpRequest) {
+        if (data.result) {
+            var resultJson = JSON.parse(data.data);
+            var empAtAnalysisByMonthFull =  resultJson.empAtAnalysisByMonthFull;
+            var empAtAnalysisByMonthBeloy =  resultJson.empAtAnalysisByMonthBeloy;
+            var empAtAnalysisByMonthLose =  resultJson.empAtAnalysisByMonthLose;
+            if(empAtAnalysisByMonthLose != null && empAtAnalysisByMonthLose.length >0){
+                for(var i = 0; i<empAtAnalysisByMonthLose.length; i++){
+                    var empAtAnalysisByMonth = empAtAnalysisByMonthLose[i];
+                    var count = empAtAnalysisByMonth.count;
+                    var work_month = parseInt(empAtAnalysisByMonth.work_month);
+                    dataarray1[work_month-1] = count ;
+                }
+            }
+            if(empAtAnalysisByMonthFull != null && empAtAnalysisByMonthFull.length >0){
+                for(var i = 0; i<empAtAnalysisByMonthFull.length; i++){
+                    var empAtAnalysisByMonth = empAtAnalysisByMonthFull[i];
+                    var count = empAtAnalysisByMonth.count;
+                    var work_month = parseInt(empAtAnalysisByMonth.work_month);
+                    dataarray2[work_month-1] = count;
+                }
+            }
+            if(empAtAnalysisByMonthBeloy != null && empAtAnalysisByMonthBeloy.length >0){
+                for(var i = 0; i<empAtAnalysisByMonthBeloy.length; i++){
+                    var empAtAnalysisByMonth = empAtAnalysisByMonthBeloy[i];
+                    var count = empAtAnalysisByMonth.count;
+                    var work_month = parseInt(empAtAnalysisByMonth.work_month);
+                    dataarray3[work_month-1] = count;
+                }
+            }
+
+            myChart5.setOption(option5);
+        }
+    });
+}
+</script>
+</body>
+</html>

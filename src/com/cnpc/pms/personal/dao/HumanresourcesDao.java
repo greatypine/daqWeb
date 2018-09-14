@@ -89,4 +89,15 @@ public interface HumanresourcesDao {
 	 */
 	public List<Map<String, Object>> queryHumanByStoreType();
 
+	/**
+	 * TODO  统计不同职位在职总人数
+	 * 2108/09/12
+	 * @param zw
+	 * @param city_id
+	 * @author gaoll
+	 * @return
+	 */
+	public Integer queryHumanresourceCountByZw(String zw,Long city_id);
+
+
 }
