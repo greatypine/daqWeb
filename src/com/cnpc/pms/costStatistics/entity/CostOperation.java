@@ -17,6 +17,9 @@ import javax.persistence.Table;
 @Table(name="t_cost_operation")
 public class CostOperation extends DataEntity {
 
+    @Column(name="controlCode",columnDefinition="int(20) COMMENT 't_cost_control code'")
+    private String controlCode;
+
     @Column(name="storeNo",columnDefinition="varchar(100) COMMENT '门店编号'")
     private String storeNo;
 
@@ -224,5 +227,13 @@ public class CostOperation extends DataEntity {
 
     public void setDecorationMaintain(double decorationMaintain) {
         this.decorationMaintain = decorationMaintain;
+    }
+
+    public String getControlCode() {
+        return controlCode;
+    }
+
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
     }
 }

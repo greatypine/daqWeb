@@ -18,6 +18,9 @@ import java.util.Date;
 @Table(name="t_cost_rent")
 public class CostRent extends DataEntity {
 
+    @Column(name="controlCode",columnDefinition="int(20) COMMENT 't_cost_control code'")
+    private String controlCode;
+
     @Column(name="storeNo",columnDefinition="varchar(100) COMMENT '门店编号'")
     private String storeNo;
 
@@ -228,5 +231,13 @@ public class CostRent extends DataEntity {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public String getControlCode() {
+        return controlCode;
+    }
+
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
     }
 }
