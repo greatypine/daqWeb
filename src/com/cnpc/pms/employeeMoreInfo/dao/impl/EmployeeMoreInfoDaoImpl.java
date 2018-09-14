@@ -191,7 +191,7 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
             append_sql =  " HAVING count(employeeno) > 10 ";
         }
 
-        String sql = "select count(storeid) as count,yearmonth from (" +
+        String sql = "select count(storeid) as count,substring_index(yearmonth,'-',-1) as work_month  from (" +
                 "select yearmonth,zw,count(employeeno),storeid from t_topdata_human where " +
                 "substring_index(yearmonth,'-',1) = '"+curYear+"' and humanstatus!= 2 and yearmonth !='"+curYearMonth+"' and t_topdata_human.zw = '国安侠' GROUP BY t_topdata_human.storeid,t_topdata_human.yearmonth " +append_sql+
                 ") table_total GROUP BY table_total.yearmonth";
