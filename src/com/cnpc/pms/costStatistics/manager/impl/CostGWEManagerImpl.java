@@ -40,33 +40,20 @@ public class CostGWEManagerImpl extends BizBaseCommonManager implements CostGWEM
 
                     filter = FilterFactory.getSimpleFilter("storeNo='"+storeNo+"' and year="+year+" and month="+month);
                     lst_costGWE = (List<CostGWE>) this.getList(filter);
-                    CostGWE cr = null;
+                    CostGWE gwe = null;
                     if(lst_costGWE!=null&&lst_costGWE.size()>0) {
-                        cr = lst_costRenovation.get(i);
+                        gwe = lst_costGWE.get(0);
                     }else{
-                        cr = new CostRenovation();
+                        gwe = new CostGWE();
                     }
-                    cr.setStoreNo(storeNo);
-                    cr.setStoreName(storeName);
-                    cr.setDecorationCompany(decorationCompany);
-                    cr.setStructureAcreage(structureAcreage);
-                    cr.setRenovationUnitPrice(renovationUnitPrice);
-                    cr.setDecorateCost(decorateCost);
-                    cr.setBusinessScreen(businessScreen);
-                    cr.setFurniture(furniture);
-                    cr.setLightBox(lightBox);
-                    cr.setProcessManage(processManage);
-                    cr.setProcessManageSurcharge(processManageSurcharge);
-                    cr.setAirConditioner(airConditioner);
-                    cr.setAirConditionerSurcharge(airConditionerSurcharge);
-                    cr.setDesign(design);
-                    cr.setTotal(total);
-                    cr.setAmortizeMonth(amortizeMonth);
-                    cr.setAmortizeMoney(amortizeMoney);
-                    cr.setCompletedDate(completedDate);
-                    cr.setContractDate(contractDate);
-                    preObject(cr);
-                    saveObject(cr);
+                    gwe.setStoreNo(storeNo);
+                    gwe.setStoreName(storeName);
+                    gwe.setYear(year);
+                    gwe.setMonth(month);
+                    gwe.setElectricityFee(electricityFee);
+                    gwe.setWaterFee(waterFee);
+                    preObject(gwe);
+                    saveObject(gwe);
                 }
             }
             result.put("status","success");
