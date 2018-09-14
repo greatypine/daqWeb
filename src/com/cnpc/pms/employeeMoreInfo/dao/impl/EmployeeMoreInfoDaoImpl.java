@@ -2,12 +2,14 @@ package com.cnpc.pms.employeeMoreInfo.dao.impl;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.employeeMoreInfo.dao.EmployeeMoreInfoDao;
+import com.cnpc.pms.utils.DateUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -70,5 +72,128 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
         return list;
     }
 
+    @Override
+    public List<Map<String, Object>> queryAvgWorkTime() {
+        String curDate = DateUtils.dateFormat(new Date(), "yyyy-MM");
+        String sql = "select ROUND(sum(realovertime)/sum(workdays),2) as avgtime from (SELECT recode.employee_no,recode.realovertime,recode.workdays,recode.work_month from t_work_record recode LEFT JOIN " +
+                "t_work_record_total total ON (recode.workrecord_id = total.id) where substring_index(recode.work_month,'-',1) = '2018' and total.commit_status =3 " +
+                ") t1 INNER JOIN (select yearmonth,zw,employeeno from t_topdata_human where substring_index(yearmonth,'-',1) = '2018' ) t2 ON (t1.employee_no = t2.employeeno and t1.work_month = t2.yearmonth) " +
+                "where t2.zw = '国安侠' and t2.yearmonth != '"+curDate+"'";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
 
+    @Override
+    public List<Map<String, Object>> queryAvgSentOrder() {
+        String curYearMonth = DateUtils.dateFormat(new Date(), "yyyy-MM");
+        String curYear = DateUtils.dateFormat(new Date(), "yyyy");
+        Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
+        String sql = "select ROUND(sum(datanum)/sum(t2.workdays)) as avgorder from ( " +
+                "select employee_no,sum(datanum) as datanum from ds_pes_order_empchannel_month where year = '"+curYear+"' and employee_no is not null and employee_no != '' and month !='"+curMonth+"' GROUP BY employee_no) t1 " +
+                "LEFT JOIN ( " +
+                "SELECT recode.employee_no,recode.workdays,recode.work_month from t_work_record recode LEFT JOIN t_work_record_total total ON (recode.workrecord_id = total.id) " +
+                "where substring_index(recode.work_month,'-',1) = '"+curYear+"' and total.commit_status =3 and recode.work_month != '"+curYearMonth+"' " +
+                ") t2 ON (t1.employee_no = t2.employee_no)";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryAvgMileAge() {
+        String curDate = DateUtils.dateFormat(new Date(), "yyyy-MM");
+        String sql = "select ROUND(sum(info.oneDay_moveDistance)/count(human.employee_no),4) as avgmile from t_humanresources human LEFT JOIN " +
+                "t_employee_more_info info ON (human.employee_no = info.employeeNo)  where human.zw = '国安侠' and human.humanstatus != 2";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryAvgSendOrderDistribution() {
+        String curYearMonth = DateUtils.dateFormat(new Date(), "yyyy-MM");
+        String curYear = DateUtils.dateFormat(new Date(), "yyyy");
+        Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
+        String sql = "select sum(case when ifnull(t1.datanum/t2.workdays,0)>0 and ifnull(t1.datanum/t2.workdays,0)<=10 then 1 else 0 end) as count10," +
+                "sum(case when ifnull(t1.datanum/t2.workdays,0)>10 and ifnull(t1.datanum/t2.workdays,0)<=20 then 1 else 0 end) as count20," +
+                "sum(case when ifnull(t1.datanum/t2.workdays,0)>20 and ifnull(t1.datanum/t2.workdays,0)<=30 then 1 else 0 end) as count30," +
+                "sum(case when ifnull(t1.datanum/t2.workdays,0)>30 and ifnull(t1.datanum/t2.workdays,0)<=40 then 1 else 0 end) as count40," +
+                "sum(case when ifnull(t1.datanum/t2.workdays,0)>40 then 1 else 0 end) as count40add " +
+                " from (select employee_no,sum(datanum) as datanum from ds_pes_order_empchannel_month where year = '"+curYear+"' and employee_no is not null and employee_no != '' and month != "+curMonth+" GROUP BY employee_no) t1 " +
+                "LEFT JOIN ( " +
+                "select employee_no,sum(workdays) as workdays  from (SELECT employee_no,workdays,work_month,workrecord_id from t_work_record where substring_index(work_month,'-',1) = '"+curYear+"') a1 " +
+                "LEFT JOIN t_work_record_total total ON a1.workrecord_id = total.id " +
+                "INNER JOIN (select yearmonth,zw,employeeno from t_topdata_human where substring_index(yearmonth,'-',1) = '"+curYear+"' ) a2 ON (a1.employee_no = a2.employeeno and a1.work_month = a2.yearmonth) " +
+                "where a2.zw = '国安侠' AND total.commit_status = 3 and a2.yearmonth != '"+curYearMonth+"' GROUP BY a1.employee_no " +
+                ") t2 ON (t1.employee_no = t2.employee_no)";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryAvgSendOrderMonthTrend() {
+        String curYearMonth = DateUtils.dateFormat(new Date(), "yyyy-MM");
+        String curYear = DateUtils.dateFormat(new Date(), "yyyy");
+        Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
+        String sql = "select ROUND(sum(datanum)/COUNT(DISTINCT username)) as avgcount,month from ds_pes_order_empchannel_month where year = '"+curYear+"' and month != "+curMonth+" GROUP BY month";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryAvgSendOrderGroupByCity() {
+        String curYearMonth = DateUtils.dateFormat(new Date(), "yyyy-MM");
+        String curYear = DateUtils.dateFormat(new Date(), "yyyy");
+        Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
+        String sql = "select tab1.cityname,ROUND(tab1.datanum/tab2.workdays) as datanum from ( " +
+                "select sum(datanum) as datanum,cityname from ds_pes_order_empchannel_month where year = '"+curYear+"' and employee_no is not null and employee_no != '' and month != "+curMonth+" GROUP BY cityname) tab1 " +
+                "LEFT JOIN ( " +
+                "select t1.cityname,sum(t2.workdays) as workdays from ( " +
+                "select employee_no,cityname from ds_pes_order_empchannel_month where employee_no is not null and employee_no != '' and year = '"+curYear+"' and month != "+curMonth+" GROUP BY employee_no) t1 LEFT JOIN ( " +
+                "select employee_no,sum(workdays) as workdays  from (SELECT employee_no,workdays,work_month,workrecord_id from t_work_record where substring_index(work_month,'-',1) = '"+curYear+"') a1 " +
+                "LEFT JOIN t_work_record_total total ON a1.workrecord_id = total.id " +
+                "INNER JOIN (select yearmonth,zw,employeeno from t_topdata_human where substring_index(yearmonth,'-',1) = '"+curYear+"' ) a2 ON (a1.employee_no = a2.employeeno and a1.work_month = a2.yearmonth) " +
+                "where a2.zw = '国安侠' and total.commit_status = 3 and a2.yearmonth != '"+curYearMonth+"'  GROUP BY a1.employee_no " +
+                ") t2  ON (t1.employee_no = t2.employee_no) GROUP BY t1.cityname) tab2 ON tab1.cityname = tab2.cityname;";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryEmpAtAnalysis() {
+        String sql = "select sum(case when table_total.empcount >10 then 1 else 0 end) as beyondhuman," +
+                "sum(case when table_total.empcount =10 then 1 else 0 end) as fullhuman," +
+                "sum(case when table_total.empcount <10 then 1 else 0 end) as lackhuman from ( " +
+                "SELECT count(a.employee_no) empcount,b.storeName FROM " +
+                "t_humanresources a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t where t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' " +
+                "AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
+                "on (a.store_id = b.store_id) where a.name not like '%测试%' and  a.humanstatus !=2 and a.zw = '国安侠' group by b.storeName ) table_total";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryEmpAtAnalysisByMonth(String status) {
+        String append_sql = "";
+        if(status.equals("满编")){
+            append_sql =  " HAVING count(employee_no) = 10 ";
+        }else if (status.equals("缺编")){
+            append_sql =  " HAVING count(employee_no) < 10 ";
+        }else if (status.equals("超编")){
+            append_sql =  " HAVING count(employee_no) > 10 ";
+        }
+
+        String sql = "select count(store_id) as count,substring_index(work_month,'-',-1) as work_month  from (select count(employee_no),a1.work_month,total.store_id from (SELECT employee_no,workdays,work_month,workrecord_id from t_work_record where substring_index(work_month,'-',1) = '2018') a1 " +
+                "LEFT JOIN t_work_record_total total ON a1.workrecord_id = total.id " +
+                "INNER JOIN (select yearmonth,zw,employeeno from t_topdata_human where substring_index(yearmonth,'-',1) = '2018' ) a2 ON (a1.employee_no = a2.employeeno and a1.work_month = a2.yearmonth) " +
+                "where a2.zw = '国安侠' and total.commit_status = 3 GROUP BY total.store_id,a1.work_month"+ append_sql+" ) table_total GROUP BY table_total.work_month";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
 }

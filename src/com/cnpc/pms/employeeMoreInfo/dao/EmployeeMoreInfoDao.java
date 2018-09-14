@@ -46,4 +46,63 @@ public interface EmployeeMoreInfoDao{
 
     public List<Map<String,Object>> queryEmployeeMoveDistance(String employeeNo);
 
+    /**
+     * @Description 国安侠人均日工作时间（时间截止到上月）
+     * @author gaoll
+     * @date 2018/9/12 9:46
+     **/
+    public List<Map<String,Object>> queryAvgWorkTime();
+
+    /**
+     * @Description 国安侠人均日单量( 时间截止到上月)
+     * @author gaoll
+     * @date 2018/9/12 9:46
+     **/
+    public List<Map<String,Object>> queryAvgSentOrder();
+
+
+    /**
+     * @Description 国安侠人均日里程数（时间截止到上月）
+     * @author gaoll
+     * @date 2018/9/12 9:46
+     **/
+    public List<Map<String,Object>> queryAvgMileAge();
+
+    /**
+     * @Description 国安侠人均日单量分布图（时间截止到上月）
+     * @author gaoll
+     * @date 2018/9/13 9:46
+     **/
+    public List<Map<String,Object>> queryAvgSendOrderDistribution();
+
+    /**
+     * @Description 国安侠人均月单量走势图（时间截止到上月）
+     * @author gaoll
+     * @date 2018/9/13 9:46
+     **/
+    public List<Map<String,Object>> queryAvgSendOrderMonthTrend();
+
+    /**
+     * @Description 国安侠人均日单量各城市统计（时间截止到上月）
+     * @author gaoll
+     * @date 2018/9/13 9:46
+     **/
+    public List<Map<String,Object>> queryAvgSendOrderGroupByCity();
+
+    /**
+     * @Description 实时判断门店国安侠满编门店数量
+     * @author gaoll
+     * @date 2018/9/13 9:46
+     **/
+    public List<Map<String,Object>> queryEmpAtAnalysis();
+
+    /**
+     * @Description 查询2018年每月人员编制走势图（分为满编，缺编，超编）
+     * @author gaoll
+     * @date 2018/9/13 9:46
+     **/
+    public List<Map<String,Object>> queryEmpAtAnalysisByMonth(String status);
+
+
+
 }
