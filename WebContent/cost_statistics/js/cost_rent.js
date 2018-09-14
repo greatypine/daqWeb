@@ -336,7 +336,7 @@ function getCostRent(){
 
 
         }
-    },false);
+    });
 
 }
 /**

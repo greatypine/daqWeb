@@ -144,6 +144,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         if(storeName!=null&&!"".equals(storeName)){
             sql+=" and ts.name like '%"+storeName+"%'";
+
         }
 
         List<Map<String,Object>> list = null;

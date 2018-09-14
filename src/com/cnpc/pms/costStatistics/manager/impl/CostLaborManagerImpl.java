@@ -72,7 +72,7 @@ public class CostLaborManagerImpl extends BizBaseCommonManager implements CostLa
                 lst_costLabor = (List<CostLabor>) this.getList(filter);
 
                 if (lst_costLabor != null && lst_costLabor.size() > 0) {
-                   CostLabor cl = lst_costLabor.get(i);
+                   CostLabor cl = lst_costLabor.get(0);
                    cl.setEmolument(emolument);
                    cl.setUniformAmortize(uniformAmortize);
                    cl.setAccommodation(accommodation);

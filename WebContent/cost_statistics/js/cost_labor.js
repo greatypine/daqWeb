@@ -141,7 +141,7 @@ function getCostLabor(){
 
 
         }
-    },false);
+    });
 
 }
 /**

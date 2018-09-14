@@ -18,11 +18,12 @@ import java.util.Map;
 /**
  * @ProjectName: daqWeb
  * @Package: com.cnpc.pms.costStatistics.util
- * @Description:装修摊销
+ * @Description:固定资产
  * @Author: gbl
- * @CreateDate: 2018/8/28 15:10
+ * @CreateDate: 2018/9/13 16:07
  */
-public class CostRenovationExcel {
+public class CostFixedAssetExcel {
+
 
     // 上传文件本地存储目录
     private static final String UPLOAD_DIRECTORY = "template";
@@ -30,13 +31,13 @@ public class CostRenovationExcel {
     //数据源
     private List<Map<String,Object>> data;
 
-    public CostRenovationExcel(List<Map<String,Object>> data){
+    public CostFixedAssetExcel(List<Map<String,Object>> data){
         this.data = data;
     }
     //导出的文件标题
-    private final String[] header0={"序号","门店编码","门店名称","施工单位","建筑面积","单方造价","装修施工","商业展屏","家具","标牌及灯箱","过程管理","费率：3.5%","空调设备","费率4.8%","设计","全过程项目管理","单店产值合计","摊销月份数","摊销月度成本","竣工时间","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同签订日期"};
+    private final String[] header0={"序号","门店编码","门店名称","月摊销成本（元/月）","固定资产合计（元）","多功能一体机","手机","IPADmini","收银设备","电脑","扫描枪、热敏打印机","电子类合计","摊销金额（36个月）","电动车","摊销金额（48个月）","卖场冷链设备","保险柜","微仓货架","卖场货架","机器设备合计","摊销金额（120个月）","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"};
 
-    private final String[] colName = new String[] { "store_no", "store_name","decoration_company", "structure_acreage","renovation_unit_price","decorate_cost", "business_screen","furniture","light_box", "process_manage", "process_manage_surcharge","air_conditioner","air_conditioner_surcharge", "design", "whole_process_manage_surcharge","total","amortize_month","amortize_money", "completed_date", "amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","contract_date"};
+    private final String[] colName = new String[] { "store_no", "store_name","amortize_money","total","aio","mobile_phone","iPad","cash_register","computer","scanner_gun","electronics_total","electronics_amortize","electric_cars","electric_cars_amortize","cold_chain","safe_box","capsule_goods_shelf","shopping_goods_shelf","machine_total","machine_amortize", "amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money"};
 
 
     private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG"};
@@ -46,7 +47,7 @@ public class CostRenovationExcel {
         OssRefFileManager ossRefFileManager  = (OssRefFileManager)SpringHelper.getBean("ossRefFileManager");
         UtilityManager utilityManager = (UtilityManager)SpringHelper.getBean("utilityManager");
         String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+ File.separator + UPLOAD_DIRECTORY;
-        String fileName_part = utilityManager.getPYIndexStr("装修摊销",true);
+        String fileName_part = utilityManager.getPYIndexStr("固定资产",true);
         // 如果目录不存在则创建
         File uploadDir = new File(str_file_dir_path);
         if (!uploadDir.exists()) {
@@ -57,7 +58,7 @@ public class CostRenovationExcel {
         HSSFWorkbook workbook = new HSSFWorkbook();
         // 创建Excel的工作sheet,对应到一个excel文档的tab
 
-        HSSFSheet sheet = workbook.createSheet("装修摊销");
+        HSSFSheet sheet = workbook.createSheet("固定资产");
 
         // 设置列宽  （第几列，宽度）
         sheet.setColumnWidth( 0, 1600);
@@ -213,11 +214,7 @@ public class CostRenovationExcel {
                     cell.setCellStyle(fixedStyle);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
-                }else if(j==2||j==18||j==31){
-                    cell.setCellStyle(style2);
-                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-                    cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
-                }else if(j>18&&j<31){
+                }else if(j>19&&j<=32){
                     cell.setCellStyle(style);
                     if (data==null){
                         cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
@@ -246,7 +243,7 @@ public class CostRenovationExcel {
             if(i<5){
                 cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                 cell.setCellValue("合计");
-            }else if(i>19&&i<32){
+            }else if(i>20&&i<=32){
                 cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                 cell.setCellFormula("SUM("+rowColNum[i]+2+":"+rowColNum[i]+(data.size()+1)+")");//合计添加公式
             }else{

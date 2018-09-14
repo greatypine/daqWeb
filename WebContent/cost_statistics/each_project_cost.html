@@ -64,7 +64,7 @@
                 theme: '#428bca'
             });
 
-            //getCostLabor();//获取人工成本
+            getCostLabor();//获取人工成本
 
 
         })
@@ -75,22 +75,58 @@
      * @param t
      */
     function showCostTag(t){
-            if(t==1){
+        clearCostTable();
 
-                getCostLabor();//获取人工成本
 
-            }else if(t==2){
-
-                //getCostRent();//获取租金成本
-
-            }else if(t==3){
-
-                getCostRenovation();//装修摊销
-            }else if(t==4){
-                getCostFixedAsset();//固定资产
+        if(t==1){
+            var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
+            if(store_cost_tr.length>0){
+                $$.showMessage("请先保存！")
+                return;
             }
+            getCostLabor();//获取人工成本
+
+        }else if(t==2){
+            var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
+            if(store_cost_tr.length>0){
+                $$.showMessage("请先保存！")
+                return;
+            }
+            getCostRent();//获取租金成本
+
+        }else if(t==3){
+            var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
+            if(store_cost_tr.length>0){
+                $$.showMessage("请先保存！")
+                return;
+            }
+            getCostRenovation();//装修摊销
+        }else if(t==4){
+            var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
+            if(store_cost_tr.length>0){
+                $$.showMessage("请先保存！")
+                return;
+            }
+            getCostFixedAsset();//固定资产
+        }
     }
 
+
+    /**
+     * 清空成本table页面
+     * */
+    function clearCostTable(){
+
+        $("#labor_tb_1").find("tr:gt(1)").remove();
+        $("#labor_tb_2").find("tr:gt(1)").remove();
+        $("#rent_tb_1").find("tr:gt(0)").remove();
+        $("#rent_tb_2").find("tr:gt(0)").remove();
+        $("#renovation_tb_1").find("tr:gt(0)").remove();
+        $("#renovation_tb_2").find("tr:gt(0)").remove();
+        $("#fixedAsset_tb_1").find("tr:gt(0)").remove();
+        $("#fixedAsset_tb_2").find("tr:gt(0)").remove();
+
+    }
     /**
      * 展示完整信息
      * @param t
@@ -521,6 +557,82 @@
                                 <th style="text-align: center"><p>10月</p></th>
                                 <th style="text-align: center"><p>11月</p></th>
                                 <th style="text-align: center"><p>12月</p></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- /.tab-pane
+                 <!-- 水电费 -->
+                <div class="tab-pane" id="tab_5">
+
+                    <table width="50%">
+                        <tr>
+                            <td width="10%">
+                                <p>门店编码：</p>
+                                <p><input type="text" id="storeNo_gwe" name="storeNo_gwe"></p>
+                            </td>
+                            <td width="10%">
+                                <p>门店名称：</p>
+                                <p><input type="text" name="" id="storeName_gwe"/></p>
+                            </td>
+                            <td width="10%">
+                                <p class="read">日期：</p>
+                                <p class="read"><input type="text" readonly  maxlength="12"  id="year_gwe"/></p>
+                            </td>
+
+                            <td width="10%" style="text-align: center">
+                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostgwe()">查询</button>
+                            </td>
+                            <td width="10%" style="text-align: center">
+                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostgwe()">保存</button>
+                            </td>
+                            <td width="10%" style="text-align:center">
+                                <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostgwe()">导出</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="col-sm-4 no-padding">
+                        <table class="table" cellspacing="0" cellpadding="0" id="gwe_tb_1">
+                            <tr id="gwe_tr_1">
+                                <th style="text-align: center;background-color:#A9A9A9">序号</th>
+                                <th style="text-align: center;background-color: #A9A9A9">门店编码</th>
+                                <th style="text-align: center;background-color: #A9A9A9">门店名称</th>
+
+                            </tr>
+
+
+                        </table>
+                    </div>
+                    <div class="col-sm-8 no-padding" style="overflow-x: scroll;margin-left:-1px">
+                        <table class="table table_x" cellspacing="0" cellpadding="0" id="gwe_tb_2">
+
+                            <tr id="gwe_tr_2">
+                                <th style="text-align: center"><p>1月电费</p></th>
+                                <th style="text-align: center"><p>1月水费</p></th>
+                                <th style="text-align: center"><p>2月电费</p></th>
+                                <th style="text-align: center"><p>2月水费</p></th>
+                                <th style="text-align: center"><p>3月电费</p></th>
+                                <th style="text-align: center"><p>3月水费</p></th>
+                                <th style="text-align: center"><p>4月电费</p></th>
+                                <th style="text-align: center"><p>4月水费</p></th>
+                                <th style="text-align: center"><p>5月电费</p></th>
+                                <th style="text-align: center"><p>5月水费</p></th>
+                                <th style="text-align: center"><p>6月电费</p></th>
+                                <th style="text-align: center"><p>6月水费</p></th>
+                                <th style="text-align: center"><p>7月电费</p></th>
+                                <th style="text-align: center"><p>7月水费</p></th>
+                                <th style="text-align: center"><p>8月电费</p></th>
+                                <th style="text-align: center"><p>8月水费</p></th>
+                                <th style="text-align: center"><p>9月电费</p></th>
+                                <th style="text-align: center"><p>9月水费</p></th>
+                                <th style="text-align: center"><p>10月电费</p></th>
+                                <th style="text-align: center"><p>10月水费</p></th>
+                                <th style="text-align: center"><p>11月电费</p></th>
+                                <th style="text-align: center"><p>11月水费</p></th>
+                                <th style="text-align: center"><p>12月电费</p></th>
+                                <th style="text-align: center"><p>12月水费</p></th>
+                                <th style="text-align: center"><p>合计</p></th>
+                                <th style="text-align: center"><p>月均</p></th>
                             </tr>
                         </table>
                     </div>

@@ -82,7 +82,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
                     lst_costRenovation = (List<CostRenovation>) this.getList(filter);
                     CostRenovation cr = null;
                     if(lst_costRenovation!=null&&lst_costRenovation.size()>0) {
-                        cr = lst_costRenovation.get(i);
+                        cr = lst_costRenovation.get(0);
                     }else{
                         cr = new CostRenovation();
                     }

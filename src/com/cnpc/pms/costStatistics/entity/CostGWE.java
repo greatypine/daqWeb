@@ -30,13 +30,13 @@ public class CostGWE extends DataEntity {
     private Integer month;
 
     @Column(name="gas_fee",columnDefinition="decimal(10,2) COMMENT '燃气费'")
-    private double gasFee;
+    private Double gasFee;
 
     @Column(name="water_fee",columnDefinition="decimal(10,2) COMMENT '水费'")
-    private double waterFee;
+    private Double waterFee;
 
     @Column(name="electricity_fee",columnDefinition="decimal(10,2) COMMENT '电费'")
-    private double electricityFee;
+    private Double electricityFee;
 
     public String getStoreNo() {
         return storeNo;
@@ -70,27 +70,27 @@ public class CostGWE extends DataEntity {
         this.month = month;
     }
 
-    public double getGasFee() {
+    public Double getGasFee() {
         return gasFee;
     }
 
-    public void setGasFee(double gasFee) {
+    public void setGasFee(Double gasFee) {
         this.gasFee = gasFee;
     }
 
-    public double getWaterFee() {
+    public Double getWaterFee() {
         return waterFee;
     }
 
-    public void setWaterFee(double waterFee) {
+    public void setWaterFee(Double waterFee) {
         this.waterFee = waterFee;
     }
 
-    public double getElectricityFee() {
+    public Double getElectricityFee() {
         return electricityFee;
     }
 
-    public void setElectricityFee(double electricityFee) {
+    public void setElectricityFee(Double electricityFee) {
         this.electricityFee = electricityFee;
     }
 }

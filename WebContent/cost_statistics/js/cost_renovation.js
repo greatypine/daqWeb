@@ -1,14 +1,5 @@
 
 
-// function showWholeContent(t){
-//     var id = $(t).attr("id");
-//     var content = $(t).html();
-//     layer.tips(content,"#"+id, {
-//         tips: [1, '#0ACC4C'],
-//         time: 1000
-//     });
-// }
-
 
 /**
  * 计算装修施工
@@ -19,9 +10,9 @@ function calculateDecorateCost(t){
     $(t).parent().parent().attr("editable",true);
     var id = $(t).attr("id").split("_");
     var structureAcreage = $("#structureAcreage_"+id[1]).val();
-    var renovationUnitPrice = $("#renovationUnitPrice_"+id[1]).val();
-    if(structureAcreage!=""&&renovationUnitPrice!=""){
-        $("#decorateCost_"+id[1]).val((parseFloat(structureAcreage)*parseFloat(renovationUnitPrice)).toFixed(2));
+    var GWEUnitPrice = $("#GWEUnitPrice_"+id[1]).val();
+    if(structureAcreage!=""&&GWEUnitPrice!=""){
+        $("#decorateCost_"+id[1]).val((parseFloat(structureAcreage)*parseFloat(GWEUnitPrice)).toFixed(2));
         $("#lightBox_"+id[1]).val(parseFloat(structureAcreage)*123.52.toFixed(2));
         $("#airConditioner_"+id[1]).val((parseFloat(structureAcreage)*300).toFixed(2));
         $("#airConditionerSurcharge_"+id[1]).val((parseFloat(structureAcreage)*300*0.048).toFixed(2));
@@ -127,87 +118,87 @@ function calculateAmortizeMoney(t){
 }
 
 /**
- * 获取装修摊销
+ * 获取水电燃气费
  * **/
-function getCostRenovation(){
+function getCostGWE(){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
     });
-    var storeNo=$("#storeNo_renovation").val()==""?null:$("#storeNo_renovation").val();
-    var storeName=$("#storeName_renovation").val()==""?null:$("#storeName_renovation").val();
+    var storeNo=$("#storeNo_GWE").val()==""?null:$("#storeNo_GWE").val();
+    var storeName=$("#storeName_GWE").val()==""?null:$("#storeName_GWE").val();
 
 
-    $("#renovation_tb_1").find("tr:gt(0)").remove();
-    $("#renovation_tb_2").find("tr:gt(0)").remove();
+    $("#GWE_tb_1").find("tr:gt(0)").remove();
+    $("#GWE_tb_2").find("tr:gt(0)").remove();
 
-    doManager('costRenovationManager','queryCostRenovation',[storeNo,storeName],function (data) {
+    doManager('costGWEManager','queryCostGWE',[storeNo,storeName],function (data) {
 
 
         if(data.result){
-            var costRenovation = JSON.parse(data.data).renovation;
+            var costGWE = JSON.parse(data.data).GWE;
 
 
             var rent_td_sum = "";
             var uniform_charge_sum=0;
 
-            for(var i=0;i<costRenovation.length;i++){
-                var storeNo = costRenovation[i].store_no==null?"":costRenovation[i].store_no;
-                var storeName = costRenovation[i].store_name==null?"":costRenovation[i].store_name;
-                var decoration_company = costRenovation[i].decoration_company==null?"":costRenovation[i].decoration_company;//装修公司
-                var structure_acreage = costRenovation[i].structure_acreage==null?"":costRenovation[i].structure_acreage;//建筑面积
-                var renovation_unit_price = costRenovation[i].renovation_unit_price==null?"":costRenovation[i].renovation_unit_price;//装修单价
-                var decorateCost = costRenovation[i].decorate_cost==null?"":costRenovation[i].decorate_cost;//装修施工
-                var business_screen = costRenovation[i].business_screen==null?"":costRenovation[i].business_screen;//商业展屏
-                var furniture = costRenovation[i].furniture==null?"":costRenovation[i].furniture;//家具
-                var light_box = costRenovation[i].light_box==null?"":costRenovation[i].light_box;//灯箱
-                var process_manage = costRenovation[i].process_manage==null?"":costRenovation[i].process_manage;//过程管理
-                var process_manage_surcharge = costRenovation[i].process_manage_surcharge==null?"":costRenovation[i].process_manage_surcharge;//过程管理费
-                var air_conditioner = costRenovation[i].air_conditioner==null?"":costRenovation[i].air_conditioner;//空调设备
-                var air_conditioner_surcharge = costRenovation[i].air_conditioner_surcharge==null?"":costRenovation[i].air_conditioner_surcharge;//空调设备费
-                var design = costRenovation[i].design==null?"":costRenovation[i].design;//设计
-                var total = costRenovation[i].total==null?"":costRenovation[i].total;//单店总装修花销
-                var amortize_month = costRenovation[i].amortize_month==null?"":costRenovation[i].amortize_month;//摊销月
-                var amortize_money = costRenovation[i].amortize_money==null?"":costRenovation[i].amortize_money;//摊销金额
-                var completed_date = costRenovation[i].completed_date==null?"":costRenovation[i].completed_date;//竣工日期
-                var contract_date = costRenovation[i].contract_date==null?"":costRenovation[i].contract_date;//合同日期
+            for(var i=0;i<costGWE.length;i++){
+                var storeNo = costGWE[i].store_no==null?"":costGWE[i].store_no;
+                var storeName = costGWE[i].store_name==null?"":costGWE[i].store_name;
+                var decoration_company = costGWE[i].decoration_company==null?"":costGWE[i].decoration_company;//装修公司
+                var structure_acreage = costGWE[i].structure_acreage==null?"":costGWE[i].structure_acreage;//建筑面积
+                var GWE_unit_price = costGWE[i].GWE_unit_price==null?"":costGWE[i].GWE_unit_price;//装修单价
+                var decorateCost = costGWE[i].decorate_cost==null?"":costGWE[i].decorate_cost;//装修施工
+                var business_screen = costGWE[i].business_screen==null?"":costGWE[i].business_screen;//商业展屏
+                var furniture = costGWE[i].furniture==null?"":costGWE[i].furniture;//家具
+                var light_box = costGWE[i].light_box==null?"":costGWE[i].light_box;//灯箱
+                var process_manage = costGWE[i].process_manage==null?"":costGWE[i].process_manage;//过程管理
+                var process_manage_surcharge = costGWE[i].process_manage_surcharge==null?"":costGWE[i].process_manage_surcharge;//过程管理费
+                var air_conditioner = costGWE[i].air_conditioner==null?"":costGWE[i].air_conditioner;//空调设备
+                var air_conditioner_surcharge = costGWE[i].air_conditioner_surcharge==null?"":costGWE[i].air_conditioner_surcharge;//空调设备费
+                var design = costGWE[i].design==null?"":costGWE[i].design;//设计
+                var total = costGWE[i].total==null?"":costGWE[i].total;//单店总装修花销
+                var amortize_month = costGWE[i].amortize_month==null?"":costGWE[i].amortize_month;//摊销月
+                var amortize_money = costGWE[i].amortize_money==null?"":costGWE[i].amortize_money;//摊销金额
+                var completed_date = costGWE[i].completed_date==null?"":costGWE[i].completed_date;//竣工日期
+                var contract_date = costGWE[i].contract_date==null?"":costGWE[i].contract_date;//合同日期
 
 
-                $("#renovation_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
+                $("#GWE_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
 
-                var renovation_td = "<td><input type='text'     id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
-                                    "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
-                                    "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='renovationUnitPrice_"+i+"'    value='"+renovation_unit_price+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='decorateCost_"+i+"'    value='"+decorateCost+"'/></td>"+
-                                    "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='businessScreen_"+i+"'    value='"+business_screen+"'/></td>"+
-                                    "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='furniture_"+i+"'    value='"+furniture+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='lightBox_"+i+"'    value='"+light_box+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManage_"+i+"'    value='"+process_manage+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManageSurcharge_"+i+"'    value='"+process_manage_surcharge+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditioner_"+i+"'    value='"+air_conditioner+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditionerSurcharge_"+i+"'    value='"+air_conditioner_surcharge+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='design_"+i+"'    value='"+design+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='wholeProcessManager_"+i+"'    value='"+total+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='total_"+i+"'    value='"+total+"'/></td>"+
-                                    "<td><input type='text'     onkeyup='calculateAmortizeMoney(this)' id='amortizeMonth_"+i+"'    value='"+amortize_month+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' id='amortizeMoney_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     id='completedDate_"+i+"'    value='"+completed_date+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                                    "<td><input type='text'     id='contractDate_"+i+"'    value='"+contract_date+"'/></td>";
+                var GWE_td = "<td><input type='text'     id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
+                    "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
+                    "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='GWEUnitPrice_"+i+"'    value='"+GWE_unit_price+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='decorateCost_"+i+"'    value='"+decorateCost+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='businessScreen_"+i+"'    value='"+business_screen+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='furniture_"+i+"'    value='"+furniture+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='lightBox_"+i+"'    value='"+light_box+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManage_"+i+"'    value='"+process_manage+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManageSurcharge_"+i+"'    value='"+process_manage_surcharge+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditioner_"+i+"'    value='"+air_conditioner+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditionerSurcharge_"+i+"'    value='"+air_conditioner_surcharge+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='design_"+i+"'    value='"+design+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='wholeProcessManager_"+i+"'    value='"+total+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='total_"+i+"'    value='"+total+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateAmortizeMoney(this)' id='amortizeMonth_"+i+"'    value='"+amortize_month+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' id='amortizeMoney_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     id='completedDate_"+i+"'    value='"+completed_date+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
+                    "<td><input type='text'     id='contractDate_"+i+"'    value='"+contract_date+"'/></td>";
 
 
-                $("#renovation_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+renovation_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/></tr>");
+                $("#GWE_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+GWE_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/></tr>");
 
                 laydate.render({//月份控件
                     elem:"#completedDate_"+i,
@@ -240,17 +231,17 @@ function getCostRenovation(){
             layer.close(index);
 
         }
-    },false);
+    });
 
 }
 /**
  * 导出装修摊销
  *
  * **/
-function   exportCostRenovation(){
-    var storeNo=$("#storeNo_renovation").val()==""?null:$("#storeNo_renovation").val();
-    var storeName=$("#storeName_renovation").val()==""?null:$("#storeName_renovation").val();
-    doManager('costRenovationManager','exportCostRenovation',[storeNo,storeName],function (data) {
+function   exportCostGWE(){
+    var storeNo=$("#storeNo_GWE").val()==""?null:$("#storeNo_GWE").val();
+    var storeName=$("#storeName_GWE").val()==""?null:$("#storeName_GWE").val();
+    doManager('costGWEManager','exportCostGWE',[storeNo,storeName],function (data) {
         if(data.result){
             var result= JSON.parse(data.data);
             if(result.status=='success'){
@@ -277,16 +268,16 @@ function   exportCostRenovation(){
  * 保存装修摊销
  *
  * **/
-function saveCostRenovation(){
+function saveCostGWE(){
 
-    var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
-    var costRenovationArray = [];
+    var store_cost_tr = $("#GWE_tr_2").nextAll("tr[editable='true']");
+    var costGWEArray = [];
     for(var i=0;i<store_cost_tr.length;i++){
         var storeNo= $(store_cost_tr[i]).attr("id");
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();
         var decorationCompany = $(store_cost_tr[i]).find("input[id^='decorationCompany_']").val();//装修公司
         var structureAcreage = $(store_cost_tr[i]).find('input[id^="structureAcreage_"]').val();//建筑面积
-        var renovationUnitPrice = $(store_cost_tr[i]).find('input[id^="renovationUnitPrice_"]').val();//单方造价
+        var GWEUnitPrice = $(store_cost_tr[i]).find('input[id^="GWEUnitPrice_"]').val();//单方造价
         var decorateCost = $(store_cost_tr[i]).find('input[id^="decorateCost_"]').val();//装修施工费
         var businessScreen = $(store_cost_tr[i]).find('input[id^="businessScreen_"]').val();//商业展屏
         var furniture = $(store_cost_tr[i]).find('input[id^="furniture_"]').val();//家具
@@ -302,13 +293,13 @@ function saveCostRenovation(){
         var amortizeMoney = $(store_cost_tr[i]).find('input[id^="amortizeMoney_"]').val();//摊销月度成本
         var completedDate = $(store_cost_tr[i]).find('input[id^="completedDate_"]').val();//竣工时间
         var contractDate = $(store_cost_tr[i]).find('input[id^="contractDate_"]').val();//合同签订日期
-        var costRenovation = {
+        var costGWE = {
 
             storeNo:storeNo,
             storeName:storeName,
             decorationCompany:decorationCompany,
             structureAcreage:structureAcreage,
-            renovationUnitPrice:renovationUnitPrice,
+            GWEUnitPrice:GWEUnitPrice,
             decorateCost:decorateCost,
             businessScreen:businessScreen,
             furniture:furniture,
@@ -326,11 +317,11 @@ function saveCostRenovation(){
             contractDate:contractDate
 
         }
-        costRenovationArray.push(costRenovation);
+        costGWEArray.push(costGWE);
 
     }
 
-    doManager('costRenovationManager','saveCostRenovation',[costRenovationArray],function (data) {
+    doManager('costGWEManager','saveCostGWE',[costGWEArray],function (data) {
         if(data.result){
             var result= JSON.parse(data.data);
 
