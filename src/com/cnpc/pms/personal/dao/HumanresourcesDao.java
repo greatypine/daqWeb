@@ -94,10 +94,11 @@ public interface HumanresourcesDao {
 	 * 2108/09/12
 	 * @param zw
 	 * @param city_id
+	 * @param status 统计在职总人数还是统计月店国安侠总人数
 	 * @author gaoll
 	 * @return
 	 */
-	public Integer queryHumanresourceCountByZw(String zw,Long city_id);
+	public Integer queryHumanresourceCountByZw(String zw,Long city_id,String status);
 
 
 }

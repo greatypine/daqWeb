@@ -460,14 +460,20 @@ public class EmployeeMoreInfoManagerImpl extends BizBaseCommonManager implements
 		Map<String,Object> result = new HashMap<String,Object>();
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		HumanresourcesDao humanresourcesDao = (HumanresourcesDao)SpringHelper.getBean(HumanresourcesDao.class.getName());
+		EmployeeMoreInfoDao employeeMoreInfoDao = (EmployeeMoreInfoDao)SpringHelper.getBean(EmployeeMoreInfoDao.class.getName());
 		DynamicDto dynamicDto = new DynamicDto();
-		dynamicDto.	setTarget(0);
+		dynamicDto.setTarget(0);
 		List<Map<String, Object>> citylList = dynamicDao.selectAllCitySort(dynamicDto);
-		List<Map<String, Object>> storeList = dynamicDao.findStoreCount(dynamicDto);
-		Integer human_count = humanresourcesDao.queryHumanresourceCountByZw("国安侠", null);
+		Integer storecount = employeeMoreInfoDao.queryStoreCountHavingGAX();
+		Integer human_count = humanresourcesDao.queryHumanresourceCountByZw("国安侠", null,null);
+		Integer gax_count = humanresourcesDao.queryHumanresourceCountByZw("国安侠", null,"gax");
+		List<Map<String, Object>> yuestoreList = employeeMoreInfoDao.queryYuedianCount();
+
 		result.put("cityCount",citylList.size());
-		result.put("storeCount",storeList.size());
+		result.put("storeCount",storecount);
+		result.put("yuestoreCount",yuestoreList.size());
 		result.put("humancount",human_count);
+		result.put("gax_count",gax_count);
 		return result;
 	}
 

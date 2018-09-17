@@ -663,12 +663,20 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		}
 
 	@Override
-	public Integer queryHumanresourceCountByZw(String zw, Long city_id) {
+	public Integer queryHumanresourceCountByZw(String zw, Long city_id,String status) {
 		String sql_append = "";
 		/*if(city_id != null){
 			sql_append = "";
 		}*/
-		String sql = "select count(employee_no) from t_humanresources where zw = '"+zw+"' and humanstatus != 2";
+		String sql = "";
+		if(status != null){
+			sql = "SELECT count(*) FROM " +
+					"t_humanresources a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t where t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' " +
+					"AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' and storetype = 'Y' ) b " +
+					"on (a.store_id = b.store_id) where a.name not like '%测试%' and  a.humanstatus !=2 and a.zw = '国安侠' ";
+		}else {
+			sql = "select count(employee_no) from t_humanresources human where zw = '国安侠' and humanstatus != 2 and name not like '%测试%'";
+		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List list = query.list();
 		if (list != null && list.size() > 0) {

@@ -103,6 +103,20 @@ public interface EmployeeMoreInfoDao{
      **/
     public List<Map<String,Object>> queryEmpAtAnalysisByMonth(String status);
 
+    /**
+     * @Description 查询经营月店数量
+     * @author gaoll
+     * @date 2018/9/13 9:46
+     **/
+    public List<Map<String,Object>> queryYuedianCount();
+
+
+    /**
+     * @Description 查询进驻国安侠的门店数量
+     * @author gaoll
+     * @date 2018/9/17 9:46
+     **/
+    public Integer queryStoreCountHavingGAX();
 
 
 }

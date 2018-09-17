@@ -103,7 +103,7 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
     @Override
     public List<Map<String, Object>> queryAvgMileAge() {
         String curDate = DateUtils.dateFormat(new Date(), "yyyy-MM");
-        String sql = "select ROUND(sum(info.oneDay_moveDistance)/count(human.employee_no),4) as avgmile from t_humanresources human LEFT JOIN " +
+        String sql = "select ROUND(sum(info.oneDay_moveDistance)/count(human.employee_no),1) as avgmile from t_humanresources human LEFT JOIN " +
                 "t_employee_more_info info ON (human.employee_no = info.employeeNo)  where human.zw = '国安侠' and human.humanstatus != 2";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -169,8 +169,8 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
                 "sum(case when table_total.empcount =10 then 1 else 0 end) as fullhuman," +
                 "sum(case when table_total.empcount <10 then 1 else 0 end) as lackhuman from ( " +
                 "SELECT count(a.employee_no) empcount,b.storeName FROM " +
-                "t_humanresources a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t where t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' " +
-                "AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ) b " +
+                "t_humanresources a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t where t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' " +
+                "AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' and t.storetype = 'Y' ) b " +
                 "on (a.store_id = b.store_id) where a.name not like '%测试%' and  a.humanstatus !=2 and a.zw = '国安侠' group by b.storeName ) table_total";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -184,19 +184,44 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
         Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
         String append_sql = "";
         if(status.equals("满编")){
-            append_sql =  " HAVING count(employeeno) = 10 ";
+            append_sql =  " HAVING count(human.employeeno) = 10 ";
         }else if (status.equals("缺编")){
-            append_sql =  " HAVING count(employeeno) < 10 ";
+            append_sql =  " HAVING count(human.employeeno) < 10 ";
         }else if (status.equals("超编")){
-            append_sql =  " HAVING count(employeeno) > 10 ";
+            append_sql =  " HAVING count(human.employeeno) > 10 ";
         }
 
-        String sql = "select count(storeid) as count,substring_index(yearmonth,'-',-1) as work_month  from (" +
-                "select yearmonth,zw,count(employeeno),storeid from t_topdata_human where " +
-                "substring_index(yearmonth,'-',1) = '"+curYear+"' and humanstatus!= 2 and yearmonth !='"+curYearMonth+"' and t_topdata_human.zw = '国安侠' GROUP BY t_topdata_human.storeid,t_topdata_human.yearmonth " +append_sql+
+        String sql = "select count(store_id) as count,substring_index(yearmonth,'-',-1) as work_month  from (" +
+                "select count(DISTINCT human.employeeno),t.store_id,human.yearmonth from t_topdata_human human INNER JOIN t_store t ON (t.store_id = human.storeid)  where " +
+                "substring_index(human.yearmonth,'-',1) = '2018' and human.zw = '国安侠' and  t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' " +
+                "AND t.name NOT LIKE '%办公室%' and humanstatus !=2 AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' and t.storetype = 'Y' GROUP BY human.yearmonth,t.store_id " +append_sql+
                 ") table_total GROUP BY table_total.yearmonth";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
         return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryYuedianCount() {
+        String sql = "select t.name,t.storeno from t_store t where t.storetype = 'Y' AND t.name NOT LIKE '%测试%' AND t.name NOT LIKE '%储备%' " +
+                "AND t.name NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中' ;";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return list;
+    }
+
+    @Override
+    public Integer queryStoreCountHavingGAX() {
+        String sql = "select count(*) from ( " +
+                "SELECT count(a.employee_no) empcount,b.storeName FROM " +
+                "t_humanresources a INNER JOIN (select t.store_id,name as storeName,t.city_name from t_store t where t. NAME NOT LIKE '%测试%' AND t. NAME NOT LIKE '%储备%' " +
+                "AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '') = '运营中') b " +
+                "on (a.store_id = b.store_id) where a.name not like '%测试%' and  a.humanstatus !=2 and a.zw = '国安侠' group by b.storeName ) table_total";
+        Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List list = query.list();
+        if (list != null && list.size() > 0) {
+            return Integer.parseInt(list.get(0) + "");
+        }
+        return null;
     }
 }

@@ -97,14 +97,11 @@
             <div class="col-sm-12 no-padding" id="main3" style="height: 450px;"></div>
           </div>
           <div class="box-body" style="padding: 0 50px;">
-              <h3 style="margin-bottom: 20px;">国安侠饱和度分析<span class="text-red" title="计算前提设定为每个门店10名国安侠编制。" style="padding-left: 0px; font-size: 26px; font-weight: bold; cursor: pointer">！</span></h3>
-            <div class="col-sm-6 no-padding">在编人数：<span id="empcount">加载中...</span>人</div>
-<!--
-            <div class="col-sm-4 no-padding">满编人数：<span id="fullempcount">加载中...</span>人</div>
--->
+              <h3 style="margin-bottom: 20px;">月店国安侠编制分析<span class="text-red" title="计算前提设定为每个街道月店10名国安侠编制为满编。" style="padding-left: 0px; font-size: 26px; font-weight: bold; cursor: pointer">！</span></h3>
+            <div class="col-sm-6 no-padding">月店国安侠在职人数：<span id="empcount">加载中...</span>人</div>
             <div class="col-sm-6 no-padding text-right">
-                <span class="text-red" title="设有国安侠编制的门店数×每店10人" style="padding-left: 0px; font-size: 16px; font-weight: bold; cursor: pointer">！</span>
-                满编人数：<span id="fullempcount">加载中...</span>人<span class='text-red' >（满编率：<b id="emprate">加载中...</b>）</span>
+                <span class="text-red" title="街道月店数量×每店10人" style="padding-left: 0px; font-size: 16px; font-weight: bold; cursor: pointer">！</span>
+                月店国安侠满编人数：<span id="fullempcount">加载中...</span>人<span class='text-red' >（满编率：<b id="emprate">加载中...</b>）</span>
             </div>
             <div class="progress col-sm-12 no-padding">
               <div id="emprateview" class="progress-bar progress-bar-aqua" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
@@ -375,7 +372,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
   //缺编门店占比
   option4 = {
     title: [{
-      text: '满编、缺编门店占比（实时）',
+      text: '满编、缺编月店占比（实时）',
       x: 'center',
       top: '2%',
       textBaseline: 'middle',
@@ -416,7 +413,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
   //满编门店占比
   option5 = {
     title: [{
-      text: '2018年满编、缺编门店走势',
+      text: '2018年满编、缺编月店走势',
       x: 'center',
       top: '2%',
       textBaseline: 'middle',
@@ -799,15 +796,19 @@ function showEmployeeCount(){
             var citycount = resultJson.cityCount;
             var storeCount = resultJson.storeCount;
             var humancount = resultJson.humancount;
+            var gax_count = resultJson.gax_count;
+            var yuestoreCount = resultJson.yuestoreCount;
             $("#gaxcount").html(humancount);
             $("#citycount").html(citycount);
-            $("#storecount").html(360);
-            $("#empcount").html(humancount);
-            $("#fullempcount").html(360*10)
-            var emprate =humancount*100/ (360*10);
+            $("#storecount").html(storeCount);
+
+
+            $("#empcount").html(gax_count);
+            $("#fullempcount").html(yuestoreCount*10)
+            var emprate =gax_count/ (yuestoreCount*10)*100;
             $("#emprate").html(emprate.toFixed(2)+"%");
-            $("#emprateview").attr("aria-valuenow",humancount);
-            $("#emprateview").attr("aria-valuemax",360*10);
+            $("#emprateview").attr("aria-valuenow",gax_count);
+            $("#emprateview").attr("aria-valuemax",yuestoreCount*10);
             $("#emprateview").attr("style","width:"+emprate.toFixed(2)+"%;");
         }
     },false);
@@ -883,7 +884,7 @@ function showEmpAvgSendOrderInfo(){
                 for(var i = 0; i <avgSendOrderGroupByCity.length; i++){
                     var avgSendOrder = avgSendOrderGroupByCity[i];
                     var cityname =  avgSendOrder.cityname;
-                    if(avgSendOrder.datanum != 0){
+                    if(avgSendOrder.datanum > 0){
                         citynameArray.push(cityname);
                         var datanum = avgSendOrder.datanum;
                         dataArray.push(datanum)
