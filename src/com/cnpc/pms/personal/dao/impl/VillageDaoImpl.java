@@ -1,15 +1,5 @@
 package com.cnpc.pms.personal.dao.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.hibernate.SQLQuery;
-import org.hibernate.SessionFactory;
-import org.hibernate.classic.Session;
-import org.hibernate.transform.Transformers;
-import org.springframework.orm.hibernate3.HibernateTemplate;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.security.SessionManager;
@@ -23,6 +13,15 @@ import com.cnpc.pms.personal.entity.Village;
 import com.cnpc.pms.personal.manager.StoreKeeperManager;
 import com.cnpc.pms.personal.manager.StoreManager;
 import com.cnpc.pms.personal.util.DataTransfromUtil;
+import org.hibernate.SQLQuery;
+import org.hibernate.SessionFactory;
+import org.hibernate.classic.Session;
+import org.hibernate.transform.Transformers;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class VillageDaoImpl extends BaseDAOHibernate implements VillageDao {
 
@@ -184,7 +183,8 @@ public class VillageDaoImpl extends BaseDAOHibernate implements VillageDao {
 	public void deleteBuildingByVillageId(Long village_id) {
 		String t_building_sql = "  DELETE FROM t_building WHERE tinyvillage_id IN (SELECT id FROM t_tiny_village WHERE village_id="
 				+ village_id + " AND `status`=0) "
-				+ "AND id NOT IN (SELECT building_id FROM t_house WHERE tinyvillage_id in (SELECT id FROM t_tiny_village WHERE village_id=82898 AND `status`=0) AND `status`=0 GROUP BY building_id) "
+				+ "AND id NOT IN (SELECT building_id FROM t_house WHERE tinyvillage_id in (SELECT id FROM t_tiny_village WHERE village_id=" +
+				+ village_id + " AND `status`=0) AND `status`=0 GROUP BY building_id) "
 				+ "AND (attachment_id != '' AND attachment_id IS NOT NULL) AND `status`=0";
 		Session session = getHibernateTemplate().getSessionFactory().openSession();
 		try {

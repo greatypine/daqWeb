@@ -8,9 +8,11 @@ import com.cnpc.pms.bid.manager.AttachmentManager;
 import com.cnpc.pms.personal.entity.Attachment;
 import com.cnpc.pms.personal.entity.Town;
 import com.cnpc.pms.personal.entity.Village;
+import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.personal.manager.TownManager;
 import com.cnpc.pms.personal.manager.VillageManager;
 import com.cnpc.pms.personal.util.DataTransfromUtil;
+import com.cnpc.pms.utils.OSSUploadUtil;
 import com.cnpc.pms.utils.excel.ChangeToPinYin;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -48,7 +50,7 @@ public class UploadGatherInfoAction extends HttpServlet{
 		ChangeToPinYin changeToPinYin = new ChangeToPinYin();
         TownManager townManager=(TownManager)SpringHelper.getBean("townManager");
         VillageManager villageManager=(VillageManager)SpringHelper.getBean("villageManager");
-		//OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+		OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
         if("t_commtity".equals(model)){
         	fileLoad="house";
         }else if ("t_buildInfo".equals(model)) {
@@ -89,23 +91,23 @@ public class UploadGatherInfoAction extends HttpServlet{
                      if(!file_dir_upload.exists()){//判断文件夹是否存在
                          bResult = file_dir_upload.mkdir();
                      }
-					/* String file_type = "";
+					 String file_type = "";
 					 System.out.println(name+"---------------------------------");
-					 file_type = name.substring(name.lastIndexOf("."), name.length());*/
-					 String stringPinYin = changeToPinYin.getStringPinYin(name);
-					 File file_upload = new File(str_filepath + stringPinYin);
+					 file_type = name.substring(name.lastIndexOf("."), name.length());
+					 //String stringPinYin = changeToPinYin.getStringPinYin(name);
+					 File file_upload = new File(str_filepath + name);
                      if(!file_upload.exists()){
                          bResult = file_upload.createNewFile();
                      }
                      if(!bResult){
                          throw new Exception("创建上传文件夹活创建上传文件失败！");
                      }
-					 //String file_url=null;
+					 String file_url=null;
                    //将临时文件输出到本地
                      item.write(file_upload);
                      if(name.endsWith("xls") || name.endsWith("xlsx") ){
-						 lst_excelfile.add(file_upload);
-						 //file_url = OSSUploadUtil.uploadOssFileResName(file_upload, file_type.substring(1,file_type.length()), "daqWeb/house/");
+						 //lst_excelfile.add(file_upload);
+						 file_url = OSSUploadUtil.uploadOssFileResName(file_upload, file_type.substring(1,file_type.length()), "daqWeb/house/");
                      }else{
                          writer.write("<script type='text/javascript'>window.parent.$$.showMessage(\"系统信息\", \"导入失败，文件类型不是xls、xlsx、rar或zip\");</script>" );
                          return;
@@ -113,7 +115,7 @@ public class UploadGatherInfoAction extends HttpServlet{
                      String[] split = item.getName().split("-");
                      attachment = new Attachment();
                      attachment.setFile_name(item.getName());
-                     attachment.setFile_path(stringPinYin);
+                     attachment.setFile_path(file_url);
                      attachment.setApprove_status(0);
                      attachment.setMessage("上传中");
                      attachment.setRemark(remark);
