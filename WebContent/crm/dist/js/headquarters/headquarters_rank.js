@@ -58,7 +58,7 @@ var select_data2 = "";
 	// 获取请求参数
 	var getReauestParameters = function () {
 	    // 城市ID
-	    var cityId = (decode64(getUrlParamByKey("c")) == 'null'||decode64(getUrlParamByKey("c")) == null) ? '' : decode64(getUrlParamByKey("c"));
+	    var cityId = (decode64(getUrlParamByKey("cs")) == 'null'||decode64(getUrlParamByKey("cs")) == null) ? '' : decode64(getUrlParamByKey("cs"));
 	    // 省份ID
 	    var provinceId = (decode64(getUrlParamByKey("p"))=='null'||decode64(getUrlParamByKey("p"))==null) ? '' : decode64(getUrlParamByKey("p"));
 	    var typeOfRank = (decode64(getUrlParamByKey("tps"))=='null'||decode64(getUrlParamByKey("tps"))==null) ? '' : decode64(getUrlParamByKey("tps"));
@@ -125,15 +125,24 @@ var select_data2 = "";
 		$("#nav-tabs").empty();
 		$("#store_dep").remove();
 		$("#store_dep").append(inputElement_tab1);
-	}else if(typeOfRank == 'store_gmv'){//门店排名
+	}else if(typeOfRank == 'store_gmv'||typeOfRank == 'store_order'){//门店排名
 		method = "getLastMonthStoreRankingTop10";
 		type_title = "门店排名";
 		type_from = "1";
 		$("#nav-tabs").empty();
-		var li_Element = $("<li class='active'>");
-		var li2_Element = $("<li class=''>");
-		var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='true'>").html("门店GMV");
-		var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("门店新用户量");
+		var li_Element = "";
+		var li2_Element = "";
+		if(typeOfRank == 'store_gmv'){
+			li_Element = $("<li class='active'>");
+			li2_Element = $("<li class=''>");
+		}else if(typeOfRank == 'store_order'){
+			li_Element = $("<li>");
+			li2_Element = $("<li class='active'>");
+			$("#tab_1").removeClass("active");
+			$("#tab_2").addClass("active");
+		}
+		var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='false'>").html("门店GMV");
+		var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='true'>").html("门店消费用户量");
 		li_Element.append(a_Element);
 		li2_Element.append(b_Element);
 		$("#nav-tabs").append(li_Element).append(li2_Element);
@@ -439,7 +448,7 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_,month){//获取�
 	var type_title = "";
 	var cityId = (cityId_==null||cityId_=="") ? pageStatusInfo.cityId : cityId_;
 	var cityName = (cityname_==null||cityname_=="") ? pageStatusInfo.cityName : cityname_;
-	if(typeOfRank == 'store_gmv'){//门店(订单量)排名
+	if(typeOfRank == 'store_gmv'||typeOfRank == 'store_order'){//门店(订单量)排名
 		managerName = "OrderManager";
 		method = "queryCustomerCount";
 		type_from = "2";
@@ -459,7 +468,7 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_,month){//获取�
 	}
 	var search_title2 = "";
 	if(type_from == '2'){
-		search_title2 = "查询口径："+requestMonth+"月用户量（截止到昨日24点）";
+		search_title2 = "查询口径："+requestMonth+"月消费用户量（实时）";
 	}else{
 		search_title2 = "查询口径："+requestMonth+"月订单量（截止到昨日24点）";
 	}
