@@ -100,10 +100,10 @@
             <div class="col-sm-12 no-padding" id="main3" style="height: 450px;"></div>
           </div>
           <div class="box-body" style="padding: 0 50px;">
-              <h3 style="margin-bottom: 20px;">月店国安侠编制分析<span class="text-red" title="计算前提设定为每个街道月店10名国安侠编制为满编。" style="padding-left: 0px; font-size: 26px; font-weight: bold; cursor: pointer">！</span></h3>
+              <h3 style="margin-bottom: 20px;">月店国安侠编制分析<span class="text-red" title="计算前提设定为每个街道月店6-10名国安侠编制为满编。" style="padding-left: 0px; font-size: 26px; font-weight: bold; cursor: pointer">！</span></h3>
             <div class="col-sm-6 no-padding">月店国安侠在职人数：<span id="empcount">加载中...</span>人</div>
             <div class="col-sm-6 no-padding text-right">
-                <span class="text-red" title="街道月店数量×每店10人" style="padding-left: 0px; font-size: 16px; font-weight: bold; cursor: pointer">！</span>
+                <span class="text-red" title="街道月店数量×每店(6/10)人" style="padding-left: 0px; font-size: 16px; font-weight: bold; cursor: pointer">！</span>
                 月店国安侠满编人数：<span id="fullempcount">加载中...</span>人<span class='text-red' >（满编率：<b id="emprate">加载中...</b>）</span>
             </div>
             <div class="progress col-sm-12 no-padding">
@@ -807,11 +807,18 @@ function showEmployeeCount(){
 
 
             $("#empcount").html(gax_count);
-            $("#fullempcount").html(yuestoreCount*10)
-            var emprate =gax_count/ (yuestoreCount*10)*100;
+            $("#fullempcount").html(yuestoreCount*6+"-"+yuestoreCount*10)
+            var emprate = 0;
+            if(gax_count>yuestoreCount*10){
+                emprate =gax_count/ (yuestoreCount*10)*100;
+            }else if(gax_count<yuestoreCount*6){
+                emprate =gax_count/ (yuestoreCount*6)*100;
+            }else{
+                emprate = 100;
+            }
             $("#emprate").html(emprate.toFixed(2)+"%");
             $("#emprateview").attr("aria-valuenow",gax_count);
-            $("#emprateview").attr("aria-valuemax",yuestoreCount*10);
+            $("#emprateview").attr("aria-valuemax","");
             $("#emprateview").attr("style","width:"+emprate.toFixed(2)+"%;");
         }
     },false);
