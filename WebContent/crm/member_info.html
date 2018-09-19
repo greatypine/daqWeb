@@ -233,7 +233,7 @@
                              </dl>-->
                             <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-yen"></i>社员GMV：<span id="memGmv" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
                             <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-list-alt"></i>订单量：<span id="memCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-database"></i>订单均价：<span id="memAvg" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-database"></i>客单价：<span id="memAvg" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
                         </div>
                         <div class="col-sm-7" id="main1" style="height: 450px;"></div>
                     </div>
@@ -944,7 +944,7 @@
             var myChart3= echarts.init(document.getElementById('main3'));
             option3 = {
                 title: [{
-                    text: '来源',
+                    text: '渠道来源分布',
                     left: '45%',
                     top: '2%',
                     textAlign: 'center',
@@ -956,7 +956,7 @@
                 }],
                 tooltip: {
                     trigger: 'item',
-                    formatter: '{a}<br/>{b}: {c} ({d}%)'
+                    formatter: '{b}: {c} ({d}%)'
                 },
                 calculable : true,
                 series : [
@@ -1051,7 +1051,7 @@
                 }],
                 tooltip : {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    formatter: "{b} : {c} ({d}%)"
                 },
                 series : [
                     {
@@ -1163,13 +1163,7 @@
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
-                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-                                    offset: 0,
-                                    color: '#59ADF3'
-                                }, {
-                                    offset: 1,
-                                    color: '#d87c7c'
-                                }]),
+                                color : '#59ADF3',
                                 label : {
                                     show : false,
                                     textStyle : {
@@ -1195,13 +1189,7 @@
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
-                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-                                    offset: 0,
-                                    color: '#d687d5'
-                                }, {
-                                    offset: 1,
-                                    color: '#68d099'
-                                }]),
+                                color :'#d87c7c',
                                 label : {
                                     show : false,
                                     textStyle : {
@@ -1273,13 +1261,7 @@
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
-                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-                                    offset: 0,
-                                    color: '#ffae00'
-                                }, {
-                                    offset: 1,
-                                    color: '#7777eb'
-                                }]),
+                                color : '#ffae00',
                                 label : {
                                     show : false,
                                     textStyle : {
@@ -1305,13 +1287,7 @@
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
-                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
-                                    offset: 0,
-                                    color: '#00ffae'
-                                }, {
-                                    offset: 1,
-                                    color: '#eb7777'
-                                }]),
+                                color : '#7777eb',
                                 label : {
                                     show : false,
                                     textStyle : {
@@ -1455,9 +1431,9 @@
                     data:['消费1次','消费2次','消费>=3次']
                 },
                 grid: {
-                    left: '5%',
+                    left: '10%',
                     right: '6%',
-                    bottom: '3%',
+                    bottom: '15%',
                     containLabel: true
                 },
                 toolbox: {
@@ -1486,6 +1462,20 @@
                         }
                     }
                 ],
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start:50,
+                        end: 100
+                    },
+                    {
+                        show: true,
+                        type: 'slider',
+                        y: '90%',
+                        start: 0,
+                        end: 100
+                    }
+                ],
                 series : [
                     {
                         name:'消费1次',
@@ -1496,22 +1486,22 @@
                                 borderRadius: 5,
                                 color : '#59ADF3',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'top',
                                     textStyle : {
-                                        fontSize : '14',
-                                        fontFamily : '微软雅黑',
-                                        color:'#ffae00',
+                                        fontSize : '14'
                                     }
                                 }
                             }
                         },
                         data:dataServer.jsonMemOrderCou1,
-                        markPoint: {
+                        barGap: '0%'
+/*                        ,markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
                                 {type: 'min', name: '最小值'}
                             ]
-                        }
+                        }*/
                     }
                     , {
                         name:'消费2次',
@@ -1522,22 +1512,21 @@
                                 borderRadius: 5,
                                 color : '#d87c7c',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'top',
                                     textStyle : {
-                                        fontSize : '14',
-                                        fontFamily : '微软雅黑',
-                                        color:'#ffae00',
+                                        fontSize : '14'
                                     }
                                 }
                             }
                         },
-                        data:dataServer.jsonMemOrderCou2,
-                        markPoint: {
+                        data:dataServer.jsonMemOrderCou2
+/*                        ,markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
                                 {type: 'min', name: '最小值'}
                             ]
-                        }
+                        }*/
                     },
                     , {
                         name:'消费>=3次',
@@ -1548,22 +1537,21 @@
                                 borderRadius: 5,
                                 color : '#68d099',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'top',
                                     textStyle : {
-                                        fontSize : '14',
-                                        fontFamily : '微软雅黑',
-                                        color:'#ffae00',
+                                        fontSize : '14'
                                     }
                                 }
                             }
                         },
-                        data:dataServer.jsonMemOrderCou3,
-                        markPoint: {
+                        data:dataServer.jsonMemOrderCou3
+/*                        ,markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
                                 {type: 'min', name: '最小值'}
                             ]
-                        }
+                        }*/
                     }
                 ]
             };
@@ -1589,7 +1577,7 @@
                     top: 10,
                     orient:'vertical',
                     textStyle: {color: '#fff'},
-                    data:['1单', '2单','3单']
+                    data:['1单', '2单','3单及以上']
                 },
                 series: [{
                     name: '社员活跃度分布',
@@ -1605,7 +1593,7 @@
                         name:'2单'
                     }, {
                         value: dataServer.count3,
-                        name: '3单'
+                        name: '3单及以上'
                     }],
                     label: {
                         normal: {
@@ -1668,9 +1656,9 @@
                     data:['消费1次','消费2次','消费>=3次']
                 },
                 grid: {
-                    left: '5%',
+                    left: '10%',
                     right: '6%',
-                    bottom: '3%',
+                    bottom: '15%',
                     containLabel: true
                 },
                 toolbox: {
@@ -1699,6 +1687,20 @@
                         }
                     }
                 ],
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start:50,
+                        end: 100
+                    },
+                    {
+                        show: true,
+                        type: 'slider',
+                        y: '90%',
+                        start: 0,
+                        end: 100
+                    }
+                ],
                 series : [
                     {
                         name:'消费1次',
@@ -1709,22 +1711,22 @@
                                 borderRadius: 5,
                                 color :'#59ADF3',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'top',
                                     textStyle : {
-                                        fontSize : '14',
-                                        fontFamily : '微软雅黑',
-                                        color:'#ffae00',
+                                        fontSize : '14'
                                     }
                                 }
                             }
                         },
                         data:dataServer.jsonNmemOrderCou1,
-                        markPoint: {
+                        barGap: '0%'
+ /*                       ,markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
                                 {type: 'min', name: '最小值'}
                             ]
-                        }
+                        }*/
                     }
                     , {
                         name:'消费2次',
@@ -1735,22 +1737,21 @@
                                 borderRadius: 5,
                                 color : '#d87c7c',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'top',
                                     textStyle : {
-                                        fontSize : '14',
-                                        fontFamily : '微软雅黑',
-                                        color:'#ffae00',
+                                        fontSize : '14'
                                     }
                                 }
                             }
                         },
-                        data:dataServer.jsonNmemOrderCou2,
-                        markPoint: {
+                        data:dataServer.jsonNmemOrderCou2
+/*                        ,markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
                                 {type: 'min', name: '最小值'}
                             ]
-                        }
+                        }*/
                     }
                     , {
                         name:'消费>=3次',
@@ -1761,22 +1762,21 @@
                                 borderRadius: 5,
                                 color : '#68d099',
                                 label : {
-                                    show : false,
+                                    show : true,
+                                    position: 'top',
                                     textStyle : {
-                                        fontSize : '14',
-                                        fontFamily : '微软雅黑',
-                                        color:'#ffae00',
+                                        fontSize : '14'
                                     }
                                 }
                             }
                         },
-                        data:dataServer.jsonNmemOrderCou3,
-                        markPoint: {
+                        data:dataServer.jsonNmemOrderCou3
+/*                        ,markPoint: {
                             data: [
                                 {type: 'max', name: '最大值'},
                                 {type: 'min', name: '最小值'}
                             ]
-                        }
+                        }*/
                     }
                 ]
             };
