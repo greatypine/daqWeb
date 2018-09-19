@@ -249,7 +249,7 @@
                 </div>
             </div>-->
             <div class="box box-default">
-                <div  class="box-header h4 text-light-blue"><strong>社员分析</strong><small style="padding-left: 15px;">数据基于<span class="text-red">有效用户</span>分析</small></div>
+                <div  class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
                 <div class="box-body" style="padding-top: 25px;">
                     <div class="col-sm-6 no-padding" id="main3" style="height: 450px;"></div>
                     <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
@@ -728,7 +728,9 @@
         }
 
         function loginShow(){
-
+            var d = new Date();
+            var years = d.getFullYear();
+            //$("#thisYear").html(parseInt(dataServer.memgmv==null?'0':dataServer.memgmv));
             if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
                 var b = new Base64();
                 screenlogin=b.decode(screenlogin);
@@ -951,6 +953,7 @@
                     textBaseline: 'middle',
                     textStyle: {
                         color: '#666',
+                        fontWeight: 'normal',
                         fontSize: 16
                     }
                 }],
@@ -1316,7 +1319,7 @@
                     trigger: 'axis'
                 },
                 legend: {
-                    data:['社员订单均价','非社员订单均价']
+                    data:['社员客单价','非社员客单价']
                 },
                 grid: {
                     left: '5%',
@@ -1344,7 +1347,7 @@
                 yAxis : [
                     {
                         type: 'value',
-                        name: '订单均价',
+                        name: '客单价',
                         axisLabel: {
                             textStyle:{color:'#404a59'}
                         }
@@ -1352,7 +1355,7 @@
                 ],
                 series : [
                     {
-                        name:'社员订单均价',
+                        name:'社员客单价',
                         type:'line',
                         barWidth: 40,                   // 系列级个性化，柱形宽度
                         itemStyle: {
@@ -1378,7 +1381,7 @@
                         }
                     }
                     , {
-                        name:'非社员订单均价',
+                        name:'非社员客单价',
                         type:'line',
                         barWidth: 40,                   // 系列级个性化，柱形宽度
                         itemStyle: {
@@ -1558,9 +1561,11 @@
             myChart7.setOption(option7);
 
             var myChart1= echarts.init(document.getElementById('main1'));
+            var d = new Date();
+            var years = d.getFullYear();
             option1 = {
                 title: [ {
-                    text: '社员活跃度分布',
+                    text: '社员('+years+')活跃度分布',
                     x: 'center',
                     top: '10px',
                     textStyle: {
