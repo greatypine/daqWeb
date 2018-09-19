@@ -132,10 +132,11 @@ var select_data2 = "";
 		$("#nav-tabs").empty();
 		var li_Element = "";
 		var li2_Element = "";
-		if(typeOfRank == 'store_gmv'){
+		var tabFlag = $("#tabFlag").val();
+		if(typeOfRank == 'store_gmv'||tabFlag=='1'){
 			li_Element = $("<li class='active'>");
-			li2_Element = $("<li class=''>");
-		}else if(typeOfRank == 'store_order'){
+			li2_Element = $("<li class='' >");
+		}else if(typeOfRank == 'store_order'||tabFlag=='2'){
 			li_Element = $("<li>");
 			li2_Element = $("<li class='active'>");
 			$("#tab_1").removeClass("active");
@@ -222,6 +223,7 @@ var select_data2 = "";
 	        	 	  	    pageCount:totalPage_auto,
 	        	 	  	    current:pageInfo.currentPage,
 	        	 	  	    backFn:function(p){
+	        	 	  	    	$("#tabFlag").val("1");
 	        	 	  	    	getPageRankData(p,cityId_,cityname_,requestMonth);
 	        	 	  	    }
 	        	 	  	});
@@ -448,14 +450,18 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_,month){//获取�
 	var type_title = "";
 	var cityId = (cityId_==null||cityId_=="") ? pageStatusInfo.cityId : cityId_;
 	var cityName = (cityname_==null||cityname_=="") ? pageStatusInfo.cityName : cityname_;
+	var type_title = "";
 	if(typeOfRank == 'store_gmv'||typeOfRank == 'store_order'){//门店(订单量)排名
 		managerName = "OrderManager";
 		method = "queryCustomerCount";
 		type_from = "2";
+		type_title = "门店排名";
 	}else if(typeOfRank == 'channel_gmv'){//频道(GMV)排名
 		method = "queryOrderCountByChannelName";
 		type_from = "6";
+		type_title = "频道排名";
 	}
+	$("#typeRankName").html(type_title);
 	if(cityId_==0&&cityname_=='全部城市'){
 		cityId = "";
 		cityName="";	
@@ -507,6 +513,7 @@ var getPageOtherRankData = function(cur_page,cityId_,cityname_,month){//获取�
 	        	 	  	    pageCount:totalPage_auto,
 	        	 	  	    current:pageInfo.currentPage,
 	        	 	  	    backFn:function(p){
+	        	 	  	    	$("#tabFlag").val("2");
 	        	 	  	    	getPageOtherRankData(p,cityId_,cityname_,requestMonth);
 	        	 	  	    }
 	        	 	  	});
@@ -650,6 +657,7 @@ function initallcity(){
  	var s_date = $("#crm_date_gmv2").val();
  	$("#citySelected2").val(cityId);
  	$("#citySelectedName2").val(cityname);
+ 	$("#tabFlag").val("2");
  	if(cityId!=0){
  		pageStatusInfo.select_data2 = cityId;
  		pageStatusInfo.select_data_city_name2=cityname;
@@ -666,6 +674,7 @@ function initallcity(){
  	$("#citySelected").val(cityId);
  	$("#citySelectedName").val(cityname);
  	var s_date = $("#crm_date_gmv").val();
+ 	$("#tabFlag").val("1");
  	if(cityId!=0){
  		pageStatusInfo.select_data = cityId;
  		pageStatusInfo.select_data_city_name=cityname;
@@ -716,6 +725,7 @@ function initallcity(){
  	  var index=$("#citySelect")[0].selectedIndex ;
  	  var cityname = $("#citySelect")[0].options[index].text;
 	  $("#currentMonth").val(s_date);
+	  $("#tabFlag").val("1");
  	  getPageRankData(1,cityId,cityname,s_date);
   }
  var  reloadGMVByDate2 = function (){
@@ -724,5 +734,6 @@ function initallcity(){
  	  var index=$("#citySelect2")[0].selectedIndex ;
  	  var cityname = $("#citySelect2")[0].options[index].text;
 	  $("#currentMonth2").val(s_date);
+	  $("#tabFlag").val("2");
  	  getPageOtherRankData(1,cityId,cityname,s_date);
   }
