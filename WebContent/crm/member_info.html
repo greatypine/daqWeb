@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>社员运营</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="plugins/gooey_menu/gooey.min_mem.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+    <!-- Morris charts -->
+    <link rel="stylesheet" href="plugins/morris/morris.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="plugins/select2/select2.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="IE 9/html5shiv.min.js"></script>
+    <script src="IE 9/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .box-body img{width: 100%}
+        .report{font-size: 16px;background-color: #a93f31;color: #fff; padding-bottom: 20px;}
+        .report .box-header{color: #fff;}
+        .report em{width: 70px; position: absolute; right: 0; bottom: 0;}
+        .report img{height: 100%;}
+        .report li{float:left; line-height: 28px; color: #f8e7e5; margin-top: 5px;}
+        .report i{margin-right: 5px; opacity: 0.6;}
+        .report span{font-size: 24px; color: #ffb959; font-weight: bold;}
+        .report p i{color: #fff;}
+        .report p small{font-size: 16px;}
+        .report p:nth-child(2),.report p:nth-child(2n){font-size: 18px; margin: 10px 0 5px 0; color: rgba(255,255,255,0.7);}
+        .report p:nth-child(2n+1){font-size: 34px; padding-left: 20px;}
+        .report dt{border-bottom: 1px dashed rgba(255,255,255,1); padding: 0 5px 5px 5px; position: relative; margin: 0 10px;}
+        .report dt:after{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; left: -7px;}
+        .report dt:before{content: ''; width: 7px; height: 8px; background-color: rgba(255,255,255,.8); border-radius: 50%; position: absolute; bottom: -5px; right: -7px;}
+        .report_jr li{width: 23%; background-color: rgba(0,0,0,0.2); box-shadow: 0 1px 1px rgba(0,0,0,1); border-radius: 5px; margin: 15px 1% 0 1%; padding: 15px 0; line-height: 30px;}
+        .report_jr li i{font-size: 50px; color: rgba(255, 255, 255, 0.4); padding-top: 5px;}
+        .report_jr li span{font-size: 22px; color: #ffde00;}
+
+        .vertical-example{
+            position: absolute;
+            top: 140px;
+            right: 5px;
+            width: 70px;}
+        .navimenu{min-height: 800px;width: 70px; padding-top: 0;}
+        #gooey-v .open-button, #gooey-v .gooey-menu-item{margin-top: 0; margin-bottom: 15em;}
+        #process_div{
+            background-color:#292a2b;
+            display:inline;
+            z-index:100000;
+            left:0px;
+            opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+            filter:Alpha(Opacity=30);
+            opacity: 0.3;
+        }
+
+        #process_div_pic{
+            position:fixed;
+            top:50%;
+            left:50%;
+            z-index:100000000;
+            margin:-16px 0 0 -50px;
+            width:100px;
+            height:32px;
+            color: #fff;
+        }
+        .download{position: fixed; right: 20px; top: 120px; height: 100px; overflow: hidden; z-index: 1000;}
+        .download p{font-size: 12px;}
+        .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
+            /* Firefox: */
+            -moz-animation-name:myfirst; -moz-animation-duration:2s;-moz-animation-timing-function:linear;-moz-animation-iteration-count:infinite;-moz-animation-direction:alternate;-moz-animation-play-state:running;
+            /* Safari and Chrome: */
+            -webkit-animation-name:myfirst;-webkit-animation-duration:2s;-webkit-animation-timing-function:linear;-webkit-animation-iteration-count:infinite;-webkit-animation-direction:alternate;-webkit-animation-play-state:running;
+            /* Opera: */
+            -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
+        @keyframes myfirst
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+        @-moz-keyframes myfirst /* Firefox */
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+        @-webkit-keyframes myfirst /* Safari and Chrome */
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+        @-o-keyframes myfirst /* Opera */
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+        .add_citymember{wposition: absolute;}
+        .show_cmBig{wposition: absolute;}
+        .add_TestMember{wposition: absolute;}
+        .toast{
+            width:450px;
+            height:240px;
+            background:transparent;
+            background-color:rgba(241,241,241,1);
+            box-shadow: 0 1px 1px rgba(0,0,0,1);
+            border-radius:10px;
+            position: fixed;
+            z-index: 1;
+        }
+        .toast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
+        .bigtoast{
+            width:350px;
+            height:240px;
+            background:transparent;
+            background-color:rgba(241,241,241,1);
+            box-shadow: 0 1px 1px rgba(0,0,0,1);
+            border-radius:10px;
+            position: absolute;
+            /*margin:auto;left:25%; top:60%;*/
+            z-index: 1;
+        }
+
+        .trytoast{
+            width:450px;
+            height:240px;
+            background:transparent;
+            background-color:rgba(241,241,241,1);
+            box-shadow: 0 1px 1px rgba(0,0,0,1);
+            border-radius:10px;
+            position: fixed;
+            z-index: 1;
+        }
+        .trytoast li{float:left; line-height: 28px; color: #0096BB; margin-top: 5px;}
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div id="process_div" ></div>
+<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<div class="wrapper">
+    <!-- 新header -->
+    <div class="download text-center" id="showDown" style="display:none"><div class="download_icon"  style="cursor: pointer;" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
+    <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="logo_img pull-left">
+                    <img src="dist/img/logo.png" height="30">
+                    <img src="dist/img/title.png" height="20">
+                </div>
+                <div class="pull-left">
+                    <div class="logo-lg">
+                        <ul class="no-margin">
+                            <li class="current"><em>社员运营</em></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div id="tishidiv1" style="position: absolute; display: none; border: 1px solid silver;background: silver;z-index: 888;">
+        统计范围：社员在合作社E店里近7日消费<!--平均客单价=周活跃社员在合作社E店GMV÷周活跃社员-->
+    </div>
+    <div id="tishidiv2" style="position: absolute; display: none; border: 1px solid silver;background: silver;z-index: 888;">
+        统计范围：社员在合作社E店里近7日消费<!--周消费频次=周活跃社员在合作社E店订单数÷周活跃社员-->
+    </div>
+    <!-- Content Wrapper. Contains page content -->
+    <div id="page">
+        <div class="content-wrapper">
+            <div class="container" style="width: 1300px;">
+                <input type="hidden" id="selDay" value="1"/>
+                <input type="hidden" id="setadd" value="0"/>
+                <input type="hidden" id="setBig" value="0"/>
+                <input type="hidden" id="setTry" value="0"/>
+
+        <section class="content-header">
+            <div class="box box-default">
+                <!--<div class="box-header h4"><strong>安心合作社运营报告</strong></div>-->
+                <div class="box-body user_an" style="background-color:#a93f31;color: #fff;">
+                    <div class="col-sm-12">
+
+<!--                        <div class="col-sm-5">
+                            <dt style="margin-top: 20px;">社员总数：<span id="memAllCou"></span></dt>
+                            <ul class="clearfix">
+                                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-home"></i>199社员：<span id="mem199Cou"></span></li>
+                                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-equalizer"></i>大客户社员：<span id="memBigCou"></span></li>
+                                <li class="col-sm-4 no-padding"><i class="fa fa-hourglass-half"></i>试用社员：<span id="memTryCou"></span></li>
+                            </ul>
+                            <ul class="clearfix">
+                                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-yen"></i>社员GMV：：<small>￥</small> <span id="memGmv"></span></li>
+                                <li class="col-sm-4 no-padding"><i class="glyphicon glyphicon-list-alt"></i>订单量：<span id="memCou"></span></li>
+                                <li class="col-sm-4 no-padding"><i class="fa fa-database"></i>订单均价：<small>￥</small> <span id="memAvg"></span></li>
+                            </ul>
+                        </div>-->
+                        <div class="col-sm-5">
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-shopping-cart"></i>社员总数：<span id="memAllCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-equalizer"></i>199社员：<span id="mem199Cou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-hourglass-half"></i>大客户社员：<span id="memBigCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-home"></i>试用社员：<span id="memTryCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <!-- <dl class="dl-horizontal">
+                                 <br/>
+                                 <dt><i class="glyphicon glyphicon-home"></i>199社员：</dt>
+                                 <dd><span id="mem199Cou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></dd>
+                                 <br/>
+                                 <dt><i class="glyphicon glyphicon-equalizer"></i>大客户社员：</dt>
+                                 <dd><span id="memBigCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></dd>
+                                 <br/>
+                                 <dt><i class="fa fa-hourglass-half"></i>试用社员：</dt>
+                                 <dd><span id="memTryCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></dd>
+                                 <br/>
+                                 <dt>社员GMV：</dt>
+                                 <dd><span id="memGmv"></span></dd>
+                                 <br/>
+                                 <dt>订单量：</dt>
+                                 <dd><span id="memCou"></span></dd>
+                                 <br/>
+                                 <dt>订单均价：</dt>
+                                 <dd><span id="memAvg"></span></dd>
+                             </dl>-->
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-yen"></i>社员GMV：<span id="memGmv" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-list-alt"></i>订单量：<span id="memCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-database"></i>订单均价：<span id="memAvg" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                        </div>
+                        <div class="col-sm-7" id="main1" style="height: 450px;"></div>
+                    </div>
+                </div>
+            </div>
+<!--            <div class="box box-default">
+                <div class="box-header h4 text-light-blue"><strong>有效用户分析</strong></div>
+                <div class="box-body">
+                    <div class="col-sm-12">
+                        <div id="main2" style="height: 350px;"></div>
+                        <p style="padding-top: 5px;">说明：内容内容内容内容内容内容内容内容内容内容内容内容</p>
+                    </div>
+                </div>
+            </div>-->
+            <div class="box box-default">
+                <div  class="box-header h4 text-light-blue"><strong>社员分析</strong><small style="padding-left: 15px;">数据基于<span class="text-red">有效用户</span>分析</small></div>
+                <div class="box-body" style="padding-top: 25px;">
+                    <div class="col-sm-6 no-padding" id="main3" style="height: 450px;"></div>
+                    <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
+                </div>
+            </div>
+            <div class="box box-default">
+                <div class="box-body">
+                    <div class="col-sm-6">
+                        <h4 class="text-light-blue"><strong>社员订单/非社员订单对比</strong></h4>
+                        <div class="col-sm-12 no-padding" id="main5" style="height: 260px;"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4 class="text-light-blue"><strong>社员GMV/非社员GMV对比</strong></h4>
+                        <div class="col-sm-12 no-padding" id="main6" style="height: 260px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-default">
+                <div class="box-body">
+                    <div class="col-sm-6">
+                        <h4 class="text-light-blue"><strong>社员月消费频次</strong></h4>
+                        <div class="col-sm-12 no-padding" id="main7" style="height: 260px;"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4 class="text-light-blue"><strong>非社员月消费频次</strong></h4>
+                        <div class="col-sm-12 no-padding" id="main8" style="height: 260px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-default">
+                <div class="box-body">
+                    <div class="col-sm-12">
+                        <h4 class="text-light-blue"><strong>月客单价对比</strong></h4>
+                        <div class="col-sm-12 no-padding" id="main9" style="height: 260px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-default">
+                <div class="box-body">
+                    <div class="col-sm-12">
+                        <h4 class="text-light-blue"><strong>社员增长趋势</strong></h4>
+                        <div class="col-sm-12 no-padding" id="main10" style="height: 260px;"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- ./wrapper -->
+    <div id="city_detail_div" style="height:350px;display:none">
+        <div class="col-sm-12 no-padding" id="mainTry" style="height: 260px;"></div>
+    </div>
+
+    <!-- jQuery 2.2.0 -->
+    <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+    <!-- Bootstrap 3.3.6 -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="plugins/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/app.min.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="dist/js/demo.js"></script>
+    <script src="dist/js/jquery.dataStatistics.js"></script>
+    <!-- Select2 -->
+    <script src="plugins/select2/select2.full.min.js"></script>
+    <!-- iCheck 1.0.1 -->
+    <script src="plugins/iCheck/icheck.min.js"></script>
+    <!-- page script -->
+    <script type="text/javascript" src="plugins/jquery.page.js"></script>
+    <script type="text/javascript" src="plugins/moment.min.js"></script>
+    <script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="dist/js/utils/htmlToPdf/html2canvas.js"></script>
+    <script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
+    <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+    <script type="text/javascript" src="../scripts/auto.js"></script>
+
+
+    <script src="dist/js/jquery.dataStatistics.js"></script>
+
+    <!-- Morris.js charts -->
+    <script src="bootstrap/js/raphael-min.js"></script>
+    <script src="plugins/morris/morris.min.js"></script>
+    <!-- FastClick -->
+    <!-- AdminLTE App -->
+    <!-- AdminLTE for demo purposes -->
+    <script src="dist/js/nav-scroll.js"></script>
+    <!-- 引入 ECharts 文件 -->
+     <script src="dist/js/echarts.common.min.js"></script>
+    <script src="dist/js/nav-scroll.js"></script>
+    <script src="dist/js/demo.js"></script>
+    <script src="dist/js/nav-scroll.js"></script>
+    <script src="dist/js/base64.js"></script>
+    <script src="plugins/gooey_menu/gooey.min.js"></script>
+    <script>
+        var target = decode64(getUrlParamByKey("t"));//target 0：总部  1:城市级别 2：门店
+        var cityId = decode64(getUrlParamByKey("c"));//城市ID
+        var cityName = decode64(getUrlParamByKey("cn"));//城市名称
+        var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
+        var screenlogin=getUrlParamByKey("su");
+        var loadIndex = null;
+        var option1_1 = null;
+        var option1 = null;
+        var mem_all = 0;
+        var mem_big = 0;
+
+        function showTishi1() {
+            var objDiv = $("#tishidiv1");
+            $(objDiv).css("display", "block");
+            $(objDiv).css("left", event.clientX);
+            $(objDiv).css("top", event.clientY + 10);
+        }
+        function hideTishi1() {
+            var objDiv = $("#tishidiv1");
+            $(objDiv).css("display", "none");
+        }
+        function showOrHideTishi1() {
+            var objDiv = $("#tishidiv1");
+            if($(objDiv).css("display")=="block"){
+                $(objDiv).css("display", "none");
+            }else{
+                $(objDiv).css("display", "block");
+                $(objDiv).css("left", event.clientX);
+                $(objDiv).css("top", event.clientY + 10);
+            }
+        }
+        function showOrHideTishi2() {
+            var objDiv = $("#tishidiv2");
+            if($(objDiv).css("display")=="block"){
+                $(objDiv).css("display", "none");
+            }else{
+                $(objDiv).css("display", "block");
+                $(objDiv).css("left", event.clientX);
+                $(objDiv).css("top", event.clientY + 10);
+            }
+        }
+        function showTishi2() {
+            var objDiv = $("#tishidiv2");
+            $(objDiv).css("display", "block");
+            $(objDiv).css("left", event.clientX);
+            $(objDiv).css("top", event.clientY + 10);
+        }
+        function hideTishi2() {
+            var objDiv = $("#tishidiv2");
+            $(objDiv).css("display", "none");
+        }
+        function showAddMember(){
+            $(".add_citymember").click(function(){
+                if($("#setadd").val()=="0"){
+                    if($("#setTry").val()=="1"){
+                        $("#setTry").val("0");
+                        $("#try_Member").hide();
+                    }
+                    $("#setadd").val("1");
+                    $("#cityMember").css("display", "block");
+                    $("#cityMember").css("left", event.clientX - 160);
+                    $("#cityMember").css("top", event.clientY + 60);
+                    return;
+                  //  $("#cityMember").show();
+                }else{
+                    $("#setadd").val("0");
+                    $("#cityMember").hide();
+                }
+
+            });
+            $(".add_citymember").mouseover(function(){
+                if($("#setTry").val()=="1"){
+                    $("#setTry").val("0");
+                    $("#try_Member").hide();
+                }
+                if($("#setadd").val()!="1"){
+                    $("#setadd").val("1");
+                    $("#cityMember").css("display", "block");
+                    $("#cityMember").css("left", event.clientX - 160);
+                    $("#cityMember").css("top", event.clientY + 60);
+                }
+
+            });
+/*            $(".add_citymember").mouseleave(function(){
+                $("#setadd").val("0");
+                $("#cityMember").hide();
+            });*/
+        }
+
+        document.addEventListener('click',function (e) {
+            var parent=$(e.target).parents('.add_citymember,.add_TestMember,.show_cmBig');
+            if(parent.length===0){
+                $("#setadd").val("0");
+                $("#cityMember").hide();
+                $("#setTry").val("0");
+                $("#try_Member").hide();
+                $("#setBig").val("0");
+                $("#bigMember2").hide();
+            }
+        });
+/*        document.onclick=function(){
+            alert($(this).id);
+
+                hideDiv();
+        }*/
+        function showMemberBig(){
+            $(".show_cmBig").click(function(){
+                if($("#setBig").val()=="0"){
+                    $("#setBig").val("1");
+                   // $("#bigMember").show();
+                    var myChart0 = echarts.init(document.getElementById('main0'));
+                    myChart0.clear();
+                    var chart7div=document.getElementById('main0');
+                    chart7div.style.width=350+'px';
+                    myChart0.resize(350);
+                    myChart0.setOption(option0);
+                    $("#bigMember2").show();
+                   // $("#cmBig").show();
+                    return;
+                }else{
+                    $("#setBig").val("0");
+                    //$("#bigMember").hide();
+                    $("#bigMember2").hide();
+                   // $("#cmBig").hide();
+                }
+
+            });
+            $(".show_cmBig").mouseover(function(){
+                $("#setBig").val("1");
+               // $("#bigMember").show();
+                var myChart0 = echarts.init(document.getElementById('main0'));
+                myChart0.clear();
+                var chart7div=document.getElementById('main0');
+                chart7div.style.width=350+'px';
+                myChart0.resize(350);
+                myChart0.setOption(option0);
+
+                $("#bigMember2").show();
+                $("#cmBig").show();
+            });
+/*            $(".show_cmBig").mouseleave(function(){
+                $("#setBig").val("0");
+                //$("#bigMember").hide();
+                $("#bigMember2").hide();
+                $("#cmBig").hide();
+            });*/
+        }
+
+        function showTestMem(){
+            $(".add_TestMember").click(function(){
+                if($("#setTry").val()=="0"){
+                    if($("#setadd").val()=="1"){
+                        $("#setadd").val("0");
+                        $("#cityMember").hide();
+                    }
+                    $("#setTry").val("1");
+                    $("#try_Member").css("display", "block");
+                    $("#try_Member").css("left", event.clientX - 300);
+                    $("#try_Member").css("top", event.clientY + 60);
+                   // $("#try_Member").show();
+                    return;
+                }else{
+                    $("#setTry").val("0");
+                    $("#try_Member").hide();
+                }
+
+           });
+                         $(".add_TestMember").mouseover(function(){
+                             if($("#setadd").val()=="1"){
+                                 $("#setadd").val("0");
+                                 $("#cityMember").hide();
+                             }
+                            if($("#setTry").val()!="1"){
+                                $("#setTry").val("1");
+                                $("#try_Member").css("display", "block");
+                                $("#try_Member").css("left", event.clientX - 300);
+                                $("#try_Member").css("top", event.clientY + 60);
+                            }
+
+                        });
+            /*            $(".add_TestMember").mouseleave(function(){
+                            $("#setTry").val("0");
+                            $("#try_Member").hide();
+                        });*/
+        }
+
+        function close_DayMem(){
+            $("#setadd").val("0");
+            $("#cityMember").hide();
+        }
+        function close_TryMem(){
+            $("#setTry").val("0");
+            $("#try_Member").hide();
+        }
+
+/*        function showTestMem(){
+            $(".add_TestMember").click(function(){
+                initTestMemInfo();
+            });
+        }*/
+        function doCityMem(citycode){
+            //跳转城市页面
+            var url = "member_analysis_city.html?c="+encode64(citycode);
+            window.open(url);
+        }
+
+        //定时刷新今日订单量、成交额、新增社员量
+        function doUpdate(){
+            doManager('communeMember','selectDayAllCm',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //clearInterval($("#dayDealCount"));
+                    //alert("resultJson.dayDealCount"+resultJson.dayDealCount+"dayDealSum"+resultJson.dayDealSum+"dayAddMem"+resultJson.dayAddMem);
+                    $("#dayDealCount").html(parseInt(resultJson.dayDealCount==null?'0':resultJson.dayDealCount));
+                    //当日成交额
+                    $("#dayDealSum").html(changeMoney(parseInt(resultJson.dayDealSum==null?'0':resultJson.dayDealSum)));
+                    //新增社员
+                    $("#dayNewMem").html(parseInt(resultJson.dayAddMem==null?'0':resultJson.dayAddMem));
+
+                    var bigdayCou = parseInt(resultJson.bigUpDaycou==null?'0':resultJson.bigUpDaycou);
+                    if(bigdayCou!=0){
+                    	$("#cmBigDayVal").html(bigdayCou);
+                    	$("#cmBigDay").show();
+                    }else{
+                    	$("#cmBigDay").hide();
+                    }
+                    setCityAddMem(resultJson);
+                }
+            });
+            //当日订单量
+
+
+
+        }
+
+
+        var showCityInfo = function (dataServer){
+            var cityName = dataServer.jsonCityName;
+            var cityCode = dataServer.jsonCityCode;
+            var cityStr="";
+            for(var i=0;i<cityCode.length;i++){
+                cityStr += "<a href=\"javascript:doCityMem('"+cityCode[i]+"')\"  class='gooey-menu-item'>"+cityName[i]+"</a>";
+            }
+            $("#showcitys").append(cityStr);
+        };
+        var myChart1 = echarts.init(document.getElementById('main1'));
+        //var myChart2 = echarts.init(document.getElementById('main2'));
+
+
+
+
+/*        option2 = {
+
+            tooltip: {
+                trigger: 'item',
+                formatter: "{b}"  //显示tooltip时，只显示name
+            },
+
+            calculable: false,
+            series: [{
+                type: 'treemap',
+                width: '100%',
+                height: '100%',
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            //formatter: "{b}",
+                            fontSize: 15
+                        },
+
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        label: {
+                            show: true
+                        }
+                    }
+                },
+                label: {
+                    normal: {
+                        textStyle: {
+                            fontSize: 15,
+                            //formatter: "{b}"
+                        }
+                    }
+                },
+                breadcrumb: {//关闭面包屑路径
+                    show: false
+                },
+                roam: false,//关闭平移拖动
+                nodeClick: false,//关闭节点点击
+                silent: false,//关闭鼠标事件
+                data: [
+                    {
+                        value: 3,
+                        children: [
+                            {
+                                name: '绝对有效用户：\n10',
+                                value: 10,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#d87c7c'
+                                    }
+                                } },
+                            {
+                                name: '有效用户：\n22',
+                                value: 10,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#71caa5'
+                                    }
+                                }},
+                        ]
+                    },
+                    {
+                        value: 3,
+                        children: [
+                            {
+                                name: '无法确定：\n10',
+                                value: 20,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#6e7074'
+                                    }
+                                }},
+                            {
+                                name: '黔东南：\n20',
+                                value: 10,
+                                itemStyle: {
+                                    normal: {
+                                        color: '#d687d5'
+                                    }
+                                }},
+                        ]
+                    },
+
+                ]
+            }]
+        };
+
+        myChart2.setOption(option2);*/
+        var setCityAddMem = function(dataServer){
+            var cityName = dataServer.jsonCityNames;
+            var cityAdd = dataServer.jsonCityAdds;
+            var cityStr="<ul class='clearfix'>";
+            for(var i=0;i<cityName.length;i++){
+                if(((i+1)%3)==0){
+                    if(i==cityName.length-1){
+                        cityStr += "<li style='width: 110px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul>";
+                    }else{
+                        cityStr += "<li style='width: 110px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li></ul><ul class='clearfix'>";
+                    }
+                }else{
+                    cityStr += "<li style='width: 110px;'>"+cityName[i]+":<span>"+cityAdd[i]+"</span>&nbsp;&nbsp;&nbsp;</li>";
+                }
+            }
+            $("#addCityMem").html(cityStr);
+        }
+        //设置加载中图标
+        var setLoadingMark = function (bShow) {
+            if (bShow == true) {
+                $("#process_div").show();
+                $("#process_div_pic").show();
+            } else {
+                $("#process_div").hide();
+                $("#process_div_pic").hide();
+            }
+        };
+
+        function hideDiv(){
+            var o1 = document.getElementById("cityMember");
+            var o2 = document.getElementById("try_Member");
+            if($("#setadd").val()=="1"){
+                o1.style.display = "none";
+            }
+            if($("#setTry").val()=="1"){
+                o2.style.display = "none";
+            }
+            $("#setadd").val("0");
+            $("#setTry").val("0");
+        }
+
+        function loginShow(){
+
+            if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+                var b = new Base64();
+                screenlogin=b.decode(screenlogin);
+                var obj=JSON.parse(screenlogin);
+                var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
+                var callback = function callback(data, textStatus, XMLHttpRequest) {
+                    //window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
+                    var stateObject = {};
+                    var newUrl = "/daqWeb/crm/member_analysis?ta=0";
+                    target = null;
+                    showCitys();
+                    getUser();
+                    setLoadingMark(false);
+                    //业务方法
+                    doMemberInfo();
+                    doMemberInfo1();
+                    doMemberInfo2();
+                    doMemberInfo3();
+                    doMemberInfo4();
+                    doMemberInfo5();
+                    doMemberInfo6();
+                    doMemberInfo7();
+                };
+                var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+                    alert("登录信息错误，请确认输入或联系管理员!");
+                    return false;
+                }
+                var url = "../login.do";
+                $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback);
+            }else{
+
+                //下载报告
+                $("#showDown").show();
+                var downPdf = document.getElementById("downloadPdf");
+                var pagedom = $("#page");
+                downPdf.onclick = function() {
+                    $("#process_div").show();
+                    $("#process_div_pic").show();
+                    scrollTo(0,0);
+                    html2canvas(pagedom, {
+                        onrendered : function(canvas) {
+                            var contentWidth = canvas.width;
+                            var contentHeight = canvas.height;
+                            //一页pdf显示html页面生成的canvas高度;
+                            var pageHeight = contentWidth / 592.28 * 841.89;
+                            //未生成pdf的html页面高度
+                            var leftHeight = contentHeight;
+                            //页面偏移
+                            var position = 0;
+                            //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                            var imgWidth = 595.28;
+                            var imgHeight = 592.28 / contentWidth
+                                * contentHeight;
+                            var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                            var pdf = new jsPDF('', 'pt', 'a4');
+                            //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                            //当内容未超过pdf一页显示的范围，无需分页
+                            if (leftHeight < pageHeight) {
+                                pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
+                                    imgHeight);
+                            } else {
+                                while (leftHeight > 0) {
+                                    pdf.addImage(pageData, 'JPEG', 0, position,
+                                        imgWidth, imgHeight)
+                                    leftHeight -= pageHeight;
+                                    position -= 841.89;
+                                    //避免添加空白页
+                                    if (leftHeight > 0) {
+                                        pdf.addPage();
+                                    }
+                                }
+                            }
+                            pdf.save('社员运营简报.pdf');
+                            $("#process_div_pic").hide();
+                            $("#process_div").hide();
+                        }
+                    })
+                }
+
+                showCitys();
+                getUser();
+
+
+                //业务方法
+                doMemberInfo();
+                doMemberInfo1();
+                doMemberInfo2();
+                doMemberInfo3();
+                doMemberInfo4();
+                doMemberInfo5();
+                doMemberInfo6();
+                doMemberInfo7();
+                setLoadingMark(false);
+
+            }
+
+        }
+        function showCitys(){
+            doManager('communeMember','getCityCode',"0000",function(data) {
+                if (data.result) {
+                    var resultJson = JSON.parse(data.data);
+                    if(resultJson != null){
+                        showCityInfo(resultJson);
+                        $("#gooey-v").gooeymenu({
+                            bgColor: "#68d099",
+                            contentColor: "white",
+                            style: "vertical",
+                            horizontal: {
+                                menuItemPosition: "glue"
+                            },
+                            vertical: {
+                                menuItemPosition: "glue",
+                                direction: "down"
+                            },
+                            circle: {
+                                radius: 90
+                            },
+                            margin: "small",
+                            size: 60,
+                            bounce: true,
+                            bounceLength: "small",
+                            transitionStep: 100,
+                            hover: "#68d099"
+                        });
+                        $('#citySelect').css('display','block');
+
+                    }
+                }
+            },false);
+        }
+        function getUser(){
+            doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var employeeID="";
+                    var curr_user = JSON.parse(data.data);
+                    if(curr_user == null){
+                        urlStr = "../logout.do";
+                        window.location.href = urlStr;
+                    }
+                }
+            },false);
+        }
+
+        $(function () {
+            loginShow();
+        });
+
+
+        function doMemberInfo(){
+            doManager('memberInfo','selectAllCm',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //社员饼图
+                    showMember(resultJson);
+                    setLoadingMark(false);
+                    //设置1分钟刷新页面600
+                }else{
+                }
+            },false);
+        }
+
+
+        var showMember = function (dataServer){
+
+            //社员量
+            $("#memAllCou").html(parseInt(dataServer.allcount==null?'0':dataServer.allcount+dataServer.bigcount+dataServer.trycount));
+            $("#mem199Cou").html(parseInt(dataServer.allcount==null?'0':dataServer.allcount));
+            //大客户
+            $("#memBigCou").html(parseInt(dataServer.bigcount==null?'0':dataServer.bigcount));
+            //新注册社员量
+            $("#memTryCou").html(parseInt(dataServer.trycount==null?'0':dataServer.trycount));
+        }
+
+
+        function doMemberInfo1(){
+            doManager('memberInfo','selectCmGmv',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //社员饼图
+                    showMemGmv(resultJson);
+                    //设置1分钟刷新页面600
+                }else{
+                }
+            });
+        }
+
+
+        var showMemGmv = function (dataServer){
+
+            //社员GMV
+            $("#memGmv").html(parseInt(dataServer.memgmv==null?'0':dataServer.memgmv));
+            //社员单量
+            $("#memCou").html(parseInt(dataServer.memcou==null?'0':dataServer.memcou));
+            //社员订单均价
+            $("#memAvg").html(parseInt(dataServer.memgmv/dataServer.memcou==null?'0':dataServer.memgmv/dataServer.memcou));
+        }
+
+        function doMemberInfo2(){
+            //查询社员来源分布
+            doManager('memberInfo','selectMemFrom',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //社员饼图
+                    showMemFrom(resultJson);
+                    //设置1分钟刷新页面600
+                }else{
+                }
+            });
+        }
+
+
+        var showMemFrom = function (dataServer){
+            var myChart3= echarts.init(document.getElementById('main3'));
+            option3 = {
+                title: [{
+                    text: '来源',
+                    left: '45%',
+                    top: '2%',
+                    textAlign: 'center',
+                    textBaseline: 'middle',
+                    textStyle: {
+                        color: '#666',
+                        fontSize: 16
+                    }
+                }],
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a}<br/>{b}: {c} ({d}%)'
+                },
+                calculable : true,
+                series : [
+                    {
+                        name:'渠道来源分布',
+                        type:'pie',
+                        center: ['50%', '53%'],
+                        radius: ['30%', '70%'],
+                        // roseType : 'radius',
+                        width: '40%',       // for funnel
+                        max: 40,            // for funnel
+                        itemStyle : {
+                            normal : {
+                                label : {
+                                    show : true
+                                },
+                                labelLine : {
+                                    show : true
+                                }
+                            },
+                            emphasis : {
+                                label : {
+                                    show : true
+                                },
+                                labelLine : {
+                                    show : true
+                                }
+                            }
+                        }
+                        ,label: {
+                            normal: {
+                                position: 'out', //标签的位置
+                                formatter: '{b}：{d}%',
+                                color: '#59ADF3'
+
+                            }
+                        }
+                    }
+                ]
+            };
+            var typeData = '[';
+            var ordTypeName = dataServer.jsonMemFromName;
+            var ordTypeSum = dataServer.jsonMemFromCou;
+            var  len = ordTypeName.length;
+            for(var i=0;i<len;i++){
+
+                if(len>0){
+                    if((len-1)==i){
+                        typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
+                    }else{
+                        typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"},';
+                    }
+
+                }else{
+                    typeData=typeData+'{"value":"'+ordTypeSum[i]+'","name":"'+ordTypeName[i]+'"}';
+                }
+            }
+            typeData+="]";
+            var memFromdata = JSON.parse(typeData);
+            option3.series[0].data = memFromdata;
+
+
+            myChart3.setOption(option3);
+        }
+        function doMemberInfo3(){
+            //查询社员注册城市分布
+            doManager('memberInfo','selectRegistCity',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //社员饼图
+                    showMemRegistCity(resultJson);
+                    //设置1分钟刷新页面600
+                }else{
+                }
+            });
+        }
+        var showMemRegistCity = function (dataServer){
+            var myChart4= echarts.init(document.getElementById('main4'));
+            //地区
+            option4 = {
+                title: [{
+                    text: '注册城市分布',
+                    left: '50%',
+                    top: '1%',
+                    textAlign: 'center',
+                    textBaseline: 'middle',
+                    textStyle: {
+                        color: '#666',
+                        fontWeight: 'normal',
+                        fontSize: 16
+                    }
+                }],
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                series : [
+                    {
+                        name:'城市',
+                        type: 'pie',
+                        center: ['50%', '53%'],
+                        radius: ['30%', '70%'],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                        ,label: {
+                            normal: {
+                                position: 'out', //标签的位置
+                                formatter: '{b}：{d}%',
+                                color: '#59ADF3'
+
+                            }
+                        }
+                    }
+                ]
+            };
+            var meData = '[';
+            var meProL = dataServer.jsonMemCityName;
+            var meCountL = dataServer.jsonMemCityCou;
+            var  len = meProL.length-2;
+            for(var i=0;i<len;i++){
+
+                if(len>0){
+                    if((len-1)==i){
+                        meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
+                    }else{
+                        meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"},';
+                    }
+
+                }else{
+                    meData=meData+'{"value":"'+meCountL[i]+'","name":"'+meProL[i]+'"}';
+                }
+            }
+            meData+="]";
+            var cityUserDataObject = JSON.parse(meData);
+            option4.series[0].data = cityUserDataObject;
+            myChart4.setOption(option4);
+        }
+
+        function doMemberInfo4(){
+            //查询社员订单量、GMV分布
+            doManager('memberInfo','selectMemNoMem',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //社员饼图
+                    showMemberCount(resultJson);
+                    //设置1分钟刷新页面600
+                }else{
+                }
+            });
+        }
+
+        var showMemberCount = function (dataServer){
+            var myChart5= echarts.init(document.getElementById('main5'));
+            option5 = {
+                tooltip : {
+                    show: true,
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['社员订单量','非社员订单量']
+                },
+                grid: {
+                    left: '5%',
+                    right: '6%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    show : false,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data: dataServer.jsonMemMons
+                    }
+                ],
+                yAxis : [
+                    {
+                        type: 'value',
+                        name: '订单量',
+                        axisLabel: {
+                            textStyle:{color:'#404a59'}
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'社员订单量',
+                        type:'line',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+                                    offset: 0,
+                                    color: '#59ADF3'
+                                }, {
+                                    offset: 1,
+                                    color: '#d87c7c'
+                                }]),
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonMemCous,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                    , {
+                        name:'非社员订单量',
+                        type:'line',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+                                    offset: 0,
+                                    color: '#d687d5'
+                                }, {
+                                    offset: 1,
+                                    color: '#68d099'
+                                }]),
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonNoMemCous,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+            myChart5.setOption(option5);
+
+            var myChart6= echarts.init(document.getElementById('main6'));
+            option6 = {
+                tooltip : {
+                    show: true,
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['社员GMV','非社员GMV']
+                },
+                grid: {
+                    left: '5%',
+                    right: '6%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    show : false,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data: dataServer.jsonMemMons
+                    }
+                ],
+                yAxis : [
+                    {
+                        type: 'value',
+                        name: 'GMV',
+                        axisLabel: {
+                            textStyle:{color:'#404a59'}
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'社员GMV',
+                        type:'line',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+                                    offset: 0,
+                                    color: '#ffae00'
+                                }, {
+                                    offset: 1,
+                                    color: '#7777eb'
+                                }]),
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonMemGmvs,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                    , {
+                        name:'非社员GMV',
+                        type:'line',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+                                    offset: 0,
+                                    color: '#00ffae'
+                                }, {
+                                    offset: 1,
+                                    color: '#eb7777'
+                                }]),
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonNoMemGmvs,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+            myChart6.setOption(option6);
+            var myChart9= echarts.init(document.getElementById('main9'));
+            option9 = {
+                tooltip : {
+                    show: true,
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['社员订单均价','非社员订单均价']
+                },
+                grid: {
+                    left: '5%',
+                    right: '6%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    show : false,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data: dataServer.jsonMemMons
+                    }
+                ],
+                yAxis : [
+                    {
+                        type: 'value',
+                        name: '订单均价',
+                        axisLabel: {
+                            textStyle:{color:'#404a59'}
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'社员订单均价',
+                        type:'line',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : '#7777eb',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonMemMonAvgs,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                    , {
+                        name:'非社员订单均价',
+                        type:'line',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color :'#f36f8a',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonNoMemMonAvgs,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+            myChart9.setOption(option9);
+
+        }
+        function doMemberInfo5(){
+            //查询社员非社员消费频次
+            doManager('memberInfo','selectMemShoping',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //社员消费频次
+                    setCmDealInfo(resultJson);
+                    //设置1分钟刷新页面600
+                }else{
+                }
+            });
+        }
+        var setCmDealInfo = function(dataServer){
+            var myChart7= echarts.init(document.getElementById('main7'));
+            option7 = {
+                tooltip : {
+                    show: true,
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['消费1次','消费2次','消费>=3次']
+                },
+                grid: {
+                    left: '5%',
+                    right: '6%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    show : false,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data: dataServer.jsonMemOrderMon
+                    }
+                ],
+                yAxis : [
+                    {
+                        type: 'value',
+                        name: '人数',
+                        axisLabel: {
+                            textStyle:{color:'#404a59'}
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'消费1次',
+                        type:'bar',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : '#59ADF3',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonMemOrderCou1,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                    , {
+                        name:'消费2次',
+                        type:'bar',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : '#d87c7c',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonMemOrderCou2,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    },
+                    , {
+                        name:'消费>=3次',
+                        type:'bar',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : '#68d099',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonMemOrderCou3,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+            myChart7.setOption(option7);
+
+            var myChart1= echarts.init(document.getElementById('main1'));
+            option1 = {
+                title: [ {
+                    text: '社员活跃度分布',
+                    x: 'center',
+                    top: '10px',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }],
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{b} : {c} ({d}%)"
+                },
+                legend: {
+                    selectedMode:false,
+                    right:10,
+                    top: 10,
+                    orient:'vertical',
+                    textStyle: {color: '#fff'},
+                    data:['1单', '2单','3单']
+                },
+                series: [{
+                    name: '社员活跃度分布',
+                    type: 'pie',
+                    radius: '70%',
+                    center: ['50%', '55%'],
+                    clockwise: false,
+                    data: [{
+                        value: dataServer.count1,
+                        name:'1单'
+                    }, {
+                        value: dataServer.count2,
+                        name:'2单'
+                    }, {
+                        value: dataServer.count3,
+                        name: '3单'
+                    }],
+                    label: {
+                        normal: {
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: 14,
+                            },
+                            position: 'inner',
+                            formatter: '{b}:{d}%',
+                        }
+                    },
+
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            borderWidth: 4,
+                            borderColor: '#ffffff',
+                        },
+                        emphasis: {
+                            borderWidth: 0,
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }],
+                color: [
+                    '#00acee',
+                    '#52cdd5',
+                    '#d87c7c'
+                ],
+            };
+            myChart1.setOption(option1);
+        }
+
+        function doMemberInfo6(){
+            //查询社员非社员消费频次
+            doManager('memberInfo','selectNmemShoping',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //社员消费频次
+                    setNotCmDealInfo(resultJson);
+                    //设置1分钟刷新页面600
+                }else{
+                }
+            });
+        }
+        var setNotCmDealInfo = function(dataServer){
+            var myChart8= echarts.init(document.getElementById('main8'));
+            option8 = {
+                tooltip : {
+                    show: true,
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['消费1次','消费2次','消费>=3次']
+                },
+                grid: {
+                    left: '5%',
+                    right: '6%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    show : false,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data: dataServer.jsonNmemOrderMon
+                    }
+                ],
+                yAxis : [
+                    {
+                        type: 'value',
+                        name: '人数',
+                        axisLabel: {
+                            textStyle:{color:'#404a59'}
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'消费1次',
+                        type:'bar',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color :'#59ADF3',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonNmemOrderCou1,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                    , {
+                        name:'消费2次',
+                        type:'bar',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : '#d87c7c',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonNmemOrderCou2,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                    , {
+                        name:'消费>=3次',
+                        type:'bar',
+                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        itemStyle: {
+                            normal: {                   // 系列级个性化，横向渐变填充
+                                borderRadius: 5,
+                                color : '#68d099',
+                                label : {
+                                    show : false,
+                                    textStyle : {
+                                        fontSize : '14',
+                                        fontFamily : '微软雅黑',
+                                        color:'#ffae00',
+                                    }
+                                }
+                            }
+                        },
+                        data:dataServer.jsonNmemOrderCou3,
+                        markPoint: {
+                            data: [
+                                {type: 'max', name: '最大值'},
+                                {type: 'min', name: '最小值'}
+                            ]
+                        }
+                    }
+                ]
+            };
+            myChart8.setOption(option8);
+
+        }
+
+        function doMemberInfo7(){
+            //查询社员增长情况
+            doManager('communeMember','selectCmAddInfo',"0000",function(data){
+                if(data.result){
+                    var resultJson= JSON.parse(data.data);
+                    //7日社员增长
+                    showMemberGrow(resultJson);
+                }else{
+                }
+            });
+        }
+        var showMemberGrow = function (dataServer){
+            var myChart10 = echarts.init(document.getElementById('main10'));
+            //社员人数
+            option10 = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    data: [ '新增社员人数','累计社员人数'],
+                    right:'35%',
+                    selectedMode:false,
+                    textStyle: {color: '#404a59'}
+                },
+                grid: {
+                    left: '10%',
+                    right: '6%',
+                    bottom: '15%',
+                    containLabel: true
+                },
+                xAxis: [{
+                    type: 'category',
+                    data: dataServer.jsonDateMon,
+                    axisLabel:{
+                        textStyle:{color:'#404a59',}
+                    },
+                    axisLine:{
+                        lineStyle:{color:'#404a59',}
+                    },
+                }],
+                yAxis: [{
+                    type: 'value',
+                    name: '新增社员人数',
+                    splitLine: {show: false},
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle:{color:'#404a59'}
+                    },
+                    axisLine:{
+                        lineStyle:{color:'#404a59'}
+                    }
+                },{
+                    type: 'value',
+                    name: '累计社员人数',
+                    axisLabel: {
+                        formatter: '{value}',
+                        textStyle:{color:'#404a59'}
+                    },
+                    axisLine:{
+                        lineStyle:{color:'#404a59'}
+                    },
+                    position: 'right',
+                }],
+                dataZoom: [
+                    {
+                        type: 'inside',
+                        start:50,
+                        end: 100
+                    },
+                    {
+                        show: true,
+                        type: 'slider',
+                        y: '90%',
+                        start: 0,
+                        end: 100
+                    }
+                ],
+                series: [ {
+                    name: '新增社员人数',
+                    type: 'bar',
+                    itemStyle:{normal:{color:'#ffae00'},},
+                    data: dataServer.jsonNewMonCounts,
+                    label: {
+                        normal: {
+                            show:true,
+                            position: 'top',
+                            textStyle:{
+                                color:'#ffae00',
+                            },
+                        },
+                        emphasis: {
+                            textStyle:{
+                                color:'#ffae00',
+                            },
+                        },
+                    },
+                },{
+                    name: '累计社员人数',
+                    type: 'line',
+                    itemStyle:{normal:{color:'#01949B'}},
+                    data: dataServer.jsonAllMonCounts,
+                    yAxisIndex: 1,
+                    label: {
+                        normal: {
+                            show:true,
+                            position: 'top',
+                            textStyle:{
+                                color:'#01949B',
+                            },
+                        },
+                        emphasis: {
+                            textStyle:{
+                                color:'#01949B',
+                            },
+                        },
+                    },
+                }]
+            };
+            myChart10.setOption(option10);
+
+        }
+    </script>
+</body>
+</html>
