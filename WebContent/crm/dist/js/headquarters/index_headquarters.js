@@ -4510,6 +4510,12 @@ var curr_user;
 	  var url = "sjfx-index.html";
 	  window.open(url,"sjfx-index");
   }
+
+  //用户总览
+  function goToUserAnalysis(){
+      var url = "user_analysis.html";
+      window.open(url,"user_analysis");
+  }
  
 //快递代送
   function goToExpressToSend(){

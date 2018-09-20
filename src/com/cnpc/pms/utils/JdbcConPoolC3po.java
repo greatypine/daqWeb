@@ -1,14 +1,12 @@
 package com.cnpc.pms.utils;
 
+import com.cnpc.pms.base.util.PropertiesUtil;
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import com.cnpc.pms.base.util.PropertiesUtil;
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 /**
  * impala-jdbc 连接池
@@ -34,10 +32,9 @@ public class JdbcConPoolC3po {
 			String impala_port = PropertiesUtil.getValue("impala_port");
 			String impala_user =  PropertiesUtil.getValue("impala_user");
 			String impala_password = PropertiesUtil.getValue("impala_password");
-	        String connectionUrl = "jdbc:impala://" + impala_host + ':' + impala_port + "/datacube_kudu;auth=noSasl";
+	        String connectionUrl = "jdbc:impala://" + impala_host + ':' + impala_port + "/daqWeb;auth=noSasl";
 	            
 			ds.setJdbcUrl(connectionUrl);
-			 
 			/*ds.setUser("");
 			 
 			ds.setPassword("");*/
