@@ -34,7 +34,7 @@ public class ImpalaUtil {
         try {  
         	
             
-            con = JdbcConPoolC3po.getConnection();
+            con = HikariInner.getConnection();
             System.out.println("\n== Begin Query Results ======================");  
             //ps = con.prepareStatement(sql);
             stat = con.createStatement();
@@ -51,8 +51,8 @@ public class ImpalaUtil {
             e.printStackTrace(); 
             return list;
         } finally {  
-            try {  
-            	JdbcConPoolC3po.close(con, stat, rs);
+            try {
+                HikariInner.close(con, stat, rs);
             } catch (Exception e) {  
                 e.printStackTrace();
                 return list;

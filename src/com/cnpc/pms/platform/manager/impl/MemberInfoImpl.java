@@ -243,10 +243,8 @@ public class MemberInfoImpl extends BizBaseCommonManager implements MemberInfo {
 
         MemberInfoDao commDao = (MemberInfoDao) SpringHelper.getBean(MemberInfoDao.class.getName());
         Long memAll = 0l;
-        //查询社员注册城市
         List<Map<String, Object>> cmFromList = new ArrayList<Map<String, Object>>();
         cmFromList = commDao.getMemByTimes(dd);
-        //城市名称
         List memOrderCou1 = new ArrayList();
         List memOrderCou2 = new ArrayList();
         List memOrderCou3 = new ArrayList();
@@ -290,10 +288,8 @@ public class MemberInfoImpl extends BizBaseCommonManager implements MemberInfo {
 
         MemberInfoDao commDao = (MemberInfoDao) SpringHelper.getBean(MemberInfoDao.class.getName());
         Long memAll = 0l;
-        //查询社员注册城市
         List<Map<String, Object>> cmNoOrderList = new ArrayList<Map<String, Object>>();
         cmNoOrderList = commDao.getNmemByTimes(dd);
-        //城市名称
         List nMemOrderCou1 = new ArrayList();
         List nMemOrderCou2 = new ArrayList();
         List nMemOrderCou3 = new ArrayList();

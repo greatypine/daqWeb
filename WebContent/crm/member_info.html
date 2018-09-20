@@ -207,10 +207,10 @@
                             </ul>
                         </div>-->
                         <div class="col-sm-5">
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-shopping-cart"></i>社员总数：<span id="memAllCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-equalizer"></i>199社员：<span id="mem199Cou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-hourglass-half"></i>大客户社员：<span id="memBigCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-home"></i>试用社员：<span id="memTryCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-shopping-cart"></i>&nbsp;社员总数：<span id="memAllCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span>人</h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-equalizer"></i>&nbsp;199社员：<span id="mem199Cou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span>人</h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-hourglass-half"></i>&nbsp;大客户社员：<span id="memBigCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span>人</h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-home"></i>&nbsp;试用社员：<span id="memTryCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span>人</h4>
                             <!-- <dl class="dl-horizontal">
                                  <br/>
                                  <dt><i class="glyphicon glyphicon-home"></i>199社员：</dt>
@@ -231,9 +231,9 @@
                                  <dt>订单均价：</dt>
                                  <dd><span id="memAvg"></span></dd>
                              </dl>-->
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-yen"></i>社员GMV：<span id="memGmv" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-list-alt"></i>订单量：<span id="memCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
-                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-database"></i>客单价：<span id="memAvg" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span></h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-yen"></i>&nbsp;社员GMV：<span id="memGmv" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span>元</h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;订单量：<span id="memCou" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span>单</h4>
+                            <h4 style="font-weight:bold;margin-top: 27px;margin-left: 20%;"><i class="fa fa-database"></i>&nbsp;客单价：<span id="memAvg" style="font-size: 24px; color: #ffb959; font-weight: bold;"></span>元</h4>
                         </div>
                         <div class="col-sm-7" id="main1" style="height: 450px;"></div>
                     </div>
@@ -258,11 +258,11 @@
             <div class="box box-default">
                 <div class="box-body">
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong>社员订单/非社员订单对比</strong></h4>
+                        <h4 class="text-light-blue"><strong id ="thisYear1"></strong><strong>订单对比</strong></h4>
                         <div class="col-sm-12 no-padding" id="main5" style="height: 260px;"></div>
                     </div>
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong>社员GMV/非社员GMV对比</strong></h4>
+                        <h4 class="text-light-blue"><strong id ="thisYear2"></strong><strong>GMV对比</strong></h4>
                         <div class="col-sm-12 no-padding" id="main6" style="height: 260px;"></div>
                     </div>
                 </div>
@@ -270,11 +270,11 @@
             <div class="box box-default">
                 <div class="box-body">
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong>社员月消费频次</strong></h4>
+                        <h4 class="text-light-blue"><strong id ="thisYear3"></strong><strong>社员月消费频次</strong></h4>
                         <div class="col-sm-12 no-padding" id="main7" style="height: 260px;"></div>
                     </div>
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong>非社员月消费频次</strong></h4>
+                        <h4 class="text-light-blue"><strong id ="thisYear4"></strong><strong>非社员月消费频次</strong></h4>
                         <div class="col-sm-12 no-padding" id="main8" style="height: 260px;"></div>
                     </div>
                 </div>
@@ -282,7 +282,7 @@
             <div class="box box-default">
                 <div class="box-body">
                     <div class="col-sm-12">
-                        <h4 class="text-light-blue"><strong>月客单价对比</strong></h4>
+                        <h4 class="text-light-blue"><strong id ="thisYear5"></strong><strong>月客单价对比</strong></h4>
                         <div class="col-sm-12 no-padding" id="main9" style="height: 260px;"></div>
                     </div>
                 </div>
@@ -354,7 +354,59 @@
         var option1 = null;
         var mem_all = 0;
         var mem_big = 0;
+        function changeMoney (x) {
+            var y = '';
+            if(x>10000){
+                x=x/10000;
+                if(parseInt(x)/10000<=1){
+                    y=ForDight(x,2)+"万";
+                }else if(parseInt(x)/10000>1){
+                    x=x/10000+'';
+                    y=ForDight(x,2)+"亿";
+                }
+            }else{
+                y=x;
+            }
 
+            return y;
+        }
+        function eMoney (x) {
+            var y = '';
+            var eMoneyType = "元";
+            if(x>10000){
+                x=x/10000;
+                if(parseInt(x)/10000<=1){
+                    y=ForDight(x,2);
+                    eMoneyType = "(单位:万)";
+                }else if(parseInt(x)/10000>1){
+                    x=x/10000+'';
+                    y=ForDight(x,2);
+                    eMoneyType = "(单位:亿)";
+                }
+            }else{
+                y=x;
+            }
+            return y+eMoneyType;
+        }
+        function rebateMoney(x) {
+            var y = '';
+            if(x>10000){
+                x=x/10000;
+                if(parseInt(x)/10000<=1){
+                    y=ForDight(x,2);
+                }else if(parseInt(x)/10000>1){
+                    x=x/10000+'';
+                    y=ForDight(x,2);
+                }
+            }else{
+                y=x;
+            }
+            return y;
+        }
+        function ForDight(str,How){
+            Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);
+            return Dight;
+        }
         function showTishi1() {
             var objDiv = $("#tishidiv1");
             $(objDiv).css("display", "block");
@@ -550,34 +602,6 @@
             window.open(url);
         }
 
-        //定时刷新今日订单量、成交额、新增社员量
-        function doUpdate(){
-            doManager('communeMember','selectDayAllCm',"0000",function(data){
-                if(data.result){
-                    var resultJson= JSON.parse(data.data);
-                    //clearInterval($("#dayDealCount"));
-                    //alert("resultJson.dayDealCount"+resultJson.dayDealCount+"dayDealSum"+resultJson.dayDealSum+"dayAddMem"+resultJson.dayAddMem);
-                    $("#dayDealCount").html(parseInt(resultJson.dayDealCount==null?'0':resultJson.dayDealCount));
-                    //当日成交额
-                    $("#dayDealSum").html(changeMoney(parseInt(resultJson.dayDealSum==null?'0':resultJson.dayDealSum)));
-                    //新增社员
-                    $("#dayNewMem").html(parseInt(resultJson.dayAddMem==null?'0':resultJson.dayAddMem));
-
-                    var bigdayCou = parseInt(resultJson.bigUpDaycou==null?'0':resultJson.bigUpDaycou);
-                    if(bigdayCou!=0){
-                    	$("#cmBigDayVal").html(bigdayCou);
-                    	$("#cmBigDay").show();
-                    }else{
-                    	$("#cmBigDay").hide();
-                    }
-                    setCityAddMem(resultJson);
-                }
-            });
-            //当日订单量
-
-
-
-        }
 
 
         var showCityInfo = function (dataServer){
@@ -730,7 +754,11 @@
         function loginShow(){
             var d = new Date();
             var years = d.getFullYear();
-            //$("#thisYear").html(parseInt(dataServer.memgmv==null?'0':dataServer.memgmv));
+            $("#thisYear1").html("("+years+"年)");
+            $("#thisYear2").html("("+years+"年)");
+            $("#thisYear3").html("("+years+"年)");
+            $("#thisYear4").html("("+years+"年)");
+            $("#thisYear5").html("("+years+"年)");
             if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
                 var b = new Base64();
                 screenlogin=b.decode(screenlogin);
@@ -896,12 +924,12 @@
         var showMember = function (dataServer){
 
             //社员量
-            $("#memAllCou").html(parseInt(dataServer.allcount==null?'0':dataServer.allcount+dataServer.bigcount+dataServer.trycount));
-            $("#mem199Cou").html(parseInt(dataServer.allcount==null?'0':dataServer.allcount));
+            $("#memAllCou").html(changeMoney(parseInt(dataServer.allcount==null?'0':dataServer.allcount+dataServer.bigcount)));
+            $("#mem199Cou").html(changeMoney(parseInt(dataServer.allcount==null?'0':dataServer.allcount)));
             //大客户
-            $("#memBigCou").html(parseInt(dataServer.bigcount==null?'0':dataServer.bigcount));
-            //新注册社员量
-            $("#memTryCou").html(parseInt(dataServer.trycount==null?'0':dataServer.trycount));
+            $("#memBigCou").html(changeMoney(parseInt(dataServer.bigcount==null?'0':dataServer.bigcount)));
+            //试用社员量
+            $("#memTryCou").html(changeMoney(parseInt(dataServer.trycount==null?'0':dataServer.trycount)));
         }
 
 
@@ -921,11 +949,11 @@
         var showMemGmv = function (dataServer){
 
             //社员GMV
-            $("#memGmv").html(parseInt(dataServer.memgmv==null?'0':dataServer.memgmv));
+            $("#memGmv").html(changeMoney(parseInt(dataServer.memgmv==null?'0':dataServer.memgmv)));
             //社员单量
-            $("#memCou").html(parseInt(dataServer.memcou==null?'0':dataServer.memcou));
+            $("#memCou").html(changeMoney(parseInt(dataServer.memcou==null?'0':dataServer.memcou)));
             //社员订单均价
-            $("#memAvg").html(parseInt(dataServer.memgmv/dataServer.memcou==null?'0':dataServer.memgmv/dataServer.memcou));
+            $("#memAvg").html(changeMoney(parseInt(dataServer.memgmv/dataServer.memcou==null?'0':dataServer.memgmv/dataServer.memcou)));
         }
 
         function doMemberInfo2(){
@@ -1431,11 +1459,11 @@
                     trigger: 'axis'
                 },
                 legend: {
-                    data:['消费1次','消费2次','消费>=3次']
+                    data:['消费1次','消费2次','消费3次以上']
                 },
                 grid: {
                     left: '10%',
-                    right: '6%',
+                    right: '10%',
                     bottom: '15%',
                     containLabel: true
                 },
@@ -1483,7 +1511,7 @@
                     {
                         name:'消费1次',
                         type:'bar',
-                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        barWidth: 20,                   // 系列级个性化，柱形宽度
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
@@ -1509,7 +1537,7 @@
                     , {
                         name:'消费2次',
                         type:'bar',
-                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        barWidth: 20,                   // 系列级个性化，柱形宽度
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
@@ -1532,9 +1560,9 @@
                         }*/
                     },
                     , {
-                        name:'消费>=3次',
+                        name:'消费3次以上',
                         type:'bar',
-                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        barWidth: 20,                   // 系列级个性化，柱形宽度
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
@@ -1658,11 +1686,11 @@
                     trigger: 'axis'
                 },
                 legend: {
-                    data:['消费1次','消费2次','消费>=3次']
+                    data:['消费1次','消费2次','消费3次以上']
                 },
                 grid: {
                     left: '10%',
-                    right: '6%',
+                    right: '10%',
                     bottom: '15%',
                     containLabel: true
                 },
@@ -1710,7 +1738,7 @@
                     {
                         name:'消费1次',
                         type:'bar',
-                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        barWidth: 20,                   // 系列级个性化，柱形宽度
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
@@ -1736,7 +1764,7 @@
                     , {
                         name:'消费2次',
                         type:'bar',
-                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        barWidth: 20,                   // 系列级个性化，柱形宽度
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
@@ -1759,9 +1787,9 @@
                         }*/
                     }
                     , {
-                        name:'消费>=3次',
+                        name:'消费3次以上',
                         type:'bar',
-                        barWidth: 40,                   // 系列级个性化，柱形宽度
+                        barWidth: 20,                   // 系列级个性化，柱形宽度
                         itemStyle: {
                             normal: {                   // 系列级个性化，横向渐变填充
                                 borderRadius: 5,
