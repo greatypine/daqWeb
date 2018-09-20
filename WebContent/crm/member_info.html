@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>社员运营</title>
+    <title>社员简报</title>
     <!-- Tell the browser to be responsive to screen width -->
     <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
     <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -165,7 +165,7 @@
                 <div class="pull-left">
                     <div class="logo-lg">
                         <ul class="no-margin">
-                            <li class="current"><em>社员运营</em></li>
+                            <li class="current"><em>社员简报</em></li>
                         </ul>
                     </div>
                 </div>
@@ -249,7 +249,7 @@
                 </div>
             </div>-->
             <div class="box box-default">
-                <div  class="box-header h4 text-light-blue"><strong>社员分析</strong></div>
+                <div  class="box-header h4 text-light-blue"><strong>社员来源分布</strong></div>
                 <div class="box-body" style="padding-top: 25px;">
                     <div class="col-sm-6 no-padding" id="main3" style="height: 450px;"></div>
                     <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
@@ -258,11 +258,11 @@
             <div class="box box-default">
                 <div class="box-body">
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong id ="thisYear1"></strong><strong>订单对比</strong></h4>
+                        <h4 class="text-light-blue"><strong>订单量走势对比</strong><strong id ="thisYear1"></strong></h4>
                         <div class="col-sm-12 no-padding" id="main5" style="height: 260px;"></div>
                     </div>
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong id ="thisYear2"></strong><strong>GMV对比</strong></h4>
+                        <h4 class="text-light-blue"><strong>GMV走势对比</strong><strong id ="thisYear2"></strong></h4>
                         <div class="col-sm-12 no-padding" id="main6" style="height: 260px;"></div>
                     </div>
                 </div>
@@ -270,11 +270,11 @@
             <div class="box box-default">
                 <div class="box-body">
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong id ="thisYear3"></strong><strong>社员月消费频次</strong></h4>
+                        <h4 class="text-light-blue"><strong>社员黏性</strong><strong id ="thisYear3"></strong></h4>
                         <div class="col-sm-12 no-padding" id="main7" style="height: 260px;"></div>
                     </div>
                     <div class="col-sm-6">
-                        <h4 class="text-light-blue"><strong id ="thisYear4"></strong><strong>非社员月消费频次</strong></h4>
+                        <h4 class="text-light-blue"><strong>非社员黏性</strong><strong id ="thisYear4"></strong></h4>
                         <div class="col-sm-12 no-padding" id="main8" style="height: 260px;"></div>
                     </div>
                 </div>
@@ -282,7 +282,7 @@
             <div class="box box-default">
                 <div class="box-body">
                     <div class="col-sm-12">
-                        <h4 class="text-light-blue"><strong id ="thisYear5"></strong><strong>月客单价对比</strong></h4>
+                        <h4 class="text-light-blue"><strong>客单价月走势对比</strong><strong id ="thisYear5"></strong></h4>
                         <div class="col-sm-12 no-padding" id="main9" style="height: 260px;"></div>
                     </div>
                 </div>
@@ -831,7 +831,7 @@
                                     }
                                 }
                             }
-                            pdf.save('社员运营简报.pdf');
+                            pdf.save('社员简报.pdf');
                             $("#process_div_pic").hide();
                             $("#process_div").hide();
                         }
@@ -974,7 +974,7 @@
             var myChart3= echarts.init(document.getElementById('main3'));
             option3 = {
                 title: [{
-                    text: '渠道来源分布',
+                    text: '渠道分布',
                     left: '45%',
                     top: '2%',
                     textAlign: 'center',
@@ -992,7 +992,7 @@
                 calculable : true,
                 series : [
                     {
-                        name:'渠道来源分布',
+                        name:'渠道分布',
                         type:'pie',
                         center: ['50%', '53%'],
                         radius: ['30%', '70%'],
@@ -1593,7 +1593,7 @@
             var years = d.getFullYear();
             option1 = {
                 title: [ {
-                    text: '社员('+years+')活跃度分布',
+                    text: '社员人数分布(客户黏性)',
                     x: 'center',
                     top: '10px',
                     textStyle: {
@@ -1613,7 +1613,7 @@
                     data:['1单', '2单','3单及以上']
                 },
                 series: [{
-                    name: '社员活跃度分布',
+                    name: '社员人数分布(客户黏性)',
                     type: 'pie',
                     radius: '70%',
                     center: ['50%', '55%'],
