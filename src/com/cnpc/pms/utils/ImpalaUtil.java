@@ -62,7 +62,7 @@ public class ImpalaUtil {
         try {
 
 
-            con = JdbcConPoolC3p0Util.getConnection();
+            con = HikariGuoanInner.getConnection();
             System.out.println("\n== Begin Guoan Query Results ======================");
 //            ps = con.prepareStatement(sql);
             stat = con.createStatement();
@@ -80,7 +80,7 @@ public class ImpalaUtil {
             return list;
         } finally {
             try {
-                JdbcConPoolC3p0Util.close(con, stat, rs);
+                HikariGuoanInner.close(con, stat, rs);
             } catch (Exception e) {
                 e.printStackTrace();
                 return list;
