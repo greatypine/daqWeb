@@ -1,19 +1,10 @@
 package com.cnpc.pms.utils;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import com.cnpc.pms.base.util.PropertiesUtil;
 
 /**
  * impala 连接工具类
@@ -60,8 +51,44 @@ public class ImpalaUtil {
         }
         return list;
     }
-	
-	
+
+    public static List<Map<String,Object>> executeGuoan(String sql){
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stat=null;
+        List<Map<String,Object>> list = null;
+        PreparedStatement ps = null;
+        try {
+
+
+            con = JdbcConPoolC3p0Util.getConnection();
+            System.out.println("\n== Begin Guoan Query Results ======================");
+//            ps = con.prepareStatement(sql);
+            stat = con.createStatement();
+//            rs = ps.executeQuery();
+            rs = stat.executeQuery(sql);
+            list = convertList(rs);
+
+            System.out.println("== End Guoan Query Results =======================\n\n");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return list;
+        } finally {
+            try {
+                JdbcConPoolC3p0Util.close(con, stat, rs);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return list;
+            }
+        }
+        return list;
+    }
+
 	private static List<Map<String,Object>> convertList(ResultSet rs) throws SQLException{
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 		ResultSetMetaData md = rs.getMetaData();//获取键名

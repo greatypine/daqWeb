@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>用户整体概览</title>
+    <title>用户运营分析</title>
     <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -111,7 +111,7 @@
                 <div class="pull-left">
                     <div class="logo-lg">
                         <ul class="no-margin">
-                            <li class="current"><em>用户整体概览</em></li>
+                            <li class="current"><em>用户运营分析</em></li>
                         </ul>
                     </div>
                 </div>
@@ -136,13 +136,13 @@
                     <div class="box-body">
                         <div class="col-sm-12">
                             <div id="main2" style="height: 350px;"></div>
-                            <p style="padding-top: 5px;">口径说明：真实用户=会员+历史消费3次以上（或），无效用户=消费1次且从未自己下单的用户，僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
+                            <p style="padding-top: 5px;">口径说明：真实用户=会员、历史消费3次以上，无效用户=消费1次且从未自己下单的用户，僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
                         </div>
                     </div>
                 </div>
                 <div class="box box-default">
                     <div
-                            class="box-header h4 text-light-blue"><strong>用户分析</strong><small style="padding-left: 15px;">数据基于<span class="text-red">有效用户</span>分析（口径设定：真实用户+待确认）</small></div>
+                            class="box-header h4 text-light-blue"><strong>用户分析</strong><small style="padding-left: 15px;">数据基于<span class="text-red">有效用户</span>分析（口径设定：真实用户+待确认用户）</small></div>
                     <div class="box-body" style="padding-top: 25px;">
                         <div class="col-sm-6 no-padding" id="main3" style="height: 450px;"></div>
                         <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
@@ -743,7 +743,7 @@
             trigger: 'axis'
         },
         legend: {
-            data:['消费1单用户','消费2单用户','消费3单以上用户']
+            data:['消费1单用户','消费2单用户','消费3单及以上用户']
         },
         grid: {
             left: '3%',
@@ -779,7 +779,7 @@
                 data:unitTwiceData
             },
             {
-                name:'消费3单以上用户',
+                name:'消费3单及以上用户',
                 type:'line',
                 stack: '总量',
                 data:unitMoreData
@@ -807,7 +807,7 @@
             top: 10,
             orient:'vertical',//horizontal
             textStyle: {color: '#000'},
-            data:['消费1单', '消费2单','消费3单以上']
+            data:['消费1单', '消费2单','消费3单及以上']
         },
         series: [{
             name: '用户消费频次分布',
@@ -1261,7 +1261,7 @@
                         userR1=userR2=userR3=userR4=0;
                     }
                     option2.series[0].data[0].children[0].value=userR3;
-                    option2.series[0].data[0].children[0].name="有效用户：\n"+userR3;
+                    option2.series[0].data[0].children[0].name="真实用户：\n"+userR3;
                     option2.series[0].data[1].children[0].value=userR1;
                     option2.series[0].data[1].children[0].name="无效用户：\n"+userR1;
                     option2.series[0].data[2].children[0].value=userR4;
@@ -1393,7 +1393,7 @@
                         tempTwiceData.name="消费2单";
                         userPayData.push(tempTwiceData);
                         tempMoreData.value = pay_more_customer;
-                        tempMoreData.name="消费3单以上";
+                        tempMoreData.name="消费3单及以上";
                         userPayData.push(tempMoreData);
                     }
                     option6.series[0].data=userPayData;
