@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用户整体概览</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+    <!-- Morris charts -->
+    <link rel="stylesheet" href="plugins/morris/morris.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+    <link rel="stylesheet" href="plugins/gooey_menu/gooey.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="plugins/select2/select2.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="IE 9/html5shiv.min.js"></script>
+    <script src="IE 9/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .details{background-color: #e95959; padding: 30px 0 10px 0; color: #fff;}
+        .user_photo{width: 150px; height: 150px; border-radius: 50%; margin: 0 auto; border: 5px solid rgba(183,52,52,0.5); overflow:hidden;}
+        .user_photo img{height: 150px;}
+        .dl-horizontal dt{width: 80px; line-height: 30px;}
+        .dl-horizontal dd{line-height: 30px; margin-left: 110px;}
+        .small-box{border-radius: 10px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);}
+        .small-box .icons{position: static; font-size: 70px;}
+        .small-box .icons img{height: 75px;}
+        .small-box > .small-box-footer{border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; font-size: 12px; padding: 5px 0;}
+
+        #process_div{
+            background-color:#292a2b;
+            display:inline;
+            z-index:100000;
+            left:0px;
+            opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+            filter:Alpha(Opacity=30);
+            opacity: 0.3;
+        }
+
+        #process_div_pic{
+            position:fixed;
+            top:50%;
+            left:50%;
+            z-index:100000000;
+            margin:-16px 0 0 -50px;
+            width:100px;
+            height:32px;
+            color: #fff;
+        }
+        .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
+        .download p{font-size: 12px;}
+        .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
+            /* Firefox: */
+            -moz-animation-name:myfirst; -moz-animation-duration:2s;-moz-animation-timing-function:linear;-moz-animation-iteration-count:infinite;-moz-animation-direction:alternate;-moz-animation-play-state:running;
+            /* Safari and Chrome: */
+            -webkit-animation-name:myfirst;-webkit-animation-duration:2s;-webkit-animation-timing-function:linear;-webkit-animation-iteration-count:infinite;-webkit-animation-direction:alternate;-webkit-animation-play-state:running;
+            /* Opera: */
+            -o-animation-name:myfirst;-o-animation-duration:2s;-o-animation-timing-function:linear;-o-animation-delay:2s;-o-animation-iteration-count:infinite;-o-animation-direction:alternate;-o-animation-play-state:running;}
+        @keyframes myfirst
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+        @-moz-keyframes myfirst /* Firefox */
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+        @-webkit-keyframes myfirst /* Safari and Chrome */
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+        @-o-keyframes myfirst /* Opera */
+        {
+            0%   {left:0px; top:0px;}
+            50%  {left:0px; top:10px;}
+            100% {left:0px; top:0px;}
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+    <!-- 新header -->
+    <div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
+    <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="logo_img pull-left">
+                    <img src="dist/img/logo.png" height="30">
+                    <img src="dist/img/title.png" height="20">
+                </div>
+                <div class="pull-left">
+                    <div class="logo-lg">
+                        <ul class="no-margin">
+                            <li class="current"><em>用户整体概览</em></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div id="page">
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Main content -->
+            <section class="content-header">
+                <div class="box box-default">
+                    <!--<div class="box-header h4"><strong>安心合作社运营报告</strong></div>-->
+                    <div class="box-body">
+                        <div id="main1" style="height: 450px;"></div>
+                    </div>
+                </div>
+                <div class="box box-default">
+                    <div class="box-header h4 text-light-blue"><strong>有效用户分析</strong></div>
+                    <div class="box-body">
+                        <div class="col-sm-12">
+                            <div id="main2" style="height: 350px;"></div>
+                            <p style="padding-top: 5px;">口径说明：真实用户=会员+历史消费3次以上（或），无效用户=消费1次且从未自己下单的用户，僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-default">
+                    <div
+                            class="box-header h4 text-light-blue"><strong>用户分析</strong><small style="padding-left: 15px;">数据基于<span class="text-red">有效用户</span>分析（口径设定：真实用户+待确认）</small></div>
+                    <div class="box-body" style="padding-top: 25px;">
+                        <div class="col-sm-6 no-padding" id="main3" style="height: 450px;"></div>
+                        <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
+                    </div>
+                </div>
+                <div class="box box-default">
+                    <div
+                            class="box-header h4 text-light-blue"><strong>客单价（平均交易金额）</strong></div>
+                    <div class="box-body" style="padding-top: 25px;">
+                        <div class="col-sm-8 no-padding" id="main5" style="height: 450px;"></div>
+                        <div class="col-sm-4 no-padding" id="main6" style="height: 450px;"></div>
+                        <!--<div class="col-sm-4" id="main6" style="height: 450px;"></div>-->
+                        <!--<div class="col-sm-4" id="main7" style="height: 450px;"></div>-->
+                        <!--<div class="col-sm-4" id="main8" style="height: 450px;"></div>-->
+                    </div>
+                </div>
+                <div class="box box-default">
+                    <div
+                            class="box-header h4 text-light-blue"><strong>短期用户活跃度分析</strong></div>
+                    <div class="box-body" style="padding-top: 25px;">
+                        <div class="col-sm-6" id="main9" style="height: 450px;"></div>
+                        <div class="col-sm-6" id="main10" style="height: 450px;"></div>
+                    </div>
+                </div>
+                <div class="box box-default">
+                    <div
+                            class="box-header h4 text-light-blue"><strong>新增用户</strong></div>
+                    <div class="box-body" style="padding-top: 25px;">
+                        <div id="main11" style="height: 450px;"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    </div>
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<script src="dist/js/nav-scroll.js"></script>
+<script src="dist/js/jquery.dataStatistics.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- pdf下载所需js工具 -->
+<script src="dist/js/utils/htmlToPdf/html2canvas.js"></script>
+<script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script src="dist/js/jquery.dataStatistics.js"></script>
+
+<!-- Morris.js charts -->
+<script src="bootstrap/js/raphael-min.js"></script>
+<script src="plugins/morris/morris.min.js"></script>
+<!-- FastClick -->
+<!-- AdminLTE App -->
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/nav-scroll.js"></script>
+<!-- 引入 ECharts 文件 -->
+<script src="dist/js/echarts.common.min.js"></script>
+<script src="dist/js/base64.js"></script>
+<script src="plugins/gooey_menu/gooey.min.js"></script>
+<script>
+
+    Date.prototype.format = function() {
+        var s = '';
+        var mouth = (this.getMonth() + 1)>=10?(this.getMonth() + 1):('0'+(this.getMonth() + 1));
+        var day = this.getDate()>=10?this.getDate():('0'+this.getDate());
+        s += this.getFullYear() + '-'; // 获取年份。
+        s += mouth + "-"; // 获取月份。
+        s += day; // 获取日。
+        return (s); // 返回日期。
+    };
+
+    var myChart1 = echarts.init(document.getElementById('main1'));
+    var myChart2 = echarts.init(document.getElementById('main2'));
+    var myChart3 = echarts.init(document.getElementById('main3'));
+    var myChart4 = echarts.init(document.getElementById('main4'));
+    var myChart5 = echarts.init(document.getElementById('main5'));
+    var myChart6 = echarts.init(document.getElementById('main6'));
+    // var myChart7 = echarts.init(document.getElementById('main7'));
+    // var myChart8 = echarts.init(document.getElementById('main8'));
+    var myChart9	= echarts.init(document.getElementById('main9'));
+    var myChart10 = echarts.init(document.getElementById('main10'));
+    var myChart11 = echarts.init(document.getElementById('main11'));
+
+    option1 = {
+        title: [
+            {
+                text: '注册用户：0 人',
+                x: '20',
+                y: '10',
+                textStyle: {
+                    fontSize: 20
+                }
+            },{
+                text: '消费2次以上用户占比',
+                left: '18%',
+                bottom: '10%',
+                textAlign: 'center',
+                textStyle: {
+                    fontWeight: 'normal',
+                    fontSize: '16',
+                    textAlign: 'center',
+                },
+            }, {
+                text: '消费1次用户占比',
+                left: '49%',
+                bottom: '10%',
+                textAlign: 'center',
+                textStyle: {
+                    fontWeight: 'normal',
+                    fontSize: '16',
+                    textAlign: 'center',
+                },
+            },{
+                text: '无效用户占比',
+                left: '80%',
+                bottom: '10%',
+                textAlign: 'center',
+                textStyle: {
+                    fontWeight: 'normal',
+                    fontSize: '16',
+                    textAlign: 'center',
+                },
+            }],
+        series: [
+            {
+                center: ["19.0%","50%"],
+                radius: ["59%","60%"],
+                clockWise: false,
+                hoverAnimation: false,
+                type: "pie",
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            textStyle: {
+                                fontSize: 15,
+                                fontWeight: "bold"
+                            },
+                            position: "center"
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        color: "#5886f0",
+                        borderColor: "#5886f0",
+                        borderWidth: 25
+                    },
+                    emphasis: {
+                        label: {
+                            textStyle: {
+                                fontSize: 15,
+                                fontWeight: "bold"
+                            }
+                        },
+                        color: "#5886f0",
+                        borderColor: "#5886f0",
+                        borderWidth: 25
+                    }
+                },
+                data: [
+                    {
+                        value: 0, //当前项目的值
+                        name: "0(0%)"
+                    },
+                    {
+                        value: 100, //总数
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: false
+                                },
+                                labelLine: {
+                                    show: false
+                                },
+                                color: "#5886f0",
+                                borderColor: "#5886f0",
+                                borderWidth: 0
+                            },
+                            emphasis: {
+                                color: "#5886f0",
+                                borderColor: "#5886f0",
+                                borderWidth: 0
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                center: ["50.0%","50%"],
+                radius: ["59%","60%"],
+                clockWise: false,
+                hoverAnimation: false,
+                type: "pie",
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            textStyle: {
+                                fontSize: 15,
+                                fontWeight: "bold"
+                            },
+                            position: "center"
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        color: "#ee3a3a",
+                        borderColor: "#ee3a3a",
+                        borderWidth: 25
+                    },
+                    emphasis: {
+                        label: {
+                            textStyle: {
+                                fontSize: 15,
+                                fontWeight: "bold"
+                            }
+                        },
+                        color: "#ee3a3a",
+                        borderColor: "#ee3a3a",
+                        borderWidth: 25
+                    }
+                },
+                data: [
+                    {
+                        value: 0,
+                        name: "0(0%)"
+                    },
+                    {
+                        value: 100,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: false
+                                },
+                                labelLine: {
+                                    show: false
+                                },
+                                color: "#ee3a3a",
+                                borderColor: "#ee3a3a",
+                                borderWidth: 0
+                            },
+                            emphasis: {
+                                color: "#ee3a3a",
+                                borderColor: "#ee3a3a",
+                                borderWidth: 0
+                            }
+                        }
+                    }
+                ]
+            },
+            {
+                center: ["80.0%","50%"],
+                radius: ["59%","60%"],
+                clockWise: false,
+                hoverAnimation: false,
+                type: "pie",
+                itemStyle: {
+                    normal: {
+                        label: {
+                            show: true,
+                            textStyle: {
+                                fontSize: 15,
+                                fontWeight: "bold"
+                            },
+                            position: "center"
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        color: "#f3ac3b",
+                        borderColor: "#f3ac3b",
+                        borderWidth: 25
+                    },
+                    emphasis: {
+                        label: {
+                            textStyle: {
+                                fontSize: 15,
+                                fontWeight: "bold"
+                            }
+                        },
+                        color: "#f3ac3b",
+                        borderColor: "#f3ac3b",
+                        borderWidth: 25
+                    }
+                },
+                data: [
+                    {
+                        value: 0,
+                        name: "0(0%)"
+                    },
+                    {
+                        value: 324,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: false
+                                },
+                                labelLine: {
+                                    show: false
+                                },
+                                color: "#f3ac3b",
+                                borderColor: "#f3ac3b",
+                                borderWidth: 0
+                            },
+                            emphasis: {
+                                color: "#f3ac3b",
+                                borderColor: "#f3ac3b",
+                                borderWidth: 0
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    };
+
+    var userR1 = "0";
+    var userR2 = "0";
+    var userR3 = "0";
+    var userR4 = "0";
+    option2 = {
+
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b}"  //显示tooltip时，只显示name
+        },
+
+        calculable: false,
+        series: [{
+            type: 'treemap',
+            width: '100%',
+            height: '100%',
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        //formatter: "{b}",
+                        fontSize: 15
+                    },
+
+                    borderWidth: 1
+                },
+                emphasis: {
+                    label: {
+                        show: true
+                    }
+                }
+            },
+            label: {
+                normal: {
+                    textStyle: {
+                        fontSize: 15,
+                        //formatter: "{b}"
+                    }
+                }
+            },
+            breadcrumb: {//关闭面包屑路径
+                show: false
+            },
+            roam: false,//关闭平移拖动
+            nodeClick: false,//关闭节点点击
+            silent: false,//关闭鼠标事件
+            data: [
+                {
+                    value: 3,
+                    children: [
+                        {
+                            name: '有效用户：\n10',
+                            value: userR3,
+                            itemStyle: {
+                                normal: {
+                                    color: '#71caa5'
+                                }
+                            } },
+                    ]
+                },
+                {
+                    value: 2,
+                    children: [
+                        {
+                            name: '无效用户：\n22',
+                            value: userR1,
+                            itemStyle: {
+                                normal: {
+                                    color: '#d87c7c'
+                                }
+                            }},
+                    ]
+                },
+                {
+                    value: 3,
+                    children: [
+                        {
+                            name: '待确认用户：\n10',
+                            value: userR4,
+                            itemStyle: {
+                                normal: {
+                                    color: '#6e7074'
+                                }
+                            }},
+                    ]
+                },
+                {
+                    value: 2,
+                    children: [
+                        {
+                            name: '僵尸用户：\n20',
+                            value: userR2,
+                            itemStyle: {
+                                normal: {
+                                    color: '#d687d5'
+                                }
+                            }},
+                    ]
+                },
+            ]
+        }]
+    };
+
+    //用户来源
+    var userSourceData = new Array();
+    option3 = {
+        title: [{
+            text: '用户来源',
+            left: '45%',
+            top: '2%',
+            textAlign: 'center',
+            textBaseline: 'middle',
+            textStyle: {
+                color: '#666',
+                fontSize: 16
+            }
+        }],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b}: {c} ({d}%)"
+        },
+        series: [{
+            type: 'pie',
+            selectedMode: 'single',
+            center: ['45%', '53%'],
+            radius: ['40%', '80%'],
+            color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
+
+            label: {
+                normal: {
+                    position: 'inside', //标签的位置
+                    formatter: '{b}\n{d}%'
+
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data: userSourceData
+            //     [{
+            //     value:48,
+            //     name: '公共设施'
+            // }, {
+            //     value: 13,
+            //     name: '道路交通设施'
+            // }, {
+            //     value: 12,
+            //     name: '园林绿化设施'
+            // }, {
+            //     value: 22,
+            //     name: '基础设施'
+            // }]
+        }]
+    };
+
+    //城市分布
+    var userCityData = new Array();
+    option4 = {
+        title: [{
+            text: '城市分布',
+            left: '45%',
+            top: '2%',
+            textAlign: 'center',
+            textBaseline: 'middle',
+            textStyle: {
+                color: '#666',
+                fontSize: 16
+            }
+        }],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5'],
+        series: [{
+            name: '违规次数',
+            type: 'pie',
+            clockwise: false, //饼图的扇区是否是顺时针排布
+            minAngle: 20, //最小的扇区角度（0 ~ 360）
+            center: ['45%', '53%'], //饼图的中心（圆心）坐标
+            radius: ['40%', '80%'], //饼图的半径
+            avoidLabelOverlap: true, ////是否启用防止标签重叠
+            itemStyle: { //图形样式
+                normal: {
+                    borderColor: '#1e2239',
+                    borderWidth: 1.5,
+                },
+            },
+            label: { //标签的位置
+                normal: {
+                    show: true,
+                    position: 'inside', //标签的位置
+                    formatter: "{b}\n{d}%",
+                    textStyle: {
+                        color: '#fff',
+                    }
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontWeight: 'bold'
+                    }
+                }
+            },
+            data: userCityData
+            //     [
+            //     {value: 335,name: '超速'},
+            //     {value: 335,name: '急减速'},
+            //     {value: 315,name: '飞站'},
+            //     {value: 200,name: '带速开关门'},
+            //     {value: 140,name: '急加速'}
+            // ]
+        },
+            {
+            name: '',
+            type: 'pie',
+            clockwise: false,
+            silent: true,
+            minAngle: 20, //最小的扇区角度（0 ~ 360）
+            center: ['45%', '53%'], //饼图的中心（圆心）坐标
+            radius: ['0%', '37%'], //饼图的半径
+            itemStyle: { //图形样式
+                normal: {
+                    borderColor: '#1e2239',
+                    borderWidth: 1.5,
+                    opacity: 0.21,
+                }
+            },
+            label: { //标签的位置
+                normal: {
+                    show: false,
+                }
+            },
+            data: userCityData
+            //     [
+            //     {value: 335,name: '超速'},
+            //     {value: 335,name: '急减速'},
+            //     {value: 315,name: '飞站'},
+            //     {value: 200,name: '带速开关门'},
+            //     {value: 140,name: '急加速'}
+            // ]
+        }]
+    };
+
+    //客单价
+    var now = new Date();
+    var unitOnceData=[];
+    var unitTwiceData=[];
+    var unitMoreData=[];
+    var unitXdata = function() {
+        var data = [];
+        var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
+        data = getYearAndMonth('2017-12-1',curMonth);
+        return data;
+    }();
+
+    option5 = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['消费1单用户','消费2单用户','消费3单以上用户']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: unitXdata
+        },
+        yAxis: {
+            name: '元',
+            type: 'value'
+        },
+        series: [
+            {
+                name:'消费1单用户',
+                type:'line',
+                stack: '总量',
+                data:unitOnceData
+            },
+            {
+                name:'消费2单用户',
+                type:'line',
+                stack: '总量',
+                data:unitTwiceData
+            },
+            {
+                name:'消费3单以上用户',
+                type:'line',
+                stack: '总量',
+                data:unitMoreData
+            }
+        ]
+    };
+
+    var userPayData = new Array();
+    option6 = {
+        title: [ {
+            text: '用户消费频次分布',
+            x: 'left',
+            top: '10px',
+            textStyle: {
+                color: '#3c8dbc'
+            }
+        }],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b} : {c} ({d}%)"
+        },
+        legend: {
+            selectedMode:false,
+            right:10,
+            top: 10,
+            orient:'vertical',//horizontal
+            textStyle: {color: '#000'},
+            data:['消费1单', '消费2单','消费3单以上']
+        },
+        series: [{
+            name: '用户消费频次分布',
+            type: 'pie',
+            radius: '70%',
+            center: ['50%', '55%'],
+            clockwise: false,
+            data: userPayData,
+            //     [{
+            //     value: dataServer.count1,
+            //     name:'1单'
+            // }, {
+            //     value: dataServer.count2,
+            //     name:'2单'
+            // }, {
+            //     value: dataServer.count3,
+            //     name: '3单'
+            // }],
+            label: {
+                normal: {
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: 14,
+                    },
+                    position: 'inner',
+                    formatter: '{b}:{d}%',
+                }
+            },
+
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            itemStyle: {
+                normal: {
+                    borderWidth: 4,
+                    borderColor: '#ffffff',
+                },
+                emphasis: {
+                    borderWidth: 0,
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }],
+        color: [
+            '#00acee',
+            '#52cdd5',
+            '#d87c7c'
+        ],
+    };
+
+    // option6 = {
+    //     tooltip: {
+    //         trigger: 'item',
+    //         formatter: "{b}: {c} ({d}%)"
+    //     },
+    //     series: [{
+    //         type: 'pie',
+    //         selectedMode: 'single',
+    //         center: ['50%', '53%'],
+    //         radius: [0, '80%'],
+    //         color: [ '#CCCCFF', '#FF999A', '#FFCC67','#FCC667',],
+    //
+    //         label: {
+    //             normal: {
+    //                 position: 'inside', //标签的位置
+    //                 formatter: '{b}\n{d}%'
+    //
+    //             }
+    //         },
+    //         labelLine: {
+    //             normal: {
+    //                 show: false
+    //             }
+    //         },
+    //         data: [{
+    //             value:38,
+    //             name: '公共设施'
+    //         }, {
+    //             value: 20,
+    //             name: '道路交通设施'
+    //         }, {
+    //             value: 20,
+    //             name: '园林绿化设施'
+    //         }]
+    //     }]
+    // };
+    //
+    // option7 = {
+    //     tooltip: {
+    //         trigger: 'item',
+    //         formatter: "{b}: {c} ({d}%)"
+    //     },
+    //     series: [{
+    //         type: 'pie',
+    //         selectedMode: 'single',
+    //         center: ['50%', '53%'],
+    //         radius: [0, '80%'],
+    //         color: ['#CC99CC', '#FFCCCC', '#FFCC67','#FCC667','#CC5962'],
+    //
+    //         label: {
+    //             normal: {
+    //                 position: 'inside', //标签的位置
+    //                 formatter: '{b}\n{d}%'
+    //
+    //             }
+    //         },
+    //         labelLine: {
+    //             normal: {
+    //                 show: false
+    //             }
+    //         },
+    //         data: [{
+    //             value:48,
+    //             name: '公共设施'
+    //         }, {
+    //             value: 13,
+    //             name: '道路交通设施'
+    //         }, {
+    //             value: 12,
+    //             name: '园林绿化设施'
+    //         }]
+    //     }]
+    // };
+    //
+    // option8 = {
+    //     tooltip: {
+    //         trigger: 'item',
+    //         formatter: "{b}: {c} ({d}%)"
+    //     },
+    //     series: [{
+    //         type: 'pie',
+    //         selectedMode: 'single',
+    //         center: ['50%', '53%'],
+    //         radius: [0, '80%'],
+    //         color: ['#99CCFF', '#66CCCC', '#FF999A', '#33CC33','#FCC667','#CC5962'],
+    //
+    //         label: {
+    //             normal: {
+    //                 position: 'inside', //标签的位置
+    //                 formatter: '{b}\n{d}%'
+    //
+    //             }
+    //         },
+    //         labelLine: {
+    //             normal: {
+    //                 show: false
+    //             }
+    //         },
+    //         data: [{
+    //             value:18,
+    //             name: '公共设施'
+    //         }, {
+    //             value: 53,
+    //             name: '道路交通设施'
+    //         }, {
+    //             value: 12,
+    //             name: '园林绿化设施'
+    //         }]
+    //     }]
+    // };
+
+    //活跃度
+    var oneMonthActivity = new Array();
+    option9 = {
+        title: [{
+            text: '近1月用户活跃度分布',
+            left: '46%',
+            bottom: '0',
+            textAlign: 'center',
+            textBaseline: 'middle',
+            textStyle: {
+                color: '#666',
+                fontSize: 16,
+                fontWeight:'normal'
+            }
+
+        }],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b}: {c} ({d}%)"
+        },
+        series: [{
+            type: 'pie',
+            selectedMode: 'single',
+            center: ['50%', '47%'],
+            radius: ['40%', '80%'],
+            color: ['#FF999A', '#FFCC67'],
+
+            label: {
+                normal: {
+                    position: 'inside', //标签的位置
+                    formatter: '{b}\n{d}%'
+
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data: oneMonthActivity
+            //     [{
+            //     value:48,
+            //     name: '2次以上'
+            // }, {
+            //     value: 13,
+            //     name: '1次'
+            // }]
+        }]
+    };
+
+    var threeMonthActivity = new Array();
+    option10 = {
+        title: [{
+            text: '近3月用户活跃度分布',
+            left: '49%',
+            bottom:0,
+            textAlign: 'center',
+            textBaseline: 'middle',
+            textStyle: {
+                color: '#666',
+                fontSize: 16,
+                fontWeight:'normal'
+            }
+        }],
+        tooltip: {
+            trigger: 'item',
+            formatter: "{b}: {c} ({d}%)"
+        },
+        series: [{
+            type: 'pie',
+            selectedMode: 'single',
+            center: ['50%', '47%'],
+            radius: ['40%', '80%'],
+            color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
+
+            label: {
+                normal: {
+                    position: 'inside', //标签的位置
+                    formatter: '{b}\n{d}%'
+
+                }
+            },
+            labelLine: {
+                normal: {
+                    show: false
+                }
+            },
+            data: threeMonthActivity
+            //     [{
+            //     value: 12,
+            //     name: '2次以上'
+            // }, {
+            //     value: 22,
+            //     name: '1次'
+            // }]
+        }]
+    };
+    //新增用户
+    var newCusYData = new Array();
+    var newCusXdata = function() {
+        var data = [];
+        var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
+        data = getYearAndMonth('2017-12-1',curMonth);
+        return data;
+    }();
+
+    option11 = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        color:['#37a2da', '#ffd85c'],
+        legend: {
+            data: ['新增用户']
+            // data: ['2011年', '2012年']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        yAxis: {
+            name:'人',
+            type: 'value',
+            boundaryGap: [0, 0.01]
+        },
+        xAxis: {
+            type: 'category',
+            data: newCusXdata
+        },
+        series: [
+            {
+                name: '新增用户',
+                type: 'bar',
+                data: newCusYData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                }
+            },
+            // {
+            //     name: '2012年',
+            //     type: 'bar',
+            //     data: [19325, 23438, 31000, 121594, 134141, 681807]
+            // }
+        ]
+    };
+
+    myChart1.setOption(option1);
+    myChart2.setOption(option2);
+    myChart3.setOption(option3);
+    myChart4.setOption(option4);
+    myChart5.setOption(option5);
+    myChart6.setOption(option6);
+    // myChart7.setOption(option7);
+    // myChart8.setOption(option8);
+    myChart9.setOption(option9);
+    myChart10.setOption(option10);
+    myChart11.setOption(option11);
+
+    //pdf下载
+    $(document).ready(function () {
+
+        var downPdf = document.getElementById("downloadPdf");
+        var pagedom = $("#page");
+        downPdf.onclick = function() {
+            $("#process_div").show();
+            $("#process_div_pic").show();
+            scrollTo(0,0);
+            html2canvas(pagedom, {
+                onrendered : function(canvas) {
+                    var contentWidth = canvas.width;
+                    var contentHeight = canvas.height;
+                    //一页pdf显示html页面生成的canvas高度;
+                    var pageHeight = contentWidth / 592.28 * 841.89;
+                    //未生成pdf的html页面高度
+                    var leftHeight = contentHeight;
+                    //页面偏移
+                    var position = 0;
+                    //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                    var imgWidth = 595.28;
+                    var imgHeight = 592.28 / contentWidth
+                        * contentHeight;
+                    var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                    var pdf = new jsPDF('', 'pt', 'a4');
+                    //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                    //当内容未超过pdf一页显示的范围，无需分页
+                    if (leftHeight < pageHeight) {
+                        pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
+                            imgHeight);
+                    } else {
+                        while (leftHeight > 0) {
+                            pdf.addImage(pageData, 'JPEG', 0, position,
+                                imgWidth, imgHeight)
+                            leftHeight -= pageHeight;
+                            position -= 841.89;
+                            //避免添加空白页
+                            if (leftHeight > 0) {
+                                pdf.addPage();
+                            }
+                        }
+                    }
+                    pdf.save('用户分析报告.pdf');
+                    $("#process_div_pic").hide();
+                    $("#process_div").hide();
+                }
+            })
+        }
+    });
+
+    $(function(){
+        initCustomerData();
+        initEffectiveData();
+        initSourceScatterData();
+        initCityScatterData();
+        initUnitPriceData();
+        initPayPercentData();
+        initUserActivityData();
+        initNewCustomerData();
+    });
+
+    //初始化注册用户
+    var customer_number = '0';
+    function initCustomerData(){
+        doManager("userAnalysisManager","queryTotalCustomer",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(Object.keys(jsonData).length!=0){
+                        customer_number = jsonData.customer_num;
+                    }
+                    $("#customerNum").html("注册用户："+customer_number+"人");
+                }
+            },false);
+
+        var pay_more_customer = '0';
+        var pay_once_customer = '0';
+        var pay_no_customer = '0';
+        doManager("userAnalysisManager","queryPayUser",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(Object.keys(jsonData).length!=0){
+                        pay_more_customer = jsonData.more_customer;
+                        pay_once_customer = jsonData.once_customer;
+                        pay_no_customer = customer_number - pay_more_customer - pay_once_customer;
+                    }
+                    option1.title[0].text="注册用户："+customer_number+" 人";
+                    option1.series[0].data[0].value=pay_more_customer;
+                    option1.series[0].data[0].name=pay_more_customer+"("+(pay_more_customer/customer_number).toFixed(1)*100+"%)";
+                    option1.series[0].data[1].value=customer_number;
+                    option1.series[1].data[0].value=pay_once_customer;
+                    option1.series[1].data[0].name=pay_once_customer+"("+(pay_once_customer/customer_number).toFixed(1)*100+"%)";
+                    option1.series[1].data[1].value=customer_number;
+                    option1.series[2].data[0].value=pay_no_customer;
+                    option1.series[2].data[0].name=pay_no_customer+"("+(pay_no_customer/customer_number).toFixed(1)*100+"%)";
+                    option1.series[2].data[1].value=customer_number;
+                    myChart1.setOption(option1);
+                }
+            });
+    }
+
+    function initEffectiveData() {
+        doManager("userAnalysisManager","queryUsertag",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        $(jsonData).each(function(index,element){
+                            var usertag = jsonData[index].usertag;
+                            if(usertag == 'R1' ){
+                               userR1 =  jsonData[index].usertag_num;
+                            }if(usertag == 'R2' ){
+                               userR2 =  jsonData[index].usertag_num;
+                            }else if(usertag == 'R3'){
+                               userR3 =  jsonData[index].usertag_num;
+                            }
+                        });
+                        userR4 = customer_number - userR1 - userR2 - userR3;
+                    }else{
+                        userR1=userR2=userR3=userR4=0;
+                    }
+                    option2.series[0].data[0].children[0].value=userR3;
+                    option2.series[0].data[0].children[0].name="有效用户：\n"+userR3;
+                    option2.series[0].data[1].children[0].value=userR1;
+                    option2.series[0].data[1].children[0].name="无效用户：\n"+userR1;
+                    option2.series[0].data[2].children[0].value=userR4;
+                    option2.series[0].data[2].children[0].name="待确认用户：\n"+userR4;
+                    option2.series[0].data[3].children[0].value=userR2;
+                    option2.series[0].data[3].children[0].name="僵尸用户：\n"+userR2;
+                    myChart2.setOption(option2);
+                }
+            });
+    }
+    
+    function initSourceScatterData() {//客户来源:app-APP,callcenter-400客服,store-门店,wechat-微信,pad-智能终端,web-WEB,citic-中信用户联盟,tv-电视,third_party-第三方,action-活动'
+        doManager("userAnalysisManager","querySourceScatter",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        $(jsonData).each(function(i,element){
+                            var tempData = new Object();
+                            var customer_source = "无";
+                            if(jsonData[i].customer_source == 'wechat'){
+                                customer_source = "微信";
+                            }else if(jsonData[i].customer_source == 'store'){
+                                customer_source = "门店";
+                            }else if(jsonData[i].customer_source == 'callcenter'){
+                                customer_source = "400客服";
+                            }else if(jsonData[i].customer_source == 'app'){
+                                customer_source = "APP";
+                            }else if(jsonData[i].customer_source == 'pad'){
+                                customer_source = "智能终端";
+                            }else if(jsonData[i].customer_source == 'web'){
+                                customer_source = "WEB";
+                            }else if(jsonData[i].customer_source == 'citic'){
+                                customer_source = "中信用户联盟";
+                            }else if(jsonData[i].customer_source == 'tv'){
+                                customer_source = "电视";
+                            }else if(jsonData[i].customer_source == 'third_party'){
+                                customer_source = "第三方";
+                            }else if(jsonData[i].customer_source == 'action'){
+                                customer_source = "活动";
+                            }
+                            tempData.value = jsonData[i].source_num;
+                            tempData.name = customer_source;
+                            userSourceData.push(tempData);
+                        });
+                    }else{
+                        userSourceData = new Array();
+                    }
+                    option3.series[0].data=userSourceData;
+                    myChart3.setOption(option3);
+                }
+            });
+    }
+    
+    function initCityScatterData() {
+        doManager("userAnalysisManager","queryCityScatter",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        $(jsonData).each(function(i,element){
+                            if(jsonData[i].city_name!='佛山市'){
+                                var tempData = new Object();
+                                tempData.value = jsonData[i].city_user_num;
+                                tempData.name = jsonData[i].city_name;
+                                userCityData.push(tempData);
+                            }
+                        });
+                    }else{
+                        userCityData = new Array();
+                    }
+                    option4.series[0].data=userCityData;
+                    option4.series[1].data=userCityData;
+                    myChart4.setOption(option4);
+                }
+            });
+    }
+
+
+    function initUnitPriceData() {
+        doManager("userAnalysisManager","queryUnitPrice",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        unitOnceData = new Array(12).join(0).split('');
+                        unitTwiceData = new Array(12).join(0).split('');
+                        unitMoreData = new Array(12).join(0).split('');
+                        var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
+                        var monthData = getYearAndMonth('2017-12-1',curMonth);
+                        $(jsonData).each(function(index,element){
+                            var indexTemp = jQuery.inArray(element.month_data,monthData);
+                            unitOnceData[indexTemp]=(element.once_unit_price/element.once_customer).toFixed(2);
+                            unitTwiceData[indexTemp]=(element.twice_unit_price/element.twice_customer).toFixed(2);;
+                            unitMoreData[indexTemp]=(element.more_unit_price/element.more_customer).toFixed(2);;
+                        });
+                    }
+                    option5.series[0].data=unitOnceData;
+                    option5.series[1].data=unitTwiceData;
+                    option5.series[2].data=unitMoreData;
+                    myChart5.setOption(option5);
+                }
+            });
+    }
+
+    function initPayPercentData() {
+        var pay_once_customer = 0;
+        var pay_twice_customer = 0;
+        var pay_more_customer = 0;
+        var pay_total_customer = 0;
+        doManager("userAnalysisManager","queryUnitPrice",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        var tempOnceData = new Object();
+                        var tempTwiceData = new Object();
+                        var tempMoreData = new Object();
+                        $(jsonData).each(function(index,element){
+                            pay_once_customer = pay_once_customer + jsonData[index].once_customer;
+                            pay_twice_customer = pay_twice_customer + jsonData[index].twice_customer;
+                            pay_more_customer = pay_more_customer + jsonData[index].more_customer;
+                            // pay_total_customer = pay_total_customer + jsonData[index].once_customer + jsonData[index].twice_customer + jsonData[index].more_customer;
+                        });
+                        tempOnceData.value = pay_once_customer;
+                        tempOnceData.name="消费1单";
+                        userPayData.push(tempOnceData);
+                        tempTwiceData.value = pay_twice_customer;
+                        tempTwiceData.name="消费2单";
+                        userPayData.push(tempTwiceData);
+                        tempMoreData.value = pay_more_customer;
+                        tempMoreData.name="消费3单以上";
+                        userPayData.push(tempMoreData);
+                    }
+                    option6.series[0].data=userPayData;
+                    // option6.series[0].data[0].value=pay_once_customer;
+                    // option6.series[0].data[0].name=pay_once_customer+"("+(pay_once_customer/pay_total_customer).toFixed(1)*100+"%)";
+                    // option6.series[0].data[1].value=pay_total_customer;
+                    // option6.series[1].data[0].value=pay_twice_customer;
+                    // option6.series[1].data[0].name=pay_twice_customer+"("+(pay_twice_customer/pay_total_customer).toFixed(1)*100+"%)";
+                    // option6.series[1].data[1].value=pay_total_customer;
+                    // option6.series[2].data[0].value=pay_more_customer;
+                    // option6.series[2].data[0].name=pay_more_customer+"("+(pay_more_customer/pay_total_customer).toFixed(1)*100+"%)";
+                    // option6.series[2].data[1].value=pay_total_customer;
+                    myChart6.setOption(option6);
+                }
+            });
+    }
+    
+    function initUserActivityData() {
+        doManager("userAnalysisManager","queryUserActivity",[1],
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        var tempOnceData = new Object();
+                        tempOnceData.value = jsonData.once_count;
+                        tempOnceData.name = "消费1次";
+                        oneMonthActivity.push(tempOnceData);
+                        var tempTwiceData = new Object();
+                        tempTwiceData.value = jsonData.more_count;
+                        tempTwiceData.name = "消费多次"
+                        oneMonthActivity.push(tempTwiceData);
+                    }else{
+                        oneMonthActivity = new Array();
+                    }
+                    option9.series[0].data=oneMonthActivity;
+                    myChart9.setOption(option9);
+                }
+            });
+
+        doManager("userAnalysisManager","queryUserActivity",[3],
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        var tempOnceData = new Object();
+                        tempOnceData.value = jsonData.once_count;
+                        tempOnceData.name = "消费1次";
+                        threeMonthActivity.push(tempOnceData);
+                        var tempTwiceData = new Object();
+                        tempTwiceData.value = jsonData.more_count;
+                        tempTwiceData.name = "消费多次"
+                        threeMonthActivity.push(tempTwiceData);
+                    }else{
+                        threeMonthActivity = new Array();
+                    }
+                    option10.series[0].data=threeMonthActivity;
+                    myChart10.setOption(option10);
+                }
+            });
+    }
+
+    function initNewCustomerData() {
+        doManager("userAnalysisManager","queryNewCustomer",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    if(jsonData!=null){
+                        var curMonth = now.getFullYear()+'-12-31';
+                        var monthData = getYearAndMonth('2017-12-1',curMonth);
+                        newCusYData = new Array(monthData.length+1).join(0).split('');
+                        $(jsonData).each(function(index,element){
+                            var indexTemp = jQuery.inArray(element.month_data,monthData);
+                            newCusYData[indexTemp]=element.new_customer;
+                        });
+                    }
+                    option11.series[0].data=newCusYData;
+                    myChart11.setOption(option11);
+                }
+            });
+    }
+    
+    //获取两个时间段内的月份数据
+    function getYearAndMonth(start, end) {
+        var result = [];
+        var starts = start.split('-');
+        var ends = end.split('-');
+        var staYear = parseInt(starts[0]);
+        var staMon = parseInt(starts[1]);
+        var endYear = parseInt(ends[0]);
+        var endMon = parseInt(ends[1]);
+        while (staYear <= endYear) {
+            if (staYear === endYear) {
+                while (staMon < endMon) {
+                    staMon++;
+                    staMon = staMon < 10 ? '0' + staMon : '' + staMon;
+                    result.push(staYear+"-"+staMon);
+                }
+                staYear++;
+            } else {
+                staMon++;
+                if (staMon > 12) {
+                    staMon = 1;
+                    staYear++;
+                }
+                staMon = staMon < 10 ? '0' + staMon : '' + staMon;
+                result.push(staYear+"-"+staMon);
+            }
+        }
+        return result;
+    }
+</script>
+</body>
+</html>
