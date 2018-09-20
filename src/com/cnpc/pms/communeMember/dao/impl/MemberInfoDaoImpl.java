@@ -75,7 +75,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 按月查询社员GMV、订单量
          * 2018年9月14日
          */
-        String memFromSql = "select count(dmot.trading_price) as cou,sum(dmot.trading_price)  as daypri,DATE_FORMAT(dmot.sign_time,'%Y-%m') as sellmon from df_mass_order_total dmot where dmot.order_tag1 like '%E%' ";
+        String memFromSql = "select count(dmot.trading_price) as cou,sum(dmot.trading_price)  as daypri,DATE_FORMAT(dmot.sign_time,'%Y-%m') as sellmon from df_mass_order_total dmot where dmot.sign_time>'2018-05-17 23:59:59' and dmot.order_tag1 like '%M%'";
         if(!"0000".equals(dd)) {
             memFromSql = memFromSql+ "  and dmot.store_city_code='"+dd+"'";
         }
@@ -98,7 +98,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 按月查询非社员GMV、订单量
          * 2018年9月14日
          */
-        String memFromSql = "select count(dmot.trading_price) as cou,sum(dmot.trading_price)  as daypri,DATE_FORMAT(dmot.sign_time,'%Y-%m') as sellmon from df_mass_order_total dmot where dmot.order_tag1 not like '%E%' ";
+        String memFromSql = "select count(dmot.trading_price) as cou,sum(dmot.trading_price)  as daypri,DATE_FORMAT(dmot.sign_time,'%Y-%m') as sellmon from df_mass_order_total dmot where dmot.sign_time>'2018-05-17 23:59:59' and dmot.order_tag1 not like '%M%'";
         if(!"0000".equals(dd)) {
             memFromSql = memFromSql+ "  and dmot.store_city_code='"+dd+"'";
         }
@@ -122,7 +122,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 查询非社员GMV、订单量
          * 2018年9月14日
          */
-        String memFromSql = "select count(dmot.trading_price) cou,sum(dmot.trading_price)  as pri from df_mass_order_total dmot where dmot.order_tag1 like '%E%' ";
+        String memFromSql = "select count(dmot.trading_price) cou,sum(dmot.trading_price)  as pri from df_mass_order_total dmot where dmot.sign_time>'2018-05-17 23:59:59' and dmot.order_tag1 like '%M%'";
         if(!"0000".equals(dd)) {
             memFromSql = memFromSql+ "  and dmot.store_city_code='"+dd+"'";
         }
@@ -144,7 +144,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 查询非社员GMV、订单量
          * 2018年9月14日
          */
-        String memFromSql = "select count(dmot.trading_price) cou,sum(dmot.trading_price)  as daypri from df_mass_order_total dmot where dmot.order_tag1 not like '%E%'";
+        String memFromSql = "select count(dmot.trading_price) cou,sum(dmot.trading_price)  as daypri from df_mass_order_total dmot where dmot.sign_time>'2018-05-17 23:59:59' and dmot.order_tag1 not like '%M%' ";
         if(!"0000".equals(dd)) {
             memFromSql = memFromSql+ "  and dmot.store_city_code='"+dd+"'";
         }
@@ -166,7 +166,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 按月查询社员成交次数
          * 2018年9月14日
          */
-        String memFromSql = "select ifnull(sum(CASE when  cc.cou=1 then 1 else 0 end),0) as cou1,ifnull(sum(CASE when  cc.cou=2 then 1 else 0 end),0) as cou2,ifnull(sum(CASE when  cc.cou>2 then 1 else 0 end),0) as cou3,cc.smon as smon  from (select count(dmot.customer_id) as cou,DATE_FORMAT(dmot.sign_time,'%Y-%m') as smon from df_mass_order_total dmot where dmot.order_tag1 like '%E%' ";
+        String memFromSql = "select ifnull(sum(CASE when  cc.cou=1 then 1 else 0 end),0) as cou1,ifnull(sum(CASE when  cc.cou=2 then 1 else 0 end),0) as cou2,ifnull(sum(CASE when  cc.cou>2 then 1 else 0 end),0) as cou3,cc.smon as smon  from (select count(dmot.customer_id) as cou,DATE_FORMAT(dmot.sign_time,'%Y-%m') as smon from df_mass_order_total dmot where dmot.order_tag1 like '%M%' and dmot.sign_time>'2018-05-17 23:59:59' ";
         if(!"0000".equals(dd)) {
             memFromSql = memFromSql+ "  and dmot.store_city_code='"+dd+"'";
         }
@@ -189,7 +189,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 按月查询非社员成交次数
          * 2018年9月14日
          */
-        String memFromSql = "select ifnull(sum(CASE when  cc.cou=1 then 1 else 0 end),0) as cou1,ifnull(sum(CASE when  cc.cou=2 then 1 else 0 end),0) as cou2,ifnull(sum(CASE when  cc.cou>2 then 1 else 0 end),0) as cou3,cc.smon as smon  from (select count(dmot.customer_id) as cou,DATE_FORMAT(dmot.sign_time,'%Y-%m') as smon from df_mass_order_total dmot where dmot.order_tag1 not like '%E%' ";
+        String memFromSql = "select ifnull(sum(CASE when  cc.cou=1 then 1 else 0 end),0) as cou1,ifnull(sum(CASE when  cc.cou=2 then 1 else 0 end),0) as cou2,ifnull(sum(CASE when  cc.cou>2 then 1 else 0 end),0) as cou3,cc.smon as smon  from (select count(dmot.customer_id) as cou,DATE_FORMAT(dmot.sign_time,'%Y-%m') as smon from df_mass_order_total dmot where dmot.order_tag1 not like '%M%' and dmot.sign_time>'2018-05-17 23:59:59' ";
         if(!"0000".equals(dd)) {
             memFromSql = memFromSql+ "  and dmot.store_city_code='"+dd+"'";
         }
