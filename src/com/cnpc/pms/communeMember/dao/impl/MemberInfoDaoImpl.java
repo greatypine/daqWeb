@@ -54,8 +54,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 查询社员注册城市
          * 2018年9月14日
          */
-        String memFromSql = "select count(dum.customer_source) as cou, dum.regist_cityno,tdc.cityname cityname from df_user_member dum,t_dist_citycode tdc where dum.associator_expiry_date>NOW() and LPAD(dum.regist_cityno, 4, '0') = tdc.cityno";
-        memFromSql = memFromSql+" GROUP BY dum.regist_cityno";
+        String memFromSql = "SELECT tdc.cityname cityname, count(*) cou FROM df_user_member dfum, t_dist_citycode tdc WHERE dfum.regist_cityno IS NOT NULL AND LPAD(dfum.regist_cityno, 4, '0') = tdc.cityno and dfum.associator_expiry_date>now() GROUP BY dfum.regist_cityno";
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(memFromSql);
             List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();

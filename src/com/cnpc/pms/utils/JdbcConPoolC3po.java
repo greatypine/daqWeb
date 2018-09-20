@@ -2,6 +2,7 @@ package com.cnpc.pms.utils;
 
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,6 @@ public class JdbcConPoolC3po {
 		 
 			//通过代码创建C3P0数据库连接池
 			ds= new ComboPooledDataSource();
-
 			ds.setDriverClass("com.cloudera.impala.jdbc41.Driver");
 			String impala_host = PropertiesUtil.getValue("impala_host");
 			String impala_port = PropertiesUtil.getValue("impala_port");
@@ -38,11 +38,11 @@ public class JdbcConPoolC3po {
 			 
 			ds.setPassword("");*/
 			 
-			ds.setInitialPoolSize(10);
+			ds.setInitialPoolSize(100);
 			 
-			ds.setMinPoolSize(5);
+			ds.setMinPoolSize(20);
 			 
-			ds.setMaxPoolSize(20);
+			ds.setMaxPoolSize(200);
 		 
 		}catch (Exception e) {
 		 
@@ -58,18 +58,18 @@ public class JdbcConPoolC3po {
 	public static Connection getConnection() throws SQLException {
         Logger logger = LoggerFactory.getLogger(JdbcConPoolC3po.class);
         try {
+            Connection con = ds.getConnection();
             logger.info("Connection jdbcUrl is [{}]", ds.getJdbcUrl());
             logger.info("Connection use is [{}]", ds.getNumBusyConnections());
             logger.info("Connection all  is [{}]", ds.getNumConnections());
             logger.info("Connection idle is [{}]", ds.getNumIdleConnections());
+            return con;
         }catch (Exception e) {
             logger.info("Exception is {}",e.getMessage());
             e.printStackTrace();
-
         }
-		return ds.getConnection();
-	 
-	}
+        return null;
+    }
 	 
 	 
 	 

@@ -173,7 +173,7 @@
 	</root>
 	
 	
-  <root level="INFO">   
+  <root level="INFO">
     <appender-ref ref="FILE" />   
   </root> 
   
