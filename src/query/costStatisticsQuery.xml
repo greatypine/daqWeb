@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmsquery>
+
+
+    <query id="costStatisticsQuery" header="成本录入统计" method="costStatisticsManager.selectCostStatistics">
+        <column key="id" header="主键" type="java.lang.Long" operator="in" align="center" allowSort="false" display="false"/>
+        <column key="cityName" header="城市名称" type="java.lang.String" operator="eq" align="center" allowSearch="false" allowSort="false" display="true"  width="4%"/>
+        <column key="cityId" header="城市ID" type="java.lang.String" operator="eq" align="center" allowSearch="false" allowSort="false" display="false" />
+        <column key="storeNo" header="门店编码" type="java.lang.String" operator="eq" align="center" allowSearch="false" allowSort="false" display="false" />
+        <column key="year" header="年" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" />
+        <column key="month" header="月" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false"/>
+        <column key="total" header="总门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="5%"/>
+        <column key="labor" header="人工成本录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
+        <column key="rent" header="租金成本录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
+        <column key="renovation" header="装修摊销录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
+        <column key="fixedAsset" header="固定资产录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
+        <column key="gwe" header="水电费录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
+        <column key="operation" header="运营成本录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
+    </query>
+</pmsquery>

@@ -1,6 +1,7 @@
 package com.cnpc.pms.costStatistics.manager;
 
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.costStatistics.dto.CostDto;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface CostRentManager extends IManager {
      * @date 2018/8/22 9:14
      **/
 
-    public Map<String,Object>  queryCostRent(String storeNo,String storeName,Integer year);
+    public Map<String,Object>  queryCostRent(CostDto costDto);
 
 
     /**
@@ -29,7 +30,7 @@ public interface CostRentManager extends IManager {
      * @date 2018/8/22 9:24
      **/
 
-    public Map<String,Object>  exportCostRent(String storeNo,String storeName,Integer year);
+    public Map<String,Object>  exportCostRent(CostDto costDto);
 
     /**
      * @Description 保存租金成本

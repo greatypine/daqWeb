@@ -21,6 +21,10 @@ public class CostGWE extends DataEntity {
     @Column(name="controlCode",columnDefinition="int(20) COMMENT 't_cost_control code'")
     private String controlCode;
 
+
+    @Column(name="cityName",columnDefinition="varchar(100) COMMENT '城市名称'")
+    private String cityName;
+
     @Column(name="storeNo",columnDefinition="varchar(100) COMMENT '门店编号'")
     private String storeNo;
 
@@ -104,5 +108,13 @@ public class CostGWE extends DataEntity {
 
     public void setControlCode(String controlCode) {
         this.controlCode = controlCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }

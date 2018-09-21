@@ -21,6 +21,9 @@ public class CostRenovation extends DataEntity {
     @Column(name="controlCode",columnDefinition="int(20) COMMENT 't_cost_control code'")
     private String controlCode;
 
+    @Column(name="cityName",columnDefinition="varchar(100) COMMENT '城市名称'")
+    private String cityName;
+
     @Column(name="storeNo",columnDefinition="varchar(100) COMMENT '门店编号'")
     private String storeNo;
 
@@ -81,6 +84,11 @@ public class CostRenovation extends DataEntity {
 
     @Column(name="contract_date",columnDefinition="varchar(100) COMMENT '合同日期'")
     private String contractDate;
+
+    @Column(name="expiration_contract",columnDefinition="int (2) COMMENT '装修合同是否有效 0 是 1 否'")
+    private Integer expirationContract;
+
+
 
 
     public Double getWholeProcessManageSurcharge() {
@@ -252,4 +260,19 @@ public class CostRenovation extends DataEntity {
     }
 
 
+    public Integer getExpirationContract() {
+        return expirationContract;
+    }
+
+    public void setExpirationContract(Integer expirationContract) {
+        this.expirationContract = expirationContract;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
 }

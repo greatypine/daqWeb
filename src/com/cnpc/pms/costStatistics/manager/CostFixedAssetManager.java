@@ -1,6 +1,7 @@
 package com.cnpc.pms.costStatistics.manager;
 
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.costStatistics.dto.CostDto;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface CostFixedAssetManager extends IManager {
      * @date 2018/9/11 10:45
      **/
 
-    public Map<String, Object> queryCostFixedAsset(String storeNo, String storeName);
+    public Map<String, Object> queryCostFixedAsset(CostDto costDto);
 
     /**
      * @Description 导出固定资产
@@ -28,7 +29,7 @@ public interface CostFixedAssetManager extends IManager {
      * @date 2018/9/13 14:49
      **/
 
-    public Map<String, Object> exportCostFixedAsset(String storeNo, String storeName);
+    public Map<String, Object> exportCostFixedAsset(CostDto costDto);
 
     /**
      * @Description 保存固定资产

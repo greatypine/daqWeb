@@ -5,6 +5,7 @@ import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.costStatistics.dao.CostStatisticsDao;
+import com.cnpc.pms.costStatistics.dto.CostDto;
 import com.cnpc.pms.costStatistics.entity.CostFixedAsset;
 import com.cnpc.pms.costStatistics.entity.CostRenovation;
 import com.cnpc.pms.costStatistics.manager.CostFixedAssetManager;
@@ -24,19 +25,19 @@ import java.util.Map;
 public class CostFixedAssetManagerImpl extends BizBaseCommonManager implements CostFixedAssetManager {
 
     @Override
-    public Map<String, Object> queryCostFixedAsset(String storeNo, String storeName) {
+    public Map<String, Object> queryCostFixedAsset(CostDto costDto) {
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
-        List<Map<String,Object>> list = costStatisticsDao.queryCostFixedAsset(storeNo,storeName);
+        List<Map<String,Object>> list = costStatisticsDao.queryCostFixedAsset(costDto);
         result.put("fixedAsset",list);
         return result;
     }
 
     @Override
-    public Map<String, Object> exportCostFixedAsset(String storeNo, String storeName) {
+    public Map<String, Object> exportCostFixedAsset(CostDto costDto) {
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
-        List<Map<String,Object>> list = costStatisticsDao.queryCostFixedAsset(storeNo,storeName);
+        List<Map<String,Object>> list = costStatisticsDao.queryCostFixedAsset(costDto);
         if(list==null||list.size()==0){
             result.put("message","没有符合条件的数据！");
             result.put("status","null");
@@ -59,6 +60,7 @@ public class CostFixedAssetManagerImpl extends BizBaseCommonManager implements C
             if(list!=null&&list.size()>0){
                 for(int i=0;i<list.size();i++){
                     Map<String,Object> obj = list.get(i);
+                    String cityName = obj.get("cityName")==null?"":String.valueOf(obj.get("cityName"));
                     String storeNo = obj.get("storeNo")==null?"":String.valueOf(obj.get("storeNo"));
                     String storeName = obj.get("storeName")==null?"":String.valueOf(obj.get("storeName"));
 
@@ -88,6 +90,7 @@ public class CostFixedAssetManagerImpl extends BizBaseCommonManager implements C
                     }else{
                         cfa = new CostFixedAsset();
                     }
+                    cfa.setCityName(cityName);
                     cfa.setStoreNo(storeNo);
                     cfa.setStoreName(storeName);
                     cfa.setAio(aio);

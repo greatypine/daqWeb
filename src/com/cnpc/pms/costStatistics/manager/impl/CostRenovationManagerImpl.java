@@ -5,6 +5,7 @@ import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.costStatistics.dao.CostStatisticsDao;
+import com.cnpc.pms.costStatistics.dto.CostDto;
 import com.cnpc.pms.costStatistics.entity.CostRenovation;
 import com.cnpc.pms.costStatistics.manager.CostRenovationManager;
 import com.cnpc.pms.costStatistics.util.CostRenovationExcel;
@@ -23,20 +24,20 @@ import java.util.Map;
  */
 public class CostRenovationManagerImpl extends BizBaseCommonManager implements CostRenovationManager {
     @Override
-    public Map<String, Object> queryCostRenovation(String storeNo, String storeName) {
+    public Map<String, Object> queryCostRenovation(CostDto costDto) {
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
-        List<Map<String,Object>> list = costStatisticsDao.queryCostRenovation(storeNo,storeName);
+        List<Map<String,Object>> list = costStatisticsDao.queryCostRenovation(costDto);
         result.put("renovation",list);
         return result;
     }
 
     @Override
-    public Map<String, Object> exportCostRenovation(String storeNo, String storeName) {
+    public Map<String, Object> exportCostRenovation(CostDto costDto) {
 
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
-        List<Map<String,Object>> list = costStatisticsDao.queryCostRenovation(storeNo,storeName);
+        List<Map<String,Object>> list = costStatisticsDao.queryCostRenovation(costDto);
         if(list==null||list.size()==0){
             result.put("message","没有符合条件的数据！");
             result.put("status","null");
@@ -58,6 +59,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
             if(list!=null&&list.size()>0){
                 for(int i=0;i<list.size();i++){
                     Map<String,Object> obj = list.get(i);
+                    String cityName = obj.get("cityName")==null?"":String.valueOf(obj.get("cityName"));
                     String storeNo = obj.get("storeNo")==null?"":String.valueOf(obj.get("storeNo"));
                     String storeName = obj.get("storeName")==null?"":String.valueOf(obj.get("storeName"));
 
@@ -70,6 +72,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
                     Double lightBox = obj.get("lightBox")==null?null:Double.parseDouble(String.valueOf(obj.get("lightBox")));
                     Double processManage = obj.get("processManage")==null?null:Double.parseDouble(String.valueOf(obj.get("processManage")));
                     Double processManageSurcharge = obj.get("processManageSurcharge")==null?null:Double.parseDouble(String.valueOf(obj.get("processManageSurcharge")));
+                    Double wholeProcessManageSurcharge = obj.get("wholeProcessManageSurcharge")==null?null:Double.parseDouble(String.valueOf(obj.get("wholeProcessManageSurcharge")));
                     Double airConditioner = obj.get("airConditioner")==null?null:Double.parseDouble(String.valueOf(obj.get("airConditioner")));
                     Double airConditionerSurcharge = obj.get("airConditionerSurcharge")==null?null:Double.parseDouble(String.valueOf(obj.get("airConditionerSurcharge")));
                     Double design = obj.get("design")==null?null:Double.parseDouble(String.valueOf(obj.get("design")));
@@ -86,6 +89,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
                     }else{
                         cr = new CostRenovation();
                     }
+                    cr.setCityName(cityName);
                     cr.setStoreNo(storeNo);
                     cr.setStoreName(storeName);
                     cr.setDecorationCompany(decorationCompany);
@@ -97,6 +101,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
                     cr.setLightBox(lightBox);
                     cr.setProcessManage(processManage);
                     cr.setProcessManageSurcharge(processManageSurcharge);
+                    cr.setWholeProcessManageSurcharge(wholeProcessManageSurcharge);
                     cr.setAirConditioner(airConditioner);
                     cr.setAirConditionerSurcharge(airConditionerSurcharge);
                     cr.setDesign(design);
@@ -105,6 +110,7 @@ public class CostRenovationManagerImpl extends BizBaseCommonManager implements C
                     cr.setAmortizeMoney(amortizeMoney);
                     cr.setCompletedDate(completedDate);
                     cr.setContractDate(contractDate);
+                    cr.setExpirationContract(0);
                     preObject(cr);
                     saveObject(cr);
                 }

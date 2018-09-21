@@ -27,22 +27,11 @@
 </head>
 <script type="text/javascript">
 
-    var cur_date = new Date();
-    var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
-    laydate.render({//月份控件
-        elem:'#search_date',
-        value:new Date(),
-        type:"month",
-        btns: ['confirm','now'],
-        theme: '#11214e',
-        max:year_month
 
-    });
 
     var win;
     var current_user;
     $(function () {
-
         var cur_date = new Date();
         var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
         laydate.render({//月份控件
@@ -51,10 +40,10 @@
             type:"month",
             btns: ['confirm','now'],
             theme: '#337ab7',
-            min: '2018-1-1',
             max:year_month
 
         });
+
         searchList();
         doManager('UserManager','getCurrentUserDTO',null,function(data){
             if(data.result){
@@ -205,17 +194,21 @@
     //记载页面时请求数据列表默认的方法
     function searchList() {
 
-            $$.executeSearch('costControlQuery', 'conditionsDiv');
+        $$.executeSearch('costRentContractQuery', 'conditionsDiv');
 
     }
 
 
+    //添加租赁信息
+    function add(){
+        window.location.href = 'costRentContract_add.html?userGroupCode='+current_user.usergroup.code+"&userId="+current_user.id;
+    }
 
 </script>
 <body style="height: 100%">
 <div class="panel panel-primary">
     <div class="panel-heading">
-       成本控制查询
+        成本控制查询
     </div>
     <div class="panel-body">
         <div id="conditionsDiv" style="margin-top: 10px">
@@ -253,13 +246,13 @@
         </div>
     </div>
     <div class="panel-footer" style="text-align: right" id="btnlist">
-        <button id="addbtn" style="display:none" class="btn btn-primary" onclick="add()">添加</button>
-        <button id="searchbtn" style="display:none" class="btn btn-primary" onclick="searchList()">查询</button>
-        <button id="resetbtn" style="display:none" class="btn btn-primary" onclick="doClean();">重置</button>
-        <button id="exportbtn" style="display:none" class="btn btn-primary" onclick="exportCostControl();">导出</button>
+        <button id="addbtn" style="display:inline" class="btn btn-primary" onclick="add()">添加</button>
+        <button id="searchbtn" style="display:inline" class="btn btn-primary" onclick="searchList()">查询</button>
+        <button id="resetbtn" style="display:inline" class="btn btn-primary" onclick="doClean();">重置</button>
+        <button id="exportbtn" style="display:inline" class="btn btn-primary" onclick="exportCostControl();">导出</button>
     </div>
 </div>
-<div id="centerQueryGridContainer" class="panel panel-primary" queryid="costControlQuery" "
+<div id="centerQueryGridContainer" class="panel panel-primary" queryid="costRentContractQuery"
      titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
      showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
      showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
@@ -267,11 +260,3 @@
 
 </body>
 </html>
-
-<div id="areaInfoDetail" style="display:none">
-    <div class="panel-body">
-        <table cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto" id="areaInfoTable">
-
-        </table>
-    </div>
-</div>

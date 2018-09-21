@@ -19,6 +19,148 @@ function showWholeContent(t){
     });
 }
 
+
+var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
+var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+/**
+ * 查询人工成本城市
+ * @type {null}
+ */
+var lst_select_rent_city=null;
+var rentCityNameArray=new Array();
+var rentCityIdMap = {};
+function getRentCity(t){
+
+    rentCityIdMap=new Array();
+    $("#rent_city").empty();
+
+    $("#rent_store").empty();
+    $("#store_id_rent").val("");
+    $("#store_name_rent").val("");
+
+    var str_name = $(t).val();
+    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        $("#city_id_rent").val("");
+
+        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+            return;
+        }
+
+
+
+
+        if(regex_zb.test(userGroupCode)){
+
+            doManager('dynamicManager','selectAllCity',null,function(data){
+                if(data.result){
+
+                    lst_select_rent_city = JSON.parse(data.data);
+
+                    for(i=0;i<lst_select_rent_city.length;i++){
+                        rentCityNameArray.push(lst_select_rent_city[i].cityname);
+                        rentCityIdMap[lst_select_rent_city[i].cityname] = lst_select_rent_city[i].id;
+                    }
+                    var autoComplete = new AutoComplete("city_name_rent","rent_city",rentCityNameArray);
+                    autoComplete.start(event);
+                    $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                }
+            },false);
+
+
+        }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+
+            doManager("StoreManager", "getCityNameOfCSZJ",[userId,null],
+                function(data, textStatus, XMLHttpRequest) {
+                    if (data.result) {
+                        lst_select_rent_city = JSON.parse(data.data).citylist;
+
+                        for(i=0;i<lst_select_rent_city.length;i++){
+                            rentCityNameArray.push(lst_select_rent_city[i].name);
+                            rentCityIdMap[lst_select_rent_city[i].name] = lst_select_rent_city[i].ctid;
+                        }
+                        var autoComplete = new AutoComplete("city_name_rent","rent_city",rentCityNameArray);
+                        autoComplete.start(event);
+                        $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                    }
+                },false);
+        }
+
+    }
+
+}
+
+/**
+ * 选择城市
+ * @param t
+ */
+function selectRentCity(t){
+    var temp_city = document.getElementById("city_name_rent").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+    $("#city_id_rent").val(rentCityIdMap[temp_city]);
+}
+
+
+
+/**-----------------------------------搜索门店------------------------------------------------------**/
+
+/**
+ * 查询门店
+ * @type {null}
+ */
+var lst_select_rent_store=null;
+var rentStoreNameArray=new Array();
+var rentStoreIdMap = {};
+function getRentStore(t){
+
+    rentStoreNameArray=new Array();
+    $("#rent_store").empty();
+    var str_name = $(t).val();
+    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        $("#store_id_rent").val("");
+
+        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+            return;
+        }
+        var city_id  = $("#city_id_rent").val()==""?null:$("#city_id_rent").val();
+        var city_name =  $("#city_name_rent").val();
+        if(city_id==null&&city_name!=""){
+            city_id=-10000;
+        }
+        var target=0;
+        if(regex_zb.test(userGroupCode)){//总部
+            target=0;
+        }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){//城市
+            target=1;
+        }
+
+        doManager('dynamicManager','getStoreByCity',[target,userId,city_id,str_name],function(data){
+            if(data.result){
+
+                lst_select_rent_store = JSON.parse(data.data).storelist;
+
+                for(var i=0;i<lst_select_rent_store.length;i++){
+                    rentStoreNameArray.push(lst_select_rent_store[i].name);
+                    rentStoreIdMap[lst_select_rent_store[i].name] = lst_select_rent_store[i].storeno;
+                }
+                var autoComplete = new AutoComplete("store_name_rent","rent_store",rentStoreNameArray);
+                autoComplete.start(event);
+                $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 23.1%;top: 18.4%;");
+            }else{
+
+            }
+        });
+    }
+
+}
+
+/**
+ * 选择门店
+ * @param t
+ */
+function selectRentStore(t){
+    var temp_store = document.getElementById("store_name_rent").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+    $("#store_id_rent").val(rentStoreIdMap[temp_store]);
+}
+
 /**
  * 检测租金成本数据并记录编辑的门店
  *
@@ -91,21 +233,24 @@ function  checkPropertyFee(t) {
     var propertyDeadLine = $("#propertyDeadLine_"+id[1]).val();
     if(t.value!=""){
         if(propertyDeadLine!=""){
-            var property_fee_year = parseFloat(t.value)*parseInt(propertyDeadLine);
-            $("#propertyFeeYear_"+id[1]).val(property_fee_year.toFixed(2));
+            var property_fee_month = parseFloat(t.value)/parseInt(propertyDeadLine);
+            $("#propertyFeeMonth_"+id[1]).val(property_fee_month.toFixed(2));
         }else{
-            $("#propertyFeeYear_"+id[1]).val("");
+            $("#propertyFeeMonth_"+id[1]).val("");
+            $("#costMonth_"+id[1]).val("");
         }
 
-        $("#curYearPropertyFee_"+id[1]).val(t.value);
-        var contractGrandTotal = $("#contractGrandTotal_"+id[1]).val()==""?0:$("#contractGrandTotal_"+id[1]).val();
-        var rentMonthly = (parseFloat(contractGrandTotal)/60).toFixed(2);
-        $("#rentMonthly_"+id[1]).val(rentMonthly);
-        $("input[id='costMonthly_"+id[1]+"']").each(function () {
-            $(this).val(parseFloat(rentMonthly)+parseFloat(t.value));
-        })
+
+        var rentMonthly = $("#rentMonthly_"+id[1]).val();
+        var propertyFeeMonth = $("#propertyFeeMonth_"+id[1]).val();
+        if(rentMonthly!=""&&propertyFeeMonth!=""){
+            $("#costMonth_"+id[1]).val((parseFloat(rentMonthly)+parseFloat(propertyFeeMonth)).toFixed(2));
+        }else{
+            $("#costMonth_"+id[1]).val("");
+        }
     }else if(t.value==""){
         $("#propertyFeeYear_"+id[1]).val("");
+        $("#costMonth_"+id[1]).val("");
     }
 
 
@@ -140,47 +285,7 @@ function checkContentValid(t){
     }
 }
 
-/**
- * 检测年租金
- * @param t
- */
-function checkEveryYearRent(t){
 
-    $(t).parent().parent().attr("editable",true);
-
-    var reg = /^[1-9]+(.[0-9]{2})?$/;
-    var v= $(t).val();
-    if(!reg.test(v)&&v!=""&&v!="."){
-
-        t.value = t.value.replace(/[^\d.]/g,"");  //清除“数字”和“.”以外的字符
-        t.value = t.value.replace(/\.{2,}/g,"."); //只保留第一个. 清除多余的
-        t.value = t.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-        t.value = t.value.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3');//只能输入两个小数
-        if(t.value.indexOf(".")< 0 && t.value !=""){//以上已经过滤，此处控制的是如果没有小数点，首位不能为类似于 01、02的金额
-            t.value= parseFloat(t.value);
-        }
-
-        $(t).val(t.value);
-    }else if(v=="."){
-        $(t).val("");
-    }
-
-    var index = t.id.split("_")[1];
-    var firstRent = $("#firstYearRent_"+index).val()==""?0:$("#firstYearRent_"+index).val();
-    var sendRent = $("#secondYearRent_"+index).val()==""?0:$("#secondYearRent_"+index).val();
-    var thirdRent = $("#thirdYearRent_"+index).val()==""?0:$("#thirdYearRent_"+index).val();
-    var fourRent = $("#fourthYearRent_"+index).val()==""?0:$("#fourthYearRent_"+index).val();
-    var fifthRent = $("#fifthYearRent_"+index).val()==""?0:$("#fifthYearRent_"+index).val();
-
-    $("#contractGrandTotal_"+index).val(parseFloat(firstRent)+parseFloat(sendRent)+parseFloat(thirdRent)+parseFloat(fourRent)+parseFloat(fifthRent));
-    var contractGrandTotal = $("#contractGrandTotal_"+index).val();
-    var rentMonthly = (parseFloat(contractGrandTotal)/60).toFixed(2);
-    $("#rentMonthly_"+index).val(rentMonthly);
-    var curYearPropertyFee = $("#curYearPropertyFee_"+index).val()==""?0:$("#curYearPropertyFee_"+index).val();
-    $("input[id='costMonthly_"+index+"']").each(function () {
-        $(this).val(parseFloat(rentMonthly)+parseFloat(curYearPropertyFee));
-    })
-}
 
 
 /**
@@ -194,16 +299,23 @@ function checkPropertyDeadLine(t){
     var id = t.id.split("_");
     if(t.value!=""&&parseInt(t.value)<=12&&parseInt(t.value)>=0){
 
-        var propertyFee = $("#propertyFee_"+id[1]).val();
+        var propertyFee = $("#propertyFeeYear_"+id[1]).val();
         if(propertyFee==""){
-            $("#propertyFeeYear_"+id[1]).val("");
+            $("#propertyFeeMonth_"+id[1]).val("");
         }else if(propertyFee!=""&&t.value!=""){
-            var property_fee_year = parseFloat(t.value)*parseInt(propertyFee);
-            $("#propertyFeeYear_"+id[1]).val(property_fee_year);
+            var property_fee_month = parseFloat(propertyFee)/parseInt(t.value);
+            $("#propertyFeeMonth_"+id[1]).val(property_fee_month.toFixed(2));
+            var rentMonthly = $("#rentMonthly_"+id[1]).val();
+            if(rentMonthly!=""){
+                $("#costMonth_"+id[1]).val((parseFloat(rentMonthly)+parseFloat(property_fee_month)).toFixed(2));
+            }else{
+                $("#costMonth_"+id[1]).val("");
+            }
         }
     }else{
         $(t).val("");
-        $("#propertyFeeYear_"+id[1]).val("");
+        $("#propertyFeeMonth_"+id[1]).val("");
+        $("#costMonth_"+id[1]).val("");
     }
 
 }
@@ -215,19 +327,85 @@ function checkPropertyDeadLine(t){
  * **/
 function getCostRent(){
 
+
+    var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
+    if(store_cost_tr.length>0){//有数据修改
+        $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
+            saveCostRent();
+
+        },function(){
+
+            $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
+                $(this).attr("editable","false");
+            });
+            searchCostRent();
+        });
+
+    }else if(store_cost_tr.length==0){//没有数据修改
+        searchCostRent();
+    }
+
+
+
+}
+
+/**
+ * 搜索租金成本
+ * @param
+ */
+function searchCostRent(){
+
     var index = layer.load(0,{
         shade: [0.2,'#333']
     });
-    var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
-    var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
-    var year = $("#year_rent").val();
-    $("#rt1").html(year+"年月租金");
-    $("#rt2").html(year+"年物业月费用");
-    $("#rt3").html(year+"年每月费用");
+
+    var rentDate = $("#year_rent").val();
+    var showYear = rentDate.split("-")[0];
+    var showMonth = rentDate.split("-")[1];
+
+    var showStr = showYear+"年"+showMonth+"月"
+
+    $("#propertyFeeYear_title").html(showYear+"年");
+    $("#propertyDeadline_title").html(showStr);
+    $("#propertyFeeMonth_title").html(showStr);
+    $("#rentalMonth_title").html(showStr);
+    $("#costMonth_title").html(showStr);
+
+    var cityId = $("#city_id_rent").val();
+    var cityName = $("#city_name_rent").val();
+    if(cityId==""&&cityName!=""){
+        cityId="-10000";
+    }
+
+    var storeId = $("#store_id_rent").val();
+    var storeName = $("#store_name_rent").val();
+
+    if(storeId==""&&storeName!=""){
+        storeId=-10000;
+    }
+
+    var role="zb"
+    if(regex_zb.test(userGroupCode)){
+        role=="zb";
+    }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+        role="cs";
+    }
+    var costDto= {
+
+        cityId:cityId,
+        storeNo:storeId,
+        year:showYear,
+        month:parseInt(showMonth),
+        userId:userId,
+        role:role,
+        rDate:rentDate.replace("-","/")
+    }
+
+
     $("#rent_tb_1").find("tr:gt(0)").remove();
     $("#rent_tb_2").find("tr:gt(0)").remove();
 
-    doManager('costRentManager','queryCostRent',[storeNo,storeName,year],function (data) {
+    doManager('costRentManager','queryCostRent',costDto,function (data) {
 
 
         if(data.result){
@@ -239,94 +417,46 @@ function getCostRent(){
 
             for(var i=0;i<costRent.length;i++){
 
+                var cityName = costRent[i].city_name==null?"":costRent[i].city_name;
                 var storeNo = costRent[i].store_no==null?"":costRent[i].store_no;
                 var storeName = costRent[i].store_name==null?"":costRent[i].store_name;
                 var addr = costRent[i].addr==null?"":costRent[i].addr;
-                var rent_monthly = costRent[i].rent_monthly==null?"":costRent[i].rent_monthly;//月租
-                var cost_monthly = costRent[i].cost_monthly==null?"":costRent[i].cost_monthly;//月成本
-                var contract_grand_total = costRent[i].contract_grand_total==null?"":costRent[i].contract_grand_total;//合同总金额
-                var structure_acreage = costRent[i].structure_acreage==null?"":costRent[i].structure_acreage;//建筑面积
-                var lease_unit_price = costRent[i].lease_unit_price==null?"":costRent[i].lease_unit_price;//租赁单价
-                var first_year_rent = costRent[i].first_year_rent==null?"":costRent[i].first_year_rent;
-                var second_year_rent = costRent[i].second_year_rent==null?"":costRent[i].second_year_rent;
-                var third_year_rent = costRent[i].third_year_rent==null?"":costRent[i].third_year_rent;
-                var fourth_year_rent = costRent[i].fourth_year_rent==null?"":costRent[i].fourth_year_rent;
-                var fifth_year_rent = costRent[i].fifth_year_rent==null?"":costRent[i].fifth_year_rent;
-                var deposit = costRent[i].deposit==null?"":costRent[i].deposit;//押金
-                var agency_fee = costRent[i].agency_fee==null?"":costRent[i].agency_fee;//中介费
-                var property_fee_year = "";//年物业费
-                if(costRent[i].property_fee!=null&&costRent[i].property_deadline!=null){
-                    property_fee_year = parseFloat(costRent[i].property_fee)*parseFloat(costRent[i].property_deadline);
-                }
-                var property_fee = costRent[i].property_fee==null?"":costRent[i].property_fee;//月物业费
+                var rental_month = costRent[i].rental_month==null?"":costRent[i].rental_month;//已经保存的月租金
+                var cost_month = costRent[i].cost_month==null?"":costRent[i].cost_month;//月成本
+                var property_fee_year = costRent[i].property_fee_year==null?"":costRent[i].property_fee_year;//年物业费
+                var property_fee_month = costRent[i].property_fee_month==null?"":costRent[i].property_fee_month;//月物业费
                 var property_deadline = costRent[i].property_deadline==null?"":costRent[i].property_deadline;//租期
-                var lease_start_date = costRent[i].lease_start_date==null?"":costRent[i].lease_start_date;//起租日不含免租期
-                var lease_stop_date = costRent[i].lease_stop_date==null?"":costRent[i].lease_stop_date;//到租日
-                var free_lease_start_date = costRent[i].free_lease_start_date==null?"":costRent[i].free_lease_start_date;//起租日含免租期
+                var rentalMonth_cal = costRent[i].rentalMonth_cal==null?"":costRent[i].rentalMonth_cal;//租赁合同总租金计算出的每月租金
+                var contractStoreNo = costRent[i].contractStoreNo==null?"":costRent[i].contractStoreNo;//租赁合同门店编号，
+                var subAddr = addr==""?addr:addr.substring(0,10)+"...";
+                $("#rent_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td><td style='background-color:#A9A9A9' onclick='showWholeContent(this)'><p>"+subAddr+"</p></td></tr>");
 
-                $("#rent_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td><td style='background-color:#A9A9A9' onclick='showWholeContent(this)'><p>"+addr+"</p></td></tr>");
+                var labor_td =
+                    "<td><input type='text' id='propertyFeeYear_"+i+"' onkeyup='checkPropertyFee(this)'  style='width: 100%' value='"+property_fee_year+"'/></td>" +
+                    "<td><input type='text' id='propertyDeadLine_"+i+"' onkeyup='checkPropertyDeadLine(this)' style='width: 100%'   value='"+property_deadline+"'/></td>" +
+                    "<td><input type='text' id='propertyFeeMonth_"+i+"'  readonly style='background-color: #e8e8e8;width: 100%'  value='"+property_fee_month+"'/></td>"+
+                    "<td style='width: 100%'><input type='text' readonly  style='background-color: #e8e8e8;width:100%' id='rentMonthly_"+i+"' value=''/></td>" +
+                    "<td><input type='text' id='costMonth_"+i+"' readonly style='background-color: #e8e8e8;width: 100%'  value='"+cost_month+"'/></td>";
+                $("#rent_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+labor_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden' id='addr' value='"+addr+"'/><input type='hidden' id='cityName' value='"+cityName+"'/></tr>");
 
-                var labor_td = "<td><input type='text' readonly  style='background-color: #e8e8e8' id='rentMonthly_"+i+"' value='"+rent_monthly+"'/></td><td><input type='text' readonly style='background-color: #e8e8e8' id='curYearPropertyFee_"+i+"'  value='"+property_fee+"'/></td><td><input type='text' id='costMonthly_"+i+"' readonly style='background-color: #e8e8e8'  value='"+cost_monthly+"'/></td>";
+                var rentCostMonthly="";
+                if(rental_month!=""){
+                    rentCostMonthly = rental_month;
+                    $("#rentMonthly_"+i).val(rentCostMonthly);
+                }else{
+                    if(rentalMonth_cal!=""){
+                        rentCostMonthly = rentalMonth_cal;
+                        $("#rentMonthly_"+i).val(rentCostMonthly);
+                    }else{
+                        rentCostMonthly="请在租金管理录入当前门店有效数据";
+                        $("#rentMonthly_"+i).val(rentCostMonthly);
+                        $("#propertyFeeYear_"+i).attr("readonly","readonly");
+                        $("#propertyDeadLine_"+i).attr("readonly","readonly");
+                        $("#propertyFeeYear_"+i).css("background-color","#e8e8e8");
+                        $("#propertyDeadLine_"+i).css("background-color","#e8e8e8");
 
-                for(var j=1;j<=12;j++){
-                    labor_td=labor_td+"<td><input type='text' id='costMonthly_"+i+"'  readonly  style='background-color: #e8e8e8' value='"+cost_monthly+"'/></td>";
+                    }
                 }
-
-                labor_td=labor_td + "<td><input type='text' readonly style='background-color: #e8e8e8' id='contractGrandTotal_"+i+"'  value='"+contract_grand_total+"'/></td>" +
-                                    "<td><input type='text' onkeyup='checkContentValid(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
-                                    "<td><input type='text' id='leaseUnitPrice_"+i+"' onkeyup='checkContentValid(this)'  value='"+lease_unit_price+"'/></td>" +
-                                    "<td><input type='text'  onkeyup='checkEveryYearRent(this)' id='firstYearRent_"+i+"' value='"+first_year_rent+"'/></td>" +
-                                    "<td><input type='text' id='secondYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+second_year_rent+"'/></td>" +
-                                    "<td><input type='text'  id='thirdYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+third_year_rent+"'/></td>" +
-                                    "<td><input type='text' id='fourthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+fourth_year_rent+"'/></td>" +
-                                    "<td><input type='text'  id='fifthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+fifth_year_rent+"'/></td>" +
-                                    "<td><input type='text'  id='deposit_"+i+"' onkeyup='checkContentValid(this)' value='"+deposit+"'/></td>" +
-                                    "<td><input type='text' onkeyup='checkContentValid(this)' id='agencyFee_"+i+"'  value='"+agency_fee+"'/></td>" +
-                                    "<td><input type='text' id='propertyFeeYear_"+i+"'  readonly style='background-color: #e8e8e8' value='"+property_fee_year+"'/></td>" +
-                                    "<td><input type='text' id='propertyDeadLine_"+i+"'  onkeyup='checkPropertyDeadLine(this)'  value='"+ property_deadline+"'/></td>" +
-                                    "<td><input type='text' id='propertyFee_"+i+"' onkeyup='checkPropertyFee(this)'   value='"+property_fee+"'/></td>" +
-                                    "<td><input type='text' readonly id='lease_start_date_"+i+"'  value='"+lease_start_date+"'/></td>" +
-                                    "<td><input type='text' readonly id='lease_stop_date_"+i+"'  value='"+lease_stop_date+"'/></td>" +
-                                    "<td><input type='text'  id='free_lease_start_date_"+i+"' readonly value='"+free_lease_start_date+"'/></td>";
-
-                $("#rent_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+labor_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden' id='addr' value='"+addr+"'/></tr>");
-
-                laydate.render({//月份控件
-                    elem:"#lease_start_date_"+i,
-                    value:lease_start_date==""?"":new Date(lease_start_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    done: function(value, date, endDate){
-                        console.log(value)
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
-                });
-
-                laydate.render({//月份控件
-                    elem:"#lease_stop_date_"+i,
-                    value:lease_stop_date==""?"":new Date(lease_stop_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    change: function(value, date, endDate){
-                        // console.log(value); //得到日期生成的值，如：2017-08-18
-                        // console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
-                        // console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
-                });
-
-                laydate.render({//月份控件
-                    elem:"#free_lease_start_date_"+i,
-                    value:free_lease_start_date==""?"":new Date(free_lease_start_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    change: function(value, date, endDate){
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
-                });
 
             }
 
@@ -344,11 +474,49 @@ function getCostRent(){
  *
  * **/
 function   exportCostRent(){
-    var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
-    var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
-    var year = $("#year_rent").val();
+    var rentDate = $("#year_rent").val();
+    var showYear = rentDate.split("-")[0];
+    var showMonth = rentDate.split("-")[1];
 
-    doManager('costRentManager','exportCostRent',[storeNo,storeName,year],function (data) {
+    var showStr = showYear+"年"+showMonth+"月"
+
+    $("#propertyFeeYear_title").html(showYear+"年");
+    $("#propertyDeadline_title").html(showStr);
+    $("#propertyFeeMonth_title").html(showStr);
+    $("#rentalMonth_title").html(showStr);
+    $("#costMonth_title").html(showStr);
+
+    var cityId = $("#city_id_rent").val();
+    var cityName = $("#city_name_rent").val();
+    if(cityId==""&&cityName!=""){
+        cityId="-10000";
+    }
+
+    var storeId = $("#store_id_rent").val();
+    var storeName = $("#store_name_rent").val();
+
+    if(storeId==""&&storeName!=""){
+        storeId=-10000;
+    }
+
+    var role="zb"
+    if(regex_zb.test(userGroupCode)){
+        role=="zb";
+    }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+        role="cs";
+    }
+    var costDto= {
+
+        cityId:cityId,
+        storeNo:storeId,
+        year:showYear,
+        month:parseInt(showMonth),
+        userId:userId,
+        role:role,
+        rDate:rentDate.replace("-","/")
+    }
+
+    doManager('costRentManager','exportCostRent',costDto,function (data) {
         if(data.result){
             var result= JSON.parse(data.data);
             if(result.status=='success'){
@@ -379,48 +547,31 @@ function saveCostRent(){
 
     var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
     var costRentArray = [];
-    var year= $("#year_rent").val();
+    var rdate= $("#year_rent").val();
+
     for(var i=0;i<store_cost_tr.length;i++){
         var storeNo= $(store_cost_tr[i]).attr("id");
+        var cityName = $(store_cost_tr[i]).find("input[id='cityName']").val();
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();
         var addr = $(store_cost_tr[i]).find("input[id='addr']").val();
-        var contractGrandTotal = $(store_cost_tr[i]).find('input[id^="contractGrandTotal_"]').val();
-        var rent_monthly = $(store_cost_tr[i]).find('input[id^="rentMonthly_"]').val();//月租
-        var structure_acreage = $(store_cost_tr[i]).find('input[id^="structureAcreage_"]').val();//建筑面积
-        var lease_unit_price = $(store_cost_tr[i]).find('input[id^="leaseUnitPrice_"]').val();//租赁单价
-        var first_year_rent = $(store_cost_tr[i]).find('input[id^="firstYearRent_"]').val();
-        var second_year_rent = $(store_cost_tr[i]).find('input[id^="secondYearRent_"]').val();
-        var third_year_rent = $(store_cost_tr[i]).find('input[id^="thirdYearRent_"]').val();
-        var fourth_year_rent = $(store_cost_tr[i]).find('input[id^="fourthYearRent_"]').val();
-        var fifth_year_rent = $(store_cost_tr[i]).find('input[id^="fifthYearRent_"]').val();
-        var deposit = $(store_cost_tr[i]).find('input[id^="deposit_"]').val();//押金
-        var agency_fee = $(store_cost_tr[i]).find('input[id^="agencyFee_"]').val();//中介费
-        var property_fee = $(store_cost_tr[i]).find('input[id^="propertyFee_"]').val();//月物业费
+        var rent_monthly = $(store_cost_tr[i]).find('input[id^="rentMonthly_"]').val();//月租金
+        var propertyFeeYear_ = $(store_cost_tr[i]).find('input[id^="propertyFeeYear_"]').val();//月物业费
         var property_deadline = $(store_cost_tr[i]).find('input[id^="propertyDeadLine_"]').val();//租期
-        var lease_start_date = $(store_cost_tr[i]).find('input[id^="lease_start_date_"]').val();//起租日不含免租期
-        var lease_stop_date = $(store_cost_tr[i]).find('input[id^="lease_stop_date_"]').val();//到租日
-        var free_lease_start_date = $(store_cost_tr[i]).find('input[id^="free_lease_start_date_"]').val();//起租日含免租期
+        var propertyFeeMonth = $(store_cost_tr[i]).find('input[id^="propertyFeeMonth_"]').val();//月物业费
+        var costMonth = $(store_cost_tr[i]).find('input[id^="costMonth_"]').val();//月租金成本
 
         var costRent = {
-            year:year,
+            cityName:cityName,
+            year:rdate.split("-")[0],
+            month:parseInt(rdate.split("-")[1]),
             storeNo:storeNo,
             storeName:storeName,
             addr:addr,
-            contractGrandTotal:contractGrandTotal,
-            firstYearRent:fifth_year_rent,
-            secondYearRent:second_year_rent,
-            thirtYearRent:third_year_rent,
-            fourthYearRent:fourth_year_rent,
-            fifthYearRent:fifth_year_rent,
-            structureAcreage:structure_acreage,
-            leaseUnitPrice:lease_unit_price,
-            deposit:deposit,
-            agencyFee:agency_fee,
-            propertyFee:property_fee,
+            rentalMonth:rent_monthly,
+            propertyFeeYear:propertyFeeYear_,
             propertyDeadline:property_deadline,
-            freeLeaseStartDate:free_lease_start_date,
-            leaseStartDate:lease_start_date,
-            leaseStopDate:lease_stop_date
+            propertyFeeMonth:propertyFeeMonth,
+            costMonth:costMonth
 
         }
         costRentArray.push(costRent);
@@ -433,6 +584,9 @@ function saveCostRent(){
 
             if(result.status=='success'){
                 $$.showMessage('提示',"保存成功！");
+                $("#rent_tr_2").nextAll("tr[editable='true']").each(function(){
+                    $(this).attr("editable",false);
+                })
                 return;
             }else if(result.status=="fail"){
 

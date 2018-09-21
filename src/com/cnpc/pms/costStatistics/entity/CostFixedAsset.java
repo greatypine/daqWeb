@@ -20,6 +20,9 @@ public class CostFixedAsset extends DataEntity {
     @Column(name="controlCode",columnDefinition="int(20) COMMENT 't_cost_control code'")
     private String controlCode;
 
+    @Column(name="cityName",columnDefinition="varchar(100) COMMENT '城市名称'")
+    private String cityName;
+
     @Column(name="storeNo",columnDefinition="varchar(100) COMMENT '门店编号'")
     private String storeNo;
 
@@ -27,58 +30,74 @@ public class CostFixedAsset extends DataEntity {
     private String storeName;
 
     @Column(name="amortize_money",columnDefinition="decimal(10,2) COMMENT '月摊销'")
-    private double amortizeMoney;
+    private Double amortizeMoney;
 
     @Column(name="total",columnDefinition="decimal(10,2) COMMENT '总资产'")
-    private double total;
+    private Double total;
 
     @Column(name="aio",columnDefinition="decimal(10,2) COMMENT '多功能一体机'")
-    private double aio;
+    private Double aio;
 
     @Column(name="mobile_phone",columnDefinition="decimal(10,2) COMMENT '手机'")
-    private double mobilePhone;
+    private Double mobilePhone;
 
     @Column(name="iPad",columnDefinition="decimal(10,2) COMMENT 'IPADmini'")
-    private double iPad;
+    private Double iPad;
 
     @Column(name="cash_register",columnDefinition="decimal(10,2) COMMENT '收银机'")
-    private double cashRegister;
+    private Double cashRegister;
 
     @Column(name="computer",columnDefinition="decimal(10,2) COMMENT '电脑'")
-    private double computer;
+    private Double computer;
 
     @Column(name="scanner_gun",columnDefinition="decimal(10,2) COMMENT '扫描仪'")
-    private double scannerGun;
+    private Double scannerGun;
 
     @Column(name="electronics_total",columnDefinition="decimal(10,2) COMMENT '电子类合计'")
-    private double electronicsTotal;
+    private Double electronicsTotal;
 
     @Column(name="electronics_amortize",columnDefinition="decimal(10,2) COMMENT '电子类摊销'")
-    private double electronicsAmortize;
+    private Double electronicsAmortize;
 
     @Column(name="electric_cars",columnDefinition="decimal(10,2) COMMENT '电动车'")
-    private double electricCars;
+    private Double electricCars;
 
     @Column(name="electric_cars_amortize",columnDefinition="decimal(10,2) COMMENT '电动车摊销'")
-    private double electricCarsAmortize;
+    private Double electricCarsAmortize;
 
     @Column(name="cold_chain",columnDefinition="decimal(10,2) COMMENT '卖场冷链设备'")
-    private double coldChain;
+    private Double coldChain;
 
     @Column(name="safe_box",columnDefinition="decimal(10,2) COMMENT '保险柜'")
-    private double safeBox;
+    private Double safeBox;
 
     @Column(name="capsule_goods_shelf",columnDefinition="decimal(10,2) COMMENT '微仓货架'")
-    private double  capsuleGoodsShelf;
+    private Double  capsuleGoodsShelf;
 
     @Column(name="shopping_goods_shelf",columnDefinition="decimal(10,2) COMMENT '卖场货架'")
-    private double  shoppingGoodsShelf;
+    private Double  shoppingGoodsShelf;
 
     @Column(name="machine_total",columnDefinition="decimal(10,2) COMMENT '机器设备合计'")
-    private double  machineTotal;
+    private Double  machineTotal;
 
     @Column(name="machine_amortize",columnDefinition="decimal(10,2) COMMENT '机器设备摊销'")
-    private double  machineAmortize;
+    private Double  machineAmortize;
+
+    public String getControlCode() {
+        return controlCode;
+    }
+
+    public void setControlCode(String controlCode) {
+        this.controlCode = controlCode;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
 
     public String getStoreNo() {
         return storeNo;
@@ -96,155 +115,147 @@ public class CostFixedAsset extends DataEntity {
         this.storeName = storeName;
     }
 
-    public double getAmortizeMoney() {
+    public Double getAmortizeMoney() {
         return amortizeMoney;
     }
 
-    public void setAmortizeMoney(double amortizeMoney) {
+    public void setAmortizeMoney(Double amortizeMoney) {
         this.amortizeMoney = amortizeMoney;
     }
 
-    public double getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(double total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
-    public double getAio() {
+    public Double getAio() {
         return aio;
     }
 
-    public void setAio(double aio) {
+    public void setAio(Double aio) {
         this.aio = aio;
     }
 
-    public double getMobilePhone() {
+    public Double getMobilePhone() {
         return mobilePhone;
     }
 
-    public void setMobilePhone(double mobilePhone) {
+    public void setMobilePhone(Double mobilePhone) {
         this.mobilePhone = mobilePhone;
     }
 
-    public double getiPad() {
+    public Double getiPad() {
         return iPad;
     }
 
-    public void setiPad(double iPad) {
+    public void setiPad(Double iPad) {
         this.iPad = iPad;
     }
 
-    public double getCashRegister() {
+    public Double getCashRegister() {
         return cashRegister;
     }
 
-    public void setCashRegister(double cashRegister) {
+    public void setCashRegister(Double cashRegister) {
         this.cashRegister = cashRegister;
     }
 
-    public double getComputer() {
+    public Double getComputer() {
         return computer;
     }
 
-    public void setComputer(double computer) {
+    public void setComputer(Double computer) {
         this.computer = computer;
     }
 
-    public double getScannerGun() {
+    public Double getScannerGun() {
         return scannerGun;
     }
 
-    public void setScannerGun(double scannerGun) {
+    public void setScannerGun(Double scannerGun) {
         this.scannerGun = scannerGun;
     }
 
-    public double getElectronicsTotal() {
+    public Double getElectronicsTotal() {
         return electronicsTotal;
     }
 
-    public void setElectronicsTotal(double electronicsTotal) {
+    public void setElectronicsTotal(Double electronicsTotal) {
         this.electronicsTotal = electronicsTotal;
     }
 
-    public double getElectronicsAmortize() {
+    public Double getElectronicsAmortize() {
         return electronicsAmortize;
     }
 
-    public void setElectronicsAmortize(double electronicsAmortize) {
+    public void setElectronicsAmortize(Double electronicsAmortize) {
         this.electronicsAmortize = electronicsAmortize;
     }
 
-    public double getElectricCars() {
+    public Double getElectricCars() {
         return electricCars;
     }
 
-    public void setElectricCars(double electricCars) {
+    public void setElectricCars(Double electricCars) {
         this.electricCars = electricCars;
     }
 
-    public double getElectricCarsAmortize() {
+    public Double getElectricCarsAmortize() {
         return electricCarsAmortize;
     }
 
-    public void setElectricCarsAmortize(double electricCarsAmortize) {
+    public void setElectricCarsAmortize(Double electricCarsAmortize) {
         this.electricCarsAmortize = electricCarsAmortize;
     }
 
-    public double getColdChain() {
+    public Double getColdChain() {
         return coldChain;
     }
 
-    public void setColdChain(double coldChain) {
+    public void setColdChain(Double coldChain) {
         this.coldChain = coldChain;
     }
 
-    public double getSafeBox() {
+    public Double getSafeBox() {
         return safeBox;
     }
 
-    public void setSafeBox(double safeBox) {
+    public void setSafeBox(Double safeBox) {
         this.safeBox = safeBox;
     }
 
-    public double getCapsuleGoodsShelf() {
+    public Double getCapsuleGoodsShelf() {
         return capsuleGoodsShelf;
     }
 
-    public void setCapsuleGoodsShelf(double capsuleGoodsShelf) {
+    public void setCapsuleGoodsShelf(Double capsuleGoodsShelf) {
         this.capsuleGoodsShelf = capsuleGoodsShelf;
     }
 
-    public double getShoppingGoodsShelf() {
+    public Double getShoppingGoodsShelf() {
         return shoppingGoodsShelf;
     }
 
-    public void setShoppingGoodsShelf(double shoppingGoodsShelf) {
+    public void setShoppingGoodsShelf(Double shoppingGoodsShelf) {
         this.shoppingGoodsShelf = shoppingGoodsShelf;
     }
 
-    public double getMachineTotal() {
+    public Double getMachineTotal() {
         return machineTotal;
     }
 
-    public void setMachineTotal(double machineTotal) {
+    public void setMachineTotal(Double machineTotal) {
         this.machineTotal = machineTotal;
     }
 
-    public double getMachineAmortize() {
+    public Double getMachineAmortize() {
         return machineAmortize;
     }
 
-    public void setMachineAmortize(double machineAmortize) {
+    public void setMachineAmortize(Double machineAmortize) {
         this.machineAmortize = machineAmortize;
-    }
-
-    public String getControlCode() {
-        return controlCode;
-    }
-
-    public void setControlCode(String controlCode) {
-        this.controlCode = controlCode;
     }
 }

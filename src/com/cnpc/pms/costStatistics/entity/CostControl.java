@@ -17,9 +17,9 @@ import javax.persistence.Table;
 @Table(name="t_cost_control")
 public class CostControl extends DataEntity {
 
-    @Column(name="cityName",columnDefinition="varchar(100) COMMENT '门店编号'")
+    @Column(name="cityName",columnDefinition="varchar(100) COMMENT '城市名称'")
     private String cityName;//城市名称
-    @Column(name="cityCode",columnDefinition="varchar(100) COMMENT '门店编号'")
+    @Column(name="cityCode",columnDefinition="varchar(100) COMMENT '城市编号'")
     private String cityCode;//城市编号
     @Column(name="cityId",columnDefinition="bigint(100) COMMENT '城市ID'")
     private Long cityId;//城市Id t_dist_citycode表主键ID

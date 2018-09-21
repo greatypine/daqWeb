@@ -18,37 +18,35 @@ import java.util.Map;
 /**
  * @ProjectName: daqWeb
  * @Package: com.cnpc.pms.costStatistics.util
- * @Description:导出租金成本工具类
+ * @Description:水电费
  * @Author: gbl
- * @CreateDate: 2018/8/22 9:26
+ * @CreateDate: 2018/9/19 17:14
  */
-public class CostRentExcel {
+public class CostGWEExcel {
 
     // 上传文件本地存储目录
     private static final String UPLOAD_DIRECTORY = "template";
 
     //数据源
     private List<Map<String,Object>> data;
-    private String param1;
 
-    public CostRentExcel(List<Map<String,Object>> data,String param1){
+    public CostGWEExcel(List<Map<String,Object>> data){
         this.data = data;
-        this.param1 = param1;
     }
     //导出的文件标题
-    private final String[] header0={"序号","门店编码","门店名称","门店地址","年月租金","年物业月费用","年每月费用","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同总金额","建筑面积","租赁单价","第一年租金","第二年租金","第三年租金","第四年租金","第五年租金","押金","中介费","物业费","物业期限（月）","物业每月费用","起租日（免租期截止日）","到期日","起租日（含免租期）"};
+    private final String[] header0={"序号","门店编码","门店名称","1月电费","1月水费","2月电费","2月水费","3月电费","3月水费","4月电费","4月水费","5月电费","5月水费","6月电费","6月水费","7月电费","7月水费","8月电费","8月水费","9月电费","9月水费","10月电费","10月水费","11月电费","11月水费","12月电费","12月水费"};
 
-    private final String[] colName = new String[] { "store_no", "store_name","addr", "rental_month","property_fee_month","cost_month", "cost_month1","cost_month2","cost_month3", "cost_month4", "cost_month5","cost_month6","cost_month7", "cost_month8", "cost_month9","cost_month10","cost_month11", "cost_month12", "contract_grand_total","structure_acreage","lease_unit_price", "first_year_rent", "second_year_rent","third_year_rent","fourth_year_rent", "fifth_year_rent", "deposit","agency_fee","property_fee_year", "property_deadline", "property_fee_month","lease_start_date","lease_stop_date", "free_lease_start_date"};
+    private final String[] colName = new String[] { "storeno", "storeName","electricity_fee1","water_fee1","electricity_fee2","water_fee2","electricity_fee3","water_fee3","electricity_fee4","water_fee4","electricity_fee5","water_fee5","electricity_fee6","water_fee6","electricity_fee7","water_fee7","electricity_fee8","water_fee8","electricity_fee9","water_fee9","electricity_fee10","water_fee10","electricity_fee11","water_fee11","electricity_fee12","water_fee12",};
 
 
-    private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI"};
+    private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA"};
 
     public Map<String,Object> exportFile(){
         Map<String,Object> result = new HashMap<String,Object>();
         OssRefFileManager ossRefFileManager  = (OssRefFileManager)SpringHelper.getBean("ossRefFileManager");
         UtilityManager utilityManager = (UtilityManager)SpringHelper.getBean("utilityManager");
         String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+ File.separator + UPLOAD_DIRECTORY;
-        String fileName_part = utilityManager.getPYIndexStr("租金成本",true);
+        String fileName_part = utilityManager.getPYIndexStr("水电费",true);
         // 如果目录不存在则创建
         File uploadDir = new File(str_file_dir_path);
         if (!uploadDir.exists()) {
@@ -59,7 +57,7 @@ public class CostRentExcel {
         HSSFWorkbook workbook = new HSSFWorkbook();
         // 创建Excel的工作sheet,对应到一个excel文档的tab
 
-        HSSFSheet sheet = workbook.createSheet("租金成本");
+        HSSFSheet sheet = workbook.createSheet("固定资产");
 
         // 设置列宽  （第几列，宽度）
         sheet.setColumnWidth( 0, 1600);
@@ -89,15 +87,7 @@ public class CostRentExcel {
         sheet.setColumnWidth( 24, 4500);
         sheet.setColumnWidth( 25, 4500);
         sheet.setColumnWidth( 26, 4500);
-        sheet.setColumnWidth( 27, 4500);
-        sheet.setColumnWidth( 28, 4500);
-        sheet.setColumnWidth( 29, 4500);
-        sheet.setColumnWidth( 30, 4500);
-        sheet.setColumnWidth( 31, 4500);
-        sheet.setColumnWidth( 32, 4500);
-        sheet.setColumnWidth( 33, 4500);
-        sheet.setColumnWidth( 34, 4500);
-        sheet.setColumnWidth( 35, 4500);
+
 
 
         sheet.setDefaultRowHeight((short)360);//设置行高
@@ -175,7 +165,7 @@ public class CostRentExcel {
         HSSFFont font2 = workbook.createFont();
         font2.setFontName("宋体");
         font2.setFontHeightInPoints((short) 12);
-        font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        //font2.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         HSSFCellStyle style2 = workbook.createCellStyle();
         style2.setBorderBottom(HSSFCellStyle.BORDER_THIN); //下边框
         style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);//左边框
@@ -184,27 +174,17 @@ public class CostRentExcel {
         style2.setFont(font2);
         style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);// 左右居中
         style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);// 上下居中
-        style2.setFillForegroundColor(IndexedColors.LIME.getIndex());
-        style2.setFillPattern(CellStyle.SOLID_FOREGROUND);
+        //style2.setFillForegroundColor(IndexedColors.LIME.getIndex());
+        //style2.setFillPattern(CellStyle.SOLID_FOREGROUND);
         style2.setLocked(true);
 
         // 第一行表头标题
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
-        for (int i = 0; i < 35; i++) {
+        for (int i = 0; i <27; i++) {
             cell = row.createCell(i);
-            if(i==4||i==5||i==6){
-                cell.setCellValue(param1+header0[i]);
-            }else{
-                cell.setCellValue(header0[i]);
-            }
-
-
-            if(i>3){
-                cell.setCellStyle(headstyle2);
-            }else{
-                cell.setCellStyle(headstyle);
-            }
+            cell.setCellValue(header0[i]);
+            cell.setCellStyle(headstyle);
         }
 
 
@@ -221,12 +201,11 @@ public class CostRentExcel {
                 Object data = tempmap.get(colName[j]);
                 cell = row.createCell(j+1);
 
-                if(j<3||j>30){
+                if(j<2){
                     cell.setCellStyle(fixedStyle);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
-                }else{
-
+                }else if(j>=2){
                     cell.setCellStyle(style);
                     if (data==null){
                         cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
@@ -234,27 +213,23 @@ public class CostRentExcel {
                         cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                         cell.setCellValue(Double.parseDouble(data.toString()));
                     }
-
                 }
             }
         }
         row = sheet.createRow(data.size()+1);
-        for(int i=0;i<35;i++){
+        for(int i=0;i<27;i++){
             cell = row.createCell(i);
-
             cell.setCellStyle(sumstyle);
-            if(i<4){
+            if(i<3){
                 cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                 cell.setCellValue("合计");
-            }else if(i>6&&i<19){
+            }else if(i>2){
                 cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                 cell.setCellFormula("SUM("+rowColNum[i]+2+":"+rowColNum[i]+(data.size()+1)+")");//合计添加公式
-            }else if(i>18){
-                cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
             }
 
         }
-        sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 6));
+        sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 2));
 
 
 

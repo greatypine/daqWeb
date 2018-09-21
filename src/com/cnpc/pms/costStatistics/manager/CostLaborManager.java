@@ -1,6 +1,7 @@
 package com.cnpc.pms.costStatistics.manager;
 
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.costStatistics.dto.CostDto;
 import com.cnpc.pms.costStatistics.entity.CostLabor;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface CostLaborManager extends IManager {
      * @date 2018/8/13 13:06
      **/
 
-    public Map<String,Object> queryCostLabor(String storeNo, String storeName, Integer year, Integer month);
+    public Map<String,Object> queryCostLabor(CostDto costDto);
 
     /**
      * @Description 导出人工成本
@@ -29,7 +30,7 @@ public interface CostLaborManager extends IManager {
      * @date 2018/8/16 13:32
      **/
 
-    public Map<String,Object> exportCostLabor(String storeNo,String storeName,Integer year,Integer month);
+    public Map<String,Object> exportCostLabor(CostDto costDto);
 
     /**
      * @Description 保存人工成本

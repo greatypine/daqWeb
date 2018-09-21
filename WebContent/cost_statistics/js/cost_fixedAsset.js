@@ -1,5 +1,148 @@
 
 
+var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
+var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+/**
+ * 查询人工成本城市
+ * @type {null}
+ */
+var lst_select_fixedAsset_city=null;
+var fixedAssetCityNameArray=new Array();
+var fixedAssetCityIdMap = {};
+function getFixedAssetCity(t){
+
+    fixedAssetCityIdMap=new Array();
+    $("#fixedAsset_city").empty();
+
+    $("#fixedAsset_store").empty();
+    $("#store_id_fixedAsset").val("");
+    $("#store_name_fixedAsset").val("");
+
+    var str_name = $(t).val();
+    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        $("#city_id_fixedAsset").val("");
+
+        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+            return;
+        }
+
+
+
+
+        if(regex_zb.test(userGroupCode)){
+
+            doManager('dynamicManager','selectAllCity',null,function(data){
+                if(data.result){
+
+                    lst_select_fixedAsset_city = JSON.parse(data.data);
+
+                    for(i=0;i<lst_select_fixedAsset_city.length;i++){
+                        fixedAssetCityNameArray.push(lst_select_fixedAsset_city[i].cityname);
+                        fixedAssetCityIdMap[lst_select_fixedAsset_city[i].cityname] = lst_select_fixedAsset_city[i].id;
+                    }
+                    var autoComplete = new AutoComplete("city_name_fixedAsset","fixedAsset_city",fixedAssetCityNameArray);
+                    autoComplete.start(event);
+                    $("#fixedAsset_city").attr("style","width: 150px;z-index: 99999;left: 8%;top: 18.4%;");
+                }
+            },false);
+
+
+        }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+
+            doManager("StoreManager", "getCityNameOfCSZJ",[userId,null],
+                function(data, textStatus, XMLHttpRequest) {
+                    if (data.result) {
+                        lst_select_fixedAsset_city = JSON.parse(data.data).citylist;
+
+                        for(i=0;i<lst_select_fixedAsset_city.length;i++){
+                            fixedAssetCityNameArray.push(lst_select_fixedAsset_city[i].name);
+                            fixedAssetCityIdMap[lst_select_fixedAsset_city[i].name] = lst_select_fixedAsset_city[i].ctid;
+                        }
+                        var autoComplete = new AutoComplete("city_name_fixedAsset","fixedAsset_city",fixedAssetCityNameArray);
+                        autoComplete.start(event);
+                        $("#fixedAsset_city").attr("style","width: 150px;z-index: 99999;left: 8%;top: 18.4%;");
+                    }
+                },false);
+        }
+
+    }
+
+}
+
+/**
+ * 选择城市
+ * @param t
+ */
+function selectFixedAssetCity(t){
+    var temp_city = document.getElementById("city_name_fixedAsset").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+    $("#city_id_fixedAsset").val(fixedAssetCityIdMap[temp_city]);
+}
+
+
+
+/**-----------------------------------搜索门店------------------------------------------------------**/
+
+/**
+ * 查询门店
+ * @type {null}
+ */
+var lst_select_fixedAsset_store=null;
+var fixedAssetStoreNameArray=new Array();
+var fixedAssetStoreIdMap = {};
+function getFixedAssetStore(t){
+
+    fixedAssetStoreNameArray=new Array();
+    $("#fixedAsset_store").empty();
+    var str_name = $(t).val();
+    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        $("#store_id_fixedAsset").val("");
+
+        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+            return;
+        }
+        var city_id  = $("#city_id_fixedAsset").val()==""?null:$("#city_id_fixedAsset").val();
+        var city_name =  $("#city_name_fixedAsset").val();
+        if(city_id==null&&city_name!=""){
+            city_id=-10000;
+        }
+        var target=0;
+        if(regex_zb.test(userGroupCode)){//总部
+            target=0;
+        }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){//城市
+            target=1;
+        }
+
+        doManager('dynamicManager','getStoreByCity',[target,userId,city_id,str_name],function(data){
+            if(data.result){
+
+                lst_select_fixedAsset_store = JSON.parse(data.data).storelist;
+
+                for(var i=0;i<lst_select_fixedAsset_store.length;i++){
+                    fixedAssetStoreNameArray.push(lst_select_fixedAsset_store[i].name);
+                    fixedAssetStoreIdMap[lst_select_fixedAsset_store[i].name] = lst_select_fixedAsset_store[i].storeno;
+                }
+                var autoComplete = new AutoComplete("store_name_fixedAsset","fixedAsset_store",fixedAssetStoreNameArray);
+                autoComplete.start(event);
+                $("#fixedAsset_store").attr("style","width: 150px;z-index: 99999;left: 29.1%;top: 18.4%;");
+
+            }else{
+
+            }
+        });
+    }
+
+}
+
+/**
+ * 选择门店
+ * @param t
+ */
+function selectFixedAssetStore(t){
+    var temp_store = document.getElementById("store_name_fixedAsset").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+    $("#store_id_fixedAsset").val(fixedAssetStoreIdMap[temp_store]);
+}
+
+
 
 /**
  * 计算电子类合计
@@ -30,8 +173,9 @@ function calculateElectronicsTotal(t){
         var total = parseFloat(aio)+parseFloat(iPad)+parseFloat(cashRegister)+parseFloat(computer)+parseFloat(scannerGun)+parseFloat(mobilePhone);
         $("#electronicsTotal_"+id[1]).val(total);
         $("#electronicsAmortize_"+id[1]).val(parseFloat(total/36).toFixed(2));
-        calculateAmortizeMoney(t);
+
     }
+    calculateAmortizeMoney(t);
     calculateTotal(t);
 
 }
@@ -74,14 +218,15 @@ function calculateMachineTotal(t){
         $("#machineTotal_"+id[1]).val("");
         $("#machineAmortize_"+id[1]).val("");
     }else{
-        coldChain=coldChain==""?0:parseFloat(coldChain);
-        safeBox=safeBox==""?0:parseFloat(safeBox);
-        capsuleGoodsShelf==""?0:parseFloat(capsuleGoodsShelf);
-        shoppingGoodsShelf==""?0:parseFloat(shoppingGoodsShelf);
+
         if(coldChain==""&&safeBox==""&&capsuleGoodsShelf==""&&shoppingGoodsShelf==""){
             $("#machineTotal_"+id[1]).val("");
             $("#machineAmortize_"+id[1]).val("");
         }else{
+            coldChain=coldChain==""?0:parseFloat(coldChain);
+            safeBox=safeBox==""?0:parseFloat(safeBox);
+            capsuleGoodsShelf=capsuleGoodsShelf==""?0:parseFloat(capsuleGoodsShelf);
+            shoppingGoodsShelf=shoppingGoodsShelf==""?0:parseFloat(shoppingGoodsShelf);
             var total = parseFloat(coldChain)+parseFloat(safeBox)+parseFloat(capsuleGoodsShelf)+parseFloat(shoppingGoodsShelf);
             $("#machineTotal_"+id[1]).val(total);
             $("#machineAmortize_"+id[1]).val(parseFloat(total/120).toFixed(2));
@@ -136,6 +281,7 @@ function calculateTotal(t){
     var machineTotal = $("#machineTotal_"+id[1]).val();
     if(electronicsTotal==""&&electricCars==""&&machineTotal==""){
         $("#total_"+id[1]).val("");
+
     }else{
 
         electronicsTotal = electronicsTotal==""?0:parseFloat(electronicsTotal);
@@ -146,31 +292,78 @@ function calculateTotal(t){
     }
 }
 
+/**
+ * 查询固定资产
+ */
+function getCostFixedAsset(){
 
+    var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
+    if(store_cost_tr.length>0){//有数据修改
+        $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
+            saveCostFixedAsset();
+
+        },function(){
+
+            $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
+                $(this).attr("editable","false");
+            });
+            searchCostFixedAsset();
+        });
+
+    }else if(store_cost_tr.length==0){//没有数据修改
+        searchCostFixedAsset();
+    }
+}
 
 
 /**
  * 获取固定资产
  * **/
-function getCostFixedAsset(){
+function searchCostFixedAsset(){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
     });
-    var storeNo=$("#storeNo_FixedAsset").val()==""?null:$("#storeNo_FixedAsset").val();
-    var storeName=$("#storeName_FixedAsset").val()==""?null:$("#storeName_FixedAsset").val();
+
+
+    var cityId = $("#city_id_fixedAsset").val();
+    var cityName = $("#city_name_fixedAsset").val();
+    if(cityId==""&&cityName!=""){
+        cityId="-10000";
+    }
+
+    var storeId = $("#store_id_fixedAsset").val();
+    var storeName = $("#store_name_fixedAsset").val();
+
+    if(storeId==""&&storeName!=""){
+        storeId=-10000;
+    }
+
+    var role="zb"
+    if(regex_zb.test(userGroupCode)){
+        role=="zb";
+    }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+        role="cs";
+    }
+    var costDto= {
+        cityId:cityId,
+        storeNo:storeId,
+        userId:userId,
+        role:role
+    }
 
 
     $("#fixedAsset_tb_1").find("tr:gt(0)").remove();
     $("#fixedAsset_tb_2").find("tr:gt(0)").remove();
 
-    doManager('costFixedAssetManager','queryCostFixedAsset',[storeNo,storeName],function (data) {
+    doManager('costFixedAssetManager','queryCostFixedAsset',costDto,function (data) {
 
 
         if(data.result){
             var costFixedAsset = JSON.parse(data.data).fixedAsset;
 
             for(var i=0;i<costFixedAsset.length;i++){
+                var cityName = costFixedAsset[i].city_name==null?"":costFixedAsset[i].city_name;
                 var storeNo = costFixedAsset[i].store_no==null?"":costFixedAsset[i].store_no;
                 var storeName = costFixedAsset[i].store_name==null?"":costFixedAsset[i].store_name;
                 var amortize_money = costFixedAsset[i].amortize_money==null?"":costFixedAsset[i].amortize_money;//月摊销成本
@@ -196,8 +389,7 @@ function getCostFixedAsset(){
 
                 $("#fixedAsset_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
 
-                var FixedAsset_td = "<td><input type='text'  style='background-color: #e8e8e8' readonly   id='amortizeMoney_"+i+"' value='"+amortize_money+"'/></td>" +
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='total_"+i+"'  value='"+total+"'/></td>" +
+                var FixedAsset_td =
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='aio_"+i+"'    value='"+aio+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='mobilePhone_"+i+"'    value='"+mobile_phone+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='iPad_"+i+"'    value='"+iPad+"'/></td>"+
@@ -205,15 +397,17 @@ function getCostFixedAsset(){
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='computer_"+i+"'    value='"+computer+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='scannerGun_"+i+"'    value='"+scanner_gun+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='electronicsTotal_"+i+"'    value='"+electronics_total+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='electronicsAmortize_"+i+"'    value='"+electronics_amortize+"'/></td>"+
+                    "<td><input type='text'      id='electronicsAmortize_"+i+"'    value='"+electronics_amortize+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateElectricCarsAmortize(this)' id='electricCars_"+i+"'    value='"+electric_cars+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='electricCarsAmortize_"+i+"'    value='"+electric_cars_amortize+"'/></td>"+
+                    "<td><input type='text'      id='electricCarsAmortize_"+i+"'    value='"+electric_cars_amortize+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateMachineTotal(this)' id='coldChain_"+i+"'    value='"+cold_chain+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateMachineTotal(this)' id='safeBox_"+i+"'    value='"+safe_box+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateMachineTotal(this)' id='capsuleGoodsShelf_"+i+"'    value='"+capsule_goods_shelf+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateMachineTotal(this)' id='shoppingGoodsShelf_"+i+"'    value='"+shopping_goods_shelf+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='machineTotal_"+i+"'    value='"+machine_total+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='machineAmortize_"+i+"'    value='"+machine_amortize+"'/></td>"+
+                    "<td><input type='text'      id='machineAmortize_"+i+"'    value='"+machine_amortize+"'/></td>"+
+                    "<td><input type='text'      id='amortizeMoney_"+i+"' value='"+amortize_money+"'/></td>" +
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='total_"+i+"'  value='"+total+"'/></td>" +
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
@@ -229,7 +423,7 @@ function getCostFixedAsset(){
 
 
 
-                $("#fixedAsset_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+FixedAsset_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/></tr>");
+                $("#fixedAsset_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+FixedAsset_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden'  id='cityName' value='"+cityName+"'/></tr>");
             }
 
             layer.close(index);
@@ -243,9 +437,33 @@ function getCostFixedAsset(){
  *
  * **/
 function   exportCostFixedAsset(){
-    var storeNo=$("#storeNo_FixedAsset").val()==""?null:$("#storeNo_FixedAsset").val();
-    var storeName=$("#storeName_FixedAsset").val()==""?null:$("#storeName_FixedAsset").val();
-    doManager('costFixedAssetManager','exportCostFixedAsset',[storeNo,storeName],function (data) {
+
+    var cityId = $("#city_id_fixedAsset").val();
+    var cityName = $("#city_name_fixedAsset").val();
+    if(cityId==""&&cityName!=""){
+        cityId="-10000";
+    }
+
+    var storeId = $("#store_id_fixedAsset").val();
+    var storeName = $("#store_name_fixedAsset").val();
+
+    if(storeId==""&&storeName!=""){
+        storeId=-10000;
+    }
+
+    var role="zb"
+    if(regex_zb.test(userGroupCode)){
+        role=="zb";
+    }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+        role="cs";
+    }
+    var costDto= {
+        cityId:cityId,
+        storeNo:storeId,
+        userId:userId,
+        role:role
+    }
+    doManager('costFixedAssetManager','exportCostFixedAsset',costDto,function (data) {
         if(data.result){
             var result= JSON.parse(data.data);
             if(result.status=='success'){
@@ -277,6 +495,7 @@ function saveCostFixedAsset(){
     var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
     var costFixedAssetArray = [];
     for(var i=0;i<store_cost_tr.length;i++){
+        var cityName = $(store_cost_tr[i]).find("input[id='cityName']").val();//城市名称
         var storeNo= $(store_cost_tr[i]).attr("id");//门店编号
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();//门店名称
         var amortizeMoney = $(store_cost_tr[i]).find("input[id^='amortizeMoney_']").val();//月摊销
@@ -299,6 +518,7 @@ function saveCostFixedAsset(){
         var machineAmortize = $(store_cost_tr[i]).find('input[id^="machineAmortize_"]').val();//设备摊销
 
         var costFixedAsset = {
+             cityName:cityName,
              storeNo:storeNo,
              storeName:storeName,
              amortizeMoney:amortizeMoney,
