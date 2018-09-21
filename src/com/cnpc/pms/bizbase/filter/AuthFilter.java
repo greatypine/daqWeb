@@ -616,6 +616,15 @@ public class AuthFilter extends OncePerRequestFilter {
                 return;
             }
 			/**
+			 * 2018-09-21 用户简报
+			 *
+			 * @author chenchuang
+			 */
+			if (url.contains("user_analysis.html")) {
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+			/**
 			 * 2018-07-20 安心合作社
 			 * 
 			 * @author wuxinxin
