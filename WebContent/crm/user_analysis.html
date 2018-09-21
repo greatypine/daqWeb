@@ -61,6 +61,12 @@
             height:32px;
             color: #fff;
         }
+        .yonghu{line-height: 26px; color: #fff;height: 300px; vertical-align: middle; margin-right: 0.5%;}
+        .yonghu span{padding-top: 130px; display: inline-block;}
+        .yonghu1{background-color: #71caa5; width: 19.5%;}
+        .yonghu2{background-color: #d687d5; width: 29.5%;}
+        .yonghu3{background-color: #d87c7c; width: 24.5%;}
+        .yonghu4{background-color: #797b7f; width: 25%; margin-right: 0;}
         .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
         .download p{font-size: 12px;}
         .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
@@ -135,10 +141,14 @@
                     <div class="box-header h4 text-light-blue"><strong>用户真实度分布</strong></div>
                     <div class="box-body">
                         <div class="col-sm-12">
-                            <div id="main2" style="height: 350px;"></div>
-                            <p style="padding-top: 5px;color: #777">口径说明：1、真实用户=社员、历史消费3次以上，无效用户=消费1次且从未自己下单的用户。</p>
-                            <p style="padding-top: 3px;padding-left: 70px;color: #777">2、僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
+                            <!--<div id="main2" style="height: 350px;"></div>-->
+                            <div class="pull-left yonghu yonghu1 text-center" id="yonghu1"><span id="userR3">真实用户<br>5</span></div>
+                            <div class="pull-left yonghu yonghu2 text-center" id="yonghu2"><span id="userR2">僵尸用户<br>30</span></div>
+                            <div class="pull-left yonghu yonghu3 text-center" id="yonghu3"><span id="userR1">无效用户<br>5</span></div>
+                            <div class="pull-left yonghu yonghu4 text-center" id="yonghu4"><span id="userR4">待确定用户<br>60</span></div>
                         </div>
+                        <p class="col-sm-12" style="padding-top: 5px;color: #777">口径说明：1、真实用户=社员、历史消费3次以上，无效用户=消费1次且从未自己下单的用户。</p>
+                        <p class="col-sm-12" style="padding-top: 3px;padding-left: 85px;color: #777">2、僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
                     </div>
                 </div>
                 <div class="box box-default">
@@ -237,7 +247,7 @@
     };
 
     var myChart1 = echarts.init(document.getElementById('main1'));
-    var myChart2 = echarts.init(document.getElementById('main2'));
+    // var myChart2 = echarts.init(document.getElementById('main2'));
     var myChart3 = echarts.init(document.getElementById('main3'));
     var myChart4 = echarts.init(document.getElementById('main4'));
     var myChart5 = echarts.init(document.getElementById('main5'));
@@ -485,104 +495,104 @@
     var userR2 = "0";
     var userR3 = "0";
     var userR4 = "0";
-    option2 = {
-
-        tooltip: {
-            trigger: 'item',
-            formatter: "{b}"  //显示tooltip时，只显示name
-        },
-
-        calculable: false,
-        series: [{
-            type: 'treemap',
-            width: '100%',
-            height: '100%',
-            itemStyle: {
-                normal: {
-                    label: {
-                        show: true,
-                        //formatter: "{b}",
-                        fontSize: 15
-                    },
-
-                    borderWidth: 1
-                },
-                emphasis: {
-                    label: {
-                        show: true
-                    }
-                }
-            },
-            label: {
-                normal: {
-                    textStyle: {
-                        fontSize: 15,
-                        //formatter: "{b}"
-                    }
-                }
-            },
-            breadcrumb: {//关闭面包屑路径
-                show: false
-            },
-            roam: false,//关闭平移拖动
-            nodeClick: false,//关闭节点点击
-            silent: false,//关闭鼠标事件
-            data: [
-                {
-                    value: 3,
-                    children: [
-                        {
-                            name: '有效用户：\n10',
-                            value: userR3,
-                            itemStyle: {
-                                normal: {
-                                    color: '#71caa5'
-                                }
-                            } },
-                    ]
-                },
-                {
-                    value: 2,
-                    children: [
-                        {
-                            name: '无效用户：\n22',
-                            value: userR1,
-                            itemStyle: {
-                                normal: {
-                                    color: '#d87c7c'
-                                }
-                            }},
-                    ]
-                },
-                {
-                    value: 3,
-                    children: [
-                        {
-                            name: '待确认用户：\n10',
-                            value: userR4,
-                            itemStyle: {
-                                normal: {
-                                    color: '#6e7074'
-                                }
-                            }},
-                    ]
-                },
-                {
-                    value: 2,
-                    children: [
-                        {
-                            name: '僵尸用户：\n20',
-                            value: userR2,
-                            itemStyle: {
-                                normal: {
-                                    color: '#d687d5'
-                                }
-                            }},
-                    ]
-                },
-            ]
-        }]
-    };
+    // option2 = {
+    //
+    //     tooltip: {
+    //         trigger: 'item',
+    //         formatter: "{b}"  //显示tooltip时，只显示name
+    //     },
+    //
+    //     calculable: false,
+    //     series: [{
+    //         type: 'treemap',
+    //         width: '100%',
+    //         height: '100%',
+    //         itemStyle: {
+    //             normal: {
+    //                 label: {
+    //                     show: true,
+    //                     //formatter: "{b}",
+    //                     fontSize: 15
+    //                 },
+    //
+    //                 borderWidth: 1
+    //             },
+    //             emphasis: {
+    //                 label: {
+    //                     show: true
+    //                 }
+    //             }
+    //         },
+    //         label: {
+    //             normal: {
+    //                 textStyle: {
+    //                     fontSize: 15,
+    //                     //formatter: "{b}"
+    //                 }
+    //             }
+    //         },
+    //         breadcrumb: {//关闭面包屑路径
+    //             show: false
+    //         },
+    //         roam: false,//关闭平移拖动
+    //         nodeClick: false,//关闭节点点击
+    //         silent: false,//关闭鼠标事件
+    //         data: [
+    //             {
+    //                 value: 3,
+    //                 children: [
+    //                     {
+    //                         name: '有效用户：\n10',
+    //                         value: userR3,
+    //                         itemStyle: {
+    //                             normal: {
+    //                                 color: '#71caa5'
+    //                             }
+    //                         } },
+    //                 ]
+    //             },
+    //             {
+    //                 value: 2,
+    //                 children: [
+    //                     {
+    //                         name: '无效用户：\n22',
+    //                         value: userR1,
+    //                         itemStyle: {
+    //                             normal: {
+    //                                 color: '#d87c7c'
+    //                             }
+    //                         }},
+    //                 ]
+    //             },
+    //             {
+    //                 value: 3,
+    //                 children: [
+    //                     {
+    //                         name: '待确认用户：\n10',
+    //                         value: userR4,
+    //                         itemStyle: {
+    //                             normal: {
+    //                                 color: '#6e7074'
+    //                             }
+    //                         }},
+    //                 ]
+    //             },
+    //             {
+    //                 value: 2,
+    //                 children: [
+    //                     {
+    //                         name: '僵尸用户：\n20',
+    //                         value: userR2,
+    //                         itemStyle: {
+    //                             normal: {
+    //                                 color: '#d687d5'
+    //                             }
+    //                         }},
+    //                 ]
+    //             },
+    //         ]
+    //     }]
+    // };
 
     //用户来源
     var userSourceData = new Array();
@@ -1136,7 +1146,7 @@
     };
 
     myChart1.setOption(option1);
-    myChart2.setOption(option2);
+    // myChart2.setOption(option2);
     myChart3.setOption(option3);
     myChart4.setOption(option4);
     myChart5.setOption(option5);
@@ -1258,29 +1268,76 @@
                         $(jsonData).each(function(index,element){
                             var usertag = jsonData[index].usertag;
                             if(usertag == 'R1' ){
-                               userR1 =  jsonData[index].usertag_num;
+                                userR1 =  jsonData[index].usertag_num;
                             }if(usertag == 'R2' ){
-                               userR2 =  jsonData[index].usertag_num;
+                                userR2 =  jsonData[index].usertag_num;
                             }else if(usertag == 'R3'){
-                               userR3 =  jsonData[index].usertag_num;
+                                userR3 =  jsonData[index].usertag_num;
                             }
                         });
                         userR4 = customer_number - userR1 - userR2 - userR3;
                     }else{
                         userR1=userR2=userR3=userR4=0;
                     }
-                    option2.series[0].data[0].children[0].value=userR3;
-                    option2.series[0].data[0].children[0].name="真实用户：\n"+changeMoney(parseInt(userR3));
-                    option2.series[0].data[1].children[0].value=userR1;
-                    option2.series[0].data[1].children[0].name="无效用户：\n"+userR1;
-                    option2.series[0].data[2].children[0].value=userR4;
-                    option2.series[0].data[2].children[0].name="待确认用户：\n"+changeMoney(parseInt(userR4));
-                    option2.series[0].data[3].children[0].value=userR2;
-                    option2.series[0].data[3].children[0].name="僵尸用户：\n"+changeMoney(parseInt(userR2));
-                    myChart2.setOption(option2);
+                    var spaceWidth = "0.5%";//缝隙宽
+                    document.getElementById('userR1').innerHTML="无效用户<br>"+userR1;
+                    var yonghu3 = document.getElementById("yonghu3");
+                    var userR1Width = 0.05;
+                    if(parseInt(userR1)>=10000){
+                        userR1Width = (userR1/customer_number).toFixed(2);
+                    }
+                    yonghu3.style.width = userR1Width*100+"%";
+
+                    document.getElementById('userR3').innerHTML="真实用户<br>"+changeMoney(parseInt(userR3));
+                    var yonghu1 = document.getElementById("yonghu1");
+                    var userR3Width = (userR3/customer_number).toFixed(2);
+                    yonghu1.style.width = userR3Width*(100-1-userR1Width*100)+"%";
+
+                    document.getElementById('userR2').innerHTML="僵尸用户<br>"+changeMoney(parseInt(userR2));
+                    var yonghu2 = document.getElementById("yonghu2");
+                    var userR2Width = (userR2/customer_number).toFixed(2);
+                    yonghu2.style.width = userR2Width*(100-1-userR1Width*100)+"%";
+
+                    document.getElementById('userR4').innerHTML="待确定用户<br>"+changeMoney(parseInt(userR4));
+                    var yonghu4 = document.getElementById("yonghu4");
+                    var userR4Width = (userR4/customer_number).toFixed(2);
+                    yonghu4.style.width = userR4Width*(100-1-userR1Width*100)+"%";
                 }
             });
     }
+
+    // function initEffectiveData() {
+    //     doManager("userAnalysisManager","queryUsertag",null,
+    //         function(data,textStatus,XmlHttpRequest){
+    //             if (data.result) {
+    //                 var jsonData = $.fromJSON(data.data);
+    //                 if(jsonData!=null){
+    //                     $(jsonData).each(function(index,element){
+    //                         var usertag = jsonData[index].usertag;
+    //                         if(usertag == 'R1' ){
+    //                            userR1 =  jsonData[index].usertag_num;
+    //                         }if(usertag == 'R2' ){
+    //                            userR2 =  jsonData[index].usertag_num;
+    //                         }else if(usertag == 'R3'){
+    //                            userR3 =  jsonData[index].usertag_num;
+    //                         }
+    //                     });
+    //                     userR4 = customer_number - userR1 - userR2 - userR3;
+    //                 }else{
+    //                     userR1=userR2=userR3=userR4=0;
+    //                 }
+    //                 option2.series[0].data[0].children[0].value=userR3;
+    //                 option2.series[0].data[0].children[0].name="真实用户：\n"+changeMoney(parseInt(userR3));
+    //                 option2.series[0].data[1].children[0].value=userR1;
+    //                 option2.series[0].data[1].children[0].name="无效用户：\n"+userR1;
+    //                 option2.series[0].data[2].children[0].value=userR4;
+    //                 option2.series[0].data[2].children[0].name="待确认用户：\n"+changeMoney(parseInt(userR4));
+    //                 option2.series[0].data[3].children[0].value=userR2;
+    //                 option2.series[0].data[3].children[0].name="僵尸用户：\n"+changeMoney(parseInt(userR2));
+    //                 myChart2.setOption(option2);
+    //             }
+    //         });
+    // }
     
     function initSourceScatterData() {//客户来源:app-APP,callcenter-400客服,store-门店,wechat-微信,pad-智能终端,web-WEB,citic-中信用户联盟,tv-电视,third_party-第三方,action-活动'
         doManager("userAnalysisManager","querySourceScatter",null,
