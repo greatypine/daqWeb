@@ -132,17 +132,18 @@
                     </div>
                 </div>
                 <div class="box box-default">
-                    <div class="box-header h4 text-light-blue"><strong>有效用户分析</strong></div>
+                    <div class="box-header h4 text-light-blue"><strong>用户真实度分布</strong></div>
                     <div class="box-body">
                         <div class="col-sm-12">
                             <div id="main2" style="height: 350px;"></div>
-                            <p style="padding-top: 5px;">口径说明：真实用户=社员、历史消费3次以上，无效用户=消费1次且从未自己下单的用户，僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
+                            <p style="padding-top: 5px;color: #777">口径说明：1、真实用户=社员、历史消费3次以上，无效用户=消费1次且从未自己下单的用户。</p>
+                            <p style="padding-top: 3px;padding-left: 70px;color: #777">2、僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
                         </div>
                     </div>
                 </div>
                 <div class="box box-default">
                     <div
-                            class="box-header h4 text-light-blue"><strong>用户分析</strong><small style="padding-left: 15px;">数据基于<span class="text-red">有效用户</span>分析（口径设定：真实用户+待确认用户）</small></div>
+                            class="box-header h4 text-light-blue"><strong>用户来源分布</strong><small style="padding-left: 15px;">口径说明：假定有效用户=真实用户+待确认用户</small></div>
                     <div class="box-body" style="padding-top: 25px;">
                         <div class="col-sm-6 no-padding" id="main3" style="height: 450px;"></div>
                         <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
@@ -150,7 +151,7 @@
                 </div>
                 <div class="box box-default">
                     <div
-                            class="box-header h4 text-light-blue"><strong>客单价（平均交易金额）</strong></div>
+                            class="box-header h4 text-light-blue"><strong>消费能力概况</strong></div>
                     <div class="box-body" style="padding-top: 25px;">
                         <div class="col-sm-8 no-padding" id="main5" style="height: 450px;"></div>
                         <div class="col-sm-4 no-padding" id="main6" style="height: 450px;"></div>
@@ -161,7 +162,7 @@
                 </div>
                 <div class="box box-default">
                     <div
-                            class="box-header h4 text-light-blue"><strong>短期用户活跃度分析</strong></div>
+                            class="box-header h4 text-light-blue"><strong>短期用户活跃度</strong></div>
                     <div class="box-body" style="padding-top: 25px;">
                         <div class="col-sm-6" id="main9" style="height: 450px;"></div>
                         <div class="col-sm-6" id="main10" style="height: 450px;"></div>
@@ -587,7 +588,7 @@
     var userSourceData = new Array();
     option3 = {
         title: [{
-            text: '用户来源',
+            text: '触点分布',
             left: '45%',
             top: '2%',
             textAlign: 'center',
@@ -739,6 +740,14 @@
     }();
 
     option5 = {
+        title: [ {
+            text: '客单价走势',
+            x: 'left',
+            top: '10px',
+            textStyle: {
+                color: '#666'
+            }
+        }],
         tooltip: {
             trigger: 'axis'
         },
@@ -790,11 +799,11 @@
     var userPayData = new Array();
     option6 = {
         title: [ {
-            text: '用户消费频次分布',
+            text: '消费频次分布',
             x: 'left',
             top: '10px',
             textStyle: {
-                color: '#3c8dbc'
+                color: '#666'
             }
         }],
         tooltip: {
@@ -807,10 +816,10 @@
             top: 10,
             orient:'vertical',//horizontal
             textStyle: {color: '#000'},
-            data:['消费1单', '消费2单','消费3单及以上']
+            data:['消费1单用户数', '消费2单用户数','消费多单用户数']
         },
         series: [{
-            name: '用户消费频次分布',
+            name: '消费频次分布',
             type: 'pie',
             radius: '70%',
             center: ['50%', '55%'],
@@ -1225,15 +1234,15 @@
                         pay_once_customer = jsonData.once_customer;
                         pay_no_customer = customer_number - pay_more_customer - pay_once_customer;
                     }
-                    option1.title[0].text="注册用户："+customer_number+" 人";
+                    option1.title[0].text="注册用户："+changeMoney(parseInt(customer_number))+" 人";
                     option1.series[0].data[0].value=pay_more_customer;
-                    option1.series[0].data[0].name=pay_more_customer+"("+(pay_more_customer/customer_number).toFixed(1)*100+"%)";
+                    option1.series[0].data[0].name=changeMoney(parseInt(pay_more_customer))+"("+(pay_more_customer/customer_number).toFixed(1)*100+"%)";
                     option1.series[0].data[1].value=customer_number;
                     option1.series[1].data[0].value=pay_once_customer;
-                    option1.series[1].data[0].name=pay_once_customer+"("+(pay_once_customer/customer_number).toFixed(1)*100+"%)";
+                    option1.series[1].data[0].name=changeMoney(parseInt(pay_once_customer))+"("+(pay_once_customer/customer_number).toFixed(1)*100+"%)";
                     option1.series[1].data[1].value=customer_number;
                     option1.series[2].data[0].value=pay_no_customer;
-                    option1.series[2].data[0].name=pay_no_customer+"("+(pay_no_customer/customer_number).toFixed(1)*100+"%)";
+                    option1.series[2].data[0].name=changeMoney(parseInt(pay_no_customer))+"("+(pay_no_customer/customer_number).toFixed(1)*100+"%)";
                     option1.series[2].data[1].value=customer_number;
                     myChart1.setOption(option1);
                 }
@@ -1261,13 +1270,13 @@
                         userR1=userR2=userR3=userR4=0;
                     }
                     option2.series[0].data[0].children[0].value=userR3;
-                    option2.series[0].data[0].children[0].name="真实用户：\n"+userR3;
+                    option2.series[0].data[0].children[0].name="真实用户：\n"+changeMoney(parseInt(userR3));
                     option2.series[0].data[1].children[0].value=userR1;
                     option2.series[0].data[1].children[0].name="无效用户：\n"+userR1;
                     option2.series[0].data[2].children[0].value=userR4;
-                    option2.series[0].data[2].children[0].name="待确认用户：\n"+userR4;
+                    option2.series[0].data[2].children[0].name="待确认用户：\n"+changeMoney(parseInt(userR4));
                     option2.series[0].data[3].children[0].value=userR2;
-                    option2.series[0].data[3].children[0].name="僵尸用户：\n"+userR2;
+                    option2.series[0].data[3].children[0].name="僵尸用户：\n"+changeMoney(parseInt(userR2));
                     myChart2.setOption(option2);
                 }
             });
@@ -1387,13 +1396,13 @@
                             // pay_total_customer = pay_total_customer + jsonData[index].once_customer + jsonData[index].twice_customer + jsonData[index].more_customer;
                         });
                         tempOnceData.value = pay_once_customer;
-                        tempOnceData.name="消费1单";
+                        tempOnceData.name="消费1单用户数";
                         userPayData.push(tempOnceData);
                         tempTwiceData.value = pay_twice_customer;
-                        tempTwiceData.name="消费2单";
+                        tempTwiceData.name="消费2单用户数";
                         userPayData.push(tempTwiceData);
                         tempMoreData.value = pay_more_customer;
-                        tempMoreData.name="消费3单及以上";
+                        tempMoreData.name="消费多单用户数";
                         userPayData.push(tempMoreData);
                     }
                     option6.series[0].data=userPayData;
@@ -1474,7 +1483,24 @@
                 }
             });
     }
-    
+
+    function changeMoney (x) {
+        x=x/10000;
+        var y = '';
+        if(parseInt(x)/10000<=1){
+            y=ForDight(x,0)+"万";
+        }else if(parseInt(x)/10000>1){
+            x=x/10000+'';
+            y=ForDight(x,0)+"亿";
+        }
+        return y;
+    }
+
+    function ForDight(str,How){
+        Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);
+        return Dight;
+    }
+
     //获取两个时间段内的月份数据
     function getYearAndMonth(start, end) {
         var result = [];
