@@ -45,7 +45,7 @@ public class UserAnalysisDaoImpl extends BaseDAOHibernate implements UserAnalysi
     @Override
     public List<Map<String, Object>> querySourceScatter(){
         String sql = "SELECT count(1) AS source_num, ifnull(customer_source,'无') AS customer_source FROM df_user_profile dup "
-                + "RIGHT join df_userprofile_tag dut on dup.customer_id=dut.customer_id where dut.usertag!='R1' and dut.usertag!='R2' GROUP BY customer_source";
+                + "RIGHT join df_userprofile_tag dut on dup.customer_id=dut.customer_id where (dut.usertag='R3' or dut.usertag='R4') GROUP BY customer_source";
         List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
         return list;
     }
@@ -53,7 +53,7 @@ public class UserAnalysisDaoImpl extends BaseDAOHibernate implements UserAnalysi
     @Override
     public List<Map<String, Object>> queryCityScatter(){
         String sql = "SELECT count(DISTINCT dus.customer_id) AS city_user_num, city_name,cityno FROM df_user_store dus "
-                + "right join df_userprofile_tag dut on dus.customer_id=dut.customer_id where dut.usertag!='R1' and dut.usertag!='R2' and cityno IS NOT NULL GROUP BY cityno,city_name";
+                + "right join df_userprofile_tag dut on dus.customer_id=dut.customer_id where (dut.usertag='R3' or dut.usertag='R4') and cityno IS NOT NULL GROUP BY cityno,city_name";
         List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
         return list;
     }
