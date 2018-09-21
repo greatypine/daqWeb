@@ -1329,32 +1329,32 @@
                     }
                     var spaceWidth = "0.5%";//缝隙宽
                     var yonghu3 = document.getElementById("yonghu3");
-                    var userR1Width = 0.05;
-                    if(parseInt(userR1)>=10000){
-                        userR1Width = (userR1/customer_number).toFixed(2);
-                    }
+                    // var userR1Width = 0.05;
+                    // if(parseInt(userR1)>=10000){
+                    var userR1Width = (userR1/customer_number).toFixed(2);
+                    // }
                     yonghu3.style.width = userR1Width*100+"%";
-                    document.getElementById('userR1').innerHTML="无效用户<br>"+userR1+"("+(userR1/customer_number).toFixed(2)*100+"%"+")";
+                    document.getElementById('userR1').innerHTML="无效用户<br>"+changeMoney(parseInt(userR1))+"("+(userR1/customer_number).toFixed(2)*100+"%"+")";
 
                     var yonghu1 = document.getElementById("yonghu1");
                     var userR3Width = (userR3/customer_number).toFixed(2);
-                    yonghu1.style.width = userR3Width*(100-2-userR1Width*100)+"%";
-                    document.getElementById('userR3').innerHTML="真实用户<br>"+changeMoney(parseInt(userR3))+"("+userR3Width*(100-2-userR1Width*100)+"%"+")";
+                    yonghu1.style.width = userR3Width*(100-userR1Width*100)+"%";
+                    document.getElementById('userR3').innerHTML="真实用户<br>"+changeMoney(parseInt(userR3))+"("+(userR3Width*(100-userR1Width*100)).toFixed(2)+"%"+")";
 
                     var yonghu2 = document.getElementById("yonghu2");
                     var userR2Width = (userR2/customer_number).toFixed(2);
-                    yonghu2.style.width = userR2Width*(100-2-userR1Width*100)+"%";
-                    document.getElementById('userR2').innerHTML="僵尸用户<br>"+changeMoney(parseInt(userR2))+"("+userR2Width*(100-2-userR1Width*100)+"%"+")";
+                    yonghu2.style.width = userR2Width*(100-userR1Width*100)+"%";
+                    document.getElementById('userR2').innerHTML="僵尸用户<br>"+changeMoney(parseInt(userR2))+"("+(userR2Width*(100-userR1Width*100)).toFixed(2)+"%"+")";
 
                     var yonghu4 = document.getElementById("yonghu4");
                     var userR4Width = (userR4/customer_number).toFixed(2);
-                    yonghu4.style.width = userR4Width*(100-2-userR1Width*100)+"%";
-                    document.getElementById('userR4').innerHTML="待确认用户<br>"+changeMoney(parseInt(userR4))+"("+userR4Width*(100-2-userR1Width*100)+"%"+")";
+                    yonghu4.style.width = userR4Width*(100-userR1Width*100)+"%";
+                    document.getElementById('userR4').innerHTML="待确认用户<br>"+changeMoney(parseInt(userR4))+"("+(userR4Width*(100-userR1Width*100)).toFixed(2)+"%"+")";
 
                     var yonghu5 = document.getElementById("yonghu5");
                     var userR5Width = (userR5/customer_number).toFixed(2);
-                    yonghu5.style.width = userR5Width*(100-2-userR1Width*100)+"%";
-                    document.getElementById('userR5').innerHTML="无交易用户<br>"+changeMoney(parseInt(userR5))+"("+userR5Width*(100-2-userR1Width*100)+"%"+")";
+                    yonghu5.style.width = userR5Width*(100-userR1Width*100)+"%";
+                    document.getElementById('userR5').innerHTML="无交易用户（非社员）<br>"+changeMoney(parseInt(userR5))+"("+(userR5Width*(100-userR1Width*100)).toFixed(2)+"%"+")";
                 }
             });
     }
