@@ -63,10 +63,11 @@
         }
         .yonghu{line-height: 26px; color: #fff;height: 300px; vertical-align: middle; margin-right: 0.5%;}
         .yonghu span{padding-top: 130px; display: inline-block;}
-        .yonghu1{background-color: #71caa5; width: 19.5%;}
-        .yonghu2{background-color: #d687d5; width: 29.5%;}
-        .yonghu3{background-color: #d87c7c; width: 24.5%;}
-        .yonghu4{background-color: #797b7f; width: 25%; margin-right: 0;}
+        .yonghu1{background-color: #458B00; width: 4.5%;}
+        .yonghu2{background-color: #4D4D4D; width: 20.5%;}
+        .yonghu3{background-color: #636363; width: 5.5%;}
+        .yonghu4{background-color: #43CD80; width: 60%;}
+        .yonghu5{background-color: #8A8A8A; width: 5.5%;margin-right: 0;}
         .download{position: fixed; right: 20px; top: 100px; height: 100px; overflow: hidden; z-index: 1000;}
         .download p{font-size: 12px;}
         .download_icon{font-size: 36px; position:relative;animation-name:myfirst;animation-duration:2s;animation-timing-function:linear;animation-iteration-count:infinite;animation-direction:alternate;animation-play-state:running;
@@ -143,9 +144,10 @@
                         <div class="col-sm-12">
                             <!--<div id="main2" style="height: 350px;"></div>-->
                             <div class="pull-left yonghu yonghu1 text-center" id="yonghu1"><span id="userR3">真实用户<br>5</span></div>
+                            <div class="pull-left yonghu yonghu4 text-center" id="yonghu4"><span id="userR4">待确定用户<br>60</span></div>
                             <div class="pull-left yonghu yonghu2 text-center" id="yonghu2"><span id="userR2">僵尸用户<br>30</span></div>
                             <div class="pull-left yonghu yonghu3 text-center" id="yonghu3"><span id="userR1">无效用户<br>5</span></div>
-                            <div class="pull-left yonghu yonghu4 text-center" id="yonghu4"><span id="userR4">待确定用户<br>60</span></div>
+                            <div class="pull-left yonghu yonghu5 text-center" id="yonghu5"><span id="userR5">无交易用户<br>5</span></div>
                         </div>
                         <p class="col-sm-12" style="padding-top: 5px;color: #777">口径说明：1、真实用户=社员、历史消费3次以上，无效用户=消费1次且从未自己下单的用户。</p>
                         <p class="col-sm-12" style="padding-top: 3px;padding-left: 85px;color: #777">2、僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户。</p>
@@ -235,6 +237,8 @@
 <script src="dist/js/base64.js"></script>
 <script src="plugins/gooey_menu/gooey.min.js"></script>
 <script>
+
+    var screenlogin=getUrlParamByKey("su");
 
     Date.prototype.format = function() {
         var s = '';
@@ -495,6 +499,7 @@
     var userR2 = "0";
     var userR3 = "0";
     var userR4 = "0";
+    var userR5 = "0";
     // option2 = {
     //
     //     tooltip: {
@@ -1208,6 +1213,9 @@
     });
 
     $(function(){
+
+        loginShow();
+
         initCustomerData();
         initEffectiveData();
         initSourceScatterData();
@@ -1217,6 +1225,44 @@
         initUserActivityData();
         initNewCustomerData();
     });
+
+    function loginShow(){
+
+        if(screenlogin!=null&&screenlogin!=''&&screenlogin!=undefined){
+            var b = new Base64();
+            screenlogin=b.decode(screenlogin);
+            var obj=JSON.parse(screenlogin);
+            var reObj = new PMSRequestObject("userManager", "isAppScreenUser", [obj.code,obj.employeeId,obj.password]);
+            var callback = function callback(data, textStatus, XMLHttpRequest) {
+                //window.parent.location=getRootPath() + "/crm/index_K.html?pls=0";
+                var stateObject = {};
+                var newUrl = "/daqWeb/crm/user_analysis.html?ta=0";
+                history.pushState(stateObject,null,newUrl);
+            };
+            var failureCallback = function failureCallback(data, textStatus, XMLHttpRequest) {
+                alert("登录信息错误，请确认输入或联系管理员!");
+                return false;
+            }
+            var url = "../login.do";
+            $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback);
+        }else{
+            getUser();
+        }
+
+    }
+
+    function getUser(){
+        doManager("UserManager", "getCurrentUserDTO",null,function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var employeeID="";
+                var curr_user = JSON.parse(data.data);
+                if(curr_user == null){
+                    urlStr = "../logout.do";
+                    window.location.href = urlStr;
+                }
+            }
+        },false);
+    }
 
     //初始化注册用户
     var customer_number = '0';
@@ -1273,11 +1319,13 @@
                                 userR2 =  jsonData[index].usertag_num;
                             }else if(usertag == 'R3'){
                                 userR3 =  jsonData[index].usertag_num;
+                            }else if(usertag == 'R4'){
+                                userR4 =  jsonData[index].usertag_num;
                             }
                         });
-                        userR4 = customer_number - userR1 - userR2 - userR3;
+                        userR5 = customer_number - userR1 - userR2 - userR3 - userR4;
                     }else{
-                        userR1=userR2=userR3=userR4=0;
+                        userR1=userR2=userR3=userR4=userR5=0;
                     }
                     var spaceWidth = "0.5%";//缝隙宽
                     document.getElementById('userR1').innerHTML="无效用户<br>"+userR1;
@@ -1291,17 +1339,22 @@
                     document.getElementById('userR3').innerHTML="真实用户<br>"+changeMoney(parseInt(userR3));
                     var yonghu1 = document.getElementById("yonghu1");
                     var userR3Width = (userR3/customer_number).toFixed(2);
-                    yonghu1.style.width = userR3Width*(100-1-userR1Width*100)+"%";
+                    yonghu1.style.width = userR3Width*(100-2-userR1Width*100)+"%";
 
                     document.getElementById('userR2').innerHTML="僵尸用户<br>"+changeMoney(parseInt(userR2));
                     var yonghu2 = document.getElementById("yonghu2");
                     var userR2Width = (userR2/customer_number).toFixed(2);
-                    yonghu2.style.width = userR2Width*(100-1-userR1Width*100)+"%";
+                    yonghu2.style.width = userR2Width*(100-2-userR1Width*100)+"%";
 
                     document.getElementById('userR4').innerHTML="待确定用户<br>"+changeMoney(parseInt(userR4));
                     var yonghu4 = document.getElementById("yonghu4");
                     var userR4Width = (userR4/customer_number).toFixed(2);
-                    yonghu4.style.width = userR4Width*(100-1-userR1Width*100)+"%";
+                    yonghu4.style.width = userR4Width*(100-2-userR1Width*100)+"%";
+
+                    document.getElementById('userR5').innerHTML="无交易用户<br>"+changeMoney(parseInt(userR5));
+                    var yonghu5 = document.getElementById("yonghu5");
+                    var userR5Width = (userR5/customer_number).toFixed(2);
+                    yonghu5.style.width = userR5Width*(100-2-userR1Width*100)+"%";
                 }
             });
     }
