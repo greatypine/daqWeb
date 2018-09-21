@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>门店划片列表</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <!-- 引入css和js即可 -->
+    <link rel="stylesheet" href="../scripts/css/cityselect.css">
+    <script type="text/javascript" src="../scripts/cityselect.js"></script>
+    <script type="text/javascript" src="../crm/laydate/laydate.js"></script>
+    <style type="text/css">
+        .display {
+            width: 100%
+        }
+
+        .display tr td {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+
+
+
+    var win;
+    var current_user;
+    $(function () {
+        var cur_date = new Date();
+        var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
+        laydate.render({//月份控件
+            elem:'#search_date',
+            value:new Date(),
+            type:"month",
+            btns: ['confirm','now'],
+            theme: '#337ab7',
+            max:year_month
+
+        });
+
+        searchList();
+        doManager('UserManager','getCurrentUserDTO',null,function(data){
+            if(data.result){
+
+                current_user = JSON.parse(data.data);
+                store_id = current_user.store_id;
+                var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
+                var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+                if(regex_zb.test(current_user.usergroup.code)){
+                    $("#city_name").show();
+                    $("#city_id").show();
+                    $("#storeName").show();
+                    $("#storeId_select").show();
+                    $("#searchbtn").show();
+                    $("#resetbtn").show();
+
+
+                    doManager('dynamicManager','selectAllCity',null,function(data){
+                        if(data.result){
+
+                            var cityList = JSON.parse(data.data);
+                            var more_city="";
+                            for(var i=0;i<cityList.length;i++){
+                                more_city=more_city+"<option value='"+cityList[i].id+"'>"+cityList[i].cityname+"</option>"
+                            }
+                            $("#city_id").append(more_city);
+                        }
+                    },false);
+
+                    doManager("areaManager", "getStoreOfByCSZJ_QYJL",[current_user.id,$("#city_id").val(),"ZB"],
+                        function(data, textStatus, XMLHttpRequest) {
+                            if (data.result) {
+                                var storelist= JSON.parse(data.data);
+
+                                if(storelist==null||storelist.length==0){
+
+                                    var more_store="<option value=''>全部</option>";
+                                    $("#storeId_select").append(more_store);
+                                }else{
+                                    if(storelist!=null&&storelist.length>0){
+                                        var more_store="<option value=''>全部</option>";
+                                        for(var i=0;i<storelist.length;i++){
+                                            more_store=more_store+"<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>"
+                                        }
+                                        $("#storeId_select").append(more_store);
+                                    }
+                                    $pmspage.opArr = [allTinyVillage,areaMap];
+                                    searchList();
+                                    //initEmployeeSelect(store_id);
+                                }
+                            }
+                        },false);
+                }else if(regex_cs.test(current_user.usergroup.code)||current_user.usergroup.code=="GLY"){
+                    $("#city_name").show();
+                    $("#city_id").show();
+                    $("#storeName").show();
+                    $("#storeId_select").show();
+                    $("#searchbtn").show();
+                    $("#resetbtn").show();
+                    $("#exportbtn").show();
+                    doManager("StoreManager", "getCityNameOfCSZJ",[current_user.id,null],
+                        function(data, textStatus, XMLHttpRequest) {
+                            if (data.result) {
+                                var cityinfo= JSON.parse(data.data);
+                                var cityList = cityinfo.citylist;
+                                if(cityList==null){
+                                    $("#btnlist").hide();
+
+                                    return;
+                                }else{
+                                    if(cityList!=null&&cityList.length>0){
+                                        var more_city="";
+                                        for(var i=0;i<cityList.length;i++){
+                                            more_city=more_city+"<option value='"+cityList[i].ctid+"'>"+cityList[i].name+"</option>"
+                                        }
+                                        $("#city_id").append(more_city);
+                                    }
+                                    //searchList();
+                                    //initEmployeeSelect(store_id);
+                                }
+                            }
+                        },false);
+
+
+                    doManager("areaManager", "getStoreOfByCSZJ_QYJL",[current_user.id,$("#city_id").val(),"CSZJ"],
+                        function(data, textStatus, XMLHttpRequest) {
+                            if (data.result) {
+                                var storelist= JSON.parse(data.data);
+
+                                if(storelist==null||storelist.length==0){
+
+                                    var more_store="<option value=''>全部</option>";
+                                    $("#storeId_select").append(more_store);
+                                }else{
+                                    if(storelist!=null&&storelist.length>0){
+                                        var more_store="<option value=''>全部</option>";
+                                        for(var i=0;i<storelist.length;i++){
+                                            more_store=more_store+"<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>"
+                                        }
+                                        $("#storeId_select").append(more_store);
+                                    }
+                                    $pmspage.opArr = [allTinyVillage,areaMap];
+                                    searchList();
+                                    //initEmployeeSelect(store_id);
+                                }
+                            }
+                        },false);
+
+
+                }else if (current_user.usergroup.code=="DZ"){
+
+                }else if(current_user.usergroup.code=="QYJL"){
+                    $("#storeName").show();
+                    $("#storeId_select").show();
+                    $("#resetbtn").show();
+                    doManager("areaManager", "getStoreOfByCSZJ_QYJL",[current_user.id,null,"QYJL"],
+                        function(data, textStatus, XMLHttpRequest) {
+                            if (data.result) {
+                                var storelist= JSON.parse(data.data);
+
+                                if(storelist==null||storelist.length==0){
+
+                                    $$.showMessage('提示',"该运营经理没有管辖的门店！");
+                                }else{
+                                    $("#searchbtn").show();
+                                    if(storelist!=null&&storelist.length>0){
+                                        var more_store="";
+                                        for(var i=0;i<storelist.length;i++){
+                                            more_store=more_store+"<option value='"+storelist[i].store_id+"'>"+storelist[i].name+"</option>"
+                                        }
+                                        $("#storeId_select").append(more_store);
+                                    }
+                                    $('#store_id').val(storelist[0].store_id);
+                                    searchList();
+                                    //initEmployeeSelect(store_id);
+                                }
+                            }
+                        },false);
+                }
+
+            }else{
+                $$.showMessage('提示',data.message);
+            }
+        });
+
+    });
+
+    //记载页面时请求数据列表默认的方法
+    function searchList() {
+
+        $$.executeSearch('costRentContractQuery', 'conditionsDiv');
+
+    }
+
+
+    //添加租赁信息
+    function add(){
+        window.location.href = 'costRentContract_add.html?userGroupCode='+current_user.usergroup.code+"&userId="+current_user.id;
+    }
+
+</script>
+<body style="height: 100%">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        成本控制查询
+    </div>
+    <div class="panel-body">
+        <div id="conditionsDiv" style="margin-top: 10px">
+            <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                  displaynumber="7">
+                <table id="searchTable"  cellpadding="0" cellspacing="0"  style="min-width: 100%; width: auto;border-collapse:separate; border-spacing:0px 10px;">
+                    <tr>
+                        <td width="12px">
+                            <span id="city_name">城市:</span>
+                        </td>
+                        <td width="12%">
+                            <select id="city_id" name="city_id" onchange="manageCity()" style="width:100px;display:none" class="form-control">
+
+                            </select>
+                        </td>
+                        <td width="12px">
+                            <span id="storeName">门店:</span>
+                        </td>
+                        <td width="12%">
+                            <select id="storeId_select" name="storeId_select" onchange="manageStore()" style="width:100px;display:none" class="form-control">
+
+                            </select>
+                        </td>
+                        <td width="12px">
+                            <span >日期:</span>
+                        </td>
+                        <td>
+                            <input id="search_date" name="search_date" type="text" style="width:100px" class="form-control" readonly="readonly"/>
+                        </td>
+
+                    </tr>
+
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="panel-footer" style="text-align: right" id="btnlist">
+        <button id="addbtn" style="display:inline" class="btn btn-primary" onclick="add()">添加</button>
+        <button id="searchbtn" style="display:inline" class="btn btn-primary" onclick="searchList()">查询</button>
+        <button id="resetbtn" style="display:inline" class="btn btn-primary" onclick="doClean();">重置</button>
+        <button id="exportbtn" style="display:inline" class="btn btn-primary" onclick="exportCostControl();">导出</button>
+    </div>
+</div>
+<div id="centerQueryGridContainer" class="panel panel-primary" queryid="costRentContractQuery"
+     titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
+     showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+     showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
+
+
+</body>
+</html>

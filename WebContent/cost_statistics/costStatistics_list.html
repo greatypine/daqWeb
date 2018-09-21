@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>门店划片列表</title>
+
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <link href="../scripts/css/auto.css" rel="stylesheet">
+    <!-- 引入css和js即可 -->
+    <link rel="stylesheet" href="../scripts/css/cityselect.css">
+    <script type="text/javascript" src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="../scripts/auto.js"></script>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../crm/laydate/laydate.js"></script>
+    <style type="text/css">
+        .display {
+            width: 100%
+        }
+
+        .display tr td {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+
+
+
+    var win;
+    var current_user;
+    $(function () {
+        var cur_date = new Date();
+        var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
+        $("#search_year").val(cur_date.getFullYear());
+        $("#search_month").val(cur_date.getMonth()+1);
+        laydate.render({//月份控件
+            elem:'#search_date',
+            value:new Date(),
+            type:"month",
+            btns: ['confirm','now'],
+            theme: '#337ab7',
+            max:year_month,
+            done: function(value, date, endDate){
+                $("#search_year").val(date["year"]);
+                $("#search_month").val(date["month"]);
+
+            }
+
+        });
+
+
+        doManager('UserManager','getCurrentUserDTO',null,function(data){
+            if(data.result){
+                current_user = JSON.parse(data.data);
+                searchList();
+            }else{
+                $$.showMessage('提示',data.message);
+            }
+        });
+
+    });
+
+
+
+    var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
+    var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+    /**
+     * 查询人工成本城市
+     * @type {null}
+     */
+    var lst_select_control_city=null;
+    var controlCityNameArray=new Array();
+    var controlCityIdMap = {};
+    function getcontrolCity(t){
+
+        controlCityIdMap=new Array();
+        $("#control_city").empty();
+
+        $("#control_store").empty();
+        $("#store_id_control").val("");
+        $("#store_name_control").val("");
+
+        var str_name = $(t).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+            $("#city_id_control").val("");
+
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+
+
+
+
+            if(regex_zb.test(current_user.usergroup.code)){
+
+                doManager('dynamicManager','selectAllCity',null,function(data){
+                    if(data.result){
+
+                        lst_select_control_city = JSON.parse(data.data);
+
+                        for(i=0;i<lst_select_control_city.length;i++){
+                            controlCityNameArray.push(lst_select_control_city[i].cityname);
+                            controlCityIdMap[lst_select_control_city[i].cityname] = lst_select_control_city[i].cityname;
+                        }
+                        var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
+                        autoComplete.start(event);
+                    }
+                },false);
+
+
+            }else if(regex_cs.test(current_user.usergroup.code)||current_user.usergroup.code=="GLY"){
+
+                doManager("StoreManager", "getCityNameOfCSZJ",[current_user.id,null],
+                    function(data, textStatus, XMLHttpRequest) {
+                        if (data.result) {
+                            lst_select_control_city = JSON.parse(data.data).citylist;
+
+                            for(var  i=0;i<lst_select_control_city.length;i++){
+                                controlCityNameArray.push(lst_select_control_city[i].name);
+                                controlCityIdMap[lst_select_control_city[i].name] = lst_select_control_city[i].name;
+                            }
+                            var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
+                            autoComplete.start(event);
+                        }
+                    },false);
+            }
+
+        }
+
+    }
+
+    /**
+     * 选择城市
+     * @param t
+     */
+    function selectcontrolCity(t){
+        var temp_city = document.getElementById("city_name_control").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+        $("#city_id_control").val(controlCityIdMap[temp_city]);
+    }
+
+
+
+    /**-----------------------------------搜索门店------------------------------------------------------**/
+
+    /**
+     * 查询门店
+     * @type {null}
+     */
+    var lst_select_control_store=null;
+    var controlStoreNameArray=new Array();
+    var controlStoreIdMap = {};
+    function getcontrolStore(t){
+
+        controlStoreNameArray=new Array();
+        $("#control_store").empty();
+        var str_name = $(t).val();
+        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+            $("#store_id_control").val("");
+
+            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+                return;
+            }
+            var city_id  = $("#city_id_control").val()==""?null:$("#city_id_control").val();
+            var city_name =  $("#city_name_control").val();
+            if(city_id==null&&city_name!=""){
+                city_id=-10000;
+            }
+            var target=0;
+            if(regex_zb.test(current_user.usergroup.code)){//总部
+                target=0;
+            }else if(regex_cs.test(current_user.usergroup.code)||current_user.usergroup.code=="GLY"){//城市
+                target=1;
+            }
+
+            doManager('dynamicManager','getStoreByCity',[target,current_user.id,city_id,str_name],function(data){
+                if(data.result){
+
+                    lst_select_control_store = JSON.parse(data.data).storelist;
+
+                    for(var i=0;i<lst_select_control_store.length;i++){
+                        controlStoreNameArray.push(lst_select_control_store[i].name);
+                        controlStoreIdMap[lst_select_control_store[i].name] = lst_select_control_store[i].storeno;
+                    }
+                    var autoComplete = new AutoComplete("store_name_control","control_store",controlStoreNameArray);
+                    autoComplete.start(event);
+                }else{
+
+                }
+            });
+        }
+
+    }
+
+    /**
+     * 选择门店
+     * @param t
+     */
+    function selectcontrolStore(t){
+        var temp_store = document.getElementById("store_name_control").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+        $("#store_id_control").val(controlStoreIdMap[temp_store]);
+    }
+
+    //记载页面时请求数据列表默认的方法
+    function searchList() {
+
+            $$.executeSearch('costStatisticsQuery', 'conditionsDiv');
+
+    }
+
+
+    //添加成本
+    function add(){
+        window.location.href = 'store_cost.html?userGroupCode='+current_user.usergroup.code+"&userId="+current_user.id+"&flag=add";
+    }
+
+
+
+    var COLUMNS = {
+        "total": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName];
+
+            return value;
+        },
+        "labor": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
+        "rent": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
+        "renovation": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
+        "fixedAsset": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
+        "gwe": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
+        "operation": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        }
+    }
+
+
+    var checkObj = {
+        html: '<a href="#"  class="blue">查看</a>',
+        resourceId: "del",
+        func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
+            var cityId = allColumnsDataMap.cityId;
+            var cityName = allColumnsDataMap.cityName;
+            window.location.href = 'store_cost.html?userGroupCode='+current_user.usergroup.code+"&userId="+current_user.id+"&cur_city_id="+cityId+"&cur_city_name="+encode64(cityName)+"&flag=search";
+        }
+    };
+
+
+
+    $pmspage.opArr = [checkObj];
+</script>
+<body style="height: 100%">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+       成本控制查询
+    </div>
+    <div class="panel-body">
+        <div id="conditionsDiv" style="margin-top: 10px">
+            <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                  displaynumber="7">
+                <table id="searchTable"  cellpadding="0" cellspacing="0"  style="min-width: 100%; width: auto;border-collapse:separate; border-spacing:0px 10px;">
+                    <tr>
+                        <td width="12px">
+                            <span >城市名称：</span>
+                        </td>
+                        <td width="300px">
+                                <input id="city_id_control" name="cityName" type="hidden" value=""/>
+                                <input type="text" class="form-control"  placeholder="城市" id="city_name_control" onkeyup="getcontrolCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
+                            <div class="auto hidden" id="control_city" onclick="selectcontrolCity(this)" style="width:150px;z-index: 99999;">
+                                <!-- /.input group -->
+                            </div>
+                        </td>
+                        <!--<td width="12px">-->
+                            <!--<span >门店名称：</span>-->
+                        <!--</td>-->
+                        <!--<td >-->
+                                <!--<input id="store_id_control" name="storeNo" type="hidden" value=""/>-->
+                                <!--<input type="text" class="form-control"  onkeyup="getcontrolStore(this)" placeholder="门店" id="store_name_control" style="border-radius: 6px;width: 40%"/>-->
+                            <!--<div class="auto hidden" id="control_store" onclick="selectcontrolStore(this)" style="width:300px;z-index: 99999;">-->
+                            <!--</div>-->
+                        <!--</td>-->
+                        <td width="12px">
+                            <span >日期:</span>
+                        </td>
+                        <td>
+                            <input id="search_date" name="search_date" type="text" style="width:100px" class="form-control" readonly="readonly"/>
+                            <input id="search_year" name="year" type="hidden"/>
+                            <input id="search_month" name="month" type="hidden"/>
+                        </td>
+
+                    </tr>
+
+                </table>
+            </form>
+        </div>
+    </div>
+    <div class="panel-footer" style="text-align: right" id="btnlist">
+        <button id="addbtn" style="display:inline" class="btn btn-primary" onclick="add()">成本录入</button>
+        <button id="searchbtn" style="display:inline" class="btn btn-primary" onclick="searchList()">查询</button>
+
+    </div>
+</div>
+
+
+<div id="centerQueryGridContainer" class="panel panel-primary" queryid="costStatisticsQuery" operators="$pmspage.opArr"
+     titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
+     showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+     showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
+
+
+</body>
+</html>
+
+<div id="areaInfoDetail" style="display:none">
+    <div class="panel-body">
+        <table cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto" id="areaInfoTable">
+
+        </table>
+    </div>
+</div>
