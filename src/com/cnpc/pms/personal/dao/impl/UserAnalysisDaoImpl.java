@@ -60,9 +60,9 @@ public class UserAnalysisDaoImpl extends BaseDAOHibernate implements UserAnalysi
 
     @Override
     public List<Map<String, Object>> queryUnitPrice(){
-        String sql = "SELECT sum(case when count_order=1 then trading_price else 0 end) once_unit_price,sum(case when count_order=1 then 1 else 0 end) once_customer,"
-                + "sum(case when count_order=2 then trading_price else 0 end)  twice_unit_price,sum(case when count_order=2 then 1 else 0 end) twice_customer,"
-                + "sum(case when count_order>=3 then trading_price else 0 end)  more_unit_price,sum(case when count_order>=3 then 1 else 0 end) more_customer,"
+        String sql = "SELECT sum(case when count_order=1 then trading_price else 0 end) once_unit_price,sum(case when count_order=1 then count_order else 0 end) once_customer,"
+                + "sum(case when count_order=2 then trading_price else 0 end)  twice_unit_price,sum(case when count_order=2 then count_order else 0 end) twice_customer,"
+                + "sum(case when count_order>=3 then trading_price else 0 end)  more_unit_price,sum(case when count_order>=3 then count_order else 0 end) more_customer,"
                 + "month_data FROM (select sum(trading_price) as trading_price,count(1) as count_order,"
                 + "customer_id,strleft(sign_time, 7) AS month_data from df_mass_order_total WHERE 1=1 ";
         sql = sql + " GROUP BY month_data,customer_id ) aa GROUP BY month_data ORDER BY month_data ASC";
