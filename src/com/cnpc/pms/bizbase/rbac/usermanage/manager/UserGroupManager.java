@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.util.List;
 
 import com.cnpc.pms.base.manager.IManager;
+import com.cnpc.pms.base.paging.FilterFactory;
+import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserGroupDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.UserGroup;
+import com.cnpc.pms.personal.entity.TinyArea;
 
 /**
  * 
@@ -65,4 +68,6 @@ public interface UserGroupManager extends IManager {
 	
 	
 	public List<?> queryAllUserGroup();
+
+	public UserGroup findUserGroupByname(String name);
 }

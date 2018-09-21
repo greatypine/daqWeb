@@ -453,5 +453,7 @@ public interface UserManager extends IManager {
 	 * @return
      */
 	public User isAppScreenUser(String code,String employeeId,String password);
+
+	public Map<String, Object> queryObserveDistCityUserList(QueryConditions condition);
 	 
 }
