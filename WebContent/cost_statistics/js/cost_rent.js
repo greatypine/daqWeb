@@ -366,7 +366,7 @@ function searchCostRent(){
     var showStr = showYear+"年"+showMonth+"月"
 
     $("#propertyFeeYear_title").html(showYear+"年");
-    $("#propertyDeadline_title").html(showStr);
+    $("#propertyDeadline_title").html(showYear+"年");
     $("#propertyFeeMonth_title").html(showStr);
     $("#rentalMonth_title").html(showStr);
     $("#costMonth_title").html(showStr);

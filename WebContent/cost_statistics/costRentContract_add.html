@@ -227,7 +227,7 @@ function checkEveryYearRent(t){
          $("#contractGrandTotal_"+index).val(rentTotal+parseFloat(deposit)+parseFloat(agencyFee));
          var structureAcreage =  $("#structureAcreage_"+index).val();
          if(structureAcreage!=""){
-            $("#leaseUnitPrice_"+index).val(rentTotal/parseFloat(structureAcreage));
+            $("#leaseUnitPrice_"+index).val((rentTotal/parseFloat(structureAcreage)).toFixed(2));
          }
 
     }

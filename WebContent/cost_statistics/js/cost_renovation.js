@@ -165,7 +165,7 @@ function calculateDecorateCost(t){
     }else {
         $("#decorateCost_"+id[1]).val("");
         if(structureAcreage!=""){
-            $("#lightBox_"+id[1]).val(parseFloat(structureAcreage)*123.52.toFixed(2));
+            $("#lightBox_"+id[1]).val((parseFloat(structureAcreage)*123.52).toFixed(2));
             $("#airConditioner_"+id[1]).val((parseFloat(structureAcreage)*300).toFixed(2));
             $("#airConditionerSurcharge_"+id[1]).val((parseFloat(structureAcreage)*300*0.048).toFixed(2));
             $("#design_"+id[1]).val((parseFloat(structureAcreage)*130).toFixed(2));
@@ -243,7 +243,8 @@ function calculateRenovationTotal(t){
     var lightBox = $("#lightBox_"+id[1]).val();
     var decorateCost = $("#decorateCost_"+id[1]).val();
     var businessScreen = $("#businessScreen_"+id[1]).val();
-    if(wholeProcessManager==""&&design==""&&processManage==""&&airConditioner==""&&lightBox==""&&decorateCost==""&&businessScreen==""){
+    var furniture = $("#furniture_"+id[1]).val();
+    if(wholeProcessManager==""&&design==""&&processManage==""&&airConditioner==""&&lightBox==""&&decorateCost==""&&businessScreen==""&&furniture==""){
         $("#total_"+id[1]).val("");
     }else{
         wholeProcessManager=wholeProcessManager==""?0:parseFloat(wholeProcessManager);
@@ -253,7 +254,8 @@ function calculateRenovationTotal(t){
         lightBox=lightBox==""?0:parseFloat(lightBox);
         decorateCost=decorateCost==""?0:parseFloat(decorateCost);
         businessScreen=businessScreen==""?0:parseFloat(businessScreen);
-        $("#total_"+id[1]).val((wholeProcessManager+design+processManage+airConditioner+lightBox+decorateCost+businessScreen).toFixed(2));
+        furniture = furniture==""?0:parseFloat(furniture);
+        $("#total_"+id[1]).val((wholeProcessManager+design+processManage+airConditioner+lightBox+decorateCost+businessScreen+furniture).toFixed(2));
 
     }
 
