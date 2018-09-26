@@ -1683,7 +1683,10 @@ Date.prototype.format=function(fmt) {
       var coupon="<strong>优惠券：</strong>"+coupon_org+"<br>";
       var cost="<strong>成本：</strong>"+cost_org+"<br>";
 
-      var profitcontent = cost+method;
+      var profitcontent = "无合同";
+      if(contract_id != ''){
+          profitcontent = method;
+      }
 
       layer.tips(profitcontent, '#'+profitid, {
           tips: [4, '#0FA6D8'], //还可配置颜色
