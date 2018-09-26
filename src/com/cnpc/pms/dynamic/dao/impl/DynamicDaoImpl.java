@@ -3197,7 +3197,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		String sql=" select IFNULL(b.inviteCode,'暂无') as inviteCode,ifnull(a.total,0) as total,b.employee_no,CONCAT('*******',SUBSTR(b.mobilephone,8,11)) as mobilephone,b.name,GROUP_CONCAT(b.storename) as storename,b.city_name from "
 				+" (select inviteCode,COUNT(1) as total from df_user_member where  customer_id not in (select customer_id from df_member_whitelist) and DATE_FORMAT(opencard_time,'%Y-%m')='"+dynamicDto.getBeginDate()+"' GROUP BY inviteCode) a"
 				+" RIGHT JOIN"
-				+" (select t.name,t.phone as mobilephone,t.employee_no,t.inviteCode,ts.name as storename,ts.city_name from t_humanresources t LEFT JOIN t_store ts ON t.store_id = ts.store_id where t.humanstatus=1  and t.inviteCode is not null and t.inviteCode!='' "+whereStoreId
+				+" (select t.name,t.phone as mobilephone,t.employee_no,t.inviteCode,ifnull(ts.name,'') as storename,ifnull(t.citySelect,'') as city_name from t_humanresources t LEFT JOIN t_store ts ON t.store_id = ts.store_id where t.humanstatus=1  and t.inviteCode is not null and t.inviteCode!='' "+whereStoreId
 
 				+" UNION"
 				+" select tst.name,tst.phone as mobilephone,tst.employee_no,tst.inviteCode,ifnull(c.storename,'') as storename,ifnull(c.city_name,'') as city_name from t_storekeeper tst  "+whereJoin+" (select tbu.employeeId,t.name as storename,t.city_name from t_store  t INNER JOIN tb_bizbase_user tbu  on t.skid = tbu.id  where t.skid is not null  "+whereStoreId+") c on tst.employee_no = c.employeeId where tst.humanstatus=1  and tst.inviteCode is not null and tst.inviteCode!=''"
