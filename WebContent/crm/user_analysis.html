@@ -624,7 +624,7 @@
             type: 'pie',
             // selectedMode: 'single',
             center: ['45%', '53%'],
-            radius: ['40%', '80%'],
+            radius: ['40%', '75%'],
             avoidLabelOverlap: true, ////是否启用防止标签重叠
             color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
             itemStyle : {
@@ -697,11 +697,13 @@
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
-        radius : [40, 110],
-        center : ['40%', '60%'],
+        // radius : [40, 100],
+        radius: ['40%', '75%'],
+        center: ['45%', '53%'],
+        // center : ['40%', '60%'],
         // roseType : 'radius',
-        width: '40%',       // for funnel
-        max: 40,            // for funnel
+        // width: '40%',       // for funnel
+        // max: 40,            // for funnel
         color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5'],
         series: [{
             name: '用户数',
@@ -709,7 +711,7 @@
             clockwise: false, //饼图的扇区是否是顺时针排布
             // minAngle: 20, //最小的扇区角度（0 ~ 360）
             center: ['45%', '53%'], //饼图的中心（圆心）坐标
-            radius: ['40%', '80%'], //饼图的半径
+            radius: ['40%', '75%'], //饼图的半径
             avoidLabelOverlap: true, ////是否启用防止标签重叠
             itemStyle: { //图形样式
                 normal: {

@@ -4543,6 +4543,7 @@ function loginShow(){
 	    var url = "../login.do";
 	    $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback); 
 	}else{
+        $('#downloadbutton').show();
 		showData();
 	}
 }
