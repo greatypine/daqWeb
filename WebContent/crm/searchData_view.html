@@ -1662,7 +1662,7 @@ Date.prototype.format=function(fmt) {
 	  var coupon_org = coupon;
 	  var cost_org = cost;
       var method = "";
-	  if(contract_id != ''){
+	  if(contract_id != '' && contract_id != null){
           doManager('massOrderManager','queryContractById',[contract_id],function(data){
               if(data.result){
                   var result= JSON.parse(data.data);
@@ -1684,7 +1684,7 @@ Date.prototype.format=function(fmt) {
       var cost="<strong>成本：</strong>"+cost_org+"<br>";
 
       var profitcontent = "无合同";
-      if(contract_id != ''){
+      if(method != ''){
           profitcontent = method;
       }
 
