@@ -105,9 +105,11 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <!-- Site wrapper -->
+<div id="process_div" ></div>
+<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
 <div class="wrapper">
     <!-- 新header -->
-    <div class="download text-center"><div class="download_icon" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
+    <div class="download text-center" id="showDown" style="display:none"><div class="download_icon" style="cursor: pointer;" id="downloadPdf"><i class="fa fa-download"></i></div><p>下载报告</p></div>
     <header class="main-header">
         <nav class="navbar navbar-static-top">
             <div class="container">
@@ -149,7 +151,7 @@
                             <div class="pull-left yonghu yonghu3 text-center" id="yonghu3"><span id="userR1">无效用户<br>5</span></div>
                             <div class="pull-left yonghu yonghu5 text-center" id="yonghu5"><span id="userR5">无交易用户<br>5</span></div>
                         </div>
-                        <p class="col-sm-12" style="padding-top: 5px;color: #777">口径说明：1、真实用户=社员+历史消费3次以上，无效用户=仅消费1次且从未使用app的用户。</p>
+                        <p class="col-sm-12" style="padding-top: 5px;color: #777">口径说明：1、真实用户=社员+历史消费3次以上+400购物，无效用户=仅消费1次且从未使用app的用户。</p>
                         <p class="col-sm-12" style="padding-top: 3px;padding-left: 85px;color: #777">2、僵尸用户=2018年未消费，待确认用户=注册人数-真实用户-无效用户-僵尸用户-无交易用户。</p>
                     </div>
                 </div>
@@ -794,19 +796,37 @@
                 name:'消费1单用户',
                 type:'line',
                 stack: '总量',
-                data:unitOnceData
+                data:unitOnceData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                }
             },
             {
                 name:'消费2单用户',
                 type:'line',
                 stack: '总量',
-                data:unitTwiceData
+                data:unitTwiceData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                }
             },
             {
                 name:'消费3单及以上用户',
                 type:'line',
                 stack: '总量',
-                data:unitMoreData
+                data:unitMoreData,
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                }
             }
         ]
     };
@@ -1162,55 +1182,6 @@
     myChart10.setOption(option10);
     myChart11.setOption(option11);
 
-    //pdf下载
-    $(document).ready(function () {
-
-        var downPdf = document.getElementById("downloadPdf");
-        var pagedom = $("#page");
-        downPdf.onclick = function() {
-            $("#process_div").show();
-            $("#process_div_pic").show();
-            scrollTo(0,0);
-            html2canvas(pagedom, {
-                onrendered : function(canvas) {
-                    var contentWidth = canvas.width;
-                    var contentHeight = canvas.height;
-                    //一页pdf显示html页面生成的canvas高度;
-                    var pageHeight = contentWidth / 592.28 * 841.89;
-                    //未生成pdf的html页面高度
-                    var leftHeight = contentHeight;
-                    //页面偏移
-                    var position = 0;
-                    //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
-                    var imgWidth = 595.28;
-                    var imgHeight = 592.28 / contentWidth
-                        * contentHeight;
-                    var pageData = canvas.toDataURL('image/jpeg', 1.0);
-                    var pdf = new jsPDF('', 'pt', 'a4');
-                    //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-                    //当内容未超过pdf一页显示的范围，无需分页
-                    if (leftHeight < pageHeight) {
-                        pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
-                            imgHeight);
-                    } else {
-                        while (leftHeight > 0) {
-                            pdf.addImage(pageData, 'JPEG', 0, position,
-                                imgWidth, imgHeight)
-                            leftHeight -= pageHeight;
-                            position -= 841.89;
-                            //避免添加空白页
-                            if (leftHeight > 0) {
-                                pdf.addPage();
-                            }
-                        }
-                    }
-                    pdf.save('用户简报.pdf');
-                    $("#process_div_pic").hide();
-                    $("#process_div").hide();
-                }
-            })
-        }
-    });
 
     $(function(){
 
@@ -1224,6 +1195,8 @@
         initPayPercentData();
         initUserActivityData();
         initNewCustomerData();
+
+        setLoadingMark(false);
     });
 
     function loginShow(){
@@ -1247,6 +1220,54 @@
             $$.ajax(url, "requestString=" + reObj.toJsonString(), callback, failureCallback);
         }else{
             getUser();
+
+            //pdf下载
+            $("#showDown").show();
+            var downPdf = document.getElementById("downloadPdf");
+            var pagedom = $("#page");
+            downPdf.onclick = function() {
+                $("#process_div").show();
+                $("#process_div_pic").show();
+                scrollTo(0,0);
+                html2canvas(pagedom, {
+                    onrendered : function(canvas) {
+                        var contentWidth = canvas.width;
+                        var contentHeight = canvas.height;
+                        //一页pdf显示html页面生成的canvas高度;
+                        var pageHeight = contentWidth / 592.28 * 841.89;
+                        //未生成pdf的html页面高度
+                        var leftHeight = contentHeight;
+                        //页面偏移
+                        var position = 0;
+                        //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高
+                        var imgWidth = 595.28;
+                        var imgHeight = 592.28 / contentWidth
+                            * contentHeight;
+                        var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                        var pdf = new jsPDF('', 'pt', 'a4');
+                        //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
+                        //当内容未超过pdf一页显示的范围，无需分页
+                        if (leftHeight < pageHeight) {
+                            pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth,
+                                imgHeight);
+                        } else {
+                            while (leftHeight > 0) {
+                                pdf.addImage(pageData, 'JPEG', 0, position,
+                                    imgWidth, imgHeight)
+                                leftHeight -= pageHeight;
+                                position -= 841.89;
+                                //避免添加空白页
+                                if (leftHeight > 0) {
+                                    pdf.addPage();
+                                }
+                            }
+                        }
+                        pdf.save('用户简报.pdf');
+                        $("#process_div_pic").hide();
+                        $("#process_div").hide();
+                    }
+                })
+            }
         }
 
     }
@@ -1263,6 +1284,17 @@
             }
         },false);
     }
+
+    //设置加载中图标
+    var setLoadingMark = function (bShow) {
+        if (bShow == true) {
+            $("#process_div").show();
+            $("#process_div_pic").show();
+        } else {
+            $("#process_div").hide();
+            $("#process_div_pic").hide();
+        }
+    };
 
     //初始化注册用户
     var customer_number = '0';
@@ -1466,11 +1498,9 @@
                 if (data.result) {
                     var jsonData = $.fromJSON(data.data);
                     if(jsonData!=null){
-                        unitOnceData = new Array(12).join(0).split('');
-                        unitTwiceData = new Array(12).join(0).split('');
-                        unitMoreData = new Array(12).join(0).split('');
                         var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
                         var monthData = getYearAndMonth('2017-12-1',curMonth);
+                        unitOnceData = unitTwiceData = unitMoreData = new Array(monthData.length+1).join(0).split('');
                         $(jsonData).each(function(index,element){
                             var indexTemp = jQuery.inArray(element.month_data,monthData);
                             unitOnceData[indexTemp]=(element.once_unit_price/element.once_customer).toFixed(2);
@@ -1580,7 +1610,7 @@
                 if (data.result) {
                     var jsonData = $.fromJSON(data.data);
                     if(jsonData!=null){
-                        var curMonth = now.getFullYear()+'-12-31';
+                        var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
                         var monthData = getYearAndMonth('2017-12-1',curMonth);
                         newCusYData = new Array(monthData.length+1).join(0).split('');
                         $(jsonData).each(function(index,element){
