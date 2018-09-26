@@ -276,7 +276,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE WHEN a.order_tag1 like '%M%' THEN '是'  ELSE '否' END AS order_tag_member, "
 				+ "CASE a.order_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source "
-				+ ",IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit "
+				+ ",IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),0) as order_profit "
 				+ "from ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
