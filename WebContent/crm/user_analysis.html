@@ -607,7 +607,7 @@
         title: [{
             text: '触点分布',
             left: '45%',
-            top: '2%',
+            top: '1%',
             textAlign: 'center',
             textBaseline: 'middle',
             textStyle: {
@@ -619,23 +619,47 @@
             trigger: 'item',
             formatter: "{b}: {c} ({d}%)"
         },
+        calculable : true,
         series: [{
             type: 'pie',
-            selectedMode: 'single',
+            // selectedMode: 'single',
             center: ['45%', '53%'],
             radius: ['40%', '80%'],
+            avoidLabelOverlap: true, ////是否启用防止标签重叠
             color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67','#FCC667','#CC5962'],
-
+            itemStyle : {
+                normal : {
+                    label : {
+                        show : true
+                    },
+                    labelLine : {
+                        show : true
+                    }
+                },
+                emphasis : {
+                    label : {
+                        show : true
+                    },
+                    labelLine : {
+                        show : true
+                    }
+                }
+            },
             label: {
                 normal: {
-                    position: 'inside', //标签的位置
-                    formatter: '{b}\n{d}%'
-
+                    position: 'out', //标签的位置
+                    formatter: '{b}：{d}%',
+                },
+                emphasis: {
+                    show: true,
+                    textStyle: {
+                        fontWeight: 'bold'
+                    }
                 }
             },
             labelLine: {
                 normal: {
-                    show: false
+                    show: true
                 }
             },
             data: userSourceData
@@ -661,7 +685,7 @@
         title: [{
             text: '城市分布',
             left: '45%',
-            top: '2%',
+            top: '1%',
             textAlign: 'center',
             textBaseline: 'middle',
             textStyle: {
@@ -673,6 +697,11 @@
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
+        radius : [40, 110],
+        center : ['40%', '60%'],
+        // roseType : 'radius',
+        width: '40%',       // for funnel
+        max: 40,            // for funnel
         color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5'],
         series: [{
             name: '用户数',
@@ -691,11 +720,8 @@
             label: { //标签的位置
                 normal: {
                     show: true,
-                    position: 'inside', //标签的位置
+                    position: 'out', //标签的位置
                     formatter: "{b}\n{d}%",
-                    textStyle: {
-                        color: '#fff',
-                    }
                 },
                 emphasis: {
                     show: true,
@@ -703,6 +729,22 @@
                         fontWeight: 'bold'
                     }
                 }
+                // normal : {
+                //     label : {
+                //         show : true
+                //     },
+                //     labelLine : {
+                //         show : true
+                //     }
+                // },
+                // emphasis : {
+                //     label : {
+                //         show : true
+                //     },
+                //     labelLine : {
+                //         show : true
+                //     }
+                // }
             },
             data: userCityData
             //     [
@@ -746,9 +788,9 @@
 
     //客单价
     var now = new Date();
-    var unitOnceData=[];
-    var unitTwiceData=[];
-    var unitMoreData=[];
+    var unitOnceData=new Array();
+    var unitTwiceData=new Array();
+    var unitMoreData=new Array();
     var unitXdata = function() {
         var data = [];
         var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
@@ -760,7 +802,7 @@
         title: [ {
             text: '客单价走势',
             x: 'left',
-            top: '10px',
+            top: '0px',
             textStyle: {
                 color: '#666'
             }
@@ -795,7 +837,7 @@
             {
                 name:'消费1单用户',
                 type:'line',
-                stack: '总量',
+                // stack: '总量', //Y轴数据显示累加属性
                 data:unitOnceData,
                 markPoint: {
                     data: [
@@ -807,7 +849,7 @@
             {
                 name:'消费2单用户',
                 type:'line',
-                stack: '总量',
+                // stack: '总量',
                 data:unitTwiceData,
                 markPoint: {
                     data: [
@@ -819,7 +861,7 @@
             {
                 name:'消费3单及以上用户',
                 type:'line',
-                stack: '总量',
+                // stack: '总量',
                 data:unitMoreData,
                 markPoint: {
                     data: [
@@ -877,8 +919,19 @@
                         fontSize: 14,
                     },
                     position: 'inner',
-                    formatter: '{b}:{d}%',
+                    formatter: '{b}\n{d}%',
                 }
+                // normal: {
+                //     show: true,
+                //     position: 'out', //标签的位置
+                //     formatter: "{b}\n{d}%",
+                // },
+                // emphasis: {
+                //     show: true,
+                //     textStyle: {
+                //         fontWeight: 'bold'
+                //     }
+                // }
             },
 
             labelLine: {
@@ -1500,7 +1553,9 @@
                     if(jsonData!=null){
                         var curMonth = now.getFullYear()+'-'+(now.getMonth()+1);
                         var monthData = getYearAndMonth('2017-12-1',curMonth);
-                        unitOnceData = unitTwiceData = unitMoreData = new Array(monthData.length+1).join(0).split('');
+                        unitOnceData = new Array(monthData.length+1).join(0).split('');
+                        unitTwiceData = new Array(monthData.length+1).join(0).split('');
+                        unitMoreData = new Array(monthData.length+1).join(0).split('');
                         $(jsonData).each(function(index,element){
                             var indexTemp = jQuery.inArray(element.month_data,monthData);
                             unitOnceData[indexTemp]=(element.once_unit_price/element.once_customer).toFixed(2);

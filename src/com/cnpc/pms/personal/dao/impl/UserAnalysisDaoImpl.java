@@ -63,8 +63,8 @@ public class UserAnalysisDaoImpl extends BaseDAOHibernate implements UserAnalysi
         String sql = "SELECT sum(case when count_order=1 then trading_price else 0 end) once_unit_price,sum(case when count_order=1 then count_order else 0 end) once_customer,"
                 + "sum(case when count_order=2 then trading_price else 0 end)  twice_unit_price,sum(case when count_order=2 then count_order else 0 end) twice_customer,"
                 + "sum(case when count_order>=3 then trading_price else 0 end)  more_unit_price,sum(case when count_order>=3 then count_order else 0 end) more_customer,"
-                + "month_data FROM (select sum(trading_price) as trading_price,count(1) as count_order,"
-                + "customer_id,strleft(sign_time, 7) AS month_data from df_mass_order_total WHERE 1=1 ";
+                + "month_data FROM (select sum(gmv_price) as trading_price,count(1) as count_order,"
+                + "customer_id,strleft(sign_time, 7) AS month_data from df_mass_order_total WHERE gmv_price<=5000 AND (order_tag1 not like '%K%' OR order_tag1 is null) AND store_name not like '%企业购%' ";
         sql = sql + " GROUP BY month_data,customer_id ) aa GROUP BY month_data ORDER BY month_data ASC";
         List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
         return list;
