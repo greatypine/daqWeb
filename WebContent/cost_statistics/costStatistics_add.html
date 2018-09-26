@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>成本控制</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+    <link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-table.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-table-fixed-columns.css">-->
+    <!--<link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-editable.css">-->
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../crm/plugins/date-new/css/jquery-ui-1.9.2.custom.css" type="text/css">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../scripts/css/auto.css" rel="stylesheet">
+    <script type="text/javascript" src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="../scripts/auto.js"></script>
+    <script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
+    <script type="text/javascript" src="../crm/laydate/laydate.js"></script>
+    <script type="text/javascript" src="plugins/fixed-columns/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/bidLib2.0.js"></script>
+    <script src="js/costCommon.js" type = "text/javascript"></script>
+    <script src="js/cost_labor.js" type = "text/javascript"></script>
+    <script src="js/cost_rent.js" type = "text/javascript"></script>
+    <script src="js/cost_renovation.js" type = "text/javascript"></script>
+    <script src="js/cost_fixedAsset.js" type = "text/javascript"></script>
+    <script src="js/cost_gwe.js" type = "text/javascript"></script>
+    <script src="js/cost_operation.js" type = "text/javascript"></script>
+    <script src="js/cost_rent_contract.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var userGroupCode = getUrlParamByKey("userGroupCode");//登录账号角色组
+        var userId= getUrlParamByKey("userId");
+        var cur_city_id= getUrlParamByKey("cur_city_id");
+        var cur_city_name= getUrlParamByKey("cur_city_name");
+        var flag=getUrlParamByKey("flag");
+         $(function () {
+             getCostRenovation();
+        //
+        //     var cur_date = new Date();
+        //     var year = cur_date.getFullYear();
+        //     var  month = cur_date.getMonth()+1;
+        //     var showDate = year+"年"+month+"月";
+        //     $("#emolument_title").html(showDate);
+        //     $("#uniformAmortize_title").html(showDate);
+        //     $("#accommodation_title").html(showDate);
+        //
+        //     laydate.render({//月份控件
+        //         elem:'#year_labor',
+        //         value:new Date(),
+        //         type:"month",
+        //         btns: ['confirm','now'],
+        //         theme: '#428bca'
+        //     });
+        //
+        //
+        //     if(flag=="search"){
+        //         $("#city_id_labor").val(cur_city_id);
+        //         $("#city_name_labor").val(decode64(cur_city_name));
+        //     }
+        //     getCostLabor();//获取人工成本
+        //
+        //
+            autodivheight();
+            function autodivheight(){ //函数：获取尺寸
+                //获取浏览器窗口高度
+                var winHeight=0;
+                if (window.innerHeight)
+                    winHeight = window.innerHeight;
+                else if ((document.body) && (document.body.clientHeight))
+                    winHeight = document.body.clientHeight;
+                //通过深入Document内部对body进行检测，获取浏览器窗口高度
+                if (document.documentElement && document.documentElement.clientHeight)
+                    winHeight = document.documentElement.clientHeight;
+                document.getElementById("tab-roll-renovation").style.height= winHeight*0.74 +"px";
+                document.getElementById("tab-roll-fixedAsset").style.height= winHeight*0.76 +"px";
+                document.getElementById("tab-roll-rent").style.height= winHeight*0.74 +"px";
+                document.getElementById("tab-roll-operation").style.height= winHeight*0.74 +"px";
+            }
+            window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
+
+
+         })
+
+        /**
+         * 切换第一级tag
+         * */
+        function showFirstLevelCostTag(t){
+
+            if(t=="fixedCost"){//固定成本
+                getCostRenovation();//装修摊销
+            }else if(t=="yearCost"){//年度成本
+                var cur_date = new Date();
+                laydate.render({//月份控件
+                    elem:'#year_property',
+                    value:cur_date,
+                    type:"year",
+                    btns: ['confirm','now'],
+                    theme: '#428bca'
+                });
+                getCostRent();//物业费
+            }else if(t=="monthCost"){//月度成本
+                getCostLabor();//人工成本
+            }
+
+        }
+
+        /**
+         * 切换第二级tag
+         * @param t
+         */
+        function showSecondLevelCostTag(t){
+            clearCostTable();
+
+            //
+            // if(t==""){
+            //     var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showConfirm("提示","是否需要保存改变的数据？",function () {
+            //             saveCostLabor();
+            //         });
+            //     }
+            //     if(flag=="search"){
+            //         $("#city_id_labor").val(cur_city_id);
+            //         $("#city_name_labor").val(decode64(cur_city_name));
+            //     }
+            //     getCostLabor('auto');//获取人工成本
+            //
+            // }else
+            if(t=="rent"){
+
+                var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("请先保存！")
+                    return;
+                }
+
+                if(flag=="search"){
+                    $("#city_id_rent").val(cur_city_id);
+                    $("#city_name_rent").val(decode64(cur_city_name));
+                }
+                getCostRent();
+            }else if(t=="rentContract"){
+                var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("请先保存！")
+                    return;
+                }
+
+                if(flag=="search"){
+                    $("#city_id_rentContract").val(cur_city_id);
+                    $("#city_name_rentContract").val(decode64(cur_city_name));
+                }
+                getCostRentContract();
+
+            }else if(t=="renovation"){
+                var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("请先保存！")
+                    return;
+                }
+                if(flag=="search"){
+                    $("#city_id_renovation").val(cur_city_id);
+                    $("#city_name_renovation").val(decode64(cur_city_name));
+                }
+                getCostRenovation();//装修摊销
+            }else if(t=="fixedAsset"){
+                var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("请先保存！")
+                    return;
+                }
+                if(flag=="search"){
+                    $("#city_id_fixedAsset").val(cur_city_id);
+                    $("#city_name_fixedAsset").val(decode64(cur_city_name));
+                }
+                getCostFixedAsset();//固定资产
+            }else if(t=="property"){//物业费用
+                var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("请先保存！")
+                    return;
+                }
+
+                if(flag=="search"){
+                    $("#city_id_fixedAsset").val(cur_city_id);
+                    $("#city_name_fixedAsset").val(decode64(cur_city_name));
+                }
+
+                var cur_date = new Date();
+
+                laydate.render({//月份控件
+                    elem:'#year_property',
+                    value:cur_date,
+                    type:"year",
+                    btns: ['confirm','now'],
+                    theme: '#428bca'
+                });
+                getCostRent();//物业费用
+            }
+            // else if(t==5){
+            //
+            //     var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //
+            //
+            //     var cur_date = new Date();
+            //
+            //     laydate.render({//月份控件
+            //         elem:'#year_gwe',
+            //         value:cur_date,
+            //         type:"month",
+            //         btns: ['confirm','now'],
+            //         theme: '#428bca'
+            //     });
+            //     if(flag=="search"){
+            //         $("#city_id_gwe").val(cur_city_id);
+            //         $("#city_name_gwe").val(decode64(cur_city_name));
+            //     }
+            //     getCostGWE();
+            // }
+            else if(t=="operation"){//运营成本
+
+                var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("请先保存！")
+                    return;
+                }
+
+
+                var cur_date = new Date();
+
+                laydate.render({//月份控件
+                    elem:'#year_operation',
+                    value:cur_date,
+                    type:"year",
+                    btns: ['confirm','now'],
+                    theme: '#428bca'
+                });
+                if(flag=="search"){
+                    $("#city_id_operation").val(cur_city_id);
+                    $("#city_name_operation").val(decode64(cur_city_name));
+                }
+                getCostOperation();
+            }
+        }
+
+
+        /**
+         * 清空成本table页面
+         * */
+        function clearCostTable(){
+
+            $("#labor_tb_1").find("tr:gt(1)").remove();
+            $("#labor_tb_2").find("tr:gt(1)").remove();
+            $("#rent_tb_1").find("tr:gt(0)").remove();
+            $("#rent_tb_2").find("tr:gt(0)").remove();
+            $("#renovation_tb_1").find("tr:gt(0)").remove();
+            $("#renovation_tb_2").find("tr:gt(0)").remove();
+            $("#fixedAsset_tb_1").find("tr:gt(0)").remove();
+            $("#fixedAsset_tb_2").find("tr:gt(0)").remove();
+            $("#gwe_tb_1").find("tr:gt(0)").remove();
+            $("#gwe_tb_2").find("tr:gt(0)").remove();
+            $("#operation_tb_1").find("tr:gt(0)").remove();
+            $("#operation_tb_2").find("tr:gt(0)").remove();
+        }
+        // /**
+        //  * 展示完整信息
+        //  * @param t
+        //  */
+        // function showWholeContent(t){
+        //     var id = $(t).attr("id");
+        //     layer.tips(t.value,"#"+id, {
+        //         tips: [1, '#0ACC4C'],
+        //         time: 1000
+        //     });
+        // }
+
+
+
+
+    </script>
+</head>
+<style type="text/css">
+    .panel-heading .but{float:right; text-align: center;}
+    .but input {
+        background-color: transparent;
+        border: 1px solid #fff;
+        border-radius: 3px;
+        padding: 0 13px;
+        margin-right: 30px;}
+    .content-wrapper{background: #fff;}
+    .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
+    .nav-tabs-custom > .nav-tabs > li > a{font-size: 14px; padding: 8px 15px;}
+    .nav-tabs-custom > .nav-tabs > li > a:hover{color: #3a90cb;}
+    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: #3a90cb; color: #fff;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #3a90cb; border-left: 1px solid #3a90cb; border-right:1px solid #3a90cb;}
+    .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #3a90cb;}
+    .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #3a90cb; margin: 5px 0; }
+    .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
+    .table > tbody > tr > td,.table > tbody > tr > th{border: 1px solid #d1d1d1; height: 30px; line-height: 30px; padding: 0 8px;}
+    .table > tbody > tr > td p,.table > tbody > tr > th p{width: 165px; margin: 0;}
+    .table_x{max-width: 1700px;}
+    .no-padding{padding: 0;}
+    .tab-roll{overflow-y: scroll;}
+    .table td input{width: 100%; height: 100%; border: 0;}
+    .table > tbody > tr > th p{font-weight: bold}
+
+</style>
+<body style="height: 100%">
+<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
+    <div class="panel-heading">成本控制
+        <span class="but">
+			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
+		</span>
+    </div>
+    <div class="panel-body" id="temp1" style="padding: 12px">
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_fixed_cost" data-toggle="tab" onclick="showFirstLevelCostTag('fixedCost')">固定成本</a></li>
+                <li><a href="#tab_year_cost" data-toggle="tab" onclick="showFirstLevelCostTag('yearCost')">年度成本</a></li>
+                <li><a href="#tab_month_cost" data-toggle="tab" onclick="showFirstLevelCostTag('monthCost')">月度成本</a></li>
+            </ul>
+            <div class="tab-content no-padding">
+                <!-- 固定成本-->
+                <div class="tab-pane active" id="tab_fixed_cost">
+
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_renovation" data-toggle="tab" onclick="showSecondLevelCostTag('renovation')">装修摊销</a></li>
+                            <li><a href="#tab_fixed_asset" data-toggle="tab" onclick="showSecondLevelCostTag('fixedAsset')">固定资产</a></li>
+                            <li><a href="#tab_rent_contract" data-toggle="tab" onclick="showSecondLevelCostTag('rentContract')">合同租金</a></li>
+                        </ul>
+                        <div class="tab-content no-padding">
+
+                            <!-- 装修摊销-->
+                            <div class="tab-pane active" id="tab_renovation">
+
+                                <table width="60%">
+                                    <tr>
+
+                                        <td style="width:6%">城市名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="city_id_renovation" name="city_id_renovation" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_renovation" onkeyup="getRenovationCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
+                                            <div class="auto hidden" id="renovation_city" onclick="selectRenovationCity(this)" style="width:150px;z-index: 99999;">
+                                                <!-- /.input group -->
+                                            </div>
+                                            </p>
+                                        </td>
+
+
+                                        <td style="width:6%">门店名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="store_id_renovation" name="store_id_renovation" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  onkeyup="getRenovationStore(this)" placeholder="门店" id="store_name_renovation" style="border-radius: 6px;width:150px"/>
+                                            <div class="auto hidden" id="renovation_store" onclick="selectRenovationStore(this)" style="width:150px;z-index: 99999;">
+                                            </div>
+                                            </p>
+                                        </td>
+
+                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostRenovation()">查询</button>
+                                        </td>
+                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostRenovation()">保存</button>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostRenovation()">导出</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="tab-roll" id="tab-roll-renovation">
+
+                                    <div class="col-sm-10 no-padding" style="margin-left:-1px">
+                                        <table class="table table_x" cellspacing="0" cellpadding="0" id="renovation_tb_2">
+
+                                            <tr id="renovation_tr_2">
+                                                <th style="text-align: center;"><p>序号</p></th>
+                                                <th style="text-align: center;"><p>门店编码</p></th>
+                                                <th style="text-align: center;"><p>门店名称</p></th>
+                                                <th style="text-align: center"><p>施工单位</p></th>
+                                                <th style="text-align: center"><p>建筑面积</p></th>
+                                                <th style="text-align: center"><p>单方造价</p></th>
+                                                <th style="text-align: center"><p>装修施工</p></th>
+                                                <th style="text-align: center"><p>商业展屏</p></th>
+                                                <th style="text-align: center"><p>家具</p></th>
+                                                <th style="text-align: center"><p>标牌及灯箱</p></th>
+                                                <th style="text-align: center"><p>过程管理</p></th>
+                                                <th style="text-align: center"><p>费率3.5%</p></th>
+                                                <th style="text-align: center"><p>空调设备</p></th>
+                                                <th style="text-align: center"><p>费率4.8%</p></th>
+                                                <th style="text-align: center"><p>设计</p></th>
+                                                <th style="text-align: center"><p>全过程项目管理</p></th>
+                                                <th style="text-align: center"><p>单店产值合计</p></th>
+                                                <th style="text-align: center"><p>摊销月份数</p></th>
+                                                <th style="text-align: center"><p>摊销月度成本</p></th>
+                                                <th style="text-align: center"><p>竣工时间</p></th>
+                                                <th style="text-align: center"><p>合同签订日期</p></th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- 固定资产-->
+                            <div class="tab-pane " id="tab_fixed_asset">
+                                <table width="60%">
+                                    <tr>
+
+                                        <td style="width:6%">城市名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="city_id_fixedAsset" name="city_id_fixedAsset" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_fixedAsset" onkeyup="getFixedAssetCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
+                                            <div class="auto hidden" id="fixedAsset_city" onclick="selectFixedAssetCity(this)" style="width:150px;z-index: 99999;">
+                                                <!-- /.input group -->
+                                            </div>
+                                            </p>
+                                        </td>
+
+
+                                        <td style="width:6%">门店名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="store_id_fixedAsset" name="store_id_fixedAsset" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  onkeyup="getFixedAssetStore(this)" placeholder="门店" id="store_name_fixedAsset" style="border-radius: 6px;width: 150px"/>
+                                            <div class="auto hidden" id="fixedAsset_store" onclick="selectFixedAssetStore(this)" style="width:150px;z-index: 99999;">
+                                            </div>
+                                            </p>
+                                        </td>
+
+                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostFixedAsset()">查询</button>
+                                        </td>
+                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostFixedAsset()">保存</button>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostFixedAsset()">导出</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="tab-roll" id="tab-roll-fixedAsset">
+
+                                    <div class="col-sm-8 no-padding" style="margin-left:-1px">
+                                        <table class="table table_x" cellspacing="0" cellpadding="0" id="fixedAsset_tb_2">
+
+                                            <tr id="fixedAsset_tr_2">
+                                                <th style="text-align: center;"><p>序号</p></th>
+                                                <th style="text-align: center;"><p>门店编码</p></th>
+                                                <th style="text-align: center;"><p>门店名称</p></th>
+                                                <th style="text-align: center"><p>多功能一体机</p></th>
+                                                <th style="text-align: center"><p>手机</p></th>
+                                                <th style="text-align: center"><p>IPADmini</p></th>
+                                                <th style="text-align: center"><p>收银设备</p></th>
+                                                <th style="text-align: center"><p>电脑</p></th>
+                                                <th style="text-align: center"><p>扫描枪、热敏打印机</p></th>
+                                                <th style="text-align: center"><p>电子类合计</p></th>
+                                                <th style="text-align: center"><p>摊销金额（36个月）</p></th>
+                                                <th style="text-align: center"><p>电动车</p></th>
+                                                <th style="text-align: center"><p>摊销金额（48个月）</p></th>
+                                                <th style="text-align: center"><p>卖场冷链设备</p></th>
+                                                <th style="text-align: center"><p>保险柜</p></th>
+                                                <th style="text-align: center"><p>微仓货架</p></th>
+                                                <th style="text-align: center"><p>卖场货架</p></th>
+                                                <th style="text-align: center"><p>机器设备合计</p></th>
+                                                <th style="text-align: center"><p>摊销金额（120个月）</p></th>
+                                                <th style="text-align: center"><p>月摊销成本（元/月）</p></th>
+                                                <th style="text-align: center"><p>固定资产合计（元）</p></th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 合同租金-->
+                            <div class="tab-pane " id="tab_rent_contract">
+                                <table width="50%">
+                                    <tr>
+                                        <td style="width:6%">城市名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+
+                                            <p>
+                                                <input id="city_id_rentContract" name="city_id_rentContract" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_rentContract" onkeyup="getRentContractCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
+                                            <div class="auto hidden" id="rentContract_city" onclick="selectRentContractCity(this)" style="width:150px;z-index: 99999;">
+                                                <!-- /.input group -->
+                                            </div>
+                                            </p>
+                                        </td>
+
+
+                                        <td style="width: 6%">门店名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="store_id_rentContract" name="store_id_rentContract" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  onkeyup="getRentContractStore(this)" placeholder="门店" id="store_name_rentContract" style="border-radius: 6px;width: 150px"/>
+                                            <div class="auto hidden" id="rentContract_store" onclick="selectRentContractStore(this)" style="width:150px;z-index: 99999;">
+                                            </div>
+                                            </p>
+                                        </td>
+
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px;" onclick="getCostRentContract()">查询</button>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px;" onclick="saveCostRentContract()">保存</button>
+                                        </td>
+
+                                    </tr>
+                                </table>
+                                <div class="tab-roll" id="tab-roll-rent">
+
+                                    <div class="col-sm-8 no-padding" style="margin-left:-1px">
+                                        <table class="table table_x" cellspacing="0" cellpadding="0" id="rentContract_tb_2">
+
+                                            <tr id="rentContract_tr_2">
+                                                <th style="text-align: center;"><p>序号</p></th>
+                                                <th style="text-align: center;"><p>门店编码</p></th>
+                                                <th style="text-align: center;"><p>门店名称</p></th>
+                                                <th style="text-align: center"><p>起租日（含免租期)</p></th>
+                                                <th style="text-align: center"><p>起租日（免租期截止日）</p></th>
+                                                <th style="text-align: center"><p>到期日</p></th>
+                                                <th style="text-align: center"><p>第一年租金</p></th>
+                                                <th style="text-align: center"><p>第二年租金</p></th>
+                                                <th style="text-align: center"><p>第三年租金</p></th>
+                                                <th style="text-align: center"><p>第四年租金</p></th>
+                                                <th style="text-align: center"><p>第五年租金</p></th>
+                                                <th style="text-align: center"><p>建筑面积</p></th>
+                                                <th style="text-align: center"><p>租赁单价</p></th>
+                                                <th style="text-align: center"><p>押金</p></th>
+                                                <th style="text-align: center"><p>中介费</p></th>
+                                                <th style="text-align: center"><p>合同总金额</p></th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+                <!-- 年度成本-->
+                <div class="tab-pane" id="tab_year_cost">
+
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_property" data-toggle="tab" onclick="showSecondLevelCostTag('property')">物业费用</a></li>
+                            <li><a href="#tab_operation" data-toggle="tab" onclick="showSecondLevelCostTag('operation')">日常运营</a></li>
+                        </ul>
+                        <div class="tab-content no-padding">
+
+                            <div class="tab-pane active" id="tab_property">
+                                <table width="60%">
+                                    <tr>
+
+                                        <td style="width:6%">城市名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="city_id_rent" name="city_id_rent" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_rent" onkeyup="getRentCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
+                                            <div class="auto hidden" id="rent_city" onclick="selectRentCity(this)" style="width:150px;z-index: 99999;">
+                                                <!-- /.input group -->
+                                            </div>
+                                            </p>
+                                        </td>
+
+
+                                        <td style="width:6%">门店名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="store_id_rent" name="store_id_rent" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  onkeyup="getRentStore(this)" placeholder="门店" id="store_name_rent" style="border-radius: 6px;width: 150px"/>
+                                            <div class="auto hidden" id="rent_store" onclick="selectRentStore(this)" style="width:150px;z-index: 99999;">
+                                            </div>
+                                            </p>
+                                        </td>
+
+
+                                        <td style="width:6%">日期：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p class="read"><input type="text" class="form-control"  style="width: 100px" readonly="readonly"  maxlength="12"  id="year_property"/></p>
+
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostRent()">查询</button>
+                                        </td>
+                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostRent()">保存</button>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostRent()">导出</button>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div class="col-sm-12 no-padding" style="margin-left:-1px">
+                                    <table class="table table_x" cellspacing="0" cellpadding="0" id="property_tb_2">
+
+                                        <tr id="property_tr_2">
+                                            <th style="text-align: center;background-color:#A9A9A9"><p>序号</p></th>
+                                            <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
+                                            <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
+                                            <th style="text-align: center"><p style="width: 180px"><span style="font-weight: bold;color:red" id="propertyFeeYear_title"></span>物业费（年）</p></th>
+                                            <th style="text-align: center"><p style="width: 180px">物业期限（月）</p></th>
+                                            <th style="text-align: center"><p style="width: 180px">物业费（月）</p></th>
+
+                                        </tr>
+
+                                    </table>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane " id="tab_operation">
+
+                                <table width="60%">
+                                    <tr>
+
+                                        <td style="width:6%">城市名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="city_id_operation" name="city_id_operation" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_operation" onkeyup="getOperationCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
+                                            <div class="auto hidden" id="operation_city" onclick="selectOperationCity(this)" style="width:150px;z-index: 99999;">
+                                                <!-- /.input group -->
+                                            </div>
+                                            </p>
+                                        </td>
+
+
+                                        <td style="width:6%">门店名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="store_id_operation" name="store_id_operation" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  onkeyup="getOperationStore(this)" placeholder="门店" id="store_name_operation" style="border-radius: 6px;width:150px"/>
+                                            <div class="auto hidden" id="operation_store" onclick="selectOperationStore(this)" style="width:150px;z-index: 99999;">
+                                            </div>
+                                            </p>
+                                        </td>
+
+                                        <td style="width:6%">日期：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p class="read"><input type="text" style="width: 100px" readonly="readonly" class="form-control"   maxlength="12"  id="year_operation"/></p>
+                                            <input type="hidden" id="operation_save_date" value=""/>
+                                        </td>
+
+                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostOperation()">查询</button>
+                                        </td>
+                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostOperation()">保存</button>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostOperation()">导出</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="tab-roll" id="tab-roll-operation">
+
+                                    <div class="col-sm-8 no-padding" style="margin-left:-1px">
+                                        <table class="table table_x" cellspacing="0" cellpadding="0" id="operation_tb_2">
+
+                                            <tr id="operation_tr_2">
+                                                <th style="text-align: center;background-color:#A9A9A9"><p>序号</p></th>
+                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
+                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
+                                                <th style="text-align: center"><p>日常办公</p></th>
+                                                <th style="text-align: center"><p>仓储型星店房租</p></th>
+                                                <th style="text-align: center"><p>桶装水</p></th>
+                                                <th style="text-align: center"><p>门店保险</p></th>
+                                                <th style="text-align: center"><p>电动车维修费用</p></th>
+                                                <th style="text-align: center"><p>购物袋</p></th>
+                                                <th style="text-align: center"><p>垃圾袋</p></th>
+                                                <th style="text-align: center"><p>灭火器</p></th>
+                                                <th style="text-align: center"><p>车载包+背包</p></th>
+                                                <th style="text-align: center"><p>头盔+护膝+手套</p></th>
+                                                <th style="text-align: center"><p>绿植</p></th>
+                                                <th style="text-align: center"><p>托盘</p></th>
+                                                <th style="text-align: center"><p>仓储物资（周转箱等）</p></th>
+                                                <th style="text-align: center"><p>门店营销活动费</p></th>
+                                                <th style="text-align: center"><p>门店装修及设备维修</p></th>
+                                                <th style="text-align: center"><p>年运营费用累计（元）</p></th>
+                                                <th style="text-align: center"><p>月度运营费用（元）</p></th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+                <!-- 月度成本-->
+                <div class="tab-pane" id="tab_month_cost">
+
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_labor" data-toggle="tab" onclick="showSecondLevelCostTag('labor')">人工成本</a></li>
+                            <li><a href="#tab_gwe" data-toggle="tab" onclick="showSecondLevelCostTag('gwe')">水电费</a></li>
+                        </ul>
+                        <div class="tab-content no-padding">
+
+                            <div class="tab-pane active" id="tab_labor">
+                                <table width="60%">
+                                    <tr>
+
+                                        <td style="width:6%">城市名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="city_id_labor" name="city_id_labor" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_labor" onkeyup="getLaborCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
+                                            <div class="auto hidden" id="labor_city" onclick="selectLaborCity(this)" style="width: 150px;z-index: 99999;">
+                                                <!-- /.input group -->
+                                            </div>
+                                            </p>
+                                        </td>
+
+
+                                        <td style="width: 6%">门店名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="store_id_labor" name="store_id_labor" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  onkeyup="getLaborStore(this)" placeholder="门店" id="store_name_labor" style="border-radius: 6px;width: 150px"/>
+                                            <div class="auto hidden" id="labor_store" onclick="selectLaborStore(this)" style="width:150px;z-index: 99999;">
+                                            </div>
+                                            </p>
+                                        </td>
+
+                                        <td style="width: 6%">日期：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p class="read"><input type="text" class="form-control" style="width: 100px" readonly="readonly"  maxlength="12"  id="year_labor"/></p>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostLabor()">查询</button>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostLabor()">保存</button>
+                                        </td>
+                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostLabor()">导出</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="col-sm-4 no-padding">
+
+                                    <table class="table" cellspacing="0" cellpadding="0" id="labor_tb_1">
+                                        <tr id="laboe_tr_1">
+                                            <th style="text-align: center;background-color:#A9A9A9">序号</th>
+                                            <th style="text-align: center;background-color: #A9A9A9">门店编码</th>
+                                            <th style="text-align: center;background-color: #A9A9A9">门店名称</th>
+                                        </tr>
+
+
+                                    </table>
+                                </div>
+                                <div class="col-sm-8 no-padding" style="overflow-x: scroll;margin-left:-1px">
+                                    <table class="table table_x" cellspacing="0" cellpadding="0" id="labor_tb_2">
+                                        <input id="labor_year_month" type="hidden"/>
+                                        <tr id="labor_tr_2">
+                                            <th><p style="text-align: center"><span style="font-weight: bold;color:red" id="uniformCharge_title"></span>工服年费</p></th>
+                                            <th><p style="text-align: center"><span style="font-weight: bold;color:red" id="emolument_title"></span>员工薪酬</p></th>
+                                            <th><p style="text-align: center"><span style="font-weight: bold;color:red" id="uniformAmortize_title"></span>工服摊销</p></th>
+                                            <th><p style="text-align: center"><span style="font-weight: bold;color:red" id="accommodation_title"></span>住宿星店房租</p></th>
+                                            <th><p style="text-align: center">小计（元）</p></th>
+                                        </tr>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane active" id="tab_gwe">
+
+                            </div>
+
+
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- /.tab-content -->
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

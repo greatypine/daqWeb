@@ -80,15 +80,10 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
                     cr.setCityName(cityName);
                     cr.setStoreNo(storeNo);
                     cr.setStoreName(storeName);
-                    cr.setAddr(addr);
                     cr.setPropertyDeadline(propertyDeadline);
                     cr.setPropertyFeeYear(propertyFeeYear);
                     cr.setPropertyFeeMonth(propertyFeeMonth);
                     cr.setYear(year);
-                    cr.setMonth(month);
-                    cr.setRentalMonth(rentalMonth);
-                    cr.setCostMonth(costMonth);
-
                     preObject(cr);
                     saveObject(cr);
                 }else{
@@ -96,19 +91,13 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
                     cr.setCityName(cityName);
                     cr.setStoreNo(storeNo);
                     cr.setStoreName(storeName);
-                    cr.setAddr(addr);
                     cr.setPropertyDeadline(propertyDeadline);
                     cr.setPropertyFeeYear(propertyFeeYear);
                     cr.setPropertyFeeMonth(propertyFeeMonth);
                     cr.setYear(year);
-                    cr.setMonth(month);
-                    cr.setRentalMonth(rentalMonth);
-                    cr.setCostMonth(costMonth);
-
                     preObject(cr);
                     saveObject(cr);
                 }
-
 
             }
             result.put("status","success");

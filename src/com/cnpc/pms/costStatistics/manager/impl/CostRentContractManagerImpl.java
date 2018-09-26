@@ -42,6 +42,7 @@ public class CostRentContractManagerImpl extends BizBaseCommonManager implements
             IFilter filter = null;
             List<CostRentContract> lst_costRentContract=null;
             for(int i=0;i<list.size();i++){
+                String cityName = list.get(i).get("cityName")==null?"":String.valueOf(list.get(i).get("cityName"));
                 String storeNo = list.get(i).get("storeNo")==null?"":String.valueOf(list.get(i).get("storeNo"));
                 String storeName = list.get(i).get("storeName")==null?"":String.valueOf(list.get(i).get("storeName"));
 
@@ -63,6 +64,7 @@ public class CostRentContractManagerImpl extends BizBaseCommonManager implements
 
                 if (lst_costRentContract != null && lst_costRentContract.size() > 0) {
                     CostRentContract crc = lst_costRentContract.get(i);
+                    crc.setCityName(cityName);
                     crc.setStoreNo(storeNo);
                     crc.setStoreName(storeName);
                     crc.setContractGrandTotal(contractGrandTotal);
@@ -82,6 +84,7 @@ public class CostRentContractManagerImpl extends BizBaseCommonManager implements
                     saveObject(crc);
                 }else{
                     CostRentContract crc = new CostRentContract();
+                    crc.setCityName(cityName);
                     crc.setStoreNo(storeNo);
                     crc.setStoreName(storeName);
                     crc.setContractGrandTotal(contractGrandTotal);
