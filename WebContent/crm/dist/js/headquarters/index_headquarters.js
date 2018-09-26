@@ -4939,7 +4939,7 @@ var initClick = function(){
         window.open(url);
     });
     $("#turnover_customer_more").on('click',function(){
-       toToMemberAnalysis();  
+       goToMemberAnalysis();  
     });
     $("#customer_analysis_more").on('click',function(){
         goToUserMember();
