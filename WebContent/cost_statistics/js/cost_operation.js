@@ -259,8 +259,6 @@ function searchCostOperation(){
         year:year
     }
 
-
-    $("#operation_tb_1").find("tr:gt(0)").remove();
     $("#operation_tb_2").find("tr:gt(0)").remove();
 
     doManager('costOperationManager','queryCostOperation',costDto,function (data) {
@@ -291,11 +289,9 @@ function searchCostOperation(){
                 var year_charge = costOperation[i].year_charge==null?"":costOperation[i].year_charge;//运营费/年
                 var month_charge = costOperation[i].month_charge==null?"":costOperation[i].month_charge;//运营费/月
 
-
-
-                $("#operation_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
-
-                var operation_td = "<td><input type='text' style='width: 100%'  onkeyup='calculateYearCharge(this)'  id='dailyOffice_"+i+"' value='"+daily_office+"'/></td>" +
+                var operation_td =
+                    "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>"+
+                    "<td><input type='text' style='width: 100%'  onkeyup='calculateYearCharge(this)'  id='dailyOffice_"+i+"' value='"+daily_office+"'/></td>" +
                     "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='rent_"+i+"'  value='"+rent+"'/></td>" +
                     "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='barrelledWater_"+i+"'    value='"+barrelled_water+"'/></td>"+
                     "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='storeInsurance_"+i+"'    value='"+store_insurance+"'/></td>"+

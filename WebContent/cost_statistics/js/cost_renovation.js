@@ -292,7 +292,7 @@ function getCostRenovation(){
 
         },function(){
 
-            $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
+            $("#renovation_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
             searchCostRenovation();
@@ -376,10 +376,9 @@ function searchCostRenovation(){
                 var completed_date = costRenovation[i].completed_date==null?"":costRenovation[i].completed_date;//竣工日期
                 var contract_date = costRenovation[i].contract_date==null?"":costRenovation[i].contract_date;//合同日期
 
-
-                $("#renovation_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
-
-                var renovation_td = "<td><input type='text'     id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
+                var renovation_td =
+                    "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>"+
+                    "<td><input type='text'     id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
                     "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
                     "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='renovationUnitPrice_"+i+"'    value='"+renovation_unit_price+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='decorateCost_"+i+"'    value='"+decorateCost+"'/></td>"+
@@ -387,58 +386,31 @@ function searchCostRenovation(){
                     "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='furniture_"+i+"'    value='"+furniture+"'/></td>"+
                     "<td><input type='text'      id='lightBox_"+i+"'    value='"+light_box+"'/></td>"+
                     "<td><input type='text'      id='processManage_"+i+"'    value='"+process_manage+"'/></td>"+
-                    "<td><input type='text'      id='processManageSurcharge_"+i+"'    value='"+process_manage_surcharge+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManageSurcharge_"+i+"'    value='"+process_manage_surcharge+"'/></td>"+
                     "<td><input type='text'      id='airConditioner_"+i+"'    value='"+air_conditioner+"'/></td>"+
-                    "<td><input type='text'      id='airConditionerSurcharge_"+i+"'    value='"+air_conditioner_surcharge+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='airConditionerSurcharge_"+i+"'    value='"+air_conditioner_surcharge+"'/></td>"+
                     "<td><input type='text'      id='design_"+i+"'    value='"+design+"'/></td>"+
-                    "<td><input type='text'      id='wholeProcessManager_"+i+"'    value='"+whole_process_manage_surcharge+"'/></td>"+
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='wholeProcessManager_"+i+"'    value='"+whole_process_manage_surcharge+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='total_"+i+"'    value='"+total+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateRenovationAmortizeMoney(this)' id='amortizeMonth_"+i+"'    value='"+amortize_month+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' id='amortizeMoney_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     id='completedDate_"+i+"'    value='"+completed_date+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoneyMonth_"+i+"'    value='"+amortize_money+"'/></td>"+
-                    "<td><input type='text'     id='contractDate_"+i+"'    value='"+contract_date+"'/></td>";
+                    "<td><input type='text'     id='completedDate_"+i+"' onclick='initCompletedDate(this)'   value='"+completed_date+"'/></td>"+
+                    "<td><input type='text'     id='contractDate_"+i+"'  onclick='initContractDate(this)'  value='"+contract_date+"'/></td>";
 
 
                 $("#renovation_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+renovation_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden'  id='cityName' value='"+cityName+"'/></tr>");
 
-                laydate.render({//月份控件
-                    elem:"#completedDate_"+i,
-                    value:completed_date==""?"":new Date(completed_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    done: function(value, date, endDate){
-                        console.log(value)
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
+                $( "#completedDate_"+i).datepicker({
+                    dateFormat: 'yy/mm/dd',
+                    changeMonth: true,
+                    changeYear: true
                 });
 
-                laydate.render({//月份控件
-                    elem:"#contractDate_"+i,
-                    value:contract_date==""?"":new Date(contract_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    done: function(value, date, endDate){
-                        // console.log(value); //得到日期生成的值，如：2017-08-18
-                        // console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
-                        // console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
+                $( "#contractDate_"+i).datepicker({
+                    dateFormat: 'yy/mm/dd',
+                    changeMonth: true,
+                    changeYear: true
                 });
-
             }
 
             layer.close(index);
@@ -565,6 +537,9 @@ function saveCostRenovation(){
 
             if(result.status=='success'){
                 $$.showMessage('提示',"保存成功！");
+                $("#renovation_tr_2").nextAll("tr[editable='true']").each(function () {
+                    $(this).attr("editable","false");
+                })
                 return;
             }else if(result.status=="fail"){
 

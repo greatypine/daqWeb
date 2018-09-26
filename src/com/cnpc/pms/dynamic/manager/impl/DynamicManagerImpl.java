@@ -6396,7 +6396,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 					}
 
 
-					dynamicDto.setStoreNo(storeNO.toString());
+					//dynamicDto.setStoreNo(storeNO.toString());
 					dynamicDto.setStoreNumer("N");//是否查询固定门店
 				}else  if(dynamicDto.getStoreId()==-10000){
 					dynamicDto.setStoreNo("-10000");

@@ -1,61 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>成本控制</title>
-    <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
-    <link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap.min.css">
-    <!--<link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-table.css">-->
-    <!--<link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-table-fixed-columns.css">-->
-    <!--<link rel="stylesheet" type="text/css" href="plugins/fixed-columns/css/bootstrap-editable.css">-->
-    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../crm/plugins/date-new/css/jquery-ui-1.9.2.custom.css" type="text/css">
-    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
-    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="../scripts/css/auto.css" rel="stylesheet">
-    <script type="text/javascript" src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
-    <script type="text/javascript" src="../scripts/auto.js"></script>
-    <script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
-    <script type="text/javascript" src="../crm/laydate/laydate.js"></script>
-    <script type="text/javascript" src="js/bidLib2.0.js"></script>
-    <script src="js/costCommon.js" type = "text/javascript"></script>
-    <script type="text/javascript">
-
-        var userGroupCode = getUrlParamByKey("userGroupCode");//登录账号角色组
-        var userId= getUrlParamByKey("userId");
-        var current_user=null;
-
-        $(function () {
-            doManager('UserManager','getCurrentUserDTO',null,function(data){
-                if(data.result) {
-                    current_user = JSON.parse(data.data);
-
-                    getCostRentContract();//获取人工成本
-                }},false);
-
-            autodivheight();
-            function autodivheight(){ //函数：获取尺寸
-                //获取浏览器窗口高度
-                var winHeight=0;
-                if (window.innerHeight)
-                    winHeight = window.innerHeight;
-                else if ((document.body) && (document.body.clientHeight))
-                    winHeight = document.body.clientHeight;
-                //通过深入Document内部对body进行检测，获取浏览器窗口高度
-                if (document.documentElement && document.documentElement.clientHeight)
-                    winHeight = document.documentElement.clientHeight;
-                document.getElementById("tab-roll").style.height= winHeight*0.76 +"px";
-
-
-            }
-            window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
-
-        })
-
-
-
-
-
 var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
 var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
 /**
@@ -196,9 +138,9 @@ function selectRentContractStore(t){
 
 
 /**
-* 检测年租金
-* @param t
-*/
+ * 检测年租金
+ * @param t
+ */
 function checkEveryYearRent(t){
 
     checkFloatDataValid(t);
@@ -216,19 +158,19 @@ function checkEveryYearRent(t){
         $("#leaseUnitPrice_"+index).val("");
         $("#contractGrandTotal_"+index).val("");
     }else{
-         firstRent = firstRent==""?0:firstRent;
-         sendRent = sendRent==""?0:sendRent;
-         thirdRent = thirdRent==""?0:thirdRent;
-         fourRent = fourRent==""?0:fourRent;
-         fifthRent = fifthRent==""?0:fifthRent;
-         deposit = deposit==""?0:deposit;
-         agencyFee = agencyFee==""?0:agencyFee;
-         var rentTotal = parseFloat(firstRent)+parseFloat(sendRent)+parseFloat(thirdRent)+parseFloat(fourRent)+parseFloat(fifthRent);
-         $("#contractGrandTotal_"+index).val(rentTotal+parseFloat(deposit)+parseFloat(agencyFee));
-         var structureAcreage =  $("#structureAcreage_"+index).val();
-         if(structureAcreage!=""){
+        firstRent = firstRent==""?0:firstRent;
+        sendRent = sendRent==""?0:sendRent;
+        thirdRent = thirdRent==""?0:thirdRent;
+        fourRent = fourRent==""?0:fourRent;
+        fifthRent = fifthRent==""?0:fifthRent;
+        deposit = deposit==""?0:deposit;
+        agencyFee = agencyFee==""?0:agencyFee;
+        var rentTotal = parseFloat(firstRent)+parseFloat(sendRent)+parseFloat(thirdRent)+parseFloat(fourRent)+parseFloat(fifthRent);
+        $("#contractGrandTotal_"+index).val(rentTotal+parseFloat(deposit)+parseFloat(agencyFee));
+        var structureAcreage =  $("#structureAcreage_"+index).val();
+        if(structureAcreage!=""){
             $("#leaseUnitPrice_"+index).val((rentTotal/parseFloat(structureAcreage)).toFixed(2));
-         }
+        }
 
     }
 
@@ -346,7 +288,7 @@ function searchCostRentContract(){
             var uniform_charge_sum=0;
 
             for(var i=0;i<costRent.length;i++){
-
+                var cityName = costRent[i].city_name==null?"":costRent[i].city_name;
                 var storeNo = costRent[i].storeNo==null?"":costRent[i].storeNo;
                 var storeName = costRent[i].storeName==null?"":costRent[i].storeName;
                 var contract_grand_total = costRent[i].contract_grand_total==null?"":costRent[i].contract_grand_total;//合同总金额
@@ -360,73 +302,32 @@ function searchCostRentContract(){
                 var deposit = costRent[i].deposit==null?"":costRent[i].deposit;//押金
                 var agency_fee = costRent[i].agency_fee==null?"":costRent[i].agency_fee;//中介费
 
-                var property_deadline = costRent[i].property_deadline==null?"":costRent[i].property_deadline;//租期
-                var lease_start_date = costRent[i].lease_start_date==null?"":costRent[i].lease_start_date;//起租日不含免租期
-                var lease_stop_date = costRent[i].lease_stop_date==null?"":costRent[i].lease_stop_date;//到租日
-                var free_lease_start_date = costRent[i].free_lease_start_date==null?"":costRent[i].free_lease_start_date;//起租日含免租期
+                var lease_start_date = costRent[i].lease_start_date==null?"":costRent[i].lease_start_date.split("-")[0];//起租日含免租期
+                var lease_stop_date = costRent[i].lease_start_date==null?"":costRent[i].lease_start_date.split("-")[1];//到租日
+                var free_lease_start_date = costRent[i].free_lease_start_date==null?"":costRent[i].free_lease_start_date.split("-")[1];//起租日不含免租期
 
-                $("#rentContract_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9;width: 100%'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9;width: 100%'>"+storeNo+"</td><td style='background-color:#A9A9A9;width: 100%'><p>"+storeName+"</p></td></tr>");
+                $("#rentContract_tb_1").append("<tr></tr>");
 
                 var rentContract_td =
-                    "<td><input style='width: 100%;' type='text' readonly id='lease_start_date_"+i+"'  value='"+lease_start_date+"'/></td>" +
-                    "<td><input style='width: 100%;' type='text' readonly id='lease_stop_date_"+i+"'  value='"+lease_stop_date+"'/></td>" +
-                    "<td><input style='width: 100%;' type='text'  id='free_lease_start_date_"+i+"' readonly value='"+free_lease_start_date+"'/></td>"+
+                    "<td style='text-align: center;background-color:#A9A9A9;width: 100%'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9;width: 100%'>"+storeNo+"</td><td style='background-color:#A9A9A9;width: 100%'><p>"+storeName+"</p></td>"+
+                    "<td><input style='background-color: #e8e8e8;width: 100%;' type='text' readonly id='lease_start_date_"+i+"'  value='"+lease_start_date+"'/></td>" +
+                    "<td><input style='background-color: #e8e8e8;width: 100%;' type='text'  id='free_lease_start_date_"+i+"' readonly value='"+free_lease_start_date+"'/></td>"+
+                    "<td><input style='background-color: #e8e8e8;width: 100%;' type='text' readonly id='lease_stop_date_"+i+"'  value='"+lease_stop_date+"'/></td>" +
                     "<td><input style='width: 100%;' type='text'  onkeyup='checkEveryYearRent(this)' id='firstYearRent_"+i+"' value='"+first_year_rent+"'/></td>" +
                     "<td><input style='width: 100%;' type='text' id='secondYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+second_year_rent+"'/></td>" +
                     "<td><input style='width: 100%;' type='text'  id='thirdYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+third_year_rent+"'/></td>" +
                     "<td><input style='width: 100%;' type='text' id='fourthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+fourth_year_rent+"'/></td>" +
                     "<td><input style='width: 100%;' type='text'  id='fifthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+fifth_year_rent+"'/></td>" +
-                    "<td><input style='width: 100%;' type='text' onkeyup='checkStructureAcreage(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
+                    "<td><input style='background-color: #e8e8e8;width: 100%;' readonly type='text' onkeyup='checkStructureAcreage(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
                     "<td><input style='background-color: #e8e8e8;width: 100%;' type='text' readonly id='leaseUnitPrice_"+i+"'   value='"+lease_unit_price+"'/></td>" +
                     "<td><input style='width: 100%;' type='text'  id='deposit_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+deposit+"'/></td>" +
-                    "<td><input style='width: 100%;' type='text' onkeyup='checkEveryYearRent(this)' id='agencyFee_"+i+"'  value='"+agency_fee+"'/></td>" +
+                    "<td><input style='background-color: #e8e8e8;width: 100%;' readonly type='text' onkeyup='checkEveryYearRent(this)' id='agencyFee_"+i+"'  value='"+agency_fee+"'/></td>" +
                     "<td><input type='text' readonly style='background-color: #e8e8e8;width: 100%' id='contractGrandTotal_"+i+"'  value='"+contract_grand_total+"'/></td>";
 
-                $("#rentContract_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+rentContract_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/></tr>");
-
-                laydate.render({//月份控件
-                    elem:"#lease_start_date_"+i,
-                    value:lease_start_date==""?"":new Date(lease_start_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    done: function(value, date, endDate){
-                        console.log(value)
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
-                });
-
-                laydate.render({//月份控件
-                    elem:"#lease_stop_date_"+i,
-                    value:lease_stop_date==""?"":new Date(lease_stop_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    change: function(value, date, endDate){
-                        // console.log(value); //得到日期生成的值，如：2017-08-18
-                        // console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}
-                        // console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
-                });
-
-                laydate.render({//月份控件
-                    elem:"#free_lease_start_date_"+i,
-                    value:free_lease_start_date==""?"":new Date(free_lease_start_date),
-                    format: 'yyyy/MM/dd',
-                    btns: ['confirm','now',"clear"],
-                    theme: '#428bca',
-                    change: function(value, date, endDate){
-                        $($(this)[0].elem.selector).parent().parent().attr("editable",true);
-                    }
-                });
-
+                $("#rentContract_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+rentContract_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden'  id='cityName' value='"+cityName+"'/></tr>");
             }
 
             layer.close(index);
-
-
-
 
         }
     });
@@ -473,6 +374,7 @@ function saveCostRentContract(){
     var costRentContractArray = [];
 
     for(var i=0;i<store_cost_tr.length;i++){
+        var cityName = $(store_cost_tr[i]).find("input[id='cityName']").val();
         var storeNo= $(store_cost_tr[i]).attr("id");
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();
         var contractGrandTotal = $(store_cost_tr[i]).find('input[id^="contractGrandTotal_"]').val();
@@ -485,11 +387,12 @@ function saveCostRentContract(){
         var fifth_year_rent = $(store_cost_tr[i]).find('input[id^="fifthYearRent_"]').val();
         var deposit = $(store_cost_tr[i]).find('input[id^="deposit_"]').val();//押金
         var agency_fee = $(store_cost_tr[i]).find('input[id^="agencyFee_"]').val();//中介费
-        var lease_start_date = $(store_cost_tr[i]).find('input[id^="lease_start_date_"]').val();//起租日不含免租期
+        var lease_start_date = $(store_cost_tr[i]).find('input[id^="lease_start_date_"]').val();//起租日含免租期
         var lease_stop_date = $(store_cost_tr[i]).find('input[id^="lease_stop_date_"]').val();//到租日
-        var free_lease_start_date = $(store_cost_tr[i]).find('input[id^="free_lease_start_date_"]').val();//起租日含免租期
+        var free_lease_start_date = $(store_cost_tr[i]).find('input[id^="free_lease_start_date_"]').val();//起租日不含免租期
 
         var costRentContract = {
+            cityName:cityName,
             storeNo:storeNo,
             storeName:storeName,
             contractGrandTotal:contractGrandTotal,
@@ -534,122 +437,3 @@ function saveCostRentContract(){
     },false);
 
 }
-</script>
-</head>
-<style type="text/css">
-    .panel-heading .but{float:right; text-align: center;}
-    .but input {
-        background-color: transparent;
-        border: 1px solid #fff;
-        border-radius: 3px;
-        padding: 0 13px;
-        margin-right: 30px;}
-    .content-wrapper{background: #fff;}
-    .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
-    .nav-tabs-custom > .nav-tabs > li > a{font-size: 14px; padding: 8px 15px;}
-    .nav-tabs-custom > .nav-tabs > li > a:hover{color: #3a90cb;}
-    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: #3a90cb; color: #fff;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #3a90cb; border-left: 1px solid #3a90cb; border-right:1px solid #3a90cb;}
-    .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #3a90cb;}
-    .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #3a90cb; margin: 5px 0; }
-    .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
-    .table > tbody > tr > td,.table > tbody > tr > th{border: 1px solid #d1d1d1; height: 40px; line-height: 40px; padding: 0 8px;}
-    .table > tbody > tr > td p,.table > tbody > tr > th p{width: 165px; margin: 0;}
-    .table_x{max-width: 1700px;}
-    .no-padding{padding: 0;}
-    .tab-roll{overflow-y: scroll;}
-    .table td input{width: 100%; height: 100%; border: 0;}
-    .table > tbody > tr > th p{font-weight: bold}
-
-</style>
-<body style="height: 100%">
-<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
-    <div class="panel-heading">门店租金
-        <span class="but">
-			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
-		</span>
-    </div>
-    <div class="panel-body" id="temp1">
-        <div class="nav-tabs-custom">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab_1" data-toggle="tab" >门店租金</a></li>
-            </ul>
-            <div class="tab-content no-padding">
-
-                <!-- 门店租金 -->
-                <div class="tab-pane active" id="tab_1">
-                    <table width="50%">
-                        <tr>
-                            <td style="width:6%">城市名称：</td>
-                            <td style="padding-top: 10px;width:12%">
-
-                                <p>
-                                    <input id="city_id_rentContract" name="city_id_rentContract" type="hidden" value=""/>
-                                    <input type="text" class="form-control"  placeholder="城市" id="city_name_rentContract" onkeyup="getRentContractCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                <div class="auto hidden" id="rentContract_city" onclick="selectRentContractCity(this)" style="width:150px;z-index: 99999;">
-                                    <!-- /.input group -->
-                                </div>
-                                </p>
-                            </td>
-
-
-                            <td style="width: 6%">门店名称：</td>
-                            <td style="padding-top: 10px;width:12%">
-                                <p>
-                                    <input id="store_id_rentContract" name="store_id_rentContract" type="hidden" value=""/>
-                                    <input type="text" class="form-control"  onkeyup="getRentContractStore(this)" placeholder="门店" id="store_name_rentContract" style="border-radius: 6px;width: 150px"/>
-                                <div class="auto hidden" id="rentContract_store" onclick="selectRentContractStore(this)" style="width:150px;z-index: 99999;">
-                                </div>
-                                </p>
-                            </td>
-
-                            <td width="5%" style="text-align:left;padding-bottom: 20px;">
-                                <button  class="btn btn-primary" style="margin-bottom:-20px;" onclick="getCostRentContract()">查询</button>
-                            </td>
-                            <td width="5%" style="text-align:left;padding-bottom: 20px;">
-                                <button  class="btn btn-primary" style="margin-bottom:-20px;" onclick="saveCostRentContract()">保存</button>
-                            </td>
-
-                        </tr>
-                    </table>
-                    <div class="tab-roll" id="tab-roll">
-                    <div class="col-sm-4 no-padding">
-                        <table class="table" cellspacing="0" cellpadding="0" id="rentContract_tb_1">
-                            <tr id="rentContract_tr_1">
-                                <th style="text-align: center;background-color:#A9A9A9">序号</th>
-                                <th style="text-align: center;background-color: #A9A9A9">门店编码</th>
-                                <th style="text-align: center;background-color: #A9A9A9">门店名称</th>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="col-sm-8 no-padding" style="margin-left:-1px">
-                        <table class="table table_x" cellspacing="0" cellpadding="0" id="rentContract_tb_2">
-
-                            <tr id="rentContract_tr_2">
-
-                                <th style="text-align: center"><p>起租日（免租期截止日）</p></th>
-                                <th style="text-align: center"><p>到期日</p></th>
-                                <th style="text-align: center"><p>起租日（含免租期)</p></th>
-                                <th style="text-align: center"><p>第一年租金</p></th>
-                                <th style="text-align: center"><p>第二年租金</p></th>
-                                <th style="text-align: center"><p>第三年租金</p></th>
-                                <th style="text-align: center"><p>第四年租金</p></th>
-                                <th style="text-align: center"><p>第五年租金</p></th>
-                                <th style="text-align: center"><p>建筑面积</p></th>
-                                <th style="text-align: center"><p>租赁单价</p></th>
-                                <th style="text-align: center"><p>押金</p></th>
-                                <th style="text-align: center"><p>中介费</p></th>
-                                <th style="text-align: center"><p>合同总金额</p></th>
-                            </tr>
-
-                        </table>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /.tab-content -->
-        </div>
-
-    </div>
-</div>
-</body>
-</html>

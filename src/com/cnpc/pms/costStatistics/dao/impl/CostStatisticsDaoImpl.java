@@ -220,15 +220,13 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
             sqlSub+=" and year= "+costDto.getYear();
         }
 
-        if(costDto.getMonth()!=null&&!"".equals(costDto.getMonth())){
-            sqlSub+=" and month= "+costDto.getMonth();
-        }
 
-        String sql = " select ts.storeno as store_no,ts.name as store_name,ts.city_name,ts.address as addr,tcr.property_fee_year,tcr.property_fee_month,tcr.property_deadline,tcr.rental_month,tcr.cost_month,tcrc.contractStoreNo,tcrc.rentalMonth_cal from ("+storeSql+") ts " +
+
+        String sql = " select ts.storeno as store_no,ts.name as store_name,ts.city_name,ts.address as addr,tcr.property_fee_year,tcr.property_fee_month,tcr.property_deadline,tcr.rental_month,tcr.cost_month from ("+storeSql+") ts " +
                     " left join ("+sqlSub+") tcr on ts.storeno = tcr.storeNo"+
-                    " LEFT JOIN"+
-                    " (select IFNULL(contract_grand_total,0)/60 as rentalMonth_cal,storeNo as contractStoreNo from t_cost_rent_contract where lease_stop_date >= CONCAT('"+costDto.getrDate()+"','01')) tcrc"+
-                    " on ts.storeno = tcrc.contractStoreNo where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+//                    " LEFT JOIN"+
+//                    " (select IFNULL(contract_grand_total,0)/60 as rentalMonth_cal,storeNo as contractStoreNo from t_cost_rent_contract where lease_stop_date >= CONCAT('"+costDto.getrDate()+"','01')) tcrc"+
+                    "  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
 
         List<Map<String,Object>> list = null;
         try{
@@ -446,7 +444,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
                 storeStr = " and t.storeno='"+costDto.getStoreNo()+"'";
             }
 
-            storeSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t.city_name,t1.citycode,t.estate,t.storetype from t_store t  inner join  (select * from t_dist_citycode "
+            storeSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t.city_name,t1.citycode,t.estate,t.storetype,t.tenancy_term,t.rent_free,t.agency_fee,t.rent_area from t_store t  inner join  (select * from t_dist_citycode "
                     + cityStr + ") t1" + " on t.city_name  = t1.cityname  where t.flag=0 and ifnull(t.estate,'') not like '%闭店%' "+ storeStr ;
 
 
@@ -460,7 +458,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
                 storeStr = " and t.storeno ='"+costDto.getStoreNo()+"'";
             }
             if (costDto.getUserId() != null && !"".equals(costDto.getUserId())) {
-                storeSql = "select t.name,t.city_name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode,t.estate,t.storetype from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc "
+                storeSql = "select t.name,t.city_name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode,t.estate,t.storetype,t.tenancy_term,t.rent_free,t.agency_fee,t.rent_area from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc "
                         + "   INNER JOIN t_dist_city a on a.citycode = tdc.citycode and a.pk_userid=" + costDto.getUserId()+" where tdc.status=0 "
                         + cityStr + ") t1"
                         + "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(estate,'') not like '%闭店%' " + storeStr;
@@ -469,7 +467,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         }
 
-        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.storeType,ts.estate,tc.structure_acreage,tc.lease_unit_price,tc.deposit,tc.agency_fee,tc.free_lease_start_date,tc.lease_start_date,tc.lease_stop_date,tc.contract_grand_total," +
+        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.storeType,ts.estate,ts.rent_area as structure_acreage,tc.lease_unit_price,tc.deposit,ts.agency_fee,ts.rent_free as free_lease_start_date,ts.tenancy_term as lease_start_date ,tc.contract_grand_total," +
                 " tc.first_year_rent,tc.second_year_rent,tc.third_year_rent,tc.fourth_year_rent,tc.fifth_year_rent,tc.expiration_contract " +
                 " FROM ("+storeSql+") ts left join  (select * from t_cost_rent_contract where expiration_contract=0) tc on ts.storeno=tc.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
 
