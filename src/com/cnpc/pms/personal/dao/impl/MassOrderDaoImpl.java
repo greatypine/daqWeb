@@ -49,8 +49,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score,IFNULL(a.order_tag2,'') as order_tag2, "
 				+ "CASE a.order_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source "
-//				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit,IFNULL(a.apportion_rebate,0) as apportion_rebate,"
-//				+ "IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price "
+				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit,IFNULL(a.apportion_rebate,0) as apportion_rebate,"
+				+ "IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price "
 				+ "from ";
 
 		String sqlB = sqlA;
@@ -276,7 +276,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE WHEN a.order_tag1 like '%M%' THEN '是'  ELSE '否' END AS order_tag_member, "
 				+ "CASE a.order_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source "
-//				+ ",IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit "
+				+ ",IFNULL(a.business_type,'') as business_type,IFNULL(a.order_profit,0) as order_profit "
 				+ "from ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
