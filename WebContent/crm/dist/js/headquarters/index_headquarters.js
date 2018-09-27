@@ -4518,7 +4518,7 @@ function goToDataFiles(){
   function initCustomerInfo(){
 	  if(curr_user!=null&&curr_user.usergroup.code.indexOf('ZB')!=0){
 		  //如果不是总部 隐藏 用户画像
-		  $("#user_model").hide();
+		  // $("#user_model").hide();
 	  }
   }
   //用户画像（新）
