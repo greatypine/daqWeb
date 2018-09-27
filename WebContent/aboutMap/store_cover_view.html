@@ -275,6 +275,9 @@ var divideAreaCoordinatesArray=[];/**地采除混片坐标数组*/
 var areaCoordinatesArray=[];/**混片范围坐标数组*/
 var serviceCoordinatesArray = [];/**服务范围坐标数组*/
 var vallageCoordinatesArray = [];/**小区坐标数组*/
+var storeNoArray = new Array();/**用来判断是否有重复的门店服务范围*/
+var redundant = {};
+
 
 
 //初始化地图对象，加载地图
@@ -378,40 +381,51 @@ function initData(){
                     		var polygonArray = serviceArray[i];
                     		var serviceCoordinates=polygonArray.vertex;
                     		var storeNo = polygonArray.storeNo;
-                    		var storeName = polygonArray.storeName;
-                    		var strLength = -((storeName.length*14+20)/2);
-                    		if(storeNo != "0021Y0020"){
-                    			var position = polygonArray.position;
-                        		serviceCoordinatesArray.push(serviceCoordinates);
-                    		}
-                    		//注意path是否有值
-                       		polygonArray.polygonMap = servicePolygon;
-                    		if(position != null && position.length>0){
-                    			storeMarker = new AMap.Marker({ //添加自定义点标记
-                    		        map: map,
-                    		        position: position, //基点位置
-                    		        icon:"dist/img/splogo.png",
-                    		        offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
-                    		        extData:{"storeName":storeName,"storeIndex":i}
-                    		       // draggable: true,  //是否可拖动
-                    		        //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
-                    		    });
-                    			polygonArray["marker"] = storeMarker;
-                    			storeMarker.on("click",function(e){
-                    				map.setCenter(e.target.getPosition());
-                    				map.setZoom(14);
-                    			});
-                    			storeMarker.on("mouseover",function(e){
-                    			    var storeIndex = e.target.getExtData().storeIndex;
-                                    var coordinates = serviceCoordinatesArray[storeIndex];
-                                    mouseoverPolygon.setPath(coordinates);
-                    				var storeName = e.target.getExtData().storeName;
-                    				e.target.setTitle(storeName);
-                    			});
-                                storeMarker.on("mouseout",function(e){
-                                    mouseoverPolygon.setPath([]);
-                                });
-                    		}
+                            var index = jQuery.inArray(storeNo,storeNoArray);
+                            if(index == -1){
+                                var storeName = polygonArray.storeName;
+                                var strLength = -((storeName.length*14+20)/2);
+                                var position = polygonArray.position;
+                                serviceCoordinatesArray.push(serviceCoordinates);
+                                //注意path是否有值
+                                polygonArray.polygonMap = servicePolygon;
+                                if(position != null && position.length>0){
+                                    storeMarker = new AMap.Marker({ //添加自定义点标记
+                                        map: map,
+                                        position: position, //基点位置
+                                        icon:"dist/img/splogo.png",
+                                        offset: new AMap.Pixel(-10, -10), //相对于基点的偏移位置
+                                        extData:{"storeName":storeName,"storeIndex":i}
+                                        // draggable: true,  //是否可拖动
+                                        //content: '<div class="marker-route marker-marker-bus-from">'+storeName+'</div>'   //自定义点标记覆盖物内容
+                                    });
+                                    polygonArray["marker"] = storeMarker;
+                                    storeMarker.on("click",function(e){
+                                        map.setCenter(e.target.getPosition());
+                                        map.setZoom(14);
+                                    });
+                                    storeMarker.on("mouseover",function(e){
+                                        var storeIndex = e.target.getExtData().storeIndex;
+                                        var coordinates = serviceCoordinatesArray[storeIndex];
+                                        var array1 = redundant[storeIndex];
+                                        var arrayadd = new Array();
+                                        arrayadd.push(coordinates);
+                                        if(array1!= null){
+                                            arrayadd.push(array1);
+                                        }
+                                        mouseoverPolygon.setPath(arrayadd);
+                                        var storeName = e.target.getExtData().storeName;
+                                        e.target.setTitle(storeName);
+                                    });
+                                    storeMarker.on("mouseout",function(e){
+                                        mouseoverPolygon.setPath([]);
+                                    });
+                                }
+                                storeNoArray.push(storeNo);
+                            }else{
+                                redundant[index] = serviceCoordinates;
+                                serviceCoordinatesArray.push(serviceCoordinates);
+                            }
                     	}
                     	servicePolygon.setPath(serviceCoordinatesArray);
                 	}

@@ -237,6 +237,9 @@ function timeConfig(time){
     }else if(time == 1){//全部
     	endDateStr = '2015/12/22';
     	endDateStr += timeStr;
+    }else if(time == 2){//全部
+        endDateStr = '2018/09/01';
+        endDateStr += timeStr;
     }else{
         endDateStr += timeStr;
     }

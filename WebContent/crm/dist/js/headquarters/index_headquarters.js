@@ -4326,6 +4326,20 @@ var curr_user;
 	  }
 	  window.open(url,"user_member_view");
   }
+
+//合作社社员统计
+function goToDataFiles(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "data_files.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id);
+    }else if(target==1){
+        url = "data_files.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+    }
+    window.open(url,"user_member_view");
+}
+
   
 //线下网络运营
   function goToCityNet(){
