@@ -3678,8 +3678,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 				"and tor.store_id is not null  and tor.sign_time is not null  group by tor.customer_id , tor.store_id ) T_1 group by T_1.city_code , T_1.store_id " +
 				") T_5 on T_4.id = T_5.id " +
 				"left join  gemini.t_sys_area tsa on T_2.city_code =  tsa.code " +
-				"left join  gemini.t_store ts on T_2.store_id = ts.id " +appendSql+
-				"order by  T_2.city_code,T_2.store_id,T_2.visit_num";
+				"left join  gemini.t_store ts on T_2.store_id = ts.id  and ts.name not like '%测试%' " +appendSql+
+				" order by  T_2.city_code,T_2.store_id,T_2.visit_num";
 
 		Map<String,Object> map_result = ImpalaUtil.executeByPage(sql,pageInfo);
 		return map_result;
