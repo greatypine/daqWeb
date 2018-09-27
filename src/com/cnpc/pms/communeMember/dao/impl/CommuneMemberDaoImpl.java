@@ -1608,9 +1608,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 			sql = sql + " AND LPAD(dum.regist_cityno,4,0) = '" + memberDataDto.getCityName().trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
-			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+			sql = sql + " AND dum.invitecode='"+memberDataDto.getInviteCode()+"'";
 		}
-
+        if(StringUtils.isNotEmpty(memberDataDto.getMobilePhone())){
+            sql = sql + " AND dum.mobilephone='"+memberDataDto.getMobilePhone()+"'";
+        }
 		if(StringUtils.isNotEmpty(memberDataDto.getOpen_card_time_begin())){
 			sql = sql + " AND (dum.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
 					+ memberDataDto.getOpen_card_time_end() + " 23:59:59')";
@@ -1684,9 +1686,11 @@ public List<Map<String, Object>> getMembersArea(String dd) {
 			sql = sql + " AND LPAD(dum.regist_cityno,4,0) = '" + memberDataDto.getCityName().trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(memberDataDto.getInviteCode())){
-			sql = sql + " AND dum.inviteCode='"+memberDataDto.getInviteCode()+"'";
+			sql = sql + " AND dum.invitecode='"+memberDataDto.getInviteCode()+"'";
 		}
-
+        if(StringUtils.isNotEmpty(memberDataDto.getMobilePhone())){
+            sql = sql + " AND dum.mobilephone='"+memberDataDto.getMobilePhone()+"'";
+        }
 		if(StringUtils.isNotEmpty(memberDataDto.getOpen_card_time_begin())){
 			sql = sql + " AND (dum.opencard_time between '" + memberDataDto.getOpen_card_time_begin() + " 00:00:00' and '"
 					+ memberDataDto.getOpen_card_time_end() + " 23:59:59')";

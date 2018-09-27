@@ -5,6 +5,7 @@ public class MemberDataDto {
     String cityName;
     String storeNo;
     String inviteCode;
+    String mobilePhone;
     String hidden_flag;
     String open_card_time_begin;
     String open_card_time_end;
@@ -31,6 +32,14 @@ public class MemberDataDto {
 
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 
     public String getHidden_flag() {
