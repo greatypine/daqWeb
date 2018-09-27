@@ -1020,4 +1020,16 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> selectEStoreRankingOfStore(DynamicDto dynamicDto,PageInfo pageInfo);
+
+
+	/**
+	 *
+	 * TODO 查询门店E店gmv
+	 * 2018年9月25日
+	 * @author gaoll
+	 * @param dynamicDto
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> getUserBehaviorByLog(DynamicDto dynamicDto,String cityNo,PageInfo pageInfo);
 }

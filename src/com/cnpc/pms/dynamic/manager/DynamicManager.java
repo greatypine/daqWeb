@@ -1141,4 +1141,18 @@ public interface DynamicManager extends IManager{
 	 **/
 
 	public Map<String, Object> exportEmployeeOfAreaGmv_221(DynamicDto dynamicDto);
+
+	/**
+	 * @Description 通过用户行为日志获得：用户行为，产品访问，搜索记录
+	 * @author gaoll
+	 * @date 2018/9/25 11:21
+	 **/
+	public Map<String, Object> getUserBehaviorByLog(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * @Description 导出通过用户行为日志获得：用户行为，产品访问，搜索记录
+	 * @author gaoll
+	 * @date 2018/9/26 11:21
+	 **/
+	public Map<String, Object> exportUserBehaviorByLog(DynamicDto dynamicDto);
 }

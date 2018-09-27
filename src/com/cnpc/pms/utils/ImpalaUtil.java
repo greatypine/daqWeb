@@ -1,5 +1,7 @@
 package com.cnpc.pms.utils;
 
+import com.cnpc.pms.base.paging.impl.PageInfo;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +52,61 @@ public class ImpalaUtil {
             }  
         }
         return list;
+    }
+
+    public static Map<String,Object> executeByPage(String sql, PageInfo pageInfo){
+
+        Connection con = null;
+        ResultSet rs = null;
+        Statement stat=null;
+        List<Map<String,Object>> list = null;
+        PreparedStatement ps = null;
+        Map<String,Object> map_result = new HashMap<String,Object>();
+        try {
+
+
+            con = HikariInner.getConnection();
+            System.out.println("\n== Begin Query Results ======================");
+            //ps = con.prepareStatement(sql);
+            stat = con.createStatement();
+            //rs = ps.executeQuery();
+            if(pageInfo!=null){
+                String sql_count = "SELECT COUNT(1) as total FROM ("+sql+") T";
+                rs = stat.executeQuery(sql_count);
+                List<Map<String,Object>> list1 = convertList(rs);
+                pageInfo.setTotalRecords(Integer.valueOf(list1.get(0).get("total").toString()));
+                sql += " limit "+ pageInfo.getRecordsPerPage()+" offset "+ (pageInfo.getRecordsPerPage()*(pageInfo.getCurrentPage() - 1));
+                rs = stat.executeQuery(sql);
+                list = convertList(rs);
+                Integer total_pages = (pageInfo.getTotalRecords()-1)/pageInfo.getRecordsPerPage()+1;
+                map_result.put("pageinfo",pageInfo);
+                map_result.put("total_pages", total_pages);
+                map_result.put("totalRecords", pageInfo.getTotalRecords());
+                map_result.put("user_active",list);
+            }else{
+                rs = stat.executeQuery(sql);
+                list = convertList(rs);
+                map_result.put("user_active",list);
+            }
+
+
+            System.out.println("== End Query Results =======================\n\n");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return map_result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return map_result;
+        } finally {
+            try {
+                HikariInner.close(con, stat, rs);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return map_result;
+            }
+        }
+        return map_result;
     }
 
     public static List<Map<String,Object>> executeGuoan(String sql){
