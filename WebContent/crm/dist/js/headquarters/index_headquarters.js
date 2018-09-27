@@ -4334,7 +4334,9 @@ var curr_user;
   	  var target=pageStatusInfo.targets;
   	  if(target==0){
   	  	url = "index_city_net.html";
-  	  }
+  	  }else if(target==1){
+  	    url = "index_city_net.html";
+      }
   	  window.open(url,"index_city_net"); 
   }
     //门店租赁统计
@@ -4744,7 +4746,7 @@ function goToYouyiInfo(){
     if(target==0){
         url = "youyi_product.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
     }else if(target==1){
-        url = "youyi_product_city.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+        url = "youyi_product.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
     }
     window.open(url,"youyi_product");
 }
@@ -5172,6 +5174,11 @@ function menuShowByRole(){
 		  $("#city_net").hide();
 	  }
 	  */
+    if(pageStatusInfo.targets==0){
+        $("#store_rent").show();
+    }else if(pageStatusInfo.targets==1){
+        $("#store_rent").hide();
+    }
 }
 function  clearCache(){
 	localStorage.clear();
