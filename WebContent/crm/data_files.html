@@ -261,8 +261,8 @@
 	              </div>
 	            </div>
 	            <div class="form-group col-lg-4">
-	              <label>门店<span class="checkboxFive">
-						<input type='checkbox' id="storeClick" checked="checked" value='area'>
+	              <label><span class="text-red" title="勾选门店：以门店为单位统计&#13;未勾选门店：以城市为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>门店<span class="checkboxFive">
+						<input type='checkbox' id="storeClick" onclick='operatedCoverage()' checked="checked" value='area'>
 					<label for="storeClick"></label>
                 	</span></label>
 				  <input id="store_id_userbehavior" name="store_id_userbehavior" type="hidden" value=""/>
@@ -1613,6 +1613,16 @@ function resetSerachParamTry(){
 function customer_member(){
     var URL="big_member_view.html?"+"t="+encode64(target);
     window.open(URL,"big_member");
+}
+
+function operatedCoverage(){
+    if($('#storeClick').is(':checked')){
+        $("#store_name_userbehavior").attr("disabled",false);
+    }else{
+        $("#store_name_userbehavior").attr("disabled",true);
+        $("#store_id_userbehavior").val("");
+        $("#store_name_userbehavior").val("");
+	}
 }
 </script>
 
