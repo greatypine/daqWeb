@@ -122,6 +122,54 @@
 	.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
 	.ui-datepicker-quick span{height: 30px; line-height: 35px}
 	.ui-datepicker-time{background-color:transparent}
+
+	.checkboxFive {width: 20px;position: relative; margin: 20px 20px 20px 0; padding-left: 10px;}
+	.checkboxFive label {
+		width: 17px;
+		height: 17px;
+		cursor: pointer;
+		position: absolute;
+		top: 1px;
+		left: 4px;
+		background: -moz-linear-gradient(top, #f4f4f4 0%, #f9f8f8 100%);
+		background: -webkit-linear-gradient(top, #f4f4f4 0%, #f9f8f8 100%);
+		background: linear-gradient(to bottom, #f4f4f4 0%, #f9f8f8 100%);
+		-moz-border-radius: 4px;
+		-webkit-border-radius: 4px;
+		border-radius: 4px;
+		-moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+		-webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+		box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+	}
+	.checkboxFive label:after {
+		content: '';
+		width: 12px;
+		height: 7px;
+		position: absolute;
+		top: 5px;
+		left: 4px;
+		border: 3px solid #5a5a5a;
+		border-top: none;
+		border-right: none;
+		background: transparent;
+		filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+		opacity: 0;
+		-moz-transform: rotate(-45deg);
+		-ms-transform: rotate(-45deg);
+		-webkit-transform: rotate(-45deg);
+		transform: rotate(-45deg);
+	}
+	.checkboxFive label:hover::after {
+		filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+		opacity: 0.3;
+	}
+	.checkboxFive input[type=checkbox] {
+		visibility: hidden;
+	}
+	.checkboxFive input[type=checkbox]:checked + label:after {
+		filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+		opacity: 1;
+	}
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -213,11 +261,15 @@
 	              </div>
 	            </div>
 	            <div class="form-group col-lg-4">
-	              <label>门店</label>
+	              <label>门店<span class="checkboxFive">
+						<input type='checkbox' id="storeClick" checked="checked" value='area'>
+					<label for="storeClick"></label>
+                	</span></label>
 				  <input id="store_id_userbehavior" name="store_id_userbehavior" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="门店" id="store_name_userbehavior" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%"/>
-	              <div class="auto hidden" id="auto_store" style="width:85%;z-index: 99999;">
-	              </div>
+
+	              <div class="auto hidden" id="auto_store" style="width:85%;z-index: 99999;"></div>
+
 	              <!-- /.input group -->
 	            </div>
 	            </div>
@@ -244,7 +296,7 @@
 	                    <tbody id="tradeType_tbody">
 		                    <tr>
 		                      	<th width="8%">城市</th>
-		                      	<th width="10%">门店名称</th>
+		                      	<th id="storenamehide" width="10%">门店名称</th>
 		                      	<th width="12%">访问用户数</th>
 		                      	<th width="12%">加购数</th>
 								<th width="12%">下单用户数</th>
@@ -999,7 +1051,7 @@ $('#store_name_try').keyup(function(event){
  	  		  		employeeId:employeeId,
  	  		  		target:target,
  	  		  		storeId:number_str,
- 	  		  		searchstr:"user_active"
+ 	  		  		searchstr:"user_active_city"
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -1010,7 +1062,7 @@ $('#store_name_try').keyup(function(event){
   		  		employeeId:employeeId,
   		  		target:target,
   		  		storeId:number_str,
-  		  		searchstr:"user_active"
+  		  		searchstr:"user_active_city"
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -1020,7 +1072,7 @@ $('#store_name_try').keyup(function(event){
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
   		  		target:target,
-  		  		searchstr:"user_active"
+  		  		searchstr:"user_active_city"
   			}
 	    }else if(target==3){//事业部
 	    	dynamicDto = {
@@ -1030,10 +1082,17 @@ $('#store_name_try').keyup(function(event){
 	  		  		employeeNo:employeeId,
 	  		  		storeId:number_str,
 	  		  		target:target,
-	  		  		searchstr:"user_active"
+	  		  		searchstr:"user_active_city"
 	  			}
 	    }
- 	    var pageInfo = new Object();
+	    if($('#storeClick').is(':checked')){
+            dynamicDto["searchstr"] = "user_active_store";
+            $("#storenamehide").show();
+		}else{
+            $("#storenamehide").hide();
+		}
+        $("#tradeType_tbody").find("tr:gt(0)").remove();
+        var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeStore;
         $("#totalRecord_store").html("0");
@@ -1041,7 +1100,6 @@ $('#store_name_try').keyup(function(event){
            if(data.result){
            	   var result= JSON.parse(data.data);
 	           if(result.status=='success'){
-	        	   $("#tradeType_tbody").find("tr:gt(0)").remove(); 
 	        	   var jData = result.user_active;
 	        	   if(jData==null||jData.length==0){
 	        		   crm_alert(5,"没有符合条件的数据！");
@@ -1069,17 +1127,16 @@ $('#store_name_try').keyup(function(event){
 	        		   isCreatePage1=true;
 	        	   }
 	        	   
-	        	   var infoStr="";
+
 	        	   for(var i=0;i<jData.length;i++){
 	        		   var cityname = jData[i].city_name;
-	        		   /*if(cityname == '无'){
-	        			   cityname = $("#city_name_userbehavior").val() == "" ? cityname : $("#city_name_userbehavior").val();
-	        		   }*/
-                       infoStr="";
-	        		   infoStr += "<tr>"
-		                       +"<td>"+cityname+"</td>"
-		                       +"<td>"+jData[i].store_name+"</td>"
-		                       +"<td>"+jData[i].visit_num+"</td>"
+                       var infoStr="";
+                       infoStr+= "<tr>"
+                           +"<td>"+cityname+"</td>";
+                       if($('#storeClick').is(':checked')){
+                           infoStr += "<td>"+jData[i].store_name+"</td>";
+					   }
+                       infoStr += "<td>"+jData[i].visit_num+"</td>"
 					           +"<td>"+jData[i].add_num+"</td>"
 					           +"<td>"+jData[i].order_num+"</td>"
                                +"<td>"+jData[i].sign_num+"</td>"
@@ -1088,7 +1145,6 @@ $('#store_name_try').keyup(function(event){
 		                  $("#tradeType_tbody").append(infoStr);     
 	        	   }
 	           }else if(result.status=='fail'){
-	        	   $("#tradeType_tbody").find("tr:gt(0)").remove(); 
 	           	   crm_alert(5,JSON.parse(result.data).message);
 		           	$("#page_tradetype").createPage({
 		   	 	  	    pageCount:0,
@@ -1298,7 +1354,7 @@ function searchInfo_customer(cur_page){
  	  		  		employeeId:employeeId,
  	  		  		target:target,
  	  		  		storeId:number_str,
- 	  		  		searchstr:"user_active"
+ 	  		  		searchstr:"user_active_city"
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -1309,7 +1365,7 @@ function searchInfo_customer(cur_page){
   		  		employeeId:employeeId,
   		  		target:target,
   		  		storeId:number_str,
-  		  		searchstr:"user_active"
+  		  		searchstr:"user_active_city"
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -1319,9 +1375,12 @@ function searchInfo_customer(cur_page){
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
   		  		target:target,
-  		  		searchstr:"user_active"
+  		  		searchstr:"user_active_city"
   			}
 	    }
+        if($('#storeClick').is(':checked')){
+            dynamicDto["searchstr"] = "user_active_store";
+        }
 	   
 	    doManager('dynamicManager','exportUserBehaviorByLog',[dynamicDto],function(data){
           if(data.result){
