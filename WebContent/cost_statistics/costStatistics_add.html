@@ -36,32 +36,8 @@
         var cur_city_name= getUrlParamByKey("cur_city_name");
         var flag=getUrlParamByKey("flag");
          $(function () {
-             getCostRenovation();
-        //
-        //     var cur_date = new Date();
-        //     var year = cur_date.getFullYear();
-        //     var  month = cur_date.getMonth()+1;
-        //     var showDate = year+"年"+month+"月";
-        //     $("#emolument_title").html(showDate);
-        //     $("#uniformAmortize_title").html(showDate);
-        //     $("#accommodation_title").html(showDate);
-        //
-        //     laydate.render({//月份控件
-        //         elem:'#year_labor',
-        //         value:new Date(),
-        //         type:"month",
-        //         btns: ['confirm','now'],
-        //         theme: '#428bca'
-        //     });
-        //
-        //
-        //     if(flag=="search"){
-        //         $("#city_id_labor").val(cur_city_id);
-        //         $("#city_name_labor").val(decode64(cur_city_name));
-        //     }
-        //     getCostLabor();//获取人工成本
-        //
-        //
+            getCostRenovation();
+
             autodivheight();
             function autodivheight(){ //函数：获取尺寸
                 //获取浏览器窗口高度
@@ -90,28 +66,83 @@
         function showFirstLevelCostTag(t){
 
             if(t=="fixedCost"){//固定成本
-                getCostRenovation();//装修摊销
+                if($("#li_renovation").hasClass("active")){
+                    getCostRenovation();//装修摊销
+                }else if($("#li_fixedAsset").hasClass("active")){
+                    getCostFixedAsset();//固定资产
+                }else if($("#li_rentContract").hasClass("active")){
+                    getCostRentContract();//合同租金
+                }
 
             }else if(t=="yearCost"){//年度成本
-                var cur_date = new Date();
-                laydate.render({//月份控件
-                    elem:'#year_property',
-                    value:cur_date,
-                    type:"year",
-                    btns: ['confirm','now'],
-                    theme: '#428bca'
-                });
-                getCostRent();//物业费
+                if($("#li_property").hasClass("active")){
+                    var cur_date = new Date();
+                    laydate.render({//月份控件
+                        elem:'#year_property',
+                        value:cur_date,
+                        type:"year",
+                        btns: ['confirm','now'],
+                        theme: '#428bca'
+                    });
+                    getCostRent();//物业费
+                }else if($("#li_operation").hasClass("active")){
+
+                    var cur_date = new Date();
+
+                    laydate.render({//月份控件
+                        elem:'#year_operation',
+                        value:cur_date,
+                        type:"year",
+                        btns: ['confirm','now'],
+                        theme: '#428bca'
+                    });
+
+                    getCostOperation();
+                }else if($("#li_uniform").hasClass("active")){
+
+
+                    var cur_date = new Date();
+
+                    laydate.render({//月份控件
+                        elem:'#year_uniform',
+                        value:cur_date,
+                        type:"year",
+                        btns: ['confirm','now'],
+                        theme: '#428bca'
+                    });
+
+                    getCostUniform();
+                }
+
             }else if(t=="monthCost"){//月度成本
-                var cur_date = new Date();
-                laydate.render({//月份控件
-                    elem:'#year_labor',
-                    value:cur_date,
-                    type:"month",
-                    btns: ['confirm','now'],
-                    theme: '#428bca'
-                });
-                getCostLabor();//人工成本
+                if($("#li_labor").hasClass("active")){
+                    var cur_date = new Date();
+                    laydate.render({//月份控件
+                        elem:'#year_labor',
+                        value:cur_date,
+                        type:"month",
+                        btns: ['confirm','now'],
+                        theme: '#428bca'
+                    });
+                    getCostLabor();//人工成本
+                }else if($("#li_gwe").hasClass("active")){
+
+
+
+
+                    var cur_date = new Date();
+
+                    laydate.render({//月份控件
+                        elem:'#year_gwe',
+                        value:cur_date,
+                        type:"month",
+                        btns: ['confirm','now'],
+                        theme: '#428bca'
+                    });
+
+                    getCostGWE();
+                }
+
             }
 
         }
@@ -361,9 +392,9 @@
 
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_renovation" data-toggle="tab" onclick="showSecondLevelCostTag('renovation')">装修摊销</a></li>
-                            <li><a href="#tab_fixed_asset" data-toggle="tab" onclick="showSecondLevelCostTag('fixedAsset')">固定资产</a></li>
-                            <li><a href="#tab_rent_contract" data-toggle="tab" onclick="showSecondLevelCostTag('rentContract')">租金成本-合同租金</a></li>
+                            <li id="li_renovation" class="active"><a href="#tab_renovation" data-toggle="tab" onclick="showSecondLevelCostTag('renovation')">装修摊销</a></li>
+                            <li id="li_fixedAsset"><a href="#tab_fixed_asset" data-toggle="tab" onclick="showSecondLevelCostTag('fixedAsset')">固定资产</a></li>
+                            <li id="li_rentContract"><a href="#tab_rent_contract" data-toggle="tab" onclick="showSecondLevelCostTag('rentContract')">租金成本-合同租金</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 
@@ -412,7 +443,7 @@
                                         <table class="table table_x" cellspacing="0" cellpadding="0" id="renovation_tb_2">
 
                                             <tr id="renovation_tr_2">
-                                                <th style="text-align: center;"><p>序号</p></th>
+                                                <th style="text-align: center;"><p style="width: 80px">序号</p></th>
                                                 <th style="text-align: center;"><p>门店编码</p></th>
                                                 <th style="text-align: center;"><p>门店名称</p></th>
                                                 <th style="text-align: center"><p>施工单位</p></th>
@@ -483,7 +514,7 @@
                                         <table class="table table_x" cellspacing="0" cellpadding="0" id="fixedAsset_tb_2">
 
                                             <tr id="fixedAsset_tr_2">
-                                                <th style="text-align: center;"><p>序号</p></th>
+                                                <th style="text-align: center;"><p style="width: 80px">序号</p></th>
                                                 <th style="text-align: center;"><p>门店编码</p></th>
                                                 <th style="text-align: center;"><p>门店名称</p></th>
                                                 <th style="text-align: center"><p>多功能一体机</p></th>
@@ -554,7 +585,7 @@
                                         <table class="table table_x" cellspacing="0" cellpadding="0" id="rentContract_tb_2">
 
                                             <tr id="rentContract_tr_2">
-                                                <th style="text-align: center;"><p>序号</p></th>
+                                                <th style="text-align: center;"><p style="width: 80px">序号</p></th>
                                                 <th style="text-align: center;"><p>门店编码</p></th>
                                                 <th style="text-align: center;"><p>门店名称</p></th>
                                                 <th style="text-align: center"><p>起租日（含免租期)</p></th>
@@ -627,13 +658,13 @@
                                         <td width="5%" style="text-align:left;">
                                             <button  class="btn btn-primary"  onclick="getCostRent()">查询</button>
                                         </td>
-                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
+                                        <td width="5%" style="text-align: left;">
                                             <button  class="btn btn-primary"  onclick="saveCostRent()">保存</button>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
+                                        <td width="5%" style="text-align:left;">
                                             <button  class="btn btn-primary"  onclick="exportCostProperty()">导出</button>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
+                                        <td width="5%" style="text-align:left;">
                                             <button  class="btn btn-primary"  onclick="exportCostRent()">导出租金成本</button>
                                         </td>
                                     </tr>
@@ -643,7 +674,7 @@
                                     <table class="table table_x" cellspacing="0" cellpadding="0" id="property_tb_2">
 
                                         <tr id="property_tr_2">
-                                            <th style="text-align: center;background-color:#A9A9A9"><p>序号</p></th>
+                                            <th style="text-align: center;background-color:#A9A9A9"><p style="width: 80px">序号</p></th>
                                             <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
                                             <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
                                             <th style="text-align: center"><p style="width: 180px"><span style="font-weight: bold;color:red" id="propertyFeeYear_title"></span>物业费（年）</p></th>
@@ -707,7 +738,7 @@
                                         <table class="table table_x" cellspacing="0" cellpadding="0" id="operation_tb_2">
 
                                             <tr id="operation_tr_2">
-                                                <th style="text-align: center;background-color:#A9A9A9"><p>序号</p></th>
+                                                <th style="text-align: center;background-color:#A9A9A9"><p style="width: 80px">序号</p></th>
                                                 <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
                                                 <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
                                                 <th style="text-align: center"><p>日常办公</p></th>
@@ -783,9 +814,9 @@
                                         <table class="table table_x" cellspacing="0" cellpadding="0" id="uniform_tb_2">
 
                                             <tr id="uniform_tr_2">
-                                                <th style="text-align: center;background-color:#A9A9A9">序号</th>
-                                                <th style="text-align: center;background-color: #A9A9A9">门店编码</th>
-                                                <th style="text-align: center;background-color: #A9A9A9">门店名称</th>
+                                                <th style="text-align: center;background-color:#A9A9A9"><p style="width: 80px">序号</p></th>
+                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
+                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
                                                 <th style="text-align: center"><p>工服年费</p></th>
                                                 <th style="text-align: center"><p>工服摊销（月）</p></th>
                                             </tr>
@@ -804,8 +835,8 @@
 
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_labor" data-toggle="tab" onclick="showSecondLevelCostTag('labor')">人工成本-员工薪酬</a></li>
-                            <li><a href="#tab_gwe" data-toggle="tab" onclick="showSecondLevelCostTag('gwe')">水电费</a></li>
+                            <li id="li_labor" class="active"><a href="#tab_labor" data-toggle="tab" onclick="showSecondLevelCostTag('labor')">人工成本-员工薪酬</a></li>
+                            <li id="li_gwe"><a href="#tab_gwe" data-toggle="tab" onclick="showSecondLevelCostTag('gwe')">水电费</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 

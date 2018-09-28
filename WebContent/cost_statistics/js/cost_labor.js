@@ -286,9 +286,9 @@ function searchLabor(){
                 if(emolument==""&&uniform_amortize==""&&accommodation==""){
                     subtotal = "";
                 }else{
-                    emolument==""?0:parseFloat(emolument);
-                    uniform_amortize = ""?0:parseFloat(uniform_amortize);
-                    accommodation = ""?0:parseFloat(accommodation);
+                    emolument = emolument==""?0:parseFloat(emolument);
+                    uniform_amortize=uniform_amortize == ""?0:parseFloat(uniform_amortize);
+                    accommodation=accommodation == ""?0:parseFloat(accommodation);
                     subtotal= (emolument+uniform_amortize+accommodation).toFixed(2);
                 }
                 var rc_tag ="_"+i;

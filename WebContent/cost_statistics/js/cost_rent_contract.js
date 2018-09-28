@@ -171,7 +171,7 @@ function checkEveryYearRent(t){
         $("#rentalMonth_"+index).val(((rentTotal+parseFloat(deposit)+parseFloat(agencyFee))/60).toFixed(2));
         var structureAcreage =  $("#structureAcreage_"+index).val();
         if(structureAcreage!=""){
-            $("#leaseUnitPrice_"+index).val((rentTotal/parseFloat(structureAcreage)).toFixed(2));
+            $("#leaseUnitPrice_"+index).val((rentTotal/parseFloat(structureAcreage)/5/365).toFixed(2));
         }
 
     }
@@ -207,7 +207,7 @@ function  checkStructureAcreage(t){
             var rentTotal = parseFloat(firstRent)+parseFloat(sendRent)+parseFloat(thirdRent)+parseFloat(fourRent)+parseFloat(fifthRent);
 
             if(structureAcreage!=""){
-                $("#leaseUnitPrice_"+index).val(rentTotal/parseFloat(structureAcreage));
+                $("#leaseUnitPrice_"+index).val((rentTotal/parseFloat(structureAcreage)/5/365).toFixed(2));
             }
         }
 
