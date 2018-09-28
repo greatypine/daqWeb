@@ -5274,7 +5274,7 @@ table.text-center, table.text-center td, table.text-center th {
 .TDsec-nav dl dt {display: block; border-bottom: 1px dashed #aab1cc; padding-bottom: 34px; position: relative; margin-bottom: 12px; height: 20px;padding-left: 26px;}
 .TDsec-nav dl dt i {position: absolute; width: 8px; height: 8px; border-radius: 50%; display: block; left: 0; top: 30px; border: 0; background: #aab1cc;}
 .TDsec-nav dl dd {line-height: 30px; padding: 12px 0 12px 26px;}
-.TDsec-nav dl dd span{margin: 0 25px -4px -5px; font-size: 26px; float: left; display: inline-block; width: 30px;}
+.TDsec-nav dl dd span{margin: 0 5px -4px -5px; font-size: 26px; float: left; display: inline-block; width: 30px;}
 
 .logo_img{line-height: 60px; margin-right: 40px;}
 .logo_img img{display: inline-block;}
