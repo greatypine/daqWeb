@@ -3666,34 +3666,64 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	@Override
 	public Map<String, Object> getUserBehaviorByLog(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo) {
 		String appendSql = "";
-		if(dynamicDto.getStoreId()!=null && !"".equals(dynamicDto.getStoreId())){
-			appendSql = " where T_2.store_id = '"+dynamicDto.getStoreNo()+"' ";
-		}else if(cityNo!=null && !"".equals(cityNo)){
-			appendSql = " where lpad(T_2.city_code,4,'0') = '"+cityNo+"' ";
+		String  sql = "";
+		if(dynamicDto.getSearchstr().equals("user_active_store")){
+			if(dynamicDto.getStoreId()!=null && !"".equals(dynamicDto.getStoreId())){
+				appendSql = " where T_2.store_id = '"+dynamicDto.getStoreNo()+"' ";
+			}else if(cityNo!=null && !"".equals(cityNo)){
+				appendSql = " where lpad(T_2.city_code,4,'0') = '"+cityNo+"' ";
+			}
+			sql ="select tsa.name as city_name,ts.name as store_name,isnull( T_2.visit_num , 0) as visit_num,isnull( T_3.add_num , 0)  as add_num,isnull( T_4.order_num, 0) as order_num," +
+					"isnull( T_5.sign_num, 0) as sign_num " +
+					"from (select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code , T_1.store_id , count(1) as visit_num  from ( " +
+					"select max(lf.city_code) as city_code,lf.store_id from datacube_kudu.log_final lf where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' " +
+					"and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null group by lf.customer_id,lf.store_id ) T_1 group by T_1.city_code,T_1.store_id " +
+					") T_2 left join ( " +
+					"select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as add_num from (select max(lf.city_code) as city_code,lf.store_id " +
+					"from datacube_kudu.log_final lf  where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
+					"and lf.store_id is not null   and lf.behavior_name in ('填写订单','获取用户选中购物车分组信息','预约服务时间','获取发货单详情','购物车全选','新立即购买','新团购下单', " +
+					"'再来一单','积分商品下单页','可拆分商品预约(非团购)','填写订单','购物车列表','下单','选择全部','添加购物车','提交订单','改变分组状态','购物车删除','合并支付下单页', " +
+					"'改变用户选中购物车分组状态') group by lf.customer_id,lf.store_id) T_1 group by T_1.city_code ,T_1.store_id) " +
+					"T_3 on  T_2.id= T_3.id left join " +
+					"(select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as order_num from (select max(ts.city_code) as city_code,tor.store_id from " +
+					"gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' and tor.store_id is not null " +
+					"group by tor.customer_id , tor.store_id) T_1 group by T_1.city_code , T_1.store_id) " +
+					"T_4 on T_3.id = T_4.id left join " +
+					"(select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as sign_num from (select max(ts.city_code) as city_code,tor.store_id " +
+					"from  gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id   where 1=1  and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' " +
+					"and tor.store_id is not null  and tor.sign_time is not null  group by tor.customer_id , tor.store_id ) T_1 group by T_1.city_code , T_1.store_id " +
+					") T_5 on T_4.id = T_5.id " +
+					"left join  gemini.t_sys_area tsa on T_2.city_code =  tsa.code " +
+					"inner join  gemini.t_store ts on T_2.store_id = ts.id  and ts.name not like '%测试%' " +appendSql+
+					" order by  T_2.city_code,T_2.store_id,T_2.visit_num";
+		}else if(dynamicDto.getSearchstr().equals("user_active_city")){
+			if(cityNo!=null && !"".equals(cityNo)){
+				appendSql = " where lpad(T_2.city_code,4,'0') = '"+cityNo+"' ";
+			}
+			sql = "select tsa.name as city_name,isnull( T_2.visit_num , 0) as visit_num,isnull( T_3.add_num , 0)  as add_num,isnull( T_4.order_num, 0) as order_num,isnull( T_5.sign_num, 0) as sign_num " +
+					"from (select T_1.city_code,count(1) as visit_num from (select max(lf.city_code) as city_code from datacube_kudu.log_final lf inner join gemini.t_store ts on lf.store_id = ts.id and " +
+					"ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
+					"and lf.store_id is not null group by lf.customer_id ) T_1 group by T_1.city_code ) T_2 left join " +
+					"(select T_1.city_code,count(1) as add_num from (select max(lf.city_code) as city_code from datacube_kudu.log_final lf inner join gemini.t_store ts on lf.store_id = ts.id and " +
+					"ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"'  and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
+					"and lf.store_id is not null and lf.behavior_name in ('填写订单','获取用户选中购物车分组信息','预约服务时间','获取发货单详情','购物车全选','新立即购买','新团购下单', " +
+					"'再来一单','积分商品下单页','可拆分商品预约(非团购)','填写订单','购物车列表','下单','选择全部','添加购物车','提交订单','改变分组状态','购物车删除','合并支付下单页', " +
+					"'改变用户选中购物车分组状态') group by lf.customer_id ) T_1 group by T_1.city_code ) " +
+					"T_3 on  T_2.city_code= T_3.city_code left join " +
+					"(select T_1.city_code , count(1) as order_num  from  (select max(ts.city_code) as city_code from " +
+					"gemini.t_order tor inner join gemini.t_store ts on tor.store_id = ts.id  and ts.name not like '%测试%'where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' " +
+					"and tor.store_id is not null group by tor.customer_id ) T_1 group by T_1.city_code " +
+					")T_4 on T_3.city_code = T_4.city_code left join " +
+					"(select T_1.city_code ,count(1) as sign_num from (select max(ts.city_code) as city_code from gemini.t_order tor inner join gemini.t_store ts on tor.store_id = ts.id  and " +
+					"ts.name not like '%测试%' where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"'and tor.store_id is not null and tor.sign_time is not null " +
+					"group by tor.customer_id ) T_1 group by T_1.city_code " +
+					") T_5 on T_4.city_code = T_5.city_code " +
+					"left join  gemini.t_sys_area tsa on T_2.city_code =  tsa.code "  +appendSql+
+					"order by   T_2.city_code,T_2.visit_num";
 		}
-		String  sql ="select tsa.name as city_name,ts.name as store_name,isnull( T_2.visit_num , 0) as visit_num,isnull( T_3.add_num , 0)  as add_num,isnull( T_4.order_num, 0) as order_num," +
-				"isnull( T_5.sign_num, 0) as sign_num " +
-				"from (select fnv_hash(concat_ws(T_1.city_code ,T_1.store_id)) as id,T_1.city_code , T_1.store_id , count(1) as visit_num  from ( " +
-				"select max(lf.city_code) as city_code,lf.store_id from datacube_kudu.log_final lf where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' " +
-				"and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null group by lf.customer_id,lf.store_id ) T_1 group by T_1.city_code,T_1.store_id " +
-				") T_2 left join ( " +
-				"select fnv_hash(concat_ws(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as add_num from (select max(lf.city_code) as city_code,lf.store_id " +
-				"from datacube_kudu.log_final lf  where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
-				"and lf.store_id is not null   and lf.behavior_name in ('填写订单','获取用户选中购物车分组信息','预约服务时间','获取发货单详情','购物车全选','新立即购买','新团购下单', " +
-				"'再来一单','积分商品下单页','可拆分商品预约(非团购)','填写订单','购物车列表','下单','选择全部','添加购物车','提交订单','改变分组状态','购物车删除','合并支付下单页', " +
-				"'改变用户选中购物车分组状态') group by lf.customer_id,lf.store_id) T_1 group by T_1.city_code ,T_1.store_id) " +
-				"T_3 on  T_2.id= T_3.id left join " +
-				"(select fnv_hash(concat_ws(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as order_num from (select max(ts.city_code) as city_code,tor.store_id from " +
-				"gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' and tor.store_id is not null " +
-				"group by tor.customer_id , tor.store_id) T_1 group by T_1.city_code , T_1.store_id) " +
-				"T_4 on T_3.id = T_4.id left join " +
-				"(select fnv_hash(concat_ws(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as sign_num from (select max(ts.city_code) as city_code,tor.store_id " +
-				"from  gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id   where 1=1  and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' " +
-				"and tor.store_id is not null  and tor.sign_time is not null  group by tor.customer_id , tor.store_id ) T_1 group by T_1.city_code , T_1.store_id " +
-				") T_5 on T_4.id = T_5.id " +
-				"left join  gemini.t_sys_area tsa on T_2.city_code =  tsa.code " +
-				"inner join  gemini.t_store ts on T_2.store_id = ts.id  and ts.name not like '%测试%' " +appendSql+
-				" order by  T_2.city_code,T_2.store_id,T_2.visit_num";
+
+
+
 
 		Map<String,Object> map_result = ImpalaUtil.executeByPage(sql,pageInfo);
 		return map_result;
