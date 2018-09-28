@@ -91,6 +91,7 @@
 
             if(t=="fixedCost"){//固定成本
                 getCostRenovation();//装修摊销
+
             }else if(t=="yearCost"){//年度成本
                 var cur_date = new Date();
                 laydate.render({//月份控件
@@ -585,9 +586,9 @@
 
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a href="#tab_property" data-toggle="tab" onclick="showSecondLevelCostTag('property')">租金成本-物业费用</a></li>
-                            <li><a href="#tab_operation" data-toggle="tab" onclick="showSecondLevelCostTag('operation')">日常运营</a></li>
-                            <li><a href="#tab_uniform" data-toggle="tab" onclick="showSecondLevelCostTag('uniform')">人工成本-工服费用</a></li>
+                            <li class="active" id="li_property"><a href="#tab_property" data-toggle="tab" onclick="showSecondLevelCostTag('property')">租金成本-物业费用</a></li>
+                            <li id="li_operation"><a href="#tab_operation" data-toggle="tab" onclick="showSecondLevelCostTag('operation')">日常运营</a></li>
+                            <li id="li_uniform"><a href="#tab_uniform" data-toggle="tab" onclick="showSecondLevelCostTag('uniform')">人工成本-工服费用</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 
@@ -623,17 +624,17 @@
                                             <p class="read"><input type="text" class="form-control"  style="width: 100px" readonly="readonly"  maxlength="12"  id="year_property"/></p>
 
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostRent()">查询</button>
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="getCostRent()">查询</button>
                                         </td>
                                         <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostRent()">保存</button>
+                                            <button  class="btn btn-primary"  onclick="saveCostRent()">保存</button>
                                         </td>
                                         <td width="5%" style="text-align:left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostProperty()">导出</button>
+                                            <button  class="btn btn-primary"  onclick="exportCostProperty()">导出</button>
                                         </td>
                                         <td width="5%" style="text-align:left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostRent()">导出租金成本</button>
+                                            <button  class="btn btn-primary"  onclick="exportCostRent()">导出租金成本</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -689,14 +690,14 @@
                                             <input type="hidden" id="operation_save_date" value=""/>
                                         </td>
 
-                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostOperation()">查询</button>
+                                        <td width="5%" style="text-align: left;">
+                                            <button  class="btn btn-primary"  onclick="getCostOperation()">查询</button>
                                         </td>
-                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostOperation()">保存</button>
+                                        <td width="5%" style="text-align: left;">
+                                            <button  class="btn btn-primary"  onclick="saveCostOperation()">保存</button>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostOperation()">导出</button>
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="exportCostOperation()">导出</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -765,14 +766,14 @@
                                             <input type="hidden" id="uniform_save_date" value=""/>
                                         </td>
 
-                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostUniform()">查询</button>
+                                        <td width="5%" style="text-align: left;">
+                                            <button  class="btn btn-primary"  onclick="getCostUniform()">查询</button>
                                         </td>
-                                        <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostUniform()">保存</button>
+                                        <td width="5%" style="text-align: left;">
+                                            <button  class="btn btn-primary"  onclick="saveCostUniform()">保存</button>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostUniform()">导出</button>
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="exportCostUniform()">导出</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -839,17 +840,17 @@
                                             <p class="read"><input type="text" class="form-control" style="width: 100px" readonly="readonly"  maxlength="12"  id="year_labor"/></p>
                                             <input id="labor_year_month" type="hidden"/>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostLabor()">查询</button>
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="getCostLabor()">查询</button>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostLabor()">保存</button>
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="saveCostLabor()">保存</button>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostEmolument()">员工薪酬</button>
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="exportCostEmolument()">导出</button>
                                         </td>
-                                        <td width="5%" style="text-align:left;padding-bottom: 20px;">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="exportCostLabor()">导出人工成本</button>
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="exportCostLabor()">导出人工成本</button>
                                         </td>
                                     </tr>
                                 </table>

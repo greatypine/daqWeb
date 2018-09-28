@@ -384,7 +384,7 @@ function searchCostRenovation(){
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='decorateCost_"+i+"'    value='"+decorateCost+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='businessScreen_"+i+"'    value='"+business_screen+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='furniture_"+i+"'    value='"+furniture+"'/></td>"+
-                    "<td><input type='text'      id='lightBox_"+i+"'    value='"+light_box+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateProcessManage(this)' id='lightBox_"+i+"'    value='"+light_box+"'/></td>"+
                     "<td><input type='text'      id='processManage_"+i+"'    value='"+process_manage+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='processManageSurcharge_"+i+"'    value='"+process_manage_surcharge+"'/></td>"+
                     "<td><input type='text'      id='airConditioner_"+i+"'    value='"+air_conditioner+"'/></td>"+
