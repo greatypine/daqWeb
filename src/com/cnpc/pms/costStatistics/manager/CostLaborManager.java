@@ -33,6 +33,14 @@ public interface CostLaborManager extends IManager {
     public Map<String,Object> exportCostLabor(CostDto costDto);
 
     /**
+     * @Description 导出员工薪酬
+     * @author gbl
+     * @date 2018/9/28 13:34
+     **/
+
+    public Map<String,Object> exportCostEmolument(CostDto costdto);
+
+    /**
      * @Description 保存人工成本
      * @author gbl
      * @date 2018/8/20 13:54

@@ -10,6 +10,7 @@ import com.cnpc.pms.costStatistics.entity.CostLabor;
 import com.cnpc.pms.costStatistics.entity.CostRent;
 import com.cnpc.pms.costStatistics.manager.CostRentManager;
 import com.cnpc.pms.costStatistics.util.CostLaborExcel;
+import com.cnpc.pms.costStatistics.util.CostPropertyExcel;
 import com.cnpc.pms.costStatistics.util.CostRentExcel;
 
 import java.util.HashMap;
@@ -51,6 +52,21 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
     }
 
     @Override
+    public Map<String, Object> exportCostProperty(CostDto costDto) {
+        CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
+        Map<String,Object> result = new HashMap<String,Object>();
+        List<Map<String,Object>> list = costStatisticsDao.queryCostRent(costDto);
+        if(list==null||list.size()==0){
+            result.put("message","没有符合条件的数据！");
+            result.put("status","null");
+            return result;
+        }
+        CostPropertyExcel costPropertyExcel = new CostPropertyExcel(list);
+        result = costPropertyExcel.exportFile();
+        return result;
+    }
+
+    @Override
     public Map<String, Object> saveCostRent(List<Map<String, Object>> list) {
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
@@ -76,7 +92,7 @@ public class CostRentManagerImpl extends BizBaseCommonManager implements CostRen
                 lst_costRent = (List<CostRent>) this.getList(filter);
 
                 if (lst_costRent != null && lst_costRent.size() > 0) {
-                    CostRent cr = lst_costRent.get(i);
+                    CostRent cr = lst_costRent.get(0);
                     cr.setCityName(cityName);
                     cr.setStoreNo(storeNo);
                     cr.setStoreName(storeName);

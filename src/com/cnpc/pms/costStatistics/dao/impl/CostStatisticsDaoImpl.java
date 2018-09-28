@@ -60,8 +60,8 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         }
 
-        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.city_name,ts.storeType,uniform_charge,ts.estate,year,emolument,uniform_charge,uniform_amortize,accommodation,subtotal" +
-                   " FROM ("+storeSql+") ts left join  (select * from `t_cost_labor` where year="+costDto.getYear()+" and month="+costDto.getMonth()+") tc on ts.storeno=tc.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.city_name,ts.storeType,ts.estate,tc.emolument,tc.uniform_amortize,tc.accommodation" +
+                   " FROM ("+storeSql+") ts left join  (select tcl.storeNo,tcl.accommodation,tcl.emolument,tcu.uniform_amortize from `t_cost_labor` tcl INNER JOIN t_cost_uniform tcu on tcl.storeNo = tcu.storeNo where tcl.year="+costDto.getYear()+" and tcl.month="+costDto.getMonth()+") tc on ts.storeno=tc.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
 
 
         if(costDto.getStoreName()!=null&&!"".equals(costDto.getStoreName())){
@@ -120,26 +120,39 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
             }
 
         }
-        String sql="SELECT ts.storeno as storeNo,ts.name as storeName ,ts.city_name,ts.storeType,uniform_charge,ts.estate,year," +
-                "sum(case when month=1 then emolument end) as emolument1,sum(case when month=1 then accommodation end) as accommodation1,uniform_amortize as uniform_amortize1,subtotal as subtotal1," +
-                "sum(case when month=2 then emolument end) as emolument2,sum(case when month=2 then accommodation end) as accommodation2,uniform_amortize as uniform_amortize2,subtotal as subtotal2," +
-                "sum(case when month=3 then emolument end) as emolument3,sum(case when month=3 then accommodation end) as accommodation3,uniform_amortize as uniform_amortize3,subtotal as subtotal3," +
-                "sum(case when month=4 then emolument end) as emolument4,sum(case when month=4 then accommodation end) as accommodation4,uniform_amortize as uniform_amortize4,subtotal as subtotal4," +
-                "sum(case when month=5 then emolument end) as emolument5,sum(case when month=5 then accommodation end) as accommodation5,uniform_amortize as uniform_amortize5,subtotal as subtotal5," +
-                "sum(case when month=6 then emolument end) as emolument6,sum(case when month=6 then accommodation end) as accommodation6,uniform_amortize as uniform_amortize6,subtotal as subtotal6," +
-                "sum(case when month=7 then emolument end) as emolument7,sum(case when month=7 then accommodation end) as accommodation7,uniform_amortize as uniform_amortize7,subtotal as subtotal7," +
-                "sum(case when month=8 then emolument end) as emolument8,sum(case when month=8 then accommodation end) as accommodation8,uniform_amortize as uniform_amortize8,subtotal as subtotal8," +
-                "sum(case when month=9 then emolument end) as emolument9,sum(case when month=9 then accommodation end) as accommodation9,uniform_amortize as uniform_amortize9,subtotal as subtotal9," +
-                "sum(case when month=10 then emolument end) as emolument10,sum(case when month=10 then accommodation end) as accommodation10,uniform_amortize as uniform_amortize10,subtotal as subtotal10," +
-                "sum(case when month=11 then emolument end) as emolument11,sum(case when month=1 then accommodation end) as accommodation11,uniform_amortize as uniform_amortize11,subtotal as subtotal11," +
-                "sum(case when month=12 then emolument end) as emolument12,sum(case when month=12 then accommodation end) as accommodation12,uniform_amortize as uniform_amortize12,subtotal as subtotal12" +
-                " FROM ("+storeSql+") ts left join  (select * from `t_cost_labor` where year="+costDto.getYear()+") tc on ts.storeno=tc.storeNo  group by storeNo having ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+        String sql="select a.*, " +
+                "(IFNULL(a.accommodation1,0)+IFNULL(a.uniform_amortize1,0)+IFNULL(a.emolument1,0)) as total1,"+
+                "(IFNULL(a.accommodation2,0)+IFNULL(a.uniform_amortize2,0)+IFNULL(a.emolument2,0)) as total2,"+
+                "(IFNULL(a.accommodation3,0)+IFNULL(a.uniform_amortize3,0)+IFNULL(a.emolument3,0)) as total3,"+
+                "(IFNULL(a.accommodation4,0)+IFNULL(a.uniform_amortize4,0)+IFNULL(a.emolument4,0)) as total4,"+
+                "(IFNULL(a.accommodation5,0)+IFNULL(a.uniform_amortize5,0)+IFNULL(a.emolument5,0)) as total5,"+
+                "(IFNULL(a.accommodation6,0)+IFNULL(a.uniform_amortize6,0)+IFNULL(a.emolument6,0)) as total6,"+
+                "(IFNULL(a.accommodation7,0)+IFNULL(a.uniform_amortize7,0)+IFNULL(a.emolument7,0)) as total7,"+
+                "(IFNULL(a.accommodation8,0)+IFNULL(a.uniform_amortize8,0)+IFNULL(a.emolument8,0)) as total8,"+
+                "(IFNULL(a.accommodation9,0)+IFNULL(a.uniform_amortize9,0)+IFNULL(a.emolument9,0)) as total9,"+
+                "(IFNULL(a.accommodation10,0)+IFNULL(a.uniform_amortize10,0)+IFNULL(a.emolument10,0)) as total10,"+
+                "(IFNULL(a.accommodation11,0)+IFNULL(a.uniform_amortize11,0)+IFNULL(a.emolument11,0)) as total11,"+
+                "(IFNULL(a.accommodation12,0)+IFNULL(a.uniform_amortize12,0)+IFNULL(a.emolument12,0)) as total12 "+
+                "from ( SELECT ts.storeno as storeNo,ts.name as storeName ,ts.city_name,ts.storeType,ts.estate,year," +
+                "sum(case when month=1 then emolument end) as emolument1,sum(case when month=1 then accommodation end) as accommodation1,uniform_amortize as uniform_amortize1," +
+                "sum(case when month=2 then emolument end) as emolument2,sum(case when month=2 then accommodation end) as accommodation2,uniform_amortize as uniform_amortize2," +
+                "sum(case when month=3 then emolument end) as emolument3,sum(case when month=3 then accommodation end) as accommodation3,uniform_amortize as uniform_amortize3," +
+                "sum(case when month=4 then emolument end) as emolument4,sum(case when month=4 then accommodation end) as accommodation4,uniform_amortize as uniform_amortize4," +
+                "sum(case when month=5 then emolument end) as emolument5,sum(case when month=5 then accommodation end) as accommodation5,uniform_amortize as uniform_amortize5," +
+                "sum(case when month=6 then emolument end) as emolument6,sum(case when month=6 then accommodation end) as accommodation6,uniform_amortize as uniform_amortize6," +
+                "sum(case when month=7 then emolument end) as emolument7,sum(case when month=7 then accommodation end) as accommodation7,uniform_amortize as uniform_amortize7," +
+                "sum(case when month=8 then emolument end) as emolument8,sum(case when month=8 then accommodation end) as accommodation8,uniform_amortize as uniform_amortize8," +
+                "sum(case when month=9 then emolument end) as emolument9,sum(case when month=9 then accommodation end) as accommodation9,uniform_amortize as uniform_amortize9," +
+                "sum(case when month=10 then emolument end) as emolument10,sum(case when month=10 then accommodation end) as accommodation10,uniform_amortize as uniform_amortize10," +
+                "sum(case when month=11 then emolument end) as emolument11,sum(case when month=1 then accommodation end) as accommodation11,uniform_amortize as uniform_amortize11," +
+                "sum(case when month=12 then emolument end) as emolument12,sum(case when month=12 then accommodation end) as accommodation12,uniform_amortize as uniform_amortize12" +
+                " FROM ("+storeSql+") ts left join  (select tcl.storeNo,tcl.accommodation,tcl.emolument,tcl.year,tcl.month,tcu.uniform_amortize from `t_cost_labor` tcl INNER JOIN t_cost_uniform tcu on tcl.storeNo = tcu.storeNo  where tcl.year="+costDto.getYear()+") tc on ts.storeno=tc.storeNo  group by storeNo having ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V') a";
 
 
 
 
         if(costDto.getStoreName()!=null&&!"".equals(costDto.getStoreName())){
-            sql+=" and ts.name like '%"+costDto.getStoreName()+"%'";
+            sql+=" and a.storeName like '%"+costDto.getStoreName()+"%'";
         }
 
 
@@ -279,26 +292,14 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         }
 
-        String sqlSub = "SELECT property_fee_year,property_fee_month,property_deadline ,cost_month,rental_month,storeNo,year," +
-                "SUM(case when month=1 then cost_month end) as cost_month1," +
-                "SUM(case when month=2 then cost_month end) as cost_month2," +
-                "SUM(case when month=3 then cost_month end) as cost_month3," +
-                "SUM(case when month=4 then cost_month end) as cost_month4," +
-                "SUM(case when month=5 then cost_month end) as cost_month5," +
-                "SUM(case when month=6 then cost_month end) as cost_month6," +
-                "SUM(case when month=7 then cost_month end) as cost_month7," +
-                "SUM(case when month=8 then cost_month end) as cost_month8," +
-                "SUM(case when month=9 then cost_month end) as cost_month9," +
-                "SUM(case when month=10 then cost_month end) as cost_month10," +
-                "SUM(case when month=11 then cost_month end) as cost_month11," +
-                "SUM(case when month=12 then cost_month end) as cost_month12" +
-                " FROM t_cost_rent  where year="+costDto.getYear()+" group by year ";
+        String sqlSub = "SELECT property_fee_year,property_fee_month,property_deadline ,cost_month,storeNo,year " +
+                " FROM t_cost_rent  where year="+costDto.getYear();
 
 
         String sql = " select ts.storeno as store_no,ts.city_name,ts.name as store_name,ts.city_name,ts.address as addr,tcr.*,tcrc.* from ("+storeSql+") ts " +
                 " left join ("+sqlSub+") tcr on ts.storeno = tcr.storeNo"+
                 " LEFT JOIN"+
-                " (select storeNo,contract_grand_total,structure_acreage,first_year_rent,second_year_rent,third_year_rent,fourth_year_rent,fifth_year_rent,lease_unit_price,deposit,agency_fee,free_lease_start_date,lease_start_date,lease_stop_date from t_cost_rent_contract where lease_stop_date >= CONCAT('"+costDto.getrDate()+"','01')) tcrc"+
+                " (select storeNo,contract_grand_total,rental_month,structure_acreage,first_year_rent,second_year_rent,third_year_rent,fourth_year_rent,fifth_year_rent,lease_unit_price,deposit,agency_fee,free_lease_start_date,lease_start_date,lease_stop_date from t_cost_rent_contract where lease_stop_date >= CONCAT('"+costDto.getYear()+"/','01/01')) tcrc"+
                 " on ts.storeno = tcrc.storeNo where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
 
         List<Map<String,Object>> list = null;
@@ -713,5 +714,59 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
         }
 
         return (List<Map<String, Object>>) lst_data;
+    }
+
+    @Override
+    public List<Map<String, Object>> queryCostUniform(CostDto costDto) {
+        String storeSql = "";
+
+        if ("zb".equals(costDto.getRole())) {// 总部
+            String cityStr = "";
+            if (costDto.getCityId() != null) {
+                cityStr = " where id=" + costDto.getCityId();
+            }
+
+            String storeStr = "";
+            if(costDto.getStoreNo()!=null){
+                storeStr = " and t.storeno='"+costDto.getStoreNo()+"'";
+            }
+
+            storeSql = "select t.name,t.store_id,t.platformid,t.number,t.city_name,t.storeno,t1.citycode,t.estate,t.storetype from t_store t  inner join  (select * from t_dist_citycode "
+                    + cityStr + ") t1" + " on t.city_name  = t1.cityname  where t.flag=0 and ifnull(t.estate,'') not like '%闭店%' "+ storeStr ;
+
+
+        } else if ("cs".equals(costDto.getRole())) {// 城市
+            String cityStr = "";
+            if (costDto.getCityId() != null) {
+                cityStr = "  and tdc.id=" + costDto.getCityId();
+            }
+            String storeStr = "";
+            if (costDto.getStoreNo() != null) {
+                storeStr = " and t.storeno ='"+costDto.getStoreNo()+"'";
+            }
+            if (costDto.getUserId() != null && !"".equals(costDto.getUserId())) {
+                storeSql = "select t.name,t.store_id,t.platformid,t.city_name,t.number,t.storeno,t1.citycode,t.estate,t.storetype from t_store t  inner join  (select tdc.id,tdc.cityname,tdc.citycode from t_dist_citycode tdc "
+                        + "   INNER JOIN t_dist_city a on a.citycode = tdc.citycode and a.pk_userid=" + costDto.getUserId()+" where tdc.status=0 "
+                        + cityStr + ") t1"
+                        + "	on t.city_name  = t1.cityname  and t.flag=0 and ifnull(estate,'') not like '%闭店%' " + storeStr;
+
+            }
+
+        }
+
+        String sql="SELECT ts.storeno as store_no,ts.city_name,ts.name as store_name ,ts.storeType,ts.estate,tc.* " +
+                " FROM ("+storeSql+") ts left join  (select * from t_cost_uniform where year="+costDto.getYear()+") tc on ts.storeno=tc.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+
+
+        List<Map<String,Object>> list = null;
+        try{
+            SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+            list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return list;
     }
 }

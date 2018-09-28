@@ -6370,30 +6370,30 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			if(dynamicDto.getTarget()==0){//总部
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
-					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
-
-					StringBuilder storeNO = new StringBuilder();
-					for(Map<String, Object> map:storeList){
-
-						if(map.get("store_id")==null||"".equals(map.get("store_id"))){
-							continue;
-						}
-
-						storeNO.append(","+map.get("store_id"));
-					}
-					if(storeNO.length()>0){
-
-						storeNO = storeNO.deleteCharAt(0);
-
-					}else{
-						JSONObject temp = new JSONObject();
-						temp.put("data", "");
-						temp.put("message", "系统查无此条件的数据！");
-						result.put("status","storefail");
-						result.put("data",temp.toString());
-						return result;
-					}
+//					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+//					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+//
+//					StringBuilder storeNO = new StringBuilder();
+//					for(Map<String, Object> map:storeList){
+//
+//						if(map.get("store_id")==null||"".equals(map.get("store_id"))){
+//							continue;
+//						}
+//
+//						storeNO.append(","+map.get("store_id"));
+//					}
+//					if(storeNO.length()>0){
+//
+//						storeNO = storeNO.deleteCharAt(0);
+//
+//					}else{
+//						JSONObject temp = new JSONObject();
+//						temp.put("data", "");
+//						temp.put("message", "系统查无此条件的数据！");
+//						result.put("status","storefail");
+//						result.put("data",temp.toString());
+//						return result;
+//					}
 
 
 					//dynamicDto.setStoreNo(storeNO.toString());
@@ -6410,32 +6410,32 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else if(dynamicDto.getTarget()==1){//城市总监
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
-					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+//					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+//					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+//
+//					StringBuilder storeNO = new StringBuilder();
+//					for(Map<String, Object> map:storeList){
+//
+//						if(map.get("store_id")==null||"".equals(map.get("store_id"))){
+//							continue;
+//						}
+//
+//						storeNO.append(","+map.get("store_id"));
+//					}
+//					if(storeNO.length()>0){
+//
+//						storeNO = storeNO.deleteCharAt(0);
+//
+//					}else{
+//						JSONObject temp = new JSONObject();
+//						temp.put("data", "");
+//						temp.put("message", "系统查无此条件的数据！");
+//						result.put("status","storefail");
+//						result.put("data",temp.toString());
+//						return result;
+//					}
 
-					StringBuilder storeNO = new StringBuilder();
-					for(Map<String, Object> map:storeList){
-
-						if(map.get("store_id")==null||"".equals(map.get("store_id"))){
-							continue;
-						}
-
-						storeNO.append(","+map.get("store_id"));
-					}
-					if(storeNO.length()>0){
-
-						storeNO = storeNO.deleteCharAt(0);
-
-					}else{
-						JSONObject temp = new JSONObject();
-						temp.put("data", "");
-						temp.put("message", "系统查无此条件的数据！");
-						result.put("status","storefail");
-						result.put("data",temp.toString());
-						return result;
-					}
-
-					dynamicDto.setStoreNo(storeNO.toString());
+					//dynamicDto.setStoreNo(storeNO.toString());
 					dynamicDto.setStoreNumer("N");
 				}else  if(dynamicDto.getStoreId()==-10000){
 					dynamicDto.setStoreNo("-10000");

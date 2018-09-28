@@ -24,7 +24,7 @@ function getRentContractCity(t){
             return;
         }
 
-        if(regex_zb.test(current_user.usergroup.code)){
+        if(regex_zb.test(userGroupCode)){
 
             doManager('dynamicManager','selectAllCity',null,function(data){
                 if(data.result){
@@ -37,12 +37,12 @@ function getRentContractCity(t){
                     }
                     var autoComplete = new AutoComplete("city_name_rentContract","rentContract_city",rentContractCityNameArray);
                     autoComplete.start(event);
-                    $("#rentContract_city").attr("style","width: 150px;z-index: 99999;left: 7.6%;top: 18.4%;");
+                    $("#rentContract_city").attr("style","width: 150px;z-index: 99999;left: 6.8%;top: 23.4%;");
                 }
             },false);
 
 
-        }else if(regex_cs.test(current_user.usergroup.code)||current_user.usergroup.code=="GLY"){
+        }else if(regex_cs.test(userGroupCode)||current_user.usergroup.code=="GLY"){
 
             doManager("StoreManager", "getCityNameOfCSZJ",[current_user.id,null],
                 function(data, textStatus, XMLHttpRequest) {
@@ -55,7 +55,7 @@ function getRentContractCity(t){
                         }
                         var autoComplete = new AutoComplete("city_name_rentContract","rentContract_city",rentContractCityNameArray);
                         autoComplete.start(event);
-                        $("#rentContract_city").attr("style","width: 150px;z-index: 99999;left: 7.6%;top: 18.4%;");
+                        $("#rentContract_city").attr("style","width: 150px;z-index: 99999;left: 6.8%;top: 23.4%;");
                     }
                 },false);
         }
@@ -101,13 +101,13 @@ function getRentContractStore(t){
             city_id=-10000;
         }
         var target=0;
-        if(regex_zb.test(current_user.usergroup.code)){//总部
+        if(regex_zb.test(userGroupCode)){//总部
             target=0;
-        }else if(regex_cs.test(current_user.usergroup.code)||current_user.usergroup.code=="GLY"){//城市
+        }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){//城市
             target=1;
         }
 
-        doManager('dynamicManager','getStoreByCity',[target,current_user.id,city_id,str_name],function(data){
+        doManager('dynamicManager','getStoreByCity',[target,userId,city_id,str_name],function(data){
             if(data.result){
 
                 lst_select_rentContract_store = JSON.parse(data.data).storelist;
@@ -118,7 +118,7 @@ function getRentContractStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_rentContract","rentContract_store",rentContractStoreNameArray);
                 autoComplete.start(event);
-                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 26.9%;top: 18.4%;");
+                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 24.5%;top: 23.4%;");
             }else{
 
             }
@@ -157,6 +157,7 @@ function checkEveryYearRent(t){
     if(firstRent==""&&sendRent==""&&thirdRent==""&&fourRent==""&&fifthRent==""&&deposit==""&&agencyFee==""){
         $("#leaseUnitPrice_"+index).val("");
         $("#contractGrandTotal_"+index).val("");
+        $("#rentalMonth_"+index).val("");
     }else{
         firstRent = firstRent==""?0:firstRent;
         sendRent = sendRent==""?0:sendRent;
@@ -167,6 +168,7 @@ function checkEveryYearRent(t){
         agencyFee = agencyFee==""?0:agencyFee;
         var rentTotal = parseFloat(firstRent)+parseFloat(sendRent)+parseFloat(thirdRent)+parseFloat(fourRent)+parseFloat(fifthRent);
         $("#contractGrandTotal_"+index).val(rentTotal+parseFloat(deposit)+parseFloat(agencyFee));
+        $("#rentalMonth_"+index).val(((rentTotal+parseFloat(deposit)+parseFloat(agencyFee))/60).toFixed(2));
         var structureAcreage =  $("#structureAcreage_"+index).val();
         if(structureAcreage!=""){
             $("#leaseUnitPrice_"+index).val((rentTotal/parseFloat(structureAcreage)).toFixed(2));
@@ -250,7 +252,6 @@ function searchCostRentContract(){
     });
     var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
     var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
-    $("#rentContract_tb_1").find("tr:gt(0)").remove();
     $("#rentContract_tb_2").find("tr:gt(0)").remove();
     var cityId = $("#city_id_rentContract").val();
     var cityName = $("#city_name_rentContract").val();
@@ -305,7 +306,7 @@ function searchCostRentContract(){
                 var lease_start_date = costRent[i].lease_start_date==null?"":costRent[i].lease_start_date.split("-")[0];//起租日含免租期
                 var lease_stop_date = costRent[i].lease_start_date==null?"":costRent[i].lease_start_date.split("-")[1];//到租日
                 var free_lease_start_date = costRent[i].free_lease_start_date==null?"":costRent[i].free_lease_start_date.split("-")[1];//起租日不含免租期
-
+                var rentalMonth = contract_grand_total==""?"":parseFloat(contract_grand_total/60).toFixed(2);
                 $("#rentContract_tb_1").append("<tr></tr>");
 
                 var rentContract_td =
@@ -322,7 +323,8 @@ function searchCostRentContract(){
                     "<td><input style='background-color: #e8e8e8;width: 100%;' type='text' readonly id='leaseUnitPrice_"+i+"'   value='"+lease_unit_price+"'/></td>" +
                     "<td><input style='width: 100%;' type='text'  id='deposit_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+deposit+"'/></td>" +
                     "<td><input style='background-color: #e8e8e8;width: 100%;' readonly type='text' onkeyup='checkEveryYearRent(this)' id='agencyFee_"+i+"'  value='"+agency_fee+"'/></td>" +
-                    "<td><input type='text' readonly style='background-color: #e8e8e8;width: 100%' id='contractGrandTotal_"+i+"'  value='"+contract_grand_total+"'/></td>";
+                    "<td><input type='text' readonly style='background-color: #e8e8e8;width: 100%' id='contractGrandTotal_"+i+"'  value='"+contract_grand_total+"'/></td>"+
+                    "<td><input type='text' readonly style='background-color: #e8e8e8;width: 100%' id='rentalMonth_"+i+"'  value='"+rentalMonth+"'/></td>";
 
                 $("#rentContract_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+rentContract_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden'  id='cityName' value='"+cityName+"'/></tr>");
             }
@@ -330,6 +332,63 @@ function searchCostRentContract(){
             layer.close(index);
 
         }
+    });
+
+}
+
+
+function exportCostRentContract(){
+
+    var index = layer.load(0,{
+        shade: [0.2,'#333']
+    });
+    var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
+    var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
+
+    var cityId = $("#city_id_rentContract").val();
+    var cityName = $("#city_name_rentContract").val();
+    if(cityId==""&&cityName!=""){
+        cityId="-10000";
+    }
+
+    var storeId = $("#store_id_rentContract").val();
+    var storeName = $("#store_name_rentContract").val();
+
+    if(storeId==""&&storeName!=""){
+        storeId=-10000;
+    }
+
+    var role="zb"
+    if(regex_zb.test(userGroupCode)){
+        role=="zb";
+    }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+        role="cs";
+    }
+    var costDto= {
+        cityId:cityId,
+        storeNo:storeId,
+        userId:userId,
+        role:role
+    }
+    doManager('costRentContractManager','exportCostRentContract',costDto,function (data) {
+        if(data.result){
+            var result= JSON.parse(data.data);
+            if(result.status=='success'){
+                window.location.href=result.data;
+            }else if(result.status=="null"){
+
+                $$.showMessage('提示',"请先确认是否有符合条件的数据，重新请求！");
+                return;
+            }else{
+
+                $$.showMessage('提示',"请稍后重新请求！");
+                return;
+            }
+
+        }else{
+            $$.showMessage('提示',"请稍后重新请求！");
+        }
+        layer.closeAll();
     });
 
 }
@@ -378,6 +437,7 @@ function saveCostRentContract(){
         var storeNo= $(store_cost_tr[i]).attr("id");
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();
         var contractGrandTotal = $(store_cost_tr[i]).find('input[id^="contractGrandTotal_"]').val();
+        var rentalMonth = $(store_cost_tr[i]).find('input[id^="rentalMonth_"]').val();
         var structure_acreage = $(store_cost_tr[i]).find('input[id^="structureAcreage_"]').val();//建筑面积
         var lease_unit_price = $(store_cost_tr[i]).find('input[id^="leaseUnitPrice_"]').val();//租赁单价
         var first_year_rent = $(store_cost_tr[i]).find('input[id^="firstYearRent_"]').val();
@@ -396,6 +456,7 @@ function saveCostRentContract(){
             storeNo:storeNo,
             storeName:storeName,
             contractGrandTotal:contractGrandTotal,
+            rentalMonth:rentalMonth,
             firstYearRent:first_year_rent,
             secondYearRent:second_year_rent,
             thirtYearRent:third_year_rent,

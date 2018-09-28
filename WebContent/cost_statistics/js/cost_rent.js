@@ -62,7 +62,7 @@ function getRentCity(t){
                     }
                     var autoComplete = new AutoComplete("city_name_rent","rent_city",rentCityNameArray);
                     autoComplete.start(event);
-                    $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                    $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 5.8%;top: 23.4%;");
                 }
             },false);
 
@@ -80,7 +80,7 @@ function getRentCity(t){
                         }
                         var autoComplete = new AutoComplete("city_name_rent","rent_city",rentCityNameArray);
                         autoComplete.start(event);
-                        $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                        $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 5.8%;top: 23.4%;");
                     }
                 },false);
         }
@@ -143,7 +143,7 @@ function getRentStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_rent","rent_store",rentStoreNameArray);
                 autoComplete.start(event);
-                $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 23.1%;top: 18.4%;");
+                $("#rent_store").attr("style","width: 150px;z-index: 99999;left: 20.5%;top: 23.4%;");
             }else{
 
             }
@@ -427,15 +427,7 @@ function searchCostRent(){
  *
  * **/
 function   exportCostRent(){
-    var rentDate = $("#year_rent").val();
-    var showYear = rentDate.split("-")[0];
-    var showMonth = rentDate.split("-")[1];
-
-    var showStr = showYear+"年"+showMonth+"月"
-
-    $("#propertyFeeYear_title").html(showYear+"年");
-
-
+    var showYear = $("#year_property").val();
     var cityId = $("#city_id_rent").val();
     var cityName = $("#city_name_rent").val();
     if(cityId==""&&cityName!=""){
@@ -460,10 +452,9 @@ function   exportCostRent(){
         cityId:cityId,
         storeNo:storeId,
         year:showYear,
-        month:parseInt(showMonth),
         userId:userId,
-        role:role,
-        rDate:rentDate.replace("-","/")
+        role:role
+
     }
 
     doManager('costRentManager','exportCostRent',costDto,function (data) {
@@ -482,7 +473,61 @@ function   exportCostRent(){
             }
 
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            $$.showMessage('提示',"请稍后重新请求！");
+        }
+
+    },false);
+}
+
+
+function   exportCostProperty(){
+    var showYear = $("#year_property").val();
+    var cityId = $("#city_id_rent").val();
+    var cityName = $("#city_name_rent").val();
+    if(cityId==""&&cityName!=""){
+        cityId="-10000";
+    }
+
+    var storeId = $("#store_id_rent").val();
+    var storeName = $("#store_name_rent").val();
+
+    if(storeId==""&&storeName!=""){
+        storeId=-10000;
+    }
+
+    var role="zb"
+    if(regex_zb.test(userGroupCode)){
+        role=="zb";
+    }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+        role="cs";
+    }
+    var costDto= {
+
+        cityId:cityId,
+        storeNo:storeId,
+        year:showYear,
+        userId:userId,
+        role:role
+
+    }
+
+    doManager('costRentManager','exportCostProperty',costDto,function (data) {
+        if(data.result){
+            var result= JSON.parse(data.data);
+            if(result.status=='success'){
+                window.location.href=result.data;
+            }else if(result.status=="null"){
+
+                $$.showMessage('提示',"请先确认是否有符合条件的数据，重新请求！");
+                return;
+            }else{
+
+                $$.showMessage('提示',"请稍后重新请求！");
+                return;
+            }
+
+        }else{
+            $$.showMessage('提示',"请稍后重新请求！");
         }
 
     },false);

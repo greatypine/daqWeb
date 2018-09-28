@@ -33,4 +33,12 @@ public interface CostRentContractManager extends IManager {
      **/
 
     public Map<String,Object> saveCostRentContract(List<Map<String,Object>> list);
+
+    /**
+     * @Description
+     * @author gbl
+     * @date 2018/9/28 10:09
+     **/
+
+    public  Map<String,Object> exportCostRentContract(CostDto costDto);
 }

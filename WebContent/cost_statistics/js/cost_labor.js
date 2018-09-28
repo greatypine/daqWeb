@@ -52,7 +52,7 @@ function getLaborCity(t){
                     }
                     var autoComplete = new AutoComplete("city_name_labor","labor_city",laborCityNameArray);
                     autoComplete.start(event);
-                    $("#labor_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                    $("#labor_city").attr("style","width: 150px;z-index: 99999;left: 5.7%;top: 23.4%;");
                 }
             },false);
 
@@ -70,7 +70,7 @@ function getLaborCity(t){
                         }
                         var autoComplete = new AutoComplete("city_name_labor","labor_city",laborCityNameArray);
                         autoComplete.start(event);
-                        $("#labor_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                        $("#labor_city").attr("style","width: 150px;z-index: 99999;left: 5.7%;top: 23.4%;");
                     }
                 },false);
         }
@@ -133,7 +133,7 @@ function getLaborStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_labor","labor_store",laborStoreNameArray);
                 autoComplete.start(event);
-                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 23%;top: 18.4%;");
+                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 20%;top: 23.4%;");
             }else{
 
             }
@@ -237,8 +237,7 @@ function searchLabor(){
     $("#emolument_title").html(showDate);
     $("#uniformAmortize_title").html(showDate);
     $("#accommodation_title").html(showDate);
-    $("#uniformCharge_title").html(showYear+"年");
-    $("#labor_tb_1").find("tr:gt(0)").remove();
+
     $("#labor_tb_2").find("tr:gt(0)").remove();
 
     var cityId = $("#city_id_labor").val();
@@ -279,26 +278,27 @@ function searchLabor(){
             var uniform_charge_sum=0;
 
             for(var i=0;i<costLabor.length;i++){
-                $("#labor_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+costLabor[i].storeNo+"</td><td style='background-color:#A9A9A9'>"+costLabor[i].storeName+"</td></tr>");
-                var labor_td = "";
-
 
                 var emolument =  costLabor[i]["emolument"]==null?"":costLabor[i]["emolument"];
                 var uniform_amortize = costLabor[i]["uniform_amortize"]==null?"":costLabor[i]["uniform_amortize"];
                 var accommodation = costLabor[i]["accommodation"]==null?"":costLabor[i]["accommodation"];
-                var subtotal = costLabor[i]["subtotal"]==null?"":costLabor[i]["subtotal"];
-                var uniform_charge = costLabor[i].uniform_charge==null?"":costLabor[i].uniform_charge;
+                var subtotal="";
+                if(emolument==""&&uniform_amortize==""&&accommodation==""){
+                    subtotal = "";
+                }else{
+                    emolument==""?0:parseFloat(emolument);
+                    uniform_amortize = ""?0:parseFloat(uniform_amortize);
+                    accommodation = ""?0:parseFloat(accommodation);
+                    subtotal= (emolument+uniform_amortize+accommodation).toFixed(2);
+                }
                 var rc_tag ="_"+i;
-                labor_td=labor_td+"<td><input type='text' style='width: 100%;' onkeyup='checkUniformCharge(this)' id='uniformCharge"+rc_tag+"' value='"+uniform_charge+"'/></td><td><input type='text' style='width: 100%;' onkeyup='checkCostLabor(this)' id='emolument"+rc_tag+"' value='"+emolument+"'/></td><td><input type='text' style='width: 100%;' onkeyup='checkCostLabor(this)' id='uniformAmortize"+rc_tag+"' value='"+uniform_amortize+"'/></td><td><input type='text' style='width: 100%;' onkeyup='checkCostLabor(this)' id='accommodation"+rc_tag+"' value='"+accommodation+"'></td><td><input readonly type='text'  onkeyup='showTip(this)' style='background-color: #e8e8e8;width: 100%;' id='subtotal"+rc_tag+"' value='"+subtotal+"'></td>";
-
-
-
                 var cityName = costLabor[i].city_name;
                 var storeNo=costLabor[i].storeNo;
                 var storeName = costLabor[i].storeName;
+                var labor_td="<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+costLabor[i].storeNo+"</td><td style='background-color:#A9A9A9'>"+costLabor[i].storeName+"</td>"+
+                    "<td><input type='text' style='width: 100%;background-color: #e8e8e8;' readonly onkeyup='checkCostLabor(this)' id='uniformAmortize"+rc_tag+"' value='"+uniform_amortize+"'/></td><td><input type='text' style='width: 100%;' onkeyup='checkCostLabor(this)' id='emolument"+rc_tag+"' value='"+emolument+"'/></td><td><input type='text' style='width: 100%;' onkeyup='checkCostLabor(this)' id='accommodation"+rc_tag+"' value='"+accommodation+"'></td><td><input readonly type='text'  onkeyup='showTip(this)' style='background-color: #e8e8e8;width: 100%;' id='subtotal"+rc_tag+"' value='"+subtotal+"'></td>";
 
                 $("#labor_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+labor_td+"<input type='hidden' value='"+storeName+"' id='storeName'/><input type='hidden' value='"+cityName+"' id='cityName'/></tr>");
-
             }
 
             layer.close(index);
@@ -362,7 +362,7 @@ function   exportCostLabor(){
             }
 
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            $$.showMessage('提示',"请稍后重新请求！");
         }
 
     },false);
@@ -386,7 +386,6 @@ function saveCostLabor(){
            var uniformAmortize = $(store_cost_tr[i]).find('input[id^="uniformAmortize_"]').val();
            var accommodation = $(store_cost_tr[i]).find('input[id^="accommodation_"]').val();
            var subtotal = $(store_cost_tr[i]).find('input[id^="subtotal_"]').val();
-           var uniformCharge = $(store_cost_tr[i]).find('input[id^="uniformCharge_"]').val();
            var costLabor = {
                cityName:cityName,
                storeNo:storeNo,
@@ -396,8 +395,7 @@ function saveCostLabor(){
                emolument:emolument,
                uniformAmortize:uniformAmortize,
                accommodation:accommodation,
-               subtotal:subtotal,
-               uniformCharge:uniformCharge
+               subtotal:subtotal
            };
 
                costLaborArray.push(costLabor);
@@ -429,4 +427,66 @@ function saveCostLabor(){
 
         },false);
 
+}
+
+/**
+ * 导出员工薪酬
+ */
+function exportCostEmolument(){
+
+
+
+    var showYear = $("#year_labor").val().split("-")[0];
+    var showMonth=$("#year_labor").val().split("-")[1];
+
+    var cityId = $("#city_id_labor").val();
+    var cityName = $("#city_name_labor").val();
+    if(cityId==""&&cityName!=""){
+        cityId="-10000";
+    }
+
+    var storeId = $("#store_id_labor").val();
+    var storeName = $("#store_name_labor").val();
+
+    if(storeId==""&&storeName!=""){
+        storeId=-10000;
+    }
+
+    var role="zb"
+    if(regex_zb.test(userGroupCode)){
+        role=="zb";
+    }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
+        role="cs";
+    }
+    var costDto= {
+        cityId:cityId,
+        storeNo:storeId,
+        year:showYear,
+        month:showMonth,
+        userId:userId,
+        role:role
+    }
+
+
+
+    doManager('costLaborManager','exportCostEmolument',costDto,function (data) {
+        if(data.result){
+            var result= JSON.parse(data.data);
+            if(result.status=='success'){
+                window.location.href=result.data;
+            }else if(result.status=="null"){
+
+                $$.showMessage('提示',"请先确认是否有符合条件的数据，重新请求！");
+                return;
+            }else{
+
+                $$.showMessage('提示',"请稍后重新请求！");
+                return;
+            }
+
+        }else{
+            $$.showMessage('提示',"请稍后重新请求！");
+        }
+
+    },false);
 }
