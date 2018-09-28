@@ -18,27 +18,26 @@ import java.util.Map;
 /**
  * @ProjectName: daqWeb
  * @Package: com.cnpc.pms.costStatistics.util
- * @Description:导出租金成本工具类
+ * @Description:
  * @Author: gbl
- * @CreateDate: 2018/8/22 9:26
+ * @CreateDate: 2018/9/28 10:11
  */
-public class CostRentExcel {
+public class CostRentContractExcel {
 
     // 上传文件本地存储目录
     private static final String UPLOAD_DIRECTORY = "template";
 
     //数据源
     private List<Map<String,Object>> data;
-    private String param1;
 
-    public CostRentExcel(List<Map<String,Object>> data,String param1){
+
+    public CostRentContractExcel(List<Map<String,Object>> data){
         this.data = data;
-        this.param1 = param1;
     }
     //导出的文件标题
-    private final String[] header0={"序号","门店编码","门店名称","门店地址","年月租金","年物业月费用","年每月费用","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同总金额","建筑面积","租赁单价","第一年租金","第二年租金","第三年租金","第四年租金","第五年租金","押金","中介费","物业费","物业期限（月）","物业每月费用","起租日（免租期截止日）","到期日","起租日（含免租期）"};
+    private final String[] header0={"序号","门店编码","门店名称","起租日（含免租期)","起租日（免租期截止日）","到期日","第一年租金","第二年租金","第三年租金","第四年租金","第五年租金","建筑面积","租赁单价","押金","中介费","合同总金额"};
 
-    private final String[] colName = new String[] { "store_no", "store_name","addr", "rental_month","property_fee_month","cost_month", "cost_month1","cost_month2","cost_month3", "cost_month4", "cost_month5","cost_month6","cost_month7", "cost_month8", "cost_month9","cost_month10","cost_month11", "cost_month12", "contract_grand_total","structure_acreage","lease_unit_price", "first_year_rent", "second_year_rent","third_year_rent","fourth_year_rent", "fifth_year_rent", "deposit","agency_fee","property_fee_year", "property_deadline", "property_fee_month","lease_start_date","lease_stop_date", "free_lease_start_date"};
+    private final String[] colName = new String[] { "storeNo", "storeName","lease_start_date","free_lease_start_date", "lease_start_date","first_year_rent", "second_year_rent","third_year_rent","fourth_year_rent", "fifth_year_rent", "structure_acreage","lease_unit_price","deposit", "agency_fee","contract_grand_total"};
 
 
     private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI"};
@@ -48,7 +47,7 @@ public class CostRentExcel {
         OssRefFileManager ossRefFileManager  = (OssRefFileManager)SpringHelper.getBean("ossRefFileManager");
         UtilityManager utilityManager = (UtilityManager)SpringHelper.getBean("utilityManager");
         String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+ File.separator + UPLOAD_DIRECTORY;
-        String fileName_part = utilityManager.getPYIndexStr("租金成本",true);
+        String fileName_part = utilityManager.getPYIndexStr("合同租金",true);
         // 如果目录不存在则创建
         File uploadDir = new File(str_file_dir_path);
         if (!uploadDir.exists()) {
@@ -59,7 +58,7 @@ public class CostRentExcel {
         HSSFWorkbook workbook = new HSSFWorkbook();
         // 创建Excel的工作sheet,对应到一个excel文档的tab
 
-        HSSFSheet sheet = workbook.createSheet("租金成本");
+        HSSFSheet sheet = workbook.createSheet("合同租金");
 
         // 设置列宽  （第几列，宽度）
         sheet.setColumnWidth( 0, 1600);
@@ -191,16 +190,10 @@ public class CostRentExcel {
         // 第一行表头标题
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
-        for (int i = 0; i < 35; i++) {
+        for (int i = 0; i <16; i++) {
             cell = row.createCell(i);
-            if(i==4||i==5||i==6){
-                cell.setCellValue(param1+header0[i]);
-            }else{
-                cell.setCellValue(header0[i]);
-            }
-
-
-            if(i>6){
+            cell.setCellValue(header0[i]);
+            if(i>2){
                 cell.setCellStyle(headstyle2);
             }else{
                 cell.setCellStyle(headstyle);
@@ -219,48 +212,38 @@ public class CostRentExcel {
             for (int j = 0; j < colName.length; j++) {
                 Map tempmap = (HashMap) data.get(i);
                 Object data = tempmap.get(colName[j]);
+
                 cell = row.createCell(j+1);
 
-                if(j<3||j>30){
+                if(j<2){
                     cell.setCellStyle(fixedStyle);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
-                }else{
+                }else if(j==2) {
 
-                    cell.setCellStyle(style);
+
+                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    if(data!=null){
+                        data = data.toString().split("-")[0];
+                    }
+                    cell.setCellValue(new HSSFRichTextString(data == null ? "" : data.toString()));
+                }else if(j==3||j==4){
+
+                    cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+                    if(data!=null){
+                        data = data.toString().split("-")[1];
+                    }
+                    cell.setCellValue(new HSSFRichTextString(data == null ? "" : data.toString()));
+                }else{
                     if (data==null){
                         cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
                     }else{
                         cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                         cell.setCellValue(Double.parseDouble(data.toString()));
                     }
-
-                }
-                if(j>=5&&j<=17){
-                    cell.setCellFormula("SUM(E"+(i+2)+":F"+(i+2)+")");//合计添加公式
                 }
             }
         }
-        row = sheet.createRow(data.size()+1);
-        for(int i=0;i<35;i++){
-            cell = row.createCell(i);
-
-            cell.setCellStyle(sumstyle);
-            if(i<4){
-                cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-                cell.setCellValue("合计");
-            }else if(i>6&&i<19){
-                cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
-                cell.setCellFormula("SUM("+rowColNum[i]+2+":"+rowColNum[i]+(data.size()+1)+")");//合计添加公式
-            }else if(i>18){
-                cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
-            }
-
-        }
-        sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 6));
-
-
-
 
 
         FileOutputStream os = null;

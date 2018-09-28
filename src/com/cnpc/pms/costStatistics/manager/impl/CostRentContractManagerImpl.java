@@ -8,6 +8,7 @@ import com.cnpc.pms.costStatistics.dao.CostStatisticsDao;
 import com.cnpc.pms.costStatistics.dto.CostDto;
 import com.cnpc.pms.costStatistics.entity.CostRentContract;
 import com.cnpc.pms.costStatistics.manager.CostRentContractManager;
+import com.cnpc.pms.costStatistics.util.CostRentContractExcel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +46,7 @@ public class CostRentContractManagerImpl extends BizBaseCommonManager implements
                 String cityName = list.get(i).get("cityName")==null?"":String.valueOf(list.get(i).get("cityName"));
                 String storeNo = list.get(i).get("storeNo")==null?"":String.valueOf(list.get(i).get("storeNo"));
                 String storeName = list.get(i).get("storeName")==null?"":String.valueOf(list.get(i).get("storeName"));
-
+                Double rentalMonth = list.get(i).get("rentalMonth")==null?null:Double.parseDouble(String.valueOf(list.get(i).get("rentalMonth")));
                 Double contractGrandTotal = list.get(i).get("contractGrandTotal")==null?null:Double.parseDouble(String.valueOf(list.get(i).get("contractGrandTotal")));
                 Double firstYearRent = list.get(i).get("firstYearRent")==null?null:Double.parseDouble(String.valueOf(list.get(i).get("firstYearRent")));
                 Double secondYearRent = list.get(i).get("secondYearRent")==null?null:Double.parseDouble(String.valueOf(list.get(i).get("secondYearRent")));
@@ -63,11 +64,12 @@ public class CostRentContractManagerImpl extends BizBaseCommonManager implements
                 lst_costRentContract = (List<CostRentContract>) this.getList(filter);
 
                 if (lst_costRentContract != null && lst_costRentContract.size() > 0) {
-                    CostRentContract crc = lst_costRentContract.get(i);
+                    CostRentContract crc = lst_costRentContract.get(0);
                     crc.setCityName(cityName);
                     crc.setStoreNo(storeNo);
                     crc.setStoreName(storeName);
                     crc.setContractGrandTotal(contractGrandTotal);
+                    crc.setRentalMonth(rentalMonth);
                     crc.setFirstYearRent(firstYearRent);
                     crc.setSecondYearRent(secondYearRent);
                     crc.setThirtYearRent(thirtYearRent);
@@ -88,6 +90,7 @@ public class CostRentContractManagerImpl extends BizBaseCommonManager implements
                     crc.setStoreNo(storeNo);
                     crc.setStoreName(storeName);
                     crc.setContractGrandTotal(contractGrandTotal);
+                    crc.setRentalMonth(rentalMonth);
                     crc.setFirstYearRent(firstYearRent);
                     crc.setSecondYearRent(secondYearRent);
                     crc.setThirtYearRent(thirtYearRent);
@@ -113,6 +116,21 @@ public class CostRentContractManagerImpl extends BizBaseCommonManager implements
             result.put("status","fail");
         }
 
+        return result;
+    }
+
+    @Override
+    public Map<String, Object> exportCostRentContract(CostDto costDto) {
+        CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
+        Map<String,Object> result = new HashMap<String,Object>();
+        List<Map<String,Object>> list = costStatisticsDao.queryCostRentContract(costDto);
+        if(list==null||list.size()==0){
+            result.put("message","没有符合条件的数据！");
+            result.put("status","null");
+            return result;
+        }
+        CostRentContractExcel costRentContractExcel = new CostRentContractExcel(list);
+        result = costRentContractExcel.exportFile();
         return result;
     }
 }

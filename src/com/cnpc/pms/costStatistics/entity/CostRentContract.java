@@ -51,6 +51,9 @@ public class CostRentContract extends DataEntity {
     @Column(name="contract_grand_total",columnDefinition="decimal(20,2) COMMENT '合同总金额'")
     private Double contractGrandTotal;
 
+    @Column(name="rental_month",columnDefinition="decimal(10,2) COMMENT '每月租金 '")
+    private Double rentalMonth;
+
     @Column(name="first_year_rent",columnDefinition="decimal(20,2) COMMENT '第一年租金'")
     private Double firstYearRent;
 
@@ -204,5 +207,13 @@ public class CostRentContract extends DataEntity {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public Double getRentalMonth() {
+        return rentalMonth;
+    }
+
+    public void setRentalMonth(Double rentalMonth) {
+        this.rentalMonth = rentalMonth;
     }
 }

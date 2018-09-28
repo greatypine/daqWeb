@@ -8,6 +8,7 @@ import com.cnpc.pms.costStatistics.dao.CostStatisticsDao;
 import com.cnpc.pms.costStatistics.dto.CostDto;
 import com.cnpc.pms.costStatistics.entity.CostLabor;
 import com.cnpc.pms.costStatistics.manager.CostLaborManager;
+import com.cnpc.pms.costStatistics.util.CostEmolumentExcel;
 import com.cnpc.pms.costStatistics.util.CostLaborExcel;
 import com.cnpc.pms.slice.entity.AreaInfo;
 
@@ -48,6 +49,23 @@ public class CostLaborManagerImpl extends BizBaseCommonManager implements CostLa
         result = costLaborExcel.exportFile();
         return result;
     }
+
+    @Override
+    public Map<String, Object> exportCostEmolument(CostDto costdto) {
+        CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
+        Map<String,Object> result = new HashMap<String,Object>();
+        List<Map<String,Object>> list = costStatisticsDao.queryCostLabor(costdto);
+        if(list==null||list.size()==0){
+            result.put("message","没有符合条件的数据！");
+            result.put("status","null");
+            return result;
+        }
+        CostEmolumentExcel costEmolumentExcelt = new CostEmolumentExcel(list);
+        result = costEmolumentExcelt.exportFile();
+        return result;
+
+    }
+
 
     @Override
     public Map<String, Object> saveCostLabor(List<Map<String,Object>> list) {

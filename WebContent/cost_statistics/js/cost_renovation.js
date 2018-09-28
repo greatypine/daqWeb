@@ -42,7 +42,7 @@ function getRenovationCity(t){
                     }
                     var autoComplete = new AutoComplete("city_name_renovation","renovation_city",renovationCityNameArray);
                     autoComplete.start(event);
-                    $("#renovation_city").attr("style","width: 150px;z-index: 99999;left: 8.1%;top: 18.4%;");
+                    $("#renovation_city").attr("style","width: 150px;z-index: 99999;left: 8.1%;top: 23.4%;");
                 }
             },false);
 
@@ -60,7 +60,7 @@ function getRenovationCity(t){
                         }
                         var autoComplete = new AutoComplete("city_name_renovation","renovation_city",renovationCityNameArray);
                         autoComplete.start(event);
-                        $("#renovation_city").attr("style","width: 150px;z-index: 99999;left: 8.1%;top: 18.4%;");
+                        $("#renovation_city").attr("style","width: 150px;z-index: 99999;left: 8.1%;top: 23.4%;");
                     }
                 },false);
         }
@@ -123,7 +123,7 @@ function getRenovationStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_renovation","renovation_store",renovationStoreNameArray);
                 autoComplete.start(event);
-                $("#renovation_store").attr("style","width: 150px;z-index: 99999;left: 29.1%;top: 18.4%;");
+                $("#renovation_store").attr("style","width: 150px;z-index: 99999;left: 29.1%;top: 23.4%;");
             }else{
 
             }
@@ -340,7 +340,7 @@ function searchCostRenovation(){
     }
 
 
-    $("#renovation_tb_1").find("tr:gt(0)").remove();
+
     $("#renovation_tb_2").find("tr:gt(0)").remove();
 
     doManager('costRenovationManager','queryCostRenovation',costDto,function (data) {
@@ -466,7 +466,7 @@ function   exportCostRenovation(){
             }
 
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            $$.showMessage('提示',"请稍后重新请求！");
         }
 
     },false);

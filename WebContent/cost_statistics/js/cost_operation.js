@@ -39,7 +39,7 @@ function getOperationCity(t){
                     }
                     var autoComplete = new AutoComplete("city_name_operation","operation_city",operationCityNameArray);
                     autoComplete.start(event);
-                    $("#operation_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                    $("#operation_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
                 }
             },false);
 
@@ -57,7 +57,7 @@ function getOperationCity(t){
                         }
                         var autoComplete = new AutoComplete("city_name_operation","operation_city",operationCityNameArray);
                         autoComplete.start(event);
-                        $("#operation_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                        $("#operation_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
                     }
                 },false);
         }
@@ -120,7 +120,7 @@ function getOperationStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_operation","operation_store",operationStoreNameArray);
                 autoComplete.start(event);
-                $("#operation_city").attr("style","width: 150px;z-index: 99999;left: 23%;top: 18.4%;");
+                $("#operation_store").attr("style","width: 150px;z-index: 99999;left: 23%;top: 23.4%;");
             }else{
 
             }
@@ -367,7 +367,7 @@ function   exportCostOperation(){
             }
 
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            $$.showMessage('提示',"请稍后重新请求！");
         }
 
     },false);

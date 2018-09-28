@@ -43,7 +43,7 @@ function getGWECity(t){
                     }
                     var autoComplete = new AutoComplete("city_name_gwe","gwe_city",gweCityNameArray);
                     autoComplete.start(event);
-                    $("#gwe_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                    $("#gwe_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
                 }
             },false);
 
@@ -61,7 +61,7 @@ function getGWECity(t){
                         }
                         var autoComplete = new AutoComplete("city_name_gwe","gwe_city",gweCityNameArray);
                         autoComplete.start(event);
-                        $("#gwe_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 18.4%;");
+                        $("#gwe_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
                     }
                 },false);
         }
@@ -191,7 +191,7 @@ function searchCostGWE(){
     $("#waterFee_title").html(showYear+"年"+parseInt(showMonth)+"月");
 
     $("#gwe_save_date").val($("#year_gwe").val());
-    $("#gwe_tb_1").find("tr:gt(0)").remove();
+
     $("#gwe_tb_2").find("tr:gt(0)").remove();
 
     var cityId = $("#city_id_gwe").val();
@@ -223,7 +223,7 @@ function searchCostGWE(){
     }
 
 
-    $("#gwe_tb_1").find("tr:gt(0)").remove();
+
     $("#gwe_tb_2").find("tr:gt(0)").remove();
 
     doManager('costGWEManager','queryCostGWE',costDto,function (data) {
@@ -240,10 +240,10 @@ function searchCostGWE(){
 
                 var water_fee = costGWE[i].water_fee==null?"":costGWE[i].water_fee;//水费
                 var electricity_fee = costGWE[i].electricity_fee==null?"":costGWE[i].electricity_fee;//电费
-                $("#gwe_tb_1").append("<tr><td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td></tr>");
 
-                var GWE_td = "<td><input type='text'  style='width: 100%' onkeyup='checkCostGWE(this)'   id='waterFee_"+i+"' value='"+water_fee+"'/></td>" +
-                    "<td><input type='text'     style='width: 100%'  onkeyup='checkCostGWE(this)' id='electricityFee_"+i+"'  value='"+electricity_fee+"'/></td>";
+                var GWE_td = "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>" +
+                            "<td><input type='text'  style='width: 100%' onkeyup='checkCostGWE(this)'   id='waterFee_"+i+"' value='"+water_fee+"'/></td>" +
+                            "<td><input type='text'     style='width: 100%'  onkeyup='checkCostGWE(this)' id='electricityFee_"+i+"'  value='"+electricity_fee+"'/></td>";
 
                 $("#gwe_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+GWE_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden'  id='cityName' value='"+cityName+"'/></tr>");
             }
@@ -308,7 +308,7 @@ function   exportCostGWE(){
             }
 
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            $$.showMessage('提示',"请稍后重新请求！");
         }
 
     },false);

@@ -33,6 +33,14 @@ public interface CostRentManager extends IManager {
     public Map<String,Object>  exportCostRent(CostDto costDto);
 
     /**
+     * @Description 导出物业费用
+     * @author gbl
+     * @date 2018/9/28 13:48
+     **/
+
+    public Map<String,Object> exportCostProperty(CostDto costDto);
+
+    /**
      * @Description 保存租金成本
      * @author gbl
      * @date 2018/8/22 9:23
