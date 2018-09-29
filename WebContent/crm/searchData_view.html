@@ -310,7 +310,7 @@
                     <button type="button" id="export_manual_massOrder_button" onclick="export_manual_massOrder('all')" class="btn btn-block btn-warning">完整数据导出</button>
                 </div>
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
-                    <button type="button" onclick="search_manual_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
+                    <button type="button" id="search_manual_massOrder_button" onclick="search_manual_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
                 </div>
                 <div class="col-lg-2 pull-right" style="padding-top: 25px;display: none" id="export_sensitive_button">
                     <button type="button" onclick="export_sensitive_massOrder()"  style="border-color:#FF6EB4;background-color:#FF6EB4;" class="btn btn-block btn-primary">敏感信息下载</button>
@@ -1161,8 +1161,10 @@ Date.prototype.format=function(fmt) {
      
    var isCreatePage=false;
    function search_manual_abnormalOrder(cur_page){
+        $('#search_manual_massOrder_button').attr('disabled',"true");
   		isCreatePage=false;
   		search_manual_abnormalOrder1(cur_page);
+        $('#search_manual_massOrder_button').removeAttr("disabled");
    }
   
   //查询上
@@ -1171,6 +1173,7 @@ Date.prototype.format=function(fmt) {
   var currentPage_manual= 1;
   var totalPage_manual = 1;
   function   search_manual_abnormalOrder1(cur_page){
+
 	  	
 	    var sdate = $("#auto_date").val();
 	    var begin_end_date=["",""];
@@ -1492,16 +1495,14 @@ Date.prototype.format=function(fmt) {
 	        	   }
 	           }else{
 	        	   crm_alert(5,"请稍后重新请求！");
-	        	   return;
 	           }
-         
          }else{
       	   crm_alert(5,"请稍后重新请求！");
-      	   return;
          }
         $("#process_div").hide();
    	    $("#process_div_pic").hide();
-     }); 
+
+     },false);
   	   
   }
 
