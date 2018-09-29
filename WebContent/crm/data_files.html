@@ -1618,10 +1618,12 @@ function customer_member(){
 function operatedCoverage(){
     if($('#storeClick').is(':checked')){
         $("#store_name_userbehavior").attr("disabled",false);
+        $("#auto_store").empty();
     }else{
         $("#store_name_userbehavior").attr("disabled",true);
         $("#store_id_userbehavior").val("");
         $("#store_name_userbehavior").val("");
+        $("#auto_store").empty();
 	}
 }
 </script>
