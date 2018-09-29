@@ -124,7 +124,7 @@ function getGWEStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_gwe","gwe_store",gweStoreNameArray);
                 autoComplete.start(event);
-                $("#gwe_city").attr("style","width: 150px;z-index: 99999;left: 23.1%;top: 18.4%;");
+                $("#gwe_store").attr("style","width: 150px;z-index: 99999;left: 22.9%;top: 23.4%;");
             }else{
 
             }

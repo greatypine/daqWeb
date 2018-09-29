@@ -133,7 +133,7 @@ function getLaborStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_labor","labor_store",laborStoreNameArray);
                 autoComplete.start(event);
-                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 20%;top: 23.4%;");
+                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 20.4%;top: 23.4%;");
             }else{
 
             }

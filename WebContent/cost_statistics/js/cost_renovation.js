@@ -303,6 +303,9 @@ function getCostRenovation(){
     }
 }
 
+function checkDecorationCompany(t){
+    $(t).parent().parent().attr("editable",true);
+}
 
 /**
  * 查询装修摊销
@@ -378,7 +381,7 @@ function searchCostRenovation(){
 
                 var renovation_td =
                     "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>"+
-                    "<td><input type='text'     id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
+                    "<td><input type='text'      onkeyup='checkDecorationCompany(this)' id='decorationCompany_"+i+"' value='"+decoration_company+"'/></td>" +
                     "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
                     "<td><input type='text'     onkeyup='calculateDecorateCost(this)' id='renovationUnitPrice_"+i+"'    value='"+renovation_unit_price+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='decorateCost_"+i+"'    value='"+decorateCost+"'/></td>"+
