@@ -60,8 +60,8 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         }
 
-        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.city_name,ts.storeType,ts.estate,tc.emolument,tc.uniform_amortize,tc.accommodation" +
-                   " FROM ("+storeSql+") ts left join  (select tcl.storeNo,tcl.accommodation,tcl.emolument,tcu.uniform_amortize from `t_cost_labor` tcl INNER JOIN t_cost_uniform tcu on tcl.storeNo = tcu.storeNo where tcl.year="+costDto.getYear()+" and tcl.month="+costDto.getMonth()+") tc on ts.storeno=tc.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
+        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.city_name,ts.storeType,ts.estate,tc.emolument,tcu.uniform_amortize,tc.accommodation" +
+                   " FROM ("+storeSql+") ts left join (select uniform_amortize,storeNo from t_cost_uniform where year="+costDto.getYear()+") tcu on ts.storeno = tcu.storeNo left  join (select storeNo,accommodation,emolument from `t_cost_labor`   where year="+costDto.getYear()+" and month="+costDto.getMonth()+") tc on ts.storeno=tc.storeNo  where ifnull(ts.estate,'') not like '%闭店%' and ts.name not like '%测试%'  and ts.storetype!='V'";
 
 
         if(costDto.getStoreName()!=null&&!"".equals(costDto.getStoreName())){
@@ -682,18 +682,22 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
         if(cityName!=null&&!"".equals(cityName)){
             sqlSub=" and city_name='"+cityName+"'";
         }
-        String sql = "select ts.city_name as cityName,tdc.id as cityId,ts.total,l.labor,r.rent,rv.renovation,fa.fixedAsset,g.gwe,co.operation from " +
+        String sql = "select ts.city_name as cityName,tdc.id as cityId,ts.total,l.labor,r.rent,rv.renovation,u.uniform,rc.rentContract,fa.fixedAsset,g.gwe,co.operation from " +
                 " (select city_name,count(store_id) as total from t_store where ifnull(estate,'') not like '%闭店%' and name not like '%测试%'  and storetype!='V' "+sqlSub+" GROUP BY city_name) ts" +
                 " left join " +
                 " (select count(storeNo) as labor,cityName from t_cost_labor  where year="+year+" and month="+month+" group by cityName) as l on ts.city_name = l.cityName" +
                 " left join " +
-                " (select count(storeNo) as rent,cityName from t_cost_rent where year="+year+" and `month`="+month+" GROUP BY cityName) as r on ts.city_name = r.cityName" +
+                " (select count(storeNo) as uniform,cityName from t_cost_uniform  where year="+year+"  group by cityName) as u on ts.city_name = u.cityName" +
+                " left join " +
+                " (select count(storeNo) as rent,cityName from t_cost_rent where year="+year+"   GROUP BY cityName) as r on ts.city_name = r.cityName" +
+                " left join " +
+                " (select count(storeNo) as rentContract,cityName from t_cost_rent_contract   GROUP BY cityName) as rc on ts.city_name = rc.cityName" +
                 " left join " +
                 " (select count(storeNo) as renovation,cityName from t_cost_renovation GROUP BY cityName) as rv  on ts.city_name = rv.cityName" +
                 " left join " +
                 " (select count(storeNo) as fixedAsset,cityName from t_cost_fixed_asset GROUP BY cityName) as fa on ts.city_name = fa.cityName" +
                 " left join " +
-                " (select count(storeNo) as gwe,cityName from t_cost_gas_water_elec where year="+year+" and month="+month+" GROUP BY cityName) as g on ts.city_name = g.cityName" +
+                " (select count(storeNo) as gwe,cityName from t_cost_gas_water_elec where year="+year+" and month="+month+"  GROUP BY cityName) as g on ts.city_name = g.cityName" +
                 " left join " +
                 " (select count(storeNo) as operation,cityName from t_cost_operation where year="+year+" GROUP BY cityName) co on ts.city_name = co.cityName " +
                 " left join" +

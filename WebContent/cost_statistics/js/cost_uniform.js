@@ -163,9 +163,9 @@ function checkUniformCharge(t){
     var id = $(t).attr("id").split("_");
     var uniformCharge = $("#uniformCharge_"+id[1]).val();
     if(uniformCharge!=""){
-        $("#uniformAmortize_"+id[1]).val(parseFloat(uniformCharge/12).toFixed(2));
+        $("#uniformOfAmortize_"+id[1]).val(parseFloat(uniformCharge/12).toFixed(2));
     }else{
-        $("#uniformAmortize_"+id[1]).val("");
+        $("#uniformOfAmortize_"+id[1]).val("");
     }
 
 
@@ -285,7 +285,7 @@ function searchUniform(){
                 var rc_tag ="_"+i;
                 var uniform_td=
                            "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'>"+storeName+"</td>"+
-                           "<td><input type='text' style='width: 100%;' onkeyup='checkUniformCharge(this)' id='uniformCharge"+rc_tag+"' value='"+uniform_charge+"'/></td><td><input type='text' style='background-color: #e8e8e8;width: 100%;' readonly onkeyup='checkCostuniform(this)' id='uniformAmortize"+rc_tag+"' value='"+uniform_amortize+"'/></td>";
+                           "<td><input type='text' style='width: 100%;' onkeyup='checkUniformCharge(this)' id='uniformCharge"+rc_tag+"' value='"+uniform_charge+"'/></td><td><input type='text' style='background-color: #e8e8e8;width: 100%;' readonly onkeyup='checkCostuniform(this)' id='uniformOfAmortize"+rc_tag+"' value='"+uniform_amortize+"'/></td>";
                 $("#uniform_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+uniform_td+"<input type='hidden' value='"+storeName+"' id='storeName'/><input type='hidden' value='"+cityName+"' id='cityName'/></tr>");
 
             }
@@ -362,18 +362,15 @@ function   exportCostUniform(){
  *
  * **/
 function saveCostUniform(){
+    var saveResult = "";
     var year = $("#uniform_save_date").val();
-
     var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
     var costuniformArray = [];
     for(var i=0;i<store_cost_tr.length;i++){
         var cityName = $(store_cost_tr[i]).find("input[id='cityName']").val();
         var storeNo= $(store_cost_tr[i]).attr("id");
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();
-        var emolument = $(store_cost_tr[i]).find('input[id^="emolument_"]').val();
-        var uniformAmortize = $(store_cost_tr[i]).find('input[id^="uniformAmortize_"]').val();
-        var accommodation = $(store_cost_tr[i]).find('input[id^="accommodation_"]').val();
-        var subtotal = $(store_cost_tr[i]).find('input[id^="subtotal_"]').val();
+        var uniformAmortize = $(store_cost_tr[i]).find('input[id^="uniformOfAmortize_"]').val();
         var uniformCharge = $(store_cost_tr[i]).find('input[id^="uniformCharge_"]').val();
         var costuniform = {
             cityName:cityName,
@@ -393,24 +390,30 @@ function saveCostUniform(){
             var result= JSON.parse(data.data);
 
             if(result.status=='success'){
-                $$.showMessage('提示',"保存成功！");
+                // $$.showMessage('提示',"保存成功！");
                 $("#uniform_tr_2").nextAll("tr[editable='true']").each(function(){
                     $(this).attr("editable","false");
                 })
-                return;
+                // return;
+                saveResult="success";
             }else if(result.status=="fail"){
 
-                $$.showMessage('提示',"保存失败！");
-                return;
+                // $$.showMessage('提示',"保存失败！");
+                // return;
+                saveResult="fail";
             }else{
 
-                $$.showMessage('提示',"请稍后重新请求！");
-                return;
+                // $$.showMessage('提示',"请稍后重新请求！");
+                // return;
+                saveResult="fail";
             }
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            // $.showMessage('提示',"请稍后重新请求！");
+            saveResult="fail";
         }
 
     },false);
+
+    return saveResult;
 
 }

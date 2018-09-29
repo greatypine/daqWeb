@@ -45,7 +45,6 @@
             type:"month",
             btns: ['confirm','now'],
             theme: '#337ab7',
-            max:year_month,
             done: function(value, date, endDate){
                 $("#search_year").val(date["year"]);
                 $("#search_month").val(date["month"]);
@@ -59,10 +58,11 @@
             if(data.result){
                 current_user = JSON.parse(data.data);
                 searchList();
+                getcontrolCity();
             }else{
                 $$.showMessage('提示',data.message);
             }
-        });
+        },false);
 
     });
 
@@ -75,24 +75,24 @@
      * @type {null}
      */
     var lst_select_control_city=null;
-    var controlCityNameArray=new Array();
-    var controlCityIdMap = {};
+    // var controlCityNameArray=new Array();
+    // var controlCityIdMap = {};
     function getcontrolCity(t){
 
-        controlCityIdMap=new Array();
-        $("#control_city").empty();
-
-        $("#control_store").empty();
-        $("#store_id_control").val("");
-        $("#store_name_control").val("");
-
-        var str_name = $(t).val();
-        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-            $("#city_id_control").val("");
-
-            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-                return;
-            }
+        // controlCityIdMap=new Array();
+        // $("#control_city").empty();
+        //
+        // $("#control_store").empty();
+        // $("#store_id_control").val("");
+        // $("#store_name_control").val("");
+        //
+        // var str_name = $(t).val();
+        // if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
+        //     $("#city_id_control").val("");
+        //
+        //     if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
+        //         return;
+        //     }
 
 
 
@@ -103,14 +103,17 @@
                     if(data.result){
 
                         lst_select_control_city = JSON.parse(data.data);
+                        var option="";
+                        for(var i=0;i<lst_select_control_city.length;i++){
+                            // controlCityNameArray.push(lst_select_control_city[i].cityname);
+                            // controlCityIdMap[lst_select_control_city[i].cityname] = lst_select_control_city[i].cityname;
+                            option=option+"<option value='"+lst_select_control_city[i].cityname+"'>"+lst_select_control_city[i].cityname+"</option>";
 
-                        for(i=0;i<lst_select_control_city.length;i++){
-                            controlCityNameArray.push(lst_select_control_city[i].cityname);
-                            controlCityIdMap[lst_select_control_city[i].cityname] = lst_select_control_city[i].cityname;
                         }
-                        var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
-                        autoComplete.start(event);
-                        $("#control_city").attr("style","width: 150px;z-index: 99999;left: 5.4%;top: 13%;");
+                        $("#city_id_control").append(option);
+                        // var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
+                        // autoComplete.start(event);
+                        // $("#control_city").attr("style","width: 150px;z-index: 99999;left: 5.4%;top: 13%;");
                     }
                 },false);
 
@@ -121,19 +124,22 @@
                     function(data, textStatus, XMLHttpRequest) {
                         if (data.result) {
                             lst_select_control_city = JSON.parse(data.data).citylist;
-
+                            var option="";
                             for(var  i=0;i<lst_select_control_city.length;i++){
-                                controlCityNameArray.push(lst_select_control_city[i].name);
-                                controlCityIdMap[lst_select_control_city[i].name] = lst_select_control_city[i].name;
+                                // controlCityNameArray.push(lst_select_control_city[i].name);
+                                // controlCityIdMap[lst_select_control_city[i].name] = lst_select_control_city[i].name;
+                                option=option+"<option value='"+lst_select_control_city[i].name+"'>"+lst_select_control_city[i].name+"</option>";
+
                             }
-                            var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
-                            autoComplete.start(event);
-                            $("#control_city").attr("style","width: 150px;z-index: 99999;left: 5.4%;top: 13%;");
+                            $("#city_id_control").append(option);
+                            // var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
+                            // autoComplete.start(event);
+                            // $("#control_city").attr("style","width: 150px;z-index: 99999;left: 5.4%;top: 13%;");
                         }
                     },false);
             }
 
-        }
+        // }
 
     }
 
@@ -141,10 +147,10 @@
      * 选择城市
      * @param t
      */
-    function selectcontrolCity(t){
-        var temp_city = document.getElementById("city_name_control").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-        $("#city_id_control").val(controlCityIdMap[temp_city]);
-    }
+    // function selectcontrolCity(t){
+    //     var temp_city = document.getElementById("city_name_control").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+    //     $("#city_id_control").val(controlCityIdMap[temp_city]);
+    // }
 
 
 
@@ -233,7 +239,19 @@
             var value = map[sColumnName]==""?0:map[sColumnName];
             return value;
         },
+        "gwe": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
         "rent": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
+        "operation": function(aData, iColumn, sColumnName, map){
+            var value = map[sColumnName]==""?0:map[sColumnName];
+            return value;
+        },
+        "uniform": function(aData, iColumn, sColumnName, map){
             var value = map[sColumnName]==""?0:map[sColumnName];
             return value;
         },
@@ -245,14 +263,13 @@
             var value = map[sColumnName]==""?0:map[sColumnName];
             return value;
         },
-        "gwe": function(aData, iColumn, sColumnName, map){
-            var value = map[sColumnName]==""?0:map[sColumnName];
-            return value;
-        },
-        "operation": function(aData, iColumn, sColumnName, map){
+        "rentContract": function(aData, iColumn, sColumnName, map){
             var value = map[sColumnName]==""?0:map[sColumnName];
             return value;
         }
+
+
+
     }
 
 
@@ -285,11 +302,12 @@
                             <span >城市名称：</span>
                         </td>
                         <td width="300px">
-                                <input id="city_id_control" name="cityName" type="hidden" value=""/>
-                                <input type="text" class="form-control"  placeholder="城市" id="city_name_control" onkeyup="getcontrolCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                            <div class="auto hidden" id="control_city" onclick="selectcontrolCity(this)" style="width:150px;z-index: 99999;">
-                                <!-- /.input group -->
-                            </div>
+                                <!--<input id="city_id_control" name="cityName" type="hidden" value=""/>-->
+                                <!--<input type="text" class="form-control"  placeholder="城市" id="city_name_control" onkeyup="getcontrolCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>-->
+                            <!--<div class="auto hidden" id="control_city" onclick="selectcontrolCity(this)" style="width:150px;z-index: 99999;">-->
+                                <!--&lt;!&ndash; /.input group &ndash;&gt;-->
+                            <!--</div>-->
+                            <select id="city_id_control" style="width: 200px" class="form-control"><option value="">全部</option></select>
                         </td>
                         <!--<td width="12px">-->
                             <!--<span >门店名称：</span>-->
@@ -332,10 +350,3 @@
 </body>
 </html>
 
-<div id="areaInfoDetail" style="display:none">
-    <div class="panel-body">
-        <table cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto" id="areaInfoTable">
-
-        </table>
-    </div>
-</div>

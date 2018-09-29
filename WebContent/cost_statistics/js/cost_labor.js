@@ -152,19 +152,7 @@ function selectLaborStore(t){
 }
 
 
-/**
- * 工服年费
- * @param t
- */
-function checkUniformCharge(t){
 
-    checkFloatDataValid(t);
-    $(t).parent().parent().attr("editable",true);
-    var id = $(t).attr("id").split("_");
-    var uniformCharge = $("#uniformCharge_"+id[1]).val();
-    var uniformAmortize = $("#uniformAmortize_"+id[1]).val(parseFloat(uniformCharge/12).toFixed(2));
-    checkCostLabor(t);
-}
 
 /**
  * 检测人工成本数据并记录编辑的门店
@@ -286,10 +274,10 @@ function searchLabor(){
                 if(emolument==""&&uniform_amortize==""&&accommodation==""){
                     subtotal = "";
                 }else{
-                    emolument = emolument==""?0:parseFloat(emolument);
-                    uniform_amortize=uniform_amortize == ""?0:parseFloat(uniform_amortize);
-                    accommodation=accommodation == ""?0:parseFloat(accommodation);
-                    subtotal= (emolument+uniform_amortize+accommodation).toFixed(2);
+                    var emolument1 = emolument==""?0:parseFloat(emolument);
+                    var uniform_amortize1=uniform_amortize == ""?0:parseFloat(uniform_amortize);
+                    var accommodation1=accommodation == ""?0:parseFloat(accommodation);
+                    subtotal= (emolument1+uniform_amortize1+accommodation1).toFixed(2);
                 }
                 var rc_tag ="_"+i;
                 var cityName = costLabor[i].city_name;
@@ -304,7 +292,7 @@ function searchLabor(){
             layer.close(index);
 
         }
-    });
+    },false);
 }
 /**
  * 导出人工成本
@@ -374,6 +362,7 @@ function   exportCostLabor(){
  *
  * **/
 function saveCostLabor(){
+       var saveResult = "";
        var year_month = $("#labor_year_month").val();
 
        var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
@@ -407,25 +396,30 @@ function saveCostLabor(){
                 var result= JSON.parse(data.data);
 
                 if(result.status=='success'){
-                    $$.showMessage('提示',"保存成功！");
+                    // $$.showMessage('提示',"保存成功！");
+                    saveResult = "success";
                     $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
                         $(this).attr("editable","false");
                     })
-                    return;
+                    // return;
                 }else if(result.status=="fail"){
 
-                    $$.showMessage('提示',"保存失败！");
-                    return;
+                    //$$.showMessage('提示',"保存失败！");
+                    saveResult="fail";
+                    // return;
                 }else{
-
-                    $$.showMessage('提示',"请稍后重新请求！");
-                    return;
+                    saveResult="fail";
+                    // $$.showMessage('提示',"请稍后重新请求！");
+                    // return;
                 }
             }else{
-                $.showMessage('提示',"请稍后重新请求！");
+                saveResult="fail";
+                // $.showMessage('提示',"请稍后重新请求！");
             }
 
         },false);
+    
+    return saveResult;
 
 }
 

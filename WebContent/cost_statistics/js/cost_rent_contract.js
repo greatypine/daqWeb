@@ -428,7 +428,7 @@ function checkFloatDataValid(t){
  * **/
 function saveCostRentContract(){
 
-
+    var saveResult = "";
     var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
     var costRentContractArray = [];
 
@@ -480,21 +480,30 @@ function saveCostRentContract(){
             var result= JSON.parse(data.data);
 
             if(result.status=='success'){
-                $$.showMessage('提示',"保存成功！");
-                return;
+                // $$.showMessage('提示',"保存成功！");
+                // return;
+                $("#rentContract_tr_2").nextAll("tr[editable='true']").each(function () {
+                    $(this).attr("editable","false");
+                })
+                saveResult="success";
             }else if(result.status=="fail"){
 
-                $$.showMessage('提示',"保存失败！");
-                return;
+                // $$.showMessage('提示',"保存失败！");
+                // return;
+                saveResult="fail";
             }else{
 
-                $$.showMessage('提示',"请稍后重新请求！");
-                return;
+                // $$.showMessage('提示',"请稍后重新请求！");
+                // return;
+                saveResult="fail";
             }
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            // $.showMessage('提示',"请稍后重新请求！");
+            saveResult="fail";
         }
 
     },false);
+    
+    return saveResult;
 
 }

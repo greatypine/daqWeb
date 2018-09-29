@@ -10,11 +10,13 @@
         <column key="year" header="年" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false" />
         <column key="month" header="月" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="false"/>
         <column key="total" header="总门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="5%"/>
-        <column key="labor" header="人工成本录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
-        <column key="rent" header="租金成本录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
-        <column key="renovation" header="装修摊销录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
-        <column key="fixedAsset" header="固定资产录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
-        <column key="gwe" header="水电费录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
-        <column key="operation" header="运营成本录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7%"/>
+        <column key="labor" header="人工成本-员工薪酬录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="11%"/>
+        <column key="gwe" header="水电费录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7.5%"/>
+        <column key="rent" header="租金成本-物业费用录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="11%"/>
+        <column key="operation" header="运营成本录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7.5%"/>
+        <column key="uniform" header="人工成本-工服费用录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="11%"/>
+        <column key="renovation" header="装修摊销录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7.5%"/>
+        <column key="fixedAsset" header="固定资产录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="7.5%"/>
+        <column key="rentContract" header="租金成本-合同租金录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="11%"/>
     </query>
 </pmsquery>

@@ -44,7 +44,7 @@ public class CostStatisticsManagerImpl extends BizBaseCommonManager implements C
             } else if ("year".equals(map_where.get("key")) && null != map_where.get("value")
                     && !"".equals(map_where.get("value"))) {
                 year = Integer.parseInt(map_where.get("value").toString());;
-            } else if ("month".equals(map_where.get("key")) && null != map_where.get("value")
+            }else if ("month".equals(map_where.get("key")) && null != map_where.get("value")
                     && !"".equals(map_where.get("value"))) {
                 month = Integer.parseInt(map_where.get("value").toString());
             }
