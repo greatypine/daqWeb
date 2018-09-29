@@ -36,7 +36,67 @@
         var cur_city_name= getUrlParamByKey("cur_city_name");
         var flag=getUrlParamByKey("flag");
          $(function () {
+
+             var cur_date = new Date();
+
+             laydate.render({//月份控件
+                 elem:'#year_property',
+                 value:cur_date,
+                 type:"year",
+                 btns: ['confirm','now'],
+                 theme: '#428bca'
+             });
+
+             laydate.render({//月份控件
+                 elem:'#year_gwe',
+                 value:cur_date,
+                 type:"month",
+                 btns: ['confirm','now'],
+                 theme: '#428bca'
+             });
+
+
+
+             laydate.render({//月份控件
+                 elem:'#year_operation',
+                 value:cur_date,
+                 type:"year",
+                 btns: ['confirm','now'],
+                 theme: '#428bca'
+             });
+
+             laydate.render({//月份控件
+                 elem:'#year_uniform',
+                 value:cur_date,
+                 type:"year",
+                 btns: ['confirm','now'],
+                 theme: '#428bca'
+             });
+
+             laydate.render({//月份控件
+                 elem:'#year_labor',
+                 value:cur_date,
+                 type:"month",
+                 btns: ['confirm','now'],
+                 theme: '#428bca'
+             });
+
+             laydate.render({//月份控件
+                 elem:'#year_gwe',
+                 value:cur_date,
+                 type:"month",
+                 btns: ['confirm','now'],
+                 theme: '#428bca'
+             });
+
             getCostRenovation();
+            getCostFixedAsset();
+            getCostRentContract();
+            getCostRent();
+            getCostUniform();
+            getCostOperation();
+            getCostGWE();
+            getCostLabor();
 
             autodivheight();
             function autodivheight(){ //函数：获取尺寸
@@ -50,7 +110,7 @@
                 if (document.documentElement && document.documentElement.clientHeight)
                     winHeight = document.documentElement.clientHeight;
                 document.getElementById("tab-roll-renovation").style.height= winHeight*0.74 +"px";
-                document.getElementById("tab-roll-fixedAsset").style.height= winHeight*0.76 +"px";
+                document.getElementById("tab-roll-fixedAsset").style.height= winHeight*0.74 +"px";
                 document.getElementById("tab-roll-rent").style.height= winHeight*0.74 +"px";
                 document.getElementById("tab-roll-operation").style.height= winHeight*0.74 +"px";
                 document.getElementById("tab-roll-uniform").style.height= winHeight*0.74 +"px";
@@ -63,87 +123,94 @@
         /**
          * 切换第一级tag
          * */
+        var cur_tag = "renovation";
         function showFirstLevelCostTag(t){
 
-            if(t=="fixedCost"){//固定成本
-                if($("#li_renovation").hasClass("active")){
-                    getCostRenovation();//装修摊销
-                }else if($("#li_fixedAsset").hasClass("active")){
-                    getCostFixedAsset();//固定资产
-                }else if($("#li_rentContract").hasClass("active")){
-                    getCostRentContract();//合同租金
-                }
-
-            }else if(t=="yearCost"){//年度成本
-                if($("#li_property").hasClass("active")){
-                    var cur_date = new Date();
-                    laydate.render({//月份控件
-                        elem:'#year_property',
-                        value:cur_date,
-                        type:"year",
-                        btns: ['confirm','now'],
-                        theme: '#428bca'
-                    });
-                    getCostRent();//物业费
-                }else if($("#li_operation").hasClass("active")){
-
-                    var cur_date = new Date();
-
-                    laydate.render({//月份控件
-                        elem:'#year_operation',
-                        value:cur_date,
-                        type:"year",
-                        btns: ['confirm','now'],
-                        theme: '#428bca'
-                    });
-
-                    getCostOperation();
-                }else if($("#li_uniform").hasClass("active")){
-
-
-                    var cur_date = new Date();
-
-                    laydate.render({//月份控件
-                        elem:'#year_uniform',
-                        value:cur_date,
-                        type:"year",
-                        btns: ['confirm','now'],
-                        theme: '#428bca'
-                    });
-
-                    getCostUniform();
-                }
-
-            }else if(t=="monthCost"){//月度成本
-                if($("#li_labor").hasClass("active")){
-                    var cur_date = new Date();
-                    laydate.render({//月份控件
-                        elem:'#year_labor',
-                        value:cur_date,
-                        type:"month",
-                        btns: ['confirm','now'],
-                        theme: '#428bca'
-                    });
-                    getCostLabor();//人工成本
-                }else if($("#li_gwe").hasClass("active")){
-
-
-
-
-                    var cur_date = new Date();
-
-                    laydate.render({//月份控件
-                        elem:'#year_gwe',
-                        value:cur_date,
-                        type:"month",
-                        btns: ['confirm','now'],
-                        theme: '#428bca'
-                    });
-
-                    getCostGWE();
-                }
-
-            }
+            var index = layer.load(0,{
+                shade: [0.2,'#333'],
+                time:1500
+            });
+            // if(t=="fixedCost"){//固定成本
+            //     if($("#li_renovation").hasClass("active")){
+            //         cur_tag="renovation";
+            //         getCostRenovation();//装修摊销
+            //     }else if($("#li_fixedAsset").hasClass("active")){
+            //         cur_tag="fixedAsset";
+            //         getCostFixedAsset();//固定资产
+            //     }else if($("#li_rentContract").hasClass("active")){
+            //         cur_tag="rentContract";
+            //         getCostRentContract();//合同租金
+            //     }
+            //
+            // }else if(t=="yearCost"){//年度成本
+            //     if($("#li_property").hasClass("active")){
+            //         var cur_date = new Date();
+            //         laydate.render({//月份控件
+            //             elem:'#year_property',
+            //             value:cur_date,
+            //             type:"year",
+            //             btns: ['confirm','now'],
+            //             theme: '#428bca'
+            //         });
+            //         cur_tag="rent";
+            //         getCostRent();//物业费
+            //     }else if($("#li_operation").hasClass("active")){
+            //
+            //         var cur_date = new Date();
+            //
+            //         laydate.render({//月份控件
+            //             elem:'#year_operation',
+            //             value:cur_date,
+            //             type:"year",
+            //             btns: ['confirm','now'],
+            //             theme: '#428bca'
+            //         });
+            //         cur_tag="operation";
+            //         getCostOperation();
+            //     }else if($("#li_uniform").hasClass("active")){
+            //
+            //
+            //         var cur_date = new Date();
+            //
+            //         laydate.render({//月份控件
+            //             elem:'#year_uniform',
+            //             value:cur_date,
+            //             type:"year",
+            //             btns: ['confirm','now'],
+            //             theme: '#428bca'
+            //         });
+            //         cur_tag="uniform";
+            //         getCostUniform();
+            //     }
+            //
+            // }else if(t=="monthCost"){//月度成本
+            //     if($("#li_labor").hasClass("active")){
+            //         var cur_date = new Date();
+            //         laydate.render({//月份控件
+            //             elem:'#year_labor',
+            //             value:cur_date,
+            //             type:"month",
+            //             btns: ['confirm','now'],
+            //             theme: '#428bca'
+            //         });
+            //         cur_tag="labor";
+            //         getCostLabor();//人工成本
+            //     }else if($("#li_gwe").hasClass("active")){
+            //
+            //         var cur_date = new Date();
+            //
+            //         laydate.render({//月份控件
+            //             elem:'#year_gwe',
+            //             value:cur_date,
+            //             type:"month",
+            //             btns: ['confirm','now'],
+            //             theme: '#428bca'
+            //         });
+            //         cur_tag="gwe";
+            //         getCostGWE();
+            //     }
+            //
+            // }
 
         }
 
@@ -152,184 +219,188 @@
          * @param t
          */
         function showSecondLevelCostTag(t){
-            clearCostTable();
-
-
-            if(t=="labor"){
-                var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showConfirm("提示","是否需要保存改变的数据？",function () {
-                        saveCostLabor();
-                    });
-                }
-                if(flag=="search"){
-                    $("#city_id_labor").val(cur_city_id);
-                    $("#city_name_labor").val(decode64(cur_city_name));
-                }
-                getCostLabor();//获取人工成本
-
-            }else if(t=="rent"){
-
-                var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-
-                if(flag=="search"){
-                    $("#city_id_rent").val(cur_city_id);
-                    $("#city_name_rent").val(decode64(cur_city_name));
-                }
-                getCostRent();
-            }else if(t=="rentContract"){
-                var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-
-                if(flag=="search"){
-                    $("#city_id_rentContract").val(cur_city_id);
-                    $("#city_name_rentContract").val(decode64(cur_city_name));
-                }
-                getCostRentContract();
-
-            }else if(t=="renovation"){
-                var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-                if(flag=="search"){
-                    $("#city_id_renovation").val(cur_city_id);
-                    $("#city_name_renovation").val(decode64(cur_city_name));
-                }
-                getCostRenovation();//装修摊销
-            }else if(t=="fixedAsset"){
-                var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-                if(flag=="search"){
-                    $("#city_id_fixedAsset").val(cur_city_id);
-                    $("#city_name_fixedAsset").val(decode64(cur_city_name));
-                }
-                getCostFixedAsset();//固定资产
-            }else if(t=="property"){//物业费用
-                var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-
-                if(flag=="search"){
-                    $("#city_id_fixedAsset").val(cur_city_id);
-                    $("#city_name_fixedAsset").val(decode64(cur_city_name));
-                }
-
-                var cur_date = new Date();
-
-                laydate.render({//月份控件
-                    elem:'#year_property',
-                    value:cur_date,
-                    type:"year",
-                    btns: ['confirm','now'],
-                    theme: '#428bca'
-                });
-                getCostRent();//物业费用
-            }else if(t=="gwe"){
-
-                var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-
-
-                var cur_date = new Date();
-
-                laydate.render({//月份控件
-                    elem:'#year_gwe',
-                    value:cur_date,
-                    type:"month",
-                    btns: ['confirm','now'],
-                    theme: '#428bca'
-                });
-                if(flag=="search"){
-                    $("#city_id_gwe").val(cur_city_id);
-                    $("#city_name_gwe").val(decode64(cur_city_name));
-                }
-                getCostGWE();
-            }
-            else if(t=="operation"){//运营成本
-
-                var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-
-
-                var cur_date = new Date();
-
-                laydate.render({//月份控件
-                    elem:'#year_operation',
-                    value:cur_date,
-                    type:"year",
-                    btns: ['confirm','now'],
-                    theme: '#428bca'
-                });
-                if(flag=="search"){
-                    $("#city_id_operation").val(cur_city_id);
-                    $("#city_name_operation").val(decode64(cur_city_name));
-                }
-                getCostOperation();
-            }else if(t=="uniform"){
-
-                var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
-                if(store_cost_tr.length>0){
-                    $$.showMessage("请先保存！")
-                    return;
-                }
-
-
-                var cur_date = new Date();
-
-                laydate.render({//月份控件
-                    elem:'#year_uniform',
-                    value:cur_date,
-                    type:"year",
-                    btns: ['confirm','now'],
-                    theme: '#428bca'
-                });
-                if(flag=="search"){
-                    $("#city_id_uniform").val(cur_city_id);
-                    $("#city_name_uniform").val(decode64(cur_city_name));
-                }
-                getCostUniform();
-            }
+            var index = layer.load(0,{
+                shade: [0.2,'#333'],
+                time:1500
+            });
+            // clearCostTable();
+            //
+            //
+            // if(t=="labor"){
+            //     var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showConfirm("提示","是否需要保存改变的数据？",function () {
+            //             saveCostLabor();
+            //         });
+            //     }
+            //     if(flag=="search"){
+            //         $("#city_id_labor").val(cur_city_id);
+            //         $("#city_name_labor").val(decode64(cur_city_name));
+            //     }
+            //     getCostLabor();//获取人工成本
+            //
+            // }else if(t=="rent"){
+            //
+            //     var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //
+            //     if(flag=="search"){
+            //         $("#city_id_rent").val(cur_city_id);
+            //         $("#city_name_rent").val(decode64(cur_city_name));
+            //     }
+            //     getCostRent();
+            // }else if(t=="rentContract"){
+            //     var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //
+            //     if(flag=="search"){
+            //         $("#city_id_rentContract").val(cur_city_id);
+            //         $("#city_name_rentContract").val(decode64(cur_city_name));
+            //     }
+            //     getCostRentContract();
+            //
+            // }else if(t=="renovation"){
+            //     var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //     if(flag=="search"){
+            //         $("#city_id_renovation").val(cur_city_id);
+            //         $("#city_name_renovation").val(decode64(cur_city_name));
+            //     }
+            //     getCostRenovation();//装修摊销
+            // }else if(t=="fixedAsset"){
+            //     var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //     if(flag=="search"){
+            //         $("#city_id_fixedAsset").val(cur_city_id);
+            //         $("#city_name_fixedAsset").val(decode64(cur_city_name));
+            //     }
+            //     getCostFixedAsset();//固定资产
+            // }else if(t=="property"){//物业费用
+            //     var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //
+            //     if(flag=="search"){
+            //         $("#city_id_fixedAsset").val(cur_city_id);
+            //         $("#city_name_fixedAsset").val(decode64(cur_city_name));
+            //     }
+            //
+            //     var cur_date = new Date();
+            //
+            //     laydate.render({//月份控件
+            //         elem:'#year_property',
+            //         value:cur_date,
+            //         type:"year",
+            //         btns: ['confirm','now'],
+            //         theme: '#428bca'
+            //     });
+            //     getCostRent();//物业费用
+            // }else if(t=="gwe"){
+            //
+            //     var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //
+            //
+            //     var cur_date = new Date();
+            //
+            //     laydate.render({//月份控件
+            //         elem:'#year_gwe',
+            //         value:cur_date,
+            //         type:"month",
+            //         btns: ['confirm','now'],
+            //         theme: '#428bca'
+            //     });
+            //     if(flag=="search"){
+            //         $("#city_id_gwe").val(cur_city_id);
+            //         $("#city_name_gwe").val(decode64(cur_city_name));
+            //     }
+            //     getCostGWE();
+            // }
+            // else if(t=="operation"){//运营成本
+            //
+            //     var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //
+            //
+            //     var cur_date = new Date();
+            //
+            //     laydate.render({//月份控件
+            //         elem:'#year_operation',
+            //         value:cur_date,
+            //         type:"year",
+            //         btns: ['confirm','now'],
+            //         theme: '#428bca'
+            //     });
+            //     if(flag=="search"){
+            //         $("#city_id_operation").val(cur_city_id);
+            //         $("#city_name_operation").val(decode64(cur_city_name));
+            //     }
+            //     getCostOperation();
+            // }else if(t=="uniform"){
+            //
+            //     var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
+            //     if(store_cost_tr.length>0){
+            //         $$.showMessage("请先保存！")
+            //         return;
+            //     }
+            //
+            //
+            //     var cur_date = new Date();
+            //
+            //     laydate.render({//月份控件
+            //         elem:'#year_uniform',
+            //         value:cur_date,
+            //         type:"year",
+            //         btns: ['confirm','now'],
+            //         theme: '#428bca'
+            //     });
+            //     if(flag=="search"){
+            //         $("#city_id_uniform").val(cur_city_id);
+            //         $("#city_name_uniform").val(decode64(cur_city_name));
+            //     }
+            //     getCostUniform();
+            // }
         }
 
 
         /**
          * 清空成本table页面
          * */
-        function clearCostTable(){
-
-            $("#labor_tb_1").find("tr:gt(1)").remove();
-            $("#labor_tb_2").find("tr:gt(1)").remove();
-            $("#rent_tb_1").find("tr:gt(0)").remove();
-            $("#rent_tb_2").find("tr:gt(0)").remove();
-            $("#renovation_tb_1").find("tr:gt(0)").remove();
-            $("#renovation_tb_2").find("tr:gt(0)").remove();
-            $("#fixedAsset_tb_1").find("tr:gt(0)").remove();
-            $("#fixedAsset_tb_2").find("tr:gt(0)").remove();
-            $("#gwe_tb_1").find("tr:gt(0)").remove();
-            $("#gwe_tb_2").find("tr:gt(0)").remove();
-            $("#operation_tb_1").find("tr:gt(0)").remove();
-            $("#operation_tb_2").find("tr:gt(0)").remove();
-        }
+        // function clearCostTable(){
+        //
+        //     $("#labor_tb_1").find("tr:gt(1)").remove();
+        //     $("#labor_tb_2").find("tr:gt(1)").remove();
+        //     $("#rent_tb_1").find("tr:gt(0)").remove();
+        //     $("#rent_tb_2").find("tr:gt(0)").remove();
+        //     $("#renovation_tb_1").find("tr:gt(0)").remove();
+        //     $("#renovation_tb_2").find("tr:gt(0)").remove();
+        //     $("#fixedAsset_tb_1").find("tr:gt(0)").remove();
+        //     $("#fixedAsset_tb_2").find("tr:gt(0)").remove();
+        //     $("#gwe_tb_1").find("tr:gt(0)").remove();
+        //     $("#gwe_tb_2").find("tr:gt(0)").remove();
+        //     $("#operation_tb_1").find("tr:gt(0)").remove();
+        //     $("#operation_tb_2").find("tr:gt(0)").remove();
+        // }
         // /**
         //  * 展示完整信息
         //  * @param t
@@ -342,7 +413,56 @@
         //     });
         // }
 
+        /**
+         * 返回
+         * */
+        function goBack(){
 
+
+                var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("提示","请先保存 '人工成本-员工薪酬'！")
+                    return;
+                }
+
+                var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("提示","请先保存 '租金成本-合同租金'！")
+                    return;
+                }
+
+                var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("提示","请先保存 '装修摊销'！")
+                    return;
+                }
+
+                var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("提示","请先保存 '固定资产'！")
+                    return;
+                }
+
+                var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("提示","请先保存 '水电费'！")
+                    return;
+                }
+
+                var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("提示","请先保存 '日常运营'！")
+                    return;
+                }
+
+                var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
+                if(store_cost_tr.length>0){
+                    $$.showMessage("提示","请先保存 ‘人工成本-工服费用’！")
+                    return;
+                }
+
+                window.history.go(-1);
+        }
 
 
     </script>
@@ -376,7 +496,7 @@
 <div class="panel panel-primary" style="margin: 10px 5px 0 5px">
     <div class="panel-heading">成本控制
         <span class="but">
-			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
+			<input name="" type="button" onclick="goBack()" value="返回">
 		</span>
     </div>
     <div class="panel-body" id="temp1" style="padding: 12px">
