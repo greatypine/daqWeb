@@ -21,6 +21,9 @@ var guoanManRankGMVOption;
 //事业群排名(GMV)排名柱状图
 var businessDepRankChartGMV;
 var businessDepRankGMVOption;
+//商品销售云图
+var commodityRankChartGMV;
+var commodityRankOption;
 //拉新用户,消费用户图
 var customerNewChart;
 var customerNewChartOption;
@@ -225,7 +228,8 @@ var initPageElements = function () {
     // 初始化事业群排名(GMV)显示图
 	businessDepRankChartGMV = echarts.init(document.getElementById('main4'));
 	guoanManRankChartGMV = echarts.init(document.getElementById('main5'));
-	
+	 // 初始化城市商品排名显示图
+    commodityRankChart = echarts.init(document.getElementById('main6'));
 	cityRankGmvOption = {
     title:[
       //{text:"城市排名（GMV:元）",x: '2%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"}},
@@ -1002,6 +1006,77 @@ var initPageElements = function () {
     businessDepRankChartGMV.on('click', function (params){
         var depName=encode64(businessDepRankGMVOption.legend.data[params.dataIndex]);
         window.open("index_BU.html?depname="+depName);
+    });
+    var maskImage = new Image();
+    maskImage.src = '../crm/sjfx-group_files/180209101040.png';
+    // 柱状图属性：商品排名
+    commodityRankOption = {
+        title: {
+        	 x: 'left',
+             textStyle:{color:"#efefef",fontSize:"16"}
+        },
+        tooltip: {
+        	formatter:function(param,ticket,callback){
+        		$("#main6 >div").eq(1)[0].style.cursor="default";
+        		return param.data.tooltips+" : "+param.data.value;
+        	}
+        },
+        series: [{
+            type : 'wordCloud',  //类型为字符云
+                shape : 'pentagon',  //平滑
+                gridSize : 2, //网格尺寸
+                size : ['80%','80%'],
+                left:'5%',
+                width:'80%',
+                sizeRange : [ 12, 50 ],  
+                rotationRange : [ -90, 90 ], //旋转范围
+                maskImage:maskImage,
+                textStyle : {  
+                    normal : {
+                        fontFamily:'sans-serif',
+                        color: function () {  
+                            var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];  
+                            return colors[parseInt(Math.random() * 10)];  
+                        }
+                    },  
+                    emphasis : {  
+                        shadowBlur : 5,  //阴影距离
+                        shadowColor : '#333'  //阴影颜色
+                    }  
+                },
+                data:[],
+        }]
+    };
+    commodityRankChart.on('click', function (params){
+    var cName = params.data['city_name'];
+    var cityno = params.data['cityno'];
+    if(cName.indexOf('市')>0){
+    	cName = cName.replace('市','');
+    }
+    if(cName.indexOf('黔东南州')>0){
+    	cName='黔东南苗族侗族自治州';
+    }
+    if(cityno.length==3){
+    	cityno = '0'+cityno;
+    }
+    	//昨天日期
+      if(pageStatusInfo['currentDay']==1){
+      	s1 = findLastFirstDay();
+      	s2 = findLastEndDay();
+      }else{
+      	s1 = findTodayFirstDay();
+      	s2 = findTodayYesterdayDay();
+      }
+	  var dayTime = s1+"-"+s2
+      var product_id=encode64(params.data['product_id']);
+      var target=pageStatusInfo.targets;
+	  var url = "";
+	  if(target==0){
+	  	url = "searchDataItem_view.html?t="+encode64(0)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("product")+"&product_id="+product_id;
+	  }else if(target==1){
+	  	url = "searchDataItem_view.html?t="+encode64(1)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("product")+"&product_id="+product_id;
+	  }
+      window.open(url);
     });
     //设置鼠标移入菜单显示
     //setMouseOverShow();
@@ -2600,52 +2675,20 @@ var getCommodityRankData = function (pageStatusInfo) {
 };
 // 显示商品排名
 var showCommodityRank = function (commodityRankData) {
- // 初始化城市商品排名显示图
-    var commodityRankChart = echarts.init(document.getElementById('main6'));
-    var maskImage = new Image();
+	var maskImage = new Image();
     maskImage.src = '../crm/sjfx-group_files/180209101040.png';
-    // 柱状图属性：商品排名
-    var commodityRankOption = {
-        title: {
-        	 x: 'left',
-             textStyle:{color:"#efefef",fontSize:"16"}
-        },
-        tooltip: {
-        	formatter:function(param,ticket,callback){
-        		$("#main6 >div").eq(1)[0].style.cursor="default";
-        		return param.data.tooltips+" : "+param.data.value;
-        	}
-        },
-        series: [{
-            type : 'wordCloud',  //类型为字符云
-                shape : 'pentagon',  //平滑
-                gridSize : 2, //网格尺寸
-                size : ['80%','80%'],
-                left:'5%',
-                width:'80%',
-                sizeRange : [ 12, 50 ],  
-                rotationRange : [ -90, 90 ], //旋转范围
-                maskImage:maskImage,
-                textStyle : {  
-                    normal : {
-                        fontFamily:'sans-serif',
-                        color: function () {  
-                            var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];  
-                            return colors[parseInt(Math.random() * 10)];  
-                        }
-                    },  
-                    emphasis : {  
-                        shadowBlur : 5,  //阴影距离
-                        shadowColor : '#333'  //阴影颜色
-                    }  
-                },
-                data:[],
-        }]
-    };
     if(commodityRankData['gmv'].length>2){
 	  	var commodityDataStr = '{"dataCloud":[';
 	    $.each(eval(commodityRankData['gmv']), function (idx, val) {
-	    	commodityDataStr+='{"name":"'+(val['product_name']+'').substring(0,6)+'","value":"'+val['product_count']+'","tooltips":"'+val['product_name']+'"},';
+	    	var ifContains = true;
+	    	if(val['product_name'].indexOf('工资')>0 || val['product_name'].indexOf('过账')>0 ||
+	    	val['product_name'].indexOf('工程')>0){
+	    		ifContains = false;
+	    	}
+	    	if(ifContains){
+	    		commodityDataStr+='{"name":"'+(val['product_name']+'').substring(0,6)+'","value":"'+val['product_count']+'","product_id":"'+val['product_id']+
+	    			'","cityno":"'+val['cityno']+'","city_name":"'+val['city_name']+'","tooltips":"'+val['product_name']+'"},';
+	    	}
 	    });
 	    if(commodityRankData['gmv'].length>0){
 	    	commodityDataStr = commodityDataStr.substring(0,commodityDataStr.lastIndexOf(","));
@@ -4598,6 +4641,21 @@ function goToDataFiles(){
 	  	url = "searchData_view.html?t="+encode64(1)+"&e="+encode64(curr_user.id)+"&cn="+encode64(pageStatusInfo.cityName);
 	  }
 	  window.open(url,"searchData_view");
+  }
+  //商品销售档案
+  function searchItemData(){
+	  try{
+		  saveAccessModuleLog("数据动态系统","商品销售档案",returnCitySN,0,"");
+	  }catch(error){}
+	  var role = curr_user.usergroup.code;
+	  var url = "";
+	  var target=pageStatusInfo.targets;
+	  if(target==0){
+	  	url = "searchDataItem_view.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+	  }else if(target==1){
+	  	url = "searchDataItem_view.html?t="+encode64(1)+"&e="+encode64(curr_user.id)+"&cn="+encode64(pageStatusInfo.cityName);
+	  }
+	  window.open(url,"searchDataItem_view");
   }
 
     //社员档案

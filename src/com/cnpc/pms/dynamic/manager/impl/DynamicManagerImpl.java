@@ -4924,6 +4924,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				Map<String,Object> dynamic = (Map<String,Object>)dynamicList.get(i);
 				jo.put("product_name", dynamic.get("product_name"));
 				jo.put("product_count", dynamic.get("product_count"));
+				jo.put("product_id", dynamic.get("product_id"));
+				jo.put("city_name", dynamic.get("city_name"));
+				jo.put("cityno", dynamic.get("cityno"));
 				if(sign!=null){
 					jo.put("rank", i+1);
 					jo.put("cityrank", i+1);
@@ -4936,6 +4939,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				Map<String,Object> dynamic = (Map<String,Object>)dynamicList.get(i);
 				jo.put("product_name", dynamic.get("product_name"));
 				jo.put("product_count", dynamic.get("product_count"));
+				jo.put("product_id", dynamic.get("product_id"));
+				jo.put("city_name", dynamic.get("city_name"));
+				jo.put("cityno", dynamic.get("cityno"));
 				if(sign!=null){
 					for (int j = 0; j < dynamicAllList.size(); j++) {
 						if(dynamic.get("product_id").toString().equals(dynamicAllList.get(j).get("product_id").toString())
