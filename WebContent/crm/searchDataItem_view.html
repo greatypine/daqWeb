@@ -1100,7 +1100,8 @@ Date.prototype.format=function(fmt) {
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
        			 +"<td><a href=\"javascript:;\" onmouseover=\"showProduct('"+prcontent+"');\" id=\""+pdid+"\">"+productname+"</a></td>"
- 			   	   	    +"<td><a style=\"text-decoration:underline\" onmouseover=\"showordersource('"+sourcecontent+"');\" id=\""+sourceid+"\" href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
+ 			   	   	    //+"<td><a style=\"text-decoration:underline\" onmouseover=\"showordersource('"+sourcecontent+"');\" id=\""+sourceid+"\" href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
+ 			   	   	    +"<td><a style=\"text-decoration:underline\" onmouseover=\"showordersource('"+sourcecontent+"');\" id=\""+sourceid+"\" href=\"#\">"+jData[i].order_sn+"</a></td>"
  			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
  			   	   	+"<td><a href=\"javascript:;\" onmouseover=\"showarea('"+areacontent+"');\" id=\""+areaWid+"\">"+jData[i].area_name+"</a></td>"
  			   	   	    //+"<td><a href=\"javascript:;\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+original_price+"</a></td>"
