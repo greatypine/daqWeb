@@ -83,6 +83,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sort_tag = massOrderDto.getSort_tag();
 		String city_code = massOrderDto.getCity_name();
 		String store_code = massOrderDto.getStore_no();
+		String department_name = massOrderDto.getDepartment_name();
+		String channel_name = massOrderDto.getChannel_name();
 		String whereStr = "";
 		String selectQuery = "IFNULL(tor.order_sn,'') AS order_sn, IFNULL(tor.area_code,'') AS area_code, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
 				"IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code,IFNULL(tor.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
@@ -131,13 +133,19 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr = whereStr + " and tor.customer_mobile_phone = '" + customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_name)){
-			whereStr = whereStr + " and tor.addr_name like '%" + customer_name.trim() + "%'";
+			whereStr = whereStr + " and tor.addr_name like '%" + addr_customer_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_phone)){
 			whereStr = whereStr + " and tor.addr_mobilephone = '" + addr_customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(store_code)){
 			whereStr = whereStr + " and tor.store_code = '" + store_code.trim() + "'";
+		}
+		if(StringUtils.isNotEmpty(department_name)){
+			whereStr = whereStr + " and tor.department_name = '" + department_name.trim() + "'";
+		}
+		if(StringUtils.isNotEmpty(channel_name)){
+			whereStr = whereStr + " and tor.channel_name = '" + channel_name.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(city_code)){
 			if(city_code.startsWith("00")){
@@ -181,9 +189,9 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		if(StringUtils.isNotEmpty(comment_Flag)){
 			if("1".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents IS NOT NULL ";
+				whereStr = whereStr + " and toip.contents <>'' ";
 			}else if("3".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents IS NULL ";
+				whereStr = whereStr + " and toip.contents ='' ";
 			}
 		}
 		if(StringUtils.isNotEmpty(order_source)){
@@ -261,6 +269,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String sort_tag = massOrderDto.getSort_tag();
 		String city_code = massOrderDto.getCity_name();
 		String store_code = massOrderDto.getStore_no();
+		String department_name = massOrderDto.getDepartment_name();
+		String channel_name = massOrderDto.getChannel_name();
 		String whereStr = "";
 		String selectQuery = "IFNULL(tor.order_sn,'') AS order_sn, IFNULL(tor.area_code,'') AS area_code, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
 				"IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code,IFNULL(tor.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
@@ -308,13 +318,19 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr = whereStr + " and tor.customer_mobile_phone = '" + customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_name)){
-			whereStr = whereStr + " and tor.addr_name like '%" + customer_name.trim() + "%'";
+			whereStr = whereStr + " and tor.addr_name like '%" + addr_customer_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_phone)){
 			whereStr = whereStr + " and tor.addr_mobilephone = '" + addr_customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(store_code)){
 			whereStr = whereStr + " and tor.store_code = '" + store_code.trim() + "'";
+		}
+		if(StringUtils.isNotEmpty(department_name)){
+			whereStr = whereStr + " and tor.department_name = '" + department_name.trim() + "'";
+		}
+		if(StringUtils.isNotEmpty(channel_name)){
+			whereStr = whereStr + " and tor.channel_name = '" + channel_name.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(city_code)){
 			if(city_code.startsWith("00")){
@@ -358,9 +374,9 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		if(StringUtils.isNotEmpty(comment_Flag)){
 			if("1".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents IS NOT NULL ";
+				whereStr = whereStr + " and toip.contents <>'' ";
 			}else if("3".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents IS NULL ";
+				whereStr = whereStr + " and toip.contents ='' ";
 			}
 		}
 		if(StringUtils.isNotEmpty(order_source)){

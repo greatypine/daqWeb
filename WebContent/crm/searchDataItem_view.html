@@ -245,7 +245,7 @@
                   <div class="pull-left search-title">订单渠道：</div>
                   <div class="search-con">
                     <div class="sl-v-list-busi">
-                      <a id="tag_App" onclick="busiSelection('App')" style="cursor:pointer;">App</a>
+                      <a id="tag_App" onclick="busiSelection('app')" style="cursor:pointer;">App</a>
                       <a id="tag_400客服" onclick="busiSelection('callcenter')" style="cursor:pointer;">400客服</a>
                       <a id="tag_门店" onclick="busiSelection('store')" style="cursor:pointer;">门店</a>
                       <a id="tag_微信" onclick="busiSelection('wechat')" style="cursor:pointer;">微信</a>
@@ -876,7 +876,7 @@ Date.prototype.format=function(fmt) {
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-		var orderLabels = $("#label_private_manual").val();
+		var orderLabels = $("#busi_private_manual").val();
 		if(orderLabels!=null && orderLabels!='' && orderLabels.indexOf(',') >= 0){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
@@ -935,7 +935,7 @@ Date.prototype.format=function(fmt) {
 	 			endDate:begin_end_date[1].trim(),
 				order_sn:ordersn,
 				store_no:number_str,
-				order_labels:orderLabels,
+				order_source:orderLabels,
 				status:"0",
 				city_name:cityName,
 				department_name:dept,
@@ -1031,6 +1031,7 @@ Date.prototype.format=function(fmt) {
        			    var addr_name = jData[i].order_customer_name==null?'':jData[i].order_customer_name;
        			    var addr_mobile_phone = jData[i].order_mobilephone==null?'':jData[i].order_mobilephone;
        			    var eshop_name = jData[i].eshop_name==null?'':jData[i].eshop_name;
+       			    var eshop_id = jData[i].eshop_id==null?'':jData[i].eshop_id;
        			    var store_name = jData[i].store_name==null?'':jData[i].store_name;
        			    var channel_name = jData[i].channel_name==null?'':jData[i].channel_name;
        			    var addr_address = jData[i].order_address==null?'':jData[i].order_address;
@@ -1070,8 +1071,9 @@ Date.prototype.format=function(fmt) {
  			       	var dept="<strong>事业群：</strong>"+department_name+"<br>";
 			        var channel="<strong>频道：</strong>"+channel_name+"<br>";
 			        var ename="<strong>E店：</strong>"+eshop_name+"<br>";
+			        var eshopid="<strong>E店ID：</strong>"+eshop_id+"<br>";
 			        //var busitype="<strong>商业模式：</strong>"+business_type+"<br>";
- 			        var econtent =dept+channel+ename+"@etips"+i;
+ 			        var econtent =dept+channel+ename+eshopid+"@etips"+i;
 			        var eid = "etips"+i;
 			        
 			        var gmv="<strong>单价：</strong>"+original_price+"<br>";
@@ -1167,8 +1169,15 @@ Date.prototype.format=function(fmt) {
 	  var id = obj.split("@")[1];
 	  layer.tips(msg, '#'+id, {
 		  tips: [4, '#0FA6D8'], //还可配置颜色
-		  time:5000
+		  time:5000,
+		  area: 'auto',
+		  maxWidth: '300'
 	  });
+  }
+    //数据查找-员工数据
+  function searchEmployee(employeephone){
+	  var url = "humanresources_list.html?t="+encode64(target)+"&sn="+encode64(storeName)+"&cn="+encode64(cityname)+"&ep="+encode64(employeephone);
+	  window.open(url,"humanresources_list");
   }
   //客户信息显示
   function showcustomer(obj){
@@ -1234,7 +1243,9 @@ Date.prototype.format=function(fmt) {
 	   var id = obj.split("@")[1];
 	   layer.tips(msg, '#'+id, {
 		   tips: [4, '#0FA6D8'], //还可配置颜色
-		   time:5000
+		   time:5000,
+		   area: 'auto',
+		   maxWidth: '300'
 	   });
   }
 //数据查找-查询片区数据
@@ -1314,7 +1325,7 @@ Date.prototype.format=function(fmt) {
 	    	number_str=-10000;
 	    }
 	   
-	    var orderLabels = $("#label_private_manual").val();
+	    var orderLabels = $("#busi_private_manual").val();
 	    if(orderLabels!=null && orderLabels!='' && orderLabels.indexOf(',') >= 0){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
@@ -1468,7 +1479,7 @@ Date.prototype.format=function(fmt) {
 	   
 	    $("#process_div").show();
 	 	$("#process_div_pic").show();
-		var orderLabels = $("#label_private_manual").val();
+		var orderLabels = $("#busi_private_manual").val();
 		if(orderLabels!=null && orderLabels!='' && orderLabels.indexOf(',') >= 0){
 	    	orderLabels = orderLabels.substring(0,orderLabels.length-1);
 	    }
@@ -1508,7 +1519,7 @@ Date.prototype.format=function(fmt) {
 			order_sn:ordersn,
 			store_no:number_str,
 			store_name:storeName,
-			order_labels:orderLabels,
+			order_source:orderLabels,
 			status:"0",
 			city_name:cityName,
 	  		department_name:dept,
@@ -1614,7 +1625,7 @@ Date.prototype.format=function(fmt) {
 function busiSelection(labelname){
     	var labelName = $("#busi_private_manual").val();
     	if(labelName.indexOf(labelname)>=0){
-    		$("#busi_private_manual").val($("#busi_private_manual").val());
+    		$("#busi_private_manual").val($("#busi_private_manual").val().replace(labelname+",",""));
     	}else{
     		$("#busi_private_manual").val($("#busi_private_manual").val()+labelname+",");
     	}
