@@ -251,7 +251,7 @@
     ],
   };
   var avgSendOrderArray = [0,0,0,0,0,0,0,0,0,0,0,0];
-var array1 = ['4月','5月','6月','7月','8月'];
+var array1 = ['4月','5月','6月','7月','8月','9月'];
   //人均月送单量
   option2 = {
     title: [ {
@@ -485,7 +485,7 @@ var array1 = ['4月','5月','6月','7月','8月'];
           }
         },
         axisTick: {show: false},
-        data: ["1月","2月","3月","4月","5月","6月","7月","8月"]
+        data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月"]
       }, {
         axisPointer: {show: false},
         axisLine: {
@@ -866,7 +866,7 @@ function showEmpInfo(){
             $("#avgSendOrder").html(avgorder);
         }
     });*/
-    $("#avgSendOrder").html(8);
+    $("#avgSendOrder").html(10);
     doManager("employeeMoreInfoManager", "getAvgMileAage",null,function(data, textStatus, XMLHttpRequest) {
         if (data.result) {
             var resultJson = JSON.parse(data.data);
