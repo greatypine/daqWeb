@@ -3712,7 +3712,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			if(cityNo!=null && !"".equals(cityNo)){
 				appendSql = " where lpad(T_2.city_code,4,'0') = '"+cityNo+"' ";
 			}
-			sql = "select tsa.name as city_name,isnull( T_2.visit_num , 0) as visit_num,isnull( T_3.add_num , 0)  as add_num,isnull( T_4.order_num, 0) as order_num,isnull( T_5.sign_num, 0) as sign_num,isnull( T_6.pvNum, 0) as pvNum " +
+			sql = "select tsa.name as city_name,isnull( T_2.visit_num , 0) as visit_num,isnull( T_3.add_num , 0)  as add_num,isnull( T_4.order_num, 0) as order_num,isnull( T_5.sign_num, 0) as sign_num,isnull( T_6.pvNum, 0) as pvnum " +
 					"from (select T_1.city_code,count(1) as visit_num from (select max(lf.city_code) as city_code from datacube_kudu.log_final lf inner join gemini.t_store ts on lf.store_id = ts.id and " +
 					"ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
 					"and lf.store_id is not null and lf.customer_id not in (" +
@@ -3730,13 +3730,14 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					") group by tor.customer_id ) T_1 group by T_1.city_code " +
 					")T_4 on T_3.city_code = T_4.city_code left join " +
 					"(select T_1.city_code ,count(1) as sign_num from (select max(ts.city_code) as city_code from gemini.t_order tor inner join gemini.t_store ts on tor.store_id = ts.id  and " +
-					"ts.name not like '%测试%' where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"'and tor.store_id is not null and tor.sign_time is not null " +
+					"ts.name not like '%测试%' where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' and tor.store_id is not null and tor.sign_time is not null " +
 					"and tor.customer_id not in ('fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					") group by tor.customer_id ) T_1 group by T_1.city_code " +
 					") T_5 on T_4.city_code = T_5.city_code left join ( " +
-					"select lf.city_code,lf.store_id,count(distinct lf.action_id) as pvNum from datacube_kudu.log_final lf inner join gemini.t_store ts on lf.store_id = ts.id and ts.name not like '%测试%' " +
-					"where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
-					"and lf.store_id is not null and lf.customer_id not in ('fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
+					"select lf.city_code,count(distinct lf.action_id) as pvNum from datacube_kudu.log_final lf " +
+					"inner join gemini.t_store ts on lf.store_id = ts.id and ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' " +
+					"and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null " +
+					"and lf.customer_id not in ( 'fakecustomerformicromarket000002', 'fakecustomerformicromarket000001', 'fakecustomerforexpress0000000001' " +
 					") and lf.behavior_name = '专场/首页' group by lf.city_code " +
 					") T_6 on T_2.city_code = T_6.city_code " +
 					"left join  gemini.t_sys_area tsa on T_2.city_code =  tsa.code "  +appendSql+
