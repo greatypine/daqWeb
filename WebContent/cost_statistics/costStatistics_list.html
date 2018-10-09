@@ -19,7 +19,7 @@
     <script type="text/javascript" src="../crm/laydate/laydate.js"></script>
     <style type="text/css">
         .display {
-            width: 100%
+            width: 140%
         }
 
         .display tr td {
@@ -275,17 +275,21 @@
 
     var checkObj = {
         html: '<a href="#"  class="blue">查看</a>',
-        resourceId: "del",
+        resourceId: "edit",
         func: function (queryid, data, nTr, allColumns, allColumnsDataMap) {
             var cityId = allColumnsDataMap.cityId;
             var cityName = allColumnsDataMap.cityName;
-            window.location.href = 'store_cost.html?userGroupCode='+current_user.usergroup.code+"&userId="+current_user.id+"&cur_city_id="+cityId+"&cur_city_name="+encode64(cityName)+"&flag=search";
+            var year = $("#search_year").val();
+            var month = $("#search_month").val();
+            var s_date = $("#search_date").val();
+
+            window.location.href = 'costStatistics_add.html?userGroupCode='+current_user.usergroup.code+"&userId="+current_user.id+"&cur_city_id="+cityId+"&cur_city_name="+encode64(cityName)+"$year="+year+"&month="+month+"&search_date="+s_date+"&flag=search";
         }
     };
 
 
 
-    //$pmspage.opArr = [checkObj];
+    $pmspage.opArr = [checkObj];
 </script>
 <body style="height: 100%">
 <div class="panel panel-primary">
@@ -307,7 +311,7 @@
                             <!--<div class="auto hidden" id="control_city" onclick="selectcontrolCity(this)" style="width:150px;z-index: 99999;">-->
                                 <!--&lt;!&ndash; /.input group &ndash;&gt;-->
                             <!--</div>-->
-                            <select id="city_id_control" style="width: 200px" class="form-control"><option value="">全部</option></select>
+                            <select id="city_id_control" name="cityName" style="width: 200px;cursor: pointer" class="form-control"><option value="">全部</option></select>
                         </td>
                         <!--<td width="12px">-->
                             <!--<span >门店名称：</span>-->
@@ -322,7 +326,7 @@
                             <span >日期:</span>
                         </td>
                         <td>
-                            <input id="search_date" name="search_date" type="text" style="width:100px" class="form-control" readonly="readonly"/>
+                            <input id="search_date" name="search_date" type="text" style="width:100px;cursor:pointer" class="form-control" readonly="readonly"/>
                             <input id="search_year" name="year" type="hidden"/>
                             <input id="search_month" name="month" type="hidden"/>
                         </td>

@@ -17,27 +17,8 @@ var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
  * @type {null}
  */
 var lst_select_labor_city=null;
-var laborCityNameArray=new Array();
-var laborCityIdMap = {};
-function getLaborCity(t){
 
-    laborCityIdMap=new Array();
-    $("#labor_city").empty();
-
-    $("#labor_store").empty();
-    $("#store_id_labor").val("");
-    $("#store_name_labor").val("");
-
-    var str_name = $(t).val();
-    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        $("#city_id_labor").val("");
-
-        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-            return;
-        }
-
-
-
+function getLaborCity(){
 
         if(regex_zb.test(userGroupCode)){
 
@@ -45,15 +26,16 @@ function getLaborCity(t){
                 if(data.result){
 
                     lst_select_labor_city = JSON.parse(data.data);
-
-                    for(i=0;i<lst_select_labor_city.length;i++){
-                        laborCityNameArray.push(lst_select_labor_city[i].cityname);
-                        laborCityIdMap[lst_select_labor_city[i].cityname] = lst_select_labor_city[i].id;
+                    var option = "";
+                    for( var i=0;i<lst_select_labor_city.length;i++){
+                        option=option+"<option value='"+lst_select_labor_city[i].id+"'>"+lst_select_labor_city[i].cityname+"</option>";
                     }
-                    var autoComplete = new AutoComplete("city_name_labor","labor_city",laborCityNameArray);
-                    autoComplete.start(event);
-                    $("#labor_city").attr("style","width: 150px;z-index: 99999;left: 5.7%;top: 23.4%;");
+                    $("#city_id_labor").append(option);
+                    if(flag=="search"){
+                        $("#city_id_labor").val(cur_city_id);
+                    }
                 }
+
             },false);
 
 
@@ -64,29 +46,28 @@ function getLaborCity(t){
                     if (data.result) {
                         lst_select_labor_city = JSON.parse(data.data).citylist;
 
-                        for(i=0;i<lst_select_labor_city.length;i++){
-                            laborCityNameArray.push(lst_select_labor_city[i].name);
-                            laborCityIdMap[lst_select_labor_city[i].name] = lst_select_labor_city[i].ctid;
+                        var option = "";
+                        for( var i=0;i<lst_select_labor_city.length;i++){
+                            option=option+"<option value='"+lst_select_labor_city[i].ctid+"'>"+lst_select_labor_city[i].name+"</option>";
                         }
-                        var autoComplete = new AutoComplete("city_name_labor","labor_city",laborCityNameArray);
-                        autoComplete.start(event);
-                        $("#labor_city").attr("style","width: 150px;z-index: 99999;left: 5.7%;top: 23.4%;");
+                        $("#city_id_labor").append(option);
+                        if(flag=="search"){
+                            $("#city_id_labor").val(cur_city_id);
+                        }
                     }
                 },false);
         }
 
-    }
-
 }
-
-/**
- * 选择城市
- * @param t
- */
-function selectLaborCity(t){
-    var temp_city = document.getElementById("city_name_labor").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-    $("#city_id_labor").val(laborCityIdMap[temp_city]);
-}
+//
+// /**
+//  * 选择城市
+//  * @param t
+//  */
+// function selectLaborCity(t){
+//     var temp_city = document.getElementById("city_name_labor").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+//     $("#city_id_labor").val(laborCityIdMap[temp_city]);
+// }
 
 
 
@@ -111,10 +92,7 @@ function getLaborStore(t){
             return;
         }
         var city_id  = $("#city_id_labor").val()==""?null:$("#city_id_labor").val();
-        var city_name =  $("#city_name_labor").val();
-        if(city_id==null&&city_name!=""){
-            city_id=-10000;
-        }
+
         var target=0;
         if(regex_zb.test(userGroupCode)){//总部
             target=0;
@@ -133,7 +111,7 @@ function getLaborStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_labor","labor_store",laborStoreNameArray);
                 autoComplete.start(event);
-                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 20.4%;top: 23.4%;");
+                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 26.4%;top: 23.1%;");
             }else{
 
             }
@@ -227,12 +205,14 @@ function searchLabor(){
     $("#accommodation_title").html(showDate);
 
     $("#labor_tb_2").find("tr:gt(0)").remove();
-
-    var cityId = $("#city_id_labor").val();
-    var cityName = $("#city_name_labor").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
+    var cityId="";
+    if(flag=="search"){
+        cityId = cur_city_id;
+    }else{
+         cityId = $("#city_id_labor").val();
     }
+
+
 
     var storeId = $("#store_id_labor").val();
     var storeName = $("#store_name_labor").val();
@@ -305,10 +285,7 @@ function   exportCostLabor(){
     var showMonth=$("#year_labor").val().split("-")[1];
 
     var cityId = $("#city_id_labor").val();
-    var cityName = $("#city_name_labor").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_labor").val();
     var storeName = $("#store_name_labor").val();
@@ -434,10 +411,7 @@ function exportCostEmolument(){
     var showMonth=$("#year_labor").val().split("-")[1];
 
     var cityId = $("#city_id_labor").val();
-    var cityName = $("#city_name_labor").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_labor").val();
     var storeName = $("#store_name_labor").val();

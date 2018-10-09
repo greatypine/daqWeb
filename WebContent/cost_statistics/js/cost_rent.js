@@ -27,26 +27,8 @@ var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
  * @type {null}
  */
 var lst_select_rent_city=null;
-var rentCityNameArray=new Array();
-var rentCityIdMap = {};
-function getRentCity(t){
 
-    rentCityIdMap=new Array();
-    $("#rent_city").empty();
-
-    $("#rent_store").empty();
-    $("#store_id_rent").val("");
-    $("#store_name_rent").val("");
-
-    var str_name = $(t).val();
-    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        $("#city_id_rent").val("");
-
-        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-            return;
-        }
-
-
+function getRentCity(){
 
 
         if(regex_zb.test(userGroupCode)){
@@ -56,15 +38,16 @@ function getRentCity(t){
 
                     lst_select_rent_city = JSON.parse(data.data);
 
-                    for(i=0;i<lst_select_rent_city.length;i++){
-                        rentCityNameArray.push(lst_select_rent_city[i].cityname);
-                        rentCityIdMap[lst_select_rent_city[i].cityname] = lst_select_rent_city[i].id;
+                    var option = "";
+                    for( var i=0;i<lst_select_rent_city.length;i++){
+                        option=option+"<option value='"+lst_select_rent_city[i].id+"'>"+lst_select_rent_city[i].cityname+"</option>";
                     }
-                    var autoComplete = new AutoComplete("city_name_rent","rent_city",rentCityNameArray);
-                    autoComplete.start(event);
-                    $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 5.8%;top: 23.4%;");
+                    $("#city_id_rent").append(option);
+                    if(flag=="search"){
+                        $("#city_id_rent").val(cur_city_id);
+                    }
                 }
-            },false);
+            });
 
 
         }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
@@ -74,29 +57,30 @@ function getRentCity(t){
                     if (data.result) {
                         lst_select_rent_city = JSON.parse(data.data).citylist;
 
-                        for(i=0;i<lst_select_rent_city.length;i++){
-                            rentCityNameArray.push(lst_select_rent_city[i].name);
-                            rentCityIdMap[lst_select_rent_city[i].name] = lst_select_rent_city[i].ctid;
+                        var option = "";
+                        for( var i=0;i<lst_select_rent_city.length;i++){
+                            option=option+"<option value='"+lst_select_rent_city[i].ctid+"'>"+lst_select_rent_city[i].name+"</option>";
                         }
-                        var autoComplete = new AutoComplete("city_name_rent","rent_city",rentCityNameArray);
-                        autoComplete.start(event);
-                        $("#rent_city").attr("style","width: 150px;z-index: 99999;left: 5.8%;top: 23.4%;");
+                        $("#city_id_rent").append(option);
+                        if(flag=="search"){
+                            $("#city_id_rent").val(cur_city_id);
+                        }
                     }
-                },false);
+                });
         }
 
-    }
+
 
 }
 
-/**
- * 选择城市
- * @param t
- */
-function selectRentCity(t){
-    var temp_city = document.getElementById("city_name_rent").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-    $("#city_id_rent").val(rentCityIdMap[temp_city]);
-}
+// /**
+//  * 选择城市
+//  * @param t
+//  */
+// function selectRentCity(t){
+//     var temp_city = document.getElementById("city_name_rent").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+//     $("#city_id_rent").val(rentCityIdMap[temp_city]);
+// }
 
 
 
@@ -121,10 +105,7 @@ function getRentStore(t){
             return;
         }
         var city_id  = $("#city_id_rent").val()==""?null:$("#city_id_rent").val();
-        var city_name =  $("#city_name_rent").val();
-        if(city_id==null&&city_name!=""){
-            city_id=-10000;
-        }
+
         var target=0;
         if(regex_zb.test(userGroupCode)){//总部
             target=0;
@@ -143,7 +124,7 @@ function getRentStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_rent","rent_store",rentStoreNameArray);
                 autoComplete.start(event);
-                $("#rent_store").attr("style","width: 150px;z-index: 99999;left: 20.5%;top: 23.4%;");
+                $("#rent_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 23.1%;");
             }else{
 
             }
@@ -364,10 +345,11 @@ function searchCostRent(){
     $("#propertyFeeYear_title").html(showYear+"年");
 
 
-    var cityId = $("#city_id_rent").val();
-    var cityName = $("#city_name_rent").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
+    var cityId="";
+    if(flag=="search"){
+        cityId = cur_city_id;
+    }else{
+        cityId = $("#city_id_rent").val();
     }
 
     var storeId = $("#store_id_rent").val();
@@ -429,10 +411,7 @@ function searchCostRent(){
 function   exportCostRent(){
     var showYear = $("#year_property").val();
     var cityId = $("#city_id_rent").val();
-    var cityName = $("#city_name_rent").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_rent").val();
     var storeName = $("#store_name_rent").val();

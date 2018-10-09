@@ -28,7 +28,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         if ("zb".equals(costDto.getRole())) {// 总部
             String cityStr = "";
-            if (costDto.getCityId() != null) {
+            if (costDto.getCityId() != null&&!"".equals(costDto.getCityId())) {
                 cityStr = " where id=" + costDto.getCityId();
             }
 
