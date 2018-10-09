@@ -157,7 +157,7 @@ function checkEveryYearRent(t){
         var rentTotal = parseFloat(firstRent)+parseFloat(sendRent)+parseFloat(thirdRent)+parseFloat(fourRent)+parseFloat(fifthRent);
         $("#contractGrandTotal_"+index).val(rentTotal+parseFloat(deposit)+parseFloat(agencyFee));
         $("#rentalMonth_"+index).val(((rentTotal+parseFloat(deposit)+parseFloat(agencyFee))/60).toFixed(2));
-        var structureAcreage =  $("#structureAcreage_"+index).val();
+        var structureAcreage =  $("#rentStructureAcreage_"+index).val();
         if(structureAcreage!=""){
             $("#leaseUnitPrice_"+index).val((rentTotal/parseFloat(structureAcreage)/5/365).toFixed(2));
         }
@@ -174,7 +174,7 @@ function  checkStructureAcreage(t){
     checkFloatDataValid(t);
     $(t).parent().parent().attr("editable",true);
     var index = $(t).attr("id").split("_")[1];
-    var structureAcreage =  $("#structureAcreage_"+index).val();
+    var structureAcreage =  $("#rentStructureAcreage_"+index).val();
     var firstRent = $("#firstYearRent_"+index).val();
     var sendRent = $("#secondYearRent_"+index).val();
     var thirdRent = $("#thirdYearRent_"+index).val();
@@ -309,7 +309,7 @@ function searchCostRentContract(){
                     "<td><input style='width: 100%;' type='text'  id='thirdYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+third_year_rent+"'/></td>" +
                     "<td><input style='width: 100%;' type='text' id='fourthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+fourth_year_rent+"'/></td>" +
                     "<td><input style='width: 100%;' type='text'  id='fifthYearRent_"+i+"' onkeyup='checkEveryYearRent(this)'  value='"+fifth_year_rent+"'/></td>" +
-                    "<td><input style='background-color: #e8e8e8;width: 100%;' readonly type='text' onkeyup='checkStructureAcreage(this)' id='structureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
+                    "<td><input style='background-color: #e8e8e8;width: 100%;' readonly type='text' onkeyup='checkStructureAcreage(this)' id='rentStructureAcreage_"+i+"'  value='"+structure_acreage+"'/></td>" +
                     "<td><input style='background-color: #e8e8e8;width: 100%;' type='text' readonly id='leaseUnitPrice_"+i+"'   value='"+lease_unit_price+"'/></td>" +
                     "<td><input style='width: 100%;' type='text'  id='deposit_"+i+"' onkeyup='checkEveryYearRent(this)' value='"+deposit+"'/></td>" +
                     "<td><input style='background-color: #e8e8e8;width: 100%;' readonly type='text' onkeyup='checkEveryYearRent(this)' id='agencyFee_"+i+"'  value='"+agency_fee+"'/></td>" +
@@ -425,7 +425,7 @@ function saveCostRentContract(){
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();
         var contractGrandTotal = $(store_cost_tr[i]).find('input[id^="contractGrandTotal_"]').val();
         var rentalMonth = $(store_cost_tr[i]).find('input[id^="rentalMonth_"]').val();
-        var structure_acreage = $(store_cost_tr[i]).find('input[id^="structureAcreage_"]').val();//建筑面积
+        var structure_acreage = $(store_cost_tr[i]).find('input[id^="rentStructureAcreage_"]').val();//建筑面积
         var lease_unit_price = $(store_cost_tr[i]).find('input[id^="leaseUnitPrice_"]').val();//租赁单价
         var first_year_rent = $(store_cost_tr[i]).find('input[id^="firstYearRent_"]').val();
         var second_year_rent = $(store_cost_tr[i]).find('input[id^="secondYearRent_"]').val();
