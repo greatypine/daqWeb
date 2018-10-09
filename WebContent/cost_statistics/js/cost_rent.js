@@ -462,10 +462,7 @@ function   exportCostRent(){
 function   exportCostProperty(){
     var showYear = $("#year_property").val();
     var cityId = $("#city_id_rent").val();
-    var cityName = $("#city_name_rent").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_rent").val();
     var storeName = $("#store_name_rent").val();

@@ -34,7 +34,7 @@ function getRentContractCity(t){
             doManager("StoreManager", "getCityNameOfCSZJ",[userId,null],
                 function(data, textStatus, XMLHttpRequest) {
                     if (data.result) {
-                        lst_select_rentContract_city = JSON.parse(data.data);
+                        lst_select_rentContract_city = JSON.parse(data.data).citylist;
 
                         var option = "";
                         for( var i=0;i<lst_select_rentContract_city.length;i++){
