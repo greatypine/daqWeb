@@ -53,7 +53,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			sql = sql + " AND a.order_sn = '" + order_sn + "'";
 		}
 		try{
-			lst_data = ImpalaUtil.execute(sql);
+			lst_data = ImpalaUtil.executeGuoan(sql);
 			// 获得查询数据
 			if (lst_data != null && lst_data.size() > 0) {
 				order_obj = (Map<String, Object>) lst_data.get(0);
@@ -228,14 +228,14 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
         List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
         Integer count_ = 0;
         try{
-        	lst_data_count=ImpalaUtil.execute(sqlB);
+        	lst_data_count=ImpalaUtil.executeGuoan(sqlB);
         	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
         	if(pageInfo.getCurrentPage()==1){
         		sqlA = sqlA+whereStr+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
         	}else{
         		sqlA = sqlA+whereStr+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
         	}
-        	lst_data=ImpalaUtil.execute(sqlA);
+        	lst_data=ImpalaUtil.executeGuoan(sqlA);
             lst_result = lst_data;
         }catch (Exception e){
             e.printStackTrace();
@@ -415,7 +415,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
         List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
         try{
         	sqlA = sqlA+whereStr;
-        	lst_data=ImpalaUtil.execute(sqlA);
+        	lst_data=ImpalaUtil.executeGuoan(sqlA);
             lst_result = lst_data;
         }catch (Exception e){
             e.printStackTrace();
