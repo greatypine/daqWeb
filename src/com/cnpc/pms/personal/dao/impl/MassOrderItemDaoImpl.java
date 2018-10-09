@@ -107,8 +107,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,''),IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
 				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end, toc.star_level AS " +
 				"star_level";
-		String sqlA = "SELECT " +selectQuery+" from gemini.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
-		String sqlB = "SELECT count(1) as count_ "+" from gemini.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlB = "SELECT count(1) as count_ "+" from datacube_kudu.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
 			whereStr = whereStr + " and tor.order_sn  like '%" + order_sn.trim() + "%'";
 		}
@@ -299,7 +299,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,''),IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
 				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end, toc.star_level AS " +
 				"star_level";
-		String sqlA = "SELECT " +selectQuery+" from gemini.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
 			whereStr = whereStr + " and tor.order_sn  like '%" + order_sn.trim() + "%'";
 		}
