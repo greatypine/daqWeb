@@ -297,6 +297,7 @@
 		                    <tr>
 		                      	<th width="8%">城市</th>
 		                      	<th id="storenamehide" width="10%">门店名称</th>
+								<th width="12%">首页PV</th>
 		                      	<th width="12%">访问用户数</th>
 		                      	<th width="12%">加购数</th>
 								<th width="12%">下单用户数</th>
@@ -1136,7 +1137,8 @@ $('#store_name_try').keyup(function(event){
                        if($('#storeClick').is(':checked')){
                            infoStr += "<td>"+jData[i].store_name+"</td>";
 					   }
-                       infoStr += "<td>"+jData[i].visit_num+"</td>"
+                       infoStr += "<td>"+jData[i].pvnum+"</td>"
+						   		+"<td>"+jData[i].visit_num+"</td>"
 					           +"<td>"+jData[i].add_num+"</td>"
 					           +"<td>"+jData[i].order_num+"</td>"
                                +"<td>"+jData[i].sign_num+"</td>"

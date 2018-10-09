@@ -7107,13 +7107,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			if(dynamicDto.getSearchstr().equals("user_active_city")){
 				sheet = wb.createSheet("用户行为");
 				row = sheet.createRow(0);
-				str_headers = new String[]{"城市","访问用户数","加购数","下单用户数","交易用户数"};
-				headers_key = new String[]{"city_name","visit_num","add_num","order_num","sign_num"};
+				str_headers = new String[]{"城市","首页PV","访问用户数","加购数","下单用户数","交易用户数"};
+				headers_key = new String[]{"city_name","pvnum","visit_num","add_num","order_num","sign_num"};
 			}else if(dynamicDto.getSearchstr().equals("user_active_store")){
 				sheet = wb.createSheet("用户行为");
 				row = sheet.createRow(0);
-				str_headers = new String[]{"城市","门店名称","访问用户数","加购数","下单用户数","交易用户数"};
-				headers_key = new String[]{"city_name","store_name","visit_num","add_num","order_num","sign_num"};
+				str_headers = new String[]{"城市","门店名称","首页PV","访问用户数","加购数","下单用户数","交易用户数"};
+				headers_key = new String[]{"city_name","store_name","pvnum","visit_num","add_num","order_num","sign_num"};
 			}else if(dynamicDto.getSearchstr().equals("store")){
 				sheet = wb.createSheet("门店会员");
 				row = sheet.createRow(0);
