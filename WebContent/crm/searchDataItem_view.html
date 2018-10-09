@@ -245,16 +245,16 @@
                   <div class="pull-left search-title">订单渠道：</div>
                   <div class="search-con">
                     <div class="sl-v-list-busi">
-                      <a id="tag_App" onclick="busiSelection('app')" style="cursor:pointer;">App</a>
-                      <a id="tag_400客服" onclick="busiSelection('callcenter')" style="cursor:pointer;">400客服</a>
-                      <a id="tag_门店" onclick="busiSelection('store')" style="cursor:pointer;">门店</a>
-                      <a id="tag_微信" onclick="busiSelection('wechat')" style="cursor:pointer;">微信</a>
-                      <a id="tag_智能终端" onclick="busiSelection('pad')" style="cursor:pointer;">智能终端</a>
-                      <a id="tag_积分" onclick="busiSelection('score')" style="cursor:pointer;">积分</a>
-                      <a id="tag_WEB" onclick="busiSelection('citic_vip_gift')" style="cursor:pointer;">WEB</a>
-                      <a id="tag_中信vip礼品" onclick="busiSelection('web')" style="cursor:pointer;">中信vip礼品</a>
-                      <a id="tag_电视" onclick="busiSelection('tv')" style="cursor:pointer;">电视</a>
-                      <a id="tag_微超订单" onclick="busiSelection('microMarket')" style="cursor:pointer;">微超订单</a>
+                      <a id="tag_app" onclick="busiSelection('app')" style="cursor:pointer;">App</a>
+                      <a id="tag_callcenter" onclick="busiSelection('callcenter')" style="cursor:pointer;">400客服</a>
+                      <a id="tag_store" onclick="busiSelection('store')" style="cursor:pointer;">门店</a>
+                      <a id="tag_wechat" onclick="busiSelection('wechat')" style="cursor:pointer;">微信</a>
+                      <a id="tag_pad" onclick="busiSelection('pad')" style="cursor:pointer;">智能终端</a>
+                      <a id="tag_score" onclick="busiSelection('score')" style="cursor:pointer;">积分</a>
+                      <a id="tag_web" onclick="busiSelection('web')" style="cursor:pointer;">WEB</a>
+                      <a id="tag_citic_vip_gift" onclick="busiSelection('citic_vip_gift')" style="cursor:pointer;">中信vip礼品</a>
+                      <a id="tag_tv" onclick="busiSelection('tv')" style="cursor:pointer;">电视</a>
+                      <a id="tag_microMarket" onclick="busiSelection('microMarket')" style="cursor:pointer;">微超订单</a>
                       <input type="text" style="display:none" class="form-control" placeholder="订单来源标签"  id="busi_private_manual"/>
                     </div>
                   </div>
@@ -549,8 +549,28 @@ Date.prototype.format=function(fmt) {
             obj.removeClass("bg-orange-active");
             filter.remove();
             var curValue = $(this).text();
-          	var name = curValue.substring(0,curValue.length)+",";
+          	var name_ = "";
     		var deptName = $("#busi_private_manual").val();
+    		if(curValue=='400客服'){
+    			name_ = "callcenter";
+    		}else if(curValue=='App'){
+    			name_ = "app";
+    		}else if(curValue=='门店'){
+    			name_ = "store";
+    		}else if(name=='智能终端'){
+    			name_ = "pad";
+    		}else if(curValue=='积分'){
+    			name_ = "score";
+    		}else if(curValue=='WEB'){
+    			name_ = "web";
+    		}else if(curValue=='中信vip礼品'){
+    			name_ = "citic_vip_gift";
+    		}else if(curValue=='微超订单'){
+    			name_ = "microMarket";
+    		}else if(curValue=='微信'){
+    			name_ = "wechat";
+    		}
+    		var name = name_.substring(0,name_.length)+",";
     		$("#busi_private_manual").val(deptName.replace(name,""));
 
             var aobj = $(".breadcrumb .search-con a");
