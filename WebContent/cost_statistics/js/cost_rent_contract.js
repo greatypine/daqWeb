@@ -29,9 +29,9 @@ function getRentContractCity(t){
             });
 
 
-        }else if(regex_cs.test(userGroupCode)||current_user.usergroup.code=="GLY"){
+        }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
 
-            doManager("StoreManager", "getCityNameOfCSZJ",[current_user.id,null],
+            doManager("StoreManager", "getCityNameOfCSZJ",[userId,null],
                 function(data, textStatus, XMLHttpRequest) {
                     if (data.result) {
                         lst_select_rentContract_city = JSON.parse(data.data);

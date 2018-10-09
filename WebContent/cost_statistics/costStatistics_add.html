@@ -492,9 +492,9 @@
             if(store_cost_tr.length>0){
                var saveResult= saveCostLabor();
                if(saveResult=="success"){
-                   saveInfo= saveInfo+"'人工成本-员工薪酬' 保存成功！</br>";
+                   saveInfo= saveInfo+"<p>'人工成本-员工薪酬' 保存成功！</p>";
                }else{
-                   saveInfo= saveInfo+"'人工成本-员工薪酬' 保存失败！</br>";
+                   saveInfo= saveInfo+"<p>'人工成本-员工薪酬' 保存失败！</p>";
                }
             }
 
@@ -502,9 +502,9 @@
             if(store_cost_tr.length>0){
                var saveResult =  saveCostRentContract();
                if(saveResult=="success"){
-                   saveInfo = saveInfo+"'租金成本-合同租金' 保存成功！</br>";
+                   saveInfo = saveInfo+"<p>'租金成本-合同租金' 保存成功！</p>";
                }else{
-                   saveInfo = saveInfo+"'租金成本-合同租金' 保存失败！</br>";
+                   saveInfo = saveInfo+"<p>'租金成本-合同租金' 保存失败！</p>";
                }
             }
 
@@ -512,9 +512,9 @@
             if(store_cost_tr.length>0){
                 var saveResult = saveCostRenovation();
                 if(saveResult=="success"){
-                    saveInfo = saveInfo+"'装修摊销' 保存成功！</br>";
+                    saveInfo = saveInfo+"<p>'装修摊销' 保存成功！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
                 }else{
-                    saveInfo = saveInfo+"'装修摊销' 保存失败！</br>";
+                    saveInfo = saveInfo+"<p>'装修摊销' 保存失败！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
                 }
             }
 
@@ -522,9 +522,9 @@
             if(store_cost_tr.length>0){
                 var saveResult = saveCostFixedAsset();
                 if(saveResult=="success"){
-                    saveInfo = saveInfo+"'固定资产' 保存成功！</br>";
+                    saveInfo = saveInfo+"<p>'固定资产' 保存成功！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
                 }else{
-                    saveInfo = saveInfo+"'固定资产' 保存失败！</br>";
+                    saveInfo = saveInfo+"<p>'固定资产' 保存失败！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
                 }
             }
 
@@ -532,9 +532,9 @@
             if(store_cost_tr.length>0){
                 var saveResult=  saveCostGWE();
                 if(saveResult=="success"){
-                    saveInfo = saveInfo+"'水电费' 保存成功！</br>";
+                    saveInfo = saveInfo+"<p>'水电费' 保存成功！</p>";
                 }else{
-                    saveInfo = saveInfo+"'水电费' 保存失败！</br>";
+                    saveInfo = saveInfo+"<p>'水电费' 保存失败！</p>";
                 }
             }
 
@@ -542,9 +542,9 @@
             if(store_cost_tr.length>0){
                 var saveResult=  saveCostOperation();
                 if(saveResult=="success"){
-                    saveInfo = saveInfo+"'日常运营' 保存成功！</br>";
+                    saveInfo = saveInfo+"<p>'日常运营' 保存成功！</p>";
                 }else{
-                    saveInfo = saveInfo+"'日常运营' 保存失败！</br>";
+                    saveInfo = saveInfo+"<p>'日常运营' 保存失败！</p>";
                 }
             }
 
@@ -553,9 +553,9 @@
 
                 var saveResult=  saveCostUniform();
                 if(saveResult=="success"){
-                    saveInfo = saveInfo+"'人工成本-工服费用' 保存成功！</br>";
+                    saveInfo = saveInfo+"<p>'人工成本-工服费用' 保存成功！</p>";
                 }else{
-                    saveInfo = saveInfo+"'人工成本-工服费用' 保存失败！</br>";
+                    saveInfo = saveInfo+"<p>'人工成本-工服费用' 保存失败！</p>";
                 }
             }
 
@@ -564,14 +564,15 @@
 
                 var saveResult=  saveCostRent();
                 if(saveResult=="success"){
-                    saveInfo = saveInfo+"'租金成本-物业费用' 保存成功！</br>";
+                    saveInfo = saveInfo+"<p>'租金成本-物业费用' 保存成功！</p>";
                 }else{
-                    saveInfo = saveInfo+"'租金成本-物业费用' 保存失败！</br>";
+                    saveInfo = saveInfo+"<p>'租金成本-物业费用' 保存失败！</p>";
                 }
             }
 
             if(saveInfo!=""){
                 $$.showMessage("提示",saveInfo);
+                $(".ui-icon-alert").remove();
 
             }
 
@@ -592,15 +593,15 @@
     .nav-tabs-custom > .nav-tabs > li > a{font-size: 14px; padding: 8px 15px;}
     .nav-tabs-custom > .nav-tabs > li > a.secondTabLi{font-size: 14px; padding: 5px 13px;}
     .nav-tabs-custom > .nav-tabs > li > a:hover{color: #3a90cb;}
-    .nav-tabs-custom > .nav-tabs > li > a.secondTabLi{color: #3a90cbb5;}
+    .nav-tabs-custom > .nav-tabs > li > a.secondTabLi{color: #83c0f5;}
     .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: #3a90cb; color: #fff;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #3a90cb; border-left: 1px solid #3a90cb; border-right:1px solid #3a90cb;}
-    .nav-tabs-custom > .nav-tabs > li.active > a.secondTabLi {background: #3a90cbb5; color: #fff;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 1px solid #3a90cbb5; border-left: 1px solid #3a90cbb5; border-right:1px solid #3a90cbb5;}
+    .nav-tabs-custom > .nav-tabs > li.active > a.secondTabLi {background: #83c0f5; color: #fff;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 1px solid #83c0f5; border-left: 1px solid #83c0f5; border-right:1px solid #83c0f5;}
 
     .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #3a90cb;}
-    .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a.secondTabLi{border-left: 1px solid #3a90cbb5;}
+    .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a.secondTabLi{border-left: 1px solid #83c0f5;}
 
     .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #3a90cb; margin: 5px 0; }
-    .nav-tabs-custom > .secondTabUl{border-bottom: 1px solid #3a90cbb5; margin: 5px 0; }
+    .nav-tabs-custom > .secondTabUl{border-bottom: 1px solid #83c0f5; margin: 5px 0; }
     .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
     .table > tbody > tr > td,.table > tbody > tr > th{border: 1px solid #d1d1d1; height: 30px; line-height: 30px; padding: 0 8px;}
     .table > tbody > tr > td p,.table > tbody > tr > th p{width: 165px; margin: 0;}
@@ -613,9 +614,10 @@
 </style>
 <body style="height: 100%">
 <div class="panel panel-primary" style="margin: 10px 5px 0 5px">
-    <div class="panel-heading">成本控制
+    <div class="panel-heading">成本控制录入<span style="color:red">(离开当前页面之前请务必点击'保存'!)</span>
         <span class="but">
 			<!--<input name="" type="button" onclick="goBack()" value="返回">-->
+
             <input name="" type="button" onclick="saveAll()" value="保存">
 		</span>
     </div>
