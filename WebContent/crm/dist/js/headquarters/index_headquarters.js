@@ -1069,12 +1069,13 @@ var initPageElements = function () {
       }
 	  var dayTime = s1+"-"+s2
       var product_id=encode64(params.data['product_id']);
+      var product_name=encode64(params.data['tooltips']);
       var target=pageStatusInfo.targets;
 	  var url = "";
 	  if(target==0){
-	  	url = "searchDataItem_view.html?t="+encode64(0)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("product")+"&product_id="+product_id;
+	  	url = "searchDataItem_view.html?t="+encode64(0)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("product")+"&product_id="+product_id+"&product_name="+product_name;
 	  }else if(target==1){
-	  	url = "searchDataItem_view.html?t="+encode64(1)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("product")+"&product_id="+product_id;
+	  	url = "searchDataItem_view.html?t="+encode64(1)+"&e=&cn="+encode64(cName)+"&time="+encode64(dayTime)+"&co="+encode64(cityno)+"&rt="+encode64("product")+"&product_id="+product_id+"&product_name="+product_name;
 	  }
       window.open(url);
     });

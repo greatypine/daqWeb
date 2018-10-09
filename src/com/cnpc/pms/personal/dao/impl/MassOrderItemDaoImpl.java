@@ -67,7 +67,13 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo) {
 		String order_sn = massOrderDto.getOrder_sn();
 		/*String begin_date = massOrderDto.getBeginDate();
-		String end_date = massOrderDto.getEndDate();*/
+		String end_date = massOrderDto.getEndDate();
+		if(StringUtils.isNotEmpty(begin_date)){
+			begin_date = begin_date.replace("/", "-")+" 00:00:00";
+		}
+		if(StringUtils.isNotEmpty(end_date)){
+			end_date = end_date.replace("/", "-")+"  23:59:59";
+		}*/
 		String begin_date = "2018-09-24 00:00:00";
 		String end_date = "2018-09-24 23:59:59";
 		String eshop_id = massOrderDto.getEshop_id();
@@ -189,9 +195,9 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		if(StringUtils.isNotEmpty(comment_Flag)){
 			if("1".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents <>'' ";
+				whereStr = whereStr + " and toip.contents <>''  ";
 			}else if("3".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents ='' ";
+				whereStr = whereStr + " and (toip.contents ='' or toip.contents is null)  ";
 			}
 		}
 		if(StringUtils.isNotEmpty(order_source)){
@@ -253,7 +259,13 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	public List<Map<String, Object>> exportOrder(MassOrderItemDto massOrderDto) {
 		String order_sn = massOrderDto.getOrder_sn();
 		/*String begin_date = massOrderDto.getBeginDate();
-		String end_date = massOrderDto.getEndDate();*/
+		String end_date = massOrderDto.getEndDate();
+		if(StringUtils.isNotEmpty(begin_date)){
+			begin_date = begin_date.replace("/", "-")+" 00:00:00";
+		}
+		if(StringUtils.isNotEmpty(end_date)){
+			end_date = end_date.replace("/", "-")+"  23:59:59";
+		}*/
 		String begin_date = "2018-09-24 00:00:00";
 		String end_date = "2018-09-24 23:59:59";
 		String eshop_id = massOrderDto.getEshop_id();
@@ -374,9 +386,9 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		if(StringUtils.isNotEmpty(comment_Flag)){
 			if("1".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents <>'' ";
+				whereStr = whereStr + " and toip.contents <>''  ";
 			}else if("3".equals(comment_Flag)){
-				whereStr = whereStr + " and toip.contents ='' ";
+				whereStr = whereStr + " and (toip.contents ='' or toip.contents is null)  ";
 			}
 		}
 		if(StringUtils.isNotEmpty(order_source)){
