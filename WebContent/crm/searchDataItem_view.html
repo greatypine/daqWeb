@@ -237,7 +237,7 @@
 		                      <a onclick="dimensionSelect('6')" style="cursor:pointer;" class="bg-orange-active">全部</a>
 		                      <a onclick="dimensionSelect('1')" style="cursor:pointer;">有</a>
 		                      <a onclick="dimensionSelect('3')" style="cursor:pointer;">无</a>
-		                      <input type="text" style="display:none" class="form-control" placeholder="快捷评价"  id="dimension_manual" value="1"/>
+		                      <input type="text" style="display:none" class="form-control" placeholder="快捷评价"  id="dimension_manual" value="6"/>
 		                    </div>
 		                  </div>
 				     </div>
@@ -411,6 +411,7 @@ Date.prototype.format=function(fmt) {
 	//从门店GMV、国安侠GMV 跳转过来（Editor:gaobaolei）
 	var tag = decode64(getUrlParamByKey("tag"));//订单标签
 	var product_id = decode64(getUrlParamByKey("product_id"));//商品id
+	var product_name = decode64(getUrlParamByKey("product_name"));//商品名称
 	
   $(function () {
     $(".logo-lg > ul > li").mouseenter(function(){
@@ -471,6 +472,7 @@ Date.prototype.format=function(fmt) {
 			$('#auto_date').data('daterangepicker').setStartDate(time.split('-')[0]);
 			$('#auto_date').data('daterangepicker').setEndDate(time.split('-')[1]);
 			$('#product_id_manual').val(product_id);
+			$('#product_name_manual').val(product_name);
 		}
 	}
   	//更多显示
@@ -1616,7 +1618,7 @@ Date.prototype.format=function(fmt) {
  function dimensionSelect(dimension){
  	var deptName = $("#dimension_manual").val();
  	if(deptName.indexOf(dimension)>=0){
- 		$("#dimension_manual").val($("#dimension_manual").val());
+ 		$("#dimension_manual").val($("#dimension_manual").val().replace(dimension,""));
  	}else{
  		$("#dimension_manual").val(dimension);
  	}
