@@ -105,8 +105,8 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
     @Override
     public List<Map<String, Object>> queryAvgMileAge() {
         String curDate = DateUtils.dateFormat(new Date(), "yyyy-MM");
-        String sql = "select ROUND(sum(info.oneDay_moveDistance)/count(human.employee_no),1) as avgmile from t_humanresources human LEFT JOIN " +
-                "t_employee_more_info info ON (human.employee_no = info.employeeNo)  where human.zw = '国安侠' and human.humanstatus != 2";
+        String sql = "select ROUND(sum(info.oneDay_moveDistance)/count(human.employee_no),1) as avgmile from (select * from t_humanresources where zw = '国安侠' and humanstatus != 2 ) human INNER JOIN " +
+                "(select * from t_employee_more_info where oneDay_moveDistance != 0 and oneDay_moveDistance is not null ) info ON (human.employee_no = info.employeeNo)";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
         return list;
