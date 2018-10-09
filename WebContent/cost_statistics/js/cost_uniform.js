@@ -17,26 +17,8 @@ var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
  * @type {null}
  */
 var lst_select_uniform_city=null;
-var uniformCityNameArray=new Array();
-var uniformCityIdMap = {};
-function getUniformCity(t){
 
-    uniformCityIdMap=new Array();
-    $("#uniform_city").empty();
-
-    $("#uniform_store").empty();
-    $("#store_id_uniform").val("");
-    $("#store_name_uniform").val("");
-
-    var str_name = $(t).val();
-    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        $("#city_id_uniform").val("");
-
-        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-            return;
-        }
-
-
+function getUniformCity(){
 
 
         if(regex_zb.test(userGroupCode)){
@@ -46,15 +28,16 @@ function getUniformCity(t){
 
                     lst_select_uniform_city = JSON.parse(data.data);
 
-                    for(i=0;i<lst_select_uniform_city.length;i++){
-                        uniformCityNameArray.push(lst_select_uniform_city[i].cityname);
-                        uniformCityIdMap[lst_select_uniform_city[i].cityname] = lst_select_uniform_city[i].id;
+                    var option = "";
+                    for( var i=0;i<lst_select_uniform_city.length;i++){
+                        option=option+"<option value='"+lst_select_uniform_city[i].id+"'>"+lst_select_uniform_city[i].cityname+"</option>";
                     }
-                    var autoComplete = new AutoComplete("city_name_uniform","uniform_city",uniformCityNameArray);
-                    autoComplete.start(event);
-                    $("#uniform_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
+                    $("#city_id_uniform").append(option);
+                    if(flag=="search"){
+                        $("#city_id_uniform").val(cur_city_id);
+                    }
                 }
-            },false);
+            });
 
 
         }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
@@ -64,29 +47,30 @@ function getUniformCity(t){
                     if (data.result) {
                         lst_select_uniform_city = JSON.parse(data.data).citylist;
 
-                        for(i=0;i<lst_select_uniform_city.length;i++){
-                            uniformCityNameArray.push(lst_select_uniform_city[i].name);
-                            uniformCityIdMap[lst_select_uniform_city[i].name] = lst_select_uniform_city[i].ctid;
+                        var option = "";
+                        for( var i=0;i<lst_select_uniform_city.length;i++){
+                            option=option+"<option value='"+lst_select_uniform_city[i].ctid+"'>"+lst_select_uniform_city[i].name+"</option>";
                         }
-                        var autoComplete = new AutoComplete("city_name_uniform","uniform_city",uniformCityNameArray);
-                        autoComplete.start(event);
-                        $("#uniform_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
+                        $("#city_id_uniform").append(option);
+                        if(flag=="search"){
+                            $("#city_id_uniform").val(cur_city_id);
+                        }
                     }
-                },false);
+                });
         }
 
-    }
+
 
 }
 
-/**
- * 选择城市
- * @param t
- */
-function selectUniformCity(t){
-    var temp_city = document.getElementById("city_name_uniform").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-    $("#city_id_uniform").val(uniformCityIdMap[temp_city]);
-}
+// /**
+//  * 选择城市
+//  * @param t
+//  */
+// function selectUniformCity(t){
+//     var temp_city = document.getElementById("city_name_uniform").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+//     $("#city_id_uniform").val(uniformCityIdMap[temp_city]);
+// }
 
 
 
@@ -111,10 +95,7 @@ function getUniformStore(t){
             return;
         }
         var city_id  = $("#city_id_uniform").val()==""?null:$("#city_id_uniform").val();
-        var city_name =  $("#city_name_uniform").val();
-        if(city_id==null&&city_name!=""){
-            city_id=-10000;
-        }
+
         var target=0;
         if(regex_zb.test(userGroupCode)){//总部
             target=0;
@@ -133,7 +114,7 @@ function getUniformStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_uniform","uniform_store",uniformStoreNameArray);
                 autoComplete.start(event);
-                $("#uniform_store").attr("style","width: 150px;z-index: 99999;left: 23%;top: 23.4%;");
+                $("#uniform_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 23.1%;");
             }else{
 
             }
@@ -239,10 +220,11 @@ function searchUniform(){
 
     $("#uniform_tb_2").find("tr:gt(0)").remove();
 
-    var cityId = $("#city_id_uniform").val();
-    var cityName = $("#city_name_uniform").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
+    var cityId="";
+    if(flag=="search"){
+        cityId = cur_city_id;
+    }else{
+        cityId = $("#city_id_uniform").val();
     }
 
     var storeId = $("#store_id_uniform").val();
@@ -306,10 +288,7 @@ function   exportCostUniform(){
     var showMonth=$("#year_uniform").val().split("-")[1];
 
     var cityId = $("#city_id_uniform").val();
-    var cityName = $("#city_name_uniform").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_uniform").val();
     var storeName = $("#store_name_uniform").val();

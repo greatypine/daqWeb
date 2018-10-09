@@ -34,6 +34,9 @@
         var userId= getUrlParamByKey("userId");
         var cur_city_id= getUrlParamByKey("cur_city_id");
         var cur_city_name= getUrlParamByKey("cur_city_name");
+        var year = getUrlParamByKey("year");
+        var month = getUrlParamByKey("month");
+        var searchDate = getUrlParamByKey("search_date");
         var flag=getUrlParamByKey("flag");
          $(function () {
 
@@ -56,6 +59,11 @@
                 document.getElementById("tab-roll-rent").style.height= winHeight*0.74 +"px";
                 document.getElementById("tab-roll-operation").style.height= winHeight*0.74 +"px";
                 document.getElementById("tab-roll-uniform").style.height= winHeight*0.74 +"px";
+                document.getElementById("tab-roll-property").style.height= winHeight*0.74 +"px";
+                document.getElementById("tab-roll-labor").style.height= winHeight*0.74 +"px";
+                document.getElementById("tab-roll-gwe").style.height= winHeight*0.74 +"px";
+
+
             }
             window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
 
@@ -66,7 +74,20 @@
          * 加载数据
          * */
         function loadAllData(){
+
+            getLaborCity();
+            getRenovationCity();
+            getFixedAssetCity();
+            getRentContractCity();
+            getRentCity();
+            getUniformCity();
+            getOperationCity();
+            getGWECity();
             var cur_date = new Date();
+            if(flag=="search"){
+                cur_date = new Date(searchDate);
+            }
+
 
             laydate.render({//月份控件
                 elem:'#year_property',
@@ -118,13 +139,28 @@
                 theme: '#428bca'
             });
             getCostLabor();
-            getCostRenovation();
+
+
+            getCostRenovation()
+
+
             getCostFixedAsset();
+
+
             getCostRentContract();
+
+
             getCostRent();
+
+
             getCostUniform();
+
+
             getCostOperation();
+
+
             getCostGWE();
+
 
             $("#li_property").addClass("active");
             $("#li_renovation").addClass("active");
@@ -138,7 +174,7 @@
 
             var index = layer.load(0,{
                 shade: [0.2,'#333'],
-                time:1500
+                time:1000
             });
             // if(t=="fixedCost"){//固定成本
             //     if($("#li_renovation").hasClass("active")){
@@ -231,7 +267,7 @@
         function showSecondLevelCostTag(t){
             var index = layer.load(0,{
                 shade: [0.2,'#333'],
-                time:1500
+                time:1000
             });
             // clearCostTable();
             //
@@ -393,35 +429,6 @@
         }
 
 
-        /**
-         * 清空成本table页面
-         * */
-        // function clearCostTable(){
-        //
-        //     $("#labor_tb_1").find("tr:gt(1)").remove();
-        //     $("#labor_tb_2").find("tr:gt(1)").remove();
-        //     $("#rent_tb_1").find("tr:gt(0)").remove();
-        //     $("#rent_tb_2").find("tr:gt(0)").remove();
-        //     $("#renovation_tb_1").find("tr:gt(0)").remove();
-        //     $("#renovation_tb_2").find("tr:gt(0)").remove();
-        //     $("#fixedAsset_tb_1").find("tr:gt(0)").remove();
-        //     $("#fixedAsset_tb_2").find("tr:gt(0)").remove();
-        //     $("#gwe_tb_1").find("tr:gt(0)").remove();
-        //     $("#gwe_tb_2").find("tr:gt(0)").remove();
-        //     $("#operation_tb_1").find("tr:gt(0)").remove();
-        //     $("#operation_tb_2").find("tr:gt(0)").remove();
-        // }
-        // /**
-        //  * 展示完整信息
-        //  * @param t
-        //  */
-        // function showWholeContent(t){
-        //     var id = $(t).attr("id");
-        //     layer.tips(t.value,"#"+id, {
-        //         tips: [1, '#0ACC4C'],
-        //         time: 1000
-        //     });
-        // }
 
         /**
          * 返回
@@ -563,7 +570,10 @@
                 }
             }
 
-            $$.showMessage("提示",saveInfo);
+            if(saveInfo!=""){
+                $$.showMessage("提示",saveInfo);
+
+            }
 
         }
 
@@ -580,10 +590,17 @@
     .content-wrapper{background: #fff;}
     .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
     .nav-tabs-custom > .nav-tabs > li > a{font-size: 14px; padding: 8px 15px;}
+    .nav-tabs-custom > .nav-tabs > li > a.secondTabLi{font-size: 14px; padding: 5px 13px;}
     .nav-tabs-custom > .nav-tabs > li > a:hover{color: #3a90cb;}
+    .nav-tabs-custom > .nav-tabs > li > a.secondTabLi{color: #3a90cbb5;}
     .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active > a:hover{background: #3a90cb; color: #fff;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 2px solid #3a90cb; border-left: 1px solid #3a90cb; border-right:1px solid #3a90cb;}
+    .nav-tabs-custom > .nav-tabs > li.active > a.secondTabLi {background: #3a90cbb5; color: #fff;font-weight: bold; cursor: pointer;border-top-right-radius: 3px; border-top-left-radius: 3px; border-top: 1px solid #3a90cbb5; border-left: 1px solid #3a90cbb5; border-right:1px solid #3a90cbb5;}
+
     .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a{border-left: 1px solid #3a90cb;}
+    .nav-tabs-custom > .nav-tabs > li:first-of-type.active > a.secondTabLi{border-left: 1px solid #3a90cbb5;}
+
     .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #3a90cb; margin: 5px 0; }
+    .nav-tabs-custom > .secondTabUl{border-bottom: 1px solid #3a90cbb5; margin: 5px 0; }
     .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
     .table > tbody > tr > td,.table > tbody > tr > th{border: 1px solid #d1d1d1; height: 30px; line-height: 30px; padding: 0 8px;}
     .table > tbody > tr > td p,.table > tbody > tr > th p{width: 165px; margin: 0;}
@@ -616,9 +633,9 @@
                 <div class="tab-pane active" id="tab_month_cost">
 
                     <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li id="li_labor" class="active"><a href="#tab_labor" data-toggle="tab" onclick="showSecondLevelCostTag('labor')">人工成本-员工薪酬</a></li>
-                            <li id="li_gwe"><a href="#tab_gwe" data-toggle="tab" onclick="showSecondLevelCostTag('gwe')">水电费</a></li>
+                        <ul class="nav nav-tabs secondTabUl" >
+                            <li id="li_labor" class="active"><a  class="secondTabLi" href="#tab_labor" data-toggle="tab" onclick="showSecondLevelCostTag('labor')">人工成本-员工薪酬</a></li>
+                            <li id="li_gwe"><a class="secondTabLi" href="#tab_gwe" data-toggle="tab" onclick="showSecondLevelCostTag('gwe')">水电费</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 
@@ -627,14 +644,8 @@
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="city_id_labor" name="city_id_labor" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_labor" onkeyup="getLaborCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="labor_city" onclick="selectLaborCity(this)" style="width: 150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_labor" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
 
 
@@ -650,7 +661,7 @@
 
                                         <td style="width: 6%">日期：</td>
                                         <td style="padding-top: 10px;width:12%">
-                                            <p class="read"><input type="text" class="form-control" style="width: 100px" readonly="readonly"  maxlength="12"  id="year_labor"/></p>
+                                            <p class="read"><input type="text" class="form-control" style="width: 100px;cursor:pointer" readonly="readonly"  maxlength="12"  id="year_labor"/></p>
                                             <input id="labor_year_month" type="hidden"/>
                                         </td>
                                         <td width="5%" style="text-align:left;">
@@ -667,8 +678,8 @@
                                         <!--</td>-->
                                     </tr>
                                 </table>
-
-                                <div class="col-sm-12 no-padding" style="overflow-x: scroll;margin-left:-1px">
+                                <div class="tab-roll" id="tab-roll-labor">
+                                    <div class="col-sm-12 no-padding" style="overflow-x: scroll;margin-left:-1px">
                                     <table class="table table_x" cellspacing="0" cellpadding="0" id="labor_tb_2">
 
                                         <tr id="labor_tr_2">
@@ -683,20 +694,15 @@
 
                                     </table>
                                 </div>
+                                </div>
                             </div>
 
-                            <div class="tab-pane active" id="tab_gwe">
+                            <div class="tab-pane " id="tab_gwe">
                                 <table width="60%">
                                     <tr>
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="city_id_gwe" name="city_id_gwe" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_gwe" onkeyup="getGWECity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="gwe_city" onclick="selectGWECity(this)" style="width:150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_gwe" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
 
                                         <td style="width:6%">门店名称：</td>
@@ -711,7 +717,7 @@
 
                                         <td style="width:6%">日期：</td>
                                         <td style="padding-top: 10px;width:12%">
-                                            <p class="read"><input type="text" class="form-control" style="width: 100px" readonly="readonly"  maxlength="12"  id="year_gwe"/></p>
+                                            <p class="read"><input type="text" class="form-control" style="width: 100px;cursor:pointer" readonly="readonly"  maxlength="12"  id="year_gwe"/></p>
                                             <input type="hidden" id="gwe_save_date" value=""/>
                                         </td>
 
@@ -726,8 +732,8 @@
                                         </td>
                                     </tr>
                                 </table>
-
-                                <div class="col-sm-12 no-padding" style="margin-left:-1px">
+                                <div class="tab-roll" id="tab-roll-gwe">
+                                    <div class="col-sm-12 no-padding" style="margin-left:-1px">
                                     <table class="table table_x" cellspacing="0" cellpadding="0" id="gwe_tb_2">
 
                                         <tr id="gwe_tr_2">
@@ -738,6 +744,7 @@
                                             <th style="text-align: center"><p><span style="font-weight: bold;color:red" id="waterFee_title"></span>月水费</p></th>
                                         </tr>
                                     </table>
+                                </div>
                                 </div>
                             </div>
 
@@ -750,10 +757,10 @@
                 <div class="tab-pane" id="tab_year_cost">
 
                     <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li id="li_property"><a href="#tab_property" data-toggle="tab" onclick="showSecondLevelCostTag('property')">租金成本-物业费用</a></li>
-                            <li id="li_operation"><a href="#tab_operation" data-toggle="tab" onclick="showSecondLevelCostTag('operation')">日常运营</a></li>
-                            <li id="li_uniform"><a href="#tab_uniform" data-toggle="tab" onclick="showSecondLevelCostTag('uniform')">人工成本-工服费用</a></li>
+                        <ul class="nav nav-tabs secondTabUl" >
+                            <li id="li_property" ><a class="secondTabLi" href="#tab_property" data-toggle="tab" onclick="showSecondLevelCostTag('property')">租金成本-物业费用</a></li>
+                            <li id="li_operation" ><a class="secondTabLi" href="#tab_operation" data-toggle="tab" onclick="showSecondLevelCostTag('operation')">日常运营</a></li>
+                            <li id="li_uniform" ><a class="secondTabLi" href="#tab_uniform" data-toggle="tab" onclick="showSecondLevelCostTag('uniform')">人工成本-工服费用</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 
@@ -762,14 +769,8 @@
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="city_id_rent" name="city_id_rent" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_rent" onkeyup="getRentCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="rent_city" onclick="selectRentCity(this)" style="width:150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_rent" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
 
 
@@ -786,7 +787,7 @@
 
                                         <td style="width:6%">日期：</td>
                                         <td style="padding-top: 10px;width:12%">
-                                            <p class="read"><input type="text" class="form-control"  style="width: 100px" readonly="readonly"  maxlength="12"  id="year_property"/></p>
+                                            <p class="read"><input type="text" class="form-control"  style="width: 100px;cursor:pointer" readonly="readonly"  maxlength="12"  id="year_property"/></p>
 
                                         </td>
                                         <td width="5%" style="text-align:left;">
@@ -803,8 +804,8 @@
                                         <!--</td>-->
                                     </tr>
                                 </table>
-
-                                <div class="col-sm-12 no-padding" style="margin-left:-1px">
+                                <div class="tab-roll" id="tab-roll-property">
+                                    <div class="col-sm-12 no-padding" style="margin-left:-1px">
                                     <table class="table table_x" cellspacing="0" cellpadding="0" id="property_tb_2">
 
                                         <tr id="property_tr_2">
@@ -819,7 +820,7 @@
 
                                     </table>
                                 </div>
-
+                                </div>
                             </div>
 
                             <div class="tab-pane " id="tab_operation">
@@ -828,14 +829,8 @@
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="city_id_operation" name="city_id_operation" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_operation" onkeyup="getOperationCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="operation_city" onclick="selectOperationCity(this)" style="width:150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_operation" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
 
 
@@ -851,7 +846,7 @@
 
                                         <td style="width:6%">日期：</td>
                                         <td style="padding-top: 10px;width:12%">
-                                            <p class="read"><input type="text" style="width: 100px" readonly="readonly" class="form-control"   maxlength="12"  id="year_operation"/></p>
+                                            <p class="read"><input type="text" style="width: 100px;cursor:pointer" readonly="readonly" class="form-control"   maxlength="12"  id="year_operation"/></p>
                                             <input type="hidden" id="operation_save_date" value=""/>
                                         </td>
 
@@ -904,16 +899,9 @@
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="city_id_uniform" name="city_id_uniform" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_uniform" onkeyup="getUniformCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="uniform_city" onclick="selectUniformCity(this)" style="width:150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_uniform" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
-
 
                                         <td style="width:6%">门店名称：</td>
                                         <td style="padding-top: 10px;width:12%">
@@ -927,7 +915,7 @@
 
                                         <td style="width:6%">日期：</td>
                                         <td style="padding-top: 10px;width:12%">
-                                            <p class="read"><input type="text" style="width: 100px" readonly="readonly" class="form-control"   maxlength="12"  id="year_uniform"/></p>
+                                            <p class="read"><input type="text" style="width: 100px;cursor:pointer" readonly="readonly" class="form-control"   maxlength="12"  id="year_uniform"/></p>
                                             <input type="hidden" id="uniform_save_date" value=""/>
                                         </td>
 
@@ -968,10 +956,10 @@
                 <div class="tab-pane" id="tab_fixed_cost">
 
                     <div class="nav-tabs-custom">
-                        <ul class="nav nav-tabs">
-                            <li id="li_renovation"><a href="#tab_renovation" data-toggle="tab" onclick="showSecondLevelCostTag('renovation')">装修摊销</a></li>
-                            <li id="li_fixedAsset"><a href="#tab_fixed_asset" data-toggle="tab" onclick="showSecondLevelCostTag('fixedAsset')">固定资产</a></li>
-                            <li id="li_rentContract"><a href="#tab_rent_contract" data-toggle="tab" onclick="showSecondLevelCostTag('rentContract')">租金成本-合同租金</a></li>
+                        <ul class="nav nav-tabs secondTabUl" >
+                            <li id="li_renovation"><a class="secondTabLi" href="#tab_renovation" data-toggle="tab" onclick="showSecondLevelCostTag('renovation')">装修摊销</a></li>
+                            <li id="li_fixedAsset"><a  class="secondTabLi" href="#tab_fixed_asset" data-toggle="tab" onclick="showSecondLevelCostTag('fixedAsset')">固定资产</a></li>
+                            <li id="li_rentContract"><a class="secondTabLi" href="#tab_rent_contract" data-toggle="tab" onclick="showSecondLevelCostTag('rentContract')">租金成本-合同租金</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 
@@ -982,14 +970,8 @@
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="city_id_renovation" name="city_id_renovation" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_renovation" onkeyup="getRenovationCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="renovation_city" onclick="selectRenovationCity(this)" style="width:150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_renovation" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
 
 
@@ -1053,14 +1035,8 @@
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="city_id_fixedAsset" name="city_id_fixedAsset" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_fixedAsset" onkeyup="getFixedAssetCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="fixedAsset_city" onclick="selectFixedAssetCity(this)" style="width:150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_fixedAsset" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
 
 
@@ -1122,15 +1098,8 @@
                                 <table width="50%">
                                     <tr>
                                         <td style="width:6%">城市名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-
-                                            <p>
-                                                <input id="city_id_rentContract" name="city_id_rentContract" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  placeholder="城市" id="city_name_rentContract" onkeyup="getRentContractCity(this)" style="display: inherit;width:150px;border-radius: 6px; "/>
-                                            <div class="auto hidden" id="rentContract_city" onclick="selectRentContractCity(this)" style="width:150px;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                            </p>
+                                        <td style="width:12%">
+                                            <select id="city_id_rentContract" style="width: 200px" class="form-control"><option value="">全部</option></select>
                                         </td>
 
 

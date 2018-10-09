@@ -7,26 +7,8 @@ var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
  * @type {null}
  */
 var lst_select_fixedAsset_city=null;
-var fixedAssetCityNameArray=new Array();
-var fixedAssetCityIdMap = {};
-function getFixedAssetCity(t){
 
-    fixedAssetCityIdMap=new Array();
-    $("#fixedAsset_city").empty();
-
-    $("#fixedAsset_store").empty();
-    $("#store_id_fixedAsset").val("");
-    $("#store_name_fixedAsset").val("");
-
-    var str_name = $(t).val();
-    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        $("#city_id_fixedAsset").val("");
-
-        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-            return;
-        }
-
-
+function getFixedAssetCity(){
 
 
         if(regex_zb.test(userGroupCode)){
@@ -36,15 +18,16 @@ function getFixedAssetCity(t){
 
                     lst_select_fixedAsset_city = JSON.parse(data.data);
 
-                    for(i=0;i<lst_select_fixedAsset_city.length;i++){
-                        fixedAssetCityNameArray.push(lst_select_fixedAsset_city[i].cityname);
-                        fixedAssetCityIdMap[lst_select_fixedAsset_city[i].cityname] = lst_select_fixedAsset_city[i].id;
+                    var option = "";
+                    for( var i=0;i<lst_select_fixedAsset_city.length;i++){
+                        option=option+"<option value='"+lst_select_fixedAsset_city[i].id+"'>"+lst_select_fixedAsset_city[i].cityname+"</option>";
                     }
-                    var autoComplete = new AutoComplete("city_name_fixedAsset","fixedAsset_city",fixedAssetCityNameArray);
-                    autoComplete.start(event);
-                    $("#fixedAsset_city").attr("style","width: 150px;z-index: 99999;left: 8%;top: 23.4%;");
+                    $("#city_id_fixedAsset").append(option);
+                    if(flag=="search"){
+                        $("#city_id_fixedAsset").val(cur_city_id);
+                    }
                 }
-            },false);
+            });
 
 
         }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
@@ -54,29 +37,28 @@ function getFixedAssetCity(t){
                     if (data.result) {
                         lst_select_fixedAsset_city = JSON.parse(data.data).citylist;
 
-                        for(i=0;i<lst_select_fixedAsset_city.length;i++){
-                            fixedAssetCityNameArray.push(lst_select_fixedAsset_city[i].name);
-                            fixedAssetCityIdMap[lst_select_fixedAsset_city[i].name] = lst_select_fixedAsset_city[i].ctid;
+                        var option = "";
+                        for( var i=0;i<lst_select_fixedAsset_city.length;i++){
+                            option=option+"<option value='"+lst_select_fixedAsset_city[i].ctid+"'>"+lst_select_fixedAsset_city[i].name+"</option>";
                         }
-                        var autoComplete = new AutoComplete("city_name_fixedAsset","fixedAsset_city",fixedAssetCityNameArray);
-                        autoComplete.start(event);
-                        $("#fixedAsset_city").attr("style","width: 150px;z-index: 99999;left: 8%;top: 23.4%;");
+                        $("#city_id_fixedAsset").append(option);
+                        if(flag=="search"){
+                            $("#city_id_fixedAsset").val(cur_city_id);
+                        }
                     }
-                },false);
+                });
         }
 
-    }
-
 }
 
-/**
- * 选择城市
- * @param t
- */
-function selectFixedAssetCity(t){
-    var temp_city = document.getElementById("city_name_fixedAsset").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-    $("#city_id_fixedAsset").val(fixedAssetCityIdMap[temp_city]);
-}
+// /**
+//  * 选择城市
+//  * @param t
+//  */
+// function selectFixedAssetCity(t){
+//     var temp_city = document.getElementById("city_name_fixedAsset").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+//     $("#city_id_fixedAsset").val(fixedAssetCityIdMap[temp_city]);
+// }
 
 
 
@@ -101,10 +83,7 @@ function getFixedAssetStore(t){
             return;
         }
         var city_id  = $("#city_id_fixedAsset").val()==""?null:$("#city_id_fixedAsset").val();
-        var city_name =  $("#city_name_fixedAsset").val();
-        if(city_id==null&&city_name!=""){
-            city_id=-10000;
-        }
+
         var target=0;
         if(regex_zb.test(userGroupCode)){//总部
             target=0;
@@ -123,7 +102,7 @@ function getFixedAssetStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_fixedAsset","fixedAsset_store",fixedAssetStoreNameArray);
                 autoComplete.start(event);
-                $("#fixedAsset_store").attr("style","width: 150px;z-index: 99999;left: 29.1%;top: 23.4%;");
+                $("#fixedAsset_store").attr("style","width: 150px;z-index: 99999;left: 28.3%;top: 23.1%;");
 
             }else{
 
@@ -251,7 +230,7 @@ function calculateAmortizeMoney(t){
     var electricCarsAmortize = $("#electricCarsAmortize_"+id[1]).val();
     var machineAmortize = $("#machineAmortize_"+id[1]).val();
     if(electronicsAmortize==""&&electricCarsAmortize==""&&machineAmortize==""){
-        $("#amortizeMoney_"+id[1]).val("");
+        $("#fixedAssetAmortizeMoney_"+id[1]).val("");
         $("input[id='amortizeMoneyMonth_"+id[1]+"']").each(function () {
             $(this).val("");
         })
@@ -262,7 +241,7 @@ function calculateAmortizeMoney(t){
          electricCarsAmortize = electricCarsAmortize==""?0:parseFloat(electricCarsAmortize);
          machineAmortize = machineAmortize==""?0:parseFloat(machineAmortize);
          var total= parseFloat(electronicsAmortize)+parseFloat(electricCarsAmortize)+parseFloat(machineAmortize);
-        $("#amortizeMoney_"+id[1]).val(parseFloat(total).toFixed(2));
+        $("#fixedAssetAmortizeMoney_"+id[1]).val(parseFloat(total).toFixed(2));
         $("input[id='amortizeMoneyMonth_"+id[1]+"']").each(function () {
             $(this).val(parseFloat(total).toFixed(2));
         })
@@ -280,7 +259,7 @@ function calculateTotal(t){
     var electricCars = $("#electricCars_"+id[1]).val();
     var machineTotal = $("#machineTotal_"+id[1]).val();
     if(electronicsTotal==""&&electricCars==""&&machineTotal==""){
-        $("#total_"+id[1]).val("");
+        $("#fixedAssetTotal_"+id[1]).val("");
 
     }else{
 
@@ -288,7 +267,7 @@ function calculateTotal(t){
         electricCars = electricCars==""?0:parseFloat(electricCars);
         machineTotal = machineTotal==""?0:parseFloat(machineTotal);
         var total= parseFloat(electronicsTotal)+parseFloat(electricCars)+parseFloat(machineTotal);
-        $("#total_"+id[1]).val(parseFloat(total).toFixed(2));
+        $("#fixedAssetTotal_"+id[1]).val(parseFloat(total).toFixed(2));
     }
 }
 
@@ -326,10 +305,11 @@ function searchCostFixedAsset(){
     });
 
 
-    var cityId = $("#city_id_fixedAsset").val();
-    var cityName = $("#city_name_fixedAsset").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
+    var cityId="";
+    if(flag=="search"){
+        cityId = cur_city_id;
+    }else{
+        cityId = $("#city_id_fixedAsset").val();
     }
 
     var storeId = $("#store_id_fixedAsset").val();
@@ -407,8 +387,8 @@ function searchCostFixedAsset(){
                     "<td><input type='text'     onkeyup='calculateMachineTotal(this)' id='shoppingGoodsShelf_"+i+"'    value='"+shopping_goods_shelf+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='machineTotal_"+i+"'    value='"+machine_total+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8' readonly id='machineAmortize_"+i+"'    value='"+machine_amortize+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='amortizeMoney_"+i+"' value='"+amortize_money+"'/></td>" +
-                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='total_"+i+"'  value='"+total+"'/></td>" ;
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='fixedAssetAmortizeMoney_"+i+"' value='"+amortize_money+"'/></td>" +
+                    "<td><input type='text'     style='background-color: #e8e8e8' readonly id='fixedAssetTotal_"+i+"'  value='"+total+"'/></td>" ;
                 $("#fixedAsset_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+FixedAsset_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden'  id='cityName' value='"+cityName+"'/></tr>");
             }
 
@@ -425,10 +405,7 @@ function searchCostFixedAsset(){
 function   exportCostFixedAsset(){
 
     var cityId = $("#city_id_fixedAsset").val();
-    var cityName = $("#city_name_fixedAsset").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_fixedAsset").val();
     var storeName = $("#store_name_fixedAsset").val();
@@ -478,14 +455,15 @@ function   exportCostFixedAsset(){
  * **/
 function saveCostFixedAsset(){
 
+    var  saveResult="";
     var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
     var costFixedAssetArray = [];
     for(var i=0;i<store_cost_tr.length;i++){
         var cityName = $(store_cost_tr[i]).find("input[id='cityName']").val();//城市名称
         var storeNo= $(store_cost_tr[i]).attr("id");//门店编号
         var storeName = $(store_cost_tr[i]).find("input[id='storeName']").val();//门店名称
-        var amortizeMoney = $(store_cost_tr[i]).find("input[id^='amortizeMoney_']").val();//月摊销
-        var total = $(store_cost_tr[i]).find('input[id^="total_"]').val();//合计
+        var amortizeMoney = $(store_cost_tr[i]).find("input[id^='fixedAssetAmortizeMoney_']").val();//月摊销
+        var total = $(store_cost_tr[i]).find('input[id^="fixedAssetTotal_"]').val();//合计
         var aio = $(store_cost_tr[i]).find('input[id^="aio_"]').val();//多功能一体机
         var mobilePhone = $(store_cost_tr[i]).find('input[id^="mobilePhone_"]').val();//手机
         var iPad = $(store_cost_tr[i]).find('input[id^="iPad_"]').val();//ipad
@@ -535,24 +513,24 @@ function saveCostFixedAsset(){
             var result= JSON.parse(data.data);
 
             if(result.status=='success'){
-                $$.showMessage('提示',"保存成功！");
                 $("#fixedAsset_tr_2").nextAll("tr[editable='true']").each(function () {
                     $(this).attr("editable","false");
                 })
-                return;
+                saveResult="success";
+
             }else if(result.status=="fail"){
 
-                $$.showMessage('提示',"保存失败！");
-                return;
+                saveResult="fail";
             }else{
 
-                $$.showMessage('提示',"请稍后重新请求！");
-                return;
+                saveResult="fail";
             }
         }else{
-            $.showMessage('提示',"请稍后重新请求！");
+            saveResult="fail";
         }
 
     },false);
+
+    return saveResult;
 
 }

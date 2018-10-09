@@ -8,27 +8,8 @@ var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
  * @type {null}
  */
 var lst_select_gwe_city=null;
-var gweCityNameArray=new Array();
-var gweCityIdMap = {};
-function getGWECity(t){
 
-    gweCityIdMap=new Array();
-    $("#gwe_city").empty();
-
-    $("#gwe_store").empty();
-    $("#store_id_gwe").val("");
-    $("#store_name_gwe").val("");
-
-    var str_name = $(t).val();
-    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        $("#city_id_gwe").val("");
-
-        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-            return;
-        }
-
-
-
+function getGWECity(){
 
         if(regex_zb.test(userGroupCode)){
 
@@ -37,15 +18,16 @@ function getGWECity(t){
 
                     lst_select_gwe_city = JSON.parse(data.data);
 
-                    for(i=0;i<lst_select_gwe_city.length;i++){
-                        gweCityNameArray.push(lst_select_gwe_city[i].cityname);
-                        gweCityIdMap[lst_select_gwe_city[i].cityname] = lst_select_gwe_city[i].id;
+                    var option = "";
+                    for( var i=0;i<lst_select_gwe_city.length;i++){
+                        option=option+"<option value='"+lst_select_gwe_city[i].id+"'>"+lst_select_gwe_city[i].cityname+"</option>";
                     }
-                    var autoComplete = new AutoComplete("city_name_gwe","gwe_city",gweCityNameArray);
-                    autoComplete.start(event);
-                    $("#gwe_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
+                    $("#city_id_gwe").append(option);
+                    if(flag=="search"){
+                        $("#city_id_gwe").val(cur_city_id);
+                    }
                 }
-            },false);
+            });
 
 
         }else if(regex_cs.test(userGroupCode)||userGroupCode=="GLY"){
@@ -54,30 +36,28 @@ function getGWECity(t){
                 function(data, textStatus, XMLHttpRequest) {
                     if (data.result) {
                         lst_select_gwe_city = JSON.parse(data.data).citylist;
-
-                        for(i=0;i<lst_select_gwe_city.length;i++){
-                            gweCityNameArray.push(lst_select_gwe_city[i].name);
-                            gweCityIdMap[lst_select_gwe_city[i].name] = lst_select_gwe_city[i].ctid;
+                        var option = "";
+                        for( var i=0;i<lst_select_gwe_city.length;i++){
+                            option=option+"<option value='"+lst_select_gwe_city[i].ctid+"'>"+lst_select_gwe_city[i].name+"</option>";
                         }
-                        var autoComplete = new AutoComplete("city_name_gwe","gwe_city",gweCityNameArray);
-                        autoComplete.start(event);
-                        $("#gwe_city").attr("style","width: 150px;z-index: 99999;left: 6.6%;top: 23.4%;");
+                        $("#city_id_gwe").append(option);
+                        if(flag=="search"){
+                            $("#city_id_gwe").val(cur_city_id);
+                        }
                     }
-                },false);
+                });
         }
 
-    }
-
 }
 
-/**
- * 选择城市
- * @param t
- */
-function selectGWECity(t){
-    var temp_city = document.getElementById("city_name_gwe").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-    $("#city_id_gwe").val(gweCityIdMap[temp_city]);
-}
+// /**
+//  * 选择城市
+//  * @param t
+//  */
+// function selectGWECity(t){
+//     var temp_city = document.getElementById("city_name_gwe").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+//     $("#city_id_gwe").val(gweCityIdMap[temp_city]);
+// }
 
 
 
@@ -102,10 +82,7 @@ function getGWEStore(t){
             return;
         }
         var city_id  = $("#city_id_gwe").val()==""?null:$("#city_id_gwe").val();
-        var city_name =  $("#city_name_gwe").val();
-        if(city_id==null&&city_name!=""){
-            city_id=-10000;
-        }
+
         var target=0;
         if(regex_zb.test(userGroupCode)){//总部
             target=0;
@@ -124,7 +101,7 @@ function getGWEStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_gwe","gwe_store",gweStoreNameArray);
                 autoComplete.start(event);
-                $("#gwe_store").attr("style","width: 150px;z-index: 99999;left: 22.9%;top: 23.4%;");
+                $("#gwe_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 23.1%;");
             }else{
 
             }
@@ -194,10 +171,11 @@ function searchCostGWE(){
 
     $("#gwe_tb_2").find("tr:gt(0)").remove();
 
-    var cityId = $("#city_id_gwe").val();
-    var cityName = $("#city_name_gwe").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
+    var cityId="";
+    if(flag=="search"){
+        cityId = cur_city_id;
+    }else{
+        cityId = $("#city_id_gwe").val();
     }
 
     var storeId = $("#store_id_gwe").val();
@@ -265,10 +243,7 @@ function   exportCostGWE(){
 
 
     var cityId = $("#city_id_gwe").val();
-    var cityName = $("#city_name_gwe").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_gwe").val();
     var storeName = $("#store_name_gwe").val();

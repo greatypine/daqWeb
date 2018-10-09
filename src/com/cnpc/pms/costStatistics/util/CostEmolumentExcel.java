@@ -35,7 +35,7 @@ public class CostEmolumentExcel {
     //导出的文件标题
     private final String[] header0={"序号","门店编码","门店名称","员工薪酬","住宿星店房租"};
 
-    private final String[] colName = new String[] { "store_no", "store_name","emolument","accommodation"};
+    private final String[] colName = new String[] { "storeNo", "storeName","emolument","accommodation"};
 
     private final String[] rowColNum=new String[]{"A","B","C","D","E"};
 

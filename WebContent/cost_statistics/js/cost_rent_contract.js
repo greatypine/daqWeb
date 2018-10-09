@@ -5,24 +5,10 @@ var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
  * @type {null}
  */
 var lst_select_rentContract_city=null;
-var rentContractCityNameArray=new Array();
-var rentContractCityIdMap = {};
+
 function getRentContractCity(t){
 
-    rentContractCityIdMap=new Array();
-    $("#rentContract_city").empty();
 
-    $("#rentContract_store").empty();
-    $("#store_id_rentContract").val("");
-    $("#store_name_rentContract").val("");
-
-    var str_name = $(t).val();
-    if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-        $("#city_id_rentContract").val("");
-
-        if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-            return;
-        }
 
         if(regex_zb.test(userGroupCode)){
 
@@ -31,15 +17,16 @@ function getRentContractCity(t){
 
                     lst_select_rentContract_city = JSON.parse(data.data);
 
-                    for(i=0;i<lst_select_rentContract_city.length;i++){
-                        rentContractCityNameArray.push(lst_select_rentContract_city[i].cityname);
-                        rentContractCityIdMap[lst_select_rentContract_city[i].cityname] = lst_select_rentContract_city[i].id;
+                    var option = "";
+                    for( var i=0;i<lst_select_rentContract_city.length;i++){
+                        option=option+"<option value='"+lst_select_rentContract_city[i].id+"'>"+lst_select_rentContract_city[i].cityname+"</option>";
                     }
-                    var autoComplete = new AutoComplete("city_name_rentContract","rentContract_city",rentContractCityNameArray);
-                    autoComplete.start(event);
-                    $("#rentContract_city").attr("style","width: 150px;z-index: 99999;left: 6.8%;top: 23.4%;");
+                    $("#city_id_rentContract").append(option);
+                    if(flag=="search"){
+                        $("#city_id_rentContract").val(cur_city_id);
+                    }
                 }
-            },false);
+            });
 
 
         }else if(regex_cs.test(userGroupCode)||current_user.usergroup.code=="GLY"){
@@ -49,29 +36,30 @@ function getRentContractCity(t){
                     if (data.result) {
                         lst_select_rentContract_city = JSON.parse(data.data);
 
-                        for(i=0;i<lst_select_rentContract_city.length;i++){
-                            rentContractCityNameArray.push(lst_select_rentContract_city[i].cityname);
-                            rentContractCityIdMap[lst_select_rentContract_city[i].cityname] = lst_select_rentContract_city[i].id;
+                        var option = "";
+                        for( var i=0;i<lst_select_rentContract_city.length;i++){
+                            option=option+"<option value='"+lst_select_rentContract_city[i].ctid+"'>"+lst_select_rentContract_city[i].name+"</option>";
                         }
-                        var autoComplete = new AutoComplete("city_name_rentContract","rentContract_city",rentContractCityNameArray);
-                        autoComplete.start(event);
-                        $("#rentContract_city").attr("style","width: 150px;z-index: 99999;left: 6.8%;top: 23.4%;");
+                        $("#city_id_rentContract").append(option);
+                        if(flag=="search"){
+                            $("#city_id_rentContract").val(cur_city_id);
+                        }
                     }
-                },false);
+                });
         }
 
-    }
+
 
 }
 
-/**
- * 选择城市
- * @param t
- */
-function selectRentContractCity(t){
-    var temp_city = document.getElementById("city_name_rentContract").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-    $("#city_id_rentContract").val(rentContractCityIdMap[temp_city]);
-}
+// /**
+//  * 选择城市
+//  * @param t
+//  */
+// function selectRentContractCity(t){
+//     var temp_city = document.getElementById("city_name_rentContract").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
+//     $("#city_id_rentContract").val(rentContractCityIdMap[temp_city]);
+// }
 
 
 
@@ -96,10 +84,10 @@ function getRentContractStore(t){
             return;
         }
         var city_id  = $("#city_id_rentContract").val()==""?null:$("#city_id_rentContract").val();
-        var city_name =  $("#city_name_rentContract").val();
-        if(city_id==null&&city_name!=""){
-            city_id=-10000;
-        }
+        // var city_name =  $("#city_name_rentContract").val();
+        // if(city_id==null&&city_name!=""){
+        //     city_id=-10000;
+        // }
         var target=0;
         if(regex_zb.test(userGroupCode)){//总部
             target=0;
@@ -118,7 +106,7 @@ function getRentContractStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_rentContract","rentContract_store",rentContractStoreNameArray);
                 autoComplete.start(event);
-                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 24.5%;top: 23.4%;");
+                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 23.1%;");
             }else{
 
             }
@@ -253,10 +241,12 @@ function searchCostRentContract(){
     var storeNo=$("#storeNo_rent").val()==""?null:$("#storeNo_rent").val();
     var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
     $("#rentContract_tb_2").find("tr:gt(0)").remove();
-    var cityId = $("#city_id_rentContract").val();
-    var cityName = $("#city_name_rentContract").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
+
+    var cityId="";
+    if(flag=="search"){
+        cityId = cur_city_id;
+    }else{
+        cityId = $("#city_id_rentContract").val();
     }
 
     var storeId = $("#store_id_rentContract").val();
@@ -346,10 +336,7 @@ function exportCostRentContract(){
     var storeName=$("#storeName_rent").val()==""?null:$("#storeName_rent").val();
 
     var cityId = $("#city_id_rentContract").val();
-    var cityName = $("#city_name_rentContract").val();
-    if(cityId==""&&cityName!=""){
-        cityId="-10000";
-    }
+
 
     var storeId = $("#store_id_rentContract").val();
     var storeName = $("#store_name_rentContract").val();

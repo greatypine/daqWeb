@@ -193,11 +193,9 @@ public class CostRentContractExcel {
         for (int i = 0; i <16; i++) {
             cell = row.createCell(i);
             cell.setCellValue(header0[i]);
-            if(i>2){
-                cell.setCellStyle(headstyle2);
-            }else{
-                cell.setCellStyle(headstyle);
-            }
+
+            cell.setCellStyle(headstyle);
+
         }
 
 
