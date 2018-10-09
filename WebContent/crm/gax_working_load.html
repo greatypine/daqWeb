@@ -170,6 +170,14 @@
 <script src="dist/js/base64.js"></script>
 
 <script>
+    var xData_month = function() {
+        var now = new Date();
+        var data = [];
+        var curMonth = now.getFullYear()+'-'+now.getMonth()+'-31';
+        var startMonth = (now.getFullYear()-1)+'-'+'12-1';
+        data = getYearAndMonth(startMonth,curMonth);
+        return data;
+    }();
   var myChart1 = echarts.init(document.getElementById('main1'));
   var myChart2 = echarts.init(document.getElementById('main2'));
   var myChart3 = echarts.init(document.getElementById('main3'));
@@ -251,7 +259,7 @@
     ],
   };
   var avgSendOrderArray = [0,0,0,0,0,0,0,0,0,0,0,0];
-var array1 = ['4月','5月','6月','7月','8月','9月'];
+var array1 = xData_month;
   //人均月送单量
   option2 = {
     title: [ {
@@ -485,7 +493,7 @@ var array1 = ['4月','5月','6月','7月','8月','9月'];
           }
         },
         axisTick: {show: false},
-        data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月"]
+        data: xData_month
       }, {
         axisPointer: {show: false},
         axisLine: {
@@ -745,6 +753,34 @@ var array1 = ['4月','5月','6月','7月','8月','9月'];
           })
       }
   });
+
+    //获取两个时间段内的月份数据
+    function getYearAndMonth(start, end) {
+        var result = [];
+        var starts = start.split('-');
+        var ends = end.split('-');
+        var staYear = parseInt(starts[0]);
+        var staMon = parseInt(starts[1]);
+        var endYear = parseInt(ends[0]);
+        var endMon = parseInt(ends[1]);
+        while (staYear <= endYear) {
+            if (staYear === endYear) {
+                while (staMon < endMon) {
+                    staMon++;
+                    result.push(staYear+"-"+staMon);
+                }
+                staYear++;
+            } else {
+                staMon++;
+                if (staMon > 12) {
+                    staMon = 1;
+                    staYear++;
+                }
+                result.push(staYear+"-"+staMon);
+            }
+        }
+        return result;
+    }
 </script>
 <script>
 var screenlogin=getUrlParamByKey("su");
@@ -858,15 +894,15 @@ function showEmpInfo(){
             $("#avgWorkTime").html(avgtime);
         }
     });
-    /*doManager("employeeMoreInfoManager", "getAvgSendOrder",null,function(data, textStatus, XMLHttpRequest) {
+    doManager("employeeMoreInfoManager", "getAvgSendOrder",null,function(data, textStatus, XMLHttpRequest) {
         if (data.result) {
             var resultJson = JSON.parse(data.data);
             var avgSentOrder = resultJson.avgSentOrder;
-            var avgorder = avgSentOrder[0].avgorder == null ? 0 : avgSentOrder[0].avgorder;
+            var avgorder = avgSentOrder.avgorder == null ? 0 : avgSentOrder.avgorder;
             $("#avgSendOrder").html(avgorder);
         }
-    });*/
-    $("#avgSendOrder").html(10);
+    });
+    //$("#avgSendOrder").html(10);
     doManager("employeeMoreInfoManager", "getAvgMileAage",null,function(data, textStatus, XMLHttpRequest) {
         if (data.result) {
             var resultJson = JSON.parse(data.data);
@@ -902,7 +938,7 @@ function showEmpAvgSendOrderInfo(){
             if(avgSendOrderMonthTrend != null && avgSendOrderMonthTrend.length >0){
                 for(var i = 0; i <avgSendOrderMonthTrend.length; i++){
                     var avgSendOrder = avgSendOrderMonthTrend[i];
-                    var index = jQuery.inArray(parseInt(avgSendOrder.month)+"月",array1);
+                    var index = jQuery.inArray('2018-'+parseInt(avgSendOrder.month),array1);
                     avgSendOrderArray[index] = avgSendOrder.avgcount;
                 }
             }
@@ -980,6 +1016,7 @@ function showEmpAvgAtAnalysisInfo(){
         }
     });
 }
+
 </script>
 </body>
 </html>

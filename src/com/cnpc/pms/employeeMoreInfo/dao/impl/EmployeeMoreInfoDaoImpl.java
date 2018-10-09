@@ -90,10 +90,12 @@ public class EmployeeMoreInfoDaoImpl extends BaseDAOHibernate implements Employe
         String curYear = DateUtils.dateFormat(new Date(), "yyyy");
         Integer curMonth = Integer.parseInt(DateUtils.dateFormat(new Date(), "MM"));
         String sql = "select ROUND(sum(datanum)/sum(t2.workdays)) as avgorder from ( " +
-                "select employee_no,sum(datanum) as datanum from ds_pes_order_empchannel_month where year = '"+curYear+"' and employee_no is not null and employee_no != '' and month !='"+curMonth+"' GROUP BY employee_no) t1 " +
+                "select employee_no,sum(datanum) as datanum from ds_pes_order_empchannel_month where year = '"+curYear+"' and employee_no is not null and employee_no != '' and month !="+curMonth+" GROUP BY employee_no) t1 " +
                 "LEFT JOIN ( " +
-                "SELECT recode.employee_no,recode.workdays,recode.work_month from t_work_record recode LEFT JOIN t_work_record_total total ON (recode.workrecord_id = total.id) " +
-                "where substring_index(recode.work_month,'-',1) = '"+curYear+"' and total.commit_status =3 and recode.work_month != '"+curYearMonth+"' " +
+                "select employee_no,sum(workdays) as workdays  from (SELECT employee_no,workdays,work_month,workrecord_id from t_work_record where substring_index(work_month,'-',1) = '"+curYear+"') a1 " +
+                "INNER JOIN t_work_record_total total ON a1.workrecord_id = total.id " +
+                "INNER JOIN (select yearmonth,zw,employeeno from t_topdata_human where substring_index(yearmonth,'-',1) = '"+curYear+"' ) a2 ON (a1.employee_no = a2.employeeno and a1.work_month = a2.yearmonth) " +
+                "where a2.zw = '国安侠' AND total.commit_status = 3 and a2.yearmonth != '"+curYearMonth+"'  GROUP BY a1.employee_no " +
                 ") t2 ON (t1.employee_no = t2.employee_no)";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String,Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
