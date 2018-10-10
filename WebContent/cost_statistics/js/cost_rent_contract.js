@@ -1,5 +1,5 @@
-var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
-var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+var regex_zb = new RegExp("^(MDCBGLZB|mdcbglzb)\w*");//成本管理总部角色
+var regex_cs = new RegExp("^(MDCBGLCS|mdcbglcs)\w*");//成本管理城市级别
 /**
  * 查询人工成本城市
  * @type {null}
@@ -106,7 +106,7 @@ function getRentContractStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_rentContract","rentContract_store",rentContractStoreNameArray);
                 autoComplete.start(event);
-                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 23.1%;");
+                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 28.3%;top: 22.3%;");
             }else{
 
             }
