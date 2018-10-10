@@ -902,7 +902,7 @@ Date.prototype.format=function(fmt) {
   	//以tag_为前缀的快速标签均为晚上定时更新，除积分订单外
   	$("[id^='tag_']").click(function(event) {
         var id = event.target.id;
-        if($(this).hasClass('bg-orange-active') && id!='tag_积分订单'){
+        if($(this).hasClass('bg-orange-active')){
             blurDateCurMonth();
         }
     });
