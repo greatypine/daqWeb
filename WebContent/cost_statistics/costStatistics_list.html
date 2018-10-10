@@ -57,8 +57,9 @@
         doManager('UserManager','getCurrentUserDTO',null,function(data){
             if(data.result){
                 current_user = JSON.parse(data.data);
-                searchList();
+
                 getcontrolCity();
+                searchList();
             }else{
                 $$.showMessage('提示',data.message);
             }
@@ -75,8 +76,9 @@
      * @type {null}
      */
     var lst_select_control_city=null;
-    // var controlCityNameArray=new Array();
+     var controlCityNameArray=new Array();
     // var controlCityIdMap = {};
+
     function getcontrolCity(t){
 
         // controlCityIdMap=new Array();
@@ -108,9 +110,14 @@
                             // controlCityNameArray.push(lst_select_control_city[i].cityname);
                             // controlCityIdMap[lst_select_control_city[i].cityname] = lst_select_control_city[i].cityname;
                             option=option+"<option value='"+lst_select_control_city[i].cityname+"'>"+lst_select_control_city[i].cityname+"</option>";
-
+                            controlCityNameArray.push("'"+lst_select_control_city[i].cityname+"'");
                         }
                         $("#city_id_control").append(option);
+                        if(controlCityNameArray.length==0){
+                            $("#cityName").val("none");
+                        }else{
+                            $("#cityName").val(controlCityNameArray.join(","));
+                        }
                         // var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
                         // autoComplete.start(event);
                         // $("#control_city").attr("style","width: 150px;z-index: 99999;left: 5.4%;top: 13%;");
@@ -129,9 +136,15 @@
                                 // controlCityNameArray.push(lst_select_control_city[i].name);
                                 // controlCityIdMap[lst_select_control_city[i].name] = lst_select_control_city[i].name;
                                 option=option+"<option value='"+lst_select_control_city[i].name+"'>"+lst_select_control_city[i].name+"</option>";
-
+                                controlCityNameArray.push("'"+lst_select_control_city[i].name+"'");
                             }
                             $("#city_id_control").append(option);
+                            if(controlCityNameArray.length==0){
+                                $("#cityName").val("none");
+                            }else{
+                                $("#cityName").val(controlCityNameArray.join(","));
+                            }
+
                             // var autoComplete = new AutoComplete("city_name_control","control_city",controlCityNameArray);
                             // autoComplete.start(event);
                             // $("#control_city").attr("style","width: 150px;z-index: 99999;left: 5.4%;top: 13%;");
@@ -153,6 +166,15 @@
     // }
 
 
+    function changeCostCity() {
+        var cityName = $("#city_id_control").val();
+        if(cityName==""){
+            $("#cityName").val(controlCityNameArray.join(","));
+        }else{
+            $("#cityName").val("'"+cityName+"'");
+        }
+
+    }
 
     /**-----------------------------------搜索门店------------------------------------------------------**/
 
@@ -311,7 +333,8 @@
                             <!--<div class="auto hidden" id="control_city" onclick="selectcontrolCity(this)" style="width:150px;z-index: 99999;">-->
                                 <!--&lt;!&ndash; /.input group &ndash;&gt;-->
                             <!--</div>-->
-                            <select id="city_id_control" name="cityName" style="width: 200px;cursor: pointer" class="form-control"><option value="">全部</option></select>
+                            <input type="hidden" name="cityName" id="cityName" value="none"/>
+                            <select id="city_id_control" onchange="changeCostCity()" style="width: 200px;cursor: pointer" class="form-control"><option value="">全部</option></select>
                         </td>
                         <!--<td width="12px">-->
                             <!--<span >门店名称：</span>-->
