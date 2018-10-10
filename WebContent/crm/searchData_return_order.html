@@ -209,6 +209,7 @@
                   <th width="10%">退货时间</th>
                   <th width="9%">业务信息</th>
                   <th width="10%">人员信息</th>
+                  <td width="9%" style="font-weight:bold;">毛利（元）</td>
                   <th width="10%">订单标签</th>
                 </tr>
                 </tbody>
@@ -803,17 +804,27 @@ Date.prototype.format=function(fmt) {
  			        var pcontent =gmv+trading+payable+returnPrice+"@ptips"+i;
 			        var pid = "ptips"+i; 
 			        
-			        var employeeid = "employeetips"+i;  
-       			       
-	        		infoStr= "<tr>";
+			        var employeeid = "employeetips"+i;
+                    var profitid = "profittips"+i;
+
+                    infoStr= "<tr>";
        			    infoStr= infoStr
                     	+"<td><a href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
  			   	   	    +"<td><a href=\"#\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
  			   	        +"<td><a href=\"#\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+returned_amount+"</a></td>"
                 	   	+"<td><a href=\"#\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+r+"</a></td>"
  			   	   	    +"<td><a href=\"#\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
- 			   	   	    +"<td><a href=\"#\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>"
-                    	+"<td>";
+ 			   	   	    +"<td><a href=\"#\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
+                       infoStr = infoStr
+                           +"<td>";
+                       var curDate = new Date(new Date(new Date().toLocaleDateString()).getTime());
+                       if(jData[i].sign_time>=curDate){
+                           infoStr = infoStr + "<a href=\"javascript:;\">暂未计算</a>";
+                       }else{
+                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
+                       }
+                       infoStr = infoStr
+                           +"</td><td>";
 	        		   if(jData[i].pubseas_label=='1'){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/623608966639545324.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">公海订单</span>";
@@ -986,7 +997,45 @@ Date.prototype.format=function(fmt) {
   			}  
   		});  
   }
-  
+
+    //利润信息显示
+    function showprofit(rebate,coupon,cost,contract_id,profitid){
+        var rebate_org = rebate;
+        var coupon_org = coupon;
+        var cost_org = cost;
+        var method = "";
+        if(contract_id != '' && contract_id != null){
+            doManager('massOrderManager','queryContractById',[contract_id],function(data){
+                if(data.result){
+                    var result= JSON.parse(data.data);
+                    if(result!=null){
+
+                        var method_org = "从价";
+                        if(result.method=='volume'){
+                            method_org = "从量";
+                        }else if(result.method=='percent'){
+                            method_org = "从率";
+                        }
+                        method = "<strong>结算方式：</strong>"+method_org+"<br>";
+                    }
+                }
+            },false);
+        }
+        var rebate="<strong>返利：</strong>"+rebate_org+"<br>";
+        var coupon="<strong>优惠券：</strong>"+coupon_org+"<br>";
+        var cost="<strong>成本：</strong>"+cost_org+"<br>";
+
+        var profitcontent = "无合同";
+        if(method != ''){
+            profitcontent = method;
+        }
+
+        layer.tips(profitcontent, '#'+profitid, {
+            tips: [4, '#0FA6D8'], //还可配置颜色
+            time:5000
+        });
+    }
+
   //导出
   function export_manual_massOrder(hiddenvalue){
 	  	var sdate = $("#auto_date").val();

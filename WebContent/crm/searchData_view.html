@@ -903,7 +903,7 @@ Date.prototype.format=function(fmt) {
   	$("[id^='tag_']").click(function(event) {
         var id = event.target.id;
         if($(this).hasClass('bg-orange-active') && id!='tag_积分订单'){
-            blurDate();
+            blurDateCurMonth();
         }
     });
 
@@ -917,6 +917,19 @@ Date.prototype.format=function(fmt) {
       var start_date = begin_end_date[0];
       if(start_date.replace(/\s+/g,"")==cDate){//如果时间是今天则变更时间
           $("#auto_date").val("2018/01/01"+"-"+begin_end_date[1]);
+      }
+  }
+
+  function blurDateCurMonth(){
+      var sdate = $("#auto_date").val();
+      var begin_end_date=["",""];
+      if(sdate!=""){
+          begin_end_date = sdate.split("-");
+      }
+      var start_date = begin_end_date[0];
+      if(start_date.replace(/\s+/g,"")==cDate){//如果时间是今天则变更时间
+          var date = new Date();
+          $("#auto_date").val(date.getFullYear()+"/"+(date.getMonth()+1)+"/01"+"-"+begin_end_date[1]);
       }
   }
 
@@ -1423,9 +1436,18 @@ Date.prototype.format=function(fmt) {
                 	   	+"<td><a href=\"javascript:;\" onmouseover=\"showarea('"+jData[i].area_code+"','"+jData[i].order_sn+"','"+areaid+"');\" id=\""+areaid+"\">"+area_name+"</a></td>"
                 	   	+"<td><a href=\"javascript:;\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+s+"</a></td>"
  			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
- 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>"
- 			   	   		+"<td><a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a></td>"
-                    	+"<td>";
+ 			   	   	    +"<td><a href=\"javascript:;\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
+
+       			    infoStr = infoStr
+                        +"<td>";
+                       var curDate = new Date(new Date(new Date().toLocaleDateString()).getTime());
+                       if(jData[i].sign_time>=curDate){
+                           infoStr = infoStr + "<a href=\"javascript:;\">暂未计算</a>";
+                       }else{
+                           infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
+                       }
+       			    infoStr = infoStr
+                           +"</td><td>";
 	        		   if(jData[i].pubseas_label=='1'){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/623608966639545324.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">公海订单</span>";
@@ -1705,6 +1727,7 @@ Date.prototype.format=function(fmt) {
 
 	 	var number_str = $("#store_id_manual").val(); 
 	    var storeName = $("#store_name_manual").val();
+        $("#auto").empty();
 	    if(number_str==""&&storeName!=""){
 	    	number_str=-10000;
 	    }
