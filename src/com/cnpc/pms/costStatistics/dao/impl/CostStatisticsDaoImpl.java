@@ -680,7 +680,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         String sqlSub = "";
         if(cityName!=null&&!"".equals(cityName)){
-            sqlSub=" and city_name='"+cityName+"'";
+            sqlSub=" and city_name in ("+cityName+")";
         }
         String sql = "select ts.city_name as cityName,tdc.id as cityId,ts.total,l.labor,r.rent,rv.renovation,u.uniform,rc.rentContract,fa.fixedAsset,g.gwe,co.operation from " +
                 " (select city_name,count(store_id) as total from t_store where ifnull(estate,'') not like '%闭店%' and name not like '%测试%'  and storetype!='V' "+sqlSub+" GROUP BY city_name) ts" +
