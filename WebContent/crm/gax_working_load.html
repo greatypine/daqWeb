@@ -486,7 +486,8 @@ var array1 = xData_month;
           lineStyle: {color: '#666'}
         },
         axisLabel: {
-          margin: 10,
+            interval:0,
+         // margin: 10,
           textStyle: {
             fontSize: 14,
             color: '#666'
@@ -494,14 +495,6 @@ var array1 = xData_month;
         },
         axisTick: {show: false},
         data: xData_month
-      }, {
-        axisPointer: {show: false},
-        axisLine: {
-          lineStyle: {color: '#666'}
-        },
-        axisTick: {show: false},
-        position: 'bottom',
-        offset: 20
       }],
     yAxis: [{
       type: 'value',
