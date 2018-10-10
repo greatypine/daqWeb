@@ -1,22 +1,22 @@
 package com.cnpc.pms.dynamic.dao.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.dao.UserOperationStatDao;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
 import com.cnpc.pms.utils.DateUtils;
+import com.cnpc.pms.utils.ImpalaUtil;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOperationStatDao {
 
@@ -216,8 +216,14 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
-		sql = sql + " GROUP BY a.store_id,a.area_code ";
-		
+		sql = sql + " GROUP BY a.store_city_code ";
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+			sql = sql + ",a.store_id ";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+			sql = sql + ",a.area_code ";
+		}
+
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 		
 		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession()
@@ -265,8 +271,14 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
-		sql = sql + " GROUP BY a.store_id,a.area_code ";
-		
+		sql = sql + " GROUP BY a.store_city_code ";
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+			sql = sql + ",a.store_id ";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+			sql = sql + ",a.area_code ";
+		}
+
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return list;
@@ -296,8 +308,14 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
-		sql = sql + " GROUP BY a.store_id,a.area_code ";
-		
+		sql = sql + " GROUP BY a.store_city_code ";
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+			sql = sql + ",a.store_id ";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+			sql = sql + ",a.area_code ";
+		}
+
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 		
 		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession()
@@ -345,8 +363,14 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
-		sql = sql + " GROUP BY a.store_id,a.area_code ";
-		
+		sql = sql + " GROUP BY a.store_city_code ";
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+			sql = sql + ",a.store_id ";
+		}
+		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+			sql = sql + ",a.area_code ";
+		}
+
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return list;
@@ -595,6 +619,50 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		sql = sql +  "group by customer_id HAVING count(1)>=2) GROUP BY a.store_id,a.area_code ";
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+
+	public Map<String, Object> queryRegistCusStat(UserOperationStatDto userOperationStatDto, PageInfo pageInfo){
+
+		String sql = "SELECT IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' THEN 1 end),0) as total_cus, "
+				+ "IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' AND strleft(tc.create_time,10)>='"+userOperationStatDto.getBeginDate()+"' THEN 1 end),0) as new_cus, "
+				+ "min(td.cityno) as cityno,min(td.cityname) as cityname FROM gemini.t_customer tc JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
+		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
+			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%'";
+		}
+		sql = sql + " GROUP BY td.cityno order by td.cityno asc ";
+
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+
+		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+		int recordsPerPage = pageInfo.getRecordsPerPage();
+		sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+		String total = "0";
+		List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+		if(resultCount !=null && resultCount.size()>0 ){
+			total = String.valueOf(resultCount.get(0).get("total"));
+		}
+
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+		map_result.put("pageinfo", pageInfo);
+		map_result.put("data", list);
+		map_result.put("total_pages", total_pages);
+		return map_result;
+	}
+
+	public List<Map<String, Object>> exportRegistCusStat(UserOperationStatDto userOperationStatDto){
+		String sql = "SELECT IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' THEN 1 end),0) as total_cus, "
+				+ "IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' AND strleft(tc.create_time,10)>='"+userOperationStatDto.getBeginDate()+"' THEN 1 end),0) as new_cus, "
+				+ "min(td.cityno) as cityno,min(td.cityname) as cityname FROM gemini.t_customer tc JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
+		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
+			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%'";
+		}
+		sql = sql + " GROUP BY td.cityno order by td.cityno asc ";
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
 	}
 	

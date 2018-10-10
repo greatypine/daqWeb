@@ -8,6 +8,8 @@ public class UserOperationStatDto {
 	private String storeNo;
 	private String paytype;
 	private String dimension;
+	private String searchStoreStr;
+	private String searchAreaStr;
 	
 	public String getBeginDate() {
 		return beginDate;
@@ -45,5 +47,20 @@ public class UserOperationStatDto {
 	public void setDimension(String dimension) {
 		this.dimension = dimension;
 	}
-	
+
+	public String getSearchStoreStr() {
+		return searchStoreStr;
+	}
+
+	public void setSearchStoreStr(String searchStoreStr) {
+		this.searchStoreStr = searchStoreStr;
+	}
+
+	public String getSearchAreaStr() {
+		return searchAreaStr;
+	}
+
+	public void setSearchAreaStr(String searchAreaStr) {
+		this.searchAreaStr = searchAreaStr;
+	}
 }

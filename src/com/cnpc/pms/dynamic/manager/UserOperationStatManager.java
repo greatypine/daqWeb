@@ -1,10 +1,10 @@
 package com.cnpc.pms.dynamic.manager;
 
-import java.util.Map;
-
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
+
+import java.util.Map;
 
 public interface UserOperationStatManager extends IManager {
 
@@ -43,5 +43,9 @@ public interface UserOperationStatManager extends IManager {
 	public Map<String, Object> queryEffectCusStat(UserOperationStatDto userOperationStatDto, PageInfo pageInfo);
 	
 	public Map<String, Object> exportEffectCusStat(UserOperationStatDto userOperationStatDto);
+
+	public Map<String, Object> queryRegistCusStat(UserOperationStatDto userOperationStatDto, PageInfo pageInfo);
+
+	public Map<String, Object> exportRegistCusStat(UserOperationStatDto userOperationStatDto);
 	
 }
