@@ -3017,7 +3017,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					"SUM(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount, " +
 					"SUM(case when member_type = 'associator_start_2' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199 " +
 					"from df_user_member member "+condition_sql+" GROUP BY member.regist_storeid) dutm " +
-					"left join t_store ts ON (dutm.regist_storeid = ts.platformid) "+join_sql+" GROUP BY ts.storeno";
+					"left join t_store ts ON (dutm.regist_storeid = ts.platformid) "+join_sql+" GROUP BY ts.storeno " +
+					"ORDER BY (case when ts.storeno is null then '9010C0130' else ts.storeno end),ts.storeno asc";
 		}else{
 			sql = "select ifnull(ts.storeno,'无') as storeno,ifnull(ts.name,'无') as name,ifnull(ts.city_name,'无') as city_name,dutm.nowcount as nowcount,dutm.opencount as opencount," +
 					"dutm.count199 as count199 from (select regist_storeid,regist_cityno," +
@@ -3025,7 +3026,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					"SUM(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount," +
 					"SUM(case when member_type = 'associator_start_2' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199 " +
 					"from df_user_member member GROUP BY member.regist_storeid) dutm " +
-					"left join t_store ts ON (dutm.regist_storeid = ts.platformid) where ts.storeno = '"+dynamicDto.getStoreNo()+"'";
+					"left join t_store ts ON (dutm.regist_storeid = ts.platformid) where ts.storeno = '"+dynamicDto.getStoreNo()+"' " +
+					"ORDER BY (case when ts.storeno is null then '9010C0130' else ts.storeno end),ts.storeno asc";
 		}
 		
 		Query query = this.getHibernateTemplate().getSessionFactory()
@@ -3118,14 +3120,16 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 					"sum(case when member.associator_expiry_date>now() and  member.opencard_time is not null then 1 else 0 end ) as opencount, " +
 					"sum(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount " +
 					"from df_user_try_member member "+condition_sql+" group by member.regist_storeid ) dutm   " +
-					"left join t_store ts  on (dutm.regist_storeid = ts.platformid) "+join_sql+" GROUP BY ts.storeno";
+					"left join t_store ts  on (dutm.regist_storeid = ts.platformid) "+join_sql+" GROUP BY ts.storeno " +
+					"ORDER BY (case when ts.storeno is null then '9010C0130' else ts.storeno end),ts.storeno asc";
 		}else{
 			sql = "select ifnull(ts.storeno,'无') as storeno,ifnull(ts.name, '无') AS name,ifnull(ts.city_name, '无') AS city_name,dutm.opencount as opencount,dutm.nowcount as nowcount " +
 					"from (select regist_storeid," +
 					"sum(case when member.associator_expiry_date>now() and  member.opencard_time is not null then 1 else 0 end ) as opencount," +
 					"sum(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount " +
 					"from df_user_try_member member group by member.regist_storeid ) dutm  " +
-					"left join t_store ts  on (dutm.regist_storeid = ts.platformid) where ts.storeno = '"+dynamicDto.getStoreNo()+"'";
+					"left join t_store ts  on (dutm.regist_storeid = ts.platformid) where ts.storeno = '"+dynamicDto.getStoreNo()+"' " +
+					"ORDER BY (case when ts.storeno is null then '9010C0130' else ts.storeno end),ts.storeno asc";
 		}
 
 		Query query = this.getHibernateTemplate().getSessionFactory()
