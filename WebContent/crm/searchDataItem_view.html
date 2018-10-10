@@ -420,18 +420,21 @@ Date.prototype.format=function(fmt) {
     $(".logo-lg > ul > li").mouseleave(function(){
       $(this).children(".nav_dropdown").hide();
     });
+    var todayDate = new Date();
+    var firstDate = new Date(todayDate.getTime() - 24*60*60*1000);
+    var curDate = new Date(todayDate.getTime() - 24*60*60*1000);
     $('#auto_date').daterangepicker({
     	minDate:new Date(2017, 12),
-        maxDate:new Date()
+        maxDate:curDate
     });
     
-    var firstDate = new Date();
 //     firstDate.setDate(1); //第一天
-    var curDate = new Date();
     var bdate = firstDate.format('yyyy/MM/dd');
     var cDate = curDate.format('yyyy/MM/dd');
     $("#auto_date").val(bdate+"-"+cDate);
-    
+    $('#auto_date').data('daterangepicker').setStartDate(firstDate);
+	$('#auto_date').data('daterangepicker').setEndDate(curDate);
+	
     document.getElementById("ordersn_manual").onkeyup =function() {
         this.value =this.value.replace(/\s/g,'').replace(/\D/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");;
   	};
@@ -1611,8 +1614,11 @@ Date.prototype.format=function(fmt) {
 	$("#product_id_manual").val("");
 	$("#product_name_manual").val("");
 	$("#customer_phone_manual").empty();
-    $('#auto_date').data('daterangepicker').setStartDate(new Date());
-	$('#auto_date').data('daterangepicker').setEndDate(new Date());
+	var todayDate = new Date();
+    var firstDate = new Date(todayDate.getTime() - 24*60*60*1000);
+ 	var endDate = new Date(todayDate.getTime() - 24*60*60*1000);
+    $('#auto_date').data('daterangepicker').setStartDate(firstDate);
+	$('#auto_date').data('daterangepicker').setEndDate(endDate);
   }
   
   var autoPageRecordes=10;
