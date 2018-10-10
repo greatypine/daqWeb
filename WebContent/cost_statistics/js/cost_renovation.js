@@ -265,22 +265,22 @@ function calculateRenovationAmortizeMoney(t){
 /**
  * 获取装修摊销
  */
-function getCostRenovation(){
+function getCostRenovation(f){
     var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostRenovation();
+            saveCostRenovation(f);
 
         },function(){
 
             $("#renovation_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchCostRenovation();
+            searchCostRenovation(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchCostRenovation();
+        searchCostRenovation(f);
     }
 }
 
@@ -291,14 +291,14 @@ function checkDecorationCompany(t){
 /**
  * 查询装修摊销
  * **/
-function searchCostRenovation(){
+function searchCostRenovation(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
     });
 
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
         cityId = $("#city_id_renovation").val();

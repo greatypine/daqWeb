@@ -184,23 +184,23 @@ function calculateYearCharge(t){
 /**
  * 查询运营成本
  */
-function getCostOperation(){
+function getCostOperation(f){
 
     var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostOperation();
+            saveCostOperation(f);
 
         },function(){
 
             $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchCostOperation();
+            searchCostOperation(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchCostOperation();
+        searchCostOperation(f);
     }
 }
 
@@ -208,7 +208,7 @@ function getCostOperation(){
 /**
  * 获取运营成本
  * **/
-function searchCostOperation(){
+function searchCostOperation(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -218,7 +218,7 @@ function searchCostOperation(){
     $("#operation_save_date").val(year);
 
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
         cityId = $("#city_id_operation").val();

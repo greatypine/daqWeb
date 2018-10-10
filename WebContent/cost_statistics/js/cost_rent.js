@@ -306,24 +306,24 @@ function checkPropertyDeadLine(t){
 /**
  * 获取租金成本
  * **/
-function getCostRent(){
+function getCostRent(f){
 
 
     var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostRent();
+            saveCostRent(f);
 
         },function(){
 
             $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchCostRent();
+            searchCostRent(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchCostRent();
+        searchCostRent(f);
     }
 
 
@@ -334,7 +334,7 @@ function getCostRent(){
  * 搜索租金成本
  * @param
  */
-function searchCostRent(){
+function searchCostRent(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -346,7 +346,7 @@ function searchCostRent(){
 
 
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
         cityId = $("#city_id_rent").val();

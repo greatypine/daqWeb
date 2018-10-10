@@ -183,24 +183,24 @@ function checkCostUniform(t){
 /**
  * 获取工服成本
  * **/
-function getCostUniform(){
+function getCostUniform(f){
 
 
     var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostUniform();
+            saveCostUniform(f);
 
         },function(){
 
             $("#uniform_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchUniform();
+            searchUniform(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchUniform();
+        searchUniform(f);
     }
 
 }
@@ -208,7 +208,7 @@ function getCostUniform(){
 /**
  * 查询工服成本
  */
-function searchUniform(){
+function searchUniform(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -221,7 +221,7 @@ function searchUniform(){
     $("#uniform_tb_2").find("tr:gt(0)").remove();
 
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
         cityId = $("#city_id_uniform").val();

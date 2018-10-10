@@ -111,7 +111,7 @@ function getLaborStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_labor","labor_store",laborStoreNameArray);
                 autoComplete.start(event);
-                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 26.4%;top: 23.1%;");
+                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 22.3%;");
             }else{
 
             }
@@ -163,24 +163,24 @@ function checkCostLabor(t){
 /**
  * 获取人工成本
  * **/
-function getCostLabor(){
+function getCostLabor(f){
 
 
     var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostLabor();
+            saveCostLabor(f);
 
         },function(){
 
             $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchLabor();
+            searchLabor(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchLabor();
+        searchLabor(f);
     }
 
 }
@@ -188,7 +188,7 @@ function getCostLabor(){
 /**
  * 查询人工成本
  */
-function searchLabor(){
+function searchLabor(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -206,7 +206,7 @@ function searchLabor(){
 
     $("#labor_tb_2").find("tr:gt(0)").remove();
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
          cityId = $("#city_id_labor").val();

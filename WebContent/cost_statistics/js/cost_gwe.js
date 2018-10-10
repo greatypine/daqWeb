@@ -131,24 +131,24 @@ function  checkCostGWE(t) {
 /**
  * 获取水电费
  */
-function getCostGWE() {
+function getCostGWE(f) {
 
 
     var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostGWE();
+            saveCostGWE(f);
 
         },function(){
 
             $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchCostGWE();
+            searchCostGWE(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchCostGWE();
+        searchCostGWE(f);
     }
 }
 
@@ -156,7 +156,7 @@ function getCostGWE() {
 /**
  * 查询水电费
  * **/
-function searchCostGWE(){
+function searchCostGWE(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -172,7 +172,7 @@ function searchCostGWE(){
     $("#gwe_tb_2").find("tr:gt(0)").remove();
 
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
         cityId = $("#city_id_gwe").val();

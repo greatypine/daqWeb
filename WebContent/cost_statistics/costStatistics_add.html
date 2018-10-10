@@ -138,28 +138,28 @@
                 btns: ['confirm','now'],
                 theme: '#428bca'
             });
-            getCostLabor();
+            getCostLabor("auto");
 
 
-            getCostRenovation()
+            getCostRenovation("auto")
 
 
-            getCostFixedAsset();
+            getCostFixedAsset("auto");
 
 
-            getCostRentContract();
+            getCostRentContract("auto");
 
 
-            getCostRent();
+            getCostRent("auto");
 
 
-            getCostUniform();
+            getCostUniform("auto");
 
 
-            getCostOperation();
+            getCostOperation("auto");
 
 
-            getCostGWE();
+            getCostGWE("auto");
 
 
             $("#li_property").addClass("active");
@@ -667,7 +667,7 @@
                                             <input id="labor_year_month" type="hidden"/>
                                         </td>
                                         <td width="5%" style="text-align:left;">
-                                            <button  class="btn btn-primary"  onclick="getCostLabor()">查询</button>
+                                            <button  class="btn btn-primary"  onclick="getCostLabor('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align:left;">-->
                                             <!--<button  class="btn btn-primary"  onclick="saveCostLabor()">保存</button>-->
@@ -724,7 +724,7 @@
                                         </td>
 
                                         <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostGWE()">查询</button>
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostGWE('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align: left;padding-bottom: 20px">-->
                                             <!--<button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostGWE()">保存</button>-->
@@ -793,7 +793,7 @@
 
                                         </td>
                                         <td width="5%" style="text-align:left;">
-                                            <button  class="btn btn-primary"  onclick="getCostRent()">查询</button>
+                                            <button  class="btn btn-primary"  onclick="getCostRent('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align: left;">-->
                                             <!--<button  class="btn btn-primary"  onclick="saveCostRent()">保存</button>-->
@@ -853,7 +853,7 @@
                                         </td>
 
                                         <td width="5%" style="text-align: left;">
-                                            <button  class="btn btn-primary"  onclick="getCostOperation()">查询</button>
+                                            <button  class="btn btn-primary"  onclick="getCostOperation('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align: left;">-->
                                             <!--<button  class="btn btn-primary"  onclick="saveCostOperation()">保存</button>-->
@@ -922,7 +922,7 @@
                                         </td>
 
                                         <td width="5%" style="text-align: left;">
-                                            <button  class="btn btn-primary"  onclick="getCostUniform()">查询</button>
+                                            <button  class="btn btn-primary"  onclick="getCostUniform('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align: left;">-->
                                             <!--<button  class="btn btn-primary"  onclick="saveCostUniform()">保存</button>-->
@@ -988,7 +988,7 @@
                                         </td>
 
                                         <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostRenovation()">查询</button>
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostRenovation('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align: left;padding-bottom: 20px">-->
                                             <!--<button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostRenovation()">保存</button>-->
@@ -1053,7 +1053,7 @@
                                         </td>
 
                                         <td width="5%" style="text-align: left;padding-bottom: 20px">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostFixedAsset()">查询</button>
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px" onclick="getCostFixedAsset('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align: left;padding-bottom: 20px">-->
                                             <!--<button  class="btn btn-primary" style="margin-bottom:-20px" onclick="saveCostFixedAsset()">保存</button>-->
@@ -1116,7 +1116,7 @@
                                         </td>
 
                                         <td width="5%" style="text-align:left;padding-bottom: 20px;">
-                                            <button  class="btn btn-primary" style="margin-bottom:-20px;" onclick="getCostRentContract()">查询</button>
+                                            <button  class="btn btn-primary" style="margin-bottom:-20px;" onclick="getCostRentContract('manual')">查询</button>
                                         </td>
                                         <!--<td width="5%" style="text-align:left;padding-bottom: 20px;">-->
                                             <!--<button  class="btn btn-primary" style="margin-bottom:-20px;" onclick="saveCostRentContract()">保存</button>-->

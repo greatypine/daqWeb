@@ -274,23 +274,23 @@ function calculateTotal(t){
 /**
  * 查询固定资产
  */
-function getCostFixedAsset(){
+function getCostFixedAsset(f){
 
     var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostFixedAsset();
+            saveCostFixedAsset(f);
 
         },function(){
 
             $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchCostFixedAsset();
+            searchCostFixedAsset(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchCostFixedAsset();
+        searchCostFixedAsset(f);
     }
 }
 
@@ -298,7 +298,7 @@ function getCostFixedAsset(){
 /**
  * 获取固定资产
  * **/
-function searchCostFixedAsset(){
+function searchCostFixedAsset(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -306,7 +306,7 @@ function searchCostFixedAsset(){
 
 
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
         cityId = $("#city_id_fixedAsset").val();

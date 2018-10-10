@@ -207,24 +207,24 @@ function  checkStructureAcreage(t){
 /**
  * 获取租金
  * **/
-function getCostRentContract(){
+function getCostRentContract(f){
 
 
     var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            searchCostRentContract();
+            searchCostRentContract(f);
 
         },function(){
 
             $("#rentContract_tr_2").nextAll("tr[editable='true']").each(function(){
                 $(this).attr("editable","false");
             });
-            searchCostRentContract();
+            searchCostRentContract(f);
         });
 
     }else if(store_cost_tr.length==0){//没有数据修改
-        searchCostRentContract();
+        searchCostRentContract(f);
     }
 
 }
@@ -233,7 +233,7 @@ function getCostRentContract(){
 /**
  * 获取租金
  * */
-function searchCostRentContract(){
+function searchCostRentContract(f){
 
     var index = layer.load(0,{
         shade: [0.2,'#333']
@@ -243,7 +243,7 @@ function searchCostRentContract(){
     $("#rentContract_tb_2").find("tr:gt(0)").remove();
 
     var cityId="";
-    if(flag=="search"){
+    if(f=="auto"){
         cityId = cur_city_id;
     }else{
         cityId = $("#city_id_rentContract").val();
