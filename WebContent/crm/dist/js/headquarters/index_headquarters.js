@@ -2682,8 +2682,8 @@ var showCommodityRank = function (commodityRankData) {
 	  	var commodityDataStr = '{"dataCloud":[';
 	    $.each(eval(commodityRankData['gmv']), function (idx, val) {
 	    	var ifContains = true;
-	    	if(val['product_name'].indexOf('工资')>0 || val['product_name'].indexOf('过账')>0 ||
-	    	val['product_name'].indexOf('工程')>0){
+	    	if(val['product_name'].indexOf('工资')!=-1 || val['product_name'].indexOf('过账')!=-1 ||
+	    	val['product_name'].indexOf('工程')!=-1){
 	    		ifContains = false;
 	    	}
 	    	if(ifContains){
