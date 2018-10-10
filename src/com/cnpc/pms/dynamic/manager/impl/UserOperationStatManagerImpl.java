@@ -484,9 +484,21 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"城市","门店名称	","片区编号","拉新用户","拉新用户超10元","拉新用户超20元"};
+  	        String[] str_headers = {"城市","门店名称","片区编号","拉新用户","拉新用户超10元","拉新用户超20元"};
   	        String[] headers_key = {"city_name","store_name","area_code","new_count","new_10_count","new_20_count"};
-  	       
+			if(StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
+				str_headers = new String[]{"城市","拉新用户","拉新用户超10元","拉新用户超20元"};
+				headers_key = new String[]{"city_name","new_count","new_10_count","new_20_count"};
+			}
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+				str_headers = new String[]{"城市","门店名称","拉新用户","拉新用户超10元","拉新用户超20元"};
+				headers_key = new String[]{"city_name","store_name","new_count","new_10_count","new_20_count"};
+			}
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+				str_headers = new String[]{"城市","片区编号","拉新用户","拉新用户超10元","拉新用户超20元"};
+				headers_key = new String[]{"city_name","area_code","new_count","new_10_count","new_20_count"};
+			}
+
   	        for(int i = 0;i < str_headers.length;i++){
   	            XSSFCell cell = row.createCell(i);
   	            cell.setCellStyle(getHeaderStyle());
@@ -589,9 +601,21 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"城市","门店名称	","片区编号","消费用户","消费用户超10元","消费用户超20元"};
+  	        String[] str_headers = {"城市","门店名称","片区编号","消费用户","消费用户超10元","消费用户超20元"};
   	        String[] headers_key = {"city_name","store_name","area_code","pay_count","pay_10_count","pay_20_count"};
-  	       
+  	        if(StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
+				str_headers = new String[]{"城市","消费用户","消费用户超10元","消费用户超20元"};
+				headers_key = new String[]{"city_name","pay_count","pay_10_count","pay_20_count"};
+			}
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+				str_headers = new String[]{"城市","门店名称","消费用户","消费用户超10元","消费用户超20元"};
+				headers_key = new String[]{"city_name","store_name","pay_count","pay_10_count","pay_20_count"};
+			}
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+				str_headers = new String[]{"城市","片区编号","消费用户","消费用户超10元","消费用户超20元"};
+				headers_key = new String[]{"city_name","area_code","pay_count","pay_10_count","pay_20_count"};
+			}
+
   	        for(int i = 0;i < str_headers.length;i++){
   	            XSSFCell cell = row.createCell(i);
   	            cell.setCellStyle(getHeaderStyle());
@@ -870,7 +894,91 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   		}
   		return result;
 	}
-	
+
+	public Map<String, Object> queryRegistCusStat(UserOperationStatDto userOperationStatDto, PageInfo pageInfo){
+		UserOperationStatDao userOperationStatDao = (UserOperationStatDao) SpringHelper.getBean(UserOperationStatDao.class.getName());
+		Map<String, Object> result =new HashMap<String,Object>();
+		try {
+			result = userOperationStatDao.queryRegistCusStat(userOperationStatDto,pageInfo);
+			result.put("status","success");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("status","fail");
+		}
+		return result;
+	}
+
+	public Map<String, Object> exportRegistCusStat(UserOperationStatDto userOperationStatDto){
+		UserOperationStatDao userOperationStatDao = (UserOperationStatDao) SpringHelper.getBean(UserOperationStatDao.class.getName());
+
+		Map<String, Object> result = new HashMap<String,Object>();
+		List<Map<String, Object>> list = userOperationStatDao.exportRegistCusStat(userOperationStatDto);
+		if(list!=null&&list.size()>0){//成功返回数据
+			if(list.size()>50000){
+				result.put("message","导出条目过多，请重新筛选条件导出！");
+				result.put("status","more");
+				return result;
+			}
+			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
+			String str_web_path = PropertiesUtil.getValue("file.web.root");
+
+			XSSFWorkbook wb = new XSSFWorkbook();
+			setCellStyle_common(wb);
+			setHeaderStyle(wb);
+			XSSFSheet sheet = wb.createSheet("注册用户统计数据");
+			XSSFRow row = sheet.createRow(0);
+
+			//定义表头 以及 要填入的 字段
+			String[] str_headers = {"城市","新增注册用户","累积注册用户"};
+			String[] headers_key = {"cityname","new_cus","total_cus"};
+
+			for(int i = 0;i < str_headers.length;i++){
+				XSSFCell cell = row.createCell(i);
+				cell.setCellStyle(getHeaderStyle());
+				cell.setCellValue(new XSSFRichTextString(str_headers[i]));
+			}
+
+			for(int i = 0;i < list.size();i++){
+				row = sheet.createRow(i+1);
+				for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+					setCellValueall(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+				}
+			}
+
+			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_registlist.xlsx");
+			if(file_xls.exists()){
+				file_xls.delete();
+			}
+			FileOutputStream os = null;
+			String url = null;
+			try {
+				os = new FileOutputStream(file_xls.getAbsoluteFile());
+				wb.write(os);
+				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+			}catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if(os != null){
+					try {
+						os.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+
+			result.put("message","导出成功！");
+			result.put("status","success");
+			result.put("data", url);
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+		return result;
+	}
+
+
 	private XSSFCellStyle getHeaderStyle(){
 		return style_header;
 	}

@@ -1,11 +1,11 @@
 package com.cnpc.pms.dynamic.dao;
 
-import java.util.List;
-import java.util.Map;
-
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
+
+import java.util.List;
+import java.util.Map;
 
 public interface UserOperationStatDao extends IDAO{
 	
@@ -34,4 +34,8 @@ public interface UserOperationStatDao extends IDAO{
 	public Map<String, Object> queryEffectCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo,String timeFlag);
 	
 	public List<Map<String, Object>> exportEffectCusStat(UserOperationStatDto userOperationStatDto,String timeFlag);
+
+	public Map<String, Object> queryRegistCusStat(UserOperationStatDto userOperationStatDto, PageInfo pageInfo);
+
+	public List<Map<String, Object>> exportRegistCusStat(UserOperationStatDto userOperationStatDto);
 }
