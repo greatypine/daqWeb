@@ -10,8 +10,8 @@ function showTip(t){
 }
 
 
-var regex_zb = new RegExp("^(MDCBGLZB|mdcbglzb)\w*");//成本管理总部角色
-var regex_cs = new RegExp("^(MDCBGLCS|mdcbglcs)\w*");//成本管理城市级别
+var regex_zb = new RegExp("^(ZBMDCBGL|zbmdcbgl)\w*");//成本管理总部角色
+var regex_cs = new RegExp("^(CSMDCBGL|csmdcbgl)\w*");//城市级别
 /**
  * 查询人工成本城市
  * @type {null}
