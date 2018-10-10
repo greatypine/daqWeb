@@ -8,6 +8,7 @@ public class UserOperationStatDto {
 	private String storeNo;
 	private String paytype;
 	private String dimension;
+	private String areaCode;
 	private String searchStoreStr;
 	private String searchAreaStr;
 	
@@ -46,6 +47,14 @@ public class UserOperationStatDto {
 	}
 	public void setDimension(String dimension) {
 		this.dimension = dimension;
+	}
+
+	public String getAreaCode() {
+		return areaCode;
+	}
+
+	public void setAreaCode(String areaCode) {
+		this.areaCode = areaCode;
 	}
 
 	public String getSearchStoreStr() {

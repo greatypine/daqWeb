@@ -2874,12 +2874,14 @@ function   search_manual_daynewcus1(cur_page){
 	    		cityName="黔东南州";
 	    	}
 	    }
+	    var areaCode = $("#area_code_manual_daynewcus").val();
 	    var userOperationStatDto=null;
 	    userOperationStatDto = {
 	    		beginDate:begin_end_date[0].trim(),
 				endDate:begin_end_date[1].trim(),
 				storeNo:number_str,
 				cityName:cityName,
+            	areaCode:areaCode,
                 searchStoreStr:"",
                 searchAreaStr:""
 			}
@@ -3008,12 +3010,14 @@ function export_manual_daynewcus(){
 	    		cityName="黔东南州";
 	    	}
 	    }
+    	var areaCode = $("#area_code_manual_daynewcus").val();
 	    var userOperationStatDto=null;
 	    userOperationStatDto = {
 	    	beginDate:begin_end_date[0].trim(),
 			endDate:begin_end_date[1].trim(),
 			storeNo:number_str,
 			cityName:cityName,
+            areaCode:areaCode,
             searchStoreStr:"",
             searchAreaStr:""
 		}
@@ -3094,12 +3098,14 @@ function   search_manual_daypay1(cur_page){
 	    		cityName="黔东南州";
 	    	}
 	    }
+    	var areaCode = $("#area_code_manual_daypay").val();
 	    var userOperationStatDto=null;
 	    userOperationStatDto = {
 	    		beginDate:begin_end_date[0].trim(),
 				endDate:begin_end_date[1].trim(),
 				storeNo:number_str,
 				cityName:cityName,
+            	areaCode:areaCode,
 				searchStoreStr:"",
 				searchAreaStr:""
 			}
@@ -3229,12 +3235,14 @@ function export_manual_daypay(){
 	    		cityName="黔东南州";
 	    	}
 	    }
+    	var areaCode = $("#area_code_manual_daypay").val();
 	    var userOperationStatDto=null;
 	    userOperationStatDto = {
 	    	beginDate:begin_end_date[0].trim(),
 			endDate:begin_end_date[1].trim(),
 			storeNo:number_str,
 			cityName:cityName,
+            areaCode:areaCode,
             searchStoreStr:"",
             searchAreaStr:""
 		}

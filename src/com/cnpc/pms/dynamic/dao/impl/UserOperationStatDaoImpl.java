@@ -216,6 +216,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
+        if(StringUtils.isNotEmpty(userOperationStatDto.getAreaCode())){
+            sql = sql + " and a.area_code ='" + userOperationStatDto.getAreaCode().trim()+ "'";
+        }
 		sql = sql + " GROUP BY a.store_city_code ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
 			sql = sql + ",a.store_id ";
@@ -249,7 +252,7 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportNewCusStat(UserOperationStatDto userOperationStatDto,String timeFlag){
-		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,count(DISTINCT(case when a.customer_isnew_flag >=0 then customer_id end)) new_count,"
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'无') AS area_code,count(DISTINCT(case when a.customer_isnew_flag >=0 then customer_id end)) new_count,"
 				+ "count(DISTINCT(case when a.customer_isnew_flag >= 10 then customer_id end)) new_10_count,count(DISTINCT(case when a.customer_isnew_flag >= 20 then customer_id end)) new_20_count FROM";
 		
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
@@ -271,6 +274,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
+        if(StringUtils.isNotEmpty(userOperationStatDto.getAreaCode())){
+            sql = sql + " and a.area_code ='" + userOperationStatDto.getAreaCode().trim()+ "'";
+        }
 		sql = sql + " GROUP BY a.store_city_code ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
 			sql = sql + ",a.store_id ";
@@ -308,6 +314,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
+        if(StringUtils.isNotEmpty(userOperationStatDto.getAreaCode())){
+            sql = sql + " and a.area_code ='" + userOperationStatDto.getAreaCode().trim()+ "'";
+        }
 		sql = sql + " GROUP BY a.store_city_code ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
 			sql = sql + ",a.store_id ";
@@ -341,7 +350,7 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportPayCusStat(UserOperationStatDto userOperationStatDto,String timeFlag){
-		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,count(DISTINCT customer_id) pay_count,count(DISTINCT(case when trading_price > 10 "
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'无') AS area_code,count(DISTINCT customer_id) pay_count,count(DISTINCT(case when trading_price > 10 "
 				+ " then customer_id end)) pay_10_count,count(DISTINCT(case when trading_price > 20 then customer_id end)) pay_20_count FROM ";
 		
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
@@ -363,6 +372,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
 			sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
 		}
+        if(StringUtils.isNotEmpty(userOperationStatDto.getAreaCode())){
+            sql = sql + " and a.area_code ='" + userOperationStatDto.getAreaCode().trim()+ "'";
+        }
 		sql = sql + " GROUP BY a.store_city_code ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
 			sql = sql + ",a.store_id ";
