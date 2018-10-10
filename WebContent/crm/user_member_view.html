@@ -259,7 +259,11 @@
 	                  			<font id="attention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">包含畅购卡升级和199开卡</font>		 
 		                      </th>
 		                      <th width="12%">199新增开卡数</th>
-		                      <th width="12%">累计社员总数</th>
+		                      <th width="12%">
+								  累计社员总数
+								  <font id="showcountstore" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+								  <font id="hidecountstore" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:20px">截止到当前时间累计社员总数，与开卡时间无关</font>
+							  </th>
 		                    </tr>
 	                    </tbody>
 	                  </table>
@@ -345,7 +349,11 @@
 	                  			<font id="attentioncity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:125px">包含畅购卡升级和199开卡</font>		 
 		                      </th>
 		                      <th width="12%">199新增开卡数</th>
-		                      <th width="12%">累计社员总数</th>
+		                      <th width="12%">
+								  累计社员总数
+								  <font id="showcountcity" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+								  <font id="hidecountcity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">截止到当前时间累计社员总数，与开卡时间无关</font>
+							  </th>
 		                    </tr>
 	                    </tbody>
 	                  </table>
@@ -440,7 +448,11 @@
 									  <th width="10%">门店名称</th>
 									  <th width="10%">门店编号</th>
 									  <th width="12%">新增试用社员数（含过期）</th>
-									  <th width="12%">累计试用社员总数（有效期内）</th>
+									  <th width="12%">
+										  累计试用社员总数（有效期内）
+										  <font id="showcounttry" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
+										  <font id="hidecounttry" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:20px">截止到当前时间累计社员总数，与开卡时间无关</font>
+									  </th>
 								  </tr>
 								  </tbody>
 							  </table>
@@ -592,6 +604,13 @@
 	  	$("#showattention").on("mouseout",function(event){
 	  		$("#attention").hide();
 	  	});
+        //门店纬度
+        $("#showcountstore").on("mouseover",function(event){
+            $("#hidecountstore").show();
+        });
+        $("#showcountstore").on("mouseout",function(event){
+            $("#hidecountstore").hide();
+        });
 	  	//城市纬度
 	  	$("#showattentioncity").on("mouseover",function(event){
 	  		$("#attentioncity").show();
@@ -599,6 +618,19 @@
 	  	$("#showattentioncity").on("mouseout",function(event){
 	  		$("#attentioncity").hide();
 	  	});
+        $("#showcountcity").on("mouseover",function(event){
+            $("#hidecountcity").show();
+        });
+        $("#showcountcity").on("mouseout",function(event){
+            $("#hidecountcity").hide();
+        });
+        //试用社员
+        $("#showcounttry").on("mouseover",function(event){
+            $("#hidecounttry").show();
+        });
+        $("#showcounttry").on("mouseout",function(event){
+            $("#hidecounttry").hide();
+        });
 
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
