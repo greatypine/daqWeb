@@ -1001,7 +1001,7 @@ public interface DynamicDao extends IDAO{
 
 	public Map<String,Object> getEmployeeGmv_221(DynamicDto dynamicDto,PageInfo pageInfo);
 	/**
-	 * 查询近七日221GMV走势图
+	 * 大客户社员统计
 	 * @author gaoll
 	 * 2018年7月11日
 	 * @param dynamicDto

@@ -261,8 +261,7 @@
 		                      <th width="12%">199新增开卡数</th>
 		                      <th width="12%">
 								  累计社员总数
-								  <font id="showcountstore" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-								  <font id="hidecountstore" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">截止到当前累计社员总数</font>
+								  <label style="font-weight:normal;" id="query_store_info"></label>
 							  </th>
 		                    </tr>
 	                    </tbody>
@@ -351,8 +350,7 @@
 		                      <th width="12%">199新增开卡数</th>
 		                      <th width="12%">
 								  累计社员总数
-								  <font id="showcountcity" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-								  <font id="hidecountcity" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:125px">截止到当前累计社员总数</font>
+								  <label style="font-weight:normal;" id="query_city_info"></label>
 							  </th>
 		                    </tr>
 	                    </tbody>
@@ -447,11 +445,9 @@
 									  <th width="8%">城市</th>
 									  <th width="10%">门店名称</th>
 									  <th width="10%">门店编号</th>
-									  <th width="12%">新增试用社员数（含过期）</th>
+									  <th width="12%">新增试用社员数<label style="font-weight:normal;">（含过期）</label></th>
 									  <th width="12%">
-										  累计试用社员总数（有效期内）
-										  <font id="showcounttry" style="color:#ffcc00;font-size:14px;font-weight:normal;">！</font>
-										  <font id="hidecounttry" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:100px">截止到当前累计试用社员总数</font>
+										  累计试用社员总数<label style="font-weight:normal;" id="query_try_info"></label>
 									  </th>
 								  </tr>
 								  </tbody>
@@ -528,6 +524,14 @@
             var buttonValue= $(this).val();
             $('#last_data_choice').html(buttonValue);
         });
+        var sdate = $("#first_date").val();
+        var begin_end_date=["",""];
+        if(sdate!=""){
+            begin_end_date = sdate.split("-");
+        }
+        $("#query_store_info").text("（截止到"+begin_end_date[1]+"）");
+        $("#query_city_info").text("（截止到"+begin_end_date[1]+"）");
+        $("#query_try_info").text("（有效期内截止到"+begin_end_date[1]+"）");
 		if(target==0){//总部
 			if(cityName!=""){
 			    //门店单位社员
@@ -604,13 +608,6 @@
 	  	$("#showattention").on("mouseout",function(event){
 	  		$("#attention").hide();
 	  	});
-        //门店纬度
-        $("#showcountstore").on("mouseover",function(event){
-            $("#hidecountstore").show();
-        });
-        $("#showcountstore").on("mouseout",function(event){
-            $("#hidecountstore").hide();
-        });
 	  	//城市纬度
 	  	$("#showattentioncity").on("mouseover",function(event){
 	  		$("#attentioncity").show();
@@ -618,19 +615,6 @@
 	  	$("#showattentioncity").on("mouseout",function(event){
 	  		$("#attentioncity").hide();
 	  	});
-        $("#showcountcity").on("mouseover",function(event){
-            $("#hidecountcity").show();
-        });
-        $("#showcountcity").on("mouseout",function(event){
-            $("#hidecountcity").hide();
-        });
-        //试用社员
-        $("#showcounttry").on("mouseover",function(event){
-            $("#hidecounttry").show();
-        });
-        $("#showcounttry").on("mouseout",function(event){
-            $("#hidecounttry").hide();
-        });
 
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
@@ -922,6 +906,7 @@ $('#store_name_try').keyup(function(event){
  	    pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeCity;
         $("#totalRecord_city").html("0");
+        $("#query_city_info").text("（截止到"+begin_end_date[1]+"）");
 	    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
            if(data.result){
            	   var result= JSON.parse(data.data);
@@ -1079,6 +1064,7 @@ $('#store_name_try').keyup(function(event){
  	    pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeStore;
         $("#totalRecord_store").html("0");
+        $("#query_store_info").text("（截止到"+begin_end_date[1]+"）");
 	    doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
            if(data.result){
            	   var result= JSON.parse(data.data);
@@ -1232,6 +1218,7 @@ function searchInfo_customer(cur_page){
     pageInfo.currentPage = cur_page;
     pageInfo.recordsPerPage = manualPageRecordeCustomer;
     $("#totalRecord_customer").html("0");
+    $("#query_try_info").text("（有效期内截止到"+begin_end_date[1]+"）");
 
     doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
         if(data.result){
