@@ -209,6 +209,7 @@
                   <th width="6%">员工编号</th>
                   <th width="5%">社员邀请码</th>
                   <th width="8%" id="depname">岗位</th>
+                  <th width="8%">电话</th>
                   <th width="12%">事业群</th>
                    <th width="10%">门店</th>
                   <th width="10%">城市</th>
@@ -626,6 +627,11 @@ Date.prototype.format=function(fmt) {
     			    	   zw=jData[i].zw==null?"":jData[i].zw;
     			       }
     			       
+    			        var phone = jData[i].phone==null?"":jData[i].phone;
+				       	var cphone="<strong>员工电话：</strong>"+phone+"<br>";
+				       	var phonecontent =cphone+"@employeetips"+i;
+				        var employeeid = "employeetips"+i;
+				        var employee_phone_show = phone==null?"":phone.substring(0,3)+"****"+phone.substring(phone.length-4,phone.length);
     			       
     			       
     			       
@@ -651,6 +657,7 @@ Date.prototype.format=function(fmt) {
 		                       +"<td>"+employee_no+"</td>"
 		                       +"<td>"+inviteCode+"</td>"
 		                       +"<td>"+zw+"</td>"
+		                       +"<td><a href=\"javascript:;\" onmouseover=\"showinfo('"+phonecontent+"');\" id=\""+employeeid+"\">"+employee_phone_show+"</a></td>"
 		                       +"<td>"+career_group+"</td>"
 		                       +"<td>"+storename+"</td>"
 		                       +"<td>"+citySelect+"</td>"
@@ -670,6 +677,17 @@ Date.prototype.format=function(fmt) {
    	    $("#process_div_pic").hide();
      }); 
   	   
+  }
+  
+  
+//用户信息、消费信息、所属区域显示
+  function showinfo(obj){
+	  var msg = obj.split("@")[0];
+	  var id = obj.split("@")[1];
+	  layer.tips(msg, '#'+id, {
+		  tips: [4, '#0FA6D8'], //还可配置颜色
+		  time:5000
+	  });
   }
   
   
