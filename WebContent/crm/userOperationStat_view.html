@@ -3863,8 +3863,10 @@ function export_manual_daypay(){
 	  		$("#store_name_manual_more").val("");
 			var a = document.getElementById("citySelectMore");
 		  	a.options[0].selected = true;
+            initallstoreMore();
 	  	}else if(target==1){
 	  		$("#store_name_manual_more").val("");
+            initStoreSelectcomplateMore();
 	  	}		
 	  	$('#auto_date_more').data('daterangepicker').setStartDate(new Date());
 		$('#auto_date_more').data('daterangepicker').setEndDate(new Date());
@@ -3875,8 +3877,10 @@ function export_manual_daypay(){
 	  		$("#store_name_manual_areamore").val("");
 			var a = document.getElementById("citySelectAreamore");
 		  	a.options[0].selected = true;
+            initallstoreAreamore();
 	  	}else if(target==1){
 	  		$("#store_name_manual_areamore").val("");
+            initStoreSelectcomplateAreamore();
 	  	}		
 	  	$('#auto_date_areamore').data('daterangepicker').setStartDate(new Date());
 		$('#auto_date_areamore').data('daterangepicker').setEndDate(new Date());
@@ -3887,8 +3891,10 @@ function export_manual_daypay(){
 	  		$("#store_name_manual_daynewcus").val("");
 			var a = document.getElementById("citySelectDaynewcus");
 		  	a.options[0].selected = true;
+            initallstoreDaynewcus();
 	  	}else if(target==1){
 	  		$("#store_name_manual_daynewcus").val("");
+            initStoreSelectcomplateDaynewcus();
 	  	}
         $("#area_code_manual_daynewcus").val("");
 	  	$('#auto_date_daynewcus').data('daterangepicker').setStartDate(new Date());
@@ -3900,8 +3906,10 @@ function export_manual_daypay(){
 	  		$("#store_name_manual_daypay").val("");
 			var a = document.getElementById("citySelectDaypay");
 		  	a.options[0].selected = true;
+            initallstoreDaypay();
 	  	}else if(target==1){
 	  		$("#store_name_manual_daypay").val("");
+            initStoreSelectcomplateDaypay();
 	  	}
         $("#area_code_manual_daypay").val("");
 	  	$('#auto_date_daypay').data('daterangepicker').setStartDate(new Date());
