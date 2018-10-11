@@ -112,6 +112,7 @@
     .fold-con{display: none;}
     .auto{max-height:200px; overflow-y:scroll;border: 0px solid #dedede;}
     .sl-v-list-radio input{margin:0px 0 0}
+	#manual_title th{font-weight:bold;}
 
 	.checkboxFive {width: 20px;position: relative; margin: 20px 20px 20px 0; padding-left: 10px;}
 	.checkboxFive label {
@@ -837,7 +838,7 @@
 											<th width="9%">城市</th>
 											<!--<th id="storenameregisthide" width="9%">门店</th>-->
 											<th width="9%">新增注册用户</th>
-											<th width="9%">累计注册用户</th>
+											<th width="9%">累计注册用户<label style="font-weight:normal;" id="query_data_info"></label></th>
 										</tr>
 										</tbody>
 									</table>
@@ -1039,6 +1040,7 @@ Date.prototype.format=function(fmt) {
  	$("#auto_date_daynewcus").val(bdate+" - "+cDate);
  	$("#auto_date_daypay").val(bdate+" - "+cDate);
     $("#auto_date_regist").val(bdate+" - "+cDate);
+    $("#query_data_info").text("（截止到"+cDate+"）");
  
     var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
     if(target==0){//总部
@@ -3683,6 +3685,7 @@ function export_manual_daypay(){
 		if(sdate!=""){
 			begin_end_date = sdate.split("-");
 		}
+        $("#query_data_info").text("（截止到"+begin_end_date[1]+"）");
 
 		$("#process_div").show();
 		$("#process_div_pic").show();
@@ -4128,7 +4131,6 @@ function inint_registcus(){
         $("#citySelectRegist").prop("disabled", true);
         $("#citySelectRegist option[value='"+cityname+"']").attr('selected',true);
     }
-
 }
 
 //[有效用户]切换初始化
