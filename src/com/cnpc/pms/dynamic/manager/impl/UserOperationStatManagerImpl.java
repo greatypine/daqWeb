@@ -490,11 +490,11 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
 				str_headers = new String[]{"城市","拉新用户","拉新用户超10元","拉新用户超20元"};
 				headers_key = new String[]{"city_name","new_count","new_10_count","new_20_count"};
 			}
-			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
 				str_headers = new String[]{"城市","门店名称","拉新用户","拉新用户超10元","拉新用户超20元"};
 				headers_key = new String[]{"city_name","store_name","new_count","new_10_count","new_20_count"};
 			}
-			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr())){
 				str_headers = new String[]{"城市","片区编号","拉新用户","拉新用户超10元","拉新用户超20元"};
 				headers_key = new String[]{"city_name","area_code","new_count","new_10_count","new_20_count"};
 			}
@@ -607,11 +607,11 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
 				str_headers = new String[]{"城市","消费用户","消费用户超10元","消费用户超20元"};
 				headers_key = new String[]{"city_name","pay_count","pay_10_count","pay_20_count"};
 			}
-			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr())){
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
 				str_headers = new String[]{"城市","门店名称","消费用户","消费用户超10元","消费用户超20元"};
 				headers_key = new String[]{"city_name","store_name","pay_count","pay_10_count","pay_20_count"};
 			}
-			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr())){
+			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr())){
 				str_headers = new String[]{"城市","片区编号","消费用户","消费用户超10元","消费用户超20元"};
 				headers_key = new String[]{"city_name","area_code","pay_count","pay_10_count","pay_20_count"};
 			}

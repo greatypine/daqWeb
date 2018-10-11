@@ -616,7 +616,7 @@
 										<label for="storeClickDayNewcus"></label>
 										</span></label>
 									  <input id="store_id_manual_daynewcus" name="store_id_manual_daynewcus" type="hidden" bidTableFlag="true" value=""/>
-						              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual_daynewcus" />
+						              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual_daynewcus" disabled="true"/>
 						              <div class="auto hidden" id="auto_daynewcus" style="width: 94%;z-index: 99999;">
 						              </div>
 						            </div>
@@ -625,7 +625,7 @@
 										<input type='checkbox' id="storeClickDayNewcusArea" onclick='operatedCoverageDayNewcusArea()' checked="checked" value='area'>
 										<label for="storeClickDayNewcusArea"></label>
 										</span></label>
-										<input type="text" class="form-control"  placeholder="片区编号" id="area_code_manual_daynewcus" />
+										<input type="text" class="form-control"  placeholder="片区编号" id="area_code_manual_daynewcus" disabled="true"/>
 									</div>
 				                </div>
 			              		</div>
@@ -687,7 +687,7 @@
 										<label for="storeClickDaypay"></label>
 										</span></label>
 									  <input id="store_id_manual_daypay" name="store_id_manual_daypay" type="hidden" bidTableFlag="true" value=""/>
-						              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual_daypay" />
+						              <input type="text" class="form-control"  placeholder="门店" id="store_name_manual_daypay" disabled="true"/>
 						              <div class="auto hidden" id="auto_daypay" style="width: 94%;z-index: 99999;">
 						              </div>
 						            </div>
@@ -696,7 +696,7 @@
 										<input type='checkbox' id="storeClickDaypayArea" onclick='operatedCoverageDaypayArea()' checked="checked" value='area'>
 										<label for="storeClickDaypayArea"></label>
 										</span></label>
-										<input type="text" class="form-control"  placeholder="片区编号" id="area_code_manual_daypay" />
+										<input type="text" class="form-control"  placeholder="片区编号" id="area_code_manual_daypay" disabled="true"/>
 									</div>
 				                </div>
 			              		</div>
@@ -1234,7 +1234,11 @@ Date.prototype.format=function(fmt) {
 	  		$("#dimension_manual").val(name);
         }
     });
-  	
+	//新增用户/消费用户 默认不勾选
+    $('#storeClickDayNewcus').removeAttr('checked');
+    $('#storeClickDayNewcusArea').removeAttr('checked');
+    $('#storeClickDaypay').removeAttr('checked');
+    $('#storeClickDaypayArea').removeAttr('checked');
   });
 	
   /**
@@ -3896,6 +3900,7 @@ function export_manual_daypay(){
 	  		$("#store_name_manual_daynewcus").val("");
             initStoreSelectcomplateDaynewcus();
 	  	}
+      	$("#store_id_manual_daynewcus").val("");
         $("#area_code_manual_daynewcus").val("");
 	  	$('#auto_date_daynewcus').data('daterangepicker').setStartDate(new Date());
 		$('#auto_date_daynewcus').data('daterangepicker').setEndDate(new Date());
@@ -3911,6 +3916,7 @@ function export_manual_daypay(){
 	  		$("#store_name_manual_daypay").val("");
             initStoreSelectcomplateDaypay();
 	  	}
+        $("#store_id_manual_daypay").val("");
         $("#area_code_manual_daypay").val("");
 	  	$('#auto_date_daypay').data('daterangepicker').setStartDate(new Date());
 		$('#auto_date_daypay').data('daterangepicker').setEndDate(new Date());
