@@ -223,7 +223,7 @@
 								  <tbody id="tradeType_tbody_customer">
 								  <tr>
 									  <th width="12%">新增大客户社员数</th>
-									  <th width="12%">累计大客户社员数</th>
+									  <th width="12%">累计大客户社员数<label style="font-weight:normal;" id="query_data_info"></label></th>
 								  </tr>
 								  </tbody>
 							  </table>
@@ -290,6 +290,12 @@
             var buttonValue= $(this).val();
             $('#last_data_choice').html(buttonValue);
         });
+        var sdate = $("#last_date").val();
+        var begin_end_date=["",""];
+        if(sdate!=""){
+            begin_end_date = sdate.split("-");
+        }
+        $("#query_data_info").text("（截止到"+begin_end_date[1]+"）");
 		if(target==0){//总部
 
 		}else if(target==1){//城市
@@ -338,6 +344,7 @@
 				searchstr:"customer"
 			}
 		}
+        $("#query_data_info").text("（截止到"+begin_end_date[1]+"）");
 		var pageInfo = new Object();
 		pageInfo.currentPage = cur_page;
 		doManager('dynamicManager','getUserMemberInfo',[dynamicDto,pageInfo],function(data){
