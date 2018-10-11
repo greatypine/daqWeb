@@ -1391,7 +1391,7 @@ Date.prototype.format=function(fmt) {
 						document.getElementById("store_name_manual_more").value=document.getElementById("store_name_manual_more").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 					}
  				}
- 			}, false);
+ 			});
  	}
  	
  	function initallstoreAreamore() {
@@ -1421,7 +1421,7 @@ Date.prototype.format=function(fmt) {
 						document.getElementById("store_name_manual_areamore").value=document.getElementById("store_name_manual_areamore").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 					}
  				}
- 			}, false);
+ 			});
  	}
  	
  	function initallstoreDaynewcus() {
@@ -1451,7 +1451,7 @@ Date.prototype.format=function(fmt) {
 						document.getElementById("store_name_manual_daynewcus").value=document.getElementById("store_name_manual_daynewcus").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 					}
  				}
- 			}, false);
+ 			});
  	}
  	
  	function initallstoreDaypay() {
@@ -1481,7 +1481,7 @@ Date.prototype.format=function(fmt) {
 						document.getElementById("store_name_manual_daypay").value=document.getElementById("store_name_manual_daypay").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
 					}
  				}
- 			}, false);
+ 			});
  	}
  	
   	function initallstoreDaymore() {
@@ -3894,6 +3894,7 @@ function export_manual_daypay(){
   }
   
   function resetDaynewcusSerachParam(t){
+      $("#auto_daynewcus").empty();
 	  	if(target==0){
 	  		$("#store_name_manual_daynewcus").val("");
 			var a = document.getElementById("citySelectDaynewcus");
