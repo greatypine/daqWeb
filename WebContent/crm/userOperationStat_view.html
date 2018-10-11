@@ -3685,8 +3685,8 @@ function export_manual_daypay(){
 		var cityName = $("#citySelectRegist  option:selected").val();
 		var userOperationStatDto=null;
 		userOperationStatDto = {
-			beginDate:begin_end_date[0].replace("/","-").trim(),
-			endDate:begin_end_date[1].replace("/","-").trim(),
+			beginDate:begin_end_date[0].replace(new RegExp("/","g"),"-").trim(),
+			endDate:begin_end_date[1].replace(new RegExp("/","g"),"-").trim(),
 			storeNo:"",
 			cityName:cityName,
 			searchStoreStr:"",
@@ -3775,8 +3775,8 @@ function export_manual_daypay(){
 		var cityName = $("#citySelectRegist  option:selected").val();
 		var userOperationStatDto=null;
 		userOperationStatDto = {
-			beginDate:begin_end_date[0].replace("/","-").trim(),
-			endDate:begin_end_date[1].replace("/","-").trim(),
+			beginDate:begin_end_date[0].replace(new RegExp("/","g"),"-").trim(),
+			endDate:begin_end_date[1].replace(new RegExp("/","g"),"-").trim(),
 			storeNo:"",
 			cityName:cityName,
 			searchStoreStr:"",
