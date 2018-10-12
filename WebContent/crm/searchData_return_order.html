@@ -820,7 +820,9 @@ Date.prototype.format=function(fmt) {
                        var curDate = new Date(new Date(new Date().toLocaleDateString()).getTime());
                        if(jData[i].sign_time>=curDate){
                            infoStr = infoStr + "<a href=\"javascript:;\">暂未计算</a>";
-                       }else{
+                       } else if(jData[i].contract_method=='price' && jData[i].cost_price==0){
+                           infoStr = infoStr + "<a href=\"javascript:;\">成本为0无利润</a>";
+                       } else {
                            infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
                        }
                        infoStr = infoStr

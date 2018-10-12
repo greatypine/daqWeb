@@ -44,6 +44,9 @@ public class MassOrderDto {
 	private String addr_customer_name;
 	private String addr_customer_phone;
 	private String busi_names;
+	private String profit_price_min;
+	private String profit_price_max;
+	private String contract_method;
 	private String sort_tag;
 	private String sort_type;
 	private String hidden_flag;
@@ -255,6 +258,31 @@ public class MassOrderDto {
 	public void setBusi_names(String busi_names) {
 		this.busi_names = busi_names;
 	}
+
+	public String getProfit_price_min() {
+		return profit_price_min;
+	}
+
+	public void setProfit_price_min(String profit_price_min) {
+		this.profit_price_min = profit_price_min;
+	}
+
+	public String getProfit_price_max() {
+		return profit_price_max;
+	}
+
+	public void setProfit_price_max(String profit_price_max) {
+		this.profit_price_max = profit_price_max;
+	}
+
+	public String getContract_method() {
+		return contract_method;
+	}
+
+	public void setContract_method(String contract_method) {
+		this.contract_method = contract_method;
+	}
+
 	public String getSort_tag() {
 		return sort_tag;
 	}

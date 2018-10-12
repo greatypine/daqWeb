@@ -214,6 +214,29 @@
 	                  </div>
 	                 </div>
                 <div class="selectorLine clearfix">
+                    <div class="pull-left search-title">毛利信息：</div>
+                    <div class="search-con">
+                        <div class="sl-v-list">
+                            <div class="form-group has-success col-lg-3">
+                                <div style="display:block">
+                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="利润最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
+                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="利润最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+                                </div>
+                            </div>
+                            <div class="form-group has-success col-lg-2">
+                                <select class="form-control select2" id="contract_method">
+                                    <option value="">全部</option>
+                                    <option value="price">从价</option>
+                                    <option value="volume">从量</option>
+                                    <option value="percent">从率</option>
+                                </select>
+                            </div>
+                            <font id="showprofitattention" style="top:7px;right:75px;color:#337ab7;font-size:16px;font-weight:normal;">!</font>
+                            <font id="profitattention" style="font-size: 12px; color:#337ab7;white-space: nowrap; position: absolute; top: -10px; z-index: 1000; left: 750px; display: none;">利润结算方式</font>
+                        </div>
+                    </div>
+                </div>
+                <div class="selectorLine clearfix">
                   <div class="pull-left search-title">客户信息：</div>
                   <div class="search-con">
                     <div class="sl-v-list">
@@ -331,7 +354,7 @@
                   <td width="10%" style="font-weight:bold;" id="time_sort">签收时间 <i class="fa fa-angle-up" id="time_sort_label"></i></td>
                   <td width="9%" style="font-weight:bold;">业务信息</td>
                   <td width="10%" style="font-weight:bold;">人员信息</td>
-                  <td width="9%" style="font-weight:bold;">毛利（元）</td>
+                  <td width="9%" style="font-weight:bold;" id="profit_sort">毛利（元）<i class="fa fa-angle-up" id="profit_sort_label"></i></td>
                   <td width="10%" style="font-weight:bold;">订单标签</td>
                 </tr>
                 </tbody>
@@ -877,6 +900,20 @@ Date.prototype.format=function(fmt) {
   		sort_tag_type = "";
 	  	search_manual_abnormalOrder(1);
   	});
+
+      $("#profit_sort").click(function(){
+          if($("#profit_sort_label").hasClass('fa fa-angle-down')){
+              $("#profit_sort_label").removeClass("fa fa-angle-down");
+              $("#profit_sort_label").addClass("fa fa-angle-up");
+              sort_tag_value = "up";
+          }else {
+              $("#profit_sort_label").removeClass("fa fa-angle-up");
+              $("#profit_sort_label").addClass("fa fa-angle-down");
+              sort_tag_value = "down";
+          }
+          sort_tag_type = "profit_sort";
+          search_manual_abnormalOrder(1);
+      });
   	
   	$("#showattention").on("mouseover",function(event){
   		$("#attention").show();
@@ -884,6 +921,13 @@ Date.prototype.format=function(fmt) {
   	$("#showattention").on("mouseout",function(event){
   		$("#attention").hide();
   	});
+
+    $("#showprofitattention").on("mouseover",function(event){
+        $("#profitattention").show();
+    });
+    $("#showprofitattention").on("mouseout",function(event){
+        $("#profitattention").hide();
+    });
   	
   	//从数据分析页跳转过来直接查询
   	if(time!=null && redirectTag!=null){
@@ -1259,11 +1303,17 @@ Date.prototype.format=function(fmt) {
 	    	busiNames = busiNames.replace("服务类","2");
 	    	busiNames = busiNames.replace("团购","3");
 	    }
+        var profit_price_min = $("#min_money_auto").val();
+        var profit_price_max= $("#max_money_auto").val();
+        var contract_method = $("#contract_method").val();
 	    var sort_tag = "";
 	    var sort_type = "";
 	    if(sort_tag_type=="price_sort"){
 	    	sort_type = "price";
-	    }
+	    }else if(sort_tag_type=="profit_sort"){
+            sort_type = "profit";
+        }
+
 	    if(sort_tag_value == "up"){
 	    	sort_tag = "ASC";
 	    }else{
@@ -1298,6 +1348,9 @@ Date.prototype.format=function(fmt) {
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
 	    		busi_names:busiNames,
+                profit_price_min:profit_price_min,
+                profit_price_max:profit_price_max,
+                contract_method:contract_method,
 	    		sort_tag:sort_tag,
 	    		sort_type:sort_type
 			}
@@ -1443,7 +1496,9 @@ Date.prototype.format=function(fmt) {
                        var curDate = new Date(new Date(new Date().toLocaleDateString()).getTime());
                        if(jData[i].sign_time>=curDate){
                            infoStr = infoStr + "<a href=\"javascript:;\">暂未计算</a>";
-                       }else{
+                       } else if(jData[i].contract_method=='price' && jData[i].cost_price==0){
+                           infoStr = infoStr + "<a href=\"javascript:;\">成本为0无利润</a>";
+                       } else {
                            infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
                        }
        			    infoStr = infoStr
@@ -1785,6 +1840,9 @@ Date.prototype.format=function(fmt) {
 	    	busiNames = busiNames.replace("服务类","2");
 	    	busiNames = busiNames.replace("团购","3");
 	    }
+        var profit_price_min = $("#min_money_auto").val();
+        var profit_price_max= $("#max_money_auto").val();
+        var contract_method = $("#contract_method").val();
 	    var sort_tag = "";
 	    var sort_type = "";
 	    if(sort_tag_type=="price_sort"){
@@ -1824,6 +1882,9 @@ Date.prototype.format=function(fmt) {
 	    		employee_mobile:employeeMobile,
 	    		department_names:departmentNames,
 	    		busi_names:busiNames,
+                profit_price_min:profit_price_min,
+                profit_price_max:profit_price_max,
+                contract_method:contract_method,
 	    		sort_tag:sort_tag,
 	    		sort_type:sort_type,
 	    		hidden_flag:hiddenvalue
@@ -2043,6 +2104,10 @@ Date.prototype.format=function(fmt) {
 	$("#customer_phone_manual").empty();
 	$("#employee_no_manual").val("");
 	$("#employee_mobile_manual").val("");
+    $("#min_money_auto").val("");
+    $("#max_money_auto").val("");
+    $("#contract_method").val("");
+    $("#customer_isnew").val("");
     $('#auto_date').data('daterangepicker').setStartDate(new Date());
 	$('#auto_date').data('daterangepicker').setEndDate(new Date());
   }
