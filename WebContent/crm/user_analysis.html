@@ -141,25 +141,25 @@
                     </div>
                 </div>
                 <div class="box box-default">
-                    <div class="box-header h4 text-light-blue"><strong>用户真实度分布</strong></div>
+                    <div class="box-header h4 text-light-blue"><strong>用户忠实度分布</strong></div>
                     <div class="box-body">
                         <div class="col-sm-12">
                             <!--<div id="main2" style="height: 350px;"></div>-->
-                            <div class="pull-left yonghu yonghu1 text-center" id="yonghu1"><span id="userR3">真实用户<br>5</span></div>
+                            <div class="pull-left yonghu yonghu1 text-center" id="yonghu1"><span id="userR3">忠实用户<br>5</span></div>
                             <div class="pull-left yonghu yonghu4 text-center" id="yonghu4"><span id="userR4">待确认用户<br>60</span></div>
                             <div class="pull-left yonghu yonghu2 text-center" id="yonghu2"><span id="userR2">僵尸用户<br>30</span></div>
                             <div class="pull-left yonghu yonghu3 text-center" id="yonghu3"><span id="userR1">无效用户<br>5</span></div>
                             <div class="pull-left yonghu yonghu5 text-center" id="yonghu5"><span id="userR5">无交易用户<br>5</span></div>
                         </div>
-                        <p class="col-sm-12" style="padding-top: 5px;color: #777">口径说明：1、真实用户=社员+历史消费3次以上+400购物。</p>
+                        <p class="col-sm-12" style="padding-top: 5px;color: #777">口径说明：1、忠实用户=社员+历史消费3次以上+400购物。</p>
                         <p class="col-sm-12" style="padding-top: 3px;padding-left: 85px;color: #777">2、无效用户=仅消费1次且从未使用app的用户。</p>
                         <p class="col-sm-12" style="padding-top: 3px;padding-left: 85px;color: #777">3、僵尸用户=2018年未消费。</p>
-                        <p class="col-sm-12" style="padding-top: 3px;padding-left: 85px;color: #777">4、待确认用户=注册人数-真实用户-无效用户-僵尸用户-无交易用户。</p>
+                        <p class="col-sm-12" style="padding-top: 3px;padding-left: 85px;color: #777">4、待确认用户=注册人数-忠实用户-无效用户-僵尸用户-无交易用户。</p>
                     </div>
                 </div>
                 <div class="box box-default">
                     <div
-                            class="box-header h4 text-light-blue"><strong>用户来源分布</strong><small style="padding-left: 15px;">口径说明：假定有效用户=真实用户+待确认用户</small></div>
+                            class="box-header h4 text-light-blue"><strong>用户来源分布</strong><small style="padding-left: 15px;">口径说明：假定有效用户=忠实用户+待确认用户</small></div>
                     <div class="box-body" style="padding-top: 25px;">
                         <div class="col-sm-6 no-padding" id="main3" style="height: 450px;"></div>
                         <div class="col-sm-6 no-padding" id="main4" style="height: 450px;"></div>
@@ -1428,7 +1428,7 @@
                     var yonghu1 = document.getElementById("yonghu1");
                     var userR3Width = (userR3/customer_number).toFixed(2);
                     yonghu1.style.width = userR3Width*(100-userR1Width*100)+"%";
-                    document.getElementById('userR3').innerHTML="真实用户<br>"+changeMoney(parseInt(userR3))+"("+(userR3Width*(100-userR1Width*100)).toFixed(2)+"%"+")";
+                    document.getElementById('userR3').innerHTML="忠实用户<br>"+changeMoney(parseInt(userR3))+"("+(userR3Width*(100-userR1Width*100)).toFixed(2)+"%"+")";
 
                     var yonghu2 = document.getElementById("yonghu2");
                     var userR2Width = (userR2/customer_number).toFixed(2);
@@ -1448,39 +1448,6 @@
             });
     }
 
-    // function initEffectiveData() {
-    //     doManager("userAnalysisManager","queryUsertag",null,
-    //         function(data,textStatus,XmlHttpRequest){
-    //             if (data.result) {
-    //                 var jsonData = $.fromJSON(data.data);
-    //                 if(jsonData!=null){
-    //                     $(jsonData).each(function(index,element){
-    //                         var usertag = jsonData[index].usertag;
-    //                         if(usertag == 'R1' ){
-    //                            userR1 =  jsonData[index].usertag_num;
-    //                         }if(usertag == 'R2' ){
-    //                            userR2 =  jsonData[index].usertag_num;
-    //                         }else if(usertag == 'R3'){
-    //                            userR3 =  jsonData[index].usertag_num;
-    //                         }
-    //                     });
-    //                     userR4 = customer_number - userR1 - userR2 - userR3;
-    //                 }else{
-    //                     userR1=userR2=userR3=userR4=0;
-    //                 }
-    //                 option2.series[0].data[0].children[0].value=userR3;
-    //                 option2.series[0].data[0].children[0].name="真实用户：\n"+changeMoney(parseInt(userR3));
-    //                 option2.series[0].data[1].children[0].value=userR1;
-    //                 option2.series[0].data[1].children[0].name="无效用户：\n"+userR1;
-    //                 option2.series[0].data[2].children[0].value=userR4;
-    //                 option2.series[0].data[2].children[0].name="待确认用户：\n"+changeMoney(parseInt(userR4));
-    //                 option2.series[0].data[3].children[0].value=userR2;
-    //                 option2.series[0].data[3].children[0].name="僵尸用户：\n"+changeMoney(parseInt(userR2));
-    //                 myChart2.setOption(option2);
-    //             }
-    //         });
-    // }
-    
     function initSourceScatterData() {//客户来源:app-APP,callcenter-400客服,store-门店,wechat-微信,pad-智能终端,web-WEB,citic-中信用户联盟,tv-电视,third_party-第三方,action-活动'
         doManager("userAnalysisManager","querySourceScatter",null,
             function(data,textStatus,XmlHttpRequest){
