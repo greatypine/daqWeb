@@ -1028,21 +1028,21 @@ var initPageElements = function () {
                 size : ['80%','80%'],
                 left:'5%',
                 width:'80%',
-                sizeRange : [ 12, 50 ],  
+                sizeRange : [ 12, 50 ],
                 rotationRange : [ -90, 90 ], //旋转范围
                 maskImage:maskImage,
-                textStyle : {  
+                textStyle : {
                     normal : {
                         fontFamily:'sans-serif',
-                        color: function () {  
-                            var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];  
-                            return colors[parseInt(Math.random() * 10)];  
+                        color: function () {
+                            var colors = ['#fda67e', '#81cacc', '#cca8ba', "#88cc81", "#82a0c5", '#fddb7e', '#735ba1', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+                            return colors[parseInt(Math.random() * 10)];
                         }
-                    },  
-                    emphasis : {  
+                    },
+                    emphasis : {
                         shadowBlur : 5,  //阴影距离
                         shadowColor : '#333'  //阴影颜色
-                    }  
+                    }
                 },
                 data:[],
         }]
@@ -4384,7 +4384,7 @@ function goToDataFiles(){
     window.open(url,"user_member_view");
 }
 
-  
+
 //线下网络运营
   function goToCityNet(){
   	  var role = curr_user.usergroup.code;
@@ -4445,7 +4445,20 @@ function goToDataFiles(){
 	  }
 	  window.open(url,"_blank");
   }
-  
+
+
+//用户行为分析
+function gotobehavior(){
+    // var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "user_behavior.html";
+    }
+    window.open(url,"user_behavior");
+}
+
+
   /**
    * 片区内拉新GMV
    */
@@ -5014,7 +5027,7 @@ var initClick = function(){
         window.open(url);
     });
     $("#turnover_customer_more").on('click',function(){
-       goToMemberAnalysis();  
+       goToMemberAnalysis();
     });
     $("#customer_analysis_more").on('click',function(){
         goToUserMember();

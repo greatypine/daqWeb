@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>用户行为分析</title>
+		<!-- Tell the browser to be responsive to screen width -->
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<!-- Bootstrap 3.3.6 -->
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+		<!-- Ionicons -->
+		<link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+		<!-- Morris charts -->
+		<link rel="stylesheet" href="plugins/morris/morris.css">
+		<!-- Theme style -->
+		<link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+		<!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+		<link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+		<style>
+			.content-wrapper {
+				background: #f1f1f1;
+			}
+
+			.nav-tabs-custom,
+			.nav-tabs-custom>.tab-content {
+				background: transparent;
+			}
+
+			.nav-tabs-custom>.nav-tabs>li>a {
+				font-size: 20px;
+				padding: 8px 15px;
+			}
+
+			.nav-tabs-custom>.nav-tabs>li>a:hover {
+				color: #f39c12;
+			}
+
+			.nav-tabs-custom>.nav-tabs>li {
+				width: 32.88%;
+				text-align: center;
+				font-size: 20px;
+				font-weight: bold;
+			}
+
+			.nav-tabs-custom>.nav-tabs>li.active>a,
+			.nav-tabs-custom>.nav-tabs>li.active>a:hover {
+				background: #fff;
+				color: #f39c12;
+				font-weight: bold;
+				cursor: pointer;
+				border-top-right-radius: 3px;
+				border-top-left-radius: 3px;
+				border-top: 2px solid #f39c12;
+				border-left: 1px solid #f39c12;
+				border-right: 1px solid #f39c12;
+				font-size: 20px;
+				font-weight: bold;
+			}
+
+			.nav-tabs-custom>.nav-tabs>li:first-of-type.active>a {
+				border-left: 1px solid #f39c12;
+			}
+
+			.nav-tabs-custom>.nav-tabs {
+				border-bottom: 1px solid #f39c12;
+				margin: 5px 0;
+			}
+
+			.nav-tabs-custom>.nav-tabs>li {
+				margin-bottom: -1px;
+			}
+
+			.table>tbody>tr>td,
+			.table>tbody>tr>th {
+				border: 1px solid #d1d1d1
+			}
+
+			.table>tbody>tr>td p,
+			.table>tbody>tr>th p {
+				width: 100px;
+				margin: 0;
+			}
+
+			.table_x {
+				max-width: 1700px;
+			}
+
+			.report {
+				width: 100%;
+				height: 500px;
+				/*background: #dadada;*/
+			}
+
+			.reportdiv {
+				margin: 0 auto;
+				width: 500px;
+				background: url("dist/img/behavior.jpg") no-repeat center;
+				background-size: 500px;
+				height: 500px;
+				position: relative;
+			}
+
+			.reportdiv #pro1 {
+				position: absolute;
+				font-size: 12px;
+				left: 17px;
+				top: 176px;
+				color: #feb54e;
+				font-weight: bold;
+			}
+
+			.reportdiv #pro2 {
+				position: absolute;
+				left: 16px;
+				top: 238px;
+				color: #d32a41;
+				font-weight: bold;
+			}
+
+			.reportdiv #pro3 {
+				position: absolute;
+				left: 16px;
+				top: 298px;
+				color: #2ba8a4;
+				font-weight: bold;
+			}
+
+			.reportdiv #user1 {
+				position: absolute;
+				font-size: 18px;
+				left: 133px;
+				top: 156px;
+				color: #fff;
+			}
+
+			.reportdiv #user2 {
+				font-size: 16px;
+				position: absolute;
+				left: 133px;
+				top: 218px;
+				color: #fff;
+			}
+
+			.reportdiv #user3 {
+				font-size: 14px;
+				position: absolute;
+				left: 133px;
+				top: 278px;
+				color: #fff;
+			}
+
+			.reportdiv #user4 {
+				position: absolute;
+				font-size: 12px;
+				left: 133px;
+				top: 338px;
+				color: #fff;
+			}
+
+			.col3 {
+				margin-top: 20px;
+				display: flex;
+				justify-content: center;
+			}
+
+			.circle {
+				margin-top: 10px;
+				width: 150px;
+				height: 150px;
+				border: 2px dotted blue;
+				border-radius: 50%;
+				text-align: center;
+				line-height: 150px;
+				font-size: 20px;
+				margin: 0 auto;
+			}
+
+			.all {
+				font-size: 16px;
+				color: red;
+				padding-left: 5px;
+				padding-right: 5px;
+			}
+
+			.average {
+				font-size: 16px;
+				color: red;
+				padding-left: 5px;
+				padding-right: 5px;
+			}
+
+			.bigall {
+				margin-top: 5px;
+				text-align: center;
+			}
+
+			.bigaverage {
+				margin-top: 5px;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body class="hold-transition skin-blue sidebar-mini">
+		<!-- Site wrapper -->
+		<div class="wrapper">
+			<header class="main-header">
+				<nav class="navbar navbar-static-top">
+					<div class="container">
+						<div class="logo_img pull-left"><img src="dist/img/logo1.png" height="30"><img src="dist/img/title.png" height="20"></div>
+						<div class="pull-left">
+							<div class="logo-lg">
+								<ul class="no-margin no-padding">
+									<li class="current">
+										<em class="logo_cs">用户行为分析</em>
+										<!--<div class="TDsec-nav">-->
+											<!--<div class="secNav-box">-->
+												<!--<dl class="col-sm-3">-->
+													<!--<dt><i></i>运营数据</dt>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-money"></span>营业额统计</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-user-plus"></span>用户运营</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-cubes"></span>产品运营</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-institution"></span>门店运营</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-comments-o"></span>混片情况</a>-->
+													<!--</dd>-->
+												<!--</dl>-->
+												<!--<dl class="col-sm-3">-->
+													<!--<dt><i></i>绩效数据</dt>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-line-chart"></span>门店GMV</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-pie-chart"></span>国安侠GMV</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-area-chart"></span>门店拉新</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-bar-chart"></span>国安侠拉新</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a>-->
+													<!--</dd>-->
+												<!--</dl>-->
+												<!--<dl class="col-sm-3">-->
+													<!--<dt><i></i>档案数据</dt>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-file-o"></span>订单档案</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-newspaper-o"></span>员工档案</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-copy"></span>片区档案</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-clipboard"></span>小区档案</a>-->
+													<!--</dd>-->
+												<!--</dl>-->
+												<!--<dl class="col-sm-3">-->
+													<!--<dt><i></i>排名数据</dt>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-signal"></span>XX排名</a>-->
+													<!--</dd>-->
+													<!--<dd>-->
+														<!--<a href="#"><span class="fa fa-signal"></span>XX排名</a>-->
+													<!--</dd>-->
+												<!--</dl>-->
+											<!--</div>-->
+										<!--</div>-->
+									</li>
+
+								</ul>
+
+							</div>
+						</div>
+						<!--<div class="navbar-custom-menu">-->
+							<!--<ul class="nav navbar-nav">-->
+								<!--<li class="dropdown user user-menu">-->
+									<!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">-->
+										<!--<img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->
+										<!--<span class="hidden-xs">王春</span>-->
+									<!--</a>-->
+									<!--<ul class="dropdown-menu">-->
+										<!--<li class="user-header">-->
+											<!--<img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">-->
+
+											<!--<p><strong>王春</strong></p>-->
+											<!--<p>店长<span>A77777</span></p>-->
+											<!--<p>呼家楼店</p>-->
+										<!--</li>-->
+
+										<!--<li class="user-footer">-->
+											<!--<div class="pull-left">-->
+												<!--<a href="#" class="btn btn-default btn-flat">个人中心</a>-->
+											<!--</div>-->
+											<!--<div class="pull-right">-->
+												<!--<a href="#" class="btn btn-default btn-flat">退出</a>-->
+											<!--</div>-->
+										<!--</li>-->
+									<!--</ul>-->
+								<!--</li>-->
+							<!--</ul>-->
+						<!--</div>-->
+					</div>
+				</nav>
+			</header>
+
+			<!-- Content Wrapper. Contains page content -->
+			<div class="content-wrapper">
+				<div class="container">
+					<!-- Main content -->
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+
+
+							<li class="active">
+								<a href="#tab_3" data-toggle="tab" id="tab_week" onclick="tabWeek()">周(近7天)</a>
+							</li>
+							<li>
+								<a href="#tab_2" data-toggle="tab" id="tab_month" onclick="tabMonth()">月(当月)</a>
+							</li>
+							<li >
+								<a href="#tab_1" data-toggle="tab" id="tab_year" onclick="tabYear()">2018年</a>
+							</li>
+						</ul>
+						<div class="tab-content no-padding">
+							<div class="tab-pane active" id="tab_1ddd">
+								<div class="box box-default">
+									<div class="box-header h4 text-light-blue"><strong>APP访问情况</strong></div>
+									<div class="box-body" style="padding-top: 25px;">
+										<div class="report">
+											<div class="reportdiv">
+												<p><span id="pro1"></span><strong id="user1"></strong></p>
+												<p><span id="pro2"></span><strong id="user2"></strong></p>
+												<p><span id="pro3"></span><strong id="user3"></strong></p>
+												<p><span></span><strong id="user4"></strong></p>
+											</div>
+										</div>
+										<div id="main1" style="height: 500px;"></div>
+										<div id="main2" style="height: 500px;"></div>
+
+									</div>
+								</div>
+								<div class="box box-default">
+									<div class="box-header h4 text-light-blue"><strong>用户购物体验分析(昨天)</strong></div>
+									<div class="box-body" style="padding-top: 25px;">
+										<h4 style="text-align: center;">每个用户完成下单共需<strong style="color: cornflowerblue;font-size: 24px;margin-left: 10px;margin-right: 10px;" id="user_sum"></strong>步</h4>
+										<div>
+											<div class="col-sm-3 col3">
+												<div>
+													<div class="circle">
+														<strong>浏览</strong>
+													</div>
+													<p class="bigall">共<strong class="all" id="numS1"></strong>次</p>
+													<p class="bigaverage">平均每天<strong class="average" id="avg1"></strong>次</p>
+												</div>
+
+											</div>
+											<div class="col-sm-3 col3">
+												<div>
+													<div class="circle">
+														<strong>加购</strong>
+													</div>
+													<p class="bigall">共<strong class="all" id="numS2"></strong>次</p>
+													<p class="bigaverage">平均每天<strong class="average" id="avg2"></strong>次</p>
+												</div>
+											</div>
+											<div class="col-sm-3 col3">
+												<div>
+													<div class="circle">
+														<strong>下单</strong>
+													</div>
+													<p class="bigall">共<strong class="all" id="numS3"></strong>次</p>
+													<p class="bigaverage">平均每天<strong class="average" id="avg3"></strong>次</p>
+												</div>
+											</div>
+											<div class="col-sm-3 col3">
+												<div>
+													<div class="circle">
+														<strong>支付</strong>
+													</div>
+													<p class="bigall">共<strong class="all" id="numS4"></strong>次</p>
+													<p class="bigaverage">平均每天<strong class="average" id="avg4"></strong>次</p>
+												</div>
+											</div>
+										</div>
+										<!--饼状图-->
+										<div class="col-sm-6 no-padding" id="main3" style="height: 450px;margin-top: 80px;"></div>
+										<div class="col-sm-6 no-padding" id="main4" style="height: 450px; margin-top: 80px;"></div>
+										<div class="col-sm-6 no-padding" id="main5" style="height: 450px;margin-top: 80px;"></div>
+										<div class="col-sm-6 no-padding" id="main6" style="height: 450px;margin-top: 80px;"></div>
+									</div>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_322222">
+
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="tab_433333">
+								333333
+							</div>
+
+							<!-- /.tab-pane -->
+
+							<!-- /.tab-content -->
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+				<!-- ./wrapper -->
+
+		<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+		<!-- Bootstrap 3.3.6 -->
+		<script src="bootstrap/js/bootstrap.min.js"></script>
+		<!-- Morris.js charts -->
+		<script src="bootstrap/js/raphael-min.js"></script>
+		<script src="plugins/morris/morris.min.js"></script>
+		<!-- FastClick -->
+		<script src="plugins/fastclick/fastclick.js"></script>
+		<!-- AdminLTE App -->
+		<script src="dist/js/app.min.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="dist/js/demo.js"></script>
+		<script src="dist/js/nav-scroll.js"></script>
+		<script src="dist/js/jquery.dataStatistics.js"></script>
+		<!-- Select2 -->
+		<script src="plugins/select2/select2.full.min.js"></script>
+		<!-- iCheck 1.0.1 -->
+		<script src="plugins/iCheck/icheck.min.js"></script>
+		<!-- page script -->
+		<script type="text/javascript" src="plugins/jquery.page.js"></script>
+		<script type="text/javascript" src="plugins/moment.min.js"></script>
+		<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+		<!-- pdf下载所需js工具 -->
+		<script src="dist/js/utils/htmlToPdf/html2canvas.js"></script>
+		<script src="dist/js/utils/htmlToPdf/jspdf.debug.js"></script>
+		<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+		<script type="text/javascript" src="../scripts/auto.js"></script>
+		<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+		<script src="dist/js/jquery.dataStatistics.js"></script>
+
+		<!-- Morris.js charts -->
+		<script src="bootstrap/js/raphael-min.js"></script>
+		<script src="plugins/morris/morris.min.js"></script>
+		<!-- FastClick -->
+		<!-- AdminLTE App -->
+		<!-- AdminLTE for demo purposes -->
+		<script src="dist/js/nav-scroll.js"></script>
+		<!-- 引入 ECharts 文件 -->
+		<script src="dist/js/echarts.common.min.js"></script>
+		<script src="dist/js/base64.js"></script>
+		<script src="plugins/gooey_menu/gooey.min.js"></script>
+
+		<script type="text/javascript">
+
+
+                    option3 = {
+                        title: [{
+                            text: '浏览',
+                            left: '45%',
+                            top: '2%',
+                            textAlign: 'center',
+                            textBaseline: 'middle',
+                            textStyle: {
+                                color: '#666',
+                                fontSize: 16
+                            }
+                        }],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{b}: {c} ({d}%)"
+                        },
+                        series: [{
+                            type: 'pie',
+                            selectedMode: 'single',
+                            center: ['45%', '53%'],
+                            radius: ['40%', '80%'],
+                            color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5',"#ffcc67","#ffa8a9","#00bfb7","#ea5f97",'#AF89D6'],                            label: {
+                                normal: {
+                                    position: 'inside', //标签的位置
+                                    formatter: '{b}\n{d}%'
+
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [{
+                                value: 48,
+                                name: '公共设施'
+                            }, {
+                                value: 13,
+                                name: '道路交通设施'
+                            }, {
+                                value: 12,
+                                name: '园林绿化设施'
+                            }, {
+                                value: 22,
+                                name: '基础设施'
+                            }]
+                        }]
+                    };
+                    option4 = {
+                        title: [{
+                            text: '加购',
+                            left: '45%',
+                            top: '2%',
+                            textAlign: 'center',
+                            textBaseline: 'middle',
+                            textStyle: {
+                                color: '#666',
+                                fontSize: 16
+                            }
+                        }],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b}: {c} ({d}%)"
+                        },
+                        color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5',"#ffcc67","#ffa8a9","#00bfb7","#ea5f97","#af89d6"],                        series: [{
+                            name: '违规次数',
+                            type: 'pie',
+                            clockwise: false, //饼图的扇区是否是顺时针排布
+                            minAngle: 20, //最小的扇区角度（0 ~ 360）
+                            center: ['45%', '53%'], //饼图的中心（圆心）坐标
+                            radius: ['40%', '80%'], //饼图的半径
+                            avoidLabelOverlap: true, ////是否启用防止标签重叠
+                            itemStyle: { //图形样式
+                                normal: {
+                                    borderColor: '#1e2239',
+                                    borderWidth: 1.5,
+                                },
+                            },
+                            label: { //标签的位置
+                                normal: {
+                                    show: true,
+                                    position: 'inside', //标签的位置
+                                    formatter: "{b}\n{d}%",
+                                    textStyle: {
+                                        color: '#fff',
+                                    }
+                                },
+                                emphasis: {
+                                    show: true,
+                                    textStyle: {
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            data: [{
+                                value: 335,
+                                name: '超速'
+                            },
+                                {
+                                    value: 335,
+                                    name: '急减速'
+                                },
+                                {
+                                    value: 315,
+                                    name: '飞站'
+                                },
+                                {
+                                    value: 200,
+                                    name: '带速开关门'
+                                },
+                                {
+                                    value: 140,
+                                    name: '急加速'
+                                }
+                            ]
+                        }, {
+                            name: '',
+                            type: 'pie',
+                            clockwise: false,
+                            silent: true,
+                            minAngle: 20, //最小的扇区角度（0 ~ 360）
+                            center: ['45%', '53%'], //饼图的中心（圆心）坐标
+                            radius: ['0%', '37%'], //饼图的半径
+                            itemStyle: { //图形样式
+                                normal: {
+                                    borderColor: '#1e2239',
+                                    borderWidth: 1.5,
+                                    opacity: 0.21,
+                                }
+                            },
+                            label: { //标签的位置
+                                normal: {
+                                    show: false,
+                                }
+                            },
+                            data: [{
+                                value: 335,
+                                name: '超速'
+                            },
+                                {
+                                    value: 335,
+                                    name: '急减速'
+                                },
+                                {
+                                    value: 315,
+                                    name: '飞站'
+                                },
+                                {
+                                    value: 200,
+                                    name: '带速开关门'
+                                },
+                                {
+                                    value: 140,
+                                    name: '急加速'
+                                }
+                            ]
+                        }]
+                    };
+                    option5 = {
+                        title: [{
+                            text: '下单',
+                            left: '45%',
+                            top: '2%',
+                            textAlign: 'center',
+                            textBaseline: 'middle',
+                            textStyle: {
+                                color: '#666',
+                                fontSize: 16
+                            }
+                        }],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{b}: {c} ({d}%)"
+                        },
+                        series: [{
+                            type: 'pie',
+                            selectedMode: 'single',
+                            center: ['45%', '53%'],
+                            radius: [0, '80%'],
+                            color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67',"#fd9173" ,'#CC5962'],
+                            label: {
+                                normal: {
+                                    position: 'inside', //标签的位置
+                                    formatter: '{b}\n{d}%'
+
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [{
+                                value: 38,
+                                name: '公共设施'
+                            }, {
+                                value: 20,
+                                name: '道路交通设施'
+                            }, {
+                                value: 20,
+                                name: '园林绿化设施'
+                            }]
+                        }]
+                    };
+                    option6 = {
+                        title: [{
+                            text: '支付',
+                            left: '45%',
+                            top: '2%',
+                            textAlign: 'center',
+                            textBaseline: 'middle',
+                            textStyle: {
+                                color: '#666',
+                                fontSize: 16
+                            }
+                        }],
+                        tooltip: {
+                            trigger: 'item',
+                            formatter: "{b}: {c} ({d}%)"
+                        },
+                        series: [{
+                            type: 'pie',
+                            selectedMode: 'single',
+                            center: ['45%', '53%'],
+                            radius: ['40%', '80%'],
+                            color:["#42a4eb","#5f71d2","#4ac7f5"],
+                            label: {
+                                normal: {
+                                    position: 'inside', //标签的位置
+                                    formatter: '{b}\n{d}%'
+
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: false
+                                }
+                            },
+                            data: [{
+                                value: 48,
+                                name: '2次以上'
+                            }, {
+                                value: 13,
+                                name: '1次'
+                            }]
+                        }]
+                    };
+
+					var month = "trunc(now(), 'MONTH')"; //当月
+					var year = "trunc(now(), 'YEAR')"; //当年
+					var day = "trunc(now(), 'DD')"; //当天
+					var week = "from_unixtime(unix_timestamp(days_sub(now(), 7)), 'yyyy-MM-dd')"; //最近7天
+					var oneDay = "from_unixtime(unix_timestamp(days_sub(now(), 1)), 'yyyy-MM-dd')"; //最近1天
+
+
+
+					//初始化请求
+                    $(function(){
+//						var startTime = year;
+//						var endTime = "null";
+                        var startTime = week;
+						var endTime = day;
+						var sTime = oneDay;
+						var eTime = day;
+                        //按时间范围查询用户行为
+						selectByTimeUserBehaviorList(startTime,endTime);
+						//按城市查询用户行为
+						selectByCityUserBehavior(startTime,endTime);
+						//按频道查询用户行为
+						selectByChannelUserBehavior(startTime,endTime);
+						//购物用户行为总点击次数
+						selectUserShoppingNums(sTime,eTime);
+						//购物用户行为平均点击次数
+						selectUserShoppingAvg(sTime,eTime);
+						//购物分类详情
+						selectUserShoppingDetails(sTime,eTime);
+1
+					});
+
+                    function tabYear(){
+                        var startTime = year;
+                        var endTime = "null";
+                        //按时间范围查询用户行为
+                        selectByTimeUserBehaviorList(startTime,endTime);
+                        //按城市查询用户行为
+                        selectByCityUserBehavior(startTime,endTime);
+                        //按频道查询用户行为
+                        selectByChannelUserBehavior(startTime,endTime);
+					}
+					function tabMonth(){
+                        var startTime = month;
+                        var endTime = "null";
+                        //按时间范围查询用户行为
+                        selectByTimeUserBehaviorList(startTime,endTime);
+                        //按城市查询用户行为
+                        selectByCityUserBehavior(startTime,endTime);
+                        //按频道查询用户行为
+                        selectByChannelUserBehavior(startTime,endTime);
+					}
+					function tabWeek(){
+                        var startTime = week;
+                        var endTime = day;
+                        //按时间范围查询用户行为
+                        selectByTimeUserBehaviorList(startTime,endTime);
+                        //按城市查询用户行为
+                        selectByCityUserBehavior(startTime,endTime);
+                        //按频道查询用户行为
+                        selectByChannelUserBehavior(startTime,endTime);
+					}
+
+//                    var myChart2 = echarts.init(document.getElementById('main2'));
+//                    var myChart3 = echarts.init(document.getElementById('main3'));
+//                    var myChart4 = echarts.init(document.getElementById('main4'));
+//                    var myChart5 = echarts.init(document.getElementById('main5'));
+//                    var myChart6 = echarts.init(document.getElementById('main6'));
+//					var allNum = 0;
+					var fnum = 0;
+					var jnum = 0;
+					var cnum = 0;
+					var xnum = 0;
+                    function selectByTimeUserBehaviorList(startTime,endTime){
+                        doManager("userBehavior","selectUserBrhaviorList",[startTime,endTime],
+                            function(data,textStatus,XmlHttpRequest){
+                                if (data.result) {
+                                    var jsonData = $.fromJSON(data.data);
+                                    if(Object.keys(jsonData).length!=0){
+                                        var city_datas = jsonData.data;
+                                        if(city_datas != null && city_datas != undefined){
+                                            for(var i = 0; i < city_datas.length ; i++){
+                                                var datarRow = city_datas[i];
+                                                if(datarRow["type"] == "访问用户数"){
+                                                    fnum =  document.getElementById("user1").innerHTML = datarRow["num"];
+                                                }
+                                                if(datarRow["type"] == "加购用户数"){
+                                                    jnum = document.getElementById("user2").innerHTML = datarRow["num"];
+                                                }
+                                                if(datarRow["type"] == "下单用户数"){
+                                                    xnum = document.getElementById("user3").innerHTML = datarRow["num"];
+                                                }
+                                                if(datarRow["type"] == "成交用户数"){
+                                                    cnum = document.getElementById("user4").innerHTML = datarRow["num"];
+                                                }
+                                            }
+                                            if(fnum >0 && jnum>0&& xnum>0&& cnum>0){
+                                                document.getElementById("pro1").innerHTML = Math.round(jnum / fnum * 10000) / 100.00 + "%";
+                                                document.getElementById("pro2").innerHTML = Math.round(xnum / jnum * 10000) / 100.00 + "%";
+                                                document.getElementById("pro3").innerHTML = Math.round(cnum / xnum * 10000) / 100.00 + "%";
+                                            }
+										}
+                                    }
+                                }
+                            },false);
+
+                    }
+
+                    function selectByCityUserBehavior(startTime,endTime){
+                        doManager("userBehavior","selectByCityList",[startTime,endTime],
+                            function(data,textStatus,XmlHttpRequest){
+                                if (data.result) {
+                                    var city_xData = new Array(); //城市
+                                    var city_visit_num = new Array();  //访问
+                                    var city_add_num = new Array();    //加购
+                                    var city_order_num = new Array();  //下单
+                                    var city_sign_num = new Array();   //支付
+                                    var jsonData = $.fromJSON(data.data);
+                                    if(Object.keys(jsonData).length!=0){
+                                        var city_datas = jsonData.data;
+                                        if(city_datas != null && city_datas != undefined){
+                                            for(var i = 0; i < city_datas.length ; i++){
+                                                var datarRow = city_datas[i];
+                                                city_xData.push(datarRow["city_name"]);
+                                                city_visit_num.push(datarRow["visit_num"]);
+                                                city_add_num.push(datarRow["add_num"]);
+                                                city_order_num.push(datarRow["order_num"]);
+                                                city_sign_num.push(datarRow["sign_num"]);
+                                            }
+										}
+                                    }
+                                    var myChart1 = echarts.init(document.getElementById('main1'));
+                                    var option1 = {
+                                        title: {
+                                            text: '城市',
+                                            x: 'center',
+                                            top: '2%',
+                                            textAlign: 'left',
+                                            textStyle: {
+                                                fontSize: "20",
+                                                fontWeight: "bold"
+                                            }
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis'
+                                        },
+                                        legend: {
+                                            left: "right",
+                                            data: ['访问人数', '加购人数', '下单人数', '支付人数']
+                                        },
+                                        grid: {
+                                            left: '3%',
+                                            right: '4%',
+                                            bottom: '1%',
+                                            containLabel: true
+                                        },
+                                        xAxis: {
+                                            type: 'category',
+                                            splitLine:{show: false},
+                                            boundaryGap: false,
+                                            axisLabel: {
+                                                interval: 0,
+                                                margin : 20
+                                            },
+                                            data: city_xData
+                                        },
+                                        yAxis: {
+                                            type: 'value',
+                                            splitLine:{show: false},
+                                        },
+                                        series: [{
+                                            name: '访问人数',
+                                            type: 'line',
+                                            stack: '总量',
+                                            data: city_visit_num
+                                        },
+                                            {
+                                                name: '加购人数',
+                                                type: 'line',
+                                                stack: '总量',
+                                                data: city_add_num
+                                            },
+                                            {
+                                                name: '下单人数',
+                                                type: 'line',
+                                                stack: '总量',
+                                                data: city_order_num
+                                            },
+                                            {
+                                                name: '支付人数',
+                                                type: 'line',
+                                                stack: '总量',
+                                                data: city_sign_num
+                                            }
+                                        ]
+                                    };
+//                        option1.xAxis.data = city_xData;
+//                        option1.series[0].data = city_visit_num;
+//                        option1.series[1].data = city_add_num;
+//                        option1.series[2].data = city_order_num;
+//                        option1.series[3].data = city_sign_num;
+                                    myChart1.clear();
+                                    myChart1.setOption(option1, true);
+                                    myChart1.resize();
+                                }
+                            },false);
+                    }
+
+                    function selectByChannelUserBehavior(startTime,endTime){
+                        doManager("userBehavior","selectByChannel",[startTime,endTime],
+                            function(data,textStatus,XmlHttpRequest){
+                                if (data.result) {
+                                    var channel_xData = new Array(); //城市
+                                    var channel_visit_num = new Array();  //访问
+                                    var channel_order_num = new Array();  //下单
+                                    var channel_sign_num = new Array();   //支付
+                                    var jsonData = $.fromJSON(data.data);
+                                    if(Object.keys(jsonData).length!=0){
+                                        var channel_datas = jsonData.data;
+                                        if(channel_datas != null &&channel_datas != undefined){
+                                            for(var i = 0; i < channel_datas.length ; i++){
+                                                var datarRow = channel_datas[i];
+                                                channel_xData.push(datarRow["channel_name"]);
+                                                channel_visit_num.push(datarRow["visit_num"]);
+                                                channel_order_num.push(datarRow["order_num"]);
+                                                channel_sign_num.push(datarRow["sign_num"]);
+                                            }
+										}
+                                    }
+                                    var myChart2 = echarts.init(document.getElementById('main2'));
+                                    var option2 = {
+                                        dataZoom: {
+                                            show: true,
+                                            type: 'slider',
+                                            height: 20,
+                                            start: 0,
+                                            end: 40,
+                                            bottom: 0
+                                        },
+                                        title: {
+                                            text: '频道',
+                                            x: 'center',
+                                            top: '2%',
+                                            textAlign: 'left',
+                                            textStyle: {
+                                                fontSize: "20",
+                                                fontWeight: "bold"
+                                            }
+                                        },
+                                        tooltip: {
+                                            trigger: 'axis',
+                                            axisPointer: {
+                                                type: 'shadow',
+                                                textStyle: {
+                                                    color: '#fff'
+                                                }
+                                            },
+                                        },
+                                        grid: {
+                                            borderWidth: 0,
+                                            left: '7%',
+                                            right: '5%',
+                                            bottom: '15%',
+                                            textStyle: {
+                                                color: '#fff'
+                                            }
+                                        },
+                                        legend: {
+                                            x: 'right',
+                                            top: '30',
+                                            data: ['访问人数', '下单人数', '支付人数']
+                                        },
+                                        calculable: true,
+                                        xAxis: [{
+                                            type: 'category',
+                                            axisLine: {
+                                                lineStyle: {
+                                                    color: '#000'
+                                                }
+                                            },
+                                            splitLine: {
+                                                show: false
+                                            },
+                                            axisTick: {
+                                                show: false
+                                            },
+                                            splitArea: {
+                                                show: false
+                                            },
+                                            axisLabel: {
+                                                interval: 0,
+												margin : 20
+                                            },
+                                            data: channel_xData,
+                                        }],
+                                        yAxis: [{
+                                            type: 'value',
+                                            splitLine: {
+                                                show: false
+                                            },
+                                            axisLine: {
+                                                lineStyle: {
+                                                    color: '#000'
+                                                }
+                                            },
+                                            axisTick: {
+                                                show: false
+                                            },
+                                            axisLabel: {
+                                                interval: 0,
+                                            },
+                                            splitArea: {
+                                                show: false
+                                            },
+                                        }],
+                                        series: [{
+                                            name: '访问人数',
+                                            type: 'bar',
+                                            stack: "总量",
+                                            barMaxWidth: 35,
+                                            barGap: '10%',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: 'rgba(255,144,128,1)',
+                                                    label: {
+                                                        show: true,
+                                                        textStyle: {
+                                                            color: '#fff'
+                                                        },
+                                                        position: 'insideTop',
+                                                        formatter: function(p) {
+                                                            return p.value > 0 ? (p.value) : '';
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            data: channel_visit_num,
+                                        }, {
+                                            name: '下单人数',
+                                            type: 'bar',
+                                            stack: '总量',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: 'rgba(0,191,183,1)',
+                                                    barBorderRadius: 0,
+                                                    label: {
+                                                        show: true,
+                                                        position: 'top',
+                                                        formatter: function(p) {
+                                                            return p.value > 0 ? (p.value) : '';
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            data: channel_order_num
+                                        }, {
+                                            name: '支付人数',
+                                            type: 'bar',
+                                            stack: '总量',
+                                            itemStyle: {
+                                                normal: {
+                                                    color: '#ed7d31',
+                                                    barBorderRadius: 0,
+                                                    label: {
+                                                        show: true,
+                                                        position: 'top',
+                                                        formatter: function(p) {
+                                                            return p.value > 0 ? (p.value) : '';
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            data: channel_sign_num
+                                        }
+                                        ]
+                                    }
+                                    option2.xAxis[0].data = channel_xData;
+                                    option2.series[0].data = channel_visit_num;
+                                    option2.series[1].data = channel_order_num;
+                                    option2.series[2].data = channel_sign_num;
+                                    myChart2.clear();
+                                    myChart2.setOption(option2, true);
+                                    myChart2.resize();
+                                }
+                            },false);
+                    }
+
+
+                    function selectUserShoppingNums(startTime,endTime){
+                        doManager("userBehavior","selectUserShoppingCart",[startTime,endTime],
+                            function(data,textStatus,XmlHttpRequest){
+                                if (data.result) {
+                                    var jsonData = $.fromJSON(data.data);
+                                    if(Object.keys(jsonData).length!=0){
+                                        var userNums = jsonData.data;
+                                        if(userNums != null &&userNums != undefined) {
+                                            for (var i = 0; i < userNums.length; i++) {
+                                                var datarRow = userNums[i];
+                                                if (datarRow["action_level"] == "1") {
+                                                    document.getElementById("numS1").innerHTML = datarRow["num"];
+                                                }
+                                                if (datarRow["action_level"] == "2") {
+                                                    document.getElementById("numS2").innerHTML = datarRow["num"];
+                                                }
+                                                if (datarRow["action_level"] == "3") {
+                                                    document.getElementById("numS3").innerHTML = datarRow["num"];
+                                                }
+                                                if (datarRow["action_level"] == "4") {
+                                                    document.getElementById("numS4").innerHTML = datarRow["num"];
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },false);
+                    }
+
+
+                    function selectUserShoppingAvg(startTime,endTime){
+                        doManager("userBehavior","selectUserShoppingCartAvg",[startTime,endTime],
+                            function(data,textStatus,XmlHttpRequest){
+                                if (data.result) {
+                                    var jsonData = $.fromJSON(data.data);
+                                    if(Object.keys(jsonData).length!=0){
+                                        var userAvg = jsonData.data;
+                                        var avg1 = 0;
+                                        var avg2 = 0;
+                                        var avg3 = 0;
+                                        var avg4 = 0;
+                                        if(userAvg != null &&userAvg != undefined) {
+                                            for (var i = 0; i < userAvg.length; i++) {
+                                                var datarRow = userAvg[i];
+                                                if (datarRow["action_level"] == "1") {
+                                                    avg1 = document.getElementById("avg1").innerHTML = datarRow["num"];
+                                                }
+                                                if (datarRow["action_level"] == "2") {
+                                                    avg2 = document.getElementById("avg2").innerHTML = datarRow["num"];
+                                                }
+                                                if (datarRow["action_level"] == "3") {
+                                                    avg3 = document.getElementById("avg3").innerHTML = datarRow["num"];
+                                                }
+                                                if (datarRow["action_level"] == "4") {
+                                                    avg4 = document.getElementById("avg4").innerHTML = datarRow["num"];
+                                                }
+                                            }
+                                            document.getElementById("user_sum").innerHTML = avg1 + avg2 + avg3 + avg4;
+                                        }
+                                    }
+                                }
+                            },false);
+                    }
+
+
+                    var arrayF = new Array(); //访问分类
+                    var arrayJ = new Array(); //加购分类
+                    var arrayX = new Array(); //下单分类
+                    var arrayZ = new Array(); //支付分类
+                    function selectUserShoppingDetails(startTime,endTime){
+                        doManager("userBehavior","selectUserShoppingCartDetails",[startTime,endTime],
+                            function(data,textStatus,XmlHttpRequest){
+                                if (data.result) {
+                                    var jsonData = $.fromJSON(data.data);
+                                    if(Object.keys(jsonData).length!=0){
+                                        var userDetails = jsonData.data;
+                                        if(userDetails != null &&userDetails != undefined) {
+                                            for (var i = 0; i < userDetails.length; i++) {
+                                                var datarRow = userDetails[i];
+                                                var objRow = new Object();
+                                                if (datarRow["action_level"] == "1") {
+                                                    objRow.name = datarRow["behavior_name"];
+                                                    objRow.value = datarRow["num"];
+                                                    arrayF.push(objRow);
+                                                }
+                                                if (datarRow["action_level"] == "2") {
+                                                    objRow.name = datarRow["behavior_name"];
+                                                    objRow.value = datarRow["num"];
+                                                    arrayJ.push(objRow);
+                                                }
+                                                if (datarRow["action_level"] == "3") {
+                                                    objRow.name = datarRow["behavior_name"];
+                                                    objRow.value = datarRow["num"];
+                                                    arrayX.push(objRow);
+                                                }
+                                                if (datarRow["action_level"] == "4") {
+                                                    objRow.name = datarRow["behavior_name"];
+                                                    objRow.value = datarRow["num"];
+                                                    arrayZ.push(objRow);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },false);
+                        var myChart3 = echarts.init(document.getElementById('main3'));
+                        var myChart4 = echarts.init(document.getElementById('main4'));
+                        var myChart5 = echarts.init(document.getElementById('main5'));
+                        var myChart6 = echarts.init(document.getElementById('main6'));
+                        option3.series[0].data = arrayF;
+                        option4.series[0].data = arrayJ;
+                        option4.series[1].data = arrayJ;
+                        option5.series[0].data = arrayX;
+                        option6.series[0].data = arrayZ;
+                        myChart3.setOption(option3);
+                        myChart4.setOption(option4);
+                        myChart5.setOption(option5);
+                        myChart6.setOption(option6);
+                        myChart3.clear();
+                        myChart3.setOption(option3, true);
+                        myChart3.resize();
+                        myChart4.clear();
+                        myChart4.setOption(option4, true);
+                        myChart4.resize();
+                        myChart5.clear();
+                        myChart5.setOption(option5, true);
+                        myChart5.resize();
+                        myChart6.clear();
+                        myChart6.setOption(option6, true);
+                        myChart6.resize();
+                    }
+
+				</script>
+	</body>
+
+</html>
