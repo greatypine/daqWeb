@@ -16,7 +16,7 @@ public class StoreObserveParameterDaoImp extends BaseDAOHibernate implements Sto
 
     @Override
     public List<Map<String, Object>> queryObserveParameterList(Long store_id,String observe_month){
-        String sql="select details.model_id,model.model_name,details.observe_content,parameter.points_deduction_description,parameter.content_score,parameter.score_empno_empname,parameter.check_details_id as id from t_observe_parameter parameter " +
+        String sql="select details.model_id,model.model_color,model.model_name,details.observe_content,parameter.points_deduction_description,parameter.content_score,parameter.score_empno_empname,parameter.check_details_id as id from t_observe_parameter parameter " +
                 "LEFT JOIN t_observe_check_details details ON (parameter.check_details_id = details.id) INNER JOIN t_observe_model model ON (model.id = details.model_id) where " +
                 "parameter.store_id = "+store_id+" and parameter.observe_month = '"+observe_month+"'";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);

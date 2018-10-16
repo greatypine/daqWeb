@@ -254,4 +254,13 @@ public class UserGroupManagerImpl extends BizBaseCommonManager implements
 		List<?> lst_group = this.getList();
 		return lst_group;
 	}
+
+	@Override
+	public UserGroup findUserGroupByname(String name) {
+		List<?> lst_data = this.getList(FilterFactory.getSimpleFilter("name" ,name));
+		if (lst_data != null && lst_data.size() > 0) {
+			return (UserGroup) lst_data.get(0);
+		}
+		return null;
+	}
 }

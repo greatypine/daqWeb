@@ -40,6 +40,7 @@ public class CheckDetailsManagerImpl extends BizBaseCommonManager implements Che
                 checkDetails.setOrder_no(observeDTO.getOrder_no());
                 checkDetails.setStatus(observeDTO.getStatus());
                 checkDetails.setObserve_content(observeDTO.getObserve_content());
+                checkDetails.setRemark(observeDTO.getRemark());
                 checkDetails.setType(0);
                 BeanUtils.copyProperties(checkDetails, checkDetails1,
                         new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
@@ -51,6 +52,7 @@ public class CheckDetailsManagerImpl extends BizBaseCommonManager implements Che
                 checkDetails.setOrder_no(observeDTO.getOrder_no());
                 checkDetails.setStatus(observeDTO.getStatus());
                 checkDetails.setObserve_content(observeDTO.getObserve_content());
+                checkDetails.setRemark(observeDTO.getRemark());
                 checkDetails.setType(0);
                 preObject(checkDetails);
                 this.saveObject(checkDetails);

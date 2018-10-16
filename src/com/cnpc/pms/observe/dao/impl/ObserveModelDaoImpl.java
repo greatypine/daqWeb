@@ -19,7 +19,7 @@ public class ObserveModelDaoImpl  extends BaseDAOHibernate implements ObserveMod
 
     @Override
     public List<Map<String, Object>> getObserveList() {
-        String sql="select model.model_name,details.observe_content,details.model_id,details.id from t_observe_model model INNER JOIN t_observe_check_details details ON (model.id = details.model_id)";
+        String sql="select model.model_name,model.model_color,details.observe_content,details.model_id,details.id from t_observe_model model INNER JOIN t_observe_check_details details ON (model.id = details.model_id) where model.status = 0 and details.status = 0 order by model.order_no,details.order_no ASC ";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
         return lst_data;
@@ -27,11 +27,23 @@ public class ObserveModelDaoImpl  extends BaseDAOHibernate implements ObserveMod
 
     @Override
     public List<Map<String, Object>> getObserveModelList() {
-        String sql="select model.model_name,details.model_id,count(details.model_id) as count from t_observe_model model INNER JOIN t_observe_check_details details ON (model.id = details.model_id) GROUP BY details.model_id";
+        String sql="select model.model_name,model.model_color,details.model_id,count(details.model_id) as count from t_observe_model model INNER JOIN t_observe_check_details details ON (model.id = details.model_id) where model.status = 0 and details.status = 0 GROUP BY details.model_id order by details.order_no ASC ";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
         List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
         return lst_data;
     }
+
+    @Override
+    public List<Map<String, Object>> getObserveModelListByEdit(Long store_id,String observe_month) {
+        String sql="select details.model_id,model.model_name,model.model_color,count(details.model_id) as count from t_observe_parameter parameter " +
+                "LEFT JOIN t_observe_check_details details ON (parameter.check_details_id = details.id) INNER JOIN t_observe_model model ON (model.id = details.model_id) where  " +
+                "parameter.store_id = "+store_id+" and parameter.observe_month = '"+observe_month+"' GROUP BY model_id ORDER BY model.order_no";
+        SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+        List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        return lst_data;
+    }
+
+
 
     @Override
     public List<String> getObserveContentList(){
@@ -44,7 +56,7 @@ public class ObserveModelDaoImpl  extends BaseDAOHibernate implements ObserveMod
 
     @Override
     public List<ObserveModel> getObserveModel() {
-        String find_sql = "select * from t_observe_model";
+        String find_sql = "select * from t_observe_model where status = 0";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(find_sql);
         List<ObserveModel> list = query.addEntity(ObserveModel.class).list();
         return list;

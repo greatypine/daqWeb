@@ -418,6 +418,14 @@
         <column key="code" header="登录名" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="33%"/>
         <column key="citynames" header="城市" type="java.lang.String" align="left" allowSearch="true" allowSort="true" display="true" width="33%"/>
     </query>
+
+    <!-- 明查暗访人员的城市分配 -->
+    <query id="observeUserCityManagerQuery" header="城市权限分配" baseclass="com.cnpc.pms.bizbase.rbac.usermanage.entity.User" method="userManager.queryObserveDistCityUserList" order="id desc">
+        <column key="id" header="用户管理" type="java.lang.Long" align="left" allowSearch="true" operator="eq" display="false"/>
+        <column key="name" header="用户名称" allowSearch="true" type="java.lang.String" align="left" operator="like" allowSort="true" display="true" width="33%"/>
+        <column key="code" header="登录名" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="33%"/>
+        <column key="citynames" header="城市" type="java.lang.String" align="left" allowSearch="true" allowSort="true" display="true" width="33%"/>
+    </query>
     
 
     <query id="customerAchievementsQuery" header="用户画像完成量" baseclass="com.cnpc.pms.personal.entity.Customer" method="customerManager.queryAchievements">
