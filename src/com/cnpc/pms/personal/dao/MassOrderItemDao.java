@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 
 /**
@@ -31,23 +32,25 @@ public interface MassOrderItemDao extends IDAO{
   	/**
 	 * 根据片区编号查询信息
 	 * @param area_code
+	 * @param order_sn
+	 * @param timeFlag
 	 * @return
 	 */
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn);
+	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag);
 	/**
 	 * 查询订单数据列表
 	 * @param massOrderDto
 	 * @param pageInfo
 	 * @return
 	 */
-	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto,PageInfo pageInfo);
+	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto,PageInfo pageInfo,String timeFlag);
 	
 	/**
 	 * 导出订单数据列表
 	 * @param massOrderDto
 	 * @return
 	 */
-	public List<Map<String, Object>> exportOrder(MassOrderItemDto massOrderDto);
+	public List<Map<String, Object>> exportOrder(MassOrderItemDto massOrderDto,String timeFlag);
 	
 	/**
 	 * 根据门店编号查Platformid
@@ -55,4 +58,18 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> queryPlatformidByCode(String storeno);
+	/**
+	 * 查询当日实时毛利(全国/省/市切换)
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryDailyprofit(DynamicDto dd);
+	/**
+	 * 查询当月实时毛利(全国/省/市切换)
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryMonthprofit(DynamicDto dd);
+	
+	
 }
