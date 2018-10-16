@@ -7,11 +7,11 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
@@ -64,7 +64,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		return order_obj;
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo) {
+	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo,String timeFlag) {
 		String order_sn = massOrderDto.getOrder_sn();
 		String begin_date = massOrderDto.getBeginDate();
 		String end_date = massOrderDto.getEndDate();
@@ -92,7 +92,15 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String department_name = massOrderDto.getDepartment_name();
 		String channel_name = massOrderDto.getChannel_name();
 		String whereStr = "";
-		String selectQuery = "IFNULL(tor.order_sn,'') AS order_sn, IFNULL(tor.area_code,'') AS area_code, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
+		String sqlTableMass = "";
+		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
+			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_daily tor ";
+		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
+			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_monthly tor ";
+		} else {
+			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_total tor ";
+		}
+		String selectQuery = "IFNULL(toip.order_sn,'') AS order_sn, IFNULL(tor.area_code,'') AS area_code, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
 				"IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code,IFNULL(tor.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
 				"'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN " +
 				"'智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' " +
@@ -100,17 +108,17 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				"AS create_time, IFNULL(toip.eshop_pro_id,'') AS product_id, IFNULL(toip.eshop_pro_name,'') AS product_name, IFNULL(toip.eshop_id,'') AS " +
 				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(tor.customer_name,'') AS customer_name, IFNULL(tor.customer_mobile_phone,'') AS customer_mobilephone," +
 				"IFNULL(tor.addr_address,'') AS order_address, IFNULL(tor.addr_mobilephone,'') AS order_mobilephone, IFNULL(tor.addr_name,'') AS order_customer_name," +
-				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
+				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,toip.quantity AS quantity, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
 				"IFNULL(from_unixtime(unix_timestamp(toip.order_signed_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(tor.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
 				"as appointment_start_time, from_unixtime(unix_timestamp(toip.order_cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time, IFNULL(tor.employee_name,'') AS employee_name,IFNULL(tor.employee_phone,'') AS employee_phone,IFNULL(tor.department_name,'') AS dep_name, " +
 				"IFNULL(tor.channel_name,'') AS channel_name, IFNULL(toip.contents,'') AS order_contents," +
 				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,''),IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
 				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end, toc.star_level AS " +
 				"star_level";
-		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
-		String sqlB = "SELECT count(1) as count_ "+" from datacube_kudu.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlB = "SELECT count(1) as count_ "+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
-			whereStr = whereStr + " and tor.order_sn  like '%" + order_sn.trim() + "%'";
+			whereStr = whereStr + " and toip.order_sn  like '%" + order_sn.trim() + "%'";
 		}
 		
 		if(StringUtils.isNotEmpty(begin_date)){
@@ -256,7 +264,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String, Object>> exportOrder(MassOrderItemDto massOrderDto) {
+	public List<Map<String, Object>> exportOrder(MassOrderItemDto massOrderDto,String timeFlag) {
 		String order_sn = massOrderDto.getOrder_sn();
 		String begin_date = massOrderDto.getBeginDate();
 		String end_date = massOrderDto.getEndDate();
@@ -284,7 +292,15 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String department_name = massOrderDto.getDepartment_name();
 		String channel_name = massOrderDto.getChannel_name();
 		String whereStr = "";
-		String selectQuery = "IFNULL(tor.order_sn,'') AS order_sn, IFNULL(tor.area_code,'') AS area_code, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
+		String sqlTableMass = "";
+		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
+			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_daily tor ";
+		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
+			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_monthly tor ";
+		} else {
+			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_total tor ";
+		}
+		String selectQuery = "IFNULL(toip.order_sn,'') AS order_sn, IFNULL(tor.area_code,'') AS area_code, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
 				"IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code,IFNULL(tor.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
 				"'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN " +
 				"'智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' " +
@@ -292,16 +308,16 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				"AS create_time, IFNULL(toip.eshop_pro_id,'') AS product_id, IFNULL(toip.eshop_pro_name,'') AS product_name, IFNULL(toip.eshop_id,'') AS " +
 				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(tor.customer_name,'') AS customer_name, IFNULL(tor.customer_mobile_phone,'') AS customer_mobilephone," +
 				"IFNULL(tor.addr_address,'') AS order_address, IFNULL(tor.addr_mobilephone,'') AS order_mobilephone, IFNULL(tor.addr_name,'') AS order_customer_name," +
-				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
+				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,toip.quantity AS quantity, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
 				"IFNULL(from_unixtime(unix_timestamp(toip.order_signed_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(tor.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
 				"as appointment_start_time, from_unixtime(unix_timestamp(toip.order_cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time, IFNULL(tor.employee_name,'') AS employee_name,IFNULL(tor.employee_phone,'') AS employee_phone,IFNULL(tor.department_name,'') AS dep_name, " +
 				"IFNULL(tor.channel_name,'') AS channel_name, IFNULL(toip.contents,'') AS order_contents," +
 				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,''),IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
 				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end, toc.star_level AS " +
 				"star_level";
-		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join daqWeb.df_mass_order_monthly tor on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
-			whereStr = whereStr + " and tor.order_sn  like '%" + order_sn.trim() + "%'";
+			whereStr = whereStr + " and toip.order_sn  like '%" + order_sn.trim() + "%'";
 		}
 		
 		if(StringUtils.isNotEmpty(begin_date)){
@@ -441,10 +457,16 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn) {
+	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag) {
 		String sql = "SELECT IFNULL(a.area_code,'') AS area_code, IFNULL(a.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, "
 				+ "IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code FROM ";
-		sql = sql + " df_mass_order_monthly a ";
+		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
+			sql = sql + " df_mass_order_daily a ";
+		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
+			sql = sql + " df_mass_order_monthly a ";
+		} else {
+			sql = sql + " df_mass_order_total a ";
+		}		
 		sql = sql + "LEFT JOIN t_area ta ON a.area_code = ta.area_no LEFT JOIN tiny_village_code vc ON a.info_village_code = vc. CODE WHERE 1=1 ";
 
 		if (StringUtils.isNotEmpty(area_code) && !area_code.equals("null")) {
@@ -463,23 +485,61 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		return order_obj;
 	}
-	/*	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn) {
-		String sql = "SELECT IFNULL(a.area_code,'') AS area_code, IFNULL(a.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, "
-				+ "IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code FROM ";
-		sql = sql + " daqWeb.df_mass_order_monthly a ";
-		sql = sql + "LEFT JOIN t_area ta ON a.area_code = ta.area_no LEFT JOIN tiny_village_code vc ON a.info_village_code = vc. CODE WHERE 1=1 ";
+	public Map<String, Object> queryDailyprofit(DynamicDto dd) {
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String beginDate = dd.getBeginDate();
+		String endDate = dd.getEndDate();
+		String dateStr = "";
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
+			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
+		}
+		String sql = "SELECT IFNULL(SUM(tor.order_profit), 0) AS order_profit FROM df_mass_order_daily ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join  " +
+				"t_dist_citycode d on d.cityname=t.city_name "+dateStr+provinceStr+cityStr;
+		List<Map<String,Object>> lst_data=ImpalaUtil.executeGuoan(sql);
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("gmv", lst_data);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> queryMonthprofit(DynamicDto dd) {
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String beginDate = dd.getBeginDate();
+		String endDate = dd.getEndDate();
+		String dateStr = "";
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		}
+		if(city_id!=null&&city_id!=""){
+			cityStr+=" and d.id='"+city_id+"' ";
+		}else if("yes".equals(zx)){
+			cityStr+=" and d.id='"+province_id+"' ";
+		}
+		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
+			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
+		}
+		String sql = "SELECT IFNULL(SUM(tor.order_profit), 0) AS order_profit FROM df_mass_order_monthly ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join  " +
+				"t_dist_citycode d on d.cityname=t.city_name "+dateStr+provinceStr+cityStr;
 
-		if (StringUtils.isNotEmpty(area_code) && !area_code.equals("null")) {
-			sql = sql + " AND a.area_code = '" + area_code + "'";
-		}
-		if (StringUtils.isNotEmpty(order_sn)) {
-			sql = sql + " AND a.order_sn = '" + order_sn + "'";
-		}
-		List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
-		lst_data=ImpalaUtil.execute(sql);
-		Map<String,Object> lst_bj = lst_data.get(0);
-		return lst_bj;
-	}*/
+		List<Map<String,Object>> lst_data=ImpalaUtil.executeGuoan(sql);
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("gmv", lst_data);
+		return map_result;
+	}
 }
