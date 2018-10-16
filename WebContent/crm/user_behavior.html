@@ -7,6 +7,7 @@
 		<title>用户行为分析</title>
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+		<link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
 		<!-- Bootstrap 3.3.6 -->
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 		<!-- Font Awesome -->
@@ -99,6 +100,7 @@
 				width: 100%;
 				height: 500px;
 				/*background: #dadada;*/
+				margin-top:-100px ;
 			}
 
 			.reportdiv {
@@ -112,8 +114,7 @@
 
 			.reportdiv #pro1 {
 				position: absolute;
-				font-size: 12px;
-				left: 17px;
+				left: -40px;
 				top: 176px;
 				color: #feb54e;
 				font-weight: bold;
@@ -121,7 +122,7 @@
 
 			.reportdiv #pro2 {
 				position: absolute;
-				left: 16px;
+				left: -40px;
 				top: 238px;
 				color: #d32a41;
 				font-weight: bold;
@@ -129,7 +130,7 @@
 
 			.reportdiv #pro3 {
 				position: absolute;
-				left: 16px;
+				left: -40px;
 				top: 298px;
 				color: #2ba8a4;
 				font-weight: bold;
@@ -346,7 +347,7 @@
 						<div class="tab-content no-padding">
 							<div class="tab-pane active" id="tab_1ddd">
 								<div class="box box-default">
-									<div class="box-header h4 text-light-blue"><strong>APP访问情况</strong></div>
+									<div class="box-header h2 text-light-blue"><strong>APP访问情况</strong></div>
 									<div class="box-body" style="padding-top: 25px;">
 										<div class="report">
 											<div class="reportdiv">
@@ -357,12 +358,12 @@
 											</div>
 										</div>
 										<div id="main1" style="height: 500px;"></div>
-										<div id="main2" style="height: 500px;"></div>
+										<div id="main2" style="height: 500px;margin-top: 50px"></div>
 
 									</div>
 								</div>
 								<div class="box box-default">
-									<div class="box-header h4 text-light-blue"><strong>用户购物体验分析(昨天)</strong></div>
+									<div class="box-header h2 text-light-blue"><strong>用户购物体验分析(昨天)</strong></div>
 									<div class="box-body" style="padding-top: 25px;">
 										<h4 style="text-align: center;">每个用户完成下单共需<strong style="color: cornflowerblue;font-size: 24px;margin-left: 10px;margin-right: 10px;" id="user_sum"></strong>步</h4>
 										<div>
@@ -479,7 +480,7 @@
 
                     option3 = {
                         title: [{
-                            text: '浏览',
+                            text: '用户浏览分布',
                             left: '45%',
                             top: '2%',
                             textAlign: 'center',
@@ -500,14 +501,14 @@
                             radius: ['40%', '80%'],
                             color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5',"#ffcc67","#ffa8a9","#00bfb7","#ea5f97",'#AF89D6'],                            label: {
                                 normal: {
-                                    position: 'inside', //标签的位置
+                                    position: 'outside', //标签的位置
                                     formatter: '{b}\n{d}%'
 
                                 }
                             },
                             labelLine: {
                                 normal: {
-                                    show: false
+                                    show: true
                                 }
                             },
                             data: [{
@@ -527,7 +528,7 @@
                     };
                     option4 = {
                         title: [{
-                            text: '加购',
+                            text: '商品加购来源',
                             left: '45%',
                             top: '2%',
                             textAlign: 'center',
@@ -542,7 +543,6 @@
                             formatter: "{a} <br/>{b}: {c} ({d}%)"
                         },
                         color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5',"#ffcc67","#ffa8a9","#00bfb7","#ea5f97","#af89d6"],                        series: [{
-                            name: '违规次数',
                             type: 'pie',
                             clockwise: false, //饼图的扇区是否是顺时针排布
                             minAngle: 20, //最小的扇区角度（0 ~ 360）
@@ -558,17 +558,19 @@
                             label: { //标签的位置
                                 normal: {
                                     show: true,
-                                    position: 'inside', //标签的位置
+                                    position: 'outside', //标签的位置
                                     formatter: "{b}\n{d}%",
-                                    textStyle: {
-                                        color: '#fff',
-                                    }
                                 },
                                 emphasis: {
                                     show: true,
                                     textStyle: {
                                         fontWeight: 'bold'
                                     }
+                                }
+                            },
+                            labelLine: {
+                                normal: {
+                                    show: true
                                 }
                             },
                             data: [{
@@ -637,7 +639,7 @@
                     };
                     option5 = {
                         title: [{
-                            text: '下单',
+                            text: '用户下单情况',
                             left: '45%',
                             top: '2%',
                             textAlign: 'center',
@@ -659,14 +661,14 @@
                             color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67',"#fd9173" ,'#CC5962'],
                             label: {
                                 normal: {
-                                    position: 'inside', //标签的位置
+                                    position: 'outside', //标签的位置
                                     formatter: '{b}\n{d}%'
 
                                 }
                             },
                             labelLine: {
                                 normal: {
-                                    show: false
+                                    show: true
                                 }
                             },
                             data: [{
@@ -683,7 +685,7 @@
                     };
                     option6 = {
                         title: [{
-                            text: '支付',
+                            text: '用户支付情况',
                             left: '45%',
                             top: '2%',
                             textAlign: 'center',
@@ -705,14 +707,14 @@
                             color:["#42a4eb","#5f71d2","#4ac7f5"],
                             label: {
                                 normal: {
-                                    position: 'inside', //标签的位置
+                                    position: 'outside', //标签的位置
                                     formatter: '{b}\n{d}%'
 
                                 }
                             },
                             labelLine: {
                                 normal: {
-                                    show: false
+                                    show: true
                                 }
                             },
                             data: [{
@@ -880,7 +882,7 @@
                                     var option1 = {
                                         title: {
                                             text: '城市',
-                                            x: 'center',
+                                            x: '4%',
                                             top: '2%',
                                             textAlign: 'left',
                                             textStyle: {
@@ -950,7 +952,7 @@
                                     myChart1.setOption(option1, true);
                                     myChart1.resize();
                                 }
-                            },false);
+                            });
                     }
 
                     function selectByChannelUserBehavior(startTime,endTime){
@@ -986,7 +988,7 @@
                                         },
                                         title: {
                                             text: '频道',
-                                            x: 'center',
+                                            x: '4%',
                                             top: '2%',
                                             textAlign: 'left',
                                             textStyle: {
@@ -1129,7 +1131,7 @@
                                     myChart2.setOption(option2, true);
                                     myChart2.resize();
                                 }
-                            },false);
+                            });
                     }
 
 
@@ -1194,7 +1196,7 @@
                                         }
                                     }
                                 }
-                            },false);
+                            });
                     }
 
 
@@ -1237,7 +1239,7 @@
                                         }
                                     }
                                 }
-                            },false);
+                            });
                         var myChart3 = echarts.init(document.getElementById('main3'));
                         var myChart4 = echarts.init(document.getElementById('main4'));
                         var myChart5 = echarts.init(document.getElementById('main5'));
