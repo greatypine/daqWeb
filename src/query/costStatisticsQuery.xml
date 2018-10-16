@@ -19,4 +19,11 @@
         <column key="fixedAsset" header="固定资产录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="4%"/>
         <column key="rentContract" header="租金成本-合同租金录入门店数" type="java.lang.String" align="center" allowSearch="false" operator="like" allowSort="false" display="true" width="6%"/>
     </query>
+
+    <query id="queryCostCity" header="城市"  order="id desc" method="noticeManager.getNoticeCity">
+        <column key="id" header="选择" display="true" type="java.lang.Long" allowSearch="true" allowSort="false" align="center" width="10%"/>
+        <column key="cityname" header="城市名称"  operator="like" align="center" allowSort="true" type="String" width="45%"/>
+        <column key="citycode" header="城市编码"  align="center" allowSort="true" type="String" width="45%"/>
+
+    </query>
 </pmsquery>

@@ -2,6 +2,7 @@ package com.cnpc.pms.costStatistics.manager;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.query.json.QueryConditions;
+import com.cnpc.pms.costStatistics.dto.CostDto;
 
 import java.util.Map;
 
@@ -21,4 +22,12 @@ public interface CostStatisticsManager extends IManager {
      **/
 
     public Map<String, Object> selectCostStatistics(QueryConditions queryConditions);
+
+    /**
+     * @Description
+     * @author gbl
+     * @date 2018/10/16 16:07
+     **/
+
+    public Map<String,Object> exportCostStatement(CostDto costDto);
 }

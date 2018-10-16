@@ -106,7 +106,7 @@ function getRentContractStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_rentContract","rentContract_store",rentContractStoreNameArray);
                 autoComplete.start(event);
-                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 28.3%;top: 22.3%;");
+                $("#rentContract_store").attr("style","width: 150px;z-index: 99999;left: 26%;top: 22.3%;");
             }else{
 
             }
@@ -213,7 +213,7 @@ function getCostRentContract(f){
     var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            searchCostRentContract(f);
+            saveCostRentContract("single");
 
         },function(){
 
@@ -256,6 +256,7 @@ function searchCostRentContract(f){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_rentContract").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -266,6 +267,7 @@ function searchCostRentContract(f){
         cityId:cityId,
         storeNo:storeId,
         userId:userId,
+        estate:estate,
         role:role
     }
     doManager('costRentContractManager','queryCostRentContract',costDto,function (data) {
@@ -282,6 +284,7 @@ function searchCostRentContract(f){
                 var cityName = costRent[i].city_name==null?"":costRent[i].city_name;
                 var storeNo = costRent[i].storeNo==null?"":costRent[i].storeNo;
                 var storeName = costRent[i].storeName==null?"":costRent[i].storeName;
+                var estate = costRent[i].estate==null?"":costRent[i].estate;
                 var contract_grand_total = costRent[i].contract_grand_total==null?"":costRent[i].contract_grand_total;//合同总金额
                 var structure_acreage = costRent[i].structure_acreage==null?"":costRent[i].structure_acreage;//建筑面积
                 var lease_unit_price = costRent[i].lease_unit_price==null?"":costRent[i].lease_unit_price;//租赁单价
@@ -300,7 +303,7 @@ function searchCostRentContract(f){
                 $("#rentContract_tb_1").append("<tr></tr>");
 
                 var rentContract_td =
-                    "<td style='text-align: center;background-color:#A9A9A9;width: 100%'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9;width: 100%'>"+storeNo+"</td><td style='background-color:#A9A9A9;width: 100%'><p>"+storeName+"</p></td>"+
+                    "<td style='text-align: center;background-color:#e8e8e8;width: 100%'>"+(i+1)+"</td><td style='text-align: center;background-color:#e8e8e8;width: 100%'>"+storeNo+"</td><td style='background-color:#e8e8e8;width: 100%'><p>"+storeName+"</p></td><td style='background-color:#e8e8e8;text-align: center'><p>"+estate+"</p></td>"+
                     "<td><input style='background-color: #e8e8e8;width: 100%;' type='text' readonly id='lease_start_date_"+i+"'  value='"+lease_start_date+"'/></td>" +
                     "<td><input style='background-color: #e8e8e8;width: 100%;' type='text'  id='free_lease_start_date_"+i+"' readonly value='"+free_lease_start_date+"'/></td>"+
                     "<td><input style='background-color: #e8e8e8;width: 100%;' type='text' readonly id='lease_stop_date_"+i+"'  value='"+lease_stop_date+"'/></td>" +
@@ -345,6 +348,7 @@ function exportCostRentContract(){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_rentContract").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -355,6 +359,7 @@ function exportCostRentContract(){
         cityId:cityId,
         storeNo:storeId,
         userId:userId,
+        estate:estate,
         role:role
     }
     doManager('costRentContractManager','exportCostRentContract',costDto,function (data) {
@@ -413,7 +418,7 @@ function checkFloatDataValid(t){
  * 保存租金
  *
  * **/
-function saveCostRentContract(){
+function saveCostRentContract(ac){
 
     var saveResult = "";
     var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
@@ -471,21 +476,32 @@ function saveCostRentContract(){
                 // return;
                 $("#rentContract_tr_2").nextAll("tr[editable='true']").each(function () {
                     $(this).attr("editable","false");
-                })
+                });
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 saveResult="success";
             }else if(result.status=="fail"){
 
-                // $$.showMessage('提示',"保存失败！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 saveResult="fail";
             }else{
 
-                // $$.showMessage('提示',"请稍后重新请求！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 saveResult="fail";
             }
         }else{
-            // $.showMessage('提示',"请稍后重新请求！");
+            if(ac=="single"){
+                $$.showMessage('提示',"保存成功！");
+                return;
+            }
             saveResult="fail";
         }
 

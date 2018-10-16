@@ -124,7 +124,7 @@ function getRentStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_rent","rent_store",rentStoreNameArray);
                 autoComplete.start(event);
-                $("#rent_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 22.3%;");
+                $("#rent_store").attr("style","width: 150px;z-index: 99999;left: 24%;top: 22.3%;");
             }else{
 
             }
@@ -309,10 +309,10 @@ function checkPropertyDeadLine(t){
 function getCostRent(f){
 
 
-    var store_cost_tr = $("#rent_tr_2").nextAll("tr[editable='true']");
+    var store_cost_tr = $("#property_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostRent(f);
+            saveCostRent("single");
 
         },function(){
 
@@ -359,6 +359,7 @@ function searchCostRent(f){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_rent").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -371,6 +372,7 @@ function searchCostRent(f){
         storeNo:storeId,
         year:showYear,
         userId:userId,
+        estate:estate,
         role:role
 
     }
@@ -388,11 +390,12 @@ function searchCostRent(f){
                 var cityName = costRent[i].city_name==null?"":costRent[i].city_name;
                 var storeNo = costRent[i].store_no==null?"":costRent[i].store_no;
                 var storeName = costRent[i].store_name==null?"":costRent[i].store_name;
+                var estate = costRent[i].estate==null?"":costRent[i].estate;
                 var property_fee_year = costRent[i].property_fee_year==null?"":costRent[i].property_fee_year;//年物业费
                 var property_fee_month = costRent[i].property_fee_month==null?"":costRent[i].property_fee_month;//月物业费
                 var property_deadline = costRent[i].property_deadline==null?"":costRent[i].property_deadline;//租期
                 var rent_td =
-                    "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>"+
+                    "<td style='text-align: center;background-color:#e8e8e8'>"+(i+1)+"</td><td style='text-align: center;background-color:#e8e8e8'>"+storeNo+"</td><td style='background-color:#e8e8e8'><p>"+storeName+"</p></td><td style='text-align:center;background-color:#e8e8e8'>"+estate+"</td>"+
                     "<td><input type='text' id='propertyFeeYear_"+i+"' onkeyup='checkPropertyFee(this)'  style='width: 100%' value='"+property_fee_year+"'/></td>" +
                     "<td><input type='text' id='propertyDeadLine_"+i+"' onkeyup='checkPropertyDeadLine(this)' style='width: 100%'   value='"+property_deadline+"'/></td>" +
                     "<td><input type='text' id='propertyFeeMonth_"+i+"'  readonly style='background-color: #e8e8e8;width: 100%'  value='"+property_fee_month+"'/></td>";
@@ -420,6 +423,7 @@ function   exportCostRent(){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_rent").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -432,6 +436,7 @@ function   exportCostRent(){
         storeNo:storeId,
         year:showYear,
         userId:userId,
+        estate:estate,
         role:role
 
     }
@@ -471,6 +476,7 @@ function   exportCostProperty(){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_rent").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -483,6 +489,7 @@ function   exportCostProperty(){
         storeNo:storeId,
         year:showYear,
         userId:userId,
+        estate:estate,
         role:role
 
     }
@@ -514,7 +521,7 @@ function   exportCostProperty(){
  * 保存租金成本
  *
  * **/
-function saveCostRent(){
+function saveCostRent(ac){
 
     var saveResult = "";
     var store_cost_tr = $("#property_tr_2").nextAll("tr[editable='true']");
@@ -549,24 +556,34 @@ function saveCostRent(){
 
             if(result.status=='success'){
                 // $$.showMessage('提示',"保存成功！");
-                $("#rent_tr_2").nextAll("tr[editable='true']").each(function(){
+                $("#property_tr_2").nextAll("tr[editable='true']").each(function(){
                     $(this).attr("editable",false);
-                })
-                // return;
+                });
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 saveResult="success";
             }else if(result.status=="fail"){
 
-                // $$.showMessage('提示',"保存失败！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }else{
 
-                // $$.showMessage('提示',"请稍后重新请求！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }
         }else{
-            // $.showMessage('提示',"请稍后重新请求！");
+            if(ac=="single"){
+                $$.showMessage('提示',"保存失败！");
+                return;
+            }
             saveResult="fail";
         }
 

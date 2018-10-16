@@ -114,7 +114,7 @@ function getUniformStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_uniform","uniform_store",uniformStoreNameArray);
                 autoComplete.start(event);
-                $("#uniform_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 22.3%;");
+                $("#uniform_store").attr("style","width: 150px;z-index: 99999;left: 24%;top: 22.3%;");
             }else{
 
             }
@@ -189,7 +189,7 @@ function getCostUniform(f){
     var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostUniform(f);
+            saveCostUniform("single");
 
         },function(){
 
@@ -234,6 +234,7 @@ function searchUniform(f){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_uniform").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -245,6 +246,7 @@ function searchUniform(f){
         storeNo:storeId,
         year:showYear,
         userId:userId,
+        estate:estate,
         role:role
     }
     doManager('costUniformManager','queryCostUniform',costDto,function (data) {
@@ -262,11 +264,12 @@ function searchUniform(f){
                 var cityName = costuniform[i].city_name;
                 var storeNo=costuniform[i].store_no;
                 var storeName = costuniform[i].store_name;
+                var estate = costuniform[i].estate==null?"":costuniform[i].estate;
                 var uniform_amortize = costuniform[i]["uniform_amortize"]==null?"":costuniform[i]["uniform_amortize"];
                 var uniform_charge = costuniform[i].uniform_charge==null?"":costuniform[i].uniform_charge;
                 var rc_tag ="_"+i;
                 var uniform_td=
-                           "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'>"+storeName+"</td>"+
+                           "<td style='text-align: center;background-color:#e8e8e8'>"+(i+1)+"</td><td style='text-align: center;background-color:#e8e8e8'>"+storeNo+"</td><td style='background-color:#e8e8e8'>"+storeName+"</td><td style='text-align:center;background-color:#e8e8e8'>"+estate+"</td>"+
                            "<td><input type='text' style='width: 100%;' onkeyup='checkUniformCharge(this)' id='uniformCharge"+rc_tag+"' value='"+uniform_charge+"'/></td><td><input type='text' style='background-color: #e8e8e8;width: 100%;' readonly onkeyup='checkCostuniform(this)' id='uniformOfAmortize"+rc_tag+"' value='"+uniform_amortize+"'/></td>";
                 $("#uniform_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+uniform_td+"<input type='hidden' value='"+storeName+"' id='storeName'/><input type='hidden' value='"+cityName+"' id='cityName'/></tr>");
 
@@ -297,6 +300,7 @@ function   exportCostUniform(){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_uniform").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -308,6 +312,7 @@ function   exportCostUniform(){
         storeNo:storeId,
         year:showYear,
         userId:userId,
+        estate:estate,
         role:role
     }
 
@@ -340,7 +345,7 @@ function   exportCostUniform(){
  * 保存工服成本
  *
  * **/
-function saveCostUniform(){
+function saveCostUniform(ac){
     var saveResult = "";
     var year = $("#uniform_save_date").val();
     var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
@@ -374,20 +379,32 @@ function saveCostUniform(){
                     $(this).attr("editable","false");
                 })
                 // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 saveResult="success";
             }else if(result.status=="fail"){
 
-                // $$.showMessage('提示',"保存失败！");
-                // return;
+
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }else{
 
-                // $$.showMessage('提示',"请稍后重新请求！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }
         }else{
-            // $.showMessage('提示',"请稍后重新请求！");
+            if(ac=="single"){
+                $$.showMessage('提示',"保存失败！");
+                return;
+            }
             saveResult="fail";
         }
 

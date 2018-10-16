@@ -83,6 +83,11 @@ public class CostOperation extends DataEntity {
     @Column(name="year",columnDefinition="int(4) COMMENT '年'")
     private Integer year;
 
+    @Column(name="month",columnDefinition="int(4) COMMENT '月'")
+    private Integer month;
+
+
+
     public String getControlCode() {
         return controlCode;
     }
@@ -257,5 +262,13 @@ public class CostOperation extends DataEntity {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
     }
 }

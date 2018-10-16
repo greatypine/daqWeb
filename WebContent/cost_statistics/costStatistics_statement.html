@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="renderer" content="webkit">
+    <title>成本报表</title>
+    <script type="text/javascript" src="../startbootstrap/js/jquery.1.10.2.min.js"></script>
+    <script type="text/javascript" src="../startbootstrap/js/layer.js"></script>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../scripts/ajaxfileupload.js"></script>
+
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../scripts/css/auto.css" rel="stylesheet">
+    <link href="../custom_css/arrow.css" rel="stylesheet">
+    <script type="text/javascript" src="./select_view/select_option.js"></script>
+    <script type="text/javascript" src="../scripts/auto.js"></script>
+    <script type="text/javascript" src="../scripts/city.data.js"></script>
+
+    <style type="text/css">
+        .header_img{
+            width: 100%;
+            height: 100%;
+            float: right;
+            border-radius:50%
+        }
+        #base_form td{
+            padding-bottom: 15px;
+        }
+
+        #new_address td{
+            padding-bottom: 6px;
+        }
+        .but {
+            float: right;
+            text-align: center;
+        }
+        .but input{background-color:transparent; border:1px solid #fff; border-radius:3px; padding:0 13px; margin-right:30px;}
+        .increase{width:240px; height:160px; background-color:#fff; border:2px dashed #cecece; position:relative; margin:0 auto;}
+        .inc1{border:4px solid #c1bfc0; height:0; width:126px; border-radius:10px; position:absolute; top:50%; left:50%; margin:-4px 0 0 -63px;}
+        .inc2{border:4px solid #c1bfc0; height:126px; width:0; border-radius:10px; position:absolute; top:50%; left:50%; margin:-63px 0 0 -4px;}
+        .img_plus{margin-left: 5px;width: 14px;height: 14px;cursor: pointer}
+        .img_minus{margin-left: 5px;width: 14px;height: 14px;cursor: pointer}
+        #moreInfo_open img:hover{
+            -moz-transform:scale(1.5,1.5);
+            -webkit-transform:scale(1.5,1.5);
+            -o-transform:scale(1.5,1.5);
+        }
+        #moreInfo_close:hover{
+            -moz-transform:scale(1.5,1.5);
+            -webkit-transform:scale(1.5,1.5);
+            -o-transform:scale(1.5,1.5);
+        }
+
+        .tag{
+            border-radius:3px;
+            cursor:pointer;
+            width: 110px;
+            height: 22px;
+            color:#f4f4f4;
+            background-color:#8ec9f1;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 22px;
+            float:left;
+            margin-left:5px;
+            margin-top: 5px;
+        }
+
+
+        #notice_way span{
+            text-align: center;
+            padding: 2px;
+            margin: 0;
+            font-family: helvetica,arial,sans-serif;
+            color: #777;
+            font-size: 35px;
+            font-weight: bold;
+            text-shadow:0 0 0.2em #2bb6f9, 0 0 0.2em #77c0ff;
+            position:relative;
+            top:10px
+        }
+
+
+    </style>
+    <script type="text/javascript">
+        var noticeNo = getUrlParamByKey("noticeNo");
+        var actionType = getUrlParamByKey("actionType");
+
+        $(function(){
+            initcurruser();
+        });
+
+        var loginUser = null;
+        var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
+        var regex_cs = new RegExp("^(CS|cs)\w*");//城市角色
+
+
+
+        function initcurruser(){
+            //取得当前登录人的门店
+            doManager("UserManager", "getCurrentUserDTO",null,
+                function(data, textStatus, XMLHttpRequest) {
+                    if (data.result) {
+                        var curr_user = JSON.parse(data.data);
+                        loginUser = curr_user;
+                        if(regex_zb.test(curr_user.usergroup.code)){//总部人员
+                            $("#tr_city").show();
+                            $("#btnSave").show();
+                            $("#btnReset").show();
+                        }else if(regex_cs.test(curr_user.usergroup.code)){//城市总监
+                            $("#tr_city").show();
+                            $("#tr_store").show();
+                            $("#tr_zw").show();
+                            $("#tr_employee").show();
+                            $("#btnSave").show();
+                            $("#btnReset").show();
+                        }
+                    }
+                },false);
+        }
+
+        var checkWin = function(fun,page,title){
+            this.win = $("<div style='overflow-y: hidden'></div>");
+            var _this = this;
+            var initWin = function(){
+                _this.win.html('<iframe name="select_win" frameborder="0" width="100%" height="100%" src="'+page+'" scrolling="yes"></iframe>');
+                _this.win.dialog({
+                    bgiframe: true,
+                    title:title,
+                    autoOpen:false,
+                    width:_this.width,
+                    height:_this.height,
+                    open:function(event,ui){$(".ui-icon-closethick").hide()},
+                    buttons : {
+                        "确定": function(){
+                            window.frames["select_win"].doSubmit();
+
+                        },
+                        "取消":function(){
+                            _this.hide();
+                            _this.win.remove();
+                        }
+                    },
+                    modal:true
+                });
+            };
+            this.width = 900;
+            this.height = 730;
+            this.callBack = function(json){
+                if (fun && typeof(fun) == 'function') {
+
+                    fun(json);
+                }
+            };
+
+            this.show = function(){
+                _this.win.dialog("open");
+            };
+
+            this.hide = function(){
+                if(_this.onSubmitHandler){
+                    _this.onSubmitHandler();
+                }
+                _this.win.dialog("close");
+            };
+            initWin();
+        }
+
+
+        function getCity(fun){
+            var page="cost_city.html?employee_no="+loginUser.id+"&selectCity="+selectCity;
+            win = new checkWin(fun,page,"选择城市");
+            win.show();
+        }
+
+
+
+        var selectCity = null;
+        var saveCity = null
+        function costCity(data){
+            selectCity = new Array();
+            saveCity = new Array();
+            var city="";
+            if(data.length>0){
+
+            }
+            for(var i=0;i<data.length;i++){
+                if(i==11){
+                    city=city+'<div class="tag" >...</div>';
+                }else if(i<11){
+                    var city_name = data[i].name;
+                    if(city_name!=null&&city_name.length>6){
+                        city_name = city_name.substring(0,5)+"...";
+                    }
+                    city=city+'<div class="tag" id="'+data[i].code+'"+>'+city_name+'</div>';
+                }
+                selectCity[i] = data[i].code;
+                saveCity[i] = data[i].name;
+            }
+            if(city!=""){
+                $("#cost_city").html(city);
+
+            }else{
+                $("#cost_city").empty();
+
+            }
+        }
+
+        function imgClickDelete(_this){
+            $(_this).parent().parent().remove()
+        }
+
+    /**
+     * 生出成本报表并导出
+     */
+    function createStatement(){
+        var costQuarter = $("#costQuarter").val();
+        var costStoreEastate = $("#costStoreEastate").val();
+        var costDto = {
+            cityCode:selectCity.splice(","),
+            estate:costStoreEastate,
+            quarter:costQuarter
+        }
+
+        doManager("CostStatisticsManager", "exportCostStatement",costDto,
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var curr_user = JSON.parse(data.data);
+                    loginUser = curr_user;
+                    if(regex_zb.test(curr_user.usergroup.code)){//总部人员
+                        $("#tr_city").show();
+                        $("#btnSave").show();
+                        $("#btnReset").show();
+                    }else if(regex_cs.test(curr_user.usergroup.code)){//城市总监
+                        $("#tr_city").show();
+                        $("#tr_store").show();
+                        $("#tr_zw").show();
+                        $("#tr_employee").show();
+                        $("#btnSave").show();
+                        $("#btnReset").show();
+                    }
+                }
+            },false);
+    }
+
+    </script>
+</head>
+
+<body style="height: 100%">
+<div class="rightcont clear">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            基本信息
+            <span class="but">
+
+                        <input type="button" onclick="doBack();" value="导出报表"/>
+                        <input type="hidden" id="city_id" />
+            </span>
+        </div>
+        <form id="base_form">
+            <div class="panel-body" style="height: 90%;padding:10px">
+                <table id="tiny_village_table" cellpadding="0" cellspacing="0" style="position:relative;left:20%;margin: 10px; width:60%">
+                    <tr>
+                        <td style="width:12%">季度<span style="color:red">*</span></td>
+                        <td>
+                            <select id="costQuarter" name="costQuarter" class="form-control"  style="width:87%;cursor: pointer" >
+                                <option value="0">全部季度</option>
+                                <option value="1">第一季度</option>
+                                <option value="2">第二季度</option>
+                                <option value="3">第三季度</option>
+                                <option value="4">第四季度</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:12%">门店状态<span style="color:red">*</span></td>
+                        <td>
+                            <select id="costStoreEastate"  style="width: 87%;cursor: pointer" class="form-control">
+                                <option value="" selected>全部</option>
+                                <option value="筹备中">筹备中</option>
+                                <option value="待开业">待开业</option>
+                                <option value="运营中">运营中</option>
+                                <option value="闭店">闭店</option>
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:15%">城市<span style="color:red">*</span></td>
+                        <td><div id="cost_city" onclick="getCity(costCity)" class="form-control" style="position:relative;top:6px;width:87%;height:70px;margin-bottom:10px;cursor:pointer;"><div class="tag" id="allCity">全部</div></div></td>
+                    </tr>
+                </table>
+                <iframe name="t_f_a_o" id="t_f_a_o" style="display: none"></iframe>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

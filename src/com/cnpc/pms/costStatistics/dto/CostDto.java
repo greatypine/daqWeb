@@ -18,7 +18,9 @@ public class CostDto {
     private Long userId;
     private String role;//总部、城市
     private String rDate;
-
+    private String estate;//门店状态
+    private String  cityCode;//城市编码
+    private Integer quarter;//季度
 
     public Long getCityId() {
         return cityId;
@@ -90,5 +92,29 @@ public class CostDto {
 
     public void setrDate(String rDate) {
         this.rDate = rDate;
+    }
+
+    public String getEstate() {
+        return estate;
+    }
+
+    public void setEstate(String estate) {
+        this.estate = estate;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public Integer getQuarter() {
+        return quarter;
+    }
+
+    public void setQuarter(Integer quarter) {
+        this.quarter = quarter;
     }
 }

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>选择城市</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet"
+          type="text/css">
+    <script>
+        var employeeId = getUrlParamByKey("employee_no");
+        var selectCity = getUrlParamByKey("selectCity");
+
+        var arr =new Array();
+        $(function () {
+
+            $("#employee_no").val(employeeId);
+
+            if((selectCity==""||selectCity=="null")){//全部
+                getCity(1);
+            }else{
+                getCity(2);
+                allCity = selectCity.split(",");
+            }
+
+            //页面加载成功后需要获取数据
+            searchList();
+
+        });
+
+        var allCity = new Array();
+        var cityArray = new Array();
+        function getCity(f){
+
+            doManager('noticeManager','getCityOfRole',null,function(data){
+                if(data.result){
+                    var result = JSON.parse(data.data).data;
+                    cityArray = result;
+                    if(f==1){
+                        if(result!=null&&result.length>0){
+                            for(var i=0;i<result.length;i++){
+                                allCity.push(result[i].citycode);
+                            }
+                        }
+                    }
+
+                }else{
+                    $$.showMessage('提示',data.message);
+                }
+            },false);
+        }
+
+
+        var COLUMNS = {
+            "id": function(aData, iColumn, sColumnName, map){
+                var citycode = map["citycode"];
+                var regex_city= new RegExp("^[a-zA-Z0-9]+");//总部角色
+                if(selectCity==""||selectCity=="null"){//全部
+                    if(isInArray(allCity,citycode)&&checkstatus){
+                        return '<input type="checkbox" name="chkbox"  onclick="citycheck(this)" value="'+citycode+'" checked="true"/>';
+
+                    }else{
+                        return '<input type="checkbox" name="chkbox" onclick="citycheck(this)" value="'+citycode+'" />';
+
+                    }
+                }else if((selectCity.indexOf(",")>=0||regex_city.test(selectCity))){
+                    if(isInArray(allCity,citycode)&&checkstatus){
+                        return '<input type="checkbox" name="chkbox" onclick="citycheck(this)" value="'+citycode+'" checked="true"/>';
+                    }else{
+                        return '<input type="checkbox" name="chkbox"  onclick="citycheck(this)" value="'+citycode+'"/>';
+                    }
+                }
+
+            }
+        }
+
+
+        function isInArray(arr,value){
+            for(var i = 0; i < arr.length; i++){
+                if(value === arr[i]){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
+        function citycheck(city){
+            if(city.checked){
+                allCity.push(city.value);
+            }else{
+                for(n in allCity){
+                    if(allCity[n]==city.value){
+                        allCity.splice(n,1);
+                    }
+                }
+            }
+
+        }
+        //记载页面时请求数据列表默认的方法
+        function searchList() {
+            $$.executeSearch('queryCostCity', 'conditionsDiv');
+        }
+
+        function doSubmit(){
+            var jsons=new Array();
+
+            if (allCity.length != 0) {
+                for(var i=0;i<allCity.length;i++){
+                    var city = getCityInfo(allCity[i]);
+                    var json = {name:city.cityname,code:city.citycode};
+                    jsons.push(json);
+                }
+                parent.win.callBack(jsons);
+                parent.win.hide();
+                parent.win.win.remove();
+            }else{
+                $$.showMessage('提示',"请选择至少一个城市");
+                return;
+            }
+
+        }
+
+        function getCityInfo(code){
+
+            for(n in cityArray){
+                if(cityArray[n].citycode==code){
+                    return cityArray[n]
+                }
+            }
+
+        }
+
+        var checkstatus=true;
+        function  clearChecked(){
+            checkstatus = false;
+            allCity.splice(0,allCity.length);
+            var objs = $("#queryCostCity_id").find("tr:gt(0)");
+            if (objs.length != 0) {
+                for(var i=0;i<objs.length;i++){
+                    var checkStatus = $(objs[i]).find("td:eq(0)").children()[0].checked;
+                    if(checkStatus){
+                        $(objs[i]).find("td:eq(0)").children()[0].checked=false;
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/css">
+        html,body{
+            height: 100%;
+        }
+        .display{
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+<div id="bodyDiv">
+    <div id="userGroupInfo" class="panel panel-primary">
+        <div class="panel-heading">
+            <a href="#" onclick="toggleBizBiz('conditionsDiv','pic');"><img src="../scripts/images/22.png" align="absmiddle" id="pic"/></a>&nbsp;搜索条件
+        </div>
+        <div id="conditionsDiv" class="panel-body">
+            <table class="bigteble">
+                <tr>
+                    <td align="left" width="4%" class="basetext">
+                        城市名称:
+                    </td>
+                    <td class="baseform" align="left" width="25%">
+                        <input type="text" name="cityname" id="cityname" class="form-control" style="width: 20%" onkeyup="value=this.value.replace(/\s+/g,'')"/>
+                    </td>
+                    <input id="employee_no" name="employee_no" value="" type="hidden" />
+
+                </tr>
+            </table>
+        </div>
+        <div class="panel-footer"  align="right">
+            <input class="btn btn-primary" onClick="searchList()" value="查询" type="button"/>
+            <input class="btn btn-primary" onClick="clearChecked()" value="清空选中" type="button"/>
+        </div>
+    </div>
+    <div id="gridContainer" searchDiv="conditionsDiv" queryid="queryCostCity" class="panel panel-primary"
+         operators="$pmspage.opArr" titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="false"
+         showprint="false" showsearch="false" showtitle="true" showpaging="true" showcheckbox="false"
+         checkmode="multiple" autoload="false" showno="false">
+    </div>
+</div>
+</body>
+
+
+</html>
