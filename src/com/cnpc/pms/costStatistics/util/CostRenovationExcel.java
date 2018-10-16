@@ -34,9 +34,9 @@ public class CostRenovationExcel {
         this.data = data;
     }
     //导出的文件标题
-    private final String[] header0={"序号","门店编码","门店名称","施工单位","建筑面积","单方造价","装修施工","商业展屏","家具","标牌及灯箱","过程管理","费率：3.5%","空调设备","费率4.8%","设计","全过程项目管理","单店产值合计","摊销月份数","摊销月度成本","竣工时间","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同签订日期"};
+    private final String[] header0={"序号","门店编码","门店名称","装修施工","商业展屏","家具","标牌及灯箱","空调设备","设计","全过程项目管理","单店产值合计","摊销月份数","摊销月度成本","竣工时间","1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月","合同签订日期"};
 
-    private final String[] colName = new String[] { "store_no", "store_name","decoration_company", "structure_acreage","renovation_unit_price","decorate_cost", "business_screen","furniture","light_box", "process_manage", "process_manage_surcharge","air_conditioner","air_conditioner_surcharge", "design", "whole_process_manage_surcharge","total","amortize_month","amortize_money", "completed_date", "amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","contract_date"};
+    private final String[] colName = new String[] { "store_no", "store_name","decorate_cost", "business_screen","furniture","light_box", "air_conditioner", "design", "whole_process_manage_surcharge","total","amortize_month","amortize_money", "completed_date", "amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","amortize_money","contract_date"};
 
 
     private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG"};
@@ -189,7 +189,7 @@ public class CostRenovationExcel {
         // 第一行表头标题
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
-        for (int i = 0; i <33; i++) {
+        for (int i = 0; i <27; i++) {
             cell = row.createCell(i);
             cell.setCellValue(header0[i]);
             cell.setCellStyle(headstyle);
@@ -213,11 +213,11 @@ public class CostRenovationExcel {
                     cell.setCellStyle(fixedStyle);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
-                }else if(j==2||j==18||j==31){
+                }else if(j==2||j==12||j==25){
                     cell.setCellStyle(style2);
                     cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                     cell.setCellValue(new HSSFRichTextString(data==null?"":data.toString()));
-                }else if(j>18&&j<31){
+                }else if(j>12&&j<25){
                     cell.setCellStyle(style);
                     if (data==null){
                         cell.setCellType(HSSFCell.CELL_TYPE_BLANK);
@@ -239,14 +239,14 @@ public class CostRenovationExcel {
             }
         }
         row = sheet.createRow(data.size()+1);
-        for(int i=0;i<33;i++){
+        for(int i=0;i<27;i++){
             cell = row.createCell(i);
 
             cell.setCellStyle(sumstyle);
-            if(i<5){
+            if(i<3){
                 cell.setCellType(HSSFCell.CELL_TYPE_STRING);
                 cell.setCellValue("合计");
-            }else if(i>19&&i<32){
+            }else if(i>13&&i<26){
                 cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
                 cell.setCellFormula("SUM("+rowColNum[i]+2+":"+rowColNum[i]+(data.size()+1)+")");//合计添加公式
             }else{
@@ -254,7 +254,7 @@ public class CostRenovationExcel {
             }
 
         }
-        sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 6));
+        sheet.addMergedRegion(new CellRangeAddress(row.getRowNum(), row.getRowNum(), 0, 2));
 
 
 

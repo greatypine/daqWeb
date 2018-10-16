@@ -111,7 +111,7 @@ function getLaborStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_labor","labor_store",laborStoreNameArray);
                 autoComplete.start(event);
-                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 22.3%;");
+                $("#labor_store").attr("style","width: 150px;z-index: 99999;left: 24%;top: 22.3%;");
             }else{
 
             }
@@ -169,7 +169,7 @@ function getCostLabor(f){
     var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostLabor(f);
+            saveCostLabor("single");
 
         },function(){
 
@@ -221,6 +221,7 @@ function searchLabor(f){
         storeId=-10000;
     }
 
+    var  estate = $("#storeEstate_labor").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -233,6 +234,7 @@ function searchLabor(f){
         year:showYear,
         month:showMonth,
         userId:userId,
+        estate:estate,
         role:role
     }
     doManager('costLaborManager','queryCostLabor',costDto,function (data) {
@@ -263,7 +265,8 @@ function searchLabor(f){
                 var cityName = costLabor[i].city_name;
                 var storeNo=costLabor[i].storeNo;
                 var storeName = costLabor[i].storeName;
-                var labor_td="<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+costLabor[i].storeNo+"</td><td style='background-color:#A9A9A9'>"+costLabor[i].storeName+"</td>"+
+                var estate = costLabor[i].estate;
+                var labor_td="<td style='text-align: center;background-color: #e8e8e8'>"+(i+1)+"</td><td style='text-align: center;background-color: #e8e8e8'>"+costLabor[i].storeNo+"</td><td style='background-color: #e8e8e8'>"+costLabor[i].storeName+"</td><td style='text-align:center;background-color: #e8e8e8'>"+costLabor[i].estate+"</td>"+
                     "<td><input type='text' style='width: 100%;background-color: #e8e8e8;' readonly onkeyup='checkCostLabor(this)' id='uniformAmortize"+rc_tag+"' value='"+uniform_amortize+"'/></td><td><input type='text' style='width: 100%;' onkeyup='checkCostLabor(this)' id='emolument"+rc_tag+"' value='"+emolument+"'/></td><td><input type='text' style='width: 100%;' onkeyup='checkCostLabor(this)' id='accommodation"+rc_tag+"' value='"+accommodation+"'></td><td><input readonly type='text'  onkeyup='showTip(this)' style='background-color: #e8e8e8;width: 100%;' id='subtotal"+rc_tag+"' value='"+subtotal+"'></td>";
 
                 $("#labor_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+labor_td+"<input type='hidden' value='"+storeName+"' id='storeName'/><input type='hidden' value='"+cityName+"' id='cityName'/></tr>");
@@ -338,7 +341,7 @@ function   exportCostLabor(){
  * 保存人工成本
  *
  * **/
-function saveCostLabor(){
+function saveCostLabor(ac){
        var saveResult = "";
        var year_month = $("#labor_year_month").val();
 
@@ -374,22 +377,39 @@ function saveCostLabor(){
 
                 if(result.status=='success'){
                     // $$.showMessage('提示',"保存成功！");
-                    saveResult = "success";
+
                     $("#labor_tr_2").nextAll("tr[editable='true']").each(function(){
                         $(this).attr("editable","false");
-                    })
+                    });
+                    if(ac=="single"){
+                        $$.showMessage('提示',"保存成功！");
+                        return;
+                    }
+                    saveResult = "success";
                     // return;
                 }else if(result.status=="fail"){
 
                     //$$.showMessage('提示',"保存失败！");
+                    if(ac=="single"){
+                        $$.showMessage('提示',"保存失败！");
+                        return;
+                    }
                     saveResult="fail";
                     // return;
                 }else{
+                    if(ac=="single"){
+                        $$.showMessage('提示',"保存失败！");
+                        return;
+                    }
                     saveResult="fail";
                     // $$.showMessage('提示',"请稍后重新请求！");
                     // return;
                 }
             }else{
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
                 // $.showMessage('提示',"请稍后重新请求！");
             }
@@ -420,6 +440,7 @@ function exportCostEmolument(){
         storeId=-10000;
     }
 
+    var  estate = $("#storeEstate_labor").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -432,6 +453,7 @@ function exportCostEmolument(){
         year:showYear,
         month:showMonth,
         userId:userId,
+        estate:estate,
         role:role
     }
 

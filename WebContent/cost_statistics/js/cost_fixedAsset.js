@@ -102,7 +102,7 @@ function getFixedAssetStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_fixedAsset","fixedAsset_store",fixedAssetStoreNameArray);
                 autoComplete.start(event);
-                $("#fixedAsset_store").attr("style","width: 150px;z-index: 99999;left: 33.5%;top: 22.3%;");
+                $("#fixedAsset_store").attr("style","width: 150px;z-index: 99999;left:29.2%;top: 22.3%;");
 
             }else{
 
@@ -279,7 +279,7 @@ function getCostFixedAsset(f){
     var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostFixedAsset(f);
+            saveCostFixedAsset("single");
 
         },function(){
 
@@ -319,6 +319,7 @@ function searchCostFixedAsset(f){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_fixedAsset").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -329,6 +330,7 @@ function searchCostFixedAsset(f){
         cityId:cityId,
         storeNo:storeId,
         userId:userId,
+        estate:estate,
         role:role
     }
 
@@ -346,6 +348,7 @@ function searchCostFixedAsset(f){
                 var cityName = costFixedAsset[i].city_name==null?"":costFixedAsset[i].city_name;
                 var storeNo = costFixedAsset[i].store_no==null?"":costFixedAsset[i].store_no;
                 var storeName = costFixedAsset[i].store_name==null?"":costFixedAsset[i].store_name;
+                var estate = costFixedAsset[i].estate==null?"":costFixedAsset[i].estate;
                 var amortize_money = costFixedAsset[i].amortize_money==null?"":costFixedAsset[i].amortize_money;//月摊销成本
                 var total = costFixedAsset[i].total==null?"":costFixedAsset[i].total;//固定资产
                 var aio = costFixedAsset[i].aio==null?"":costFixedAsset[i].aio;//装修单多功能一体机
@@ -370,7 +373,7 @@ function searchCostFixedAsset(f){
 
 
                 var FixedAsset_td =
-                    "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>"+
+                    "<td style='text-align: center;background-color:#e8e8e8'>"+(i+1)+"</td><td style='text-align: center;background-color:#e8e8e8'>"+storeNo+"</td><td style='background-color:#e8e8e8'><p>"+storeName+"</p></td><td style='background-color:#e8e8e8;text-align: center'><p>"+estate+"</p></td>"+
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='aio_"+i+"'    value='"+aio+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='mobilePhone_"+i+"'    value='"+mobile_phone+"'/></td>"+
                     "<td><input type='text'     onkeyup='calculateElectronicsTotal(this)' id='iPad_"+i+"'    value='"+iPad+"'/></td>"+
@@ -414,6 +417,7 @@ function   exportCostFixedAsset(){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_fixedAsset").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -424,6 +428,7 @@ function   exportCostFixedAsset(){
         cityId:cityId,
         storeNo:storeId,
         userId:userId,
+        estate:estate,
         role:role
     }
     doManager('costFixedAssetManager','exportCostFixedAsset',costDto,function (data) {
@@ -453,7 +458,7 @@ function   exportCostFixedAsset(){
  * 保存固定资产
  *
  * **/
-function saveCostFixedAsset(){
+function saveCostFixedAsset(ac){
 
     var  saveResult="";
     var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
@@ -515,17 +520,31 @@ function saveCostFixedAsset(){
             if(result.status=='success'){
                 $("#fixedAsset_tr_2").nextAll("tr[editable='true']").each(function () {
                     $(this).attr("editable","false");
-                })
+                });
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 saveResult="success";
 
             }else if(result.status=="fail"){
-
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }else{
-
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }
         }else{
+            if(ac=="single"){
+                $$.showMessage('提示',"保存失败！");
+                return;
+            }
             saveResult="fail";
         }
 

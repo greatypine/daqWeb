@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 
 /**
@@ -26,7 +27,7 @@ public interface MassOrderItemManager extends IManager {
 	 * @param area_code
 	 * @return
 	 */
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn);
+	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String beginDate);
 	
 	/**
 	 * 根据订单号查询国安侠信息
@@ -49,6 +50,23 @@ public interface MassOrderItemManager extends IManager {
 	 * @return
 	 */
 	public Map<String, Object> exportOrder(MassOrderItemDto massOrderDto);
-	
-	
+	/**
+	 * 查询当日实时毛利
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryDailyprofit(DynamicDto dd);
+	/**
+	 * 查询当月实时毛利
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryMonthprofit(DynamicDto dd);
+	/**
+	 * 根据订单sn查询订单该产品明细
+	 * @param order_sn
+	 * @param product_id
+	 * @return
+	 */
+	public Map<String, Object> queryOrderDetailBySN(String order_sn,String product_id);
 }

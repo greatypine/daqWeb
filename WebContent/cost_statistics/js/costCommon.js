@@ -1,3 +1,5 @@
+
+var storeColor={"筹备中":"#2fb5f5","待开业":"#f1c730","运营中":"#48ef1f","闭店":"#da4545"}
 /**************************自定义confirm***********************************/
 PMSApplication.prototype.showConfirm_cost = function(title, message, callback,cancel) {
     if (this.dialog == null){

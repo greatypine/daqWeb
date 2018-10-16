@@ -110,7 +110,7 @@
             laydate.render({//月份控件
                 elem:'#year_operation',
                 value:cur_date,
-                type:"year",
+                type:"month",
                 btns: ['confirm','now'],
                 theme: '#428bca'
             });
@@ -490,7 +490,7 @@
             var saveInfo = "";
             var store_cost_tr = $("#labor_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
-               var saveResult= saveCostLabor();
+               var saveResult= saveCostLabor("unify");
                if(saveResult=="success"){
                    saveInfo= saveInfo+"<p>'人工成本-员工薪酬' 保存成功！</p>";
                }else{
@@ -500,7 +500,7 @@
 
             var store_cost_tr = $("#rentContract_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
-               var saveResult =  saveCostRentContract();
+               var saveResult =  saveCostRentContract("unify");
                if(saveResult=="success"){
                    saveInfo = saveInfo+"<p>'租金成本-合同租金' 保存成功！</p>";
                }else{
@@ -510,7 +510,7 @@
 
             var store_cost_tr = $("#renovation_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
-                var saveResult = saveCostRenovation();
+                var saveResult = saveCostRenovation("unify");
                 if(saveResult=="success"){
                     saveInfo = saveInfo+"<p>'装修摊销' 保存成功！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
                 }else{
@@ -520,7 +520,7 @@
 
             var store_cost_tr = $("#fixedAsset_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
-                var saveResult = saveCostFixedAsset();
+                var saveResult = saveCostFixedAsset("unify");
                 if(saveResult=="success"){
                     saveInfo = saveInfo+"<p>'固定资产' 保存成功！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>";
                 }else{
@@ -530,7 +530,7 @@
 
             var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
-                var saveResult=  saveCostGWE();
+                var saveResult=  saveCostGWE("unify");
                 if(saveResult=="success"){
                     saveInfo = saveInfo+"<p>'水电费' 保存成功！</p>";
                 }else{
@@ -540,7 +540,7 @@
 
             var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
-                var saveResult=  saveCostOperation();
+                var saveResult=  saveCostOperation("unify");
                 if(saveResult=="success"){
                     saveInfo = saveInfo+"<p>'日常运营' 保存成功！</p>";
                 }else{
@@ -551,7 +551,7 @@
             var store_cost_tr = $("#uniform_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
 
-                var saveResult=  saveCostUniform();
+                var saveResult=  saveCostUniform("unify");
                 if(saveResult=="success"){
                     saveInfo = saveInfo+"<p>'人工成本-工服费用' 保存成功！</p>";
                 }else{
@@ -562,7 +562,7 @@
             var store_cost_tr = $("#property_tr_2").nextAll("tr[editable='true']");
             if(store_cost_tr.length>0){
 
-                var saveResult=  saveCostRent();
+                var saveResult=  saveCostRent("unify");
                 if(saveResult=="success"){
                     saveInfo = saveInfo+"<p>'租金成本-物业费用' 保存成功！</p>";
                 }else{
@@ -603,7 +603,7 @@
     .nav-tabs-custom > .nav-tabs{border-bottom: 1px solid #3a90cb; margin: 5px 0; }
     .nav-tabs-custom > .secondTabUl{border-bottom: 1px solid #7ab4e6; margin: 5px 0; }
     .nav-tabs-custom > .nav-tabs > li{margin-bottom: -1px;}
-    .table > tbody > tr > td,.table > tbody > tr > th{border: 1px solid #d1d1d1; height: 30px; line-height: 30px; padding: 0 8px;}
+    .table > tbody > tr > td,.table > tbody > tr > th{border: 1px solid #d1d1d1; height: 30px; line-height: 30px; padding: 0}
     .table > tbody > tr > td p,.table > tbody > tr > th p{width: 165px; margin: 0;}
     .table_x{max-width: 1700px;}
     .no-padding{padding: 0;}
@@ -638,18 +638,18 @@
                         <ul class="nav nav-tabs secondTabUl" >
                             <li id="li_labor" class="active"><a  class="secondTabLi" href="#tab_labor" data-toggle="tab" onclick="showSecondLevelCostTag('labor')">人工成本-员工薪酬</a></li>
                             <li id="li_gwe"><a class="secondTabLi" href="#tab_gwe" data-toggle="tab" onclick="showSecondLevelCostTag('gwe')">水电费</a></li>
+                            <li id="li_operation" ><a class="secondTabLi" href="#tab_operation" data-toggle="tab" onclick="showSecondLevelCostTag('operation')">日常运营</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 
                             <div class="tab-pane active" id="tab_labor">
-                                <table width="60%">
+                                <table width="70%">
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
                                         <td style="width:12%">
-                                            <select id="city_id_labor" style="width: 200px" class="form-control"><option value="">全部</option></select>
+                                            <select id="city_id_labor" style="width: 200px;cursor: pointer" class="form-control"><option value="">全部</option></select>
                                         </td>
-
 
                                         <td style="width: 6%">门店名称：</td>
                                         <td style="padding-top: 10px;width:12%">
@@ -659,6 +659,17 @@
                                             <div class="auto hidden" id="labor_store" onclick="selectLaborStore(this)" style="width:150px;z-index: 99999;">
                                             </div>
                                             </p>
+                                        </td>
+
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_labor" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
                                         </td>
 
                                         <td style="width: 6%">日期：</td>
@@ -685,9 +696,10 @@
                                     <table class="table table_x" cellspacing="0" cellpadding="0" id="labor_tb_2">
 
                                         <tr id="labor_tr_2">
-                                            <th style="text-align: center;background-color:#A9A9A9">序号</th>
-                                            <th style="text-align: center;background-color: #A9A9A9">门店编码</th>
-                                            <th style="text-align: center;background-color: #A9A9A9">门店名称</th>
+                                            <th style="text-align: center;width: 60px">序号</th>
+                                            <th style="text-align: center;width: 120px">门店编码</th>
+                                            <th style="text-align: center;width: 280px">门店名称</th>
+                                            <th style="text-align: center;width: 165px;">门店状态</th>
                                             <th><p style="text-align: center"><span style="font-weight: bold;color:red" id="uniformAmortize_title"></span>工服摊销</p></th>
                                             <th><p style="text-align: center"><span style="font-weight: bold;color:red" id="emolument_title"></span>员工薪酬</p></th>
                                             <th><p style="text-align: center"><span style="font-weight: bold;color:red" id="accommodation_title"></span>住宿星店房租</p></th>
@@ -698,9 +710,8 @@
                                 </div>
                                 </div>
                             </div>
-
                             <div class="tab-pane " id="tab_gwe">
-                                <table width="60%">
+                                <table width="70%">
                                     <tr>
                                         <td style="width:6%">城市名称：</td>
                                         <td style="width:12%">
@@ -715,6 +726,17 @@
                                             <div class="auto hidden" id="gwe_store" onclick="selectGWEStore(this)" style="width:150px;z-index: 99999;">
                                             </div>
                                             </p>
+                                        </td>
+
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_gwe" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
                                         </td>
 
                                         <td style="width:6%">日期：</td>
@@ -739,9 +761,10 @@
                                     <table class="table table_x" cellspacing="0" cellpadding="0" id="gwe_tb_2">
 
                                         <tr id="gwe_tr_2">
-                                            <th style="text-align: center;background-color:#A9A9A9">序号</th>
-                                            <th style="text-align: center;background-color: #A9A9A9">门店编码</th>
-                                            <th style="text-align: center;background-color: #A9A9A9">门店名称</th>
+                                            <th style="text-align: center;width: 60px">序号</th>
+                                            <th style="text-align: center;width: 120px">门店编码</th>
+                                            <th style="text-align: center;width: 280px">门店名称</th>
+                                            <th style="text-align: center;width: 165px;">门店状态</th>
                                             <th style="text-align: center"><p><span style="font-weight: bold;color:red" id="electricityFee_title"></span>月电费</p></th>
                                             <th style="text-align: center"><p><span style="font-weight: bold;color:red" id="waterFee_title"></span>月水费</p></th>
                                         </tr>
@@ -749,7 +772,88 @@
                                 </div>
                                 </div>
                             </div>
+                            <div class="tab-pane " id="tab_operation">
 
+                                <table width="70%">
+                                    <tr>
+
+                                        <td style="width:6%">城市名称：</td>
+                                        <td style="width:12%">
+                                            <select id="city_id_operation" style="width: 200px" class="form-control"><option value="">全部</option></select>
+                                        </td>
+
+
+                                        <td style="width:6%">门店名称：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p>
+                                                <input id="store_id_operation" name="store_id_operation" type="hidden" value=""/>
+                                                <input type="text" class="form-control"  onkeyup="getOperationStore(this)" placeholder="门店" id="store_name_operation" style="border-radius: 6px;width:150px"/>
+                                            <div class="auto hidden" id="operation_store" onclick="selectOperationStore(this)" style="width:150px;z-index: 99999;">
+                                            </div>
+                                            </p>
+                                        </td>
+
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_operation" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
+                                        </td>
+
+                                        <td style="width:6%">日期：</td>
+                                        <td style="padding-top: 10px;width:12%">
+                                            <p class="read"><input type="text" style="width: 100px;cursor:pointer" readonly="readonly" class="form-control"   maxlength="12"  id="year_operation"/></p>
+                                            <input type="hidden" id="operation_save_year" value=""/>
+                                            <input type="hidden" id="operation_save_month" value=""/>
+                                        </td>
+
+                                        <td width="5%" style="text-align: left;">
+                                            <button  class="btn btn-primary"  onclick="getCostOperation('manual')">查询</button>
+                                        </td>
+                                        <!--<td width="5%" style="text-align: left;">-->
+                                        <!--<button  class="btn btn-primary"  onclick="saveCostOperation()">保存</button>-->
+                                        <!--</td>-->
+                                        <td width="5%" style="text-align:left;">
+                                            <button  class="btn btn-primary"  onclick="exportCostOperation()">导出</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="tab-roll" id="tab-roll-operation">
+
+                                    <div class="col-sm-8 no-padding" style="margin-left:-1px">
+                                        <table class="table table_x" cellspacing="0" cellpadding="0" id="operation_tb_2">
+
+                                            <tr id="operation_tr_2">
+                                                <th style="text-align: center;"><p style="width:60px">序号</p></th>
+                                                <th style="text-align: center;"><p>门店编码</p></th>
+                                                <th style="text-align: center;"><p style="width: 280px">门店名称</p></th>
+                                                <th style="text-align: center;"><p style="width: 165px">门店状态</p></th>
+                                                <th style="text-align: center"><p>日常办公</p></th>
+                                                <th style="text-align: center"><p>仓储型星店房租</p></th>
+                                                <th style="text-align: center"><p>桶装水</p></th>
+                                                <th style="text-align: center"><p>门店保险</p></th>
+                                                <th style="text-align: center"><p>电动车维修费用</p></th>
+                                                <th style="text-align: center"><p>购物袋</p></th>
+                                                <th style="text-align: center"><p>垃圾袋</p></th>
+                                                <th style="text-align: center"><p>灭火器</p></th>
+                                                <th style="text-align: center"><p>车载包+背包</p></th>
+                                                <th style="text-align: center"><p>头盔+护膝+手套</p></th>
+                                                <th style="text-align: center"><p>绿植</p></th>
+                                                <th style="text-align: center"><p>托盘</p></th>
+                                                <th style="text-align: center"><p>仓储物资（周转箱等）</p></th>
+                                                <th style="text-align: center"><p>门店营销活动费</p></th>
+                                                <th style="text-align: center"><p>门店装修及设备维修</p></th>
+                                                <th style="text-align: center"><p>月度运营费用（元）</p></th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
 
                         </div>
                         <!-- /.tab-content -->
@@ -761,13 +865,13 @@
                     <div class="nav-tabs-custom">
                         <ul class="nav nav-tabs secondTabUl" >
                             <li id="li_property" ><a class="secondTabLi" href="#tab_property" data-toggle="tab" onclick="showSecondLevelCostTag('property')">租金成本-物业费用</a></li>
-                            <li id="li_operation" ><a class="secondTabLi" href="#tab_operation" data-toggle="tab" onclick="showSecondLevelCostTag('operation')">日常运营</a></li>
+
                             <li id="li_uniform" ><a class="secondTabLi" href="#tab_uniform" data-toggle="tab" onclick="showSecondLevelCostTag('uniform')">人工成本-工服费用</a></li>
                         </ul>
                         <div class="tab-content no-padding">
 
                             <div class="tab-pane active" id="tab_property">
-                                <table width="60%">
+                                <table width="70%">
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
@@ -784,6 +888,16 @@
                                             <div class="auto hidden" id="rent_store" onclick="selectRentStore(this)" style="width:150px;z-index: 99999;">
                                             </div>
                                             </p>
+                                        </td>
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_rent" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
                                         </td>
 
 
@@ -811,9 +925,10 @@
                                     <table class="table table_x" cellspacing="0" cellpadding="0" id="property_tb_2">
 
                                         <tr id="property_tr_2">
-                                            <th style="text-align: center;background-color:#A9A9A9"><p style="width: 80px">序号</p></th>
-                                            <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
-                                            <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
+                                            <th style="text-align: center;width: 60px">序号</th>
+                                            <th style="text-align: center;width: 120px">门店编码</th>
+                                            <th style="text-align: center;width: 280px">门店名称</th>
+                                            <th style="text-align: center;width: 165px;">门店状态</th>
                                             <th style="text-align: center"><p style="width: 180px"><span style="font-weight: bold;color:red" id="propertyFeeYear_title"></span>物业费（年）</p></th>
                                             <th style="text-align: center"><p style="width: 180px">物业期限（月）</p></th>
                                             <th style="text-align: center"><p style="width: 180px">物业费摊销（月）</p></th>
@@ -825,79 +940,10 @@
                                 </div>
                             </div>
 
-                            <div class="tab-pane " id="tab_operation">
 
-                                <table width="60%">
-                                    <tr>
-
-                                        <td style="width:6%">城市名称：</td>
-                                        <td style="width:12%">
-                                            <select id="city_id_operation" style="width: 200px" class="form-control"><option value="">全部</option></select>
-                                        </td>
-
-
-                                        <td style="width:6%">门店名称：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p>
-                                                <input id="store_id_operation" name="store_id_operation" type="hidden" value=""/>
-                                                <input type="text" class="form-control"  onkeyup="getOperationStore(this)" placeholder="门店" id="store_name_operation" style="border-radius: 6px;width:150px"/>
-                                            <div class="auto hidden" id="operation_store" onclick="selectOperationStore(this)" style="width:150px;z-index: 99999;">
-                                            </div>
-                                            </p>
-                                        </td>
-
-                                        <td style="width:6%">日期：</td>
-                                        <td style="padding-top: 10px;width:12%">
-                                            <p class="read"><input type="text" style="width: 100px;cursor:pointer" readonly="readonly" class="form-control"   maxlength="12"  id="year_operation"/></p>
-                                            <input type="hidden" id="operation_save_date" value=""/>
-                                        </td>
-
-                                        <td width="5%" style="text-align: left;">
-                                            <button  class="btn btn-primary"  onclick="getCostOperation('manual')">查询</button>
-                                        </td>
-                                        <!--<td width="5%" style="text-align: left;">-->
-                                            <!--<button  class="btn btn-primary"  onclick="saveCostOperation()">保存</button>-->
-                                        <!--</td>-->
-                                        <td width="5%" style="text-align:left;">
-                                            <button  class="btn btn-primary"  onclick="exportCostOperation()">导出</button>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <div class="tab-roll" id="tab-roll-operation">
-
-                                    <div class="col-sm-8 no-padding" style="margin-left:-1px">
-                                        <table class="table table_x" cellspacing="0" cellpadding="0" id="operation_tb_2">
-
-                                            <tr id="operation_tr_2">
-                                                <th style="text-align: center;background-color:#A9A9A9"><p style="width: 80px">序号</p></th>
-                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
-                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
-                                                <th style="text-align: center"><p>日常办公</p></th>
-                                                <th style="text-align: center"><p>仓储型星店房租</p></th>
-                                                <th style="text-align: center"><p>桶装水</p></th>
-                                                <th style="text-align: center"><p>门店保险</p></th>
-                                                <th style="text-align: center"><p>电动车维修费用</p></th>
-                                                <th style="text-align: center"><p>购物袋</p></th>
-                                                <th style="text-align: center"><p>垃圾袋</p></th>
-                                                <th style="text-align: center"><p>灭火器</p></th>
-                                                <th style="text-align: center"><p>车载包+背包</p></th>
-                                                <th style="text-align: center"><p>头盔+护膝+手套</p></th>
-                                                <th style="text-align: center"><p>绿植</p></th>
-                                                <th style="text-align: center"><p>托盘</p></th>
-                                                <th style="text-align: center"><p>仓储物资（周转箱等）</p></th>
-                                                <th style="text-align: center"><p>门店营销活动费</p></th>
-                                                <th style="text-align: center"><p>门店装修及设备维修</p></th>
-                                                <th style="text-align: center"><p>年运营费用累计（元）</p></th>
-                                                <th style="text-align: center"><p>月度运营费用（元）</p></th>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-
-                            </div>
                             <div class="tab-pane " id="tab_uniform">
 
-                                <table width="60%">
+                                <table width="70%">
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
@@ -913,6 +959,17 @@
                                             <div class="auto hidden" id="uniform_store" onclick="selectUniformStore(this)" style="width:150px;z-index: 99999;">
                                             </div>
                                             </p>
+                                        </td>
+
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_uniform" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
                                         </td>
 
                                         <td style="width:6%">日期：</td>
@@ -938,9 +995,10 @@
                                         <table class="table table_x" cellspacing="0" cellpadding="0" id="uniform_tb_2">
 
                                             <tr id="uniform_tr_2">
-                                                <th style="text-align: center;background-color:#A9A9A9"><p style="width: 80px">序号</p></th>
-                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店编码</p></th>
-                                                <th style="text-align: center;background-color: #A9A9A9"><p>门店名称</p></th>
+                                                <th style="text-align: center;width: 60px">序号</th>
+                                                <th style="text-align: center;width: 120px">门店编码</th>
+                                                <th style="text-align: center;width: 280px">门店名称</th>
+                                                <th style="text-align: center;width: 165px;">门店状态</th>
                                                 <th style="text-align: center"><p>工服年费</p></th>
                                                 <th style="text-align: center"><p>工服摊销（月）</p></th>
                                             </tr>
@@ -968,7 +1026,7 @@
                             <!-- 装修摊销-->
                             <div class="tab-pane active" id="tab_renovation">
 
-                                <table width="60%">
+                                <table width="70%">
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
@@ -985,6 +1043,17 @@
                                             <div class="auto hidden" id="renovation_store" onclick="selectRenovationStore(this)" style="width:150px;z-index: 99999;">
                                             </div>
                                             </p>
+                                        </td>
+
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_renovation" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
                                         </td>
 
                                         <td width="5%" style="text-align: left;padding-bottom: 20px">
@@ -1006,18 +1075,19 @@
                                             <tr id="renovation_tr_2">
                                                 <th style="text-align: center;"><p style="width: 80px">序号</p></th>
                                                 <th style="text-align: center;"><p>门店编码</p></th>
-                                                <th style="text-align: center;"><p>门店名称</p></th>
-                                                <th style="text-align: center"><p>施工单位</p></th>
-                                                <th style="text-align: center"><p>建筑面积</p></th>
-                                                <th style="text-align: center"><p>单方造价</p></th>
+                                                <th style="text-align: center;"><p style="width: 280px">门店名称</p></th>
+                                                <th style="text-align: center;"><p>门店状态</p></th>
+                                                <!--<th style="text-align: center"><p>施工单位</p></th>-->
+                                                <!--<th style="text-align: center"><p>建筑面积</p></th>-->
+                                                <!--<th style="text-align: center"><p>单方造价</p></th>-->
                                                 <th style="text-align: center"><p>装修施工</p></th>
                                                 <th style="text-align: center"><p>商业展屏</p></th>
                                                 <th style="text-align: center"><p>家具</p></th>
                                                 <th style="text-align: center"><p>标牌及灯箱</p></th>
-                                                <th style="text-align: center"><p>过程管理</p></th>
-                                                <th style="text-align: center"><p>费率3.5%</p></th>
+                                                <!--<th style="text-align: center"><p>过程管理</p></th>-->
+                                                <!--<th style="text-align: center"><p>费率3.5%</p></th>-->
                                                 <th style="text-align: center"><p>空调设备</p></th>
-                                                <th style="text-align: center"><p>费率4.8%</p></th>
+                                                <!--<th style="text-align: center"><p>费率4.8%</p></th>-->
                                                 <th style="text-align: center"><p>设计</p></th>
                                                 <th style="text-align: center"><p>全过程项目管理</p></th>
                                                 <th style="text-align: center"><p>单店产值合计</p></th>
@@ -1033,7 +1103,7 @@
                             </div>
                             <!-- 固定资产-->
                             <div class="tab-pane " id="tab_fixed_asset">
-                                <table width="60%">
+                                <table width="70%">
                                     <tr>
 
                                         <td style="width:6%">城市名称：</td>
@@ -1050,6 +1120,17 @@
                                             <div class="auto hidden" id="fixedAsset_store" onclick="selectFixedAssetStore(this)" style="width:150px;z-index: 99999;">
                                             </div>
                                             </p>
+                                        </td>
+
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_fixedAsset" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
                                         </td>
 
                                         <td width="5%" style="text-align: left;padding-bottom: 20px">
@@ -1071,7 +1152,8 @@
                                             <tr id="fixedAsset_tr_2">
                                                 <th style="text-align: center;"><p style="width: 80px">序号</p></th>
                                                 <th style="text-align: center;"><p>门店编码</p></th>
-                                                <th style="text-align: center;"><p>门店名称</p></th>
+                                                <th style="text-align: center;"><p style="width: 280px">门店名称</p></th>
+                                                <th style="text-align: center;"><p>门店状态</p></th>
                                                 <th style="text-align: center"><p>多功能一体机</p></th>
                                                 <th style="text-align: center"><p>手机</p></th>
                                                 <th style="text-align: center"><p>IPADmini</p></th>
@@ -1097,7 +1179,7 @@
                             </div>
                             <!-- 合同租金-->
                             <div class="tab-pane " id="tab_rent_contract">
-                                <table width="50%">
+                                <table width="60%">
                                     <tr>
                                         <td style="width:6%">城市名称：</td>
                                         <td style="width:12%">
@@ -1113,6 +1195,17 @@
                                             <div class="auto hidden" id="rentContract_store" onclick="selectRentContractStore(this)" style="width:150px;z-index: 99999;">
                                             </div>
                                             </p>
+                                        </td>
+
+                                        <td style="width:6%">门店状态：</td>
+                                        <td style="width:12%">
+                                            <select id="storeEstate_rentContract" style="width: 100px;cursor: pointer" class="form-control">
+                                                <option value="" selected>全部</option>
+                                                <option value="筹备中">筹备中</option>
+                                                <option value="待开业">待开业</option>
+                                                <option value="运营中">运营中</option>
+                                                <option value="闭店">闭店</option>
+                                            </select>
                                         </td>
 
                                         <td width="5%" style="text-align:left;padding-bottom: 20px;">
@@ -1135,7 +1228,8 @@
                                             <tr id="rentContract_tr_2">
                                                 <th style="text-align: center;"><p style="width: 80px">序号</p></th>
                                                 <th style="text-align: center;"><p>门店编码</p></th>
-                                                <th style="text-align: center;"><p>门店名称</p></th>
+                                                <th style="text-align: center;"><p style="width: 280px">门店名称</p></th>
+                                                <th style="text-align: center;"><p>门店状态</p></th>
                                                 <th style="text-align: center"><p>起租日（含免租期)</p></th>
                                                 <th style="text-align: center"><p>起租日（免租期截止日）</p></th>
                                                 <th style="text-align: center"><p>到期日</p></th>

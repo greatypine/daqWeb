@@ -44,15 +44,18 @@ public class StoreObserveParameterManagerImpl extends BizBaseCommonManager imple
         StoreObserveParameterDao storeObserveParameterDao = (StoreObserveParameterDao)SpringHelper.getBean(StoreObserveParameterDao.class.getName());
         String add_or_edit = observeDTO.getAdd_or_edit();
         List<Map<String, Object>> maps = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> observeModelList = new ArrayList<Map<String, Object>>();
         if(add_or_edit.equals("edit")){
             StoreObserveParameterScoreDao storeObserveParameterScoreDao = (StoreObserveParameterScoreDao)SpringHelper.getBean(StoreObserveParameterScoreDao.class.getName());
             maps = storeObserveParameterDao.queryObserveParameterList(observeDTO.getStore_id(), observeDTO.getObserve_month());
             List<Map<String, Object>> observeScore = storeObserveParameterScoreDao.queryObserveScoreByStoreAndObserveMonth(observeDTO.getStore_id(), observeDTO.getObserve_month());
+            observeModelList = observeModelDao.getObserveModelListByEdit(observeDTO.getStore_id(), observeDTO.getObserve_month());
             result.put("observeScore",observeScore);
         }else if(add_or_edit.equals("add")){
             maps = observeModelDao.getObserveList();
+            observeModelList = observeModelDao.getObserveModelList();
         }
-        List<Map<String, Object>> observeModelList = observeModelDao.getObserveModelList();
+
         result.put("observeParameterList",maps);
         result.put("observeModelList",observeModelList);
         return result;

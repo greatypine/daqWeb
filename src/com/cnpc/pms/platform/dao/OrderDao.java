@@ -461,4 +461,10 @@ public interface OrderDao {
 	 **/
 
 	public Map<String,Object> queryOrderOfCustomer(String customerId);
+	/**
+	 * 根据order_id,product_id查询订单项信息
+	 * @param order_id
+	 * @return
+	 */
+	public List<Map<String, Object>> queryOrderItemInfoByIdAndProid(String order_id,String product_id);
 }

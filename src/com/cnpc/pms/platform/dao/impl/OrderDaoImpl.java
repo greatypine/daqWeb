@@ -2332,4 +2332,33 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 		}
 		return map_r;
 	}
+	@Override
+	public List<Map<String, Object>> queryOrderItemInfoByIdAndProid(String order_id,
+			String product_id) {
+		List<Map<String, Object>> lst_data = null;
+    	List<Map<String, Object>> ret_date = new ArrayList<Map<String,Object>>();
+    	String sql = "SELECT * from t_order_item toi WHERE toi.order_id='"+order_id+"' and toi.eshop_pro_id='"+product_id+"' ";
+    	if(order_id!=null&&order_id.length()>0){
+    		Session session = getHibernateTemplate().getSessionFactory().openSession();
+        	try { 
+    			SQLQuery query = session.createSQLQuery(sql);
+    			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+    			if(lst_data!=null&&lst_data.size()>0){
+    				for(Map<String, Object> obj:lst_data){
+    					String img_url = obj.get("first_url")==null?"":obj.get("first_url").toString();
+    					if(img_url!=null&&img_url.length()>0){
+    						String url = "https://imgcdn.guoanshequ.com/"+img_url;
+    						obj.put("first_url", url);
+    					}
+    					ret_date.add(obj);
+    				}
+    			}
+    		} catch (HibernateException e) {
+    			e.printStackTrace();
+    		}finally{
+    			session.close();
+    		}
+    	}
+    	return ret_date;
+	}
 }

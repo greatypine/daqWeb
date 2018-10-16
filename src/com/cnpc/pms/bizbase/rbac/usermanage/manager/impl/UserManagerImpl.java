@@ -2571,4 +2571,103 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		}
 		return null;
 	}
+
+	@Override
+	public Map<String, Object> queryObserveDistCityUserList(QueryConditions condition) {
+		Map<String,Object> returnMap = new java.util.HashMap<String, Object>();
+		PageInfo pageInfo = condition.getPageinfo();
+		String name = null;
+		String citynames = null;
+		String usergroupname = null;
+		for(Map<String, Object> map : condition.getConditions()){
+			if("name".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				name = map.get("value").toString();
+			}
+			if("citynames".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				citynames = map.get("value").toString();
+			}/*
+			if("humanstatus".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				humanstatus = map.get("value").toString();
+			}*/
+			if("usergroupname".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				usergroupname = map.get("value").toString();
+			}
+		}
+		UserGroupManager userGroupManager = (UserGroupManager)SpringHelper.getBean("userGroupManager");
+		UserGroup userGroup = userGroupManager.findUserGroupByname(usergroupname);
+		FSP fsp = new FSP();
+		fsp.setSort(SortFactory.createSort("id", ISort.DESC));
+		StringBuffer sbfCondition = new StringBuffer();
+		sbfCondition.append(" disabledFlag=1");
+		if(userGroup != null){
+			Long id = userGroup.getId();
+			sbfCondition.append(" and pk_usergroup ="+ id);
+		}
+		DistCityManager distCityManager = (DistCityManager)SpringHelper.getBean("distCityManager");
+
+		if(name!=null){
+			sbfCondition.append(" and name like '%"+name+"%'");
+		}else if(citynames!=null&&citynames.trim().length()>0){
+			List<Long> useridList = distCityManager.queryDistinctByCity(citynames);
+			if(useridList!=null){
+				String useridsql = "";
+				for(Long userid:useridList){
+					useridsql+=userid+",";
+				}
+				useridsql=useridsql.substring(0,useridsql.length()-1);
+				sbfCondition.append(" and id in("+useridsql+")");
+			}
+		}else{
+			List<Long> useridList = distCityManager.queryDistinctUserId();
+			if(useridList!=null){
+				String useridsql = "";
+				for(Long userid:useridList){
+					useridsql+=userid+",";
+				}
+				useridsql=useridsql.substring(0,useridsql.length()-1);
+				sbfCondition.append(" and id in("+useridsql+")");
+			}
+
+		}
+
+		sbfCondition.append(" order by id DESC ");
+
+		IFilter iFilter =FilterFactory.getSimpleFilter(sbfCondition.toString());
+		fsp.setPage(pageInfo);
+		fsp.setUserFilter(iFilter);
+		List<User> lst_data = (List<User>) this.getList(fsp);
+		List<User> ret_data = new ArrayList<User>();
+
+		if(lst_data!=null){
+			//根据ID查询所管理城市
+			for(User u:lst_data){
+				String cityname="";
+				DistCity distCity = distCityManager.queryDistCitysByUserId(u.getId());
+				if(distCity!=null){
+					if(distCity.getCity1()!=null){
+						cityname+=distCity.getCity1()+",";
+					}
+					if(distCity.getCity2()!=null){
+						cityname+=distCity.getCity2()+",";
+					}
+					if(distCity.getCity3()!=null){
+						cityname+=distCity.getCity3()+",";
+					}
+					if(distCity.getCity4()!=null){
+						cityname+=distCity.getCity4()+",";
+					}
+					if(distCity.getCity5()!=null){
+						cityname+=distCity.getCity5()+",";
+					}
+				}
+
+				u.setCitynames(cityname);
+				ret_data.add(u);
+			}
+		}
+		returnMap.put("pageinfo", pageInfo);
+		returnMap.put("header", "");
+		returnMap.put("data", ret_data);
+		return returnMap;
+	}
 }

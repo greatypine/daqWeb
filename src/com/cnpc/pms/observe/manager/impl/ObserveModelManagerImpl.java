@@ -87,7 +87,7 @@ public class ObserveModelManagerImpl extends BizBaseCommonManager implements Obs
             String str = (String) weidu_where.get("value");
             status = Integer.valueOf(str.replace(",",""));
         }
-        if ("orgEntity.id".equals(city_where.get("key")) && !"null".equals(city_where.get("value"))
+        if ("orgEntity.id".equals(city_where.get("key")) && null != city_where.get("value") && !"null".equals(city_where.get("value"))
                 && !"".equals(city_where.get("value"))) {
             id = Long.valueOf(city_where.get("value")+"");
         }
@@ -109,6 +109,8 @@ public class ObserveModelManagerImpl extends BizBaseCommonManager implements Obs
                 observeMo.setModel_name(observeDTO.getModel_name());
                 observeMo.setOrder_no(observeDTO.getOrder_no());
                 observeMo.setStatus(observeDTO.getStatus());
+                observeMo.setRemark(observeDTO.getRemark());
+                observeMo.setModel_color(observeDTO.getModel_color());
                 BeanUtils.copyProperties(observeMo, observeModel,
                         new String[] { "id", "version", "create_time", "create_user", "create_user_id" });
                 preObject(observeModel);
@@ -118,6 +120,8 @@ public class ObserveModelManagerImpl extends BizBaseCommonManager implements Obs
                 observeMo.setModel_name(observeDTO.getModel_name());
                 observeMo.setOrder_no(observeDTO.getOrder_no());
                 observeMo.setStatus(observeDTO.getStatus());
+                observeMo.setModel_color(observeDTO.getModel_color());
+                observeMo.setRemark(observeDTO.getRemark());
                 preObject(observeMo);
                 this.saveObject(observeMo);
             }

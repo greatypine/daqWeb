@@ -20,7 +20,7 @@
     var store_name=decode64(getUrlParamByKey("sn"));
     var store_id=decode64(getUrlParamByKey("si"));
     var observe_question_number = 0;
-    var colorStyleArray = ["trbg1","trbg2","trbg3","trbg4","trbg5","trbg6","trbg7","trbg8","trbg9","trbg10","trbg11","trbg12"];
+    var colorStyleArray = ["trbg1","trbg2","trbg3","trbg4","trbg5","trbg6","trbg7","trbg8","trbg9","trbg10","trbg11","trbg12","trbg13"];
     
     function latetime(){
     	var today = new Date();
@@ -64,15 +64,15 @@
                                 var model_name = observeModel.model_name;
                                 var model_id = observeModel.model_id;
                                 if(observeModel.model_id == observeParameter.model_id){
-                                    observeParameterString += '<tr><td rowspan="'+count+'" class="'+colorStyleArray[model_id-1]+'" >'+model_name+'</td>'
-                                        +'<th id="'+observeParameter.id+'" class="'+colorStyleArray[model_id-1]+'">'+observe_content+'</th>'
+                                    observeParameterString += '<tr><td rowspan="'+count+'" style="background-color:'+observeModel.model_color+';">'+model_name+'</td>'
+                                        +'<th id="'+observeParameter.id+'" style="background-color:'+observeModel.model_color+';">'+observe_content+'</th>'
                                         +'<td><input class="form-control" type="text"></td><td><input class="form-control" type="text"></td>'
                                         +'<td><input class="form-control" type="text"></td></tr>';
                                     break;
                                 }
                             }
 						}else{
-                            observeParameterString += '<tr><th id="'+observeParameter.id+'" class="'+colorStyleArray[observeParameter.model_id-1]+'">'+observe_content+'</th><td><input class="form-control" type="text"></td>'
+                            observeParameterString += '<tr><th id="'+observeParameter.id+'" style="background-color:'+observeParameter.model_color+';">'+observe_content+'</th><td><input class="form-control" type="text"></td>'
                                 +'<td><input class="form-control" type="text"></td><td><input class="form-control" type="text"></td></tr>';
 						}
                     }
@@ -132,15 +132,15 @@
                                 var model_name = observeModel.model_name;
                                 var model_id = observeModel.model_id;
                                 if(observeModel.model_id == observeParameter.model_id){
-                                    observeParameterString += '<tr><td rowspan="'+count+'" class="'+colorStyleArray[model_id-1]+'" >'+model_name+'</td>'
-                                        +'<th id="'+observeParameter.id+'" class="'+colorStyleArray[model_id-1]+'">'+observe_content+'</th>'
+                                    observeParameterString += '<tr><td rowspan="'+count+'" style="background-color:'+observeModel.model_color+';">'+model_name+'</td>'
+                                        +'<th id="'+observeParameter.id+'" style="background-color:'+observeModel.model_color+';">'+observe_content+'</th>'
                                         +'<td><input class="form-control" type="text" value="'+observeParameter.points_deduction_description+'"></td><td><input class="form-control" type="text" value="'+observeParameter.content_score+'"></td>'
                                         +'<td><input class="form-control" type="text" value="'+observeParameter.score_empno_empname+'"></td></tr>';
                                     break;
                                 }
                             }
                         }else{
-                            observeParameterString += '<tr><th id="'+observeParameter.id+'" class="'+colorStyleArray[observeParameter.model_id-1]+'">'+observe_content+'</th><td><input class="form-control" type="text" value="'+observeParameter.points_deduction_description+'"></td>'
+                            observeParameterString += '<tr><th id="'+observeParameter.id+'" style="background-color:'+observeParameter.model_color+';">'+observe_content+'</th><td><input class="form-control" type="text" value="'+observeParameter.points_deduction_description+'"></td>'
                                 +'<td><input class="form-control" type="text" value="'+observeParameter.content_score+'"></td><td><input class="form-control" type="text" value="'+observeParameter.score_empno_empname+'"></td></tr>';
                         }
                     }
@@ -308,6 +308,7 @@
     table .trbg10{background-color: #bfbfbf;}
     table .trbg11{background-color: #92cddc;}
     table .trbg12{background-color: #ff99ff;}
+	table .trbg13{background-color: #611c7e36;}
 </style>
 <body>
 	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">

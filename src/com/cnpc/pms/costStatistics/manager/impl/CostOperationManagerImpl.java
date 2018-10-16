@@ -77,10 +77,11 @@ public class CostOperationManagerImpl extends BizBaseCommonManager implements Co
                     Double storageMaterials = obj.get("storageMaterials")==null?null:Double.parseDouble(String.valueOf(obj.get("storageMaterials")));
                     Double activityFee = obj.get("activityFee")==null?null:Double.parseDouble(String.valueOf(obj.get("activityFee")));
                     Double decorationMaintain = obj.get("decorationMaintain")==null?null:Double.parseDouble(String.valueOf(obj.get("decorationMaintain")));
-                    Double yearCharge = list.get(i).get("yearCharge")==null?null:Double.parseDouble(String.valueOf(obj.get("yearCharge")));
+//                    Double yearCharge = list.get(i).get("yearCharge")==null?null:Double.parseDouble(String.valueOf(obj.get("yearCharge")));
                     Double monthCharge = obj.get("monthCharge")==null?null:Double.parseDouble(String.valueOf(obj.get("monthCharge")));
                     Integer year = obj.get("year")==null?null:Integer.parseInt(String.valueOf(obj.get("year")));
-                    filter = FilterFactory.getSimpleFilter("storeNo='"+storeNo+"' and year="+year);
+                    Integer month = obj.get("month")==null?null:Integer.parseInt(String.valueOf(obj.get("month")));
+                    filter = FilterFactory.getSimpleFilter("storeNo='"+storeNo+"' and  year="+year+" and  month="+month);
                     lst_costOperation = (List<CostOperation>) this.getList(filter);
                     CostOperation co = null;
                     if(lst_costOperation!=null&&lst_costOperation.size()>0) {
@@ -106,9 +107,10 @@ public class CostOperationManagerImpl extends BizBaseCommonManager implements Co
                     co.setStorageMaterials(storageMaterials);
                     co.setActivityFee(activityFee);
                     co.setDecorationMaintain(decorationMaintain);
-                    co.setYearCharge(yearCharge);
+//                    co.setYearCharge(yearCharge);
                     co.setMonthCharge(monthCharge);
                     co.setYear(year);
+                    co.setMonth(month);
                     preObject(co);
                     saveObject(co);
                 }

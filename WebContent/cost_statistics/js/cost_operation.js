@@ -104,7 +104,7 @@ function getOperationStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_operation","operation_store",operationStoreNameArray);
                 autoComplete.start(event);
-                $("#operation_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 22.3%;");
+                $("#operation_store").attr("style","width: 150px;z-index: 99999;left: 24%;top: 22.3%;");
             }else{
 
             }
@@ -130,7 +130,7 @@ function selectOperationStore(t){
  * 计算运营费用累计
  * @param t
  */
-function calculateYearCharge(t){
+function calculateMonthCharge(t){
     checkFloatDataValid(t);
     $(t).parent().parent().attr("editable",true);
     var id = $(t).attr("id").split("_");
@@ -151,8 +151,6 @@ function calculateYearCharge(t){
     var storageMaterials = $("#storageMaterials_"+id[1]).val();//仓储物资
     var activityFee = $("#activityFee_"+id[1]).val();//活动费
     var decorationMaintain = $("#decorationMaintain_"+id[1]).val();//门店装修及维修费
-    // var yearCharge = $("#yearCharge_"+id[1]).val();//年运营费
-    // var monthCharge = $("#monthCharge_"+id[1]).val();//月运营费
 
     if(dailyOffice==""&&rent==""&&barrelledWater==""&&storeInsurance==""&&carMaintain==""&&shoppingBag==""&&garbageBag==""&&extinguisher==""&&backpack==""&&helmet==""&&greenPlants==""&&tray==""&&storageMaterials==""&&activityFee==""&&decorationMaintain==""){
         $("#yearCharge_"+id[1]).val("");
@@ -175,9 +173,8 @@ function calculateYearCharge(t){
         activityFee = activityFee==""?0:parseFloat(activityFee);
         decorationMaintain = decorationMaintain==""?0:parseFloat(decorationMaintain);
 
-        var total_year= dailyOffice+rent+barrelledWater+storeInsurance+carMaintain+shoppingBag+garbageBag+extinguisher+backpack+helmet+greenPlants+tray+storageMaterials+activityFee+decorationMaintain;
-        $("#yearCharge_"+id[1]).val(total_year.toFixed(2));
-        $("#monthCharge_"+id[1]).val((total_year/12).toFixed(2));
+        var total_month= dailyOffice+rent+barrelledWater+storeInsurance+carMaintain+shoppingBag+garbageBag+extinguisher+backpack+helmet+greenPlants+tray+storageMaterials+activityFee+decorationMaintain;
+        $("#monthCharge_"+id[1]).val((total_month).toFixed(2));
     }
 }
 
@@ -189,7 +186,7 @@ function getCostOperation(f){
     var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostOperation(f);
+            saveCostOperation("single");
 
         },function(){
 
@@ -214,8 +211,10 @@ function searchCostOperation(f){
         shade: [0.2,'#333']
     });
 
-    var year = $("#year_operation").val();
-    $("#operation_save_date").val(year);
+    var year = $("#year_operation").val().split("-")[0];
+    var month = $("#year_operation").val().split("-")[1];
+    $("#operation_save_year").val(year);
+    $("#operation_save_month").val(month);
 
     var cityId="";
     if(f=="auto"){
@@ -231,6 +230,7 @@ function searchCostOperation(f){
         storeId=-10000;
     }
 
+    var estate  = $("#storeEstate_operation").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -242,7 +242,9 @@ function searchCostOperation(f){
         storeNo:storeId,
         userId:userId,
         role:role,
-        year:year
+        year:year,
+        month:month,
+        estate:estate
     }
 
     $("#operation_tb_2").find("tr:gt(0)").remove();
@@ -257,6 +259,7 @@ function searchCostOperation(f){
                 var cityName = costOperation[i].city_name==null?"":costOperation[i].city_name;
                 var storeNo = costOperation[i].store_no==null?"":costOperation[i].store_no;
                 var storeName = costOperation[i].store_name==null?"":costOperation[i].store_name;
+                var estate = costOperation[i].estate==null?"":costOperation[i].estate;
                 var daily_office = costOperation[i].daily_office==null?"":costOperation[i].daily_office;//日常办公
                 var rent = costOperation[i].rent==null?"":costOperation[i].rent;//仓店房租
                 var barrelled_water = costOperation[i].barrelled_water==null?"":costOperation[i].barrelled_water;//桶装水
@@ -272,27 +275,26 @@ function searchCostOperation(f){
                 var storage_materials = costOperation[i].storage_materials==null?"":costOperation[i].storage_materials;//仓储物资
                 var activity_fee = costOperation[i].activity_fee==null?"":costOperation[i].activity_fee;//活动费
                 var decoration_maintain = costOperation[i].decoration_maintain==null?"":costOperation[i].decoration_maintain;//门店装修及维修费
-                var year_charge = costOperation[i].year_charge==null?"":costOperation[i].year_charge;//运营费/年
+                // var year_charge = costOperation[i].year_charge==null?"":costOperation[i].year_charge;//运营费/年
                 var month_charge = costOperation[i].month_charge==null?"":costOperation[i].month_charge;//运营费/月
 
                 var operation_td =
-                    "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>"+
-                    "<td><input type='text' style='width: 100%'  onkeyup='calculateYearCharge(this)'  id='dailyOffice_"+i+"' value='"+daily_office+"'/></td>" +
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='rent_"+i+"'  value='"+rent+"'/></td>" +
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='barrelledWater_"+i+"'    value='"+barrelled_water+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='storeInsurance_"+i+"'    value='"+store_insurance+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='carMaintain_"+i+"'    value='"+car_maintain+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='shoppingBag_"+i+"'    value='"+shopping_bag+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='garbageBag_"+i+"'    value='"+garbage_bag+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='extinguisher_"+i+"'    value='"+extinguisher+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='backpack_"+i+"'    value='"+backpack+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='helmet_"+i+"'    value='"+helmet+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='greenPlants_"+i+"'    value='"+greenPlants+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='tray_"+i+"'    value='"+tray+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='storageMaterials_"+i+"'    value='"+storage_materials+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='activityFee_"+i+"'    value='"+activity_fee+"'/></td>"+
-                    "<td><input type='text'     style='width: 100%' onkeyup='calculateYearCharge(this)' id='decorationMaintain_"+i+"'    value='"+decoration_maintain+"'/></td>"+
-                    "<td><input type='text'     style='background-color: #e8e8e8;width: 100%' readonly id='yearCharge_"+i+"'    value='"+year_charge+"'/></td>"+
+                    "<td style='text-align: center;background-color:#e8e8e8'>"+(i+1)+"</td><td style='text-align: center;background-color:#e8e8e8'>"+storeNo+"</td><td style='background-color:#e8e8e8'><p>"+storeName+"</p></td><td style='text-align: center;background-color:#e8e8e8'>"+estate+"</td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='dailyOffice_"+i+"' value='"+daily_office+"'/></td>" +
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='rent_"+i+"'  value='"+rent+"'/></td>" +
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='barrelledWater_"+i+"'    value='"+barrelled_water+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='storeInsurance_"+i+"'    value='"+store_insurance+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='carMaintain_"+i+"'    value='"+car_maintain+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='shoppingBag_"+i+"'    value='"+shopping_bag+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='garbageBag_"+i+"'    value='"+garbage_bag+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='extinguisher_"+i+"'    value='"+extinguisher+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='backpack_"+i+"'    value='"+backpack+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='helmet_"+i+"'    value='"+helmet+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='greenPlants_"+i+"'    value='"+greenPlants+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='tray_"+i+"'    value='"+tray+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='storageMaterials_"+i+"'    value='"+storage_materials+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='activityFee_"+i+"'    value='"+activity_fee+"'/></td>"+
+                    "<td><input type='text'     onkeyup='calculateMonthCharge(this)' style='width: 100%'  id='decorationMaintain_"+i+"'    value='"+decoration_maintain+"'/></td>"+
                     "<td><input type='text'     style='background-color: #e8e8e8;width: 100%' readonly id='monthCharge_"+i+"'    value='"+month_charge+"'/></td>";
 
                     $("#operation_tb_2").append("<tr id='"+storeNo+"' editable='false'>"+operation_td+"<input type='hidden'  id='storeName' value='"+storeName+"'/><input type='hidden'  id='cityName' value='"+cityName+"'/></tr>");
@@ -311,7 +313,8 @@ function searchCostOperation(f){
 function   exportCostOperation(){
 
     var cityId = $("#city_id_operation").val();
-    var year = $("#year_operation").val();
+    var year = $("#year_operation").val().split("-")[0];
+    var month =$("#year_operation").val().split("-")[1];
 
 
     var storeId = $("#store_id_operation").val();
@@ -321,6 +324,7 @@ function   exportCostOperation(){
         storeId=-10000;
     }
 
+    var estate  = $("#storeEstate_operation").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -332,7 +336,9 @@ function   exportCostOperation(){
         storeNo:storeId,
         userId:userId,
         role:role,
-        year:year
+        year:year,
+        month:month,
+        estate:estate
     }
     doManager('costOperationManager','exportCostOperation',costDto,function (data) {
         if(data.result){
@@ -361,11 +367,12 @@ function   exportCostOperation(){
  * 保存运营成本
  *
  * **/
-function saveCostOperation(){
+function saveCostOperation(ac){
 
     var saveResult = "";
     var store_cost_tr = $("#operation_tr_2").nextAll("tr[editable='true']");
-    var year = $("#operation_save_date").val();
+    var year = $("#operation_save_year").val();
+    var month = $("#operation_save_month").val();
     var costOperationArray = [];
 
     for(var i=0;i<store_cost_tr.length;i++){
@@ -387,12 +394,13 @@ function saveCostOperation(){
         var storageMaterials = $(store_cost_tr[i]).find('input[id^="storageMaterials_"]').val();//仓储物资
         var activityFee = $(store_cost_tr[i]).find('input[id^="activityFee_"]').val();//活动费
         var decorationMaintain = $(store_cost_tr[i]).find('input[id^="decorationMaintain_"]').val();//门店装修及维修费
-        var yearCharge = $(store_cost_tr[i]).find('input[id^="yearCharge_"]').val();//年运营费
+        // var yearCharge = $(store_cost_tr[i]).find('input[id^="yearCharge_"]').val();//年运营费
         var monthCharge = $(store_cost_tr[i]).find('input[id^="monthCharge_"]').val();//月运营费
 
         var costOperation = {
             cityName:cityName,
             year:year,
+            month:month,
             storeNo:storeNo,
             storeName:storeName,
             dailyOffice:dailyOffice,
@@ -410,7 +418,7 @@ function saveCostOperation(){
             storageMaterials:storageMaterials,
             activityFee:activityFee,
             decorationMaintain:decorationMaintain,
-            yearCharge:yearCharge,
+            // yearCharge:yearCharge,
             monthCharge:monthCharge
         }
         costOperationArray.push(costOperation);
@@ -426,21 +434,31 @@ function saveCostOperation(){
                 $("#operation_tr_2").nextAll("tr[editable='true']").each(function () {
                     $(this).attr("editable","false");
                 })
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 saveResult="success";
             }else if(result.status=="fail"){
 
-                // $$.showMessage('提示',"保存失败！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }else{
 
-                // $$.showMessage('提示',"请稍后重新请求！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }
         }else{
-            // $.showMessage('提示',"请稍后重新请求！");
+            if(ac=="single"){
+                $$.showMessage('提示',"保存失败！");
+                return;
+            }
             saveResult="fail";
         }
 

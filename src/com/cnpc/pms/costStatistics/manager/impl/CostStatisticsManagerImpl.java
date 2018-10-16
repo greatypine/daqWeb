@@ -5,6 +5,7 @@ import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.costStatistics.dao.CostStatisticsDao;
+import com.cnpc.pms.costStatistics.dto.CostDto;
 import com.cnpc.pms.costStatistics.manager.CostStatisticsManager;
 
 import java.util.HashMap;
@@ -58,5 +59,26 @@ public class CostStatisticsManagerImpl extends BizBaseCommonManager implements C
         map_result.put("pageinfo", obj_page);
         map_result.put("header", "成本录入情况");
         return map_result;
+    }
+
+    @Override
+    public Map<String, Object> exportCostStatement(CostDto costDto) {
+
+        Integer quarter = costDto.getQuarter();
+        String cityCode = costDto.getCityCode();
+        String eastate = costDto.getEstate();
+        StringBuilder citySb = new StringBuilder();
+        if(!"".equals(cityCode)){
+            String[] cityArr = cityCode.split(",");
+            for(int i = 0;i<cityArr.length;i++){
+                citySb.append(",'"+cityArr[i]+"'");
+            }
+            costDto.setCityCode(citySb.substring(1).toString());
+
+        }
+
+
+
+        return null;
     }
 }

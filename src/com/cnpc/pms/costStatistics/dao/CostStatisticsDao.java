@@ -136,4 +136,12 @@ public interface CostStatisticsDao extends IDAO {
 
     public List<Map<String,Object>> queryCostUniform(CostDto costDto);
 
+    /**
+     * @Description 获取成本报表数据
+     * @author gbl
+     * @date 2018/10/16 16:43
+     **/
+
+    public List<Map<String,Object>> getCostStatisticsStatement(CostDto costDto);
+
 }

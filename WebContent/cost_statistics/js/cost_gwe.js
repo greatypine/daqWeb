@@ -101,7 +101,7 @@ function getGWEStore(t){
                 }
                 var autoComplete = new AutoComplete("store_name_gwe","gwe_store",gweStoreNameArray);
                 autoComplete.start(event);
-                $("#gwe_store").attr("style","width: 150px;z-index: 99999;left: 26.3%;top: 23.1%;");
+                $("#gwe_store").attr("style","width: 150px;z-index: 99999;left: 24%;top: 22.3%;");
             }else{
 
             }
@@ -137,7 +137,7 @@ function getCostGWE(f) {
     var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
     if(store_cost_tr.length>0){//有数据修改
         $$.showConfirm_cost("提示","是否需要保存改变的数据？",function () {
-            saveCostGWE(f);
+            saveCostGWE("single");
 
         },function(){
 
@@ -185,6 +185,7 @@ function searchCostGWE(f){
         storeId=-10000;
     }
 
+    var estate = $("#storeEstate_gwe").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -197,6 +198,7 @@ function searchCostGWE(f){
         year:showYear,
         month:parseInt(showMonth),
         userId:userId,
+        estate:estate,
         role:role
     }
 
@@ -215,11 +217,11 @@ function searchCostGWE(f){
                 var cityName = costGWE[i].city_name==null?"":costGWE[i].city_name;
                 var storeNo = costGWE[i].storeNo==null?"":costGWE[i].storeNo;
                 var storeName = costGWE[i].storeName==null?"":costGWE[i].storeName;
-
+                var estate = costGWE[i].estate==null?"":costGWE[i].estate;
                 var water_fee = costGWE[i].water_fee==null?"":costGWE[i].water_fee;//水费
                 var electricity_fee = costGWE[i].electricity_fee==null?"":costGWE[i].electricity_fee;//电费
 
-                var GWE_td = "<td style='text-align: center;background-color:#A9A9A9'>"+(i+1)+"</td><td style='text-align: center;background-color:#A9A9A9'>"+storeNo+"</td><td style='background-color:#A9A9A9'><p>"+storeName+"</p></td>" +
+                var GWE_td = "<td style='text-align: center;background-color:#e8e8e8'>"+(i+1)+"</td><td style='text-align: center;background-color:#e8e8e8'>"+storeNo+"</td><td style='background-color:#e8e8e8'><p>"+storeName+"</p></td><td style='text-align:center;background-color:#e8e8e8'>"+estate+"</td>" +
                             "<td><input type='text'  style='width: 100%' onkeyup='checkCostGWE(this)'   id='waterFee_"+i+"' value='"+water_fee+"'/></td>" +
                             "<td><input type='text'     style='width: 100%'  onkeyup='checkCostGWE(this)' id='electricityFee_"+i+"'  value='"+electricity_fee+"'/></td>";
 
@@ -251,7 +253,7 @@ function   exportCostGWE(){
     if(storeId==""&&storeName!=""){
         storeId=-10000;
     }
-
+    var estate = $("#storeEstate_gwe").val();
     var role="zb"
     if(regex_zb.test(userGroupCode)){
         role=="zb";
@@ -264,6 +266,7 @@ function   exportCostGWE(){
         year:showYear,
         month:parseInt(showMonth),
         userId:userId,
+        estate:estate,
         role:role
     }
 
@@ -294,7 +297,7 @@ function   exportCostGWE(){
  * 保存固定资产
  *
  * **/
-function saveCostGWE(){
+function saveCostGWE(ac){
     var saveResult= "";
     var year_month = $("#gwe_save_date").val();
     var store_cost_tr = $("#gwe_tr_2").nextAll("tr[editable='true']");
@@ -328,24 +331,38 @@ function saveCostGWE(){
 
             if(result.status=='success'){
                 // $$.showMessage('提示',"保存成功！");
+
                 $("#gwe_tr_2").nextAll("tr[editable='true']").each(function(){
                     $(this).attr("editable","false");
-                })
+                });
+
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存成功！");
+                    return;
+                }
                 // return;
                 saveResult="success";
             }else if(result.status=="fail"){
 
-                // $$.showMessage('提示',"保存失败！");
-                // return;
+
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }else{
 
-                // $$.showMessage('提示',"请稍后重新请求！");
-                // return;
+                if(ac=="single"){
+                    $$.showMessage('提示',"保存失败！");
+                    return;
+                }
                 saveResult="fail";
             }
         }else{
-            // $.showMessage('提示',"请稍后重新请求！");
+            if(ac=="single"){
+                $$.showMessage('提示',"保存失败！");
+                return;
+            }
             saveResult="fail";
         }
 
