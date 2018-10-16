@@ -735,11 +735,11 @@
 
 					//初始化请求
                     $(function(){
-//						var startTime = year;
-//						var endTime = "null";
-                        var startTime = week;
+//                        var startTime = week;
+                        var startTime = '"2018-10-10"';
 						var endTime = day;
-						var sTime = oneDay;
+//						var sTime = oneDay;
+                        var sTime = '"2018-10-10"';
 						var eTime = day;
                         //按时间范围查询用户行为
 						selectByTimeUserBehaviorList(startTime,endTime);
@@ -757,6 +757,13 @@
 					});
 
                     function tabYear(){
+                        document.getElementById("pro1").innerHTML = '';
+                        document.getElementById("pro2").innerHTML = '';
+                        document.getElementById("pro3").innerHTML = '';
+                        document.getElementById("user1").innerHTML = '';
+                        document.getElementById("user2").innerHTML = '';
+                        document.getElementById("user3").innerHTML = '';
+                        document.getElementById("user4").innerHTML = '';
                         var startTime = year;
                         var endTime = "null";
                         //按时间范围查询用户行为
@@ -767,6 +774,13 @@
                         selectByChannelUserBehavior(startTime,endTime);
 					}
 					function tabMonth(){
+                        document.getElementById("pro1").innerHTML = '';
+                        document.getElementById("pro2").innerHTML = '';
+                        document.getElementById("pro3").innerHTML = '';
+                        document.getElementById("user1").innerHTML = '';
+                        document.getElementById("user2").innerHTML = '';
+                        document.getElementById("user3").innerHTML = '';
+                        document.getElementById("user4").innerHTML = '';
                         var startTime = month;
                         var endTime = "null";
                         //按时间范围查询用户行为
@@ -777,6 +791,13 @@
                         selectByChannelUserBehavior(startTime,endTime);
 					}
 					function tabWeek(){
+                        document.getElementById("pro1").innerHTML = '';
+                        document.getElementById("pro2").innerHTML = '';
+                        document.getElementById("pro3").innerHTML = '';
+                        document.getElementById("user1").innerHTML = '';
+                        document.getElementById("user2").innerHTML = '';
+                        document.getElementById("user3").innerHTML = '';
+                        document.getElementById("user4").innerHTML = '';
                         var startTime = week;
                         var endTime = day;
                         //按时间范围查询用户行为
