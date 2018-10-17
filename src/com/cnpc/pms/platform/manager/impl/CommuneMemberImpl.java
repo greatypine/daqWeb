@@ -2404,12 +2404,12 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
          */
         Map<String, Object> result = new HashMap<String, Object>();
 
-        CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
+        PlatformStoreDao comDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
 
 
         // 查询累计大客户社员数量
         List<Map<String, Object>> CmBigCountList = new ArrayList<Map<String, Object>>();
-        CmBigCountList = commDao.getBigCount(dd);
+        CmBigCountList = comDao.getBigCount(dd);
         if (CmBigCountList != null && CmBigCountList.size() > 0) {
             result.put("bigCou", CmBigCountList.get(0).get("cou"));
         } else {
@@ -2418,7 +2418,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 
         // 查询当日大客户社员量
         List<Map<String, Object>> CmBigDayCountList = new ArrayList<Map<String, Object>>();
-        CmBigDayCountList = commDao.getBigByDayCount(dd);
+        CmBigDayCountList = comDao.getBigByDayCount(dd);
         if (CmBigDayCountList != null && CmBigDayCountList.size() > 0) {
             result.put("bigDaycou", CmBigDayCountList.get(0).get("cou"));
         } else {
