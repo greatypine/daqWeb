@@ -35,9 +35,9 @@ public class CostRentContractExcel {
         this.data = data;
     }
     //导出的文件标题
-    private final String[] header0={"序号","门店编码","门店名称","起租日（含免租期)","起租日（免租期截止日）","到期日","第一年租金","第二年租金","第三年租金","第四年租金","第五年租金","建筑面积","租赁单价","押金","中介费","合同总金额"};
+    private final String[] header0={"序号","门店编码","门店名称","起租日（含免租期)","起租日（免租期截止日）","到期日","第一年租金","第二年租金","第三年租金","第四年租金","第五年租金","建筑面积","租赁单价","押金","中介费","合同总金额","每月租金"};
 
-    private final String[] colName = new String[] { "storeNo", "storeName","lease_start_date","free_lease_start_date", "lease_start_date","first_year_rent", "second_year_rent","third_year_rent","fourth_year_rent", "fifth_year_rent", "structure_acreage","lease_unit_price","deposit", "agency_fee","contract_grand_total"};
+    private final String[] colName = new String[] { "storeNo", "storeName","lease_start_date","free_lease_start_date", "lease_start_date","first_year_rent", "second_year_rent","third_year_rent","fourth_year_rent", "fifth_year_rent", "structure_acreage","lease_unit_price","deposit", "agency_fee","contract_grand_total","rental_month"};
 
 
     private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI"};
@@ -190,7 +190,7 @@ public class CostRentContractExcel {
         // 第一行表头标题
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
-        for (int i = 0; i <16; i++) {
+        for (int i = 0; i <17; i++) {
             cell = row.createCell(i);
             cell.setCellValue(header0[i]);
 

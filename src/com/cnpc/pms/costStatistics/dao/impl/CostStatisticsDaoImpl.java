@@ -513,7 +513,7 @@ public class CostStatisticsDaoImpl extends BaseDAOHibernate implements CostStati
 
         }
 
-        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.storeType,ts.estate,ts.rent_area as structure_acreage,tc.lease_unit_price,tc.deposit,ts.agency_fee,ts.rent_free as free_lease_start_date,ts.tenancy_term as lease_start_date ,tc.contract_grand_total," +
+        String sql="SELECT ts.storeno as storeNo,ts.city_name,ts.name as storeName ,ts.storeType,ts.estate,ts.rent_area as structure_acreage,tc.lease_unit_price,tc.deposit,ts.agency_fee,ts.rent_free as free_lease_start_date,ts.tenancy_term as lease_start_date ,tc.contract_grand_total,tc.rental_month," +
                 " tc.first_year_rent,tc.second_year_rent,tc.third_year_rent,tc.fourth_year_rent,tc.fifth_year_rent,tc.expiration_contract " +
                 " FROM ("+storeSql+") ts left join  (select * from t_cost_rent_contract where expiration_contract=0) tc on ts.storeno=tc.storeNo  where  ts.name not like '%测试%'  and ts.storetype!='V'";
 

@@ -84,7 +84,7 @@ public class CostGWEManagerImpl extends BizBaseCommonManager implements CostGWEM
     public Map<String, Object> exportCostGWE(CostDto costDto) {
         CostStatisticsDao costStatisticsDao = (CostStatisticsDao) SpringHelper.getBean(CostStatisticsDao.class.getName());
         Map<String,Object> result = new HashMap<String,Object>();
-        List<Map<String,Object>> list = costStatisticsDao.exportCostGWE(costDto);
+        List<Map<String,Object>> list = costStatisticsDao.queryCostGWE(costDto);
         if(list==null||list.size()==0){
             result.put("message","没有符合条件的数据！");
             result.put("status","null");
