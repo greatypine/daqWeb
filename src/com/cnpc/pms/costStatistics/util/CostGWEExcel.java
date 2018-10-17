@@ -34,9 +34,9 @@ public class CostGWEExcel {
         this.data = data;
     }
     //导出的文件标题
-    private final String[] header0={"序号","门店编码","门店名称","1月电费","1月水费","2月电费","2月水费","3月电费","3月水费","4月电费","4月水费","5月电费","5月水费","6月电费","6月水费","7月电费","7月水费","8月电费","8月水费","9月电费","9月水费","10月电费","10月水费","11月电费","11月水费","12月电费","12月水费"};
+    private final String[] header0={"序号","门店编码","门店名称","电费","水费"};
 
-    private final String[] colName = new String[] { "storeno", "storeName","electricity_fee1","water_fee1","electricity_fee2","water_fee2","electricity_fee3","water_fee3","electricity_fee4","water_fee4","electricity_fee5","water_fee5","electricity_fee6","water_fee6","electricity_fee7","water_fee7","electricity_fee8","water_fee8","electricity_fee9","water_fee9","electricity_fee10","water_fee10","electricity_fee11","water_fee11","electricity_fee12","water_fee12",};
+    private final String[] colName = new String[] { "storeNo", "storeName","electricity_fee","water_fee"};
 
 
     private final String[] rowColNum=new String[]{"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA"};
@@ -181,7 +181,7 @@ public class CostGWEExcel {
         // 第一行表头标题
         HSSFRow row = sheet.createRow(0);
         HSSFCell cell = null;
-        for (int i = 0; i <27; i++) {
+        for (int i = 0; i <5; i++) {
             cell = row.createCell(i);
             cell.setCellValue(header0[i]);
             cell.setCellStyle(headstyle);
@@ -217,7 +217,7 @@ public class CostGWEExcel {
             }
         }
         row = sheet.createRow(data.size()+1);
-        for(int i=0;i<27;i++){
+        for(int i=0;i<5;i++){
             cell = row.createCell(i);
             cell.setCellStyle(sumstyle);
             if(i<3){
