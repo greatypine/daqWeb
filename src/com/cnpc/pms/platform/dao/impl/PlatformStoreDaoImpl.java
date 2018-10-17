@@ -559,6 +559,48 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
 		
 	}
 
-	// ----------------------------------wuxinxin end------------------------------------//
+    @Override
+    public List<Map<String, Object>> getBigCount(String dd) {
+        /**
+         * @author wuxinxin
+         * 2018年10月17日
+         */
+        String sumRebateSql = "select count(distinct customer_id) from t_member_operation_record where mode='adminDefined' and  and end_time>now()";
+        Session session = getHibernateTemplate().getSessionFactory().openSession();
+        try {
+            SQLQuery sqlQuery = session.createSQLQuery(sumRebateSql);
+            // 获得查询数据
+            List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return turnover_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getBigByDayCount(String dd) {
+        /**
+         * @author wuxinxin
+         * 2018年10月17日
+         */
+        String sumRebateSql = "select count(distinct customer_id) from t_member_operation_record where mode='adminDefined' and end_time>now() and date(create_time) = curdate()";
+        Session session = getHibernateTemplate().getSessionFactory().openSession();
+        try {
+            SQLQuery sqlQuery = session.createSQLQuery(sumRebateSql);
+            // 获得查询数据
+            List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+            return turnover_data;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return null;
+    }
+
+    // ----------------------------------wuxinxin end------------------------------------//
 
 }

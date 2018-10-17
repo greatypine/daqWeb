@@ -121,6 +121,20 @@ public interface PlatformStoreDao {
     * @author wuxinxin
     */
    public List<Map<String, Object>> getAllRebate(String dd);
+
+    /**
+     *
+     * TODO 查询社员记录表中大客户社员数量
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getBigCount(String dd);
+
+    /**
+     *
+     * TODO 查询社员记录表中当天大客户社员数量
+     * @author wuxinxin
+     */
+    public List<Map<String, Object>> getBigByDayCount(String dd);
    //-------------------wuxinxin         end------------------------//
 	
 	
