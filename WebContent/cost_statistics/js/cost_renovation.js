@@ -304,6 +304,14 @@ function checkDecorationCompany(t){
     $(t).parent().parent().attr("editable",true);
 }
 
+function initCompletedDate(t){
+    $(t).parent().parent().attr("editable",true);
+}
+
+function initContractDate(t){
+    $(t).parent().parent().attr("editable",true);
+}
+
 /**
  * 查询装修摊销
  * **/
