@@ -497,12 +497,12 @@
                         series: [{
                             type: 'pie',
                             selectedMode: 'single',
-                            center: ['45%', '53%'],
-                            radius: ['40%', '80%'],
+                            center: ['49%', '57%'],
+                            radius: ['30%', '70%'],
                             color: ['#fd9173', '#f36f8a', '#5f71d2', '#42a4eb', '#4ac7f5',"#ffcc67","#ffa8a9","#00bfb7","#ea5f97",'#AF89D6'],                            label: {
                                 normal: {
                                     position: 'outside', //标签的位置
-                                    formatter: '{b}\n{d}%'
+                                    formatter: '{b} {d}%'
 
                                 }
                             },
@@ -546,8 +546,8 @@
                             type: 'pie',
                             clockwise: false, //饼图的扇区是否是顺时针排布
                             minAngle: 20, //最小的扇区角度（0 ~ 360）
-                            center: ['45%', '53%'], //饼图的中心（圆心）坐标
-                            radius: ['40%', '80%'], //饼图的半径
+                            center: ['49%', '57%'],
+                            radius: ['30%', '70%'],
                             avoidLabelOverlap: true, ////是否启用防止标签重叠
                             itemStyle: { //图形样式
                                 normal: {
@@ -559,7 +559,7 @@
                                 normal: {
                                     show: true,
                                     position: 'outside', //标签的位置
-                                    formatter: "{b}\n{d}%",
+                                    formatter: "{b} {d}%",
                                 },
                                 emphasis: {
                                     show: true,
@@ -600,7 +600,7 @@
                             clockwise: false,
                             silent: true,
                             minAngle: 20, //最小的扇区角度（0 ~ 360）
-                            center: ['45%', '53%'], //饼图的中心（圆心）坐标
+                            center: ['49%', '57%'],
                             radius: ['0%', '37%'], //饼图的半径
                             itemStyle: { //图形样式
                                 normal: {
@@ -656,13 +656,13 @@
                         series: [{
                             type: 'pie',
                             selectedMode: 'single',
-                            center: ['45%', '53%'],
+                            center: ['49%', '57%'],
                             radius: [0, '80%'],
                             color: ['#AF89D6', '#59ADF3', '#FF999A', '#FFCC67',"#fd9173" ,'#CC5962'],
                             label: {
                                 normal: {
                                     position: 'outside', //标签的位置
-                                    formatter: '{b}\n{d}%'
+                                    formatter: '{b} {d}%'
 
                                 }
                             },
@@ -737,11 +737,11 @@
 
 					//初始化请求
                     $(function(){
-//                        var startTime = week;
-                        var startTime = '"2018-10-10"';
+                        var startTime = week;
+//                        var startTime = '"2018-10-10"';
 						var endTime = day;
-//						var sTime = oneDay;
-                        var sTime = '"2018-10-10"';
+						var sTime = oneDay;
+//                        var sTime = '"2018-10-10"';
 						var eTime = day;
                         //按时间范围查询用户行为
 						selectByTimeUserBehaviorList(startTime,endTime);
@@ -1161,7 +1161,7 @@
                                         }
                                     }
                                 }
-                            },false);
+                            },true);
                     }
 
 
@@ -1196,7 +1196,7 @@
                                         }
                                     }
                                 }
-                            });
+                            },true);
                     }
 
 
@@ -1208,6 +1208,14 @@
                         doManager("userBehavior","selectUserShoppingCartDetails",[startTime,endTime],
                             function(data,textStatus,XmlHttpRequest){
                                 if (data.result) {
+                                    var myChart3 = echarts.init(document.getElementById('main3'));
+                                    var myChart4 = echarts.init(document.getElementById('main4'));
+                                    var myChart5 = echarts.init(document.getElementById('main5'));
+                                    var myChart6 = echarts.init(document.getElementById('main6'));
+                                    myChart3.setOption(option3);
+                                    myChart4.setOption(option4);
+                                    myChart5.setOption(option5);
+                                    myChart6.setOption(option6);
                                     var jsonData = $.fromJSON(data.data);
                                     if(Object.keys(jsonData).length!=0){
                                         var userDetails = jsonData.data;
@@ -1236,35 +1244,25 @@
                                                     arrayZ.push(objRow);
                                                 }
                                             }
+                                            option3.series[0].data = arrayF;
+                                            option4.series[0].data = arrayJ;
+                                            option4.series[1].data = arrayJ;
+                                            option5.series[0].data = arrayX;
+                                            option6.series[0].data = arrayZ;
+                                            myChart3.setOption(option3, true);
+                                            myChart3.resize();
+                                            myChart4.setOption(option4, true);
+                                            myChart4.resize();
+                                            myChart5.setOption(option5, true);
+                                            myChart5.resize();
+                                            myChart6.setOption(option6, true);
+                                            myChart6.resize();
                                         }
                                     }
                                 }
-                            });
-                        var myChart3 = echarts.init(document.getElementById('main3'));
-                        var myChart4 = echarts.init(document.getElementById('main4'));
-                        var myChart5 = echarts.init(document.getElementById('main5'));
-                        var myChart6 = echarts.init(document.getElementById('main6'));
-                        option3.series[0].data = arrayF;
-                        option4.series[0].data = arrayJ;
-                        option4.series[1].data = arrayJ;
-                        option5.series[0].data = arrayX;
-                        option6.series[0].data = arrayZ;
-                        myChart3.setOption(option3);
-                        myChart4.setOption(option4);
-                        myChart5.setOption(option5);
-                        myChart6.setOption(option6);
-                        myChart3.clear();
-                        myChart3.setOption(option3, true);
-                        myChart3.resize();
-                        myChart4.clear();
-                        myChart4.setOption(option4, true);
-                        myChart4.resize();
-                        myChart5.clear();
-                        myChart5.setOption(option5, true);
-                        myChart5.resize();
-                        myChart6.clear();
-                        myChart6.setOption(option6, true);
-                        myChart6.resize();
+                            },true);
+
+
                     }
 
 				</script>
