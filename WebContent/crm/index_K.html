@@ -241,6 +241,7 @@
                 <li><a href="#day-chart" data-toggle="tab" onclick="javascript:chartresize2()">日</a></li>
 				<li><a href="#week-chart" data-toggle="tab" onclick="javascript:chartresize4()">周</a></li>
                 <li  class="active"><a href="#month-chart" data-toggle="tab" onclick="javascript:chartresize3()">月</a></li>
+                <div class="col-sm-1 pull-right"><button type="button" id="search-btn-export" class="btn btn-block btn-sm" style="margin-right: 50px; font-size: 14px; background-color: rgba(0,0,0,0.1);color: #fff">数据导出</button></div>
                 <div class="col-sm-1 pull-right"><button type="button" id="search-btn-add" class="btn btn-block btn-sm" style="margin-right: 50px; font-size: 14px; background-color: rgba(0,0,0,0.1);color: #fff">加入对比</button></div>
 			  </ul>
 			  <div class="tab-content no-padding" id="tab-content">
@@ -1204,10 +1205,9 @@ Date.prototype.format = function() {
 				splitArea: {
 					show: false
 				},
-				axisLabel: {
-					interval: 0,
-
-				},
+				// axisLabel: {
+				// 	interval: 0,
+				// },
 				data: xData_week,
 			}],
 			yAxis: [{
@@ -1387,7 +1387,7 @@ Date.prototype.format = function() {
 				xAxisIndex: [0],
 				bottom: '30',
 				start: '0',
-				end: '45',
+				end: '80',
 				handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
 				handleSize: '110%',
 				handleStyle:{
@@ -1603,6 +1603,37 @@ Date.prototype.format = function() {
 	 $('#maxbClick').iCheck({
 	  	checkboxClass: 'icheckbox_minimal-red'
 	 });
+      //导出
+      $("#search-btn-export").click(function(){
+        //depart/channel/city/store/b/title
+          var exportStatDto = getShareParam();
+          $("#process_div").show();
+          $("#process_div_pic").show();
+          doManager("chartStatManager","exportTurnover",[exportStatDto],
+              function(data){
+                  if(data.result){
+                      var result= JSON.parse(data.data);
+                      if(result.status=='success'){
+                          window.location.href=result.data;
+                      }else if(result.status=='more'){
+                          crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+                          $("#process_div").hide();
+                          $("#process_div_pic").hide();
+                          return;
+                      }else{
+                          crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+                          $("#process_div").hide();
+                          $("#process_div_pic").hide();
+                          return;
+                      }
+
+                  }else{
+                      crm_alert(5,"请稍后重新请求！");
+                  }
+                  $("#process_div").hide();
+                  $("#process_div_pic").hide();
+              });
+      });
 	  //＋对比
 	  $("#search-btn-add").click(function(){
 		  var labelName1 = $("#label_manual_first").html();

@@ -1,11 +1,10 @@
 package com.cnpc.pms.dynamic.manager;
 
-import java.util.List;
-import java.util.Map;
-
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.dynamic.entity.ChartStatDto;
-import com.cnpc.pms.personal.entity.DistCityCode;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Function：K线图
@@ -87,7 +86,12 @@ public interface ChartStatManager extends IManager {
 	 * 查询GMV散点图
 	 */
 	public List<Map<String, Object>> queryDataOfScatterplot(ChartStatDto csd);
-	
+
+	/**
+	 * 数据导出
+	 */
+	public Map<String, Object> exportTurnover(ChartStatDto csd);
+
 	/**------------------用户数据分析相关接口-------------------------------*/
 	
 	/**
