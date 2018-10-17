@@ -1066,7 +1066,7 @@ Date.prototype.format=function(fmt) {
        			    var cost_price = jData[i].cost_price;
        			    var gmv_price = jData[i].gmv_price;
        			    var business_type = jData[i].business_type=='pool'?'联营':'自营';
-       			    var productid = jData[i].product_id;
+       			    var productid_ = jData[i].product_id;
        			    var productname = jData[i].product_name;
        			    var df_signed_time = jData[i].df_signed_time;
        			    var order_contents = jData[i].order_contents;
@@ -1114,7 +1114,7 @@ Date.prototype.format=function(fmt) {
 			        var sourceid = "sourcetips"+i;
 			        
 			        var product="<strong>商品名称：</strong>"+productname+"<br>";
-			        var productid="<strong>商品ID：</strong>"+productid+"<br>";
+			        var productid="<strong>商品ID：</strong>"+productid_+"<br>";
  			        var prcontent =product+productid+"@producttips"+i;
 			        var pdid = "producttips"+i;
 			        
@@ -1127,7 +1127,7 @@ Date.prototype.format=function(fmt) {
 	        		var imageInfo = "";
 	        		var quantity =  jData[i].quantity;;
 	        		var total_price = jData[i].original_price*jData[i].quantity;
-	        		doManager('massOrderItemManager','queryOrderDetailBySN',[jData[i].order_sn,productid],function(data){
+	        		doManager('massOrderItemManager','queryOrderDetailBySN',[jData[i].order_sn,productid_],function(data){
 	        			if(data.result){
 	        	         	   var result= JSON.parse(data.data);
 	        	         	  $(result.item_list).each(function(i,obj){
