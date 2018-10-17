@@ -1131,8 +1131,8 @@ Date.prototype.format=function(fmt) {
 	        			if(data.result){
 	        	         	   var result= JSON.parse(data.data);
 	        	         	  $(result.item_list).each(function(i,obj){
-	        	         	  	//imageInfo="<div class=\"col-lg-4 text-left\"><img width=\"60px\" height=\"60px\" src=\""+obj.first_url+"\"></div>";
-	        	         	  	$("#image_pro").html("<img width=\"60px\" height=\"60px\" src=\""+obj.first_url+"\">");
+	        	         	  	imageInfo="<div class=\"col-lg-4 text-left\" id=\"image_pro\"><img width=\"60px\" height=\"60px\" src=\""+obj.first_url+"\"></div>";
+	        	         	  	//$("#image_pro").html("<img width=\"60px\" height=\"60px\" src=\""+obj.first_url+"\">");
 	        	         	  });
 	        			}
 	        		},false);
