@@ -1131,12 +1131,13 @@ Date.prototype.format=function(fmt) {
 	        			if(data.result){
 	        	         	   var result= JSON.parse(data.data);
 	        	         	  $(result.item_list).each(function(i,obj){
-	        	         	  	imageInfo="<div class=\"col-lg-4 text-left\"><img width=\"60px\" height=\"60px\" src=\""+obj.first_url+"\"></div>";
+	        	         	  	//imageInfo="<div class=\"col-lg-4 text-left\"><img width=\"60px\" height=\"60px\" src=\""+obj.first_url+"\"></div>";
+	        	         	  	$("#image_pro").html("<img width=\"60px\" height=\"60px\" src=\""+obj.first_url+"\">");
 	        	         	  });
 	        			}
 	        		});
 	        		if(imageInfo == ""){
-	        			imageInfo = "<div class=\"col-lg-4 text-left\"></div>";
+	        			imageInfo = "<div class=\"col-lg-4 text-left\" id=\"image_pro\"></div>";
 	        		}
 	        		var quantity_="<strong>销售数量：</strong>"+quantity+"<br>";
 			        var total_price_="<strong>销售金额：</strong>"+total_price+"<br>";
