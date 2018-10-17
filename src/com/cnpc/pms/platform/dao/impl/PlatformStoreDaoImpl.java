@@ -565,7 +565,7 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
          * @author wuxinxin
          * 2018年10月17日
          */
-        String sumRebateSql = "select count(distinct customer_id) from t_member_operation_record where mode='adminDefined' and  and end_time>now()";
+        String sumRebateSql = "select count(distinct customer_id) from t_member_operation_record where mode='adminDefined' and end_time>now()";
         Session session = getHibernateTemplate().getSessionFactory().openSession();
         try {
             SQLQuery sqlQuery = session.createSQLQuery(sumRebateSql);
