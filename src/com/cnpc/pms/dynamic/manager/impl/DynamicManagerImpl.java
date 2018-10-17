@@ -30,6 +30,7 @@ import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.SyncDataLog;
 import com.cnpc.pms.personal.manager.*;
 import com.cnpc.pms.platform.dao.OrderDao;
+import com.cnpc.pms.platform.dao.PlatformStoreDao;
 import com.cnpc.pms.slice.dao.AreaDao;
 import com.cnpc.pms.slice.manager.AreaManager;
 import com.cnpc.pms.utils.Base64Encoder;
@@ -6241,7 +6242,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			}else if(dynamicDto.getSearchstr().equals("store")){
 				result= dynamicDao.getStoreMember(dynamicDto,cityNo, pageInfo);
 			}else if(dynamicDto.getSearchstr().equals("customer")){
-				result= dynamicDao.getCustomerMember(dynamicDto, pageInfo);
+				PlatformStoreDao platformStoreDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
+				result= platformStoreDao.getCustomerMember(dynamicDto, pageInfo);
 			}else if(dynamicDto.getSearchstr().equals("try_member")){
 				result= dynamicDao.getStoreTryMember(dynamicDto,cityNo, pageInfo);
 			}

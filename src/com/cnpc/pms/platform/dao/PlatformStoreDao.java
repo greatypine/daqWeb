@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.personal.dto.StoreDTO;
 import com.cnpc.pms.platform.entity.PlatformStore;
 
@@ -136,6 +137,17 @@ public interface PlatformStoreDao {
      */
     public List<Map<String, Object>> getBigByDayCount(String dd);
    //-------------------wuxinxin         end------------------------//
+
+
+	/**
+	 * 大客户社员统计
+	 * @author gaoll
+	 * 2018年10月11日
+	 * @param dynamicDto
+	 * @param pageInfo
+	 * @return
+	 */
+	Map<String,Object> getCustomerMember(DynamicDto dynamicDto, PageInfo pageInfo);
 	
 	
 }

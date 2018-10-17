@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.dynamic.entity.DynamicDto;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -602,5 +603,53 @@ public class PlatformStoreDaoImpl extends DAORootHibernate implements PlatformSt
     }
 
     // ----------------------------------wuxinxin end------------------------------------//
+
+
+	@Override
+	public Map<String, Object> getCustomerMember(DynamicDto dynamicDto, PageInfo pageInfo) {
+		List<?> list = null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+
+		String sql = "select t1.opencount,ifnull(t2.nowcount,0) as nowcount from (select count(distinct customer_id) as opencount from t_member_operation_record where  mode='adminDefined' and  end_time>now() " +
+				" and begin_time <= '"+dynamicDto.getEndDate()+" 23:59:59') t1,(" +
+				"select count(distinct customer_id) as nowcount from t_member_operation_record where  mode='adminDefined' and  end_time>now()  and begin_time BETWEEN '" + dynamicDto.getBeginDate() + " 00:00:00' and '" + dynamicDto.getEndDate() + " 23:59:59') t2";
+
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		try {
+			SQLQuery sqlQuery = session.createSQLQuery(sql);
+			// 获得查询数据
+			List<Map<String, Object>> turnover_data = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if (pageInfo != null) {
+				String sql_count = "SELECT count(1) from (" + sql + ") c ";
+				Query query_count = session.createSQLQuery(sql_count);
+
+				pageInfo.setTotalRecords(Integer.valueOf(query_count.uniqueResult().toString()));
+
+				list = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+						.setFirstResult(
+								pageInfo.getRecordsPerPage()
+										* (pageInfo.getCurrentPage() - 1))
+						.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+
+				Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+				map_result.put("pageinfo", pageInfo);
+				map_result.put("total_pages", total_pages);
+			} else {
+				list = sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			}
+
+			map_result.put("member", list);
+			return map_result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return null;
+
+
+
+	}
 
 }
