@@ -390,7 +390,6 @@ public class DateUtils {
 
 	/**
 	 * 获取当年的周，从周日开始
-	 * @param weeks
 	 * @return
 	 */
 	public static List<String> getDateByWeek(){
@@ -414,7 +413,6 @@ public class DateUtils {
 	}
 	/**
 	 * 获取当年的周，从周日开始
-	 * @param weeks
 	 * @return
 	 */
 	public static List<String> getMemDateByWeek(){
@@ -512,6 +510,28 @@ public class DateUtils {
         cal.set(Calendar.MONTH, cal.get(Calendar.MONTH) - 1); // 设置为上一个月
         return sdf.format(cal.getTime());
 	}
+
+	/**
+	 * 获取当年所有的天
+	 * @return
+	 */
+	public static List<String> getDateByDay(){
+		Calendar c = new GregorianCalendar();
+		int days = c.get(Calendar.DAY_OF_YEAR);
+		List<String> list = new ArrayList<String>();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		c.setTime(new Date());
+		Date date = c.getTime();
+		for (int i = 0; i < days; i++) {
+			String dayBefore = getBeforeDate(dateFormat.format(date),-(i));
+			list.add(dayBefore);
+		}
+
+		Collections.sort(list);
+
+		return list;
+	}
+
 	public static void main(String[] args) {
 //		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		Calendar c = new GregorianCalendar();
@@ -527,7 +547,7 @@ public class DateUtils {
 //		System.out.println(dateFormat.format(date2));
 //		int weekOfYear2 = getWeekOfYear(date);
 //		System.out.println(weekOfYear2);
-		 List<String> list = getDateByWeek();
+		 List<String> list = getDateByDay();
 		 System.out.println(list.toString());
 	}
 
