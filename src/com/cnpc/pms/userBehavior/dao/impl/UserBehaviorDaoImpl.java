@@ -606,6 +606,7 @@ public class UserBehaviorDaoImpl extends BaseDAOHibernate implements UserBehavio
         sql = sql + " 		where 1=1";
         sql = sql + " 		and lf.simple_date >= "+startTime+" ";
         sql = sql + " 		and lf.simple_date < "+endTime+"";
+        sql = sql + " and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null and behavior_name is not null ";
         sql = sql + " 		and lf.customer_id  in ";
         sql = sql + " 		(";
         sql = sql + " 			select customer_id from gemini.t_order ";
@@ -641,6 +642,7 @@ public class UserBehaviorDaoImpl extends BaseDAOHibernate implements UserBehavio
         sql = sql + " 			where 1=1";
         sql = sql + " 			and lf.simple_date >= "+startTime+" ";
         sql = sql + " 			and lf.simple_date < "+endTime+"";
+        sql = sql + " and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null and behavior_name is not null ";
         sql = sql + " 			and lf.customer_id  in ";
         sql = sql + " 			(";
         sql = sql + " 				select customer_id from gemini.t_order ";
@@ -677,6 +679,7 @@ public class UserBehaviorDaoImpl extends BaseDAOHibernate implements UserBehavio
         sql = sql + " 			where 1=1";
         sql = sql + " 			and lf.simple_date >= "+startTime+" ";
         sql = sql + " 			and lf.simple_date < "+endTime+"";
+        sql = sql + " and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null and behavior_name is not null ";
         sql = sql + " 			and lf.customer_id  in ";
         sql = sql + " 			(";
         sql = sql + " 				select customer_id from gemini.t_order ";
@@ -711,6 +714,7 @@ public class UserBehaviorDaoImpl extends BaseDAOHibernate implements UserBehavio
         sql = sql + " 			where 1=1";
         sql = sql + " 			and lf.simple_date >= "+startTime+" ";
         sql = sql + " 			and lf.simple_date < "+endTime+"";
+        sql = sql + " and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null and behavior_name is not null ";
         sql = sql + " 			and lf.customer_id  in ";
         sql = sql + " 			(";
         sql = sql + " 				select customer_id from gemini.t_order ";
