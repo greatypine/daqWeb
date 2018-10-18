@@ -1311,7 +1311,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 	public Map<String, Object> selectDayAllCm(String dd) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		CommuneMemberDao commDao = (CommuneMemberDao) SpringHelper.getBean(CommuneMemberDao.class.getName());
-
+        PlatformStoreDao comDao = (PlatformStoreDao) SpringHelper.getBean(PlatformStoreDao.class.getName());
 		// 查询当日成交量、成交额 ----必须
 		List<Map<String, Object>> dayDealList = new ArrayList<Map<String, Object>>();
 		dayDealList = commDao.getDayDealCount(dd);
@@ -1354,7 +1354,7 @@ public class CommuneMemberImpl extends BizBaseCommonManager implements CommuneMe
 		
 		// 查询当日大客户社员量
         List<Map<String, Object>> CmBigDayCountList = new ArrayList<Map<String, Object>>();
-        CmBigDayCountList = commDao.getBigByDayCount(dd);
+        CmBigDayCountList = comDao.getBigByDayCount(dd);
         if (CmBigDayCountList != null && CmBigDayCountList.size() > 0) {
             result.put("bigUpDaycou", CmBigDayCountList.get(0).get("cou"));
         } else {
