@@ -37,6 +37,7 @@ import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
+import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.manager.MassOrderItemManager;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.platform.dao.OrderDao;
@@ -265,10 +266,21 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 	@Override
 	public Map<String, Object> queryDailyprofit(DynamicDto dd) {
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		if(city_id!=null){
+			cityNO = storeDao.getCityNOOfCityById(city_id);
+		}
+		if(province_id!=null&&province_id!=""){
+			provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+		}
 		Map<String,Object> dailyprofitMap = null;
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			dailyprofitMap = massOrderItemDao.queryDailyprofit(dd);
+			dailyprofitMap = massOrderItemDao.queryDailyprofit(dd,cityNO,provinceNO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -279,17 +291,37 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 	private String getDailyprofitData(DynamicDto dd,int month,Map<String,Object> dailyprofitMap){
 		JSONArray json = new JSONArray();
         JSONObject jo = new JSONObject();
-        jo.put("order_daily_profit", dailyprofitMap.get("order_profit"));
+        List<Map<String, Object>> orderProfitList = (List<Map<String, Object>>) dailyprofitMap.get("gmv");
+        if(orderProfitList!=null&&orderProfitList.size()>0){
+        	jo.put("order_daily_profit", orderProfitList.get(0).get("order_profit"));
+        }else{
+        	jo.put("order_daily_profit", 0);
+        }
         json.put(jo);
         return json.toString();
 	}
 	@Override
 	public Map<String, Object> queryMonthprofit(DynamicDto dd) {
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		String beginDate = DateUtils.getCurrMonthFirstDate("YYYY-MM-dd");
+		String endDate = DateUtils.getCurrMonthLastDate("YYYY-MM-dd");
+		dd.setBeginDate(beginDate);
+		dd.setEndDate(endDate);
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		if(city_id!=null){
+			cityNO = storeDao.getCityNOOfCityById(city_id);
+		}
+		if(province_id!=null&&province_id!=""){
+			provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+		}
 		Map<String,Object> dailyprofitMap = null;
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			dailyprofitMap = massOrderItemDao.queryMonthprofit(dd);
+			dailyprofitMap = massOrderItemDao.queryMonthprofit(dd,cityNO,provinceNO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -300,7 +332,12 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 	private String getMonthprofitData(DynamicDto dd,int month,Map<String,Object> dailyprofitMap){
 		JSONArray json = new JSONArray();
         JSONObject jo = new JSONObject();
-        jo.put("order_month_profit", dailyprofitMap.get("order_profit"));
+        List<Map<String, Object>> orderProfitList = (List<Map<String, Object>>) dailyprofitMap.get("gmv");
+        if(orderProfitList!=null&&orderProfitList.size()>0){
+        	jo.put("order_month_profit", orderProfitList.get(0).get("order_profit"));
+        }else{
+        	jo.put("order_month_profit", 0);
+        }
         json.put(jo);
         return json.toString();
 	}
