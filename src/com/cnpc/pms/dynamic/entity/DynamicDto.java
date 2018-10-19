@@ -37,6 +37,7 @@ public class DynamicDto {
     private Long tinyvillageId;//小区ID
     private String dept;//事业部
     private String channel;//频道
+	private String order_way;//下单途径
     
 	/** 接口类型，为了标识出的特殊接口字段，是否需要在拜访记录和客户画像接口中传递 grade 这个字段 */
 	private String interfaceType;
@@ -283,7 +284,12 @@ public class DynamicDto {
 	public void setChannel(String channel) {
 		this.channel = channel;
 	}
-	
-	
 
+	public String getOrder_way() {
+		return order_way;
+	}
+
+	public void setOrder_way(String order_way) {
+		this.order_way = order_way;
+	}
 }

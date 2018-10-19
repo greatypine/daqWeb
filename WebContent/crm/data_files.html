@@ -122,6 +122,7 @@
 	.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
 	.ui-datepicker-quick span{height: 30px; line-height: 35px}
 	.ui-datepicker-time{background-color:transparent}
+	.ui-datepicker-css{width: 300px;}
 
 	.checkboxFive {width: 20px;position: relative; margin: 20px 20px 20px 0; padding-left: 10px;}
 	.checkboxFive label {
@@ -218,10 +219,10 @@
 	          <div class="box-body">
 	          <div class="clearfix search-criteria">
 	            <div id="selectorLine clearfix no-border" class="clearfix">
-	            <div class="form-group col-lg-4">
+	            <div class="form-group col-lg-3">
 	              <label>时间</label>
 	             	<div class="search-con">
-						<div class="time" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
+						<div class="time" style="width: 300px;z-index: 99999;margin:0 15px 0 0;">
 						    <div class="time_endbg" id="time_endbg">
 						        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
 						        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
@@ -252,7 +253,7 @@
 						</div>
 					</div>
 	            </div>
-	            <div class="form-group col-lg-4">
+	            <div class="form-group col-lg-3">
 	              <label>城市</label>
 				  <input id="city_id_userbehavior" name="city_id_userbehavior" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="城市" id="city_name_userbehavior" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
@@ -260,25 +261,31 @@
 	              <!-- /.input group -->
 	              </div>
 	            </div>
-	            <div class="form-group col-lg-4">
+	            <div class="form-group col-lg-3">
 	              <label><span class="text-red" title="勾选门店：以门店为单位统计&#13;未勾选门店：以城市为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>门店<span class="checkboxFive">
-						<input type='checkbox' id="storeClick" onclick='operatedCoverage()' checked="checked" value='area'>
+						<input type='checkbox' id="storeClick" onclick='operatedCoverage()'  value='area'>
 					<label for="storeClick"></label>
                 	</span></label>
 				  <input id="store_id_userbehavior" name="store_id_userbehavior" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="门店" id="store_name_userbehavior" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%"/>
-
 	              <div class="auto hidden" id="auto_store" style="width:85%;z-index: 99999;"></div>
-
 	              <!-- /.input group -->
 	            </div>
+				<div class="form-group col-lg-3">
+					<label>用户来源</label>
+					<select class="form-control select2" id="user_source" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
+						<option value="all" >全部</option>
+						<option value="wx" >微信</option>
+						<option value="app" >APP</option>
+					</select>
+				</div>
 	            </div>
 	            </div>
 	            
 	            <div class="clearfix">
-	            	<!--<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+	            	<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
 		                <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
-		            </div>-->
+		            </div>
 		            <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
 		              <button type="button" onclick="export_tradetype()" class="btn btn-block btn-warning">导出</button>
 		            </div>
@@ -642,6 +649,7 @@
 	  	$("#showattentioncity").on("mouseout",function(event){
 	  		$("#attentioncity").hide();
 	  	});
+        $('#storeClick').attr('checked',true);
 
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
@@ -1029,6 +1037,7 @@ $('#store_name_try').keyup(function(event){
 	  	if(sdate!=""){
 	  		begin_end_date = sdate.split("-");
 	   	}
+	   	var user_source = $("#user_source").val();
     	$("#process_div").show();
    	 	$("#process_div_pic").show();
  	    var number_str = $("#store_id_userbehavior").val(); 
@@ -1052,7 +1061,8 @@ $('#store_name_try').keyup(function(event){
  	  		  		employeeId:employeeId,
  	  		  		target:target,
  	  		  		storeId:number_str,
- 	  		  		searchstr:"user_active_city"
+ 	  		  		searchstr:"user_active_city",
+              		order_way:user_source
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -1063,7 +1073,8 @@ $('#store_name_try').keyup(function(event){
   		  		employeeId:employeeId,
   		  		target:target,
   		  		storeId:number_str,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+				 order_way:user_source
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -1073,7 +1084,8 @@ $('#store_name_try').keyup(function(event){
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
   		  		target:target,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+                order_way:user_source
   			}
 	    }else if(target==3){//事业部
 	    	dynamicDto = {
@@ -1083,7 +1095,8 @@ $('#store_name_try').keyup(function(event){
 	  		  		employeeNo:employeeId,
 	  		  		storeId:number_str,
 	  		  		target:target,
-	  		  		searchstr:"user_active_city"
+	  		  		searchstr:"user_active_city",
+           			order_way:user_source
 	  			}
 	    }
 	    if($('#storeClick').is(':checked')){
@@ -1332,6 +1345,7 @@ function searchInfo_customer(cur_page){
 	  	if(sdate!=""){
 	  		begin_end_date = sdate.split("-");
 	   	}
+        var user_source = $("#user_source").val();
     	$("#process_div").show();
   	 	$("#process_div_pic").show();
    		
@@ -1356,7 +1370,8 @@ function searchInfo_customer(cur_page){
  	  		  		employeeId:employeeId,
  	  		  		target:target,
  	  		  		storeId:number_str,
- 	  		  		searchstr:"user_active_city"
+ 	  		  		searchstr:"user_active_city",
+              		order_way:user_source
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -1367,7 +1382,8 @@ function searchInfo_customer(cur_page){
   		  		employeeId:employeeId,
   		  		target:target,
   		  		storeId:number_str,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+                 order_way:user_source
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -1377,7 +1393,8 @@ function searchInfo_customer(cur_page){
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
   		  		target:target,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+                order_way:user_source
   			}
 	    }
         if($('#storeClick').is(':checked')){
@@ -1552,7 +1569,7 @@ function export_customer(){
     });
 }
  
-/*function resetSerachParam(){
+function resetSerachParam(){
 	 $("#auto_store").empty();
 	if(target==0){//总部
 		if(fromBar != "1" && fromBar != "2"){
@@ -1579,8 +1596,13 @@ function export_customer(){
     var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01'; 
 	$("#searchTime").val(startDateStr +"-"+ timeStr);
 	$("#data_choice").html("默认时期");
+    var a = document.getElementById("user_source");
+    $('#storeClick').prop('checked',true);
+    $("#store_name_userbehavior").attr("disabled",false);
+    $("#auto_store").empty();
+    a.options[0].selected = true;
 
-}*/
+}
 
 function resetSerachParamTry(){
     $("#auto_store_try").empty();
@@ -1619,9 +1641,11 @@ function customer_member(){
 
 function operatedCoverage(){
     if($('#storeClick').is(':checked')){
+
         $("#store_name_userbehavior").attr("disabled",false);
         $("#auto_store").empty();
     }else{
+
         $("#store_name_userbehavior").attr("disabled",true);
         $("#store_id_userbehavior").val("");
         $("#store_name_userbehavior").val("");

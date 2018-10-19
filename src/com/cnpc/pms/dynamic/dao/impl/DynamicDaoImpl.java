@@ -3672,6 +3672,18 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 	public Map<String, Object> getUserBehaviorByLog(DynamicDto dynamicDto,String cityNo, PageInfo pageInfo) {
 		String appendSql = "";
 		String  sql = "";
+		String log_str = "";
+		String order_str = "";
+		String behavior_name_str = " and lf.behavior_name in( '专场/首页','微信首页') ";
+		if(dynamicDto.getOrder_way().equals("wx")){
+			log_str = " and lf.log_type='wx' ";
+			order_str = " and tor.order_source = 'wechat' ";
+			behavior_name_str = " and lf.behavior_name ='微信首页' ";
+		}else if(dynamicDto.getOrder_way().equals("app")){
+			log_str = " and lf.log_type !='wx' ";
+			order_str = " and tor.order_source != 'wechat' ";
+			behavior_name_str = " and lf.behavior_name = '专场/首页' ";
+		}
 		if(dynamicDto.getSearchstr().equals("user_active_store")){
 			if(dynamicDto.getStoreId()!=null && !"".equals(dynamicDto.getStoreId())){
 				appendSql = " where T_2.store_id = '"+dynamicDto.getStoreNo()+"' ";
@@ -3681,34 +3693,34 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			sql ="select tsa.name as city_name,ts.name as store_name,isnull( T_2.visit_num , 0) as visit_num,isnull( T_3.add_num , 0)  as add_num,isnull( T_4.order_num, 0) as order_num," +
 					"isnull( T_5.sign_num, 0) as sign_num,isnull( T_6.pvNum, 0) as pvNum  " +
 					"from (select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code , T_1.store_id , count(1) as visit_num  from ( " +
-					"select max(lf.city_code) as city_code,lf.store_id from datacube_kudu.log_final lf where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' " +
+					"select max(lf.city_code) as city_code,lf.store_id from datacube_kudu.log_final lf where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' " +log_str+
 					"and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null  and lf.customer_id not in (" +
 					"'fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					") group by lf.customer_id,lf.store_id ) T_1 group by T_1.city_code,T_1.store_id " +
 					") T_2 left join ( " +
 					"select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as add_num from (select max(lf.city_code) as city_code,lf.store_id " +
-					"from datacube_kudu.log_final lf  where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
+					"from datacube_kudu.log_final lf  where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"'"+log_str+" and lf.customer_id is not null and lf.city_code is not null " +
 					"and lf.store_id is not null and lf.customer_id not in ( " +
 					"'fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001') " +
 					"and lf.behavior_name in (select  behavior_name from datacube_kudu.d_action_level where level = 9 " +
 					") group by lf.customer_id,lf.store_id) T_1 group by T_1.city_code ,T_1.store_id) " +
 					"T_3 on  T_2.id= T_3.id left join " +
 					"(select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as order_num from (select max(ts.city_code) as city_code,tor.store_id from " +
-					"gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' and tor.store_id is not null " +
+					"gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"'"+order_str+" and tor.store_id is not null " +
 					" and tor.customer_id not in ( 'fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					")group by tor.customer_id , tor.store_id) T_1 group by T_1.city_code , T_1.store_id) " +
 					"T_4 on T_3.id = T_4.id left join " +
 					"(select fnv_hash(concat(T_1.city_code ,T_1.store_id)) as id,T_1.city_code,T_1.store_id,count(1) as sign_num from (select max(ts.city_code) as city_code,tor.store_id " +
-					"from  gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id   where 1=1  and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' " +
+					"from  gemini.t_order tor left join gemini.t_store ts on tor.store_id = ts.id   where 1=1  and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' " +order_str+
 					"and tor.store_id is not null  and tor.sign_time is not null and tor.customer_id not in ( " +
 					"'fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					") group by tor.customer_id , tor.store_id ) T_1 group by T_1.city_code , T_1.store_id " +
 					") T_5 on T_4.id = T_5.id left join " +
 					"(select lf.store_id,count(distinct lf.action_id) as pvNum from datacube_kudu.log_final lf " +
 					"inner join gemini.t_store ts on lf.store_id = ts.id and ts.name not like '%测试%' where 1=1 " +
-					"and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
+					"and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"'"+log_str+" and lf.customer_id is not null and lf.city_code is not null " +
 					"and lf.store_id is not null and lf.customer_id not in ('fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
-					") and lf.behavior_name = '专场/首页'group by lf.store_id " +
+					") "+behavior_name_str+" group by lf.store_id " +
 					")T_6 on  T_2.store_id = T_6.store_id " +
 					"left join  gemini.t_sys_area tsa on T_2.city_code =  tsa.code " +
 					"inner join  gemini.t_store ts on T_2.store_id = ts.id  and ts.name not like '%测试%' " +appendSql+
@@ -3719,31 +3731,31 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 			}
 			sql = "select tsa.name as city_name,isnull( T_2.visit_num , 0) as visit_num,isnull( T_3.add_num , 0)  as add_num,isnull( T_4.order_num, 0) as order_num,isnull( T_5.sign_num, 0) as sign_num,isnull( T_6.pvNum, 0) as pvnum " +
 					"from (select T_1.city_code,count(1) as visit_num from (select max(lf.city_code) as city_code from datacube_kudu.log_final lf inner join gemini.t_store ts on lf.store_id = ts.id and " +
-					"ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
+					"ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' and lf.simple_date < '"+dynamicDto.getEndDate()+"'"+log_str+" and lf.customer_id is not null and lf.city_code is not null " +
 					"and lf.store_id is not null and lf.customer_id not in (" +
 					"'fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					") group by lf.customer_id ) T_1 group by T_1.city_code ) T_2 left join " +
 					"(select T_1.city_code,count(1) as add_num from (select max(lf.city_code) as city_code from datacube_kudu.log_final lf inner join gemini.t_store ts on lf.store_id = ts.id and " +
-					"ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"'  and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null " +
+					"ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"'  and lf.simple_date < '"+dynamicDto.getEndDate()+"'"+log_str+" and lf.customer_id is not null and lf.city_code is not null " +
 					"and lf.store_id is not null and lf.customer_id not in ('fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					") and lf.behavior_name in ( select  behavior_name from datacube_kudu.d_action_level where level = 9 " +
 					") group by lf.customer_id ) T_1 group by T_1.city_code ) " +
 					"T_3 on  T_2.city_code= T_3.city_code left join " +
 					"(select T_1.city_code , count(1) as order_num  from  (select max(ts.city_code) as city_code from " +
-					"gemini.t_order tor inner join gemini.t_store ts on tor.store_id = ts.id  and ts.name not like '%测试%'where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' " +
+					"gemini.t_order tor inner join gemini.t_store ts on tor.store_id = ts.id  and ts.name not like '%测试%'where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' " +order_str+
 					"and tor.store_id is not null and tor.customer_id not in ('fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					") group by tor.customer_id ) T_1 group by T_1.city_code " +
 					")T_4 on T_3.city_code = T_4.city_code left join " +
 					"(select T_1.city_code ,count(1) as sign_num from (select max(ts.city_code) as city_code from gemini.t_order tor inner join gemini.t_store ts on tor.store_id = ts.id  and " +
-					"ts.name not like '%测试%' where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"' and tor.store_id is not null and tor.sign_time is not null " +
+					"ts.name not like '%测试%' where 1=1 and tor.create_time > '"+dynamicDto.getBeginDate()+"' and tor.create_time < '"+dynamicDto.getEndDate()+"'"+order_str+" and tor.store_id is not null and tor.sign_time is not null " +
 					"and tor.customer_id not in ('fakecustomerformicromarket000002','fakecustomerformicromarket000001','fakecustomerforexpress0000000001' " +
 					") group by tor.customer_id ) T_1 group by T_1.city_code " +
 					") T_5 on T_4.city_code = T_5.city_code left join ( " +
 					"select lf.city_code,count(distinct lf.action_id) as pvNum from datacube_kudu.log_final lf " +
 					"inner join gemini.t_store ts on lf.store_id = ts.id and ts.name not like '%测试%' where 1=1 and lf.simple_date >= '"+dynamicDto.getBeginDate()+"' " +
-					"and lf.simple_date < '"+dynamicDto.getEndDate()+"' and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null " +
+					"and lf.simple_date < '"+dynamicDto.getEndDate()+"'"+log_str+" and lf.customer_id is not null and lf.city_code is not null and lf.store_id is not null " +
 					"and lf.customer_id not in ( 'fakecustomerformicromarket000002', 'fakecustomerformicromarket000001', 'fakecustomerforexpress0000000001' " +
-					") and lf.behavior_name = '专场/首页' group by lf.city_code " +
+					") "+behavior_name_str+" group by lf.city_code " +
 					") T_6 on T_2.city_code = T_6.city_code " +
 					"left join  gemini.t_sys_area tsa on T_2.city_code =  tsa.code "  +appendSql+
 					"order by   T_2.city_code,T_2.visit_num";
