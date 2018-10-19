@@ -244,7 +244,23 @@ public class DateUtils {
 
 		return day_first;
 	}
-
+	/**
+	 * 返回当前时间的月末日期
+	 * 
+	 * @param dateFormat
+	 * @return
+	 */
+	public static String getCurrMonthLastDate(String dateFormat) {
+		SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+		Calendar cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 1);
+        cale.set(Calendar.DAY_OF_MONTH, 0);
+        String day_last = df.format(cale.getTime());
+        StringBuffer str = new StringBuffer().append(day_last);
+        day_last = str.toString();
+        
+		return day_last;
+	}
 	public static String getNextMonthDate(String targetDate, String dateFormat) {
 		SimpleDateFormat df = new SimpleDateFormat(dateFormat);
 		Calendar calendar = Calendar.getInstance();

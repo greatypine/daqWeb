@@ -2,6 +2,7 @@ var pageStatusInfo = {};
 var mapChart;
 var statisticExtendInfo;
 var timerId;
+var timerProfitId;
 var refreshId;
 // 城市排名(GMV)柱状图
 var cityRankChartGmv;
@@ -36,6 +37,10 @@ var timer_china_beat;//城市闪动的定时
 var timer_china_beat2;//城市大图闪动的定时
 var fullScreenChart;
 var beatData;
+var totalprice;//用于切换的中间的数字
+var totalpriceCurrentTime;//当日实时营业额
+var order_daily_profit_cur;//当日实时毛利
+var changeType = 3;
 var screenlogin=getUrlParamByKey("su");
 layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
@@ -135,6 +140,30 @@ var showPageContent = function (pageStatusInfo) {
     // 显示本月新增开卡用户和历史总社员数
     getOpenCardUser(pageStatusInfo);
     getDailyData();
+    getDailyProfitData();
+    if(changeType==1){
+    	showsumofcurdailygmv();
+    	showsumofcurdailyprofit();
+    	showsumofcurmonthprofit();
+    	showsumofcurmonth();
+    }else if(changeType==2){
+    	showsumofcurdailygmv();
+    	showsumofcurmonth();
+    	showsumofcurmonthck();
+    	showsumofcurdailyprofit();
+    	showsumofcurmonthprofit();
+    }else if(changeType==3){
+    	showsumofcurdailyprofit();
+    	showsumofcurdailygmv();
+    	showsumofcurmonth();
+    	showsumofcurmonthprofit();
+    }else if(changeType==4){
+    	showsumofcurdailygmv();
+    	showsumofcurmonthprofit();
+    	showsumofcurmonthprofitck();
+    	showsumofcurmonth();
+    	showsumofcurdailyprofit();
+    }
     // 显示统计概要
     pageStatusInfo.currentPage=1;
     getStatisticInfo(pageStatusInfo);
@@ -1364,6 +1393,7 @@ var showHistoryData = function (historyData) {
     $("#tradesumofhistoryOrderHid").html(parseInt(historyData.history_order_count==null?'0':historyData.history_order_count));
     $("#tradesumofmonthOrderHid").html(parseInt(historyData.month_order_count==null?'0':historyData.month_order_count));
     $("#tradesumofmonthCustmomerHid").html(parseInt(historyData.customer_count));
+    $("#tradesumofcurmonthOriginHid").html(parseInt(historyData.curMonthTurnover));
     $("#tradesumofcurmonths").html(changeMoney(parseInt(historyData.curMonthTurnover)));
     $("#tradesumofCurYears").html(changeMoney(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum)));
     $("#tradesumofhistorys").html(changeMoney(parseInt(historyData.historyTurnover)+(parseInt(historyData.year_gmv_sum==null?'0':historyData.year_gmv_sum))));
@@ -3375,18 +3405,11 @@ var getDailyData = function(){
   					$("#totle_price").html(totle_price);
   					day_curr = totle_price;
   					
-  					var totalprice = totle_price+'';
-
-  					if(totalprice.indexOf(".")>0){
-  						totalprice = totalprice.substring(0,totalprice.lastIndexOf("."));
+  					totalprice = totle_price+'';
+  					totalpriceCurrentTime = totalprice;
+  					if(changeType==1){
+  						showsumofcurdailygmvck();
   					}
-  					if(totalprice.length>8){
-  						dojob(totalprice.substring(0,totalprice.length)); 
-  					}else{
-  						totalprice = "000000000"+totalprice;
-  						dojob(totalprice.substring(totalprice.length-9,totalprice.length)); 
-  					}
-  					
   					//var tradesumofhistory = $("#tradesumofhistoryHid").text();//历史营业额
   					var tradesumofcustomerMonth = $("#tradesumofmonthCustmomerHid").text();//本月用户量
   					var tradesumoflastmonthCustmomer = $("#tradesumoflastmonthCustmomerHid").text();//上月今天用户量
@@ -3531,6 +3554,34 @@ var getDailyData = function(){
   		});
   		
     //console.log('chonfu method in ' + (new Date().getTime() - startTime) + ' millisecond');
+    }
+    //获取当日累计营业额(元)数据
+var getDailyProfitData = function(){
+        chonfuProfit();
+        timerProfitId = setInterval(chonfuProfit,3000);
+}
+ function chonfuProfit(){
+    	 //查询当日累计毛利
+    var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+     doManager("massOrderItemManager", "queryDailyprofit",[reqestParameter],
+  			function(data, textStatus, XMLHttpRequest) {
+  			if (data.result) {
+	             var resultJson = JSON.parse(data.data);
+	            order_daily_profit = JSON.parse(resultJson.gmv)[0].order_daily_profit+"";
+	            order_daily_profit = order_daily_profit+"";
+	        }else{
+	        	order_month_profit = "0";
+	        }
+			order_daily_profit_cur = order_daily_profit;
+			if(changeType==3){
+  				showsumofcurdailyprofitck();
+  			}
+  		});
     }
     var ns=[];
     var changeno="";
@@ -5134,10 +5185,10 @@ function js_alert(){
     x=x/10000;
     var y = '';
     if(parseInt(x)/10000<=1){
-    	y=ForDight(x,2)+"万";
+    	y=ForDight(x,1)+"万";
     }else if(parseInt(x)/10000>1){
     	x=x/10000+'';
-    	y=ForDight(x,2)+"亿";
+    	y=ForDight(x,1)+"亿";
     }
     return y;
 }
@@ -5207,13 +5258,13 @@ function showMoreSummaryStatistics(){
 	    $("#info_head_dl").hide();
 	  });
 	  $(".info_bottom").mouseover(function(){
-	    $(this).css('width','40%');
+	    $(this).css('width','50%');
 	    $(this).find(".info_bottom_left").show();
-	    $(this).find(".info_bottom_dl").removeClass("col-sm-6").addClass("col-sm-4");
+	    $(this).find(".info_bottom_dl").removeClass("col-sm-6").addClass("col-sm-3");
 	  });
 	  $(".info_bottom").mouseleave(function(){
 	    $(this).css('width','25%');
-	    $(this).find(".info_bottom_right").removeClass("col-sm-4").addClass("col-sm-6");
+	    $(this).find(".info_bottom_right").removeClass("col-sm-3").addClass("col-sm-6");
 	    $(this).find(".info_bottom_left").hide();
 	  });
 }
@@ -5363,6 +5414,12 @@ function showTooltip3(){
 function hideTooltip3(){
 	$("#attention3").hide();
 }
+function showTooltip4(){
+	$("#attention4").show();
+}
+function hideTooltip4(){
+	$("#attention4").hide();
+}
 function getScreenWidth(){
 /*
   var screenWidth = screen.width;
@@ -5374,4 +5431,136 @@ function getScreenWidth(){
   }
   */
   $(".text-muted").removeClass("text-muted2").addClass("text-muted1");
+}
+function showsumofcurmonth(){
+	var currentMonthGMV = $("#tradesumofcurmonthOriginHid").text();
+	return 	currentMonthGMV;
+}
+function showsumofcurmonthck(){
+	changeType=2;
+	var currentMonthGMV = showsumofcurmonth();
+	var currentMonthGMV_Next = changeMoney(currentMonthGMV);
+	if(currentMonthGMV_Next.indexOf('亿')!=-1){
+    	$("#gmvText").html("当月营业额（万元）");
+    	totalprice = ForDight(currentMonthGMV/10000+"",0)+"";
+    }else if(currentMonthGMV_Next.indexOf('万')!=-1){
+    	$("#gmvText").html("当月营业额（元）");
+    	totalprice = currentMonthGMV+"";
+	}
+	$("#tradesumofcurmonths").html(changeMoney(currentMonthGMV));
+	doJobChange();
+}
+function showsumofcurdailygmv(){
+		var currenttotalpriceTitle;
+	 	setCurrentDate(pageStatusInfo);
+ 		var currentDateInfo = pageStatusInfo['currentYear']+"-"+pageStatusInfo['currentMonth_']+"-"+pageStatusInfo['currentDay'];
+    	 //查询当日累计营业额
+    	var dynamicDto = {
+    			beginDate:currentDateInfo,
+    			endDate:currentDateInfo,
+    			month:pageStatusInfo['currentMonth_'],
+	  			year:pageStatusInfo['currentYear'],
+	  			provinceId:pageStatusInfo["provinceId"],
+				cityId:pageStatusInfo["cityId"]
+    	}
+     var startTime = new Date().getTime();
+     doManager("dynamicManager", "getDailyStoreTotlePrice",[dynamicDto],
+  			function(data, textStatus, XMLHttpRequest) {
+  				if (data.result) { 
+  					 var resultJson= JSON.parse(data.data);
+  					 var dailyData = JSON.parse(resultJson.daily);
+  					 var totle_price = dailyData[0].storecur_all_price==null?"0":dailyData[0].storecur_all_price;
+  					 currenttotalpriceTitle = totle_price+'';
+					 $("#tradesumofcurDaily").html(changeMoney(currenttotalpriceTitle));
+  				}
+  	});
+}
+function showsumofcurdailygmvck(){
+	changeType=1;
+	$("#gmvText").html("当日营业额（元）");
+	var currenttotalprice = totalpriceCurrentTime;
+	totalprice = currenttotalprice;
+	doJobChange();
+}
+function showsumofcurdailyprofit(){
+	var order_daily_profit;
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryDailyprofit",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            order_daily_profit = JSON.parse(resultJson.gmv)[0].order_daily_profit+"";
+	        }else{
+	        	order_daily_profit = "0";
+	        }
+	 	$("#tradesumofdailyprofit").html(changeMoney(order_daily_profit));
+    });
+    return order_daily_profit;
+}
+function showsumofcurdailyprofitck(){
+	changeType=3;
+	$("#gmvText").html("当日毛利（元）");
+	var order_daily_profit = order_daily_profit_cur;
+	totalprice = order_daily_profit+"";
+	doJobChange();
+}
+function showsumofcurmonthprofit(){
+	var order_month_profit;
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryMonthprofit",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            order_month_profit = JSON.parse(resultJson.gmv)[0].order_month_profit;
+	            order_month_profit = order_month_profit+"";
+	        }else{
+	        	order_month_profit = "0";
+	        }
+		$("#tradesumofcurmonthsprofit").html(changeMoney(order_month_profit));
+    });
+    return order_month_profit;
+}
+function showsumofcurmonthprofitck(){
+	changeType=4;
+	$("#gmvText").html("当月毛利（元）");
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryMonthprofit",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            order_month_profit = JSON.parse(resultJson.gmv)[0].order_month_profit;
+	            order_month_profit = order_month_profit+"";
+	        }else{
+	        	order_month_profit = "0";
+	        }
+    },false);
+	totalprice = order_month_profit+"";
+	doJobChange();
+}
+function doJobChange(){
+	var totalprice_;
+	if(totalprice.indexOf(".")>0){
+  		totalprice_ = totalprice.substring(0,totalprice.lastIndexOf("."));
+  	}
+	if(totalprice.length>8){
+		dojob(totalprice_.substring(0,totalprice_.length)); 
+	}else{
+		totalprice_ = "000000000"+totalprice;
+		dojob(totalprice_.substring(totalprice_.length-9,totalprice_.length)); 
+	}
 }

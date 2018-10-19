@@ -63,13 +63,13 @@ public interface MassOrderItemDao extends IDAO{
 	 * @param dd
 	 * @return
 	 */
-	public Map<String, Object> queryDailyprofit(DynamicDto dd);
+	public Map<String, Object> queryDailyprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	/**
 	 * 查询当月实时毛利(全国/省/市切换)
 	 * @param dd
 	 * @return
 	 */
-	public Map<String, Object> queryMonthprofit(DynamicDto dd);
+	public Map<String, Object> queryMonthprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	
 	
 }
