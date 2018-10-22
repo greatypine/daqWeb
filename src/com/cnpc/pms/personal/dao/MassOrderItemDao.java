@@ -70,6 +70,16 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> queryMonthprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
+	/**
+	 * 查询近七日毛利走势图
+	 * @author zhangli
+	 * 2018年10月21日
+	 * @param dd
+	 * @param provinceNO 
+	 * @param cityNO 
+	 * @return
+	 */
+	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 	
 	
 }

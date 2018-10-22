@@ -5,11 +5,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -357,5 +359,61 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		logger.info("查询订单明细该产品结束:"+order_sn);
 
 		return order_obj;
+	}
+	@Override
+	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
+		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
+		Long city_id = dd.getCityId();
+		String province_id = dd.getProvinceId();
+		try{
+			if(city_id!=null){
+				cityNO = storeDao.getCityNOOfCityById(city_id);
+			}
+			if(province_id!=null&&province_id!=""){
+				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
+			}
+//			String beginDate = "2018-03-02";
+//    		String curDate = "2018-03-08";
+			String cur = com.cnpc.pms.base.file.comm.utils.DateUtil.curDate();
+			String curDate = DateUtils.lastDate();
+			String beginDate = DateUtils.getBeforeDate(cur,-7);
+			dd.setBeginDate(beginDate);
+			dd.setEndDate(curDate);
+			Map<String, Object> customerOrderRate = massOrderItemDao.getProfitRangeForWeek(dd,cityNO,provinceNO);
+			List<Map<String,Object>> lst_data = (List<Map<String, Object>>) customerOrderRate.get("lst_data");
+			SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+			String maxDateStr = curDate;    
+		    String minDateStr = "";    
+		    Calendar calc =Calendar.getInstance();      
+	         for(int i=0;i<7;i++){  
+	        	 calc.setTime(sdf.parse(maxDateStr));    
+	             calc.add(calc.DATE, -i);    
+	             Date minDate = calc.getTime();    
+	             minDateStr = sdf.format(minDate);   
+	           	 Map<String,Object> lst_map = new HashMap<String, Object>();
+	           	 lst_map.put("week_date", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
+	           	 lst_map.put("week_gmv", 0);
+				 for(int j=0;j<lst_data.size();j++){
+	    			Map<String,Object> lst_map_week = lst_data.get(j);
+	    			String dateStr = String.valueOf(lst_map_week.get("week_date"));
+	    			if(minDateStr.contains(dateStr)){
+	    				lst_data.remove(j);
+	    				String week_date = String.valueOf(lst_map_week.get("week_date"));
+	    				lst_map.put("week_date", week_date);
+	    				lst_map.put("week_gmv", lst_map_week.get("week_gmv"));
+	    				
+	    			}
+				}
+				lst_data.add(lst_map);
+	         }
+			result.put("lst_data", lst_data);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

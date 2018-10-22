@@ -140,7 +140,6 @@ var showPageContent = function (pageStatusInfo) {
     // 显示本月新增开卡用户和历史总社员数
     getOpenCardUser(pageStatusInfo);
     getDailyData();
-    getDailyProfitData();
     if(changeType==1){
     	showsumofcurdailygmv();
     	showsumofcurdailyprofit();
@@ -154,6 +153,7 @@ var showPageContent = function (pageStatusInfo) {
     	showsumofcurmonthprofit();
     }else if(changeType==3){
     	showsumofcurdailyprofit();
+    	getDailyProfitData();
     	showsumofcurdailygmv();
     	showsumofcurmonth();
     	showsumofcurmonthprofit();
@@ -267,10 +267,10 @@ var initPageElements = function () {
     legend: {
             show: 'true',
             data: [{
-	            name:'全部GMV走势',
+	            name:'GMV走势',
 	            textStyle:{color:"#fff"}
             },{
-            	name:'221GMV走势',
+            	name:'毛利走势',
             	textStyle:{color:"#fff"}
             	}],
             right: '3%',
@@ -358,7 +358,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '全部GMV走势',
+        name: 'GMV走势',
         type:'line',
         data:[],
         smooth: true,
@@ -386,7 +386,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '221GMV走势',
+        name: '毛利走势',
         type:'line',
         data:[],
         smooth: true,
@@ -2472,9 +2472,10 @@ var getTwoTwoOneRankGmv = function(pageStatusInfo){
         }
         //console.log('\trequest: city rank gmv. ');
         //console.log(reqestParameter);
-        // 近七日221GMV走势图
+        // 近七日221GMV走势图-修改为近七日毛利走势图
         var startTime = new Date().getTime();
-        doManager("dynamicManager", "getTwoTwoOneGMVRangeForWeek",[reqestParameter],
+        //doManager("dynamicManager", "getTwoTwoOneGMVRangeForWeek",[reqestParameter],
+        doManager("massOrderItemManager", "getProfitRangeForWeek",[reqestParameter],
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
@@ -2486,7 +2487,7 @@ var getTwoTwoOneRankGmv = function(pageStatusInfo){
     }
 
 }
-// 显示近7天221GMV走势
+// 显示近7天221GMV走势-修改为近7天毛利走势
 var showTwoTwoOneRankGmv = function (twoTwoOneRankDataGmv) {
   	var data = [];
     var data1 = [];
