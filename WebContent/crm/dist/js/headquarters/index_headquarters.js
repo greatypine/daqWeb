@@ -4446,6 +4446,42 @@ function goToDataFiles(){
 	  window.open(url,"_blank");
   }
 
+  //门店毛利
+  function goToStoreprofit(){
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "dynamicData_storeprofit_analysis.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id)+"&#ff";
+      }else if(target==1){
+          url = "dynamicData_storeprofit_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
+      }
+      window.open(url,"_blank");
+  }
+
+  //事业群毛利
+  function goToDeptprofit() {
+      var role = curr_user.usergroup.code;
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "dynamicData_deptprofit_analysis.html?t="+encode64('0')+"&cn=&r="+encode64(role)+"&c=&dn=&e="+encode64(curr_user.id);
+      }else if(target==1){
+          url =  "dynamicData_deptprofit_analysis.html?t="+encode64(1)+"&r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&dn=&e="+encode64(curr_user.id);
+      }
+      window.open(url,"_blank");
+  }
+  
+  //城市毛利
+  function goToCityprofit(){
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "dynamicData_cityprofit_analysis.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id)+"&#ff";
+      }else if(target==1){
+          url = "dynamicData_cityprofit_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
+      }
+      window.open(url,"_blank");
+  }
 
 //用户行为分析
 function gotobehavior(){

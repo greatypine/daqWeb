@@ -461,5 +461,17 @@ public interface StoreDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String,Object>> findSchoolStoreInfo();
+
+	/**
+	 * 门店毛利
+	 * @return
+	 */
+	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * 导出门店毛利数据
+	 * @return
+	 */
+	public List<Map<String, Object>> exportStoreTradeProfit(DynamicDto dynamicDto);
 	
 }
