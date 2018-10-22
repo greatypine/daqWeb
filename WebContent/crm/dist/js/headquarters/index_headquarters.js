@@ -3562,8 +3562,13 @@ var getDailyProfitData = function(){
         timerProfitId = setInterval(chonfuProfit,3000);
 }
  function chonfuProfit(){
+ 		var currentDateInfo = pageStatusInfo['currentYear']+"-"+pageStatusInfo['currentMonth_']+"-"+pageStatusInfo['currentDay'];
+    	setCurrentDate(pageStatusInfo);
     	 //查询当日累计毛利
     var reqestParameter = {
+    	 //查询当日累计营业额
+    		beginDate:currentDateInfo,
+    		endDate:currentDateInfo,
             month:pageStatusInfo.currentMonth,
             year:pageStatusInfo.currentYear,
             provinceId:pageStatusInfo.provinceId,
@@ -5574,7 +5579,7 @@ function doJobChange(){
 	if(totalprice.length>8){
 		dojob(totalprice_.substring(0,totalprice_.length)); 
 	}else{
-		totalprice_ = "000000000"+totalprice;
+		totalprice_ = "000000000"+totalprice_;
 		dojob(totalprice_.substring(totalprice_.length-9,totalprice_.length)); 
 	}
 }
