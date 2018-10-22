@@ -149,8 +149,9 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     				humanresources.setContractdateend(enddatestr);
     			}catch(Exception e){
     				System.out.println("日期处理失败！");
-    				rcvmsg="合同日期格式错误！ 导入失败！";
-    				return rcvmsg;
+    				//rcvmsg="合同日期格式错误！ 导入失败！";
+    				//return rcvmsg;
+    				log.info("合同日期处理失败，跳过该条数据的日期处理！！！！！！！！！！！");
     			}
     			
     			
@@ -290,6 +291,12 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
     	return humanresources;
     }
     
+    
+    @Override
+    public Humanresources queryHumanById(Long id){
+    	Humanresources humanresources = (Humanresources)this.getObject(id);
+    	return humanresources;
+    }
     
     
     /**
@@ -468,7 +475,9 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
 		}else{
 	        IFilter iFilter =FilterFactory.getSimpleFilter(" name like '%"+groupzw+"%'");
 	        List<?> lst_groupList = u.getList(iFilter);
-	        userGroup = (UserGroup) lst_groupList.get(0);
+	        if(lst_groupList!=null&&lst_groupList.size()>0) {
+	        	userGroup = (UserGroup) lst_groupList.get(0);
+	        }
 		}
 		
         
