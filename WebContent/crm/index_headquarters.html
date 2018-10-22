@@ -306,27 +306,6 @@
 		
               <!--实时数据-->
       <div class="text-muted text-muted1 nav-tabs-custom"  style="width: 48%; float:left; position: relative; margin: 0 1%; left: 25%;">
-        <!-- <div class="gaugetb1 clearfix text-center">
-          <li class="col-sm-6 pull-left active"><a href="#tab_1" data-toggle="tab">
-          <div class="col-sm-4">
-          	<input type="hidden" id="tradesumofcurmonthHid">
-            <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip();" onmouseout="hideTooltip();">当月营业额</h5>
-            <font id="attention" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>	
-            <p id="tradesumofcurmonths"></p>
-          </div>
-          <div class="col-sm-4">
-          	<input type="hidden" id="tradesumofyearHid">
-            <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip2();" onmouseout="hideTooltip2();">当年营业额</h5>
-            <font id="attention2" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>
-            <p id="tradesumofCurYears"></p>
-          </div>
-          <div class="col-sm-4">
-          	<input type="hidden" id="tradesumofhistoryHid">
-            <h5 class="no-margin" style="cursor: pointer;" onmouseover="showTooltip3();" onmouseout="hideTooltip3();">历史营业额</h5>
-            <font id="attention3" style="color:#FFFFFF;font-size: 12px;white-space: nowrap;position: absolute;top:-18px;z-index: 1000;display:none;left:60px">统计口径：签收金额 - 退货金额</font>
-            <p id="tradesumofhistorys"></p>
-          </div>
-        </div> -->
         <ul class="gaugetb1 clearfix text-center nav nav-tabs">
           <li class="col-sm-3 pull-left"><a href="#tab_1" data-toggle="tab" onclick="showsumofcurdailygmvck()">
             <input type="hidden" id="tradesumofcurdailygmvHid">
@@ -354,7 +333,7 @@
             <p id="tradesumofcurmonthsprofit"></p>
           </a></li>
         </ul>
-        <h3 class="text-right" style="margin-top:10px;" id="gmvText">当日营业额（元）</h3>
+        <h3 class="text-right" style="margin-top:10px;" id="gmvText">当日毛利（元）</h3>
        <div class="tab-content no-padding">
           <div class="tab-pane active">
             <div class="dataStatistics">
@@ -404,9 +383,9 @@
               <div class="col-sm-5 no-padding text-center"><p class="increase" id="order_count_ratio"></p>环比</div> -->
             </div>
             <div class="info_bottom_dl info_bottom_left pull-right col-sm-6 no-margin" style="display: none;">
-              <h4 class="gaugetb3">历史营业额</h4>
-			  <input type="hidden" id="tradesumofhistoryHid"/>
-              <div class="col-sm-8 no-padding gaugetb3" id="tradesumofhistorys"></div>
+              <h4 class="gaugetb5">当年营业额</h4>
+              <input type="hidden" id="tradesumofyearHid">
+              <div class="col-sm-8 no-padding gaugetb5" id="tradesumofCurYears"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
               <h4 class="gaugetb3">历史累计消费用户</h4>
@@ -426,7 +405,9 @@
               <div class="col-sm-4 no-padding gaugetb4" id="tradesumofhistoryOrder"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
-              <div class="col-sm-4 no-padding gaugetb3" id="tradesumofhistoryCustmomer3"></div>
+              <h4 class="gaugetb5">历史营业额</h4>
+			  <input type="hidden" id="tradesumofhistoryHid"/>
+              <div class="col-sm-8 no-padding gaugetb5" id="tradesumofhistorys"></div>
             </div>
           </div>
         </div>

@@ -69,4 +69,12 @@ public interface MassOrderItemManager extends IManager {
 	 * @return
 	 */
 	public Map<String, Object> queryOrderDetailBySN(String order_sn,String product_id);
+	/**
+     * 查询毛利近七日走势图
+     * 2018年10月21日
+     * @author zhangli
+     * @param dd
+     * @return
+     */
+	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd);
 }
