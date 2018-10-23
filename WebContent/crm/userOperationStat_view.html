@@ -655,6 +655,7 @@
 					                  <th width="9%">拉新用户</th>
 					                  <th width="9%">拉新用户超10元</th>
 					                  <th width="9%">拉新用户超20元</th>
+									  <th width="9%">累计用户<label style="font-weight:normal;" id="query_newdata_info"></label></th>
 					                </tr>
 					                </tbody>
 					              </table>
@@ -726,6 +727,7 @@
 					                  <th width="9%">消费用户</th>
 					                  <th width="9%">消费用户超10元</th>
 					                  <th width="9%">消费用户超20元</th>
+									  <th width="9%">累计用户<label style="font-weight:normal;" id="query_paydata_info"></label></th>
 					                </tr>
 					                </tbody>
 					              </table>
@@ -1041,7 +1043,9 @@ Date.prototype.format=function(fmt) {
  	$("#auto_date_daypay").val(bdate+" - "+cDate);
     $("#auto_date_regist").val(bdate+" - "+cDate);
     $("#query_data_info").text("（截止到"+cDate+"）");
- 
+    $("#query_newdata_info").text("（截止到"+cDate+"）");
+    $("#query_paydata_info").text("（截止到"+cDate+"）");
+
     var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
     if(target==0){//总部
     	var liTab=document.getElementById("li_tab_8");
@@ -2857,7 +2861,7 @@ function   search_manual_daynewcus1(cur_page){
 	  	if(sdate!=""){
 	  		 begin_end_date = sdate.split("-");
 	   	}
-	  	
+        $("#query_newdata_info").text("（截止到"+begin_end_date[1]+"）");
 	 	var number_str = $("#store_id_manual_daynewcus").val(); 
 	    var storeName = $("#store_name_manual_daynewcus").val();
 	    if(storeName!=""){
@@ -2971,6 +2975,7 @@ function   search_manual_daynewcus1(cur_page){
                  	+"<td>"+jData[i].new_count+"</td>"
                  	+"<td>"+jData[i].new_10_count+"</td>"
                  	+"<td>"+jData[i].new_20_count+"</td>"
+                    +"<td>"+jData[i].total_count+"</td>"
 	                +"</tr>";
 		                       
 		            $("#manual_tbody_daynewcus").append(infoStr);     
@@ -3083,7 +3088,7 @@ function   search_manual_daypay1(cur_page){
 	  	if(sdate!=""){
 	  		 begin_end_date = sdate.split("-");
 	   	}
-	  	
+        $("#query_paydata_info").text("（截止到"+begin_end_date[1]+"）");
 	 	var number_str = $("#store_id_manual_daypay").val(); 
 	    var storeName = $("#store_name_manual_daypay").val();
 	    if(storeName!=""){
@@ -3196,6 +3201,7 @@ function   search_manual_daypay1(cur_page){
                  	+"<td>"+jData[i].pay_count+"</td>"
                  	+"<td>"+jData[i].pay_10_count+"</td>"
                  	+"<td>"+jData[i].pay_20_count+"</td>"
+                    +"<td>"+jData[i].total_count+"</td>"
 	                +"</tr>";
 		                       
 		            $("#manual_tbody_daypay").append(infoStr);     

@@ -484,19 +484,19 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"城市","门店名称","片区编号","拉新用户","拉新用户超10元","拉新用户超20元"};
-  	        String[] headers_key = {"city_name","store_name","area_code","new_count","new_10_count","new_20_count"};
+  	        String[] str_headers = {"城市","门店名称","片区编号","拉新用户","拉新用户超10元","拉新用户超20元","累计用户"};
+  	        String[] headers_key = {"city_name","store_name","area_code","new_count","new_10_count","new_20_count","total_count"};
 			if(StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
-				str_headers = new String[]{"城市","拉新用户","拉新用户超10元","拉新用户超20元"};
-				headers_key = new String[]{"city_name","new_count","new_10_count","new_20_count"};
+				str_headers = new String[]{"城市","拉新用户","拉新用户超10元","拉新用户超20元","累计用户"};
+				headers_key = new String[]{"city_name","new_count","new_10_count","new_20_count","total_count"};
 			}
 			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
-				str_headers = new String[]{"城市","门店名称","拉新用户","拉新用户超10元","拉新用户超20元"};
-				headers_key = new String[]{"city_name","store_name","new_count","new_10_count","new_20_count"};
+				str_headers = new String[]{"城市","门店名称","拉新用户","拉新用户超10元","拉新用户超20元","累计用户"};
+				headers_key = new String[]{"city_name","store_name","new_count","new_10_count","new_20_count","total_count"};
 			}
 			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr())){
-				str_headers = new String[]{"城市","片区编号","拉新用户","拉新用户超10元","拉新用户超20元"};
-				headers_key = new String[]{"city_name","area_code","new_count","new_10_count","new_20_count"};
+				str_headers = new String[]{"城市","片区编号","拉新用户","拉新用户超10元","拉新用户超20元","累计用户"};
+				headers_key = new String[]{"city_name","area_code","new_count","new_10_count","new_20_count","total_count"};
 			}
 
   	        for(int i = 0;i < str_headers.length;i++){
@@ -601,19 +601,19 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
   	        XSSFRow row = sheet.createRow(0);
   	        
   	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"城市","门店名称","片区编号","消费用户","消费用户超10元","消费用户超20元"};
-  	        String[] headers_key = {"city_name","store_name","area_code","pay_count","pay_10_count","pay_20_count"};
+  	        String[] str_headers = {"城市","门店名称","片区编号","消费用户","消费用户超10元","消费用户超20元","累计用户"};
+  	        String[] headers_key = {"city_name","store_name","area_code","pay_count","pay_10_count","pay_20_count","total_count"};
   	        if(StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
-				str_headers = new String[]{"城市","消费用户","消费用户超10元","消费用户超20元"};
-				headers_key = new String[]{"city_name","pay_count","pay_10_count","pay_20_count"};
+				str_headers = new String[]{"城市","消费用户","消费用户超10元","消费用户超20元","累计用户"};
+				headers_key = new String[]{"city_name","pay_count","pay_10_count","pay_20_count","total_count"};
 			}
 			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchStoreStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchAreaStr())){
-				str_headers = new String[]{"城市","门店名称","消费用户","消费用户超10元","消费用户超20元"};
-				headers_key = new String[]{"city_name","store_name","pay_count","pay_10_count","pay_20_count"};
+				str_headers = new String[]{"城市","门店名称","消费用户","消费用户超10元","消费用户超20元","累计用户"};
+				headers_key = new String[]{"city_name","store_name","pay_count","pay_10_count","pay_20_count","total_count"};
 			}
 			if(StringUtils.isNotEmpty(userOperationStatDto.getSearchAreaStr()) && StringUtils.isEmpty(userOperationStatDto.getSearchStoreStr())){
-				str_headers = new String[]{"城市","片区编号","消费用户","消费用户超10元","消费用户超20元"};
-				headers_key = new String[]{"city_name","area_code","pay_count","pay_10_count","pay_20_count"};
+				str_headers = new String[]{"城市","片区编号","消费用户","消费用户超10元","消费用户超20元","累计用户"};
+				headers_key = new String[]{"city_name","area_code","pay_count","pay_10_count","pay_20_count","total_count"};
 			}
 
   	        for(int i = 0;i < str_headers.length;i++){
@@ -929,7 +929,7 @@ public class UserOperationStatManagerImpl extends BizBaseCommonManager implement
 			XSSFRow row = sheet.createRow(0);
 
 			//定义表头 以及 要填入的 字段
-			String[] str_headers = {"城市","新增注册用户","累积注册用户"};
+			String[] str_headers = {"城市","新增注册用户","累计注册用户"};
 			String[] headers_key = {"cityname","new_cus","total_cus"};
 
 			for(int i = 0;i < str_headers.length;i++){
