@@ -74,7 +74,6 @@
 	
 	.text-muted2 .dataStatistics .digit > div.digit_top, .text-muted2 .dataStatistics .digit > div.shadow_top{background-color: #11214e; border-radius: 4px; width: 38px;}
     .text-muted2 .dataStatistics .digit > div.digit_bottom, .text-muted2 .dataStatistics .digit > div.shadow_bottom{background-color: #11214e; border-radius: 4px; text-align: center; width: 38px;}
-
     .text-muted2 .dataStatistics:hover .digit_set{box-shadow: 0 0 16px 2px #186ff0}
     .text-muted2 .dataStatistics .digit > div.digit_bottom .digit_wrap, .text-muted2 .dataStatistics .digit > div.shadow_bottom .digit_wrap{margin-top: -82%; line-height: 63px;}
 	
@@ -89,22 +88,17 @@
     .gaugetb2{color: #ffc203;}
     .gaugetb3{color: #f88962}
     .gaugetb4{color: #ea89ed}
-    .gaugetb5{color: #00ffe6}
     .info_bottom .col-sm-5{font-size: 12px;}
     .increase{color: #30d7c7;}
     .decline{color: #ff3064;}
     .info_bottom p{border-bottom: 1px solid #ffc203; margin: 0; font-size: 14px; font-weight: bold;}
 
-    .nav-tabs-custom,.nav-tabs-custom > .tab-content{background: transparent;}
-    .nav-tabs-custom > .nav-tabs > li{border: 0; margin: 0;}
-    .nav-tabs-custom > .nav-tabs > li.active > a,.nav-tabs-custom > .nav-tabs > li.active:hover > a{background-color: transparent; border: 0;}
-    .nav-tabs-custom > .nav-tabs > li.active > a, .nav-tabs-custom > .nav-tabs > li.active:hover > a{color:#00ffe6;}
-    .nav-tabs-custom > .nav-tabs{color: #efefef; border: 0;}
-
+    .gaugetb1{color: #efefef;}
+    .gaugetb5{color: #00ffe6}
     .gaugetb1 p{font-size: 26px; font-weight: bold;}
-    .nav-tabs-custom > .nav-tabs > li.active a{color: #00ffe6;}
-    .nav-tabs-custom > .nav-tabs > li a{color: #b9b9b9;}
-
+    .gaugetb1 .col-sm-4:nth-child(1){color: #ff002f;}
+    .gaugetb1 .col-sm-4:nth-child(2){color: #ff6600;}
+    .gaugetb1 .col-sm-4:nth-child(3){color: #00ffe6;}
 
 
     
