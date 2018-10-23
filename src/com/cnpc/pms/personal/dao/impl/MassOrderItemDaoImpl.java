@@ -538,17 +538,41 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
 			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
 		}
-		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)), 0) AS order_profit FROM df_mass_order_monthly ds "+dateStr+provinceStr+cityStr;
+		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)), 0) AS order_profit FROM daqWeb.df_mass_order_monthly ds "+dateStr+provinceStr+cityStr;
 		List<Map<String, Object>> lst_data = null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
-		/*List<Map<String,Object>> lst_data=ImpalaUtil.executeGuoan(sql);
-		Map<String, Object> map_result = new HashMap<String, Object>();
+		lst_data=ImpalaUtil.executeGuoan(sql);
+		map_result.put("gmv", lst_data);
+		return map_result;
+		/*SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		map_result.put("gmv", lst_data);
 		return map_result;*/
-		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+	}
+	@Override
+	public Map<String, Object> queryHistoryprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String provinceStr = "";
+		String cityStr = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr+=" and ds.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr+=" and ds.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)), 0) AS order_profit FROM daqWeb.df_mass_order_total ds where 1=1 "+provinceStr+cityStr;
+		List<Map<String, Object>> lst_data = null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		lst_data=ImpalaUtil.executeGuoan(sql);
+		map_result.put("gmv", lst_data);
+		return map_result;
+		/*SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
    	 	lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
    	 	map_result.put("gmv", lst_data);
-		return map_result;
+		return map_result;*/
 	}
 	@Override
 	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd,
