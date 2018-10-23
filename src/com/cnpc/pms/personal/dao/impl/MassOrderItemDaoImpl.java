@@ -569,7 +569,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
 			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
 		}
-		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)),0) AS order_profit FROM daqWeb.df_mass_order_daily ds "+dateStr+provinceStr+cityStr;
+		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)),0) AS order_profit FROM daqWeb.df_mass_order_total ds "+dateStr+provinceStr+cityStr;
 		List<Map<String, Object>> lst_data = null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		lst_data=ImpalaUtil.executeGuoan(sql);
