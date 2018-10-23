@@ -39,10 +39,11 @@ import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.MD5Utils;
 import net.sf.json.JsonConfig;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -7165,6 +7166,56 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			result.put("message","导出成功！");
 			result.put("status","success");
 			result.put("data", url);
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
+        StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+        Map<String, Object> result =new HashMap<String,Object>();
+        try {
+            result = storeDao.queryStoreTradeProfit(dynamicDto, pageInfo);
+            result.put("status","success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status","fail");
+        }
+        return result;
+	}
+
+	@Override
+	public Map<String, Object> exportStoreTradeProfit(DynamicDto dynamicDto){
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result = new HashMap<String,Object>();
+		List<Map<String, Object>> list = storeDao.exportStoreTradeProfit(dynamicDto);
+
+		if(list!=null&&list.size()>0){//成功返回数据
+			if(list.size()>50000){
+				result.put("message","导出条目过多，请重新筛选条件导出！");
+				result.put("status","more");
+				return result;
+			}
+
+			String[] str_headers = {"城市","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
+			String[] headers_key = {"city_name","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
+				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+			}
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "dept_active".equals(dynamicDto.getSearchstr())){
+				str_headers = new String[]{"城市","门店名称","门店编号","事业群","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
+				headers_key = new String[]{"city_name","store_name","store_code","department_name","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+			}
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "channel_active".equals(dynamicDto.getSearchstr())){
+				str_headers = new String[]{"城市","门店名称","门店编号","事业群","频道","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
+				headers_key = new String[]{"city_name","store_name","store_code","department_name","channel_name","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+			}
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("毛利",list,str_headers,headers_key);
+			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
 			result.put("status","fail");

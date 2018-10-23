@@ -182,13 +182,15 @@
                                     </dl>
                                     <dl class="pull-left">
                                         <dt style="text-align:center"><i></i>绩效数据</dt>
-                                        <dd class="col-sm-6"><a href="javascript:goToStoretrade()"><span class="fa fa-line-chart"></span>门店GMV</a></dd>
-                                        <dd class="col-sm-6"><a href="javascript:goToNewaddcus()"><span class="fa fa-area-chart"></span>门店用户</a></dd>
-                                        <dd class="col-sm-6"><a href="javascript:goToAreaGMVToSend()"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd>
-                                        <dd class="col-sm-6"><a href="javascript:goToNewAddCustomerGMVToSend()"><span class="fa fa-bar-chart"></span>国安侠用户</a></dd>
-                                        <dd class="col-sm-6"><a href="javascript:goToSendOrders()"><span class="fa fa-calendar-check-o"></span>国安侠送单量</a></dd>
+                                        <dd class="col-sm-4"><a href="javascript:goToStoretrade()"><span class="fa fa-line-chart"></span>门店GMV</a></dd>
+                                        <dd class="col-sm-4"><a href="javascript:goToNewaddcus()"><span class="fa fa-area-chart"></span>门店用户</a></dd>
+                                        <dd class="col-sm-4" style="position:relative"><a href="javascript:goToStoreprofit()"><span class="fa fa-dollar"></span>门店毛利</a>
+                                            <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>
+                                        <dd class="col-sm-4"><a href="javascript:goToAreaGMVToSend()"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd>
+                                        <dd class="col-sm-4"><a href="javascript:goToNewAddCustomerGMVToSend()"><span class="fa fa-bar-chart"></span>国安侠用户</a></dd>
+                                        <dd class="col-sm-4"><a href="javascript:goToSendOrders()"><span class="fa fa-calendar-check-o"></span>国安侠送单量</a></dd>
                                         <!--<dd class="col-sm-6"><a href="javascript:goToRewardtimes()"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>-->
-                                        <dd class="col-sm-6" style="position: relative;"><a href="javascript:goToInvitationMember()"><span class="fa fa-credit-card"></span>社员邀请统计</a>
+                                        <dd class="col-sm-4" style="position: relative;"><a href="javascript:goToInvitationMember()"><span class="fa fa-credit-card"></span>社员邀请统计</a>
                                         <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
                                         <!--<dd style="position: relative;"><a href="javascript:goTo221GMV()"><span class="fa fa-thumbs-o-up"></span>221GMV</a>-->
                                             <!--<img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>-->
@@ -1804,6 +1806,11 @@ function initStoreHistoryGMV(){
 		  var url = "dynamicData_storetrade_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
 		  window.open(url,"_blank");
 	}
+    //门店毛利
+    function goToStoreprofit(){
+        var url = "dynamicData_storeprofit_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+        window.open(url,"_blank");
+    }
 	//送单量
 // 	function goToSendorders(){
 // 		  var url = "dynamicData_sendorders_analysis.html?t="+encode64(2)+"&c=&cn="+encode64(currentStore.cityName)+"&s="+ encode64(STORE_ID)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#ff";

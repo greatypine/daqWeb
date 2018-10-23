@@ -354,7 +354,9 @@
                   <td width="10%" style="font-weight:bold;" id="time_sort">签收时间 <i class="fa fa-angle-up" id="time_sort_label"></i></td>
                   <td width="9%" style="font-weight:bold;">业务信息</td>
                   <td width="10%" style="font-weight:bold;">人员信息</td>
-                  <td width="9%" style="font-weight:bold;" id="profit_sort">毛利（元）<i class="fa fa-angle-up" id="profit_sort_label"></i></td>
+                  <td width="9%" style="font-weight:bold;" id="profit_sort"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                      <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">订单销售收入</font>毛利（元）<i class="fa fa-angle-up" id="profit_sort_label"></i></td>
+                  <td width="10%" style="font-weight:bold;">营销费用</td>
                   <td width="10%" style="font-weight:bold;">订单标签</td>
                 </tr>
                 </tbody>
@@ -928,7 +930,14 @@ Date.prototype.format=function(fmt) {
     $("#showprofitattention").on("mouseout",function(event){
         $("#profitattention").hide();
     });
-  	
+
+    $("#columnattention").on("mouseover",function(event){
+        $("#forcolumnattention").show();
+    });
+    $("#columnattention").on("mouseout",function(event){
+        $("#forcolumnattention").hide();
+    });
+
   	//从数据分析页跳转过来直接查询
   	if(time!=null && redirectTag!=null){
   		search_manual_abnormalOrder(1);
@@ -1479,7 +1488,12 @@ Date.prototype.format=function(fmt) {
 			        
 			        var employeeid = "employeetips"+i;  
 			        
-			        var profitid = "profittips"+i;  
+			        var profitid = "profittips"+i;
+
+                    var coupon="<strong>优惠券：</strong>"+jData[i].apportion_coupon+"<br>";
+                    var rebate="<strong>粮票：</strong>"+jData[i].apportion_rebate+"<br>";
+                    var feecontent =coupon+rebate+"@feetips"+i;
+                    var feeid = "feetips"+i;
        			       
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
@@ -1501,6 +1515,8 @@ Date.prototype.format=function(fmt) {
                        } else {
                            infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
                        }
+                    infoStr = infoStr
+                        +"<td><a href=\"javascript:;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
        			    infoStr = infoStr
                            +"</td><td>";
 	        		   if(jData[i].pubseas_label=='1'){
@@ -1771,6 +1787,16 @@ Date.prototype.format=function(fmt) {
           time:5000
       });
   }
+
+//营销费用显示
+function showfee(obj){
+    var msg = obj.split("@")[0];
+    var id = obj.split("@")[1];
+    layer.tips(msg, '#'+id, {
+        tips: [4, '#0FA6D8'], //还可配置颜色
+        time:5000
+    });
+}
   
   //导出
   function export_manual_massOrder(hiddenvalue){
