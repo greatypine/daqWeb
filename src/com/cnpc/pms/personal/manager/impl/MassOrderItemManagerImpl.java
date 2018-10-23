@@ -332,15 +332,15 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		return result;
 	}
 	@Override
-	public Map<String, Object> queryHistoryprofit(DynamicDto dd) {
+	public Map<String, Object> queryYesterdayprofit(DynamicDto dd) {
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		String beginDate = DateUtils.lastDate();
+	    String endDate = DateUtils.lastDate();
+	    dd.setBeginDate(beginDate);
+	    dd.setEndDate(endDate);
 		Long city_id = dd.getCityId();
 		String province_id = dd.getProvinceId();
-		String beginDate = DateUtils.getCurrMonthFirstDate("YYYY-MM-dd");
-		String endDate = DateUtils.getCurrMonthLastDate("YYYY-MM-dd");
-		dd.setBeginDate(beginDate);
-		dd.setEndDate(endDate);
 		List<Map<String, Object>> cityNO = new ArrayList<Map<String,Object>>();
 		List<Map<String, Object>> provinceNO = new ArrayList<Map<String,Object>>();
 		if(city_id!=null){
@@ -352,11 +352,11 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		Map<String,Object> dailyprofitMap = null;
 		Map<String,Object> result = new HashMap<String,Object>();
 		try {
-			dailyprofitMap = massOrderItemDao.queryHistoryprofit(dd,cityNO,provinceNO);
+			dailyprofitMap = massOrderItemDao.queryYesterdayprofit(dd,cityNO,provinceNO);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String gmv = this.getHistoryprofitData(dd,dd.getMonth(),dailyprofitMap);
+		String gmv = this.getYesterdayprofitData(dd,dd.getMonth(),dailyprofitMap);
 		result.put("gmv", gmv);
 		return result;
 	}
@@ -372,14 +372,14 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		json.put(jo);
 		return json.toString();
 	}
-	private String getHistoryprofitData(DynamicDto dd,int month,Map<String,Object> dailyprofitMap){
+	private String getYesterdayprofitData(DynamicDto dd,int month,Map<String,Object> dailyprofitMap){
 		JSONArray json = new JSONArray();
         JSONObject jo = new JSONObject();
         List<Map<String, Object>> orderProfitList = (List<Map<String, Object>>) dailyprofitMap.get("gmv");
         if(orderProfitList!=null&&orderProfitList.size()>0){
-        	jo.put("order_history_profit", orderProfitList.get(0).get("order_profit"));
+        	jo.put("order_yesterday_profit", orderProfitList.get(0).get("order_profit"));
         }else{
-        	jo.put("order_history_profit", 0);
+        	jo.put("order_yesterday_profit", 0);
         }
         json.put(jo);
         return json.toString();

@@ -136,8 +136,8 @@ var showPageContent = function (pageStatusInfo) {
     getOpenCardUser(pageStatusInfo);
     //查询当月毛利
     showsumofcurmonthprofit(pageStatusInfo);
-    //查询历史毛利
-    showsumofHistoryprofit(pageStatusInfo);
+    //查询昨日毛利
+    showsumofYesterdayprofit(pageStatusInfo);
     getDailyData();
     // 显示统计概要
     pageStatusInfo.currentPage=1;
@@ -5450,24 +5450,24 @@ function showsumofcurmonthprofit(pageStatusInfo){
     });
     return order_month_profit;
 }
-function showsumofHistoryprofit(pageStatusInfo){
-	var order_history_profit;
+function showsumofYesterdayprofit(pageStatusInfo){
+	var order_yesterday_profit;
 	var reqestParameter = {
             month:pageStatusInfo.currentMonth,
             year:pageStatusInfo.currentYear,
             provinceId:pageStatusInfo.provinceId,
             cityId:pageStatusInfo.cityId
     }
-	doManager("massOrderItemManager", "queryHistoryprofit",[reqestParameter],
+	doManager("massOrderItemManager", "queryYesterdayprofit",[reqestParameter],
        function(data, textStatus, XMLHttpRequest) {
 	        if (data.result) {
 	            var resultJson = JSON.parse(data.data);
-	            order_history_profit = JSON.parse(resultJson.gmv)[0].order_history_profit;
-	            order_history_profit = order_history_profit+"";
+	            order_yesterday_profit = JSON.parse(resultJson.gmv)[0].order_yesterday_profit;
+	            order_yesterday_profit = order_yesterday_profit+"";
 	        }else{
-	        	order_history_profit = "0";
+	        	order_yesterday_profit = "0";
 	        }
-		$("#tradesumofHistoryprofit").html(changeMoney(order_history_profit));
+		$("#tradesumofyesprofit").html(changeMoney(order_yesterday_profit));
     });
-    return order_history_profit;
+    return order_yesterday_profit;
 }
