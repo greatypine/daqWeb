@@ -245,7 +245,7 @@ var initPageElements = function () {
 	            name:'GMV走势',
 	            textStyle:{color:"#fff"}
             },{
-            	name:'毛利走势',
+            	name:'收入走势',
             	textStyle:{color:"#fff"}
             	}],
             right: '3%',
@@ -393,7 +393,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '毛利走势',
+        name: '收入走势',
         type:'line',
         data:[],
         smooth: true,
