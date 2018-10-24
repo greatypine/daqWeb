@@ -341,4 +341,13 @@ public interface StoreManager extends IManager {
 
 	//门店租赁信息
 	Map<String,Object> findStoreRentDataByCity();
+
+
+	/**
+	 * @Description 闭店后，更新当前门店的片区状态为无效，且更新片区管辖的小区国安侠为null,更新门店管辖的小区坐标belong 状态为public
+	 * @author gbl
+	 * @date 2018/10/23 18:09
+	 **/
+
+	public Map<String,Object> updateAreaAndTinyAreaAfterCloseStore(Long storeId);
 }

@@ -279,4 +279,12 @@ public interface AreaManager extends IManager {
 	 **/
 
 	public void deleteTinyVillageOfArea(Long tinyVillageId,String areaNo) throws MyException;
+
+	/**
+	 * @Description 批量更新片区状态
+	 * @author gbl
+	 * @date 2018/10/24 9:15
+	 **/
+
+	public void updateAreaStatusByMass(Long storeId);
 }

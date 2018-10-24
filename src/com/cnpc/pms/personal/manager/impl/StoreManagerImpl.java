@@ -15,6 +15,7 @@ import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.manager.DynamicManager;
+import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.mongodb.common.MongoDbUtil;
 import com.cnpc.pms.mongodb.manager.MongoDBManager;
 import com.cnpc.pms.personal.dao.*;
@@ -26,6 +27,7 @@ import com.cnpc.pms.platform.entity.PlatformStore;
 import com.cnpc.pms.platform.entity.SysArea;
 import com.cnpc.pms.platform.manager.PlatformStoreManager;
 import com.cnpc.pms.platform.manager.SysAreaManager;
+import com.cnpc.pms.slice.manager.AreaManager;
 import com.cnpc.pms.utils.PropertiesValueUtil;
 import com.cnpc.pms.utils.ValueUtil;
 import com.mongodb.BasicDBObject;
@@ -33,6 +35,8 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -55,6 +59,8 @@ import java.util.regex.Pattern;
  * 门店业务实现类 Created by liuxiao on 2016/6/6 0006.
  */
 public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
+
+	private static Log logger = LogFactory.getLog(StoreManagerImpl.class);
 	PropertiesValueUtil propertiesValueUtil = null;
 	/**
 	 * 到处户型excel单元格公共样式
@@ -2926,6 +2932,29 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 		List<Map<String, Object>> schoolStoreInfo = storeDao.findSchoolStoreInfo();
 		mapData.put("schoolStoreInfo",schoolStoreInfo);
 		return mapData;
+	}
+
+
+	@Override
+	public Map<String, Object> updateAreaAndTinyAreaAfterCloseStore(Long storeId) {
+		Map<String,Object> result = new HashMap<String,Object>();
+		try {
+			StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+			AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
+			TinyAreaManager tinyAreaManager = (TinyAreaManager)SpringHelper.getBean("tinyAreaManager");
+			Store store= storeManager.findStore(storeId);
+			areaManager.updateAreaStatusByMass(storeId);
+			tinyAreaManager.updateTinyAreaByMass(store.getStoreno());
+			result.put("code",CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info("闭店更新片区和小区坐标失败>>>>>>>>"+e.getMessage());
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+			return result;
+		}
+		return result;
 	}
 
 }

@@ -14,8 +14,12 @@ import java.util.Map;
 
 
 import com.cnpc.pms.slice.manager.AreaInfoManager;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 
 import com.cnpc.pms.base.util.SpringHelper;
@@ -61,7 +65,7 @@ import com.mongodb.client.result.DeleteResult;
  *
  */
 public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBManager{
-	
+	private static Log logger = LogFactory.getLog(MongoDBManagerImpl.class);
 	
 	@Override
 	public Map<String, Object> getAllTinyVillageOfStore(Long storeId) {
@@ -1516,8 +1520,8 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			MongoCursor<Document> cursor = dIterable.iterator(); 
 			
 			
-			if(dIterable==null){
-				result.put("code",CodeEnum.error.getValue());
+			if(list!=null&&list.size()==0){
+				result.put("code",CodeEnum.nullData.getValue());
 				result.put("message","街道所有小区没有绑定坐标");
 			}else{
 				org.json.JSONArray tmp_jarray = new org.json.JSONArray();
@@ -1526,7 +1530,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				while(cursor.hasNext()){
 					Document teDocument = cursor.next();
 					JSONObject jObject = new JSONObject(teDocument.toJson());
-					
+
 					String code = jObject.getString("code");
 					
 					for(Map<String, Object> m:list){
@@ -1548,11 +1552,53 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
+			return  result;
 		}
 		
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> updateTinyAreaOfStore(String storeNo, String tinyVillageCodes) {
+
+		Map<String,Object> result = new HashMap<String,Object>();
+		if(storeNo!=null&&tinyVillageCodes!=null&&"".equals(storeNo)&&"".equals(tinyVillageCodes)){
+			result.put("code",CodeEnum.nullData.getValue());
+			result.put("message", CodeEnum.nullData.getDescription());
+			return result;
+		}
+		try {
+			TinyAreaManager tam = (TinyAreaManager)SpringHelper.getBean("tinyAreaManager");
+			MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
+			MongoDatabase database = mDbUtil.getDatabase();
+			MongoCollection<Document> collection = database.getCollection("tiny_area");
+			String[] codeArray  = tinyVillageCodes.split(",");
+
+			for(int i=0;i<codeArray.length;i++){
+				Document updateDoc = new Document("belong","private");
+				updateDoc.put("storeNo", storeNo);
+				collection.updateMany(Filters.eq("code",codeArray[i]),new Document("$set",updateDoc));
+				TinyArea tinyArea = tam.getTinyAreaByCode(codeArray[i]);
+				tinyArea.setArea_no(null);
+				tinyArea.setStoreNo(storeNo);
+				tinyArea.setBelong("private");
+				tinyArea.setEmployee_a_no(null);
+				tinyArea.setEmployee_b_no(null);
+				this.preObject(tinyArea);
+				saveObject(tinyArea);
+			}
+
+			result.put("code",CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("code",CodeEnum.error.getValue());
+			result.put("message", CodeEnum.error.getDescription());
+		}
+
+
+		return  result;
+	}
 
 
 }
