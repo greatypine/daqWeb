@@ -5243,13 +5243,16 @@ function ForDight(str,How){
     return Dight;  
  }
 function changeMoneyByDigit (x,t) {
-    x=x/10000;
+	var regin = x;
+    var s=x/10000;
     var y = '';
-    if(parseInt(x)/10000<=1){
+    if(parseInt(s)/10000<=1&&parseInt(s)/10000>0){
     	y=ForDight(x,t)+"万";
-    }else if(parseInt(x)/10000>1){
+    }else if(parseInt(s)/10000==0){
+    	y=ForDight(regin,t);
+    }else if(parseInt(s)/10000>1){
     	x=x/10000+'';
-    	y=ForDight(x,t)+"亿";
+    	y=ForDight(s,t)+"亿";
     }
     return y;
 }
