@@ -350,7 +350,7 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'无') AS area_code,"
 				+ "count(DISTINCT (case when (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_count,"
 				+ "count(DISTINCT (case when trading_price > 10 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_10_count,"
-				+ "count(DISTINCT (case when trading_price > 20 then customer_id end)) pay_20_count,"
+				+ "count(DISTINCT (case when trading_price > 20 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_20_count,"
 				+ "count(DISTINCT case when a.sign_time <='"+userOperationStatDto.getEndDate() + " 23:59:59' then customer_id end ) total_count FROM ";
 		
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
