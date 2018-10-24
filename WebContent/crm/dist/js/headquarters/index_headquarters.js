@@ -256,7 +256,15 @@ var initPageElements = function () {
       position: function (point, params, dom, rect, size) {
         // 固定在顶部
         return [point[0], '10%'];
-      }
+      },
+      formatter:function(params){//数据格式
+            var relVal = params[0].name+"<br/>";
+            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[0]['value']),1);
+            if(params.length>1){
+            	relVal += "<br/>"+params[1]['marker']+params[1]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[1]['value']),1);
+            }
+            return relVal;
+       }
     },
     calculable : true,
     grid: {
@@ -326,6 +334,19 @@ var initPageElements = function () {
           lineStyle: {
             color: '#ccc'
           }
+        },
+        axisLabel: {
+            margin: 2,
+            formatter: function (value, index) {
+                if (value >= 10000 && value < 10000000) {
+                    value = value / 10000 + "万";
+                } else if (value >= 10000000&&value < 100000000) {
+                    value = value / 10000000 + "千万";
+                }else if(value >= 100000000){
+                	value = value / 100000000 + "亿";
+                }
+                return value;
+            }
         }
       }
     ],
@@ -345,10 +366,21 @@ var initPageElements = function () {
                 color:'#D7504B',  //圈圈的颜色
                 lineStyle:{  
                     color:'#D7504B'  //线的颜色
-                }  
+                } 
             }  
         },
         markPoint: {
+          itemStyle: {
+            normal: {
+	             borderWidth: 1,            // 标注边线线宽，单位px，默认为1
+	             label: {
+                        show: true,
+                        formatter: function(value) { 
+						   return changeMoneyByDigit(value.value,1); 
+						} 
+	               }
+	          }
+          },
           data: [
             {type: 'max', name: '最大值'},
             {type: 'min', name: '最小值'}
@@ -374,9 +406,20 @@ var initPageElements = function () {
                 lineStyle:{  
                     color:'#26C0C0'  //线的颜色
                 }  
-            }  
+            }
         },
         markPoint: {
+          itemStyle: {
+            normal: {
+	             borderWidth: 1,            // 标注边线线宽，单位px，默认为1
+	             label: {
+                        show: true,
+                        formatter: function(value) { 
+						   return changeMoneyByDigit(value.value,1); 
+						} 
+	               }
+	          }
+          },
           data: [
             {type: 'max', name: '最大值'},
             {type: 'min', name: '最小值'}
@@ -5199,7 +5242,17 @@ function ForDight(str,How){
     Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
     return Dight;  
  }
-
+function changeMoneyByDigit (x,t) {
+    x=x/10000;
+    var y = '';
+    if(parseInt(x)/10000<=1){
+    	y=ForDight(x,t)+"万";
+    }else if(parseInt(x)/10000>1){
+    	x=x/10000+'';
+    	y=ForDight(x,t)+"亿";
+    }
+    return y;
+}
 //跳转事业群gmv
 function goToDeptGMV(){
 	  var role = curr_user.usergroup.code;
