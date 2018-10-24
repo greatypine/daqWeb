@@ -1516,5 +1516,38 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 
 	}
 
+	@Override
+	public void updateAreaStatusByMass(Long storeId) {
+		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+		AreaInfoManager areaInfoManager = (AreaInfoManager) SpringHelper.getBean("areaInfoManager");
+		AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
+		IFilter iFilter = FilterFactory.getSimpleFilter("store_id",storeId)
+				.appendAnd(FilterFactory.getSimpleFilter("status",0));
+		List<Area> areaList = (List<Area>) this.getList(iFilter);
+		if (areaList != null && areaList.size() > 0) {//更新片区状态为无效
+			Area save_area = null;
+			for (int i=0;i<areaList.size();i++){
+				save_area = areaList.get(i);
+				save_area.setStatus(1);
+				preObject(save_area);
+				areaManager.saveObject(save_area);
+
+
+				List<AreaInfo> areaInfos = areaDao.queryAreaInfoByAreaId(save_area.getId());
+				if (areaInfos != null) {
+					AreaInfo aInfo = null;
+					for (int j = 0; j < areaInfos.size(); j++) {
+						aInfo = areaInfos.get(j);
+						aInfo.setStatus(1);
+						preObject(aInfo);
+						areaInfoManager.saveObject(aInfo);
+					}
+				}
+			}
+		}
+
+
+	}
+
 
 }

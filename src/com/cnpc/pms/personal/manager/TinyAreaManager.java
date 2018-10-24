@@ -75,4 +75,20 @@ public interface TinyAreaManager extends IManager {
 	 */
 	public void updateTinyAreaBelong(Long tinyId,String belong);
 
+	/**
+	 * @Description 更新门店管辖小区坐标的归属标志和国安侠
+	 * @author gbl
+	 * @date 2018/10/24 9:43
+	 **/
+
+	public void updateTinyAreaByMass(String storeNo);
+
+	/**
+	 * @Description 根据小区code查询小区坐标
+	 * @author gbl
+	 * @date 2018/10/24 16:17
+	 **/
+
+	public TinyArea getTinyAreaByCode(String  code);
+
 }
