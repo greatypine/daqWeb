@@ -1567,36 +1567,29 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("message", CodeEnum.nullData.getDescription());
 			return result;
 		}
-		try {
-			TinyAreaManager tam = (TinyAreaManager)SpringHelper.getBean("tinyAreaManager");
-			MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
-			MongoDatabase database = mDbUtil.getDatabase();
-			MongoCollection<Document> collection = database.getCollection("tiny_area");
-			String[] codeArray  = tinyVillageCodes.split(",");
 
-			for(int i=0;i<codeArray.length;i++){
-				Document updateDoc = new Document("belong","private");
-				updateDoc.put("storeNo", storeNo);
-				collection.updateMany(Filters.eq("code",codeArray[i]),new Document("$set",updateDoc));
-				TinyArea tinyArea = tam.getTinyAreaByCode(codeArray[i]);
-				tinyArea.setArea_no(null);
-				tinyArea.setStoreNo(storeNo);
-				tinyArea.setBelong("private");
-				tinyArea.setEmployee_a_no(null);
-				tinyArea.setEmployee_b_no(null);
-				this.preObject(tinyArea);
-				saveObject(tinyArea);
-			}
+		TinyAreaManager tam = (TinyAreaManager)SpringHelper.getBean("tinyAreaManager");
+		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
+		MongoDatabase database = mDbUtil.getDatabase();
+		MongoCollection<Document> collection = database.getCollection("tiny_area");
+		String[] codeArray  = tinyVillageCodes.split(",");
 
-			result.put("code",CodeEnum.success.getValue());
-			result.put("message", CodeEnum.success.getDescription());
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.put("code",CodeEnum.error.getValue());
-			result.put("message", CodeEnum.error.getDescription());
+		for(int i=0;i<codeArray.length;i++){
+			Document updateDoc = new Document("belong","private");
+			updateDoc.put("storeNo", storeNo);
+			collection.updateMany(Filters.eq("code",codeArray[i]),new Document("$set",updateDoc));
+			TinyArea tinyArea = tam.getTinyAreaByCode(codeArray[i]);
+			tinyArea.setArea_no(null);
+			tinyArea.setStoreNo(storeNo);
+			tinyArea.setBelong("private");
+			tinyArea.setEmployee_a_no(null);
+			tinyArea.setEmployee_b_no(null);
+			this.preObject(tinyArea);
+			saveObject(tinyArea);
 		}
 
-
+		result.put("code",CodeEnum.success.getValue());
+		result.put("message", CodeEnum.success.getDescription());
 		return  result;
 	}
 
