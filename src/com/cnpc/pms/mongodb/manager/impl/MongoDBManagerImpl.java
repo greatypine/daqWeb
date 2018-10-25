@@ -450,6 +450,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		           Document doc = cursor.next();  
 		           jObject = new JSONObject();
 				   jObject.put("id", codeIds.get(doc.get("code")));
+				   jObject.put("code", doc.get("code"));
 				   storeNotmp = String.valueOf(doc.get("storeNo"));
 				   storetmp = storeManager.findStoreByStoreNo(storeNotmp);
 				   jObject.put("storeNo",doc.get("storeNo"));
