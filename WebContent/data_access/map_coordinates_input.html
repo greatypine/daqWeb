@@ -32,6 +32,14 @@
             right: 0;
             bottom: 0;
         }
+        #small_mapContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
 
         input[type="text"] {
             height: 25px;
@@ -41,13 +49,28 @@
             padding: 0 4px;
         }
 
-        .button-group {
-            position: absolute;
-            /* top: 20px; */
-            right: 20px;
-            font-size: 12px;
-            padding: 10px;
+        <!-- 地图导航栏 -->
+        .button-group{
+            position:absolute;
+            top:20px;
+            right:100px;
+            font-size:12px;
+            padding:0px;
+            bottom:0px;
+            border-radius:3px;
+            height:35px;
+            box-shadow:0 2px 2px rgba(0,0,0,.15);
+            background:#fff;
         }
+        .button-group .button{
+            height:35px;
+            padding:0 10px;
+            display:inline-block;
+            background-color:transparent;
+            color:#5f6477;
+        }
+        .button-group .button:hover{color:#66B3FF}
+
 
         .menu{position: absolute; top: 50px;  left: 20px; width: 350px;}
         .sidebar-form{position: fixed; width: 350px; height: 43px; line-height: 40px; background-color: #fff; box-shadow: 1px 2px 1px rgba(0,0,0,.15); border: 0!important;}
@@ -71,14 +94,63 @@
         .btn-style-gray{height: 28px;line-height: 28px;color: #FFF;border: 0;outline: none;padding-left: 5px;padding-right: 5px;border-radius: 3px;margin-bottom: 4px;cursor: pointer;background-color: #bcbcbc;}
         .font-color-red{color: #f00;}
         .font-color-blue{color: #00c0ff;}
-        .button-group{bottom:50px;}
         #tip{bottom:20px; top:auto; font-size:14px;}
         .amap-maptype-list{display: none!important;}
+
+
+
+        .pframe{background-color: rgba(0,0,0,0.5); height: 100%; min-height: 100%; position: fixed; top: 0; left: 0; width:100%; min-width: 100%; overflow: hidden}
+
+        #pf-frequency{overflow-y: auto;}
+        #pf-frequency::-webkit-scrollbar{width: 8px; background-color: #fff;}
+        #pf-frequency::-webkit-scrollbar-thumb{background-color: #adadad; border-radius: 3px;}
+        #pf-frequency::-webkit-scrollbar-track{background-color: #fff;}
+
+        .pframe .box{margin-top: 75px;}
+        .pframe .table > tbody > tr > td{line-height: 34px;}
+        .pf-frequency,.pf-operate,.pf-resource,.pf-field{display: none;}
+
+        .box-body .alert-warning{font-size: 16px; border-bottom: 1px dashed #f39c12; padding: 0 0 3px 3px; margin: 0 10px 10px 10px; display: inline-block; line-height: 24px;}
+        .box-body .bg-teal-active{font-size: 16px; border-bottom: 1px dashed #30bbbb; padding: 0 0 3px 3px; margin: 0 10px 10px 10px; display: inline-block; line-height: 24px;}
+
+
+        /*弹窗蓝色title样式*/
+        div.amap-info-content{
+            padding:0 0 0 0;
+        }
+        div.amap-info-outer{
+            padding:0px;
+        }
+        a.amap-info-close{
+            top:10px
+        }
+        /*弹窗X样式*/
+        A:link{
+            font-size: 14px;
+            color: #eee;
+            text-decoration: none;
+        }
+
+        A:visited{
+            font-size: 14px;
+            color: #eee;
+            text-decoration: none;
+        }
+
+        .layui-layer-btn a{
+            font-size:12px;
+        }
+
+
+
 
     </style>
 </head>
 <body class="skin-blue">
 <div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
+<div class="button-group" style="top:13px;right: 75px;background:#fff;padding:0px;bottom:0px;border-radius:3px;height:35px;box-shadow:0 2px 2px rgba(0,0,0,.15);">
+    <input type="button" class="button pfedit" value="公有小区切换门店"/>
+</div>
 <div>
     <div id="tip" style="color:#f00;"><strong>温馨提示：双击左键或者单击右键可以结束坐标录入！</strong><br><span id="info"></span></div>
 
@@ -130,6 +202,21 @@
 <!-- <div id="business" style="position:fixed;left:50%;top:50%;margin:-300px 0 0 -350px;z-index:16;display: none;">
 	<iframe name="leftFrame" id="leftFrame"  src="map_tinyVillage_add.html" width="900px" height="410px" scrolling="yes"  frameborder="0" ></iframe>	
 </div> -->
+<div class="pframe pf-frequency">
+    <div class="container" style="width: 1300px;">
+        <div class="box box-default" id="pf-frequency">
+            <div class="box-body" id="box_height" style="height: 600px">
+                <div id="small_mapContainer" ></div>
+                <div class="button-group" style="top:20px;right: 20px;background:#fff;padding:0px;bottom:0px;border-radius:3px;height:35px;box-shadow:0 2px 2px rgba(0,0,0,.15);">
+                    <input type="button" class="button" onclick="checkAll()" value="全选"/>
+                    <input type="button" class="button" onclick="returnParent()" value="取消"/>
+                    <input type="button" class="button" onclick="doSave()" value="保存"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="../crm/plugins/jQuery/jQuery-2.2.0.min.js"></script>
 <script type="text/javascript" src="../scripts/bidLib.js"></script>
@@ -150,6 +237,8 @@
         //document.getElementById("test").style.height= winHeight +"px";
         //DIV高度为浏览器窗口高度的一半
         document.getElementById("namelist").style.maxHeight= winHeight - 200 +"px";
+        document.getElementById("box_height").style.maxHeight= winHeight - 100 +"px";
+
     }
     window.onresize=autodivheight; //浏览器窗口发生变化时同时变化DIV高度
 </script>
@@ -187,6 +276,11 @@
         var top = iframe.contentWindow.document.querySelector("#top");
         document.body.scrollTop = document.body.offsetHeight;
         document.body.scrollTop = 100; */
+        $(".pfedit").click(function(){
+            $(this).parents("body").css("overflow","hidden");
+            $(this).parents().children(".pf-frequency").show();
+        });
+
         doManager("TinyVillageManager", "findTinyvillageByTownId",storeId, function(data, textStatus, XMLHttpRequest) {
             if(data.result){
                 var aaa = data.data;
@@ -212,6 +306,7 @@
                                     if(area_id == arrCoordinates[x].id){
                                         arrCoordinates[x].data[0].pop();
                                         areaAry[i]['area'] = arrCoordinates[x].data[0];
+                                        areaAry[i]['code'] = arrCoordinates[x].code;
                                         areaAry[i]['store_no'] = arrCoordinates[x].storeNo;
                                         areaAry[i]['storeName'] = arrCoordinates[x].storeName;
                                         areaAry[i]['belong'] = arrCoordinates[x].belong;
@@ -343,6 +438,13 @@
         //zooms : [ 4, 16 ],
         doubleClickZoom : false
     });
+    //公有小区坐标范围地图
+    var map_small = new AMap.Map("small_mapContainer", {
+        resizeEnable : true,
+        zoom : 15,
+        //zooms : [ 4, 16 ],
+        doubleClickZoom : false
+    });
 
     map.plugin(["AMap.MapType"],function(){
         //地图类型切换
@@ -355,7 +457,7 @@
     map.plugin(["AMap.ToolBar"],function(){
         //加载工具条
         var toolBaropt = {
-            offset :new AMap.Pixel(30,100),//相对于地图容器左上角的偏移量，正数代表向右下偏移。默认为AMap.Pixel(10,10)
+            offset :new AMap.Pixel(25,80),//相对于地图容器左上角的偏移量，正数代表向右下偏移。默认为AMap.Pixel(10,10)
             /*
              *控件停靠位置
              *LT:左上角;
@@ -408,24 +510,31 @@
             serviceRange.on("click", function () {
                 setNavListVisible(false);
             });
+            //设置公有区域门店服务范围
+            var small_serviceRange = new AMap.Polygon({
+                path: polygonArea,//设置多边形边界路径
+                strokeColor: "#F00", //线颜色
+                strokeOpacity: 0.9, //线透明度
+                strokeWeight: 2,    //线宽
+                fillColor: "#00DD00", //填充色
+                fillOpacity: 0//填充透明度
+            });
+            small_serviceRange.setMap(map_small);
+            map_small.setCenter(small_serviceRange.getBounds().getCenter());
+            small_serviceRange.on("click", function () {
+                setNavListVisible(false);
+            });
         }
         
 
-        var polygon;
+
         for(var i=0;i<areaAry.length;i++){
             if(areaAry[i].area!=null && areaAry[i].area.length>0){
-                polygon = new AMap.Polygon({
-                    path: cloneAry(areaAry[i].area),//设置多边形边界路径
-                    strokeColor: "#FF33FF", //线颜色
-                    strokeOpacity: 1.0, //线透明度
-                    strokeWeight: 2,    //线宽
-                    fillColor: "#1791fc", //填充色
-                    fillOpacity: 0.45,//填充透明度
-                    extData:{"idx":i,"state":3} // state 0: 新录入  1： 录入编辑 2： 更新编辑  3：已录入
-                });
-                polygon.setMap(map);
-                areaAry[i]["polygon"] = polygon;
-                if (storeno == areaAry[i].store_no) {
+                var villagearea =  areaAry[i];
+                var polygon = drawVillageService(villagearea,i);
+
+                villagearea["polygon"] = polygon;
+                if (storeno == villagearea.store_no) {
                     areaAry[i]["editor"] =  new AMap.PolyEditor(map, polygon);
                     polygon.on("click",function(e){
                         lastIdx = eventHandlePolygon(areaAry, lastIdx, e);
@@ -443,6 +552,93 @@
                 }
             }
         }
+    }
+    var smallVillageArray = new Array();
+    var infoWindow1;
+    //根据belong字段画不同颜色小区范围：公有的黄色，私有的粉红belong
+    function drawVillageService(villagearea,i){
+        var polygon;
+        if(villagearea.belong == 'private'){
+            polygon = new AMap.Polygon({
+                path: cloneAry(villagearea.area),//设置多边形边界路径
+                strokeColor: "#FF33FF", //线颜色
+                strokeOpacity: 1.0, //线透明度
+                strokeWeight: 2,    //线宽
+                fillColor: "#1791fc", //填充色
+                fillOpacity: 0.45,//填充透明度
+                extData:{"idx":i,"state":3} // state 0: 新录入  1： 录入编辑 2： 更新编辑  3：已录入
+            });
+        }else if(villagearea.belong == 'public'){
+            polygon = new AMap.Polygon({
+                path: cloneAry(villagearea.area),//设置多边形边界路径
+                strokeColor: "#ed5f29", //线颜色
+                strokeOpacity: 1.0, //线透明度
+                strokeWeight: 2,    //线宽
+                fillColor: "#ff4200", //填充色
+                fillOpacity: 0.45,//填充透明度
+                extData:{"idx":i,"state":3} // state 0: 新录入  1： 录入编辑 2： 更新编辑  3：已录入
+            });
+            var polygon_small = new AMap.Polygon({
+                path: cloneAry(villagearea.area),//设置多边形边界路径
+                strokeColor: "#ed5f29", //线颜色
+                strokeOpacity: 1.0, //线透明度
+                strokeWeight: 2,    //线宽
+                fillColor: "#ff4200", //填充色
+                fillOpacity: 0.45,//填充透明度
+                extData:{"idx":i,"state":3,"villageTag":0,"name":villagearea.name,"storeName":villagearea.storeName} // state 0: 新录入  1： 录入编辑 2： 更新编辑  3：已录入
+            });
+            polygon_small.setMap(map_small);
+            villagearea["polygon_small"] = polygon_small;
+            smallVillageArray.push(villagearea);
+            polygon_small.on("mouseover",function(e){
+                var name = e.target.getExtData().name;
+                var storeName = e.target.getExtData().storeName;
+
+                var info="";
+                info = info+"<div style=\"padding:0 0 10px 0;\"><div style=\"background-color:#80e4ef;padding:5px 18px 5px 10px;color:#fff\"><span>小区信息</span></div>";
+                info = info+"<div style=\"padding:10px 18px 0px 14px;line-height:24px;\">";
+                info = info+"<span>小区名称："+(name==null?"无":name)+"</span></br>";
+                info = info+"<span>所属门店："+(storeName==null?"无":storeName)+"</span></br>";
+                infoWindow1 = new AMap.InfoWindow({
+                    content: info  //使用默认信息窗体框样式，显示信息内容
+                });
+                infoWindow1.open(map, e.target.getBounds().getCenter());
+            });
+
+            polygon_small.on("mouseout",function(e){
+                if(infoWindow1.Hh){
+ 	    			infoWindow1.close();
+ 	    		}
+            });
+            polygon_small.on("click",function(e){
+                var name = e.target.getExtData().name;
+                var storeName = e.target.getExtData().storeName;
+                var idx = e.target.getExtData().idx;
+                var state = e.target.getExtData().state;
+                var villageTag = e.target.getExtData().villageTag;
+                if(parseInt(villageTag)==0){
+                    e.target.setOptions({
+                        strokeColor:"#00DD00",
+                        fillColor:"#1791fc", //填充色
+                        fillOpacity: 0.6,//填充透明度
+                    });
+                    e.target.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":1});
+                }else if(parseInt(villageTag)==1){
+                    e.target.setOptions({
+                        strokeColor:"#ed5f29",
+                        fillColor:"#ff4200", //填充色
+                        fillOpacity: 0.6,//填充透明度
+                    });
+                    e.target.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":0});
+                }
+
+
+            });
+        }else{
+            console.log("the village with 'belong' at mongo ont 'private' or 'public'");
+        }
+        polygon.setMap(map);
+        return polygon;
     }
 
     var cloneAry = function (srcArg) {
@@ -564,11 +760,19 @@
     };
     // 设置多边形样式
     var setPolygonStyle = function (areaAry, offIdx, onIdx) {
-        var offOption = {
+        var offOptionprivate = {
             strokeColor: "#FF33FF", //线颜色
             strokeOpacity: 1.0, //线透明度
             strokeWeight: 2,    //线宽
             fillColor: "#1791fc", //填充色
+            fillOpacity: 0.45//填充透明度
+        };
+
+        var offOptionpublic = {
+            strokeColor: "#ed8f3b", //线颜色
+            strokeOpacity: 1.0, //线透明度
+            strokeWeight: 2,    //线宽
+            fillColor: "#ff4200", //填充色
             fillOpacity: 0.45//填充透明度
         };
 
@@ -580,8 +784,10 @@
             fillOpacity: 0.45//填充透明度
         };
         if (typeof(offIdx) != "undefined" && offIdx != null) {
-            if(typeof(areaAry[offIdx].polygon) != "undefined") {
-                areaAry[offIdx].polygon.setOptions(offOption);
+            if(typeof(areaAry[offIdx].polygon) != "undefined" && areaAry[offIdx].belong == 'private') {
+                areaAry[offIdx].polygon.setOptions(offOptionprivate);
+            }else if(typeof(areaAry[offIdx].polygon) != "undefined" && areaAry[offIdx].belong == 'public'){
+                areaAry[offIdx].polygon.setOptions(offOptionpublic);
             }
         }
 
@@ -975,6 +1181,90 @@
     /* function addArea(){
     	$("#business").show();
     } */
+    //关闭公有小区切换门店tab页
+    function returnParent(){
+        for(var i = 0; i <smallVillageArray.length; i++){
+            var polygon_small = smallVillageArray[i].polygon_small;
+            var name = polygon_small.getExtData().name;
+            var storeName = polygon_small.getExtData().storeName;
+            var idx = polygon_small.getExtData().idx;
+            var state = polygon_small.getExtData().state;
+            polygon_small.setOptions({
+                strokeColor:"#ed5f29",
+                fillColor:"#ff4200", //填充色
+                fillOpacity: 0.45,//填充透明度
+            })
+            polygon_small.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":0});
+        }
+        $(".pf-frequency").hide();
+        $(this).parents("body").css("overflow","auto");
+    }
+
+    function checkAll(){
+        for(var i = 0; i <smallVillageArray.length; i++){
+            var polygon_small = smallVillageArray[i].polygon_small;
+            var name = polygon_small.getExtData().name;
+            var storeName = polygon_small.getExtData().storeName;
+            var idx = polygon_small.getExtData().idx;
+            var state = polygon_small.getExtData().state;
+            polygon_small.setOptions({
+                strokeColor:"#00DD00",
+                fillColor:"#1791fc", //填充色
+                fillOpacity: 0.6,//填充透明度
+            })
+            polygon_small.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":1});
+        }
+    }
+    function doSave(){
+        var code_str = "";
+        for(var i = 0; i <smallVillageArray.length; i++){
+            var polygon_small = smallVillageArray[i].polygon_small;
+            var villageTag = polygon_small.getExtData().villageTag;
+            if(!AMap.GeometryUtil.isRingInRing(smallVillageArray[i].polygon_small.getPath(),serviceRange.getPath())){
+                $$.showMessage("系统信息",'小区范围超出门店服务范围，保存失败！');
+                return ;
+            };
+            if(villageTag == 1 && i != smallVillageArray.length-1){
+                code_str += smallVillageArray[i].code+",";
+            }else if (villageTag == 1 && i == smallVillageArray.length-1){
+                code_str += smallVillageArray[i].code;
+            }
+
+        }
+        doManager("MongoDBManager", "updateTinyAreaOfStore", [storeno,code_str], function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var jsonData = $.fromJSON(data.data);
+                if(jsonData.code == 200){
+                    $$.showMessage("系统信息",'保存成功！');
+                    $(".pf-frequency").hide();
+                    $(this).parents("body").css("overflow","auto");
+                    window.location.reload();
+                }else if(jsonData.code==9000033){ //坐标交叉保存失败
+                    /* $("#intersectionId").html(jsonData.message);
+                     $("#editarea").dialog({
+                     bgiframe: true,
+                     title: '坐标录入',
+                     width: 300,
+                     height: 200,
+                     modal: true,
+                     buttons: {
+                     "${form.ui.ok}": function () {
+                     $("#editarea").dialog('close');
+                     }
+                     }
+                     });
+                     */
+                    $$.showMessage("系统信息","保存失败!");
+                }else{
+                    $$.showMessage("系统信息", "保存失败!");
+                }
+            } else {
+                $$.showMessage("系统信息", "保存失败!");
+            };
+        },false);
+
+
+    }
 
 </script>
 </body>
