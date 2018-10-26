@@ -32,13 +32,13 @@
             right: 0;
             bottom: 0;
         }
-        #small_mapContainer {
+        /*#small_mapContainer {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-        }
+        }*/
 
 
         input[type="text"] {
@@ -70,6 +70,78 @@
             color:#5f6477;
         }
         .button-group .button:hover{color:#66B3FF}
+        .checkboxFive {width: 20px;position: relative; margin: 10px 10px 10px 10px;margin-bottom:4px;top:6px; padding-left: 10px;}
+        .checkboxFive label {
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+            position: absolute;
+            top: 0px;
+            left: 0;
+            background: -moz-linear-gradient(top, #f4f4f4 0%, #f9f8f8 100%);
+            background: -webkit-linear-gradient(top, #f4f4f4 0%, #f9f8f8 100%);
+            background: linear-gradient(to bottom, #f4f4f4 0%, #f9f8f8 100%);
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+            border-radius: 4px;
+            -moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+            -webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+            box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.5), 0px 1px 0px rgba(255, 255, 255, 0.4);
+        }
+        .checkboxFive label:after {
+            content: '';
+            width: 12px;
+            height: 7px;
+            position: absolute;
+            top: 5px;
+            left: 4px;
+            border: 3px solid #5a5a5a;
+            border-top: none;
+            border-right: none;
+            background: transparent;
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+            opacity: 0;
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+        .checkboxFive label:hover::after {
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+            opacity: 0.3;
+        }
+        .checkboxFive input[type=checkbox] {
+            visibility: hidden;
+        }
+        .checkboxFive input[type=checkbox]:checked + label:after {
+            filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+            opacity: 1;
+        }
+
+        .amap-marker .marker-route {
+            position: absolute;
+            padding: 5px 10px;
+            color: #e90000;
+            background: #ff9600;
+            cursor: pointer;
+            white-space:nowrap;
+            position: relative;
+            color: #fff;
+            border-radius: 3px;
+            font-size:14px;
+        }
+        .marker-route:after {
+            content:'';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #ff9600;
+            bottom: -6px;
+            left:50%;
+            margin-left:-5px;
+        }
 
 
         .menu{position: absolute; top: 50px;  left: 20px; width: 350px;}
@@ -142,15 +214,73 @@
         }
 
 
+        #dialog {
+            width: 25%;
+            min-height: 5%;
+            max-height: 100%;
+            border: #333333 solid 1px;
+            border-radius: 8px;
+            -webkit-box-shadow: 3px 3px 3px 3px #666666;
+            box-shadow: 3px 3px 3px 3px #666666;
+            position: fixed;
+            background-color: white;
+            z-index: 1000000;
+            /*display: none;*/
+        }
+        #dialog>div {
+            font-size: 14px;
+            padding: 20px 10px;
+        }
+        #dialog>footer {
+            /*padding: 10px 0 10px 75%;*/
+            text-align: center;
+            padding: 20px 0;
+        }
+        /*设置模态框的位置--页面居中*/
+
+        .dialog_position_center {
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+
+
+        #process_div{
+            background-color:#292a2b;
+            display:inline;
+            z-index:100000;
+            left:0px;
+            opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+            filter:Alpha(Opacity=30);
+            opacity: 0.3;
+        }
+
+       /* #process_div_pic{
+            position:fixed;
+            top:50%;
+            left:50%;
+            z-index:1000;
+            margin:-16px 0 0 -50px;
+            width:100px;
+            height:32px;
+            color: #fff;
+        }*/
+
+
 
 
     </style>
 </head>
 <body class="skin-blue">
+<div id="process_div" ></div>
+<!--<div id="process_div_pic" ><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>-->
 <div id="mapContainer" style="background-color:rgba(0,0,0,0.5)"></div>
-<div class="button-group" style="top:13px;right: 75px;background:#fff;padding:0px;bottom:0px;border-radius:3px;height:35px;box-shadow:0 2px 2px rgba(0,0,0,.15);">
-    <input type="button" class="button pfedit" value="公有小区切换门店"/>
-</div>
+<!--<div class="button-group" style="top:13px;right: 75px;background:#fff;padding:0px;bottom:0px;border-radius:3px;height:35px;box-shadow:0 2px 2px rgba(0,0,0,.15);">
+    <input type="button" class="button pfedit" value="公有小区门店重置"/>
+</div>-->
 <div>
     <div id="tip" style="color:#f00;"><strong>温馨提示：双击左键或者单击右键可以结束坐标录入！</strong><br><span id="info"></span></div>
 
@@ -202,18 +332,39 @@
 <!-- <div id="business" style="position:fixed;left:50%;top:50%;margin:-300px 0 0 -350px;z-index:16;display: none;">
 	<iframe name="leftFrame" id="leftFrame"  src="map_tinyVillage_add.html" width="900px" height="410px" scrolling="yes"  frameborder="0" ></iframe>	
 </div> -->
-<div class="pframe pf-frequency">
-    <div class="container" style="width: 1300px;">
-        <div class="box box-default" id="pf-frequency">
-            <div class="box-body" id="box_height" style="height: 600px">
-                <div id="small_mapContainer" ></div>
-                <div class="button-group" style="top:20px;right: 20px;background:#fff;padding:0px;bottom:0px;border-radius:3px;height:35px;box-shadow:0 2px 2px rgba(0,0,0,.15);">
-                    <input type="button" class="button" onclick="checkAll()" value="全选"/>
-                    <input type="button" class="button" onclick="returnParent()" value="取消"/>
-                    <input type="button" class="button" onclick="doSave()" value="保存"/>
-                </div>
+<div id="dialog" style="display: none" class="dialog_position_center">
 
+    <div class="content1">
+        <div class="form-group">
+            <label for="areaName" class="col-sm-2 control-label" style="padding: 5px 12px;">片区</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="areaName">
+                </select>
             </div>
+        </div>
+    </div>
+    <footer>
+        <button class="btn btn-default" onclick="returnParent()">取消</button>
+        <button type="button" onclick="doSave()" class="btn btn-primary">保存</button>
+    </footer>
+
+</div>
+<div class="pframe pf-frequency">
+    <div class="container" style="width: 400px;">
+        <div class="box box-default" id="pf-frequency">
+            <!--<div class="box-body" id="box_height" style="height: 600px">
+                <div id="small_mapContainer" ></div>
+                <div class="button-group" style="top:20px;right: 130px;background:#fff;padding:0px;bottom:0px;border-radius:3px;height:35px;box-shadow:0 2px 2px rgba(0,0,0,.15);">
+                    <span class="checkboxFive">
+                        <input type='checkbox' id="landminingClick" onclick='checkAll()' value='landmining'>全选
+                        <label for="landminingClick"></label>
+                    </span>
+                </div>
+                <div class="button-group" style="top:20px;right: 20px;background:#fff;padding:0px;bottom:0px;border-radius:3px;height:35px;box-shadow:0 2px 2px rgba(0,0,0,.15);">
+                    <input type="button" class="button" onclick="doSave()" value="保存"/>
+                    <input type="button" class="button" onclick="returnParent()" value="退出"/>
+                </div>
+            </div>-->
         </div>
     </div>
 </div>
@@ -271,15 +422,17 @@
     $(function(){
     	document.oncontextmenu=function(){return false;}
     	getServicePosition();
+        $("#process_div").hide();
+        $("#process_div_pic").hide();
     	/* var iframe = document.querySelector("#leftFrame");
         var bot = iframe.contentWindow.document.querySelector("#bot");
         var top = iframe.contentWindow.document.querySelector("#top");
         document.body.scrollTop = document.body.offsetHeight;
         document.body.scrollTop = 100; */
-        $(".pfedit").click(function(){
+        /*$(".pfedit").click(function(){
             $(this).parents("body").css("overflow","hidden");
             $(this).parents().children(".pf-frequency").show();
-        });
+        });*/
 
         doManager("TinyVillageManager", "findTinyvillageByTownId",storeId, function(data, textStatus, XMLHttpRequest) {
             if(data.result){
@@ -388,6 +541,23 @@
                 $$.showMessage("系统信息", "数据加载异常！");
             }},false);
 
+        doManager("MongoDBManager", "getAreaByStore", [storeId], function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var jsonData = $.fromJSON(data.data);
+                if(jsonData.code == 200){
+                    var areaInfo = jsonData.areaInfo;
+                    if(areaInfo.length > 0){
+                        for(var i = 0;i<areaInfo.length; i++){
+                            var area = areaInfo[i];
+                            $("#areaName").append("<option value='"+area.area_no+"'>"+area.name+"</option>");
+                        }
+                    }
+
+
+                }
+            }
+        },false);
+
         $("#search").keyup(function(th){
             var searchStr = $("#search").val();
             $("span[id^='tinyvillage_']").each(function(i,t){
@@ -439,12 +609,12 @@
         doubleClickZoom : false
     });
     //公有小区坐标范围地图
-    var map_small = new AMap.Map("small_mapContainer", {
+    /*var map_small = new AMap.Map("small_mapContainer", {
         resizeEnable : true,
         zoom : 15,
         //zooms : [ 4, 16 ],
         doubleClickZoom : false
-    });
+    });*/
 
     map.plugin(["AMap.MapType"],function(){
         //地图类型切换
@@ -510,7 +680,7 @@
             serviceRange.on("click", function () {
                 setNavListVisible(false);
             });
-            //设置公有区域门店服务范围
+            /*//设置公有区域门店服务范围
             var small_serviceRange = new AMap.Polygon({
                 path: polygonArea,//设置多边形边界路径
                 strokeColor: "#F00", //线颜色
@@ -523,7 +693,7 @@
             map_small.setCenter(small_serviceRange.getBounds().getCenter());
             small_serviceRange.on("click", function () {
                 setNavListVisible(false);
-            });
+            });*/
         }
         
 
@@ -554,7 +724,7 @@
         }
     }
     var smallVillageArray = new Array();
-    var infoWindow1;
+    //var infoWindow1;
     //根据belong字段画不同颜色小区范围：公有的黄色，私有的粉红belong
     function drawVillageService(villagearea,i){
         var polygon;
@@ -578,7 +748,7 @@
                 fillOpacity: 0.45,//填充透明度
                 extData:{"idx":i,"state":3} // state 0: 新录入  1： 录入编辑 2： 更新编辑  3：已录入
             });
-            var polygon_small = new AMap.Polygon({
+            /*var polygon_small = new AMap.Polygon({
                 path: cloneAry(villagearea.area),//设置多边形边界路径
                 strokeColor: "#ed5f29", //线颜色
                 strokeOpacity: 1.0, //线透明度
@@ -631,9 +801,7 @@
                     });
                     e.target.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":0});
                 }
-
-
-            });
+            });*/
         }else{
             console.log("the village with 'belong' at mongo ont 'private' or 'public'");
         }
@@ -1154,11 +1322,21 @@
                     areaAry[idx].polygon.getExtData().state = POLYGON_STATE_UPDATE_EDIT;
                 },
                 0);
-        	}
-            contextMenu.addItem("删除", function () {
-                    deletePolygon(areaAry, idx);
-                },
-                1);
+                contextMenu.addItem("删除", function () {
+                        deletePolygon(areaAry, idx);
+                    },
+                    1);
+        	}else if(position != "" && areaAry[idx].belong == "public"){
+                contextMenu.addItem("删除", function () {
+                        deletePolygon(areaAry, idx);
+                    },
+                    0);
+                contextMenu.addItem("分配片区",function () {
+                        polygonDistributionArea(areaAry, idx);
+                    },
+                    1);
+            }
+
         }
         contextMenu.open(map, e.lnglat);
        	if (areaAry[idx].store_no != storeno &&　areaAry[idx].belong == "private") {
@@ -1182,7 +1360,7 @@
     	$("#business").show();
     } */
     //关闭公有小区切换门店tab页
-    function returnParent(){
+    /*function returnParent(){
         for(var i = 0; i <smallVillageArray.length; i++){
             var polygon_small = smallVillageArray[i].polygon_small;
             var name = polygon_small.getExtData().name;
@@ -1201,33 +1379,55 @@
     }
 
     function checkAll(){
-        for(var i = 0; i <smallVillageArray.length; i++){
-            var polygon_small = smallVillageArray[i].polygon_small;
-            var name = polygon_small.getExtData().name;
-            var storeName = polygon_small.getExtData().storeName;
-            var idx = polygon_small.getExtData().idx;
-            var state = polygon_small.getExtData().state;
-            polygon_small.setOptions({
-                strokeColor:"#00DD00",
-                fillColor:"#1791fc", //填充色
-                fillOpacity: 0.6,//填充透明度
-            })
-            polygon_small.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":1});
+        if($('#landminingClick').is(':checked')) {
+            for(var i = 0; i <smallVillageArray.length; i++){
+                var polygon_small = smallVillageArray[i].polygon_small;
+                var name = polygon_small.getExtData().name;
+                var storeName = polygon_small.getExtData().storeName;
+                var idx = polygon_small.getExtData().idx;
+                var state = polygon_small.getExtData().state;
+                polygon_small.setOptions({
+                    strokeColor:"#00DD00",
+                    fillColor:"#1791fc", //填充色
+                    fillOpacity: 0.6,//填充透明度
+                })
+                polygon_small.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":1});
+            }
+        }else{
+            for(var i = 0; i <smallVillageArray.length; i++){
+                var polygon_small = smallVillageArray[i].polygon_small;
+                var name = polygon_small.getExtData().name;
+                var storeName = polygon_small.getExtData().storeName;
+                var idx = polygon_small.getExtData().idx;
+                var state = polygon_small.getExtData().state;
+                polygon_small.setOptions({
+                    strokeColor:"#ed5f29",
+                    fillColor:"#ff4200", //填充色
+                    fillOpacity: 0.6,//填充透明度
+                })
+                polygon_small.setExtData({"name":name,"storeName":storeName,"idx":idx,"state":state,"villageTag":0});
+            }
         }
+
     }
     function doSave(){
         var code_str = "";
         for(var i = 0; i <smallVillageArray.length; i++){
             var polygon_small = smallVillageArray[i].polygon_small;
             var villageTag = polygon_small.getExtData().villageTag;
-            if(!AMap.GeometryUtil.isRingInRing(smallVillageArray[i].polygon_small.getPath(),serviceRange.getPath())){
-                $$.showMessage("系统信息",'小区范围超出门店服务范围，保存失败！');
-                return ;
-            };
+
             if(villageTag == 1 && i != smallVillageArray.length-1){
                 code_str += smallVillageArray[i].code+",";
+                if(!AMap.GeometryUtil.isRingInRing(smallVillageArray[i].polygon_small.getPath(),serviceRange.getPath())){
+                    $$.showMessage("系统信息",'小区范围超出门店服务范围，保存失败！');
+                    return ;
+                };
             }else if (villageTag == 1 && i == smallVillageArray.length-1){
                 code_str += smallVillageArray[i].code;
+                if(!AMap.GeometryUtil.isRingInRing(smallVillageArray[i].polygon_small.getPath(),serviceRange.getPath())){
+                    $$.showMessage("系统信息",'小区范围超出门店服务范围，保存失败！');
+                    return ;
+                };
             }
 
         }
@@ -1240,20 +1440,6 @@
                     $(this).parents("body").css("overflow","auto");
                     window.location.reload();
                 }else if(jsonData.code==9000033){ //坐标交叉保存失败
-                    /* $("#intersectionId").html(jsonData.message);
-                     $("#editarea").dialog({
-                     bgiframe: true,
-                     title: '坐标录入',
-                     width: 300,
-                     height: 200,
-                     modal: true,
-                     buttons: {
-                     "${form.ui.ok}": function () {
-                     $("#editarea").dialog('close');
-                     }
-                     }
-                     });
-                     */
                     $$.showMessage("系统信息","保存失败!");
                 }else{
                     $$.showMessage("系统信息", "保存失败!");
@@ -1262,9 +1448,48 @@
                 $$.showMessage("系统信息", "保存失败!");
             };
         },false);
+    }*/
 
-
+    function returnParent(){
+        $("#dialog").hide();
+        $("body").css("overflow","auto");
+        $("#process_div").hide();
+        $("#process_div_pic").hide();
     }
+
+
+    function polygonDistributionArea(areaAry, idx){
+        if(!AMap.GeometryUtil.isRingInRing(areaAry[idx].polygon.getPath(),serviceRange.getPath())){
+            $$.showMessage("系统信息",'该小区不在本店服务范围内，无法分配片区，请删除后重新录入小区坐标，并在门店画片中分配片区！');
+            return ;
+        }else{
+            $("#process_div").show();
+            $("#process_div_pic").show();
+            $("body").css("overflow","hidden");
+            $("#dialog").show();
+        }
+    }
+
+    function doSave(){
+        doManager("MongoDBManager", "updateTinyAreaOfStore", [storeno,code_str], function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var jsonData = $.fromJSON(data.data);
+                if(jsonData.code == 200){
+                    $$.showMessage("系统信息",'保存成功！');
+                    $(".pf-frequency").hide();
+                    $(this).parents("body").css("overflow","auto");
+                    window.location.reload();
+                }else if(jsonData.code==9000033){ //坐标交叉保存失败
+                    $$.showMessage("系统信息","保存失败!");
+                }else{
+                    $$.showMessage("系统信息", "保存失败!");
+                }
+            } else {
+                $$.showMessage("系统信息", "保存失败!");
+            };
+        },false);
+    }
+
 
 </script>
 </body>
