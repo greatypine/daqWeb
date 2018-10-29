@@ -5198,7 +5198,7 @@ function changeMoneyByDigit (x,t) {
     var s=x/10000;
     var y = '';
     if(parseInt(s)/10000<=1&&parseInt(s)/10000>0){
-    	y=ForDight(x,t)+"万";
+    	y=ForDight(s,t)+"万";
     }else if(parseInt(s)/10000==0){
     	y=ForDight(regin,t);
     }else if(parseInt(s)/10000>1){
