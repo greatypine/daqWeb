@@ -5185,6 +5185,10 @@ function js_alert(){
 	crm_alert(0,"近期开放，敬请期待");
 }
 
+function js_alert_temporary(){
+    crm_alert(0,"由于近期将频繁清洗订单收入数据，订单档案功能临时关闭至11月2日。");
+}
+
   //切换城市
   function showMoreCity(){
 	 

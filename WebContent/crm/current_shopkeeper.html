@@ -201,6 +201,7 @@
                                         <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
                                         <dd><a href="javascript:goToUserProfileStat()"><span class="fa fa-user"></span>用户档案</a></dd>
                                         <!--<dd><a href="javascript:searchData()"><span class="fa fa-file-o"></span>订单档案</a></dd>-->
+                                        <dd class="logo-prohibit"><a href="javascript:js_alert_temporary()"><span class="fa fa-file-o"></span>订单档案</a></dd>
                                         <dd><a href="javascript:searchArea()"><span class="fa fa-copy"></span>片区档案</a></dd>
                                         <!-- <dd><a href="javascript:
 
@@ -3110,7 +3111,11 @@ function initStoreHistoryGMV(){
   function js_alert(){
 		crm_alert(0,"近期开放，敬请期待");
 	}
-  
+
+    function js_alert_temporary(){
+        crm_alert(0,"由于近期将频繁清洗订单收入数据，订单档案功能临时关闭至11月2日。");
+    }
+
   //数据查找-片区数据
 //   function searchArea(){
 // 	  var url = "dynamicData_areaInfo.html?t="+encode64('2')+"&s=&sn="+encode64(currentStore.name)+"&c=&cn=&e="+encode64(EMPLOYEE_ID);
