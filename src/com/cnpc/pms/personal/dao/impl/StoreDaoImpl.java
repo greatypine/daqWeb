@@ -1446,12 +1446,11 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
 		String sql = "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
 				+ "min(dot.department_name) as department_name,min(dot.channel_name) as channel_name,"
-				+ "ifnull(dround(sum(case when te.joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
-				+ "ifnull(dround(sum(case when te.joint_ims='no' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as platform_fee,"
-				+ "ifnull(dround(sum(case when te.joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
-				+ "ifnull(dround(sum(case when te.joint_ims='yes' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as ims_fee,"
-				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,gemini.t_eshop te, t_dist_citycode tdc "
-				+ "where dot.eshop_id=te.id and LPAD(dot.store_city_code, 4, '0')=tdc.cityno ";
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+				+ "ifnull(dround(sum(dot.apportion_rebate+dot.apportion_coupon),2),0) as order_fee,"
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc "
+				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno ";
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' ";
 		}
@@ -1509,12 +1508,19 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	public List<Map<String, Object>> exportStoreTradeProfit(DynamicDto dynamicDto){
 		String sql = "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
 				+ "min(dot.department_name) as department_name,min(dot.channel_name) as channel_name,"
-				+ "ifnull(dround(sum(case when te.joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
-				+ "ifnull(dround(sum(case when te.joint_ims='no' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as platform_fee,"
-				+ "ifnull(dround(sum(case when te.joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
-				+ "ifnull(dround(sum(case when te.joint_ims='yes' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as ims_fee,"
-				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,gemini.t_eshop te, t_dist_citycode tdc "
-				+ "where dot.eshop_id=te.id and LPAD(dot.store_city_code, 4, '0')=tdc.cityno ";
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+                + "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+                + "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.apportion_coupon else 0 end),2),0) as platform_coupon,"
+                + "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.apportion_coupon else 0 end),2),0) as ims_coupon,"
+                + "ifnull(dround(sum(dot.apportion_coupon),2),0) as total_coupon,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.apportion_rebate else 0 end),2),0) as platform_rebate,"
+                + "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.apportion_rebate else 0 end),2),0) as ims_rebate,"
+                + "ifnull(dround(sum(dot.apportion_rebate),2),0) as total_rebate,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as platform_fee,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as ims_fee,"
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc "
+				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno ";
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' ";
 		}

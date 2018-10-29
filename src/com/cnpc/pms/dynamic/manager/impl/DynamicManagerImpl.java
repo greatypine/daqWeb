@@ -7200,19 +7200,19 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				return result;
 			}
 
-			String[] str_headers = {"城市","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
-			String[] headers_key = {"city_name","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
+			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
-				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
-				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
+				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
 			}
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "dept_active".equals(dynamicDto.getSearchstr())){
-				str_headers = new String[]{"城市","门店名称","门店编号","事业群","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
-				headers_key = new String[]{"city_name","store_name","store_code","department_name","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+				str_headers = new String[]{"城市","门店名称","门店编号","事业群","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
+				headers_key = new String[]{"city_name","store_name","store_code","department_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
 			}
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "channel_active".equals(dynamicDto.getSearchstr())){
-				str_headers = new String[]{"城市","门店名称","门店编号","事业群","频道","销售收入（非优易）","营销费用（非优易）","销售收入（优易）","营销费用（优易）","毛利"};
-				headers_key = new String[]{"city_name","store_name","store_code","department_name","channel_name","platform_profit","platform_fee","ims_profit","ims_fee","total_profit"};
+				str_headers = new String[]{"城市","门店名称","门店编号","事业群","频道","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
+				headers_key = new String[]{"city_name","store_name","store_code","department_name","channel_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
 			}
 			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("毛利",list,str_headers,headers_key);
 			result = eeuo.exportFile();
