@@ -8,7 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.personal.entity.TinyArea;
+import com.cnpc.pms.personal.entity.TinyVillage;
+import com.cnpc.pms.personal.entity.TinyVillageCode;
+import com.cnpc.pms.personal.manager.TinyAreaManager;
+import com.cnpc.pms.personal.manager.TinyVillageCodeManager;
+import com.cnpc.pms.personal.manager.TinyVillageManager;
 import com.cnpc.pms.utils.ExportExcelByOssUtil;
+import com.mongodb.BasicDBList;
+import com.mongodb.BasicDBObject;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -948,6 +956,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		Map<String, Object> result = new HashMap<String, Object>();
 		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
 		TinyVillageDao tinyVillageDao = (TinyVillageDao)SpringHelper.getBean(TinyVillageDao.class.getName());
+		TinyAreaDao tinyAreaDao = (TinyAreaDao)SpringHelper.getBean(TinyAreaDao.class.getName());
 		try {
 			Store store = storeManager.findStore(storeId);// 查询门店
 			MongoDbUtil mDbUtil = (MongoDbUtil) SpringHelper.getBean("mongodb");
@@ -969,9 +978,29 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 				result.put("serviceArea", JSONArray.parse(jObject.get("vertex").toString()));
 			}
 
+
+
 			// 查询小区坐标
 			collection = database.getCollection("tiny_area");
-			dIterable = collection.find(Filters.eq("storeNo", store.getStoreno()));
+			//dIterable = collection.find(Filters.eq("storeNo", store.getStoreno()));
+
+			BasicDBList basicDBList = new BasicDBList();
+
+			BasicDBList storeBasic  = new BasicDBList();
+			storeBasic.add(new BasicDBObject("storeNo",store.getStoreno()));
+			storeBasic.add(new BasicDBObject("belong","private"));
+			basicDBList.add(new BasicDBObject("$and",storeBasic));
+
+			List<Map<String,Object>> tinyAreaList = tinyAreaDao.selectTinyAreaByTownExcludeStore(store.getTown_id(),store.getStoreno());
+			if(tinyAreaList!=null&&tinyAreaList.size()>0){
+				BasicDBList codeList = new BasicDBList();
+				for(int i=0;i<tinyAreaList.size();i++){
+					codeList.add(tinyAreaList.get(i).get("code"));
+				}
+				basicDBList.add(new BasicDBObject("code",new BasicDBObject("$in",codeList)));
+			}
+
+			dIterable = collection.find(new BasicDBObject("$or",basicDBList));
 			MongoCursor<Document> cursor = dIterable.iterator();
 
 			List<Object> tinyVillageCoordList = new ArrayList<Object>();
@@ -1547,6 +1576,118 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		}
 
 
+	}
+
+	@Override
+	public Map<String,Object> checkTinyAreaIsExcludeStore(Area area) {
+		List<AreaInfo> list = area.getChildrens();
+		Map<String,Object> tinyAreaResult = new HashMap<String,Object>();
+
+		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+		Store store = storeManager.findStore(area.getStore_id());
+		StringBuilder tinyvillageSbIncludePri = new StringBuilder();
+		StringBuilder tinyvillageSbIncludePub = new StringBuilder();
+		StringBuilder tinyvillageSbExcludePri = new StringBuilder();
+		StringBuilder tinyvillageSbExcludePub = new StringBuilder();
+		StringBuilder tinyvillageSbUnknown = new StringBuilder();
+		for (AreaInfo ai : list) {
+
+			// 检查是片区信息是否存在
+			List<Map<String, Object>> result = areaDao.queryTinyAreaExcludeCurStore(ai);
+
+			if (result != null && result.size() > 0) {
+
+
+				for (int i = 0; i < result.size(); i++) {
+					Map<String, Object> obj = result.get(i);
+					String storeNo = obj.get("storeno")==null?"":String.valueOf(obj.get("storeno"));
+					String belong = obj.get("belong")==null?"":String.valueOf(obj.get("belong").toString());
+					if(store.getStoreno().equals(storeNo)&&"private".equals(belong)){//已经被当前门店录入坐标且状态是private
+						tinyvillageSbIncludePri.append("、").append(obj.get("name").toString());
+					}else if(!store.getStoreno().equals(storeNo)&&"private".equals(belong)){//已经被其他门店录入坐标且状态是private
+						tinyvillageSbExcludePri.append("、").append(obj.get("name").toString());
+					}else if(!store.getStoreno().equals(storeNo)&&"public".equals(belong)){//已经被其他门店录入坐标且状态是public
+						tinyvillageSbExcludePub.append("、").append(obj.get("name").toString());
+					}else if(store.getStoreno().equals(storeNo)&&"public".equals(belong)){//已经被当前门店录入坐标且状态是public（闭店或者删除街道状态会更新为public）
+						tinyvillageSbIncludePub.append("、").append(obj.get("name").toString());
+					}else{//没有录入坐标
+						tinyvillageSbUnknown.append("、").append(obj.get("name").toString());
+					}
+
+				}
+
+			}
+		}
+
+		tinyAreaResult.put("includeTinyAreaPri",tinyvillageSbIncludePri);
+		tinyAreaResult.put("includeTinyAreaPub",tinyvillageSbIncludePub);
+		tinyAreaResult.put("excludeTinyAreaPri",tinyvillageSbExcludePri);
+		tinyAreaResult.put("excludeTinyAreaPub",tinyvillageSbExcludePub);
+		tinyAreaResult.put("tinyvillageSbUnknown",tinyvillageSbUnknown);
+		return tinyAreaResult;
+	}
+
+	@Override
+	public Map<String, Object> updateTinyVillageOfAreaAndStore(Long storeId, Long tinyVillageId,Long areaId) {
+
+		Map<String,Object> result = new HashMap<String,Object>();
+
+		TinyAreaManager tinyAreaManager = (TinyAreaManager) SpringHelper.getBean("tinyAreaManager");
+		AreaInfoManager areaInfoManager = (AreaInfoManager)SpringHelper.getBean("areaInfoManager");
+		AreaManager areaManager = (AreaManager)SpringHelper.getBean("areaManager");
+		TinyVillageCodeManager tinyVillageCodeManager = (TinyVillageCodeManager)SpringHelper.getBean("tinyVillageCodeManager");
+		TinyVillageManager tinyVillageManager = (TinyVillageManager)SpringHelper.getBean("tinyVillageManager");
+		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+
+		TinyVillage tinyVillage = tinyVillageManager.getTinyVillageById(tinyVillageId);
+		TinyVillageCode tinyVillageCode = tinyVillageCodeManager.findTinyVillageCodeByTinyId(tinyVillageId);
+		TinyArea tinyArea = tinyAreaManager.findTinyAreaByTinyId(tinyVillageId);
+		Store store = storeManager.findStore(storeId);
+
+		Area area = areaManager.queryArea(areaId);
+
+		//指定小区的片区
+		AreaInfo areaInfo = new AreaInfo();
+		areaInfo.setStore_id(storeId);
+		areaInfo.setTown_id(tinyVillage.getTown_id());
+		areaInfo.setVillage_id(tinyVillage.getVillage_id());
+		areaInfo.setTin_village_id(tinyVillageId);
+		areaInfo.setArea_id(area.getId());
+		areaInfo.setArea_no(area.getArea_no());
+		areaInfo.setBuild_model(-1);
+		areaInfo.setEmployee_a_no(area.getEmployee_a_no());
+		areaInfo.setEmployee_b_no(area.getEmployee_b_no());
+
+		preObject(areaInfo);
+		areaInfoManager.saveObject(areaInfo);
+
+
+		//更新小区的门店等信息
+		if(tinyArea!=null){
+			tinyArea.setStoreNo(store.getStoreno());
+			tinyArea.setBelong("private");
+			tinyArea.setEmployee_a_no(area.getEmployee_a_no());
+			tinyArea.setEmployee_b_no(area.getEmployee_b_no());
+			preObject(tinyArea);
+			tinyAreaManager.saveObject(tinyArea);
+		}
+
+		//更新mongodb 中小区坐标门店等信息
+		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
+		MongoDatabase database = mDbUtil.getDatabase();
+		MongoCollection<Document> collection = database.getCollection("tiny_area");
+		Document updateDoc = new Document("belong","private");
+		updateDoc.put("employee_a_no", area.getEmployee_a_no());
+		updateDoc.put("employee_b_no",area.getEmployee_b_no());
+		updateDoc.put("storeNo",store.getStoreno());
+		collection.updateMany(Filters.eq("code",tinyVillageCode.getCode()), new Document("$set",updateDoc));
+
+
+		result.put("status",CodeEnum.success.getValue());
+		result.put("message",CodeEnum.success.getDescription());
+
+		return result;
 	}
 
 

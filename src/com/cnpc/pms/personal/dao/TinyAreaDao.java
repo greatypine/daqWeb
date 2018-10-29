@@ -83,4 +83,12 @@ public interface TinyAreaDao extends IDAO {
 	* @throws
 	 */
 	public List<Map<String,Object>> selectTinyAreaByTownId(String storeNo,String townIds);
+
+	/**
+	 * @Description 查询同属街道下其他门店的小区坐标
+	 * @author gbl
+	 * @date 2018/10/25 15:25
+	 **/
+
+	public List<Map<String,Object>> selectTinyAreaByTownExcludeStore(String townIds,String storeNo);
 }
