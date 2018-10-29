@@ -5204,11 +5204,11 @@ function changeMoneyByDigit (x,t) {
     }else if(parseInt(s)/10000>1){
     	s=x/10000+'';
     	y=ForDight(s,t)+"亿";
-    }else if(regin<0&&abs(parseInt(s)/10000)<=1){
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)<=1){
     	y=ForDight(s,t)+"万";
-    }else if(regin<0&&abs(parseInt(s)/10000)==0)){
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)==0)){
     	y=ForDight(regin,t);
-    }else if(regin<0&&abs(parseInt(s)/10000)>1){
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)>1){
     	s=x/10000+'';
     	y=ForDight(s,t)+"亿";
     }
