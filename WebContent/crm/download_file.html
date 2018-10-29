@@ -537,7 +537,7 @@
     $('#city_name_tradetype').keyup(function(event){//门店交易额统计
         cityNameArray=new Array();
         $("#auto_city").empty();
-        $("#store_id_tradetype").val("");
+        $("#city_code_tradetype").val("");
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
             $("#city_id_tradetype").val("");
@@ -552,12 +552,14 @@
             }
             doManager('downloadFileManager','selectAllCity',null,function(data){
                 if(data.result){
-
+                    cityCodeMap["广东"] = "GD";
+                    cityNameArray.push("广东");
                     lst_select_city = JSON.parse(data.data);
                     for(var i=0;i<lst_select_city.length;i++){
                         cityNameArray.push(lst_select_city[i].cityname);
                         cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
                     }
+
                     var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
                     autoComplete.start(event);
                 }else{
@@ -687,6 +689,7 @@
     $('#city_name').keyup(function(event){//门店交易额统计
         cityNameArray=new Array();
         $("#auto_city_member").empty();
+        $("#city_code").val("");
         var str_name = $(this).val();
         if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
             $("#city_id").val("");
@@ -700,12 +703,14 @@
             }
             doManager('downloadFileManager','selectAllCity',null,function(data){
                 if(data.result){
-
                     lst_select_city = JSON.parse(data.data);
+                    cityCodeMap["广东"] = "GD";
+                    cityNameArray.push("广东");
                     for(var i=0;i<lst_select_city.length;i++){
                         cityNameArray.push(lst_select_city[i].cityname);
                         cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
                     }
+                    cityCodeMap["广东"] = "GD";
                     var autoComplete = new AutoComplete("city_name","auto_city_member",cityNameArray);
                     autoComplete.start(event);
                 }else{
