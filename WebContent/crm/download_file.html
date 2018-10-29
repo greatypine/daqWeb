@@ -190,6 +190,9 @@
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                                     </div>
+                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_country">
+                                        <button  type="button"  style="display:block"  onclick="export_country();" class="btn btn-block btn-warning">打包下载</button>
+                                    </div>
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_country_step1(1)">查询</button>
                                     </div>
@@ -205,7 +208,7 @@
                                             <tr>
                                                 <th width="8%">文件存储名称</th>
                                                 <th width="8%">文件模版名称</th>
-                                                <th width="10%">下载</th>
+                                                <th width="10%">操作</th>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -241,6 +244,9 @@
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                                     </div>
+                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_month">
+                                        <button  type="button"   onclick="export_monthly();" class="btn btn-block btn-warning">打包下载</button>
+                                    </div>
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_monthly_step1(1)">查询</button>
                                     </div>
@@ -256,7 +262,7 @@
                                             <tr>
                                                 <th width="8%">文件存储名称</th>
                                                 <th width="8%">文件模版名称</th>
-                                                <th width="10%">下载</th>
+                                                <th width="10%">操作</th>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -287,12 +293,16 @@
                                             <label>日期</label>
                                             <input type="text" class="form-control" id="daily_date" name="daily_date" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
                                         </div>
+
                                     </div>
                                 </div>
 
                                 <div class="clearfix">
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
+                                    </div>
+                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_daily">
+                                        <button  type="button" style="display:block"  onclick="export_daily();" class="btn btn-block btn-warning">打包下载</button>
                                     </div>
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_daily_step1(1)">查询</button>
@@ -309,7 +319,7 @@
                                             <tr>
                                                 <th width="8%">文件存储名称</th>
                                                 <th width="8%">文件模版名称</th>
-                                                <th width="10%">下载</th>
+                                                <th width="10%">操作</th>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -424,7 +434,7 @@
         type:"date",
         btns: ['confirm'],
         theme: '#11214e',
-        min: '2018-10-25',
+        min: '2018-10-28',
         max:max_date
     });
 
@@ -515,29 +525,10 @@
     var currentPage_customer = 1;
     var totalPage_customer = 1;
     function resetSerachParam(){
-        if(target==0){//总部
-            if(fromBar != "1" && fromBar != "2"){
-                $("#city_id_tradetype").val("");
-                $("#city_name_tradetype").val("");
-            }
-            $("#store_id_tradetype").val("");
-
-
-        }else if(target==1){//城市级别
-
-            $("#store_id_tradetype").val("");
-
-        }else if(target==2){//店长
-
-        }
-        var nowDate = new Date();
-        var month = nowDate.getMonth()+1;
-        var date = nowDate.getDate();
-        timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
-        nowDate.setDate(nowDate.getDate()+parseInt(-1));
-        var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01';
-        $("#searchTime").val(startDateStr +"-"+ timeStr);
-
+            $("#city_name_tradetype").val("");
+            $("#city_code_tradetype").val("");
+            $("#city_code").val("");
+            $("#city_name").val("");
     }
 
     ////////////////////////---------------月报----------------begin-------------///////////////////////////
@@ -579,7 +570,7 @@
     function search_monthly_step1(cur_page){
         var isSelCity = $("#city_code_tradetype").val();
         if(isSelCity==null||isSelCity==""){
-            crm_alert(5,"没有符合条件的数据！");
+            crm_alert(0,"请选择城市！");
             return;
         }
         isCreatePage1=false;
@@ -636,7 +627,7 @@
                         return;
                     }
                     totalPage_tradetype = result.total_pages;
-                    $("#totalRecord_store").html(result.pageinfo.totalRecords+1);
+                    $("#totalRecord_store").html(result.pageinfo.totalRecords);
                     if(!isCreatePage1){
                         $("#page_monthly").createPage({
                             pageCount:totalPage_tradetype,
@@ -647,10 +638,10 @@
                         });
                         isCreatePage1=true;
                     }
-                    var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
-                    $("#tradeType_tbody").append(firstStr);
+                  /*  var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
+                    $("#tradeType_tbody").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".csv'>下载</a></tr>";
                         $("#tradeType_tbody").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -728,7 +719,7 @@
     function search_daily_step1(cur_page){
         var isSelCity = $("#city_code").val();
         if(isSelCity==null||isSelCity==""){
-            crm_alert(5,"没有符合条件的数据！");
+            crm_alert(0,"请选择城市！");
             return;
         }
         isCityCreatePage1=false;
@@ -786,7 +777,7 @@
                         return;
                     }
                     totalPage_daily = result.total_pages;
-                    $("#totalRecord_city").html(result.pageinfo.totalRecords+1);
+                    $("#totalRecord_city").html(result.pageinfo.totalRecords);
                     if(!isCityCreatePage1){
                         $("#page_daily").createPage({
                             pageCount:totalPage_daily,
@@ -797,10 +788,10 @@
                         });
                         isCityCreatePage1=true;
                     }
-                    var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
-                    $("#tradeType_tbody_daily").append(firstStr);
+                   /* var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
+                    $("#tradeType_tbody_daily").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".csv'>下载</a></tr>";
                         $("#tradeType_tbody_daily").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -902,7 +893,7 @@
                         return;
                     }
                     totalPage_country = result.total_pages;
-                    $("#totalRecord_country").html(result.pageinfo.totalRecords+1);
+                    $("#totalRecord_country").html(result.pageinfo.totalRecords);
                     if(!isCreateCountryPage1){
                         $("#page_country").createPage({
                             pageCount:totalPage_country,
@@ -913,10 +904,10 @@
                         });
                         isCreateCountryPage1=true;
                     }
-                    var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
-                    $("#tradeType_tbody_country").append(firstStr);
+                    /*var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
+                    $("#tradeType_tbody_country").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".csv'>下载</a></tr>";
                         $("#tradeType_tbody_country").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -953,7 +944,33 @@
     ////////////////////////---------------全国----------------end-------------///////////////////////////
 
 
+//全部文件下载
+    function export_country(){
+        var filetime = $("#country_month").val();
+        var url = "https://cdn.guoanshuju.com/daqWeb/microAccount/country/"+filetime+"/country/all.zip";
+        window.open(url,"download_file");
+    }
+    function export_monthly(){
+        var filetime = $("#monthly_month").val();
+        var citys =$("#city_code_tradetype").val();
+        if(citys==null||citys==""){
+            crm_alert(0,"请选择城市！");
+            return;
+        }
+        var url = "https://cdn.guoanshuju.com/daqWeb/microAccount/month/"+filetime+"/"+citys+"/all.zip";
+        window.open(url,"download_file");
+    }
+    function export_daily(){
+        var filetime = $("#daily_date").val();
+        var citys = $("#city_code").val();
 
+        if(citys==null||citys==""){
+            crm_alert(0,"请选择城市！");
+            return;
+        }
+        var url = "https://cdn.guoanshuju.com/daqWeb/microAccount/daily/"+filetime+"/"+citys+"/all.zip";
+        window.open(url,"download_file");
+    }
 
 
 
