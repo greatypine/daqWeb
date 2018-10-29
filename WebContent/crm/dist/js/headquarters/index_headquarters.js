@@ -4907,6 +4907,19 @@ function gotobehavior(){
 	  window.open(url,"member_analysis");  
   }
 
+//数据下载-财务中心数据下载 //全国
+function goToFileDownload(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "download_file.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+    }else if(target==1){
+        url = "download_file.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+    }
+    window.open(url,"download_file");
+}
+
 
 //数据模型-优易模型-基础数据模型  //全国
 function goToYouyiInfo(){
