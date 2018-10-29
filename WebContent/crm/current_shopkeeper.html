@@ -216,7 +216,6 @@
                                         <dd><a href="javascript:searchStr(5)"><span class="fa fa-gears"></span>频道排名</a></dd>
                                     </dl>
                                     
-=======
                                         </dl>
                                         <dl class="pull-left">
                                             <dt><i></i>档案数据</dt>
@@ -239,7 +238,6 @@
                                         </dl>
 
                                     </div>
->>>>>>> d8b41641c1a5a98748a6b408f0f4682e953272bb
                                 </div>
                             </li>
                             <li>
@@ -3740,113 +3738,6 @@
 	  url+=sf;
 	  window.open(url,tg);
   }
-
-
-
-
-
-        // 近7日社员
-        option2 = {
-            title: {
-                text:"社员7日走势",x: '5%', y: '0%',textStyle:{color:"#efefef",fontSize:"16"},
-=======
-        grid: {
-            top: '28%',
-            left: '3%',
-            right: '2%',
-            bottom: '3%',
-            containLabel: true
-        },
-        xAxis: {
-            type: 'category',
-            //data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
-            splitLine: {
-                show: false
->>>>>>> d8b41641c1a5a98748a6b408f0f4682e953272bb
-            },
-            axisLine: {
-                show: true,
-                lineStyle:{color:'#ffc203'},
-            },
-            axisTick:{
-                show: false
-            },
-            axisLabel:{
-                show: true,
-                textStyle: {color:'#fff'}
-            },
-        },
-        yAxis: [
-            {
-                type: 'value',
-                position: 'left',
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    show: false
-                },
-                axisTick:{
-                    show: false
-                },
-                axisLabel:{
-                    show: true,
-                    textStyle: {color:'#fff'}
-                }
-            },
-            {
-                type: 'value',
-                position: 'right',
-                splitLine: {
-                    show: false
-                },
-                axisLine: {
-                    show: false
-                },
-                axisTick:{
-                    show: false
-                },
-                axisLabel:{
-                    show: true,
-                    textStyle: {color:'#fff'}
-                }
-            }
-        ],
-        series: [
-            {
-                name:'新增社员人数',
-                cursor: 'default',
-                type: 'bar',
-                yAxis: 1,
-                stack: '总量',
-                cursor: 'pointer',
-                label: {
-                    show: false,
-                    position: 'top',
-                    formatter: '{c} ',
-                    textStyle:{
-                        color:"#ff3064"
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        color: "#ff3064",
-                        label: {
-                            show: true,
-                            textStyle: {
-                                color: "#fff"
-                            },
-                            position: "top",
-
-                        }
-                    }
-                },
-
-            },
-        ]
-    };
-
-
 
     //合作社社员统计
     function goToUserMember(){
