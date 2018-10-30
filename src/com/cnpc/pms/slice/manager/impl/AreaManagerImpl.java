@@ -1021,20 +1021,29 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 					jObject.put("areaNo", "");
 					String code = jObject.getString("code");
 					tinyVillageDetail = tinyVillageDao.findTinyVillageInfoByCode(code);
+
 					if(tinyVillageDetail!=null&&tinyVillageDetail.size()>0){
-						jObject.put("tinyVillage_id", tinyVillageDetail.get(0).get("tiny_village_id"));
-						jObject.put("village_id",tinyVillageDetail.get(0).get("village_id"));
-						jObject.put("town_id",tinyVillageDetail.get(0).get("town_id"));
-					}
-					for (Map<String, Object> m : tinyvillageArealist) {
-						if (code.equals(m.get("code"))) {
-							jObject.put("areaName", m.get("name"));
-							jObject.put("areaNo", m.get("area_no"));
-							break;
+						Object tinyVillageDellable = tinyVillageDetail.get(0).get("dellable");
+						if(tinyVillageDellable==null||!tinyVillageDellable.equals(1)){
+							jObject.put("tinyVillage_id", tinyVillageDetail.get(0).get("tiny_village_id"));
+							jObject.put("village_id",tinyVillageDetail.get(0).get("village_id"));
+							jObject.put("town_id",tinyVillageDetail.get(0).get("town_id"));
+
+
+							for (Map<String, Object> m : tinyvillageArealist) {
+								if (code.equals(m.get("code"))) {
+									jObject.put("areaName", m.get("name"));
+									jObject.put("areaNo", m.get("area_no"));
+									break;
+								}
+							}
+
+							tmp_jarray.put(jObject);
+
 						}
+
 					}
 
-					tmp_jarray.put(jObject);
 				}
 
 				List<Map<String, Object>> areaList = areaDao.selectAreaOfStore(storeId);
