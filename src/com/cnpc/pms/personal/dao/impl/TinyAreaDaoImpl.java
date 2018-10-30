@@ -157,4 +157,12 @@ public class TinyAreaDaoImpl extends BaseDAOHibernate implements TinyAreaDao {
 		return query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 	}
 
+	@Override
+	public List<Map<String, Object>> selectTinyAreaByTownExcludeStore(String townIds, String storeNo) {
+		String sql = "select b.code,b.tiny_village_id,b.belong,b.store_no from (select id,name from t_tiny_village where town_id in ("+townIds+")) a  INNER JOIN tiny_area b on a.id = b.tiny_village_id where b.status=0 and b.belong='public' and b.store_no <> '"+storeNo+"'";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		return query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+	}
+
 }
