@@ -634,9 +634,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 
 		String sql = "SELECT IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' THEN 1 end),0) as total_cus, "
 				+ "IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' AND strleft(tc.create_time,10)>='"+userOperationStatDto.getBeginDate()+"' THEN 1 end),0) as new_cus, "
-				+ "min(td.cityno) as cityno,min(td.cityname) as cityname FROM gemini.t_customer tc JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
+				+ "ifnull(min(td.cityno),'无') AS cityno,ifnull(min(td.cityname),'无') AS cityname FROM gemini.t_customer tc LEFT JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
-			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%'";
+			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%' ";
 		}
 		sql = sql + " GROUP BY td.cityno order by td.cityno asc ";
 
@@ -665,9 +665,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	public List<Map<String, Object>> exportRegistCusStat(UserOperationStatDto userOperationStatDto){
 		String sql = "SELECT IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' THEN 1 end),0) as total_cus, "
 				+ "IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' AND strleft(tc.create_time,10)>='"+userOperationStatDto.getBeginDate()+"' THEN 1 end),0) as new_cus, "
-				+ "min(td.cityno) as cityno,min(td.cityname) as cityname FROM gemini.t_customer tc JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
+				+ "ifnull(min(td.cityno),'无') AS cityno,ifnull(min(td.cityname),'无') AS cityname FROM gemini.t_customer tc LEFT JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
-			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%'";
+			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%' ";
 		}
 		sql = sql + " GROUP BY td.cityno order by td.cityno asc ";
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);

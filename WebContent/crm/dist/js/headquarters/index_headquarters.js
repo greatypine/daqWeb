@@ -4907,6 +4907,19 @@ function gotobehavior(){
 	  window.open(url,"member_analysis");  
   }
 
+//数据下载-财务中心数据下载 //全国
+function goToFileDownload(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "download_file.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+    }else if(target==1){
+        url = "download_file.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+    }
+    window.open(url,"download_file");
+}
+
 
 //数据模型-优易模型-基础数据模型  //全国
 function goToYouyiInfo(){
@@ -5185,6 +5198,10 @@ function js_alert(){
 	crm_alert(0,"近期开放，敬请期待");
 }
 
+function js_alert_temporary(){
+    crm_alert(0,"由于近期将频繁清洗订单收入数据，订单档案功能临时关闭至11月2日。");
+}
+
   //切换城市
   function showMoreCity(){
 	 
@@ -5247,11 +5264,18 @@ function changeMoneyByDigit (x,t) {
     var s=x/10000;
     var y = '';
     if(parseInt(s)/10000<=1&&parseInt(s)/10000>0){
-    	y=ForDight(x,t)+"万";
+    	y=ForDight(s,t)+"万";
     }else if(parseInt(s)/10000==0){
     	y=ForDight(regin,t);
     }else if(parseInt(s)/10000>1){
-    	x=x/10000+'';
+    	s=x/10000+'';
+    	y=ForDight(s,t)+"亿";
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)<=1){
+    	y=ForDight(s,t)+"万";
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)==0){
+    	y=ForDight(regin,t);
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)>1){
+    	s=x/10000+'';
     	y=ForDight(s,t)+"亿";
     }
     return y;

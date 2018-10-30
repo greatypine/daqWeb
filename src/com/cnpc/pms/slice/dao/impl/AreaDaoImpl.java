@@ -696,7 +696,25 @@ public class AreaDaoImpl extends BaseDAOHibernate implements AreaDao {
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 	}
-	
-	
+
+	@Override
+	public List<Map<String, Object>> queryTinyAreaExcludeCurStore(AreaInfo areaInfo) {
+		String sql = "";
+		if (areaInfo.getTin_village_id() == null && areaInfo.getVillage_id() != null) {// 小区-'全部'
+			sql = "select t1.name,t1.id,t2.tiny_village_id,t2.storeno,t2.code,t2.belong from t_tiny_village t1 left join (select a.storeno,b.tiny_village_id,b.code,b.belong from t_store a inner join tiny_area b on a.storeno=b.store_no  "
+					+ " and b.status=0 ) t2 on t1.id = t2.tiny_village_id where (t1.dellable <> 1 or t1.dellable is null) and t1.status=0 and t1.village_id="
+					+ areaInfo.getVillage_id();
+
+		} else if (areaInfo.getTin_village_id() != null) {
+
+			sql = "select t1.name,t1.id,t2.tiny_village_id,t2.storeno,t2.code,t2.belong from t_tiny_village t1 left join (select a.storeno,b.tiny_village_id,b.code,b.belong from t_store a inner join tiny_area b on a.storeno=b.store_no  "
+					+ " and b.status=0) t2 on  t1.id = t2.tiny_village_id where id="
+					+ areaInfo.getTin_village_id();
+		}
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		return query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+	}
+
 
 }

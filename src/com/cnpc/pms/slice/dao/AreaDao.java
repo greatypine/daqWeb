@@ -304,4 +304,12 @@ public interface AreaDao {
 	 * @return
 	 */
 	public List<Map<String, Object>> queryAllAreaCount();
+
+	/**
+	 * @Description 查询非当前门店画小区坐标信息
+	 * @author gbl
+	 * @date 2018/10/26 11:13
+	 **/
+
+	public List<Map<String,Object>> queryTinyAreaExcludeCurStore(AreaInfo areaInfo);
 }

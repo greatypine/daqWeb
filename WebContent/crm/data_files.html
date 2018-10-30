@@ -122,7 +122,7 @@
 	.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
 	.ui-datepicker-quick span{height: 30px; line-height: 35px}
 	.ui-datepicker-time{background-color:transparent}
-	.ui-datepicker-css{width: 300px;}
+	.ui-datepicker-css{width: 270px;}
 
 	.checkboxFive {width: 20px;position: relative; margin: 20px 20px 20px 0; padding-left: 10px;}
 	.checkboxFive label {
@@ -222,7 +222,7 @@
 	            <div class="form-group col-lg-3">
 	              <label>时间</label>
 	             	<div class="search-con">
-						<div class="time" style="width: 300px;z-index: 99999;margin:0 15px 0 0;">
+						<div class="time" style="width: 270px;z-index: 99999;margin:0 15px 0 0;">
 						    <div class="time_endbg" id="time_endbg">
 						        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
 						        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
@@ -231,10 +231,10 @@
 						<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px 0 0;">	
 						    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
 						        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-						        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
+						        <!--<input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>-->
 						        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-						        <!--<input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-						        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>-->
+						        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
+								<!--<input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>-->
 						        <input class="ui-date-quick-button" type="button" value="全部" alt="2" name="">
 						        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
 						    </div>
@@ -533,9 +533,43 @@
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script> 
 <script type="text/javascript">
+	//格式化日期
+    Date.prototype.format=function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1, //月份
+            "d+" : this.getDate(), //日
+            "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+            "H+" : this.getHours(), //小时
+            "m+" : this.getMinutes(), //分
+            "s+" : this.getSeconds(), //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S" : this.getMilliseconds() //毫秒
+        };
+        var week = {
+            "0" : "\u65e5",
+            "1" : "\u4e00",
+            "2" : "\u4e8c",
+            "3" : "\u4e09",
+            "4" : "\u56db",
+            "5" : "\u4e94",
+            "6" : "\u516d"
+        };
+        if(/(y+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        if(/(E+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);
+        }
+        for(var k in o){
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
+    }
 
 
-<!--target(数据查询层级标识) 0:总部  1:城市级别 2:门店-->
+    <!--target(数据查询层级标识) 0:总部  1:城市级别 2:门店-->
 	layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
 	});
@@ -565,6 +599,13 @@
             var buttonValue= $(this).val();
             $('#last_data_choice').html(buttonValue);
         });
+        var nowDate = new Date();
+        nowDate.setDate(nowDate.getDate()-1);
+        var mdate = nowDate.format('yyyy/MM/dd');
+        $.setStartTime();
+        $("#searchTime").attr("value",mdate +'-'+ mdate);
+        $("#startOpenCardDate").attr("value",mdate);
+        $("#endOpenCardDate").attr("value",mdate);
         $( "#startOpenCardDate" ).datepicker( "option","minDate","2018/09/01" );
 		if(target==0){//总部
 			if(cityName!=""){
@@ -1588,13 +1629,14 @@ function resetSerachParam(){
   	  }else if(target==2){//店长
   		
   	  }
-	var nowDate = new Date();
-	var month = nowDate.getMonth()+1;
-    var date = nowDate.getDate();
-    timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
-    nowDate.setDate(nowDate.getDate()+parseInt(-1));
-    var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01'; 
-	$("#searchTime").val(startDateStr +"-"+ timeStr);
+    var nowDate = new Date();
+    nowDate.setDate(nowDate.getDate()-1);
+    var mdate = nowDate.format('yyyy/MM/dd');
+    //$.setStartTime();
+    $("#searchTime").val(mdate +"-"+ mdate);
+    $("#startOpenCardDate").val(mdate);
+    $("#endOpenCardDate").val(mdate);
+
 	$("#data_choice").html("默认时期");
     var a = document.getElementById("user_source");
     $('#storeClick').prop('checked',true);

@@ -3064,11 +3064,12 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 		String sql= "";
 		if(cityNo == null || "".equals(cityNo) ){
-			sql="select ifnull(city.cityname,'无') as city_name,dutm.opencount,dutm.nowcount,dutm.count199 from (select (case when regist_cityno = '' then null else regist_cityno end) as cityno," +
+			sql="select ifnull(city.cityname,'无') as city_name,sum(dutm.opencount) as opencount,sum(dutm.nowcount) as nowcount,sum(dutm.count199) as count199 from (select (case when regist_cityno = '' then null else regist_cityno end) as cityno," +
 					"SUM(case when member.associator_expiry_date>now() and  member.opencard_time is not null and member.opencard_time <= '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as opencount," +
 					"SUM(case when member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as nowcount," +
 					"SUM(case when member_type = 'associator_start_2' and member.opencard_time BETWEEN '"+dynamicDto.getBeginDate()+" 00:00:00' and '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as count199 " +
-					"from df_user_member member GROUP BY cityno) dutm LEFT JOIN t_dist_citycode city ON (lpad(dutm.cityno,4,'0') = city.cityno)";
+					"from df_user_member member GROUP BY cityno) dutm LEFT JOIN t_dist_citycode city ON (lpad(dutm.cityno,4,'0') = city.cityno) " +
+					"GROUP BY city_name ORDER BY (case when city.cityno is null then '9999' else city.cityno end),city.cityno";
 		}else{
 			sql="select ifnull(city.cityname,'无')  as city_name,dutm.opencount,dutm.nowcount,dutm.count199 from (select (case when regist_cityno = '' then null else regist_cityno end) as cityno," +
 					"SUM(case when member.associator_expiry_date>now() and  member.opencard_time is not null and member.opencard_time <= '"+dynamicDto.getEndDate()+" 23:59:59' then 1 else 0 end) as opencount," +
