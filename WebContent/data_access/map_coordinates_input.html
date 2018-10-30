@@ -336,6 +336,7 @@
 
     <div class="content1">
         <div class="form-group">
+            <input type="hidden" id="area_village_id">
             <label for="areaName" class="col-sm-2 control-label" style="padding: 5px 12px;">片区</label>
             <div class="col-sm-10">
                 <select class="form-control" id="areaName">
@@ -549,7 +550,7 @@
                     if(areaInfo.length > 0){
                         for(var i = 0;i<areaInfo.length; i++){
                             var area = areaInfo[i];
-                            $("#areaName").append("<option value='"+area.area_no+"'>"+area.name+"</option>");
+                            $("#areaName").append("<option value='"+area.id+"'>"+area.name+"</option>");
                         }
                     }
 
@@ -1463,24 +1464,35 @@
             $$.showMessage("系统信息",'该小区不在本店服务范围内，无法分配片区，请删除后重新录入小区坐标，并在门店画片中分配片区！');
             return ;
         }else{
-            $("#process_div").show();
-            $("#process_div_pic").show();
-            $("body").css("overflow","hidden");
-            $("#dialog").show();
+            var dellable = areaAry[idx].dellable;
+            if(dellable != 1){
+                $("#process_div").show();
+                $("#process_div_pic").show();
+                var village_id = areaAry[idx].id
+                $("#area_village_id").val(village_id);
+                $("body").css("overflow","hidden");
+                $("#dialog").show();
+            }else {
+                $$.showMessage("系统信息",'待删除小区无法分配片区！');
+                return;
+            }
+
+
         }
     }
 
     function doSave(){
-        doManager("MongoDBManager", "updateTinyAreaOfStore", [storeno,code_str], function(data, textStatus, XMLHttpRequest) {
+        var village_id = $("#area_village_id").val();
+        var areaoptions=$("#areaName option:selected");
+        var areaId = areaoptions.val();
+        doManager("areaManager", "updateTinyVillageOfAreaAndStore", [storeId,village_id,areaId], function(data, textStatus, XMLHttpRequest) {
             if (data.result) {
                 var jsonData = $.fromJSON(data.data);
-                if(jsonData.code == 200){
+                if(jsonData.status == 200){
                     $$.showMessage("系统信息",'保存成功！');
                     $(".pf-frequency").hide();
                     $(this).parents("body").css("overflow","auto");
                     window.location.reload();
-                }else if(jsonData.code==9000033){ //坐标交叉保存失败
-                    $$.showMessage("系统信息","保存失败!");
                 }else{
                     $$.showMessage("系统信息", "保存失败!");
                 }
