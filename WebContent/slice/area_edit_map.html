@@ -784,7 +784,8 @@
                             var areaName =  e.target.getExtData().areaName;
                             var name =  e.target.getExtData().tinyVillageName;
                             e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"belong":belong});
-						}
+                            window.parent.selectedTinyAreaByMap.push(tinyVillageId);
+                        }
 
 					}else if(currentStore.storeno!=storeNo&&belong=="public"){//小区非当前门店所画且是公有状态
                         if(!AMap.GeometryUtil.isRingInRing(e.target.getPath(),serviceRange.getPath())){
@@ -800,6 +801,8 @@
                             var areaName =  e.target.getExtData().areaName;
                             var name =  e.target.getExtData().tinyVillageName;
                             e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"belong":belong});
+
+                            window.parent.selectedTinyAreaByMap.push(tinyVillageId);
                         }
 					}else if(currentStore.storeno!=storeNo&&belong=="private"){//小区非当前门店所画且是私有状态
 						layer.msg("该小区还未被当前门店录入坐标范围",{"time":2000});
@@ -827,7 +830,12 @@
                         });
 					}
 
+
                     e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":3,"belong":belong});
+                    var tinyAreaIndex = window.parent.selectedTinyAreaByMap.indexOf(tinyVillageId);
+					if(tinyAreaIndex>-1){
+                        window.parent.selectedTinyAreaByMap.splice(tinyAreaIndex,1);
+					}
 
 
                 }
@@ -986,8 +994,10 @@ function drawTinyVillage(tinyVillageArray){
                         var storeNo = areaTinyVillageArray[i].getExtData().storeno;
                         var belong = areaTinyVillageArray[i].getExtData().belong;
                         areaTinyVillageArray[i].setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"marker":tinyVillageMarker,"belong":belong});
-
+                        window.parent.selectedTinyAreaByMap.push(tinyVillageId);
 					}
+
+
 
 				}
 				

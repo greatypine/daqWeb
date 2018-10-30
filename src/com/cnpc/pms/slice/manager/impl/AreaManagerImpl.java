@@ -1590,6 +1590,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		StringBuilder tinyvillageSbIncludePub = new StringBuilder();
 		StringBuilder tinyvillageSbExcludePri = new StringBuilder();
 		StringBuilder tinyvillageSbExcludePub = new StringBuilder();
+		StringBuilder tinyvillageIdSbExcludePub = new StringBuilder();
 		StringBuilder tinyvillageSbUnknown = new StringBuilder();
 		for (AreaInfo ai : list) {
 
@@ -1609,6 +1610,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 						tinyvillageSbExcludePri.append("、").append(obj.get("name").toString());
 					}else if(!store.getStoreno().equals(storeNo)&&"public".equals(belong)){//已经被其他门店录入坐标且状态是public
 						tinyvillageSbExcludePub.append("、").append(obj.get("name").toString());
+						tinyvillageIdSbExcludePub.append(",").append(obj.get("tiny_village_id"));
 					}else if(store.getStoreno().equals(storeNo)&&"public".equals(belong)){//已经被当前门店录入坐标且状态是public（闭店或者删除街道状态会更新为public）
 						tinyvillageSbIncludePub.append("、").append(obj.get("name").toString());
 					}else{//没有录入坐标
@@ -1624,6 +1626,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		tinyAreaResult.put("includeTinyAreaPub",tinyvillageSbIncludePub);
 		tinyAreaResult.put("excludeTinyAreaPri",tinyvillageSbExcludePri);
 		tinyAreaResult.put("excludeTinyAreaPub",tinyvillageSbExcludePub);
+		tinyAreaResult.put("excludeTinyAreaIdPub",tinyvillageIdSbExcludePub);
 		tinyAreaResult.put("tinyvillageSbUnknown",tinyvillageSbUnknown);
 		return tinyAreaResult;
 	}
