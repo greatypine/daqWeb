@@ -1594,5 +1594,16 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		return  result;
 	}
 
+	@Override
+	public Map<String, Object> getAreaByStore(Long storeId){
+		Map<String,Object> result = new HashMap<String,Object>();
+		AreaDao areaDao = (AreaDao)SpringHelper.getBean(AreaDao.class.getName());
+		List<Map<String, Object>> maps = areaDao.selectAreaOfStore(storeId);
+		result.put("areaInfo",maps);
+		result.put("code",CodeEnum.success.getValue());
+		result.put("message", CodeEnum.success.getDescription());
+		return  result;
+	}
+
 
 }

@@ -287,6 +287,8 @@ public interface MongoDBManager extends IManager{
 
 	public Map<String,Object> updateTinyAreaOfStore(String storeNo,String tinyVillageCodes);
 
+	public Map<String,Object> getAreaByStore(Long storeId);
+
 
 
 }
