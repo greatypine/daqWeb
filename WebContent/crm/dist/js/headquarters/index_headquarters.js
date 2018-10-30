@@ -338,11 +338,12 @@ var initPageElements = function () {
         axisLabel: {
             margin: 2,
             formatter: function (value, index) {
-                if (value >= 10000 && value < 10000000) {
+            	var axisData = Math.abs(value);
+                if (axisData >= 10000 && axisData < 10000000) {
                     value = value / 10000 + "万";
-                } else if (value >= 10000000&&value < 100000000) {
+                } else if (axisData >= 10000000&&axisData < 100000000) {
                     value = value / 10000000 + "千万";
-                }else if(value >= 100000000){
+                }else if(axisData >= 100000000){
                 	value = value / 100000000 + "亿";
                 }
                 return value;
