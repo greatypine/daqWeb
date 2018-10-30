@@ -708,17 +708,17 @@
                 if (storeno == villagearea.store_no) {
                     areaAry[i]["editor"] =  new AMap.PolyEditor(map, polygon);
                     polygon.on("click",function(e){
-                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e);
+                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e,null);
                     });
                     polygon.on('rightclick', function(e) {
-                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e);
+                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e,"right");
                     });
                 } else {
                     polygon.on("click",function(e){
-                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e);
+                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e,null);
                     });
                     polygon.on('rightclick', function(e) {
-                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e);
+                        lastIdx = eventHandlePolygon(areaAry, lastIdx, e,"right");
                     });
                 }
             }
@@ -827,7 +827,7 @@
     }
 
     // 多边形事件处理
-    var eventHandlePolygon	= function(areaAry, lastIdx, e) {
+    var eventHandlePolygon	= function(areaAry, lastIdx, e,rightflag) {
         // 导航列表显示当前选中区域的信息
         setNavListVisible(true);
         // 如果是在录入模式的话，不允许操作别的区域
@@ -869,7 +869,12 @@
         }
 
         if(hasMenu && areaAry[idx].store_no != storeno) {
-            $$.showMessage("系统信息", areaAry[idx].name + " 小区已被"+areaAry[idx].storeName+"录入坐标！");
+            if(rightflag == "right" && areaAry[idx].belong == 'public'){
+
+            }else{
+                $$.showMessage("系统信息", areaAry[idx].name + " 小区已被"+areaAry[idx].storeName+"录入坐标！");
+            }
+
         }
 
         if(e.type == "rightclick" && hasMenu) {
@@ -1003,10 +1008,10 @@
                 areaAry[idx].store_no = storeno;
                 // 设置上下文菜单
                 polygon.on("click",function(e){
-                    lastIdx = eventHandlePolygon(areaAry, lastIdx, e);
+                    lastIdx = eventHandlePolygon(areaAry, lastIdx, e,null);
                 });
                 polygon.on('rightclick', function(e) {
-                    lastIdx = eventHandlePolygon(areaAry, lastIdx, e);
+                    lastIdx = eventHandlePolygon(areaAry, lastIdx, e,"right");
                 });
             });
         });
@@ -1461,7 +1466,7 @@
 
     function polygonDistributionArea(areaAry, idx){
         if(!AMap.GeometryUtil.isRingInRing(areaAry[idx].polygon.getPath(),serviceRange.getPath())){
-            $$.showMessage("系统信息",'该小区不在本店服务范围内，无法分配片区，请删除后重新录入小区坐标，并在门店画片中分配片区！');
+            $$.showMessage("系统信息",'该小区不在本店服务范围内，无法分配片区，请删除小区坐标重新录入或修改服务范围，并在门店画片中分配片区！');
             return ;
         }else{
             var dellable = areaAry[idx].dellable;
