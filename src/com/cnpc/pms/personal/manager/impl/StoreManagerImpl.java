@@ -2068,7 +2068,6 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 				System.out.print("调用街道改变方法错误!");
 				e.printStackTrace();
 			}
-
 			try{
 				if(!store.getName().equals(storeDynamic.getName())){
 					HumanresourcesManager hManager = (HumanresourcesManager) SpringHelper.getBean("humanresourcesManager");
@@ -2076,11 +2075,16 @@ public class StoreManagerImpl extends BaseManagerImpl implements StoreManager {
 					ApprovalManager approvalManager = (ApprovalManager) SpringHelper.getBean("approvalManager");
 					approvalManager.updateStoreNameById(storeDynamic.getStore_id(), storeDynamic.getName());
 				}
+				
+				
 			}catch (Exception e){
 				e.printStackTrace();
 				System.out.println("当门店名发生改变时异常");
 			}
-
+			if ("闭店".equals(storeDynamic.getEstate())) {
+	
+				updateAreaAndTinyAreaAfterCloseStore(storeDynamic.getStore_id());
+			}
 			store.setSuperMicro(storeDynamic.getSuperMicro());
 			store.setEstate(storeDynamic.getEstate());
 			store.setStoretype(storeDynamic.getStoretype());

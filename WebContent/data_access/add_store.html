@@ -895,6 +895,7 @@ function downloadFile(pic_name){
 						}
 					},true); 
 		  }
+	
 	}
 	//验证城市编码
 	function verterCityNo(){
@@ -925,7 +926,7 @@ function downloadFile(pic_name){
 	//判断门店类型是否发生改变
 	function updateStoreType(){
 		if(storeTypeValue==null||storeTypeValue=='undefined'||storeTypeValue==''){
-			doSave();
+			ailEstatus();
 		}else{
 				var efgda=$('#storetype  option:selected').val();
 				if(efgda!=storeTypeValue&&storeTypeValue!='W'){
@@ -938,7 +939,7 @@ function downloadFile(pic_name){
 			            buttons: {
 			                "${form.ui.ok}": function () {
 			                	$("#villageInfo").dialog('close');
-			                	doSave();
+			                	ailEstatus();
 			                },
 			                "${query.ui.cancel}": function () {
 			                	$("#submit").removeAttr("disabled"); 
@@ -947,11 +948,29 @@ function downloadFile(pic_name){
 			            }
 			        });
 				}else{
-					doSave();
+					ailEstatus();
 				}
 		}
 	}
 	var path = getRootPath();
+	//如果选择闭店的确认框
+	function ailEstatus(){
+		  if($("#estate option:selected").text()=="闭店"){
+			  if(confirm("您确定要闭店吗?"))
+	    	     {
+				  doSave();
+	    	       return true;
+	    	      
+	    	     }else{
+	    	    	 $("#submit").removeAttr("disabled");
+	    		   return false;
+	    		 }
+		  }else{
+			  doSave();
+		  }
+		
+	}
+	
 	function doSave(){
 		console.log(change_flag);
 			var arr = [ "cityName","name",  "town_id",
