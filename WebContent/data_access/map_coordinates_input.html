@@ -1466,7 +1466,7 @@
 
     function polygonDistributionArea(areaAry, idx){
         if(!AMap.GeometryUtil.isRingInRing(areaAry[idx].polygon.getPath(),serviceRange.getPath())){
-            $$.showMessage("系统信息",'该小区不在本店服务范围内，无法分配片区，请删除小区坐标重新录入或修改服务范围，并在门店划片中分配片区！');
+            $$.showMessage("系统信息",'该小区不在本店服务范围内,请删除小区坐标重新录入！');
             return ;
         }else{
             var dellable = areaAry[idx].dellable;
