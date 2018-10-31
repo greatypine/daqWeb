@@ -77,6 +77,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("message", CodeEnum.success.getDescription());
 			result.put("data", list);
 		} catch (Exception e) {
+			logger.info("getAllTinyVillageOfStore>>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code", CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -113,6 +114,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getStoreServiceArea>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -156,6 +158,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	        result.put("data", JSONArray.parse(jArray.toString()));
 			
 		} catch (Exception e) {
+			logger.info("selecTinyVillageCoordByEmployeeNo>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -359,6 +362,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			}
 
 		}catch(NumberFormatException e){
+			logger.info("saveTinyVillageCoord>>>"+"坐标数据格式错误，多个小数点"+e.getMessage());
 			if(e.getMessage().contains("multiple points")){
 				result.put("code",CodeEnum.error.getValue());
 				result.put("message", "坐标数据格式错误，多个小数点");
@@ -368,15 +372,18 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			String exceptionInfo= e.getMessage();
 			
 			if(exceptionInfo.contains("Can't extract geo keys")){
+				logger.info("saveTinyVillageCoord>>>"+"不能绘制自交叉的坐标范围"+e.getMessage());
 				result.put("code",CodeEnum.error.getValue());
 				result.put("message", "不能绘制自交叉的坐标范围");
 				return result;
 			}else{
+				logger.info("saveTinyVillageCoord>>>"+"坐标范围数据不符合"+e.getMessage());
 				result.put("code",CodeEnum.error.getValue());
 				result.put("message", "坐标范围数据不符合");
 				return result;
 			}
 		} catch (Exception e) {
+			logger.info("saveTinyVillageCoord>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -454,7 +461,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				   storeNotmp = String.valueOf(doc.get("storeNo"));
 				   storetmp = storeManager.findStoreByStoreNo(storeNotmp);
 				   jObject.put("storeNo",doc.get("storeNo"));
-				   jObject.put("storeName", storetmp.getName());
+				   jObject.put("storeName", storetmp==null?"":storetmp.getName());
 				   //jObject.put("location",doc.get("location"));
 				   jObject.put("tinyVillageName", doc.get("name"));
 				   jObject.put("belong",doc.get("belong"));
@@ -488,6 +495,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("selecTinyVillageCoord>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -565,6 +573,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				}
 			}
 		} catch (Exception e) {
+			logger.info("deleteTinyVillageCoord>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -607,13 +616,14 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	        }
 	        
 		}catch(MongoQueryException e){
-			
+			logger.info("getTinyVillageCoordOfIntersection>>>"+e.getMessage());
 			if(e.getMessage().contains("Query failed with error code 2 and error message 'Loop is not valid")){
 				result.put("code",CodeEnum.error.getValue());
 				result.put("messgae","自交叉坐标点查询错误，不能绘制自交叉");
 				return result;
 			}
 		} catch (Exception e) {
+			logger.info("getTinyVillageCoordOfIntersection>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -664,6 +674,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getStorePosition>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -720,6 +731,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("code",CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
 		} catch (Exception e) {
+			logger.info("updateEmployeeOfTinyArea>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -753,7 +765,10 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				 
 				 if(!store_no.equals(store.getStoreno())){
 					tinyAreaStore = storeManager.findStoreByStoreNo(store_no.toString());
-					storeSb.append("、").append(tinyAreaStore.getName());
+					if(tinyAreaStore!=null){
+						storeSb.append("、").append(tinyAreaStore.getName());
+					}
+
 				 }
 				
 			 }
@@ -767,6 +782,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			 }
 				
 		} catch (Exception e) {
+			logger.info("getExistCoordOfTinyVillage>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -845,6 +861,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getAllTinyVillageCoordinateOfCity>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -933,6 +950,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getAllStoreServiceAreaOfCity>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -1219,6 +1237,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getAllStoreServiceAreaOfContry>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -1344,6 +1363,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("code",CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
 		} catch (Exception e) {
+			logger.info("updateTinyAreaOfEmployee>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -1444,6 +1464,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("code",CodeEnum.success.getValue());
 				result.put("message", CodeEnum.success.getDescription());
 		} catch (Exception e) {
+			logger.info("updateTinyAreaEmployeeIdNull>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -1550,6 +1571,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			}
 			
 		} catch (Exception e) {
+			logger.info("updateTinyAreaBelong>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
