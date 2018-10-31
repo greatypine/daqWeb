@@ -68,4 +68,57 @@ public class DownloadFileManagerImpl  extends BizBaseCommonManager implements Do
         }
         return relist;
     }
+
+    @Override
+    public Map<String, Object> queryOperDownloadFile(DownLoadDto downoadDto,PageInfo pageInfo) {
+        Map<String, Object> result = new HashMap<String,Object>();
+        DownloadFileDao downloadFileDao = (DownloadFileDao)SpringHelper.getBean(DownloadFileDao.class.getName());
+        try {
+            result= downloadFileDao.getOperDownloadFile(downoadDto, pageInfo);
+
+            if("全国".equals(downoadDto.getTarget())){
+                result.put("seltag","country");
+                result.put("selcity","country");
+            }else if("日报".equals(downoadDto.getTarget())){
+                result.put("seltag","daily");
+                result.put("selcity",downoadDto.getCityCode());
+            }else{
+                result.put("seltag","month");
+                result.put("selcity",downoadDto.getCityCode());
+            }
+            result.put("seltime",downoadDto.getFiletime());
+            result.put("status","success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status","fail");
+            return result;
+        }
+        return result;
+
+    }
+
+    @Override
+    public List<Map<String, Object>> selectOperAllCity() {
+
+        //查询用户城市
+        UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+        List<DistCity> citys = userManager.getCurrentUserCity();
+        DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+        List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+        List<Map<String, Object>> relist = new ArrayList<Map<String,Object>>();
+        try {
+            list = dynamicDao.selectAllCity();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        for(int i=0;i<list.size();i++){
+            for (DistCity city : citys) {
+                if(list.get(i).get("citycode").toString().equals(city.getCitycode())){
+                    relist.add(list.get(i));
+                }
+            }
+        }
+        return relist;
+    }
 }

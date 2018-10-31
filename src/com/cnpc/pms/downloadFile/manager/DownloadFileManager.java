@@ -8,14 +8,36 @@ import java.util.List;
 import java.util.Map;
 
 public interface DownloadFileManager extends IManager {
-    //查询列表
+    /**
+     *
+     * TODO  查询下载文档列表-----事业群、财务中心
+     * 2018年10月26日
+     * @author wuxinxin
+     * @return
+     */
     public Map<String, Object> queryDownloadFile(DownLoadDto downoadDto, PageInfo pageInfo);
     /**
      *
-     * TODO  查询已开店的所有城市
+     * TODO  查询城市-----事业群、财务中心
      * 2018年10月26日
      * @author wuxinxin
      * @return
      */
     public List<Map<String,Object>> selectAllCity();
+
+
+    /**
+     *
+     * TODO  查询下载文档列表-----事业群、财务中心
+     * 2018年10月26日
+     * @author wuxinxin
+     * @return
+     */
+    public Map<String, Object> queryOperDownloadFile(DownLoadDto downoadDto, PageInfo pageInfo);
+
+    /**
+     * TODO  查询城市-----运营
+     * @return
+     */
+    public List<Map<String,Object>> selectOperAllCity();
 }
