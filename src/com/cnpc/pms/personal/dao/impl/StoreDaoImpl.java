@@ -1444,13 +1444,66 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
+		String sql = "select aa.*,ifnull(bb.baosun,0) as baosun,ifnull(cc.pankui,0) as pankui from ( "
+					+ "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
+					+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
+					+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+					+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+					+ "ifnull(dround(sum(dot.apportion_rebate+dot.apportion_coupon),2),0) as order_fee,"
+					+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+					+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' ";
+		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
+			sql = sql + "and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' ";
+		}
+		if(dynamicDto.getCityId()!=null){
+			sql = sql + "and tdc.id = "+dynamicDto.getCityId()+" ";
+		}
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			sql = sql + "and dot.store_code ='"+dynamicDto.getStoreNo()+"' ";
+		}
+		sql = sql + "group by dot.store_code order by dot.store_code";
+
+		//报损
+		sql = sql + ") aa left join (select  ts.code as store_code,ifnull(dround(sum(dit.c_at_amount_l),2),0) as baosun from df_ims_tb_o_l dit,df_ims_tb_store tis,gemini.t_store ts " +
+				"where dit.c_store_id=tis.c_id and tis.c_map_store_id=CAST(ts.number as VARCHAR) and dit.c_status='已审核' and strleft(dit.c_mk_dt,7) =  '"+dynamicDto.getBeginDate()+"' " +
+				"group by ts.code) bb on aa.store_code=bb.store_code " ;
+		//盘亏
+		sql = sql + "left join (select ts.code as store_code,ifnull(dround(sum(tocg.c_pt_cost*(tocg.c_number-tocg.c_orig_number)),2),0) as pankui  " +
+				"from df_ims_tb_o_countg tocg,df_ims_tb_o_count toc,df_ims_tb_store tis,gemini.t_store ts  where tocg.c_id=toc.c_id and toc.c_store_id=tis.c_id  " +
+				"and tis.c_map_store_id=CAST(ts.number as VARCHAR) and toc.c_status='已审核' and strleft(toc.c_mk_dt,7) = '"+dynamicDto.getBeginDate()+"' group by ts.code) cc on aa.store_code=cc.store_code ";
+		sql = sql + "order by aa.store_code ";
+
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+
+		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+		int recordsPerPage = pageInfo.getRecordsPerPage();
+		sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+		String total = "0";
+		List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+		if(resultCount !=null && resultCount.size()>0 ){
+			total = String.valueOf(resultCount.get(0).get("total"));
+		}
+
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+		map_result.put("pageinfo", pageInfo);
+		map_result.put("data", list);
+		map_result.put("total_pages", total_pages);
+		return map_result;
+	}
+
+	@Override
+	public Map<String, Object> queryDeptTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
 		String sql = "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
-				+ "min(dot.department_name) as department_name,min(dot.channel_name) as channel_name,"
+				+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 				+ "ifnull(dround(sum(dot.apportion_rebate+dot.apportion_coupon),2),0) as order_fee,"
-				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc "
-				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno ";
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dot.department_name!='运营管理中心' ";
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' ";
 		}
@@ -1466,20 +1519,28 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(StringUtils.isNotEmpty(dynamicDto.getChannel())){
 			sql = sql + "and dot.channel_name like '%"+dynamicDto.getChannel()+"%' ";
 		}
-		sql = sql + "group by dot.store_city_code ";
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + ",dot.store_code ";
-		}
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "dept_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + ",dot.store_code,dot.department_name ";
-		}
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "channel_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + ",dot.store_code,dot.department_name,dot.channel_name ";
+		sql = sql + "group by ";
+
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
+			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
+					|| dynamicDto.getSearchstr().contains("dept_channel_active")){
+				sql = sql + "dot.department_name ";
+				if(dynamicDto.getSearchstr().contains("dept_city_active")){
+					sql = sql + ",dot.store_city_code ";
+				}
+				if(dynamicDto.getSearchstr().contains("dept_store_active")){
+					sql = sql + ",dot.store_code ";
+				}
+				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+					sql = sql + ",dot.channel_name ";
+				}
+				sql = sql + "order by department_name ";
+			}else{
+				sql = sql + "dot.department_name order by department_name ";
+			}
 		}
 		if("city_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + "order by dot.store_city_code asc";
-		}else{
-			sql = sql + "order by dot.store_city_code asc,dot.store_code asc";
+			sql = sql + "dot.store_city_code order by store_city_code ";
 		}
 
 		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
@@ -1506,20 +1567,24 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> exportStoreTradeProfit(DynamicDto dynamicDto){
-		String sql = "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
-				+ "min(dot.department_name) as department_name,min(dot.channel_name) as channel_name,"
+		String sql = "";
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+			sql = sql + "select aa.*,ifnull(bb.baosun,0) as baosun,ifnull(cc.pankui,0) as pankui from ( ";
+		}
+		sql = sql + "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
+				+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
-                + "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
-                + "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.apportion_coupon else 0 end),2),0) as platform_coupon,"
-                + "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.apportion_coupon else 0 end),2),0) as ims_coupon,"
-                + "ifnull(dround(sum(dot.apportion_coupon),2),0) as total_coupon,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.apportion_coupon else 0 end),2),0) as ims_coupon,"
+				+ "ifnull(dround(sum(dot.apportion_coupon),2),0) as total_coupon,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.apportion_rebate else 0 end),2),0) as platform_rebate,"
-                + "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.apportion_rebate else 0 end),2),0) as ims_rebate,"
-                + "ifnull(dround(sum(dot.apportion_rebate),2),0) as total_rebate,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.apportion_rebate else 0 end),2),0) as ims_rebate,"
+				+ "ifnull(dround(sum(dot.apportion_rebate),2),0) as total_rebate,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as platform_fee,"
-				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as ims_fee,"
-				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc "
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then (dot.apportion_rebate+dot.apportion_coupon) else 0 end),2),0) as ims_fee "
+				+ "from df_mass_order_total dot,t_dist_citycode tdc "
 				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno ";
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' ";
@@ -1536,20 +1601,46 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		if(StringUtils.isNotEmpty(dynamicDto.getChannel())){
 			sql = sql + "and dot.channel_name like '%"+dynamicDto.getChannel()+"%' ";
 		}
-		sql = sql + "group by dot.store_city_code ";
+		sql = sql + "group by ";
 		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + ",dot.store_code ";
+			sql = sql + "dot.store_code order by store_code ";
 		}
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "dept_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + ",dot.store_code,dot.department_name ";
-		}
-		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "channel_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + ",dot.store_code,dot.department_name,dot.channel_name ";
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
+			if(dynamicDto.getSearchstr().contains("dept_city_active") || dynamicDto.getSearchstr().contains("dept_store_active")
+					|| dynamicDto.getSearchstr().contains("dept_channel_active")){
+				sql = sql + "dot.department_name ";
+				if(dynamicDto.getSearchstr().contains("dept_city_active")){
+					sql = sql + ",dot.store_city_code ";
+				}
+				if(dynamicDto.getSearchstr().contains("dept_store_active")){
+					sql = sql + ",dot.store_code ";
+				}
+				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+					sql = sql + ",dot.channel_name ";
+				}
+				sql = sql + "order by department_name ";
+			}else{
+				sql = sql + "dot.department_name order by department_name ";
+			}
+
 		}
 		if("city_active".equals(dynamicDto.getSearchstr())){
-			sql = sql + "order by dot.store_city_code asc";
-		}else{
-			sql = sql + "order by dot.store_city_code asc,dot.store_code asc";
+			sql = sql + "dot.store_city_code order by store_city_code ";
+		}
+
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+			//门店报损
+			sql = sql + ") aa left join (select  ts.code as store_code,ifnull(dround(sum(dit.c_at_amount_l),2),0) as baosun from df_ims_tb_o_l dit,df_ims_tb_store tis,gemini.t_store ts " +
+					"where dit.c_store_id=tis.c_id and tis.c_map_store_id=CAST(ts.number as VARCHAR) and dit.c_status='已审核' and strleft(dit.c_mk_dt,7) =  '"+dynamicDto.getBeginDate()+"' " +
+					"group by ts.code) bb on aa.store_code=bb.store_code ";
+			//门店盘亏
+			sql = sql + "left join (select ts.code as store_code,ifnull(dround(sum(tocg.c_pt_cost*(tocg.c_number-tocg.c_orig_number)),2),0) as pankui  " +
+					"from df_ims_tb_o_countg tocg,df_ims_tb_o_count toc,df_ims_tb_store tis,gemini.t_store ts  where tocg.c_id=toc.c_id and toc.c_store_id=tis.c_id  " +
+					"and tis.c_map_store_id=CAST(ts.number as VARCHAR) and toc.c_status='已审核' and strleft(toc.c_mk_dt,7) = '"+dynamicDto.getBeginDate()+"' group by ts.code) cc on aa.store_code=cc.store_code ";
+		}
+
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+			sql = sql + "order by aa.store_code ";
 		}
 
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);

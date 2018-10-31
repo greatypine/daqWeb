@@ -7178,7 +7178,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
         StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
         Map<String, Object> result =new HashMap<String,Object>();
         try {
-            result = storeDao.queryStoreTradeProfit(dynamicDto, pageInfo);
+            if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+                result = storeDao.queryStoreTradeProfit(dynamicDto, pageInfo);
+            }else{
+                result = storeDao.queryDeptTradeProfit(dynamicDto, pageInfo);
+            }
             result.put("status","success");
         } catch (Exception e) {
             e.printStackTrace();
@@ -7200,20 +7204,41 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				return result;
 			}
 
+			//城市毛利
 			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
 			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
+			//门店毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
-				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
-				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
+				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）",
+						"优惠券（平台）","优惠券（优易）","优惠券（合计）","粮票（平台）","粮票（优易）","粮票（合计）","营销费用（平台）","营销费用（优易）","报损","盘亏"};
+				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit",
+						"platform_coupon","ims_coupon","total_coupon","platform_rebate","ims_rebate","total_rebate","platform_fee","ims_fee","baosun","pankui"};
 			}
-			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "dept_active".equals(dynamicDto.getSearchstr())){
-				str_headers = new String[]{"城市","门店名称","门店编号","事业群","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
-				headers_key = new String[]{"city_name","store_name","store_code","department_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
+			//事业群毛利
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
+				Map<String,String> content = new LinkedHashMap<>();
+				if(dynamicDto.getSearchstr().contains("dept_city_active")){
+					content.put("城市","city_name");
+				}
+				if(dynamicDto.getSearchstr().contains("dept_store_active")){
+					content.put("门店名称","store_name");
+					content.put("门店编号","store_code");
+				}
+				content.put("事业群","department_name");
+				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+					content.put("频道","channel_name");
+				}
+				content.put("销售收入（平台）","platform_profit");
+				content.put("销售收入（优易）","ims_profit");
+				content.put("销售收入（合计）","total_profit");
+				content.put("营销费用（平台）","platform_fee");
+				content.put("营销费用（优易）","ims_fee");
+				content.put("毛利","total_profit");
+
+				str_headers = content.keySet().toArray(new String[0]);
+				headers_key = content.values().toArray(new String[0]);
 			}
-			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "channel_active".equals(dynamicDto.getSearchstr())){
-				str_headers = new String[]{"城市","门店名称","门店编号","事业群","频道","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
-				headers_key = new String[]{"city_name","store_name","store_code","department_name","channel_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
-			}
+
 			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("毛利",list,str_headers,headers_key);
 			result = eeuo.exportFile();
 		}else{

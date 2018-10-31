@@ -154,8 +154,10 @@
             </div>
             <div class="form-group col-lg-4">
                 <label>事业群</label>
-                <select class="form-control select2" id="department" style="border-radius: 6px;">
-                    <option value="" >全部</option>
+                <!--<select class="form-control select2" id="department" style="border-radius: 6px;">-->
+                    <!--<option value="" >全部</option>-->
+                <!--</select>-->
+                <select class="form-control select2" id="deptSelect">
                 </select>
             </div>
             <div class="form-group col-lg-4">
@@ -254,7 +256,7 @@
 		type:"month",
 		btns: ['confirm','now'],
 		theme: '#11214e',
-		min: '2018-8-30',
+		min: '2018-9-1',
 		max:year_month
 		
 	});
@@ -271,7 +273,8 @@
     var dept = decode64(getUrlParamByKey("dn"));//事业群
     var employeeId = decode64(getUrlParamByKey("e"));//员工编号/id
 	$(function () {
-        getDepartment();
+        // getDepartment();
+        initalldept();
 		if(target==0){//总部
 			
 		}else if(target==1){//城市
@@ -306,13 +309,12 @@
 
     var searchChannelStr = "dept_active";
     if($('#channelClick').is(':checked')){
-        searchChannelStr = "channel_active";
+        searchChannelStr = "dept_channel_active";
         $("#channelnamepayhide").show();
     }else{
-        searchChannelStr = "dept_active";
         $("#channelnamepayhide").hide();
     }
-    $('#channelClick').removeAttr('checked')
+    $('#channelClick').removeAttr('checked');
     $("#channelnamepayhide").hide();
 
     var searchDeptCityStr = "dept_city_active";
@@ -320,10 +322,9 @@
         searchDeptCityStr = "dept_city_active";
         $("#citynamepayhide").show();
     }else{
-        searchDeptCityStr = "dept_city_active";
         $("#citynamepayhide").hide();
     }
-    $('#cityClick').removeAttr('checked')
+    $('#cityClick').removeAttr('checked');
     $("#citynamepayhide").hide();
 
 
@@ -333,11 +334,10 @@
         $("#storenamepayhide").show();
         $("#storenopayhide").show();
     }else{
-        searchDeptStoreStr = "dept_store_active";
         $("#storenamepayhide").hide();
         $("#storenopayhide").hide();
     }
-    $('#storeClick').removeAttr('checked')
+    $('#storeClick').removeAttr('checked');
     $("#storenamepayhide").hide();
     $("#storenopayhide").hide();
 
@@ -438,18 +438,18 @@
 		  $("#store_id_tradetype").val(storeIdMap[temp_store]);
 	 });
 
-    //获取事业群
-    function getDepartment(){
-        doManager('dynamicManager','queryDepartment',null,function(data){
-            if(data.result){
-                var lst_select_dept = JSON.parse(data.data);
-                for(i=0;i<lst_select_dept.length;i++){
-                    var option = "<option value='"+lst_select_dept[i].dep_name+"'>"+lst_select_dept[i].dep_name+"</option>";
-                    $("#department").append(option);
-                }
-            }
-        },false);
-    }
+    // //获取事业群
+    // function getDepartment(){
+    //     doManager('dynamicManager','queryDepartment',null,function(data){
+    //         if(data.result){
+    //             var lst_select_dept = JSON.parse(data.data);
+    //             for(i=0;i<lst_select_dept.length;i++){
+    //                 var option = "<option value='"+lst_select_dept[i].dep_name+"'>"+lst_select_dept[i].dep_name+"</option>";
+    //                 $("#department").append(option);
+    //             }
+    //         }
+    //     },false);
+    // }
 
     <!-------------------------------------------------------点击查询----------------------------------------------------------------->
    
@@ -479,10 +479,10 @@
    	 	$("#process_div_pic").show();
  	    var number_str = $("#store_id_tradetype").val(); 
  	    var storeName = $("#store_name_tradetype").val();
-        var dept= $("#department").val();
+        var dept = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
         var channel = $("#channel_name").val();
- 	    if(dept!=null&&dept!=""){
-            dept=dept.replace("事业部","");
+        if(dept!="" && dept=="全部"){
+            dept = null;
         }
 
  	    if(number_str==""&&storeName!=""){
@@ -540,19 +540,30 @@
         var searchstrTemp = "dept_active";
         if($('#channelClick').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked')){
             if($('#channelClick').is(':checked')){
-                dynamicDto["searchstr"] = "channel_active";
+                searchstrTemp += ",dept_channel_active";
                 $("#channelnamepayhide").show();
             }
 
             if($('#cityClick').is(':checked')){
-                dynamicDto["searchstr"] = "dept_city_active";
+                searchstrTemp += ",dept_city_active";
                 $("#citynamepayhide").show();
             }
 
             if($('#storeClick').is(':checked')){
-                dynamicDto["searchstr"] = "dept_store_active";
+                searchstrTemp += ",dept_store_active";
                 $("#storenamepayhide").show();
                 $("#storenopayhide").show();
+            }
+
+            if(searchstrTemp.indexOf("dept_channel_active") == -1){
+                $("#channelnamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("dept_city_active") == -1){
+                $("#citynamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("dept_store_active") == -1){
+                $("#storenamepayhide").hide();
+                $("#storenopayhide").hide();
             }
         }else{
             $("#channelnamepayhide").hide();
@@ -600,7 +611,7 @@
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
 	        		   infoStr= "<tr>";
-                           if($('#channelClick').is(':checked')){
+                           if($('#cityClick').is(':checked')){
                                infoStr= infoStr +"<td>"+jData[i].city_name+"</td>";
                            }
                            if($('#storeClick').is(':checked')){
@@ -669,10 +680,10 @@
    		
 	    var number_str = $("#store_id_tradetype").val(); 
 	    var storeName = $("#store_name_tradetype").val()
-        var dept= $("#department").val();
+        var dept = $("#deptSelect option:selected").html()==""?null:$("#deptSelect option:selected").html();
         var channel = $("#channel_name").val();
-        if(dept!=null&&dept!=""){
-            dept=dept.replace("事业部","");
+        if(dept!="" && dept=="全部"){
+            dept = null;
         }
 	    
  	    if(number_str==""&&storeName!=""){
@@ -728,13 +739,41 @@
            }
        }
 
-        if($('#channelClick').is(':checked')){
-            dynamicDto["searchstr"] = "channel_active";
-            $("#channelnamepayhide").show();
+        var searchstrTemp = "dept_active";
+        if($('#channelClick').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked')){
+            if($('#channelClick').is(':checked')){
+                searchstrTemp += ",dept_channel_active";
+                $("#channelnamepayhide").show();
+            }
+
+            if($('#cityClick').is(':checked')){
+                searchstrTemp += ",dept_city_active";
+                $("#citynamepayhide").show();
+            }
+
+            if($('#storeClick').is(':checked')){
+                searchstrTemp += ",dept_store_active";
+                $("#storenamepayhide").show();
+                $("#storenopayhide").show();
+            }
+
+            if(searchstrTemp.indexOf("dept_channel_active") == -1){
+                $("#channelnamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("dept_city_active") == -1){
+                $("#citynamepayhide").hide();
+            }
+            if(searchstrTemp.indexOf("dept_store_active") == -1){
+                $("#storenamepayhide").hide();
+                $("#storenopayhide").hide();
+            }
         }else{
-            dynamicDto["searchstr"] = "dept_active";
             $("#channelnamepayhide").hide();
+            $("#citynamepayhide").hide();
+            $("#storenamepayhide").hide();
+            $("#storenopayhide").hide();
         }
+        dynamicDto["searchstr"] = searchstrTemp;
 
 	    doManager('dynamicManager','exportStoreTradeProfit',[dynamicDto],function(data){
           if(data.result){
@@ -759,6 +798,19 @@
     	 $("#process_div_pic").hide();
       }); 
     }
+
+function initalldept(){
+    doManager("chartStatManager","queryAllDept",null,
+        function(data,textStatus,XmlHttpRequest){
+            if (data.result) {
+                var jsonData = $.fromJSON(data.data);
+                $("#deptSelect").append("<option value=''>全部</option>");
+                $(jsonData).each(function(index,element){
+                    $("#deptSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+                });
+            }
+        });
+}
 
 function operatedCoverageChannel(){
     if($('#channelClick').is(':checked')){
@@ -804,7 +856,7 @@ function resetSerachParam(){
 		$("#city_name-search_tradetype").empty();
 		$("#city_name_tradetype").val("");
 
-        $("#department").val("");
+        $("#deptSelect").val("");
         $("#channel_name").val("");
   	  }else if(target==1){//城市级别
     	
@@ -812,16 +864,18 @@ function resetSerachParam(){
   		$("#store_name_tradetype").val("");
     	$("#store_name-search_tradetype").empty();
 
-        $("#department").val("");
+        $("#deptSelect").val("");
         $("#channel_name").val("");
   	  }else if(target==2){//店长
   		
-  	  }else if(target==3){
+  	  }else if(target==3){//事业群
         $("#city_id_tradetype").val("");
         $("#city_name_tradetype").val("");
         $("#store_id_tradetype").val("");
         $("#store_name_tradetype").val("");
         $("#store_name-search_tradetype").empty();
+        $("#deptSelect").val("");
+        $("#channel_name").val("");
       }
 }
    
