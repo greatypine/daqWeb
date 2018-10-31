@@ -162,9 +162,8 @@
 	                    <tr>
 	                      <th width="8%">城市</th>
 	                      <th width="10%">销售收入<br/>（非优易）</th>
-                          <th width="12%">营销费用<br/>（非优易）</th>
                           <th width="10%">销售收入<br/>（优易）</th>
-                          <th width="12%">营销费用<br/>（优易）</th>
+                          <th width="12%">营销费用<br/></th>
                           <th width="10%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
                               <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">总销售收入</font>毛利</th>
 	                    </tr>
@@ -225,7 +224,7 @@
 		type:"month",
 		btns: ['confirm','now'],
 		theme: '#11214e',
-		min: '2018-8-30',
+		min: '2018-9-1',
 		max:year_month
 		
 	});
@@ -421,9 +420,8 @@
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
 		                       +"<td>"+jData[i].platform_profit+"</td>"
-                               +"<td>"+jData[i].platform_fee+"</td>"
                                +"<td>"+jData[i].ims_profit+"</td>"
-                               +"<td>"+jData[i].ims_fee+"</td>"
+                               +"<td>"+jData[i].order_fee+"</td>"
                                +"<td>"+jData[i].total_profit+"</td>"
 		                       +"</tr>";
 		                       
