@@ -9,4 +9,6 @@ import java.util.Map;
 public interface DownloadFileDao extends IDAO {
 
    public Map<String,Object> getDownloadFile(DownLoadDto downloadDto, PageInfo pageInfo);
+
+   public Map<String,Object> getOperDownloadFile(DownLoadDto downoadDto, PageInfo pageInfo);
 }

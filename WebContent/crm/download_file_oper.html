@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>结算数据</title>
+    <title>运营结算数据</title>
     <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
@@ -20,7 +20,8 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
     <link rel="stylesheet" href="plugins/datepicker/datepicker3.css">
-    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+    <!--<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">-->
+    <link rel="stylesheet" href="newdatemaker/bootstrap-datepicker.css">
     <!-- Select2 -->
     <link rel="stylesheet" href="plugins/select2/select2.min.css">
     <link rel="stylesheet" href="plugins/date-new/css/jquery-ui-1.9.2.custom.css" type="text/css">
@@ -78,7 +79,14 @@
             height:32px;
             color: #fff;
         }
-
+        .specialdays a{
+            background: #E17009 !important;
+            opacity: 0.8 !important;/*添加半透明效果*/
+            -moz-border-radius:  3px !important;
+            -webkit-border-radius:  3px !important;
+            border-radius:  7px !important;
+            color:#000000 !important;
+        }
         /*搜索框*/
         .form-control{height: 30px; line-height: 30px; border-radius: 6px; padding: 3px 8px;}
         small span:hover{
@@ -142,7 +150,7 @@
                 <div class="pull-left">
                     <div class="logo-lg">
                         <ul class="no-margin">
-                            <li class="current"><em>结算数据</em></li>
+                            <li class="current"><em>运营结算数据</em></li>
                         </ul>
                     </div>
                 </div>
@@ -160,11 +168,6 @@
 
             <section class="content-header">
                 <div class="nav-tabs-custom no-margin">
-
-                    <div class="pull-right text-red" id="bigmember" style="padding-right:15px;font-size:75%;float: right">
-
-                        <p style="margin-top: 6px;margin-right: 10px;margin-bottom: 6px;"id="tipMessage" ></p>
-                    </div>
                     <ul class="nav nav-tabs" id="nav-tabs">
                     </ul>
                     <!--<ul class="nav nav-tabs">
@@ -175,29 +178,17 @@
                     <div class="tab-content">
 
                         <div class="tab-pane active" id="tab_0">
-                            <div class="col-sm-12 text-right text-red no-padding" style="padding-right:15px;font-size:75%;float: right">
-                                <p >微超订单维度与退款纬度全部结算数据(月报)</p>
-                            </div>
                             <div class="box-body">
                                 <div class="clearfix search-criteria">
                                     <div id="selectorLine clearfix no-border0" class="clearfix">
                                         <div class="form-group col-lg-4">
-                                            <label>城市</label>
-                                            <input id="country_id_tradetype"  type="hidden" value="country"/>
-                                            <input type="text" class="form-control"  placeholder="全国"  readonly="readonly" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-                                        </div>
-
-                                        <div class="form-group col-lg-4">
                                             <label>月份</label>
-                                            <input type="text" class="form-control" id="country_month" name="country_month" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
+                                            <input type="text" class="form-control" id="report_month" name="report_month" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="clearfix">
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
-                                        <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
-                                    </div>
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_country">
                                         <button  type="button"  style="display:block"  onclick="export_country();" class="btn btn-block btn-warning">打包下载</button>
                                     </div>
@@ -229,32 +220,17 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="tab_1">
-                            <div class="col-sm-12 text-right text-red no-padding" style="padding-right:15px;font-size:75%;float: right">
-                                <p >微超订单维度与退款纬度分城市结算数据(月报)</p>
-                            </div>
                             <div class="box-body">
                                 <div class="clearfix search-criteria">
                                     <div id="selectorLine clearfix no-border1" class="clearfix">
                                         <div class="form-group col-lg-4">
-                                            <label>城市</label>
-                                            <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
-                                            <input id="city_code_tradetype" name="city_code_tradetype" type="hidden" value=""/>
-                                            <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-                                            <div class="auto hidden" id="auto_city" style="width:85%;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                        </div>
-                                        <div class="form-group col-lg-4">
-                                            <label>月份</label>
-                                            <input type="text" class="form-control" id="monthly_month" name="monthly_month" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
+                                            <label>日期</label>
+                                            <input type="text" class="form-control" id="report_week" name="report_week" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="clearfix">
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
-                                        <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
-                                    </div>
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_month">
                                         <button  type="button"   onclick="export_monthly();" class="btn btn-block btn-warning">打包下载</button>
                                     </div>
@@ -287,34 +263,18 @@
                         </div>
 
                         <div class="tab-pane" id="tab_2">
-                            <div class="col-sm-12 text-right text-red no-padding" style="padding-right:15px;font-size:75%;float: right">
-                                <p >微超订单维度与退款纬度分城市结算数据(日报)</p>
-                            </div>
                             <div class="box-body">
                                 <div class="clearfix search-criteria">
                                     <div id="selectorLine clearfix no-border2" class="clearfix">
                                         <div class="form-group col-lg-4">
-                                            <label>城市</label>
-                                            <input id="city_id" name="city_id_tradetype" type="hidden" value=""/>
-                                            <input id="city_code" name="city_code_tradetype" type="hidden" value=""/>
-                                            <input type="text" class="form-control"  placeholder="城市" id="city_name" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-                                            <div class="auto hidden" id="auto_city_member" style="width:85%;z-index: 99999;">
-                                                <!-- /.input group -->
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-lg-4">
                                             <label>日期</label>
-                                            <input type="text" class="form-control" id="daily_date" name="daily_date" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
+                                            <input type="text" class="form-control" id="report_date" name="report_date" readonly="readonly" style="cursor:pointer;background-color:#ffffff"></input>
                                         </div>
 
                                     </div>
                                 </div>
 
                                 <div class="clearfix">
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
-                                        <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
-                                    </div>
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_daily">
                                         <button  type="button" style="display:block"  onclick="export_daily();" class="btn btn-block btn-warning">打包下载</button>
                                     </div>
@@ -374,7 +334,8 @@
 <!-- page script -->
 <script type="text/javascript" src="plugins/jquery.page.js"></script>
 <script type="text/javascript" src="plugins/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!--<script src="plugins/daterangepicker/daterangepicker.js"></script>-->
+<script src="newdatemaker/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script>
@@ -421,17 +382,7 @@
     }
 
     laydate.render({//月份控件
-        elem:'#country_month',
-        value:year_month,
-        type:"month",
-        btns: ['confirm'],
-        theme: '#11214e',
-        min: '2018-09-1',
-        max:max_month
-
-    });
-    laydate.render({//月份控件
-        elem:'#monthly_month',
+        elem:'#report_month',
         value:year_month,
         type:"month",
         btns: ['confirm'],
@@ -441,15 +392,22 @@
 
     });
 
-    //开始日期
+    //日期控件
     laydate.render({
-        elem:'#daily_date',
+        elem:'#report_date',
         value:max_date,
         type:"date",
         btns: ['confirm'],
         theme: '#11214e',
         min: '2018-10-28',
         max:max_date
+    });
+    var first = getWeek(4);
+    $("#report_week").val(first);
+    $("#report_week").datepicker({
+        autoclose: true,
+        daysOfWeekDisabled: "0,1,2,3,5,6",
+        endDate:new Date()
     });
 
     var cityId = decode64(getUrlParamByKey("c"));//城市ID
@@ -470,60 +428,23 @@
         if(target==null||target==""){
             target="0";
         }
-        if(target=="0"){
+
             $("#nav-tabs").empty();
             var li_Element = $("<li class='active'>");
             var li2_Element = $("<li class=''>");
             var li3_Element = $("<li class=''>");
-            var a_Element = $("<a href='#tab_0' data-toggle='tab' aria-expanded='true'>").html("全国月报");
-            var b_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='false'>").html("月报");
+            var a_Element = $("<a href='#tab_0' data-toggle='tab' aria-expanded='true'>").html("月报");
+            var b_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='false'>").html("周报");
             var c_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("日报");
             li_Element.append(a_Element);
             li2_Element.append(b_Element);
             li3_Element.append(c_Element);
             $("#nav-tabs").append(li_Element).append(li2_Element).append(li3_Element);
-        }else{
-            $("#nav-tabs").empty();
-            var li_Element = $("<li class='active'>");
-            var li2_Element = $("<li class=''>");
-            var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='true'>").html("月报");
-            var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("日报");
-            $("#tab_0").removeClass("active");
-            $("#tab_1").addClass("active");
-            li_Element.append(a_Element);
-            li2_Element.append(b_Element);
-            $("#nav-tabs").append(li_Element).append(li2_Element);
-        }
         $(".logo-lg > ul > li").hover(function(){
             $(this).children(".nav_dropdown").toggle('1000');
         });
 
     });
-    /**-----------------------------------搜索城市------------------------------------------------------**/
-    var lst_select_city=null;
-    var cityNameArray=new Array();
-    var cityCodeMap = {};
-
-
-
-    $('#auto_city').on("click",function(){
-        var temp_city = document.getElementById("city_name_tradetype").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-        $("#city_code_tradetype").val(cityCodeMap[temp_city]);
-
-    });
-
-    $('#auto_city_member').on("click",function(){
-        var temp_city = document.getElementById("city_name").value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'');
-        $("#city_code").val(cityCodeMap[temp_city]);
-    });
-
-
-
-
-    /**-----------------------------------搜索门店------------------------------------------------------**/
-    var lst_select_store=null;
-    var storeNameArray=new Array();
-    var storeIdMap = {};
 
 
     <!-------------------------------------------------------点击查询----------------------------------------------------------------->
@@ -535,60 +456,14 @@
 
 
 
-    //重置方法
     var currentPage_customer = 1;
     var totalPage_customer = 1;
-    function resetSerachParam(){
-            $("#city_name_tradetype").val("");
-            $("#city_code_tradetype").val("");
-            $("#city_code").val("");
-            $("#city_name").val("");
-    }
 
     ////////////////////////---------------月报----------------begin-------------///////////////////////////
 
 
-    $('#city_name_tradetype').keyup(function(event){//门店交易额统计
-        cityNameArray=new Array();
-        $("#auto_city").empty();
-        $("#city_code_tradetype").val("");
-        var str_name = $(this).val();
-        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-            $("#city_id_tradetype").val("");
-            //$('#city_name-search_tradetype').children().remove();
-            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-                return;
-            }
-            var city_id = null;
-            if(target==1){
-                city_id = cityId;
-
-            }
-            doManager('downloadFileManager','selectAllCity',null,function(data){
-                if(data.result){
-                    cityCodeMap["广东"] = "GD";
-                    cityNameArray.push("广东");
-                    lst_select_city = JSON.parse(data.data);
-                    for(var i=0;i<lst_select_city.length;i++){
-                        cityNameArray.push(lst_select_city[i].cityname);
-                        cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
-                    }
-
-                    var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
-                    autoComplete.start(event);
-                }else{
-
-                }
-            });
-        }
-    });
     //查询
     function search_monthly_step1(cur_page){
-        var isSelCity = $("#city_code_tradetype").val();
-        if(isSelCity==null||isSelCity==""){
-            crm_alert(0,"请选择城市！");
-            return;
-        }
         isCreatePage1=false;
         search_monthly(cur_page);
     }
@@ -604,13 +479,11 @@
         var seltab = "月报";
         $("#process_div").show();
         $("#process_div_pic").show();
-        cityCode = $("#city_code_tradetype").val();
-        var filetime = $("#monthly_month").val();
+        var filetime = $("#report_week").val();
 
         var downloadFileDto=null;
         downloadFileDto = {
             cityId:cityId,
-            cityCode:cityCode,
             employeeId:employeeId,
             filetime:filetime,
             target:seltab
@@ -657,7 +530,7 @@
                   /*  var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
                     $("#tradeType_tbody").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_week/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
                         $("#tradeType_tbody").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -700,47 +573,9 @@
 
     var isCityCreatePage1=false;
     var manualPageRecordeCity=10;
-    $('#city_name').keyup(function(event){//门店交易额统计
-        cityNameArray=new Array();
-        $("#auto_city_member").empty();
-        $("#city_code").val("");
-        var str_name = $(this).val();
-        if(!(event.keyCode >= 37 && event.keyCode <= 40) && event.keyCode != 13){
-            $("#city_id").val("");
-            if(str_name == null || str_name == "" || str_name.indexOf('\'') > -1){
-                return;
-            }
-            var city_id = null;
-            if(target==1){
-                city_id = cityId;
-
-            }
-            doManager('downloadFileManager','selectAllCity',null,function(data){
-                if(data.result){
-                    lst_select_city = JSON.parse(data.data);
-                    cityCodeMap["广东"] = "GD";
-                    cityNameArray.push("广东");
-                    for(var i=0;i<lst_select_city.length;i++){
-                        cityNameArray.push(lst_select_city[i].cityname);
-                        cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
-                    }
-                    cityCodeMap["广东"] = "GD";
-                    var autoComplete = new AutoComplete("city_name","auto_city_member",cityNameArray);
-                    autoComplete.start(event);
-                }else{
-
-                }
-            });
-        }
-    });
 
     //日报分页
     function search_daily_step1(cur_page){
-        var isSelCity = $("#city_code").val();
-        if(isSelCity==null||isSelCity==""){
-            crm_alert(0,"请选择城市！");
-            return;
-        }
         isCityCreatePage1=false;
         search_daily(cur_page);
     }
@@ -757,13 +592,11 @@
         var seltab = "日报";
         $("#process_div").show();
         $("#process_div_pic").show();
-        cityCode = $("#city_code").val();
-        var filetime = $("#daily_date").val();
+        var filetime = $("#report_date").val();
 
         var downloadFileDto=null;
         downloadFileDto = {
             cityId:cityId,
-            cityCode:cityCode,
             employeeId:employeeId,
             filetime:filetime,
             target:seltab
@@ -772,7 +605,7 @@
         pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeCity;
         $("#totalRecord_city").html("0");
-        doManager('downloadFileManager','queryDownloadFile',[downloadFileDto,pageInfo],function(data){
+        doManager('downloadFileManager','queryDownloadFileOper',[downloadFileDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -810,7 +643,7 @@
                    /* var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
                     $("#tradeType_tbody_daily").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_daily/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
                         $("#tradeType_tbody_daily").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -873,13 +706,11 @@
         var seltab = "全国";
         $("#process_div").show();
         $("#process_div_pic").show();
-        cityCode = "country";
-        var filetime = $("#country_month").val();
+        var filetime = $("#report_month").val();
 
         var downloadFileDto=null;
         downloadFileDto = {
             cityId:cityId,
-            cityCode:cityCode,
             employeeId:employeeId,
             filetime:filetime,
             target:seltab
@@ -888,7 +719,7 @@
         pageInfo.currentPage = cur_page;
         pageInfo.recordsPerPage = manualPageRecordeCountry;
         $("#totalRecord_country").html("0");
-        doManager('downloadFileManager','queryDownloadFile',[downloadFileDto,pageInfo],function(data){
+        doManager('downloadFileManager','queryDownloadFileOper',[downloadFileDto,pageInfo],function(data){
             if(data.result){
                 var result= JSON.parse(data.data);
                 if(result.status=='success'){
@@ -926,7 +757,7 @@
                     /*var firstStr = "<tr><td>all.zip</td>"+"<td>全部文件</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/all.zip'>下载</a></tr>";
                     $("#tradeType_tbody_country").append(firstStr);*/
                     for(var i=0;i<jData.length;i++){
-                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/"+jtab+"/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
+                        var infoStr = "<tr><td>"+jData[i].file_insert_name+"</td>"+"<td>"+jData[i].file_name+"</td><td><a href='https://cdn.guoanshuju.com/daqWeb/microAccount/report_month/"+jtime+"/"+jcity+"/"+jData[i].file_insert_name+".xlsx'>下载</a></tr>";
                         $("#tradeType_tbody_country").append(infoStr);
                     }
                 }else if(result.status=='storefail'){
@@ -965,34 +796,46 @@
 
 //全部文件下载
     function export_country(){
-        var filetime = $("#country_month").val();
-        var url = "https://cdn.guoanshuju.com/daqWeb/microAccount/country/"+filetime+"/country/all.zip";
+        var filetime = $("#report_month").val();
+        var url = "https://cdn.guoanshuju.com/daqWeb/operations/country/"+filetime+"/country/all.zip";
         window.open(url,"download_file");
     }
     function export_monthly(){
-        var filetime = $("#monthly_month").val();
+        var filetime = $("#report_week").val();
         var citys =$("#city_code_tradetype").val();
         if(citys==null||citys==""){
             crm_alert(0,"请选择城市！");
             return;
         }
-        var url = "https://cdn.guoanshuju.com/daqWeb/microAccount/month/"+filetime+"/"+citys+"/all.zip";
+        var url = "https://cdn.guoanshuju.com/daqWeb/operations/month/"+filetime+"/"+citys+"/all.zip";
         window.open(url,"download_file");
     }
     function export_daily(){
-        var filetime = $("#daily_date").val();
+        var filetime = $("#report_date").val();
         var citys = $("#city_code").val();
 
         if(citys==null||citys==""){
             crm_alert(0,"请选择城市！");
             return;
         }
-        var url = "https://cdn.guoanshuju.com/daqWeb/microAccount/daily/"+filetime+"/"+citys+"/all.zip";
+        var url = "https://cdn.guoanshuju.com/daqWeb/operations/daily/"+filetime+"/"+citys+"/all.zip";
         window.open(url,"download_file");
     }
 
 
+    function getWeek(i) {
 
+        var now = new Date();
+
+        var firstDay=new Date(now - (now .getDay() +7 ) * 86400000);
+
+        firstDay.setDate(firstDay.getDate() + i);
+
+        mon = Number(firstDay.getMonth()) + 1;
+
+        return now .getFullYear() + "-" + mon + "-" + firstDay.getDate();
+
+    }
 
 
 </script>
