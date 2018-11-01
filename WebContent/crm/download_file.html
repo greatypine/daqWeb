@@ -240,7 +240,7 @@
                                             <label>城市</label>
                                             <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
                                             <input id="city_code_tradetype" name="city_code_tradetype" type="hidden" value=""/>
-                                            <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+                                            <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype"  style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
                                             <div class="auto hidden" id="auto_city" style="width:85%;z-index: 99999;">
                                                 <!-- /.input group -->
                                             </div>
@@ -298,7 +298,7 @@
                                             <label>城市</label>
                                             <input id="city_id" name="city_id_tradetype" type="hidden" value=""/>
                                             <input id="city_code" name="city_code_tradetype" type="hidden" value=""/>
-                                            <input type="text" class="form-control"  placeholder="城市" id="city_name" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
+                                            <input type="text" class="form-control"  placeholder="城市" id="city_name"  style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
                                             <div class="auto hidden" id="auto_city_member" style="width:85%;z-index: 99999;">
                                                 <!-- /.input group -->
                                             </div>
@@ -502,22 +502,17 @@
                 if(data.result){
                     lst_select_city = JSON.parse(data.data);
                     for(var i=0;i<lst_select_city.length;i++){
-                        cityNameArray.push(lst_select_city[i].cityname);
-                        cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
                         $("#city_code_tradetype").val(lst_select_city[i].citycode);
                         $("#city_name_tradetype").val(lst_select_city[i].cityname);
-
-                        if(lst_select_city[i].citycode=="GZ"){
-                            cityCodeMap["广东"] = "GD";
-                            cityNameArray.push("广东");
-                        }else{
-                            $("#city_name_tradetype").readOnly="readonly";
-                        }
+                        $("#city_code").val(lst_select_city[i].citycode);
+                        $("#city_name").val(lst_select_city[i].cityname);
+/*                        $("#city_code_tradetype").val("BJ");
+                        $("#city_name_tradetype").val("北京");
+                        $("#city_code").val("BJ");
+                        $("#city_name").val("北京");*/
+                        $("#city_name_tradetype").attr("readonly",true);
+                        $("#city_name").attr("readonly",true);
                     }
-                    var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
-                    autoComplete.start(event);
-                }else{
-
                 }
             });
 
