@@ -124,7 +124,7 @@
          	<div class="box-header h4 text-light-blue">
           	<div class="pull-left "><strong>事业群毛利</strong></div>
          	<div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
-         	<div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用包含使用的优惠券和粮票。</div>
+                <div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用包含使用的优惠券和粮票。</br>3.毛利=销售收入（平台+优易）-已退货-营销费用-报损-盘亏。</br>4.事业群报损、盘亏数据为0。</div>
           </div>
           <div class="box-body">
             <form id="searchform">
@@ -197,7 +197,7 @@
                           <th width="10%">销售收入<br/>（优易）</th>
                           <th width="12%">营销费用<br/></th>
                           <th width="10%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">销售收入-营销费用</font>毛利</th>
+                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">销售收入-已退货-营销费用</font>毛利</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -623,7 +623,7 @@
                            if($('#channelClick').is(':checked')){
                                infoStr= infoStr +"<td>"+jData[i].channel_name+"</td>";
                            }
-                       var real_profit = (jData[i].total_profit - jData[i].order_fee).toFixed(2);
+                       var real_profit = (jData[i].total_profit -jData[i].return_profit- jData[i].order_fee).toFixed(2);
                            infoStr = infoStr+"<td>"+jData[i].platform_profit+"</td>"
                            +"<td>"+jData[i].ims_profit+"</td>"
                            +"<td>"+jData[i].order_fee+"</td>"
@@ -847,7 +847,16 @@ function operatedCoverageStore(){
 }
 
 function resetSerachParam(){
-	 $("#auto_store").empty();
+	$("#auto_store").empty();
+    laydate.render({//月份控件
+        elem:'#be_date1',
+        value:new Date(),
+        type:"month",
+        btns: ['confirm','now'],
+        theme: '#11214e',
+        min: '2018-9-1',
+        max:year_month
+    });
 	if(target==0){//总部
   		$("#store_id_tradetype").val("");
   		$("#store_name_tradetype").val("");

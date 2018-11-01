@@ -479,5 +479,11 @@ public interface StoreDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String, Object>> exportStoreTradeProfit(DynamicDto dynamicDto);
+
+	/**
+	 * 导出事业群毛利数据
+	 * @return
+	 */
+	public List<Map<String, Object>> exportDeptTradeProfit(DynamicDto dynamicDto);
 	
 }
