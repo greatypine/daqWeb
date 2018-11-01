@@ -229,9 +229,12 @@
 	});
 	var cur_date = new Date();
 	var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
+    cur_date.setTime(cur_date.getTime()-2*24*60*60*1000);
+    var last_month = cur_date.getMonth()+1;
+    var last_month_date = cur_date.getFullYear()+"-" + (last_month < 10 ? '0' + last_month : '' + last_month);
 	laydate.render({//月份控件
 		elem:'#be_date1',
-		value:new Date(),
+		value:last_month_date,
 		type:"month",
 		btns: ['confirm','now'],
 		theme: '#11214e',
@@ -617,7 +620,7 @@ function resetSerachParam(){
 	 $("#auto_store").empty();
     laydate.render({//月份控件
         elem:'#be_date1',
-        value:new Date(),
+        value:last_month_date,
         type:"month",
         btns: ['confirm','now'],
         theme: '#11214e',

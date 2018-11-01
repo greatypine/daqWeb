@@ -1649,7 +1649,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				sql = sql + " and dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "'";
 			}
 		}
-		sql = sql + "group by dot.store_code order by store_code ) aa";
+		sql = sql + "group by dot.store_code order by store_code ) aa ";
 
 		//门店报损
 		sql = sql + "left join (select  ts.code as store_code,ifnull(dround(sum(dit.c_at_amount_l),2),0) as baosun from df_ims_tb_o_l dit,df_ims_tb_store tis,gemini.t_store ts " +
