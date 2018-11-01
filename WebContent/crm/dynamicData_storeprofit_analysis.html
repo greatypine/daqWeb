@@ -124,7 +124,7 @@
          	<div class="box-header h4 text-light-blue">
           	<div class="pull-left "><strong>门店毛利</strong></div>
          	<div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
-         	<div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用包含使用的优惠券和粮票。</br>3.毛利=销售收入（平台+优易）-营销费用-报损-盘亏。</div>
+                <div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用包含使用的优惠券和粮票。</br>3.毛利=销售收入（平台+优易）-已退货-营销费用-报损-盘亏。</div>
           </div>
           <div class="box-body">
             <form id="searchform">
@@ -486,6 +486,7 @@
 	        	   
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
+                       var real_profit = (jData[i].total_profit-jData[i].return_profit-jData[i].order_fee-jData[i].baosun-jData[i].pankui).toFixed(2);
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
 		                       +"<td>"+jData[i].store_name+"</td>"
@@ -495,7 +496,7 @@
                                +"<td>"+jData[i].order_fee+"</td>"
                                +"<td>"+jData[i].baosun+"</td>"
                                +"<td>"+jData[i].pankui+"</td>"
-                               +"<td>"+(jData[i].total_profit-jData[i].return_profit-jData[i].order_fee-jData[i].baosun-jData[i].pankui).toFixed(2)+"</td>"
+                               +"<td>"+real_profit+"</td>"
 		                       +"</tr>";
 		                       
 		                  $("#tradeType_tbody").append(infoStr);     
@@ -614,6 +615,15 @@
     
 function resetSerachParam(){
 	 $("#auto_store").empty();
+    laydate.render({//月份控件
+        elem:'#be_date1',
+        value:new Date(),
+        type:"month",
+        btns: ['confirm','now'],
+        theme: '#11214e',
+        min: '2018-9-1',
+        max:year_month
+    });
 	if(target==0){//总部
   		$("#store_id_tradetype").val("");
   		$("#store_name_tradetype").val("");
