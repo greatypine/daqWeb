@@ -77,7 +77,7 @@
                             var func = $.fromJSON(datas.data);
                             var model_name = func.model_name;
                             $("#model_name1").val(model_name);
-                            $("#model_name1").attr("readonly",true);
+                            //$("#model_name1").attr("readonly",true);
                             var order_no = func.order_no;
                             var remark = func.remark;
                             var model_color = func.model_color;
@@ -209,7 +209,7 @@
             }
 			
             function backPage(){
-                window.location.reload();
+                window.history.go(-1);
             }
         </script>
 
@@ -312,7 +312,7 @@
                                     <input type="text" id="model_name1" name="module" class="form-control" style="width: 50%"/>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr>git
                                 <td align="center" nowrap="true">
                                     排序:
                                     <font color="red">
