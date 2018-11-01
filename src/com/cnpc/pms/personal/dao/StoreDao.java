@@ -486,4 +486,13 @@ public interface StoreDao extends IDAO {
 	 */
 	public List<Map<String, Object>> exportDeptTradeProfit(DynamicDto dynamicDto);
 	
+
+
+	/**
+	 * @Description 查询所有门店包括已关闭的
+	 * @author gbl
+	 * @date 2018/11/1 13:56
+	 **/
+
+	public List<Map<String, Object>> getAllStoreIncludeClosed(Long employee_no, Long cityId, String role);
 }

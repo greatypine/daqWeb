@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
+
 	@Override
 	public List<Map<String, Object>> getStoreInfoList(String where, PageInfo pageInfo) {
 		// sql查询列，用于分页计算数据总数
@@ -424,7 +425,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				storeStr = " and t.name like '%" + search_str + "%'";
 			}
 			searchSql = "select t.name,t.store_id,t.platformid,t.number,t.storeno,t1.citycode from t_store t  inner join  (select * from t_dist_citycode "
-					+ cityStr + ") t1" + " on t.city_name  = t1.cityname  and t.flag=0 and ifnull(t.estate,'') not like '%闭店%' "
+					+ cityStr + ") t1" + " on t.city_name  = t1.cityname  and t.flag=0  "
 					+ storeStr + " limit 10";
 
 		} else if (target == 1) {// 城市
@@ -1764,6 +1765,48 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllStoreIncludeClosed(Long employee_no, Long cityId, String role) {
+		String whereStr = "";
+		String cityStr = "";
+
+		if ("CSZJ".equals(role)) {// 城市总监
+			if (cityId != null && cityId > 0) {
+				cityStr = " and  tdc.id=" + cityId;
+			}
+			if (employee_no != null && !"".equals(employee_no)) {
+				whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and  name not like '%测试%' and storetype!='V') t  inner join  (select tdc.id,tdc.cityname from t_dist_city a"
+						+
+
+						"   INNER JOIN t_dist_citycode tdc on a.citycode = tdc.citycode and a.pk_userid=" + employee_no
+						+ cityStr + " ) t1" + "	 on t.city_name  = t1.cityname "
+						+ " left join tb_bizbase_user as tbu on t.skid = tbu.id order by convert(t.name using gbk) asc";
+			} else {
+				whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and  name not like '%测试%' and storetype!='V') t  inner join  (select tdc.id,tdc.cityname from "
+						+
+
+						"   t_dist_citycode tdc  where tdc.status=0  " + cityStr + " ) t1" + "	on t.city_name  = t1.cityname "
+						+ "   left join tb_bizbase_user as tbu on t.skid = tbu.id order by convert(t.name using gbk) asc";
+			}
+
+		} else if ("QYJL".equals(role)) {// 区域经理
+			whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.store_id,t.storeno,t.skid,t.number from (select * from t_store where flag=0 and  name not like '%测试%' and storetype!='V') t left join tb_bizbase_user as tbu on t.rmid = tbu.id where  t.rmid = "
+					+ employee_no + " order by convert(t.name using gbk) asc";
+		} else if ("ZB".equals(role)) {// 总部
+			if (cityId != null) {
+				cityStr = " where   tdc.id=" + cityId;
+			}
+			whereStr = "select t.platformid,t.name,tbu.name as employeeName,t.skid,t.number,t.storeno,t.store_id from (select * from t_store where flag=0 and  name not like '%测试%' and storetype!='V') t inner join (select *  from t_dist_citycode tdc "
+					+ cityStr + ") t1 on t.city_name  = t1.cityname"
+					+ " left join tb_bizbase_user as tbu on t.skid = tbu.id order by convert(t.name using gbk) asc";
+		}
+
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(whereStr);
+		List<Map<String, Object>> storeDate = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		return storeDate;
 	}
 
 	public Map<String, Object> queryPlatformidByCode(String storeno){

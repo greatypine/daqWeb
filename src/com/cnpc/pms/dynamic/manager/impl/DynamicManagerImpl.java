@@ -506,7 +506,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -543,7 +543,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -625,7 +625,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -663,7 +663,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -3167,7 +3167,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -3204,7 +3204,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -3279,7 +3279,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();
@@ -3321,7 +3321,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();
@@ -5741,7 +5741,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();
@@ -5783,7 +5783,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();

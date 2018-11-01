@@ -492,13 +492,14 @@
             $("#nav-tabs").empty();
             var li_Element = $("<li class='active'>");
             var li2_Element = $("<li class=''>");
-            var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='true'>").html("城市月报");
-            var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("城市日报");
-            $("#tab_0").removeClass("active");
-            $("#tab_1").addClass("active");
+            var li3_Element = $("<li class=''>");
+            var a_Element = $("<a href='#tab_0' data-toggle='tab' aria-expanded='true'>").html("全国整体月报");
+            var b_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='false'>").html("城市月报");
+            var c_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("城市日报");
             li_Element.append(a_Element);
             li2_Element.append(b_Element);
-            $("#nav-tabs").append(li_Element).append(li2_Element);
+            li3_Element.append(c_Element);
+            $("#nav-tabs").append(li_Element).append(li2_Element).append(li3_Element);
             doManager('downloadFileManager','selectAllCity',null,function(data){
                 if(data.result){
                     lst_select_city = JSON.parse(data.data);

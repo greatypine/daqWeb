@@ -1486,12 +1486,26 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("message", CodeEnum.nullData.getDescription());
 			return result;
 		}
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
-		//calendar.add(Calendar.MONTH, -2);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		Date beginDate = calendar.getTime();
+
+
+		int startYear = calendar.get(Calendar.YEAR);//获取年份
+		int startMonth = calendar.get(Calendar.MONTH) + 1;//获取月份
+		int startDay = calendar.get(Calendar.DATE);//获取日
+
+		Date beginDate = new Date(startYear - 1900, startMonth - 1, startDay);
+
+
+
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-		Date endDate = calendar.getTime();
+		int endYear = calendar.get(Calendar.YEAR);//获取年份
+		int endMonth = calendar.get(Calendar.MONTH) + 1;//获取月份
+		int endDay = calendar.get(Calendar.DATE);//获取日
+
+		Date endDate = new Date(endYear - 1900, endMonth - 1, endDay);
+
 		List<Document> pipeline = new ArrayList<Document>();
 		Document match = new Document("$match",new BasicDBObject("employeeId",list.get(0).get("employeeId")).append("createdAt",new Document("$gte",beginDate).append("$lte",endDate)));
 		pipeline.add(match);
