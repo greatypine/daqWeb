@@ -7206,13 +7206,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 			//城市毛利
 			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","毛利"};
-			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","total_profit"};
+			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","real_profit"};
 			//门店毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
 				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）",
-						"优惠券（平台）","优惠券（优易）","优惠券（合计）","粮票（平台）","粮票（优易）","粮票（合计）","营销费用（平台）","营销费用（优易）","报损","盘亏"};
+						"优惠券（平台）","优惠券（优易）","优惠券（合计）","粮票（平台）","粮票（优易）","粮票（合计）","营销费用（平台）","营销费用（优易）","报损","盘亏","毛利"};
 				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit",
-						"platform_coupon","ims_coupon","total_coupon","platform_rebate","ims_rebate","total_rebate","platform_fee","ims_fee","baosun","pankui"};
+						"platform_coupon","ims_coupon","total_coupon","platform_rebate","ims_rebate","total_rebate","platform_fee","ims_fee","baosun","pankui","real_profit"};
 			}
 			//事业群毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
@@ -7233,13 +7233,20 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				content.put("销售收入（合计）","total_profit");
 				content.put("营销费用（平台）","platform_fee");
 				content.put("营销费用（优易）","ims_fee");
-				content.put("毛利","total_profit");
+				content.put("毛利","real_profit");
 
 				str_headers = content.keySet().toArray(new String[0]);
 				headers_key = content.values().toArray(new String[0]);
 			}
 
-			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("毛利",list,str_headers,headers_key);
+			String sheetName = "城市";
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+				sheetName="门店";
+			}
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
+				sheetName="事业群";
+			}
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil(dynamicDto.getBeginDate()+sheetName+"毛利",list,str_headers,headers_key);
 			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
