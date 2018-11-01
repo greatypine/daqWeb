@@ -1253,7 +1253,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		Map<String, Object> result = new HashMap<String, Object>();
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("employee_position");
+		MongoCollection<Document> collection = database.getCollection("position_record");
 		org.json.JSONArray jArray = new org.json.JSONArray();
 		List<Object> list1 = new ArrayList<Object>();
 		for (int i = 0; i < list.size(); i++) {
@@ -1261,20 +1261,18 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		}
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<Document> pipeline = new ArrayList<Document>();
-		Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1))); 
+		Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1)).
+				append("createdAt",new Document("$gte",new Date(beginDate)).append("$lte", new Date(endDate))));
 		pipeline.add(match);
-		Document project = new Document("$project",new Document("_id","$employeeId").append("position",1).append("locations", 1));
+		List<Object> listcoor = new ArrayList<Object>();
+		listcoor.add("$longitude");
+		listcoor.add("$latitude");
+		Document project = new Document("$project",new Document("_id","$employeeId").append("location",listcoor));
 		pipeline.add(project);
-		Document unwind = new Document("$unwind","$locations");
-		pipeline.add(unwind);
-		Document filter = new Document();
-		filter.put("locations.createTime",new Document("$gte",new Date(beginDate)).append("$lte", new Date(endDate)));
 		//filter.put("locations.event", new Document("$ne","normal"));
 		//filter.put("locations.orderId", new Document("$ne",""));
 		//filter.put("locations.orderStatus", new Document("$ne",null));
-		Document match1 = new Document("$match",filter);
-		pipeline.add(match1);
-		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")).append("createTime", new Document("$push","$locations.createTime")));
+		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$location")));
 		pipeline.add(group);
 		AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
 		MongoCursor<Document> cursor = aggregate.iterator();
@@ -1283,7 +1281,6 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	           Document doc = cursor.next();  
 	           jObject = new JSONObject();
 			   jObject.put("locations", doc.get("locations"));
-			   jObject.put("createTime", doc.get("createTime"));
 			   jObject.put("id", doc.get("_id"));
 			 //  jObject.put("position", doc.get("position"));
 			   for(int i = 0; i < list.size(); i++){
@@ -1481,7 +1478,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		PlatformEmployeeDao pDao = (PlatformEmployeeDao)SpringHelper.getBean(PlatformEmployeeDao.class.getName());
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("employee_position");
+		MongoCollection<Document> collection = database.getCollection("position_record");
 		org.json.JSONArray jArray = new org.json.JSONArray();
 		List<Map<String, Object>> list = pDao.getEmployeeByEmployeeNo(employeeNo); 
 		if(list==null||list.size()==0){//没有员工编号对应的员工
@@ -1489,25 +1486,21 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("message", CodeEnum.nullData.getDescription());
 			return result;
 		}
-		List<Document> pipeline = new ArrayList<Document>();
-		Document match = new Document("$match",new BasicDBObject("employeeId",list.get(0).get("employeeId"))); 
-		pipeline.add(match);
-		Document project = new Document("$project",new Document("_id",0).append("employeeId",1).append("locations", 1));
-		pipeline.add(project);
-		Document unwind = new Document("$unwind","$locations");
-		pipeline.add(unwind);
-		Document filter = new Document();
 		Calendar calendar = Calendar.getInstance();
 		//calendar.add(Calendar.MONTH, -2);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		Date beginDate = calendar.getTime();
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		Date endDate = calendar.getTime();
-		filter.put("locations.createTime",new Document("$gte",beginDate).append("$lte",endDate));
-		
-		Document match1 = new Document("$match",filter);
-		pipeline.add(match1);
-		Document group = new Document("$group",new Document("_id","$employeeId").append("locations", new Document("$push","$locations.location")));
+		List<Document> pipeline = new ArrayList<Document>();
+		Document match = new Document("$match",new BasicDBObject("employeeId",list.get(0).get("employeeId")).append("createdAt",new Document("$gte",beginDate).append("$lte",endDate)));
+		pipeline.add(match);
+		List<Object> listcoor = new ArrayList<Object>();
+		listcoor.add("$longitude");
+		listcoor.add("$latitude");
+		Document project = new Document("$project",new Document("_id",0).append("employeeId",1).append("location", listcoor));
+		pipeline.add(project);
+		Document group = new Document("$group",new Document("_id","$employeeId").append("locations", new Document("$push","$location")));
 		pipeline.add(group);
 		AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
 		MongoCursor<Document> cursor = aggregate.iterator();

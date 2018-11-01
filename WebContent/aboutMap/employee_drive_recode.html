@@ -562,7 +562,7 @@ var getPageContent = function(requestInfoDto){
 	$("#process_div_pic").hide();
 	
 	//setTimeout(dynamicDrawDriverRecode(),60000);
-	setTimeout(function(){
+	/*setTimeout(function(){
 		console.log(maxlocationIndex);
 		 for(var z = 0; z < maxlocationIndex; z++){
 			 (function(){
@@ -603,40 +603,46 @@ var getPageContent = function(requestInfoDto){
 				},z*500);
 			 })();
 		}
-	},1000);
-	
-	
-}
+	},1000);*/
 
-function test(){
-	setTimeout(function (){
-		for(var i = 0; i < diverRecodeArray.length; i++){
-			var empDiver = diverRecodeArray[i];
-			var locations = empDiver.locations;
-			var platformid = empDiver.platformid;
-			var employeeId = empDiver.id;
-			var online = empDiver.online;
-			var length = locations.length;
-			var locationIndex = empDiver.locationIndex;
-			var marker = empDiver.marker;
-			var polyline = empDiver.polyline;
-			if(typeof(marker) != "undefined" && typeof(polyline) != "undefined"){
-				if(length > locationIndex){
-					empDiver.marker.setPosition(locations[locationIndex]);
-					empDiver.polyline.getPath().push(locations[locationIndex]);
-					empDiver.polyline.setPath(empDiver.polyline.getPath());
-					if(empDiver.storearea != null && !empDiver.storearea.contains(locations[locationIndex])){
-						empDiver.polyline.setOptions({"strokeColor":"#000"});
-						empDiver.marker.setIcon('dist/img/offservicegaxlogo.png');
-			   		}else{
-			   			empDiver.polyline.setOptions({"strokeColor":"#f00"});
-			   			empDiver.marker.setIcon('dist/img/gaxlogo.png');
-			   		}
-					empDiver.locationIndex++;
-				}
-			}
-		}
-	},5000);
+    var flag = true;
+    var x= 0;
+    var reatimeinterval = setInterval(function(){
+        if(flag){
+            x++;
+            for(var i = 0; i < diverRecodeArray.length; i++){
+                var empDiver = diverRecodeArray[i];
+                var locations = empDiver.locations;
+                var platformid = empDiver.platformid;
+                var employeeId = empDiver.id;
+                var online = empDiver.online;
+                var length = locations.length;
+                var locationIndex = empDiver.locationIndex;
+                var marker = empDiver.marker;
+                var polyline = empDiver.polyline;
+                if(typeof(marker) != "undefined" && typeof(polyline) != "undefined"){
+                    if(length > locationIndex){
+                        empDiver.marker.setPosition(locations[locationIndex]);
+                        empDiver.polyline.getPath().push(locations[locationIndex]);
+                        empDiver.polyline.setPath(empDiver.polyline.getPath());
+                        if(empDiver.storearea != null && !empDiver.storearea.contains(locations[locationIndex])){
+                            empDiver.polyline.setOptions({"strokeColor":"#000"});
+                            empDiver.marker.setIcon('dist/img/offservicegaxlogo.png');
+                        }else{
+                            empDiver.polyline.setOptions({"strokeColor":"#f00"});
+                            empDiver.marker.setIcon('dist/img/gaxlogo.png');
+                        }
+                        empDiver.locationIndex++;
+                    }
+                }
+            }
+            if(x == maxlocationIndex - 1){
+                flag = false;
+                timeout= window.setInterval(refreshEmployeeRrcode,60000);
+                window.clearInterval(reatimeinterval);
+            }
+        }
+    },500);
 }
 
 function getEmployeeStatus(employeeno){
@@ -1068,76 +1074,8 @@ function getEmployeeDriverRecodeRealtime(){
         	crm_alert(0,"数据加载异常！");
         }
     },false);
-	/* doManager("GAXDriveRecodeManager", "getDynamicDriveRecode",[requestInfoDto], function(data, textStatus,XMLHttpRequest) {
-		if(data.result){
-        	var jsonData = JSON.parse(data.data);
-        	if(typeof(jsonData.diverRecode) != "undefined"){
-        		diverRecodeArray = jsonData.diverRecode.data; 
-        	}
-        		if(diverRecodeArray != null && diverRecodeArray.length > 0){
-        			var diverPolyline;
-        			var marker;
-        			debugger;
-        			for(var i = 0; i < diverRecodeArray.length; i++){
-        				var empDiver = diverRecodeArray[i];
-        				var locations = empDiver.locations;
-        				var platformid = empDiver.platformid;
-        				var employeeId = empDiver.id;
-        				employeeArray.push(employeeId);
-        				 if(serviceArray.length>0){
-       						for(var j = 0; j <serviceArray.length; j++){
-       							var storeService = serviceArray[j];
-       							if(storeService.platformid == platformid){
-       								 empDiver["storearea"]=storeService.servicePolygon;
-       								if(!empDiver.storearea.contains(locations)){
-       									var diverPolyline =  drawEmployeeDiverPolyline(locations,"offline");
-       		        				 	empDiver["polyline"] = diverPolyline;
-       		        				 	var marker = drawEmployeePosition(locations,empDiver,"offservice");
-	            						empDiver["marker"] = marker;
-       								}else{
-       									var diverPolyline =  drawEmployeeDiverPolyline(locations,"online");
-       		        				 	empDiver["polyline"] = diverPolyline;
-       		        				 	var marker = drawEmployeePosition(locations,empDiver,"online");
-	            						empDiver["marker"] = marker;
-       								}
-       								 break;
-       							}
-       							if(platformid == null || platformid.trim() == ""){
-       								empDiver["storearea"] = null;
-       							}
-       						}
-        				}else{
-        					empDiver["storearea"]= storeServicePolygon;
-        					if(!empDiver.storearea.contains(locations)){
-        						var diverPolyline =  drawEmployeeDiverPolyline(locations,"offline");
-		        				empDiver["polyline"] = diverPolyline;
-		        				var marker = drawEmployeePosition(locations,empDiver,"offservice");
-        						empDiver["marker"] = marker;
-							}else{
-								var diverPolyline =  drawEmployeeDiverPolyline(locations,"online");
-		        				empDiver["polyline"] = diverPolyline;
-		        				var marker = drawEmployeePosition(locations,empDiver,"online");
-        						empDiver["marker"] = marker;
-							}
-        				}
-        			}
-        	}
-        }else{
-        	crm_alert(0,"数据加载异常！");
-        }
-		timeout= window.setInterval(refreshEmployeeRrcode,20000);
-    },false); */
-	
 }
 
-/* window.onload = function(){
-	 for(var z = 0; z < maxlocationIndex; z++){
-		//setTimeout(test(),1000);
-		test();
-	} 
-	alert("1");
-	timeout= window.setInterval(refreshEmployeeRrcode,60000);
-} */
  
 
 var curr_user;
