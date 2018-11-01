@@ -102,8 +102,8 @@ public class PlatformStoreManagerImpl extends BizBaseCommonManager implements Pl
 			//创建一个document集合
 			List<Document> pipeline = new ArrayList<Document>();
 			//创建一个match document
-			Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1)).append("updateTime",
-					new Document("$get", new Date(format2+" 00:00:00"))).append("updateTime",
+			Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1)).append("createdAt",
+					new Document("$get", new Date(format2+" 00:00:00"))).append("createdAt",
 					new Document("$lte", new Date(format2+" 23:59:59"))));
 			pipeline.add(match);
 			//创建一个project document
