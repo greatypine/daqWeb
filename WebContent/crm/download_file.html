@@ -391,6 +391,7 @@
     var now_month =cur_date.getMonth();
     var max_year = cur_date.getFullYear();
     var now_date =cur_date.getDate();
+    var max_month = "";
     if(now_month==0){
         max_year =cur_date.getFullYear()-1;
         max_month = "12";
@@ -402,12 +403,15 @@
         }else{
             now_month = now_month+1;
         }
+    }else{
+        max_month = now_month;
     }
     var year_month = max_year+"-"+max_month;
     var max_date = "";
+    var max_month1 =max_month;
     var max_month =max_year+"-"+max_month +"-"+(cur_date.getDate());
     if(now_date==1){
-        if(now_month==4||now_month==6||now_month==9||now_month==1){
+        if(now_month==4||now_month==6||now_month==9||now_month==11){
             now_date =30;
         }else
             if(max_year%4==0&&now_month==2){
@@ -415,7 +419,7 @@
         }else{
                 now_date=31;
             }
-                max_date = max_year+"-"+max_month +"-"+now_date;
+                max_date = max_year+"-"+max_month1 +"-"+now_date;
     }else{
         max_date = max_year+"-"+now_month +"-"+(now_date-1);
     }
@@ -426,7 +430,7 @@
         type:"month",
         btns: ['confirm'],
         theme: '#11214e',
-        min: '2018-09-1',
+        min: '2018-10-1',
         max:max_month
 
     });
@@ -436,7 +440,7 @@
         type:"month",
         btns: ['confirm'],
         theme: '#11214e',
-        min: '2018-09-1',
+        min: '2018-10-1',
         max:max_month
 
     });
@@ -448,7 +452,7 @@
         type:"date",
         btns: ['confirm'],
         theme: '#11214e',
-        min: '2018-10-28',
+        min: '2018-10-31',
         max:max_date
     });
 
@@ -467,10 +471,11 @@
     var endt = decode64(getUrlParamByKey("endT"));
 
     $(function () {
-        if(target==null||target==""){
-            target="0";
+        //curr_user.usergroup.code=="ZBCWJSZ"||curr_user.usergroup.code=="CSCWJSZ"||curr_user.usergroup.code=="ZBSYQCWJSZ"
+        if(role==null||role==""){
+            role="CSCWJSZ";
         }
-        if(target=="0"){
+        if(role!="CSCWJSZ"){
             $("#nav-tabs").empty();
             var li_Element = $("<li class='active'>");
             var li2_Element = $("<li class=''>");
@@ -579,6 +584,7 @@
                 }else{
 
                 }
+                $("#city_code_tradetype").val("BJ");
             });
         }
     });

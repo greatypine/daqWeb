@@ -4319,8 +4319,14 @@ var curr_user;
                             //暂时控制管理员查看221gmv，以后删除（高宝磊）
     						 if(curr_user.usergroup.code=="GLY"){
                                 $("#221_gmv").show();
+                                 $("#jssj").hide();
                             }else{
                                 $("#221_gmv").hide();
+                                 if(curr_user.usergroup.code=="ZBCWJSZ"||curr_user.usergroup.code=="CSCWJSZ"||curr_user.usergroup.code=="ZBSYQCWJSZ"){
+                                    $("#jssj").show();
+                                 }else{
+                                     $("#jssj").hide();
+                                 }
                             }
     					}
     			},false);
