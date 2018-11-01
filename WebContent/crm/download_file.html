@@ -176,7 +176,7 @@
 
                         <div class="tab-pane active" id="tab_0">
                             <div class="col-sm-12 text-right text-red no-padding" style="padding-right:15px;font-size:75%;float: right">
-                                <p >微超订单维度与退款纬度全部结算数据(月报)</p>
+                                <p >※同原FTP中的 整月结算数据</p>
                             </div>
                             <div class="box-body">
                                 <div class="clearfix search-criteria">
@@ -198,9 +198,9 @@
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                                     </div>
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_country">
+<!--                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_country">
                                         <button  type="button"  style="display:block"  onclick="export_country();" class="btn btn-block btn-warning">打包下载</button>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_country_step1(1)">查询</button>
                                     </div>
@@ -230,7 +230,8 @@
                         </div>
                         <div class="tab-pane" id="tab_1">
                             <div class="col-sm-12 text-right text-red no-padding" style="padding-right:15px;font-size:75%;float: right">
-                                <p >微超订单维度与退款纬度分城市结算数据(月报)</p>
+                                <p >※同邮件中的【微超核算月报（城市）】
+                                </p>
                             </div>
                             <div class="box-body">
                                 <div class="clearfix search-criteria">
@@ -255,9 +256,9 @@
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                                     </div>
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_month">
+<!--                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_month">
                                         <button  type="button"   onclick="export_monthly();" class="btn btn-block btn-warning">打包下载</button>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_monthly_step1(1)">查询</button>
                                     </div>
@@ -288,7 +289,7 @@
 
                         <div class="tab-pane" id="tab_2">
                             <div class="col-sm-12 text-right text-red no-padding" style="padding-right:15px;font-size:75%;float: right">
-                                <p >微超订单维度与退款纬度分城市结算数据(日报)</p>
+                                <p >※同邮件中的 【微超核算日报（城市）】</p>
                             </div>
                             <div class="box-body">
                                 <div class="clearfix search-criteria">
@@ -315,9 +316,9 @@
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
                                     </div>
-                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_daily">
+<!--                                    <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;" id="exportnormal_daily">
                                         <button  type="button" style="display:block"  onclick="export_daily();" class="btn btn-block btn-warning">打包下载</button>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
                                         <button type="button" class="btn btn-block btn-primary" onclick="search_daily_step1(1)">查询</button>
                                     </div>
@@ -469,7 +470,6 @@
     var fromBar = decode64(getUrlParamByKey("fb"));
     var beti = decode64(getUrlParamByKey("beTi"));
     var endt = decode64(getUrlParamByKey("endT"));
-
     $(function () {
         //curr_user.usergroup.code=="ZBCWJSZ"||curr_user.usergroup.code=="CSCWJSZ"||curr_user.usergroup.code=="ZBSYQCWJSZ"
         if(role==null||role==""){
@@ -498,6 +498,29 @@
             li_Element.append(a_Element);
             li2_Element.append(b_Element);
             $("#nav-tabs").append(li_Element).append(li2_Element);
+            doManager('downloadFileManager','selectAllCity',null,function(data){
+                if(data.result){
+                    lst_select_city = JSON.parse(data.data);
+                    for(var i=0;i<lst_select_city.length;i++){
+                        cityNameArray.push(lst_select_city[i].cityname);
+                        cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
+                        $("#city_code_tradetype").val(lst_select_city[i].citycode);
+                        $("#city_name_tradetype").val(lst_select_city[i].cityname);
+
+                        if(lst_select_city[i].citycode=="GZ"){
+                            cityCodeMap["广东"] = "GD";
+                            cityNameArray.push("广东");
+                        }else{
+                            $("#city_name_tradetype").readOnly="readonly";
+                        }
+                    }
+                    var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
+                    autoComplete.start(event);
+                }else{
+
+                }
+            });
+
         }
         $(".logo-lg > ul > li").hover(function(){
             $(this).children(".nav_dropdown").toggle('1000');
@@ -569,22 +592,22 @@
                 city_id = cityId;
 
             }
-            doManager('downloadFileManager','selectAllCity',null,function(data){
-                if(data.result){
-                    cityCodeMap["广东"] = "GD";
-                    cityNameArray.push("广东");
-                    lst_select_city = JSON.parse(data.data);
-                    for(var i=0;i<lst_select_city.length;i++){
-                        cityNameArray.push(lst_select_city[i].cityname);
-                        cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
+                doManager('downloadFileManager','selectAllCity',null,function(data){
+                    if(data.result){
+                        cityCodeMap["广东"] = "GD";
+                        cityNameArray.push("广东");
+                        lst_select_city = JSON.parse(data.data);
+                        for(var i=0;i<lst_select_city.length;i++){
+                            cityNameArray.push(lst_select_city[i].cityname);
+                            cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
+                        }
+
+                        var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
+                        autoComplete.start(event);
+                    }else{
+
                     }
-
-                    var autoComplete = new AutoComplete("city_name_tradetype","auto_city",cityNameArray);
-                    autoComplete.start(event);
-                }else{
-
-                }
-            });
+                });
         }
     });
     //查询
@@ -720,22 +743,22 @@
                 city_id = cityId;
 
             }
-            doManager('downloadFileManager','selectAllCity',null,function(data){
-                if(data.result){
-                    lst_select_city = JSON.parse(data.data);
-                    cityCodeMap["广东"] = "GD";
-                    cityNameArray.push("广东");
-                    for(var i=0;i<lst_select_city.length;i++){
-                        cityNameArray.push(lst_select_city[i].cityname);
-                        cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
-                    }
-                    cityCodeMap["广东"] = "GD";
-                    var autoComplete = new AutoComplete("city_name","auto_city_member",cityNameArray);
-                    autoComplete.start(event);
-                }else{
+                doManager('downloadFileManager','selectAllCity',null,function(data){
+                    if(data.result){
+                        lst_select_city = JSON.parse(data.data);
+                        cityCodeMap["广东"] = "GD";
+                        cityNameArray.push("广东");
+                        for(var i=0;i<lst_select_city.length;i++){
+                            cityNameArray.push(lst_select_city[i].cityname);
+                            cityCodeMap[lst_select_city[i].cityname] = lst_select_city[i].citycode;
+                        }
+                        cityCodeMap["广东"] = "GD";
+                        var autoComplete = new AutoComplete("city_name","auto_city_member",cityNameArray);
+                        autoComplete.start(event);
+                    }else{
 
-                }
-            });
+                    }
+                });
         }
     });
 
