@@ -4320,10 +4320,20 @@ var curr_user;
     						 if(curr_user.usergroup.code=="GLY"){
                                 $("#221_gmv").show();
                                  $("#jssj").hide();
+
                             }else{
                                 $("#221_gmv").hide();
                                  if(curr_user.usergroup.code=="ZBCWJSZ"||curr_user.usergroup.code=="CSCWJSZ"||curr_user.usergroup.code=="ZBSYQCWJSZ"){
                                     $("#jssj").show();
+                                     $("#left-showa2").hide();
+                                     $("#left-showa3").hide();
+                                     $("#left-showa4").hide();
+                                 }else if(curr_user.usergroup.code=="ZBJYGLCJSZ"){
+                                     $("#left-showa1").show();
+                                     $("#left-showa2").show();
+                                     $("#left-showa3").show();
+                                     $("#left-showa4").show();
+                                     $("#jssj").show();
                                  }else{
                                      $("#jssj").hide();
                                  }

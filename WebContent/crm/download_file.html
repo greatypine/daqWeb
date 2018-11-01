@@ -181,11 +181,12 @@
                             <div class="box-body">
                                 <div class="clearfix search-criteria">
                                     <div id="selectorLine clearfix no-border0" class="clearfix">
-                                        <div class="form-group col-lg-4">
+                                        <input id="country_id_tradetype"  type="hidden" value="country"/>
+                                      <!--  <div class="form-group col-lg-4">
                                             <label>城市</label>
                                             <input id="country_id_tradetype"  type="hidden" value="country"/>
                                             <input type="text" class="form-control"  placeholder="全国"  readonly="readonly" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
-                                        </div>
+                                        </div>-->
 
                                         <div class="form-group col-lg-4">
                                             <label>月份</label>
@@ -480,9 +481,9 @@
             var li_Element = $("<li class='active'>");
             var li2_Element = $("<li class=''>");
             var li3_Element = $("<li class=''>");
-            var a_Element = $("<a href='#tab_0' data-toggle='tab' aria-expanded='true'>").html("全国月报");
-            var b_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='false'>").html("月报");
-            var c_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("日报");
+            var a_Element = $("<a href='#tab_0' data-toggle='tab' aria-expanded='true'>").html("全国整体月报");
+            var b_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='false'>").html("城市月报");
+            var c_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("城市日报");
             li_Element.append(a_Element);
             li2_Element.append(b_Element);
             li3_Element.append(c_Element);
@@ -491,8 +492,8 @@
             $("#nav-tabs").empty();
             var li_Element = $("<li class='active'>");
             var li2_Element = $("<li class=''>");
-            var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='true'>").html("月报");
-            var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("日报");
+            var a_Element = $("<a href='#tab_1' data-toggle='tab' aria-expanded='true'>").html("城市月报");
+            var b_Element = $("<a href='#tab_2' data-toggle='tab' aria-expanded='false'>").html("城市日报");
             $("#tab_0").removeClass("active");
             $("#tab_1").addClass("active");
             li_Element.append(a_Element);

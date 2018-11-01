@@ -5273,6 +5273,12 @@ table.text-center, table.text-center td, table.text-center th {
 .secNav-box .pull-left:nth-child(3),.secNav-box .pull-left:nth-child(4){width: 12%; margin: 0 1%;}
 .secNav-box .pull-left:nth-child(2){ width: 30%; margin: 0 1%;}
 .secNav-box .pull-left:nth-child(1){ width: 20%; margin: 0 1%;}
+/*.left-showa1{width: 20%; margin: 0 1%;}
+.left-showa2{width: 30%; margin: 0 1%;}
+.left-showa3{width: 12%; margin: 0 1%;}
+.left-showa4{width: 14%; margin: 0 1%;}
+.left-showb1{width: 30%; margin: 0 1%;}
+.left-showb2{width: 16%; margin: 0 1%;}*/
 /*.secNav-box .pull-left:nth-child(3),.secNav-box .pull-left:nth-child(4){width: 16%; margin: 0 1%;}
 .secNav-box .pull-left:nth-child(2),.secNav-box .pull-left:nth-child(1){ width: 30%; margin: 0 1%;}*/
 .TDsec-nav dl dt {display: block; border-bottom: 1px dashed #aab1cc; padding-bottom: 34px; position: relative; margin-bottom: 12px; height: 20px;padding-left: 26px;}
