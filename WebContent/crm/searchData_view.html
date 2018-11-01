@@ -209,6 +209,8 @@
 	                      <a id="tag_微信礼品卡" onclick="orderTypeSelection('微信礼品卡')" style="cursor:pointer;">微信礼品卡</a>
 	                      <a id="tag_集采订单" onclick="orderTypeSelection('集采订单')" style="cursor:pointer;">集采订单</a>
 	                      <a id="tag_积分订单" onclick="orderTypeSelection('积分订单')" style="cursor:pointer;">积分订单</a>
+                          <a id="tag_过账支付" onclick="orderTypeSelection('过账支付')" style="cursor:pointer;">过账支付</a>
+                          <a id="tag_无精确成本" onclick="orderTypeSelection('无精确成本')" style="cursor:pointer;">无精确成本</a>
 	                      <input type="text" style="display:none" class="form-control" placeholder="订单标签"  id="label_private_manual"/>
 	                    </div>
 	                  </div>
@@ -1579,7 +1581,14 @@ Date.prototype.format=function(fmt) {
 						}else if(jData[i].order_tag2=='3'){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/20180719093956.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">团购订单</span>";
-					}
+                        }
+                        if(jData[i].order_tag3=='0'){
+                            infoStr= infoStr
+                                +"<span style=\"background:url('../data_access/imgmouse_files/20181101143830.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">无精确成本</span>";
+                        }else if(jData[i].order_tag3=='2'){
+                            infoStr= infoStr
+                                +"<span style=\"background:url('../data_access/imgmouse_files/20181101143808.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">过账支付</span>";
+                        }
 						infoStr= infoStr
 	                       	+"</td>"
 	                       	+"</tr>";
