@@ -144,6 +144,9 @@ Date.prototype.format=function(fmt) {
 	var in_zw="";
 	
 	function dataCheck() {
+		
+		var zw =$("#zw  option:selected").val();
+		
 		var name = $("#name").val();
 		if(name==null||name.trim()==""){
 			$$.showMessage("系统信息","请填写姓名!");
@@ -201,7 +204,7 @@ Date.prototype.format=function(fmt) {
 			}
 		}
 		*/
-		
+	
 		if(zw!='市场专员'&&zw!='线上服务专员'){
 			var store_name = $('#storename').val();
 			if (store_name == "" || store_name == null) {
@@ -652,8 +655,10 @@ Date.prototype.format=function(fmt) {
 				$("#storefw").show();
 				$("#storefwbtn").attr("disabled",false);
 			}else{
-				$("#storename").css('background','');
-				$("#storename").attr("readonly","");
+				if(zw!=null&&zw.trim()!="市场专员"){
+					$("#storename").css('background','');
+					$("#storename").attr("readonly","");
+				}
 				$("#storefw").hide();
 				$("#storefwbtn").attr("disabled",true);
 				/* $("#selectStoreIds").val("");

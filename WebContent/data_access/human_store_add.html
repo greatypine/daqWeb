@@ -430,8 +430,10 @@ Date.prototype.format=function(fmt) {
 				$("#storefw").show();
 				$("#storefwbtn").attr("disabled",false);
 			}else{
-				$("#storename").css('background','');
-				$("#storename").attr("readonly","");
+				if(zw!=null&&zw.trim()!="市场专员"){
+					$("#storename").css('background','');
+					$("#storename").attr("readonly","");
+				}
 				$("#storefw").hide();
 				$("#storefwbtn").attr("disabled",true);
 				$("#selectStoreIds").val("");
