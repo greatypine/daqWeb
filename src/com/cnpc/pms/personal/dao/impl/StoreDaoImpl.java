@@ -1460,9 +1460,6 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			sql = sql + "and tdc.id = "+dynamicDto.getCityId()+" ";
 		}
 		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
-			sql = sql + "and dot.store_code ='"+dynamicDto.getStoreNo()+"' ";
-		}
-		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
 			Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
 			if (position_obj != null) {
 				sql = sql + " and (dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "' or dot.normal_store_id='"+(String) position_obj.get("platformid")+"')";
