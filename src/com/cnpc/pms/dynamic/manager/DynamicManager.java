@@ -1169,4 +1169,21 @@ public interface DynamicManager extends IManager{
 	 * @return Map<String, Object>
 	 */
 	public Map<String, Object> exportStoreTradeProfit(DynamicDto dynamicDto);
+
+    /**
+     * @Description 国安侠毛利
+     * @author wuxinxin
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto,PageInfo pageInfo);
+
+    /**
+     *
+     * TODO 导出国安侠毛利
+     * 2018年4月8日
+     * @author gaobaolei
+     * @param dd
+     * @return
+     */
+    public Map<String, Object> exportEmployeeOfMaoli(DynamicDto dd);
 }

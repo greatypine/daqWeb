@@ -1032,4 +1032,16 @@ public interface DynamicDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> getUserBehaviorByLog(DynamicDto dynamicDto,String cityNo,PageInfo pageInfo);
+
+
+    /**
+     *
+     * TODO 国安侠（片区）GMV （新）
+     * 2018年1月24日
+     * @author gaobaolei
+     * @param dynamicDto
+     * @param pageInfo
+     * @return
+     */
+    public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto,PageInfo pageInfo);
 }
