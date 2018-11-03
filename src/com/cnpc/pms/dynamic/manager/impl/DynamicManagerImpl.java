@@ -7258,4 +7258,53 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		}
 		return result;
 	}
+
+    @Override
+    public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto, PageInfo pageInfo) {
+        Map<String, Object> result = new HashedMap();
+        StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+        DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+        try {
+            if(dynamicDto.getStoreId()!=null){
+                Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+                dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
+            }
+            result= dynamicDao.employeeOfMaoli(dynamicDto, pageInfo);
+            result.put("status","success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status","fail");
+            return result;
+
+        }
+        return result;
+    }
+    /**
+     * TODO 国安侠毛利导出
+     * @Date: 2017年11月3日
+     * @param dynamicDto
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> exportEmployeeOfMaoli(DynamicDto dynamicDto) {
+        Map<String,Object> result  = new HashMap<String,Object>();
+        Map<String,Object> map  = this.employeeOfMaoli(dynamicDto, null);
+        if("success".equals(map.get("status"))){//成功返回数据
+            List<Map<String, Object>> list  = (List<Map<String, Object>>)map.get("maoli");
+            if(list==null||list.size()==0){
+                result.put("message","没有符合条件的数据！");
+                result.put("status","null");
+                return result;
+            }
+
+            String[] str_headers = {"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","营销费用","报损","盘亏","毛利"};
+            String[] headers_key = {"city_name","store_name","storeno","employee_name","employee_no","income","sumprice","baosun","pankui","maoli"};
+            ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠毛利",list,str_headers,headers_key);
+            result = eeuo.exportFile();
+        }else{
+            result.put("message","请重新操作！");
+            result.put("status","fail");
+        }
+        return result;
+    }
 }

@@ -4523,6 +4523,19 @@ function goToDataFiles(){
       window.open(url,"_blank");
   }
 
+
+    function goToGaxMaoli() {
+        var role = curr_user.usergroup.code;
+        var url = "";
+        var target=pageStatusInfo.targets;
+        if(target==0){
+            url = "dynamicData_gax_analysis.html?t="+encode64('0')+"&s=&cn=&r="+encode64(role)+"&c=&e="+encode64(curr_user.id)+"&#fg";
+        }else if(target==1){
+            url = url = "dynamicData_gax_analysis.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+        }
+        window.open(url,"_blank");
+    }
+
   //事业群毛利
   function goToDeptprofit() {
       var role = curr_user.usergroup.code;

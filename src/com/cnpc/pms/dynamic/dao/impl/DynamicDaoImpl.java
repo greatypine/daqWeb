@@ -3768,4 +3768,64 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		Map<String,Object> map_result = ImpalaUtil.executeByPage(sql,pageInfo);
 		return map_result;
 	}
+
+    @Override
+    public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto, PageInfo pageInfo) {
+        String sql="select c2.city_name as city_name,c2.storename as store_name,c2.storeno as storeno,c2.name as employee_name,c2.employeeno as employee_no,c2.income as income,round((c2.rebate+c2.sumprice),2) as sumprice,ifnull(dbaosun.count_money_avg,0) as  baosun,ifnull(dpankui.count_money_avg,0) as pankui," +
+                "round(c2.income-c2.rebate-c2.sumprice -ifnull(dbaosun.count_money_avg,0) - ifnull(dpankui.count_money_avg,0),2) as maoli,c2.zw as zw,c2.store_id as store_id  " +
+                "from (select " +
+                "c1.income, c1.rebate, c1.sumprice, c1. name, c1.employeeno, c1.zw, c1.storename, c1.store_id, tss.storeno, tss.city_name " +
+                "from " +
+                " (select " +
+                "b1.income, b1.rebate, b1.sumprice, b1.employeeno, th. name, th.zw, th.storename, th.store_id " +
+                " from " +
+                "( select round( a1.mon_profit - ifnull(a2.mon_profit,0), 2 ) income, round(a1.rebate - ifnull(a2.rebate,0), 2) rebate, round(a1.sumprice - ifnull(a2.sumprice,0), 2) sumprice, a1.info_employee_a_no employeeno from ( select ifnull(sum(dmot.order_profit), 0) mon_profit, ifnull( sum(dmot.apportion_rebate), 0 ) rebate, ifnull(sum(dmot.platform_price), 0) sumprice, dmot.info_employee_a_no from daqweb.df_mass_order_total dmot where dmot.info_employee_a_no is not null and dmot.info_employee_a_no <> '' and strleft (dmot.sign_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot.info_employee_a_no ) a1 left join ( select ifnull(sum(dmot2.order_profit), 0) mon_profit, ifnull( sum(dmot2.apportion_rebate), 0 ) rebate, ifnull( sum(dmot2.platform_price), 0 ) sumprice, dmot2.info_employee_a_no from daqweb.df_mass_order_total dmot2 where dmot2.info_employee_a_no is not null and dmot2.info_employee_a_no <> '' and strleft (dmot2.return_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot2.info_employee_a_no ) a2 on a1.info_employee_a_no = a2.info_employee_a_no ) b1 " +
+                " left join t_humanresources th on b1.employeeno = th.employee_no) c1 " +
+                "left join daqweb.t_store tss on c1.store_id = tss.store_id) c2 " +
+                "left join daqweb.df_pankui_baosun_info dbaosun on (c2.storeno=dbaosun.store_code and dbaosun.count_type='0') " +
+                "left join daqweb.df_pankui_baosun_info dpankui on (c2.storeno=dpankui.store_code and dpankui.count_type='1') where 1=1   ";
+        if(dynamicDto.getEmployeeNo()!=null&&!"".equals(dynamicDto.getEmployeeNo())){
+            sql=sql+" and c2.employeeno like '%"+dynamicDto.getEmployeeNo()+"%'";
+        }
+
+        if(dynamicDto.getEmployeeName()!=null&&!"".equals(dynamicDto.getEmployeeName())){
+            sql=sql+" and c2.name like '%"+dynamicDto.getEmployeeName()+"%'";
+        }
+        if(dynamicDto.getStoreName()!=null&&!"".equals(dynamicDto.getStoreName())){
+            sql=sql+" and c2.storename like '%"+dynamicDto.getStoreName()+"%'";
+        }
+        if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
+            sql=sql+" and c2.storeno ="+dynamicDto.getStoreNo()+"";
+        }
+        if(dynamicDto.getCityName()!=null&&!"".equals(dynamicDto.getCityName())){
+            sql=sql+" and c2.city_name like '%"+dynamicDto.getCityName()+"%'";
+        }
+        sql = sql+"order by c2.storeno";
+        String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+        Map<String, Object> map_result = new HashMap<String, Object>();
+        if(pageInfo!=null){
+            int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+            int recordsPerPage = pageInfo.getRecordsPerPage();
+            sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+            List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+            String total = "0";
+            List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+            if(resultCount !=null && resultCount.size()>0 ){
+                total = String.valueOf(resultCount.get(0).get("total"));
+            }
+
+            pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+
+            Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+            map_result.put("pageinfo", pageInfo);
+            map_result.put("maoli", list);
+            map_result.put("total_pages", total_pages);
+
+        }else{
+            List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+            map_result.put("maoli", list);
+        }
+        return map_result;
+    }
 }
