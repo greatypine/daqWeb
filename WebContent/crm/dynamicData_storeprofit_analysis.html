@@ -227,20 +227,28 @@
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
 	  
 	});
-	var cur_date = new Date();
-	var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
-    cur_date.setTime(cur_date.getTime()-2*24*60*60*1000);
-    var last_month = cur_date.getMonth()+1;
-    var last_month_date = cur_date.getFullYear()+"-" + (last_month < 10 ? '0' + last_month : '' + last_month);
-	laydate.render({//月份控件
+    /*默认显示上个月的日期*/
+    var nowdays = new Date();
+    var year = nowdays.getFullYear();
+    var month = nowdays.getMonth();
+    if(month==0){
+        month=12;
+        year=year-1;
+    }
+    if (month < 10) {
+        month = "0" + month;
+    }
+    var last_month = year + "-" + month;//上个月
+    month++;
+    var cur_month = year + "-" + month;//这个月
+    laydate.render({//月份控件
 		elem:'#be_date1',
-		value:last_month_date,
+		value:last_month,
 		type:"month",
 		btns: ['confirm','now'],
 		theme: '#11214e',
 		min: '2018-9-1',
-		max:year_month
-		
+		max:cur_month
 	});
 	
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
@@ -618,15 +626,15 @@
     }
     
 function resetSerachParam(){
-	 $("#auto_store").empty();
+	$("#auto_store").empty();
     laydate.render({//月份控件
         elem:'#be_date1',
-        value:last_month_date,
+        value:last_month,
         type:"month",
         btns: ['confirm','now'],
         theme: '#11214e',
         min: '2018-9-1',
-        max:year_month
+        max:cur_month
     });
 	if(target==0){//总部
   		$("#store_id_tradetype").val("");
