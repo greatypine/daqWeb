@@ -137,7 +137,7 @@
                     <div class="box-header h4 text-light-blue">
                         <div class="pull-left "><strong>国安侠毛利</strong></div>
                         <div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
-                        <div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用包含使用的优惠券和粮票。</div>
+                        <div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用包含使用的优惠券和粮票。</br>3.毛利=销售收入-营销费用（平台分摊的优惠券+粮票）-报损-盘亏。</div>
                     </div>
                     <div class="box-body">
                         <div class="form-group col-lg-4">
@@ -211,16 +211,16 @@
                                     <table class="table table-striped">
                                         <tbody id="customer_tbody">
                                         <tr>
-                                            <th width="10%">城市</th>
-                                            <th width="10%">门店名称</th>
-                                            <th width="10%">门店编码</th>
-                                            <th width="10%">员工姓名</th>
-                                            <th width="10%">员工编号</th>
-                                            <th width="10%">销售收入<br/></th>
-                                            <th width="12%">营销费用<br/></th>
-                                            <th width="10%">报损<br/></th>
-                                            <th width="10%">盘亏<br/></th>
-                                            <th width="10%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                                            <th width="8%" style="font-size: 14px;font-weight: bold;">城市</th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;">门店名称</th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;">门店编码</th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;">员工姓名</th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;">员工编号</th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;">销售收入<br/></th>
+                                            <th width="12%" style="font-size: 14px;font-weight:bold;">营销费用<br/></th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;">报损<br/></th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;">盘亏<br/></th>
+                                            <th width="10%" style="font-size: 14px;font-weight:bold;"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
                                                 <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:17px">销售收入-营销费用-报损-盘亏</font>毛利</th>
                                         </tr>
                                         </tbody>
@@ -565,16 +565,16 @@
 
                     for(var i=0;i<jData.length;i++){
                         infoStr= "<tr>"
-                            +"<td>"+jData[i].city_name+"</td>"
-                            +"<td>"+jData[i].store_name+"</td>"
-                            +"<td>"+jData[i].storeno+"</td>"
-                            +"<td>"+jData[i].employee_name+"</td>"
-                            +"<td>"+jData[i].employee_no+"</td>"
-                            +"<td>"+jData[i].income+"</td>"
-                            +"<td>"+jData[i].sumprice+"</td>"
-                            +"<td>"+jData[i].baosun+"</td>"
-                            +"<td>"+jData[i].pankui+"</td>"
-                            +"<td>"+jData[i].maoli+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].city_name+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].store_name+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].storeno+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].employee_name+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].employee_no+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].income+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].sumprice+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].baosun+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].pankui+"</td>"
+                            +"<td style='font-size: 14px;font-weight: normal;'>"+jData[i].maoli+"</td>"
                             +"</tr>";
                         $("#customer_tbody").append(infoStr);
                     }
@@ -630,6 +630,7 @@
                 beginDate:begin_end_date,
                 storeNumer:number_str,
                 cityId:cityId,
+                cityName:cityName,
                 employeeId:employeeId,
                 storeId:number_str,
                 target:target,
@@ -642,6 +643,7 @@
                 storeNumer:number_str,
                 interfaceType:'customerPortrait',
                 cityId:initCity,
+                cityName:cityName,
                 employeeId:employeeId,
                 storeId:number_str,
                 target:target,
@@ -686,40 +688,21 @@
     }
 
 
-    function gotoAbnormalOrder(t){
-        //t:职务 s:门店ID c:城市ID
-        if(target==0){
-            var url = "abnormal_order.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(employeeId)+"&r="+encode64(role)+"&cn=";
-            window.open(url,"abnormal_order");
-        }else if(target==1){
-            //t:职务 s:门店ID c:城市ID
-            var url = "abnormal_order.html?t="+encode64(1)+"&s=&sn=&c="+ encode64(cityId)+"&e="+encode64(employeeId)+"&r="+encode64(role)+"&cn="+encode64(cityName);
-            window.open(url,"abnormal_order");
-        }else if(target==2){
-            var url = "abnormal_order.html?t="+encode64('2')+"&c=&s=&e="+encode64(employeeId)+"&so="+encode64(storeNo)+"&sn="+encode64(storeName);
-            window.open(url,"abnormal_order");
-        }
-
-    }
 
 
-    function gotoPubSreaOrder(t){
-
-        if(target==0){
-            var url = "public_order.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(employeeId)+"&r="+encode64(role)+"&cn=&ot="+encode64(t);
-            window.open(url,"public_order");
-        }else if(target==1){
-            var url = "public_order.html?t="+encode64('1')+"&s=&sn=&c="+ encode64(cityId)+"&e="+encode64(employeeId)+"&r="+encode64(role)+"&cn="+encode64(cityName)+"&ot="+encode64(t);
-            window.open(url,"public_order");
-        }else if(target==2){
-            var url = "public_order.html?t="+encode64('2')+"&c=&s=&e="+encode64(employeeId)+"&so="+encode64(storeNo)+"&sn="+encode64(storeName)+"&ot="+encode64(t);;
-            window.open(url,"public_order");
-        }
-
-    }
 
     function resetSerachParam(){
         $("#auto_store").empty();
+        laydate.render({//月份控件
+            elem:'#be_date1',
+            value:year_month,
+            type:"month",
+            btns: ['confirm','now'],
+            theme: '#11214e',
+            min: '2018-10-1',
+            max:max_month,
+
+        });
         if(target==0){//总部
             $("#store_id_customer").val("");
             $("#store_name_customer").val("");
