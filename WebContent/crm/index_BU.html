@@ -686,16 +686,11 @@ myChart2.setOption(option2);
 							
 							
 						});
-                        var career_more = "<span style='font-size:12px'>&nbsp;&nbsp;<span   style='color:#3c8dbc;cursor:pointer' onclick='showMoreCareer()'>切换</span></span>"
-						$("#career_top").append(career_more);
                         
-                        
-                        //设置菜单权限  
-                        
-                        
-                        
-                        
-                        
+                        if(currcareers!=null&&currcareers.length>1){
+                        	var career_more = "<span style='font-size:12px'>&nbsp;&nbsp;<span   style='color:#3c8dbc;cursor:pointer' onclick='showMoreCareer()'>切换</span></span>"
+        						$("#career_top").append(career_more);
+                        }
 						
 					}
 	},false);
