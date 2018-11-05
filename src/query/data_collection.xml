@@ -814,4 +814,23 @@
     
     
     
+    
+    <!-- 事业群维护  -->
+    <query id="distCareerGroupQuery" header="事业群列表" baseclass="com.cnpc.pms.personal.entity.DataHumanType" order="id desc">
+        <column key="id" header="编号ID" type="java.lang.Long" align="left" allowSearch="true" operator="eq" display="false"/>
+        <column key="career_group" header="事业群名称" align="center" allowSort="false" allowSearch="true" operator="like" display="true" width="30%"/>
+        <column key="remark" header="事业群备注" align="center" allowSort="false" allowSearch="true" operator="like" display="true" width="30%"/>
+        <column key="groupcode" header="事业群编码" align="center" allowSort="false" allowSearch="true" operator="like" display="true" width="30%"/>
+    </query>
+    
+    
+    <!-- 事业群分配 -->
+    <query id="userCareerManagerQuery" header="事业群权限分配" baseclass="com.cnpc.pms.bizbase.rbac.usermanage.entity.User" method="userManager.queryCareerUserList" order="id desc">
+        <column key="id" header="用户管理" type="java.lang.Long" align="left" allowSearch="true" operator="eq" display="false"/>
+        <column key="name" header="用户名称" allowSearch="true" type="java.lang.String" align="left" operator="like" allowSort="true" display="true" width="33%"/>
+        <column key="code" header="登录名" type="java.lang.String" align="left" allowSearch="true" operator="like" allowSort="true" display="true" width="33%"/>
+        <column key="careernames" header="事业群" type="java.lang.String" align="left" allowSearch="true" allowSort="true" display="true" width="33%"/>
+    </query>
+    
+    
 </pmsquery>

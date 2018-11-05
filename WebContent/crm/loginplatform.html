@@ -244,6 +244,7 @@ var iscrmqyjl=false;//区域经理
 var iscareergp=false;
 var isfqzycareer=false;//门店 服务专员 事业群人员 
 var iscrmzbjs = false;//总部人员
+var iszbcareer=false;//总部事业群人员 
 
 function isLogincrm(){
     if(currentUser.usergroup.code=="GAX"){
@@ -348,8 +349,16 @@ function toCrm_role(){
 // 		q_date = c_year+"-"+(c_month-1);
 // 		q_month = c_month-1;
 // 	}
+
+	
+
 	if(iscrmzbjs){
-		window.parent.location=getRootPath() + "/crm/index_headquarters.html";
+		if(iszbcareer){
+			window.parent.location=getRootPath() + "/crm/index_BU.html";
+		}else{
+			window.parent.location=getRootPath() + "/crm/index_headquarters.html";
+		}
+		
 	}else if(iscrmgax){
 		window.parent.location=getRootPath() + "/crm/index.html";
 	}else if(iscrmdz){
@@ -360,7 +369,7 @@ function toCrm_role(){
 	}else if(iscrmqyjl){
 		//window.parent.location=getRootPath() + "/crm/manager_QYJL.html?q_date="+encode64(q_date);
 		window.parent.location=getRootPath() + "/crm/current_shopkeeper.html";
-	}else if(iscareergp){
+	}else if(iszbcareer){
 		window.parent.location=getRootPath() + "/crm/index_BU.html";
 	}else if(isfqzycareer){
 		var open_url ="?employee_no="+encode64(currentUser.employeeId);
@@ -602,7 +611,11 @@ $(document).ready(function(){
   							window.location=getRootPath() +  "/demo/index_headquarters_demo.html";
   							return;
   						}
-  						 
+  						
+  						if(curr_user.usergroup.code=="ZBSYQJSZ"){
+  							iszbcareer=true;
+  						}
+  						
   						var regex_zb = new RegExp("^(ZB|zb)\w*");//总部角色
   						if(regex_zb.test(curr_user.usergroup.code)){
   							iscrmzbjs = true;

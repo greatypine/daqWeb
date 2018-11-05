@@ -228,6 +228,8 @@ public class User extends PMSAuditEntity {
 	@Transient
 	private String citynames;
 	@Transient
+	private String careernames;
+	@Transient
 	private String usergroupname;
 	@Transient
 	private String loginip;
@@ -792,5 +794,13 @@ public class User extends PMSAuditEntity {
 
 	public void setInviteCode(String inviteCode) {
 		this.inviteCode = inviteCode;
+	}
+
+	public String getCareernames() {
+		return careernames;
+	}
+
+	public void setCareernames(String careernames) {
+		this.careernames = careernames;
 	}
 }

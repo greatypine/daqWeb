@@ -13,6 +13,7 @@ import com.cnpc.pms.bizbase.rbac.rolemanage.dto.RoleDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.inter.common.Result;
+import com.cnpc.pms.personal.entity.DistCareer;
 import com.cnpc.pms.personal.entity.DistCity;
 import com.cnpc.pms.personal.entity.Store;
 
@@ -455,5 +456,10 @@ public interface UserManager extends IManager {
 	public User isAppScreenUser(String code,String employeeId,String password);
 
 	public Map<String, Object> queryObserveDistCityUserList(QueryConditions condition);
-	 
+	
+	
+	public Map<String, Object> queryCareerUserList(QueryConditions condition);
+
+
+	public List<DistCareer> getCurrentUserCareer();
 }
