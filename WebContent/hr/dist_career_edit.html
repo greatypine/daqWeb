@@ -151,6 +151,7 @@ Date.prototype.format=function(fmt) {
 		for(var i=0;i<sarr.length;i++){
 			if (sarr[i]==sarr[i+1]&&sarr[i]!="请选择"){
 				$$.showMessage("系统信息", "请选择不同的事业群!");
+				return;
 			}
 		}
 		return true;
