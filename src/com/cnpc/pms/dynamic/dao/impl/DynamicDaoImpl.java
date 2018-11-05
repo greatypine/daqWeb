@@ -3,27 +3,19 @@
  */
 package com.cnpc.pms.dynamic.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.cnpc.pms.utils.ImpalaUtil;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.utils.DateUtils;
+import com.cnpc.pms.utils.ImpalaUtil;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author gaobaolei
@@ -3779,7 +3771,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
                 " (select " +
                 "b1.income, b1.rebate, b1.sumprice, b1.employeeno, th. name, th.zw, th.storename, th.store_id " +
                 " from " +
-                "( select round( a1.mon_profit - ifnull(a2.mon_profit,0), 2 ) income, round(a1.rebate - ifnull(a2.rebate,0), 2) rebate, round(a1.sumprice - ifnull(a2.sumprice,0), 2) sumprice, a1.info_employee_a_no employeeno from ( select ifnull(sum(dmot.order_profit), 0) mon_profit, ifnull( sum(dmot.apportion_rebate), 0 ) rebate, ifnull(sum(dmot.platform_price), 0) sumprice, dmot.info_employee_a_no from daqweb.df_mass_order_total dmot where dmot.info_employee_a_no is not null and dmot.info_employee_a_no <> '' and strleft (dmot.sign_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot.info_employee_a_no ) a1 left join ( select ifnull(sum(dmot2.order_profit), 0) mon_profit, ifnull( sum(dmot2.apportion_rebate), 0 ) rebate, ifnull( sum(dmot2.platform_price), 0 ) sumprice, dmot2.info_employee_a_no from daqweb.df_mass_order_total dmot2 where dmot2.info_employee_a_no is not null and dmot2.info_employee_a_no <> '' and strleft (dmot2.return_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot2.info_employee_a_no ) a2 on a1.info_employee_a_no = a2.info_employee_a_no ) b1 " +
+                "( select round( a1.mon_profit - ifnull(a2.mon_profit,0), 2 ) income, round(a1.rebate - ifnull(a2.rebate,0), 2) rebate, round(a1.sumprice - ifnull(a2.sumprice,0), 2) sumprice, a1.info_employee_a_no employeeno from ( select ifnull(sum(dmot.order_profit), 0) mon_profit, ifnull( sum(dmot.apportion_rebate), 0 ) rebate, ifnull(sum(CASE when  dmot.platform_price=199 and dmot.order_tag1 like '%K%' then 0 else dmot.platform_price end), 0) sumprice, dmot.info_employee_a_no from daqweb.df_mass_order_total dmot where dmot.info_employee_a_no is not null and dmot.info_employee_a_no <> '' and strleft (dmot.sign_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot.info_employee_a_no ) a1 left join ( select ifnull(sum(dmot2.order_profit), 0) mon_profit, ifnull( sum(dmot2.apportion_rebate), 0 ) rebate, ifnull(sum(CASE when  dmot2.platform_price=199 and dmot2.order_tag1 like '%K%' then 0 else dmot2.platform_price end), 0) sumprice, dmot2.info_employee_a_no from daqweb.df_mass_order_total dmot2 where dmot2.info_employee_a_no is not null and dmot2.info_employee_a_no <> '' and strleft (dmot2.return_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot2.info_employee_a_no ) a2 on a1.info_employee_a_no = a2.info_employee_a_no ) b1 " +
                 " left join t_humanresources th on b1.employeeno = th.employee_no) c1 " +
                 "left join daqweb.t_store tss on c1.store_id = tss.store_id) c2 " +
                 "left join daqweb.df_pankui_baosun_info dbaosun on (c2.storeno=dbaosun.store_code and dbaosun.count_type='0') " +

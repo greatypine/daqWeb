@@ -1450,10 +1450,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 					+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 					+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 					+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
-					+ "ifnull(dround(sum(dot.apportion_rebate+dot.platform_price),2),0) as order_fee,"
+					+ "ifnull(dround(sum(case when dot.platform_price=199 and dot.order_tag1 like '%K%' then (dot.apportion_rebate) else (dot.apportion_rebate+dot.platform_price) end),2),0) as order_fee,"
 					+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
 					+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' ";
-//		and (dot.order_tag1 not like '%K%' or dot.order_tag1 is null) "; //刨除开卡礼订单
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' ";
 		}
@@ -1619,17 +1618,16 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,"
-				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.platform_price else 0 end),2),0) as platform_coupon,"
-				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.platform_price else 0 end),2),0) as ims_coupon,"
-				+ "ifnull(dround(sum(dot.platform_price),2),0) as total_coupon,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' and dot.platform_price=199 and dot.order_tag1 like '%K%' then 0 else dot.platform_price end),2),0) as platform_coupon,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' and dot.platform_price=199 and dot.order_tag1 like '%K%' then 0 else dot.platform_price end),2),0) as ims_coupon,"
+				+ "ifnull(dround(sum(case when dot.platform_price=199 and dot.order_tag1 like '%K%' then 0 else dot.platform_price end),2),0) as total_coupon,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.apportion_rebate else 0 end),2),0) as platform_rebate,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.apportion_rebate else 0 end),2),0) as ims_rebate,"
 				+ "ifnull(dround(sum(dot.apportion_rebate),2),0) as total_rebate,"
-				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then (dot.apportion_rebate+dot.platform_price) else 0 end),2),0) as platform_fee,"
-				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then (dot.apportion_rebate+dot.platform_price) else 0 end),2),0) as ims_fee "
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' and dot.platform_price=199 and dot.order_tag1 like '%K%' then (dot.apportion_rebate) else (dot.apportion_rebate+dot.platform_price) end),2),0) as platform_fee,"
+				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' and dot.platform_price=199 and dot.order_tag1 like '%K%' then (dot.apportion_rebate) else (dot.apportion_rebate+dot.platform_price) end),2),0) as ims_fee "
 				+ "from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc  "
 				+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' and dot.department_name!='运营管理中心' ";
-//		and (dot.order_tag1 not like '%K%' or dot.order_tag1 is null) "; //刨除开卡礼订单
 		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
 			sql = sql + "and strleft(dot.sign_time,7)='"+dynamicDto.getBeginDate()+"' ";
 		}
