@@ -7213,9 +7213,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			//门店毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
 				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）",
-						"优惠券（平台）","优惠券（优易）","优惠券（合计）","粮票（平台）","粮票（优易）","粮票（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损","盘亏","毛利"};
+						"优惠券（平台）","优惠券（优易）","优惠券（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损","盘亏","毛利"};
 				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit",
-						"platform_coupon","ims_coupon","total_coupon","platform_rebate","ims_rebate","total_rebate","platform_fee","ims_fee","return_profit","baosun","pankui","real_profit"};
+						"platform_coupon","ims_coupon","total_coupon","platform_fee","ims_fee","return_profit","baosun","pankui","real_profit"};
 			}
 			//事业群毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
