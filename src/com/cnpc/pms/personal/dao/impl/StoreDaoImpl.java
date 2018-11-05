@@ -1446,7 +1446,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 	@Override
 	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
 		String sql = "select aa.*,ifnull(dd.return_profit,0) as return_profit,ifnull(dbaosun.count_money,0) as baosun,ifnull(dpankui.count_money,0) as pankui from ( "
-					+ "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,min(dot.store_code) as store_code,"
+					+ "select min(dot.store_city_name) as city_name,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 					+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 					+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 					+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
@@ -1470,9 +1470,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		sql = sql + "group by dot.store_code order by dot.store_code";
 
 		//报损
-		sql = sql + ") aa left join df_pankui_baosun_info dbaosun on (aa.store_code=dbaosun.store_code and dbaosun.count_type='0') ";
+		sql = sql + ") aa left join df_pankui_baosun_info dbaosun on (aa.store_code=dbaosun.store_code and dbaosun.count_type='0' and dbaosun.count_month='"+dynamicDto.getBeginDate()+"') ";
 		//盘亏
-		sql = sql + "left join df_pankui_baosun_info dpankui on (aa.store_code=dpankui.store_code and dpankui.count_type='1') ";
+		sql = sql + "left join df_pankui_baosun_info dpankui on (aa.store_code=dpankui.store_code and dpankui.count_type='1' and dpankui.count_month='"+dynamicDto.getBeginDate()+"') ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_code) dd on aa.store_code=dd.store_code ";
 
@@ -1606,7 +1606,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 
 	@Override
 	public List<Map<String, Object>> exportStoreTradeProfit(DynamicDto dynamicDto){
-		String sql = "select min(city_name) as city_name,min(store_name) as store_name,min(store_code) as store_code,min(department_name) as department_name,min(channel_name) as channel_name,"
+		String sql = "select min(city_name) as city_name,min(store_name) as store_name,ifnull(min(store_code),'') as store_code,min(department_name) as department_name,min(channel_name) as channel_name,"
 				+ "sum(platform_profit) as platform_profit,sum(ims_profit) as ims_profit,sum(total_profit) as total_profit, sum(platform_coupon) as platform_coupon,"
 				+ "sum(ims_coupon) as ims_coupon,sum(total_coupon) as total_coupon,sum(platform_rebate) as platform_rebate,sum(ims_rebate) as ims_rebate,sum(total_rebate) as total_rebate,"
 				+ "sum(platform_fee) as platform_fee,sum(ims_fee) as ims_fee,sum(baosun) as baosun,sum(pankui) as pankui,sum(return_profit) as return_profit, "
@@ -1645,9 +1645,9 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		sql = sql + "group by dot.store_code order by store_code ) aa ";
 
 		//门店报损
-		sql = sql + "left join df_pankui_baosun_info dbaosun on (aa.store_code=dbaosun.store_code and dbaosun.count_type='0') ";
+		sql = sql + "left join df_pankui_baosun_info dbaosun on (aa.store_code=dbaosun.store_code and dbaosun.count_type='0' and dbaosun.count_month='"+dynamicDto.getBeginDate()+"') ";
 		//门店盘亏
-		sql = sql + "left join df_pankui_baosun_info dpankui on (aa.store_code=dpankui.store_code and dpankui.count_type='1') ";
+		sql = sql + "left join df_pankui_baosun_info dpankui on (aa.store_code=dpankui.store_code and dpankui.count_type='1' and dpankui.count_month='"+dynamicDto.getBeginDate()+"') ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_code) dd on aa.store_code=dd.store_code ";
 
