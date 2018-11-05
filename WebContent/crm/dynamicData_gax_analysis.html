@@ -338,6 +338,12 @@
         $(".logo-lg > ul > li").hover(function(){
             $(this).children(".nav_dropdown").toggle('1000');
         });
+        $("#columnattention").on("mouseover",function(event){
+            $("#forcolumnattention").show();
+        });
+        $("#columnattention").on("mouseout",function(event){
+            $("#forcolumnattention").hide();
+        });
         //Date range picker
 //    $('#be_date1').daterangepicker();
     });
