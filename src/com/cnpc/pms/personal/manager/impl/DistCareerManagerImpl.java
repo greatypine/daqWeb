@@ -234,7 +234,7 @@ public class DistCareerManagerImpl extends BizBaseCommonManager implements DistC
 	 */
 	@Override
 	public List<Long> queryDistinctByCareer(String career_group) {
-		IFilter iFilter = FilterFactory.getSimpleFilter("career_group like '" + career_group + "'");
+		IFilter iFilter = FilterFactory.getSimpleFilter("careername like '" + career_group + "'");
 		List<DistCareer> distCareerList = (List<DistCareer>) this.getList(iFilter);
 		List<Long> userIds = new ArrayList<Long>();
 		if (distCareerList != null) {
