@@ -677,7 +677,6 @@ myChart2.setOption(option2);
 							deptname=obj.careername;
 							careercode=obj.careercode;
 							var option="";
-							alert(urldeptname+"--"+deptname);
 							if(urldeptname!=null&&urldeptname.length>0&&deptname==urldeptname){
 								option = '<option value="'+careercode+'" selected>'+deptname+'</option>';
 							}else{
@@ -763,7 +762,6 @@ myChart2.setOption(option2);
 	 }else{
 		 groupcode = currcareercode;
 	 }
-	 alert(groupcode+"groupcode");
 		doManager("DataHumanTypeManager", "queryDataHumanTypeByGroupCode",[groupcode],
  				function(data, textStatus, XMLHttpRequest) {
  					if (data.result) {
