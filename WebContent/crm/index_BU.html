@@ -595,8 +595,11 @@ myChart2.setOption(option2);
 	 }else{
 		 //取得当前登录人的事业群 放入urldeptname 
 		 initcurrcareer();
-		 iszb = false;
 		 initcurruser();
+		 iszb = false;
+		 
+		 
+		 
 	 }
 	  
 	  startclock();
@@ -650,6 +653,7 @@ myChart2.setOption(option2);
  	}
  
  var careercode = "";
+ var currcareercode="";
  function initcurrcareer(){
 		//取得当前登录人的事业群 
 		doManager("UserManager", "getCurrentUserCareer",null,
@@ -665,11 +669,15 @@ myChart2.setOption(option2);
                         
 						$(currcareers).each(function(i,obj){
 							if(urldeptname==null||urldeptname==""){
-								urldeptname=obj.careername;
+								if(i==0){
+									urldeptname=obj.careername;
+									currcareercode=obj.careercode;
+								}
 							}
 							deptname=obj.careername;
 							careercode=obj.careercode;
 							var option="";
+							alert(urldeptname+"--"+deptname);
 							if(urldeptname!=null&&urldeptname.length>0&&deptname==urldeptname){
 								option = '<option value="'+careercode+'" selected>'+deptname+'</option>';
 							}else{
@@ -699,10 +707,6 @@ myChart2.setOption(option2);
  
 //切换事业群
  function showMoreCareer(){
-	//取得当前的事业群 复制到 select  
-	
-	
-	
      layer.open({
          type: 1,
          title:  ['更多事业群', 'color:#fff'],
@@ -716,11 +720,20 @@ myChart2.setOption(option2);
          content:$("#more_careerDiv"),
          success:function(layer,index){
              $("#layui-layer-iframe1").attr("style","width:50px");
+           
          },
          cancel: function(index, layero){
              layer.close(index);
          }
      });
+     
+     
+     
+   //取得当前的事业群 复制到 select  
+  	//var currcareer = $(".text-yellow").html();
+  	//$("#allCareer option[text='"+currcareer+"']").attr("selected", true);
+  	
+    //.....................
  }
  
  
@@ -748,16 +761,14 @@ myChart2.setOption(option2);
  					}
 		 },false);
 	 }else{
-		 groupcode = careercode;
+		 groupcode = currcareercode;
 	 }
-
-	 
+	 alert(groupcode+"groupcode");
 		doManager("DataHumanTypeManager", "queryDataHumanTypeByGroupCode",[groupcode],
  				function(data, textStatus, XMLHttpRequest) {
  					if (data.result) {
  						
  						 var careergroup = JSON.parse(data.data);
- 						 
  						career_group = careergroup.career_group;
  						 
  						queryHumanresourcesByCareerName(career_group);
@@ -766,6 +777,7 @@ myChart2.setOption(option2);
  						
  						queryOrderAmountByChannel(career_group);
  						$(".text-yellow").html(career_group);
+ 						
  					}
  	},false);
  }
