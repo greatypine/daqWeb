@@ -3763,8 +3763,8 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
     @Override
     public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto, PageInfo pageInfo) {
-        String sql="select c2.city_name as city_name,c2.storename as store_name,c2.storeno as storeno,c2.name as employee_name,c2.employeeno as employee_no,c2.income as income,round((c2.rebate+c2.sumprice),2) as sumprice,ifnull(dbaosun.count_money_avg,0) as  baosun,ifnull(dpankui.count_money_avg,0) as pankui," +
-                "round(c2.income-c2.rebate-c2.sumprice -ifnull(dbaosun.count_money_avg,0) - ifnull(dpankui.count_money_avg,0),2) as maoli,c2.zw as zw,c2.store_id as store_id  " +
+        String sql="select c2.city_name as city_name,c2.storename as store_name,c2.storeno as storeno,c2.name as employee_name,c2.employeeno as employee_no,c2.income as income,round(c2.sumprice,2) as sumprice,ifnull(dbaosun.count_money_avg,0) as  baosun,ifnull(dpankui.count_money_avg,0) as pankui," +
+                "round(c2.income-c2.sumprice -ifnull(dbaosun.count_money_avg,0) - ifnull(dpankui.count_money_avg,0),2) as maoli,c2.zw as zw,c2.store_id as store_id  " +
                 "from (select " +
                 "c1.income, c1.rebate, c1.sumprice, c1. name, c1.employeeno, c1.zw, c1.storename, c1.store_id, tss.storeno, tss.city_name " +
                 "from " +
