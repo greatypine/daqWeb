@@ -1071,7 +1071,7 @@ public class StoreKeeperManagerImpl extends BizBaseCommonManager implements Stor
 
 		List<StoreKeeper> lst_storeKeeperList = (List<StoreKeeper>) this.getList(fsp);
 
-		String str_file_dir_path = PropertiesUtil.getValue("file.root");
+		String str_file_dir_path=this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
 		String str_newfilepath = str_file_dir_path + "storekeeper_list.xls";
 		File file_new = new File(str_newfilepath);
 		if (file_new.exists()) {
