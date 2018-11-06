@@ -34,7 +34,29 @@ public class OssRefFileManagerImpl extends BizBaseCommonManager implements OssRe
     	saveOSSRefFile(ossObj);
     	return ossObj.getOss_url();
 	}
-	
+
+	@Override
+	public String uploadOssFileNew(File f,String suffix,String urlLocation,String fileNames) {
+		String oss_url = OSSUploadUtil.uploadOssFileNew(f, suffix, urlLocation,fileNames);
+		OssRefFile ossObj = new OssRefFile();
+		try {
+			String url = f.getPath();
+			String fileName=url.substring(url.lastIndexOf(File.separator)+1);
+			if(fileName==null||fileName=="") {
+				fileName=url.substring(url.lastIndexOf("template")+9);
+			}
+			String ossName=oss_url.substring(oss_url.lastIndexOf("/")+1);
+			ossObj.setFile_name(fileName);
+			ossObj.setOss_name(ossName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		ossObj.setFile_url(f.getPath());
+		ossObj.setOss_url(oss_url);
+		ossObj.setSuffix(suffix);
+		saveOSSRefFile(ossObj);
+		return ossObj.getOss_url();
+	}
 	
 	@Override
 	public OssRefFile saveOSSRefFile(OssRefFile ossRefFile) {

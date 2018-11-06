@@ -3,6 +3,7 @@ package com.cnpc.pms.personal.manager;
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
+import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
 
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public interface MassOrderManager extends IManager {
 	 * @param massOrderDto
 	 * @return
 	 */
-	public Map<String, Object> exportOrder(MassOrderDto massOrderDto);
+	public Map<String, Object> exportOrder(MassOrderDto massOrderDto, TReportFiledown tReportFiledown);
 	
 	/**
 	 * 查询退货订单信息

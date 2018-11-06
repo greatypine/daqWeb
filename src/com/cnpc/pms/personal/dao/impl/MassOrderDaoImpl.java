@@ -4,11 +4,15 @@ import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
+import com.cnpc.pms.utils.ImpalaUtil;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.Type;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -792,5 +796,18 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 
 		return map_result;
 	}
+	@Override
+	public void updataReport(Long id , String url) {
+		String sql = " UPDATE t_report_filedown set mark_1 = '1',url =? where id =? ";
+	Session session = this.getSession();
+		session.createSQLQuery(sql).setParameters(
+				new Object[] {url, id }, new Type[] { Hibernate.STRING,Hibernate.LONG })
+			.executeUpdate();
 
+//		String  sql=" UPDATE t_report_filedown set mark_1 = '1',url = '"+ url +"' where id ="+ id +"" ;
+//		SQLQuery query = getHibernateTemplate().getSessionFactory()
+//				.getCurrentSession().createSQLQuery(sql.toString());
+//		query.executeUpdate();
+
+}
 }

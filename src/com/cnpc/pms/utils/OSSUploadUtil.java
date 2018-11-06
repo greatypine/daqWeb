@@ -32,6 +32,13 @@ public class OSSUploadUtil {
         String fileName = config.getPicLocation()+UUID.randomUUID().toString().toUpperCase().replace("-", "")+"."+fileType;   
         return putObject(file,fileType,fileName);  
     }
+
+    public static String uploadFileNew(File file,String fileType,String remotedir,String fileNames){
+        config = config==null?new OSSConfig():config;
+        config.setPicLocation(remotedir);
+        String fileName = config.getPicLocation()+fileNames+"."+fileType;
+        return putObject(file,fileType,fileName);
+    }
     
     
     public static String uploadFileResName(File file,String fileType,String remotedir){  
@@ -214,6 +221,12 @@ public class OSSUploadUtil {
     public static String uploadOssFile(File f,String suffix,String urlLocation) {
     	String rt = uploadFile(f, suffix , urlLocation); 
     	return buildClientUrl(rt);
+    }
+
+    //方法会重新生成文件名 随机码
+    public static String uploadOssFileNew(File f,String suffix,String urlLocation,String fileNames) {
+        String rt = uploadFileNew(f, suffix , urlLocation,fileNames);
+        return buildClientUrl(rt);
     }
     
     //方法不会重新生成文件名
