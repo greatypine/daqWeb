@@ -461,5 +461,38 @@ public interface StoreDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String,Object>> findSchoolStoreInfo();
+
+	/**
+	 * 门店毛利
+	 * @return
+	 */
+	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * 事业群毛利
+	 * @return
+	 */
+	public Map<String, Object> queryDeptTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * 导出门店毛利数据
+	 * @return
+	 */
+	public List<Map<String, Object>> exportStoreTradeProfit(DynamicDto dynamicDto);
+
+	/**
+	 * 导出事业群毛利数据
+	 * @return
+	 */
+	public List<Map<String, Object>> exportDeptTradeProfit(DynamicDto dynamicDto);
 	
+
+
+	/**
+	 * @Description 查询所有门店包括已关闭的
+	 * @author gbl
+	 * @date 2018/11/1 13:56
+	 **/
+
+	public List<Map<String, Object>> getAllStoreIncludeClosed(Long employee_no, Long cityId, String role);
 }

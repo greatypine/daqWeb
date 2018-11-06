@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
@@ -486,60 +487,122 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		return order_obj;
 	}
 	@Override
-	public Map<String, Object> queryDailyprofit(DynamicDto dd) {
-		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
-		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+	public Map<String, Object> queryDailyprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String beginDate = dd.getBeginDate();
 		String endDate = dd.getEndDate();
 		String dateStr = "";
 		String provinceStr = "";
 		String cityStr = "";
-		String zx = "no";
-		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
-			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr+=" and ds.store_city_code='"+cityNo+"' ";
 		}
-		if(city_id!=null&&city_id!=""){
-			cityStr+=" and d.id='"+city_id+"' ";
-		}else if("yes".equals(zx)){
-			cityStr+=" and d.id='"+province_id+"' ";
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr+=" and ds.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
 			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
 		}
-		String sql = "SELECT IFNULL(SUM(tor.order_profit), 0) AS order_profit FROM df_mass_order_daily ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join  " +
-				"t_dist_citycode d on d.cityname=t.city_name "+dateStr+provinceStr+cityStr;
-		List<Map<String,Object>> lst_data=ImpalaUtil.executeGuoan(sql);
+		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)),0) AS order_profit FROM df_mass_order_daily ds "+dateStr+provinceStr+cityStr;
+		List<Map<String, Object>> lst_data = null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		/*List<Map<String,Object>> lst_data=ImpalaUtil.executeGuoan(sql);
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		map_result.put("gmv", lst_data);
+		return map_result;*/
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+   	 	lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+   	 	map_result.put("gmv", lst_data);
 		return map_result;
 	}
 	@Override
-	public Map<String, Object> queryMonthprofit(DynamicDto dd) {
-		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
-		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+	public Map<String, Object> queryMonthprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String beginDate = dd.getBeginDate();
 		String endDate = dd.getEndDate();
 		String dateStr = "";
 		String provinceStr = "";
 		String cityStr = "";
-		String zx = "no";
-		if(province_id!=null&&province_id!=""&&"no".equals(zx)){
-			provinceStr+=" AND t.province_id='"+province_id+"' ";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr+=" and ds.store_city_code='"+cityNo+"' ";
 		}
-		if(city_id!=null&&city_id!=""){
-			cityStr+=" and d.id='"+city_id+"' ";
-		}else if("yes".equals(zx)){
-			cityStr+=" and d.id='"+province_id+"' ";
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr+=" and ds.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
 			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
 		}
-		String sql = "SELECT IFNULL(SUM(tor.order_profit), 0) AS order_profit FROM df_mass_order_monthly ds LEFT JOIN t_store t ON ds.storeno=t.storeno left join  " +
-				"t_dist_citycode d on d.cityname=t.city_name "+dateStr+provinceStr+cityStr;
-
-		List<Map<String,Object>> lst_data=ImpalaUtil.executeGuoan(sql);
+		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)), 0) AS order_profit FROM daqWeb.df_mass_order_monthly ds "+dateStr+provinceStr+cityStr;
+		List<Map<String, Object>> lst_data = null;
 		Map<String, Object> map_result = new HashMap<String, Object>();
+		lst_data=ImpalaUtil.executeGuoan(sql);
 		map_result.put("gmv", lst_data);
 		return map_result;
+		/*SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		map_result.put("gmv", lst_data);
+		return map_result;*/
+	}
+	@Override
+	public Map<String, Object> queryYesterdayprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String beginDate = dd.getBeginDate();
+		String endDate = dd.getEndDate();
+		String dateStr = "";
+		String provinceStr = "";
+		String cityStr = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr+=" and ds.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr+=" and ds.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
+			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
+		}
+		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)),0) AS order_profit FROM daqWeb.df_mass_order_total ds "+dateStr+provinceStr+cityStr;
+		List<Map<String, Object>> lst_data = null;
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		lst_data=ImpalaUtil.executeGuoan(sql);
+   	 	map_result.put("gmv", lst_data);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd,
+			List<Map<String, Object>> cityNO,
+			List<Map<String, Object>> provinceNO) {
+		Map<String, Object> map_all = new HashMap<String, Object>();
+		String cityStr1 = "";
+		String provinceStr1 = "";
+		if(cityNO!=null&&cityNO.size()>0){
+			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
+			if(cityNo.startsWith("00")){
+				cityNo = cityNo.substring(1,cityNo.length());
+			}
+			cityStr1+=" and tor.store_city_code='"+cityNo+"' ";
+		}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			provinceStr1+=" and tor.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+		}
+		String sql = "SELECT IFNULL(FLOOR(SUM(order_profit)), 0) AS week_gmv , date_format(tor.sign_time, '%m-%d') AS week_date FROM df_mass_order_monthly tor " +
+				"WHERE (tor.store_name NOT LIKE '%测试%' AND tor.sign_time >= '"+dd.getBeginDate()+" 00:00:00' AND tor.sign_time <= '"+dd.getEndDate()+" 23:59:59' "+provinceStr1+cityStr1+") GROUP BY DATE(tor.sign_time)";
+		List<Map<String, Object>> lst_data = null;
+		try{
+	    	 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+	    	 lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }
+		map_all.put("lst_data", lst_data);
+		return map_all;
 	}
 }

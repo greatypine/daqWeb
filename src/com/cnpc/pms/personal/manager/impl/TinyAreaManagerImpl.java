@@ -4,6 +4,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.mongodb.common.MongoDbUtil;
+import com.cnpc.pms.mongodb.dao.MongoDBDao;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+import org.bson.Document;
+import org.bson.types.ObjectId;
+import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 
 import com.cnpc.pms.base.paging.FilterFactory;
@@ -182,6 +193,53 @@ public class TinyAreaManagerImpl extends BizBaseCommonManager implements TinyAre
 			e.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public void updateTinyAreaByMass(String storeNo) {
+		MongoDBDao mongoDBDao = (MongoDBDao) SpringHelper.getBean(MongoDBDao.class.getName());
+		TinyAreaManager tam = (TinyAreaManager)SpringHelper.getBean("tinyAreaManager");
+
+		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
+		MongoDatabase database = mDbUtil.getDatabase();
+		MongoCollection<Document> collection = database.getCollection("tiny_area");
+		BasicDBObject query = new BasicDBObject();
+		query.append("storeNo",storeNo);
+		FindIterable<Document> dIterable = collection.find(query);
+		MongoCursor<Document> cursor = dIterable.iterator();
+		while(cursor.hasNext()){
+			Document teDocument = cursor.next();
+			JSONObject jObject = new JSONObject(teDocument.toJson());
+			String code = jObject.getString("code");
+			String id =  jObject.getJSONObject("_id").getString("$oid");
+			Document updateDoc = new Document("belong","public");
+			updateDoc.put("employee_a_no", null);
+			updateDoc.put("employee_b_no",null);
+			ObjectId obj = new ObjectId(id);
+			collection.updateMany(Filters.eq("_id",obj), new Document("$set",updateDoc));
+			List<Map<String,Object>> list = mongoDBDao.selectTinyVillageCode(code);
+			if(list!=null&&list.size()>0){
+				TinyArea tinyArea = this.getTinyAreaByTinyId(Long.parseLong(list.get(0).get("tiny_village_id").toString()));
+				tinyArea.setArea_no(null);
+				tinyArea.setBelong("public");
+				tinyArea.setEmployee_a_no(null);
+				tinyArea.setEmployee_b_no(null);
+				this.preObject(tinyArea);
+				saveObject(tinyArea);
+			}
+
+		}
+	}
+
+	@Override
+	public TinyArea getTinyAreaByCode(String code) {
+		TinyAreaManager tinyAreaManager = (TinyAreaManager) SpringHelper.getBean("tinyAreaManager");
+		List<?> lst_data = this.getList(FilterFactory.getSimpleFilter("code='" + code+"'")
+				.appendAnd(FilterFactory.getSimpleFilter("status=0")));
+		if (lst_data != null && lst_data.size() > 0) {
+			return (TinyArea) lst_data.get(0);
+		}
+		return null;
 	}
 
 }

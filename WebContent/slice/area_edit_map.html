@@ -55,7 +55,7 @@
 
 	.menu{position: absolute; top: 50px;  left: 20px; width: 190px;border-radius:4px}
     .menu2{position: absolute; bottom: 28px;  right: 6px;min-width:80px; background-color: #fff;border-radius:4px}
-    .menu_list2{margin: 0 0 0 0; width:80px; background-color: #fff; overflow-y: auto; overflow-x: hidden;  box-shadow: 1px 2px 1px rgba(0,0,0,.15);-webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out}
+    .menu_list2{margin: 0 0 0 0; width:236px; background-color: #fff; overflow-y: auto; overflow-x: hidden;  box-shadow: 1px 2px 1px rgba(0,0,0,.15);-webkit-transition: all .3s ease-in-out;-o-transition: all .3s ease-in-out;transition: all .3s ease-in-out}
     
     .menu_list2 li{
 /* 	line-height: 22px;  */
@@ -223,9 +223,15 @@
 			  	   <li class="col-lg-12" >
 	    			   <div class="col-sm-3 no-padding" style="width:10%;background:#bce1f3"></div>
 	   				   <div class="col-sm-9 no-padding" >
-	   					   <p style="padding-left:10px;white-space:nowrap;"><span style="white-space:nowrap;display:inline-block">可划片</span></p>
+	   					   <p style="padding-left:10px;white-space:nowrap;"><span style="white-space:nowrap;display:inline-block">可划片(当前门店录入小区)</span></p>
 	   				   </div>
 	   			    </li>
+					<li class="col-lg-12" >
+						<div class="col-sm-3 no-padding" style="width:10%;background:#8b0fe8"></div>
+						<div class="col-sm-9 no-padding" >
+							<p style="padding-left:10px;white-space:nowrap;"><span style="white-space:nowrap;display:inline-block">可划片(非当前门店录入小区)</span></p>
+						</div>
+					</li>
 	   			    <li class="col-lg-12" >
 	    			   <div class="col-sm-3 no-padding" style="width:10%;background:#ec612c"></div>
 	   				   <div class="col-sm-9 no-padding" >
@@ -548,6 +554,9 @@
     var $strokeColor_cur = "#55f12f";//当前片区管辖小区
     var $fillColor_cur = "#55f12f"; //当前片区管辖小区
     var $fillColor_sel = "#ec612c";//临时选中小区
+	var $fillColorPublic = "#8b0fe8";//公共小区
+	var $strokeColorPublic = "#8b0fe8"
+
     var infoWindow1;
 	function initArea(storeService,coordinate) {
 		areaTinyVillageArray = new Array();
@@ -601,10 +610,10 @@
 			                    strokeWeight: 2,    //线宽
 			                    fillColor:$fillColor_cur, //填充色
 			                    fillOpacity: 0.6,//填充透明度
-			                    extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":1} 
+			                    extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":1,"belong":coordinate[i].belong}
 			            });
 			        	
-			        	areaTag_temp=1;
+			        	areaTag_temp=1;//小区已经绑定到当前门店的当前片区
 			    	}else if(area_no!=null&&area_no!=""&&coordinate[i].areaNo!=area_no){//小区片区不是当前片区
 			    		
 			    		//绘制小区
@@ -616,10 +625,10 @@
 			                    strokeWeight: 2,    //线宽
 			                    fillColor:$fillColor_unFree, //填充色
 			                    fillOpacity: 0.9,//填充透明度
-			                    extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":2} 
+			                    extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":2,"belong":coordinate[i].belong}
 			            });
 			        	
-			        	areaTag_temp=2;
+			        	areaTag_temp=2;//小区绑定到当前门店的其他片区
 			    	}else if(area_no==null||area_no==""){
 			    		areaTinyVillage = new AMap.Polygon({
 		                    path:coordinate[i].coordinate_range.coordinates[0],//设置多边形边界路径
@@ -629,7 +638,7 @@
 		                    strokeWeight: 2,    //线宽
 		                    fillColor:$fillColor_unFree, //填充色
 		                    fillOpacity: 0.9,//填充透明度
-		                    extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":2} 
+		                    extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":2,"belong":coordinate[i].belong}
 		                });
 			    		
 			    		areaTag_temp=2;
@@ -638,21 +647,38 @@
 	            
 
 	    	}else{//小区未绑定片区
+	    		if(currentStore.storeno!=coordinate[i].storeNo&&coordinate[i].belong=="public"){
+
+                    areaTinyVillage = new AMap.Polygon({
+                        path:coordinate[i].coordinate_range.coordinates[0],//设置多边形边界路径
+                        strokeColor:$strokeColorPublic, //线颜色
+                        map:map,
+                        strokeOpacity: 1.0, //线透明度
+                        strokeWeight: 2,    //线宽
+                        strokeOpacity: 0.6,
+                        fillColor:$fillColorPublic, //填充色
+                        fillOpacity: 0.4,//填充透明度
+                        extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":3,"belong":coordinate[i].belong}
+                    });
+
+				}else if(currentStore.storeno==coordinate[i].storeNo){
+                    areaTinyVillage = new AMap.Polygon({
+                        path:coordinate[i].coordinate_range.coordinates[0],//设置多边形边界路径
+                        strokeColor:$strokeColor_free, //线颜色
+                        map:map,
+                        strokeOpacity: 1.0, //线透明度
+                        strokeWeight: 2,    //线宽
+                        strokeOpacity: 0.6,
+                        fillColor:$fillColor_free, //填充色
+                        fillOpacity: 0.4,//填充透明度
+                        extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":3,"belong":coordinate[i].belong}
+                    });
+				}
+
 	    		
-	    		areaTinyVillage = new AMap.Polygon({
-                    path:coordinate[i].coordinate_range.coordinates[0],//设置多边形边界路径
-                    strokeColor:$strokeColor_free, //线颜色
-                    map:map,
-                    strokeOpacity: 1.0, //线透明度
-                    strokeWeight: 2,    //线宽
-                    strokeOpacity: 0.6,
-                    fillColor:$fillColor_free, //填充色
-                    fillOpacity: 0.4,//填充透明度
-                    extData:{"storeno":coordinate[i].storeNo,"tinyVillageId":coordinate[i].tinyVillage_id,"tinyVillageName":coordinate[i].name,"villageId":coordinate[i].village_id,"townId":coordinate[i].town_id,"areaNo":coordinate[i].areaNo,"areaName":coordinate[i].areaName,"code":coordinate[i].code,"areaTag":3} 
-            	});
-	    		
-	    		areaTag_temp=3;
+	    		areaTag_temp=3;//小区未绑定到片区
 	    	}
+
 	    	areaTinyVillageArray.push(areaTinyVillage);
 // 	        tinyVillageMarker = new AMap.Marker({ //对小区添加自定义点标记
 //       		    visible:false,
@@ -729,6 +755,7 @@
 				var villageId = e.target.getExtData().villageId;
 				var townId = e.target.getExtData().townId;
 				var storeNo = e.target.getExtData().storeno;
+				var belong= e.target.getExtData().belong;
 // 				if(typeof(infoWindow1)!="undefined"&&infoWindow1.getIsOpen()){
 // 					infoWindow1.close();
 // 				}
@@ -743,30 +770,75 @@
 					layer.msg("该小区已绑定到其他片区",{"time":2000});
 				}else if(parseInt(areaTag)==3){//未划片小区
 					if(currentStore.storeno==storeNo){
-						e.target.setOptions({
-							strokeColor:$fillColor_sel,
-							fillColor:$fillColor_sel, //填充色
-		                    fillOpacity: 0.6,//填充透明度
-						});
-						var areaNo =  e.target.getExtData().areaNo;
-						var areaName =  e.target.getExtData().areaName;
-						var name =  e.target.getExtData().tinyVillageName;
-						e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4});
-					}else{
+
+                        if(!AMap.GeometryUtil.isRingInRing(e.target.getPath(),serviceRange.getPath())){
+                            layer.msg("该小区不在本店服务范围内，无法分配片区，请重新录入小区坐标！",{"time":2000});
+                        }else{
+
+                            e.target.setOptions({
+                                strokeColor:$fillColor_sel,
+                                fillColor:$fillColor_sel, //填充色
+                                fillOpacity: 0.6,//填充透明度
+                            });
+                            var areaNo =  e.target.getExtData().areaNo;
+                            var areaName =  e.target.getExtData().areaName;
+                            var name =  e.target.getExtData().tinyVillageName;
+                            e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"belong":belong});
+                            window.parent.selectedTinyAreaByMap.push(tinyVillageId);
+                        }
+
+					}else if(currentStore.storeno!=storeNo&&belong=="public"){//小区非当前门店所画且是公有状态
+                        if(!AMap.GeometryUtil.isRingInRing(e.target.getPath(),serviceRange.getPath())){
+                            layer.msg("该小区不在本店服务范围内，无法分配片区，请重新录入小区坐标！",{"time":2000});
+                        }else{
+
+                            e.target.setOptions({
+                                strokeColor:$fillColor_sel,
+                                fillColor:$fillColor_sel, //填充色
+                                fillOpacity: 0.6,//填充透明度
+                            });
+                            var areaNo =  e.target.getExtData().areaNo;
+                            var areaName =  e.target.getExtData().areaName;
+                            var name =  e.target.getExtData().tinyVillageName;
+                            e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"belong":belong});
+
+                            window.parent.selectedTinyAreaByMap.push(tinyVillageId);
+                        }
+					}else if(currentStore.storeno!=storeNo&&belong=="private"){//小区非当前门店所画且是私有状态
 						layer.msg("该小区还未被当前门店录入坐标范围",{"time":2000});
 					}
 					
 				}else if(parseInt(areaTag)==4){
-					e.target.setOptions({
-						strokeColor:$fillColor_free,
-						fillColor:$fillColor_free, //填充色
-	                    fillOpacity: 0.45,//填充透明度
-					});
+
+
 					var areaNo =  e.target.getExtData().areaNo;
 					var areaName =  e.target.getExtData().areaName;
 					var name =  e.target.getExtData().tinyVillageName;
-					e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":3});
-				}
+					var belong= e.target.getExtData().belong;
+					var storeNo = e.target.getExtData().storeno;
+					if(storeNo==currentStore.storeno){//当前门店所画小区
+                        e.target.setOptions({
+                            strokeColor:$fillColor_free,
+                            fillColor:$fillColor_free, //填充色
+                            fillOpacity: 0.45,//填充透明度
+                        });
+					}else if(storeNo!=currentStore.storeno&&belong=="public"){
+                        e.target.setOptions({
+                            strokeColor:$strokeColorPublic,
+                            fillColor:$fillColorPublic, //填充色
+                            fillOpacity: 0.45,//填充透明度
+                        });
+					}
+
+
+                    e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":3,"belong":belong});
+                    var tinyAreaIndex = window.parent.selectedTinyAreaByMap.indexOf(tinyVillageId);
+					if(tinyAreaIndex>-1){
+                        window.parent.selectedTinyAreaByMap.splice(tinyAreaIndex,1);
+					}
+
+
+                }
        	     });
 	    	
 	    	
@@ -814,11 +886,12 @@ var setContextMenu = function (e) {
 				var areaName =  e.target.getExtData().areaName;
 				var name =  e.target.getExtData().tinyVillageName;
 				var storeNo = e.target.getExtData().storeno;
+				var belong = e.target.getExtData.belong;
 				e.target.setOptions({
 					strokeColor:$strokeColor_free,
 					fillColor:$fillColor_free,
 					fillOpacity: 0.45,//填充透明度
-	                extData:{"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":3} 
+	                extData:{"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":3,"belong":belong}
 				});
     	   
         },
@@ -871,7 +944,7 @@ function goToPosition(c){
 function submitTinyVillage(){
 	var index = layer.load(0, {shade: false});
 	var tinyVillageArray = new Array();
-	
+
 	for(var i=0;i<areaTinyVillageArray.length;i++){
 		var areaTinyVillage = areaTinyVillageArray[i];
 		var areaTag = areaTinyVillage.getExtData().areaTag;
@@ -902,22 +975,30 @@ function drawTinyVillage(tinyVillageArray){
 			if(areaTag==3){
 				
 				if(tinyVillageArray.indexOf(tinyVillageId)!=-1){
-					areaTinyVillageArray[i].setOptions({
-						strokeColor:$fillColor_sel,
-						fillColor:$fillColor_sel, //填充色
-		                fillOpacity: 0.45,//填充透明度
-					});
-					
-					var code = areaTinyVillageArray[i].getExtData().code;
-					var areaNo =  areaTinyVillageArray[i].getExtData().areaNo;
-					var areaName =  areaTinyVillageArray[i].getExtData().areaName;
-					var tinyVillageId = areaTinyVillageArray[i].getExtData().tinyVillageId;
-					var villageId = areaTinyVillageArray[i].getExtData().villageId;
-					var townId = areaTinyVillageArray[i].getExtData().townId;
-					var tinyVillageMarker = areaTinyVillageArray[i].getExtData().marker;
-					var name =  areaTinyVillageArray[i].getExtData().tinyVillageName;
-					var storeNo = areaTinyVillageArray[i].getExtData().storeno;
-					areaTinyVillageArray[i].setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"marker":tinyVillageMarker});
+				    if(AMap.GeometryUtil.isRingInRing(areaTinyVillageArray[i].getPath(),serviceRange.getPath())){
+
+                        areaTinyVillageArray[i].setOptions({
+                            strokeColor:$fillColor_sel,
+                            fillColor:$fillColor_sel, //填充色
+                            fillOpacity: 0.45,//填充透明度
+                        });
+
+                        var code = areaTinyVillageArray[i].getExtData().code;
+                        var areaNo =  areaTinyVillageArray[i].getExtData().areaNo;
+                        var areaName =  areaTinyVillageArray[i].getExtData().areaName;
+                        var tinyVillageId = areaTinyVillageArray[i].getExtData().tinyVillageId;
+                        var villageId = areaTinyVillageArray[i].getExtData().villageId;
+                        var townId = areaTinyVillageArray[i].getExtData().townId;
+                        var tinyVillageMarker = areaTinyVillageArray[i].getExtData().marker;
+                        var name =  areaTinyVillageArray[i].getExtData().tinyVillageName;
+                        var storeNo = areaTinyVillageArray[i].getExtData().storeno;
+                        var belong = areaTinyVillageArray[i].getExtData().belong;
+                        areaTinyVillageArray[i].setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"marker":tinyVillageMarker,"belong":belong});
+                        window.parent.selectedTinyAreaByMap.push(tinyVillageId);
+					}
+
+
+
 				}
 				
 			}else if(areaTag==1){
@@ -941,7 +1022,8 @@ function drawTinyVillage(tinyVillageArray){
 					var tinyVillageMarker = areaTinyVillageArray[i].getExtData().marker;
 					var name =  areaTinyVillageArray[i].getExtData().tinyVillageName;
 					var storeNo = areaTinyVillageArray[i].getExtData().storeno;
-					areaTinyVillageArray[i].setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":3,"marker":tinyVillageMarker});
+                    var belong = areaTinyVillageArray[i].getExtData().belong;
+					areaTinyVillageArray[i].setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":3,"marker":tinyVillageMarker,"belong":belong});
 				}
 				
 			}

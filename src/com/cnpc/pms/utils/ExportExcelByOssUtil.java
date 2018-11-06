@@ -92,6 +92,14 @@ public class ExportExcelByOssUtil {
         cell.setCellType(HSSFCell.CELL_TYPE_STRING);
     }
 
+    public void setCellNumberValue(Row obj_row,HSSFCellStyle contextstyle, int nCellIndex, Object value){
+        Cell cell=obj_row.createCell(nCellIndex);
+        cell.setCellStyle(getCellStyle_common());
+        cell.setCellStyle(contextstyle);
+        cell.setCellValue(Double.parseDouble(value.toString()));
+        cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+    }
+
 
     public Map<String,Object> exportFile(){
         Map<String,Object> result = new HashMap<String,Object>();
@@ -124,7 +132,21 @@ public class ExportExcelByOssUtil {
         for(int i = 0;i < data.size();i++){
             row = sheet.createRow(i+1);
             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-                setCellValue(row, cellIndex, data.get(i).get(headers_key[cellIndex]));
+                Boolean isNum = false;//data是否为数值型
+
+                if (data.get(i).get(headers_key[cellIndex]) != null && !"".equals(data.get(i).get(headers_key[cellIndex]))) {
+                    //判断data是否为数值型
+                    isNum = data.get(i).get(headers_key[cellIndex]).toString().matches("^(-?\\d+)(\\.\\d+)?$");
+                }
+
+                if(isNum){
+                    HSSFDataFormat df = wb.createDataFormat(); // 此处设置数据格式
+                    HSSFCellStyle contextstyle =wb.createCellStyle();
+                    contextstyle.setDataFormat(df.getBuiltinFormat("#,##0.00"));//保留两位小数点
+                    setCellNumberValue(row,contextstyle, cellIndex, data.get(i).get(headers_key[cellIndex]));
+                }else{
+                    setCellValue(row, cellIndex, data.get(i).get(headers_key[cellIndex]));
+                }
             }
         }
 

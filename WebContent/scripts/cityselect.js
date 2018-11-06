@@ -290,7 +290,15 @@ Vcity.CitySelector.prototype = {
                 odt.innerHTML = sortKey[j] == 'hot'?'&nbsp;':sortKey[j];
                 odda = [];
                 for(var i=0,n=oCity[key][sortKey[j]].length;i<n;i++){
-                    str = '<a href="#">' + oCity[key][sortKey[j]][i] + '</a>';
+                    //modify by gaoll 2018/11/1
+                    if(oCity[key][sortKey[j]][i] == $('#city1').val() || oCity[key][sortKey[j]][i] == $('#city2').val() ||
+                        oCity[key][sortKey[j]][i] == $('#city3').val()|| oCity[key][sortKey[j]][i] == $('#city4').val() ||
+                        oCity[key][sortKey[j]][i] == $('#city5').val()){
+                        str = '<a href="#" style="color:#c4cacd">' + oCity[key][sortKey[j]][i] + '</a>';
+                    }else{
+                        str = '<a href="#">' + oCity[key][sortKey[j]][i] + '</a>';
+                    }
+
                     odda.push(str);
                 }
                 odd.innerHTML = odda.join('');
@@ -349,9 +357,23 @@ Vcity.CitySelector.prototype = {
             	if(typeof that.click_method != 'undefined'){
             		that.click_method(this.innerHTML);
             	}
-            	
-                that.input.value = this.innerHTML;
-                
+                //modify by gaoll 2018/11/1
+                if(this.innerHTML == $('#city1').val() || this.innerHTML == $('#city2').val() ||
+                    this.innerHTML == $('#city3').val()|| this.innerHTML == $('#city4').val() ||
+                    this.innerHTML == $('#city5').val() ) {
+                    if(that.input.value == this.innerHTML){
+                        that.input.value = this.innerHTML;
+                        Vcity._m.addClass('hide',that.cityBox);
+                        /* 点击城市名的时候隐藏myIframe */
+                        Vcity._m.addClass('hide',that.myIframe);
+                    }
+                }else{
+                    that.input.value = this.innerHTML;
+                    Vcity._m.addClass('hide',that.cityBox);
+                    /* 点击城市名的时候隐藏myIframe */
+                    Vcity._m.addClass('hide',that.myIframe);
+                }
+
                 Vcity._m.addClass('hide',that.cityBox);
                 /* 点击城市名的时候隐藏myIframe */
                 Vcity._m.addClass('hide',that.myIframe);
@@ -378,7 +400,16 @@ Vcity.CitySelector.prototype = {
                 // slideul 不存在或者 slideul存在但是是隐藏的时候 两者不能共存
                 if(!that.ul || (that.ul && Vcity._m.hasClass('hide',that.ul))){
                     Vcity._m.removeClass('hide',that.cityBox);
-
+                    //modify by gaoll 2018/11/1
+                    $(that.cityBox).find("a").each(function(t,e){
+                        if($(e).html() == $('#city1').val() || $(e).html() == $('#city2').val() ||
+                            $(e).html() == $('#city3').val()|| $(e).html() == $('#city4').val() ||
+                            $(e).html() == $('#city5').val()){
+                            $(e).attr("style","color:#c4cacd;");
+                        }else{
+                            $(e).attr("style","");
+                        }
+                    });
                     /* IE6 移除iframe 的hide 样式 */
                     //alert('click');
                     Vcity._m.removeClass('hide',that.myIframe);

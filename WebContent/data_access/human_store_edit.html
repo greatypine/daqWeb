@@ -140,7 +140,13 @@ Date.prototype.format=function(fmt) {
 	var p_citySelect = decode64(getUrlParamByKey("citySelect"));
 	var tmpphone = "";
 	var tmpcardnumber = "";
+	
+	var in_zw="";
+	
 	function dataCheck() {
+		
+		var zw =$("#zw  option:selected").val();
+		
 		var name = $("#name").val();
 		if(name==null||name.trim()==""){
 			$$.showMessage("系统信息","请填写姓名!");
@@ -174,13 +180,6 @@ Date.prototype.format=function(fmt) {
 		}
 		
 		
-		var zw =$("#zw  option:selected").val();
-		
-		if(zw==null||zw.trim()==""){
-			$$.showMessage("系统信息","职位不能为空,请选择职位!");
-			return;
-		}
-		
 		/* if (zw != "综合管理" && zw != "国安侠" && zw!="星店店长" && zw!='副店长'&&zw!='市场专员') {
 			$$.showMessage("系统信息","职位错误 ！ 请正确填写职位! ");
 			return;
@@ -205,7 +204,7 @@ Date.prototype.format=function(fmt) {
 			}
 		}
 		*/
-		
+	
 		if(zw!='市场专员'&&zw!='线上服务专员'){
 			var store_name = $('#storename').val();
 			if (store_name == "" || store_name == null) {
@@ -229,6 +228,26 @@ Date.prototype.format=function(fmt) {
 				return ;
 			}
 		}
+		
+		
+		
+		var zw =$("#zw  option:selected").val();
+		var in_zw=$("#in_zw").val();
+		var sn=$("#storename").val();
+		if(sn.indexOf("物业人员虚拟")>-1){
+			zw=in_zw;
+		}
+		if(zw==null||zw.trim()==""){
+			$$.showMessage("系统信息","职位不能为空,请选择或输入职位!");
+			return;
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 		var citySelect = $("#citySelect").val();
 		if(citySelect==null||citySelect==""){
@@ -382,12 +401,14 @@ Date.prototype.format=function(fmt) {
 					for(i=0;i<jsonData.length;i++){
 						array.push(jsonData[i].name);
 					}
-					var autoComplete = new AutoComplete("storename","auto",array);
-					document.getElementById("storename").onkeyup = function(event){
-						autoComplete.start(event);
-					}
+					
+					
 				}
 			}, false);
+		
+		
+		
+		
 	}
 	//初始化所有外包公司 
 	var outerarray=new Array();
@@ -407,27 +428,34 @@ Date.prototype.format=function(fmt) {
 	function defaultva(key,va,msg){
 		if(va==null||va==""){
 			document.getElementById(key).value=msg;
+			/* var t_no=$("#employee_no").html();
+			if(t_no!=null&&t_no.indexOf("WY00")==-1){
+				
+			} */
 		}else{
-			document.getElementById(key).value = va;
+			document.getElementById(key).value = va;	
 		}
+		
 	}
 	
 	var srczw = "";
-
+    
 	$(function() {
 		initCareerGroup();
 		
 		initalOuterCompany();
 		initallstore();
 		//initExpressCompany();	
-		doManager("HumanresourcesManager", "queryHumanresourceById", id , function(data,
+		doManager("HumanresourcesManager", "queryHumanById", id , function(data,
 				textStatus, XMLHttpRequest) {
 			if (data.result) {
 				var jsonData = $.fromJSON(data.data);
+				$("#id").val(jsonData.id);
+				$("#employee_no").html(jsonData.employee_no);
+				
 				for (var key in jsonData) {
 					var va = jsonData[key];
 					var ele = document.getElementById(key);
-					
 					if (ele != null && ele != undefined) {
 						/* if(key!=null&&key=="interndate"){
 							document.getElementById(key).value = va;
@@ -441,6 +469,7 @@ Date.prototype.format=function(fmt) {
 						if(key!=null&&key=="deptlevel3"){
 							document.getElementById(key).value = va;
 						} */
+						
 						if(key!=null&&key=="deptlevel2"){
 							defaultva(key,va,"门店运营中心");							
 						}
@@ -449,6 +478,13 @@ Date.prototype.format=function(fmt) {
 						}
 						if(key!=null&&key=="orgname"){
 							defaultva(key,va,"国安社区");	
+						}
+						
+						if(key!=null&&key=="storename"){
+							if(va!=null&&va.indexOf("物业人员虚拟")>-1){
+								$("#zw").hide();
+								$("#in_zw").show();
+							}
 						}
 						
 						var arrinput = ["career_group","career_group2","isofficial","relationtype","tel","relationname","nation","education","school","profession","remark","cardnumber","birthday","censusregister","phone","marriage","topostdate","name","interndate","zw","id","deptlevel3","store_id","storename","jobchannel","offername","citySelect","leavereason","leavedate","leavercvlistdate","reporthigher","contractdatestart","contractdateend"];
@@ -467,49 +503,6 @@ Date.prototype.format=function(fmt) {
 							$("#selectStoreName").val(jsonData.selectStoreNames);
 							$("#showSelectName").html($("#selectStoreName").val());
 						}
-						/* var showStoreName = $("#selectStoreName").val();
-						if(showStoreName.length>12){
-							showStoreName=showStoreName.substring(0, 12)+"...";
-						}
-						//临时界面的显示 
-						$("#showSelectName").html(showStoreName); */
-						
-						
-						/*
-						if(key!=null&&key=="store_id"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="storename"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="jobchannel"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="offername"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="citySelect"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="leavereason"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="leavedate"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="leavercvlistdate"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="reporthigher"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="contractdatestart"){
-							document.getElementById(key).value = va;
-						}
-						if(key!=null&&key=="contractdateend"){
-							document.getElementById(key).value = va;
-						}
-						*/
 						
 						
 						if(key!=null&&key=="professnallevel"){
@@ -567,6 +560,8 @@ Date.prototype.format=function(fmt) {
 										}else{
 											if(key!=null&&key=="zw"){
 												$("#zw").attr("value",va);
+												$("#in_zw").val(va);
+												in_zw=va;
 												//$("#zw option[text='"+va+"']").attr("selected", true);
 												srczw = va;
 												if(va=="副店长"){
@@ -600,7 +595,16 @@ Date.prototype.format=function(fmt) {
 														$("#career_group2").attr("value",va);
 														$("#career_group2 option[text='"+va+"']").attr("selected", true);
 													}else{
-														document.getElementById(key).innerHTML = va;	
+														/* if(key!=null&&key=="storename"){
+															if(va.indexOf("物业人员虚拟")>-1){
+																$("#zw").hide();
+																$("#in_zw").show();
+															}
+														}else{
+															
+														} */
+														document.getElementById(key).innerHTML = va;
+															
 													}
 													
 												}
@@ -651,8 +655,10 @@ Date.prototype.format=function(fmt) {
 				$("#storefw").show();
 				$("#storefwbtn").attr("disabled",false);
 			}else{
-				$("#storename").css('background','');
-				$("#storename").attr("readonly","");
+				if(zw!=null&&zw.trim()!="市场专员"){
+					$("#storename").css('background','');
+					$("#storename").attr("readonly","");
+				}
 				$("#storefw").hide();
 				$("#storefwbtn").attr("disabled",true);
 				/* $("#selectStoreIds").val("");
@@ -699,6 +705,47 @@ Date.prototype.format=function(fmt) {
 			$("#selectStoreName").val("");
 			$("#showSelectName").html("");
 		}
+		
+		
+		
+		
+		
+		
+		var autoComplete = new AutoComplete("storename","auto",array);
+		document.getElementById("storename").onkeyup = function(event){
+			autoComplete.start(event);
+			var in_storename=document.getElementById("storename").value;
+			if(in_storename!=null&&in_storename.indexOf("物业人员虚拟店")>-1){
+				//职位可输入 
+				$("#zw").hide();
+				$("#in_zw").show();
+				$("#in_zw").val(in_zw);
+			}else{
+				$("#zw").show();
+				$("#in_zw").hide();
+				$("#in_zw").val("");
+			}
+		}
+		$("#auto").click(function(){
+			var s_storename=document.getElementById("storename").value;
+			if(s_storename!=null&&s_storename.indexOf("物业人员虚拟店")>-1){
+				//职位可输入 
+				$("#zw").hide();
+				$("#in_zw").show();
+				$("#in_zw").val(in_zw);
+			}else{
+				$("#zw").show();
+				$("#in_zw").hide();
+				$("#in_zw").val("");
+			}
+		});
+		
+		
+		
+		
+		
+		
+		
 		
 	});
 	
@@ -792,12 +839,17 @@ Date.prototype.format=function(fmt) {
 			o["leavercvlistdate"]=$("#leavercvlistdate").val();
 		}
 		
+		if(o["storename"].indexOf("物业人员虚拟")>-1){
+			o["zw"]=$("#in_zw").val();
+		}
 		
 		if(o["zw"].indexOf("线上服务专员")>-1){
 			o["selectStoreIds"]=$("#selectStoreIds").val();
 		}else{
 			o["selectStoreIds"]="";
 		}
+		
+		
 		
 		
 		doManager("HumanresourcesManager", "updateHumanresources", o , function(data,
@@ -985,7 +1037,7 @@ Date.prototype.format=function(fmt) {
             <tr>
             	<td>
 					<p>
-						所属机构：<input type="text" id="orgname" isautotab="true" value="国安社区"/>
+						所属机构：<input type="text" id="orgname" isautotab="true" value=""/>
 					</p>
 				</td>
                 <td>
@@ -1018,7 +1070,7 @@ Date.prototype.format=function(fmt) {
 				
 				<td>
 					<p>
-						一级部门：<input type="text" id="deptlevel1" isautotab="true" value="物业事业部"/>
+						一级部门：<input type="text" id="deptlevel1" isautotab="true" value=""/>
 					</p>
 				</td>
 				<td>
@@ -1038,7 +1090,7 @@ Date.prototype.format=function(fmt) {
              <tr>
             	<td>
                 	<p>
-						二级部门：<input type="text" id="deptlevel2" isautotab="true" value="门店运营中心"/>
+						二级部门：<input type="text" id="deptlevel2" isautotab="true" value=""/>
 					</p>
                 </td>
                 <td>
@@ -1159,7 +1211,9 @@ Date.prototype.format=function(fmt) {
 						<option value="仓库主管">仓库主管</option>
 						<option value="配送主管">配送主管</option>
 						<option value="线上服务专员">线上服务专员</option>
-					</select><br>
+					</select>
+						<input type="text" id="in_zw" name="in_zw" style="width: 40%;display: none;">					
+					<br>
 					<font id="syqfont">事&nbsp;业&nbsp;群1：</font>
 					<select id="career_group" name="career_group" style="width: 25%;display:inline-block;height:30px;padding:0;margin-top:10px;" class="form-control">
 					</select>
@@ -1380,7 +1434,6 @@ Date.prototype.format=function(fmt) {
 </body>
 
 <script>
-	
 	
 	var test=new Vcity.CitySelector({input:'citySelect'});
 	

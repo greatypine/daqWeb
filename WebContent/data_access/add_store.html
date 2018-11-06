@@ -497,23 +497,23 @@ function downloadFile(pic_name){
 		browserCfg.chrome = true;
 	}
 	function dataCheck() {
-		$("#submit").attr("disabled","true");
+		//$("#submit").attr("disabled","true");
 		var obj_file = document.getElementById("contract_file");
 		var filesize = 0;
 		if(obj_file.value!=""){
 			if(browserCfg.firefox || browserCfg.chrome ){
 			filesize = obj_file.files[0].size;
 		}else{
-			$("#submit").removeAttr("disabled");
+			//$("#submit").removeAttr("disabled");
 			alert(tipMsg);
 			return;
 		}
 		if(filesize==-1){
-			$("#submit").removeAttr("disabled");
+			//$("#submit").removeAttr("disabled");
 			alert(tipMsg);
 			return;
 		}else if(filesize>maxsize){
-			$("#submit").removeAttr("disabled");
+			//$("#submit").removeAttr("disabled");
 			alert(errMsg);
 			return;
 		}}
@@ -542,7 +542,7 @@ function downloadFile(pic_name){
 			
 		}
 		if(!flsg){
-			$("#submit").removeAttr("disabled"); 
+			//$("#submit").removeAttr("disabled"); 
 			alert("该门店待"+update_user+"审批!");
 			return;
 		}
@@ -575,7 +575,7 @@ function downloadFile(pic_name){
 		var superMicro=$("#superMicro option:selected").val();//是否微超
 		var estate=$("#estate option:selected").text();//目前状态
 		if(city_name == "" || city_name == null){
-			$("#submit").removeAttr("disabled"); 
+			//$("#submit").removeAttr("disabled"); 
 			alert("请选择所在城市!");
 			return;
 		}else{
@@ -595,12 +595,12 @@ function downloadFile(pic_name){
 			
   }
 		if(!flag){
-			$("#submit").removeAttr("disabled"); 
+			//$("#submit").removeAttr("disabled"); 
 			alert("该用户没有当前城市的权限!");
 			return ;
 		}
 		if(name == "" || name == null){
-			$("#submit").removeAttr("disabled"); 
+			//$("#submit").removeAttr("disabled"); 
 			alert("请输入门店名称!");
 			return;
 		}
@@ -608,231 +608,231 @@ function downloadFile(pic_name){
 		if(storetype!='V'){
 			if(nature_value=='合作店'){
 				if(county_name == "" || county_name == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择区域!");
 					return;
 				}
 				if(place_town_id == "" || place_town_id == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择门店位置所在街道!");
 					return;
 				}
 				if(nature_value == "" || nature_value == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选门店属性!");
 					return;
 				}
 				if(storetype == "" || storetype == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选门店类型!");
 					return;
 				}
 				if(town_name == "" || town_name == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择门店服务范围覆盖街道!");
 					return;
 				}
 				if(town_name.search(place_town_name)==-1){
-					$("#submit").removeAttr("disabled");
-					alert("门店服务范围覆盖街道必须包含门店位置所在街道!");
+					//$("#submit").removeAttr("disabled");
+					alert("门店服务范/围覆盖街道必须包含门店位置所在街道!");
 					return;
 				}
 				if(store_position == "" || store_position == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择门店位置坐标!");
 					return;
 				}
 				if(citycode == "" || citycode == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请重新选择门店位置坐标!");
 					return;
 				}
 				if(address == "" || address == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写门店地址!");
 					return;
 				}
 				if(superMicro == "" || superMicro == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择是否微超!");
 					return;
 				}
 				if(estate == "" || estate == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写门店状态!");
 					return;
 				}
 				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店" && estate != "待开业"){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("门店状态必须为：筹备中、待开业、运营中、闭店!");
 					return;
 				}
 			}else{
 				if(county_name == "" || county_name == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择区域!");
 					return;
 				}
 				if(place_town_id == "" || place_town_id == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择门店位置所在街道!");
 					return;
 				}
 				if(nature_value == "" || nature_value == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选门店属性!");
 					return;
 				}
 				if(storetype == "" || storetype == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选门店类型!");
 					return;
 				}
 				if(town_name == "" || town_name == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择门店服务范围覆盖街道!");
 					return;
 				}
 				if(town_name.search(place_town_name)==-1){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("门店服务范围覆盖街道必须包含门店位置所在街道!");
 					return;
 				}
 				if(store_position == "" || store_position == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择门店位置坐标!");
 					return;
 				}
 				if(citycode == "" || citycode == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请重新选择门店位置坐标!");
 					return;
 				}
 				if(content == "" || content == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请上传合同文件!");
 					return;
 				}
 				if(tenancyTerm_start == "" || tenancyTerm_start == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择租期!");
 					return;
 				}
 				if(tenancyTerm_end == "" || tenancyTerm_end == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择租期!");
 					return;
 				}
 				var startTime = new Date(Date.parse(tenancyTerm_start));
 				var endTime = new Date(Date.parse(tenancyTerm_end));
 				if(startTime>endTime){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择正确的租赁日期!");
 					return ;
 				}
 				if(rental == "" || rental == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写租金!");
 					return;
 				}
 				if(payment_method == "" || payment_method == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择付款方式!");
 					return;
 				}
 				if(rent_area == "" || rent_area == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写计租面积!");
 					return;
 				}
 				if(usable_area == "" || usable_area == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写使用面积!");
 					return;
 				}
 				if(increase == "" || increase == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写递增!");
 					return;
 				}
 				if(rent_free_start == "" || rent_free_start == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择免租期!");
 					return;
 				}
 				if(rent_free_end == "" || rent_free_end == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择免租期!");
 					return;
 				}
 				var startTime1 = new Date(Date.parse(rent_free_start));
 				var endTime1 = new Date(Date.parse(rent_free_end));
 				if(startTime1>endTime1){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择正确的免租期!");
 					return ;
 				}
 				if(taxes == "" || taxes == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写税金!");
 					return;
 				}
 				if(agency_fee == "" || agency_fee == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写中介费!");
 					return;
 				}
 				if(increase_fee == "" || increase_fee == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写增容费!");
 					return;
 				}
 				if(address == "" || address == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写门店地址!");
 					return;
 				}
 				if(superMicro == "" || superMicro == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择是否微超!");
 					return;
 				}
 				if(estate == "" || estate == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写门店状态!");
 					return;
 				}
 				if(estate !="筹备中" && estate != "运营中"&&estate !="闭店" && estate != "待开业"){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("门店状态必须为：筹备中、待开业、运营中、闭店!");
 					return;
 				}
 			}
 		}else{
 			if(nature_value == "" || nature_value == null){
-				$("#submit").removeAttr("disabled"); 
+				//$("#submit").removeAttr("disabled"); 
 				alert("请选门店属性!");
 				return;
 			}
 			if(storetype == "" || storetype == null){
-				$("#submit").removeAttr("disabled"); 
+				//$("#submit").removeAttr("disabled"); 
 				alert("请选门店类型!");
 				return;
 			}
 
 			if(nature_value=='仓'){
 				if(store_position == "" || store_position == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请选择门店位置坐标!");
 					return;
 				}
 				if(citycode == "" || citycode == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请重新选择门店位置坐标!");
 					return;
 				}
 				if(address == "" || address == null){
-					$("#submit").removeAttr("disabled");
+					//$("#submit").removeAttr("disabled");
 					alert("请填写门店地址!");
 					return;
 				}
@@ -841,7 +841,7 @@ function downloadFile(pic_name){
 				  var startTime = new Date(Date.parse(tenancyTerm_start));
 			  	  var endTime = new Date(Date.parse(tenancyTerm_end));
 			  	  if(startTime>endTime){
-			  		$("#submit").removeAttr("disabled"); 
+			  		//$("#submit").removeAttr("disabled"); 
 					alert("请选择正确的租赁日期!");
 			  		return ;
 			  	  }
@@ -895,6 +895,7 @@ function downloadFile(pic_name){
 						}
 					},true); 
 		  }
+	
 	}
 	//验证城市编码
 	function verterCityNo(){
@@ -906,7 +907,7 @@ function downloadFile(pic_name){
 					if(data.data!='null'){
 						var jsonData = $.fromJSON(data.data);
 						if(jsonData.cityno==null||''==jsonData.cityno){
-							$("#submit").removeAttr("disabled"); 
+							//s$("#submit").removeAttr("disabled"); 
 							alert("请联系管理员添加城市编码");
 							return;
 						}
@@ -925,7 +926,7 @@ function downloadFile(pic_name){
 	//判断门店类型是否发生改变
 	function updateStoreType(){
 		if(storeTypeValue==null||storeTypeValue=='undefined'||storeTypeValue==''){
-			doSave();
+			ailEstatus();
 		}else{
 				var efgda=$('#storetype  option:selected').val();
 				if(efgda!=storeTypeValue&&storeTypeValue!='W'){
@@ -938,7 +939,7 @@ function downloadFile(pic_name){
 			            buttons: {
 			                "${form.ui.ok}": function () {
 			                	$("#villageInfo").dialog('close');
-			                	doSave();
+			                	ailEstatus();
 			                },
 			                "${query.ui.cancel}": function () {
 			                	$("#submit").removeAttr("disabled"); 
@@ -947,11 +948,23 @@ function downloadFile(pic_name){
 			            }
 			        });
 				}else{
-					doSave();
+					ailEstatus();
 				}
 		}
 	}
 	var path = getRootPath();
+	//如果选择闭店的确认框
+	function ailEstatus(){
+		  if($("#estate option:selected").text()=="闭店"){
+			  $$.showConfirm("提示","门店关闭后，片区会被删除，是否继续关闭门店?",function () {
+				  doSave();
+			     });
+		  }else{
+			  doSave();
+		  }
+		
+	}
+	
 	function doSave(){
 		console.log(change_flag);
 			var arr = [ "cityName","name",  "town_id",

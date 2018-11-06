@@ -116,12 +116,13 @@
     .yichang .type_con{background: url("dist/img/gonghai(2).png") no-repeat; background-size: 100% 100%;}
     .gonghai:hover .type_con,.yichang:hover .type_con{display: block;}
     .fold-con{display: none;}
-    .auto{max-height:200px; overflow-y:scroll;}
+	.auto{max-height:200px; overflow-y:scroll;border: 0px solid #dedede;}
     .opeDiv span{float: right;width: 46px;height: 24px;line-height: 24px;text-align: center;font-size: 12px;border: 1px solid #9fa3a8;border-radius: 3px;color: #616d73;margin: 0 13px 12px 0;box-shadow: 0 1px 5px rgba(0,0,0,0.3);cursor: pointer;}
 	.Confirm{ background: linear-gradient(#83c56a, #63b254); border: 1px solid #46975d!important;; color: #fff!important;}
 	.ui-close-date{color: #fff; font-size: 14px!important; float:right!important; margin-right:10px!important}
 	.ui-datepicker-quick span{height: 30px; line-height: 35px}
 	.ui-datepicker-time{background-color:transparent}
+	.ui-datepicker-css{width: 270px;}
 
 	.checkboxFive {width: 20px;position: relative; margin: 20px 20px 20px 0; padding-left: 10px;}
 	.checkboxFive label {
@@ -218,10 +219,10 @@
 	          <div class="box-body">
 	          <div class="clearfix search-criteria">
 	            <div id="selectorLine clearfix no-border" class="clearfix">
-	            <div class="form-group col-lg-4">
+	            <div class="form-group col-lg-3">
 	              <label>时间</label>
 	             	<div class="search-con">
-						<div class="time" style="width: 325px;z-index: 99999;margin:0 15px 0 0;">
+						<div class="time" style="width: 270px;z-index: 99999;margin:0 15px 0 0;">
 						    <div class="time_endbg" id="time_endbg">
 						        <p>日期选择：<span class="data_choice" id="data_choice">默认时期</span></p>
 						        <input type="text" class="ui-datepicker-time" id="searchTime" readonly value=""/>
@@ -230,10 +231,10 @@
 						<div class="ui-datepicker-css" id="ui-datepicker-css" style="margin:0 15px 0 0;">	
 						    <div class="ui-datepicker-quick" id="ui-datepicker-quick">
 						        <input class="ui-date-quick-button" type="button" value="今天" alt="0"  name=""/>
-						        <input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>
+						        <!--<input class="ui-date-quick-button" type="button" value="昨天" alt="-1" name=""/>-->
 						        <input class="ui-date-quick-button" type="button" value="7天内" alt="-6" name=""/>
-						        <!--<input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
-						        <input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>-->
+						        <input class="ui-date-quick-button" type="button" value="30天内" alt="-29" name=""/>
+								<!--<input class="ui-date-quick-button" type="button" value="60天内" alt="-59" name=""/>-->
 						        <input class="ui-date-quick-button" type="button" value="全部" alt="2" name="">
 						        <span class="ui-close-date" id="ui-close-date" style="cursor:pointer;">X</span>
 						    </div>
@@ -252,7 +253,7 @@
 						</div>
 					</div>
 	            </div>
-	            <div class="form-group col-lg-4">
+	            <div class="form-group col-lg-3">
 	              <label>城市</label>
 				  <input id="city_id_userbehavior" name="city_id_userbehavior" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="城市" id="city_name_userbehavior" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
@@ -260,25 +261,31 @@
 	              <!-- /.input group -->
 	              </div>
 	            </div>
-	            <div class="form-group col-lg-4">
+	            <div class="form-group col-lg-3">
 	              <label><span class="text-red" title="勾选门店：以门店为单位统计&#13;未勾选门店：以城市为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>门店<span class="checkboxFive">
-						<input type='checkbox' id="storeClick" onclick='operatedCoverage()' checked="checked" value='area'>
+						<input type='checkbox' id="storeClick" onclick='operatedCoverage()'  value='area'>
 					<label for="storeClick"></label>
                 	</span></label>
 				  <input id="store_id_userbehavior" name="store_id_userbehavior" type="hidden" value=""/>
 				  <input type="text" class="form-control"  placeholder="门店" id="store_name_userbehavior" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%"/>
-
 	              <div class="auto hidden" id="auto_store" style="width:85%;z-index: 99999;"></div>
-
 	              <!-- /.input group -->
 	            </div>
+				<div class="form-group col-lg-3">
+					<label>用户来源</label>
+					<select class="form-control select2" id="user_source" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);">
+						<option value="all" >全部</option>
+						<option value="wx" >微信</option>
+						<option value="app" >APP</option>
+					</select>
+				</div>
 	            </div>
 	            </div>
 	            
 	            <div class="clearfix">
-	            	<!--<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
+	            	<div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
 		                <button type="button" onclick="resetSerachParam()" style="border-color:#00a65a;background-color:#00a652;color:white" class="btn btn-block">重置</button>
-		            </div>-->
+		            </div>
 		            <div class="form-group col-lg-2 pull-right" style="margin-top: 20px; padding: 0 25px;">
 		              <button type="button" onclick="export_tradetype()" class="btn btn-block btn-warning">导出</button>
 		            </div>
@@ -526,9 +533,43 @@
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script> 
 <script type="text/javascript">
+	//格式化日期
+    Date.prototype.format=function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1, //月份
+            "d+" : this.getDate(), //日
+            "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+            "H+" : this.getHours(), //小时
+            "m+" : this.getMinutes(), //分
+            "s+" : this.getSeconds(), //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S" : this.getMilliseconds() //毫秒
+        };
+        var week = {
+            "0" : "\u65e5",
+            "1" : "\u4e00",
+            "2" : "\u4e8c",
+            "3" : "\u4e09",
+            "4" : "\u56db",
+            "5" : "\u4e94",
+            "6" : "\u516d"
+        };
+        if(/(y+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        if(/(E+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);
+        }
+        for(var k in o){
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
+    }
 
 
-<!--target(数据查询层级标识) 0:总部  1:城市级别 2:门店-->
+    <!--target(数据查询层级标识) 0:总部  1:城市级别 2:门店-->
 	layer.config({
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
 	});
@@ -558,6 +599,13 @@
             var buttonValue= $(this).val();
             $('#last_data_choice').html(buttonValue);
         });
+        var nowDate = new Date();
+        nowDate.setDate(nowDate.getDate()-1);
+        var mdate = nowDate.format('yyyy/MM/dd');
+        $.setStartTime();
+        $("#searchTime").attr("value",mdate +'-'+ mdate);
+        $("#startOpenCardDate").attr("value",mdate);
+        $("#endOpenCardDate").attr("value",mdate);
         $( "#startOpenCardDate" ).datepicker( "option","minDate","2018/09/01" );
 		if(target==0){//总部
 			if(cityName!=""){
@@ -642,6 +690,7 @@
 	  	$("#showattentioncity").on("mouseout",function(event){
 	  		$("#attentioncity").hide();
 	  	});
+        $('#storeClick').attr('checked',true);
 
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
@@ -1029,6 +1078,7 @@ $('#store_name_try').keyup(function(event){
 	  	if(sdate!=""){
 	  		begin_end_date = sdate.split("-");
 	   	}
+	   	var user_source = $("#user_source").val();
     	$("#process_div").show();
    	 	$("#process_div_pic").show();
  	    var number_str = $("#store_id_userbehavior").val(); 
@@ -1052,7 +1102,8 @@ $('#store_name_try').keyup(function(event){
  	  		  		employeeId:employeeId,
  	  		  		target:target,
  	  		  		storeId:number_str,
- 	  		  		searchstr:"user_active_city"
+ 	  		  		searchstr:"user_active_city",
+              		order_way:user_source
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -1063,7 +1114,8 @@ $('#store_name_try').keyup(function(event){
   		  		employeeId:employeeId,
   		  		target:target,
   		  		storeId:number_str,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+				 order_way:user_source
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -1073,7 +1125,8 @@ $('#store_name_try').keyup(function(event){
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
   		  		target:target,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+                order_way:user_source
   			}
 	    }else if(target==3){//事业部
 	    	dynamicDto = {
@@ -1083,7 +1136,8 @@ $('#store_name_try').keyup(function(event){
 	  		  		employeeNo:employeeId,
 	  		  		storeId:number_str,
 	  		  		target:target,
-	  		  		searchstr:"user_active_city"
+	  		  		searchstr:"user_active_city",
+           			order_way:user_source
 	  			}
 	    }
 	    if($('#storeClick').is(':checked')){
@@ -1332,6 +1386,7 @@ function searchInfo_customer(cur_page){
 	  	if(sdate!=""){
 	  		begin_end_date = sdate.split("-");
 	   	}
+        var user_source = $("#user_source").val();
     	$("#process_div").show();
   	 	$("#process_div_pic").show();
    		
@@ -1356,7 +1411,8 @@ function searchInfo_customer(cur_page){
  	  		  		employeeId:employeeId,
  	  		  		target:target,
  	  		  		storeId:number_str,
- 	  		  		searchstr:"user_active_city"
+ 	  		  		searchstr:"user_active_city",
+              		order_way:user_source
  	  			}
  	   }else if(target==1){//城市
 	    	 dynamicDto = {
@@ -1367,7 +1423,8 @@ function searchInfo_customer(cur_page){
   		  		employeeId:employeeId,
   		  		target:target,
   		  		storeId:number_str,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+                 order_way:user_source
   			}
 	    }else if(target==2){//店长
 	    	dynamicDto = {
@@ -1377,7 +1434,8 @@ function searchInfo_customer(cur_page){
   		  		employeeNo:employeeId,
   		  		storeId:storeId,
   		  		target:target,
-  		  		searchstr:"user_active_city"
+  		  		searchstr:"user_active_city",
+                order_way:user_source
   			}
 	    }
         if($('#storeClick').is(':checked')){
@@ -1552,7 +1610,7 @@ function export_customer(){
     });
 }
  
-/*function resetSerachParam(){
+function resetSerachParam(){
 	 $("#auto_store").empty();
 	if(target==0){//总部
 		if(fromBar != "1" && fromBar != "2"){
@@ -1571,16 +1629,22 @@ function export_customer(){
   	  }else if(target==2){//店长
   		
   	  }
-	var nowDate = new Date();
-	var month = nowDate.getMonth()+1;
-    var date = nowDate.getDate();
-    timeStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/' + (date < 10 ? '0' + date : '' + date);
-    nowDate.setDate(nowDate.getDate()+parseInt(-1));
-    var startDateStr = nowDate.getFullYear() + '/' + (month < 10 ? '0' + month : '' + month) + '/01'; 
-	$("#searchTime").val(startDateStr +"-"+ timeStr);
-	$("#data_choice").html("默认时期");
+    var nowDate = new Date();
+    nowDate.setDate(nowDate.getDate()-1);
+    var mdate = nowDate.format('yyyy/MM/dd');
+    //$.setStartTime();
+    $("#searchTime").val(mdate +"-"+ mdate);
+    $("#startOpenCardDate").val(mdate);
+    $("#endOpenCardDate").val(mdate);
 
-}*/
+	$("#data_choice").html("默认时期");
+    var a = document.getElementById("user_source");
+    $('#storeClick').prop('checked',true);
+    $("#store_name_userbehavior").attr("disabled",false);
+    $("#auto_store").empty();
+    a.options[0].selected = true;
+
+}
 
 function resetSerachParamTry(){
     $("#auto_store_try").empty();
@@ -1619,9 +1683,11 @@ function customer_member(){
 
 function operatedCoverage(){
     if($('#storeClick').is(':checked')){
+
         $("#store_name_userbehavior").attr("disabled",false);
         $("#auto_store").empty();
     }else{
+
         $("#store_name_userbehavior").attr("disabled",true);
         $("#store_id_userbehavior").val("");
         $("#store_name_userbehavior").val("");

@@ -34,7 +34,7 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getOpen_card_time_begin())){
 			sql = sql + "LEFT JOIN df_user_member dum ON dup.customer_id=dum.customer_id ";
 		}
-		sql = sql + "where 1=1 ";
+		sql = sql + "where dup.system_flag='SYS001' ";
 		if(StringUtils.isNotEmpty(userProfile.getCity_name()) || StringUtils.isNotEmpty(userProfile.getStore_no())){
 			sql = sql + " AND dup.customer_id IN (SELECT dus.customer_id FROM df_user_store dus WHERE 1=1 ";
 			if(StringUtils.isNotEmpty(userProfile.getCity_name())){
@@ -146,7 +146,7 @@ public class UserProfileDaoImpl extends BaseDAOHibernate implements UserProfileD
 		if(StringUtils.isNotEmpty(userProfile.getOpen_card_time_begin())){
 			sql = sql + "LEFT JOIN df_user_member dum ON dup.customer_id=dum.customer_id ";
 		}
-		sql = sql + "where 1=1 ";
+		sql = sql + "where dup.system_flag='SYS001' ";
 		if(StringUtils.isNotEmpty(userProfile.getCity_name()) || StringUtils.isNotEmpty(userProfile.getStore_no())){
 			sql = sql + " AND dup.customer_id IN (SELECT dus.customer_id FROM df_user_store dus WHERE 1=1 ";
 			if(StringUtils.isNotEmpty(userProfile.getCity_name())){

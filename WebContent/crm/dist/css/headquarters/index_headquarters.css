@@ -94,6 +94,7 @@
     .info_bottom p{border-bottom: 1px solid #ffc203; margin: 0; font-size: 14px; font-weight: bold;}
 
     .gaugetb1{color: #efefef;}
+    .gaugetb5{color: #00ffe6}
     .gaugetb1 p{font-size: 26px; font-weight: bold;}
     .gaugetb1 .col-sm-4:nth-child(1){color: #ff002f;}
     .gaugetb1 .col-sm-4:nth-child(2){color: #ff6600;}

@@ -279,5 +279,16 @@ public interface MongoDBManager extends IManager{
 	 */
 	public Map<String,Object> updateTinyAreaBelong(String storeNo,String townIds,String belong);
 
+	/**
+	 * @Description 更新小区坐标归属门店
+	 * @author gbl
+	 * @date 2018/10/24 15:59
+	 **/
+
+	public Map<String,Object> updateTinyAreaOfStore(String storeNo,String tinyVillageCodes);
+
+	public Map<String,Object> getAreaByStore(Long storeId);
+
+
 
 }

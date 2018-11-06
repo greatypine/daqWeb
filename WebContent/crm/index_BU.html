@@ -73,6 +73,13 @@
     /*逗号*/
     .douhao{ display: inline-block;width: 16px; height: 21px; background: url("dist/img/douhao.png") no-repeat;margin-left: 12px;}
 
+
+	#more_careerDiv select{ height: 30px;
+            margin: 10px 10px 10px 20px;
+            width: 210px;
+            border-radius: 6px;
+        }
+        
   </style>
 </head>
 
@@ -92,95 +99,185 @@
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
         <!-- Sidebar toggle button-->
-        <div class="container">
-            <div class="logo_img pull-left"><img src="dist/img/logo.png" height="30"><img src="dist/img/title.png" height="20"></div>
-            <div class="pull-left">
-                <div class="logo-lg">
-                    <ul class="no-margin">
+        <div>
+            <div class="logo_img pull-left" onclick="clearCache();" id="clearCache"><img src="dist/img/logo1.png" height="30"><img src="dist/img/title.png" height="20"></div>
+             <div class="pull-left">
+		          <div class="logo-lg">
+		            <ul class="no-margin">
                         <li class="current">
-                            <em>数据运营</em>
+                            <em>数据运营<i class="glyphicon glyphicon-triangle-bottom"></i>
+                                <img alt="" src="dist/img/new_1.gif" style="position:absolute;right:-10px; top:5px; width:25px; height:19px;">
+                            </em>
+                            
+                            
+                            
                             <div class="TDsec-nav">
                                 <div class="secNav-box">
-                                    <!-- <dl class="col-sm-3">
-                                        <dt><i></i>运营数据</dt>
-                                        <dd><a href="#"><span class="fa fa-money"></span>营业额统计</a></dd>
-                                        <dd><a href="#"><span class="fa fa-user-plus"></span>用户运营</a></dd>
-                                        <dd><a href="#"><span class="fa fa-cubes"></span>产品运营</a></dd>
-                                        <dd><a href="#"><span class="fa fa-institution"></span>门店运营</a></dd>
-                                        <dd><a href="#"><span class="fa fa-comments-o"></span>混片情况</a></dd>
-                                    </dl> -->
-                                     <dl class="col-sm-3">
-                                        <dt><i></i>绩效数据</dt>
-                                        <dd><a href="javascript:goToDeptGMV()"><span class="fa fa-book"></span>事业群GMV</a></dd>
-                                        <dd><a href="javascript:goToDeptConsumer()"><span class="fa fa-female"></span>事业群用户</a></dd>
-                                    </dl> 
-                                    <dl class="col-sm-3">
-                                        <dt><i></i>档案数据</dt>
-                                        <dd><a href="javascript:searchData()"><span class="fa fa-file-o"></span>订单档案</a></dd>
-                                        <!-- <dd><a href="javascript:searchEmployeeData()"><span class="fa fa-newspaper-o"></span>员工档案</a></dd>
-                                        <dd><a href="javascript:searchArea()"><span class="fa fa-copy"></span>片区档案</a></dd>
-                                        <dd><a href="#"><span class="fa fa-clipboard"></span>小区档案</a></dd> -->
+                                    <dl class="pull-left">
+                                        <dt style="text-align:center"><i></i>档案数据</dt>
+                                        <dd class="col-sm-6"><a href="javascript:searchData()"><span class="fa fa-file-o"></span>订单档案</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:searchEmployeeData()"><span class="fa fa-newspaper-o"></span>员工档案</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToUserProfileStat()"><span class="fa fa-user"></span>用户档案 </a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:searchArea()"><span class="fa fa-copy"></span>片区档案</a></dd>
+                                        <dd class="col-sm-6" style="position:relative"><a href="javascript:goToMemberDataStat()"><span class="fa fa-vimeo"></span>社员档案 </a>
+                                            <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
+                                        <dd class="col-sm-6"><a href="javascript:searchTinyvillageData()"><span class="fa fa-clipboard"></span>小区档案</a></dd>
+                                        <dd class="col-sm-6" style="position:relative"><a href="javascript:goToDataFiles()"><span class="fa fa-server"></span>行为数据档案 </a>
+                                            <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>
+                                        <dd class="col-sm-6"><a href="javascript:searchStoreData()"><span class="fa fa-book"></span>门店信息档案</a></dd>
+                                        <dd class="col-sm-6" style="position:relative"><a href="javascript:searchItemData()"><span class="fa fa-cart-plus"></span>商品销售档案</a>
+                                            <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>
+
                                     </dl>
-                                    <!-- <dl class="col-sm-3">
+                                    <dl class="pull-left">
+                                        <dt style="text-align:center"><i></i>绩效数据</dt>
+                                        <!-- <dd class="col-sm-6"><a href="javascript:goToStoretrade()"><span class="fa fa-line-chart"></span>门店GMV</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToNewaddcus()"><span class="fa fa-area-chart"></span>门店用户</a></dd> -->
+                                        <!--<dd class="col-sm-4" style="position:relative"><a href="javascript:goToStoreprofit()"><span class="fa fa-dollar"></span>门店毛利</a>-->
+                                            <!--<img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>-->
+                                        <!-- <dd class="col-sm-6"><a href="javascript:goToAreaGMVToSend()"><span class="fa fa-pie-chart"></span>国安侠GMV</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToNewAddCustomerGMVToSend()"><span class="fa fa-bar-chart"></span>国安侠用户</a></dd> -->
+                                        <!--<dd class="col-sm-4 logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-eur"></span>国安侠毛利</a></dd>-->
+                                        <dd class="col-sm-6"><a href="javascript:goToDeptGMV()"><span class="fa fa-book"></span>事业群GMV</a></dd>
+                                        <dd class="col-sm-6"><a href="javascript:goToDeptConsumer()"><span class="fa fa-female"></span>事业群用户</a></dd>
+                                        <!--<dd class="col-sm-4" style="position:relative"><a href="javascript:goToDeptprofit();"><span class="fa fa-gbp"></span>事业群毛利</a>-->
+                                            <!--<img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>-->
+                                        <!-- <dd class="col-sm-6"><a href="javascript:goToSendOrders()"><span class="fa fa-calendar-check-o"></span>国安侠送单量</a></dd> -->
+                                        <!--<dd class="col-sm-6"><a href="javascript:goToRewardtimes()"><span class="fa fa-thumbs-o-up"></span>国安侠好评次数</a></dd>-->
+                                        <!-- <dd class="col-sm-6"><a href="javascript:goToMemberInvitation()"><span class="fa fa-credit-card"></span>社员邀请统计</a> -->
+                                            <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
+                                        <dd class="col-sm-6" id="221_gmv" style="display: none"><a href="javascript:goTo221GMV()"><span class="fa fa-cny"></span>221GMV</a>
+                                            <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
+                                        <!--<dd class="col-sm-4" style="position:relative"><a href="javascript:goToCityprofit();"><span class="fa fa-rmb"></span>城市毛利</a>-->
+                                            <!--<img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>-->
+                                    </dl>
+                                    <dl class="pull-left">
+                                        <dt><i></i>运营数据</dt>
+                                        <dd><a href="javascript:goToTurnoverStat()"><span class="fa fa-money"></span>营业额统计</a></dd>
+                                        <dd><a href="javascript:goToUserOperationStat()"><span class="fa fa-user-plus"></span>用户运营</a></dd>
+                                        <dd><a href="javascript:goToUserMember()"><span class="fa fa-rocket"></span>合作社社员统计</a>
+                                        </dd>
+                                        <dd id="city_net"><a href="javascript:goToCityNet()"><span class="fa fa-institution"></span>线下网络体系</a></dd>
+                                        <dd id="store_rent"><a href="javascript:goToStoreRent()"><span class="fa fa-bicycle"></span>门店租赁统计</a></dd>
+                                        <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-cubes"></span>产品运营</a></dd>
+                                        <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-comments-o"></span>混片情况</a></dd>
+                                    </dl>
+                                    <dl class="pull-left">
                                         <dt><i></i>排名数据</dt>
-                                        <dd><a href="javascript:searchRank(1)"><span class="fa fa-signal"></span>城市排名(本月GMV)</a></dd>
-                                        <dd><a href="javascript:searchRank(2)"><span class="fa fa-home"></span>门店排名(本月GMV)</a></dd>
-                                        <dd><a href="javascript:searchRank(3)"><span class="fa fa-sort-amount-asc"></span>门店排名(本月订单量)</a></dd>
-                                        <dd><a href="javascript:searchRank(4)"><span class="fa fa-male"></span>国安侠排名(本月GMV)</a></dd>
-                                        <dd><a href="javascript:searchRank(5)"><span class="fa fa-cart-plus"></span>商品排名(本月销量)</a></dd>
-                                        <dd><a href="javascript:searchRank(6)"><span class="fa fa-object-ungroup"></span>事业群排名(本月GMV)</a></dd>
-                                        <dd><a href="javascript:searchRank(7)"><span class="fa fa-gears"></span>频道排名(本月GMV)</a></dd>
-                                        <dd><a href="javascript:searchRank(8)"><span class="fa fa-gear"></span>频道排名(本月订单量)</a></dd>
+                                        <dd><a href="javascript:searchRank(1)"><span class="fa fa-signal"></span>城市排名</a></dd>
+                                        <dd><a href="javascript:searchRank(2)"><span class="fa fa-home"></span>门店排名</a></dd>
+                                        <dd><a href="javascript:searchRank(4)"><span class="fa fa-male"></span>国安侠排名</a></dd>
+                                        <dd><a href="javascript:searchRank(5)"><span class="fa fa-cart-plus"></span>商品排名</a></dd>
+                                        <dd><a href="javascript:searchRank(6)"><span class="fa fa-object-ungroup"></span>事业群排名</a></dd>
+                                        <dd><a href="javascript:searchRank(7)"><span class="fa fa-gears"></span>频道排名</a></dd>
+                                    </dl>
+                                   <!--  <dl class="pull-left" style="display: block" ID="jssj">
+                                        <dt><i></i>结算数据</dt>
+                                        <dd style="position:relative;" id="report_syq"><a href="javascript:goToFileDownload()"><span class="fa fa-bar-chart"></span>结算数据</a>
+                                            <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
+                                        <dd><a href="javascript:;"><span class="fa fa-home"></span>运营结算数据</a></dd>
                                     </dl> -->
                                 </div>
                             </div>
+                            
+                            
                         </li>
                         <li>
-                            <em>数据模型</em>
+                            <em>数据模型 </dd>
+                            <i class="glyphicon glyphicon-triangle-bottom"></i><img alt="" src="dist/img/new_1.gif" style="position:absolute;right:-10px; top:5px; width:25px; height:19px;">
+                            </em>
                             <div class="TDsec-nav">
                                 <div class="secNav-box">
-                                   <!--  <dl class="col-sm-4">
+                                	<dl class="col-sm-3">
+                                        <dt><i></i>产品模型</dt>
+                                        <dd id="member_analysis"><a href="javascript:goToMemberAnalysis()"><span class="fa fa-puzzle-piece"></span>安心合作社</a></dd>
+                                        <dd style="position:relative;" id="youyi_info"><a href="javascript:goToYouyiInfo()"><span class="fa fa-bar-chart"></span>国安优易产品</a>
+                                            <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
+                                    </dl>
+                                    <dl class="col-sm-3">
                                         <dt><i></i>社区模型</dt>
                                         <dd><a href="javascript:toToBaseDataModule()"><span class="fa fa-sitemap"></span>基础数据模型</a></dd>
-                                    </dl> -->
-                                    <dl class="col-sm-4">
+                                    </dl>
+                                    <dl class="col-sm-3">
                                         <dt><i></i>订单模型</dt>
                                         <!-- <dd><a href="javascript:goToPublicOrder()"><span class="fa fa-server"></span>公海订单</a></dd> -->
                                         <dd><a href="javascript:goToAbnormalOrder()"><span class="fa fa-warning "></span>异常订单</a></dd>
                                     </dl>
-                                   <!--  <dl class="col-sm-4">
+                                    <dl class="col-sm-3" id="user_model">
                                         <dt><i></i>用户模型</dt>
-                                        <dd><a href="#"><span class="fa fa-street-view"></span>用户画像</a></dd>
-                                    </dl> -->
+                                        <dd style="position:relative"><a href="javascript:goToUserAnalysis()"><span class="fa fa-user"></span>用户简报</a>
+                                            <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>
+                                        <dd style="position:relative"><a href="javascript:goToMemberInfo()"><span class="fa fa-group"></span>社员简报</a>
+                                            <img alt="" src="dist/img/beta.png" style="position:absolute; top:5px; width:40px; height:19px;"></dd>
+                                        <!--<dd><a href="javascript:goTosjfxIndex()"><span class="fa fa-street-view"></span>用户画像</a></dd>-->
+                                    </dl>
                                 </div>
                             </div>
+                            
+                            
+                            
                         </li>
-                        <!-- <li>
-                            <em>数据地图</em>
+                        
+                        <li>
+                        	<em>数据地图<i class="glyphicon glyphicon-triangle-bottom"></i></em>
                             <div class="TDsec-nav">
                                 <div class="secNav-box">
-                                    <dl class="col-sm-4">
-                                        <dt><i></i>热力图</dt>
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>经典热力图</dt>
                                         <dd><a href="javascript:gotogmvheat()"><span class="fa fa-money"></span>营业额热力图</a></dd>
-                                        <dd><a href="javascript:gotoorderheat()"><span class="fa fa-cny"></span>订单热力图</a></dd>
-                                        <dd><a href="javascript:gotocustomerheat()"><span class="fa fa-user-secret"></span>用户人力图</a></dd>
+                                        <dd><a href="javascript:gotoorderheat()"><span class="fa fa-area-chart"></span>订单热力图</a></dd>
+                                        <dd><a href="javascript:gotocustomerheat()"><span class="fa fa-user-secret"></span>用户热力图</a></dd>
                                     </dl>
-                                    <dl class="col-sm-4">
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>小区热力图</dt>
+                                        <dd><a href="javascript:gotogmvheatxq()"><span class="fa fa-calculator"></span>营业额热力图</a></dd>
+                                        <dd><a href="javascript:gotoorderheatxq()"><span class="fa fa-bar-chart"></span>订单热力图</a></dd>
+                                        <dd><a href="javascript:gotocustomerheatxq()"><span class="fa fa-child"></span>用户热力图</a></dd>
+                                    </dl>
+                                    
+                                    <dl class="col-sm-3">
                                         <dt><i></i>覆盖范围</dt>
                                         <dd><a href="javascript:goToMapView()"><span class="fa fa-object-group"></span>门店覆盖范围</a></dd>
                                         <dd><a href="javascript:goToTinyArea()"><span class="fa fa-map-o"></span>片区分布图</a></dd>
                                     </dl>
-                                    <dl class="col-sm-4">
+                                    <dl class="col-sm-3">
                                         <dt><i></i>动态图</dt>
                                         <dd><a href="javascript:gotoemployeefb()"><span class="fa fa-group"></span>国安侠分布图</a></dd>
                                     </dl>
                                 </div>
                             </div>
-                        </li> -->
+                            
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <em>数据分析<i class="glyphicon glyphicon-triangle-bottom"></i>
+                            	<img alt="" src="dist/img/new_1.gif" style="position:absolute;right:-10px; top:5px; width:25px; height:19px;">
+                            </em>
+                            <div class="TDsec-nav">
+                                <div class="secNav-box">
+                                    <dl class="col-sm-3">
+                                        <dt><i></i>分析图</dt>
+                                        <dd><a href="javascript:gotok()"><span class="fa fa-line-chart"></span>营业额分析</a></dd>
+                                         <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-bar-chart"></span>用户分析</a></dd>
+                                        <!--<dd><a href="javascript:gotobehavior()"><span class="fa fa-child"></span>用户行为分析</a></dd>-->
+
+                                        <!-- <dd><a href="javascript:goto_user_k()"><span class="fa fa-bar-chart"></span>用户分析</a></dd> -->
+                                    </dl>
+                                    <!-- <dl class="col-sm-3">
+                                        <dt><i></i>专题分析</dt>
+                                        <dd style="position:relative;"><a href="javascript:goto221()"><span class="fa fa-life-buoy"></span>221运营分析</a></dd>
+                                        <dd style="position:relative;"><a href="javascript:gotogax_work()"><span class="fa fa-male"></span>国安侠工作量分析</a>
+                                            <img alt="" src="dist/img/new_1.gif" style="position:absolute; top:5px; width:25px; height:19px;"></dd>
+                                    </dl> -->
+                                </div>
+                            </div>
+                        </li>
+                        
+                        
 
                     </ul>
-
-
                 </div>
             </div>
             <div class="navbar-custom-menu">
@@ -232,71 +329,6 @@
 </header>
 
 
-
-  <!-- <header class="main-header">
-    <nav class="navbar navbar-static-top">
-      <div class="container">
-        <div class="pull-left">
-          <div class="logo-lg clearfix">
-            <ul class="sidebar-menu">
-              <li><a href="javascript:location.reload();" class="h2"> <img src="dist/img/logo1.png"> <img src="dist/img/title.png"></a></li>
-              <li class="nav-mark"><a href="#">事业部首页</a> </li>
-              <li><a href="#">数据模型</a><i class="fa fa-angle-down"></i>
-                <ul class="nav_dropdown" style="min-width: 130px;">
-                  <li><a href="#">订单模型</a>
-                    <ul class="nav_dropm">
-                      <li><a href="javascript:goToAbnormalOrder()">异常订单</a> </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li><a href="">数据档案<i class="fa fa-angle-down"></i></a>
-                <ul class="nav_dropdown" style="min-width: 120px;">
-                   <li><a href="javascript:searchData()">订单档案</a> </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="navbar-custom-menu">
-          <ul class="nav navbar-nav">
- <li ><a href="../crm/loginplatform.html">数据平台首页</a> </li>
-            <li class="dropdown user user-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="dist/img/376884043677306248.png" class="user-image" alt="User Image">
-                <span class="hidden-xs">载入中...</span>
-              </a>
-              <ul class="dropdown-menu">
-                User image
-                <li class="user-header">
-                  <img src="dist/img/376884043677306248.png" class="img-circle" alt="User Image">
-                  <p><strong ><span id="card_name">载入中...</span></strong></p>
-                  <p><span id="card_no">载入中...</span></p>
-                </li>
-                <li class="user-body">
-                </li>
-                <li class="user-footer">
-                  <div class="pull-left">
-                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">国安数据首页</a>
-                  </div>
-                  <div class="pull-right">
-                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
-                  </div>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header> -->
-  
-  
-  
-  
-  
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Main content -->
@@ -304,7 +336,7 @@
       <!--城市门店信息-->
       <div class="info_head with-border" style="width: 20%;float: left;">
         <div class="box no-border">
-          <div class="box-header h4"><strong><h2 class="col-lg-13 text-yellow">加载中...</h2></strong></div>
+          <div class="box-header h4"><strong id="career_top"><h2 class="col-lg-13 text-yellow">加载中...</h2></strong></div>
           <div class="box-body no-padding" id="mdxx">
             <dl class="dl-horizontal">
                 <dt>城市</dt>
@@ -557,11 +589,17 @@ myChart2.setOption(option2);
  $(function(){
 	 if(urldeptname!=null&&urldeptname.length>0){
 		 //取得一个总部的zbcuruser 
+		 initcurrcareer();
 		 iszb=true;
 		 initcurruser();
 	 }else{
-		 iszb = false;
+		 //取得当前登录人的事业群 放入urldeptname 
+		 initcurrcareer();
 		 initcurruser();
+		 iszb = false;
+		 
+		 
+		 
 	 }
 	  
 	  startclock();
@@ -569,6 +607,32 @@ myChart2.setOption(option2);
 	  $("#process_div_pic").hide();
 	  
  });
+  
+//阻止右上角弹窗关闭冒泡到父窗口
+ function siwtchCareer(evt){
+     evt = evt ? evt : (window.event ? window.event :null);
+     evt.stopPropagation();
+ }
+//切换事业群
+ function updatecareergroup(selectobj){
+     var careername=$(selectobj).find("option:selected").text()
+     var depName = encode64(careername);
+     window.parent.location=getRootPath() + "/crm/index_BU.html?depname="+depName;
+     
+     /* STORE_ID = store_id;
+     //更改店长用户的 store_id
+     var url = "../dispatcher.action";
+     var data = new PMSRequestObject("userManager", "updateUserStoreId",[store_id,EMPLOYEE_NO]);
+     $$.ajax(url, "requestString=" + data.toJsonString(), function(datas,
+                                                                   textStatus, XMLHttpRequest) {
+         if (datas.result) {
+             refreshView();
+         }else{
+             $$.showMessage("系统信息", "切换失败!");
+         }
+     }); */
+ }
+  
   
   
  var curr_user;
@@ -578,7 +642,6 @@ myChart2.setOption(option2);
 		doManager("UserManager", "getCurrentUserDTO",null,
    				function(data, textStatus, XMLHttpRequest) {
    					if (data.result) {
-   						
    						 curr_user = JSON.parse(data.data);
    						 queryBasicInfo(curr_user);
    						 $("#employee_no").html(curr_user.employeeId);
@@ -588,6 +651,86 @@ myChart2.setOption(option2);
    					}
    	},false);
  	}
+ 
+ var careercode = "";
+ var currcareercode="";
+ function initcurrcareer(){
+		//取得当前登录人的事业群 
+		doManager("UserManager", "getCurrentUserCareer",null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var currcareers = JSON.parse(data.data);
+						
+						///处理select  
+						$("#more_careerDiv").empty();
+                        var careerHtml='<select id="allCareer" onclick="siwtchCareer(event)" onchange="updatecareergroup(this)" style="color:#101010" ></select>';
+                        $("#more_careerDiv").append(careerHtml);
+                        
+                        
+						$(currcareers).each(function(i,obj){
+							if(urldeptname==null||urldeptname==""){
+								if(i==0){
+									urldeptname=obj.careername;
+									currcareercode=obj.careercode;
+								}
+							}
+							deptname=obj.careername;
+							careercode=obj.careercode;
+							var option="";
+							if(urldeptname!=null&&urldeptname.length>0&&deptname==urldeptname){
+								option = '<option value="'+careercode+'" selected>'+deptname+'</option>';
+							}else{
+								option = '<option value="'+careercode+'">'+deptname+'</option>';
+							}
+                            $("#allCareer").append(option);
+							
+							
+						});
+                        
+                        if(currcareers!=null&&currcareers.length>1){
+                        	var career_more = "<span style='font-size:12px'>&nbsp;&nbsp;<span   style='color:#3c8dbc;cursor:pointer' onclick='showMoreCareer()'>切换</span></span>"
+        						$("#career_top").append(career_more);
+                        }
+						
+					}
+	},false);
+	}
+ 
+ 
+ 
+ 
+//切换事业群
+ function showMoreCareer(){
+     layer.open({
+         type: 1,
+         title:  ['更多事业群', 'color:#fff'],
+         shadeClose: true,
+         shade:[0.1, '#393D49'],
+         moveOut:false,
+         closeBtn:1,
+         skin: 'layer-ext-crmskin',
+         area: ['250px','100px'],
+         offset: ['200px','600px'],
+         content:$("#more_careerDiv"),
+         success:function(layer,index){
+             $("#layui-layer-iframe1").attr("style","width:50px");
+           
+         },
+         cancel: function(index, layero){
+             layer.close(index);
+         }
+     });
+     
+     
+     
+   //取得当前的事业群 复制到 select  
+  	//var currcareer = $(".text-yellow").html();
+  	//$("#allCareer option[text='"+currcareer+"']").attr("selected", true);
+  	
+    //.....................
+ }
+ 
+ 
  
  
  var career_group_list = null;
@@ -601,7 +744,6 @@ myChart2.setOption(option2);
  					if (data.result) {
  						var htlist = JSON.parse(data.data);
  						for(i=0;i<htlist.length;i++){
- 							//urldeptname 
  							var careergroup = htlist[i].career_group;
  							var curgroupcode = htlist[i].groupcode;
  							if(urldeptname.indexOf(careergroup)>-1){
@@ -613,16 +755,13 @@ myChart2.setOption(option2);
  					}
 		 },false);
 	 }else{
-		 groupcode = curr_user.usergroup.code;
+		 groupcode = currcareercode;
 	 }
-	  
-
 		doManager("DataHumanTypeManager", "queryDataHumanTypeByGroupCode",[groupcode],
  				function(data, textStatus, XMLHttpRequest) {
  					if (data.result) {
  						
  						 var careergroup = JSON.parse(data.data);
- 						 
  						career_group = careergroup.career_group;
  						 
  						queryHumanresourcesByCareerName(career_group);
@@ -631,6 +770,7 @@ myChart2.setOption(option2);
  						
  						queryOrderAmountByChannel(career_group);
  						$(".text-yellow").html(career_group);
+ 						
  					}
  	},false);
  }
@@ -1119,6 +1259,462 @@ function searchEmployee(){
 	   $("#employee_detail_title").nextAll().show();
   }
 
+  ///////////////跳转开始/权限暂为总部///////////////
+  
+   //用户档案
+  function goToUserProfileStat(){
+	  var role = curr_user.usergroup.code;
+	  var url = "";
+	  var target=0;
+	  if(target==0){
+	  	url = "userProfile_view.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+	  }else if(target==1){
+	  	url = "userProfile_view.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+	  }
+	  window.open(url,"userProfile_view"); 
+   }
+  //社员档案
+  function goToMemberDataStat(){
+      var role = curr_user.usergroup.code;
+      var url = "";
+      var target=0;
+      if(target==0){
+          url = "memberData_list.html?t="+encode64('0')+"&so=&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+      }else if(target==1){
+          url = "memberData_list.html?t="+encode64(1)+"&so=&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+      }
+      window.open(url,"memberData_list");
+  }
+  //行为数据档案 
+  function goToDataFiles(){
+      var role = curr_user.usergroup.code;
+      var url = "";
+      var target=0;
+      if(target==0){
+          url = "data_files.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id);
+      }else if(target==1){
+          url = "data_files.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+      }
+      window.open(url,"user_member_view");
+  }
+  //商品销售档案
+  function searchItemData(){
+	  try{
+		  saveAccessModuleLog("数据动态系统","商品销售档案",returnCitySN,0,"");
+	  }catch(error){}
+	  var role = curr_user.usergroup.code;
+	  var url = "";
+	  var target=0;
+	  if(target==0){
+	  	url = "searchDataItem_view.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+	  }else if(target==1){
+	  	url = "searchDataItem_view.html?t="+encode64(1)+"&e="+encode64(curr_user.id)+"&cn="+encode64(pageStatusInfo.cityName);
+	  }
+	  window.open(url,"searchDataItem_view");
+  }
+  //数据查找-员工数据
+  function searchEmployeeData(){
+	  try{
+		  saveAccessModuleLog("数据动态系统","员工档案",returnCitySN,0,"");
+	  }catch(error){}
+	  var role = curr_user.usergroup.code;
+	  //总部与城市的区分
+	  var target=0;
+	  var url = "humanresources_list.html?t="+encode64(target)+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+	  window.open(url,"humanresources_list");
+  }
+  //数据查找-片区数据
+  function searchArea(){
+  	  var url = "dynamicData_areaInfo.html";
+	  window.open(url,"_blank");
+  }
+  
+  //数据查找-小区数据
+  function searchTinyvillageData(){
+  	  var url = "";
+	  var target=0;
+	  if(target==0){
+	  	url = "dynamicData_tinyvillage.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id);
+	  }else if(target==1){
+	  	url = "dynamicData_tinyvillage.html?t="+encode64(target)+"&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);
+	  }
+	  window.open(url,"dynamicData_tinyvillage");
+  }
+  //数据查找-小区数据
+  function searchStoreData(){
+  	  var url = "";
+	  var target=0;
+	  if(target==0){
+	  	url = "dynamicData_storeInfo.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id);
+	  }else if(target==1){
+	  	url = "dynamicData_storeInfo.html?t="+encode64(target)+"&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);
+	  }
+	  window.open(url);
+  }
+  //交易额 （按门店） 
+  function goToStoretrade(){
+	  var role = curr_user.usergroup.code;
+	  var url = "";
+	  var target=0;
+	  if(target==0){
+	  	url = "dynamicData_storetrade_analysis.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+	  }else if(target==1){
+	  	url = "dynamicData_storetrade_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+	  }
+	  window.open(url,"_blank");
+  }
+  //交易额 （按片区） 
+  function goToAreaGMVToSend() {
+	      var role = curr_user.usergroup.code;
+	      var url = "";
+		  var target=0;
+		  if(target==0){
+		  	url = "dynamicData_area_GMV.html?t="+encode64('0')+"&s=&cn=&r="+encode64(role)+"&c=&e="+encode64(curr_user.id)+"&#fg";
+		  }else if(target==1){
+		  	url = url = "dynamicData_area_GMV.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+		  }
+	      window.open(url,"_blank");
+  }
+  //国安侠 送单量 
+    function goToSendOrders() {
+      var role = curr_user.usergroup.code;
+      var url = "";
+	  var target=0;
+	  if(target==0){
+	  	url = "dynamicData_employee_sendOrders.html?t="+encode64('0')+"&s=&cn=&r="+encode64(role)+"&c=&e="+encode64(curr_user.id)+"&#fg";
+	  }else if(target==1){
+	  	url = url = "dynamicData_employee_sendOrders.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+	  }
+      window.open(url,"_blank");
+	}
+  
+  
+    //付费用户(按门店)
+    function goToNewaddcus(){
+    	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "dynamicData_newaddcus_analysis.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id)+"&#ff";
+  	  }else if(target==1){
+  	  	url = "dynamicData_newaddcus_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
+  	  }
+  	  window.open(url,"_blank");
+    }
+    /**
+  	   * 片区内拉新GMV
+     */
+    function goToNewAddCustomerGMVToSend() {
+  	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "dynamicData_newAddCustomer_GMV.html?t="+encode64('0')+"&s=&c=&cn&e="+encode64(curr_user.id)+"&#ff";
+  	  }else if(target==1){
+  	  	url = "dynamicData_newAddCustomer_GMV.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
+  	  }
+  	  window.open(url,"_blank");
+    }
+    
+  //社员邀请统计
+    function goToMemberInvitation(){
+    	  var role = curr_user.usergroup.code;
+          var url = "";
+    	  var target=0;
+    	  if(target==0){
+    	  	url = "dynamicData_member_invitation.html?t="+encode64('0')+"&s=&cn=&r="+encode64(role)+"&c=&e="+encode64(curr_user.id);
+    	  }else if(target==1){ 
+    	  	url  = "dynamicData_member_invitation.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id);
+    	  }
+          window.open(url,"_blank");
+    }
+  
+    //营业额统计
+    function goToTurnoverStat(){
+  	  var role = curr_user.usergroup.code;
+  	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "turnoverStat_view.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+  	  }else if(target==1){
+  	  	url = "turnoverStat_view.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+  	  }
+  	  window.open(url,"turnoverStat_view"); 
+    }
+    
+  //用户运营
+    function goToUserOperationStat(){
+  	  var role = curr_user.usergroup.code;
+  	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "userOperationStat_view.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+  	  }else if(target==1){
+  	  	url = "userOperationStat_view.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+  	  }
+  	  window.open(url,"userOperationStat_view"); 
+    }
+  
+  //合作社社员统计
+    function goToUserMember(){ 
+  	  var role = curr_user.usergroup.code;
+  	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "user_member_view.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id);
+  	  }else if(target==1){
+  	  	url = "user_member_view.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+  	  }
+  	  window.open(url,"user_member_view");
+    }
+  
+  //线下网络运营
+    function goToCityNet(){
+    	  var role = curr_user.usergroup.code;
+    	  var url = "";
+    	  var target=0;
+    	  if(target==0){
+    	  	url = "index_city_net.html";
+    	  }else if(target==1){
+    	    url = "index_city_net.html";
+        }
+    	  window.open(url,"index_city_net"); 
+    }
+    //门店租赁统计
+    function goToStoreRent(){
+        var role = curr_user.usergroup.code;
+        var url = "";
+        var target=et=0;
+        if(target==0){
+            url = "store_rent_info.html";
+        }
+        window.open(url,"store_rent_info");
+    }
+  //XX排名 总部
+    function searchRank(str){
+  		var targets = encode64(0);
+  		var targets_ = 0;
+  		var provinceName = encode64('');
+  		var provinceId = encode64('');
+  		var cityId = "";
+  		var cityName= "";
+  		if(targets_==0){
+  			cityId=encode64('');
+  			cityName=encode64('');
+  		}else if(targets_==1){
+  			cityId=encode64(pageStatusInfo.cityId);
+  		    cityName=encode64(pageStatusInfo.cityName);
+
+  		}
+  	    var type= "";
+  	    var url = "";
+  	  	if(str==1){
+  	  		type=encode64("city_gmv");
+  	  		url = "headquarters_rank.html?"+"p="+provinceId+"&cs="+cityId+"&tps="+type+"&fs="+targets+"&cn="+cityName;
+  	  	}else if(str==2){
+  	  		type=encode64("store_gmv");
+  	  		url = "headquarters_rank.html?"+"p="+provinceId+"&cs="+cityId+"&tps="+type+"&fs="+targets+"&cn="+cityName;
+  	  	}else if(str==4){
+  	  		type=encode64("guoanxia_gmv");
+  	  		url = "headquarters_rank.html?"+"p="+provinceId+"&cs="+cityId+"&tps="+type+"&cn="+cityName+"&fs="+targets;
+  	  	}else if(str==5){
+  	  		type=encode64("commodity_gmv");
+  	        url = "headquarters_rank.html?p="+provinceId+"&pn="+provinceName+"&cs="+cityId+"&cn="+cityName+"&tps="+type+"&fs="+targets;
+  	  	}else if(str==6){
+  	  		type=encode64("businessDep_gmv");
+  	  		url = "headquarters_rank.html?"+"p="+provinceId+"&cs="+cityId+"&tps="+type+"&fs="+targets+"&cn="+cityName;
+  	  	}else if(str==7){
+  	  		type=encode64("channel_gmv");
+  	  		url = "headquarters_rank.html?"+"p="+provinceId+"&cs="+cityId+"&tps="+type+"&fs="+targets+"&cn="+cityName;
+  	  	}
+  	    window.open(url);
+  	  }
+  
+  	//数据模型-社区模型-基础数据模型  //全国
+    function goToMemberAnalysis(){
+  	  var role = curr_user.usergroup.code;
+  	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "member_analysis.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+  	  }else if(target==1){
+  		  url = "member_analysis_city.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+  	  }
+  	  window.open(url,"member_analysis");  
+    }
+  
+  	//数据模型-优易模型-基础数据模型  //全国
+    function goToYouyiInfo(){
+        var role = curr_user.usergroup.code;
+        var url = "";
+        var target=0;
+        if(target==0){
+            url = "youyi_product.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+        }else if(target==1){
+            url = "youyi_product.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+        }
+        window.open(url,"youyi_product");
+    }
+  	
+    //数据模型-社区模型-基础数据模型  //全国
+    function toToBaseDataModule(){
+    	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "../aboutMap/china_city_dataview.html";
+  	  }else if(target==1){
+  	  	var citystr = "city";
+  	  	url="../aboutMap/china_city_dataview.html?c="+encode64(pageStatusInfo.cityId)+"&iscity="+encode64(citystr)+"&cn="+encode64(pageStatusInfo.cityName);
+  	  }
+  	  window.open(url,"iframe");  
+    }
+    
+    //跳转公海 订单界面 
+    function goToPublicOrder(){
+  	  //t:职务 s:门店ID c:城市ID
+  	  var role = curr_user.usergroup.code;
+  	  //总部与城市的区分
+  	  var target=0;
+  	  if(target==1){
+  		  //如果是城市
+  		  var cityName=((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
+  	  	  var cityId=(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
+  	  	  var url = "public_order.html?t="+encode64("1")+"&s=&sn=&c="+ encode64(cityId)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn="+encode64(cityName);
+  		  window.open(url,"public_order"); 
+  	  }else{
+  		  var url = "public_order.html?t="+encode64("0")+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+  		  window.open(url,"public_order"); 
+  	  }
+    }
+    
+  	//用户总览
+    function goToUserAnalysis(){
+        var url = "user_analysis.html";
+        window.open(url,"user_analysis");
+    }
+  	
+    //社员简报  //全国
+    function goToMemberInfo(){
+        var role = curr_user.usergroup.code;
+        var url = "";
+        var target=0;
+        if(target==0){
+            url = "member_info.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+        }else if(target==1){
+            url = "member_info.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+        }
+        window.open(url,"member_info");
+    }
+    
+    //数据地图-热力图-营业额热力图
+    function gotogmvheat(){
+  	  var url = "../aboutMap/data_index.html?t=1&nav=heat&type=yye&s=&c=&cn=&e=";
+  	  window.open(url,"data_index");  
+    }
+  
+    //数据地图-热力图-订单热力图
+    function gotoorderheat(){
+  	  var url = "../aboutMap/data_index.html?t=1&nav=heat&type=ddl&s=&c=&cn=&e=";
+  	  window.open(url,"data_index");  
+    }
+    
+  	//数据地图-热力图-用户热力图
+    function gotocustomerheat(){
+  	  var url = "../aboutMap/data_index.html?t=1&nav=heat&type=yhl&s=&c=&cn=&e=";
+  	  window.open(url,"data_index");  
+    }
+  	
+  	
+  	//数据地图-热力图-营业额热力图
+    function gotogmvheatxq(){
+  	  var url = "../aboutMap/data_index.html?t=1&nav=village_heat&type=yye&s=&c=&cn=&e=";
+  	  window.open(url,"data_index");  
+    }
+  	//数据地图-热力图-订单热力图
+    function gotoorderheatxq(){
+  	  var url = "../aboutMap/data_index.html?t=1&nav=village_heat&type=ddl&s=&c=&cn=&e=";
+  	  window.open(url,"data_index");  
+    }
+  	//数据地图-热力图-用户热力图
+    function gotocustomerheatxq(){
+  	  var url = "../aboutMap/data_index.html?t=1&nav=village_heat&type=yhl&s=&c=&cn=&e=";
+  	  window.open(url,"data_index");  
+    }
+  
+  	
+  	
+  	//数据地图-覆盖范围-门店覆盖范围
+    function goToMapView(){
+  	  var role = curr_user.usergroup.code;
+  	  var url = "../aboutMap/data_index.html?t=1&nav=store&s=&c=&cn=&e=";
+  	  window.open(url,"data_index"); 
+    }
+  	//数据地图-覆盖范围-片区分布图
+    function goToTinyArea(){
+  	  var role = curr_user.usergroup.code;
+  	  var url = "../aboutMap/data_index.html?t=1&nav=tiny&s=&c=&cn=&e=";
+  	  window.open(url,"data_index"); 
+    }
+  	//数据地图-动态图-国安侠分布
+    function gotoemployeefb(){
+  	  var url = "../aboutMap/data_index.html?t=1&nav=emp&s=&c=&cn=&e=";
+  	  window.open(url,"data_index");  
+    }
+  	
+  	
+  	//实时数据监控
+    function gotok(){
+  	  var role = curr_user.usergroup.code;
+  	  var url = "";
+  	  var target=0;
+  	  if(target==0){
+  	  	url = "index_K.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+  	  }else if(target==1){
+  	  	url = "index_K.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+  	  }
+  	  window.open(url,"index_K"); 
+    }
+  
+    //221战略运营页
+    function goto221(){
+    	  var target=0;
+    	  var url = "";
+    	  if(target==0){
+  	  	url = "221_store.html?t="+encode64('0');
+  	  }else if(target==1){
+  	  	url = "221_store.html?t="+encode64('1');
+  	  }
+  	  window.open(url,"221");
+    }
+  
+    function gotogax_work(){
+        var role = curr_user.usergroup.code;
+        var url = "";
+        var target=0;
+        if(target==0){
+            url = "gax_working_load.html?t="+encode64('0')+"&s=&sn=&c=&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&cn=";
+        }else if(target==1){
+            url = "gax_working_load.html?t="+encode64(1)+"&s=&sn=&c=cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&r="+encode64(role)+"&#ff";
+        }
+        window.open(url,"index_gax_work");
+    }
+    
+    
+  //数据下载-财务中心数据下载 //全国
+    function goToFileDownload(){
+        var role = curr_user.usergroup.code;
+        var url = "";
+        var target=0;
+        if(target==0){
+            url = "download_file.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+        }else if(target==1){
+            url = "download_file.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+        }
+        window.open(url,"download_file");
+    }
+    
+    
+    
+    
+  
   
 </script>
 
@@ -1155,6 +1751,8 @@ function searchEmployee(){
   	</table>
 </div>
 
-<div id="more_storeDiv" style="width:90px;height:80px;display:none">
+<div id="more_careerDiv" style="width:90px;height:50px;display:none">
+
+</div>
 
 </html>

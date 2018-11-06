@@ -828,7 +828,49 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		
 		return distCityList;
 	}
-	
+
+
+	@Override
+	public List<DistCareer> getCurrentUserCareer() {
+		List<DistCareer> distCareerList=null;
+		UserSession userSession = SessionManager.getUserSession();
+		Map<?, ?> sessionData = userSession.getSessionData();
+		User currentUser = (User) sessionData.get("user");
+		if (currentUser == null) {
+			return null;
+		}
+		currentUser = (User) getObject(currentUser.getId());
+		UserDTO currentUserDTO = buildDTO(currentUser);
+
+		//ZHGLY  综合管理
+		String  userGroupCode = currentUserDTO.getUsergroup().getCode();
+		if(userGroupCode!=null&&userGroupCode.equals("ZHGLY")){
+			//如果是综合管理，取user表中的事业群1 和事业群2
+			HumanresourcesManager humanresourcesManager = (HumanresourcesManager)SpringHelper.getBean("humanresourcesManager");
+			Humanresources humanresources = humanresourcesManager.getEmployeeInfoByEmployeeNo(currentUserDTO.getEmployeeId());
+
+			String career1=humanresources.getCareer_group();
+			String career2=humanresources.getCareer_group2();
+
+			if(career1!=null&&career1.length()>0){//如果事业群1不为空
+				DistCareer distCareer = new DistCareer();
+				distCareer.setPk_userid(currentUser.getId());
+				distCareer.setCareername(career1);
+				distCareerList.add(distCareer);
+			}
+			if(career2!=null&&career2.length()>0){//如果事业群2不为空
+				DistCareer distCareer = new DistCareer();
+				distCareer.setPk_userid(currentUser.getId());
+				distCareer.setCareername(career2);
+				distCareerList.add(distCareer);
+			}
+
+		}else{
+			DistCareerManager distCareerManager = (DistCareerManager)SpringHelper.getBean("distCareerManager");
+			distCareerList = distCareerManager.queryDistCareerListByUserId(currentUserDTO.getId());
+		}
+		return distCareerList;
+	}
 
 	/**
 	 * Checks if is exsit exp user.
@@ -1929,6 +1971,98 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		returnMap.put("data", ret_data);
 		return returnMap;
 	}
+	
+	
+	
+	
+	@Override
+    public Map<String, Object> queryCareerUserList(QueryConditions condition) {
+		Map<String,Object> returnMap = new java.util.HashMap<String, Object>();
+		PageInfo pageInfo = condition.getPageinfo();
+		String name = null;
+		String careernames = null;
+		for(Map<String, Object> map : condition.getConditions()){
+			if("name".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				name = map.get("value").toString();
+			}
+			if("careernames".equals(map.get("key"))&&map.get("value")!=null){//查询条件
+				careernames = map.get("value").toString();
+			}
+		}
+		FSP fsp = new FSP();
+		fsp.setSort(SortFactory.createSort("id", ISort.DESC));
+		StringBuffer sbfCondition = new StringBuffer();
+		sbfCondition.append(" disabledFlag=1 ");
+		DistCareerManager distCareerManager = (DistCareerManager)SpringHelper.getBean("distCareerManager");
+		if(name!=null){
+			sbfCondition.append(" and name like '%"+name+"%'");
+		}else if(careernames!=null&&careernames.trim().length()>0){
+			List<Long> useridList = distCareerManager.queryDistinctByCareer(careernames);
+			if(useridList!=null){
+				String useridsql = "";
+				for(Long userid:useridList){
+					useridsql+=userid+",";
+				}
+				useridsql=useridsql.substring(0,useridsql.length()-1);
+				sbfCondition.append(" and id in("+useridsql+")");
+			}
+		}else{
+			List<Long> useridList = distCareerManager.queryDistinctUserId();
+			if(useridList!=null){
+				String useridsql = "";
+				for(Long userid:useridList){
+					useridsql+=userid+",";
+				}
+				useridsql=useridsql.substring(0,useridsql.length()-1);
+				sbfCondition.append(" and id in("+useridsql+")");
+			}
+			
+		}
+		
+		sbfCondition.append(" order by id DESC ");
+		
+		IFilter iFilter =FilterFactory.getSimpleFilter(sbfCondition.toString());
+		fsp.setPage(pageInfo);
+		fsp.setUserFilter(iFilter);
+		List<User> lst_data = (List<User>) this.getList(fsp);
+		List<User> ret_data = new ArrayList<User>();
+		
+		if(lst_data!=null){
+			//根据ID查询所管理城市 
+			for(User u:lst_data){
+				String career_groups="";
+				DistCareer distCareer = distCareerManager.queryDistCareersByUserId(u.getId());
+				if(distCareer!=null){
+					if(distCareer.getCareer1()!=null){
+						career_groups+=distCareer.getCareer1()+",";
+					}
+					if(distCareer.getCareer2()!=null){
+						career_groups+=distCareer.getCareer2()+",";
+					}
+					if(distCareer.getCareer3()!=null){
+						career_groups+=distCareer.getCareer3()+",";
+					}
+					if(distCareer.getCareer4()!=null){
+						career_groups+=distCareer.getCareer4()+",";
+					}
+					if(distCareer.getCareer5()!=null){
+						career_groups+=distCareer.getCareer5()+",";
+					}
+				}
+				
+				u.setCareernames(career_groups);
+				ret_data.add(u);
+			}
+		}
+		returnMap.put("pageinfo", pageInfo);
+		returnMap.put("header", "");
+		returnMap.put("data", ret_data);
+		return returnMap;
+	}
+	
+	
+	
+	
 
 	@Override
 	public List<Map<String, Object>> getAllShopManager(String name) {

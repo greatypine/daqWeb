@@ -218,4 +218,7 @@ public interface HumanresourcesManager extends IManager {
      */
     public List<Humanresources> queryHumanresourceListByCardNumber(String cardnumber);
     
+    
+    public Humanresources queryHumanById(Long id);
+    
 }

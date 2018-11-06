@@ -134,6 +134,10 @@ var showPageContent = function (pageStatusInfo) {
     getHistoryData(pageStatusInfo);
     // 显示本月新增开卡用户和历史总社员数
     getOpenCardUser(pageStatusInfo);
+    //查询当月毛利
+    showsumofcurmonthprofit(pageStatusInfo);
+    //查询昨日毛利
+    showsumofYesterdayprofit(pageStatusInfo);
     getDailyData();
     // 显示统计概要
     pageStatusInfo.currentPage=1;
@@ -238,10 +242,10 @@ var initPageElements = function () {
     legend: {
             show: 'true',
             data: [{
-	            name:'全部GMV走势',
+	            name:'GMV走势',
 	            textStyle:{color:"#fff"}
             },{
-            	name:'221GMV走势',
+            	name:'收入走势',
             	textStyle:{color:"#fff"}
             	}],
             right: '3%',
@@ -252,7 +256,15 @@ var initPageElements = function () {
       position: function (point, params, dom, rect, size) {
         // 固定在顶部
         return [point[0], '10%'];
-      }
+      },
+      formatter:function(params){//数据格式
+            var relVal = params[0].name+"<br/>";
+            relVal += params[0]['marker']+params[0]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[0]['value']),1);
+            if(params.length>1){
+            	relVal += "<br/>"+params[1]['marker']+params[1]['seriesName']+ ' : ' + changeMoneyByDigit(String(params[1]['value']),1);
+            }
+            return relVal;
+       }
     },
     calculable : true,
     grid: {
@@ -322,6 +334,20 @@ var initPageElements = function () {
           lineStyle: {
             color: '#ccc'
           }
+        },
+        axisLabel: {
+            margin: 2,
+            formatter: function (value, index) {
+            	var axisData = Math.abs(value);
+                if (axisData >= 10000 && axisData < 10000000) {
+                    value = value / 10000 + "万";
+                } else if (axisData >= 10000000&&axisData < 100000000) {
+                    value = value / 10000000 + "千万";
+                }else if(axisData >= 100000000){
+                	value = value / 100000000 + "亿";
+                }
+                return value;
+            }
         }
       }
     ],
@@ -329,7 +355,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '全部GMV走势',
+        name: 'GMV走势',
         type:'line',
         data:[],
         smooth: true,
@@ -341,10 +367,21 @@ var initPageElements = function () {
                 color:'#D7504B',  //圈圈的颜色
                 lineStyle:{  
                     color:'#D7504B'  //线的颜色
-                }  
+                } 
             }  
         },
         markPoint: {
+          itemStyle: {
+            normal: {
+	             borderWidth: 1,            // 标注边线线宽，单位px，默认为1
+	             label: {
+                        show: true,
+                        formatter: function(value) { 
+						   return changeMoneyByDigit(value.value,1); 
+						} 
+	               }
+	          }
+          },
           data: [
             {type: 'max', name: '最大值'},
             {type: 'min', name: '最小值'}
@@ -357,7 +394,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '221GMV走势',
+        name: '收入走势',
         type:'line',
         data:[],
         smooth: true,
@@ -370,9 +407,20 @@ var initPageElements = function () {
                 lineStyle:{  
                     color:'#26C0C0'  //线的颜色
                 }  
-            }  
+            }
         },
         markPoint: {
+          itemStyle: {
+            normal: {
+	             borderWidth: 1,            // 标注边线线宽，单位px，默认为1
+	             label: {
+                        show: true,
+                        formatter: function(value) { 
+						   return changeMoneyByDigit(value.value,1); 
+						} 
+	               }
+	          }
+          },
           data: [
             {type: 'max', name: '最大值'},
             {type: 'min', name: '最小值'}
@@ -2442,9 +2490,10 @@ var getTwoTwoOneRankGmv = function(pageStatusInfo){
         }
         //console.log('\trequest: city rank gmv. ');
         //console.log(reqestParameter);
-        // 近七日221GMV走势图
+        // 近七日221GMV走势图-修改为近七日毛利走势图
         var startTime = new Date().getTime();
-        doManager("dynamicManager", "getTwoTwoOneGMVRangeForWeek",[reqestParameter],
+        //doManager("dynamicManager", "getTwoTwoOneGMVRangeForWeek",[reqestParameter],
+        doManager("massOrderItemManager", "getProfitRangeForWeek",[reqestParameter],
             function(data, textStatus, XMLHttpRequest) {
                 if (data.result) {
                     var resultJson = JSON.parse(data.data);
@@ -2456,7 +2505,7 @@ var getTwoTwoOneRankGmv = function(pageStatusInfo){
     }
 
 }
-// 显示近7天221GMV走势
+// 显示近7天221GMV走势-修改为近7天毛利走势
 var showTwoTwoOneRankGmv = function (twoTwoOneRankDataGmv) {
   	var data = [];
     var data1 = [];
@@ -4270,8 +4319,24 @@ var curr_user;
                             //暂时控制管理员查看221gmv，以后删除（高宝磊）
     						 if(curr_user.usergroup.code=="GLY"){
                                 $("#221_gmv").show();
+                                 $("#jssj").hide();
+
                             }else{
                                 $("#221_gmv").hide();
+                                 if(curr_user.usergroup.code=="ZBCWJSZ"||curr_user.usergroup.code=="CSCWJSZ"||curr_user.usergroup.code=="ZBSYQCWJSZ"){
+                                    $("#jssj").show();
+                                     $("#left-showa2").hide();
+                                     $("#left-showa3").hide();
+                                     $("#left-showa4").hide();
+                                 }else if(curr_user.usergroup.code=="ZBJYGLCJSZ"){
+                                     $("#left-showa1").show();
+                                     $("#left-showa2").show();
+                                     $("#left-showa3").show();
+                                     $("#left-showa4").show();
+                                     $("#jssj").show();
+                                 }else{
+                                     $("#jssj").hide();
+                                 }
                             }
     					}
     			},false);
@@ -4446,6 +4511,57 @@ function goToDataFiles(){
 	  window.open(url,"_blank");
   }
 
+  //门店毛利
+  function goToStoreprofit(){
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "dynamicData_storeprofit_analysis.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id)+"&#ff";
+      }else if(target==1){
+          url = "dynamicData_storeprofit_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
+      }
+      window.open(url,"_blank");
+  }
+
+
+    function goToGaxMaoli() {
+        var role = curr_user.usergroup.code;
+        var url = "";
+        var target=pageStatusInfo.targets;
+        if(target==0){
+            url = "dynamicData_gax_analysis.html?t="+encode64('0')+"&s=&cn=&r="+encode64(role)+"&c=&e="+encode64(curr_user.id)+"&#fg";
+        }else if(target==1){
+            url = url = "dynamicData_gax_analysis.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+        }else if(target==2){
+            url = url = "dynamicData_gax_analysis.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
+        }
+        window.open(url,"_blank");
+    }
+
+  //事业群毛利
+  function goToDeptprofit() {
+      var role = curr_user.usergroup.code;
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "dynamicData_deptprofit_analysis.html?t="+encode64('0')+"&cn=&r="+encode64(role)+"&c=&dn=&e="+encode64(curr_user.id);
+      }else if(target==1){
+          url =  "dynamicData_deptprofit_analysis.html?t="+encode64(1)+"&r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&dn=&e="+encode64(curr_user.id);
+      }
+      window.open(url,"_blank");
+  }
+  
+  //城市毛利
+  function goToCityprofit(){
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "dynamicData_cityprofit_analysis.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id)+"&#ff";
+      }else if(target==1){
+          url = "dynamicData_cityprofit_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
+      }
+      window.open(url,"_blank");
+  }
 
 //用户行为分析
 function gotobehavior(){
@@ -4823,6 +4939,19 @@ function gotobehavior(){
 	  window.open(url,"member_analysis");  
   }
 
+//数据下载-财务中心数据下载 //全国
+function goToFileDownload(){
+    var role = curr_user.usergroup.code;
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "download_file.html?t="+encode64('0')+"&s=r="+encode64(role)+"&c=&cn=&e="+encode64(curr_user.id)+"&#fg";
+    }else if(target==1){
+        url = "download_file.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+    }
+    window.open(url,"download_file");
+}
+
 
 //数据模型-优易模型-基础数据模型  //全国
 function goToYouyiInfo(){
@@ -5101,6 +5230,10 @@ function js_alert(){
 	crm_alert(0,"近期开放，敬请期待");
 }
 
+function js_alert_temporary(){
+    crm_alert(0,"由于近期将频繁清洗订单收入数据，订单档案功能临时关闭至11月2日。");
+}
+
   //切换城市
   function showMoreCity(){
 	 
@@ -5158,7 +5291,27 @@ function ForDight(str,How){
     Dight = Math.round(str*Math.pow(10,How))/Math.pow(10,How);  
     return Dight;  
  }
-
+function changeMoneyByDigit (x,t) {
+	var regin = x;
+    var s=x/10000;
+    var y = '';
+    if(parseInt(s)/10000<=1&&parseInt(s)/10000>0){
+    	y=ForDight(s,t)+"万";
+    }else if(parseInt(s)/10000==0){
+    	y=ForDight(regin,t);
+    }else if(parseInt(s)/10000>1){
+    	s=x/10000+'';
+    	y=ForDight(s,t)+"亿";
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)<=1){
+    	y=ForDight(s,t)+"万";
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)==0){
+    	y=ForDight(regin,t);
+    }else if(regin<0&&Math.abs(parseInt(s)/10000)>1){
+    	s=x/10000+'';
+    	y=ForDight(s,t)+"亿";
+    }
+    return y;
+}
 //跳转事业群gmv
 function goToDeptGMV(){
 	  var role = curr_user.usergroup.code;
@@ -5220,13 +5373,13 @@ function showMoreSummaryStatistics(){
 	    $("#info_head_dl").hide();
 	  });
 	  $(".info_bottom").mouseover(function(){
-	    $(this).css('width','40%');
+	    $(this).css('width','50%');
 	    $(this).find(".info_bottom_left").show();
-	    $(this).find(".info_bottom_dl").removeClass("col-sm-6").addClass("col-sm-4");
+	    $(this).find(".info_bottom_dl").removeClass("col-sm-6").addClass("col-sm-3");
 	  });
 	  $(".info_bottom").mouseleave(function(){
 	    $(this).css('width','25%');
-	    $(this).find(".info_bottom_right").removeClass("col-sm-4").addClass("col-sm-6");
+	    $(this).find(".info_bottom_right").removeClass("col-sm-3").addClass("col-sm-6");
 	    $(this).find(".info_bottom_left").hide();
 	  });
 }
@@ -5387,4 +5540,46 @@ function getScreenWidth(){
   }
   */
   $(".text-muted").removeClass("text-muted2").addClass("text-muted1");
+}
+function showsumofcurmonthprofit(pageStatusInfo){
+	var order_month_profit;
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryMonthprofit",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            order_month_profit = JSON.parse(resultJson.gmv)[0].order_month_profit;
+	            order_month_profit = order_month_profit+"";
+	        }else{
+	        	order_month_profit = "0";
+	        }
+		$("#tradesumofcurmonthsprofit").html(changeMoney(order_month_profit));
+    });
+    return order_month_profit;
+}
+function showsumofYesterdayprofit(pageStatusInfo){
+	var order_yesterday_profit;
+	var reqestParameter = {
+            month:pageStatusInfo.currentMonth,
+            year:pageStatusInfo.currentYear,
+            provinceId:pageStatusInfo.provinceId,
+            cityId:pageStatusInfo.cityId
+    }
+	doManager("massOrderItemManager", "queryYesterdayprofit",[reqestParameter],
+       function(data, textStatus, XMLHttpRequest) {
+	        if (data.result) {
+	            var resultJson = JSON.parse(data.data);
+	            order_yesterday_profit = JSON.parse(resultJson.gmv)[0].order_yesterday_profit;
+	            order_yesterday_profit = order_yesterday_profit+"";
+	        }else{
+	        	order_yesterday_profit = "0";
+	        }
+		$("#tradesumofyesprofit").html(changeMoney(order_yesterday_profit));
+    });
+    return order_yesterday_profit;
 }

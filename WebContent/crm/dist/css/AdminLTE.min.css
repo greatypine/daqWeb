@@ -5264,17 +5264,27 @@ table.text-center, table.text-center td, table.text-center th {
 /*.logo-lg li:hover .TDsec-nav{display: block;}*/
 
 .TDsec-nav{width: 100%; background-color: rgba(21, 31, 64, .98); position: absolute; top: 60px; left: 0; z-index: 99999999; color: #aab1cc; padding: 40px 0 20px 0; display: none;}
-.TDsec-nav a{color: #aab1cc;}
+.TDsec-nav a{color: #aab1cc;font-size: 14px;}
 .TDsec-nav a:hover{color: #fff;}
 .logo-prohibit a{color: #767676;}
 .logo-prohibit a:hover{color: #767676;}
 .secNav-box{padding: 0 100px;}
-.secNav-box .pull-left:nth-child(3),.secNav-box .pull-left:nth-child(4){width: 16%; margin: 0 1%;}
-.secNav-box .pull-left:nth-child(2),.secNav-box .pull-left:nth-child(1){ width: 30%; margin: 0 1%;}
+.secNav-box .pull-left:nth-child(5){width: 14%; margin: 0 1%;}
+.secNav-box .pull-left:nth-child(3),.secNav-box .pull-left:nth-child(4){width: 12%; margin: 0 1%;}
+.secNav-box .pull-left:nth-child(2){ width: 30%; margin: 0 1%;}
+.secNav-box .pull-left:nth-child(1){ width: 20%; margin: 0 1%;}
+/*.left-showa1{width: 20%; margin: 0 1%;}
+.left-showa2{width: 30%; margin: 0 1%;}
+.left-showa3{width: 12%; margin: 0 1%;}
+.left-showa4{width: 14%; margin: 0 1%;}
+.left-showb1{width: 30%; margin: 0 1%;}
+.left-showb2{width: 16%; margin: 0 1%;}*/
+/*.secNav-box .pull-left:nth-child(3),.secNav-box .pull-left:nth-child(4){width: 16%; margin: 0 1%;}
+.secNav-box .pull-left:nth-child(2),.secNav-box .pull-left:nth-child(1){ width: 30%; margin: 0 1%;}*/
 .TDsec-nav dl dt {display: block; border-bottom: 1px dashed #aab1cc; padding-bottom: 34px; position: relative; margin-bottom: 12px; height: 20px;padding-left: 26px;}
 .TDsec-nav dl dt i {position: absolute; width: 8px; height: 8px; border-radius: 50%; display: block; left: 0; top: 30px; border: 0; background: #aab1cc;}
 .TDsec-nav dl dd {line-height: 30px; padding: 12px 0 12px 26px;}
-.TDsec-nav dl dd span{margin: 0 5px -4px -5px; font-size: 26px; float: left; display: inline-block; width: 30px;}
+.TDsec-nav dl dd span{margin: 6px -4px -4px -5px; font-size: 18px; float: left; display: inline-block; width: 30px;}
 
 .logo_img{line-height: 60px; margin-right: 40px;}
 .logo_img img{display: inline-block;}

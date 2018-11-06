@@ -12,10 +12,7 @@ import com.cnpc.pms.platform.entity.PlatformStore;
 import com.cnpc.pms.platform.manager.PlatformStoreManager;
 import com.gexin.fastjson.JSONArray;
 import com.mongodb.BasicDBObject;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.*;
 import org.bson.Document;
 import org.json.JSONObject;
 
@@ -100,15 +97,28 @@ public class PlatformStoreManagerImpl extends BizBaseCommonManager implements Pl
 			}
 			MongoDbUtil mDbUtil = (MongoDbUtil) SpringHelper.getBean("mongodb");
 			MongoDatabase database = mDbUtil.getDatabase();
-			MongoCollection<Document> collection = database.getCollection("employee_position");
+			MongoCollection<Document> collection = database.getCollection("position_record");
 			org.json.JSONArray jArray = new org.json.JSONArray();
-			BasicDBObject query = new BasicDBObject();
-			query.append("employeeId", new BasicDBObject("$in", list1)).append("updateTime",
-					new Document("$get", new Date(format2+" 00:00:00"))).append("updateTime",
-					new Document("$lte", new Date(format2+" 23:59:59")));
-			FindIterable<Document> projection = collection.find(query)
-					.projection(new Document("_id", "$employeeId").append("employeeId", 1).append("position", 1));
-			MongoCursor<Document> cursor = projection.iterator();
+			//创建一个document集合
+			List<Document> pipeline = new ArrayList<Document>();
+			//创建一个match document
+			Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1)).append("createdAt",
+					new Document("$get", new Date(format2+" 00:00:00"))).append("createdAt",
+					new Document("$lte", new Date(format2+" 23:59:59"))));
+			pipeline.add(match);
+			//创建一个project document
+			List<Object> listcoor = new ArrayList<Object>();
+			listcoor.add("$longitude");
+			listcoor.add("$latitude");
+			Document project = new Document("$project",new Document("_id","$employeeId").append("location",listcoor).append("createdAt",1));
+			pipeline.add(project);
+			//创建一个sort document
+			Document sort = new Document("$sort",new Document("createdAt",-1));
+			pipeline.add(sort);
+			Document group = new Document("$group",new Document("_id","$_id").append("employeeId", new Document("$first","$_id")).append("position", new Document("$first","$location")));
+			pipeline.add(group);
+			AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
+			MongoCursor<Document> cursor = aggregate.iterator();
 			JSONObject jObject = null;
 			while (cursor.hasNext()) {
 				Document doc = cursor.next();

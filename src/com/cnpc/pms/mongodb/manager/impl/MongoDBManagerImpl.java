@@ -14,8 +14,12 @@ import java.util.Map;
 
 
 import com.cnpc.pms.slice.manager.AreaInfoManager;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 
 import com.cnpc.pms.base.util.SpringHelper;
@@ -61,7 +65,7 @@ import com.mongodb.client.result.DeleteResult;
  *
  */
 public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBManager{
-	
+	private static Log logger = LogFactory.getLog(MongoDBManagerImpl.class);
 	
 	@Override
 	public Map<String, Object> getAllTinyVillageOfStore(Long storeId) {
@@ -73,6 +77,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("message", CodeEnum.success.getDescription());
 			result.put("data", list);
 		} catch (Exception e) {
+			logger.info("getAllTinyVillageOfStore>>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code", CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -109,6 +114,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getStoreServiceArea>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -152,6 +158,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	        result.put("data", JSONArray.parse(jArray.toString()));
 			
 		} catch (Exception e) {
+			logger.info("selecTinyVillageCoordByEmployeeNo>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -355,6 +362,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			}
 
 		}catch(NumberFormatException e){
+			logger.info("saveTinyVillageCoord>>>"+"坐标数据格式错误，多个小数点"+e.getMessage());
 			if(e.getMessage().contains("multiple points")){
 				result.put("code",CodeEnum.error.getValue());
 				result.put("message", "坐标数据格式错误，多个小数点");
@@ -364,15 +372,18 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			String exceptionInfo= e.getMessage();
 			
 			if(exceptionInfo.contains("Can't extract geo keys")){
+				logger.info("saveTinyVillageCoord>>>"+"不能绘制自交叉的坐标范围"+e.getMessage());
 				result.put("code",CodeEnum.error.getValue());
 				result.put("message", "不能绘制自交叉的坐标范围");
 				return result;
 			}else{
+				logger.info("saveTinyVillageCoord>>>"+"坐标范围数据不符合"+e.getMessage());
 				result.put("code",CodeEnum.error.getValue());
 				result.put("message", "坐标范围数据不符合");
 				return result;
 			}
 		} catch (Exception e) {
+			logger.info("saveTinyVillageCoord>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -446,10 +457,11 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		           Document doc = cursor.next();  
 		           jObject = new JSONObject();
 				   jObject.put("id", codeIds.get(doc.get("code")));
+				   jObject.put("code", doc.get("code"));
 				   storeNotmp = String.valueOf(doc.get("storeNo"));
 				   storetmp = storeManager.findStoreByStoreNo(storeNotmp);
 				   jObject.put("storeNo",doc.get("storeNo"));
-				   jObject.put("storeName", storetmp.getName());
+				   jObject.put("storeName", storetmp==null?"":storetmp.getName());
 				   //jObject.put("location",doc.get("location"));
 				   jObject.put("tinyVillageName", doc.get("name"));
 				   jObject.put("belong",doc.get("belong"));
@@ -483,6 +495,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("selecTinyVillageCoord>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -560,6 +573,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				}
 			}
 		} catch (Exception e) {
+			logger.info("deleteTinyVillageCoord>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -602,13 +616,14 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	        }
 	        
 		}catch(MongoQueryException e){
-			
+			logger.info("getTinyVillageCoordOfIntersection>>>"+e.getMessage());
 			if(e.getMessage().contains("Query failed with error code 2 and error message 'Loop is not valid")){
 				result.put("code",CodeEnum.error.getValue());
 				result.put("messgae","自交叉坐标点查询错误，不能绘制自交叉");
 				return result;
 			}
 		} catch (Exception e) {
+			logger.info("getTinyVillageCoordOfIntersection>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -659,6 +674,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getStorePosition>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -715,6 +731,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("code",CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
 		} catch (Exception e) {
+			logger.info("updateEmployeeOfTinyArea>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -748,7 +765,10 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				 
 				 if(!store_no.equals(store.getStoreno())){
 					tinyAreaStore = storeManager.findStoreByStoreNo(store_no.toString());
-					storeSb.append("、").append(tinyAreaStore.getName());
+					if(tinyAreaStore!=null){
+						storeSb.append("、").append(tinyAreaStore.getName());
+					}
+
 				 }
 				
 			 }
@@ -762,6 +782,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			 }
 				
 		} catch (Exception e) {
+			logger.info("getExistCoordOfTinyVillage>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -840,6 +861,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getAllTinyVillageCoordinateOfCity>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -928,6 +950,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getAllStoreServiceAreaOfCity>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -1214,6 +1237,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("message", CodeEnum.success.getDescription());
 			}
 		} catch (Exception e) {
+			logger.info("getAllStoreServiceAreaOfContry>>>"+e.getMessage());
 			e.printStackTrace();
 			//mBean.getMongoClient().close();
 			result.put("code",CodeEnum.error.getValue());
@@ -1229,7 +1253,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		Map<String, Object> result = new HashMap<String, Object>();
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("employee_position");
+		MongoCollection<Document> collection = database.getCollection("position_record");
 		org.json.JSONArray jArray = new org.json.JSONArray();
 		List<Object> list1 = new ArrayList<Object>();
 		for (int i = 0; i < list.size(); i++) {
@@ -1237,20 +1261,18 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		}
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		List<Document> pipeline = new ArrayList<Document>();
-		Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1))); 
+		Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1)).
+				append("createdAt",new Document("$gte",new Date(beginDate)).append("$lte", new Date(endDate))));
 		pipeline.add(match);
-		Document project = new Document("$project",new Document("_id","$employeeId").append("position",1).append("locations", 1));
+		List<Object> listcoor = new ArrayList<Object>();
+		listcoor.add("$longitude");
+		listcoor.add("$latitude");
+		Document project = new Document("$project",new Document("_id","$employeeId").append("location",listcoor));
 		pipeline.add(project);
-		Document unwind = new Document("$unwind","$locations");
-		pipeline.add(unwind);
-		Document filter = new Document();
-		filter.put("locations.createTime",new Document("$gte",new Date(beginDate)).append("$lte", new Date(endDate)));
 		//filter.put("locations.event", new Document("$ne","normal"));
 		//filter.put("locations.orderId", new Document("$ne",""));
 		//filter.put("locations.orderStatus", new Document("$ne",null));
-		Document match1 = new Document("$match",filter);
-		pipeline.add(match1);
-		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")).append("createTime", new Document("$push","$locations.createTime")));
+		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$location")));
 		pipeline.add(group);
 		AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
 		MongoCursor<Document> cursor = aggregate.iterator();
@@ -1259,7 +1281,6 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 	           Document doc = cursor.next();  
 	           jObject = new JSONObject();
 			   jObject.put("locations", doc.get("locations"));
-			   jObject.put("createTime", doc.get("createTime"));
 			   jObject.put("id", doc.get("_id"));
 			 //  jObject.put("position", doc.get("position"));
 			   for(int i = 0; i < list.size(); i++){
@@ -1339,6 +1360,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("code",CodeEnum.success.getValue());
 			result.put("message", CodeEnum.success.getDescription());
 		} catch (Exception e) {
+			logger.info("updateTinyAreaOfEmployee>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -1439,6 +1461,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				result.put("code",CodeEnum.success.getValue());
 				result.put("message", CodeEnum.success.getDescription());
 		} catch (Exception e) {
+			logger.info("updateTinyAreaEmployeeIdNull>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
@@ -1455,7 +1478,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 		PlatformEmployeeDao pDao = (PlatformEmployeeDao)SpringHelper.getBean(PlatformEmployeeDao.class.getName());
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("employee_position");
+		MongoCollection<Document> collection = database.getCollection("position_record");
 		org.json.JSONArray jArray = new org.json.JSONArray();
 		List<Map<String, Object>> list = pDao.getEmployeeByEmployeeNo(employeeNo); 
 		if(list==null||list.size()==0){//没有员工编号对应的员工
@@ -1463,25 +1486,35 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			result.put("message", CodeEnum.nullData.getDescription());
 			return result;
 		}
-		List<Document> pipeline = new ArrayList<Document>();
-		Document match = new Document("$match",new BasicDBObject("employeeId",list.get(0).get("employeeId"))); 
-		pipeline.add(match);
-		Document project = new Document("$project",new Document("_id",0).append("employeeId",1).append("locations", 1));
-		pipeline.add(project);
-		Document unwind = new Document("$unwind","$locations");
-		pipeline.add(unwind);
-		Document filter = new Document();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar calendar = Calendar.getInstance();
-		//calendar.add(Calendar.MONTH, -2);
 		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		Date beginDate = calendar.getTime();
+
+
+		int startYear = calendar.get(Calendar.YEAR);//获取年份
+		int startMonth = calendar.get(Calendar.MONTH) + 1;//获取月份
+		int startDay = calendar.get(Calendar.DATE);//获取日
+
+		Date beginDate = new Date(startYear - 1900, startMonth - 1, startDay);
+
+
+
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-		Date endDate = calendar.getTime();
-		filter.put("locations.createTime",new Document("$gte",beginDate).append("$lte",endDate));
-		
-		Document match1 = new Document("$match",filter);
-		pipeline.add(match1);
-		Document group = new Document("$group",new Document("_id","$employeeId").append("locations", new Document("$push","$locations.location")));
+		int endYear = calendar.get(Calendar.YEAR);//获取年份
+		int endMonth = calendar.get(Calendar.MONTH) + 1;//获取月份
+		int endDay = calendar.get(Calendar.DATE);//获取日
+
+		Date endDate = new Date(endYear - 1900, endMonth - 1, endDay);
+
+		List<Document> pipeline = new ArrayList<Document>();
+		Document match = new Document("$match",new BasicDBObject("employeeId",list.get(0).get("employeeId")).append("createdAt",new Document("$gte",beginDate).append("$lte",endDate)));
+		pipeline.add(match);
+		List<Object> listcoor = new ArrayList<Object>();
+		listcoor.add("$longitude");
+		listcoor.add("$latitude");
+		Document project = new Document("$project",new Document("_id",0).append("employeeId",1).append("location", listcoor));
+		pipeline.add(project);
+		Document group = new Document("$group",new Document("_id","$employeeId").append("locations", new Document("$push","$location")));
 		pipeline.add(group);
 		AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
 		MongoCursor<Document> cursor = aggregate.iterator();
@@ -1516,8 +1549,8 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			MongoCursor<Document> cursor = dIterable.iterator(); 
 			
 			
-			if(dIterable==null){
-				result.put("code",CodeEnum.error.getValue());
+			if(list!=null&&list.size()==0){
+				result.put("code",CodeEnum.nullData.getValue());
 				result.put("message","街道所有小区没有绑定坐标");
 			}else{
 				org.json.JSONArray tmp_jarray = new org.json.JSONArray();
@@ -1526,7 +1559,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 				while(cursor.hasNext()){
 					Document teDocument = cursor.next();
 					JSONObject jObject = new JSONObject(teDocument.toJson());
-					
+
 					String code = jObject.getString("code");
 					
 					for(Map<String, Object> m:list){
@@ -1545,14 +1578,61 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			}
 			
 		} catch (Exception e) {
+			logger.info("updateTinyAreaBelong>>>"+e.getMessage());
 			e.printStackTrace();
 			result.put("code",CodeEnum.error.getValue());
 			result.put("message", CodeEnum.error.getDescription());
+			return  result;
 		}
 		
 		return result;
 	}
 
+	@Override
+	public Map<String, Object> updateTinyAreaOfStore(String storeNo, String tinyVillageCodes) {
+
+		Map<String,Object> result = new HashMap<String,Object>();
+		if(storeNo!=null&&tinyVillageCodes!=null&&"".equals(storeNo)&&"".equals(tinyVillageCodes)){
+			result.put("code",CodeEnum.nullData.getValue());
+			result.put("message", CodeEnum.nullData.getDescription());
+			return result;
+		}
+
+		TinyAreaManager tam = (TinyAreaManager)SpringHelper.getBean("tinyAreaManager");
+		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
+		MongoDatabase database = mDbUtil.getDatabase();
+		MongoCollection<Document> collection = database.getCollection("tiny_area");
+		String[] codeArray  = tinyVillageCodes.split(",");
+
+		for(int i=0;i<codeArray.length;i++){
+			Document updateDoc = new Document("belong","private");
+			updateDoc.put("storeNo", storeNo);
+			collection.updateMany(Filters.eq("code",codeArray[i]),new Document("$set",updateDoc));
+			TinyArea tinyArea = tam.getTinyAreaByCode(codeArray[i]);
+			tinyArea.setArea_no(null);
+			tinyArea.setStoreNo(storeNo);
+			tinyArea.setBelong("private");
+			tinyArea.setEmployee_a_no(null);
+			tinyArea.setEmployee_b_no(null);
+			this.preObject(tinyArea);
+			saveObject(tinyArea);
+		}
+
+		result.put("code",CodeEnum.success.getValue());
+		result.put("message", CodeEnum.success.getDescription());
+		return  result;
+	}
+
+	@Override
+	public Map<String, Object> getAreaByStore(Long storeId){
+		Map<String,Object> result = new HashMap<String,Object>();
+		AreaDao areaDao = (AreaDao)SpringHelper.getBean(AreaDao.class.getName());
+		List<Map<String, Object>> maps = areaDao.selectAreaOfStore(storeId);
+		result.put("areaInfo",maps);
+		result.put("code",CodeEnum.success.getValue());
+		result.put("message", CodeEnum.success.getDescription());
+		return  result;
+	}
 
 
 }

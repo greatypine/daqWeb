@@ -279,4 +279,28 @@ public interface AreaManager extends IManager {
 	 **/
 
 	public void deleteTinyVillageOfArea(Long tinyVillageId,String areaNo) throws MyException;
+
+	/**
+	 * @Description 批量更新片区状态
+	 * @author gbl
+	 * @date 2018/10/24 9:15
+	 **/
+
+	public void updateAreaStatusByMass(Long storeId);
+
+	/**
+	 * @Description 检测小区坐标是否当前门店
+	 * @author gbl
+	 * @date 2018/10/26 13:11
+	 **/
+
+	public Map<String,Object> checkTinyAreaIsExcludeStore(Area area);
+
+	/**
+	 * @Description 设置小区的所在片区和门店
+	 * @author gbl
+	 * @date 2018/10/29 9:10
+	 **/
+
+	public  Map<String,Object> updateTinyVillageOfAreaAndStore(Long storeId,Long tinyVillageId,Long areaId);
 }

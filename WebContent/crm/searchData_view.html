@@ -477,6 +477,8 @@
 	                      <a id="tag_微信礼品卡" onclick="orderTypeSelection('微信礼品卡')" style="cursor:pointer;">微信礼品卡</a>
 	                      <a id="tag_集采订单" onclick="orderTypeSelection('集采订单')" style="cursor:pointer;">集采订单</a>
 	                      <a id="tag_积分订单" onclick="orderTypeSelection('积分订单')" style="cursor:pointer;">积分订单</a>
+                          <a id="tag_过账支付" onclick="orderTypeSelection('过账支付')" style="cursor:pointer;">过账支付</a>
+                          <a id="tag_无精确成本" onclick="orderTypeSelection('无精确成本')" style="cursor:pointer;">无精确成本</a>
 	                      <input type="text" style="display:none" class="form-control" placeholder="订单标签"  id="label_private_manual"/>
 	                    </div>
 	                  </div>
@@ -487,8 +489,8 @@
                         <div class="sl-v-list">
                             <div class="form-group has-success col-lg-3">
                                 <div style="display:block">
-                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="毛利最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
-                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="毛利最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
+                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="销售收入最小金额"  id="min_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" />&nbsp;--
+                                    <input type="text" class="form-control" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" placeholder="销售收入最大金额"  id="max_money_auto" style="width:45%;display:inline;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);"/>
                                 </div>
                             </div>
                             <div class="form-group has-success col-lg-2">
@@ -500,7 +502,7 @@
                                 </select>
                             </div>
                             <font id="showprofitattention" style="top:7px;right:75px;color:#337ab7;font-size:16px;font-weight:bold;">!</font>
-                            <font id="profitattention" style="font-size: 12px; color:#337ab7;white-space: nowrap; position: absolute; top: -10px; z-index: 1000; left: 750px; display: none;">毛利结算方式</font>
+                            <font id="profitattention" style="font-size: 12px; color:#337ab7;white-space: nowrap; position: absolute; top: -10px; z-index: 1000; left: 750px; display: none;">销售收入结算方式</font>
                         </div>
                     </div>
                 </div>
@@ -622,7 +624,9 @@
                   <td width="10%" style="font-weight:bold;" id="time_sort">签收时间 <i class="fa fa-angle-up" id="time_sort_label"></i></td>
                   <td width="9%" style="font-weight:bold;">业务信息</td>
                   <td width="10%" style="font-weight:bold;">人员信息</td>
-                  <td width="9%" style="font-weight:bold;" id="profit_sort">毛利（元）<i class="fa fa-angle-up" id="profit_sort_label"></i></td>
+                  <td width="9%" style="font-weight:bold;" id="profit_sort"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
+                      <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">订单销售收入</font>销售收入（元）<i class="fa fa-angle-up" id="profit_sort_label"></i></td>
+                  <td width="10%" style="font-weight:bold;">营销费用</td>
                   <td width="10%" style="font-weight:bold;">订单标签</td>
                 </tr>
                 </tbody>
@@ -1196,7 +1200,14 @@ Date.prototype.format=function(fmt) {
     $("#showprofitattention").on("mouseout",function(event){
         $("#profitattention").hide();
     });
-  	
+
+    $("#columnattention").on("mouseover",function(event){
+        $("#forcolumnattention").show();
+    });
+    $("#columnattention").on("mouseout",function(event){
+        $("#forcolumnattention").hide();
+    });
+
   	//从数据分析页跳转过来直接查询
   	if(time!=null && redirectTag!=null){
   		search_manual_abnormalOrder(1);
@@ -1747,7 +1758,12 @@ Date.prototype.format=function(fmt) {
 			        
 			        var employeeid = "employeetips"+i;  
 			        
-			        var profitid = "profittips"+i;  
+			        var profitid = "profittips"+i;
+
+                    var coupon="<strong>平台优惠券：</strong>"+jData[i].apportion_coupon+"<br>";
+                    var rebate="<strong>粮票：</strong>"+jData[i].apportion_rebate+"<br>";
+                    var feecontent =coupon+rebate+"@feetips"+i;
+                    var feeid = "feetips"+i;
        			       
 	        		infoStr= "<tr>";
        			    infoStr= infoStr
@@ -1769,6 +1785,8 @@ Date.prototype.format=function(fmt) {
                        } else {
                            infoStr = infoStr + "<a href=\"javascript:;\" onmouseover=\"showprofit('"+jData[i].apportion_rebate+"','"+jData[i].apportion_coupon+"','"+jData[i].cost_price+"','"+jData[i].contract_id+"','"+profitid+"');\" id=\""+profitid+"\">"+jData[i].order_profit+"</a>";
                        }
+                    infoStr = infoStr
+                        +"<td><a href=\"javascript:;\" onmouseover=\"showfee('"+feecontent+"');\" id=\""+feeid+"\">"+jData[i].apportion_coupon+"</a></td>";
        			    infoStr = infoStr
                            +"</td><td>";
 	        		   if(jData[i].pubseas_label=='1'){
@@ -1831,7 +1849,14 @@ Date.prototype.format=function(fmt) {
 						}else if(jData[i].order_tag2=='3'){
 							infoStr= infoStr
 								+"<span style=\"background:url('../data_access/imgmouse_files/20180719093956.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">团购订单</span>";
-					}
+                        }
+                        if(jData[i].order_tag3=='0'){
+                            infoStr= infoStr
+                                +"<span style=\"background:url('../data_access/imgmouse_files/20181101143830.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">无精确成本</span>";
+                        }else if(jData[i].order_tag3=='2'){
+                            infoStr= infoStr
+                                +"<span style=\"background:url('../data_access/imgmouse_files/20181101143808.png') no-repeat;background-size:100% 110%; display: inline-block;padding:5px 5px 5px 10px; color:#fff;\">过账支付</span>";
+                        }
 						infoStr= infoStr
 	                       	+"</td>"
 	                       	+"</tr>";
@@ -2026,7 +2051,7 @@ Date.prototype.format=function(fmt) {
           },false);
       }
       var rebate="<strong>返利：</strong>"+rebate_org+"<br>";
-      var coupon="<strong>优惠券：</strong>"+coupon_org+"<br>";
+      var coupon="<strong>平台优惠券：</strong>"+coupon_org+"<br>";
       var cost="<strong>成本：</strong>"+cost_org+"<br>";
 
       var profitcontent = "无合同";
@@ -2039,6 +2064,16 @@ Date.prototype.format=function(fmt) {
           time:5000
       });
   }
+
+//营销费用显示
+function showfee(obj){
+    var msg = obj.split("@")[0];
+    var id = obj.split("@")[1];
+    layer.tips(msg, '#'+id, {
+        tips: [4, '#0FA6D8'], //还可配置颜色
+        time:5000
+    });
+}
   
   //导出
   function export_manual_massOrder(hiddenvalue){

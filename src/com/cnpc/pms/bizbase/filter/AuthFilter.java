@@ -607,6 +607,15 @@ public class AuthFilter extends OncePerRequestFilter {
                 return;
             }
             /**
+             * 2018-10-29 财务中心数据下载
+             *
+             * @author wuxinxin
+             */
+            if (url.contains("download_file.html")) {
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
+            /**
              * 2018-09-13 社员
              *
              * @author wuxinxin
@@ -735,7 +744,12 @@ public class AuthFilter extends OncePerRequestFilter {
 				return;
 			}
 			
-			if (url.contains("NoticeReciverManager")) {//公告通知
+			/*if (url.contains("NoticeReciverManager")) {//公告通知
+				filterChain.doFilter(servletRequest, servletResponse);
+				return;
+			}*/
+
+			if (url.contains("MongoDBManager")) {//公告通知
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
 			}

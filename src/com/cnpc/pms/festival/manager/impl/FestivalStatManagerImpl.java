@@ -126,11 +126,7 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 		list = platformStoreDao.getEmployeeByCity(cityNo,true);
 		String beginDate = requestInfoDto.getBeginDate();
 		String endDate = requestInfoDto.getEndDate();
-		
-			/*Map<String, Object> result = new HashMap<String, Object>();
-			MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
-			MongoDatabase database = mDbUtil.getDatabase();
-			MongoCollection<Document> collection = database.getCollection("employee_position");*/
+
 			org.json.JSONArray jArray = new org.json.JSONArray();
 			List<Object> list1 = new ArrayList<Object>();
 			List<Object> list2 = new ArrayList<Object>();
@@ -148,21 +144,6 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 				}
 				
 			}
-			/*List<Document> pipeline = new ArrayList<Document>();
-			Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list1))); 
-			pipeline.add(match);
-			Document project = new Document("$project",new Document("_id","$employeeId").append("position",1).append("locations", 1));
-			pipeline.add(project);
-			Document unwind = new Document("$unwind","$locations");
-			pipeline.add(unwind);
-			Document filter = new Document();
-			filter.put("locations.createTime",new Document("$gte",new Date(beginDate)).append("$lte", new Date(endDate)));
-			Document match1 = new Document("$match",filter);
-			pipeline.add(match1);
-			Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
-			pipeline.add(group);
-			AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
-			MongoCursor<Document> cursor = aggregate.iterator();*/
 			Thread children1 = new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -178,23 +159,6 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 			    }
 			});
 			children1.start();
-			
-	        
-	        /*List<Document> pipeline_1 = new ArrayList<Document>();
-			Document match_1 = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list2))); 
-			pipeline_1.add(match_1);
-			Document project_1 = new Document("$project",new Document("_id","$employeeId").append("position",1).append("locations", 1));
-			pipeline_1.add(project_1);
-			Document unwind_1 = new Document("$unwind","$locations");
-			pipeline_1.add(unwind_1);
-			Document filter_1 = new Document();
-			filter_1.put("locations.createTime",new Document("$gte",new Date(beginDate)).append("$lte", new Date(endDate)));
-			Document match1_1 = new Document("$match",filter_1);
-			pipeline_1.add(match1_1);
-			Document group_1 = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
-			pipeline_1.add(group_1);
-			AggregateIterable<Document> aggregate_1 = collection.aggregate(pipeline_1).allowDiskUse(true);
-			MongoCursor<Document> cursor_1 = aggregate_1.iterator();*/
 			Thread children2 = new Thread(new Runnable() {
 				@Override
 				public void run(){
@@ -210,24 +174,6 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 		           }
 			});
 			children2.start();
-		    
-	        
-	        
-	        /*List<Document> pipeline_2 = new ArrayList<Document>();
-			Document match_2 = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list3))); 
-			pipeline_2.add(match_2);
-			Document project_2 = new Document("$project",new Document("_id","$employeeId").append("position",1).append("locations", 1));
-			pipeline_2.add(project_2);
-			Document unwind_2 = new Document("$unwind","$locations");
-			pipeline_2.add(unwind_2);
-			Document filter_2 = new Document();
-			filter_2.put("locations.createTime",new Document("$gte",new Date(beginDate)).append("$lte", new Date(endDate)));
-			Document match1_2 = new Document("$match",filter_2);
-			pipeline_2.add(match1_2);
-			Document group_2 = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
-			pipeline_2.add(group_2);
-			AggregateIterable<Document> aggregate_2 = collection.aggregate(pipeline_2).allowDiskUse(true);
-			MongoCursor<Document> cursor_2 = aggregate_2.iterator();*/
 			Thread children3 = new Thread(new Runnable() {
 				@Override
 				public void run(){
@@ -284,19 +230,17 @@ public class FestivalStatManagerImpl extends BizBaseCommonManager implements Fes
 	public MongoCursor<Document> getData(List<Object> list, String bdate, String edate) {
 		MongoDbUtil mDbUtil = (MongoDbUtil)SpringHelper.getBean("mongodb");
 		MongoDatabase database = mDbUtil.getDatabase();
-		MongoCollection<Document> collection = database.getCollection("employee_position");
+		MongoCollection<Document> collection = database.getCollection("position_record");
 		List<Document> pipeline = new ArrayList<Document>();
-		Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list))); 
+		Document match = new Document("$match",new BasicDBObject("employeeId", new BasicDBObject("$in",list)).
+				append("createdAt",new Document("$gte",new Date(bdate)).append("$lte", new Date(edate))));
 		pipeline.add(match);
-		Document project = new Document("$project",new Document("_id","$employeeId").append("position",1).append("locations", 1));
+		List<Object> listcoor = new ArrayList<Object>();
+		listcoor.add("$longitude");
+		listcoor.add("$latitude");
+		Document project = new Document("$project",new Document("_id","$employeeId").append("location",listcoor));
 		pipeline.add(project);
-		Document unwind = new Document("$unwind","$locations");
-		pipeline.add(unwind);
-		Document filter = new Document();
-		filter.put("locations.createTime",new Document("$gte",new Date(bdate)).append("$lte", new Date(edate)));
-		Document match1 = new Document("$match",filter);
-		pipeline.add(match1);
-		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$locations.location")));
+		Document group = new Document("$group",new Document("_id","$_id").append("locations", new Document("$push","$location")));
 		pipeline.add(group);
 		AggregateIterable<Document> aggregate = collection.aggregate(pipeline).allowDiskUse(true);
 		MongoCursor<Document> cursor = aggregate.iterator();

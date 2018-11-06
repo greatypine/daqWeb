@@ -50,11 +50,11 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,a.create_time,a.sign_time,a.return_time,a.appointment_start_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,a.customer_name,IFNULL(a.addr_name,'') as addr_name,"
 				+ "IFNULL(a.addr_mobilephone,'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,a.channel_name,a.department_name,"
-				+ "a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score,IFNULL(a.order_tag2,'') as order_tag2, "
+				+ "a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score,IFNULL(a.order_tag2,'') as order_tag2,IFNULL(a.order_tag3,'') as order_tag3, "
 				+ "CASE a.order_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source "
-				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,IFNULL(a.apportion_rebate,0) as apportion_rebate,"
-				+ "IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price,IFNULL(a.contract_method,'') as contract_method "
+				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,"
+				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method "
 				+ "from ";
 
 		String sqlB = sqlA;
@@ -121,6 +121,10 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag1 like '%M%'  ";
 				} else if ("积分订单".equals(names[i].trim())) {
 					sql = sql + " a.score is not null  ";
+				} else if ("过账支付".equals(names[i].trim())) {
+					sql = sql + " a.order_tag3='2'  ";
+				} else if ("无精确成本".equals(names[i].trim())) {
+					sql = sql + " a.order_tag3='0'  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";
@@ -290,9 +294,11 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE WHEN a.order_tag2 like '%1%' THEN '是'  ELSE '否' END AS order_tag_product, CASE WHEN a.order_tag2 like '%2%' THEN '是' ELSE '否' END AS order_tag_service,"
 				+ "CASE WHEN a.order_tag2 like '%3%' THEN '是'  ELSE '否' END AS order_tag_groupon, "
 				+ "CASE WHEN a.order_tag1 like '%M%' THEN '是'  ELSE '否' END AS order_tag_member, "
+				+ "CASE WHEN a.order_tag3='0' THEN '是'  ELSE '否' END AS no_cost_label,"
+				+ "CASE WHEN a.order_tag3='2' THEN '是'  ELSE '否' END AS pay_label,"
 				+ "CASE a.order_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source, "
-				+ "IFNULL(a.business_type,'') as business_type,IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,"
+				+ "IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,"
 				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method "
 				+ "from ";
 
@@ -339,6 +345,10 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag1 like '%M%'  ";
 				} else if ("积分订单".equals(names[i].trim())) {
 					sql = sql + " a.score is not null  ";
+				} else if ("过账支付".equals(names[i].trim())) {
+					sql = sql + " a.order_tag3='2'  ";
+				} else if ("无精确成本".equals(names[i].trim())) {
+					sql = sql + " a.order_tag3='0'  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";
@@ -463,8 +473,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(ROUND(a.returned_amount,2),0) as returned_amount,a.customer_name,"
 				+ "IFNULL(a.addr_name,'') as addr_name,IFNULL(a.addr_mobilephone,'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,"
 				+ "a.channel_name,a.department_name,a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score"
-				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,IFNULL(a.apportion_rebate,0) as apportion_rebate,"
-				+ "IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(a.cost_price,0) as cost_price,IFNULL(a.contract_method,'') as contract_method "
+				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,"
+				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method "
 				+ " from ";
 
 		String sqlB = sqlA;
@@ -565,7 +575,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "THEN '拉新10元' WHEN a.customer_isnew_flag='0' THEN '拉新'  ELSE '否' END AS customer_isnew_flag,CASE WHEN a.order_tag1 like '%B%' THEN '是'  ELSE '否' END AS order_tag_b,"
 				+ "CASE WHEN a.order_tag1 like '%K%' THEN '是'  ELSE '否' END AS order_tag_k,CASE WHEN a.order_tag1 like '%S%' THEN '是'  ELSE '否' END AS order_tag_s,"
 				+ "CASE WHEN a.score is not null THEN '是' ELSE '否' END AS score,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,"
-				+ "IFNULL(a.apportion_coupon,0) as apportion_coupon,IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method from ";
+				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,"
+				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method from ";
 
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
 			sql = sql + " df_mass_order_daily ";

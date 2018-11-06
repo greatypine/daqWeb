@@ -1155,4 +1155,35 @@ public interface DynamicManager extends IManager{
 	 * @date 2018/9/26 11:21
 	 **/
 	public Map<String, Object> exportUserBehaviorByLog(DynamicDto dynamicDto);
+
+	/**
+	 * @Description 门店毛利
+	 * @author chenchuang
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * @Description 导出门店毛利数据
+	 * @author chenchuang
+	 * @return Map<String, Object>
+	 */
+	public Map<String, Object> exportStoreTradeProfit(DynamicDto dynamicDto);
+
+    /**
+     * @Description 国安侠毛利
+     * @author wuxinxin
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto,PageInfo pageInfo);
+
+    /**
+     *
+     * TODO 导出国安侠毛利
+     * 2018年4月8日
+     * @author gaobaolei
+     * @param dd
+     * @return
+     */
+    public Map<String, Object> exportEmployeeOfMaoli(DynamicDto dd);
 }

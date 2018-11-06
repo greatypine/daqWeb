@@ -194,8 +194,11 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryNewCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo,String timeFlag){
-		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,count(DISTINCT(case when a.customer_isnew_flag >=0 then customer_id end)) new_count,"
-				+ "count(DISTINCT(case when a.customer_isnew_flag >= 10 then customer_id end)) new_10_count,count(DISTINCT(case when a.customer_isnew_flag >= 20 then customer_id end)) new_20_count FROM";
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,"
+				+ "count(DISTINCT(case when a.customer_isnew_flag >=0 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) new_count,"
+				+ "count(DISTINCT(case when a.customer_isnew_flag >= 10 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) new_10_count,"
+				+ "count(DISTINCT(case when a.customer_isnew_flag >= 20 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) new_20_count,"
+				+ "count(DISTINCT(case when a.sign_time <='"+userOperationStatDto.getEndDate() + " 23:59:59' then customer_id end )) total_count FROM";
 		
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
 			sql = sql + " df_mass_order_daily a ";
@@ -206,10 +209,6 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		}
 		
 		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
-		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
-			sql = sql + " and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"
-					+ userOperationStatDto.getEndDate() + " 23:59:59')";
-		}
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
 			sql = sql + " and a.store_city_name like '%" + userOperationStatDto.getCityName().trim() + "%'";
 		}
@@ -252,8 +251,11 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportNewCusStat(UserOperationStatDto userOperationStatDto,String timeFlag){
-		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'无') AS area_code,count(DISTINCT(case when a.customer_isnew_flag >=0 then customer_id end)) new_count,"
-				+ "count(DISTINCT(case when a.customer_isnew_flag >= 10 then customer_id end)) new_10_count,count(DISTINCT(case when a.customer_isnew_flag >= 20 then customer_id end)) new_20_count FROM";
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'无') AS area_code,"
+				+ "count(DISTINCT(case when a.customer_isnew_flag >=0 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) new_count,"
+				+ "count(DISTINCT(case when a.customer_isnew_flag >= 10 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) new_10_count,"
+				+ "count(DISTINCT(case when a.customer_isnew_flag >= 20 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) new_20_count,"
+				+ "count(DISTINCT(case when a.sign_time <='"+userOperationStatDto.getEndDate() + " 23:59:59' then customer_id end )) total_count FROM";
 		
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
 			sql = sql + " df_mass_order_daily a ";
@@ -264,10 +266,6 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		}
 		
 		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
-		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
-			sql = sql + " and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"
-					+ userOperationStatDto.getEndDate() + " 23:59:59')";
-		}
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
 			sql = sql + " and a.store_city_name like '%" + userOperationStatDto.getCityName().trim() + "%'";
 		}
@@ -292,8 +290,11 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> queryPayCusStat(UserOperationStatDto userOperationStatDto,PageInfo pageInfo,String timeFlag){
-		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,count(DISTINCT customer_id) pay_count,count(DISTINCT(case when trading_price > 10 "
-				+ " then customer_id end)) pay_10_count,count(DISTINCT(case when trading_price > 20 then customer_id end)) pay_20_count FROM ";
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'') AS area_code,"
+				+ "count(DISTINCT (case when (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_count,"
+				+ "count(DISTINCT(case when trading_price > 10 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_10_count,"
+				+ "count(DISTINCT(case when trading_price > 20 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_20_count,"
+				+ "count(DISTINCT case when a.sign_time <='"+userOperationStatDto.getEndDate() + " 23:59:59' then customer_id end ) total_count FROM ";
 		
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
 			sql = sql + " df_mass_order_daily a ";
@@ -304,10 +305,6 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		}
 		
 		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
-		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
-			sql = sql + " and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"
-					+ userOperationStatDto.getEndDate() + " 23:59:59')";
-		}
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
 			sql = sql + " and a.store_city_name like '%" + userOperationStatDto.getCityName().trim() + "%'";
 		}
@@ -350,8 +347,11 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	
 	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> exportPayCusStat(UserOperationStatDto userOperationStatDto,String timeFlag){
-		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'无') AS area_code,count(DISTINCT customer_id) pay_count,count(DISTINCT(case when trading_price > 10 "
-				+ " then customer_id end)) pay_10_count,count(DISTINCT(case when trading_price > 20 then customer_id end)) pay_20_count FROM ";
+		String sql = "SELECT a.store_city_name as city_name, a.store_name, IFNULL(a.area_code,'无') AS area_code,"
+				+ "count(DISTINCT (case when (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_count,"
+				+ "count(DISTINCT (case when trading_price > 10 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_10_count,"
+				+ "count(DISTINCT (case when trading_price > 20 and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"+ userOperationStatDto.getEndDate() + " 23:59:59') then customer_id end)) pay_20_count,"
+				+ "count(DISTINCT case when a.sign_time <='"+userOperationStatDto.getEndDate() + " 23:59:59' then customer_id end ) total_count FROM ";
 		
 		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
 			sql = sql + " df_mass_order_daily a ";
@@ -362,10 +362,6 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 		}
 		
 		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
-		if (StringUtils.isNotEmpty(userOperationStatDto.getBeginDate())) {
-			sql = sql + " and (a.sign_time between '" + userOperationStatDto.getBeginDate() + " 00:00:00' and '"
-					+ userOperationStatDto.getEndDate() + " 23:59:59')";
-		}
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
 			sql = sql + " and a.store_city_name like '%" + userOperationStatDto.getCityName().trim() + "%'";
 		}
@@ -638,9 +634,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 
 		String sql = "SELECT IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' THEN 1 end),0) as total_cus, "
 				+ "IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' AND strleft(tc.create_time,10)>='"+userOperationStatDto.getBeginDate()+"' THEN 1 end),0) as new_cus, "
-				+ "min(td.cityno) as cityno,min(td.cityname) as cityname FROM gemini.t_customer tc JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
+				+ "ifnull(min(td.cityno),'无') AS cityno,ifnull(min(td.cityname),'无') AS cityname FROM gemini.t_customer tc LEFT JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
-			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%'";
+			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%' ";
 		}
 		sql = sql + " GROUP BY td.cityno order by td.cityno asc ";
 
@@ -669,9 +665,9 @@ public class UserOperationStatDaoImpl extends BaseDAOHibernate implements UserOp
 	public List<Map<String, Object>> exportRegistCusStat(UserOperationStatDto userOperationStatDto){
 		String sql = "SELECT IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' THEN 1 end),0) as total_cus, "
 				+ "IFNULL(SUM(CASE WHEN strleft(tc.create_time,10)<='"+userOperationStatDto.getEndDate()+"' AND strleft(tc.create_time,10)>='"+userOperationStatDto.getBeginDate()+"' THEN 1 end),0) as new_cus, "
-				+ "min(td.cityno) as cityno,min(td.cityname) as cityname FROM gemini.t_customer tc JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
+				+ "ifnull(min(td.cityno),'无') AS cityno,ifnull(min(td.cityname),'无') AS cityname FROM gemini.t_customer tc LEFT JOIN t_dist_citycode td ON LPAD(tc.city_code, 4, '0') = td.cityno where 1=1 ";
 		if(StringUtils.isNotEmpty(userOperationStatDto.getCityName())){
-			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%'";
+			sql = sql + "and td.cityname like '%"+userOperationStatDto.getCityName()+"%' ";
 		}
 		sql = sql + " GROUP BY td.cityno order by td.cityno asc ";
 		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);

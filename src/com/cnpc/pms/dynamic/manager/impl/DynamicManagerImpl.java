@@ -39,10 +39,11 @@ import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.MD5Utils;
 import net.sf.json.JsonConfig;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -505,7 +506,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -542,7 +543,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -624,7 +625,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -662,7 +663,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -3166,7 +3167,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -3203,7 +3204,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					for(Map<String, Object> map:storeList){
@@ -3278,7 +3279,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();
@@ -3320,7 +3321,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();
@@ -5740,7 +5741,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "ZB");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();
@@ -5782,7 +5783,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(dynamicDto.getStoreId()==null||"".equals(dynamicDto.getStoreId())){//查询所有城市的门店
 
 					StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-					List<Map<String,Object>> storeList = storeDao.getAllStoreOfCRM(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
+					List<Map<String,Object>> storeList = storeDao.getAllStoreIncludeClosed(dynamicDto.getEmployeeId(), dynamicDto.getCityId(), "CSZJ");//获取门店
 					
 					StringBuilder storeNO = new StringBuilder();
 					StringBuilder storeIds = new StringBuilder();
@@ -7171,4 +7172,139 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		}
 		return result;
 	}
+
+	@Override
+	public Map<String, Object> queryStoreTradeProfit(DynamicDto dynamicDto,PageInfo pageInfo){
+        StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+        Map<String, Object> result =new HashMap<String,Object>();
+        try {
+            if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+                result = storeDao.queryStoreTradeProfit(dynamicDto, pageInfo);
+            }else{
+                result = storeDao.queryDeptTradeProfit(dynamicDto, pageInfo);
+            }
+            result.put("status","success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status","fail");
+        }
+        return result;
+	}
+
+	@Override
+	public Map<String, Object> exportStoreTradeProfit(DynamicDto dynamicDto){
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+		Map<String, Object> result = new HashMap<String,Object>();
+		List<Map<String, Object>> list = storeDao.exportDeptTradeProfit(dynamicDto);
+		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+			list = storeDao.exportStoreTradeProfit(dynamicDto);
+		}
+
+		if(list!=null&&list.size()>0){//成功返回数据
+			if(list.size()>50000){
+				result.put("message","导出条目过多，请重新筛选条件导出！");
+				result.put("status","more");
+				return result;
+			}
+
+			//城市毛利
+			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","毛利"};
+			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","real_profit"};
+			//门店毛利
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）",
+						"优惠券（平台）","优惠券（优易）","优惠券（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损","盘亏","毛利"};
+				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit",
+						"platform_coupon","ims_coupon","total_coupon","platform_fee","ims_fee","return_profit","baosun","pankui","real_profit"};
+			}
+			//事业群毛利
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
+				Map<String,String> content = new LinkedHashMap<>();
+				if(dynamicDto.getSearchstr().contains("dept_city_active")){
+					content.put("城市","city_name");
+				}
+				if(dynamicDto.getSearchstr().contains("dept_store_active")){
+					content.put("门店名称","store_name");
+					content.put("门店编号","store_code");
+				}
+				content.put("事业群","department_name");
+				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+					content.put("频道","channel_name");
+				}
+				content.put("销售收入（平台）","platform_profit");
+				content.put("销售收入（优易）","ims_profit");
+				content.put("销售收入（合计）","total_profit");
+				content.put("营销费用（平台）","platform_fee");
+				content.put("营销费用（优易）","ims_fee");
+				content.put("销售收入（已退货）","return_profit");
+				content.put("毛利","real_profit");
+
+				str_headers = content.keySet().toArray(new String[0]);
+				headers_key = content.values().toArray(new String[0]);
+			}
+
+			String sheetName = "城市";
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
+				sheetName="门店";
+			}
+			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
+				sheetName="事业群";
+			}
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil(dynamicDto.getBeginDate()+sheetName+"毛利",list,str_headers,headers_key);
+			result = eeuo.exportFile();
+		}else{
+			result.put("message","请重新操作！");
+			result.put("status","fail");
+		}
+		return result;
+	}
+
+    @Override
+    public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto, PageInfo pageInfo) {
+        Map<String, Object> result = new HashedMap();
+        StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
+        DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+        try {
+            if(dynamicDto.getStoreId()!=null){
+                Store store = (Store)storeManager.getObject(dynamicDto.getStoreId());
+                dynamicDto.setStoreNo("'"+String.valueOf(store.getStoreno())+"'");
+            }
+            result= dynamicDao.employeeOfMaoli(dynamicDto, pageInfo);
+            result.put("status","success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.put("status","fail");
+            return result;
+
+        }
+        return result;
+    }
+    /**
+     * TODO 国安侠毛利导出
+     * @Date: 2017年11月3日
+     * @param dynamicDto
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> exportEmployeeOfMaoli(DynamicDto dynamicDto) {
+        Map<String,Object> result  = new HashMap<String,Object>();
+        Map<String,Object> map  = this.employeeOfMaoli(dynamicDto, null);
+        if("success".equals(map.get("status"))){//成功返回数据
+            List<Map<String, Object>> list  = (List<Map<String, Object>>)map.get("maoli");
+            if(list==null||list.size()==0){
+                result.put("message","没有符合条件的数据！");
+                result.put("status","null");
+                return result;
+            }
+
+            String[] str_headers = {"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","营销费用","报损","盘亏","毛利"};
+            String[] headers_key = {"city_name","store_name","storeno","employee_name","employee_no","income","sumprice","baosun","pankui","maoli"};
+            ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠毛利",list,str_headers,headers_key);
+            result = eeuo.exportFile();
+        }else{
+            result.put("message","请重新操作！");
+            result.put("status","fail");
+        }
+        return result;
+    }
 }

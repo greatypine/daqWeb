@@ -345,16 +345,16 @@
                     if(data.result){
                         var result = JSON.parse(data.data);
                         if(result.cur_store=='1'){
-    	                   	 $$.showConfirm("提示","数据是否删除？",function () {
-    	                		 var id = allColumnsDataMap.id;
-    	                         doManager('areaManager','deleteArea',[id],function(data){
-    	                            if(data.result){
-    	                                searchList();
-    	                            }else{
-    	                                $$.showMessage('提示',data.message);
-    	                            }
-    	                         });
-    	                     });
+                            $$.showConfirm("提示","数据是否删除？",function () {
+                                var id = allColumnsDataMap.id;
+                                doManager('areaManager','deleteArea',[id],function(data){
+                                    if(data.result){
+                                        searchList();
+                                    }else{
+                                        $$.showMessage('提示',data.message);
+                                    }
+                                });
+                            });
                         }else if(result.cur_store=='2'){
                         	$$.showMessage('提示',"当前账号正在 '"+result.cur_name+"' 登录,请重新加载");
                         }
