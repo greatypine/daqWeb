@@ -4532,6 +4532,8 @@ function goToDataFiles(){
             url = "dynamicData_gax_analysis.html?t="+encode64('0')+"&s=&cn=&r="+encode64(role)+"&c=&e="+encode64(curr_user.id)+"&#fg";
         }else if(target==1){
             url = url = "dynamicData_gax_analysis.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#fg";
+        }else if(target==2){
+            url = url = "dynamicData_gax_analysis.html?t="+encode64(1)+"&s=r="+encode64(role)+"&c="+encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&so="+encode64(currentStore.storeno)+"&e="+encode64(EMPLOYEE_NO)+"&sn="+encode64(currentStore.name)+"&#fg";
         }
         window.open(url,"_blank");
     }
