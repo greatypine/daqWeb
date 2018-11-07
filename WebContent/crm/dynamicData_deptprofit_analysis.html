@@ -788,7 +788,7 @@
             $("#storenopayhide").hide();
         }
         dynamicDto["searchstr"] = searchstrTemp;
-
+        $("#tradeType_tbody").find("tr:gt(0)").remove();
 	    doManager('dynamicManager','exportStoreTradeProfit',[dynamicDto],function(data){
           if(data.result){
           	   var result= JSON.parse(data.data);
