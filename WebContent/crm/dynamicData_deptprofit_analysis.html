@@ -317,6 +317,7 @@
 			$("#city_name_channel").val(cityName);
 			$("#city_name_tradetype").attr("readonly",true);
 			$("#city_name_channel").attr("readonly",true);
+            $("#cityClick").attr("disabled","disabled");
 		}else if(target==2){//店长
 			$("#city_name_tradetype").val(cityName);
 			$("#city_name_channel").val(cityName);
@@ -326,6 +327,8 @@
 			$("#store_name_channel").val(storeName);
 			$("#store_name_tradetype").attr("readonly",true);
 			$("#store_name_channel").attr("readonly",true);
+            $("#cityClick").attr("disabled","disabled");
+            $("#storeClick").attr("disabled","disabled");
 		}else if(target==3){//事业群
             $("#department").val(dept);
             $("#department").attr("disabled","disabled");
