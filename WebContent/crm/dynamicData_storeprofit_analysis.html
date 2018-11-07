@@ -268,12 +268,12 @@
         elem:'#be_date1',
         value:year_month,
         type:"month",
-        btns: ['confirm','now'],
+        btns: ['confirm'],
         theme: '#11214e',
         min: '2018-10-1',
         max:max_month,
     });
-	
+
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
 	var initCity = cityId;
 	var cityName = decode64(getUrlParamByKey("cn"));//城市名称
@@ -654,7 +654,7 @@ function resetSerachParam(){
         elem:'#be_date1',
         value:year_month,
         type:"month",
-        btns: ['confirm','now'],
+        btns: ['confirm'],
         theme: '#11214e',
         min: '2018-10-1',
         max:max_month,
