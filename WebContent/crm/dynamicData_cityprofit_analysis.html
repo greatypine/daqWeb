@@ -218,27 +218,50 @@
 	  
 	});
     /*默认显示上个月的日期*/
-    var nowdays = new Date();
-    var year = nowdays.getFullYear();
-    var month = nowdays.getMonth();
-    if(month==0){
-        month=12;
-        year=year-1;
+    var cur_date = new Date();
+    var now_month =cur_date.getMonth();
+    var max_year = cur_date.getFullYear();
+    var now_date =cur_date.getDate();
+    var max_month = "";
+    if(now_month==0){
+        max_year =cur_date.getFullYear()-1;
+        max_month = "12";
     }
-    if (month < 10) {
-        month = "0" + month;
+    if(now_month>0&&now_month<10){
+        max_month = "0"+now_month;
+        if(now_month<9){
+            now_month ="0"+(now_month+1);
+        }else{
+            now_month = now_month+1;
+        }
+    }else{
+        max_month = now_month;
     }
-    var last_month = year + "-" + month;//上个月
-    month++;
-    var cur_month = year + "-" + month;//这个月
+    var year_month = max_year+"-"+max_month;
+    var max_date = "";
+    var max_month1 =max_month;
+    var max_month =max_year+"-"+max_month +"-"+(cur_date.getDate());
+    if(now_date==1){
+        if(now_month==4||now_month==6||now_month==9||now_month==11){
+            now_date =30;
+        }else
+        if(max_year%4==0&&now_month==2){
+            now_date=29;
+        }else{
+            now_date=31;
+        }
+        max_date = max_year+"-"+max_month1 +"-"+now_date;
+    }else{
+        max_date = max_year+"-"+now_month +"-"+(now_date-1);
+    }
     laydate.render({//月份控件
         elem:'#be_date1',
-        value:last_month,
+        value:year_month,
         type:"month",
         btns: ['confirm','now'],
         theme: '#11214e',
-        min: '2018-9-1',
-        max:cur_month
+        min: '2018-10-1',
+        max:max_month,
     });
 	
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
@@ -556,12 +579,12 @@
 function resetSerachParam(){
     laydate.render({//月份控件
         elem:'#be_date1',
-        value:last_month,
+        value:year_month,
         type:"month",
         btns: ['confirm','now'],
         theme: '#11214e',
-        min: '2018-9-1',
-        max:cur_month
+        min: '2018-10-1',
+        max:max_month,
     });
 	if(target==0){//总部
 
