@@ -814,7 +814,7 @@
             $("#storenopayhide").hide();
         }
         dynamicDto["searchstr"] = searchstrTemp;
-        $("#tradeType_tbody").find("tr:gt(0)").remove();
+        searchInfo_tradeprofit_step2(1);
 	    doManager('dynamicManager','exportStoreTradeProfit',[dynamicDto],function(data){
           if(data.result){
           	   var result= JSON.parse(data.data);
@@ -836,7 +836,7 @@
           }
          $("#process_div").hide();
     	 $("#process_div_pic").hide();
-      }); 
+      });
     }
 
 function initalldept(){
