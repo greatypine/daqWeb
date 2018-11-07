@@ -1,21 +1,21 @@
 package com.cnpc.pms.utils;
 
 import com.cnpc.pms.base.common.manager.UtilityManager;
-import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
+import com.cnpc.pms.utils.excel.MergedRegionParam;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +38,8 @@ public class ExportExcelByOssUtil {
     private String[] headers;
     //数据源列名
     private String[] keys;
-
+    //导出的文件合并标题（支持多级合并）
+    private List<List<MergedRegionParam>> params = new ArrayList<>();
 
     private HSSFCellStyle style_header = null;
     private CellStyle cellStyle_common = null;
@@ -48,7 +49,14 @@ public class ExportExcelByOssUtil {
         this.data = data;
         this.headers = headers;
         this.keys = keys;
+    }
 
+    public ExportExcelByOssUtil(String sheetName, List<Map<String,Object>> data, String[] headers, String [] keys, List<List<MergedRegionParam>> params){
+        this.sheetName = sheetName;
+        this.data = data;
+        this.headers = headers;
+        this.keys = keys;
+        this.params = params;
     }
 
 
@@ -120,9 +128,30 @@ public class ExportExcelByOssUtil {
         setCellStyle_common(wb);
         setHeaderStyle(wb);
         HSSFSheet sheet = wb.createSheet(sheetName);
-        HSSFRow row = sheet.createRow(0);
         String[] str_headers = headers;
         String[] headers_key = keys;
+
+        int rowNum = 0;
+
+        HSSFRow row = null;
+        if(params != null && params.size() > 0) {//不设置合并params值的话会跳过此步骤，不影响现有逻辑
+            for(List<MergedRegionParam> paramList: params){
+                row = sheet.createRow(rowNum);
+                for(int i = 0;i < str_headers.length;i++){
+                    HSSFCell cell = row.createCell(i);
+                    cell.setCellStyle(getHeaderStyle());
+                }
+                for(MergedRegionParam param : paramList){
+                    findIndex(param);
+                    row.getCell(param.getI()).setCellValue(new HSSFRichTextString(param.getName()));
+                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, param.getI(), param.getJ()));
+                }
+                rowNum++;
+            }
+        }
+
+        row = sheet.createRow(rowNum);
+
         for(int i = 0;i < str_headers.length;i++){
             HSSFCell cell = row.createCell(i);
             cell.setCellStyle(getHeaderStyle());
@@ -130,7 +159,7 @@ public class ExportExcelByOssUtil {
         }
 
         for(int i = 0;i < data.size();i++){
-            row = sheet.createRow(i+1);
+            row = sheet.createRow(i+rowNum+1);
             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
                 Boolean isNum = false;//data是否为数值型
 
@@ -182,4 +211,25 @@ public class ExportExcelByOssUtil {
 
         return result;
     }
+
+    /**
+     * 查找合并单元格所在的索引位置
+     * @param param
+     */
+    public void findIndex(MergedRegionParam param){
+        int i=0;
+        int j=0;
+        for(int k=0;i<headers.length;k++){
+            if(headers[k].equals(param.getStart())){
+                i = k;
+            }
+            if(headers[k].equals(param.getEnd())){
+                j = k;
+                break;
+            }
+        }
+        param.setI(i);
+        param.setJ(j);
+    }
+
 }

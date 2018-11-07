@@ -37,13 +37,14 @@ import com.cnpc.pms.utils.Base64Encoder;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.MD5Utils;
+import com.cnpc.pms.utils.excel.MergedRegionParam;
 import net.sf.json.JsonConfig;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -7207,29 +7208,71 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				return result;
 			}
 
+			List<List<MergedRegionParam>> targetMergeList = null;
+
 			//城市毛利
 			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","毛利"};
 			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","real_profit"};
+
+			//所需合并的单元格参数
+			MergedRegionParam param1 = new MergedRegionParam("城市","城市","城市");
+			MergedRegionParam param2 = new MergedRegionParam("门店名称","门店编号","门店");
+			MergedRegionParam param3 = new MergedRegionParam("销售收入（平台）","销售收入（合计）","销售收入");
+			MergedRegionParam param4 = new MergedRegionParam("优惠券（平台）","优惠券（合计）","优惠券");
+			MergedRegionParam param5 = new MergedRegionParam("营销费用（平台）","营销费用（优易）","营销费用");
+			MergedRegionParam param6 = new MergedRegionParam("销售收入（已退货）","销售收入（已退货）","已退货");
+			MergedRegionParam param7 = new MergedRegionParam("毛利","毛利","毛利");
+			MergedRegionParam param8 = new MergedRegionParam("事业群","事业群","事业群");
+			MergedRegionParam param9 = new MergedRegionParam("频道","频道","频道");
+			MergedRegionParam param10 = new MergedRegionParam("报损","盘亏","进销存系统费用");
+			List cityList = new ArrayList();
+			cityList.add(param1);
+			cityList.add(param3);
+			cityList.add(param5);
+			cityList.add(param6);
+			cityList.add(param7);
+			List<List<MergedRegionParam>> cityMergeList = new ArrayList<>();
+			cityMergeList.add(cityList);
+
+			targetMergeList = cityMergeList;
+
 			//门店毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
 				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）",
 						"优惠券（平台）","优惠券（优易）","优惠券（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损","盘亏","毛利"};
 				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit",
 						"platform_coupon","ims_coupon","total_coupon","platform_fee","ims_fee","return_profit","baosun","pankui","real_profit"};
+				List storeList = new ArrayList();
+				storeList.add(param1);
+				storeList.add(param2);
+				storeList.add(param3);
+				storeList.add(param4);
+				storeList.add(param5);
+				storeList.add(param6);
+				storeList.add(param7);
+				storeList.add(param10);
+				List<List<MergedRegionParam>> storeMergeList = new ArrayList<>();
+				storeMergeList.add(storeList);
+				targetMergeList = storeMergeList;
 			}
+
 			//事业群毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
+				List deptList = new ArrayList();
 				Map<String,String> content = new LinkedHashMap<>();
 				if(dynamicDto.getSearchstr().contains("dept_city_active")){
 					content.put("城市","city_name");
+					deptList.add(param1);
 				}
 				if(dynamicDto.getSearchstr().contains("dept_store_active")){
 					content.put("门店名称","store_name");
 					content.put("门店编号","store_code");
+					deptList.add(param2);
 				}
 				content.put("事业群","department_name");
 				if(dynamicDto.getSearchstr().contains("dept_channel_active")){
 					content.put("频道","channel_name");
+					deptList.add(param9);
 				}
 				content.put("销售收入（平台）","platform_profit");
 				content.put("销售收入（优易）","ims_profit");
@@ -7241,6 +7284,15 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 
 				str_headers = content.keySet().toArray(new String[0]);
 				headers_key = content.values().toArray(new String[0]);
+
+				deptList.add(param3);
+				deptList.add(param5);
+				deptList.add(param6);
+				deptList.add(param7);
+				deptList.add(param8);
+				List<List<MergedRegionParam>> deptMergeList = new ArrayList<>();
+				deptMergeList.add(deptList);
+				targetMergeList = deptMergeList;
 			}
 
 			String sheetName = "城市";
@@ -7250,7 +7302,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && dynamicDto.getSearchstr().contains("dept_active")){
 				sheetName="事业群";
 			}
-			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil(dynamicDto.getBeginDate()+sheetName+"毛利",list,str_headers,headers_key);
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil(dynamicDto.getBeginDate()+sheetName+"毛利",list,str_headers,headers_key,targetMergeList);
 			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
