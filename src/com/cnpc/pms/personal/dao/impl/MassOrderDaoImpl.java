@@ -50,7 +50,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE a.order_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' "
 				+ "WHEN 'pad' THEN '智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source "
 				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,"
-				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method "
+				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method,IFNULL(a.order_tag4,'') as order_tag4 "
 				+ "from ";
 
 		String sqlB = sqlA;
@@ -121,6 +121,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag3='2'  ";
 				} else if ("无精确成本".equals(names[i].trim())) {
 					sql = sql + " a.order_tag3='0'  ";
+				} else if ("A类营销费用".equals(names[i].trim())){
+					sql = sql + " a.order_tag4 is not null  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";
@@ -345,6 +347,8 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 					sql = sql + " a.order_tag3='2'  ";
 				} else if ("无精确成本".equals(names[i].trim())) {
 					sql = sql + " a.order_tag3='0'  ";
+				} else if ("A类营销费用".equals(names[i].trim())){
+					sql = sql + " a.order_tag4 is not null  ";
 				}
 				if (i == names.length - 1) {
 					sql = sql + " )";
@@ -470,7 +474,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "IFNULL(a.addr_name,'') as addr_name,IFNULL(a.addr_mobilephone,'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,"
 				+ "a.channel_name,a.department_name,a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score"
 				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,"
-				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method "
+				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method,IFNULL(a.order_tag4,'') as order_tag4 "
 				+ " from ";
 
 		String sqlB = sqlA;
