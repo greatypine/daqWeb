@@ -14,12 +14,12 @@ import java.util.Map;
 
 public class TReportFiledownManagerImpl extends BizBaseCommonManager implements TreportFiledownManager {
     @Override
-    public List<TReportFiledown> selectReportFileDowns() {
+    public List<TReportFiledown> selectReportFileDowns(String tableLogic) {
         UserSession userSession = SessionManager.getUserSession();
         Map sessionData = userSession.getSessionData();
         String username = (String) sessionData.get("userCode");
         TReportFiledownManagerDao tReportFiledownDao = (TReportFiledownManagerDao) SpringHelper.getBean(TReportFiledownManagerDao.class.getName());
-        List<TReportFiledown> list=tReportFiledownDao.getReportDown(username);
+        List<TReportFiledown> list=tReportFiledownDao.getReportDown(username,tableLogic);
         return list;
     }
     @Override

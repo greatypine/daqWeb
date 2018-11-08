@@ -13,7 +13,7 @@ import java.util.Map;
  * @author shijunhui 2018年9月25日
  */
 public interface TReportFiledownManagerDao extends IDAO {
-    public List<TReportFiledown> getReportDown(String username);
+    public List<TReportFiledown> getReportDown(String username,String tableLogic);
 
     public void getUpdateReportFileDowns(TReportFiledown tReportFiledown);
 

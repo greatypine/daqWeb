@@ -3,14 +3,18 @@ package com.cnpc.pms.reportFiledown.entity;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
+import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
+import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
+import com.cnpc.pms.utils.DateUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -22,6 +26,7 @@ import org.apache.poi.xssf.usermodel.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class HttpClientUtils {
@@ -55,9 +60,23 @@ public class HttpClientUtils {
         return t4;
     }
 
-    public void getDataTable(List<Map<String, Object>> list, MassOrderDto massOrderDto, String fileName, MassOrderDao massOrderDao,Long id) {
+    public void getDataTable( MassOrderDto massOrderDto, String fileName, MassOrderDao massOrderDao,Long id) {
         Map<String, Object> result = new HashMap<String,Object>();
         String url = null;
+        List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+        try {
+            String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
+                list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
+            }else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
+                list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
+            }else{
+                list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if(list!=null&&list.size()>0){//成功返回数据
 
             String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
@@ -149,6 +168,89 @@ public class HttpClientUtils {
         }
 
         massOrderDao.updataReport(id,url);
+
+    }
+
+    public void getDataTableSPXSDA( MassOrderItemDto massOrderDto, String fileName, MassOrderItemDao massOrderItemDao, Long id) {
+        String url = null;
+        List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+        try {
+            String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
+                list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
+            }else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
+                list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
+            }else{
+                list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if(list!=null&&list.size()>0){//成功返回数据
+
+            String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+            String str_web_path = PropertiesUtil.getValue("file.web.root");
+
+            XSSFWorkbook wb = new XSSFWorkbook();
+            setCellStyle_common(wb);
+            setHeaderStyle(wb);
+            XSSFSheet sheet = wb.createSheet("商品销售数据");
+            XSSFRow row = sheet.createRow(0);
+
+            //定义表头 以及 要填入的 字段
+            String[] str_headers = {"商品名称","商品ID","订单号","下单客户姓名","下单客户电话","预约时间","下单时间","签收时间","单价","签收客户姓名","签收客户电话","片区编号","小区编号","片区A国安侠编号","送单侠姓名",
+                    "送单侠电话","签收地址","E店名称","门店名称","门店编号","事业群","频道","城市","订单来源","评价信息"};
+            String[] headers_key = {"product_name","product_id","order_sn","customer_name","customer_mobilephone","appointment_start_time","create_time","df_signed_time","original_price","order_customer_name","order_mobilephone","area_code","village_code",
+                    "info_employee_a_no","employee_name","employee_phone","order_address",
+                    "eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","order_contents"};
+
+            for(int i = 0;i < str_headers.length;i++){
+                XSSFCell cell = row.createCell(i);
+                cell.setCellStyle(getHeaderStyle());
+                cell.setCellValue(new XSSFRichTextString(str_headers[i]));
+            }
+
+            for(int i = 0;i < list.size();i++){
+                row = sheet.createRow(i+1);
+                for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+                    String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+                    if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
+                        if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
+                            value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+                        }
+                    }
+                    setCellValueall(row, cellIndex, value);
+                }
+            }
+
+            File file_xls = new File(str_file_dir_path + fileName+".xlsx");
+            if(file_xls.exists()){
+                file_xls.delete();
+            }
+            FileOutputStream os = null;
+
+            try {
+                os = new FileOutputStream(file_xls.getAbsoluteFile());
+                wb.write(os);
+                OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+                url = ossRefFileManager.uploadOssFileNew(file_xls, "xlsx", "daqWeb/download/",fileName);
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if(os != null){
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }
+
+        massOrderItemDao.updataReport(id,url);
 
     }
 

@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface TreportFiledownManager extends IManager{
 
-    public List<TReportFiledown> selectReportFileDowns();
+    public List<TReportFiledown> selectReportFileDowns(String tableLogic);
 
     public void updateReportFileDowns(TReportFiledown tReportFiledown);
 

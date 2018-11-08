@@ -5,7 +5,6 @@ import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.security.UserSession;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
-import com.cnpc.pms.base.util.StrUtil;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
@@ -13,7 +12,7 @@ import com.cnpc.pms.personal.manager.MassOrderManager;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.manager.impl.OrderManagerImpl;
-import com.cnpc.pms.reportFiledown.entity.ExportRunable;
+import com.cnpc.pms.reportFiledown.entity.ExportRunableDDDA;
 import com.cnpc.pms.reportFiledown.entity.HttpClientUtils;
 import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
 import com.cnpc.pms.utils.DateUtils;
@@ -85,52 +84,30 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   	public Map<String, Object> exportOrder(MassOrderDto massOrderDto, TReportFiledown tReportFiledown) {
 		MassOrderDao massOrderDao = (MassOrderDao)SpringHelper.getBean(MassOrderDao.class.getName());
 //		TReportFiledownManagerDao tReportFiledownDao = (TReportFiledownManagerDao)SpringHelper.getBean(TReportFiledownManagerDao.class.getName());
-
 		Map<String, Object> result = new HashMap<String,Object>();
-		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
-		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=massOrderDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		if(list.size()>50000){
-			result.put("message","导出条目过多，请重新筛选条件导出！");
-			result.put("status","more");
-		}else{
-			HttpClientUtils httpClientUtils = new HttpClientUtils();
-			UserSession userSession = SessionManager.getUserSession();
-			Map sessionData = userSession.getSessionData();
-			String username = (String) sessionData.get("userCode");
-			tReportFiledown.setCreate_time(new Date());
-			tReportFiledown.setUsername(username);
-			tReportFiledown.setDownTimes(0);
+		HttpClientUtils httpClientUtils = new HttpClientUtils();
+		UserSession userSession = SessionManager.getUserSession();
+		Map sessionData = userSession.getSessionData();
+		String username = (String) sessionData.get("userCode");
+		tReportFiledown.setCreate_time(new Date());
+		tReportFiledown.setUsername(username);
+		tReportFiledown.setDownTimes(0);
+		tReportFiledown.setTableLogic("DDDA");
+		String fileName =  tReportFiledown.getFilename();
+		fileName = httpClientUtils.getPingYin(fileName);
+		tReportFiledown.setFilename(fileName);
+		tReportFiledown.setUrl("/" + fileName);
+		tReportFiledown.setMark1("0");
+		saveObject(tReportFiledown);
 
-			String fileName =  tReportFiledown.getFilename();
-			fileName = httpClientUtils.getPingYin(fileName);
-			tReportFiledown.setFilename(fileName);
-			tReportFiledown.setUrl("/" + fileName);
-			tReportFiledown.setMark1("0");
-			saveObject(tReportFiledown);
+		String starts = "DDDA";
+		ExportRunableDDDA s1 = new ExportRunableDDDA(starts, fileName, null, massOrderDto, false,tReportFiledown,massOrderDao);
+		Thread t1 = new Thread(s1);
+		t1.start();
 
-			String starts = "1";
-			ExportRunable s1 = new ExportRunable(list, starts, fileName, null, massOrderDto, false,tReportFiledown,massOrderDao);
-			Thread t1 = new Thread(s1);
-			t1.start();
-
-			result.put("message","导出成功！");
-			result.put("status","success");
-		}
-
-  		return result;
+		result.put("message","导出成功！");
+		result.put("status","success");
+		return result;
   	}
 	
 	@Override

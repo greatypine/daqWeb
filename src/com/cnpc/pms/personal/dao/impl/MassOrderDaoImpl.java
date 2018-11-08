@@ -461,8 +461,19 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql =  sql + " ORDER BY a.sign_time "+massOrderDto.getSort_tag()+" ";
 		}
 
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        try{
+            Query query = session.createSQLQuery(sql);
+//            result = Integer.valueOf(query.uniqueResult().toString());
+			list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 		return list;
 	}
 
@@ -815,10 +826,5 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				new Object[] {url, id }, new Type[] { Hibernate.STRING,Hibernate.LONG })
 			.executeUpdate();
 
-//		String  sql=" UPDATE t_report_filedown set mark_1 = '1',url = '"+ url +"' where id ="+ id +"" ;
-//		SQLQuery query = getHibernateTemplate().getSessionFactory()
-//				.getCurrentSession().createSQLQuery(sql.toString());
-//		query.executeUpdate();
-
-}
+	}
 }

@@ -18,9 +18,9 @@ import java.util.List;
 public class TReportFiledownManagerDaoImpl extends BaseDAOHibernate implements TReportFiledownManagerDao {
 
     @Override
-    public List<TReportFiledown> getReportDown(String username) {
+    public List<TReportFiledown> getReportDown(String username,String tableLogic) {
         // TODO Auto-generated method stub
-        String hql = " select * from t_report_filedown where username = '"+username+"' ORDER BY create_time DESC LIMIT 20 ";
+        String hql = " select * from t_report_filedown where username = '"+username+"' and table_logic = '"+tableLogic+"' ORDER BY create_time DESC LIMIT 20 ";
         SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(hql);
         List<TReportFiledown> list = query.addEntity(TReportFiledown.class).list();
         return list;
