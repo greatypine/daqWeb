@@ -4,11 +4,15 @@ import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
+import com.cnpc.pms.utils.ImpalaUtil;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.Type;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -462,8 +466,19 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql =  sql + " ORDER BY a.sign_time "+massOrderDto.getSort_tag()+" ";
 		}
 
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        try{
+            Query query = session.createSQLQuery(sql);
+//            result = Integer.valueOf(query.uniqueResult().toString());
+			list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+
 		return list;
 	}
 
@@ -808,5 +823,13 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 
 		return map_result;
 	}
+	@Override
+	public void updataReport(Long id , String url) {
+		String sql = " UPDATE t_report_filedown set mark_1 = '1',url =? where id =? ";
+	Session session = this.getSession();
+		session.createSQLQuery(sql).setParameters(
+				new Object[] {url, id }, new Type[] { Hibernate.STRING,Hibernate.LONG })
+			.executeUpdate();
 
+	}
 }

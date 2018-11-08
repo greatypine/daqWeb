@@ -112,6 +112,185 @@
     .gonghai:hover .type_con,.yichang:hover .type_con{display: block;}
     .fold-con{display: none;}
     .auto{max-height:200px; overflow-y:scroll;border: 0px solid #dedede;}
+
+
+    /*遮罩层*/
+
+    #mask1 {
+        width: 100%;
+        height: 100%;
+        background-color: #333333;
+        opacity: 0.3;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        display: none;
+    }
+    /*模态框的模板*/
+
+    #dialog {
+        position: absolute;
+        width: 25%;
+        height: 250px;
+        min-height: 5%;
+        max-height: 100%;
+        border: #333333 solid 1px;
+        border-radius: 8px;
+        -webkit-box-shadow: 3px 3px 3px 3px #666666;
+        box-shadow: 3px 3px 3px 3px #666666;
+        position: fixed;
+        background-color: white;
+        z-index: 2;
+        display: none;
+    }
+
+    #dialog2 {
+        display: none;
+    }
+
+    #dialog>header {
+        text-align: left;
+        color: #333;
+        font-size: 18px;
+        position: relative;
+        padding: 10px;
+    }
+
+    #dialog>header>span:last-child {
+        position: absolute;
+        right: 2%;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        color: #CCCCCC;
+    }
+
+    #dialog>header>span:last-child:hover {
+        color: #666666;
+        cursor: pointer;
+    }
+
+    #dialog>.content1 {
+        padding: 20px 10px;
+        font-size: 16px;
+        color: #777777;
+    }
+    #dialog .fz17{
+        font-size: 17px;
+    }
+
+    #dialog>.content1>.trlight2 {
+        line-height: 30px;
+    }
+    #dialog>.content1>.trlight3 {
+        line-height: 30px;
+        padding-top: 20px;
+    }
+    /*trlight*/
+
+    #dialog .form-control {
+        border-radius: 7px;
+        display: inline;
+        width: 70%;
+    }
+
+    #dialog #footer {
+        text-align: center;
+        padding-bottom: 10px;
+    }
+    /*设置模态框的位置--页面居中*/
+
+    .dialog_position_center {
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .newimg {
+        display: none;
+    }
+
+    .content2 {
+        width: 400px;
+        position: absolute;
+        right: 10px;
+        top: 70px;
+        background: #f8f9fa;
+        border-radius: 3px;
+        max-height: 600px;
+    }
+
+    .content2 .dialogremove {
+        margin-right: 20px;
+    }
+
+    .content2 .modeltitle {
+        margin-left: 15px;
+        margin-top: 15px;
+    }
+    .content2 .div1{
+        margin-top: 10px;
+        max-height: 290px;
+        overflow: auto;
+
+    }
+    .content2 img{
+        width: 28px;
+    }
+    .navbar-custom-menu{
+        position: absolute;
+        right: 0px;
+        margin-right: 0;
+    }
+    .navbar-custom-menu ul{
+        margin-right: 100px;
+    }
+    .content2 .divcontent {
+        width: 362px;
+        height: 60px;
+        background: #fff;
+        margin: 10px auto;
+        box-shadow: 2px 2px 2px 2px #ebeced;
+        border-radius: 3px;
+    }
+
+    .content2 .downleft {
+        width: 59px;
+        height: 60px;
+        float: left;
+        text-align: center;
+        line-height: 60px;
+        border-right: 1px solid #ccc;
+    }
+
+    .content2 .downright {
+        width: 300px;
+        height: 60px;
+        margin-left: 60px;
+    }
+
+    .content2 .downrightdiv {
+        margin-left: 20px;
+    }
+
+    .content2 .downrightspan {
+        display: inline-block;
+        width: 45px;
+    }
+
+    .content2 .xlsx {
+        color: #1a73e8;
+        font-weight: bold;
+    }
+
+    .content2 .downrighta {
+        color: #1a73e8;
+        margin-left: 20px;
+    }
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -134,11 +313,100 @@
 							</ul>
 						</div>
 					</div>
+          <!--右上角下载中心-->
+          <div class="navbar-custom-menu">
+              <ul class="nav navbar-nav">
+                  <li style="color: #fff;line-height: 50px;">
+
+                  </li>
+                  <li class="dropdown user user-menu dialog_open2" onclick="download_table();">
+                      <a href="#" class="">
+                          <span class="glyphicon glyphicon-download-alt" ></span> 下载中心
+                          <img alt="" class="newimg" src="dist/img/new_1.gif" style="position:absolute;right:-10px; top:5px; width:25px; height:19px;">
+                      </a>
+                  </li>
+              </ul>
+              <div class="modal-content content2" id="dialog2">
+                  <div>
+                      <button type="button" class="close dialog_remove2 dialogremove">×</button>
+                      <h4 class="modal-title modeltitle">导出列表页面（暂留20条记录）</h4>
+                  </div>
+                  <!--<div class="modal-body" style="padding-left: 0px;padding-right:0px;padding-top:0px;padding-bottom: 0px;">-->
+                      <!--<div class="col-md-12 col-xs-12">-->
+                          <!--<table class="table" id="head_tr">-->
+                              <!--&lt;!&ndash;<tbody>&ndash;&gt;-->
+                              <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>名称</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>下载次数</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>下载时间</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>状态</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>创建时间</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>操作</td>&ndash;&gt;-->
+                              <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                              <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>121323</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td> 0 </td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td> — </td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td> 已生成文件</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>2018-10-30 10:13:09</td>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;<td>&ndash;&gt;-->
+                                      <!--&lt;!&ndash;<a>下载</a>&ndash;&gt;-->
+                                  <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                              <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                              <!--&lt;!&ndash;</tbody>&ndash;&gt;-->
+                          <!--</table>-->
+                      <!--</div>-->
+                  <!--</div>-->
+
+                  <div class="div1" id="head_tr">
+
+                  </div>
+
+                  <div class="modal-footer" style="text-align: center;">
+                      <button type="button" class="btn btn-default dialog_remove2">关闭</button>
+                  </div>
+              </div>
+
+          </div>
       </div>
     </nav>
   </header>
 
-  <!-- =============================================== -->
+    <!-- Content Wrapper. Contains page content -->
+    <!--遮罩层-->
+    <div id="mask1"></div>
+        <!--导出按钮模态框-->
+        <div id="dialog" class="dialog_position_center">
+            <!--头部分-->
+            <header>
+                <span>添加下载任务</span><span class="dialog_close">&times;</span>
+            </header>
+            <!--内容部分-->
+            <div class="content1">
+                <div class="trlight" style="text-align: center">
+                    <!--<span>导出信息：</span>-->
+                    <span class="fz17" id="city" style="color: #f39c12;font-weight: bold"></span>
+                    <span class="fz17" id="store" style="color: #f39c12;font-weight: bold"></span>
+                    <!--<span>日期：</span>-->
+                    <span class="fz17" id="date" style="color: #f39c12;font-weight: bold"></span>
+                </div>
+                <div class="trlight3" style="text-align: center">
+                    <span style="font-size: 15px;color: #333"> 文件名称：</span>
+                    <input style="width: 280px; height: 35px;color: #333;font-size: 15px" id="userName" type="text" class="form-control" placeholder="文件名称">
+                </div>
+
+            </div>
+            <!--底部部分-->
+            <div> &nbsp</div>
+            <footer id="footer">
+                <button class="btn btn-default dialog_remove">取消</button>
+                <button class="btn btn-primary dialog_close" onclick="export_manual_massOrder('normal')">确定</button>
+            </footer>
+        </div>
+    <!--</div>-->
+
+    <!-- =============================================== -->
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -330,7 +598,7 @@
                     <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
                 </div>
                 <div class="col-lg-2 pull-right" style="padding-top: 25px;" id="exportnormal">
-                    <button type="button" id="export_manual_massOrder_button" onclick="export_manual_massOrder('normal')" class="btn btn-block btn-warning">导出</button>
+                    <button type="button" id="export_manual_massOrder_button" class="btn btn-block btn-warning dialog_open">导出</button>
                 </div>
                 <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
                     <button type="button" id="export_manual_massOrder_button" onclick="export_manual_massOrder('all')" class="btn btn-block btn-warning">完整数据导出</button>
@@ -1814,6 +2082,11 @@ function showfee(obj){
   
   //导出
   function export_manual_massOrder(hiddenvalue){
+      var filename = $("#userName").val();
+      if(filename == "" || filename == null){
+          crm_alert(0,"名称不能为空！");
+          return false;
+      }
 	  	var sdate = $("#auto_date").val();
 	    var begin_end_date=["",""];
 	  	if(sdate!=""){
@@ -1848,8 +2121,8 @@ function showfee(obj){
           }
         }
 
-        $("#process_div").show();
-        $("#process_div_pic").show();
+//        $("#process_div").show();
+//        $("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
 	    var dept = $("#dept_manual").val();
 	    var eshopId = $("#eshop_id_manual").val();
@@ -1929,12 +2202,17 @@ function showfee(obj){
 	    		sort_type:sort_type,
 	    		hidden_flag:hiddenvalue
 			}
-		    
-		    doManager('massOrderManager','exportOrder',[massOrderDto],function(data){
+      var reportFiledown=null;
+
+      reportFiledown = {
+          filename : filename
+      }
+		    doManager('massOrderManager','exportOrder',[massOrderDto,reportFiledown],function(data){
 		          if(data.result){
 		          	   var result= JSON.parse(data.data);
 			           if(result.status=='success'){
-			        	   window.location.href=result.data;
+                           $("#reportName").val("");
+//			        	   window.location.href=result.data;
 			           }else if(result.status=='more'){
 			        	   crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
 			        	   $("#process_div").hide();
@@ -1953,8 +2231,94 @@ function showfee(obj){
 		         $("#process_div").hide();
 		    	 $("#process_div_pic").hide();
 		     });
+      crm_alert(0,"请去下载中心下载导出文件！");
 	  }
-  
+
+//下载列表
+function download_table(){
+
+    doManager('treportFiledownManager','selectReportFileDowns',["DDDA"],function(data){
+        if(data.result){
+            var dataresult= JSON.parse(data.data);
+            if(dataresult != undefined && dataresult != null && dataresult.length){
+                var objtr = $("#head_tr");
+                document.getElementById("head_tr").innerHTML = "";
+//                objtr.append("<tr> <td class='downtr'>名称</td>  <td class='downtr'>状态</td> <td class='downtr'>操作</td></tr>");
+                var html = "";
+                for(var i=0; i<dataresult.length; i++){
+                    if(dataresult[i].downTime != null && dataresult[i].downTime != ""){
+                        var file_downTime = formmatDate(dataresult[i].downTime);
+                    }else{
+                        file_downTime = " — ";
+                    }
+                    var file_filename = dataresult[i].filename;
+                    var file_createTime = formmatDate(dataresult[i].create_time);
+                    var file_status = dataresult[i].mark1;
+                    var file_id = dataresult[i].id;
+                    if(file_status == 0){
+                        file_status = "正在生成文件...";
+                    }else{
+                        file_status = "已生成文件";
+                    }
+                    var file_username = dataresult[i].username;
+
+                    var file_enfilename = dataresult[i].url;
+                    var file_times = dataresult[i].downTimes;
+
+
+//                    var url = document.location + "";
+//                    var indexurl = url.indexOf("crm");
+//                    url = url.substr(0, indexurl);
+//                    var dateurl = getCurrent();
+//                    url = url + "out/artifacts/daqWeb_war_exploded/template"+ file_enfilename + ".csv";
+                    var url = dataresult[i].url;
+                    if(dataresult[i].mark1 == 0){
+//                        html = html + "<tr><td class='downtr'>"+ file_filename +"</td><td class='downtr'> " + file_status +"</td><td class='downtr'><a class='downa' style='color:gray;' disabled='true'>下载</a></td></tr>";
+                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 10px;'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.xlsx</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' style='color:gray;' disabled='true'>下载</a></div></div></dd> </dl>"
+                    }else{
+//                        html = html + "<tr><td class='downtr'>"+ file_filename +"</td><td class='downtr'> " + file_status +"</td><td class='downtr'><a class='downa' href='"+ url+"' onclick='addTimes("+file_id+","+file_times+")'>下载</a></td></tr>";
+                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 10px;'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.xlsx</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' href='"+ url+"' onclick='addTimes("+file_id+","+file_times+")'>下载</a></div></div></dd> </dl>"
+
+                    }
+
+                }
+                //objtr.clean();
+
+
+                objtr.append(html);
+            }
+        }
+    })
+}
+//点击下载
+function addTimes(id,times){
+    var tReportFiledown = new Object();
+    tReportFiledown.id = id;
+    tReportFiledown.downTimes= times;
+    doManager('treportFiledownManager','updateReportFileDowns',[tReportFiledown],function(data){
+        if(data.result) {
+            console.log("下载添加次数");
+        }
+    })
+}
+
+
+
+function formmatDate(value){
+    if(value==null||value=="")return null;
+    // var unixTimestamp = new Date(value);
+    // return unixTimestamp.toLocaleString();
+    var time = new Date(value);
+    var y = time.getFullYear();
+    var m = time.getMonth()+1;
+    var d = time.getDate();
+    var h = time.getHours();
+    var mm = time.getMinutes();
+    var s = time.getSeconds();
+    return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
+}
+function add0(m){return m<10?'0'+m:m }
+
   //订单详情
   function showorderdetail(order_sn){
 	  $("#process_div").show();
@@ -2182,6 +2546,155 @@ function DateDiff(Date1,Date2) { //Date1和Date2是2018-09-01格式
     return Days;
 }
 
+
+
+//打开按钮"模态框"
+$(".dialog_open").click(function(){
+    var total = $("#totalRecord_cannot").text();
+    parseInt("total");
+    if(total != ""){
+        var totals = parseInt(total);
+        if(totals <= 50000){
+            var cityName = $("#citySelect  option:selected").text();
+            var sdate = $("#auto_date").val();
+            var storeName = $("#store_name_manual").val();
+            $("#city").text(cityName);
+            $("#store").text(storeName);
+            $("#date").text(sdate);
+            $("#userName").val("商品销售档案");
+            dialogOpen()
+        }else{
+            crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+        }
+    }else{
+        crm_alert(0,"请先确认是否查询到数据！");
+    }
+
+
+});
+//确定按钮"模态框"
+$(".dialog_close").click(function(){
+    dialogClose()
+})
+//取消按钮"模态框"
+$(".dialog_remove").click(function(){
+    dialogRemove()
+})
+
+//遮罩层
+var  _$mask = $("#mask1");
+
+var  $dialog = $("#dialog");
+
+/**
+ * 打开模态框
+ * @param animationSwitch 切换模态框的动画 true:淡入 false：滑入
+ * @returns {*|{opacity}} void方法
+ */
+function dialogOpen() {
+    if(animationSwitch = true) {
+        _$mask.fadeIn(200, function() {
+            $dialog.fadeIn(600);
+        })
+    }else{
+        _$mask.fadeIn(200, function() {
+            $dialog.stop().slideDown(200);
+        })
+    }
+}
+
+/**
+ * 确定模态框
+ * @param animationSwitch 切换模态框的动画 true:淡出 false：滑出
+ * @returns {*|{opacity}} void方法
+ */
+
+
+function dialogClose(){
+    if(animationSwitch = true){
+        _$mask.fadeOut(200, function() {
+            $dialog.fadeOut(600);
+            $(".newimg").show()
+        })
+    }else{
+        _$mask.fadeOut(200, function() {
+            $dialog.stop().slideUp(200)
+        });
+    }
+}
+
+/**
+ * 取消模态框
+ * @param animationSwitch 切换模态框的动画 true:淡出 false：滑出
+ * @returns {*|{opacity}} void方法
+ */
+
+
+function dialogRemove(){
+    if(animationSwitch = true){
+        _$mask.fadeOut(200, function() {
+            $dialog.fadeOut(600);
+        })
+    }else{
+        _$mask.fadeOut(200, function() {
+            $dialog.stop().slideUp(200)
+        });
+    }
+}
+//
+//			//打开下载中心"模态框"
+//			$(".dialog_open2").click(() => dialogOpen2());
+//			//关闭下载中心"模态框"
+//
+//			$(".dialog_remove2").click(() => dialogRemove2())
+
+//打开下载中心"模态框"
+$(".dialog_open2").click(function(){
+    dialogOpen2()
+});
+//关闭下载中心"模态框"
+$(".dialog_remove2").click(function(){
+    dialogRemove2()
+})
+
+var $dialog2 = $("#dialog2");
+
+/**
+ * 打开下载中心模态框
+ * @param animationSwitch 切换模态框的动画 true:淡入 false：滑入
+ * @returns {*|{opacity}} void方法
+ */
+
+function dialogOpen2(){
+    if(animationSwitch = true){
+        _$mask.fadeIn(200, function() {
+            $dialog2.fadeIn(600);
+            $(".newimg").hide()
+        })
+    }else{
+        _$mask.fadeIn(200, function() {
+            $dialog2.stop().slideDown(200);
+        });
+    }
+}
+
+/**
+ * 关闭下载中心模态框
+ * @param animationSwitch 切换模态框的动画 true:淡出 false：滑出
+ * @returns {*|{opacity}} void方法
+ */
+
+function dialogRemove2(){
+    if(animationSwitch = true){
+        _$mask.fadeOut(200, function() {
+            $dialog2.fadeOut(600);
+        })
+    }else{
+        _$mask.fadeOut(200, function() {
+            $dialog2.stop().slideUp(200)
+        });
+    }
+}
 </script>
 </body>
 

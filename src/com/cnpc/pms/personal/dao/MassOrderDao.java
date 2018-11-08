@@ -119,5 +119,8 @@ public interface MassOrderDao extends IDAO{
 	 **/
 
 	public Map<String,Object> queryOrderListOfApp(String employeeNo,PageInfo pageInfo,String orderSN);
-	
+
+	public void updataReport(Long id ,String url);
+
+
 }

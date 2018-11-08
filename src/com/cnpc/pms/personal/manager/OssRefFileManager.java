@@ -8,5 +8,6 @@ import com.cnpc.pms.personal.entity.OssRefFile;
 public interface OssRefFileManager extends IManager{
 
 	public String uploadOssFile(File f,String suffix,String urlLocation);
+	public String uploadOssFileNew(File f,String suffix,String urlLocation,String fileNames);
 	public OssRefFile saveOSSRefFile(OssRefFile ossRefFile);
 }

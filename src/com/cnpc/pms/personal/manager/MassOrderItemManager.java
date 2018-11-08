@@ -6,6 +6,7 @@ import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
+import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
 
 /**
  * @Function：订单详情数据
@@ -49,7 +50,7 @@ public interface MassOrderItemManager extends IManager {
 	 * @param massOrderDto
 	 * @return
 	 */
-	public Map<String, Object> exportOrder(MassOrderItemDto massOrderDto);
+	public Map<String, Object> exportOrder(MassOrderItemDto massOrderDto, TReportFiledown tReportFiledown);
 	/**
 	 * 查询当日实时毛利
 	 * @param dd

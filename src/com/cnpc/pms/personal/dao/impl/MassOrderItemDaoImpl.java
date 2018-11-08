@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
@@ -17,6 +19,7 @@ import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.utils.ImpalaUtil;
+import org.hibernate.type.Type;
 
 /**
  * @Function：清洗出的订单详情Dao实现
@@ -604,5 +607,15 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	     }
 		map_all.put("lst_data", lst_data);
 		return map_all;
+	}
+
+	@Override
+	public void updataReport(Long id , String url) {
+		String sql = " UPDATE t_report_filedown set mark_1 = '1',url =? where id =? ";
+		Session session = this.getSession();
+		session.createSQLQuery(sql).setParameters(
+				new Object[] {url, id }, new Type[] { Hibernate.STRING,Hibernate.LONG })
+				.executeUpdate();
+
 	}
 }

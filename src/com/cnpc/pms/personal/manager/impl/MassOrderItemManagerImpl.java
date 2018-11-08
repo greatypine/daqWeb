@@ -1,8 +1,5 @@
 package com.cnpc.pms.personal.manager.impl;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.cnpc.pms.base.security.SessionManager;
+import com.cnpc.pms.base.security.UserSession;
+import com.cnpc.pms.reportFiledown.entity.ExportRunableSPXSDA;
+import com.cnpc.pms.reportFiledown.entity.HttpClientUtils;
+import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -24,14 +26,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.cnpc.pms.base.paging.impl.PageInfo;
-import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
@@ -41,7 +40,6 @@ import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.manager.MassOrderItemManager;
-import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.manager.impl.OrderManagerImpl;
 import com.cnpc.pms.utils.DateUtils;
@@ -129,97 +127,33 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		return result;
 	}
 	@Override
-  	public Map<String, Object> exportOrder(MassOrderItemDto massOrderDto) {
+  	public Map<String, Object> exportOrder(MassOrderItemDto massOrderDto, TReportFiledown tReportFiledown) {
 		//OrderDao massOrderItemDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 		
   		Map<String, Object> result = new HashMap<String,Object>();
-  		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
-  		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
-  		} catch (Exception e) {
-  			e.printStackTrace();
-  			return null;
-  		}
-  		if(list!=null&&list.size()>0){//成功返回数据
-  			if(list.size()>50000){
-  				result.put("message","导出条目过多，请重新筛选条件导出！");
-  	  			result.put("status","more");
-  	  			return result;
-  			}
-			String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template";
-  			String str_web_path = PropertiesUtil.getValue("file.web.root");
 
-  	        XSSFWorkbook wb = new XSSFWorkbook();   
-  	        setCellStyle_common(wb);
-  	        setHeaderStyle(wb);
-  	        XSSFSheet sheet = wb.createSheet("商品销售数据");
-  	        XSSFRow row = sheet.createRow(0);
-  	        
-  	        //定义表头 以及 要填入的 字段 
-  	        String[] str_headers = {"商品名称","商品ID","订单号","下单客户姓名","下单客户电话","预约时间","下单时间","签收时间","单价","签收客户姓名","签收客户电话","片区编号","小区编号","片区A国安侠编号","送单侠姓名",
-  	        		"送单侠电话","签收地址","E店名称","门店名称","门店编号","事业群","频道","城市","订单来源","评价信息"};
-	        String[] headers_key = {"product_name","product_id","order_sn","customer_name","customer_mobilephone","appointment_start_time","create_time","df_signed_time","original_price","order_customer_name","order_mobilephone","area_code","village_code",
-			        		"info_employee_a_no","employee_name","employee_phone","order_address",
-			        		"eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","order_contents"};
-  	       
-  	        for(int i = 0;i < str_headers.length;i++){
-  	            XSSFCell cell = row.createCell(i);
-  	            cell.setCellStyle(getHeaderStyle());
-  	            cell.setCellValue(new XSSFRichTextString(str_headers[i]));
-  	        }
-  	        
-  	        for(int i = 0;i < list.size();i++){
-  	        	 row = sheet.createRow(i+1);
-  	             for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-  	            	String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-  	            	if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
-						if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
-							value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
-						}
-  	  	            }
-  	  	            setCellValueall(row, cellIndex, value);
-  	             }
-  	        }
+		HttpClientUtils httpClientUtils = new HttpClientUtils();
+		UserSession userSession = SessionManager.getUserSession();
+		Map sessionData = userSession.getSessionData();
+		String username = (String) sessionData.get("userCode");
+		tReportFiledown.setCreate_time(new Date());
+		tReportFiledown.setUsername(username);
+		tReportFiledown.setDownTimes(0);
+		tReportFiledown.setTableLogic("SPXSDA");
+		String fileName =  tReportFiledown.getFilename();
+		fileName = httpClientUtils.getPingYin(fileName);
+		tReportFiledown.setFilename(fileName);
+		tReportFiledown.setUrl("/" + fileName);
+		tReportFiledown.setMark1("0");
+		saveObject(tReportFiledown);
 
-  			File file_xls = new File(str_file_dir_path + File.separator +System.currentTimeMillis()+"_orderitemlist.xlsx");
-  			if(file_xls.exists()){
-  				file_xls.delete();
-  			}
-  			FileOutputStream os = null;
-			String url = null;
-  			try {
-  				os = new FileOutputStream(file_xls.getAbsoluteFile());
-  				wb.write(os);
-				OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-				url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
-  			}catch (Exception e) {
-  				e.printStackTrace();
-  			} finally {
-  				if(os != null){
-  					try {
-  						os.close();
-  					} catch (IOException e) {
-  						e.printStackTrace();
-  					}
-  				}
-  			}
+		ExportRunableSPXSDA s1 = new ExportRunableSPXSDA(fileName, null, massOrderDto, false,tReportFiledown,massOrderItemDao);
+		Thread t1 = new Thread(s1);
+		t1.start();
 
-  			result.put("message","导出成功！");
-  			result.put("status","success");
-			result.put("data", url);
-  		}else{
-  			result.put("message","请重新操作！");
-  			result.put("status","fail");
-  		}
+		result.put("message","导出成功！");
+		result.put("status","success");
   		return result;
   	}
 	private XSSFCellStyle getHeaderStyle(){
