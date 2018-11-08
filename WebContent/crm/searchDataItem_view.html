@@ -2027,7 +2027,7 @@ function DateDiff(Date1,Date2) { //Date1和Date2是2018-09-01格式
 $(".dialog_open").click(function(){
     var total = $("#totalRecord_cannot").text();
     parseInt("total");
-    if(total != ""){
+    if(total != "" && total != 0 ){
         var totals = parseInt(total);
         if(totals <= 50000){
             var cityName = $("#citySelect  option:selected").text();
