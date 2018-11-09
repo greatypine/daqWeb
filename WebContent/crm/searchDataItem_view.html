@@ -1629,6 +1629,16 @@ Date.prototype.format=function(fmt) {
   }
   
   function resetSerachParam(t){
+  	  if(target==0){//总部
+    		var a = document.getElementById("citySelect");
+    	  	a.options[0].selected = true;
+    	  	$("#store_name_manual").val("");
+          initallstore();
+    	  }else if(target==1){
+    		$("#store_name_manual").val("");
+    		initStoreSelectcomplate();
+    	  }
+  	$("#store_id_manual").val("");  
  	$("#customer_phone_manual").val("");
 	$("#customer_name_manual").val("");
 	$("#addr_phone_manual").val("");
