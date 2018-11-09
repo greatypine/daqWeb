@@ -711,10 +711,21 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 		if(StringUtils.isNotEmpty(storeno)){
 			sql = sql + " AND t.storeno='"+storeno+"' ";
 		}
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+//		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		List<?> lst_data = new ArrayList<Map<String, Object>>();
+		try{
+			Query query = session.createSQLQuery(sql);
+//            result = Integer.valueOf(query.uniqueResult().toString());
+			lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		}catch (Exception e){
+			e.printStackTrace();
+		}finally {
+			session.close();
+		}
 		// 获得查询数据
 		Map<String, Object> order_obj = null;
-		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
 		if (lst_data != null && lst_data.size() > 0) {
 			order_obj = (Map<String, Object>) lst_data.get(0);
 		}
