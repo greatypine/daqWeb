@@ -124,7 +124,7 @@
          	<div class="box-header h4 text-light-blue">
           	<div class="pull-left "><strong>城市毛利</strong></div>
          	<div class="pull-left text-red" style="padding-left:15px;font-size:75%">数据口径：</div>
-         	<div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用不包含A类营销费用。</br>3.毛利=销售收入（平台+优易）-已退货（已签收并退款）-营销费用（平台分摊的优惠券）-报损-盘亏。</br>4.城市报损、盘亏数据为0。</div>
+         	<div class="pull-left text-red" style="font-size:75%">1.本月数据截止到昨天24点。</br>2.营销费用不包含A类营销费用。</br>3.毛利=销售收入（平台+优易）-已退货（已签收并退款）-营销费用（平台分摊的优惠券）-报损-盘亏。</div>
           </div>
           <div class="box-body">
             <form id="searchform">
@@ -165,8 +165,10 @@
                           <th width="13%">销售收入<br/>（优易-进销存系统商品）</th>
                           <th width="12%">已退货<br/></th>
                           <th width="12%">营销费用<br/></th>
+                          <th width="12%">报损<br/></th>
+                          <th width="12%">盘亏<br/></th>
                           <th width="10%"><font id="columnattention" style="color:#337ab7;font-size:14px;font-weight:normal;">！</font>
-                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">销售收入-已退货-营销费用</font>毛利</th>
+                              <font id="forcolumnattention" style="color:#47b8ef;font-size: 12px;white-space: nowrap;position: absolute;top:-8px;z-index: 1000;display:none;left:60px">销售收入-已退货-营销费用-报损-盘亏</font>毛利</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -452,13 +454,15 @@
 	        	   
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-	        	       var real_profit = (jData[i].total_profit - jData[i].return_profit - jData[i].order_fee).toFixed(2);
+	        	       var real_profit = (jData[i].total_profit - jData[i].return_profit - jData[i].order_fee-jData[i].baosun-jData[i].pankui).toFixed(2);
 	        		   infoStr= "<tr>"
 		                       +"<td>"+jData[i].city_name+"</td>"
 		                       +"<td>"+jData[i].platform_profit+"</td>"
                                +"<td>"+jData[i].ims_profit+"</td>"
                                +"<td>"+jData[i].return_profit+"</td>"
                                +"<td>"+jData[i].order_fee+"</td>"
+                               +"<td>"+jData[i].baosun+"</td>"
+                               +"<td>"+jData[i].pankui+"</td>"
                                +"<td>"+real_profit+"</td>"
 		                       +"</tr>";
 		                       

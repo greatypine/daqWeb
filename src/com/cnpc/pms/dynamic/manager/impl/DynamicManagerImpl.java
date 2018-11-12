@@ -7181,9 +7181,11 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
         try {
             if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
                 result = storeDao.queryStoreTradeProfit(dynamicDto, pageInfo);
+            }else if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "city_active".equals(dynamicDto.getSearchstr())){
+				result = storeDao.queryCityTradeProfit(dynamicDto, pageInfo);
             }else{
-                result = storeDao.queryDeptTradeProfit(dynamicDto, pageInfo);
-            }
+				result = storeDao.queryDeptTradeProfit(dynamicDto, pageInfo);
+			}
             result.put("status","success");
         } catch (Exception e) {
             e.printStackTrace();
@@ -7196,9 +7198,13 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	public Map<String, Object> exportStoreTradeProfit(DynamicDto dynamicDto){
 		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		Map<String, Object> result = new HashMap<String,Object>();
-		List<Map<String, Object>> list = storeDao.exportDeptTradeProfit(dynamicDto);
+		List<Map<String, Object>> list = null;
 		if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
 			list = storeDao.exportStoreTradeProfit(dynamicDto);
+		}else if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "city_active".equals(dynamicDto.getSearchstr())){
+			list = storeDao.exportCityTradeProfit(dynamicDto);
+		}else{
+			list = storeDao.exportDeptTradeProfit(dynamicDto);
 		}
 
 		if(list!=null&&list.size()>0){//成功返回数据
@@ -7211,8 +7217,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			List<List<MergedRegionParam>> targetMergeList = null;
 
 			//城市毛利
-			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","毛利"};
-			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","real_profit"};
+			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损","盘亏","毛利"};
+			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","baosun","pankui","real_profit"};
 
 			//所需合并的单元格参数
 			MergedRegionParam param1 = new MergedRegionParam("城市","城市","城市");
@@ -7231,6 +7237,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			cityList.add(param5);
 			cityList.add(param6);
 			cityList.add(param7);
+			cityList.add(param10);
 			List<List<MergedRegionParam>> cityMergeList = new ArrayList<>();
 			cityMergeList.add(cityList);
 
