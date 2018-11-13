@@ -1345,8 +1345,8 @@ Date.prototype.format=function(fmt) {
 	    }
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+				beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+	 			endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				storeNo:number_str,
 				cityName:cityName
 			}
@@ -1475,8 +1475,8 @@ Date.prototype.format=function(fmt) {
 	    }
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-			beginDate:begin_end_date[0].trim(),
- 			endDate:begin_end_date[1].trim(),
+            beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 			storeNo:number_str,
 			cityName:cityName
 		}
@@ -1553,8 +1553,8 @@ Date.prototype.format=function(fmt) {
 	 	var areano = $("#areano_manual").val(); 
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+            	beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            	endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 	 			storeNo:number_str,
 				cityName:cityName,
 				areaNo:areano
@@ -1723,8 +1723,8 @@ Date.prototype.format=function(fmt) {
 	 	var areano = $("#areano_manual").val(); 
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-			beginDate:begin_end_date[0].trim(),
- 			endDate:begin_end_date[1].trim(),
+            beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
  			storeNo:number_str,
 			cityName:cityName,
 			areaNo:areano
@@ -1802,8 +1802,8 @@ function   search_manual_dept1(cur_page){
 	    var deptName = $("#dept_manual").val(); 
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+            	beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            	endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				storeNo:number_str,
 				cityName:cityName,
 				deptName:deptName
@@ -1929,8 +1929,8 @@ function export_manual_dept(){
 	    var deptName = $("#dept_manual").val(); 
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-			beginDate:begin_end_date[0].trim(),
- 			endDate:begin_end_date[1].trim(),
+            beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 			storeNo:number_str,
 			cityName:cityName,
 			deptName:deptName
@@ -2008,8 +2008,8 @@ function   search_manual_channel1(cur_page){
 	    var channelName = $("#channel_manual").val(); 
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+            	beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            	endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				storeNo:number_str,
 				cityName:cityName,
 				channelName:channelName
@@ -2134,8 +2134,8 @@ function export_manual_channel(){
     var channelName = $("#channel_manual").val(); 
     var turnOverStatDto=null;
     turnOverStatDto = {
-		beginDate:begin_end_date[0].trim(),
-			endDate:begin_end_date[1].trim(),
+        beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+        endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 		storeNo:number_str,
 		cityName:cityName,
 		channelName:channelName
@@ -2213,8 +2213,8 @@ function   search_manual_eshop1(cur_page){
 	    var eshopName = $("#eshop_manual").val(); 
 	    var turnOverStatDto=null;
 	    turnOverStatDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+            	beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+            	endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				storeNo:number_str,
 				cityName:cityName,
 				eshopName:eshopName
@@ -2339,8 +2339,8 @@ function export_manual_eshop(){
     var eshopName = $("#eshop_manual").val(); 
     var turnOverStatDto=null;
     turnOverStatDto = {
-		beginDate:begin_end_date[0].trim(),
-		endDate:begin_end_date[1].trim(),
+        beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+        endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 		storeNo:number_str,
 		cityName:cityName,
 		eshopName:eshopName

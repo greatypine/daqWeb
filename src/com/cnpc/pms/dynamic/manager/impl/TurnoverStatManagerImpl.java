@@ -5,13 +5,10 @@ import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.dynamic.dao.TurnoverStatDao;
-import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.TurnoverStatDto;
 import com.cnpc.pms.dynamic.manager.TurnoverStatManager;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
-import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
-import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -23,8 +20,10 @@ import org.apache.poi.xssf.usermodel.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements TurnoverStatManager {
 	
@@ -38,15 +37,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 		TurnoverStatDao turnoverStatDao = (TurnoverStatDao)SpringHelper.getBean(TurnoverStatDao.class.getName());
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				result = turnoverStatDao.queryStoreStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				result = turnoverStatDao.queryStoreStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = turnoverStatDao.queryStoreStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = turnoverStatDao.queryStoreStat(storeStatDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,15 +53,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   		Map<String, Object> result = new HashMap<String,Object>();
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
   		try {
-  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				list=turnoverStatDao.exportStoreStat(storeStatDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				list=turnoverStatDao.exportStoreStat(storeStatDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=turnoverStatDao.exportStoreStat(storeStatDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			list=turnoverStatDao.exportStoreStat(storeStatDto);
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
@@ -144,15 +127,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 		TurnoverStatDao turnoverStatDao = (TurnoverStatDao)SpringHelper.getBean(TurnoverStatDao.class.getName());
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				result = turnoverStatDao.queryAreaStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				result = turnoverStatDao.queryAreaStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = turnoverStatDao.queryAreaStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = turnoverStatDao.queryAreaStat(storeStatDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -168,15 +143,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   		Map<String, Object> result = new HashMap<String,Object>();
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
   		try {
-  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				list=turnoverStatDao.exportAreaStat(storeStatDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				list=turnoverStatDao.exportAreaStat(storeStatDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=turnoverStatDao.exportAreaStat(storeStatDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			list=turnoverStatDao.exportAreaStat(storeStatDto);
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
@@ -250,15 +217,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 		TurnoverStatDao turnoverStatDao = (TurnoverStatDao)SpringHelper.getBean(TurnoverStatDao.class.getName());
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				result = turnoverStatDao.queryDeptStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				result = turnoverStatDao.queryDeptStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = turnoverStatDao.queryDeptStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = turnoverStatDao.queryDeptStat(storeStatDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -274,15 +233,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   		Map<String, Object> result = new HashMap<String,Object>();
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
   		try {
-  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				list=turnoverStatDao.exportDeptStat(storeStatDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				list=turnoverStatDao.exportDeptStat(storeStatDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=turnoverStatDao.exportDeptStat(storeStatDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			list=turnoverStatDao.exportDeptStat(storeStatDto);
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
@@ -356,15 +307,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 		TurnoverStatDao turnoverStatDao = (TurnoverStatDao)SpringHelper.getBean(TurnoverStatDao.class.getName());
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				result = turnoverStatDao.queryChannelStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				result = turnoverStatDao.queryChannelStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = turnoverStatDao.queryChannelStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = turnoverStatDao.queryChannelStat(storeStatDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -380,15 +323,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   		Map<String, Object> result = new HashMap<String,Object>();
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
   		try {
-  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				list=turnoverStatDao.exportChannelStat(storeStatDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				list=turnoverStatDao.exportChannelStat(storeStatDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=turnoverStatDao.exportChannelStat(storeStatDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			list=turnoverStatDao.exportChannelStat(storeStatDto);
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
@@ -462,15 +397,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
 		TurnoverStatDao dynamicDataStatDao = (TurnoverStatDao)SpringHelper.getBean(TurnoverStatDao.class.getName());
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				result = dynamicDataStatDao.queryEshopStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				result = dynamicDataStatDao.queryEshopStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = dynamicDataStatDao.queryEshopStat(storeStatDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = dynamicDataStatDao.queryEshopStat(storeStatDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -486,15 +413,7 @@ public class TurnoverStatManagerImpl  extends BizBaseCommonManager implements Tu
   		Map<String, Object> result = new HashMap<String,Object>();
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
   		try {
-  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(), format.format(new Date()))==0){
-				list=turnoverStatDao.exportEshopStat(storeStatDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(storeStatDto.getBeginDate()) && DateUtils.compareDate(storeStatDto.getBeginDate(),preMonthFirst)>=0){
-				list=turnoverStatDao.exportEshopStat(storeStatDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=turnoverStatDao.exportEshopStat(storeStatDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			list=turnoverStatDao.exportEshopStat(storeStatDto);
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
