@@ -1328,13 +1328,6 @@ Date.prototype.format=function(fmt) {
   	    	number_str=-10000;
   	    }
 
-      	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-      	if(days > 60){
-          if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
-              return ;
-          }
-      	}
-
   	    $("#process_div").show();
  	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
@@ -1458,13 +1451,6 @@ Date.prototype.format=function(fmt) {
   	    	number_str=-10000;
   	    }
 
-      	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-      	if(days > 60){
-          if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
-              return ;
-          }
-      	}
-
 	    $("#process_div").show();
 	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelect  option:selected").val();
@@ -1534,13 +1520,6 @@ Date.prototype.format=function(fmt) {
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-
-     	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-     	if(days > 60){
-         if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
-             return ;
-         }
-     	}
 
  	    $("#process_div").show();
 	 	$("#process_div_pic").show();
@@ -1705,13 +1684,6 @@ Date.prototype.format=function(fmt) {
   	    	number_str=-10000;
   	    }
 
-		 var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-		 if(days > 60){
-			 if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
-				 return ;
-			 }
-		 }
-
 	    $("#process_div").show();
 	 	$("#process_div_pic").show();
   	  	var cityName = $("#citySelectArea  option:selected").val();
@@ -1783,13 +1755,6 @@ function   search_manual_dept1(cur_page){
   	    if(number_str==""&&storeName!=""){
   	    	number_str=-10000;
   	    }
-
-    	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-    	if(days > 60){
-        	if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
-            	return ;
-        	}
-    	}
 
 	  	$("#process_div").show();
  	 	$("#process_div_pic").show();
@@ -1911,13 +1876,6 @@ function export_manual_dept(){
   	    	number_str=-10000;
   	    }
 
-		var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-		if(days > 60){
-			if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
-				return ;
-			}
-		}
-
 	    $("#process_div").show();
 	 	$("#process_div_pic").show();
 	    var cityName = $("#citySelectDept  option:selected").val();
@@ -1989,13 +1947,6 @@ function   search_manual_channel1(cur_page){
  	    if(number_str==""&&storeName!=""){
  	    	number_str=-10000;
  	    }
-
-    	var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-    	if(days > 60){
-       	 	if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
-            	return ;
-        	}
-    	}
 
 	  	$("#process_div").show();
 	 	$("#process_div_pic").show();
@@ -2116,13 +2067,6 @@ function export_manual_channel(){
 	  	number_str=-10000;
 	}
 
-    var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-    if(days > 60){
-        if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
-            return ;
-        }
-    }
-
     $("#process_div").show();
  	$("#process_div_pic").show();
     var cityName = $("#citySelectChannel  option:selected").val();
@@ -2194,13 +2138,6 @@ function   search_manual_eshop1(cur_page){
  	    if(number_str==""&&storeName!=""){
  	    	number_str=-10000;
  	    }
-
-		var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-		if(days > 60){
-			if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续查询？")) {
-				return ;
-			}
-		}
 
 	  	$("#process_div").show();
 	 	$("#process_div_pic").show();
@@ -2320,13 +2257,6 @@ function export_manual_eshop(){
  	if(number_str==""&&storeName!=""){
  		number_str=-10000;
  	}
-
-    var days = DateDiff(begin_end_date[0].trim(),begin_end_date[1].trim());
-    if(days > 60){
-        if (!confirm("当前时间条件下的搜索时间可能超过5分钟，建议缩短时间范围再试，是否继续下载？")) {
-            return ;
-        }
-    }
 
     $("#process_div").show();
  	$("#process_div_pic").show();
