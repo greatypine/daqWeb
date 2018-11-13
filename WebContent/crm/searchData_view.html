@@ -234,8 +234,7 @@
     }
     .content2 .div1{
         margin-top: 10px;
-        max-height: 290px;
-        overflow: auto;
+        max-height: 360px;
 
     }
     .content2 img{
@@ -328,36 +327,12 @@
               </ul>
               <div class="modal-content content2" id="dialog2">
                   <div>
-                      <button type="button" class="close dialog_remove2 dialogremove">×</button>
-                      <h4 class="modal-title modeltitle">下载文件列表（暂留20条记录）</h4>
+                      <h4 class="modal-title modeltitle">下载文件列表</h4>
+                      <!--<a href="javascript:reportFiledown()"><span></span>查看全部</a>-->
                   </div>
-                  <!--<div class="modal-body" style="padding-left: 0px;padding-right:0px;padding-top:0px;padding-bottom: 0px;">-->
-                      <!--<div class="col-md-12 col-xs-12">-->
-                          <!--<table class="table" id="head_tr">-->
-                              <!--&lt;!&ndash;<tbody>&ndash;&gt;-->
-                              <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>名称</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>下载次数</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>下载时间</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>状态</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>创建时间</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>操作</td>&ndash;&gt;-->
-                              <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-                              <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>121323</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td> 0 </td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td> — </td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td> 已生成文件</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>2018-10-30 10:13:09</td>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;<td>&ndash;&gt;-->
-                                      <!--&lt;!&ndash;<a>下载</a>&ndash;&gt;-->
-                                  <!--&lt;!&ndash;</td>&ndash;&gt;-->
-                              <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-                              <!--&lt;!&ndash;</tbody>&ndash;&gt;-->
-                          <!--</table>-->
-                      <!--</div>-->
-                  <!--</div>-->
-
+                  <div style="position: absolute;right: 25px;top: 14px">
+                      <a href="javascript:reportFiledown()"><span></span>查看全部</a>
+                  </div>
                   <div class="div1" id="head_tr">
 
                   </div>
@@ -2277,7 +2252,7 @@ function download_table(){
                         html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 10px;'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.xlsx</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' style='color:gray;' disabled='true'>下载</a></div></div></dd> </dl>"
                     }else{
 //                        html = html + "<tr><td class='downtr'>"+ file_filename +"</td><td class='downtr'> " + file_status +"</td><td class='downtr'><a class='downa' href='"+ url+"' onclick='addTimes("+file_id+","+file_times+")'>下载</a></td></tr>";
-                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 10px;'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.xlsx</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' href='"+ url+"' onclick='addTimes("+file_id+","+file_times+")'>下载</a></div></div></dd> </dl>"
+                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 10px;'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.xlsx</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' href='"+ url+"'>下载</a></div></div></dd> </dl>"
 
                     }
 
@@ -2547,6 +2522,13 @@ function DateDiff(Date1,Date2) { //Date1和Date2是2018-09-01格式
 }
 
 
+function reportFiledown(){
+    var url = "";
+
+    url = "filedown_list.html";
+
+    window.open(url,"filedown_list");
+}
 
 //打开按钮"模态框"
 $(".dialog_open").click(function(){
@@ -2554,7 +2536,7 @@ $(".dialog_open").click(function(){
     parseInt("total");
     if(total != "" && total != 0){
         var totals = parseInt(total);
-        if(totals <= 50000){
+        if(totals <= 100000){
             var cityName = $("#citySelect  option:selected").text();
             var sdate = $("#auto_date").val();
             var storeName = $("#store_name_manual").val();
