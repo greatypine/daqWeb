@@ -331,7 +331,7 @@
                       <!--<a href="javascript:reportFiledown()"><span></span>查看全部</a>-->
                   </div>
                   <div style="position: absolute;right: 25px;top: 14px">
-                      <a href="javascript:reportFiledown()"><span></span>查看全部</a>
+                      <a href="javascript:reportFiledown()"  style='text-decoration: underline'><span></span>查看全部</a>
                   </div>
                   <div class="div1" id="head_tr">
 
@@ -354,7 +354,7 @@
         <div id="dialog" class="dialog_position_center">
             <!--头部分-->
             <header>
-                <span>添加下载任务</span><span class="dialog_close">&times;</span>
+                <span>添加下载任务</span><span class="dialog_close" style="font-size: 32px;">&times;</span>
             </header>
             <!--内容部分-->
             <div class="content1">
@@ -374,8 +374,8 @@
             <!--底部部分-->
             <div> &nbsp</div>
             <footer id="footer">
-                <button class="btn btn-default dialog_remove">取消</button>
                 <button class="btn btn-primary dialog_close" onclick="export_manual_massOrder('normal')">确定</button>
+                <button class="btn btn-default dialog_remove">取消</button>
             </footer>
         </div>
     <!--</div>-->
@@ -2522,6 +2522,21 @@ function DateDiff(Date1,Date2) { //Date1和Date2是2018-09-01格式
 }
 
 
+$(document).bind('click',function(e){
+    var e = e || window.event; //浏览器兼容性
+    var elem = e.target || e.srcElement;
+    while (elem) { //循环判断至跟节点，防止点击的是div子元素
+        if (elem.id && elem.id=='dialog2') {
+            return;
+        }
+        elem = elem.parentNode;
+    }
+    var showPanel = document.getElementById("dialog2");
+    var showPanel1 = document.getElementById("mask1");
+    showPanel.style.display = "none";
+    showPanel1.style.display = "none";
+});
+
 function reportFiledown(){
     var url = "";
 
@@ -2546,7 +2561,7 @@ $(".dialog_open").click(function(){
             $("#userName").val("订单档案");
             dialogOpen()
         }else{
-            crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+            crm_alert(0,"单次导出不能超过10万条记录，请调整搜索条件，确认结果条数后再试。");
         }
     }else{
         crm_alert(0,"请先确认是否查询到数据！");

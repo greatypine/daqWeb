@@ -79,16 +79,6 @@ public class HttpClientUtils {
             e.printStackTrace();
         }
         if(list!=null&&list.size()>0){//成功返回数据
-
-            String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
-            String str_web_path = PropertiesUtil.getValue("file.web.root");
-
-            XSSFWorkbook wb = new XSSFWorkbook();
-//            setCellStyle_common(wb);
-//            setHeaderStyle(wb);
-//            XSSFSheet sheet = wb.createSheet("订单数据");
-//            XSSFRow row = sheet.createRow(0);
-
             //定义表头 以及 要填入的 字段
             String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","下单时间","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
                     "门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是否开卡礼订单","是否试用礼订单",
@@ -98,105 +88,107 @@ public class HttpClientUtils {
                     "customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s","score","order_tag_product","order_tag_service","order_tag_groupon","order_tag_member","pay_label","no_cost_label","a_fee_label",
                     "order_source","order_profit","contract_method","apportion_coupon","apportion_rebate"};
 
-//            for(int i = 0;i < str_headers.length;i++){
-//                XSSFCell cell = row.createCell(i);
-//                cell.setCellStyle(getHeaderStyle());
-//                cell.setCellValue(new XSSFRichTextString(str_headers[i]));
-//            }
-//
-//            for(int i = 0;i < list.size();i++){
-//                row = sheet.createRow(i+1);
-//                for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-//                    String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-//                    if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
-//                        if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
-//                            value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
-//                        }
-//                    }
-//                    setCellValueall(row, cellIndex, value);
-//                }
-//            }
-
-            File file_xls = new File(str_file_dir_path + fileName+".csv");
-            if(file_xls.exists()){
-                file_xls.delete();
-            }
-            FileOutputStream os = null;
-
-            try {
-                file_xls.createNewFile();
-                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
-                for(String title : str_headers){
-                    out.write(title);
-                    out.write(",");
+            if(list.size() <= 50000){
+                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+                String str_web_path = PropertiesUtil.getValue("file.web.root");
+                File file_xls = new File(str_file_dir_path + fileName+".xlsx");
+                if(file_xls.exists()){
+                    file_xls.delete();
                 }
-                out.write("\r\n");
+                FileOutputStream os = null;
+                XSSFWorkbook wb = new XSSFWorkbook();
+                setCellStyle_common(wb);
+                setHeaderStyle(wb);
+                XSSFSheet sheet = wb.createSheet("订单数据");
+                XSSFRow row = sheet.createRow(0);
+                for(int i = 0;i < str_headers.length;i++){
+                    XSSFCell cell = row.createCell(i);
+                    cell.setCellStyle(getHeaderStyle());
+                    cell.setCellValue(new XSSFRichTextString(str_headers[i]));
+                }
+
                 for(int i = 0;i < list.size();i++){
-                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
+                    row = sheet.createRow(i+1);
+                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
                         String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
                         if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
                             if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
                         }
-                        out.write(value);
-                        out.write(",");
-                        continue;
+                        setCellValueall(row, cellIndex, value);
                     }
-                    //写完一行换行
-                    out.write("\r\n");
-
                 }
-                out.close();
-
-
-
-//                os = new FileOutputStream(file_xls.getAbsoluteFile());
-//                wb.write(os);
-                OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+                try {
+                    os = new FileOutputStream(file_xls.getAbsoluteFile());
+                    wb.write(os);
+                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
 //                url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
-                url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+                    url = ossRefFileManager.uploadOssFileNew(file_xls, "xlsx", "daqWeb/download/",fileName);
 
-//                file_xls.createNewFile();
-//                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
-//                for(String title : str_headers){
-//                    out.write(title);
-//                    out.write(",");
-//                }
-//                out.write("\r\n");
-//                for(int i = 0;i < list.size();i++){
-//                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
-//                        String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-//                        if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
-//                            if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
-//                                value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
-//                            }
-//                        }
-//                        out.write(value);
-//                        out.write(",");
-//                        continue;
-//                    }
-//                    //写完一行换行
-//                    out.write("\r\n");
-//
-//                }
-//                out.close();
-            }catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if(os != null){
-                    try {
-                        os.close();
-  					} catch (IOException e) {
-  						e.printStackTrace();
-  					}
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if(os != null){
+                        try {
+                            os.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+            }else{
+                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+                String str_web_path = PropertiesUtil.getValue("file.web.root");
+                File file_xls = new File(str_file_dir_path + fileName+".csv");
+                if(file_xls.exists()){
+                    file_xls.delete();
+                }
+                FileOutputStream os = null;
+                try {
+                    file_xls.createNewFile();
+                    OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
+                    for(String title : str_headers){
+                        out.write(title);
+                        out.write(",");
+                    }
+                    out.write("\r\n");
+                    for(int i = 0;i < list.size();i++){
+                        for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
+                            String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+                            if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
+                                if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
+                                    value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+                                }
+                            }
+                            out.write(value);
+                            out.write(",");
+                            continue;
+                        }
+                        //写完一行换行
+                        out.write("\r\n");
+
+                    }
+                    out.close();
+                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+//                url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
+                    url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if(os != null){
+                        try {
+                            os.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
-
+            massOrderDao.updataReport(id,url);
         }
-
-        massOrderDao.updataReport(id,url);
-
     }
 
     public void getDataTableSPXSDA( MassOrderItemDto massOrderDto, String fileName, MassOrderItemDao massOrderItemDao, Long id) {
@@ -217,15 +209,6 @@ public class HttpClientUtils {
         }
         if(list!=null&&list.size()>0){//成功返回数据
 
-            String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
-            String str_web_path = PropertiesUtil.getValue("file.web.root");
-
-//            XSSFWorkbook wb = new XSSFWorkbook();
-//            setCellStyle_common(wb);
-//            setHeaderStyle(wb);
-//            XSSFSheet sheet = wb.createSheet("商品销售数据");
-//            XSSFRow row = sheet.createRow(0);
-
             //定义表头 以及 要填入的 字段
             String[] str_headers = {"商品名称","商品ID","订单号","下单客户姓名","下单客户电话","预约时间","下单时间","签收时间","单价","签收客户姓名","签收客户电话","片区编号","小区编号","片区A国安侠编号","送单侠姓名",
                     "送单侠电话","签收地址","E店名称","门店名称","门店编号","事业群","频道","城市","订单来源","评价信息"};
@@ -233,78 +216,107 @@ public class HttpClientUtils {
                     "info_employee_a_no","employee_name","employee_phone","order_address",
                     "eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","order_contents"};
 
-//            for(int i = 0;i < str_headers.length;i++){
-//                XSSFCell cell = row.createCell(i);
-//                cell.setCellStyle(getHeaderStyle());
-//                cell.setCellValue(new XSSFRichTextString(str_headers[i]));
-//            }
-//
-//            for(int i = 0;i < list.size();i++){
-//                row = sheet.createRow(i+1);
-//                for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-//                    String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-//                    if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
-//                        if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
-//                            value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
-//                        }
-//                    }
-//                    setCellValueall(row, cellIndex, value);
-//                }
-//            }
-
-            File file_xls = new File(str_file_dir_path + fileName+".csv");
-            if(file_xls.exists()){
-                file_xls.delete();
-            }
-            FileOutputStream os = null;
-
-            try {
-                file_xls.createNewFile();
-                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
-                for(String title : str_headers){
-                    out.write(title);
-                    out.write(",");
+            if(list.size() <= 50000){
+                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+                String str_web_path = PropertiesUtil.getValue("file.web.root");
+                XSSFWorkbook wb = new XSSFWorkbook();
+                setCellStyle_common(wb);
+                setHeaderStyle(wb);
+                XSSFSheet sheet = wb.createSheet("商品销售数据");
+                XSSFRow row = sheet.createRow(0);
+                for(int i = 0;i < str_headers.length;i++){
+                    XSSFCell cell = row.createCell(i);
+                    cell.setCellStyle(getHeaderStyle());
+                    cell.setCellValue(new XSSFRichTextString(str_headers[i]));
                 }
-                out.write("\r\n");
+
                 for(int i = 0;i < list.size();i++){
-                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
+                    row = sheet.createRow(i+1);
+                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
                         String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-                    if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
-                        if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
-                            value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+                        if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
+                            if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
+                                value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+                            }
+                        }
+                        setCellValueall(row, cellIndex, value);
+                    }
+                }
+                File file_xls = new File(str_file_dir_path + fileName+".xlsx");
+                if(file_xls.exists()){
+                    file_xls.delete();
+                }
+                FileOutputStream os = null;
+                try {
+                    os = new FileOutputStream(file_xls.getAbsoluteFile());
+                    wb.write(os);
+                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+                    url = ossRefFileManager.uploadOssFileNew(file_xls, "xlsx", "daqWeb/download/",fileName);
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if(os != null){
+                        try {
+                            os.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
-                        out.write(value);
-                        out.write(",");
-                        continue;
-                    }
-                    //写完一行换行
-                    out.write("\r\n");
-
                 }
-                out.close();
 
-//                os = new FileOutputStream(file_xls.getAbsoluteFile());
-//                wb.write(os);
-                OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-                url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+            }else{
+                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+                String str_web_path = PropertiesUtil.getValue("file.web.root");
+                File file_xls = new File(str_file_dir_path + fileName+".csv");
+                if(file_xls.exists()){
+                    file_xls.delete();
+                }
+                FileOutputStream os = null;
 
-            }catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if(os != null){
-                    try {
-                        os.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                try {
+                    file_xls.createNewFile();
+                    OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
+                    for(String title : str_headers){
+                        out.write(title);
+                        out.write(",");
+                    }
+                    out.write("\r\n");
+                    for(int i = 0;i < list.size();i++){
+                        for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
+                            String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+                            if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
+                                if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
+                                    value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+                                }
+                            }
+                            out.write(value);
+                            out.write(",");
+                            continue;
+                        }
+                        //写完一行换行
+                        out.write("\r\n");
+
+                    }
+                    out.close();
+
+                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+                    url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    if(os != null){
+                        try {
+                            os.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
-
+            massOrderItemDao.updataReport(id,url);
         }
-
-        massOrderItemDao.updataReport(id,url);
-
     }
 
 

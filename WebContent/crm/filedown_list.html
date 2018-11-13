@@ -206,6 +206,7 @@
 <script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script type="text/javascript" src="../scripts/auto.js"></script>
 <script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
 <script tyle="text/javascript">
 
     $(document).ready(function () {
@@ -263,11 +264,14 @@
 
 
     function deleteFiledown(id){
-        doManager('treportFiledownManager','deleteByFiledown',[id],function(data){
-            if(data.result){
-                window.location.reload();
-            }
-        })
+        layer.confirm('是否确认删除？', function(){
+            doManager('treportFiledownManager','deleteByFiledown',[id],function(data){
+                if(data.result){
+                    window.location.reload();
+                }
+            })
+        });
+
     }
 
 

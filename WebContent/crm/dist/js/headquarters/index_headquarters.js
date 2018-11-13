@@ -5654,6 +5654,20 @@ function reportFiledown(){
     window.open(url,"filedown_list");
 }
 
+
+$(document).bind('click',function(e){
+    var e = e || window.event; //浏览器兼容性
+    var elem = e.target || e.srcElement;
+    while (elem) { //循环判断至跟节点，防止点击的是div子元素
+        if (elem.id && elem.id=='dialog2') {
+            return;
+        }
+        elem = elem.parentNode;
+    }
+    var showPanel = document.getElementById("dialog2");
+    showPanel.style.display = "none";
+});
+
 //打开下载中心"模态框"
 $(".dialog_open2").click(function(){
     dialogOpen2()
