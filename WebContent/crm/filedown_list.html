@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>历史下载记录</title>
+   <link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=0.3, maximum-scale=1, user-scalable=yes" name="viewport">  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="bootstrap/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="bootstrap/css/ionicons.min.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="plugins/iCheck/all.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <!-- AdminLTE Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+  <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker-bs3.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="plugins/select2/select2.min.css">
+  <link href="../scripts/css/auto.css" rel="stylesheet">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="IE 9/html5shiv.min.js"></script>
+  <script src="IE 9/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    .info_head img{width:123px; margin-top:10px;}
+    .info_head span{padding-left: 20px;}
+    .info_bottom .text-right span{padding: 6px 12px; margin:0 20px 0 3px; display: inline-block;}
+    .box .h4{padding-left:20px;}
+    .logo-lg li{float: left; position: relative;}
+
+    .logo-lg i{color: #fff;}
+    .nav_dropdown li{padding: 5px 0; line-height: 20px; white-space: nowrap; font-size: 14px;}
+    .logo-lg > ul > li:hover > a{color: #001f3f; font-weight: bold;}
+    .logo-lg > ul > li:hover i{ transform: rotate(180deg); transition: all 0.3s linear; color: #001f3f;}
+    .table button{padding: 3px 20px; margin: 0 5px;}
+	
+	.tcdPageCode a{display: inline-block;color: #428bca;display: inline-block;height: 25px;	line-height: 25px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode a:hover{text-decoration: none;border: 1px solid #428bca;}
+	.tcdPageCode span.current{display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #428bca;	border: 1px solid #428bca;border-radius: 4px;vertical-align: middle;}
+	.tcdPageCode span.disabled{	display: inline-block;height: 25px;line-height: 25px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+	.audit_process{ overflow-y: auto;  background: #f9f9f9; border-radius: 5px; padding:15px 0 20px 0;}
+    .audit_process .clearfix{ padding:10px 30px;}
+	 #process_div{
+			background-color:#292a2b; 
+			display:inline; 
+			z-index:100000;  
+			left:0px; 
+			opacity:0.3; top:0; left:0;height:100%; width:100%; z-index:999; position:fixed; _position:absolute; _left: expression_r(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); _top: expression_r(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);
+			filter:Alpha(Opacity=30); 
+			opacity: 0.3; 
+		} 
+		
+		#process_div_pic{
+			position:fixed;
+			top:50%;
+			left:50%; 
+			z-index:100000000; 
+			margin:-16px 0 0 -50px; 
+			width:100px; 
+			height:32px;
+			color: #fff;
+		}
+    .how-more i{padding-left: 5px; font-size: 14px;}
+    .selectorLine a{float: left; height: 18px; line-height: 18px; padding: 0 3px; margin: 2px 12px 12px 0; white-space: nowrap;}
+    .selectorLine a:nth-child(1){margin-left: 15px;}
+    .selectorLine a:hover{background-color: #ff7701; color: #fff;}
+    .search-more i{position: absolute; top: 3px; right: 0; display: block; width: 20px; height: 20px; background-position: 4px 7px; font-size: 18px;}
+    .search-more-open i{ -webkit-transform: rotateX(180deg); -o-transform: rotateX(180deg); -moz-transform: rotateX(180deg);}
+    .sx_type span{padding-right: 5px;}
+    .sx_type span .icheckbox_minimal-blue{margin-right: 2px;}
+    .breadcrumb a{position: relative; float: left; margin: 0 10px 10px 0; padding: 0 25px 0 5px; height: 25px; line-height: 25px; overflow: hidden; border: 1px solid #DDD; background-color: #f3f3f3; color: #333; font-size: 12px;}
+    .breadcrumb a span{margin-right: 3px;}
+    .breadcrumb a i{position: absolute; width: 25px; height: 22px; right: 0; top: 0; color: #999; padding: 6px 0 0 9px; height: 25px;}
+    .breadcrumb a:hover{border: 1px solid #e4393c; background-color: #fff;}
+    .breadcrumb a:hover i{background-color: #e4393c; color: #fff;}
+    /*类型*/
+    .leixing div{display: inline-block; position: relative; cursor: pointer;}
+
+
+
+    .content2 .dialogremove {
+        margin-right: 20px;
+    }
+
+    .content2 .modeltitle {
+        margin-left: 15px;
+        margin-top: 15px;
+    }
+    .content2 img{
+        width: 28px;
+    }
+    .navbar-custom-menu{
+        position: absolute;
+        right: 0px;
+        margin-right: 0;
+    }
+    .navbar-custom-menu ul{
+        margin-right: 100px;
+    }
+    .content2 .divcontent {
+        width: 900px;
+        height: 80px;
+        background: #fff;
+        margin: 10px auto;
+        box-shadow: 2px 2px 2px 2px #ebeced;
+        border-radius: 3px;
+    }
+
+    .content2 .downleft {
+        width: 75px;
+        height: 80px;
+        float: left;
+        text-align: center;
+        line-height: 80px;
+        border-right: 1px solid #ccc;
+    }
+
+    .content2 .downright {
+        width: 600px;
+        height: 60px;
+        margin-left: 80px;
+    }
+
+    .content2 .downrightdiv {
+        margin-left: 20px;
+    }
+
+    .content2 .downrightspan {
+        display: inline-block;
+        width: 65px;
+    }
+
+    .content2 .xlsx {
+        color: #1a73e8;
+        font-weight: bold;
+    }
+
+    .content2 .downrighta {
+        color: #1a73e8;
+        margin-left: 20px;
+    }
+  </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div id="process_div" style="display:none"></div>
+<div id="process_div_pic" style="display:none"><img style="width:50px;height: 50px;" src="dist/img/376884043677306248.png"><i class="fa fa-refresh fa-spin"></i></div>
+<!-- Site wrapper -->
+<div class="wrapper" style="background: #f4f4f4">
+
+ <header class="main-header">
+    <nav class="navbar navbar-static-top">
+      <div class="container">
+					<div class="logo_img pull-left">
+						<img src="dist/img/logo.png" height="30">
+						<img src="dist/img/title.png" height="20">
+					</div>
+					<div class="pull-left">
+						<div class="logo-lg">
+							<ul class="no-margin">
+								<li class="current"><em>历史下载记录</em></li>
+							</ul>
+						</div>
+					</div>
+
+      </div>
+
+    </nav>
+  </header>
+
+    <!--右上角下载中心-->
+    <div class="modal-content content2" id="dialog2" style="background: #f4f4f4">
+        <div class="div1" id="head_tr">
+
+        </div>
+    </div>
+</div>
+
+<!-- ./wrapper -->
+
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- Select2 -->
+<script src="plugins/select2/select2.full.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="plugins/iCheck/icheck.min.js"></script>
+<!-- FastClick -->
+<script src="plugins/fastclick/fastclick.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- page script -->
+<script type="text/javascript" src="plugins/jquery.page.js"></script>
+<script type="text/javascript" src="plugins/moment.min.js"></script>
+<script type="text/javascript" src="plugins/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="../scripts/bidLibjsjquery3.0.js"></script>
+<script type="text/javascript" src="../scripts/auto.js"></script>
+<script src="https://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script tyle="text/javascript">
+
+    $(document).ready(function () {
+        doManager('treportFiledownManager','selectReportFileDownsList',null,function(data){
+            if(data.result){
+                var dataresult= JSON.parse(data.data);
+                if(dataresult != undefined && dataresult != null && dataresult.length){
+                    var objtr = $("#head_tr");
+                    document.getElementById("head_tr").innerHTML = "";
+//                objtr.append("<tr> <td class='downtr'>名称</td>  <td class='downtr'>状态</td> <td class='downtr'>操作</td></tr>");
+                    var html = "";
+                    for(var i=0; i<dataresult.length; i++) {
+                        if (dataresult[i].downTime != null && dataresult[i].downTime != "") {
+                            var file_downTime = formmatDate(dataresult[i].downTime);
+                        } else {
+                            file_downTime = " — ";
+                        }
+                        var file_filename = dataresult[i].filename+".xlsx";
+                        var file_createTime = formmatDate(dataresult[i].create_time);
+                        var file_status = dataresult[i].mark1;
+                        var file_id = dataresult[i].id;
+                        if (file_status == 0) {
+                            file_status = "正在生成文件...";
+                        } else {
+                            file_status = "已生成文件";
+                        }
+                        var file_username = dataresult[i].username;
+
+                        var file_enfilename = dataresult[i].url;
+                        var file_times = dataresult[i].downTimes;
+                        var heml_name = dataresult[i].tableLogic;
+                        if (heml_name == "DDDA") {
+                            heml_name = "订单档案";
+                        } else if (heml_name == "SPXSDA") {
+                            heml_name = "商品销售档案"
+                        }
+
+                        var url = dataresult[i].url;
+                        if (dataresult[i].mark1 == 0) {
+                            html = html + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:gray;' disabled='true'>" + file_filename + "</a></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd> <button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button> </dl>"
+                        } else {
+                            html = html + "<dl class='divcontent' style='position: relative'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 20px;float: left'><div class='downrightdiv'><span class='downrightspan'>文件来源</span><span>：</span><span style='color:#333;font-weight: bold'>" + heml_name + "</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status + "</span></div></div><div style='padding-top: 20px;float: left;margin-left: 70px'><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><a class='downrighta' style='color:#1a73e8;' href='" + url + "'>" + file_filename + "</a><span ></span></div><div class='downrightdiv'><span class='downrightspan'>创建时间</span><span>：</span><span>" +"&nbsp;&nbsp;&nbsp;&nbsp;"+ file_createTime + "</span></div></div></dd><button type='button' class='close dialog_remove2 dialogremove' onclick='deleteFiledown("+file_id+");' style='position: absolute;right: 0px;top: 11px;font-size: 28px'>×</button>  </dl>"
+
+                        }
+
+                    }
+                    //objtr.clean();
+
+
+                    objtr.append(html);
+                }
+            }
+        })
+    });
+
+
+    function deleteFiledown(id){
+        doManager('treportFiledownManager','deleteByFiledown',[id],function(data){
+            if(data.result){
+                window.location.reload();
+            }
+        })
+    }
+
+
+    function formmatDate(value){
+        if(value==null||value=="")return null;
+        // var unixTimestamp = new Date(value);
+        // return unixTimestamp.toLocaleString();
+        var time = new Date(value);
+        var y = time.getFullYear();
+        var m = time.getMonth()+1;
+        var d = time.getDate();
+        var h = time.getHours();
+        var mm = time.getMinutes();
+        var s = time.getSeconds();
+        return y+'-'+add0(m)+'-'+add0(d)+' '+add0(h)+':'+add0(mm)+':'+add0(s);
+    }
+    function add0(m){return m<10?'0'+m:m }
+
+
+//确定按钮"模态框"
+$(".dialog_close").click(function(){
+    dialogClose()
+})
+//取消按钮"模态框"
+$(".dialog_remove").click(function(){
+    dialogRemove()
+})
+
+//遮罩层
+var  _$mask = $("#mask1");
+
+var  $dialog = $("#dialog");
+
+/**
+ * 打开模态框
+ * @param animationSwitch 切换模态框的动画 true:淡入 false：滑入
+ * @returns {*|{opacity}} void方法
+ */
+function dialogOpen() {
+    if(animationSwitch = true) {
+        _$mask.fadeIn(200, function() {
+            $dialog.fadeIn(600);
+        })
+    }else{
+        _$mask.fadeIn(200, function() {
+            $dialog.stop().slideDown(200);
+        })
+    }
+}
+
+/**
+ * 确定模态框
+ * @param animationSwitch 切换模态框的动画 true:淡出 false：滑出
+ * @returns {*|{opacity}} void方法
+ */
+
+
+function dialogClose(){
+    if(animationSwitch = true){
+        _$mask.fadeOut(200, function() {
+            $dialog.fadeOut(600);
+            $(".newimg").show()
+        })
+    }else{
+        _$mask.fadeOut(200, function() {
+            $dialog.stop().slideUp(200)
+        });
+    }
+}
+
+/**
+ * 取消模态框
+ * @param animationSwitch 切换模态框的动画 true:淡出 false：滑出
+ * @returns {*|{opacity}} void方法
+ */
+
+
+function dialogRemove(){
+    if(animationSwitch = true){
+        _$mask.fadeOut(200, function() {
+            $dialog.fadeOut(600);
+        })
+    }else{
+        _$mask.fadeOut(200, function() {
+            $dialog.stop().slideUp(200)
+        });
+    }
+}
+//
+//			//打开下载中心"模态框"
+//			$(".dialog_open2").click(() => dialogOpen2());
+//			//关闭下载中心"模态框"
+//
+//			$(".dialog_remove2").click(() => dialogRemove2())
+
+//打开下载中心"模态框"
+$(".dialog_open2").click(function(){
+    dialogOpen2()
+});
+//关闭下载中心"模态框"
+$(".dialog_remove2").click(function(){
+    dialogRemove2()
+})
+
+var $dialog2 = $("#dialog2");
+
+/**
+ * 打开下载中心模态框
+ * @param animationSwitch 切换模态框的动画 true:淡入 false：滑入
+ * @returns {*|{opacity}} void方法
+ */
+
+function dialogOpen2(){
+    if(animationSwitch = true){
+        _$mask.fadeIn(200, function() {
+            $dialog2.fadeIn(600);
+            $(".newimg").hide()
+        })
+    }else{
+        _$mask.fadeIn(200, function() {
+            $dialog2.stop().slideDown(200);
+        });
+    }
+}
+
+/**
+ * 关闭下载中心模态框
+ * @param animationSwitch 切换模态框的动画 true:淡出 false：滑出
+ * @returns {*|{opacity}} void方法
+ */
+
+function dialogRemove2(){
+    if(animationSwitch = true){
+        _$mask.fadeOut(200, function() {
+            $dialog2.fadeOut(600);
+        })
+    }else{
+        _$mask.fadeOut(200, function() {
+            $dialog2.stop().slideUp(200)
+        });
+    }
+}
+</script>
+</body>
+
+
+
+</html>

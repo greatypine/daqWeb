@@ -11,7 +11,11 @@ public interface TreportFiledownManager extends IManager{
 
     public List<TReportFiledown> selectReportFileDowns(String tableLogic);
 
+    public List<TReportFiledown> selectReportFileDownsList();
+
     public void updateReportFileDowns(TReportFiledown tReportFiledown);
+
+    public void deleteByFiledown(int id);
 
 	
 

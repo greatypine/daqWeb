@@ -4574,6 +4574,15 @@ function gotobehavior(){
     window.open(url,"user_behavior");
 }
 
+function reportFiledown(){
+    var url = "";
+    var target=pageStatusInfo.targets;
+    if(target==0){
+        url = "report_filedown.html";
+    }
+    window.open(url,"user_behavior");
+}
+
 
   /**
    * 片区内拉新GMV
@@ -5582,4 +5591,114 @@ function showsumofYesterdayprofit(pageStatusInfo){
 		$("#tradesumofyesprofit").html(changeMoney(order_yesterday_profit));
     });
     return order_yesterday_profit;
+}
+
+
+//下载列表
+function download_table(){
+
+    doManager('treportFiledownManager','selectReportFileDowns',["null"],function(data){
+        if(data.result){
+            var dataresult= JSON.parse(data.data);
+            if(dataresult != undefined && dataresult != null && dataresult.length){
+                var objtr = $("#head_tr");
+                document.getElementById("head_tr").innerHTML = "";
+//                objtr.append("<tr> <td class='downtr'>名称</td>  <td class='downtr'>状态</td> <td class='downtr'>操作</td></tr>");
+                var html = "";
+                for(var i=0; i<dataresult.length; i++){
+                    var file_filename = dataresult[i].filename;
+                    var file_status = dataresult[i].mark1;
+                    var file_id = dataresult[i].id;
+                    if(file_status == 0){
+                        file_status = "正在生成文件...";
+                    }else{
+                        file_status = "已生成文件";
+                    }
+                    var file_username = dataresult[i].username;
+
+                    var file_enfilename = dataresult[i].url;
+                    var file_times = dataresult[i].downTimes;
+                    var heml_name = dataresult[i].tableLogic;
+                    if(heml_name == "DDDA"){
+                        heml_name = "订单档案";
+                    }else if(heml_name == "SPXSDA"){
+                        heml_name = "商品销售档案"
+                    }
+
+                    var url = dataresult[i].url;
+                    if(dataresult[i].mark1 == 0){
+//                        html = html + "<tr><td class='downtr'>"+ file_filename +"</td><td class='downtr'> " + file_status +"</td><td class='downtr'><a class='downa' style='color:gray;' disabled='true'>下载</a></td></tr>";
+                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 1px;'><div class='downrightdiv'><span style='color:#1a73e8;'>"+ heml_name +"</span></div><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.xlsx</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' style='color:gray;' disabled='true'>下载</a></div></div></dd> </dl>"
+                    }else{
+//                        html = html + "<tr><td class='downtr'>"+ file_filename +"</td><td class='downtr'> " + file_status +"</td><td class='downtr'><a class='downa' href='"+ url+"' onclick='addTimes("+file_id+","+file_times+")'>下载</a></td></tr>";
+                        html = html + "<dl class='divcontent'><dt class='downleft'><img src='dist/img/xlsx.png'/></dt><dd class='downright'><div style='padding-top: 1px;'><div class='downrightdiv'><span style='color:#1a73e8;'>"+ heml_name +"</span></div><div class='downrightdiv'><span class='downrightspan'>文件名</span><span>：</span><span style='color:#1a73e8;'>"+ file_filename +"</span><span class='xlsx'>.xlsx</span></div><div class='downrightdiv'><span class='downrightspan'>状 &nbsp;&nbsp;态</span><span>：</span><span>" + file_status +"</span><a class='downrighta' href='"+ url+"'>下载</a></div></div></dd> </dl>"
+
+                    }
+
+                }
+                //objtr.clean();
+
+
+                objtr.append(html);
+            }
+            $("#dialog2").css("display","block");
+        }
+    })
+}
+
+function reportFiledown(){
+    var url = "";
+
+    url = "filedown_list.html";
+
+    window.open(url,"filedown_list");
+}
+
+//打开下载中心"模态框"
+$(".dialog_open2").click(function(){
+    dialogOpen2()
+});
+//关闭下载中心"模态框"
+$(".dialog_remove2").click(function(){
+    dialogRemove2()
+})
+//遮罩层
+var  _$mask = $("#mask1");
+var $dialog2 = $("#dialog2");
+
+/**
+ * 打开下载中心模态框
+ * @param animationSwitch 切换模态框的动画 true:淡入 false：滑入
+ * @returns {*|{opacity}} void方法
+ */
+
+function dialogOpen2(){
+    if(animationSwitch = true){
+        _$mask.fadeIn(200, function() {
+            $dialog2.fadeIn(600);
+            $(".newimg").hide()
+        })
+    }else{
+        _$mask.fadeIn(200, function() {
+            $dialog2.stop().slideDown(200);
+        });
+    }
+}
+
+/**
+ * 关闭下载中心模态框
+ * @param animationSwitch 切换模态框的动画 true:淡出 false：滑出
+ * @returns {*|{opacity}} void方法
+ */
+
+function dialogRemove2(){
+    if(animationSwitch = true){
+        _$mask.fadeOut(200, function() {
+            $dialog2.fadeOut(600);
+        })
+    }else{
+        _$mask.fadeOut(200, function() {
+            $dialog2.stop().slideUp(200)
+        });
+    }
 }

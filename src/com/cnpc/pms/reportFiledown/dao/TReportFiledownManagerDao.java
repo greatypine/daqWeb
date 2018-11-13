@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public interface TReportFiledownManagerDao extends IDAO {
     public List<TReportFiledown> getReportDown(String username,String tableLogic);
-
+    public List<TReportFiledown> getReportDownList(String username);
     public void getUpdateReportFileDowns(TReportFiledown tReportFiledown);
-
+    public void getDeleteFileDowns(int id);
 }

@@ -55,6 +55,105 @@
 		height:32px;
 		color: #fff;
 	}
+
+
+
+  #mask1 {
+      width: 100%;
+      height: 100%;
+      background-color: #333333;
+      opacity: 0.3;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      display: none;
+  }
+
+  #dialog2 {
+      display: none;
+  }
+  .newimg {
+      display: none;
+  }
+
+  .content2 {
+      width: 400px;
+      position: absolute;
+      right: 10px;
+      top: 70px;
+      background: #f8f9fa;
+      border-radius: 3px;
+      max-height: 600px;
+  }
+
+  .content2 .dialogremove {
+      margin-right: 20px;
+  }
+
+  .content2 .modeltitle {
+      margin-left: 15px;
+      margin-top: 15px;
+  }
+  .content2 .div1{
+      margin-top: 10px;
+      max-height: 370px;
+      overflow: auto;
+
+  }
+  .content2 img{
+      width: 28px;
+  }
+  .navbar-custom-menu{
+      position: absolute;
+      right: 0px;
+      margin-right: 0;
+  }
+  .navbar-custom-menu ul{
+      margin-right: 100px;
+  }
+  .content2 .divcontent {
+      width: 362px;
+      height: 60px;
+      background: #fff;
+      margin: 10px auto;
+      box-shadow: 2px 2px 2px 2px #ebeced;
+      border-radius: 3px;
+  }
+
+  .content2 .downleft {
+      width: 59px;
+      height: 60px;
+      float: left;
+      text-align: center;
+      line-height: 60px;
+      border-right: 1px solid #ccc;
+  }
+
+  .content2 .downright {
+      width: 300px;
+      height: 60px;
+      margin-left: 60px;
+  }
+
+  .content2 .downrightdiv {
+      margin-left: 20px;
+  }
+
+  .content2 .downrightspan {
+      display: inline-block;
+      width: 45px;
+  }
+
+  .content2 .xlsx {
+      color: #1a73e8;
+      font-weight: bold;
+  }
+
+  .content2 .downrighta {
+      color: #1a73e8;
+      margin-left: 20px;
+  }
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -277,7 +376,12 @@
 	                <!-- Menu Footer-->
 	                <li class="user-footer">
 	                  <div class="pull-left">
-	                    <a href="../crm/loginplatform.html" class="btn btn-default btn-flat">数据平台首页</a>
+                      <!--<li class="dropdown user user-menu dialog_open2" onclick="download_table();">-->
+                          <div  class="btn btn-default btn-flat" onclick="download_table();">
+                              <span class="glyphicon glyphicon-download-alt" ></span> 下载中心
+                              <img alt="" class="newimg" src="dist/img/new_1.gif" style="position:absolute;right:-10px; top:5px; width:25px; height:19px;">
+                          </div>
+                      <!--</li>-->
 	                  </div>
 	                  <div class="pull-right">
 	                    <a href="javascript:doLogout()" class="btn btn-default btn-flat">退出</a>
@@ -286,13 +390,29 @@
 	              </ul>
 	            </li>
            </ul>
+
          </div>
+            <div class="modal-content content2" id="dialog2">
+                <div>
+                    <h4 class="modal-title modeltitle">下载文件列表</h4>
+                </div>
+                <div style="position: absolute;right: 25px;top: 14px">
+                    <a href="javascript:reportFiledown()"><span></span>查看全部</a>
+                </div>
+                <div class="div1" id="head_tr">
+
+                </div>
+
+                <div class="modal-footer" style="text-align: center;">
+                    <button type="button" class="btn btn-default dialog_remove2">关闭</button>
+                </div>
+            </div>
        </div>
     </nav>
 </header>
-	
 
 
+    <div id="mask1"></div>
 
   <!-- =============================================== -->
 
