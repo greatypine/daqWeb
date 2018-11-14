@@ -1149,12 +1149,20 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 	}
 
 	public void setCellValue(Row obj_row, int nCellIndex, Object value){
+
+
 		Cell cell=obj_row.createCell(nCellIndex);
 		cell.setCellStyle(getCellStyle_common());
 		cell.setCellValue(new HSSFRichTextString(value==null?null:value.toString()));
 		cell.setCellType(HSSFCell.CELL_TYPE_STRING);
 	}
-
+    public void setCellNumberValue(Row obj_row,HSSFCellStyle contextstyle, int nCellIndex, Object value){
+        Cell cell=obj_row.createCell(nCellIndex);
+        cell.setCellStyle(getCellStyle_common());
+        cell.setCellStyle(contextstyle);
+        cell.setCellValue(Double.parseDouble(value.toString()));
+        cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+    }
 	@Override
 	public Map<String, Object> exportStoreTradeByType(DynamicDto dynamicDto) {
 		Map<String,Object> result  = new HashMap<String,Object>();
@@ -2352,7 +2360,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				value = cell.getNumericCellValue() == 0D ? null : String.valueOf(cell.getNumericCellValue());
 				if (cell.getCellStyle().getDataFormat() == 177||cell.getCellStyle().getDataFormat() == 58||cell.getCellStyle().getDataFormat() == 31){
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-					Date date = org.apache.poi.ss.usermodel.DateUtil
+					Date date = DateUtil
 							.getJavaDate(Double.valueOf(value));
 					value = sdf.format(date);
 					return value;
@@ -6295,7 +6303,20 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				for(int i = 0;i < list.size();i++){
 					row = sheet.createRow(i+1);
 					for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        Boolean isNum = false;//data是否为数值型
+                        if (list.get(i).get(headers_key[cellIndex]) != null && !"".equals(list.get(i).get(headers_key[cellIndex]))) {
+                            //判断data是否为数值型
+                            isNum = list.get(i).get(headers_key[cellIndex]).toString().matches("^(-?\\d+)(\\.\\d+)?$");
+                        }
+
+                        if(isNum){
+                            HSSFDataFormat df = wb.createDataFormat(); // 此处设置数据格式
+                            HSSFCellStyle contextstyle =wb.createCellStyle();
+                            contextstyle.setDataFormat(df.getBuiltinFormat("#,#0"));//数据格式只显示整数
+                            setCellNumberValue(row,contextstyle, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        }else{
+                            setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        }
 					}
 				}
 				file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_citymember.xls");
@@ -6313,7 +6334,20 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				for(int i = 0;i < list.size();i++){
 					row = sheet.createRow(i+1);
 					for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        Boolean isNum = false;//data是否为数值型
+                        if (list.get(i).get(headers_key[cellIndex]) != null && !"".equals(list.get(i).get(headers_key[cellIndex]))) {
+                            //判断data是否为数值型
+                            isNum = list.get(i).get(headers_key[cellIndex]).toString().matches("^(-?\\d+)(\\.\\d+)?$");
+                        }
+
+                        if(isNum){
+                            HSSFDataFormat df = wb.createDataFormat(); // 此处设置数据格式
+                            HSSFCellStyle contextstyle =wb.createCellStyle();
+                            contextstyle.setDataFormat(df.getBuiltinFormat("#,#0"));//数据格式只显示整数
+                            setCellNumberValue(row,contextstyle, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        }else{
+                            setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        }
 					}
 				}
 				file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_storemember.xls");
@@ -6331,7 +6365,20 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				for(int i = 0;i < list.size();i++){
 					row = sheet.createRow(i+1);
 					for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
-						setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        Boolean isNum = false;//data是否为数值型
+                        if (list.get(i).get(headers_key[cellIndex]) != null && !"".equals(list.get(i).get(headers_key[cellIndex]))) {
+                            //判断data是否为数值型
+                            isNum = list.get(i).get(headers_key[cellIndex]).toString().matches("^(-?\\d+)(\\.\\d+)?$");
+                        }
+
+                        if(isNum){
+                            HSSFDataFormat df = wb.createDataFormat(); // 此处设置数据格式
+                            HSSFCellStyle contextstyle =wb.createCellStyle();
+                            contextstyle.setDataFormat(df.getBuiltinFormat("#,#0"));//数据格式只显示整数
+                            setCellNumberValue(row,contextstyle, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        }else{
+                            setCellValue(row, cellIndex, list.get(i).get(headers_key[cellIndex]));
+                        }
 					}
 				}
 				file_xls = new File(str_file_dir_path + File.separator+System.currentTimeMillis()+"_storetrymember.xls");
@@ -7355,9 +7402,15 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
                 result.put("status","null");
                 return result;
             }
-
-            String[] str_headers = {"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","营销费用","报损","盘亏","毛利"};
-            String[] headers_key = {"city_name","store_name","storeno","employee_name","employee_no","income","sumprice","baosun","pankui","maoli"};
+            String[] str_headers = null;
+            String[] headers_key = null;
+            if("2018-10".equals(dynamicDto.getBeginDate())){
+                str_headers = new String[]{"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","营销费用","报损","盘亏","毛利"};
+                headers_key = new String[]{"city_name", "store_name", "storeno", "employee_name", "employee_no", "income", "sumprice", "baosun", "pankui", "maoli"};
+            }else{
+                str_headers = new String[]{"城市","门店名称","门店编码","员工姓名","员工编号","销售收入","片区销售收入","手动分配销售收入","人均分配销售收入","营销费用","报损","盘亏","毛利"};
+                headers_key = new String[]{"city_name","store_name","storeno","employee_name","employee_no","allcome","income","outcome","wcd_profit","sumprice","baosun","pankui","maoli"};
+            }
             ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("国安侠毛利",list,str_headers,headers_key);
             result = eeuo.exportFile();
         }else{
