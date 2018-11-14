@@ -3763,19 +3763,58 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
     @Override
     public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto, PageInfo pageInfo) {
-        String sql="select c2.city_name as city_name,c2.storename as store_name,c2.storeno as storeno,c2.name as employee_name,c2.employeeno as employee_no,c2.income as income,round(c2.sumprice,2) as sumprice,ifnull(dbaosun.count_money_avg,0) as  baosun,ifnull(dpankui.count_money_avg,0) as pankui," +
-                "round(c2.income-c2.sumprice -ifnull(dbaosun.count_money_avg,0) - ifnull(dpankui.count_money_avg,0),2) as maoli,c2.zw as zw,c2.store_id as store_id  " +
-                "from (select " +
-                "c1.income, c1.rebate, c1.sumprice, c1. name, c1.employeeno, c1.zw, c1.storename, c1.store_id, tss.storeno, tss.city_name " +
-                "from " +
-                " (select " +
-                "b1.income, b1.rebate, b1.sumprice, b1.employeeno, th. name, th.zw, th.storename, th.store_id " +
-                " from " +
-                "( select round( a1.mon_profit - ifnull(a2.mon_profit,0), 2 ) income, round(a1.rebate - ifnull(a2.rebate,0), 2) rebate, round(a1.sumprice - ifnull(a2.sumprice,0), 2) sumprice, a1.info_employee_a_no employeeno from ( select ifnull(sum(dmot.order_profit), 0) mon_profit, ifnull( sum(dmot.apportion_rebate), 0 ) rebate, ifnull(sum(CASE when  dmot.order_tag4 is null then dmot.platform_price else 0 end), 0) sumprice, dmot.info_employee_a_no from daqweb.df_mass_order_total dmot where dmot.info_employee_a_no is not null and dmot.info_employee_a_no <> '' and strleft (dmot.sign_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot.info_employee_a_no ) a1 left join ( select ifnull(sum(dmot2.order_profit), 0) mon_profit, ifnull( sum(dmot2.apportion_rebate), 0 ) rebate, ifnull(sum(CASE when  dmot2.order_tag4 is null then dmot2.platform_price else 0 end), 0) sumprice, dmot2.info_employee_a_no from daqweb.df_mass_order_total dmot2 where dmot2.info_employee_a_no is not null and dmot2.info_employee_a_no <> '' and strleft (dmot2.return_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot2.info_employee_a_no ) a2 on a1.info_employee_a_no = a2.info_employee_a_no ) b1 " +
-                " left join t_humanresources th on b1.employeeno = th.employee_no) c1 " +
-                "left join daqweb.t_store tss on c1.store_id = tss.store_id) c2 " +
-                "left join daqweb.df_pankui_baosun_info dbaosun on (c2.storeno=dbaosun.store_code and dbaosun.count_type='0' and dbaosun.count_month='"+ dynamicDto.getBeginDate()+"') " +
-                "left join daqweb.df_pankui_baosun_info dpankui on (c2.storeno=dpankui.store_code and dpankui.count_type='1' and dpankui.count_month='"+ dynamicDto.getBeginDate()+"') where 1=1   ";
+
+        String sql="";
+        if("2018-10".equals(dynamicDto.getBeginDate())){
+            sql="select c2.city_name as city_name,c2.storename as store_name,c2.storeno as storeno,c2.name as employee_name,c2.employeeno as employee_no,c2.income as income,round(c2.sumprice,2) as sumprice,ifnull(dbaosun.count_money_avg,0) as  baosun,ifnull(dpankui.count_money_avg,0) as pankui," +
+                    "round(c2.income-c2.sumprice -ifnull(dbaosun.count_money_avg,0) - ifnull(dpankui.count_money_avg,0),2) as maoli,c2.zw as zw,c2.store_id as store_id  " +
+                    "from (select " +
+                    "c1.income, c1.rebate, c1.sumprice, c1. name, c1.employeeno, c1.zw, c1.storename, c1.store_id, tss.storeno, tss.city_name " +
+                    "from " +
+                    " (select " +
+                    "b1.income, b1.rebate, b1.sumprice, b1.employeeno, th. name, th.zw, th.storename, th.store_id " +
+                    " from " +
+                    "( select round( a1.mon_profit - ifnull(a2.mon_profit,0), 2 ) income, round(a1.rebate - ifnull(a2.rebate,0), 2) rebate, round(a1.sumprice - ifnull(a2.sumprice,0), 2) sumprice, a1.info_employee_a_no employeeno from ( select ifnull(sum(dmot.order_profit), 0) mon_profit, ifnull( sum(dmot.apportion_rebate), 0 ) rebate, ifnull(sum(CASE when  dmot.order_tag4 is null then dmot.platform_price else 0 end), 0) sumprice, dmot.info_employee_a_no from daqweb.df_mass_order_total dmot where dmot.info_employee_a_no is not null and dmot.info_employee_a_no <> '' and strleft (dmot.sign_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot.info_employee_a_no ) a1 left join ( select ifnull(sum(dmot2.order_profit), 0) mon_profit, ifnull( sum(dmot2.apportion_rebate), 0 ) rebate, ifnull(sum(CASE when  dmot2.order_tag4 is null then dmot2.platform_price else 0 end), 0) sumprice, dmot2.info_employee_a_no from daqweb.df_mass_order_total dmot2 where dmot2.info_employee_a_no is not null and dmot2.info_employee_a_no <> '' and strleft (dmot2.return_time, 7) = '"+dynamicDto.getBeginDate()+"' group by dmot2.info_employee_a_no ) a2 on a1.info_employee_a_no = a2.info_employee_a_no ) b1 " +
+                    " left join t_humanresources th on b1.employeeno = th.employee_no) c1 " +
+                    "left join daqweb.t_store tss on c1.store_id = tss.store_id) c2 " +
+                    "left join daqweb.df_pankui_baosun_info dbaosun on (c2.storeno=dbaosun.store_code and dbaosun.count_type='0' and dbaosun.count_month='"+ dynamicDto.getBeginDate()+"') " +
+                    "left join daqweb.df_pankui_baosun_info dpankui on (c2.storeno=dpankui.store_code and dpankui.count_type='1' and dpankui.count_month='"+ dynamicDto.getBeginDate()+"') where 1=1   ";
+        }else{
+            sql = "select c2.city_name as city_name, c2.storename as store_name, c2.storeno as storeno, c2. name as employee_name, c2.employeeno as employee_no, round((c2.income+ifnull(c5.income, 0)+ifnull(c6.wcd_profit, 0)),2) as allcome,c2.income as income, round(ifnull(c5.income, 0), 2) as outcome," +
+                    " round(ifnull(c6.wcd_profit, 0), 2) as wcd_profit, round(ifnull(c2.sumprice,0)+ifnull(c5.sumprice, 0), 2) as sumprice,round( ifnull(dbaosun.count_money_avg, 0), 2 ) as baosun," +
+                    " round( ifnull(dpankui.count_money_avg, 0), 2 ) as pankui, round( c2.income + ifnull(c5.income, 0) + ifnull(c6.wcd_profit, 0) - ifnull(c5.sumprice, 0) - c2.sumprice - ifnull(dbaosun.count_money_avg, 0) - ifnull(dpankui.count_money_avg, 0), 2 ) as maoli," +
+                    " c2.zw as zw, c2.store_id as store_id from ( select c1.income, c1.rebate, c1.sumprice, c1. name, c1.employeeno, c1.zw, c1.storename, c1.store_id, tss.storeno, tss.city_name" +
+                    " from ( select b1.income, b1.rebate, b1.sumprice, b1.employeeno, th. name, th.zw, th.storename, th.store_id from ( select round( a1.mon_profit - ifnull(a2.mon_profit, 0), 2 ) income," +
+                    " round( a1.rebate - ifnull(a2.rebate, 0), 2 ) rebate, round( a1.sumprice - ifnull(a2.sumprice, 0), 2 ) sumprice, a1.info_employee_a_no employeeno" +
+                    " from ( select ifnull(sum(dmot.order_profit), 0) mon_profit, ifnull( sum(dmot.apportion_rebate), 0 ) rebate, ifnull( sum( CASE when dmot.order_tag4 is null then dmot.platform_price else 0 end ), 0 ) sumprice," +
+                    " dmot.info_employee_a_no from daqweb.df_mass_order_total dmot where dmot.info_employee_a_no is not null and dmot.info_employee_a_no <> '' and strleft (dmot.sign_time, 7) = '"+ dynamicDto.getBeginDate()+"' group by dmot.info_employee_a_no ) a1" +
+                    " left join ( select ifnull(sum(dmot2.order_profit), 0) mon_profit, ifnull( sum(dmot2.apportion_rebate), 0 ) rebate, ifnull( sum( CASE when dmot2.order_tag4 is null then dmot2.platform_price else 0 end ), 0 ) sumprice," +
+                    " dmot2.info_employee_a_no from daqweb.df_mass_order_total dmot2 where dmot2.info_employee_a_no is not null and dmot2.info_employee_a_no <> '' and strleft (dmot2.return_time, 7) = '"+ dynamicDto.getBeginDate()+"' group by dmot2.info_employee_a_no ) a2" +
+                    " on a1.info_employee_a_no = a2.info_employee_a_no ) b1" +
+                    " left join t_humanresources th on b1.employeeno = th.employee_no ) c1" +
+                    " left join daqweb.t_store tss on c1.store_id = tss.store_id ) c2" +
+                    " left join daqweb.df_pankui_baosun_info dbaosun on ( c2.storeno = dbaosun.store_code and dbaosun.count_type = '0' and dbaosun.count_month = '"+ dynamicDto.getBeginDate()+"' )" +
+                    " left join daqweb.df_pankui_baosun_info dpankui on ( c2.storeno = dpankui.store_code and dpankui.count_type = '1' and dpankui.count_month = '"+ dynamicDto.getBeginDate()+"' )" +
+                    " left join ( select round( d1.mon_profit - ifnull(d2.mon_profit, 0), 2 ) income, round( d1.rebate - ifnull(d2.rebate, 0), 2 ) rebate, round( d1.sumprice - ifnull(d2.sumprice, 0), 2 ) sumprice," +
+                    " d1.employee_no employeeno from ( select ifnull(sum(dmot3.order_profit), 0) mon_profit, ifnull( sum(dmot3.apportion_rebate), 0 ) rebate," +
+                    " ifnull( sum( CASE when dmot3.order_tag4 is null then dmot3.platform_price else 0 end ), 0 ) sumprice, dopm.employee_no as employee_no" +
+                    " from df_order_pubseas_monthly dopm join df_mass_order_total dmot3 on (dopm.df_order_id = dmot3.id) where dopm.employee_no is not null" +
+                    " AND dmot3.eshop_name NOT LIKE '%测试%' AND dmot3.eshop_white != 'QA' AND dmot3.store_white != 'QA' and dmot3.pubseas_label = '1'" +
+                    " AND strleft (dmot3.sign_time, 7) = '"+ dynamicDto.getBeginDate()+"' group by dopm.employee_no ) d1 left join ( select ifnull(sum(dmot4.order_profit), 0) mon_profit," +
+                    " ifnull( sum(dmot4.apportion_rebate), 0 ) rebate, ifnull( sum( CASE when dmot4.order_tag4 is null then dmot4.platform_price else 0 end ), 0 ) sumprice, " +
+                    " dopm1.employee_no as employee_no from df_order_pubseas_monthly dopm1 join df_mass_order_total dmot4 on (dopm1.df_order_id = dmot4.id) where dopm1.employee_no is not null" +
+                    " AND dmot4.eshop_name NOT LIKE '%测试%' AND dmot4.eshop_white != 'QA' AND dmot4.store_white != 'QA' and dmot4.pubseas_label = '1'" +
+                    " AND strleft (dmot4.return_time, 7) = '"+ dynamicDto.getBeginDate()+"' group by dopm1.employee_no ) d2 on d1.employee_no = d2.employee_no ) c5 on ( c2.employeeno = c5.employeeno )" +
+                    " left join ( select ifnull((e5.pergmv - e6.pergmv), 0) wcd_profit, e5.storeno from ( select e1.storeno, e2.persum, e1.pernum, ifnull((e2.persum / e1.pernum), 0) as pergmv" +
+                    " from ( select dtop.storeno storeno, count(1) as pernum from ds_topdata dtop where dtop.zw = '国安侠' and dtop.humanstatus = 1 and dtop.yearmonth = '"+ dynamicDto.getBeginDate()+"'" +
+                    " group by dtop.storeno ) e1, ( select tor1.store_code store_code, sum(tor1.order_profit) persum from df_mass_order_total tor1 where tor1.eshop_name NOT LIKE '%测试%'" +
+                    " AND tor1.eshop_white != 'QA' AND tor1.store_white != 'QA' and tor1.store_status = 0 AND tor1.customer_id like 'fakecustomer%' AND strleft (tor1.sign_time, 7) = '"+ dynamicDto.getBeginDate()+"' group by tor1.store_code ) e2" +
+                    " where e1.storeno = e2.store_code ) e5 left join ( select e3.storeno, ifnull((e4.persum / e3.pernum), 0) as pergmv from ( select dtop1.storeno, count(1) as pernum from ds_topdata dtop1 where dtop1.zw = '国安侠'" +
+                    " and dtop1.humanstatus = 1 and dtop1.yearmonth = '"+ dynamicDto.getBeginDate()+"' group by dtop1.storeno ) e3, ( select tor2.store_code, sum(tor2.order_profit) persum from df_mass_order_total tor2 where tor2.eshop_name NOT LIKE '%测试%'" +
+                    " AND tor2.eshop_white != 'QA' AND tor2.store_white != 'QA' and tor2.store_status = 0 AND tor2.customer_id like 'fakecustomer%' AND strleft (tor2.return_time, 7) = '"+ dynamicDto.getBeginDate()+"' group by tor2.store_code ) e4 where e3.storeno = e4.store_code ) e6" +
+                    " on e5.storeno = e6.storeno ) c6 on (c2.storeno = c6.storeno) where 1 = 1";
+        }
+
         if(dynamicDto.getEmployeeNo()!=null&&!"".equals(dynamicDto.getEmployeeNo())){
             sql=sql+" and c2.employeeno like '%"+dynamicDto.getEmployeeNo()+"%'";
         }
@@ -3792,7 +3831,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         if(dynamicDto.getCityName()!=null&&!"".equals(dynamicDto.getCityName())){
             sql=sql+" and c2.city_name like '%"+dynamicDto.getCityName()+"%'";
         }
-        sql = sql+"order by c2.storeno";
+        sql = sql+" order by c2.storeno";
         String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
         Map<String, Object> map_result = new HashMap<String, Object>();
         if(pageInfo!=null){
