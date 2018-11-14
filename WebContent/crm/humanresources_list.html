@@ -648,6 +648,18 @@ Date.prototype.format=function(fmt) {
     			    	   titalstr="离职日期";
     			       }
     			       
+    			       if(onlinestartstr=="Y"){
+    			    	   var lefttime = jData[i].lefttime==null?"":jData[i].lefttime;
+        			       if(lefttime!=null&&lefttime.length>1){
+        			    	   showdate=lefttime.substring(0,10);
+        			    	   titalstr="离职日期";
+        			       }else{
+        			    	   titalstr="入职日期";
+        			       }
+    			       }
+    			       
+    			       
+    			       
 	        		   var infoStr= "<tr>";
 	        		   		
         			       var s="";

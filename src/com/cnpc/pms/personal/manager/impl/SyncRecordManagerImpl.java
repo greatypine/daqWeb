@@ -24,6 +24,7 @@ import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.personal.entity.SyncRecord;
 import com.cnpc.pms.personal.manager.CityHumanresourcesManager;
+import com.cnpc.pms.personal.manager.OnLineHumanresourcesManager;
 import com.cnpc.pms.personal.manager.SyncRecordLogManager;
 import com.cnpc.pms.personal.manager.SyncRecordManager;
 import com.cnpc.pms.personal.util.SearchDataServiceUtils;
@@ -59,9 +60,9 @@ public class SyncRecordManagerImpl extends BizBaseCommonManager implements SyncR
 	@Override
 	@Transactional
 	public void saveSearchWebServiceData(){
-		CityHumanresourcesManager cityHumanresourcesManager=(CityHumanresourcesManager) SpringHelper.getBean("cityHumanresourcesManager");
 		SyncRecordLogManager syncRecordLogManager = (SyncRecordLogManager) SpringHelper.getBean("syncRecordLogManager");
-
+		OnLineHumanresourcesManager onLineHumanresourcesManager = (OnLineHumanresourcesManager) SpringHelper.getBean("onLineHumanresourcesManager");
+		
 		//取同步表 更新日期后的最大值 
 		FSP fsp = new FSP();
 		fsp.setSort(SortFactory.createSort("updatetime", ISort.DESC));
@@ -81,7 +82,7 @@ public class SyncRecordManagerImpl extends BizBaseCommonManager implements SyncR
 					//同步记录表
 					IFilter repFilter =FilterFactory.getSimpleFilter("cardid",syncRecord.getCardid());
 					List<SyncRecord> saveSyncRecords = (List<SyncRecord>) this.getList(repFilter);
-					if(saveSyncRecords!=null&&saveSyncRecords.size()>0){
+					if(saveSyncRecords!=null&&saveSyncRecords.size()>0){//如果存在 则更新 
 						SyncRecord saveSyncRecord = saveSyncRecords.get(0);
 						saveSyncRecord.setUpdatetime(syncRecord.getUpdatetime());
 						saveSyncRecord.setName(syncRecord.getName());
@@ -95,16 +96,21 @@ public class SyncRecordManagerImpl extends BizBaseCommonManager implements SyncR
 						saveSyncRecord.setEmail(syncRecord.getEmail());
 						saveSyncRecord.setJointime(syncRecord.getJointime());
 						saveSyncRecord.setLefttime(syncRecord.getLefttime());
-						saveSyncRecord.setEmployee_no(syncRecord.getEmployee_no());
-						saveSyncRecord.setInviteCode(syncRecord.getInviteCode());
+						/*saveSyncRecord.setEmployee_no(syncRecord.getEmployee_no());
+						saveSyncRecord.setInviteCode(syncRecord.getInviteCode());*/
 						preSaveObject(saveSyncRecord);
 						this.saveObject(saveSyncRecord);
 					}else{
 						preSaveObject(syncRecord);
 						this.saveObject(syncRecord);
 					}
+					
 					//线上人员表 
-					//cityHumanresourcesManager.saveCityHumanresourcesByCardNo(syncRecord);
+					try {
+						onLineHumanresourcesManager.saveOnlineHuman(syncRecord);
+					}catch (Exception e) {
+						log.info("=============同步线上人员出现异常============="+e.getMessage());
+					}
 					
 					//保存同步记录 
 					syncRecordLogManager.saveSyncRecordLog(syncRecord);

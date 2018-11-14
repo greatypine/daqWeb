@@ -179,7 +179,18 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 			sql+=" where "+sqlwhere;*/
 			
 			if(humanresources!=null&&humanresources.getHumanstatus().equals(2L)){
-				sqlwhere +=" and 1=0 ";
+				sqlwhere +=" and length(lefttime)>1 ";
+				
+				if(humanresources!=null&&humanresources.getTopostdate()!=null&&humanresources.getTopostdate().length()>0){
+					String startDate = humanresources.getTopostdate().split("-")[0].toString().trim();
+					String endDate = humanresources.getTopostdate().split("-")[1].toString().trim();
+					//离职
+					sqlwhere +=" and DATE_FORMAT(a.lefttime,'%Y/%m/%d') >='"+startDate+"'";
+					sqlwhere +=" and DATE_FORMAT(a.lefttime,'%Y/%m/%d') <='"+endDate+"'";
+				}
+				
+			}else {
+				sqlwhere +=" and (length(lefttime)<1 or lefttime is null) ";
 			}
 			
 			
@@ -384,7 +395,18 @@ public class HumanresourcesDaoImpl extends DAORootHibernate implements Humanreso
 		public List<Map<String, Object>> exportOnLineHuman(Humanresources humanresources){
 			String sqlwhere = " 1=1 ";
 			if(humanresources!=null&&humanresources.getHumanstatus().equals(2L)){
-				sqlwhere +=" and 1=0 ";
+				sqlwhere +=" and length(lefttime)>1 ";
+				
+				if(humanresources!=null&&humanresources.getTopostdate()!=null&&humanresources.getTopostdate().length()>0){
+					String startDate = humanresources.getTopostdate().split("-")[0].toString().trim();
+					String endDate = humanresources.getTopostdate().split("-")[1].toString().trim();
+					//离职
+					sqlwhere +=" and DATE_FORMAT(a.lefttime,'%Y/%m/%d') >='"+startDate+"'";
+					sqlwhere +=" and DATE_FORMAT(a.lefttime,'%Y/%m/%d') <='"+endDate+"'";
+				}
+				
+			}else {
+				sqlwhere +=" and (length(lefttime)<1 or lefttime is null) ";
 			}
 			
 			if(humanresources!=null&&humanresources.getCitySelect()!=null&&humanresources.getCitySelect().length()>0){

@@ -72,6 +72,11 @@ public class OnLineHumanresources extends DataEntity{
 	 */
 	@Column(length = 65,name="inviteCode")
 	private String inviteCode;
+	
+	// 离职时间
+	@Column(length = 65, name = "lefttime")
+	private String lefttime;
+	
 
 
 	public String getCitySelect() {
@@ -161,6 +166,16 @@ public class OnLineHumanresources extends DataEntity{
 
 	public void setInviteCode(String inviteCode) {
 		this.inviteCode = inviteCode;
+	}
+
+
+	public String getLefttime() {
+		return lefttime;
+	}
+
+
+	public void setLefttime(String lefttime) {
+		this.lefttime = lefttime;
 	} 
 	
 	
