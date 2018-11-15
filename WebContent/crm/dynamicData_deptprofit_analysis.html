@@ -251,49 +251,18 @@
 	});
     /*默认显示上个月的日期*/
     var cur_date = new Date();
-    var now_month =cur_date.getMonth();
-    var max_year = cur_date.getFullYear();
-    var now_date =cur_date.getDate();
-    var max_month = "";
-    if(now_month==0){
-        max_year =cur_date.getFullYear()-1;
-        max_month = "12";
-    }
-    if(now_month>0&&now_month<10){
-        max_month = "0"+now_month;
-        if(now_month<9){
-            now_month ="0"+(now_month+1);
-        }else{
-            now_month = now_month+1;
-        }
-    }else{
-        max_month = now_month;
-    }
-    var year_month = max_year+"-"+max_month;
-    var max_date = "";
-    var max_month1 =max_month;
-    var max_month =max_year+"-"+max_month +"-"+(cur_date.getDate());
-    if(now_date==1){
-        if(now_month==4||now_month==6||now_month==9||now_month==11){
-            now_date =30;
-        }else
-        if(max_year%4==0&&now_month==2){
-            now_date=29;
-        }else{
-            now_date=31;
-        }
-        max_date = max_year+"-"+max_month1 +"-"+now_date;
-    }else{
-        max_date = max_year+"-"+now_month +"-"+(now_date-1);
-    }
+    var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
+    cur_date.setTime(cur_date.getTime()-2*24*60*60*1000);
+    var last_month = cur_date.getMonth();
+    var last_month_date = cur_date.getFullYear()+"-" + (last_month < 10 ? '0' + last_month : '' + last_month);
     laydate.render({//月份控件
         elem:'#be_date1',
-        value:year_month,
+        value:last_month_date,
         type:"month",
-        btns: ['confirm'],
+        btns: ['confirm','now'],
         theme: '#11214e',
         min: '2018-10-1',
-        max:max_month,
+        max:year_month,
     });
 	
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
@@ -889,12 +858,12 @@ function resetSerachParam(){
 	$("#auto_store").empty();
     laydate.render({//月份控件
         elem:'#be_date1',
-        value:year_month,
+        value:last_month_date,
         type:"month",
-        btns: ['confirm'],
+        btns: ['confirm','now'],
         theme: '#11214e',
         min: '2018-10-1',
-        max:max_month,
+        max:year_month,
     });
 	if(target==0){//总部
   		$("#store_id_tradetype").val("");

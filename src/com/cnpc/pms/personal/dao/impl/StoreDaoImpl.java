@@ -1470,9 +1470,15 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		sql = sql + "group by dot.store_code order by dot.store_code";
 
 		//报损
-		sql = sql + ") aa left join df_pankui_baosun_info dbaosun on (aa.store_code=dbaosun.store_code and dbaosun.count_type='0' and dbaosun.count_month='"+dynamicDto.getBeginDate()+"') ";
+		sql = sql + ") aa left join (select count_money,store_code,create_date,num  from (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,"
+				+ "baosun.store_code,baosun.create_date,ROW_NUMBER() OVER(PARTITION BY baosun.store_code ORDER BY create_date DESC) as num "
+				+ "from df_pankui_baosun_info baosun where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' group by baosun.store_code,baosun.create_date "
+				+ ") aa having num=1 ) dbaosun on (aa.store_code=dbaosun.store_code) ";
 		//盘亏
-		sql = sql + "left join df_pankui_baosun_info dpankui on (aa.store_code=dpankui.store_code and dpankui.count_type='1' and dpankui.count_month='"+dynamicDto.getBeginDate()+"') ";
+		sql = sql + "left join (select count_money,store_code,create_date,num  from (select ifnull(dround(sum(pankui.count_money),2),0) as count_money,"
+				+ "pankui.store_code,pankui.create_date,ROW_NUMBER() OVER(PARTITION BY pankui.store_code ORDER BY create_date DESC) as num "
+				+ "from df_pankui_baosun_info pankui where pankui.count_type='1' and pankui.count_month='"+dynamicDto.getBeginDate()+"' group by pankui.store_code,pankui.create_date "
+				+ ") aa having num=1 ) dpankui on (aa.store_code=dpankui.store_code) ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_code) dd on aa.store_code=dd.store_code ";
 
@@ -1527,11 +1533,15 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		sql = sql + "group by dot.store_city_code order by dot.store_city_code";
 
 		//报损
-		sql = sql + ") aa left join (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,ts.city_code from df_pankui_baosun_info baosun join gemini.t_store ts  on baosun.store_code=ts.code "
-				+"where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' group by ts.city_code) dbaosun on aa.store_city_code=dbaosun.city_code ";
+		sql = sql + ") aa left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,ts.city_code,"
+				+ "baosun.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info baosun "
+				+ "join gemini.t_store ts  on baosun.store_code=ts.code where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' "
+				+ "group by ts.city_code,baosun.create_date ) aa having num=1) dbaosun on aa.store_city_code=dbaosun.city_code ";
 		//盘亏
-		sql = sql + "left join (select ifnull(dround(sum(pankui.count_money),2),0)  as count_money,ts.city_code from df_pankui_baosun_info pankui join gemini.t_store ts  on pankui.store_code=ts.code "
-				+"where pankui.count_type='1' and pankui.count_month='"+dynamicDto.getBeginDate()+"' group by ts.city_code) dpankui on aa.store_city_code=dpankui.city_code ";
+		sql = sql + "left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(pankui.count_money),2),0) as count_money,ts.city_code,"
+				+ "pankui.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info pankui "
+				+ "join gemini.t_store ts  on pankui.store_code=ts.code where pankui.count_type='1' and pankui.count_month='"+dynamicDto.getBeginDate()+"' "
+				+ "group by ts.city_code,pankui.create_date ) aa having num=1) dpankui on aa.store_city_code=dpankui.city_code ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
 
@@ -1727,11 +1737,16 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			}
 		}
 		sql = sql + "group by dot.store_code order by store_code ) aa ";
-
 		//报损
-		sql = sql + "left join df_pankui_baosun_info dbaosun on (aa.store_code=dbaosun.store_code and dbaosun.count_type='0' and dbaosun.count_month='"+dynamicDto.getBeginDate()+"') ";
+		sql = sql + "left join (select count_money,store_code,create_date,num  from (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,"
+				+ "baosun.store_code,baosun.create_date,ROW_NUMBER() OVER(PARTITION BY baosun.store_code ORDER BY create_date DESC) as num "
+				+ "from df_pankui_baosun_info baosun where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' group by baosun.store_code,baosun.create_date "
+				+ ") aa having num=1 ) dbaosun on (aa.store_code=dbaosun.store_code) ";
 		//盘亏
-		sql = sql + "left join df_pankui_baosun_info dpankui on (aa.store_code=dpankui.store_code and dpankui.count_type='1' and dpankui.count_month='"+dynamicDto.getBeginDate()+"') ";
+		sql = sql + "left join (select count_money,store_code,create_date,num  from (select ifnull(dround(sum(pankui.count_money),2),0) as count_money,"
+				+ "pankui.store_code,pankui.create_date,ROW_NUMBER() OVER(PARTITION BY pankui.store_code ORDER BY create_date DESC) as num "
+				+ "from df_pankui_baosun_info pankui where pankui.count_type='1' and pankui.count_month='"+dynamicDto.getBeginDate()+"' group by pankui.store_code,pankui.create_date "
+				+ ") aa having num=1 ) dpankui on (aa.store_code=dpankui.store_code) ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_code) dd on aa.store_code=dd.store_code ";
 
@@ -1774,11 +1789,15 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 		sql = sql + "group by dot.store_city_code order by store_city_code ";
 
 		//报损
-		sql = sql + ") aa left join (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,ts.city_code from df_pankui_baosun_info baosun join gemini.t_store ts  on baosun.store_code=ts.code "
-				+"where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' group by ts.city_code) dbaosun on aa.store_city_code=dbaosun.city_code ";
+		sql = sql + ") aa left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,ts.city_code,"
+				+ "baosun.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info baosun "
+				+ "join gemini.t_store ts  on baosun.store_code=ts.code where baosun.count_type='0' and baosun.count_month='"+dynamicDto.getBeginDate()+"' "
+				+ "group by ts.city_code,baosun.create_date ) aa having num=1) dbaosun on aa.store_city_code=dbaosun.city_code ";
 		//盘亏
-		sql = sql + "left join (select ifnull(dround(sum(pankui.count_money),2),0)  as count_money,ts.city_code from df_pankui_baosun_info pankui join gemini.t_store ts  on pankui.store_code=ts.code "
-				+"where pankui.count_type='1' and pankui.count_month='"+dynamicDto.getBeginDate()+"' group by ts.city_code) dpankui on aa.store_city_code=dpankui.city_code ";
+		sql = sql + "left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(pankui.count_money),2),0) as count_money,ts.city_code,"
+				+ "pankui.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info pankui "
+				+ "join gemini.t_store ts  on pankui.store_code=ts.code where pankui.count_type='1' and pankui.count_month='"+dynamicDto.getBeginDate()+"' "
+				+ "group by ts.city_code,pankui.create_date ) aa having num=1) dpankui on aa.store_city_code=dpankui.city_code ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,7)='"+dynamicDto.getBeginDate()+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
 
