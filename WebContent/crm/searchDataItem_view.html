@@ -520,7 +520,7 @@
                 <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative">
                     <div id="exportnormal">
                         <button type="button" id="export_manual_massOrderItem_button" class="btn btn-block btn-warning dialog_open">导出</button>
-                        <span id="forcolumnattention1" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">请确认是否已经查询到数据！</span>
+                        <span id="forcolumnattention1" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">点击查询后导出！</span>
                     </div>
                     <div id="div" style="z-index:10000;position: absolute;top: 25px;display: block"></div>
                 </div>
@@ -1131,15 +1131,8 @@ Date.prototype.format=function(fmt) {
   		isCreatePage=false;
   		search_manual_abnormalOrder1(cur_page);
 
-       var total = $("#totalRecord_cannot").text();
-       if(total != "" && total != 0 ){
-           var div = document.getElementById("div");
-           div.style.display = "none";
-           $(".btn-warning").css("background-color","#f39c12");
-           $(".btn-warning").css("border-color","#e08e0b");
-           $('#export_manual_massOrderItem_button').removeAttr("disabled");
-
-       }else{
+       var total = 22000;
+       if(total == "" || total == 0 || total == "0"){
            var export_button = document.getElementById("export_manual_massOrderItem_button");
            var height = export_button.clientHeight;
            var width = export_button.clientWidth;
@@ -1150,6 +1143,12 @@ Date.prototype.format=function(fmt) {
            $(".btn-warning").css("background-color","#666");
            $(".btn-warning").css("border-color","#666");
            document.getElementById("export_manual_massOrderItem_button").setAttribute("disabled", true);
+       }else{
+           var div = document.getElementById("div");
+           div.style.display = "none";
+           $(".btn-warning").css("background-color","#f39c12");
+           $(".btn-warning").css("border-color","#e08e0b");
+           $('#export_manual_massOrderItem_button').removeAttr("disabled");
        }
    }
   
@@ -2101,7 +2100,6 @@ $("#div").on("mouseout",function(event){
 //打开按钮"模态框"
 $(".dialog_open").click(function(){
     var total = $("#totalRecord_cannot").text();
-    parseInt("total");
     if(total != "" && total != 0 ){
         var totals = parseInt(total);
         if(totals <= 100000){
