@@ -695,7 +695,7 @@ Date.prototype.format=function(fmt) {
     
   	initcurruser();//初始化登录人信息 
     var isManager = currentUser.usergroup.code;
-    if(isManager=="GLY"){
+    if(isManager=="GLY"||isManager=='ZBYYZLKZJSZ'){
     	var exportnormal = document.getElementById("exportnormal");
     	exportnormal.style.display = "none";
     	var exportall = document.getElementById("exportall");
@@ -1336,7 +1336,7 @@ Date.prototype.format=function(fmt) {
        			    var channel_name = jData[i].channel_name==null?'':jData[i].channel_name;
        			    var addr_address = jData[i].order_address==null?'':jData[i].order_address;
        			    var department_name = jData[i].dep_name==null?'':jData[i].dep_name;
-       			    var original_price = jData[i].original_price;//单价
+       			    var original_price = jData[i].original_price==null?'':jData[i].original_price.toFixed(1);//单价
        			    var cost_price = jData[i].cost_price;
        			    var gmv_price = jData[i].gmv_price;
        			    var business_type = jData[i].business_type=='pool'?'联营':'自营';

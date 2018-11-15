@@ -211,10 +211,10 @@ public class HttpClientUtils {
 
             //定义表头 以及 要填入的 字段
             String[] str_headers = {"商品名称","商品ID","订单号","下单客户姓名","下单客户电话","预约时间","下单时间","签收时间","单价","签收客户姓名","签收客户电话","片区编号","小区编号","片区A国安侠编号","送单侠姓名",
-                    "送单侠电话","签收地址","E店名称","门店名称","门店编号","事业群","频道","城市","订单来源","评价信息"};
+                    "送单侠电话","签收地址","E店名称","门店名称","门店编号","事业群","频道","城市","订单来源","商品评价星级","订单配送速度评价星级","订单配送服务评价星级","评价信息","评价和追评的间隔天数","追加评论内容"};
             String[] headers_key = {"product_name","product_id","order_sn","customer_name","customer_mobilephone","appointment_start_time","create_time","df_signed_time","original_price","order_customer_name","order_mobilephone","area_code","village_code",
                     "info_employee_a_no","employee_name","employee_phone","order_address",
-                    "eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","order_contents"};
+                    "eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","star_level","star_level_1","star_level_2","order_contents","next_days","next_contents"};
 
             if(list.size() <= 50000){
                 String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
@@ -234,11 +234,15 @@ public class HttpClientUtils {
                     row = sheet.createRow(i+1);
                     for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
                         String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-                        if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
+                        if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
                             if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
-                        }
+                        }else if(cellIndex==24||cellIndex==25||cellIndex==26||cellIndex==28){
+	                    	if("NULL".equals(value)||"null".equals(value)){
+	                    		value = "";
+	                    	}
+                    	}
                         setCellValueall(row, cellIndex, value);
                     }
                 }
