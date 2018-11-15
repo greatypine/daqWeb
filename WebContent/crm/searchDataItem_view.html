@@ -517,8 +517,12 @@
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                     <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
                 </div>
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;" id="exportnormal">
-                    <button type="button" id="export_manual_massOrderItem_button" class="btn btn-block btn-warning dialog_open">导出</button>
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative">
+                    <div id="exportnormal">
+                        <button type="button" id="export_manual_massOrderItem_button" class="btn btn-block btn-warning dialog_open">导出</button>
+                        <span id="forcolumnattention1" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">请确认是否已经查询到数据！</span>
+                    </div>
+                    <div id="div" style="z-index:10000;position: absolute;top: 25px;display: block"></div>
                 </div>
                 <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
                     <button type="button" id="export_manual_massOrderItem_button" onclick="export_manual_massOrderItem('all')" class="btn btn-block btn-warning">完整数据导出</button>
@@ -655,6 +659,15 @@ Date.prototype.format=function(fmt) {
 	var product_name = decode64(getUrlParamByKey("product_name"));//商品名称
 	
   $(function () {
+      var export_button = document.getElementById("export_manual_massOrderItem_button");
+      var height = export_button.clientHeight;
+      var width = export_button.clientWidth;
+      var div = document.getElementById("div");
+      $("#div").css("height",height+"px");
+      $("#div").css("width",width+"px");
+      $(".btn-warning").css("background-color","#666");
+      $(".btn-warning").css("border-color","#666");
+      document.getElementById("export_manual_massOrderItem_button").setAttribute("disabled", true);
     $(".logo-lg > ul > li").mouseenter(function(){
       $(this).children(".nav_dropdown").show();
     });
@@ -1117,6 +1130,27 @@ Date.prototype.format=function(fmt) {
    function search_manual_abnormalOrder(cur_page){
   		isCreatePage=false;
   		search_manual_abnormalOrder1(cur_page);
+
+       var total = $("#totalRecord_cannot").text();
+       if(total != "" && total != 0 ){
+           var div = document.getElementById("div");
+           div.style.display = "none";
+           $(".btn-warning").css("background-color","#f39c12");
+           $(".btn-warning").css("border-color","#e08e0b");
+           $('#export_manual_massOrderItem_button').removeAttr("disabled");
+
+       }else{
+           var export_button = document.getElementById("export_manual_massOrderItem_button");
+           var height = export_button.clientHeight;
+           var width = export_button.clientWidth;
+           var div = document.getElementById("div");
+           div.style.display = "block";
+           $("#div").css("height",height+"px");
+           $("#div").css("width",width+"px");
+           $(".btn-warning").css("background-color","#666");
+           $(".btn-warning").css("border-color","#666");
+           document.getElementById("export_manual_massOrderItem_button").setAttribute("disabled", true);
+       }
    }
   
   //查询上
@@ -2056,6 +2090,13 @@ $(document).bind('click',function(e){
     showPanel1.style.display = "none";
 });
 
+
+$("#div").on("mouseover",function(event){
+    $("#forcolumnattention1").show();
+});
+$("#div").on("mouseout",function(event){
+    $("#forcolumnattention1").hide();
+});
 
 //打开按钮"模态框"
 $(".dialog_open").click(function(){
