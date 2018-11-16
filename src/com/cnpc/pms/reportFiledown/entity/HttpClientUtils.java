@@ -210,9 +210,9 @@ public class HttpClientUtils {
         if(list!=null&&list.size()>0){//成功返回数据
 
             //定义表头 以及 要填入的 字段
-            String[] str_headers = {"商品名称","商品ID","订单号","下单客户姓名","下单客户电话","预约时间","下单时间","签收时间","单价","签收客户姓名","签收客户电话","片区编号","小区编号","片区A国安侠编号","送单侠姓名",
+            String[] str_headers = {"商品名称","商品ID","订单号","下单客户姓名","下单客户电话","预约时间","下单时间","签收时间","单价","销售数量","签收客户姓名","签收客户电话","片区编号","小区编号","片区A国安侠编号","送单侠姓名",
                     "送单侠电话","签收地址","E店名称","门店名称","门店编号","事业群","频道","城市","订单来源","商品评价星级","订单配送速度评价星级","订单配送服务评价星级","评价信息","评价和追评的间隔天数","追加评论内容"};
-            String[] headers_key = {"product_name","product_id","order_sn","customer_name","customer_mobilephone","appointment_start_time","create_time","df_signed_time","original_price","order_customer_name","order_mobilephone","area_code","village_code",
+            String[] headers_key = {"product_name","product_id","order_sn","customer_name","customer_mobilephone","appointment_start_time","create_time","df_signed_time","original_price","quantity","order_customer_name","order_mobilephone","area_code","village_code",
                     "info_employee_a_no","employee_name","employee_phone","order_address",
                     "eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","star_level","star_level_1","star_level_2","order_contents","next_days","next_contents"};
 

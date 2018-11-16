@@ -312,7 +312,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				"AS create_time, IFNULL(toip.eshop_pro_id,'') AS product_id, IFNULL(toip.eshop_pro_name,'') AS product_name, IFNULL(toip.eshop_id,'') AS " +
 				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(tor.customer_name,'') AS customer_name, IFNULL(tor.customer_mobile_phone,'') AS customer_mobilephone," +
 				"IFNULL(tor.addr_address,'') AS order_address, IFNULL(tor.addr_mobilephone,'') AS order_mobilephone, IFNULL(tor.addr_name,'') AS order_customer_name," +
-				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,toip.quantity AS quantity, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
+				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,IFNULL(toip.quantity,0) AS quantity, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
 				"IFNULL(from_unixtime(unix_timestamp(toip.order_signed_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(tor.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
 				"as appointment_start_time, from_unixtime(unix_timestamp(toip.order_cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time, IFNULL(tor.employee_name,'') AS employee_name,IFNULL(tor.employee_phone,'') AS employee_phone,IFNULL(tor.department_name,'') AS dep_name, " +
 				"IFNULL(tor.channel_name,'') AS channel_name, IFNULL(toip.contents,'') AS order_contents,toc.star_level AS star_level,toec.star_level_1 AS star_level_1,toec.star_level_2 AS star_level_2,toac.days AS next_days,IFNULL(toac.contents,'') AS next_contents," +
