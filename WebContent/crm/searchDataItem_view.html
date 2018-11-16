@@ -517,8 +517,9 @@
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;" >
                     <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
                 </div>
+
 				<input type="hidden" id="exportType">
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative" id="export1">
+                <div class="col-lg-2 pull-right" style="display: block;padding-top: 25px;z-index: 1000;position: relative" id="export1">
                     <div id="exportnormal">
                         <button type="button" id="export_manual_massOrderItem_button" class="btn btn-block btn-warning dialog_open export_">导出</button>
                         <span id="forcolumnattention1" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">点击查询后导出！</span>
@@ -527,7 +528,7 @@
                     <div id="div" style="z-index:10000;position: absolute;top: 25px;display: block"></div>
                 </div>
 
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative" id="export2">
+                <div class="col-lg-2 pull-right" style="display: none;padding-top: 25px;z-index: 1000;position: relative" id="export2">
                     <div id="exportall">
                         <button type="button" id="export_manual_massOrderItem_button" style="display:block" class="btn btn-block btn-warning dialog_open export">完整数据导出</button>
                         <span id="forcolumnattention2" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">点击查询后导出！</span>
@@ -664,9 +665,31 @@ Date.prototype.format=function(fmt) {
 	var tag = decode64(getUrlParamByKey("tag"));//订单标签
 	var product_id = decode64(getUrlParamByKey("product_id"));//商品id
 	var product_name = decode64(getUrlParamByKey("product_name"));//商品名称
-	
-  $(function () {
 
+function getIsManager() {
+    var isManager = currentUser.usergroup.code;
+    if(isManager=="GLY"||isManager=='ZBYYZLKZJSZ'){
+        var exportnormal = document.getElementById("exportnormal");
+        exportnormal.style.display = "none";
+        var exportall = document.getElementById("exportall");
+        exportall.style.display = "block";
+        var export1 = document.getElementById("export1");
+        export1.style.display = "none";
+        var export2 = document.getElementById("export2");
+        export2.style.display = "block";
+    }else{
+        var exportall = document.getElementById("exportall");
+        exportall.style.display = "none";
+        var export2 = document.getElementById("export2");
+        export2.style.display = "none";
+        var export1 = document.getElementById("export1");
+        export1.style.display = "block";
+    }
+}
+
+  $(function () {
+      initcurruser();//初始化登录人信息
+      getIsManager();
       var export_button = document.getElementById("export_manual_massOrderItem_button");
       var height = export_button.clientHeight;
       var width = export_button.clientWidth;
@@ -711,21 +734,8 @@ Date.prototype.format=function(fmt) {
         this.value =this.value.replace(/\s/g,'').replace(/\D/g,'').replace(/(\d{4})(?=\d)/g,"$1 ");;
   	};
     
-  	initcurruser();//初始化登录人信息 
-    var isManager = currentUser.usergroup.code;
-    if(isManager=="GLY"||isManager=='ZBYYZLKZJSZ'){
-    	var exportnormal = document.getElementById("exportnormal");
-    	exportnormal.style.display = "none";
-    	var exportall = document.getElementById("exportall");
-    	exportall.style.display = "block";
-        var export1 = document.getElementById("export1");
-        export1.style.display = "none";
-    }else{
-        var exportall = document.getElementById("exportall");
-        exportall.style.display = "none";
-        var export2 = document.getElementById("export2");
-        export2.style.display = "none";
-    }
+
+
     var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
     if(target==0){//总部
     	initallcity(); 
