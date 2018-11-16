@@ -248,7 +248,7 @@
         margin-right: 100px;
     }
     .content2 .divcontent {
-        width: 362px;
+        width: 378px;
         height: 60px;
         background: #fff;
         margin: 10px auto;
@@ -266,7 +266,7 @@
     }
 
     .content2 .downright {
-        width: 300px;
+        width: 400px;
         height: 60px;
         margin-left: 60px;
     }
@@ -514,18 +514,24 @@
             <div class="clearfix">
               <!--<div class="col-lg-4" id="tianchong" style="padding-top: 25px;">
               </div>-->
-                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
+                <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;" >
                     <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
                 </div>
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative">
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative" id="export1">
                     <div id="exportnormal">
                         <button type="button" id="export_manual_massOrderItem_button" class="btn btn-block btn-warning dialog_open">导出</button>
                         <span id="forcolumnattention1" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">点击查询后导出！</span>
                     </div>
+
                     <div id="div" style="z-index:10000;position: absolute;top: 25px;display: block"></div>
                 </div>
-                <div class="col-lg-2 pull-right" style="padding-top: 25px;display:none" id="exportall">
-                    <button type="button" id="export_manual_massOrderItem_button" onclick="export_manual_massOrderItem('all')" class="btn btn-block btn-warning">完整数据导出</button>
+
+                <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative" id="export2">
+                    <div id="exportall">
+                        <button type="button" id="export_manual_massOrderItem_button" style="display:block" class="btn btn-block btn-warning dialog_open export">完整数据导出</button>
+                        <span id="forcolumnattention2" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">请确认是否已经查询到数据！</span>
+                    </div>
+                    <div id="div1" style="z-index:10000;position: absolute;top: 25px;display: block"></div>
                 </div>
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;">
                     <button type="button" onclick="search_manual_abnormalOrder(1)" class="btn btn-block btn-primary">查询</button>
@@ -659,15 +665,20 @@ Date.prototype.format=function(fmt) {
 	var product_name = decode64(getUrlParamByKey("product_name"));//商品名称
 	
   $(function () {
+
       var export_button = document.getElementById("export_manual_massOrderItem_button");
       var height = export_button.clientHeight;
       var width = export_button.clientWidth;
       var div = document.getElementById("div");
+      var div1 = document.getElementById("div1");
       $("#div").css("height",height+"px");
       $("#div").css("width",width+"px");
+      $("#div1").css("height",height+"px");
+      $("#div1").css("width",width+"px");
       $(".btn-warning").css("background-color","#666");
       $(".btn-warning").css("border-color","#666");
       document.getElementById("export_manual_massOrderItem_button").setAttribute("disabled", true);
+      $(".export").attr("disabled", true);
     $(".logo-lg > ul > li").mouseenter(function(){
       $(this).children(".nav_dropdown").show();
     });
@@ -700,6 +711,13 @@ Date.prototype.format=function(fmt) {
     	exportnormal.style.display = "none";
     	var exportall = document.getElementById("exportall");
     	exportall.style.display = "block";
+        var export1 = document.getElementById("export1");
+        export1.style.display = "none";
+    }else{
+        var exportall = document.getElementById("exportall");
+        exportall.style.display = "none";
+        var export2 = document.getElementById("export2");
+        export2.style.display = "none";
     }
     var regex_yw = new RegExp("^(YW|yw)\w*");//业务（事业部）
     if(target==0){//总部
@@ -1131,24 +1149,33 @@ Date.prototype.format=function(fmt) {
   		isCreatePage=false;
   		search_manual_abnormalOrder1(cur_page);
 
-       var total = 22000;
+       var total = $("#totalRecord_cannot").text();
        if(total == "" || total == 0 || total == "0"){
            var export_button = document.getElementById("export_manual_massOrderItem_button");
            var height = export_button.clientHeight;
            var width = export_button.clientWidth;
            var div = document.getElementById("div");
+           var div1 = document.getElementById("div1");
            div.style.display = "block";
+           div1.style.display = "block";
            $("#div").css("height",height+"px");
            $("#div").css("width",width+"px");
+           $("#div1").css("height",height+"px");
+           $("#div1").css("width",width+"px");
            $(".btn-warning").css("background-color","#666");
            $(".btn-warning").css("border-color","#666");
            document.getElementById("export_manual_massOrderItem_button").setAttribute("disabled", true);
+           $(".export").attr("disabled", true);
+
        }else{
            var div = document.getElementById("div");
+           var div1 = document.getElementById("div1");
            div.style.display = "none";
+           div1.style.display = "none";
            $(".btn-warning").css("background-color","#f39c12");
            $(".btn-warning").css("border-color","#e08e0b");
            $('#export_manual_massOrderItem_button').removeAttr("disabled");
+           $(".export").removeAttr("disabled");
        }
    }
   
@@ -1447,7 +1474,7 @@ Date.prototype.format=function(fmt) {
          }
         $("#process_div").hide();
    	    $("#process_div_pic").hide();
-     }); 
+     },false);
   	   
   }
   
@@ -2095,6 +2122,13 @@ $("#div").on("mouseover",function(event){
 });
 $("#div").on("mouseout",function(event){
     $("#forcolumnattention1").hide();
+});
+
+$("#div1").on("mouseover",function(event){
+    $("#forcolumnattention2").show();
+});
+$("#div1").on("mouseout",function(event){
+    $("#forcolumnattention2").hide();
 });
 
 //打开按钮"模态框"
