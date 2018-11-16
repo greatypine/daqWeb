@@ -80,10 +80,10 @@ public class HttpClientUtils {
         }
         if(list!=null&&list.size()>0){//成功返回数据
             //定义表头 以及 要填入的 字段
-            String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","有效金额","交易金额","应付金额","下单时间","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
+            String[] str_headers = {"订单号","片区编号","小区编号","片区A国安侠编号","用户电话","用户ID","有效金额","交易金额","应付金额","下单时间","预约时间","签收时间","退货时间","送单侠姓名","送单侠电话","E店名称","门店名称",
                     "门店编号","事业群","频道","城市","是否公海订单","是否异常订单","是否已退款","是否小贷","是否快周边","是否微信礼品卡","是否拉新","是否集采订单","是否开卡礼订单","是否试用礼订单",
                     "是否积分订单","是否221商品类订单","是否221服务类订单","是否221团购订单","是否社员订单","是否过账工资","是否无精确成本","是否A类营销费用","订单来源","销售收入","结算方式","平台优惠券金额","粮票"};
-            String[] headers_key = {"order_sn","area_code","village_code","info_employee_a_no","customer_mobile_phone","gmv_price","trading_price","payable_price","create_time","appointment_start_time","sign_time","return_time",
+            String[] headers_key = {"order_sn","area_code","village_code","info_employee_a_no","customer_mobile_phone","customer_id","gmv_price","trading_price","payable_price","create_time","appointment_start_time","sign_time","return_time",
                     "employee_name","employee_phone","eshop_name","store_name","store_code","department_name","channel_name","store_city_name","pubseas_label","abnormal_label","return_label","loan_label","quick_label","gift_label",
                     "customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s","score","order_tag_product","order_tag_service","order_tag_groupon","order_tag_member","pay_label","no_cost_label","a_fee_label",
                     "order_source","order_profit","contract_method","apportion_coupon","apportion_rebate"};

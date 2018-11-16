@@ -4,7 +4,6 @@ import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
-import com.cnpc.pms.utils.ImpalaUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -12,7 +11,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.Type;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -283,7 +281,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@Override
 	public List<Map<String, Object>> exportOrder(MassOrderDto massOrderDto, String timeFlag) {
 		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,IFNULL(a.info_employee_a_no,'') AS info_employee_a_no,"
-				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,"
+				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.customer_id,'') as customer_id,IFNULL(a.trading_price,0) as trading_price,IFNULL(a.payable_price,0) as payable_price,"
 				+ "IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(a.create_time,'') AS create_time,IFNULL(a.sign_time,'') AS sign_time,IFNULL(a.return_time,'') AS return_time,IFNULL(a.appointment_start_time,'') AS appointment_start_time,"
 				+ "IFNULL(a.employee_name,'') AS employee_name,IFNULL(a.employee_phone,'') AS employee_phone,"
 				+ "a.eshop_name,a.store_name,a.store_code,a.channel_name,a.department_name,a.store_city_name,CASE WHEN a.pubseas_label='1' THEN '是'  ELSE '否' END AS pubseas_label,"
