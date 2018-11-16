@@ -274,6 +274,7 @@
     var max_year = cur_date.getFullYear();
     var now_date =cur_date.getDate();
     var max_month = "";
+    var use_month = max_year+"-"+(now_month+1)+"-"+now_date;
     if(now_month==0){
         max_year =cur_date.getFullYear()-1;
         max_month = "12";
@@ -312,7 +313,7 @@
         btns: ['confirm'],
         theme: '#11214e',
         min: '2018-10-1',
-        max:max_month,
+        max:use_month,
 
     });
     var cityId = decode64(getUrlParamByKey("c"));//城市ID
