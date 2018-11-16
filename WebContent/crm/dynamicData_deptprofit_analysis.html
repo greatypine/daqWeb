@@ -325,15 +325,16 @@
     $("#channelnamepayhide").hide();
 
     var searchDeptCityStr = "dept_city_active";
+    if(target!=1){
+        $('#cityClick').removeAttr('checked');
+    }
+    $("#citynamepayhide").hide();
     if($('#cityClick').is(':checked')){
         searchDeptCityStr = "dept_city_active";
         $("#citynamepayhide").show();
     }else{
         $("#citynamepayhide").hide();
     }
-    $('#cityClick').removeAttr('checked');
-    $("#citynamepayhide").hide();
-
 
     var searchDeptStoreStr = "dept_store_active";
     if($('#storeClick').is(':checked')){
