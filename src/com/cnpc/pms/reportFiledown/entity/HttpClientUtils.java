@@ -238,7 +238,7 @@ public class HttpClientUtils {
                             if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
-                        }else if(cellIndex==24||cellIndex==25||cellIndex==26||cellIndex==28){
+                        }else if(cellIndex==25||cellIndex==26||cellIndex==27||cellIndex==29){
 	                    	if("NULL".equals(value)||"null".equals(value)){
 	                    		value = "";
 	                    	}
@@ -293,7 +293,7 @@ public class HttpClientUtils {
                                 if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                     value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                                 }
-                            }else if(cellIndex==24||cellIndex==25||cellIndex==26||cellIndex==28){
+                            }else if(cellIndex==25||cellIndex==26||cellIndex==27||cellIndex==29){
                                 if("NULL".equals(value)||"null".equals(value)){
                                     value = "";
                                 }
