@@ -289,9 +289,13 @@ public class HttpClientUtils {
                     for(int i = 0;i < list.size();i++){
                         for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
                             String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-                            if(cellIndex==3 && "normal".equals(massOrderDto.getHidden_flag())){
+                            if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
                                 if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                     value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+                                }
+                            }else if(cellIndex==24||cellIndex==25||cellIndex==26||cellIndex==28){
+                                if("NULL".equals(value)||"null".equals(value)){
+                                    value = "";
                                 }
                             }
                             out.write(value);
