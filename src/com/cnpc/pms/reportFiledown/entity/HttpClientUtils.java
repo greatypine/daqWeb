@@ -111,7 +111,7 @@ public class HttpClientUtils {
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
                         }
-                        out.write(value);
+                        out.write(value.toString()+'\t');
                         out.write(",");
                         continue;
                     }
@@ -192,7 +192,7 @@ public class HttpClientUtils {
                                     value = "";
                                 }
                             }
-                            out.write(value);
+                            out.write(value.toString()+'\t');
                             out.write(",");
                             continue;
                         }
