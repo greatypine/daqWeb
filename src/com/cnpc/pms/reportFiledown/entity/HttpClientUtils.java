@@ -88,102 +88,50 @@ public class HttpClientUtils {
                     "customer_isnew_flag","order_tag_b","order_tag_k","order_tag_s","score","order_tag_product","order_tag_service","order_tag_groupon","order_tag_member","pay_label","no_cost_label","a_fee_label",
                     "order_source","order_profit","contract_method","apportion_coupon","apportion_rebate"};
 
-            if(list.size() <= 50000){
-                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
-                String str_web_path = PropertiesUtil.getValue("file.web.root");
-                File file_xls = new File(str_file_dir_path + fileName+".xlsx");
-                if(file_xls.exists()){
-                    file_xls.delete();
+            String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+            String str_web_path = PropertiesUtil.getValue("file.web.root");
+            File file_xls = new File(str_file_dir_path + fileName+".csv");
+            if(file_xls.exists()){
+                file_xls.delete();
+            }
+            FileOutputStream os = null;
+            try {
+                file_xls.createNewFile();
+                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
+                for(String title : str_headers){
+                    out.write(title);
+                    out.write(",");
                 }
-                FileOutputStream os = null;
-                XSSFWorkbook wb = new XSSFWorkbook();
-                setCellStyle_common(wb);
-                setHeaderStyle(wb);
-                XSSFSheet sheet = wb.createSheet("订单数据");
-                XSSFRow row = sheet.createRow(0);
-                for(int i = 0;i < str_headers.length;i++){
-                    XSSFCell cell = row.createCell(i);
-                    cell.setCellStyle(getHeaderStyle());
-                    cell.setCellValue(new XSSFRichTextString(str_headers[i]));
-                }
-
+                out.write("\r\n");
                 for(int i = 0;i < list.size();i++){
-                    row = sheet.createRow(i+1);
-                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
                         String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
                         if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
                             if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
                         }
-                        setCellValueall(row, cellIndex, value);
-                    }
-                }
-                try {
-                    os = new FileOutputStream(file_xls.getAbsoluteFile());
-                    wb.write(os);
-                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-//                url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
-                    url = ossRefFileManager.uploadOssFileNew(file_xls, "xlsx", "daqWeb/download/",fileName);
-
-                }catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if(os != null){
-                        try {
-                            os.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-            }else{
-                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
-                String str_web_path = PropertiesUtil.getValue("file.web.root");
-                File file_xls = new File(str_file_dir_path + fileName+".csv");
-                if(file_xls.exists()){
-                    file_xls.delete();
-                }
-                FileOutputStream os = null;
-                try {
-                    file_xls.createNewFile();
-                    OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
-                    for(String title : str_headers){
-                        out.write(title);
+                        out.write(value);
                         out.write(",");
+                        continue;
                     }
+                    //写完一行换行
                     out.write("\r\n");
-                    for(int i = 0;i < list.size();i++){
-                        for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
-                            String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-                            if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
-                                if(com.cnpc.pms.base.file.comm.utils.StringUtils.isNotEmpty(value) && value.length() > 7 ){
-                                    value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
-                                }
-                            }
-                            out.write(value);
-                            out.write(",");
-                            continue;
-                        }
-                        //写完一行换行
-                        out.write("\r\n");
 
-                    }
-                    out.close();
-                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+                }
+                out.close();
+                OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
 //                url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
-                    url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+                url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
 
-                }catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if(os != null){
-                        try {
-                            os.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+            }catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if(os != null){
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -216,110 +164,55 @@ public class HttpClientUtils {
                     "info_employee_a_no","employee_name","employee_phone","order_address",
                     "eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","star_level","star_level_1","star_level_2","order_contents","next_days","next_contents"};
 
-            if(list.size() <= 50000){
-                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
-                String str_web_path = PropertiesUtil.getValue("file.web.root");
-                XSSFWorkbook wb = new XSSFWorkbook();
-                setCellStyle_common(wb);
-                setHeaderStyle(wb);
-                XSSFSheet sheet = wb.createSheet("商品销售数据");
-                XSSFRow row = sheet.createRow(0);
-                for(int i = 0;i < str_headers.length;i++){
-                    XSSFCell cell = row.createCell(i);
-                    cell.setCellStyle(getHeaderStyle());
-                    cell.setCellValue(new XSSFRichTextString(str_headers[i]));
-                }
+            String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+            String str_web_path = PropertiesUtil.getValue("file.web.root");
+            File file_xls = new File(str_file_dir_path + fileName+".csv");
+            if(file_xls.exists()){
+                file_xls.delete();
+            }
+            FileOutputStream os = null;
 
+            try {
+                file_xls.createNewFile();
+                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
+                for(String title : str_headers){
+                    out.write(title);
+                    out.write(",");
+                }
+                out.write("\r\n");
                 for(int i = 0;i < list.size();i++){
-                    row = sheet.createRow(i+1);
-                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++){
+                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
                         String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
                         if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
                             if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
                         }else if(cellIndex==24||cellIndex==25||cellIndex==26||cellIndex==28){
-	                    	if("NULL".equals(value)||"null".equals(value)){
-	                    		value = "";
-	                    	}
-                    	}
-                        setCellValueall(row, cellIndex, value);
-                    }
-                }
-                File file_xls = new File(str_file_dir_path + fileName+".xlsx");
-                if(file_xls.exists()){
-                    file_xls.delete();
-                }
-                FileOutputStream os = null;
-                try {
-                    os = new FileOutputStream(file_xls.getAbsoluteFile());
-                    wb.write(os);
-                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-                    url = ossRefFileManager.uploadOssFileNew(file_xls, "xlsx", "daqWeb/download/",fileName);
-
-                }catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if(os != null){
-                        try {
-                            os.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-            }else{
-                String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
-                String str_web_path = PropertiesUtil.getValue("file.web.root");
-                File file_xls = new File(str_file_dir_path + fileName+".csv");
-                if(file_xls.exists()){
-                    file_xls.delete();
-                }
-                FileOutputStream os = null;
-
-                try {
-                    file_xls.createNewFile();
-                    OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
-                    for(String title : str_headers){
-                        out.write(title);
-                        out.write(",");
-                    }
-                    out.write("\r\n");
-                    for(int i = 0;i < list.size();i++){
-                        for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
-                            String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
-                            if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
-                                if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
-                                    value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
-                                }
-                            }else if(cellIndex==24||cellIndex==25||cellIndex==26||cellIndex==28){
-                                if("NULL".equals(value)||"null".equals(value)){
-                                    value = "";
-                                }
+                            if("NULL".equals(value)||"null".equals(value)){
+                                value = "";
                             }
-                            out.write(value);
-                            out.write(",");
-                            continue;
                         }
-                        //写完一行换行
-                        out.write("\r\n");
-
+                        out.write(value);
+                        out.write(",");
+                        continue;
                     }
-                    out.close();
+                    //写完一行换行
+                    out.write("\r\n");
 
-                    OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
-                    url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+                }
+                out.close();
 
-                }catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    if(os != null){
-                        try {
-                            os.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+                url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if(os != null){
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
