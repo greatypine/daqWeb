@@ -517,9 +517,10 @@
                 <div class="form-group col-lg-2 pull-right" style="padding-top: 25px;" >
                     <button type="button" onclick="resetSerachParam(2)" style="border-color:#00a65a;background-color:#00a652" class="btn btn-block btn-primary">重置</button>
                 </div>
+				<input type="hidden" id="exportType">
                 <div class="col-lg-2 pull-right" style="padding-top: 25px;z-index: 1000;position: relative" id="export1">
                     <div id="exportnormal">
-                        <button type="button" id="export_manual_massOrderItem_button" class="btn btn-block btn-warning dialog_open">导出</button>
+                        <button type="button" id="export_manual_massOrderItem_button" class="btn btn-block btn-warning dialog_open export_">导出</button>
                         <span id="forcolumnattention1" style="color:#47b8ef;font-size: 14px;white-space: nowrap;position: absolute;top:1px;z-index: 1000;display:none;left:17px">点击查询后导出！</span>
                     </div>
 
@@ -684,6 +685,12 @@ Date.prototype.format=function(fmt) {
     });
     $(".logo-lg > ul > li").mouseleave(function(){
       $(this).children(".nav_dropdown").hide();
+    });
+	$(".export").click(function(){
+      $("#exportType").val("all");
+    });
+	$(".export_").click(function(){
+      $("#exportType").val("normal");
     });
     var todayDate = new Date();
     var firstDate = new Date(todayDate.getTime() - 24*60*60*1000);
@@ -1664,6 +1671,7 @@ Date.prototype.format=function(fmt) {
   
   //导出
   function export_manual_massOrderItem(hiddenvalue){
+	  var hiddenvalue = $("#exportType").val();
       var filename = $("#userName").val();
       if(filename == "" || filename == null){
           crm_alert(0,"名称不能为空！");
