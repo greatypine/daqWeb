@@ -726,7 +726,7 @@ Date.prototype.format=function(fmt) {
 
 function getIsManager(){
     var isManager = currentUser.usergroup.code;
-    if(isManager=="GLY"){
+    if(isManager=="GLY" || isManager=="ZBYYZLKZJSZ"){
         var exportnormal = document.getElementById("exportnormal");
         exportnormal.style.display = "none";
         var exportall = document.getElementById("exportall");

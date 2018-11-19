@@ -338,7 +338,7 @@ Date.prototype.format=function(fmt) {
     
   	initcurruser();//初始化登录人信息 
     var isManager = currentUser.usergroup.code;
-    if(isManager=="GLY"){
+    if(isManager=="GLY" || isManager=="ZBYYZLKZJSZ"){
     	var exportnormal = document.getElementById("exportnormal");
     	exportnormal.style.display = "none";
     	var exportall = document.getElementById("exportall");
