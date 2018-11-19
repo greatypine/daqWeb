@@ -8,6 +8,7 @@ import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.utils.DateUtils;
+import com.opencsv.CSVWriter;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -98,6 +99,7 @@ public class HttpClientUtils {
             try {
                 file_xls.createNewFile();
                 OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
+
                 for(String title : str_headers){
                     out.write(title);
                     out.write(",");
@@ -118,8 +120,19 @@ public class HttpClientUtils {
                             }
                             //将逗号转义
                             value="\""+value+"\"";
+
                         }
-                        out.write(value.toString()+'\t');
+                        if(value != null && value.length()>=2) {
+                            if(value.indexOf("\"")==0) value = value.substring(1,value.length());   //去掉第一个 "
+                            if(value.lastIndexOf("\"")==(value.length()-1)) value = value.substring(0,value.length()-1);  //去掉最后一个 "
+
+                            value = value.replaceAll("\"\"","\"");//把两个双引号换成一个双引号
+                        }
+                        if(cellIndex == 0){
+                            out.write(value+'\t');
+                        }else{
+                            out.write(value);
+                        }
                         out.write(",");
                         continue;
                     }
@@ -129,6 +142,7 @@ public class HttpClientUtils {
 
                 }
                 out.close();
+
                 OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
 //                url = ossRefFileManager.uploadOssFile(file_xls, "xlsx", "daqWeb/download/");
                 url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
@@ -209,7 +223,11 @@ public class HttpClientUtils {
                                 //将逗号转义
                                 value="\""+value+"\"";
                             }
-                            out.write(value.toString()+'\t');
+                            if(cellIndex == 2){
+                                out.write(value+'\t');
+                            }else{
+                                out.write(value);
+                            }
                             out.write(",");
                             continue;
                         }
