@@ -12,3 +12,4 @@ build/
 out/
 daqWeb.iml
 .gitignore
+src/rebel.xml
