@@ -12,7 +12,6 @@ import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.security.UserSession;
 import com.cnpc.pms.reportFiledown.entity.ExportRunableSPXSDA;
 import com.cnpc.pms.reportFiledown.entity.HttpClientUtils;
-import com.cnpc.pms.reportFiledown.entity.RunableNum;
 import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
@@ -54,8 +53,7 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 
 	private static Log logger = LogFactory.getLog(OrderManagerImpl.class);
 
-	private static RunableNum runableNum;
-    
+
     /**
      * excel单元格公共样式
      */
