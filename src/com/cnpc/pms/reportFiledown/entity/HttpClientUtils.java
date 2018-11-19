@@ -111,10 +111,19 @@ public class HttpClientUtils {
                                 value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
                             }
                         }
+                        if(value.contains(",")){
+                            //如果还有双引号，先将双引号转义，避免两边加了双引号后转义错误
+                            if(value.contains("\"")){
+                                value=value.replace("\"", "\"\"");
+                            }
+                            //将逗号转义
+                            value="\""+value+"\"";
+                        }
                         out.write(value.toString()+'\t');
                         out.write(",");
                         continue;
                     }
+
                     //写完一行换行
                     out.write("\r\n");
 
@@ -191,6 +200,14 @@ public class HttpClientUtils {
                                 if("NULL".equals(value)||"null".equals(value)){
                                     value = "";
                                 }
+                            }
+                            if(value.contains(",")){
+                                //如果还有双引号，先将双引号转义，避免两边加了双引号后转义错误
+                                if(value.contains("\"")){
+                                    value=value.replace("\"", "\"\"");
+                                }
+                                //将逗号转义
+                                value="\""+value+"\"";
                             }
                             out.write(value.toString()+'\t');
                             out.write(",");
