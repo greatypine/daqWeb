@@ -398,6 +398,27 @@ Date.prototype.format=function(fmt) {
 			}
 		}
 	});
+
+  //失去焦点事件
+  $("#ordersn_manual").blur(function() {
+      var ordersn = $("#ordersn_manual").val();
+      if(ordersn!=""){
+          blurDate();
+      }
+  });
+  //退款日期变更
+  function blurDate(){
+      var sdate = $("#auto_date").val();
+      var begin_end_date=["",""];
+      if(sdate!=""){
+          begin_end_date = sdate.split("-");
+      }
+      var start_date = begin_end_date[0];
+      if(start_date.replace(/\s+/g,"")==cDate){//如果时间是今天则变更时间
+          $("#auto_date").val("2018/01/01"+"-"+begin_end_date[1]);
+      }
+  }
+
   });
 	
   /**
