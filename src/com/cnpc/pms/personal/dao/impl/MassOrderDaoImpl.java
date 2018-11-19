@@ -4,6 +4,7 @@ import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
+import com.cnpc.pms.utils.ImpalaUtil;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -263,7 +264,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				String area_code = (String) map.get("area_code");
 				String order_sn = (String) map.get("order_sn");
 				if (StringUtils.isNotEmpty(area_code)) {
-					Map result = this.queryAreaDetailByCode(area_code, order_sn,timeFlag);
+					Map result = this.queryAreaDetailByCode(area_code, order_sn);
 					map.put("area_name", result.get("area_name"));
 				}
 			}
@@ -481,46 +482,18 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo, String timeFlag) {
-		String sqlA = "select CONCAT(a.id,'') as id, a.order_sn,IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,a.eshop_name,a.employee_name,"
+	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto, PageInfo pageInfo) {
+		String sql = "select a.id, a.order_sn,IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,a.eshop_name,a.employee_name,"
 				+ "a.pubseas_label,a.abnormal_label,a.return_label,a.loan_label,a.create_time,a.sign_time,a.return_time,a.appointment_start_time,a.employee_no,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(ROUND(a.returned_amount,2),0) as returned_amount,a.customer_name,"
 				+ "IFNULL(a.addr_name,'') as addr_name,IFNULL(a.addr_mobilephone,'') as addr_mobilephone,IFNULL(a.addr_address,'') as addr_address,"
-				+ "a.channel_name,a.department_name,a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,'') as score"
-				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,"
-				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method,IFNULL(a.order_tag4,'') as order_tag4 "
-				+ " from ";
+				+ "a.channel_name,a.department_name,a.customer_isnew_flag,a.area_code,a.info_employee_a_no,IFNULL(a.order_tag1,'') as order_tag1,IFNULL(a.score,0) as score"
+				+ ",a.contract_id,IFNULL(a.business_type,'') as business_type,IFNULL(ROUND(a.order_profit, 2),0) as order_profit,IFNULL(ROUND(a.apportion_rebate,2),0) as apportion_rebate,"
+				+ "IFNULL(ROUND(a.platform_price,2),0) as apportion_coupon,IFNULL(ROUND(a.cost_price,2),0) as cost_price,IFNULL(a.contract_method,'') as contract_method,IFNULL(a.order_tag4,'') as order_tag4 "
+				+ " from df_mass_order_total a where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
 
-		String sqlB = sqlA;
-
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sqlA = sqlA + " df_mass_order_daily a ";
-			sqlB = sqlB + " df_mass_order_daily a ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sqlA = sqlA + " df_mass_order_monthly a ";
-			sqlB = sqlB + " df_mass_order_monthly a ";
-		} else {
-			sqlA = sqlA + " df_mass_order_total a ";
-			sqlB = sqlB + " df_mass_order_total a ";
-		}
-
-		String sqlTemp2 = " join (select id from ";
-		
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sqlTemp2 = sqlTemp2 + " df_mass_order_daily a ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sqlTemp2 = sqlTemp2 + " df_mass_order_monthly a ";
-		} else {
-			sqlTemp2 = sqlTemp2 + " df_mass_order_total a ";
-		}
-
-		sqlA = sqlA + sqlTemp2 + " where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
-		sqlB = sqlB + " where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
-
-		String sql = "";
 		if (StringUtils.isNotEmpty(massOrderDto.getBeginDate())) {
-			sql = sql + " and (a.return_time between '" + massOrderDto.getBeginDate() + " 00:00:00' and '"
-					+ massOrderDto.getEndDate() + " 23:59:59')";
+			sql = sql + " and strleft(a.return_time,10)>='" + massOrderDto.getBeginDate() + "' and strleft(a.return_time,10)<='" + massOrderDto.getEndDate() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getOrder_sn())) {
 			sql = sql + " and a.order_sn ='" + massOrderDto.getOrder_sn().trim() + "'";
@@ -534,38 +507,36 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			}
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,'0') = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 
-		sqlA = sqlA + sql + " ORDER BY a.return_time desc ";
-		sqlB = sqlB + sql;
+		sql = sql + " ORDER BY a.return_time desc ";
 
-		String sql_count = "SELECT COUNT(1) as total FROM (" + sqlB + ") T";
-
-		Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession()
-				.createSQLQuery(sql_count);
-		Object total = query_count.uniqueResult();
-		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+		String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
 
 		int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
 		int recordsPerPage = pageInfo.getRecordsPerPage();
-		sqlA = sqlA + " LIMIT " + startData + "," + recordsPerPage + ") b ON a.id = b.id";
+		sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sqlA);
-
-		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		String total = "0";
+		List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+		if(resultCount !=null && resultCount.size()>0 ){
+			total = String.valueOf(resultCount.get(0).get("total"));
+		}
 
 		if (list != null && list.size() > 0) {
 			for (Map map : list) {
 				String area_code = (String) map.get("area_code");
 				String order_sn = (String) map.get("order_sn");
 				if (StringUtils.isNotEmpty(area_code)) {
-					Map result = this.queryAreaDetailByCode(area_code, order_sn,timeFlag);
+					Map result = this.queryAreaDetailByCode(area_code, order_sn);
 					map.put("area_name", result.get("area_name"));
 				}
 			}
 		}
 
+		pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
 		map_result.put("pageinfo", pageInfo);
@@ -576,7 +547,7 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Map<String, Object>> exportReturnOrder(MassOrderDto massOrderDto, String timeFlag) {
+	public List<Map<String, Object>> exportReturnOrder(MassOrderDto massOrderDto) {
 		String sql = "select a.order_sn,IFNULL(a.area_code,'') as area_code,IFNULL(a.info_village_code,'') as village_code,a.info_employee_a_no,"
 				+ "IFNULL(a.customer_mobile_phone,'') as customer_mobile_phone,IFNULL(a.trading_price,0) as trading_price,"
 				+ "IFNULL(a.payable_price,0) as payable_price,IFNULL(ROUND(a.gmv_price,2),0) as gmv_price,IFNULL(ROUND(a.returned_amount,2),0) as returned_amount,"
@@ -588,21 +559,13 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				+ "CASE WHEN a.loan_label='5' THEN '是'  ELSE '否' END AS gift_label,CASE WHEN a.customer_isnew_flag='20' THEN '拉新20元' WHEN a.customer_isnew_flag='10' "
 				+ "THEN '拉新10元' WHEN a.customer_isnew_flag='0' THEN '拉新'  ELSE '否' END AS customer_isnew_flag,CASE WHEN a.order_tag1 like '%B%' THEN '是'  ELSE '否' END AS order_tag_b,"
 				+ "CASE WHEN a.order_tag4='A3' THEN '是'  ELSE '否' END AS order_tag_k,CASE WHEN a.order_tag1 like '%S%' THEN '是'  ELSE '否' END AS order_tag_s,"
-				+ "CASE WHEN a.score is not null THEN '是' ELSE '否' END AS score,IFNULL(FORMAT(a.order_profit, 2),'') as order_profit,"
-				+ "IFNULL(FORMAT(a.platform_price,2),0) as apportion_coupon,IFNULL(FORMAT(a.apportion_rebate,2),0) as apportion_rebate,"
-				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method from ";
+				+ "CASE WHEN a.score is not null THEN '是' ELSE '否' END AS score,IFNULL(ROUND(a.order_profit, 2),0) as order_profit,"
+				+ "IFNULL(ROUND(a.platform_price,2),0) as apportion_coupon,IFNULL(ROUND(a.apportion_rebate,2),0) as apportion_rebate,"
+				+ "IFNULL(CASE a.contract_method WHEN  'price' THEN '从价' WHEN  'volume' THEN '从量' WHEN  'percent' THEN '从率' END,'') as contract_method from df_mass_order_total a ";
 
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_daily ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_monthly ";
-		} else {
-			sql = sql + " df_mass_order_total ";
-		}
-		sql = sql + " a where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
+		sql = sql + " where a.return_label = '1' AND a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
 		if (StringUtils.isNotEmpty(massOrderDto.getBeginDate())) {
-			sql = sql + " and (a.return_time between '" + massOrderDto.getBeginDate() + " 00:00:00' and '"
-					+ massOrderDto.getEndDate() + " 23:59:59')";
+			sql = sql + " and strleft(a.return_time,10)>='" + massOrderDto.getBeginDate() + "' and strleft(a.return_time,10)<='" + massOrderDto.getEndDate() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getOrder_sn())) {
 			sql = sql + " and a.order_sn ='" + massOrderDto.getOrder_sn().trim() + "'";
@@ -616,12 +579,11 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			}
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getCity_name())) {
-			sql = sql + " and LPAD(a.store_city_code,4,0) = '" + massOrderDto.getCity_name().trim() + "'";
+			sql = sql + " and LPAD(a.store_city_code,4,'0') = '" + massOrderDto.getCity_name().trim() + "'";
 		}
 		sql = sql + " ORDER BY a.return_time desc";
 
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
 		return list;
 	}
 	
@@ -646,16 +608,9 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn,String timeFlag) {
+	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn) {
 		String sql = "SELECT IFNULL(a.area_code,'') AS area_code, IFNULL(a.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, "
-				+ "IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code FROM ";
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_daily a ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sql = sql + " df_mass_order_monthly a ";
-		} else {
-			sql = sql + " df_mass_order_total a ";
-		}		
+				+ "IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code FROM df_mass_order_total a ";
 		sql = sql + "LEFT JOIN t_area ta ON a.area_code = ta.area_no LEFT JOIN tiny_village_code vc ON a.info_village_code = vc. CODE WHERE 1=1 ";
 
 		if (StringUtils.isNotEmpty(area_code) && !area_code.equals("null")) {
@@ -665,10 +620,9 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 			sql = sql + " AND a.order_sn = '" + order_sn + "'";
 		}
 
-		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String,Object>> lst_data = ImpalaUtil.executeGuoan(sql);
 		// 获得查询数据
 		Map<String, Object> order_obj = null;
-		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		if (lst_data != null && lst_data.size() > 0) {
 			order_obj = (Map<String, Object>) lst_data.get(0);
 		}

@@ -117,15 +117,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
 
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				result = massOrderDao.queryReturnMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				result = massOrderDao.queryReturnMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = massOrderDao.queryReturnMassOrder(massOrderDto, pageInfo, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = massOrderDao.queryReturnMassOrder(massOrderDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,15 +133,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
   		Map<String, Object> result = new HashMap<String,Object>();
   		List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
   		try {
-  			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				list=massOrderDao.exportReturnOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			list=massOrderDao.exportReturnOrder(massOrderDto);
   		} catch (Exception e) {
   			e.printStackTrace();
   			return null;
@@ -287,16 +271,7 @@ public class MassOrderManagerImpl extends BizBaseCommonManager implements MassOr
     	OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
     	
     	Map<String,Object> order_obj =  new HashMap<String,Object>();
-    	String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-		if(StringUtils.isNotEmpty(beginDate) && DateUtils.compareDate(beginDate, format.format(new Date()))==0){
-			order_obj = massOrderDao.queryAreaDetailByCode(area_code,order_sn,MassOrderDto.TimeFlag.CUR_DAY.code);
-		}else if(StringUtils.isNotEmpty(beginDate) && DateUtils.compareDate(beginDate,preMonthFirst)>=0){
-			order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn, MassOrderDto.TimeFlag.LATEST_MONTH.code);
-		}else{
-			order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-		}
-    	
+		order_obj =  massOrderDao.queryAreaDetailByCode(area_code,order_sn);
     	Map<String,Object> position_obj = orderDao.queryPositionByOrdersn(order_sn);
     	String latitude = "";
     	String longitude ="";

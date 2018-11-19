@@ -664,8 +664,8 @@ Date.prototype.format=function(fmt) {
 	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+				beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+	 			endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				order_sn:ordersn,
 				store_no:number_str,
 				order_labels:orderLabels,
@@ -732,31 +732,6 @@ Date.prototype.format=function(fmt) {
 	        	  
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-       			       var s="";
-       			       var a="";
-       			       var c="";
-       			       var r="";
-       			       if(jData[i].sign_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].sign_time);
-       			   		 	s=d.format('yyyy-MM-dd HH:mm:ss')
-       			       }
-       			    	if(jData[i].create_time!=null){
-	   			    		var d=	new Date();
-	   			     		d.setTime(jData[i].create_time);
-	   			   		 	c=d.format('yyyy-MM-dd HH:mm:ss')
-   			       		}
-       			    	if(jData[i].return_time!=null){
-       			    		var d=	new Date();
-       			     		d.setTime(jData[i].return_time);
-       			   		 	r=d.format('yyyy-MM-dd HH:mm:ss')
-       			        }
-                       if(jData[i].appointment_start_time!=null){
-                           var d=	new Date();
-                           d.setTime(jData[i].appointment_start_time);
-                           a=d.format('yyyy-MM-dd HH:mm:ss')
-                       }
-       			    		
        			    var customer_name = jData[i].customer_name==null?'':jData[i].customer_name;
        			    var addr_name = jData[i].addr_name==null?'':jData[i].addr_name;
        			    var eshop_name = jData[i].eshop_name==null?'':jData[i].eshop_name;
@@ -779,12 +754,12 @@ Date.prototype.format=function(fmt) {
 			        var customercontent =cname+cphone+rname+rphone+raddr+"@customertips"+i;
 			        var customerid = "customertips"+i;
 			        
-       			    var ctime="<strong>下单时间：</strong>"+c+"<br>";
-       			    var atime="<strong>预约时间：</strong>"+a+"<br>";
- 			       	var stime="<strong>签收时间：</strong>"+s+"<br>";
- 			       	var rtime="<strong>退货时间：</strong>"+r+"<br>";
+       			    var ctime="<strong>下单时间：</strong>"+jData[i].create_time+"<br>";
+       			    var atime="<strong>预约时间：</strong>"+jData[i].appointment_start_time+"<br>";
+ 			       	var stime="<strong>签收时间：</strong>"+jData[i].sign_time+"<br>";
+ 			       	var rtime="<strong>退货时间：</strong>"+jData[i].return_time+"<br>";
  			       	var tcontent = ctime;
- 			       	if(a!=null && a!=""){
+ 			       	if(jData[i].appointment_start_time!=null && jData[i].appointment_start_time!=""){
                         tcontent = tcontent + atime;
                     }
  			        tcontent = tcontent+stime+rtime+"@timetips"+i;
@@ -812,7 +787,7 @@ Date.prototype.format=function(fmt) {
                     	+"<td><a href=\"javascript:showorderdetail('"+jData[i].order_sn+"')\">"+jData[i].order_sn+"</a></td>"
  			   	   	    +"<td><a href=\"#\" onmouseover=\"showcustomer('"+customercontent+"');\" id=\""+customerid+"\">"+customer_mobile_phone_show+"</a></td>"
  			   	        +"<td><a href=\"#\" onmouseover=\"showprice('"+pcontent+"');\" id=\""+pid+"\">"+returned_amount+"</a></td>"
-                	   	+"<td><a href=\"#\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+r+"</a></td>"
+                	   	+"<td><a href=\"#\" onmouseover=\"showtime('"+tcontent+"');\" id=\""+tid+"\">"+jData[i].return_time+"</a></td>"
  			   	   	    +"<td><a href=\"#\" onmouseover=\"showeshopinfo('"+econtent+"');\" id=\""+eid+"\">"+eshop_name+"</a></td>"
  			   	   	    +"<td><a href=\"#\" onmouseover=\"showemployee('"+jData[i].order_sn+"','"+employeeid+"');\" id=\""+employeeid+"\">"+employee_name+"</a></td>";
                        infoStr = infoStr
@@ -1095,8 +1070,8 @@ Date.prototype.format=function(fmt) {
 	    }
 	    var massOrderDto=null;
 	    massOrderDto = {
-				beginDate:begin_end_date[0].trim(),
-	 			endDate:begin_end_date[1].trim(),
+                beginDate:begin_end_date[0].trim().replace(new RegExp("/","g"),"-"),
+                endDate:begin_end_date[1].trim().replace(new RegExp("/","g"),"-"),
 				order_sn:ordersn,
 				store_no:number_str,
 				order_labels:orderLabels,

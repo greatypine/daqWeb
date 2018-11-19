@@ -44,7 +44,7 @@ public interface MassOrderDao extends IDAO{
 	 * @param pageInfo
 	 * @return
 	 */
-	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto,PageInfo pageInfo,String timeFlag);
+	public Map<String, Object> queryReturnMassOrder(MassOrderDto massOrderDto,PageInfo pageInfo);
 	
 	/**
 	 * 导出退货订单数据列表
@@ -52,7 +52,7 @@ public interface MassOrderDao extends IDAO{
 	 * @param timeFlag
 	 * @return
 	 */
-	public List<Map<String, Object>> exportReturnOrder(MassOrderDto massOrderDto,String timeFlag);
+	public List<Map<String, Object>> exportReturnOrder(MassOrderDto massOrderDto);
 	
 	/**
 	 * 根据订单号查询订单
@@ -66,7 +66,7 @@ public interface MassOrderDao extends IDAO{
 	 * @param area_code
 	 * @return
 	 */
-	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn, String timeFlag);
+	public Map<String, Object> queryAreaDetailByCode(String area_code, String order_sn);
 	
 	/**
 	 * 根据订单号查国安侠信息
