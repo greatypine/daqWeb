@@ -122,12 +122,6 @@ public class HttpClientUtils {
                             value="\""+value+"\"";
 
                         }
-                        if(value != null && value.length()>=2) {
-                            if(value.indexOf("\"")==0) value = value.substring(1,value.length());   //去掉第一个 "
-                            if(value.lastIndexOf("\"")==(value.length()-1)) value = value.substring(0,value.length()-1);  //去掉最后一个 "
-
-                            value = value.replaceAll("\"\"","\"");//把两个双引号换成一个双引号
-                        }
                         if(cellIndex == 0 || cellIndex == 2 ||cellIndex == 9||cellIndex == 10||cellIndex == 11||cellIndex == 12){
                             out.write(value+'\t');
                         }else{
