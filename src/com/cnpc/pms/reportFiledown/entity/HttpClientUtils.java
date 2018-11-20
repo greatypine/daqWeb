@@ -128,7 +128,7 @@ public class HttpClientUtils {
 
                             value = value.replaceAll("\"\"","\"");//把两个双引号换成一个双引号
                         }
-                        if(cellIndex == 0){
+                        if(cellIndex == 0 || cellIndex == 2 ||cellIndex == 9||cellIndex == 10||cellIndex == 11||cellIndex == 12){
                             out.write(value+'\t');
                         }else{
                             out.write(value);
@@ -223,7 +223,7 @@ public class HttpClientUtils {
                                 //将逗号转义
                                 value="\""+value+"\"";
                             }
-                            if(cellIndex == 2){
+                            if(cellIndex == 2 ||cellIndex == 6||cellIndex == 7||cellIndex == 8||cellIndex == 5||cellIndex == 14){
                                 out.write(value+'\t');
                             }else{
                                 out.write(value);
