@@ -407,6 +407,7 @@
         }
     }else{
         max_month = now_month;
+        now_month = now_month+1;
     }
     var year_month = max_year+"-"+max_month;
     var max_date = "";
@@ -421,11 +422,10 @@
         }else{
                 now_date=31;
             }
-                max_date = max_year+"-"+max_month1 +"-"+now_date;
+                max_date = max_year+"-"+now_month +"-"+now_date;
     }else{
         max_date = max_year+"-"+now_month +"-"+(now_date-1);
     }
-
     laydate.render({//月份控件
         elem:'#country_month',
         value:year_month,
