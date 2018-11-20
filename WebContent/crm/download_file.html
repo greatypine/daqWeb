@@ -564,12 +564,40 @@
     var currentPage_customer = 1;
     var totalPage_customer = 1;
     function resetSerachParam(){
-            $("#city_name_tradetype").val("");
-            $("#city_code_tradetype").val("");
-            $("#city_code").val("");
-            $("#city_name").val("");
+        laydate.render({
+            elem:'#daily_date',
+            value:max_date,
+            type:"date",
+            btns: ['confirm'],
+            theme: '#11214e',
+            min: '2018-10-31',
+            max:max_date
+        });
+        $("#city_name_tradetype").val("");
+        $("#city_code_tradetype").val("");
+        $("#city_code").val("");
+        $("#city_name").val("");
     }
+    laydate.render({//月份控件
+        elem:'#country_month',
+        value:year_month,
+        type:"month",
+        btns: ['confirm'],
+        theme: '#11214e',
+        min: '2018-10-1',
+        max:max_month
 
+    });
+    laydate.render({//月份控件
+        elem:'#monthly_month',
+        value:year_month,
+        type:"month",
+        btns: ['confirm'],
+        theme: '#11214e',
+        min: '2018-10-1',
+        max:max_month
+
+    });
     ////////////////////////---------------月报----------------begin-------------///////////////////////////
 
 
