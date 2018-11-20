@@ -122,6 +122,12 @@ public class HttpClientUtils {
                             value="\""+value+"\"";
 
                         }
+                        if( value.contains("\n")){
+
+                            value=value.replace("\n", " ");
+                            //将逗号转义
+                            value="\""+value+"\"";
+                        }
                         if(cellIndex == 0 || cellIndex == 2 ||cellIndex == 9||cellIndex == 10||cellIndex == 11||cellIndex == 12){
                             out.write(value+'\t');
                         }else{
@@ -214,6 +220,12 @@ public class HttpClientUtils {
                                 if(value.contains("\"")){
                                     value=value.replace("\"", "\"\"");
                                 }
+                                //将逗号转义
+                                value="\""+value+"\"";
+                            }
+                            if( value.contains("\n")){
+
+                                value=value.replace("\n", " ");
                                 //将逗号转义
                                 value="\""+value+"\"";
                             }
