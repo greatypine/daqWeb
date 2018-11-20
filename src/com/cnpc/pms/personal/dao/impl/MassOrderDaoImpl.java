@@ -789,10 +789,10 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 	@Override
 	public void updataReport(Long id , String url) {
 		String sql = " UPDATE t_report_filedown set mark_1 = '1',url =? where id =? ";
-	Session session = this.getSession();
+		Session session = this.getSession();
 		session.createSQLQuery(sql).setParameters(
 				new Object[] {url, id }, new Type[] { Hibernate.STRING,Hibernate.LONG })
 			.executeUpdate();
-
+		session.close();
 	}
 }

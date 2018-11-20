@@ -616,6 +616,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		session.createSQLQuery(sql).setParameters(
 				new Object[] {url, id }, new Type[] { Hibernate.STRING,Hibernate.LONG })
 				.executeUpdate();
+		session.close();
 
 	}
 }
