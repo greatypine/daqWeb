@@ -2361,4 +2361,23 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
     	}
     	return ret_date;
 	}
+	
+	
+	
+	@Override
+	public List<Map<String, Object>> getCareerChannelOfGemini() {
+		String sql="SELECT concat(id,'') as id,name,concat(parent_id,'') as parent_id,level from t_department_channel where name not like '测试%'";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+	 	List<Map<String, Object>> lst_data = null;
+	 	Map<String, Object> map_r = null;
+	     try{
+	        SQLQuery query = session.createSQLQuery(sql);
+	        lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }finally {
+	         session.close();
+	     }
+	    return lst_data;
+	}
 }
