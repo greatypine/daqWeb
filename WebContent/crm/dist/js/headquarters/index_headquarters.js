@@ -5589,7 +5589,7 @@ function showsumofYesterdayprofit(pageStatusInfo){
 	            var resultJson = JSON.parse(data.data);
 	            var jData = JSON.parse(resultJson.gmv)[0];
 	            var real_profit;
-	            if(jData.total_profit){
+	            if(typeof(jData.total_profit)!="undefined"){
 		            real_profit = (jData.total_profit - jData.return_profit - jData.order_fee).toFixed(2);
 		            
 		            order_yesterday_profit = real_profit;
