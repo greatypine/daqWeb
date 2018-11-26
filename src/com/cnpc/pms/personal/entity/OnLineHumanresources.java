@@ -77,6 +77,13 @@ public class OnLineHumanresources extends DataEntity{
 	@Column(length = 65, name = "lefttime")
 	private String lefttime;
 	
+	//角色组ID
+	@Column(length = 65,name = "groupcode")
+	private String groupcode;
+	
+	//角色组名称 
+	@Column(length = 65, name = "groupname")
+	private String groupname;
 
 
 	public String getCitySelect() {
@@ -176,6 +183,26 @@ public class OnLineHumanresources extends DataEntity{
 
 	public void setLefttime(String lefttime) {
 		this.lefttime = lefttime;
+	}
+
+
+	public String getGroupcode() {
+		return groupcode;
+	}
+
+
+	public void setGroupcode(String groupcode) {
+		this.groupcode = groupcode;
+	}
+
+
+	public String getGroupname() {
+		return groupname;
+	}
+
+
+	public void setGroupname(String groupname) {
+		this.groupname = groupname;
 	} 
 	
 	
