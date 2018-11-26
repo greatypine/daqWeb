@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>添加或修改目标值信息</title>
+<link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+<link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../aboutMap/plugins/bootstrp-datarangepicker/daterangepicker.css">
+	<link href="../scripts/css/auto.css" rel="stylesheet">
+<script type="text/javascript" src="../scripts/bidLib.js"></script>
+	<script src="../aboutMap/plugins/bootstrp-datarangepicker/daterangepicker.js"></script>
+
+
+	<script src="dist/js/headquarters/conversion_utils.js"></script>
+<script type="text/javascript">
+var datas = [];
+/* 	function queryTaskQuantity(cityname,cityno){
+		if(cityno!='0'){
+			doManager("storexpandManager", "getTaskQuantityExist",[cityname],
+			function(data,textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var resultJson= JSON.parse(data.data);
+					var task_quantity_count = JSON.parse(resultJson.task_quantity_count);
+					if(parseInt(task_quantity_count)==0){
+						$("#cooperative_task").removeAttr("disabled");
+						$("#self_support_task").removeAttr("disabled");
+					}else{
+						$("#cooperative_task").attr("disabled","disabled");
+						$("#self_support_task").attr("disabled","disabled");
+					}
+				}
+			});
+		}
+	} */
+
+
+	function yanzhen(){
+		
+		var weekSelect = $("#frame_time").val();
+		if(weekSelect == null||weekSelect == ""){
+			alert("录入时间不能为空");
+			return;
+		}
+		var maori_target=$("#maori_target").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(maori_target==null||maori_target==""){
+			alert("毛利不能为空");
+			return;
+		}
+        var profit_target=$("#profit_target").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(profit_target==null||profit_target==""){
+            alert("利润不能为空");
+			return;
+		}
+		var user_target=$("#user_target").val().replace(/(^\s*)|(\s*$)/g, "");
+		if(user_target == "" || user_target == null){
+			alert("用户不能为空!");
+			return;
+		}
+//		if(!isNumber(maori_target)){
+//			alert("毛利必须为数字");
+//			return;
+//		}
+//        if(!isNumber(profit_target)){
+//            alert("利润必须为数字");
+//            return;
+//        }
+//        if(!isNumber(user_target)){
+//            alert("用户必须为数字");
+//            return;
+//        }
+
+		var citySelect = $("#citySelect").val();
+		if(citySelect == null||citySelect == "0"){
+			alert("城市不能为空");
+			return;
+		}
+		yanzhenAdd();		
+	}
+	
+	function yanzhenAdd(){
+		var statistics=$("#frame_time").val();
+		var city_name=$("#city_name").val();
+		doManager("targetEntryManager", "getByTarget",[statistics,city_name] , function(data,
+				textStatus, XMLHttpRequest) {
+			if (data.result) {
+				var resultJson= JSON.parse(data.data);
+				var task_quantity_count = JSON.parse(resultJson.statistics);
+				if(parseInt(task_quantity_count)!=0){
+					alert("该目标值已录入,请返回列表修改!");
+					return;
+				}
+				doSave();
+			}else{
+				$$.showMessage("系统信息", "信息加载异常");
+				return;;
+			}
+		});
+	}
+	function doSave(){
+		var arr = [ "frame_time", "businessGroup_name","businessGroup_code","city_name","city_code","maori_target","profit_target","user_target","id"];
+			var o = {};
+			for ( var i in arr) {
+				var v = arr[i];
+				var va = $("#" + v).val();
+				o[v] = va;
+			}
+			doManager("targetEntryManager", "saveOrUpdateTargetEntry", o, function(data,
+					textStatus, XMLHttpRequest) {
+				if (data.result) {
+					var jsonData = $.fromJSON(data.data);
+					alert("添加成功！");
+					window.location.href = 'target_entry_view.html';
+				} else {
+					$$.showMessage("系统信息", "添加失败!");
+				}
+			});
+}
+	$(function(){
+		initcurruser();
+		var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
+	  	if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
+	  		initcurcity();
+	  	}else{
+			initallcity();
+	  	}
+	});
+	function initallcity(){
+ 		doManager("DistCityCodeManager","queryAllDistCityList",null,
+ 		    function(data,textStatus,XmlHttpRequest){
+ 				if (data.result) {
+ 					var jsonData = $.fromJSON(data.data);
+ 					//$("#citySelect").append("<option value='0'>全部城市</option>");
+ 					$(jsonData).each(function(index,element){
+ 					if(index==0){
+ 						$("#city_name").val(element.cityname);
+ 					 	$("#city_code").val(element.cityno);
+ 					}
+ 						$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
+                     });
+ 				}
+ 		});
+ 	}
+	 function initcurcity(){
+		 doManager("DistCityCodeManager","queryAllDistCityList",null,
+		 		    function(data,textStatus,XmlHttpRequest){
+		 				if (data.result) {
+		 					var jsonData = $.fromJSON(data.data);
+		 					giveCityNo(datas,jsonData);
+		 				}
+		 });
+	 		doManager("userManager","getCurrentUserCity",null,
+	 		    function(data,textStatus,XmlHttpRequest){
+	 				if (data.result) {
+	 					var jsonData = $.fromJSON(data.data);
+	 					var IndexSelected = "";
+	 					$(jsonData).each(function(index,element){
+	 		 				var index = findArray(datas, {value: element.cityname});
+	 						$("#citySelect").append('<option value="'+datas[index].name+'">'+element.cityname+'</option>');
+	 						if(index==0){
+	 		 					$("#cityname").val(element.cityname);
+ 					 			$("#cityno").val(datas[index].name);
+	 						}
+	                     });
+	 					 $("#citySelect")[0].selectedIndex = IndexSelected;
+	 				}
+	 		});
+	 }
+	 function giveCityNo(datas,jsonData){
+			$(jsonData).each(function(index,element){
+				var object = new Object();
+				object.name = jsonData[index]['city_code'];
+				object.value = jsonData[index]['city_name'];
+				datas.push(object);
+             });
+		 
+	 }
+	 var curr_user;
+	  function initcurruser(){
+		    
+	  		//取得当前登录人的门店
+			doManager("UserManager", "getCurrentUserDTO",null,
+	    				function(data, textStatus, XMLHttpRequest) {
+	    					if (data.result) {
+	    						var employeeID="";
+	    						 curr_user = JSON.parse(data.data);
+	    					}
+	    			},false);
+	  	}
+
+	function select_data(){
+		var cityno = $("#citySelect").val();
+	 	var index=$("#citySelect")[0].selectedIndex ;
+	 	var cityname = $("#citySelect")[0].options[index].text;
+	 	$("#city_name").val(cityname);
+	 	$("#city_code").val(cityno);
+	 	//查询本年是否录入过合作店和自营店任务目标(如果填过只能修改不能新增)
+	 	//queryTaskQuantity(cityname,cityno);
+	}
+</script>
+</head>
+<style type="text/css">
+	td {
+		width=50%;
+	}
+
+	p{
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:38%;}
+	.panel-heading .but{float:right; text-align: center;}
+	.but input {
+		background-color: transparent;
+		border: 1px solid #fff;
+		border-radius: 3px;
+		padding: 0 13px;
+		margin-right: 30px;}
+		.ui-dialog .ui-dialog-titlebar-close span {
+    		display: none;
+    	}
+</style>
+<body>
+	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
+    <div class="panel-heading">目标值录入信息添加
+        <span class="but">
+			<input name="" type="submit" onclick="yanzhen();" value="保存">
+			<input name="" type="button" onclick="javascript:history.go(-1);" value="返回">
+		</span>
+    </div>
+    <div class="panel-body" id="temp1">
+	<form action="" method="post" class="pmsForm">
+	<input type="hidden" name="county_id" id="county_id"/>
+	<input type="hidden" name="id" id="id"/>
+	<table width="100%">
+		<tr>
+			<td width="33.33%">
+				<p class="read">统计时间：<span style="color: red" id="statistics">*</span></p>
+				<p class="read"><input id="frame_time" revalidate="true"
+									   type="text" likeOption="false" name="date"
+									   validate="formatDate:true" class="pmsDateField form-control"
+									   yearRange="-100:+10" style="width: 38%; display: inline;"
+									   readonly />
+				</p>
+			</td>
+			<td>
+				<p class="read">事业群/频道：<span style="color: red">*</span></p>
+				<p class="read"><select id="businessGroup" style="width: 38%" onchange="select_data();"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
+			</td>
+			<td>
+				<p class="read">城市名称：<span style="color: red">*</span></p>
+				<p class="read"><select id="citySelect" style="width: 38%" onchange="select_data();"></select><input type="hidden" id="city_name" name="city_name"><input type="hidden" id="city_code" name="city_code"> </p>
+			</td>
+		</tr>
+		<tr>
+			<td width="33.33%">
+				<p>毛利：<span style="color: red">*</span></p>
+				<p><input type="text" name="maori_target" id="maori_target" onkeyup="value=value.replace(/[^\d.]/g,'')"/></p>
+			</td>
+			<td width="33.33%">
+				<p class="read">利润：<span style="color: red">*</span></p>
+				<p class="read"><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="12" name="profit_target" id="profit_target"/></p>
+			</td>
+			<td width="33.33%">
+				<p>用户：<span style="color: red">*</span></p>
+				<p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="user_target" id="user_target"/></p>
+			</td>
+
+
+		</tr>
+	</table>
+	</form>
+	</div>
+</div>
+</body>
+</html>

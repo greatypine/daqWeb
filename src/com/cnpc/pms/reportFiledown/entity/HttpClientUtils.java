@@ -8,6 +8,8 @@ import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.manager.OssRefFileManager;
 import com.cnpc.pms.utils.DateUtils;
+import com.cnpc.pms.utils.HikariGuoanInner;
+import com.cnpc.pms.utils.HikariInner;
 import com.opencsv.CSVWriter;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -28,6 +30,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -261,6 +266,115 @@ public class HttpClientUtils {
             massOrderItemDao.updataReport(id,url);
         }
     }
+
+//    public void getDataTableSPXSDA( MassOrderItemDto massOrderDto, String fileName, MassOrderItemDao massOrderItemDao, Long id) {
+//        String url = null;
+//        List<Map<String, Object>> list = new ArrayList<Map<String,Object>>();
+//        String sql = "";
+//        try {
+//            String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
+//            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+//            if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
+////                list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.CUR_DAY.code);
+//            }else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
+//                sql=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.LATEST_MONTH.code);
+//            }else{
+////                list=massOrderItemDao.exportOrder(massOrderDto, MassOrderDto.TimeFlag.HISTORY_MONTH.code);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        if(sql!=null){//成功返回数据
+//            FileOutputStream os = null;
+//            Connection conn = null;
+//            PreparedStatement ps = null;
+//            ResultSet resultSet = null;
+//            //定义表头 以及 要填入的 字段
+////            String[] str_headers = {"商品名称","商品ID","订单号","下单客户姓名","下单客户电话","预约时间","下单时间","签收时间","订单评价时间","单价","销售数量","签收客户姓名","签收客户电话","片区编号","小区编号","片区A国安侠编号","送单侠姓名",
+////                    "送单侠电话","签收地址","E店名称","门店名称","门店编号","事业群","频道","城市","订单来源","商品评价星级","订单配送速度评价星级","订单配送服务评价星级","评价信息","评价和追评的间隔天数","追加评论内容"};
+////            String[] headers_key = {"product_name","product_id","order_sn","customer_name","customer_mobilephone","appointment_start_time","create_time","df_signed_time","order_commented_time","original_price","quantity","order_customer_name","order_mobilephone","area_code","village_code",
+////                    "info_employee_a_no","employee_name","employee_phone","order_address",
+////                    "eshop_name","store_name","store_code","dep_name","channel_name","store_city_name","order_source","star_level","star_level_1","star_level_2","order_contents","next_days","next_contents"};
+//
+//            String str_file_dir_path = this.getClass().getClassLoader().getResource("../../").getPath()+"template/";
+//            String str_web_path = PropertiesUtil.getValue("file.web.root");
+//            File file_xls = new File(str_file_dir_path + fileName+".csv");
+//            if(file_xls.exists()){
+//                file_xls.delete();
+//            }
+//
+//            try {
+//                file_xls.createNewFile();
+//                OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(file_xls), "GB2312");
+////                for(String title : str_headers){
+////                    out.write(title);
+////                    out.write(",");
+////                }
+////                out.write("\r\n");
+////                for(int i = 0;i < list.size();i++){
+////                    for(int cellIndex = 0;cellIndex < headers_key.length; cellIndex ++) {
+////                        String value = String.valueOf(list.get(i).get(headers_key[cellIndex]));
+////                        if(cellIndex==4 && "normal".equals(massOrderDto.getHidden_flag())){
+////                            if(StringUtils.isNotEmpty(value) && value.length() > 7 ){
+////                                value = value.substring(0, 3) + "****" + value.substring(value.length() - 4);
+////                            }
+////                        }else if(cellIndex==26||cellIndex==27||cellIndex==28||cellIndex==30){
+////                            if("NULL".equals(value)||"null".equals(value)){
+////                                value = "";
+////                            }
+////                        }
+////                        if(value.contains(",")){
+////                            //如果还有双引号，先将双引号转义，避免两边加了双引号后转义错误
+////                            if(value.contains("\"")){
+////                                value=value.replace("\"", "\"\"");
+////                            }
+////                            //将逗号转义
+////                            value="\""+value+"\"";
+////                        }
+////                        if( value.contains("\n")){
+////
+////                            value=value.replace("\n", " ");
+////                            //将逗号转义
+////                            value="\""+value+"\"";
+////                        }
+////                        if(cellIndex == 2 ||cellIndex == 6||cellIndex == 7||cellIndex == 8||cellIndex == 5||cellIndex == 14){
+////                            out.write(value+'\t');
+////                        }else{
+////                            out.write(value);
+////                        }
+////                        out.write(",");
+////                        continue;
+////                    }
+////                    //写完一行换行
+////                    out.write("\r\n");
+////
+////
+////                }
+////                out.close();
+//                conn = HikariGuoanInner.getConnection();
+//                ps = conn.prepareStatement(sql);
+//                resultSet = ps.executeQuery();
+//                CSVWriter csvWriter = new CSVWriter(out);
+////            csvWriter.writeAll(head);
+//                csvWriter.writeAll(resultSet, true);
+//                csvWriter.close();
+//                OssRefFileManager ossRefFileManager = (OssRefFileManager) SpringHelper.getBean("ossRefFileManager");
+//                url = ossRefFileManager.uploadOssFileNew(file_xls, "csv", "daqWeb/download/",fileName);
+//
+//            }catch (Exception e) {
+//                e.printStackTrace();
+//            } finally {
+//                if(os != null){
+//                    try {
+//                        os.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//            massOrderItemDao.updataReport(id,url);
+//        }
+//    }
 
 
     private XSSFCellStyle style_header = null;
