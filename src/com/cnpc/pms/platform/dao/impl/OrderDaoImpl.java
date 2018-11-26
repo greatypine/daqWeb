@@ -6,7 +6,6 @@ import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.dynamic.entity.EshopPurchaseDto;
 import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
 import com.cnpc.pms.platform.dao.OrderDao;
-import com.cnpc.pms.utils.ValueUtil;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -508,7 +507,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
     public List<Map<String, Object>> queryOrderItemInfoById(String order_id){
     	List<Map<String, Object>> lst_data = null;
     	List<Map<String, Object>> ret_date = new ArrayList<Map<String,Object>>();
-    	String sql = "SELECT * from t_order_item WHERE t_order_item.order_id='"+order_id+"'";
+    	String sql = "SELECT id, order_id, product_type, eshop_pro_id, eshop_pro_name, self_code, unit_price, unit_score, quantity, unit, weight, business_no, first_url, second_url, cost_price, original_price, remark, sku_rule_id, concat(provider_id,'') as provider_id, output_tax_rate, status, version, create_user, create_time, update_user, update_time,create_user_id,update_user_id from t_order_item WHERE t_order_item.order_id='"+order_id+"'";
     	if(order_id!=null&&order_id.length()>0){
     		Session session = getHibernateTemplate().getSessionFactory().openSession();
         	try { 
@@ -2360,5 +2359,24 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
     		}
     	}
     	return ret_date;
+	}
+	
+	
+	
+	@Override
+	public List<Map<String, Object>> getCareerChannelOfGemini() {
+		String sql="SELECT concat(id,'') as id,name,concat(parent_id,'') as parent_id,level from t_department_channel where name not like '测试%'";
+		Session session = getHibernateTemplate().getSessionFactory().openSession();
+	 	List<Map<String, Object>> lst_data = null;
+	 	Map<String, Object> map_r = null;
+	     try{
+	        SQLQuery query = session.createSQLQuery(sql);
+	        lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+	     }catch (Exception e){
+	         e.printStackTrace();
+	     }finally {
+	         session.close();
+	     }
+	    return lst_data;
 	}
 }

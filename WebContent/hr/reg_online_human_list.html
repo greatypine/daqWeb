@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>线上人员账号开通列表</title>
+    <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+    <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="../scripts/css/auto.css" rel="stylesheet">
+    <link href="../startbootstrap/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="../scripts/auto.js"></script> 
+</head>
+<script>
+    var win;
+    var array=new Array();
+	//初始化所有门店 
+	
+    $(function () {
+    	
+    	doClean();
+        //页面加载成功后需要获取数据
+        searchList();
+        //初始化所有事业群 频道 供选择 
+        initCareerChannel();
+        
+        $(".ui-icon-closethick").hide();
+    });
+
+    var objCareerList = new Array();
+	
+    //初始化事业群 频道  
+	function initCareerChannel() {
+		doManager("OnLineHumanresourcesManager", "queryCareerChannel", null,
+				function(data, textStatus, XMLHttpRequest) {
+					if (data.result) {
+						var jsonData = $.fromJSON(data.data);
+						objCareerList=jsonData;
+						var careerhtml = "<option>请选择..</option>";
+						$(jsonData).each(function(i,obj){
+							if(obj.level=="1"){
+								careerhtml+="<option value='"+obj.id+"'>"+obj.name+"</option>";
+							}
+						});
+						$("#careername").append(careerhtml);
+					}
+				}, false);
+	}
+    
+    
+    function setChannel(){
+    	var careerid =$("#careername  option:selected").val();
+    	var channelhtml = "<option>请选择..</option>";
+    	$(objCareerList).each(function(i,obj){
+    		if(obj.parent_id==careerid){
+    			channelhtml+="<option value='"+obj.id+"'>"+obj.name+"</option>";
+    		}
+    	});
+    	$("#channelname").empty();
+    	$("#channelname").append(channelhtml);
+    }
+    
+    
+    
+	
+    function doClean() {
+        document.service_qa.reset();
+        $("#store\\.id").val("");
+    }
+    //操作列
+
+    //记载页面时请求数据列表默认的方法
+    function searchList() {
+        $$.executeSearch('regOnLineHumanresourcesQuery', 'conditionsDiv');
+        $(".ui-helper-clearfix").eq(0).remove();
+    }
+
+    //验证是不是空
+    function isnull(str) {
+        return str == null || str == "null" || str === "" || str == "undefined" || typeof(str) == "undefined";
+    }
+
+
+
+    //列表中 列的处理
+    var COLUMNS = {
+            "lefttime": function(aData, iColumn, sColumnName, map){
+                var value = map[sColumnName];
+                var ret = "";
+                if(value!=null&&value!=""&&value.length>10){
+                	ret=value.substring(0,10);
+                }
+                return ret;
+            }
+        } 
+    
+    var deleteObj = {
+			html : '<a href="#">删除</a>',
+			resourceId : "xxExpress_List_delete",
+			func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+				var id = allColumnsDataMap.id;
+				$$.showPromptDialog("系统提示", "确认删除？", false, 320, function() {
+					doManager("XxExpressManager", "deleteXxExpress", id + '', function(
+							data, textStatus, XMLHttpRequest) {
+						if (data.result) {
+							window.location.href = 'xx_express_list.html';
+						} else {
+							$$.showMessage("系统信息", "删除失败!");
+						}
+					});
+				});
+			}
+		}
+    var editObj = {
+			html : '<a href="#">编辑 </a>',
+			resourceId : "humanstore_List_update",
+			func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+				var id = allColumnsDataMap.id;
+				//window.location.href = "dist_city_edit.html?id="+id;
+				showOnLineCareer(id);
+			}
+		}
+    
+    
+    
+    function showOnLineCareer(id){
+    	queryCareerChannelById(id);
+    	$(".ui-icon-closethick").hide();
+        var div = $("#updateonlinediv");
+        
+        div.dialog({
+            bgiframe : true,
+            title : "设置员工角色及事业群频道",
+            width : 380,
+            buttons : {
+                "确认开通" : function() {
+                    checkSumitCount($(this),id);
+                },
+                "取消" : function() {
+                    $(this).dialog("close");
+                    //window.location.reload();
+                }
+            },
+            modal : false
+        });
+    }
+    
+    function queryCareerChannelById(id){
+    	//根据ID获取信息 复值 
+    	 doManager('OnLineHumanresourcesManager','queryCareerChannelById',id,function(data){
+             if(data.result){
+                 var retobj = JSON.parse(data.data);
+                 if(retobj!=null&&retobj.groupname!=null&&retobj.groupname.trim().length>0){
+                	$("#groupname").attr("value",retobj.groupcode);
+ 					$("#groupname option[text='"+groupname+"']").attr("selected", true);
+                 }else{
+                	 document.div_qa.reset();
+                 }
+                 if(retobj!=null&&retobj.careername!=null&&retobj.careername.trim().length>0){
+                	$("#careername").attr("value",retobj.careerid);
+ 					$("#careername option[text='"+retobj.careername+"']").attr("selected", true);
+ 					setChannel();
+                 }
+                 if(retobj!=null&&retobj.channelname!=null&&retobj.channelname.trim().length>0){
+                	$("#channelname").attr("value",retobj.channelid);
+ 					$("#channelname option[text='"+retobj.channelname+"']").attr("selected", true);
+                 }
+                 
+             }else{
+                 $$.showMessage('提示',data.message);
+             }
+         },false); 
+    	
+    }
+    
+    
+    
+    function checkSumitCount(_this,id){
+    	var groupid =$("#groupname  option:selected").val();
+    	var groupname =$("#groupname  option:selected").html();
+    	
+    	var careerid =$("#careername  option:selected").val();
+    	var careername =$("#careername  option:selected").html();
+    	
+    	var channelid =$("#channelname  option:selected").val();
+    	var channelname =$("#channelname  option:selected").html();
+    	
+    	if(groupname.indexOf('请选择')>-1){
+    		 $$.showMessage('提示',"请选择角色组！ ");
+    		return;
+    	}
+    	if(careername.indexOf('请选择')>-1){
+   			 $$.showMessage('提示',"请选择事业群！ ");
+   			return;
+   		}
+    	if(channelname.indexOf('请选择')>-1){
+   			 $$.showMessage('提示',"请选择频道！ ");
+   			return;
+   		}
+    	
+    	
+    	var obj = {
+    			id:id,
+    			groupcode:groupid,
+    			groupname:groupname,
+    			careerid:careerid,
+    			careername:careername,
+    			channelid:channelid,
+    			channelname:channelname
+    	}
+    	
+        //取得选择的月份。判断如果为当前或是大于当前月。则不允许保存。结束//
+       doManager('OnLineHumanresourcesManager','saveRegOnLineHumanGroup',obj,function(data){
+            if(data.result){
+                var result = JSON.parse(data.data);
+                if(result !=null){
+                    $$.showMessage('提示','保存成功！');
+                    $(_this).dialog("close");
+                    window.location.reload();
+                }
+            }else{
+                $$.showMessage('提示',data.message);
+            }
+        }); 
+    }
+    
+    
+    
+    var publishObj = {
+			html : '<a href="#">查看 </a>',
+			resourceId : "humanstore_List_detail",
+			func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
+				var id = allColumnsDataMap.id;
+				window.location.href = "human_store_detail.html?id="+id;
+			}
+		}
+    $pmspage.opArr = [ editObj /*, publishObj  , deleteObj*/ ];
+    
+    
+</script>
+<style type="text/css">
+    .but {
+        float: right;
+        text-align: center;
+    }
+    .but input{background-color:transparent; border:1px solid #fff; border-radius:3px; padding:0 13px; margin-right:30px;}
+</style>
+<body style="height: 100%">
+<div class="panel panel-default" style="margin: 10px">
+    <div class="panel-heading">
+        <h4 class="panel-title">
+              城市数据维护:线上人员账号开通列表
+        </h4>
+    </div>
+</div>
+<div class="rightcont clear">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <label id="imp_base_div">-</label>&nbsp;人员查询
+        </div>
+        <div class="panel-body" id="imp_data_div">
+            <!-- <div id="uploadDiv" style="border-bottom: 1px solid #eee">
+                <form action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadFrom"
+                      target="hframe">
+                    <div class="form-group">
+                        <div class="form-group input-group" style="width: 300px;float: left;margin-right: 20px">
+                            <input type="file" isuploadtable="true" name="file" class="form-control">
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" onclick="();" name="upload">
+                                    <img src="../scripts/images/upload_to_cloud.png" alt="导入" style="height: 20px"/>
+                                </button>
+                            </span>
+                        </div>
+                        <iframe name="hframe" id="hframe" style=" display: none"></iframe>
+                        <button name="download" class="btn btn-outline btn-default" onclick="downloadTemplate();">下载模板</button>
+                    </div>
+                </form>
+            </div> -->
+            <div id="conditionsDiv" style="margin-top: 0px">
+                <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
+                      displaynumber="7">
+                    <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                        <tr>
+                            <td width="5%">员工姓名:</td>
+                            <td>
+                                <input id="name" name="name" type="text" style="width:50%" class="form-control" onkeyup="value=value.replace(/(\s*)|(\s*)/g,'').replace(/[ ]/g,'')"/>
+                            </td>
+                      		
+                            
+                            
+                        </tr>
+                       
+                    </table>
+                </form>
+            </div>
+        </div>
+        <div class="panel-footer" style="text-align: right">
+            <button class="btn btn-primary" onclick="searchList()">查询</button>
+            <button class="btn btn-primary" onclick="doClean();">重置</button>
+            <!-- <button class="btn btn-primary" onclick="doAdd();">新增</button> -->
+        </div>
+    </div>
+    <input type="hidden" id="store_id" isautotab="true" />
+    <div id="centerQueryGridContainer" class="panel panel-primary" queryid="regOnLineHumanresourcesQuery" operators="$pmspage.opArr"
+         titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showno="true"
+         showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+         showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true"></div>
+
+
+<div id="updateonlinediv" class="panel panel-primary" style="display: none;">
+            <div class="panel-body">
+             <form id="div_qa" name="div_qa">
+            <input type="hidden" id="online_id" value="" />
+                <table  cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
+                	<tr>
+                		<td align="right" >选择角色组<label style="color:red;">*</label>：</td>
+                        <td >
+                           	<select id="groupname" style="width: 100%;display:inline-block;padding:0;" class="form-control">
+                           		<option>请选择..</option>
+                           		<option value="ZBCSGLB">总部-城市管理部</option>
+                           		<option value="ZBCPGLB">总部-产品管理部</option>
+                           	</select>
+                        </td>
+                	</tr>
+                    <tr>
+                        <td align="right" width="20%" >选择事业群<label style="color:red;">*</label>：</td>
+                        <td width="80%" >
+                        	<select id="careername" onchange="setChannel()" style="width: 100%;display:inline-block;padding:0;" class="form-control">
+                           		
+                           	</select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" >选择频道<label style="color:red;">*</label>：</td>
+                        <td >
+                        	<select id="channelname" style="width: 100%;display:inline-block;padding:0;" class="form-control">
+                           		<option>请选择..</option>
+                           	</select>
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </div>
+        
+        
+</div>
+</body>
+
+
+</html>

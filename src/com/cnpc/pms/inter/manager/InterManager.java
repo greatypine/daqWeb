@@ -575,4 +575,9 @@ public interface InterManager extends IManager {
   	//******************ds调用同步线上人员  *********************//
   	public Result syncOnLineHuman();
   	
+  	
+  	
+  	//测试接口 
+  	public String testNoProxySendMessage(String mobilephone,String content);
+  	
 }

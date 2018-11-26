@@ -3450,6 +3450,31 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 			return resultString;
 		}
 		
+		
+		/**
+		 * 测试用接口 并无实际应用  
+		 * @param mobilephone
+		 * @param content
+		 * @return
+		 */
+		@Override
+		public String testNoProxySendMessage(String mobilephone,String content) {
+			String resultString = "";
+			try {
+				String sendcode_gb2312 = URLEncoder.encode(content,"utf8");
+				System.out.println(sendcode_gb2312);
+				String url = "http://q.hl95.com:8061/?username=gasjyz&password=Gasj0121&message=%s&phone=%s&epid=123743&linkid=&subcode=";
+				CloseableHttpClient httpclient = HttpClients.createDefault();
+				HttpGet httpGet = new HttpGet(String.format(url, new Object[]{sendcode_gb2312,mobilephone}));
+				CloseableHttpResponse response = httpclient.execute(httpGet);
+				resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+			} catch (Exception e) {
+				resultString="Error:"+e.getMessage();
+			}
+			return resultString;
+		}
+		
+		
 		/**
 		 * 通用发送短信的方法  ，参数 手机号 发送内容 发送的功能模块名称
 		 * @return

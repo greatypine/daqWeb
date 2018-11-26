@@ -467,4 +467,9 @@ public interface OrderDao {
 	 * @return
 	 */
 	public List<Map<String, Object>> queryOrderItemInfoByIdAndProid(String order_id,String product_id);
+	
+	
+	
+	
+	public  List<Map<String, Object>>  getCareerChannelOfGemini();
 }
