@@ -744,10 +744,10 @@ public class AuthFilter extends OncePerRequestFilter {
 				return;
 			}
 			
-			/*if (url.contains("NoticeReciverManager")) {//公告通知
+			if (url.contains("NoticeReciverManager")) {//公告通知
 				filterChain.doFilter(servletRequest, servletResponse);
 				return;
-			}*/
+			}
 
 			if (url.contains("MongoDBManager")) {//公告通知
 				filterChain.doFilter(servletRequest, servletResponse);
