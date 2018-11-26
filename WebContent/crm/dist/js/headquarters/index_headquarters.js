@@ -245,7 +245,7 @@ var initPageElements = function () {
 	            name:'GMV走势',
 	            textStyle:{color:"#fff"}
             },{
-            	name:'收入走势',
+            	name:'毛利走势',
             	textStyle:{color:"#fff"}
             	}],
             right: '3%',
@@ -394,7 +394,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '收入走势',
+        name: '毛利走势',
         type:'line',
         data:[],
         smooth: true,
@@ -2510,8 +2510,9 @@ var showTwoTwoOneRankGmv = function (twoTwoOneRankDataGmv) {
   	var data = [];
     var data1 = [];
     $.each(eval(twoTwoOneRankDataGmv['lst_data']), function (idx, val) {
+    	var real_profit = (val['total_profit'] - val['return_profit'] - val['order_fee']).toFixed(2);
     	data.push(val['week_date']);
-    	data1.push(val['week_gmv']);
+    	data1.push(real_profit);
     });
 	//cityRankGmvOption.xAxis[0].data = data.reverse();
     cityRankGmvOption.series[1].data = data1.reverse();
@@ -5562,12 +5563,15 @@ function showsumofcurmonthprofit(pageStatusInfo){
        function(data, textStatus, XMLHttpRequest) {
 	        if (data.result) {
 	            var resultJson = JSON.parse(data.data);
-	            order_month_profit = JSON.parse(resultJson.gmv)[0].order_month_profit;
+	            var jData = JSON.parse(resultJson.gmv)[0];
+	            var real_profit = (jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun-jData.pankui).toFixed(2);
+	            
+	            order_month_profit = real_profit;
 	            order_month_profit = order_month_profit+"";
 	        }else{
 	        	order_month_profit = "0";
 	        }
-		$("#tradesumofcurmonthsprofit").html(changeMoney(order_month_profit));
+		$("#tradesumofcurmonthsprofit").html(changeMoneyByDigit(order_month_profit,2));
     });
     return order_month_profit;
 }
@@ -5583,12 +5587,20 @@ function showsumofYesterdayprofit(pageStatusInfo){
        function(data, textStatus, XMLHttpRequest) {
 	        if (data.result) {
 	            var resultJson = JSON.parse(data.data);
-	            order_yesterday_profit = JSON.parse(resultJson.gmv)[0].order_yesterday_profit;
-	            order_yesterday_profit = order_yesterday_profit+"";
+	            var jData = JSON.parse(resultJson.gmv)[0];
+	            var real_profit;
+	            if(jData.total_profit){
+		            real_profit = (jData.total_profit - jData.return_profit - jData.order_fee).toFixed(2);
+		            
+		            order_yesterday_profit = real_profit;
+		            order_yesterday_profit = order_yesterday_profit+"";
+	            }else{
+	            	order_yesterday_profit = "0";
+	            }
 	        }else{
 	        	order_yesterday_profit = "0";
 	        }
-		$("#tradesumofyesprofit").html(changeMoney(order_yesterday_profit));
+		$("#tradesumofyesprofit").html(changeMoneyByDigit(order_yesterday_profit,2));
     });
     return order_yesterday_profit;
 }

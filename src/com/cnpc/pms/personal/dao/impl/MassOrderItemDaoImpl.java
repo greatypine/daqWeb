@@ -522,91 +522,152 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		return map_result;
 	}
 	@Override
-	public Map<String, Object> queryMonthprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
-		String beginDate = dd.getBeginDate();
-		String endDate = dd.getEndDate();
-		String dateStr = "";
-		String provinceStr = "";
-		String cityStr = "";
+	public Map<String, Object> queryMonthprofit(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
+		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,"
+		+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun,sum(ifnull(dpankui.count_money, 0)) AS pankui from ( "
+		+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
+		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
+		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' ";
+		String beginDate = dynamicDto.getBeginDate().substring(0, dynamicDto.getBeginDate().lastIndexOf("-"));
+		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
+			sql = sql + "and strleft(dot.sign_time,7)='"+beginDate+"' ";
+		}
 		if(cityNO!=null&&cityNO.size()>0){
 			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
 			if(cityNo.startsWith("00")){
 				cityNo = cityNo.substring(1,cityNo.length());
 			}
-			cityStr+=" and ds.store_city_code='"+cityNo+"' ";
+			sql = sql + " and dot.store_city_code='"+cityNo+"' ";
 		}
 		if(provinceNO!=null&&provinceNO.size()>0){
-			provinceStr+=" and ds.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+			sql = sql + " and dot.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";;
 		}
-		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
-			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
+			if (position_obj != null) {
+				sql = sql + " and (dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "' or dot.normal_store_id='"+(String) position_obj.get("platformid")+"')";
+			}else{
+				sql = sql + " and dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "'";
+			}
 		}
-		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)), 0) AS order_profit FROM daqWeb.df_mass_order_monthly ds "+dateStr+provinceStr+cityStr;
-		List<Map<String, Object>> lst_data = null;
+		sql = sql + "group by dot.store_city_code order by dot.store_city_code";
+
+		//报损
+		sql = sql + ") aa left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(baosun.count_money),2),0) as count_money,ts.city_code,"
+				+ "baosun.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info baosun "
+				+ "join gemini.t_store ts  on baosun.store_code=ts.code where baosun.count_type='0' and baosun.count_month='"+beginDate+"' "
+				+ "group by ts.city_code,baosun.create_date ) aa having num=1) dbaosun on aa.store_city_code=dbaosun.city_code ";
+		//盘亏
+		sql = sql + "left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(pankui.count_money),2),0) as count_money,ts.city_code,"
+				+ "pankui.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info pankui "
+				+ "join gemini.t_store ts  on pankui.store_code=ts.code where pankui.count_type='1' and pankui.count_month='"+beginDate+"' "
+				+ "group by ts.city_code,pankui.create_date ) aa having num=1) dpankui on aa.store_city_code=dpankui.city_code ";
+		//退款
+		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,7)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
+
+
+
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
 		Map<String, Object> map_result = new HashMap<String, Object>();
-		lst_data=ImpalaUtil.executeGuoan(sql);
-		map_result.put("gmv", lst_data);
+		map_result.put("gmv", list);
 		return map_result;
-		/*SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		map_result.put("gmv", lst_data);
-		return map_result;*/
 	}
 	@Override
-	public Map<String, Object> queryYesterdayprofit(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
-		String beginDate = dd.getBeginDate();
-		String endDate = dd.getEndDate();
-		String dateStr = "";
-		String provinceStr = "";
-		String cityStr = "";
+	public Map<String, Object> queryYesterdayprofit(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
+		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
+		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit"
+		+ " from (select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
+		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
+		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' ";
+		String beginDate = dynamicDto.getBeginDate();
+		if(StringUtils.isNotEmpty(dynamicDto.getBeginDate())){
+			sql = sql + "and strleft(dot.sign_time,10)='"+beginDate+"' ";
+		}
 		if(cityNO!=null&&cityNO.size()>0){
 			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
 			if(cityNo.startsWith("00")){
 				cityNo = cityNo.substring(1,cityNo.length());
 			}
-			cityStr+=" and ds.store_city_code='"+cityNo+"' ";
+			sql = sql + " and dot.store_city_code='"+cityNo+"' ";
 		}
 		if(provinceNO!=null&&provinceNO.size()>0){
-			provinceStr+=" and ds.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+			sql = sql + " and dot.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";;
 		}
-		if(beginDate!=null&&endDate!=null&&!"".equals(beginDate)&&!"".equals(endDate)){
-			dateStr = " WHERE ds.sign_time BETWEEN '"+beginDate+" 00:00:00' and '"+endDate+" 23:59:59' ";
+		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
+			Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
+			if (position_obj != null) {
+				sql = sql + " and (dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "' or dot.normal_store_id='"+(String) position_obj.get("platformid")+"')";
+			}else{
+				sql = sql + " and dot.store_code ='" + dynamicDto.getStoreNo().trim()+ "'";
+			}
 		}
-		String sql = "SELECT IFNULL(FLOOR(SUM(ds.order_profit)),0) AS order_profit FROM daqWeb.df_mass_order_total ds "+dateStr+provinceStr+cityStr;
-		List<Map<String, Object>> lst_data = null;
+		sql = sql + "group by dot.store_city_code order by dot.store_city_code";
+
+		//以日为单位不减报损和盘亏
+		//退款
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,10)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
+
+
+
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
 		Map<String, Object> map_result = new HashMap<String, Object>();
-		lst_data=ImpalaUtil.executeGuoan(sql);
-   	 	map_result.put("gmv", lst_data);
+		map_result.put("gmv", list);
 		return map_result;
 	}
 	@Override
-	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd,
-			List<Map<String, Object>> cityNO,
+	public Map<String, Object> getProfitRangeForWeek(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,
 			List<Map<String, Object>> provinceNO) {
-		Map<String, Object> map_all = new HashMap<String, Object>();
-		String cityStr1 = "";
-		String provinceStr1 = "";
+		String beginDate = dynamicDto.getBeginDate();
+		String endDate = dynamicDto.getEndDate();
+		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
+		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,from_unixtime(unix_timestamp(aa.sign_time),'yyyy-MM-dd') AS week_date "
+		+ " from (select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') as sign_time,"
+		+ "min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
+		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
+		+ "ifnull(dround(sum(case when dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as order_fee,"
+		+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit from df_mass_order_total dot,t_dist_citycode tdc,gemini.t_department_channel dc "
+		+ "where LPAD(dot.store_city_code, 4, '0')=tdc.cityno  and dc.id=dot.bussiness_group_id and dc.level=1 and dc.name not like '%测试%' "
+		+ "AND strleft (dot.sign_time, 10) >= '"+beginDate+"' AND strleft (dot.sign_time, 10) <= '"+endDate+"'";
+		String whereStr = " where 1=1 ";
+		String groupStr = " GROUP BY from_unixtime(unix_timestamp(aa.sign_time),'yyyy-MM-dd') ";
 		if(cityNO!=null&&cityNO.size()>0){
 			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
 			if(cityNo.startsWith("00")){
 				cityNo = cityNo.substring(1,cityNo.length());
 			}
-			cityStr1+=" and tor.store_city_code='"+cityNo+"' ";
+			whereStr +=  " and aa.store_city_code='"+cityNo+"' ";
 		}
 		if(provinceNO!=null&&provinceNO.size()>0){
-			provinceStr1+=" and tor.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
+			whereStr += " and aa.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";;
 		}
-		String sql = "SELECT IFNULL(FLOOR(SUM(order_profit)), 0) AS week_gmv , date_format(tor.sign_time, '%m-%d') AS week_date FROM df_mass_order_monthly tor " +
-				"WHERE (tor.store_name NOT LIKE '%测试%' AND tor.sign_time >= '"+dd.getBeginDate()+" 00:00:00' AND tor.sign_time <= '"+dd.getEndDate()+" 23:59:59' "+provinceStr1+cityStr1+") GROUP BY DATE(tor.sign_time)";
-		List<Map<String, Object>> lst_data = null;
-		try{
-	    	 SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-	    	 lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	     }catch (Exception e){
-	         e.printStackTrace();
-	     }
-		map_all.put("lst_data", lst_data);
-		return map_all;
+		sql = sql + "group by dot.store_city_code,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') order by dot.store_city_code";
+
+		//以日为单位不减报损和盘亏
+		//退款
+		sql = sql + ") aa left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd') AS return_time2,"
+				+ "store_city_code from df_mass_order_total where strleft (return_time, 10) >= '"+beginDate+"' and strleft (return_time, 10) <= '"+endDate+"'  group by store_city_code,"
+				+ "from_unixtime(unix_timestamp(return_time),'yyyy-MM-dd')) dd on aa.store_city_code=dd.store_city_code and aa.sign_time = dd.return_time2 ";
+
+		sql = sql +whereStr+groupStr;
+
+		List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("lst_data", list);
+		return map_result;
 	}
 
 	@Override

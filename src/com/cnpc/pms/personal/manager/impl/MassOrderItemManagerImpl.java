@@ -300,24 +300,44 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 		JSONObject jo = new JSONObject();
 		List<Map<String, Object>> orderProfitList = (List<Map<String, Object>>) dailyprofitMap.get("gmv");
 		if(orderProfitList!=null&&orderProfitList.size()>0){
-			jo.put("order_month_profit", orderProfitList.get(0).get("order_profit"));
+			jo.put("ims_profit", orderProfitList.get(0).get("ims_profit"));
+			jo.put("return_profit", orderProfitList.get(0).get("return_profit"));
+			jo.put("order_fee", orderProfitList.get(0).get("order_fee"));
+			jo.put("total_profit", orderProfitList.get(0).get("total_profit"));
+			jo.put("baosun", orderProfitList.get(0).get("baosun"));
+			jo.put("pankui", orderProfitList.get(0).get("pankui"));
+			jo.put("platform_profit", orderProfitList.get(0).get("platform_profit"));
 		}else{
-			jo.put("order_month_profit", 0);
+			jo.put("ims_profit", 0);
+			jo.put("return_profit", 0);
+			jo.put("order_fee", 0);
+			jo.put("total_profit", 0);
+			jo.put("baosun", 0);
+			jo.put("pankui", 0);
+			jo.put("platform_profit", 0);
 		}
 		json.put(jo);
 		return json.toString();
 	}
 	private String getYesterdayprofitData(DynamicDto dd,int month,Map<String,Object> dailyprofitMap){
 		JSONArray json = new JSONArray();
-        JSONObject jo = new JSONObject();
-        List<Map<String, Object>> orderProfitList = (List<Map<String, Object>>) dailyprofitMap.get("gmv");
-        if(orderProfitList!=null&&orderProfitList.size()>0){
-        	jo.put("order_yesterday_profit", orderProfitList.get(0).get("order_profit"));
-        }else{
-        	jo.put("order_yesterday_profit", 0);
-        }
-        json.put(jo);
-        return json.toString();
+		JSONObject jo = new JSONObject();
+		List<Map<String, Object>> orderProfitList = (List<Map<String, Object>>) dailyprofitMap.get("gmv");
+		if(orderProfitList!=null&&orderProfitList.size()>0){
+			jo.put("ims_profit", orderProfitList.get(0).get("ims_profit"));
+			jo.put("return_profit", orderProfitList.get(0).get("return_profit"));
+			jo.put("order_fee", orderProfitList.get(0).get("order_fee"));
+			jo.put("total_profit", orderProfitList.get(0).get("total_profit"));
+			jo.put("platform_profit", orderProfitList.get(0).get("platform_profit"));
+		}else{
+			jo.put("ims_profit", 0);
+			jo.put("return_profit", 0);
+			jo.put("order_fee", 0);
+			jo.put("total_profit", 0);
+			jo.put("platform_profit", 0);
+		}
+		json.put(jo);
+		return json.toString();
 	}
 	@Override
 	public Map<String, Object> queryOrderDetailBySN(String order_sn,String product_id) {
@@ -370,7 +390,11 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 	             minDateStr = sdf.format(minDate);   
 	           	 Map<String,Object> lst_map = new HashMap<String, Object>();
 	           	 lst_map.put("week_date", minDateStr.substring((minDateStr.indexOf("-")+1),minDateStr.length()));
-	           	 lst_map.put("week_gmv", 0);
+	           	 lst_map.put("platform_profit", 0);
+	           	 lst_map.put("ims_profit", 0);
+	           	 lst_map.put("order_fee", 0);
+	           	 lst_map.put("total_profit", 0);
+	           	 lst_map.put("return_profit", 0);
 				 for(int j=0;j<lst_data.size();j++){
 	    			Map<String,Object> lst_map_week = lst_data.get(j);
 	    			String dateStr = String.valueOf(lst_map_week.get("week_date"));
@@ -378,7 +402,11 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 	    				lst_data.remove(j);
 	    				String week_date = String.valueOf(lst_map_week.get("week_date"));
 	    				lst_map.put("week_date", week_date);
-	    				lst_map.put("week_gmv", lst_map_week.get("week_gmv"));
+	    				lst_map.put("platform_profit", lst_map_week.get("platform_profit"));
+	    				lst_map.put("ims_profit", lst_map_week.get("ims_profit"));
+	    				lst_map.put("order_fee", lst_map_week.get("order_fee"));
+	    				lst_map.put("total_profit", lst_map_week.get("total_profit"));
+	    				lst_map.put("return_profit", lst_map_week.get("return_profit"));
 	    				
 	    			}
 				}
