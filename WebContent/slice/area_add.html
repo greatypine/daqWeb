@@ -322,33 +322,68 @@
     }
 
     function selectTinVillage(_this){
-        var $building = $(_this).parent().parent().find('div[id="building_info"]');;
+        var tinVillage_id = $(_this).val();
+        var villageId = $($(_this).parent().parent().find('select:eq(1)')).val();
+        var $building = $(_this).parent().parent().find('div[id="building_info"]');
+        var areaInfo={
+            area_id:id,
+            village_id:villageId,
+            tin_village_id:tinVillage_id
+        }
+        doManager('areaManager','checkTinyVillageBindArea',[areaInfo,actionType],function(data){
+            if(data.result){
+                var jsonArea = JSON.parse(data.data);
+                if(jsonArea.village_name==null&&jsonArea.tiny_village_name==null){
+                    if(tinVillage_id==""){
+                        $building.html("全部");
+                        return;
+                    }
+                    if(!array_building.hasOwnProperty(tinVillage_id)){
+                        findBuilding(tinVillage_id);
+                    }
+                    var builds = array_building[tinVillage_id];
+                    if(builds != null || typeof (builds) == 'undefined') {
+                        var building_str = "";
+
+                        $(builds).each(function(index,build){
+                            building_str = ","+build.name+building_str;
+
+                        });
+
+                        if(building_str.length>12){
+                            building_str = building_str.substring(0,10) + "...";
+                        }
+                        $building.html(building_str.substring(1));
+
+                    }
+                }else{
+                    $$.showMessage('提示',jsonArea.village_name+"   "+jsonArea.tiny_village_name+ " 在其他片区已存在!",function () {
+                        // $("#saveButton").attr("disabled","disabled");
+                    });
+                    return;
+                }
+                // cur_area = jsonArea;
+                // store_id = jsonArea.store_id+"";
+                // $('#name').val(jsonArea.name);
+                //
+                // findStore(jsonArea.employee_a_no,jsonArea.employee_b_no);
+                //
+                // $("#town_name").val(jsonArea.town_id);
+                //
+                //
+                //
+                // for(var index in jsonArea.childrens){
+                //     var areainfo = jsonArea.childrens[index];
+                //     findVillage(areainfo.town_id);//查询社区
+                //     addRow(areainfo,"update");
+                // }
+            }
+        },false);
         
 //         $building.children().remove();
 //         $building.append('<option value="">全选</option>');
-        var tinVillage_id = $(_this).val();
-        if(tinVillage_id==""){
-        	 $building.html("全部");
-        	 return;
-        }
-        if(!array_building.hasOwnProperty(tinVillage_id)){
-            findBuilding(tinVillage_id);
-        }
-        var builds = array_building[tinVillage_id];
-        if(builds != null || typeof (builds) == 'undefined') {
-        	  var building_str = "";
-        	 
-              $(builds).each(function(index,build){
-            	  building_str = ","+build.name+building_str;
-                  
-              });
-             
-              if(building_str.length>12){
-            	  building_str = building_str.substring(0,10) + "...";
-              }
-              $building.html(building_str.substring(1));
-              
-        }
+
+
     }
 	
     var townInfo=null;
@@ -727,158 +762,166 @@
     		            	 $("#saveButton").html("正在保存...");
     		                 $("#saveButton").attr("disabled","disabled");
     		    	        //检测数据库中是否有已存在的areainfo
-    		    			doManager('areaManager','checkAreaIsRepeat',[area,actionType],function(data){
+    		    			doManager('areaManager','saveArea',[area,actionType],function(data){
     		    	            if(data.result){
     		    	            	var aiJson = JSON.parse(data.data);
-    		    	            	if(aiJson.length>0){//有重复的片区信息
-    		    	            		var tinyvillages = "";
-    		    	            	    var villages = "";
-    		    	            		for(var i=0;i<aiJson.length;i++){
-    		    	            			if(aiJson[i].tiny_village_name!=""){
-    		    	            				tinyvillages = tinyvillages+"、"+aiJson[i].tiny_village_name;
-    		    	            			}
-    		    	            			
-    		    	            			if(aiJson[i].village_name!=""){
-    		    	            				villages = villages+"、"+aiJson[i].village_name;
-    		    	            			}
-    		    	            			
-    		    	            		}
-    		    	            		 $$.showMessage('提示',villages.substring(1)+"   "+tinyvillages.substring(1)+ " 在其他片区已存在!",function(){
-		    		       	                	
-    		    	            			 $("#saveButton").html("保存");
-        		    		                 $("#saveButton").removeAttr("disabled");
-		    		       	                });
-    		    	            		$('.ui-dialog-titlebar-close').remove();
-    		    	            	}else{
+    		    	            	if(!aiJson.checkStatus){
+                                       $$.showMessage('提示',aiJson.checkDesc,function(){
 
-    		    	            	    doManager('areaManager','checkTinyAreaIsExcludeStore',area,function(data){//检测小区是否被当前门店录入坐标范围
-    		    		       	            if(data.result){
-    		    		       	            	var aiJson = JSON.parse(data.data);
-
-                                                if(aiJson.tinyvillageSbUnknown.length>0){
-
-
-                                                    $$.showMessage('提示',aiJson.tinyvillageSbUnknown.substring(1)+ " 还未被当前门店录入坐标范围!",function(){
-
-                                                        $("#saveButton").html("保存");
-                                                        $("#saveButton").removeAttr("disabled");
-                                                    });
-                                                    $('.ui-dialog-titlebar-close').remove();
-                                                    return;
-                                                }
-
-    		    		       	            	if(aiJson.excludeTinyAreaPri.length>0){
-
-        	    		    	            		
-        	    		    	            		 $$.showMessage('提示',aiJson.excludeTinyAreaPri.substring(1)+ " 还未被当前门店录入坐标范围!",function(){
-        			    		       	                	
-        	    		    	            			 $("#saveButton").html("保存");
-        	        		    		                 $("#saveButton").removeAttr("disabled");
-        			    		       	                });
-        	    		    	            		 $('.ui-dialog-titlebar-close').remove();
-        	    		    	            		 return;
-    		    		       	            	}
-    		    		       	            	if(aiJson.excludeTinyAreaPub.length>0){
-                                                    if(selectedTinyAreaByMap.length==0){
-                                                        $$.showMessage('提示',aiJson.excludeTinyAreaPub.substring(1)+ " 已经被其他门店录入坐标，请点击‘通过地图选择小区’执行小区选择的操作!",function(){
-
-                                                            $("#saveButton").html("保存");
-                                                            $("#saveButton").removeAttr("disabled");
-                                                        });
-                                                        $('.ui-dialog-titlebar-close').remove();
-                                                        return;
-                                                    }else{//检测非当前门店的小区是否通过地图选择
-                                                        var excludeTinyAreaIdArray = aiJson.excludeTinyAreaIdPub.substring(1).split(",");
-                                                        var excludeTintAreaNameArray  = aiJson.excludeTinyAreaPub.substring(1).split("、");
-                                                        var unSelectedTinyAreaByMap=[];
-                                                        for(var i=0;i<excludeTinyAreaIdArray.length;i++){
-                                                            if(selectedTinyAreaByMap.indexOf(parseInt(excludeTinyAreaIdArray[i]))<0){
-                                                                unSelectedTinyAreaByMap.push(excludeTintAreaNameArray[i]);
-                                                            }
-                                                        }
-
-                                                        if(unSelectedTinyAreaByMap.length>0){
-
-                                                            $$.showMessage('提示',unSelectedTinyAreaByMap.join("、")+ " 已经被其他门店录入坐标，请点击‘通过地图选择小区’执行小区选择的操作!",function(){
-
-                                                                $("#saveButton").html("保存");
-                                                                $("#saveButton").removeAttr("disabled");
-                                                            });
-                                                            $('.ui-dialog-titlebar-close').remove();
-                                                            return;
-                                                        }
-                                                    }
-
-                                                }
-
-                                                if(aiJson.includeTinyAreaPub.length>0){
-                                                    $$.showMessage('提示',aiJson.includeTinyAreaPub.substring(1)+" 暂时不能被当前门店选择使用!",function(){
-
-                                                        $("#saveButton").html("保存");
-                                                        $("#saveButton").removeAttr("disabled");
-                                                    });
-                                                    $('.ui-dialog-titlebar-close').remove();
-                                                    return;
-                                                }
-
-                                                // //检测选择的小区坐标是否完全在门店服务范围内
-                                                // var invalidTinyVillage=[];
-                                                // for(var j=0;j<childs.length;j++){
-                                                //     var temp_tinyVillageId = childs[j].tin_village_id;
-                                                //     for(var n=0;n<checkAreaTinyVillageArray.length;n++){
-                                                //
-                                                //         var temp_tinyVillageId1 = checkAreaTinyVillageArray[n].getExtData().tinyVillageId;
-                                                //
-                                                //         if(temp_tinyVillageId==temp_tinyVillageId1){
-                                                //             if(!AMap.GeometryUtil.isRingInRing(checkAreaTinyVillageArray[n].getPath(),checkServiceRange.getPath()))
-                                                //                 var temp_tinyVillageName = checkAreaTinyVillageArray[n].getExtData().tinyVillageName;
-                                                //                 invalidTinyVillage.push(temp_tinyVillageName);
-                                                //             }
-                                                //             break;
-                                                //         }
-                                                //     }
-                                                //
-                                                //
-                                                // if(invalidTinyVillage.length>0){
-                                                //     $$.showMessage('提示',invalidTinyVillage.join(",")+" 没有完全在门店服务范围内,请重新录入小区坐标!",function(){
-                                                //
-                                                //         $("#saveButton").html("保存");
-                                                //         $("#saveButton").removeAttr("disabled");
-                                                //     });
-                                                //     $('.ui-dialog-titlebar-close').remove();
-                                                //     return;
-                                                // }
-
-    		    		       	            		
-                                                 //执行保存
-                                                 doManager('areaManager','saveArea',area,function(data){
-                                                    if(data.result){
-                                                        if(data.data!="null"){
-                                                         $$.showMessage('提示','保存成功',function(){
-
-                                                            doBack();
-                                                            });
-                                                        }else{
-                                                            $$.showMessage('提示',"保存失败");
-                                                            $("#saveButton").html("保存");
-                                                            $("#saveButton").removeAttr("disabled");
-                                                        }
-
-                                                    }else{
-                                                        $$.showMessage('提示',data.message);
-                                                        $("#saveButton").html("保存");
-                                                        $("#saveButton").removeAttr("disabled");
-                                                    }
-                                                });
-
-    		    		       	            	
-    		    		       	            }else{
-    		    		       	                $$.showMessage('提示',data.message);
-    		    		       	                $("#saveButton").html("保存");
-        		    		                    $("#saveButton").removeAttr("disabled");
-    		    		       	            }
-    		    		       	        }); 
-    		    	            	}
+                                           $("#saveButton").html("保存");
+                                           $("#saveButton").removeAttr("disabled");
+                                       });
+                                       $('.ui-dialog-titlebar-close').remove();
+                                    }
+    		    	            	// if(aiJson.length>0){//有重复的片区信息
+    		    	            	// 	var tinyvillages = "";
+    		    	            	//     var villages = "";
+    		    	            	// 	for(var i=0;i<aiJson.length;i++){
+    		    	            	// 		if(aiJson[i].tiny_village_name!=""){
+    		    	            	// 			tinyvillages = tinyvillages+"、"+aiJson[i].tiny_village_name;
+    		    	            	// 		}
+    		    	            	//
+    		    	            	// 		if(aiJson[i].village_name!=""){
+    		    	            	// 			villages = villages+"、"+aiJson[i].village_name;
+    		    	            	// 		}
+    		    	            	//
+    		    	            	// 	}
+    		    	            	// 	 $$.showMessage('提示',villages.substring(1)+"   "+tinyvillages.substring(1)+ " 在其他片区已存在!",function(){
+		    		       	      //
+    		    	            	// 		 $("#saveButton").html("保存");
+        		    		        //          $("#saveButton").removeAttr("disabled");
+		    		       	      //           });
+    		    	            	// 	$('.ui-dialog-titlebar-close').remove();
+    		    	            	// }else{
+                                    //
+    		    	            	//     doManager('areaManager','checkTinyAreaIsExcludeStore',area,function(data){//检测小区是否被当前门店录入坐标范围
+    		    		       	  //           if(data.result){
+    		    		       	  //           	var aiJson = JSON.parse(data.data);
+                                    //
+                                     //            if(aiJson.tinyvillageSbUnknown.length>0){
+                                    //
+                                    //
+                                     //                $$.showMessage('提示',aiJson.tinyvillageSbUnknown.substring(1)+ " 还未被当前门店录入坐标范围!",function(){
+                                    //
+                                     //                    $("#saveButton").html("保存");
+                                     //                    $("#saveButton").removeAttr("disabled");
+                                     //                });
+                                     //                $('.ui-dialog-titlebar-close').remove();
+                                     //                return;
+                                     //            }
+                                    //
+    		    		       	  //           	if(aiJson.excludeTinyAreaPri.length>0){
+                                    //
+        	    		    	    //
+        	    		    	    //         		 $$.showMessage('提示',aiJson.excludeTinyAreaPri.substring(1)+ " 还未被当前门店录入坐标范围!",function(){
+        			    		     //
+        	    		    	    //         			 $("#saveButton").html("保存");
+        	        		    	// 	                 $("#saveButton").removeAttr("disabled");
+        			    		     //   	                });
+        	    		    	    //         		 $('.ui-dialog-titlebar-close').remove();
+        	    		    	    //         		 return;
+    		    		       	  //           	}
+    		    		       	  //           	if(aiJson.excludeTinyAreaPub.length>0){
+                                     //                if(selectedTinyAreaByMap.length==0){
+                                     //                    $$.showMessage('提示',aiJson.excludeTinyAreaPub.substring(1)+ " 已经被其他门店录入坐标，请点击‘通过地图选择小区’执行小区选择的操作!",function(){
+                                    //
+                                     //                        $("#saveButton").html("保存");
+                                     //                        $("#saveButton").removeAttr("disabled");
+                                     //                    });
+                                     //                    $('.ui-dialog-titlebar-close').remove();
+                                     //                    return;
+                                     //                }else{//检测非当前门店的小区是否通过地图选择
+                                     //                    var excludeTinyAreaIdArray = aiJson.excludeTinyAreaIdPub.substring(1).split(",");
+                                     //                    var excludeTintAreaNameArray  = aiJson.excludeTinyAreaPub.substring(1).split("、");
+                                     //                    var unSelectedTinyAreaByMap=[];
+                                     //                    for(var i=0;i<excludeTinyAreaIdArray.length;i++){
+                                     //                        if(selectedTinyAreaByMap.indexOf(parseInt(excludeTinyAreaIdArray[i]))<0){
+                                     //                            unSelectedTinyAreaByMap.push(excludeTintAreaNameArray[i]);
+                                     //                        }
+                                     //                    }
+                                    //
+                                     //                    if(unSelectedTinyAreaByMap.length>0){
+                                    //
+                                     //                        $$.showMessage('提示',unSelectedTinyAreaByMap.join("、")+ " 已经被其他门店录入坐标，请点击‘通过地图选择小区’执行小区选择的操作!",function(){
+                                    //
+                                     //                            $("#saveButton").html("保存");
+                                     //                            $("#saveButton").removeAttr("disabled");
+                                     //                        });
+                                     //                        $('.ui-dialog-titlebar-close').remove();
+                                     //                        return;
+                                     //                    }
+                                     //                }
+                                    //
+                                     //            }
+                                    //
+                                     //            if(aiJson.includeTinyAreaPub.length>0){
+                                     //                $$.showMessage('提示',aiJson.includeTinyAreaPub.substring(1)+" 暂时不能被当前门店选择使用!",function(){
+                                    //
+                                     //                    $("#saveButton").html("保存");
+                                     //                    $("#saveButton").removeAttr("disabled");
+                                     //                });
+                                     //                $('.ui-dialog-titlebar-close').remove();
+                                     //                return;
+                                     //            }
+                                    //
+                                     //            // //检测选择的小区坐标是否完全在门店服务范围内
+                                     //            // var invalidTinyVillage=[];
+                                     //            // for(var j=0;j<childs.length;j++){
+                                     //            //     var temp_tinyVillageId = childs[j].tin_village_id;
+                                     //            //     for(var n=0;n<checkAreaTinyVillageArray.length;n++){
+                                     //            //
+                                     //            //         var temp_tinyVillageId1 = checkAreaTinyVillageArray[n].getExtData().tinyVillageId;
+                                     //            //
+                                     //            //         if(temp_tinyVillageId==temp_tinyVillageId1){
+                                     //            //             if(!AMap.GeometryUtil.isRingInRing(checkAreaTinyVillageArray[n].getPath(),checkServiceRange.getPath()))
+                                     //            //                 var temp_tinyVillageName = checkAreaTinyVillageArray[n].getExtData().tinyVillageName;
+                                     //            //                 invalidTinyVillage.push(temp_tinyVillageName);
+                                     //            //             }
+                                     //            //             break;
+                                     //            //         }
+                                     //            //     }
+                                     //            //
+                                     //            //
+                                     //            // if(invalidTinyVillage.length>0){
+                                     //            //     $$.showMessage('提示',invalidTinyVillage.join(",")+" 没有完全在门店服务范围内,请重新录入小区坐标!",function(){
+                                     //            //
+                                     //            //         $("#saveButton").html("保存");
+                                     //            //         $("#saveButton").removeAttr("disabled");
+                                     //            //     });
+                                     //            //     $('.ui-dialog-titlebar-close').remove();
+                                     //            //     return;
+                                     //            // }
+                                    //
+    		    		       	  //
+                                     //             //执行保存
+                                     //             doManager('areaManager','saveArea',area,function(data){
+                                     //                if(data.result){
+                                     //                    if(data.data!="null"){
+                                     //                     $$.showMessage('提示','保存成功',function(){
+                                    //
+                                     //                        doBack();
+                                     //                        });
+                                     //                    }else{
+                                     //                        $$.showMessage('提示',"保存失败");
+                                     //                        $("#saveButton").html("保存");
+                                     //                        $("#saveButton").removeAttr("disabled");
+                                     //                    }
+                                    //
+                                     //                }else{
+                                     //                    $$.showMessage('提示',data.message);
+                                     //                    $("#saveButton").html("保存");
+                                     //                    $("#saveButton").removeAttr("disabled");
+                                     //                }
+                                     //            });
+                                    //
+    		    		       	  //
+    		    		       	  //           }else{
+    		    		       	  //               $$.showMessage('提示',data.message);
+    		    		       	  //               $("#saveButton").html("保存");
+        		    		        //             $("#saveButton").removeAttr("disabled");
+    		    		       	  //           }
+    		    		       	  //       });
+    		    	            	// }
     		    	            	
     		    	            }else{
     		    	                $$.showMessage('提示',data.message,function(){
