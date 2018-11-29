@@ -16,6 +16,7 @@ import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.UserGroup;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserGroupManager;
@@ -80,6 +81,8 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 	//查询开通线上人员列表 
 	@Override
 	public Map<String, Object> queryRegOnLineHumanList(QueryConditions condition) {
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		UserDTO userDTO = userManager.getCurrentUserDTO();
 		Map<String, Object> returnMap = new java.util.HashMap<String, Object>();
 		PageInfo pageInfo = condition.getPageinfo();
 		String name = null;
@@ -91,9 +94,22 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 		FSP fsp = new FSP();
 		StringBuffer sbfCondition = new StringBuffer();
 		sbfCondition.append("1=1");
+		String userCode = userDTO.getUsergroup().getCode();
+		
 		if(name!=null&&name.length()>0) {
 			sbfCondition.append(" and name like '%"+name+"%'");
+		}else {
+			if(userCode.equals("GLY")) {
+				sbfCondition.append(" and 1=1");
+			}else if(userCode.equals("ZBCPGLBGLY")) {
+				sbfCondition.append(" and groupcode='ZBCPGLB'");
+			}else if(userCode.equals("ZBCSGLBGLY")){
+				sbfCondition.append(" and groupcode='ZBCSGLB'");
+			}else {
+				sbfCondition.append(" and 1=0");
+			}
 		}
+		
 		IFilter iFilter = FilterFactory.getSimpleFilter(sbfCondition.toString());
 		fsp.setPage(pageInfo);
 		fsp.setSort(SortFactory.createSort("id",ISort.DESC));
