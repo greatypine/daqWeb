@@ -976,11 +976,22 @@
 
     map.on("click",function(e){
         setNavListVisible(false);
-        if(!serviceRange.contains([e.lnglat.getLng(),e.lnglat.getLat()])){
-            if(e.type=="click") {
-                throw false;
+        //if(!serviceRange[0].contains([e.lnglat.getLng(),e.lnglat.getLat()]) && !serviceRange[1].contains([e.lnglat.getLng(),e.lnglat.getLat()])){
+        var checkResult = true;
+        for(var i=0;i<serviceRange.getPath().length;i++){
+            if(!AMap.GeometryUtil.isPointInRing([e.lnglat.getLng(),e.lnglat.getLat()],serviceRange.getPath()[i])){
+
+                checkResult=false;
+            }else{
+                checkResult=true;
+                break;
             }
+
         }
+        if(!checkResult&&e.type=="click") {
+            throw false;
+        }
+
     });
 
     var drawPolygon = function (map,areaAry, idx) {
@@ -1104,10 +1115,22 @@
     };
 
     function savePolygon(areaAry, idx) {
-    	if(!AMap.GeometryUtil.isRingInRing(areaAry[idx].polygon.getPath(),serviceRange.getPath())){
-    		$$.showMessage("系统信息","坐标范围超出门店服务范围，请修改后保存！");
-    		return ;
-    	};
+
+        var checkResult = true;
+        for(var i=0;i<serviceRange.getPath().length;i++){
+            if(!AMap.GeometryUtil.isRingInRing(areaAry[idx].polygon.getPath(),serviceRange.getPath()[i])){
+
+                checkResult=false;
+            }else{
+                checkResult=true;
+                break;
+            }
+
+        }
+        if(!checkResult) {
+            $$.showMessage("系统信息","坐标范围超出门店服务范围，请修改后保存！");
+            return ;
+        }
         var requestPara = {};
         requestPara['tiny_village_id']=areaAry[idx].id;
         // 设置后端保存信息

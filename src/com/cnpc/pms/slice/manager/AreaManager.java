@@ -19,7 +19,15 @@ public interface AreaManager extends IManager {
 
 	Area queryArea(Long id);
 
-	Area saveArea(Area area);
+	Area saveArea_discard(Area area);
+
+	/**
+	 * @Description 验证并保存片区
+	 * @author gbl
+	 * @date 2018/11/28 15:13
+	 **/
+
+	public Map<String,Object> saveArea(Area area,String actionType);
 
 	Area deleteArea(Long id);
 
@@ -303,4 +311,15 @@ public interface AreaManager extends IManager {
 	 **/
 
 	public  Map<String,Object> updateTinyVillageOfAreaAndStore(Long storeId,Long tinyVillageId,Long areaId);
+
+	/**
+	 * @Description 检测小区是否已经绑定片区
+	 * @author gbl
+	 * @date 2018/11/29 9:39
+	 **/
+
+	public AreaInfo checkTinyVillageBindArea(AreaInfo areaInfo,String actionType);
+
+
+
 }

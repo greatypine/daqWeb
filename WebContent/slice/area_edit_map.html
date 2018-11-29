@@ -771,21 +771,35 @@
 				}else if(parseInt(areaTag)==3){//未划片小区
 					if(currentStore.storeno==storeNo){
 
-                        if(!AMap.GeometryUtil.isRingInRing(e.target.getPath(),serviceRange.getPath())){
-                            layer.msg("该小区不在本店服务范围内，无法分配片区，请重新录入小区坐标！",{"time":2000});
-                        }else{
 
-                            e.target.setOptions({
-                                strokeColor:$fillColor_sel,
-                                fillColor:$fillColor_sel, //填充色
-                                fillOpacity: 0.6,//填充透明度
-                            });
-                            var areaNo =  e.target.getExtData().areaNo;
-                            var areaName =  e.target.getExtData().areaName;
-                            var name =  e.target.getExtData().tinyVillageName;
-                            e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"belong":belong});
-                            window.parent.selectedTinyAreaByMap.push(tinyVillageId);
+                        var checkResult = true;
+                        for(var i=0;i<serviceRange.getPath().length;i++){
+                            if(!AMap.GeometryUtil.isRingInRing(e.target.getPath(),serviceRange.getPath()[i])){
+
+                                checkResult=false;
+                            }else{
+                                checkResult=true;
+                                break;
+                            }
+
                         }
+                        if(!checkResult) {
+                            layer.msg("该小区不在本店服务范围内，无法分配片区，请重新录入小区坐标！",{"time":2000});
+                            return ;
+                        }
+
+
+						e.target.setOptions({
+							strokeColor:$fillColor_sel,
+							fillColor:$fillColor_sel, //填充色
+							fillOpacity: 0.6,//填充透明度
+						});
+						var areaNo =  e.target.getExtData().areaNo;
+						var areaName =  e.target.getExtData().areaName;
+						var name =  e.target.getExtData().tinyVillageName;
+						e.target.setExtData({"storeno":storeNo,"tinyVillageId":tinyVillageId,"tinyVillageName":name,"villageId":villageId,"townId":townId,"areaNo":areaNo,"areaName":areaName,"code":code,"areaTag":4,"belong":belong});
+						window.parent.selectedTinyAreaByMap.push(tinyVillageId);
+
 
 					}else if(currentStore.storeno!=storeNo&&belong=="public"){//小区非当前门店所画且是公有状态
                         if(!AMap.GeometryUtil.isRingInRing(e.target.getPath(),serviceRange.getPath())){
