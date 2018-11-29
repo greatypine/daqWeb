@@ -96,7 +96,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 	}
 
 	@Override
-	public Area saveArea(Area area) {
+	public Area saveArea_discard(Area area) {
 		AreaInfoManager areaInfoManager = (AreaInfoManager) SpringHelper.getBean("areaInfoManager");
 		AreaHistoryManager areaHistoryManager = (AreaHistoryManager) SpringHelper.getBean("areaHistoryManager");
 		AreaInfoHistoryManager areaInfoHistoryManager = (AreaInfoHistoryManager) SpringHelper
@@ -208,6 +208,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			villageSB = villageSB.length()>0?villageSB.deleteCharAt(0):villageSB;
 			tinyVillageSB = tinyVillageSB.length()>0?tinyVillageSB.deleteCharAt(0):tinyVillageSB;
 			result.put("checkStatus",false);
+			result.put("checkResult","bindByArea");
 			result.put("checkDesc",villageSB.toString()+" "+tinyVillageSB.toString()+" 在其他片区已存在!");
 			return result;
 		}
@@ -217,6 +218,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		Object tinyvillageSbUnknown = checkTinyAreaResult.get("tinyvillageSbUnknown");
 		if(tinyvillageSbUnknown!=null&&tinyvillageSbUnknown.toString().length()>0){
 			result.put("checkStatus",false);
+			result.put("checkResult","noTinyArea");
 			result.put("checkDesc",tinyvillageSbUnknown.toString().substring(1)+" 还未被当前门店录入坐标范围!");
 			return result;
 		}
@@ -224,6 +226,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		Object excludeTinyAreaPri = checkTinyAreaResult.get("excludeTinyAreaPri");
 		if(excludeTinyAreaPri!=null&&excludeTinyAreaPri.toString().length()>0){
 			result.put("checkStatus",false);
+			result.put("checkResult","noTinyArea");
 			result.put("checkDesc",excludeTinyAreaPri.toString().substring(1)+" 还未被当前门店录入坐标范围!");
 			return result;
 		}
@@ -232,14 +235,17 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		Object excludeTinyAreaIdPub = checkTinyAreaResult.get("excludeTinyAreaIdPub");
 		if(excludeTinyAreaPub!=null&&excludeTinyAreaPub.toString().length()>0){
 			result.put("checkStatus",false);
+			result.put("checkResult","selectByMap");
 			result.put("checkDesc",excludeTinyAreaPub.toString().substring(1)+" 已经被其他门店录入坐标，请点击‘通过地图选择小区’执行小区选择的操作!");
-			result.put("checkData",excludeTinyAreaIdPub);
+			result.put("checkData1",excludeTinyAreaIdPub);
+			result.put("checkData2",excludeTinyAreaPub);
 			return result;
 		}
 
 		Object includeTinyAreaPub = checkTinyAreaResult.get("includeTinyAreaPub");
 		if(includeTinyAreaPub!=null&&includeTinyAreaPub.toString().length()>0){
 			result.put("checkStatus",false);
+			result.put("checkResult","noUse");
 			result.put("checkDesc",includeTinyAreaPub.toString().substring(1)+" 暂时不能被当前门店选择使用!");
 			return result;
 		}
@@ -322,6 +328,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			e.printStackTrace();
 			return null;
 		}
+		saveResult.put("checkStatus",true);
 		saveResult.put("saveResult",save_area);
 		return saveResult;
 
@@ -1111,17 +1118,23 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			//Filters.eq("storeId", store.getPlatformid())
 			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
-			Document document = dIterable.first();
 
-			if (document == null) {
+
+			MongoCursor<Document> cursor0 = dIterable.iterator();
+
+			if(cursor0==null){
 				result.put("store", store);
-				result.put("code", CodeEnum.nullData.getValue());
-				result.put("message", "门店服务范围不存在");
+				result.put("code",CodeEnum.nullData.getValue());
+				result.put("message","门店服务范围不存在");
 				return result;
-			} else {
-				org.json.JSONObject jObject = new org.json.JSONObject(document.toJson());
-				result.put("serviceArea", JSONArray.parse(jObject.get("vertex").toString()));
 			}
+
+			JSONArray ja = new JSONArray();
+			while (cursor0.hasNext()) {
+				Document doc = cursor0.next();
+				ja.add(doc.get("vertex"));
+			}
+			result.put("serviceArea", ja);
 
 
 
@@ -1307,16 +1320,21 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			System.out.println(">>>>>>>>>>>>>>>>>>>>>>storeid:"+store.getPlatformid()+"   platformid:"+store.getPlatformid());
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
-			Document document = dIterable.first();
-           
-			if (document == null) {
-				result.put("code", CodeEnum.nullData.getValue());
-				result.put("message", "门店服务范围不存在");
+			MongoCursor<Document> cursor = dIterable.iterator();
+
+			if(cursor==null){
+				result.put("code",CodeEnum.nullData.getValue());
+				result.put("message","门店服务范围不存在");
 				return result;
-			} else {
-				org.json.JSONObject jObject = new org.json.JSONObject(document.toJson());
-				result.put("serviceArea", JSONArray.parse(jObject.get("vertex").toString()));
 			}
+
+			JSONArray ja = new JSONArray();
+			while (cursor.hasNext()) {
+				Document doc = cursor.next();
+				ja.add(doc.get("vertex"));
+			}
+			result.put("serviceArea", ja);
+
 
 			MongoCollection<Document> collection2 = database.getCollection("store_position");
 			FindIterable<Document> dIterable2 = collection2.find(new Document("_id", store.getPlatformid()).append("status", 0));
@@ -1573,18 +1591,25 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
-			Document document = dIterable.first();
 
-			
-			if (document == null) {
+
+			MongoCursor<Document> cursor0 = dIterable.iterator();
+
+			if(cursor0==null){
 				result.put("store", store);
-				result.put("code", CodeEnum.nullData.getValue());
-				result.put("message", "门店服务范围不存在");
+				result.put("code",CodeEnum.nullData.getValue());
+				result.put("message","门店服务范围不存在");
 				return result;
-			} else {
-				org.json.JSONObject jObject = new org.json.JSONObject(document.toJson());
-				result.put("serviceArea", JSONArray.parse(jObject.get("vertex").toString()));
 			}
+
+			JSONArray ja = new JSONArray();
+			while (cursor0.hasNext()) {
+				Document doc = cursor0.next();
+				ja.add(doc.get("vertex"));
+			}
+			result.put("serviceArea", ja);
+			
+
 			
 			// 查询小区坐标
 			collection = database.getCollection("tiny_area");

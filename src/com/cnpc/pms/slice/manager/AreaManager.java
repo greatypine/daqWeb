@@ -19,7 +19,7 @@ public interface AreaManager extends IManager {
 
 	Area queryArea(Long id);
 
-	Area saveArea(Area area);
+	Area saveArea_discard(Area area);
 
 	/**
 	 * @Description 验证并保存片区
