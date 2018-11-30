@@ -233,8 +233,8 @@
                                         </dd>
                                         <dd id="city_net"><a href="javascript:goToCityNet()"><span class="fa fa-institution"></span>线下网络体系</a></dd>
                                         <dd id="store_rent"><a href="javascript:goToStoreRent()"><span class="fa fa-bicycle"></span>门店租赁统计</a></dd>
-                                        <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-cubes"></span>产品运营</a></dd>
-                                        <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-comments-o"></span>混片情况</a></dd>
+                                        <!--<dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-cubes"></span>产品运营</a></dd>
+                                        <dd class="logo-prohibit"><a href="javascript:js_alert()"><span class="fa fa-comments-o"></span>混片情况</a></dd>-->
                                     </dl>
                                     <dl class="pull-left" id="left-showa4">
                                         <dt><i></i>排名数据</dt>
@@ -487,8 +487,9 @@
         <div class="box no-border">
           <div class="box-header h4 text-right" style="margin-bottom: -5px; margin-top:0;font-size: 12px;cursor: pointer;color: #747474" id="customer_analysis_more">更多</div>
           <div class="box-body no-padding">
-            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
+            <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip5();" onmouseout="hideTooltip5();">
               <h4 class="gaugetb4">昨日毛利</h4>
+              <font id="attention5" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-20px;z-index: 1000;display:none;">销售收入-营销</font>	
               <div class="col-sm-8 no-padding gaugetb4" id="tradesumofyesprofit"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
@@ -514,7 +515,7 @@
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin" onmouseover="showTooltip4();" onmouseout="hideTooltip4();">
               <h4 class="gaugetb4">当月毛利</h4>
-              <font id="attention4" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-35px;z-index: 1000;display:none;">销售收入-已退货-营销费用-报损-盘亏</font>	
+              <font id="attention4" style="color:#FFFFFF;font-size: 12px;position: absolute;top:-20px;z-index: 1000;display:none;">销售收入-营销-损耗</font>	
               <div class="col-sm-8 no-padding gaugetb4" id="tradesumofcurmonthsprofit"></div>
             </div>
             <div class="info_bottom_dl info_bottom_right pull-right col-sm-6 no-margin">
