@@ -394,8 +394,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '毛利走势',
-        type:'line',
+        name: '毛利走势',        type:'line',
         data:[],
         smooth: true,
         showAllSymbol: true,
@@ -403,9 +402,9 @@ var initPageElements = function () {
         symbolSize: 10,
         itemStyle : {  
             normal : {  
-                color:'#26C0C0',  //圈圈的颜色
+                color:'#ea89ed',  //圈圈的颜色
                 lineStyle:{  
-                    color:'#26C0C0'  //线的颜色
+                    color:'#ea89ed'  //线的颜色
                 }  
             }
         },
@@ -5538,6 +5537,12 @@ function showTooltip3(){
 }
 function hideTooltip3(){
 	$("#attention3").hide();
+}
+function showTooltip4(){
+	$("#attention4").show();
+}
+function hideTooltip4(){
+	$("#attention4").hide();
 }
 function getScreenWidth(){
 /*
