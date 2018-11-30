@@ -5544,6 +5544,12 @@ function showTooltip4(){
 function hideTooltip4(){
 	$("#attention4").hide();
 }
+function showTooltip5(){
+	$("#attention5").show();
+}
+function hideTooltip5(){
+	$("#attention5").hide();
+}
 function getScreenWidth(){
 /*
   var screenWidth = screen.width;
