@@ -291,7 +291,7 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 										return result;
 									}else{
 										result.put("code",CodeEnum.nullData.getValue());
-										result.put("message","当前小区的小区编号错误");
+										result.put("message","当前区域已经被"+temp_store.getName()+"所画的编号为（"+tinyVillageNo+"）的小区占用");
 										return result;
 									}
 									
