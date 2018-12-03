@@ -956,7 +956,10 @@ var initPageElements = function () {
       {
       	cursor: 'pointer',
         name: 'GMV',
-        type: 'bar',xAxisIndex: 0,yAxisIndex: 0,barWidth:'55%',
+        type: 'bar',xAxisIndex: 0,yAxisIndex: 0,
+        //barWidth:'55%',
+        barWidth : 40,//柱图宽度
+        barMaxWidth:40,//最大宽度
         itemStyle:{
           normal:{
             barBorderRadius: 50,
