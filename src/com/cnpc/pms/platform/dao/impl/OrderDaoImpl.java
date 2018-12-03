@@ -1824,68 +1824,7 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	         session.close();
 	     }
 	     return map_result;
-	}
-	@Override
-	public Map<String, Object> queryStoreCustmerCount(DynamicDto dd,List<Map<String, Object>> cityNO,
-			List<Map<String, Object>> provinceNO,PageInfo pageInfo) {
-		String cityStr1 = "";
-		String provinceStr1 = "";
-		if(cityNO!=null&&cityNO.size()>0){
-			String cityNo = String.valueOf(cityNO.get(0).get("cityno"));
-			if(cityNo.startsWith("00")){
-				cityNo = cityNo.substring(1,cityNo.length());
-			}
-			cityStr1+=" and ts.city_code='"+cityNo+"' ";
-		}
-		if(provinceNO!=null&&provinceNO.size()>0){
-			provinceStr1+=" and ts.province_code='"+provinceNO.get(0).get("gb_code")+"'";
-		}
-		Map<String, Object> maps = new HashMap<String, Object>();
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
-		String sql = "SELECT count(tr.customer_id) AS customer_count,ts.`name` AS store_name,ts.city_code as city_code,concat(tr.store_id,'') as store_id FROM " +
-				"df_customer_order_month_trade tr LEFT JOIN t_store ts ON tr.store_id = ts.id  WHERE tr.order_ym = '"+
-				dd.getYear()+(dd.getMonth()<10?("0"+dd.getMonth()):dd.getMonth())+"' "+cityStr1+provinceStr1+" and ts.`name` is not null GROUP BY ts.`name` ORDER BY customer_count DESC ";
-		String sql_count = "SELECT count(tdd.customer_count) as customer_cnt from ( "+sql+") tdd ";
-		Map<String, Object> map_result = new HashMap<String, Object>();
-		List<?> list = null;
-		try {
-			Query query_count = session.createSQLQuery(sql_count);
-			List<?> total = query_count
-					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			if(pageInfo!=null){
-				if(total!=null&&total.size()>0){
-					maps = (Map<String, Object>) total.get(0);
-					pageInfo.setTotalRecords(Integer.valueOf(maps.get("customer_cnt").toString()));
-				}else{
-					pageInfo.setTotalRecords(Integer.valueOf(0));
-				}
-			}
-			Query query = session.createSQLQuery(sql);
-			
-			if(pageInfo==null){
-				list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-			}else{
-				list=query
-				.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
-				.setFirstResult(
-						pageInfo.getRecordsPerPage()
-								* (pageInfo.getCurrentPage() - 1))
-				.setMaxResults(pageInfo.getRecordsPerPage()).list();
-			}
-			if(pageInfo!=null){
-				Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
-				map_result.put("pageinfo", pageInfo);
-				map_result.put("total_pages", total_pages);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			session.close();
-		}
-		map_result.put("gmv", list);
-		return map_result;
-	}
-	
+	}	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> queryPositionByOrdersn(String order_sn) {

@@ -1044,4 +1044,11 @@ public interface DynamicDao extends IDAO{
      * @return
      */
     public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto,PageInfo pageInfo);
+    /**
+	 * 查询daqWeb库门店用户量-原来在gemini
+	 * @param dd
+	 * @param pageInfo
+	 * @return
+	 */
+	Map<String, Object> queryStoreCustmerCount(DynamicDto dd, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO,PageInfo pageInfo);
 }

@@ -3950,7 +3950,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 						map.put("cityno", dynamic.get("city_code"));
 						cityNO.add(map);
 						if(dynamicByCityMap.get(String.valueOf(dynamic.get("city_code")))==null){
-							dynamicByCity = (Map<String, Object>) orderDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
+							dynamicByCity = (Map<String, Object>) dynamicDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
 							dynamicByCityMap.put(String.valueOf(dynamic.get("city_code")), dynamicByCity);
 						}
 					}else if("4".equals(methodKey)){
@@ -4985,12 +4985,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> dynamicList = null;
 		Map<String,Object> dynamicAllList = null;
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
-		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		String[] str_headers = new String[4];
 		String[] headers_key = new String[4];
 		String tableName = "";
 		int target = dynamicDto.getTarget();
-		String cityStr = String.valueOf(dynamicDto.getCityId());
 		DynamicDto dynamicDto2 = new DynamicDto();
 		dynamicDto2.setCityId(null);
 		dynamicDto2.setProvinceId(null);
@@ -5033,8 +5031,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(province_id!=null&&province_id!=""){
 					provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
 				}
-				dynamicList = orderDao.queryStoreCustmerCount(dynamicDto,cityNO,provinceNO,null);
-				dynamicAllList = orderDao.queryStoreCustmerCount(dynamicDto2,null,null,null);
+				dynamicList = dynamicDao.queryStoreCustmerCount(dynamicDto,cityNO,provinceNO,null);
+				dynamicAllList = dynamicDao.queryStoreCustmerCount(dynamicDto2,null,null,null);
 				list = this.getRankList(dynamicList, dynamicAllList,"store_name",dynamicDto,"3");
 				tableName = "门店(本月新用户量)排名";
 				str_headers[2]="门店名称";

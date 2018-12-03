@@ -3880,4 +3880,70 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }
         return map_result;
     }
+
+	@Override
+	public Map<String, Object> queryStoreCustmerCount(DynamicDto dd,List<Map<String, Object>> cityNO,
+			List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+	//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+	//		zx = "yes";
+	//	}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+				provinceStr+=" AND ts.province_id='"+province_id+"' ";
+			}
+		}
+		if(cityNO!=null&&cityNO.size()>0){
+			if(city_id!=null&&city_id!=""){
+				cityStr+=" and d.id='"+city_id+"' ";
+			}else if("yes".equals(zx)){
+				cityStr+=" and d.id='"+province_id+"' ";
+			}
+		}
+		Map<String, Object> maps = new HashMap<String, Object>();
+		String sql = "SELECT count(tr.customer_id) AS customer_count,ts.`name` AS store_name,case WHEN LEFT(d.cityno,2)='00' THEN right(d.cityno,3) ELSE d.cityno END AS city_code,concat(tr.store_id,'') as store_id FROM " +
+				"df_customer_order_month_trade_new tr LEFT JOIN t_store ts ON tr.store_id = ts.platformid left join t_dist_citycode d on d.cityname=ts.city_name  WHERE tr.order_ym = '"+
+				dd.getYear()+(dd.getMonth()<10?("0"+dd.getMonth()):dd.getMonth())+"' "+provinceStr+cityStr+" and ts.`name` is not null GROUP BY ts.`name` ORDER BY customer_count DESC ";
+		String sql_count = "SELECT count(tdd.customer_count) as customer_cnt from ( "+sql+") tdd ";
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		List<?> list = null;
+		try {
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+			List<?> total = query_count
+					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if(pageInfo!=null){
+				if(total!=null&&total.size()>0){
+					maps = (Map<String, Object>) total.get(0);
+					pageInfo.setTotalRecords(Integer.valueOf(maps.get("customer_cnt").toString()));
+				}else{
+					pageInfo.setTotalRecords(Integer.valueOf(0));
+				}
+			}
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			
+			if(pageInfo==null){
+				list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			}else{
+				list=query
+				.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(
+						pageInfo.getRecordsPerPage()
+								* (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+			}
+			if(pageInfo!=null){
+				Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+				map_result.put("pageinfo", pageInfo);
+				map_result.put("total_pages", total_pages);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map_result.put("gmv", list);
+		return map_result;
+	}
 }

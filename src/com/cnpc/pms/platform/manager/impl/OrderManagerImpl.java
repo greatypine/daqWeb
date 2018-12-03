@@ -653,7 +653,6 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 			Map<String,Object> dynamicAllMap = null;
 			Map<String,Object> result = new HashMap<String,Object>();
 			StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
-			OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 			List<Map<String, Object>> cityList = dynamicDao.selectAllCity();
 			if(city_id!=null){
@@ -662,11 +661,11 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 			if(province_id!=null&&province_id!=""){
 				provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
 			}
-			customercList = orderDao.queryStoreCustmerCount(dd,cityNO,provinceNO,pageInfo);
+			customercList = dynamicDao.queryStoreCustmerCount(dd,cityNO,provinceNO,pageInfo);
 			DynamicDto dd1 = dd;
 			dd1.setCityId(null);
 			dd1.setProvinceId(null);
-			dynamicAllMap = orderDao.queryStoreCustmerCount(dd1,null,null,null);
+			dynamicAllMap = dynamicDao.queryStoreCustmerCount(dd1,null,null,null);
 			customercList.put("cityList", cityList);
 			String gmv = this.getRankUserDataJson(customercList,dynamicAllMap,dd,sign).toString();
 			result.put("gmv", gmv);
@@ -677,7 +676,7 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 		}
 		public JSONArray getRankUserDataJson(Map<String,Object> dynamicMap,Map<String,Object> dynamicAllMap,DynamicDto ddDto,String sign){
 			JSONArray json = new JSONArray();
-			OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
+			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 			List<Map<String,Object>> dynamicList = null;
 			List<Map<String,Object>> dynamicAllList = null;
 			Map<String,Object> dynamicByCity = null;
@@ -719,7 +718,7 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 						map.put("cityno", dynamic.get("city_code"));
 						cityNO.add(map);
 						if(dynamicByCityMap.get(String.valueOf(dynamic.get("city_code")))==null){
-							dynamicByCity = (Map<String, Object>) orderDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
+							dynamicByCity = (Map<String, Object>) dynamicDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
 							dynamicByCityMap.put(String.valueOf(dynamic.get("city_code")), dynamicByCity);
 						}
 						dynamicByCityList = (List<Map<String, Object>>)dynamicByCityMap.get(dynamic.get("city_code")).get("gmv");

@@ -342,13 +342,6 @@ public interface OrderDao {
 	
 	public List<Map<String, Object>> queryOrderByCustomerIdTop20(String customer_id);
 	
-	/**
-	 * 查询gemini库门店用户量
-	 * @param dd
-	 * @param pageInfo
-	 * @return
-	 */
-	Map<String, Object> queryStoreCustmerCount(DynamicDto dd, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO,PageInfo pageInfo);
 	
 	/**
 	 * 
