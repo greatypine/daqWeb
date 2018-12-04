@@ -762,32 +762,16 @@ var endDay = year + "-" + month ;//这个月的第一天
 
             if($('#channelClick').is(':checked')){
                 searchstrTemp += ",dept_channel_active";
-                $("#channel_column").show();
             }
 
             if($('#cityClick').is(':checked')){
                 searchstrTemp += ",dept_city_active";
-                $("#city_column").show();
             }
 
             if($('#storeClick').is(':checked')){
                 searchstrTemp += ",dept_store_active";
-                $("#storeName_column").show();
             }
 
-            if(searchstrTemp.indexOf("dept_channel_active") == -1){
-                $("#channel_column").hide();
-            }
-            if(searchstrTemp.indexOf("dept_city_active") == -1){
-                $("#city_column").hide();
-            }
-            if(searchstrTemp.indexOf("dept_store_active") == -1){
-                $("#storeName_column").hide();
-            }
-        }else{
-            $("#channel_column").hide();
-            $("#city_column").hide();
-            $("#storeName_column").hide();
 
         }
         dynamicDto["searchstr"] = searchstrTemp;
