@@ -35,16 +35,16 @@ public class ExportExcelByOssUtil {
     //数据源
     private List<Map<String,Object>> data;
     //导出的文件标题
-    private String[] headers;
+    private Object[] headers;
     //数据源列名
-    private String[] keys;
+    private Object[] keys;
     //导出的文件合并标题（支持多级合并）
     private List<List<MergedRegionParam>> params = new ArrayList<>();
 
     private HSSFCellStyle style_header = null;
     private CellStyle cellStyle_common = null;
 
-    public ExportExcelByOssUtil(String sheetName, List<Map<String,Object>> data, String[] headers, String [] keys){
+    public ExportExcelByOssUtil(String sheetName, List<Map<String,Object>> data, Object[] headers,  Object[] keys){
         this.sheetName = sheetName;
         this.data = data;
         this.headers = headers;
@@ -128,8 +128,8 @@ public class ExportExcelByOssUtil {
         setCellStyle_common(wb);
         setHeaderStyle(wb);
         HSSFSheet sheet = wb.createSheet(sheetName);
-        String[] str_headers = headers;
-        String[] headers_key = keys;
+        Object[] str_headers = headers;
+        Object[] headers_key = keys;
 
         int rowNum = 0;
 
@@ -155,7 +155,7 @@ public class ExportExcelByOssUtil {
         for(int i = 0;i < str_headers.length;i++){
             HSSFCell cell = row.createCell(i);
             cell.setCellStyle(getHeaderStyle());
-            cell.setCellValue(new HSSFRichTextString(str_headers[i]));
+            cell.setCellValue(new HSSFRichTextString(str_headers[i].toString()));
         }
 
         for(int i = 0;i < data.size();i++){
