@@ -280,16 +280,29 @@
 	  extend: 'skin/crmskin/style.css' //加载新皮肤
 	  
 	});
-	var cur_date = new Date();
-	var year_month = cur_date.getFullYear()+"-"+(cur_date.getMonth()+1);
+/*默认显示上个月的日期*/
+var cur_date = new Date();
+var year = cur_date.getFullYear();
+var month = cur_date.getMonth();
+if(month==0){
+    month=12;
+    year=year-1;
+}
+if (month < 10) {
+    month = "0" + month;
+}
+var firstDay = year + "-" + month ;//上个月的第一天
+month++;
+var endDay = year + "-" + month ;//这个月的第一天
+
 	laydate.render({//月份控件
 		elem:'#be_date1',
-		value:new Date(),
+		value:endDay,
 		type:"month",
 		btns: ['confirm','now'],
 		theme: '#11214e',
-		min: '2018-1-1',
-		max:year_month
+		min: firstDay+"-01",
+		max:firstDay+"-01"
 		
 	});
 	var cityId = decode64(getUrlParamByKey("c"));//城市ID
