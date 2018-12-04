@@ -958,8 +958,8 @@ var initPageElements = function () {
         name: 'GMV',
         type: 'bar',xAxisIndex: 0,yAxisIndex: 0,
         //barWidth:'55%',
-        barWidth : 40,//柱图宽度
-        barMaxWidth:40,//最大宽度
+        barWidth : 35,//柱图宽度
+        barMaxWidth:35,//最大宽度
         itemStyle:{
           normal:{
             barBorderRadius: 50,
@@ -5112,7 +5112,7 @@ var initClick = function(){
     	var type=encode64("commodity_gmv");
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_rank.html?p=&pn=cs="+cityId+"&cn="+cityName+"&tps="+type+"&fs="+targets;
+        var url = "headquarters_rank.html?p=&pn=&cs="+cityId+"&cn="+cityName+"&tps="+type+"&fs="+targets;
         window.open(url);
     });
     $("#businessDep_gmv_more").on('click',function(){
