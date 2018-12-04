@@ -1044,4 +1044,20 @@ public interface DynamicDao extends IDAO{
      * @return
      */
     public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto,PageInfo pageInfo);
+
+    /**
+     * @Description 查询事业群GMV
+     * @author gbl
+     * @date 2018/11/30 14:42
+     **/
+
+    public Map<String,Object> queryDeptGMVByImpala(DynamicDto dynamicDto,PageInfo pageInfo);
+
+    /**
+     * @Description 查询事业群用户
+     * @author gbl
+     * @date 2018/12/1 16:13
+     **/
+
+	public Map<String,Object> queryDeptConsumerByImpala(DynamicDto dynamicDto,PageInfo pageInfo);
 }
