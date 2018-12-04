@@ -38,7 +38,9 @@ import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.MD5Utils;
 import com.cnpc.pms.utils.excel.MergedRegionParam;
+
 import net.sf.json.JsonConfig;
+
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -3910,6 +3912,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		List<Map<String,Object>> dynamicAllList = null;
 		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		Map<String,Object> dynamicByCity = null;
 		List<Map<String,Object>> dynamicByCityList = null;
 		Map<String,Map<String,Object>> dynamicByCityMap = new HashMap<String, Map<String,Object>>();
@@ -3950,6 +3953,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 						map.put("cityno", dynamic.get("city_code"));
 						cityNO.add(map);
 						if(dynamicByCityMap.get(String.valueOf(dynamic.get("city_code")))==null){
+							String cityno = String.valueOf(cityNO.get(0).get("cityno")).length()==3?('0'+String.valueOf(cityNO.get(0).get("cityno"))):String.valueOf(cityNO.get(0).get("cityno"));
+							List<Map<String,Object>> cityIdList = storeDao.getCityIdByNO(String.valueOf(cityno));
+							ddDto.setCityId(Long.parseLong(String.valueOf(cityIdList.get(0).get("cityId"))));
 							dynamicByCity = (Map<String, Object>) dynamicDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
 							dynamicByCityMap.put(String.valueOf(dynamic.get("city_code")), dynamicByCity);
 						}

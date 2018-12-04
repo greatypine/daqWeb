@@ -677,6 +677,7 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 		public JSONArray getRankUserDataJson(Map<String,Object> dynamicMap,Map<String,Object> dynamicAllMap,DynamicDto ddDto,String sign){
 			JSONArray json = new JSONArray();
 			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+			StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 			List<Map<String,Object>> dynamicList = null;
 			List<Map<String,Object>> dynamicAllList = null;
 			Map<String,Object> dynamicByCity = null;
@@ -718,6 +719,9 @@ public class OrderManagerImpl extends BizBaseCommonManager implements OrderManag
 						map.put("cityno", dynamic.get("city_code"));
 						cityNO.add(map);
 						if(dynamicByCityMap.get(String.valueOf(dynamic.get("city_code")))==null){
+							String cityno = String.valueOf(cityNO.get(0).get("cityno")).length()==3?('0'+String.valueOf(cityNO.get(0).get("cityno"))):String.valueOf(cityNO.get(0).get("cityno"));
+							List<Map<String,Object>> cityIdList = storeDao.getCityIdByNO(String.valueOf(cityno));
+							ddDto.setCityId(Long.parseLong(String.valueOf(cityIdList.get(0).get("cityId"))));
 							dynamicByCity = (Map<String, Object>) dynamicDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
 							dynamicByCityMap.put(String.valueOf(dynamic.get("city_code")), dynamicByCity);
 						}

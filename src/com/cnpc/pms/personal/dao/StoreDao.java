@@ -507,4 +507,10 @@ public interface StoreDao extends IDAO {
 	 **/
 
 	public List<Map<String, Object>> getAllStoreIncludeClosed(Long employee_no, Long cityId, String role);
+	/**
+	 * 根据城市编码查询城市ID
+	 * @param cityno
+	 * @return
+	 */
+	List<Map<String, Object>> getCityIdByNO(String cityno);
 }

@@ -7,6 +7,7 @@ import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ImpalaUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -1983,6 +1984,18 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 			order_obj = (Map<String, Object>) lst_data.get(0);
 		}
 		return order_obj;
+	}
+
+	@Override
+	public List<Map<String, Object>> getCityIdByNO(String cityNo) {
+		String sql = "select t.id as cityId  from  t_dist_citycode t ";
+		if (StringUtils.isNotEmpty(cityNo)) {
+			sql = sql + " where t.cityno=" + cityNo;
+		}
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		// 获得查询数据
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
 	}
 
 }

@@ -5082,74 +5082,58 @@ var initClick = function(){
 	var targets = encode64(pageStatusInfo.targets);
 	$("#city_gmv_more").on('click',function(){
     	var type=encode64("city_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#store_gmv_more").on('click',function(){
     	var type=encode64("store_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#store_order_more").on('click',function(){
     	var type=encode64("store_order");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#guoanxia_gmv_more").on('click',function(){
     	var type=encode64("guoanxia_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#commodity_gmv_more").on('click',function(){
     	var type=encode64("commodity_gmv");
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_rank.html?p="+provinceId+"&pn="+provinceName+"&cs="+cityId+"&cn="+cityName+"&tps="+type+"&fs="+targets;
+        var url = "headquarters_rank.html?p=&pn=cs="+cityId+"&cn="+cityName+"&tps="+type+"&fs="+targets;
         window.open(url);
     });
     $("#businessDep_gmv_more").on('click',function(){
     	var type=encode64("businessDep_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#channel_gmv_more").on('click',function(){
     	var type=encode64("channel_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#channel_order_more").on('click',function(){
     	var type=encode64("channel_order");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&targets="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#gmv_rank_more").on('click',function(){
