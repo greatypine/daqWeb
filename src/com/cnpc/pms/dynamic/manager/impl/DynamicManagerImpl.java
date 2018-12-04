@@ -5915,11 +5915,18 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
-			
-			String[] dateArr = dd.getBeginDate().split("-");
-	        dd.setYear(Integer.parseInt(dateArr[0]));
-	        dd.setMonth(Integer.parseInt(dateArr[1]));
-			result= dynamicDao.queryDeptGmv(dd, pageInfo);
+
+            String[] dateArr = dd.getBeginDate().split("-");
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR,Integer.parseInt(dateArr[0]));
+            calendar.set(Calendar.MONTH,Integer.parseInt(dateArr[1])-1);
+            calendar.set(Calendar.DAY_OF_MONTH,1);
+            String beginDate = DateUtils.dateFormat(calendar.getTime());
+            dd.setBeginDate(beginDate);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String endDate = DateUtils.dateFormat(calendar.getTime());
+            dd.setEndDate(endDate);
+			result= dynamicDao.queryDeptGMVByImpala(dd, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -5940,9 +5947,17 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
 			String[] dateArr = dd.getBeginDate().split("-");
-            dd.setYear(Integer.parseInt(dateArr[0]));
-            dd.setMonth(Integer.parseInt(dateArr[1]));
-			result= dynamicDao.queryDeptConsumer(dd, pageInfo);
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.YEAR,Integer.parseInt(dateArr[0]));
+			calendar.set(Calendar.MONTH,Integer.parseInt(dateArr[1])-1);
+            calendar.set(Calendar.DAY_OF_MONTH,1);
+            String beginDate = DateUtils.dateFormat(calendar.getTime());
+            dd.setBeginDate(beginDate);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+			String endDate = DateUtils.dateFormat(calendar.getTime());
+			dd.setEndDate(endDate);
+
+			result= dynamicDao.queryDeptConsumerByImpala(dd, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -5961,16 +5976,42 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryDeptGmv(dd, null);
 		if("success".equals(map.get("status"))){//成功返回数据
-			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("gmv");
+			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("data");
 			if(list==null||list.size()==0){
 				result.put("message","没有符合条件的数据！");
 				result.put("status","null");
 				return result;
 			}
 
-			String[] str_headers = {"城市","门店编号","门店名称","事业群","绩效GMV"};
-			String[] headers_key = {"cityname","storeno","storename","deptname","pesgmv"};
-			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群GMV",list,str_headers,headers_key);
+
+            List<String> headers = new ArrayList<String>();
+            headers.add("事业群");
+            headers.add("绩效GMV");
+
+            List<String> headers_key = new ArrayList<String>();
+            headers_key.add("deptname");
+            headers_key.add("pesgmv");
+
+            int index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_city_active")) {
+                headers.add(index_dept_last,"城市");
+                headers_key.add(index_dept_last,"store_city_name");
+            }
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_store_active")){
+                headers.add(index_dept_last,"门店名称");
+                headers_key.add(index_dept_last,"store_name");
+                headers.add(index_dept_last+1,"门店编号");
+                headers_key.add(index_dept_last+1,"store_code");
+            }
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_channel_active")){
+                headers.add(index_dept_last+1,"频道");
+                headers_key.add(index_dept_last+1,"channel_name");
+            }
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群GMV",list,headers.toArray(),headers_key.toArray());
 			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
@@ -5988,16 +6029,45 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryDeptConsumer(dd, null);
 		if("success".equals(map.get("status"))){//成功返回数据
-			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("consumer");
+			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("data");
 			if(list==null||list.size()==0){
 				result.put("message","没有符合条件的数据！");
 				result.put("status","null");
 				return result;
 			}
 
-			String[] str_headers = {"城市","门店编号","门店名称","事业群","消费用户","消费用户超10元"};
-			String[] headers_key = {"cityname","storeno","storename","deptname","cusnum","cusnum_ten"};
-			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群用户",list,str_headers,headers_key);
+
+			List<String> headers = new ArrayList<String>();
+			headers.add("事业群");
+			headers.add("消费用户");
+			headers.add("消费用户超10元");
+
+			List<String> headers_key = new ArrayList<String>();
+			headers_key.add("deptname");
+            headers_key.add("cusnum");
+            headers_key.add("cusnum_ten");
+
+            int index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+			if(dd.getSearchstr().contains("dept_city_active")) {
+				headers.add(index_dept_last,"城市");
+				headers_key.add(index_dept_last,"store_city_name");
+			}
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_store_active")){
+                headers.add(index_dept_last,"门店名称");
+                headers_key.add(index_dept_last,"store_name");
+                headers.add(index_dept_last+1,"门店编号");
+                headers_key.add(index_dept_last+1,"store_code");
+            }
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_channel_active")){
+                headers.add(index_dept_last+1,"频道");
+                headers_key.add(index_dept_last+1,"channel_name");
+            }
+
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群用户",list,headers.toArray(),headers_key.toArray());
 			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");

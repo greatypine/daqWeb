@@ -166,11 +166,10 @@
               <!-- /.input group -->
             </div>
             <div class="form-group col-lg-4">
-              <label>城市</label>
-<!--              <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" bidTableFlag="true" value=""/> -->
-<!--              <input id="city_name_tradetype" name="city_name_tradetype" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="city_name-search_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" /> -->
-<!--              <datalist id="city_name-search_tradetype"> -->
-<!--              </datalist> -->
+                <label><span class="text-red" title="勾选城市：以城市为单位统计&#13;未勾选城市：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>城市<span class="checkboxFive">
+                <input type='checkbox' id="cityClick" onclick='operatedCoverageCity()' checked="checked" value='city'>
+                <label for="cityClick"></label>
+                </span></label>
 			  <input id="city_id_tradetype" name="city_id_tradetype" type="hidden" value=""/>
 			  <input type="text" class="form-control"  placeholder="城市" id="city_name_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3)"/>
               <div class="auto hidden" id="auto_city" style="width:82%;z-index: 99999;">
@@ -178,11 +177,10 @@
               </div>
             </div>
            <div class="form-group col-lg-4">
-              <label>门店</label>
-<!--              <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" bidTableFlag="true" value=""/> -->
-<!--              <input id="store_name_tradetype" name="store_name_tradetype" maxlength="40" type="text" class="form-control" bidTableFlag="true" list="store_name-search_tradetype" style="display: inherit;width: 90%;border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);" /> -->
-<!--              <datalist id="store_name-search_tradetype"> -->
-<!--              </datalist> -->
+               <label><span class="text-red" title="勾选门店：以门店为单位统计&#13;未勾选门店：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>门店<span class="checkboxFive">
+                <input type='checkbox' id="storeClick" onclick='operatedCoverageStore()' checked="checked" value='store'>
+                <label for="storeClick"></label>
+                </span></label>
 			  <input id="store_id_tradetype" name="store_id_tradetype" type="hidden" value=""/>
 			  <input type="text" class="form-control"  placeholder="门店" id="store_name_tradetype" style="border-radius: 6px; box-shadow: 0 1px 1px rgba(0,0,0,0.3);width: 90%""/>
               <div class="auto hidden" id="auto_store" style="width:82%;z-index: 99999;">
@@ -200,8 +198,16 @@
                 </select>
               <!-- /.input group -->
             </div>
+            <div class="form-group col-lg-4">
+                <label><span class="text-red" title="勾选频道：以频道为单位统计&#13;未勾选频道：以其它数据项为单位统计" style="padding-left: 0px; font-size: 14px; font-weight: bold; cursor: pointer">！</span>频道<span class="checkboxFive">
+            <input type='checkbox' id="channelClick" onclick='operatedCoverageChannel()' checked="checked" value='area'>
+            <label for="channelClick"></label>
+            </span></label>
+                <input type="text" class="form-control"  placeholder="频道" id="channel_name" style="border-radius: 6px;width: 90%" disabled="true"/>
+            </div>
             </form>
-           
+              <div class="form-group col-lg-6" style="margin-top: 20px; padding: 0 25px;">
+              </div>
             <div class="form-group col-lg-2" style="margin-top: 20px; padding: 0 25px;">
               <button type="button" class="btn btn-block btn-primary" onclick="searchInfo_tradetype_step1(1)">查询</button>
             </div>
@@ -220,12 +226,12 @@
                   <table class="table table-striped">
                     <tbody id="tradeType_tbody">
 	                    <tr>
-	                      <th width="8%">城市</th>
-	                      <th width="10%">门店名称</th>
-<!-- 	                      <th width="10%">门店编号</th> -->
-	                      <th width="10%">事业群</th>
-	                      <th width="12%">消费用户</th>
-	                      <th width="12%">消费用户超10元</th>
+                            <th width="8%" id="city_column">城市</th>
+                            <th width="10%" id="storeName_column">门店名称</th>
+                            <th width="10%" id="dept_column">事业群</th>
+                            <th width="10%" id="channel_column">频道</th>
+	                        <th width="12%">消费用户</th>
+	                        <th width="12%">消费用户超10元</th>
 	                    </tr>
                     </tbody>
                   </table>
@@ -311,8 +317,42 @@
 	    $(".logo-lg > ul > li").hover(function(){
 	      $(this).children(".nav_dropdown").toggle('1000');
 	    });
-    
-	   
+
+
+
+        var searchChannelStr = "dept_active";
+        if($('#channelClick').is(':checked')){
+            searchChannelStr = "dept_channel_active";
+            $("#channel_column").show();
+        }else{
+            $("#channel_column").hide();
+        }
+        $('#channelClick').removeAttr('checked');
+        $("#channel_column").hide();
+
+        var searchDeptCityStr = "dept_city_active";
+        if(target!=1){
+            $('#cityClick').removeAttr('checked');
+        }
+        $("#city_column").hide();
+        if($('#cityClick').is(':checked')){
+            searchDeptCityStr = "dept_city_active";
+            $("#city_column").show();
+        }else{
+            $("#city_column").hide();
+        }
+
+        var searchDeptStoreStr = "dept_store_active";
+        if($('#storeClick').is(':checked')){
+            searchDeptStoreStr = "dept_store_active";
+            $("#storeName_column").show();
+
+        }else{
+            $("#storeName_column").hide();
+
+        }
+        $('#storeClick').removeAttr('checked');
+        $("#storeName_column").hide();
     
   });
   /**-----------------------------------搜索城市------------------------------------------------------**/
@@ -417,7 +457,7 @@
                     
                     for(i=0;i<lst_select_store.length;i++){
                     	storeNameArray.push(lst_select_store[i].name);
-                    	storeIdMap[lst_select_store[i].name] = lst_select_store[i].storeno;
+                    	storeIdMap[lst_select_store[i].name] = lst_select_store[i].platformid;
       			  	}
       			  	var autoComplete = new AutoComplete("store_name_tradetype","auto_store",storeNameArray);
       			    autoComplete.start(event);
@@ -435,18 +475,14 @@
      
      //获取事业群
     function getDepartment(){
-        doManager('dynamicManager','queryDepartment',null,function(data){
+        doManager('chartStatManager','queryAllDept',null,function(data){
             if(data.result){
-            	
-            	var lst_select_dept = JSON.parse(data.data);
-//                 $(lst_select_city).each(function(index,element){
-//                     $('#city_name-search_tradetype').append('<option value="'+element.cityname+'">');
-//                 });
-					
-            	 for(i=0;i<lst_select_dept.length;i++){
-            		var option = "<option value='"+lst_select_dept[i].dep_name+"'>"+lst_select_dept[i].dep_name+"</option>";
-   			  		$("#department").append(option);
-            	 }
+
+                var lst_select_dept = JSON.parse(data.data);
+                for(var i=0;i<lst_select_dept.length;i++){
+                    var option = "<option value='"+lst_select_dept[i].id+"'>"+lst_select_dept[i].name+"</option>";
+                    $("#department").append(option);
+                }
             }
         },false);
     }
@@ -488,7 +524,10 @@
 	   var dept= $("#department").val();
 	   var number_str = $("#store_id_tradetype").val(); 
 	   var storeName = $("#store_name_tradetype").val();
-	    
+        if(dept==""){
+            dept = null;
+        }
+        var channelName =  $("#channel_name").val();
 	   if(number_str==""&&storeName!=""){
 	    	number_str=-10000;
 	   }
@@ -502,6 +541,7 @@
  	  				beginDate:begin_end_date,
  	  				cityName:cityName,
  	  		  		dept:dept,
+                    channel:channelName,
  	  		  		target:target,
  	  		  	    storeNo:number_str
  	  			}
@@ -510,6 +550,7 @@
   				beginDate:begin_end_date,
   				cityName:cityName,
   		  		dept:dept,
+                channel:channelName,
   		  		target:target,
   		  	    storeNo:number_str
   			}
@@ -518,10 +559,48 @@
 	    			beginDate:begin_end_date,
 	  				cityName:cityName,
 	  		  		dept:dept,
+                    channel:channelName,
 	  		  		target:target,
 	  		  	    storeNo:number_str
 	  			}
 	    }
+
+
+        var searchstrTemp = "dept_active";
+        if($('#channelClick').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked')){
+
+            if($('#channelClick').is(':checked')){
+                searchstrTemp += ",dept_channel_active";
+                $("#channel_column").show();
+            }
+
+            if($('#cityClick').is(':checked')){
+                searchstrTemp += ",dept_city_active";
+                $("#city_column").show();
+            }
+
+            if($('#storeClick').is(':checked')){
+                searchstrTemp += ",dept_store_active";
+                $("#storeName_column").show();
+            }
+
+            if(searchstrTemp.indexOf("dept_channel_active") == -1){
+                $("#channel_column").hide();
+            }
+            if(searchstrTemp.indexOf("dept_city_active") == -1){
+                $("#city_column").hide();
+            }
+            if(searchstrTemp.indexOf("dept_store_active") == -1){
+                $("#storeName_column").hide();
+            }
+        }else{
+            $("#channel_column").hide();
+            $("#city_column").hide();
+            $("#storeName_column").hide();
+
+        }
+        dynamicDto["searchstr"] = searchstrTemp;
+        $("#tradeType_tbody").find("tr:gt(0)").remove();
  	    var pageInfo = new Object();
  	    pageInfo.currentPage = cur_page;
 	    doManager('dynamicManager','queryDeptConsumer',[dynamicDto,pageInfo],function(data){
@@ -529,7 +608,7 @@
            	   var result= JSON.parse(data.data);
 	           if(result.status=='success'){
 	        	   $("#tradeType_tbody").find("tr:gt(0)").remove(); 
-	        	   var jData = result.consumer;
+	        	   var jData = result.data;
 	        	   if(jData==null||jData.length==0){
 	        		   crm_alert(5,"没有符合条件的数据！");
 	        		   $("#page_tradetype").createPage({
@@ -558,15 +637,25 @@
 	        	   
 	        	   var infoStr="";
 	        	   for(var i=0;i<jData.length;i++){
-	        		   infoStr= "<tr>"
-		                       +"<td>"+jData[i].cityname+"</td>"
-		                       +"<td>"+jData[i].storename+"</td>"
-		                       +"<td>"+jData[i].deptname+"</td>"
-		                       +"<td>"+jData[i].cusnum+"</td>"
-		                       +"<td>"+jData[i].cusnum_ten+"</td>"
-		                       +"</tr>";
-		                       
-		                  $("#tradeType_tbody").append(infoStr);     
+	        		   infoStr= "<tr>";
+                       if($('#cityClick').is(':checked')){
+                           infoStr = infoStr+"<td>"+jData[i].store_city_name+"</td>";
+                       }
+
+                       if($('#storeClick').is(':checked')){
+                           infoStr = infoStr +"<td>"+jData[i].store_name+"</td>";
+                       }
+
+                       infoStr = infoStr+"<td>"+jData[i].deptname+"</td>";
+
+                       if($('#channelClick').is(':checked')){
+                           infoStr = infoStr +"<td>"+jData[i].channel_name+"</td>";
+                       }
+
+                       infoStr = infoStr +"<td>"+jData[i].cusnum+"</td><td>"+jData[i].cusnum_ten+"</td></tr>"
+
+
+                       $("#tradeType_tbody").append(infoStr);
 	        	   }
 	           }else{
 	        	   crm_alert(5,"请稍后重新请求！");
@@ -601,38 +690,88 @@
     function export_tradetype1(begin_end_date){
     	$("#process_div").show();
   	 	$("#process_div_pic").show();
-   		
-  	    var cityId = $("#city_id_tradetype").val();
-		var cityName = $("#city_name_tradetype").val();
-		var dept= $("#department").val();
-		var number_str = $("#store_id_tradetype").val(); 
-		var storeName = $("#store_name_tradetype").val();
- 	    var dynamicDto=null;
- 	    if(target==0){
-		   dynamicDto = {
-		 				beginDate:begin_end_date,
-		 				cityName:cityName,
-		 		  		dept:dept,
-		 		  		target:target,
-		 		  		storeNo:number_str
-		 			}
-		  }else if(target==1){//城市
-		  	 dynamicDto = {
-					beginDate:begin_end_date,
-					cityName:cityName,
-			  		dept:dept,
-			  		target:target,
-			  		storeNo:number_str
-				}
-		  }else if(target==3){//事业部
-		  	dynamicDto = {
-		  			beginDate:begin_end_date,
-						cityName:cityName,
-				  		dept:dept,
-				  		target:target,
-				  		storeNo:number_str
-					}
-		  }
+
+        var cityId = $("#city_id_tradetype").val();
+        var cityName = $("#city_name_tradetype").val();
+        var dept= $("#department").val();
+        var number_str = $("#store_id_tradetype").val();
+        var storeName = $("#store_name_tradetype").val();
+        if(dept==""){
+            dept = null;
+        }
+        var channelName =  $("#channel_name").val();
+        if(number_str==""&&storeName!=""){
+            number_str=-10000;
+        }
+        var dynamicDto=null;
+        if(target==0){//总部
+
+            if(cityId==""&&cityName!=""){
+                cityId="-10000";
+            }
+            dynamicDto = {
+                beginDate:begin_end_date,
+                cityName:cityName,
+                dept:dept,
+                channel:channelName,
+                target:target,
+                storeNo:number_str
+            }
+        }else if(target==1){//城市
+            dynamicDto = {
+                beginDate:begin_end_date,
+                cityName:cityName,
+                dept:dept,
+                channel:channelName,
+                target:target,
+                storeNo:number_str
+            }
+        }else if(target==3){//事业部
+            dynamicDto = {
+                beginDate:begin_end_date,
+                cityName:cityName,
+                dept:dept,
+                channel:channelName,
+                target:target,
+                storeNo:number_str
+            }
+        }
+
+
+        var searchstrTemp = "dept_active";
+        if($('#channelClick').is(':checked') || $('#cityClick').is(':checked') || $('#storeClick').is(':checked')){
+
+            if($('#channelClick').is(':checked')){
+                searchstrTemp += ",dept_channel_active";
+                $("#channel_column").show();
+            }
+
+            if($('#cityClick').is(':checked')){
+                searchstrTemp += ",dept_city_active";
+                $("#city_column").show();
+            }
+
+            if($('#storeClick').is(':checked')){
+                searchstrTemp += ",dept_store_active";
+                $("#storeName_column").show();
+            }
+
+            if(searchstrTemp.indexOf("dept_channel_active") == -1){
+                $("#channel_column").hide();
+            }
+            if(searchstrTemp.indexOf("dept_city_active") == -1){
+                $("#city_column").hide();
+            }
+            if(searchstrTemp.indexOf("dept_store_active") == -1){
+                $("#storeName_column").hide();
+            }
+        }else{
+            $("#channel_column").hide();
+            $("#city_column").hide();
+            $("#storeName_column").hide();
+
+        }
+        dynamicDto["searchstr"] = searchstrTemp;
 	   
 	    doManager('dynamicManager','exportDeptConsumer',[dynamicDto],function(data){
           if(data.result){
@@ -715,18 +854,57 @@ function resetSerachParam(){
 	    	$("#city_id_tradetype").val("");
 			$("#city_name_tradetype").val("");
 			$("#department").val("");
+            $("#channel_name").val("");
 	  	  }else if(target==1){//城市级别
 	  		$("#department").val("");
 	  		$("#store_id_tradetype").val("");
 	   		$("#store_name_tradetype").val("");
 	     	$("#store_name-search_tradetype").empty();
+            $("#channel_name").val("");
 	  	  }else if(target==3){
 	    	$("#city_id_tradetype").val("");
 	    	$("#city_name_tradetype").val("");
 	    	$("#store_id_tradetype").val("");
 	   		$("#store_name_tradetype").val("");
 	     	$("#store_name-search_tradetype").empty();
+            $("#channel_name").val("");
 	      }
+}
+
+
+function operatedCoverageCity(){
+    if($('#cityClick').is(':checked')){
+        $("#city_name_tradetype").attr("disabled",false);
+        $("#auto_city").empty();
+    }else{
+        $("#city_name_tradetype").attr("disabled",true);
+        $("#city_id_tradetype").val("");
+        $("#city_name_tradetype").val("");
+        $("#city_store").empty();
+    }
+}
+
+
+function operatedCoverageStore(){
+    if($('#storeClick').is(':checked')){
+        $("#store_name_tradetype").attr("disabled",false);
+        $("#auto_store").empty();
+    }else{
+        $("#store_name_tradetype").attr("disabled",true);
+        $("#store_id_tradetype").val("");
+        $("#store_name_tradetype").val("");
+        $("#auto_store").empty();
+    }
+}
+
+
+function operatedCoverageChannel(){
+    if($('#channelClick').is(':checked')){
+        $("#channel_name").attr("disabled",false);
+    }else{
+        $("#channel_name").attr("disabled",true);
+        $("#channel_name").val("");
+    }
 }
    
 </script>
