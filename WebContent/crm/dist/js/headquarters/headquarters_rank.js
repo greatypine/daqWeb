@@ -626,7 +626,7 @@ function initallcity(){
  					$("#citySelect").append("<option value='0'>全部城市</option>");
  					$("#citySelect2").append("<option value='0'>全部城市</option>");
  					$(jsonData).each(function(index,element){
- 						if(pageStatusInfo.cityName == element.cityname){
+ 						if(pageStatusInfo.cityId == element.id){
  							IndexSelected = index+1;
  						}
  						$("#citySelect").append('<option value="'+element.id+'">'+element.cityname+'</option>');
@@ -644,7 +644,7 @@ function initallcity(){
  					var jsonData = $.fromJSON(data.data);
  					var IndexSelected = "";
  					$(jsonData).each(function(index,element){
- 						if(pageStatusInfo.cityName == element.cityname){
+ 						if(pageStatusInfo.cityId == element.cityid){
  							IndexSelected = index;
  						}
  						$("#citySelect").append('<option value="'+element.cityid+'">'+element.cityname+'</option>');
