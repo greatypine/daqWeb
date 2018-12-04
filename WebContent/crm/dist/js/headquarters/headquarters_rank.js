@@ -622,12 +622,18 @@ function initallcity(){
  		    function(data,textStatus,XmlHttpRequest){
  				if (data.result) {
  					var jsonData = $.fromJSON(data.data);
+ 					var IndexSelected = "";
  					$("#citySelect").append("<option value='0'>全部城市</option>");
  					$("#citySelect2").append("<option value='0'>全部城市</option>");
  					$(jsonData).each(function(index,element){
+ 						if(pageStatusInfo.cityName == element.cityname){
+ 							IndexSelected = index+1;
+ 						}
  						$("#citySelect").append('<option value="'+element.id+'">'+element.cityname+'</option>');
  						$("#citySelect2").append('<option value="'+element.id+'">'+element.cityname+'</option>');
                      });
+                     $("#citySelect")[0].selectedIndex = IndexSelected;
+ 					 $("#citySelect2")[0].selectedIndex = IndexSelected;
  				}
  		});
  	}
