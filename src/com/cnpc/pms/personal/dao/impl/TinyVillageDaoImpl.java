@@ -523,7 +523,7 @@ public class TinyVillageDaoImpl extends BaseDAOHibernate implements TinyVillageD
 		TinyAreaManager tinyAreaManager = (TinyAreaManager) SpringHelper.getBean("tinyAreaManager");
 		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
 		List<Map<String, Object>> listData = new ArrayList<Map<String, Object>>();
-		String sql = "select tiny.id,tiny.`name`,tiny.tinyvillage_type ,IF(tiny.dellable=1,'有','无') as dellable ,IFNULL(IFNULL(codd.consumer_number,0)+IFNULL(codd.consumer_number_2018,0),0) as consumer_number,town.`name` as town_name,ifnull(tiny.residents_number,0) as residents_number,ifnull(vill.`name`,'') as village_name,"
+		String sql = "select tiny.id,tiny.`name`,tiny.tinyvillage_type ,IF(tiny.dellable=1,'有','无') as dellable ,town.`name` as town_name,ifnull(tiny.residents_number,0) as residents_number,ifnull(vill.`name`,'') as village_name,"
 				+ " case city.`name` WHEN '北京市辖区' THEN '北京' WHEN '北京县' THEN '北京' WHEN '天津市辖区' THEN '天津' WHEN '天津市辖县' THEN '天津' "
 				+ "  WHEN '上海市辖区' THEN '上海' WHEN '上海县' THEN '上海' WHEN '重庆市辖区' THEN '重庆' WHEN '重庆县' THEN '重庆' else city.`name`  END as city_name"
 				+ " ,codd.`code` as tinyvillage_code "
@@ -701,7 +701,7 @@ public class TinyVillageDaoImpl extends BaseDAOHibernate implements TinyVillageD
 
 	@Override
 	public Map<String, Object> findTinyVillageInfoByTinyId(String TinyId, String where) {
-		String sql = "select tiny.id,tiny.`name`,tiny.tinyvillage_type ,IF(tiny.dellable=1,'有','无') as dellable,IFNULL(IFNULL(codd.consumer_number,0)+IFNULL(codd.consumer_number_2018,0),0) as consumer_number,town.`name` as town_name,ifnull(tiny.residents_number,0) as residents_number,ifnull(vill.`name`,'') as village_name,"
+		String sql = "select tiny.id,tiny.`name`,tiny.tinyvillage_type ,IF(tiny.dellable=1,'有','无') as dellable,town.`name` as town_name,ifnull(tiny.residents_number,0) as residents_number,ifnull(vill.`name`,'') as village_name,"
 				+ " case city.`name` WHEN '北京市辖区' THEN '北京' WHEN '北京县' THEN '北京' WHEN '天津市辖区' THEN '天津' WHEN '天津市辖县' THEN '天津' "
 				+ "  WHEN '上海市辖区' THEN '上海' WHEN '上海县' THEN '上海' WHEN '重庆市辖区' THEN '重庆' WHEN '重庆县' THEN '重庆' else city.`name`  END as city_name"
 				+ " ,codd.`code` as tinyvillage_code "
@@ -719,7 +719,7 @@ public class TinyVillageDaoImpl extends BaseDAOHibernate implements TinyVillageD
 
 	@Override
 	public Map<String, Object> exportAboutTinyvillage(String where) {
-		String sql = "select tiny.id,IFNULL(area.vallage_area,0) as vallage_area,tiny.`name`,tiny.tinyvillage_type ,IF(tiny.dellable=1,'有','无') as dellable,IFNULL(IFNULL(codd.consumer_number,0)+IFNULL(codd.consumer_number_2018,0),0) as consumer_number,town.`name` as town_name,ifnull(tiny.residents_number,0) as residents_number,vill.`name` as village_name,ifnull(store.name,'') as store_name,"
+		String sql = "select tiny.id,IFNULL(area.vallage_area,0) as vallage_area,tiny.`name`,tiny.tinyvillage_type ,IF(tiny.dellable=1,'有','无') as dellable,town.`name` as town_name,ifnull(tiny.residents_number,0) as residents_number,vill.`name` as village_name,ifnull(store.name,'') as store_name,"
 				+ " CASE WHEN area.id is NULL THEN '无' else '有' end as tiny_map,case city.`name` WHEN '北京市辖区' THEN '北京' WHEN '北京县' THEN '北京' WHEN '天津市辖区' THEN '天津' WHEN '天津市辖县' THEN '天津' "
 				+ " WHEN '上海市辖区' THEN '上海' WHEN '上海县' THEN '上海' WHEN '重庆市辖区' THEN '重庆' WHEN '重庆县' THEN '重庆' else city.`name`  END as city_name"
 				+ " ,codd.`code` as tinyvillage_code "
