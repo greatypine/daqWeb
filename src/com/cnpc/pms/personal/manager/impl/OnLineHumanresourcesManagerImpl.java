@@ -102,9 +102,9 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 			if(userCode.equals("GLY")) {
 				sbfCondition.append(" and 1=1");
 			}else if(userCode.equals("ZBCPGLBGLY")) {
-				sbfCondition.append(" and groupcode='ZBCPGLB'");
+				//sbfCondition.append(" and groupcode='ZBCPGLB'");
 			}else if(userCode.equals("ZBCSGLBGLY")){
-				sbfCondition.append(" and groupcode='ZBCSGLB'");
+				sbfCondition.append(" and (groupcode='ZBYYGLBZ' or groupcode='ZBCPGLB') ");
 			}else {
 				sbfCondition.append(" and 1=0");
 			}
