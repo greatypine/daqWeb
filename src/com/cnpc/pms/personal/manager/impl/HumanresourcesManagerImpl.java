@@ -3911,8 +3911,8 @@ public class HumanresourcesManagerImpl extends BizBaseCommonManager implements H
   	        
   	      //如果是线上人员 
   	     if(online){
-  	    	  String[] str_headers = {"城市","部门","员工姓名","员工编号","身份证号","社员邀请码","工号"};
-  			  String[] headers_key = {"citySelect","deptname","name","employee_no","cardnumber","inviteCode","work_no"};
+  	    	  String[] str_headers = {"城市","部门","员工姓名","员工编号","社员邀请码"};
+  			  String[] headers_key = {"citySelect","deptname","name","employee_no","inviteCode"};
   	  	       
   			  
   			 for(int i = 0;i < str_headers.length;i++){

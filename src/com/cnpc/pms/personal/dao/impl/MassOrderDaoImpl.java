@@ -265,7 +265,11 @@ public class MassOrderDaoImpl extends BaseDAOHibernate implements MassOrderDao {
 				String order_sn = (String) map.get("order_sn");
 				if (StringUtils.isNotEmpty(area_code)) {
 					Map result = this.queryAreaDetailByCode(area_code, order_sn);
-					map.put("area_name", result.get("area_name"));
+					if(result != null){
+						map.put("area_name", result.get("area_name"));
+					}else{
+						map.put("area_name", "");
+					}
 				}
 			}
 		}

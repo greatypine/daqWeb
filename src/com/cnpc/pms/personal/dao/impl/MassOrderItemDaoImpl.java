@@ -119,8 +119,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,'') as area_code,IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
 				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end, toc.star_level AS " +
 				"star_level";
-		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
-		String sqlB = "SELECT count(1) as count_ "+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment_dr toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlB = "SELECT count(1) as count_ "+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment_dr toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
 			whereStr = whereStr + " and toip.order_sn = '" + order_sn.trim() + "' ";
 		}
@@ -318,8 +318,8 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				"IFNULL(tor.channel_name,'') AS channel_name, IFNULL(toc.contents,'') AS order_contents,toc.star_level AS star_level,toec.star_level_1 AS star_level_1,toec.star_level_2 AS star_level_2,toac.days AS next_days,IFNULL(toac.contents,'') AS next_contents," +
 				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,'') AS area_code,IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
 				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end ";
-		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN gemini.t_order_additional_comment toac ON toac.order_id = toip.order_id and toac.eshop_pro_id = toip.eshop_pro_id "
-				+ " LEFT JOIN gemini.t_order_eshop_comment toec ON toec.order_id = toip.order_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment_dr toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN gemini.t_order_additional_comment toac ON toac.order_id = toip.order_id and toac.eshop_pro_id = toip.eshop_pro_id "
+				+ " LEFT JOIN gemini.t_order_eshop_comment_dr toec ON toec.order_id = toip.order_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
 			whereStr = whereStr + " and toip.order_sn  = '" + order_sn.trim() + "' ";
 		}
@@ -545,7 +545,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			sql = sql + " and dot.store_city_code='"+cityNo+"' ";
 		}
 		if(provinceNO!=null&&provinceNO.size()>0){
-			sql = sql + " and dot.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";;
+			sql = sql + " and dot.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
 			Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
@@ -601,7 +601,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			sql = sql + " and dot.store_city_code='"+cityNo+"' ";
 		}
 		if(provinceNO!=null&&provinceNO.size()>0){
-			sql = sql + " and dot.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";;
+			sql = sql + " and dot.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		if(StringUtils.isNotEmpty(dynamicDto.getStoreNo())){
 			Map<String,Object> position_obj = queryPlatformidByCode(dynamicDto.getStoreNo());
@@ -651,7 +651,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr +=  " and aa.store_city_code='"+cityNo+"' ";
 		}
 		if(provinceNO!=null&&provinceNO.size()>0){
-			whereStr += " and aa.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";;
+			whereStr += " and aa.store_province_code='"+provinceNO.get(0).get("gb_code")+"'";
 		}
 		sql = sql + "group by dot.store_city_code,from_unixtime(unix_timestamp(dot.sign_time),'yyyy-MM-dd') order by dot.store_city_code";
 

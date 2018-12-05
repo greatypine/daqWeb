@@ -1376,10 +1376,10 @@ public class TinyVillageManagerImpl extends BizBaseCommonManager implements Tiny
 				setHeaderStyle(wb);
 				HSSFSheet sheet = wb.createSheet("小区信息");
 				HSSFRow row = sheet.createRow(0);
-				String[] str_headers = { "城市", "小区名称", "小区编号", "小区居民户数", "小区面积", "已消费人数", "小区地图", "删除标签", "所属门店",
+				String[] str_headers = { "城市", "小区名称", "小区编号", "小区居民户数", "小区面积",  "小区地图", "删除标签", "所属门店",
 						"所属街道", "所属社区", "小区类型" };
 				String[] headers_key = { "city_name", "name", "tinyvillage_code", "residents_number", "vallage_area",
-						"consumer_number", "tiny_map", "dellable", "store_name", "town_name", "village_name",
+						"tiny_map", "dellable", "store_name", "town_name", "village_name",
 						"tinyvillage_type" };
 				for (int i = 0; i < str_headers.length; i++) {
 					HSSFCell cell = row.createCell(i);

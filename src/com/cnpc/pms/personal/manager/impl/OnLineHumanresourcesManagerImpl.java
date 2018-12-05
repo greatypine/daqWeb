@@ -16,6 +16,7 @@ import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.entity.UserGroup;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserGroupManager;
@@ -80,6 +81,8 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 	//查询开通线上人员列表 
 	@Override
 	public Map<String, Object> queryRegOnLineHumanList(QueryConditions condition) {
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		UserDTO userDTO = userManager.getCurrentUserDTO();
 		Map<String, Object> returnMap = new java.util.HashMap<String, Object>();
 		PageInfo pageInfo = condition.getPageinfo();
 		String name = null;
@@ -91,9 +94,22 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 		FSP fsp = new FSP();
 		StringBuffer sbfCondition = new StringBuffer();
 		sbfCondition.append("1=1");
+		String userCode = userDTO.getUsergroup().getCode();
+		
 		if(name!=null&&name.length()>0) {
 			sbfCondition.append(" and name like '%"+name+"%'");
+		}else {
+			if(userCode.equals("GLY")) {
+				sbfCondition.append(" and 1=1");
+			}else if(userCode.equals("ZBCPGLBGLY")) {
+				//sbfCondition.append(" and groupcode='ZBCPGLB'");
+			}else if(userCode.equals("ZBCSGLBGLY")){
+				sbfCondition.append(" and (groupcode='ZBYYGLBZ' or groupcode='ZBCPGLB') ");
+			}else {
+				sbfCondition.append(" and 1=0");
+			}
 		}
+		
 		IFilter iFilter = FilterFactory.getSimpleFilter(sbfCondition.toString());
 		fsp.setPage(pageInfo);
 		fsp.setSort(SortFactory.createSort("id",ISort.DESC));
@@ -125,37 +141,40 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 		IFilter userFilter = FilterFactory.getSimpleFilter("mobilephone='"+phone+"' and disabledFlag=1 ");
 		List<User> users = (List<User>) userManager.getList(userFilter);
 		
-		if(users!=null&&users.size()>0&&phone!=null&&phone.length()>0) {
-			//如果存在账号信息 则禁用 
-			for(User rmUser : users) {
-				rmUser.setDisabledFlag(0);
-				preSaveObject(rmUser);
-				userManager.saveObject(rmUser);
+		//如果不存在用户组 说明没分配过。则创建用户。如果存在则证明 为修改 不对用户进行操作 
+		if(onLineHumanresources.getGroupcode()==null||onLineHumanresources.getGroupcode().length()==0) {
+			if(users!=null&&users.size()>0&&phone!=null&&phone.length()>0) {
+				//如果存在账号信息 则禁用 
+				for(User rmUser : users) {
+					rmUser.setDisabledFlag(0);
+					preSaveObject(rmUser);
+					userManager.saveObject(rmUser);
+				}
 			}
+			//重新开通 
+			User user = new User();
+			user.setName(onLineHumanresources.getName());
+			user.setCode(ChineseToEnglish.getPingYin(onLineHumanresources.getName()));
+			user.setDisabledFlag(1);
+			user.setDoctype(0);
+			user.setEmail("123@123.com");
+			user.setEmployeeId(onLineHumanresources.getEmployee_no());
+			user.setEnablestate(1);
+			user.setPassword("e10adc3949ba59abbe56e057f20f883e"); //123456
+			user.setPk_org(Long.parseLong("40284"));
+			user.setMobilephone(onLineHumanresources.getPhone());
+			user.setCareergroup(careerChannelDto.getCareername());
+			
+			IFilter groupFilter =FilterFactory.getSimpleFilter("code",careerChannelDto.getGroupcode());
+	        List<?> lst_groupList = u.getList(groupFilter);
+	        UserGroup userGroup = (UserGroup) lst_groupList.get(0);
+			
+	        user.setUsergroup(userGroup);
+			user.setLogicDel(0);
+			preSaveObject(user);
+			userManager.saveObject(user);
 		}
-		//重新开通 
 		
-		User user = new User();
-		user.setName(onLineHumanresources.getName());
-		user.setCode(ChineseToEnglish.getPingYin(onLineHumanresources.getName()));
-		user.setDisabledFlag(1);
-		user.setDoctype(0);
-		user.setEmail("123@123.com");
-		user.setEmployeeId(onLineHumanresources.getEmployee_no());
-		user.setEnablestate(1);
-		user.setPassword("e10adc3949ba59abbe56e057f20f883e"); //123456
-		user.setPk_org(Long.parseLong("40284"));
-		user.setMobilephone(onLineHumanresources.getPhone());
-		user.setCareergroup(careerChannelDto.getCareername());
-		
-		IFilter groupFilter =FilterFactory.getSimpleFilter("code",careerChannelDto.getGroupcode());
-        List<?> lst_groupList = u.getList(groupFilter);
-        UserGroup userGroup = (UserGroup) lst_groupList.get(0);
-		
-        user.setUsergroup(userGroup);
-		user.setLogicDel(0);
-		preSaveObject(user);
-		userManager.saveObject(user);
 		
 		onLineHumanresources.setGroupcode(careerChannelDto.getGroupcode());
 		onLineHumanresources.setGroupname(careerChannelDto.getGroupname());

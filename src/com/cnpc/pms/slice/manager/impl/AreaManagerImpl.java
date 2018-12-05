@@ -17,6 +17,7 @@ import com.cnpc.pms.personal.manager.TinyVillageManager;
 import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -95,7 +96,7 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 	}
 
 	@Override
-	public Area saveArea(Area area) {
+	public Area saveArea_discard(Area area) {
 		AreaInfoManager areaInfoManager = (AreaInfoManager) SpringHelper.getBean("areaInfoManager");
 		AreaHistoryManager areaHistoryManager = (AreaHistoryManager) SpringHelper.getBean("areaHistoryManager");
 		AreaInfoHistoryManager areaInfoHistoryManager = (AreaInfoHistoryManager) SpringHelper
@@ -180,6 +181,157 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		}
 
 		return save_area;
+	}
+
+	@Override
+	public Map<String, Object> saveArea(Area area, String actionType) {
+
+		AreaInfoManager areaInfoManager = (AreaInfoManager) SpringHelper.getBean("areaInfoManager");
+		AreaHistoryManager areaHistoryManager = (AreaHistoryManager) SpringHelper.getBean("areaHistoryManager");
+		AreaInfoHistoryManager areaInfoHistoryManager = (AreaInfoHistoryManager) SpringHelper.getBean("areaInfoHistoryManager");
+		StoreManager storeManager = (StoreManager) SpringHelper.getBean("storeManager");
+		MongoDBManager mongoDBManager = (MongoDBManager) SpringHelper.getBean("mongoDBManager");
+
+		//检查小区是否已经绑定到其他片区
+		List<AreaInfo> checkRepeatResult = this.checkAreaIsRepeat(area,actionType);
+		if(checkRepeatResult!=null&&checkRepeatResult.size()>0){
+			Map<String,Object> result = new HashMap<String,Object>();
+			StringBuilder villageSB = new StringBuilder();
+			StringBuilder tinyVillageSB = new StringBuilder();
+			for(AreaInfo areaInfo:checkRepeatResult){
+
+				villageSB.append("、").append(areaInfo.getVillage_name());
+				if(areaInfo.getTiny_village_name()!=null){
+					tinyVillageSB.append("、").append(areaInfo.getTiny_village_name());
+				}
+			}
+			villageSB = villageSB.length()>0?villageSB.deleteCharAt(0):villageSB;
+			tinyVillageSB = tinyVillageSB.length()>0?tinyVillageSB.deleteCharAt(0):tinyVillageSB;
+			result.put("checkStatus",false);
+			result.put("checkResult","bindByArea");
+			result.put("checkDesc",villageSB.toString()+" "+tinyVillageSB.toString()+" 在其他片区已存在!");
+			return result;
+		}
+
+		Map<String,Object> checkTinyAreaResult= this.checkTinyAreaIsExcludeStore(area);
+		Map<String,Object> result = new HashMap<String,Object>();
+		Object tinyvillageSbUnknown = checkTinyAreaResult.get("tinyvillageSbUnknown");
+		if(tinyvillageSbUnknown!=null&&tinyvillageSbUnknown.toString().length()>0){
+			result.put("checkStatus",false);
+			result.put("checkResult","noTinyArea");
+			result.put("checkDesc",tinyvillageSbUnknown.toString().substring(1)+" 还未被当前门店录入坐标范围!");
+			return result;
+		}
+
+		Object excludeTinyAreaPri = checkTinyAreaResult.get("excludeTinyAreaPri");
+		if(excludeTinyAreaPri!=null&&excludeTinyAreaPri.toString().length()>0){
+			result.put("checkStatus",false);
+			result.put("checkResult","noTinyArea");
+			result.put("checkDesc",excludeTinyAreaPri.toString().substring(1)+" 还未被当前门店录入坐标范围!");
+			return result;
+		}
+
+		Object excludeTinyAreaPub = checkTinyAreaResult.get("excludeTinyAreaPub");
+		Object excludeTinyAreaIdPub = checkTinyAreaResult.get("excludeTinyAreaIdPub");
+		if(excludeTinyAreaPub!=null&&excludeTinyAreaPub.toString().length()>0){
+			result.put("checkStatus",false);
+			result.put("checkResult","selectByMap");
+			result.put("checkDesc",excludeTinyAreaPub.toString().substring(1)+" 已经被其他门店录入坐标，请点击‘通过地图选择小区’执行小区选择的操作!");
+			result.put("checkData1",excludeTinyAreaIdPub);
+			result.put("checkData2",excludeTinyAreaPub);
+			return result;
+		}
+
+		Object includeTinyAreaPub = checkTinyAreaResult.get("includeTinyAreaPub");
+		if(includeTinyAreaPub!=null&&includeTinyAreaPub.toString().length()>0){
+			result.put("checkStatus",false);
+			result.put("checkResult","noUse");
+			result.put("checkDesc",includeTinyAreaPub.toString().substring(1)+" 暂时不能被当前门店选择使用!");
+			return result;
+		}
+
+
+		Store store = (Store) storeManager.getObject(area.getStore_id());
+		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+		Area save_area = null;
+		AreaHistory areaHistory = null;
+		List<AreaInfo> areaInfoList = null;
+		Map<String,Object> saveResult = new HashMap<String,Object>();
+		try {
+
+			if (null != area.getId()) {
+				save_area = (Area) this.getObject(area.getId());
+
+				// 保存片区原始数据记录
+				areaHistory = new AreaHistory();
+				BeanUtils.copyProperties(save_area, areaHistory, new String[] { "id" });
+				areaHistory.setArea_id(area.getId());
+				areaHistory.setFlag(1);
+				areaHistoryManager.saveObject(areaHistory);
+
+				areaInfoList = (List<AreaInfo>) areaDao.queryAreaInfoByAreaId(area.getId());
+				for (AreaInfo info : areaInfoList) {
+					AreaInfoHistory areaInfoHistory = new AreaInfoHistory();
+					BeanUtils.copyProperties(info, areaInfoHistory, new String[] { "id" });
+					areaInfoHistory.setAreainfo_id(info.getId());
+					areaInfoHistory.setFlag(1);
+					areaInfoHistoryManager.saveObject(areaInfoHistory);
+				}
+
+				areaInfoManager.deleteAreaInfoByAreaId(area);// 删除原始片区详情
+
+			} else {
+				List<Area> area_list = (List<Area>) this
+						.getList(FilterFactory.getSimpleFilter("store_id", area.getStore_id()));
+				String temp_no = "";
+				if (area_list == null || area_list.size() == 0) {
+					temp_no = "00001";
+				} else if (area_list.size() > 0 && area_list.size() < 9) {
+					temp_no = "0000" + (area_list.size() + 1);
+				} else if (area_list.size() >= 9 && area_list.size() < 99) {
+					temp_no = "000" + (area_list.size() + 1);
+				} else if (area_list.size() >= 99 && area_list.size() < 999) {
+					temp_no = "00" + (area_list.size() + 1);
+				} else if (area_list.size() >= 999 && area_list.size() < 9999) {
+					temp_no = "0" + (area_list.size() + 1);
+				} else if (area_list.size() >= 9999) {
+					temp_no = String.valueOf(area_list.size() + 1);
+				}
+				save_area = new Area();
+				String area_no = store.getStoreno() + temp_no;
+				save_area.setArea_no(area_no);
+			}
+			save_area.setName(area.getName());
+			// save_area.setTown_id(area.getTown_id());
+			save_area.setStore_id(area.getStore_id());
+			save_area.setEmployee_a_name(area.getEmployee_a_name());
+			save_area.setEmployee_a_no(area.getEmployee_a_no());
+			save_area.setEmployee_b_no(area.getEmployee_b_no());
+			save_area.setEmployee_b_name(area.getEmployee_b_name());
+
+			preObject(save_area);
+			this.saveObject(save_area);
+
+			for (AreaInfo info : area.getChildrens()) {
+				info.setStore_id(area.getStore_id());
+				info.setArea_id(save_area.getId());
+				info.setArea_no(save_area.getArea_no());
+				preObject(info);
+				areaInfoManager.saveObject(info);
+			}
+			save_area.setChildrens(area.getChildrens());
+			Map<String, Object> mongoresult = mongoDBManager.updateTinyAreaOfEmployee(save_area);
+			if (Integer.parseInt(String.valueOf(mongoresult.get("code"))) != CodeEnum.success.getValue()) {
+				throw new MyException("更新tiny_area或者mongodb国安侠失败");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		saveResult.put("checkStatus",true);
+		saveResult.put("saveResult",save_area);
+		return saveResult;
+
 	}
 
 	@Override
@@ -966,17 +1118,23 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			//Filters.eq("storeId", store.getPlatformid())
 			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
-			Document document = dIterable.first();
 
-			if (document == null) {
+
+			MongoCursor<Document> cursor0 = dIterable.iterator();
+
+			if(cursor0==null){
 				result.put("store", store);
-				result.put("code", CodeEnum.nullData.getValue());
-				result.put("message", "门店服务范围不存在");
+				result.put("code",CodeEnum.nullData.getValue());
+				result.put("message","门店服务范围不存在");
 				return result;
-			} else {
-				org.json.JSONObject jObject = new org.json.JSONObject(document.toJson());
-				result.put("serviceArea", JSONArray.parse(jObject.get("vertex").toString()));
 			}
+
+			JSONArray ja = new JSONArray();
+			while (cursor0.hasNext()) {
+				Document doc = cursor0.next();
+				ja.add(doc.get("vertex"));
+			}
+			result.put("serviceArea", ja);
 
 
 
@@ -1162,16 +1320,21 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			System.out.println(">>>>>>>>>>>>>>>>>>>>>>storeid:"+store.getPlatformid()+"   platformid:"+store.getPlatformid());
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
-			Document document = dIterable.first();
-           
-			if (document == null) {
-				result.put("code", CodeEnum.nullData.getValue());
-				result.put("message", "门店服务范围不存在");
+			MongoCursor<Document> cursor = dIterable.iterator();
+
+			if(cursor==null){
+				result.put("code",CodeEnum.nullData.getValue());
+				result.put("message","门店服务范围不存在");
 				return result;
-			} else {
-				org.json.JSONObject jObject = new org.json.JSONObject(document.toJson());
-				result.put("serviceArea", JSONArray.parse(jObject.get("vertex").toString()));
 			}
+
+			JSONArray ja = new JSONArray();
+			while (cursor.hasNext()) {
+				Document doc = cursor.next();
+				ja.add(doc.get("vertex"));
+			}
+			result.put("serviceArea", ja);
+
 
 			MongoCollection<Document> collection2 = database.getCollection("store_position");
 			FindIterable<Document> dIterable2 = collection2.find(new Document("_id", store.getPlatformid()).append("status", 0));
@@ -1428,18 +1591,25 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 			
 			MongoCollection<Document> collection = database.getCollection("store_service_area");
 			FindIterable<Document> dIterable = collection.find(new Document("storeId",store.getPlatformid()).append("status", 0));
-			Document document = dIterable.first();
 
-			
-			if (document == null) {
+
+			MongoCursor<Document> cursor0 = dIterable.iterator();
+
+			if(cursor0==null){
 				result.put("store", store);
-				result.put("code", CodeEnum.nullData.getValue());
-				result.put("message", "门店服务范围不存在");
+				result.put("code",CodeEnum.nullData.getValue());
+				result.put("message","门店服务范围不存在");
 				return result;
-			} else {
-				org.json.JSONObject jObject = new org.json.JSONObject(document.toJson());
-				result.put("serviceArea", JSONArray.parse(jObject.get("vertex").toString()));
 			}
+
+			JSONArray ja = new JSONArray();
+			while (cursor0.hasNext()) {
+				Document doc = cursor0.next();
+				ja.add(doc.get("vertex"));
+			}
+			result.put("serviceArea", ja);
+			
+
 			
 			// 查询小区坐标
 			collection = database.getCollection("tiny_area");
@@ -1700,6 +1870,39 @@ public class AreaManagerImpl extends BizBaseCommonManager implements AreaManager
 		result.put("message",CodeEnum.success.getDescription());
 
 		return result;
+	}
+
+	@Override
+	public AreaInfo checkTinyVillageBindArea(AreaInfo areaInfo, String actionType) {
+		AreaDao areaDao = (AreaDao) SpringHelper.getBean(AreaDao.class.getName());
+		// 检查是片区信息是否存在
+		List<Map<String, Object>> result = areaDao.selectAreaInfo(areaInfo, actionType);
+		if (result != null && result.size() > 0) {
+			StringBuilder tinyvillageSb = new StringBuilder();
+			StringBuilder villageSb = new StringBuilder();
+			String tinyvillage = "";
+			String village = "";
+			for (int i = 0; i < result.size(); i++) {
+				Map<String, Object> obj = result.get(i);
+				if (obj.get("flag") != null && Long.parseLong(obj.get("flag").toString()) == 1) {// 全部小区
+					villageSb.append("、").append(obj.get("name").toString());
+				} else if (obj.get("flag") != null && Long.parseLong(obj.get("flag").toString()) == 2) {// 个别小区
+					tinyvillageSb.append("、").append(obj.get("name").toString());
+				}
+			}
+
+			if (tinyvillageSb.toString().contains("、")) {
+				tinyvillage = tinyvillageSb.toString().substring(1);
+			}
+
+			if (villageSb.toString().contains("、")) {
+				village = villageSb.toString().substring(1);
+			}
+
+			areaInfo.setVillage_name(village);
+			areaInfo.setTiny_village_name(tinyvillage);
+		}
+		return areaInfo;
 	}
 
 

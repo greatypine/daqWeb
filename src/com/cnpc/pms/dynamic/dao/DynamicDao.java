@@ -3,12 +3,8 @@
  */
 package com.cnpc.pms.dynamic.dao;
 
-import java.io.DataOutput;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.cxf.helpers.MapNamespaceContext;
-
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
@@ -1044,4 +1040,30 @@ public interface DynamicDao extends IDAO{
      * @return
      */
     public Map<String, Object> employeeOfMaoli(DynamicDto dynamicDto,PageInfo pageInfo);
+
+    /**
+	 * 查询daqWeb库门店用户量-原来在gemini
+	 * @param dd
+	 * @param pageInfo
+	 * @return
+	 */
+	Map<String, Object> queryStoreCustmerCount(DynamicDto dd, List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO,PageInfo pageInfo);
+
+
+    /**
+     * @Description 查询事业群GMV
+     * @author gbl
+     * @date 2018/11/30 14:42
+     **/
+
+    public Map<String,Object> queryDeptGMVByImpala(DynamicDto dynamicDto,PageInfo pageInfo);
+
+    /**
+     * @Description 查询事业群用户
+     * @author gbl
+     * @date 2018/12/1 16:13
+     **/
+
+	public Map<String,Object> queryDeptConsumerByImpala(DynamicDto dynamicDto,PageInfo pageInfo);
+
 }

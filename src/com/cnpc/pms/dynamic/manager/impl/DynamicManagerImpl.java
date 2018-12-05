@@ -38,7 +38,9 @@ import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.ExportExcelByOssUtil;
 import com.cnpc.pms.utils.MD5Utils;
 import com.cnpc.pms.utils.excel.MergedRegionParam;
+
 import net.sf.json.JsonConfig;
+
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.*;
@@ -3910,6 +3912,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		List<Map<String,Object>> dynamicAllList = null;
 		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+		StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
 		Map<String,Object> dynamicByCity = null;
 		List<Map<String,Object>> dynamicByCityList = null;
 		Map<String,Map<String,Object>> dynamicByCityMap = new HashMap<String, Map<String,Object>>();
@@ -3950,7 +3953,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 						map.put("cityno", dynamic.get("city_code"));
 						cityNO.add(map);
 						if(dynamicByCityMap.get(String.valueOf(dynamic.get("city_code")))==null){
-							dynamicByCity = (Map<String, Object>) orderDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
+							String cityno = String.valueOf(cityNO.get(0).get("cityno")).length()==3?('0'+String.valueOf(cityNO.get(0).get("cityno"))):String.valueOf(cityNO.get(0).get("cityno"));
+							List<Map<String,Object>> cityIdList = storeDao.getCityIdByNO(String.valueOf(cityno));
+							ddDto.setCityId(Long.parseLong(String.valueOf(cityIdList.get(0).get("cityId"))));
+							dynamicByCity = (Map<String, Object>) dynamicDao.queryStoreCustmerCount(ddDto,cityNO,null,null);
 							dynamicByCityMap.put(String.valueOf(dynamic.get("city_code")), dynamicByCity);
 						}
 					}else if("4".equals(methodKey)){
@@ -4985,12 +4991,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> dynamicList = null;
 		Map<String,Object> dynamicAllList = null;
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
-		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		String[] str_headers = new String[4];
 		String[] headers_key = new String[4];
 		String tableName = "";
 		int target = dynamicDto.getTarget();
-		String cityStr = String.valueOf(dynamicDto.getCityId());
 		DynamicDto dynamicDto2 = new DynamicDto();
 		dynamicDto2.setCityId(null);
 		dynamicDto2.setProvinceId(null);
@@ -5033,8 +5037,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 				if(province_id!=null&&province_id!=""){
 					provinceNO = storeDao.getProvinceNOOfCSZJ(province_id);
 				}
-				dynamicList = orderDao.queryStoreCustmerCount(dynamicDto,cityNO,provinceNO,null);
-				dynamicAllList = orderDao.queryStoreCustmerCount(dynamicDto2,null,null,null);
+				dynamicList = dynamicDao.queryStoreCustmerCount(dynamicDto,cityNO,provinceNO,null);
+				dynamicAllList = dynamicDao.queryStoreCustmerCount(dynamicDto2,null,null,null);
 				list = this.getRankList(dynamicList, dynamicAllList,"store_name",dynamicDto,"3");
 				tableName = "门店(本月新用户量)排名";
 				str_headers[2]="门店名称";
@@ -5911,11 +5915,18 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		StoreManager storeManager = (StoreManager)SpringHelper.getBean("storeManager");
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
-			
-			String[] dateArr = dd.getBeginDate().split("-");
-	        dd.setYear(Integer.parseInt(dateArr[0]));
-	        dd.setMonth(Integer.parseInt(dateArr[1]));
-			result= dynamicDao.queryDeptGmv(dd, pageInfo);
+
+            String[] dateArr = dd.getBeginDate().split("-");
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR,Integer.parseInt(dateArr[0]));
+            calendar.set(Calendar.MONTH,Integer.parseInt(dateArr[1])-1);
+            calendar.set(Calendar.DAY_OF_MONTH,1);
+            String beginDate = DateUtils.dateFormat(calendar.getTime());
+            dd.setBeginDate(beginDate);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String endDate = DateUtils.dateFormat(calendar.getTime());
+            dd.setEndDate(endDate);
+			result= dynamicDao.queryDeptGMVByImpala(dd, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -5936,9 +5947,17 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
 		try {
 			String[] dateArr = dd.getBeginDate().split("-");
-            dd.setYear(Integer.parseInt(dateArr[0]));
-            dd.setMonth(Integer.parseInt(dateArr[1]));
-			result= dynamicDao.queryDeptConsumer(dd, pageInfo);
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.YEAR,Integer.parseInt(dateArr[0]));
+			calendar.set(Calendar.MONTH,Integer.parseInt(dateArr[1])-1);
+            calendar.set(Calendar.DAY_OF_MONTH,1);
+            String beginDate = DateUtils.dateFormat(calendar.getTime());
+            dd.setBeginDate(beginDate);
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+			String endDate = DateUtils.dateFormat(calendar.getTime());
+			dd.setEndDate(endDate);
+
+			result= dynamicDao.queryDeptConsumerByImpala(dd, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -5957,16 +5976,42 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryDeptGmv(dd, null);
 		if("success".equals(map.get("status"))){//成功返回数据
-			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("gmv");
+			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("data");
 			if(list==null||list.size()==0){
 				result.put("message","没有符合条件的数据！");
 				result.put("status","null");
 				return result;
 			}
 
-			String[] str_headers = {"城市","门店编号","门店名称","事业群","绩效GMV"};
-			String[] headers_key = {"cityname","storeno","storename","deptname","pesgmv"};
-			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群GMV",list,str_headers,headers_key);
+
+            List<String> headers = new ArrayList<String>();
+            headers.add("事业群");
+            headers.add("绩效GMV");
+
+            List<String> headers_key = new ArrayList<String>();
+            headers_key.add("deptname");
+            headers_key.add("pesgmv");
+
+            int index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_city_active")) {
+                headers.add(index_dept_last,"城市");
+                headers_key.add(index_dept_last,"store_city_name");
+            }
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_store_active")){
+                headers.add(index_dept_last,"门店名称");
+                headers_key.add(index_dept_last,"store_name");
+                headers.add(index_dept_last+1,"门店编号");
+                headers_key.add(index_dept_last+1,"store_code");
+            }
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_channel_active")){
+                headers.add(index_dept_last+1,"频道");
+                headers_key.add(index_dept_last+1,"channel_name");
+            }
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群GMV",list,headers.toArray(),headers_key.toArray());
 			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");
@@ -5984,16 +6029,45 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 		Map<String,Object> result  = new HashMap<String,Object>();
 		Map<String,Object> map  = this.queryDeptConsumer(dd, null);
 		if("success".equals(map.get("status"))){//成功返回数据
-			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("consumer");
+			List<Map<String, Object>> list = (List<Map<String, Object>>)map.get("data");
 			if(list==null||list.size()==0){
 				result.put("message","没有符合条件的数据！");
 				result.put("status","null");
 				return result;
 			}
 
-			String[] str_headers = {"城市","门店编号","门店名称","事业群","消费用户","消费用户超10元"};
-			String[] headers_key = {"cityname","storeno","storename","deptname","cusnum","cusnum_ten"};
-			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群用户",list,str_headers,headers_key);
+
+			List<String> headers = new ArrayList<String>();
+			headers.add("事业群");
+			headers.add("消费用户");
+			headers.add("消费用户超10元");
+
+			List<String> headers_key = new ArrayList<String>();
+			headers_key.add("deptname");
+            headers_key.add("cusnum");
+            headers_key.add("cusnum_ten");
+
+            int index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+			if(dd.getSearchstr().contains("dept_city_active")) {
+				headers.add(index_dept_last,"城市");
+				headers_key.add(index_dept_last,"store_city_name");
+			}
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_store_active")){
+                headers.add(index_dept_last,"门店名称");
+                headers_key.add(index_dept_last,"store_name");
+                headers.add(index_dept_last+1,"门店编号");
+                headers_key.add(index_dept_last+1,"store_code");
+            }
+
+            index_dept_last =  headers_key.indexOf("deptname")==0?0:(headers_key.indexOf("deptname"));
+            if(dd.getSearchstr().contains("dept_channel_active")){
+                headers.add(index_dept_last+1,"频道");
+                headers_key.add(index_dept_last+1,"channel_name");
+            }
+
+			ExportExcelByOssUtil eeuo = new ExportExcelByOssUtil("事业群用户",list,headers.toArray(),headers_key.toArray());
 			result = eeuo.exportFile();
 		}else{
 			result.put("message","请重新操作！");

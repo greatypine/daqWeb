@@ -101,18 +101,25 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			query.append("storeId", platformId);
 			query.append("status", 0);
 			FindIterable<Document> dIterable = collection.find(query);
-			Document document = dIterable.first();
-			
-			if(document==null){
+			MongoCursor<Document> cursor = dIterable.iterator();
+
+			if(cursor==null){
 				result.put("code",CodeEnum.nullData.getValue());
 				result.put("message","门店服务范围不存在");
 				return result;
-			}else{ 
-				JSONObject jObject = new JSONObject(document.toJson());
-				result.put("data", JSONArray.parse(jObject.get("vertex").toString()));
-				result.put("code",CodeEnum.success.getValue());
-				result.put("message", CodeEnum.success.getDescription());
 			}
+
+			JSONArray ja = new JSONArray();
+			while (cursor.hasNext()) {
+				Document doc = cursor.next();
+				ja.add(doc.get("vertex"));
+			}
+			result.put("data", ja);
+			result.put("code",CodeEnum.success.getValue());
+			result.put("message", CodeEnum.success.getDescription());
+
+
+
 		} catch (Exception e) {
 			logger.info("getStoreServiceArea>>>"+e.getMessage());
 			e.printStackTrace();
@@ -274,16 +281,21 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 									Store temp_store = storeManager.findStoreByStoreNo(String.valueOf(storeNo));
 									List<Map<String,Object>> list = mongoDBDao.selectTinyVillageCode(String.valueOf(tinyVillageNo));
 									StringBuilder sb = new StringBuilder("");
-									if(list!=null){
+									if(list!=null&&list.size()>0){
 										for(Map<String,Object> map:list){
 											sb.append("、"+map.get("tiny_village_name"));
 										}
 										sb = sb.deleteCharAt(0);
+										result.put("code",CodeEnum.repeatData.getValue());
+										result.put("message","当前区域已经被 "+temp_store.getName()+" 所画的 "+sb.toString()+" 占用");
+										return result;
+									}else{
+										result.put("code",CodeEnum.nullData.getValue());
+										result.put("message","当前区域已经被"+temp_store.getName()+"所画的编号为（"+tinyVillageNo+"）的小区占用");
+										return result;
 									}
 									
-									result.put("code",CodeEnum.repeatData.getValue());
-									result.put("message","当前区域已经被 "+temp_store.getName()+" 所画的 "+sb.toString()+" 占用");
-									return result;
+
 									
 								}else{
 									result.put("code",CodeEnum.repeatData.getValue());
@@ -650,13 +662,23 @@ public class MongoDBManagerImpl extends BizBaseCommonManager implements MongoDBM
 			query.append("storeId", store.getPlatformid());
 			query.append("status", 0);
 			FindIterable<Document> dIterable1 = collection1.find(query);
-			Document document1 = dIterable1.first();
-			
-			if(document1==null){
+			//Document document1 = dIterable1.first();
+//
+//			if(document1==null){
+//				result.put("code",CodeEnum.nullData.getValue());
+//				result.put("message","门店服务范围不存在");
+//				return result;
+//			}
+
+			MongoCursor<Document> cursor = dIterable1.iterator();
+
+			if(cursor==null){
 				result.put("code",CodeEnum.nullData.getValue());
 				result.put("message","门店服务范围不存在");
 				return result;
 			}
+
+
 		    // 注意这里的数据类型是document  
 			MongoCollection<Document> collection2 = database.getCollection("store_position");
 			//Filters.eq("_id", store.getPlatformid());

@@ -394,8 +394,7 @@ var initPageElements = function () {
       {
         cursor: 'default',
         //name:'一街坊、八街坊东、八街西、永定路社区社区部',
-        name: '毛利走势',
-        type:'line',
+        name: '毛利走势',        type:'line',
         data:[],
         smooth: true,
         showAllSymbol: true,
@@ -403,9 +402,9 @@ var initPageElements = function () {
         symbolSize: 10,
         itemStyle : {  
             normal : {  
-                color:'#26C0C0',  //圈圈的颜色
+                color:'#ea89ed',  //圈圈的颜色
                 lineStyle:{  
-                    color:'#26C0C0'  //线的颜色
+                    color:'#ea89ed'  //线的颜色
                 }  
             }
         },
@@ -957,7 +956,10 @@ var initPageElements = function () {
       {
       	cursor: 'pointer',
         name: 'GMV',
-        type: 'bar',xAxisIndex: 0,yAxisIndex: 0,barWidth:'55%',
+        type: 'bar',xAxisIndex: 0,yAxisIndex: 0,
+        //barWidth:'55%',
+        barWidth : 35,//柱图宽度
+        barMaxWidth:35,//最大宽度
         itemStyle:{
           normal:{
             barBorderRadius: 50,
@@ -5080,74 +5082,58 @@ var initClick = function(){
 	var targets = encode64(pageStatusInfo.targets);
 	$("#city_gmv_more").on('click',function(){
     	var type=encode64("city_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#store_gmv_more").on('click',function(){
     	var type=encode64("store_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#store_order_more").on('click',function(){
     	var type=encode64("store_order");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#guoanxia_gmv_more").on('click',function(){
     	var type=encode64("guoanxia_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#commodity_gmv_more").on('click',function(){
     	var type=encode64("commodity_gmv");
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-        var url = "headquarters_rank.html?p="+provinceId+"&pn="+provinceName+"&cs="+cityId+"&cn="+cityName+"&tps="+type+"&fs="+targets;
+        var url = "headquarters_rank.html?p=&pn=&cs="+cityId+"&cn="+cityName+"&tps="+type+"&fs="+targets;
         window.open(url);
     });
     $("#businessDep_gmv_more").on('click',function(){
     	var type=encode64("businessDep_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#channel_gmv_more").on('click',function(){
     	var type=encode64("channel_gmv");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&fs="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#channel_order_more").on('click',function(){
     	var type=encode64("channel_order");
-    	var provinceId=encode64(pageStatusInfo.provinceId =="" ? '' : pageStatusInfo.provinceId);
     	var cityId=encode64(pageStatusInfo.cityId =="" ? '' : pageStatusInfo.cityId);
-    	var provinceName=encode64((pageStatusInfo.provinceName ==""||typeof(pageStatusInfo.provinceName) == "undefined") ? '' : pageStatusInfo.provinceName);
     	var cityName=encode64((pageStatusInfo.cityName ==""||typeof(pageStatusInfo.cityName) == "undefined") ? '' : pageStatusInfo.cityName);
-        var url = "headquarters_rank.html?"+"p="+provinceId+"&tps="+type+"&cs="+cityId+"&targets="+targets+"&pn="+provinceName+"&cn="+cityName;
+        var url = "headquarters_rank.html?"+"p=&tps="+type+"&cs="+cityId+"&targets="+targets+"&pn=&cn="+cityName;
         window.open(url);
     });
     $("#gmv_rank_more").on('click',function(){
@@ -5539,6 +5525,18 @@ function showTooltip3(){
 function hideTooltip3(){
 	$("#attention3").hide();
 }
+function showTooltip4(){
+	$("#attention4").show();
+}
+function hideTooltip4(){
+	$("#attention4").hide();
+}
+function showTooltip5(){
+	$("#attention5").show();
+}
+function hideTooltip5(){
+	$("#attention5").hide();
+}
 function getScreenWidth(){
 /*
   var screenWidth = screen.width;
@@ -5589,7 +5587,7 @@ function showsumofYesterdayprofit(pageStatusInfo){
 	            var resultJson = JSON.parse(data.data);
 	            var jData = JSON.parse(resultJson.gmv)[0];
 	            var real_profit;
-	            if(jData.total_profit){
+	            if(typeof(jData.total_profit)!="undefined"){
 		            real_profit = (jData.total_profit - jData.return_profit - jData.order_fee).toFixed(2);
 		            
 		            order_yesterday_profit = real_profit;

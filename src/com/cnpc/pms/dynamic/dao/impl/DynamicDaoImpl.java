@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.cnpc.pms.utils.ImpalaUtil;
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -3214,7 +3215,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 		}
 		String sql=" select IFNULL(b.inviteCode,'暂无') as inviteCode,ifnull(a.total,0) as total,b.employee_no,CONCAT('*******',SUBSTR(b.mobilephone,8,11)) as mobilephone,b.name,concat(GROUP_CONCAT(b.storename),'') as storename,b.city_name from "
-				+" (select inviteCode,COUNT(1) as total from df_user_member where  customer_id not in (select customer_id from df_member_whitelist) and DATE_FORMAT(opencard_time,'%Y-%m')='"+dynamicDto.getBeginDate()+"' GROUP BY inviteCode) a"
+				+" (select inviteCode,COUNT(1) as total from df_user_member where invitecode REGEXP  '^[0-9]{6}$' and  customer_id not in (select customer_id from df_member_whitelist) and DATE_FORMAT(opencard_time,'%Y-%m')='"+dynamicDto.getBeginDate()+"' GROUP BY inviteCode) a"
 				+" RIGHT JOIN"
 				+" (select t.name,t.phone as mobilephone,t.employee_no,t.inviteCode,ifnull(ts.name,'') as storename,ifnull(t.citySelect,'') as city_name from t_humanresources t LEFT JOIN t_store ts ON t.store_id = ts.store_id "+whereCity+" where  t.inviteCode is not null and t.inviteCode!='' "+whereStoreId
 
@@ -3880,4 +3881,309 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }
         return map_result;
     }
+
+	@Override
+
+	public Map<String, Object> queryStoreCustmerCount(DynamicDto dd,List<Map<String, Object>> cityNO,
+			List<Map<String, Object>> provinceNO, PageInfo pageInfo) {
+		String province_id = dd.getProvinceId()==null?"":String.valueOf(dd.getProvinceId());
+		String city_id = dd.getCityId()==null?"":String.valueOf(dd.getCityId());
+		String provinceStr = "";
+		String cityStr = "";
+		String zx = "no";
+	//		if("1".equals(province_id)||"2".equals(province_id)||"3".equals(province_id)){
+	//		zx = "yes";
+	//	}
+		if(provinceNO!=null&&provinceNO.size()>0){
+			if(province_id!=null&&province_id!=""&&"no".equals(zx)){
+				provinceStr+=" AND ts.province_id='"+province_id+"' ";
+			}
+		}
+		if(cityNO!=null&&cityNO.size()>0){
+			if(city_id!=null&&city_id!=""){
+				cityStr+=" and d.id='"+city_id+"' ";
+			}else if("yes".equals(zx)){
+				cityStr+=" and d.id='"+province_id+"' ";
+			}
+		}
+		Map<String, Object> maps = new HashMap<String, Object>();
+		String sql = "SELECT count(tr.customer_id) AS customer_count,ts.`name` AS store_name,case WHEN LEFT(d.cityno,2)='00' THEN right(d.cityno,3) ELSE d.cityno END AS city_code,concat(tr.store_id,'') as store_id FROM " +
+				"df_customer_order_month_trade_new tr LEFT JOIN t_store ts ON tr.store_id = ts.platformid left join t_dist_citycode d on d.cityname=ts.city_name  WHERE tr.order_ym = '"+
+				dd.getYear()+(dd.getMonth()<10?("0"+dd.getMonth()):dd.getMonth())+"' "+provinceStr+cityStr+" and ts.`name` is not null GROUP BY ts.`name` ORDER BY customer_count DESC ";
+		String sql_count = "SELECT count(tdd.customer_count) as customer_cnt from ( "+sql+") tdd ";
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		List<?> list = null;
+		try {
+			Query query_count = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql_count);
+			List<?> total = query_count
+					.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			if(pageInfo!=null){
+				if(total!=null&&total.size()>0){
+					maps = (Map<String, Object>) total.get(0);
+					pageInfo.setTotalRecords(Integer.valueOf(maps.get("customer_cnt").toString()));
+				}else{
+					pageInfo.setTotalRecords(Integer.valueOf(0));
+				}
+			}
+			Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+			
+			if(pageInfo==null){
+				list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+			}else{
+				list=query
+				.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(
+						pageInfo.getRecordsPerPage()
+								* (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+			}
+			if(pageInfo!=null){
+				Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+				map_result.put("pageinfo", pageInfo);
+				map_result.put("total_pages", total_pages);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		map_result.put("gmv", list);
+        return map_result;
+    }
+
+	public Map<String, Object> queryDeptGMVByImpala(DynamicDto dynamicDto, PageInfo pageInfo) {
+
+
+		String groupStr = " group by bussiness_group_id";
+		String whereStr= " where deptgmv.deptid is not null and deptgmv.deptname not like '%运营管理中心%' and deptgmv.deptname not like '%测试%' and deptgmv.deptname is not null";
+		String onStr = " on deptgmv.deptid = deptthgmv.deptid";
+		String orderStr=" order by deptgmv.deptid";
+		String selectStr1 = ",min(department_name) as deptname";
+		String selectStr2 = "";
+		String storeWhere = "";
+		if(dynamicDto.getDept()!=null&&!"".equals(dynamicDto.getDept())){
+			whereStr = whereStr+" and c.bussiness_group_id='"+dynamicDto.getDept()+"'";
+		}
+
+		if(dynamicDto.getSearchstr().contains("dept_city_active")) {
+			groupStr = groupStr + " ,store_city_code";
+			if(dynamicDto.getCityName()!=null&&!"".equals(dynamicDto.getCityName())){
+				whereStr = whereStr+" and deptgmv.store_city_name like '%"+dynamicDto.getCityName()+"%'";
+			}
+
+			onStr = onStr+" and deptgmv.store_city_code = deptthgmv.store_city_code ";
+			selectStr1=selectStr1+" ,store_city_code,min(store_city_name) as store_city_name";
+			selectStr2 = selectStr2+",deptgmv.store_city_name";
+            orderStr = orderStr+",deptgmv.store_city_name";
+		}
+
+		if(dynamicDto.getSearchstr().contains("dept_store_active")){
+			groupStr = groupStr + ",store_id,store_code ";
+
+			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
+				whereStr = whereStr+" and deptgmv.store_id='"+dynamicDto.getStoreNo()+"'";
+			}
+
+			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
+				storeWhere = "(tor.store_id='"+dynamicDto.getStoreNo()+"' or tor.normal_store_id='"+dynamicDto.getStoreNo()+"') and ";
+			}
+
+			onStr = onStr+" and deptgmv.store_id = deptthgmv.store_id ";
+			selectStr1=selectStr1+" ,store_id,min(store_name) as store_name,store_code";
+			selectStr2 = selectStr2+",deptgmv.store_name,deptgmv.store_code";
+            orderStr = orderStr+",deptgmv.store_name";
+		}
+
+		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+			groupStr = groupStr + ",channel_id";
+
+			if(dynamicDto.getChannel()!=null&&!"".equals(dynamicDto.getChannel())){
+				whereStr = whereStr+" and deptgmv.channel_name like '%"+dynamicDto.getChannel()+"%'";
+			}
+
+			onStr = onStr+"  and deptgmv.channel_id = deptthgmv.channel_id ";
+			selectStr1=selectStr1+" ,channel_id,min(channel_name) as channel_name";
+			selectStr2 = selectStr2+",deptgmv.channel_name";
+            orderStr = orderStr+",deptgmv.channel_name";
+		}
+
+		whereStr = whereStr+orderStr;
+
+		String sql = "select " +
+				" deptgmv.deptid," +
+				" deptgmv.deptname," +
+				" (IFNULL(deptgmv.gmv_price,0) - IFNULL(deptthgmv.thgmv_price,0)) as pesgmv," +
+				" IFNULL(deptgmv.gmv_price,0) as deptgmv," +
+				" IFNULL(deptthgmv.thgmv_price,0) as thgmv" +
+				selectStr2+
+				" from (" +
+				" select " +
+				" tor.bussiness_group_id as deptid," +
+				" sum(tor.gmv_price) as gmv_price " +
+					selectStr1+
+				" from df_mass_order_monthly tor " +
+				" where "+storeWhere+" tor.sign_time >='"+dynamicDto.getBeginDate()+"' "+
+				" and tor.sign_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
+				" and (tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA')" +
+				" and (tor.store_white !='QA' and tor.store_status = 0 )" +
+				" and (tor.loan_label ='0' or tor.loan_label ='3' or tor.loan_label = '5')" +
+				" and (tor.abnormal_label ='0')" +
+				    groupStr+
+				" ) deptgmv left join ( " +
+				" select" +
+				" tor.bussiness_group_id as deptid," +
+				" sum(tor.returned_amount) as thgmv_price" +
+					selectStr1+
+				" from df_mass_order_total tor" +
+				" where "+storeWhere+" tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA'" +
+				" AND tor.store_white !='QA' and tor.store_status = 0" +
+				" AND (tor.loan_label ='0' or tor.loan_label ='3' or tor.loan_label = '5')" +
+				" AND (tor.abnormal_label ='0')" +
+				" AND tor.return_time >= '"+dynamicDto.getBeginDate()+"' "+
+				" AND tor.return_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
+					groupStr+
+				") deptthgmv"+onStr+ whereStr;
+
+
+        Map<String, Object> map_result = new HashMap<String, Object>();
+        if(pageInfo!=null) {
+
+            String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+
+            int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+            int recordsPerPage = pageInfo.getRecordsPerPage();
+            sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+
+
+            String total = "0";
+            List<Map<String, Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+            if (resultCount != null && resultCount.size() > 0) {
+                total = String.valueOf(resultCount.get(0).get("total"));
+            }
+
+            pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+
+            Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+            map_result.put("pageinfo", pageInfo);
+
+            map_result.put("total_pages", total_pages);
+
+        }
+
+        List<Map<String, Object>> list = ImpalaUtil.executeGuoan(sql);
+        map_result.put("data", list);
+		return map_result;
+
+	}
+
+	@Override
+	public Map<String, Object> queryDeptConsumerByImpala(DynamicDto dynamicDto, PageInfo pageInfo) {
+		String groupStr1 = " group by bussiness_group_id";
+		String whereStr= " where c.bussiness_group_id is not null and c.department_name not like '%运营管理中心%' and c.department_name not like '%测试%' and c.department_name is not null";
+		String onStr = " on c.bussiness_group_id = b.bussiness_group_id";
+        String orderStr=" order by c.bussiness_group_id";
+		String selectStr1 = ",min(department_name) as department_name";
+		String selectStr2 = "";
+		String storeWhere = "";
+		if(dynamicDto.getDept()!=null&&!"".equals(dynamicDto.getDept())){
+			whereStr = whereStr+" and c.bussiness_group_id='"+dynamicDto.getDept()+"'";
+		}
+
+		if(dynamicDto.getSearchstr().contains("dept_city_active")) {
+			groupStr1 = groupStr1 + " ,store_city_code";
+			if(dynamicDto.getCityName()!=null&&!"".equals(dynamicDto.getCityName())){
+				whereStr = whereStr+" and c.store_city_name like '%"+dynamicDto.getCityName()+"%'";
+			}
+
+			onStr = onStr+" and c.store_city_code = b.store_city_code ";
+			selectStr1=selectStr1+" ,store_city_code,min(store_city_name) as store_city_name";
+			selectStr2 = selectStr2+",c.store_city_name";
+            orderStr = orderStr+",c.store_city_name";
+		}
+
+		if(dynamicDto.getSearchstr().contains("dept_store_active")){
+			groupStr1 = groupStr1 + ",store_id,store_code ";
+			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
+				whereStr = whereStr+" and c.store_id='"+dynamicDto.getStoreNo()+"'";
+			}
+
+			onStr = onStr+" and c.store_id = b.store_id ";
+			selectStr1=selectStr1+" ,store_id,min(store_name) as store_name,store_code";
+			selectStr2 = selectStr2+",c.store_name,c.store_code";
+            orderStr = orderStr+",c.store_name";
+		}
+
+		if(dynamicDto.getSearchstr().contains("dept_channel_active")){
+			groupStr1 = groupStr1 + ",channel_id ";
+			if(dynamicDto.getChannel()!=null&&!"".equals(dynamicDto.getChannel())){
+				whereStr = whereStr+" and c.channel_name like '%"+dynamicDto.getChannel()+"%'";
+			}
+
+			onStr = onStr+"  and c.channel_id = b.channel_id ";
+			selectStr1=selectStr1+" ,channel_id,min(channel_name) as channel_name";
+			selectStr2 = selectStr2+",c.channel_name";
+            orderStr = orderStr+",c.channel_name";
+		}
+
+		whereStr = whereStr+orderStr;
+
+		String sql = "SELECT " +
+				" c.bussiness_group_id as deptid," +
+				" c.department_name as deptname," +
+				" c.cusnum," +
+				" b.cusnum_ten " +
+				 selectStr2+
+				" FROM " +
+				" (select " +
+				" bussiness_group_id," +
+				" count(distinct customer_id) as cusnum " +
+				  selectStr1+
+				" from df_mass_order_monthly tor" +
+				" where "+storeWhere+" tor.sign_time >='"+dynamicDto.getBeginDate()+"' "+
+				" and tor.sign_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
+				" and (tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA')" +
+				" and (tor.store_white !='QA' and tor.store_status = 0)" +
+				  groupStr1+") c" +
+				" LEFT JOIN " +
+				" (select " +
+				" bussiness_group_id," +
+				"sum(case when a.monetary > 10 then 1 else 0 end) as cusnum_ten" +
+				  selectStr1+
+				"  from (select " +
+				" bussiness_group_id," +
+				" sum(IFNULL(tor.gmv_price,0)) as monetary" +
+				 selectStr1+
+				" from df_mass_order_monthly tor" +
+				" where "+storeWhere+" tor.sign_time >='"+dynamicDto.getBeginDate()+"' "+
+				" and tor.sign_time < from_unixtime(unix_timestamp(days_add(from_unixtime(unix_timestamp('"+dynamicDto.getEndDate()+"'), 'yyyy-MM-dd') , 1)), 'yyyy-MM-dd')" +
+				" and (tor.eshop_name NOT LIKE '%测试%' AND tor.eshop_white!='QA')" +
+				" and (tor.store_white !='QA' and tor.store_status = 0)" +
+				  groupStr1+",customer_id) a "+groupStr1+") b "+onStr+ whereStr;
+
+
+        Map<String, Object> map_result = new HashMap<String, Object>();
+        if(pageInfo!=null){
+            String sql_count = "SELECT COUNT(1) as total FROM (" + sql + ") T";
+
+            int startData = (pageInfo.getCurrentPage() - 1) * pageInfo.getRecordsPerPage();
+            int recordsPerPage = pageInfo.getRecordsPerPage();
+            sql = sql + " LIMIT " + recordsPerPage + " offset " + startData;
+
+
+            String total = "0";
+            List<Map<String,Object>> resultCount = ImpalaUtil.executeGuoan(sql_count);
+            if(resultCount !=null && resultCount.size()>0 ){
+                total = String.valueOf(resultCount.get(0).get("total"));
+            }
+
+            pageInfo.setTotalRecords(Integer.valueOf(total.toString()));
+
+            Integer total_pages = (pageInfo.getTotalRecords() - 1) / pageInfo.getRecordsPerPage() + 1;
+            map_result.put("pageinfo", pageInfo);
+
+            map_result.put("total_pages", total_pages);
+        }
+        List<Map<String,Object>> list = ImpalaUtil.executeGuoan(sql);
+        map_result.put("data", list);
+
+		return map_result;
+	}
 }
