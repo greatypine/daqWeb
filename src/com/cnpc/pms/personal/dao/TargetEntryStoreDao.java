@@ -3,20 +3,26 @@ package com.cnpc.pms.personal.dao;
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.personal.entity.Storexpand;
-import com.cnpc.pms.personal.entity.TargetEntry;
 import com.cnpc.pms.personal.entity.TargetEntryStore;
 
 import java.util.List;
 import java.util.Map;
 
-public interface TargetEntryDao extends IDAO{
+public interface TargetEntryStoreDao extends IDAO{
 	/**
 	 * 获取目标值录入分页列表
 	 * @param where
 	 * @param pageInfo
 	 * @return
 	 */
-	List<Map<String, Object>> getTargetEntryList(String where, PageInfo pageInfo);
+	List<Map<String, Object>> getTargetEntryStoreList(String where, PageInfo pageInfo);
+	List<Map<String, Object>> getTargetEntryStoreList1(String where, PageInfo pageInfo);
+
+	List<Map<String, Object>> getTargetEntryStoreData(String frame_time,String dept,String channel, PageInfo pageInfo);
+
+	List<Map<String, Object>> exportFile(TargetEntryStore targetEntryStore);
+
+	void updateTargetEntryStore(TargetEntryStore targetEntryStore);
 
 	/**
 	 * 某年签约数量，上会通过数据
@@ -42,17 +48,12 @@ public interface TargetEntryDao extends IDAO{
 
 	/**
 	 * 查询是否录入过信息
-	 * @param
+	 * @param cityname
 	 * @param statistics
 	 * @return
 	 */
-	Map<String, Object> getStatisticsExist(String statistics, String deptName,String channelName);
+	Map<String, Object> getStatisticsExist(String statistics, String cityname);
 	
 	
 	Storexpand getStorexpandById(Long id);
-
-	void updateTargetEntry(TargetEntry targetEntry);
-
-	Map<String, Object> getByIdList(TargetEntry targetEntry);
-
 }

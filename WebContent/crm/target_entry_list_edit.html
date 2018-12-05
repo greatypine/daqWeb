@@ -11,37 +11,65 @@
 <script type="text/javascript" src="../scripts/bidLib.js"></script>
 <script src="dist/js/headquarters/conversion_utils.js"></script>
 <script type="text/javascript">
-	var id = getUrlParamByKey("id");
+    Date.prototype.format=function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1, //月份
+            "d+" : this.getDate(), //日
+            "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+            "H+" : this.getHours(), //小时
+            "m+" : this.getMinutes(), //分
+            "s+" : this.getSeconds(), //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S" : this.getMilliseconds() //毫秒
+        };
+        var week = {
+            "0" : "\u65e5",
+            "1" : "\u4e00",
+            "2" : "\u4e8c",
+            "3" : "\u4e09",
+            "4" : "\u56db",
+            "5" : "\u4e94",
+            "6" : "\u516d"
+        };
+        if(/(y+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        if(/(E+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "\u661f\u671f" : "\u5468") : "")+week[this.getDay()+""]);
+        }
+        for(var k in o){
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+
+//    var COLUMNS = {
+//        "frame_time": function(aData, iColumn, sColumnName, map){
+//            var value = map[sColumnName];
+//            var d=	new Date();
+//            d.setTime(value);
+//            var s=d.format('yyyy-MM-dd');
+//            return s;
+//        }
+//
+//    }
+
+
+
+    var id = getUrlParamByKey("id");
 	var datas = [];
 	$(function(){
 		$("#id").val(id);
+        initalldept();
+        initallchannel();
 		initcurruser();
-		var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
-	  	if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
-	  		initcurcity();
-	  	}else{
-			initallcity();
-	  	}
 		getEditInfo();
+        searchList();
+
 	});
-/* 	function queryTaskQuantity(cityname,cityno){
-		if(cityno!='0'){
-			doManager("officeNetworkManager", "getTaskQuantityExist",[cityname],
-			function(data,textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var resultJson= JSON.parse(data.data);
-					var task_quantity_count = JSON.parse(resultJson.task_quantity_count);
-					if(parseInt(task_quantity_count)==0){
-						$("#cooperative_task").removeAttr("disabled");
-						$("#self_support_task").removeAttr("disabled");
-					}else{
-						$("#cooperative_task").attr("disabled","disabled");
-						$("#self_support_task").attr("disabled","disabled");
-					}
-				}
-			});
-		}
-	} */
+
 
 	function getEditInfo(){
 		var id = $("#id").val();
@@ -54,25 +82,12 @@
 					var jsonData = $.fromJSON(data.data);
 					for ( var key in jsonData) {
 						var va = jsonData[key];
-						if("city_code"==key){
-							$("#city_code").val(va);
-							var options = $("#citySelect option");
-							 for(var i = 0; i < options.length; i++){
-					                var tmp = options[i].value;
-					                if(tmp == va){
-					                    options[i].selected = 'selected';
-					                    break;
-					                }
-					            }
-							 
-							$("#citySelect").val(va);
-						}else{
-							$("#"+key).val(va);
-						}
+                        $("#"+key).text(va);
+                        $("#"+key).val(va);
 					}
-					var ff = $("#frame_time").val();
-                    var frame_time =fmtDate(ff);
-                    $("#frame_time").val(frame_time);
+//					var ff = $("#frame_time").val();
+//                    var frame_time =fmtDate(ff);
+//                    $("#frame_time").val(frame_time);
 				}else{
 					$$.showMessage("系统信息", "加载信息错误");
 				}
@@ -82,111 +97,57 @@
 			}
 		},false);
 	}
-	function yanzhen(){
+    var storeJson;
 
-        var weekSelect = $("#frame_time").val();
-        if(weekSelect == null||weekSelect == ""){
-            alert("录入时间不能为空");
-            return;
-        }
-        var maori_target=$("#maori_target").val().replace(/(^\s*)|(\s*$)/g, "");
-        if(maori_target==null||maori_target==""){
-            alert("毛利不能为空");
-            return;
-        }
-        var profit_target=$("#profit_target").val().replace(/(^\s*)|(\s*$)/g, "");
-        if(profit_target==null||profit_target==""){
-            alert("利润不能为空");
-            return;
-        }
-        var user_target=$("#user_target").val().replace(/(^\s*)|(\s*$)/g, "");
-        if(user_target == "" || user_target == null){
-            alert("用户不能为空!");
-            return;
-        }
-        if(!isNumber(maori_target)){
-            alert("毛利必须为数字");
-            return;
-        }
-        if(!isNumber(profit_target)){
-            alert("利润必须为数字");
-            return;
-        }
-        if(!isNumber(user_target)){
-            alert("用户必须为数字");
-            return;
-        }
+    var array_channel=new Array();
+    //初始化所有频道
+    function initallchannel() {
+        doManager("chartStatManager", "queryAllChannel", null,
+            function(data, textStatus, XMLHttpRequest) {
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    array_channel = new Array();
+                    var storeString = "";
+                    for(i=0;i<jsonData.length;i++){
+                        array_channel.push(jsonData[i].name);
+                        if(i == 0){
+                            storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
+                        }else if(i == jsonData.length-1){
+                            storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+"}";
+                        }else{
+                            storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
+                        }
+                    }
+                    storeJson=$.fromJSON(storeString);
+                    $("#channelSelect").append("<option value=''>全部频道</option>");
+                    $(jsonData).each(function(index,element){
+                        $("#channelSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+                        if(index == 0){
+                            $("#channel_code").val(element.id);
+                            $("#channel_name").val(element.name);
+                        }
+                    });
+                }
+            }, false);
+    }
 
-        var citySelect = $("#citySelect").val();
-        if(citySelect == null||citySelect == "0"){
-            alert("城市不能为空");
-            return;
-        }
-		doSave();		
-	}
-	
-	function doSave(){
-        var arr = [ "frame_time", "businessGroup_name","businessGroup_code","city_name","city_code","maori_target","profit_target","user_target","id"];
-        var o = {};
-			for ( var i in arr) {
-				var v = arr[i];
-				var va = $("#" + v).val();
-				o[v] = va;
-			}
-			doManager("targetEntryManager", "saveOrUpdateTargetEntry", o, function(data,
-					textStatus, XMLHttpRequest) {
-				if (data.result) {
-					var jsonData = $.fromJSON(data.data);
-					alert("修改成功！");
-					window.location.href = 'target_entry_view.html';
-				} else {
-					$$.showMessage("系统信息", "修改失败!");
-				}
-			});
-			
-}
-	function initallcity(){
- 		doManager("DistCityCodeManager","queryAllDistCityList",null,
- 		    function(data,textStatus,XmlHttpRequest){
- 				if (data.result) {
- 					var jsonData = $.fromJSON(data.data);
- 					//$("#citySelect").append("<option value='0'>全部城市</option>");
- 					$(jsonData).each(function(index,element){
- 						$("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
-                     });
- 				}
- 		},false);
- 	}
-	 function initcurcity(){
-			doManager("DistCityCodeManager","queryAllDistCityList",null,
-			 		    function(data,textStatus,XmlHttpRequest){
-			 				if (data.result) {
-			 					var jsonData = $.fromJSON(data.data);
-			 					giveCityNo(datas,jsonData);
-			 				}
-			 });
-	 		doManager("userManager","getCurrentUserCity",null,
-	 		    function(data,textStatus,XmlHttpRequest){
-	 				if (data.result) {
-	 					var jsonData = $.fromJSON(data.data);
-	 					var IndexSelected = "";
-	 					$(jsonData).each(function(index,element){
-	 						var index = findArray(datas, {value: element.cityname});
-	 						$("#citySelect").append('<option value="'+datas[index].name+'">'+element.cityname+'</option>');
-	                     });
-	 					 $("#citySelect")[0].selectedIndex = IndexSelected;
-	 				}
-	 		});
-	 }
-	 function giveCityNo(datas,jsonData){
-			$(jsonData).each(function(index,element){
-				var object = new Object();
-				object.name = jsonData[index]['city_code'];
-				object.value = jsonData[index]['city_name'];
-				datas.push(object);
-          });
-		 
-	 }
+    function initalldept(){
+        doManager("chartStatManager","queryAllDept",null,
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    $("#deptSelect").append("<option value=''>全部事业群</option>");
+                    $(jsonData).each(function(index,element){
+                        $("#deptSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+                        if(index == 0){
+                            $("#businessGroup_code").val(element.id);
+                            $("#businessGroup_name").val(element.name);
+                        }
+                    });
+                }
+            });
+    }
+
 	 var curr_user;
 	  function initcurruser(){
 		    
@@ -200,33 +161,120 @@
 	    			},false);
 	  	}
 
-	function select_data(){
-		var cityno = $("#citySelect").val();
-	 	var index=$("#citySelect")[0].selectedIndex ;
-	 	var cityname = $("#citySelect")[0].options[index].text;
-	 	$("#city_name").val(cityname);
-	 	$("#city_code").val(cityno);
-	 	//查询本年是否录入过合作店和自营店任务目标(如果填过只能修改不能新增)
-	 	//queryTaskQuantity(cityname,cityno);
-	}
-    function fmtDate(obj){
-        var date = new Date(parseInt(obj));//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + '-';
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        var D = date.getDate() + ' ';
-//        var h = date.getHours() + ':';
-//        var  m = date.getMinutes() + ':';
-//        var s = date.getSeconds();
-        return Y+M+D;
 
+    //记载页面时请求数据列表默认的方法
+    function searchList() {
+        $$.executeSearch('queryTargetEntryStoreList', 'conditionsDiv');
+        $(".operateHeader").width("5%");
     }
+
+
+    function download() {
+        var targetEntryStore=null;
+        targetEntryStore = {
+            frame_time: $("#frame_time").val(),
+            businessGroup_name: $("#businessGroup_name").val(),
+            channel_name: $("#channel_name").val(),
+            maori_target: $("#maori_target").val(),
+            profit_target: $("#profit_target").val(),
+            user_target: $("#user_target").val()
+        }
+        doManager('targetEntryStoreManager','exportOrder',[targetEntryStore],function(data){
+            if(data.result){
+                var result= JSON.parse(data.data);
+                if(result.status=='success'){
+//                    $("#reportName").val("");
+			        	   window.location.href=result.data;
+                }else if(result.status=='more'){
+//                    crm_alert(0,"单次导出不能超过5万条记录，请调整搜索条件，确认结果条数后再试。");
+//                    $("#process_div").hide();
+//                    $("#process_div_pic").hide();
+                    return;
+                }else{
+//                    crm_alert(0,"请先确认是否有符合条件的数据，重新请求！");
+//                    $("#process_div").hide();
+//                    $("#process_div_pic").hide();
+                    return;
+                }
+
+            }else{
+                crm_alert(5,"请稍后重新请求！");
+            }
+            $("#process_div").hide();
+            $("#process_div_pic").hide();
+        });
+    }
+
+    //自定义一个上传Excel的方法
+    function uploadExcel() {
+        var fileDiv = document.getElementById("showFile");
+        fileDiv.style.display = "none";
+        $('button[name="upload"]').attr("disabled",true);
+        var content = $('input[name="file"]').val();
+        //文件不能为空
+        if (content == "") {
+            $$.showMessage("${system.info}", "请选择文件!");
+            $('button[name="upload"]').attr("disabled",false);
+            return false;
+        }
+        //后缀必须为xls,不支持2007
+        var suffix = content.match(/^(.*)(\.)(.{1,8})$/)[3];
+        if ("xls" != suffix && 'rar' != suffix && 'zip' != suffix && "xlsx" != suffix) {
+            $$.showMessage("${system.info}", "请上传xls,xlsx,rar或zip文件");
+            $('button[name="upload"]').attr("disabled",false);
+            return false;
+        }
+        var path = getRootPath();
+        var $form_upload = $("#uploadFrom");
+        $form_upload.attr("action", path + "/excelUpload.action?model=targetEntry_store");
+        $form_upload.submit();
+        $('button[name="upload"]').attr("disabled",false);
+        $('input[name="file"]').val('');
+//        importSuccess();
+    }
+
+    function importSuccess() {
+
+        window.location.reload();
+        $$.showMessage("系统信息", "导入成功");
+        $('input[name="filehstk"]').val("");
+//        searchList();
+    }
+
+//    function showForm() {
+//
+//    }
+
+   function showFile() {
+        var fileDiv = document.getElementById("showFile");
+        fileDiv.style.display = "block";
+    }
+
+    $(document).bind('click',function(e){
+        var e = e || window.event; //浏览器兼容性
+        var elem = e.target || e.srcElement;
+        while (elem) { //循环判断至跟节点，防止点击的是div子元素
+            if (elem.id && elem.id=='file') {
+                return;
+            }
+            if (elem.id && elem.id=='showFile') {
+                return;
+            }
+            elem = elem.parentNode;
+        }
+        var showPanel = document.getElementById("showFile");
+        showPanel.style.display = "none";
+    });
+
 </script>
 </head>
 <style type="text/css">
 	td {
 		width=50%;
 	}
-
+	.display{
+		width:100%
+	}
 	p{
 		margin-top: 10px;
 		margin-bottom: 10px;
@@ -245,53 +293,73 @@
 		.ui-dialog .ui-dialog-titlebar-close span {
     		display: none;
     	}
+	#showFile {
+		right: 6px;
+		width: 300px;
+		height: 90px;
+		min-height: 5%;
+		max-height: 100%;
+		border: #333333 solid 1px;
+		border-radius: 8px;
+		position: fixed;
+		background-color: white;
+		z-index: 2;
+		display: none;
+	}
+	input{
+		border:0;
+	}
 </style>
 <body>
 	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
-    <div class="panel-heading" style="height: 65px">目标值录入信息添加
-		<p style="position: absolute;width: 268px;height: 80px;right: 90px;top: 14px"><input type="file" isuploadtable="true" name="file" class="form-control" style="width:75%; height:38px;">
-			<span class="input-group-btn" style="width:10%; display:inline-block;float: right;right: 40px;top: -38px">
-					<button type="button" class="btn btn-default" onclick="uploadExcel();" name="upload" style="height: 38px">
-						<img src="../scripts/images/upload_to_cloud.png" alt="导入" style="height: 20px"/>
-					</button>
-				</span>
-		</p>
-		<span class="but" style="position: relative;top: 3px;">
-                <input type="button" style="height: 36px" onclick="exportfwzyExcel();" value="导出"/>
+    <div class="panel-heading" style="height: 65px">频道总体目标值
+		<div style="margin-top: -18px">
+			<span style="position: absolute;left: 200px;color: red;margin-right: 30%">提示：1、请先导出数据在导入数据。</span><br>
+			<span style="position: absolute;left: 240px;color: red;margin-right: 30%">2、请确保填写门店各指标总和等于频道指标。</span>
+		</div>
+		<span class="but" style="position: relative;top: -18px;">
+			<button name="file" style="height: 38px" class="btn btn-outline btn-default" id="file" onclick="showFile()">导入数据</button>
+			<button name="download" style="height: 38px" class="btn btn-outline btn-default" onclick="download();">导出数据</button>
             </span>
-
 	</div>
-    <div class="panel-body" id="temp1">
+		<div id="showFile">
+			<form action="uploaderAction.action" method="post" enctype="multipart/form-data" id="uploadFrom" target="hframe" style="width:100%; float:left;">
+				<p style="position: absolute;width: 268px;height: 80px;right: 20px;top: 14px">
+					<input type="file" isuploadtable="true" name="file" class="form-control" style="width:75%; height:38px;">
+					<span class="input-group-btn" style="width:10%; display:inline-block;float: right;right: 40px;top: -38px">
+			<button type="button" class="btn btn-default" onclick="uploadExcel();" name="upload" style="height: 38px">
+			<img src="../scripts/images/upload_to_cloud.png" alt="导入" style="height: 20px"/>
+			</button>
+			</span>
+				</p>
+				<iframe name="hframe" id="hframe" style="display: none"></iframe>
+			</form>
+		</div>
+    <div class="panel-body" id="conditionsDiv">
 	<form action="" method="post" class="pmsForm">
 	<input type="hidden" name="county_id" id="county_id"/>
 	<input type="hidden" name="id" id="id"/>
 		<table width="100%">
 			<tr>
 				<td width="33.33%">
-					<p class="read">统计时间：<span style="color: red" id="statistics">*</span></p>
-					<p class="read"><input id="frame_time" style="width: 38%;color: #ccc" readonly /></p>
+					<p class="read">月份：<input name="frame_time" id="frame_time" readonly style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
 				<td>
-					<p class="read">事业群/频道：<span style="color: red">*</span></p>
-					<p class="read"><select id="businessGroup" style="width: 38%;color: #ccc" disabled onchange="select_data();"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
+					<p class="read">事业群名称：<input name="businessGroup_name" id="businessGroup_name" readonly style="width: 38%;color: #333333;border: 0;"></input></p>
 				</td>
 				<td>
-					<p class="read">城市名称：<span style="color: red">*</span></p>
-					<p class="read"><select id="citySelect" style="width: 38%;color: #ccc" disabled onchange="select_data();"></select><input type="hidden" id="city_name" name="city_name"><input type="hidden" id="city_code" name="city_code"> </p>
+					<p class="read">频道名称：<input name="channel_name" id="channel_name" readonly style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
 			</tr>
 			<tr>
 				<td width="33.33%">
-					<p>毛利：<span style="color: red">*</span></p>
-					<p><input type="text" name="maori_target" readonly id="maori_target" onkeyup="value=value.replace(/[^\d.]/g,'')"/></p>
+					<p>频道毛利指标：<input name="maori_target" id="maori_target" readonly style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
 				<td width="33.33%">
-					<p class="read">利润：<span style="color: red">*</span></p>
-					<p class="read"><input type="text" readonly onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="12" name="profit_target" id="profit_target"/></p>
+					<p class="read">频道利润指标：<input name="profit_target" readonly id="profit_target" style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
 				<td width="33.33%">
-					<p>用户：<span style="color: red">*</span></p>
-					<p><input type="text" readonly onkeyup="value=value.replace(/[^\d.]/g,'')" name="user_target" id="user_target"/></p>
+					<p>频道用户指标：<input name="user_target" id="user_target" readonly style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
 
 
@@ -301,9 +369,12 @@
 	</div>
 </div>
 
-	<div id="centerQueryGridContainer" class="panel panel-primary" queryid="targetEntryStoreList" operators="$pmspage.opArr"
-		 titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
-		 showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
-		 showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true" style="100%"></div>
+
+
+	<div id="centerQueryGridContainer" class="panel panel-primary" queryid="queryTargetEntryStoreList" operators="$pmspage.opArr"
+			 titleAlign="center" fnRender="renderColumns" searchDiv="conditionsDiv" showNo="true"
+			 showsearch="false" showpaging="true" showdisplay="false" showprint="false" autoload="false"
+			 showcheckbox="false" showRidaoButton="true" usecache="true" showsearch="false" showtitle="true" style="width: 100%">
+	</div>
 </body>
 </html>

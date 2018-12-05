@@ -172,6 +172,12 @@ public class UpLoadExcelAction extends HttpServlet {
                 System.out.println("上传商业信息文件数量"+lst_excelfile.size());
                 List<File> repeat = removeRepeat(lst_excelfile);
                new ReadCompanyInfo().readBusinessExcel(repeat,ip);
+            }else if("targetEntry_store".equals(model)){
+                String retmsg = importTargetEntryStore(lst_excelfile);
+                if(retmsg!=null){
+                    throw new Exception(retmsg);
+                }
+
             }
             writer.write("<script type='text/javascript'>window.parent.importSuccess();</script>" );
             System.gc();
@@ -427,7 +433,13 @@ public class UpLoadExcelAction extends HttpServlet {
     	
     	return arrayList;
     }
-    
+    public String importTargetEntryStore(List<File> lst_excelfile) throws Exception {
+        if(lst_excelfile.size() > 0){
+            TargetEntryStoreManager targetEntryStoreManager = (TargetEntryStoreManager)SpringHelper.getBean("targetEntryStoreManager");
+            return targetEntryStoreManager.saveTargetEntryStore(lst_excelfile);
+        }
+        return null;
+    }
     
     
 }

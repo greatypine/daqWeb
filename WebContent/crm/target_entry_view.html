@@ -5,6 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>目标值信息列表</title>
     <script type="text/javascript" src="../scripts/bidLib.js"></script>
+    <script type="text/javascript" src="../crm/laydate/laydate.js"></script>
+    <script type="text/javascript" src="../scripts/auto.js"></script>
+
     <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
     <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -15,10 +18,14 @@
     	.display{
     		width:100%
     	}
+        .demo-footer a{padding: 0 5px; color: #01AAED;}
         table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:65%;}
 </style>
 <script type="text/javascript">
 var win;
+
+
+
 $(function () {
 	//获取当前登录的用户
 	 doManager("UserManager", "findUserInfo", null, function(
@@ -43,6 +50,20 @@ $(function () {
     //页面加载成功后需要获取数据
     searchList();
     $(".operateHeader").width("5%");
+
+    var min= new Date();
+    var max=min.getFullYear() + "-" + (min.getMonth() + 1);
+    laydate.render({
+        elem: '#fromTime'
+        ,type: 'month'//最大日期
+        ,max: max
+    });
+    laydate.render({
+        elem: '#frame_time'
+        ,type: 'month'//最大日期
+        ,max: max
+    });
+
 });
 //记载页面时请求数据列表默认的方法
 function searchList() {
@@ -54,7 +75,8 @@ function doClean() {
     searchList();
 }
 function insertTown(){
-	window.location.href="target_entry_list_add.html";
+    var url = "target_entry_list_add.html";
+	window.open(url,"target_entry_list_add");
 }
 
 var editObj = {
@@ -68,39 +90,32 @@ var editObj = {
 var COLUMNS = {
 		   "caozuo": function(aData, iColumn, sColumnName, map){
 				 var id = map['id'];
-               var frame_time =fmtDate(map['frame_time']);
-               return '<a href="target_entry_list_edit.html?id='+id+'">编辑</a>';
-//				 var start_time = map['time_period'].split("~")[0];
-//				 var end_time = map['time_period'].split("~")[1];
-//				 var myDate = new Date();
-//				 var date = myDate.toLocaleDateString(); //获取当前日期
-//				 if(Date.parse(date) < Date.parse(end_time)) {//时间戳对比
-//					return '<a href="office_network_list_edit.html?id='+id+'">编辑</a>';
-//			     }else{
-//			    	 return '';
-//			     }
-		    }
+               return '<a href="target_entry_list_edit.html?id='+id+'" target="_blank">编辑</a>';
+
+		    },
 }
 
-function fmtDate(obj){
-    var date =  new Date(obj);
-    var y = 1900+date.getYear();
-    var m = "0"+(date.getMonth()+1);
-    var d = "0"+date.getDate();
-    return y+"-"+m.substring(m.length-2,m.length)+"-"+d.substring(d.length-2,d.length);
+function edit(url, id){
+    var a = document.createElement('a');
+    a.setAttribute('href', url);
+    a.setAttribute('target', 'target_entry_list_edit');
+    a.setAttribute('id', id);
+    // 防止反复添加
+    if(!document.getElementById(id)) {
+        document.body.appendChild(a);
+    }
+    a.click();
 }
 
 function showcardinfo(file_name){
-
 //    var rootPath = "https://cdn.guoanshuju.com/upload_folder/siteselection/";
 //    $("#showcard").attr("src",rootPath+file_name);
-
     var imgdiv = $("#showcarddiv");
     imgdiv.dialog({
         bgiframe : true,
-        title : "目标录入",
-        width : 680,
-        height: 450,
+        title : "指标录入",
+        width : 750,
+        height: 350,
         buttons : {
             "确定" : function() {
                 yanzhen();
@@ -112,8 +127,20 @@ function showcardinfo(file_name){
         },
         modal : false
     });
+    $("#frame_time").blur();
 }
 
+//判断是否为数字
+function isNumber(val){
+    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+    var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+    if(regPos.test(val) || regNeg.test(val)){
+        return true;
+    }else{
+        return false;
+    }
+
+}
 
 function yanzhen(){
 
@@ -124,61 +151,69 @@ function yanzhen(){
     }
     var maori_target=$("#maori_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(maori_target==null||maori_target==""){
-        alert("毛利不能为空");
+        alert("频道毛利指标不能为空");
         return;
     }
     var profit_target=$("#profit_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(profit_target==null||profit_target==""){
-        alert("利润不能为空");
+        alert("频道利润指标不能为空");
         return;
     }
     var user_target=$("#user_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(user_target == "" || user_target == null){
-        alert("用户不能为空!");
+        alert("频道用户指标不能为空!");
         return;
     }
-//    if(!isNumber(maori_target)){
-//        alert("毛利必须为数字");
-//        return;
-//    }
-//    if(!isNumber(profit_target)){
-//        alert("利润必须为数字");
-//        return;
-//    }
-//    if(!isNumber(user_target)){
-//        alert("用户必须为数字");
-//        return;
-//    }
-
-    var citySelect = $("#citySelect").val();
-    if(citySelect == null||citySelect == "0"){
-        alert("城市不能为空");
+    var deptSelect = $("#deptSelect").val();
+    if(deptSelect == null||deptSelect == "" ||deptSelect == "全部事业群"){
+        alert("请选择事业群");
+        return;
+    }
+    var channelSelect = $("#channelSelect").val();
+    if(channelSelect == null||channelSelect == "" ||channelSelect == "全部频道"){
+        alert("请选择频道");
+        return;
+    }
+    if(!isNumber(maori_target)){
+        alert("频道毛利必须为数字");
+        return;
+    }
+    if(!isNumber(profit_target)){
+        alert("频道利润必须为数字");
+        return;
+    }
+    if(!isNumber(user_target)){
+        alert("频道用户必须为数字");
         return;
     }
     yanzhenAdd();
 }
 
 function yanzhenAdd(){
+    var  newWindow = window.open();
     var statistics=$("#frame_time").val();
-    var city_name=$("#city_name").val();
-    doManager("targetEntryManager", "getByTarget",[statistics,city_name] , function(data,
+    var businessGroup_name=$("#businessGroup_name").val();
+    var channel_name=$("#channel_name").val();
+    doManager("targetEntryManager", "getByTarget",[statistics,businessGroup_name,channel_name] , function(data,
                                                                                     textStatus, XMLHttpRequest) {
         if (data.result) {
             var resultJson= JSON.parse(data.data);
             var task_quantity_count = JSON.parse(resultJson.statistics);
             if(parseInt(task_quantity_count)!=0){
                 alert("该目标值已录入,请返回列表修改!");
+                newWindow.close();
                 return;
             }
-            doSave();
+            doSave(newWindow);
         }else{
             $$.showMessage("系统信息", "信息加载异常");
             return;;
         }
     });
+
 }
-function doSave(){
-    var arr = [ "frame_time", "businessGroup_name","businessGroup_code","city_name","city_code","maori_target","profit_target","user_target","id"];
+function doSave(newWindow){
+    var arr = [ "frame_time", "businessGroup_name","businessGroup_code","channel_name","channel_code","maori_target","profit_target","user_target","id"];
     var o = {};
     for ( var i in arr) {
         var v = arr[i];
@@ -190,7 +225,12 @@ function doSave(){
         if (data.result) {
             var jsonData = $.fromJSON(data.data);
             alert("添加成功！");
-            window.location.href = 'target_entry_view.html';
+            searchList();
+            var id = jsonData.id;
+            var url =  "target_entry_list_edit.html?id="+id;
+//            window.open(url,"target_entry_list_edit");
+            newWindow.location.href = url;
+
         } else {
             $$.showMessage("系统信息", "添加失败!");
         }
@@ -198,63 +238,19 @@ function doSave(){
 }
 $(function(){
     initcurruser();
+//    initCareerChannel();
+    initalldept();
+    initallchannel();
     var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
-    if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
-        initcurcity();
-    }else{
-        initallcity();
-    }
+//    if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
+//        initcurcity();
+//    }else{
+//        initallcity();
+//    }
 });
-function initallcity(){
-    doManager("DistCityCodeManager","queryAllDistCityList",null,
-        function(data,textStatus,XmlHttpRequest){
-            if (data.result) {
-                var jsonData = $.fromJSON(data.data);
-                //$("#citySelect").append("<option value='0'>全部城市</option>");
-                $(jsonData).each(function(index,element){
-                    if(index==0){
-                        $("#city_name").val(element.cityname);
-                        $("#city_code").val(element.cityno);
-                    }
-                    $("#citySelect").append('<option value="'+element.cityno+'">'+element.cityname+'</option>');
-                });
-            }
-        });
-}
-function initcurcity(){
-    doManager("DistCityCodeManager","queryAllDistCityList",null,
-        function(data,textStatus,XmlHttpRequest){
-            if (data.result) {
-                var jsonData = $.fromJSON(data.data);
-                giveCityNo(datas,jsonData);
-            }
-        });
-    doManager("userManager","getCurrentUserCity",null,
-        function(data,textStatus,XmlHttpRequest){
-            if (data.result) {
-                var jsonData = $.fromJSON(data.data);
-                var IndexSelected = "";
-                $(jsonData).each(function(index,element){
-                    var index = findArray(datas, {value: element.cityname});
-                    $("#citySelect").append('<option value="'+datas[index].name+'">'+element.cityname+'</option>');
-                    if(index==0){
-                        $("#cityname").val(element.cityname);
-                        $("#cityno").val(datas[index].name);
-                    }
-                });
-                $("#citySelect")[0].selectedIndex = IndexSelected;
-            }
-        });
-}
-function giveCityNo(datas,jsonData){
-    $(jsonData).each(function(index,element){
-        var object = new Object();
-        object.name = jsonData[index]['city_code'];
-        object.value = jsonData[index]['city_name'];
-        datas.push(object);
-    });
 
-}
+
+
 var curr_user;
 function initcurruser(){
 
@@ -268,43 +264,144 @@ function initcurruser(){
         },false);
 }
 
-function select_data(){
-    var cityno = $("#citySelect").val();
-    var index=$("#citySelect")[0].selectedIndex ;
-    var cityname = $("#citySelect")[0].options[index].text;
-    $("#city_name").val(cityname);
-    $("#city_code").val(cityno);
-    //查询本年是否录入过合作店和自营店任务目标(如果填过只能修改不能新增)
-    //queryTaskQuantity(cityname,cityno);
+
+var storeJson;
+
+var array_channel=new Array();
+//初始化所有频道
+function initallchannel() {
+    doManager("chartStatManager", "queryAllChannel", null,
+        function(data, textStatus, XMLHttpRequest) {
+            if (data.result) {
+                var jsonData = $.fromJSON(data.data);
+                array_channel = new Array();
+                var storeString = "";
+                for(i=0;i<jsonData.length;i++){
+                    array_channel.push(jsonData[i].name);
+                    if(i == 0){
+                        storeString = "{'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
+                    }else if(i == jsonData.length-1){
+                        storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+"}";
+                    }else{
+                        storeString = storeString+"'"+jsonData[i].name+"'"+":"+"'"+jsonData[i].id+"'"+",";
+                    }
+                }
+                storeJson=$.fromJSON(storeString);
+                $("#channelSelect").append("<option value=''>全部频道</option>");
+                $(jsonData).each(function(index,element){
+                    $("#channelSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+                    if(index == 0){
+                        $("#channel_code").val(element.id);
+                        $("#channel_name").val(element.name);
+                    }
+                });
+            }
+        }, false);
 }
+
+function initalldept(){
+    doManager("chartStatManager","queryAllDept",null,
+        function(data,textStatus,XmlHttpRequest){
+            if (data.result) {
+                var jsonData = $.fromJSON(data.data);
+                $("#deptSelect").append("<option value=''>全部事业群</option>");
+                $(jsonData).each(function(index,element){
+                    $("#deptSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+                    if(index == 0){
+                        $("#businessGroup_code").val(element.id);
+                        $("#businessGroup_name").val(element.name);
+                    }
+                });
+            }
+        });
+}
+
+
+function showDept() {
+    var businessGroupno = $("#deptSelect").val();
+    var index=$("#deptSelect")[0].selectedIndex ;
+    var businessGroupname = $("#deptSelect")[0].options[index].text;
+    $("#businessGroup_name").val(businessGroupname);
+    $("#businessGroup_code").val(businessGroupno);
+    initChannelSelectcomplate();
+}
+
+function showChannel() {
+    var channel_code = $("#channelSelect").val();
+    var index=$("#channelSelect")[0].selectedIndex ;
+    var channel_name = $("#channelSelect")[0].options[index].text;
+    $("#channel_code").val(channel_code);
+    $("#channel_name").val(channel_name);
+}
+
+
+var storeJsonChannel;
+function initChannelSelectcomplate(){
+    var deptSelect = $("#deptSelect  option:selected").val();
+    $("#channelSelect").empty();
+    if(deptSelect==""){
+        initallchannel();
+    }else{
+        //根据事业群查询频道信息
+        var deptId = "'"+deptSelect+"'";
+        doManager("chartStatManager","findChannelByDept",[deptId],
+            function(data,textStatus,XmlHttpRequest){
+                if (data.result) {
+                    var jsonData = $.fromJSON(data.data);
+                    array_channel=new Array();
+                    var storeString = "";
+                    $(jsonData).each(function(index,element){
+                        var channelName = element.name;
+                        var id = element.id;
+                        array_channel.push(channelName);
+                        if(index == 0){
+                            storeString = "{'"+channelName+"'"+":"+"'"+id+"'"+",";
+                        }else if(index == jsonData.length-1){
+                            storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+"}";
+                        }else{
+                            storeString = storeString+"'"+channelName+"'"+":"+"'"+id+"'"+",";
+                        }
+                    });
+                    storeJsonChannel=$.fromJSON(storeString);
+                    $("#channelSelect").append("<option value=''>全部频道</option>");
+                    $(jsonData).each(function(index,element){
+                        $("#channelSelect").append('<option value="'+element.id+'">'+element.name+'</option>');
+                    });
+                }
+            });
+    }
+
+}
+
+
 </script>
 <body style="height: 100%">
 	<div class="panel panel-default" style="margin: 10px">
 	    <div class="panel-heading">
 	        <h4 class="panel-title">
-	           目标值录入信息:
+	           频道录入信息:
 	        </h4>
 	    </div>
 	</div>
 	    <div class="panel panel-primary">
-        <div class="panel-heading">目标值录入信息查询</div>
+        <div class="panel-heading">指标录入信息查询</div>
         <div class="panel-body">
             <div id="conditionsDiv" style="margin-top: 10px">
                 <form id="service_qa" name="service_qa" class="pmsForm" validate="true" clientvalidate="true"
                       displaynumber="7">
                     <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
                         <tr>
-                            <td width="7%">统计时间段:</td>
+                            <td width="7%">月份:</td>
                             <td>
-                                <input id="period_type" name="period_type" type="text" style="width:60%" class="form-control"/>
+                                <input id="fromTime" name="fromTime" type="text" style="width:60%" readonly class="form-control"/>
                             </td>
-                            <td width="7%">城市:</td>
+                            <td width="7%">事业群名称:</td>
                             <td>
-                                <input id="cityname" name="cityname" type="text" style="width:60%" class="form-control"/>
+                                <input id="businessGroupName" name="businessGroupName" type="text" style="width:60%" class="form-control"/>
                             </td>
-                            <td width="7%">频道:</td>
+                            <td width="7%">频道名称:</td>
                             <td>
-                                <input id="channel" name="channel" type="text" style="width:60%" class="form-control"/>
+                                <input id="channelName" name="channelName" type="text" style="width:60%" class="form-control"/>
                             </td>
 
                         </tr>
@@ -328,37 +425,32 @@ function select_data(){
                     <table width="100%">
                         <tr>
                             <td width="45%">
-                                <p class="read">统计时间：<span style="color: red" id="statistics">*</span></p>
-                                <p class="read"><input id="frame_time" revalidate="true"
-                                                       type="text" likeOption="false" name="date"
-                                                       validate="formatDate:true" class="pmsDateField form-control"
-                                                       yearRange="-100:+10" style="width: 65%; display: inline;"
+                                <p class="read">月份：</p>
+                                <p class="read"><input id="frame_time" name="frame_time"
+                                                       type="text" class="form-control demo-input" style="width: 65%; display: inline;"
                                                        readonly />
                                 </p>
                             </td>
                             <td width="45%">
-                                <p class="read">事业群/频道：<span style="color: red">*</span></p>
-                                <p class="read"><select id="businessGroup" style="width: 65%" onchange="select_data();"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
+                                <p class="read">事业群名称：</p>
+                                <p class="read"><select id="deptSelect" style="width: 65%" onchange="showDept()"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
                             </td>
-
+                            <td width="45%">
+                                <p class="read">频道名称：</p>
+                                <p class="read"><select id="channelSelect" style="width: 65%" onchange="showChannel()"></select><input type="hidden" id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
+                            </td>
                         </tr>
                         <tr>
                             <td width="45%">
-                                <p class="read">城市名称：<span style="color: red">*</span></p>
-                                <p class="read"><select id="citySelect" style="width: 65%" onchange="select_data();"></select><input type="hidden" id="city_name" name="city_name"><input type="hidden" id="city_code" name="city_code"> </p>
-                            </td>
-                            <td width="45%">
-                                <p>毛利：<span style="color: red">*</span></p>
+                                <p>频道毛利指标：</p>
                                 <p><input type="text" name="maori_target" id="maori_target" onkeyup="value=value.replace(/[^\d.]/g,'')"/></p>
                             </td>
-                        </tr>
-                        <tr>
                             <td width="45%">
-                                <p class="read">利润：<span style="color: red">*</span></p>
+                                <p class="read">频道利润指标：</p>
                                 <p class="read"><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="12" name="profit_target" id="profit_target"/></p>
                             </td>
                             <td width="45%">
-                                <p>用户：<span style="color: red">*</span></p>
+                                <p>频道用户指标：</p>
                                 <p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="user_target" id="user_target"/></p>
                             </td>
 

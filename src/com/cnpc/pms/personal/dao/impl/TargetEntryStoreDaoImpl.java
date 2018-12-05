@@ -4,46 +4,32 @@ import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
-import com.cnpc.pms.personal.dao.StorexpandDao;
 import com.cnpc.pms.personal.dao.TargetEntryDao;
-import com.cnpc.pms.personal.entity.DistCity;
+import com.cnpc.pms.personal.dao.TargetEntryStoreDao;
 import com.cnpc.pms.personal.entity.Storexpand;
-import com.cnpc.pms.personal.entity.TargetEntry;
+import com.cnpc.pms.personal.entity.TargetEntryStore;
+import org.apache.commons.lang.StringUtils;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 
 import java.util.*;
 
-public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntryDao {
+public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements TargetEntryStoreDao {
 	@Override
-	public List<Map<String, Object>> getTargetEntryList(String where,
+	public List<Map<String, Object>> getTargetEntryStoreList(String where,
 			PageInfo pageInfo) {
-		// 取得当前登录人 所管理城市
-				String cityssql = "";
 				StringBuffer sb_where = new StringBuffer();
 				UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-//				List<DistCity> distCityList = userManager.getCurrentUserCity();
-//				if (distCityList != null && distCityList.size() > 0) {
-//					for (DistCity d : distCityList) {
-//						cityssql += "'" + d.getCityname() + "',";
-//					}
-//					cityssql = cityssql.substring(0, cityssql.length() - 1);
-//				}
 //
-//				if (cityssql != "" && cityssql.length() > 0) {
-//					sb_where.append(" and te.city_name in (" + cityssql + ") ");
-//				}
 		// sql查询列，用于分页计算数据总数
-				String str_count_sql = "select COUNT(DISTINCT te.id) "
-						+ "from df_target_entry te WHERE 1=1  ";
+				String str_count_sql = "select COUNT(DISTINCT t.store_id) from t_store t where  t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '')='运营中' AND t.storetype != 'V' AND t.storetype != 'W' ";
 				System.out.println(str_count_sql);
 				// sql查询列，用于页面展示所有的数据
-				String find_sql = "select te.id,te.BusinessGroup_name,te.channel_name,te.create_time,te.frame_time" +
-						",te.maori_target,te.profit_target,te.store_name,te.user_target,te.user_code " +
-						",te.update_user,te.update_time from df_target_entry te  WHERE 1=1  ";
+				String find_sql = "select t.city_name,t.`name` as store_name,t.storeno as store_code,'0' as maori_target,'0' as profit_target,'0' as user_target from t_store t where  t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '')='运营中' AND t.storetype != 'V' AND t.storetype != 'W'  ";
 				StringBuilder sb_sql = new StringBuilder();
 				sb_sql.append(find_sql);
-				sb_sql.append(where +sb_where.toString()+ " order by te.id desc");
+				sb_sql.append(where +sb_where.toString()+ " order by t.id desc");
 				// SQL查询对象
 				SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
 						.createSQLQuery(sb_sql.toString());
@@ -69,6 +55,93 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 				}
 				return lst_result;
 	}
+
+	@Override
+	public List<Map<String, Object>> getTargetEntryStoreList1(String where,
+															 PageInfo pageInfo) {
+		// 取得当前登录人 所管理城市
+		String cityssql = "";
+		StringBuffer sb_where = new StringBuffer();
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		// sql查询列，用于分页计算数据总数
+		String find_sql = "select t.city_name,t.`name` as store_name,t.storeno as store_code,'0' as maori_target,'0' as profit_target,'0' as user_target from t_store t where  t. NAME NOT LIKE '%储备%' AND t. NAME NOT LIKE '%办公室%' AND t.flag = '0' AND ifnull(t.estate, '')='运营中' AND t.storetype != 'V' AND t.storetype != 'W'  ";
+		StringBuilder sb_sql = new StringBuilder();
+		sb_sql.append(find_sql);
+		sb_sql.append(where +sb_where.toString()+ " order by t.id desc");
+		// SQL查询对象
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
+				.createSQLQuery(sb_sql.toString());
+
+		// 查询数据量对象
+//		SQLQuery countQuery = getHibernateTemplate().getSessionFactory().getCurrentSession()
+//				.createSQLQuery(str_count_sql);
+//		pageInfo.setTotalRecords(Integer.valueOf(countQuery.list().get(0).toString()));
+		// 获得查询数据
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+
+		// 如果没有数据返回
+		if (lst_data == null || lst_data.size() == 0) {
+			return lst_result;
+		}
+		// 转换成需要的数据形式
+		for (Object obj_data : lst_data) {
+			lst_result.add((Map<String, Object>) obj_data);
+		}
+		return lst_result;
+	}
+	@Override
+	public List<Map<String, Object>> getTargetEntryStoreData(String frame_time,String dept_name,String channel,
+															 PageInfo pageInfo) {
+		// 取得当前登录人 所管理城市
+		String cityssql = "";
+		StringBuffer sb_where = new StringBuffer();
+		UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
+		// sql查询列，用于分页计算数据总数
+				String str_count_sql = "select COUNT(DISTINCT ts.id) "
+						+ "from df_target_entry_store ts WHERE 1=1  ";
+				System.out.println(str_count_sql);
+		// sql查询列，用于页面展示所有的数据
+		String find_sql = "select ts.frame_time,ts.channel_name,ts.city_name,ts.store_name,ts.store_code,ts.maori_target,ts.profit_target,ts.user_target from df_target_entry_store ts where ts.frame_time='"+frame_time +"' and  ts.channel_name='"+ channel+"' and ts.businessGroup_name='"+ dept_name+"'  ";
+		StringBuilder sb_sql = new StringBuilder();
+		sb_sql.append(find_sql);
+		// SQL查询对象
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession()
+				.createSQLQuery(sb_sql.toString());
+
+		// 查询数据量对象
+				SQLQuery countQuery = getHibernateTemplate().getSessionFactory().getCurrentSession()
+						.createSQLQuery(str_count_sql);
+				pageInfo.setTotalRecords(Integer.valueOf(countQuery.list().get(0).toString()));
+		// 获得查询数据
+		List<?> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP)
+				.setFirstResult(pageInfo.getRecordsPerPage() * (pageInfo.getCurrentPage() - 1))
+				.setMaxResults(pageInfo.getRecordsPerPage()).list();
+
+		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
+
+		// 如果没有数据返回
+		if (lst_data == null || lst_data.size() == 0) {
+			return lst_result;
+		}
+		// 转换成需要的数据形式
+		for (Object obj_data : lst_data) {
+			lst_result.add((Map<String, Object>) obj_data);
+		}
+		return lst_result;
+	}
+
+	public List<Map<String, Object>> exportFile(TargetEntryStore targetEntryStore){
+		String sql = " select ts.frame_time,ts.city_name,ts.store_name,ts.store_code,ts.maori_target,ts.profit_target,ts.user_target from df_target_entry_store ts where ts.frame_time='"+targetEntryStore.getFrame_time()+"' and ts.channel_name='"+ targetEntryStore.getChannel_name()+"' and ts.businessGroup_name='"+ targetEntryStore.getBusinessGroup_name()+"' ";
+
+
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+
 	@Override
 	public Map<String, Object> getTaskQuantityExist(String cityname) {
 		String sql ="SELECT count(*) as task_quantity_count FROM df_bussiness_target WHERE 1=1 and type='store' and period_type='week' ";
@@ -85,16 +158,13 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 		return resuMap;
 	}
 	@Override
-	public Map<String, Object> getStatisticsExist(String statistics,String deptName,String channelName) {
+	public Map<String, Object> getStatisticsExist(String statistics,String cityname) {
 		String sql ="SELECT count(*) as target_count FROM df_target_entry WHERE 1=1  ";
-		if(deptName!=null&&!"".equals(deptName)){
-			sql += " AND businessGroup_name='"+deptName+"' ";
+		if(cityname!=null&&!"".equals(cityname)){
+			sql += " AND city_name='"+cityname+"' ";
 		}
 		if(statistics!=null&&!"".equals(statistics)){
 			sql += " AND frame_time='"+statistics+"'";
-		}
-		if(channelName!=null&&!"".equals(channelName)){
-			sql += " AND channel_name='"+channelName+"'";
 		}
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -153,23 +223,11 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 	}
 
 	@Override
-	public void updateTargetEntry(TargetEntry targetEntry) {
-		String sql = "UPDATE df_target_entry ts  SET ts.maori_target = '"+targetEntry.getMaori_target()+"' ,ts.profit_target='"+targetEntry.getProfit_target()+"' ,ts.user_target='"+targetEntry.getUser_target()+"' where ts.channel_name = '"+targetEntry.getChannel_name()+"' and ts.businessGroup_name='"+targetEntry.getBusinessGroup_name()+"' and ts.frame_time ='"+targetEntry.getFrame_time()+"' ";
+	public void updateTargetEntryStore(TargetEntryStore targetEntryStore) {
+		String sql = "UPDATE df_target_entry_store ts  SET ts.maori_target = '"+targetEntryStore.getMaori_target()+"' ,ts.profit_target='"+targetEntryStore.getProfit_target()+"' ,ts.user_target='"+targetEntryStore.getUser_target()+"' where ts.city_name = '"+targetEntryStore.getCity_name()+"' and ts.store_code='"+targetEntryStore.getStore_code()+"' and ts.frame_time ='"+targetEntryStore.getFrame_time()+"' and ts.channel_name ='"+targetEntryStore.getChannel_name()+"' and ts.businessGroup_name ='"+targetEntryStore.getBusinessGroup_name()+"' ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql.toString());
 		query.executeUpdate();
 
 	}
 
-	@Override
-	public Map<String, Object> getByIdList(TargetEntry targetEntry) {
-		String sql ="select * from df_target_entry t WHERE t.frame_time='"+targetEntry.getFrame_time()+"' and t.businessGroup_name='"+targetEntry.getBusinessGroup_name()+"' and t.channel_name = '"+targetEntry.getChannel_name()+"'  ";
-		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
-		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-		Map<String, Object> resuMap = new HashMap<String,Object>();
-		if(lst_data!=null&&lst_data.size()>0){
-			Map<String, Object> map_lst = (Map<String, Object>)lst_data.get(0);
-			resuMap.put("id",map_lst.get("id"));
-		}
-		return resuMap;
-	}
 }

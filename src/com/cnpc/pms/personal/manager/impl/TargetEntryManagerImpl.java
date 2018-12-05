@@ -5,6 +5,8 @@ import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.query.json.QueryConditions;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
+import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
+import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.dao.StorexpandDao;
 import com.cnpc.pms.personal.dao.TargetEntryDao;
@@ -15,6 +17,7 @@ import com.cnpc.pms.personal.manager.StorexpandManager;
 import com.cnpc.pms.personal.manager.TargetEntryManager;
 import com.cnpc.pms.utils.DateUtils;
 
+import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -42,6 +45,10 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 	}
 	@Override
 	public Map<String, Object> showTargetData(QueryConditions conditions) {
+//		UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
+//		UserDTO userDTO = userManager.getCurrentUserDTO();
+//
+//		userDTO.getUsergroup().getCode();
 		TargetEntryDao targetEntryDao = (TargetEntryDao) SpringHelper.getBean(TargetEntryDao.class.getName());
 		// 查询的数据条件
 		StringBuilder sb_where = new StringBuilder();
@@ -50,9 +57,9 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 		// 返回的对象，包含数据集合、分页对象等
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		List<Map<String, Object>> mapWhereList = conditions.getConditions();
-		Map<String, Object> weidu_where = mapWhereList.get(2);
-		Map<String, Object> statistical_time_period_where = mapWhereList.get(0);
-		Map<String, Object> city_where = mapWhereList.get(1);
+		Map<String, Object> channel_where = mapWhereList.get(2);
+		Map<String, Object> time_where = mapWhereList.get(0);
+		Map<String, Object> dept_where = mapWhereList.get(1);
 //		if ("year".equals(weidu_where.get("key")) && null != weidu_where.get("value")
 //				&& !"".equals(weidu_where.get("value"))) {
 //			String str = (String) weidu_where.get("value");
@@ -65,9 +72,17 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 //				}
 //			}
 //		}
-		if ("city_name".equals(city_where.get("key")) && null != city_where.get("value")
-					&& !"".equals(city_where.get("value"))) {
-				sb_where.append(" AND te.city_name like '").append(city_where.get("value")).append("'");
+		if ("fromTime".equals(time_where.get("key")) && null != time_where.get("value")
+				&& !"".equals(time_where.get("value"))) {
+			sb_where.append(" AND te.frame_time like '").append(time_where.get("value")).append("'");
+		}
+		if ("businessGroupName".equals(dept_where.get("key")) && null != dept_where.get("value")
+					&& !"".equals(dept_where.get("value"))) {
+				sb_where.append(" AND te.businessGroup_name like '").append(dept_where.get("value")).append("'");
+		}
+		if ("channelName".equals(channel_where.get("key")) && null != channel_where.get("value")
+				&& !"".equals(channel_where.get("value"))) {
+			sb_where.append(" AND te.channel_name like '").append(channel_where.get("value")).append("'");
 		}
 
 		System.out.println(sb_where);
@@ -79,7 +94,9 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 
 	@Override
 	public TargetEntry saveOrUpdateTargetEntry(TargetEntry targetEntry) {
+		TargetEntryDao targetEntryDao = (TargetEntryDao) SpringHelper.getBean(TargetEntryDao.class.getName());
 		TargetEntry saveTargetEntry = null;
+		Map<String,Object> result = new HashMap<String,Object>();
 		if (targetEntry.getId() != null) {
 			saveTargetEntry = getTargetEntryByOriginId(targetEntry.getId());
 		} else {
@@ -88,8 +105,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 		try{
 			saveTargetEntry.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			saveTargetEntry.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			saveTargetEntry.setCity_code(targetEntry.getCity_code());
-			saveTargetEntry.setCity_name(targetEntry.getCity_name());
+			saveTargetEntry.setChannel_code(targetEntry.getChannel_code());
+			saveTargetEntry.setChannel_name(targetEntry.getChannel_name());
 			saveTargetEntry.setMaori_target(targetEntry.getMaori_target());
 			saveTargetEntry.setProfit_target(targetEntry.getProfit_target());
 			saveTargetEntry.setUser_target(targetEntry.getUser_target());
@@ -101,6 +118,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 			}else{
 				targetEntryManager.saveObject(saveTargetEntry);
 			}
+			result = targetEntryDao.getByIdList(saveTargetEntry);
+			saveTargetEntry.setId(Long.valueOf(result.get("id").toString()));
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -115,8 +134,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 			TargetEntryDTO.setId(targetEntry.getId());
 			TargetEntryDTO.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			TargetEntryDTO.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			TargetEntryDTO.setCity_code(targetEntry.getCity_code());
-			TargetEntryDTO.setCity_name(targetEntry.getCity_name());
+			TargetEntryDTO.setChannel_code(targetEntry.getChannel_code());
+			TargetEntryDTO.setChannel_name(targetEntry.getChannel_name());
 			TargetEntryDTO.setMaori_target(targetEntry.getMaori_target());
 			TargetEntryDTO.setProfit_target(targetEntry.getProfit_target());
 			TargetEntryDTO.setUser_target(targetEntry.getUser_target());
@@ -143,8 +162,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 		try {
 			targetEntry.setBusinessGroup_code(saveTargetEntry.getBusinessGroup_code());
 			targetEntry.setBusinessGroup_name(saveTargetEntry.getBusinessGroup_name());
-			targetEntry.setCity_code(saveTargetEntry.getCity_code());
-			targetEntry.setCity_name(saveTargetEntry.getCity_name());
+			targetEntry.setChannel_code(saveTargetEntry.getChannel_code());
+			targetEntry.setChannel_name(saveTargetEntry.getChannel_name());
 			targetEntry.setMaori_target(saveTargetEntry.getMaori_target());
 			targetEntry.setProfit_target(saveTargetEntry.getProfit_target());
 			targetEntry.setUser_target(saveTargetEntry.getUser_target());
@@ -165,10 +184,10 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 	}
 
 	@Override
-	public Map<String, Object> getByTarget(String statistics,String cityname) {
+	public Map<String, Object> getByTarget(String statistics,String deptName,String channelName) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		TargetEntryDao targetEntryDao = (TargetEntryDao)SpringHelper.getBean(TargetEntryDao.class.getName());
-		result = targetEntryDao.getStatisticsExist(statistics.replace("/", "-"),cityname);
+		result = targetEntryDao.getStatisticsExist(statistics.replace("/", "-"),deptName,channelName);
 		return result;
 	}
 }
