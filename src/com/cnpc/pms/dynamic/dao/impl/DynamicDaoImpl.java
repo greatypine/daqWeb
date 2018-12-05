@@ -3215,7 +3215,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 		}
 		String sql=" select IFNULL(b.inviteCode,'暂无') as inviteCode,ifnull(a.total,0) as total,b.employee_no,CONCAT('*******',SUBSTR(b.mobilephone,8,11)) as mobilephone,b.name,concat(GROUP_CONCAT(b.storename),'') as storename,b.city_name from "
-				+" (select inviteCode,COUNT(1) as total from df_user_member where  customer_id not in (select customer_id from df_member_whitelist) and DATE_FORMAT(opencard_time,'%Y-%m')='"+dynamicDto.getBeginDate()+"' GROUP BY inviteCode) a"
+				+" (select inviteCode,COUNT(1) as total from df_user_member where invitecode REGEXP  '^[0-9]{6}$' and  customer_id not in (select customer_id from df_member_whitelist) and DATE_FORMAT(opencard_time,'%Y-%m')='"+dynamicDto.getBeginDate()+"' GROUP BY inviteCode) a"
 				+" RIGHT JOIN"
 				+" (select t.name,t.phone as mobilephone,t.employee_no,t.inviteCode,ifnull(ts.name,'') as storename,ifnull(t.citySelect,'') as city_name from t_humanresources t LEFT JOIN t_store ts ON t.store_id = ts.store_id "+whereCity+" where  t.inviteCode is not null and t.inviteCode!='' "+whereStoreId
 
