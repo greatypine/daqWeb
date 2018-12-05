@@ -141,37 +141,40 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 		IFilter userFilter = FilterFactory.getSimpleFilter("mobilephone='"+phone+"' and disabledFlag=1 ");
 		List<User> users = (List<User>) userManager.getList(userFilter);
 		
-		if(users!=null&&users.size()>0&&phone!=null&&phone.length()>0) {
-			//如果存在账号信息 则禁用 
-			for(User rmUser : users) {
-				rmUser.setDisabledFlag(0);
-				preSaveObject(rmUser);
-				userManager.saveObject(rmUser);
+		//如果不存在用户组 说明没分配过。则创建用户。如果存在则证明 为修改 不对用户进行操作 
+		if(onLineHumanresources.getGroupcode()==null||onLineHumanresources.getGroupcode().length()==0) {
+			if(users!=null&&users.size()>0&&phone!=null&&phone.length()>0) {
+				//如果存在账号信息 则禁用 
+				for(User rmUser : users) {
+					rmUser.setDisabledFlag(0);
+					preSaveObject(rmUser);
+					userManager.saveObject(rmUser);
+				}
 			}
+			//重新开通 
+			User user = new User();
+			user.setName(onLineHumanresources.getName());
+			user.setCode(ChineseToEnglish.getPingYin(onLineHumanresources.getName()));
+			user.setDisabledFlag(1);
+			user.setDoctype(0);
+			user.setEmail("123@123.com");
+			user.setEmployeeId(onLineHumanresources.getEmployee_no());
+			user.setEnablestate(1);
+			user.setPassword("e10adc3949ba59abbe56e057f20f883e"); //123456
+			user.setPk_org(Long.parseLong("40284"));
+			user.setMobilephone(onLineHumanresources.getPhone());
+			user.setCareergroup(careerChannelDto.getCareername());
+			
+			IFilter groupFilter =FilterFactory.getSimpleFilter("code",careerChannelDto.getGroupcode());
+	        List<?> lst_groupList = u.getList(groupFilter);
+	        UserGroup userGroup = (UserGroup) lst_groupList.get(0);
+			
+	        user.setUsergroup(userGroup);
+			user.setLogicDel(0);
+			preSaveObject(user);
+			userManager.saveObject(user);
 		}
-		//重新开通 
 		
-		User user = new User();
-		user.setName(onLineHumanresources.getName());
-		user.setCode(ChineseToEnglish.getPingYin(onLineHumanresources.getName()));
-		user.setDisabledFlag(1);
-		user.setDoctype(0);
-		user.setEmail("123@123.com");
-		user.setEmployeeId(onLineHumanresources.getEmployee_no());
-		user.setEnablestate(1);
-		user.setPassword("e10adc3949ba59abbe56e057f20f883e"); //123456
-		user.setPk_org(Long.parseLong("40284"));
-		user.setMobilephone(onLineHumanresources.getPhone());
-		user.setCareergroup(careerChannelDto.getCareername());
-		
-		IFilter groupFilter =FilterFactory.getSimpleFilter("code",careerChannelDto.getGroupcode());
-        List<?> lst_groupList = u.getList(groupFilter);
-        UserGroup userGroup = (UserGroup) lst_groupList.get(0);
-		
-        user.setUsergroup(userGroup);
-		user.setLogicDel(0);
-		preSaveObject(user);
-		userManager.saveObject(user);
 		
 		onLineHumanresources.setGroupcode(careerChannelDto.getGroupcode());
 		onLineHumanresources.setGroupname(careerChannelDto.getGroupname());
