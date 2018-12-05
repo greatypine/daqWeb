@@ -193,4 +193,28 @@
         <column key="model_name" header="明查模块" display="true" allowSearch="true" operator="eq" allowSort="true" align="center" width="30%"/>
         <column key="is_used" header="是否停用"  align="center" operator="eq" allowSort="true" width="30%"/>
     </query>
+
+
+    <query id="targetEntry" header="目标值录入信息列表"  order="id desc" method="targetEntryManager.showTargetData">
+        <column key="id" header="编号"  align="center" display="false" allowSort="false"/>
+        <column key="frame_time" header="时间" width="15%" align="center" allowSort="false"/>
+        <column key="BusinessGroup_name" header="事业群名称" width="10%" align="center" allowSort="false"/>
+        <column key="channel_name" header="频道名称" width="15%" align="center" allowSort="false"/>
+        <column key="maori_target" header="频道毛利指标" width="15%" align="center" allowSort="false"/>
+        <column key="profit_target" header="频道利润指标" width="15%" align="center" allowSort="false"/>
+        <column key="user_target" header="频道用户指标" width="15%" align="center" allowSort="false"/>
+        <column key="caozuo" header="操作" width="6%" align="center" allowSort="false"/>
+    </query>
+
+    <query id="queryTargetEntryStoreList" header="分解到门店"  order="id desc" method="targetEntryStoreManager.showTarStoregetData">
+        <column key="id" header="编号"  align="center" display="false" allowSort="false"/>
+        <!--<column key="channel_name" header="频道名称" width="10%" align="center" allowSort="false"/>-->
+        <column key="city_name" header="城市名称" width="15%" align="center" allowSort="false"/>
+        <column key="store_name" header="门店名称" width="15%" align="center" allowSort="false"/>
+        <column key="store_code" header="门店编号" width="15%" align="center" allowSort="false"/>
+        <column key="maori_target" header="门店毛利指标" width="15%" align="center" allowSort="false"/>
+        <column key="profit_target" header="门店利润指标" width="15%" align="center" allowSort="false"/>
+        <column key="user_target" header="门店用户指标" width="15%" align="center" allowSort="false"/>
+    </query>
+
 </pmsquery>
