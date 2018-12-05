@@ -19,7 +19,22 @@
     		width:100%
     	}
         .demo-footer a{padding: 0 5px; color: #01AAED;}
-        table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:65%;}
+/*
+        table ,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:65%;}
+*/
+        #deptSelect {
+            border:1px solid #ccc;
+            border-radius:3px; line-height: 30px;
+            height: 30px;
+            width:70%;
+        }
+        #channelSelect {
+            border:1px solid #ccc;
+            border-radius:3px; line-height: 30px;
+            height: 30px;
+            width:70%;
+        }
+
 </style>
 <script type="text/javascript">
 var win;
@@ -53,15 +68,17 @@ $(function () {
 
     var min= new Date();
     var max=min.getFullYear() + "-" + (min.getMonth() + 1);
+
     laydate.render({
         elem: '#fromTime'
         ,type: 'month'//最大日期
-        ,max: max
+//        ,max: max,
+        ,min:max
     });
     laydate.render({
         elem: '#frame_time'
         ,type: 'month'//最大日期
-        ,max: max
+        ,min:max
     });
 
 });
@@ -128,6 +145,9 @@ function showcardinfo(file_name){
         modal : false
     });
     $("#frame_time").blur();
+    var button = document.getElementsByClassName("ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
+    button[0].style.width = "100px";
+    button[1].style.width = "100px";
 }
 
 //判断是否为数字
@@ -410,9 +430,8 @@ function initChannelSelectcomplate(){
             </div>
         </div>
         <div class="panel-footer" style="text-align: right">
-            <button class="btn btn-primary" onclick="searchList()">查询</button>
-            <button class="btn btn-primary" id="inser" onclick="showcardinfo()">添加</button>
-            <button class="btn btn-primary" onclick="doClean();">重置</button>
+            <button class="btn btn-primary" style="width: 140px" onclick="searchList()">查询</button>
+            <button class="btn btn-primary" id="inser" onclick="showcardinfo()">新增目标值录入</button>
         </div>
     </div>
     <div id="showcarddiv" class="panel panel-primary" style="display: none;">
@@ -427,17 +446,17 @@ function initChannelSelectcomplate(){
                             <td width="45%">
                                 <p class="read">月份：</p>
                                 <p class="read"><input id="frame_time" name="frame_time"
-                                                       type="text" class="form-control demo-input" style="width: 65%; display: inline;"
+                                                       type="text" class="form-control demo-input" style="width: 70%; display: inline;"
                                                        readonly />
                                 </p>
                             </td>
                             <td width="45%">
                                 <p class="read">事业群名称：</p>
-                                <p class="read"><select id="deptSelect" style="width: 65%" onchange="showDept()"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
+                                <p class="read"><select id="deptSelect"  onchange="showDept()"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
                             </td>
                             <td width="45%">
                                 <p class="read">频道名称：</p>
-                                <p class="read"><select id="channelSelect" style="width: 65%" onchange="showChannel()"></select><input type="hidden" id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
+                                <p class="read"><select id="channelSelect" onchange="showChannel()"></select><input type="hidden" id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
                             </td>
                         </tr>
                         <tr>
