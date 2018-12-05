@@ -119,7 +119,12 @@
 			func : function(queryid, data, nTr, allColumns, allColumnsDataMap) {
 				var id = allColumnsDataMap.id;
 				//window.location.href = "dist_city_edit.html?id="+id;
-				showOnLineCareer(id);
+				var lefttime = allColumnsDataMap.lefttime;
+				if(lefttime!=null&&lefttime.length>0){
+					$$.showMessage("系统信息", "该员工已离职!");
+				}else{
+					showOnLineCareer(id);
+				}
 			}
 		}
     
