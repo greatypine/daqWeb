@@ -8,4 +8,6 @@ public interface OnLineHumanresourcesSubManager extends IManager{
 	
 	public OnLineHumanresourcesSub removeOnlineSub(OnLineHumanresourcesSub onLineHumanresourcesSub);
 	
+	public OnLineHumanresourcesSub queryOnlineHumanSubByOnLineId(Long onlineid);
+	
 }

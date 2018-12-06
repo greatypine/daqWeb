@@ -104,7 +104,7 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 			}else if(userCode.equals("ZBCPGLBGLY")) {
 				//sbfCondition.append(" and groupcode='ZBCPGLB'");
 			}else if(userCode.equals("ZBCSGLBGLY")){
-				sbfCondition.append(" and (groupcode='ZBYYGLBZ' or groupcode='ZBCPGLB') ");
+				sbfCondition.append(" and (groupcode='ZBYYGLBZ' or groupcode='ZBCPGLB' or groupcode='ZBPDFZRJSZ') ");
 			}else {
 				sbfCondition.append(" and 1=0");
 			}
@@ -173,6 +173,21 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 			user.setLogicDel(0);
 			preSaveObject(user);
 			userManager.saveObject(user);
+		}else {
+			//只修改usergroup
+			IFilter groupFilter =FilterFactory.getSimpleFilter("code",careerChannelDto.getGroupcode());
+	        List<?> lst_groupList = u.getList(groupFilter);
+	        UserGroup userGroup = (UserGroup) lst_groupList.get(0);
+	        
+	        if(users!=null&&users.size()>0&&phone!=null&&phone.length()>0) {
+	        	User user = users.get(0);
+	        	user.setUsergroup(userGroup);
+				user.setEmployeeId(onLineHumanresources.getEmployee_no());
+				user.setCareergroup(careerChannelDto.getCareername());
+				preSaveObject(user);
+				userManager.saveObject(user);
+	        }
+	        
 		}
 		
 		

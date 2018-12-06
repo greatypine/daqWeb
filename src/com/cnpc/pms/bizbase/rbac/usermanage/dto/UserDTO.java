@@ -224,6 +224,14 @@ public class UserDTO extends PMSDTO {
 	
 	private String inviteCode;
 	
+	//事业群
+	private String careergroup_id;
+	private String careergroup;
+	
+	//频道
+	private String channel_id;
+	private String channelname;
+	
 	public String getBlankPassword() {
 		return blankPassword;
 	}
@@ -1028,5 +1036,37 @@ public class UserDTO extends PMSDTO {
 
 	public void setInviteCode(String inviteCode) {
 		this.inviteCode = inviteCode;
+	}
+
+	public String getCareergroup() {
+		return careergroup;
+	}
+
+	public void setCareergroup(String careergroup) {
+		this.careergroup = careergroup;
+	}
+
+	public String getChannelname() {
+		return channelname;
+	}
+
+	public void setChannelname(String channelname) {
+		this.channelname = channelname;
+	}
+
+	public String getCareergroup_id() {
+		return careergroup_id;
+	}
+
+	public void setCareergroup_id(String careergroup_id) {
+		this.careergroup_id = careergroup_id;
+	}
+
+	public String getChannel_id() {
+		return channel_id;
+	}
+
+	public void setChannel_id(String channel_id) {
+		this.channel_id = channel_id;
 	}
 }

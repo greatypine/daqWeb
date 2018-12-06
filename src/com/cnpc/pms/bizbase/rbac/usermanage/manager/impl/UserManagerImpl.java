@@ -759,6 +759,32 @@ public class UserManagerImpl extends BizBaseCommonManager implements
 		if(!isNormal){
 			currentUserDTO.setStore_name(selectStore.toString());
 		}
+		
+		
+		//根据当前登录人的电话 取得当前登录人的事业群 频道
+		String mobilephone = currentUserDTO.getMobilephone();
+		OnLineHumanresourcesManager onLineHumanresourcesManager = (OnLineHumanresourcesManager) SpringHelper.getBean("onLineHumanresourcesManager");
+		OnLineHumanresourcesSubManager onLineHumanresourcesSubManager = (OnLineHumanresourcesSubManager) SpringHelper.getBean("onLineHumanresourcesSubManager");
+		IFilter onLineFilter = FilterFactory.getSimpleFilter("phone='"+mobilephone+"' and groupcode is not null ");
+		List<OnLineHumanresources> onlines = (List<OnLineHumanresources>) onLineHumanresourcesManager.getList(onLineFilter);
+		if(onlines!=null&&onlines.size()>0) {
+			OnLineHumanresources onLineHumanresources = onlines.get(0);
+			if(onLineHumanresources!=null) {
+				IFilter subFilter = FilterFactory.getSimpleFilter("online_id",onLineHumanresources.getId());
+
+				List<OnLineHumanresourcesSub> subs = (List<OnLineHumanresourcesSub>) onLineHumanresourcesSubManager.getList(subFilter);
+				if(subs!=null&&subs.size()>0) {
+					OnLineHumanresourcesSub sub = subs.get(0);
+					currentUserDTO.setCareergroup_id(sub.getCareerid());
+					currentUserDTO.setCareergroup(sub.getCareername());
+					currentUserDTO.setChannel_id(sub.getChannelid());
+					currentUserDTO.setChannelname(sub.getChannelname());
+				}
+			}
+		}
+		
+		
+		
 		return currentUserDTO;
 	} 
 	

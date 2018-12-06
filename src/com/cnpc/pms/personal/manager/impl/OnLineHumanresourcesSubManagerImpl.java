@@ -24,6 +24,17 @@ import com.cnpc.pms.personal.manager.RegOnLineHumanresourcesManager;
 public class OnLineHumanresourcesSubManagerImpl extends BizBaseCommonManager implements OnLineHumanresourcesSubManager {
 	
 	
+	@Override
+	public OnLineHumanresourcesSub queryOnlineHumanSubByOnLineId(Long onlineid) {
+		IFilter userFilter = FilterFactory.getSimpleFilter("online_id="+onlineid);
+		List<OnLineHumanresourcesSub> subs = (List<OnLineHumanresourcesSub>) this.getList(userFilter);
+		if(subs!=null&&subs.size()>0) {
+			return subs.get(0);
+		}
+		return null;
+
+	}
+	
 	
 	
 	@Override
