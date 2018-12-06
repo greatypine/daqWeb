@@ -329,14 +329,16 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 					if(nRowIndex > 2){
 						for(int nCellIndex = 0;nCellIndex < nCellSize ;nCellIndex ++) {
 							String str_value = getCellValue(row_human.getCell(nCellIndex));
-							if(nCellIndex == 3){
-								maori_target =  maori_target + Double.valueOf(str_value);
-							}
-							if(nCellIndex == 4){
-								profit_target = profit_target + Double.valueOf(str_value);
-							}
-							if(nCellIndex == 5){
-								user_target =  user_target + Double.valueOf(str_value);
+							if(str_value != null && str_value != "" && str_value != "0"){
+								if(nCellIndex == 3){
+									maori_target =  maori_target + Double.valueOf(str_value);
+								}
+								if(nCellIndex == 4){
+									profit_target = profit_target + Double.valueOf(str_value);
+								}
+								if(nCellIndex == 5){
+									user_target =  user_target + Double.valueOf(str_value);
+								}
 							}
 						}
 					}
@@ -359,7 +361,11 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								int nCellSize = row_human.getPhysicalNumberOfCells();
 								TargetEntry targetEntry = new TargetEntry();
 								for(int nCellIndex = 0;nCellIndex < nCellSize ;nCellIndex ++) {
-									String str_value = getCellValue(row_human.getCell(nCellIndex));
+									String str_value = "";
+									str_value = getCellValue(row_human.getCell(nCellIndex));
+									if(str_value == null){
+										str_value = "0";
+									}
 									if(nCellIndex == 3){
 										targetEntry.setMaori_target(new BigDecimal(str_value));
 									}
@@ -379,7 +385,11 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								int nCellSize = row_human.getPhysicalNumberOfCells();
 								TargetEntryStore targetEntryStore = new TargetEntryStore();
 								for(int nCellIndex = 0;nCellIndex < nCellSize ;nCellIndex ++) {
-									String str_value = getCellValue(row_human.getCell(nCellIndex));
+									String str_value = "";
+									str_value = getCellValue(row_human.getCell(nCellIndex));
+									if(str_value == null){
+										str_value = "0";
+									}
 									if(nCellIndex == 0){
 										targetEntryStore.setCity_name(str_value);
 									}

@@ -19,7 +19,22 @@
     		width:100%
     	}
         .demo-footer a{padding: 0 5px; color: #01AAED;}
-        table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:65%;}
+/*
+        table ,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:65%;}
+*/
+        #deptSelect {
+            border:1px solid #ccc;
+            border-radius:3px; line-height: 30px;
+            height: 30px;
+            width:70%;
+        }
+        #channelSelect {
+            border:1px solid #ccc;
+            border-radius:3px; line-height: 30px;
+            height: 30px;
+            width:70%;
+        }
+
 </style>
 <script type="text/javascript">
 var win;
@@ -53,15 +68,17 @@ $(function () {
 
     var min= new Date();
     var max=min.getFullYear() + "-" + (min.getMonth() + 1);
+
     laydate.render({
         elem: '#fromTime'
         ,type: 'month'//最大日期
-        ,max: max
+//        ,max: max,
+        ,min:max
     });
     laydate.render({
         elem: '#frame_time'
         ,type: 'month'//最大日期
-        ,max: max
+        ,min:max
     });
 
 });
@@ -69,6 +86,12 @@ $(function () {
 function searchList() {
     $$.executeSearch('targetEntry', 'conditionsDiv');
     $(".operateHeader").width("5%");
+    $("#maori_target").val("");
+    $("#profit_target").val("");
+    $("#user_target").val("");
+    $("#frame_time").val("");
+    $("#deptSelect").val("");
+    $("#channelSelect").val("");
 }
 function doClean() {
     document.service_qa.reset();
@@ -118,8 +141,11 @@ function showcardinfo(file_name){
         height: 350,
         buttons : {
             "确定" : function() {
-                yanzhen();
-                $(this).dialog("close");
+                var flag = yanzhen();
+                if(flag != false){
+                    $(this).dialog("close");
+                }
+
             },
             "取消" : function() {
                 $(this).dialog("close");
@@ -128,6 +154,9 @@ function showcardinfo(file_name){
         modal : false
     });
     $("#frame_time").blur();
+    var button = document.getElementsByClassName("ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
+    button[0].style.width = "100px";
+    button[1].style.width = "100px";
 }
 
 //判断是否为数字
@@ -147,44 +176,44 @@ function yanzhen(){
     var weekSelect = $("#frame_time").val();
     if(weekSelect == null||weekSelect == ""){
         alert("录入时间不能为空");
-        return;
+        return false;
     }
     var maori_target=$("#maori_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(maori_target==null||maori_target==""){
         alert("频道毛利指标不能为空");
-        return;
+        return false;
     }
     var profit_target=$("#profit_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(profit_target==null||profit_target==""){
         alert("频道利润指标不能为空");
-        return;
+        return false;
     }
     var user_target=$("#user_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(user_target == "" || user_target == null){
         alert("频道用户指标不能为空!");
-        return;
+        return false;
     }
     var deptSelect = $("#deptSelect").val();
     if(deptSelect == null||deptSelect == "" ||deptSelect == "全部事业群"){
         alert("请选择事业群");
-        return;
+        return false;
     }
     var channelSelect = $("#channelSelect").val();
     if(channelSelect == null||channelSelect == "" ||channelSelect == "全部频道"){
         alert("请选择频道");
-        return;
+        return false;
     }
     if(!isNumber(maori_target)){
         alert("频道毛利必须为数字");
-        return;
+        return false;
     }
     if(!isNumber(profit_target)){
         alert("频道利润必须为数字");
-        return;
+        return false;
     }
     if(!isNumber(user_target)){
         alert("频道用户必须为数字");
-        return;
+        return false;
     }
     yanzhenAdd();
 }
@@ -391,11 +420,11 @@ function initChannelSelectcomplate(){
                       displaynumber="7">
                     <table id="searchTable" cellpadding="0" cellspacing="0" style="min-width: 100%; width: auto">
                         <tr>
-                            <td width="7%">月份:</td>
+                            <td width="4%">月份:</td>
                             <td>
                                 <input id="fromTime" name="fromTime" type="text" style="width:60%" readonly class="form-control"/>
                             </td>
-                            <td width="7%">事业群名称:</td>
+                            <td width="8%">事业群名称:</td>
                             <td>
                                 <input id="businessGroupName" name="businessGroupName" type="text" style="width:60%" class="form-control"/>
                             </td>
@@ -410,9 +439,8 @@ function initChannelSelectcomplate(){
             </div>
         </div>
         <div class="panel-footer" style="text-align: right">
-            <button class="btn btn-primary" onclick="searchList()">查询</button>
-            <button class="btn btn-primary" id="inser" onclick="showcardinfo()">添加</button>
-            <button class="btn btn-primary" onclick="doClean();">重置</button>
+            <button class="btn btn-primary" style="width: 140px" onclick="searchList()">查询</button>
+            <button class="btn btn-primary" id="inser" onclick="showcardinfo()">新增目标值录入</button>
         </div>
     </div>
     <div id="showcarddiv" class="panel panel-primary" style="display: none;">
@@ -427,17 +455,17 @@ function initChannelSelectcomplate(){
                             <td width="45%">
                                 <p class="read">月份：</p>
                                 <p class="read"><input id="frame_time" name="frame_time"
-                                                       type="text" class="form-control demo-input" style="width: 65%; display: inline;"
+                                                       type="text" class="form-control demo-input" style="width: 70%; display: inline;"
                                                        readonly />
                                 </p>
                             </td>
                             <td width="45%">
                                 <p class="read">事业群名称：</p>
-                                <p class="read"><select id="deptSelect" style="width: 65%" onchange="showDept()"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
+                                <p class="read"><select id="deptSelect"  onchange="showDept()"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
                             </td>
                             <td width="45%">
                                 <p class="read">频道名称：</p>
-                                <p class="read"><select id="channelSelect" style="width: 65%" onchange="showChannel()"></select><input type="hidden" id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
+                                <p class="read"><select id="channelSelect" onchange="showChannel()"></select><input type="hidden" id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
                             </td>
                         </tr>
                         <tr>

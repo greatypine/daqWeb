@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>添加或修改目标值信息</title>
+<meta http-equiv="X-UA-Compatible" charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>门店目标值录入</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../icon.png" />
 <link href="../startbootstrap/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="../startbootstrap/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
 <link href="../startbootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
@@ -10,7 +12,9 @@
 <link href="../scripts/css/auto.css" rel="stylesheet">
 <script type="text/javascript" src="../scripts/bidLib.js"></script>
 <script src="dist/js/headquarters/conversion_utils.js"></script>
+</head>
 <script type="text/javascript">
+
     Date.prototype.format=function(fmt) {
         var o = {
             "M+" : this.getMonth()+1, //月份
@@ -62,8 +66,8 @@
 	var datas = [];
 	$(function(){
 		$("#id").val(id);
-        initalldept();
-        initallchannel();
+//        initalldept();
+//        initallchannel();s
 		initcurruser();
 		getEditInfo();
         searchList();
@@ -279,7 +283,7 @@
 		margin-top: 10px;
 		margin-bottom: 10px;
 	}
-	table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:38%;;color: #ccc}
+	/*table input,table select{border:1px solid #ccc; border-radius:3px; line-height: 30px; height: 30px; width:38%;;color: #ccc}*/
 	.panel-heading .but{float:right; text-align: center;}
 	.but{
 		right: -12px;
@@ -306,18 +310,17 @@
 		z-index: 2;
 		display: none;
 	}
-	input{
-		border:0;
-	}
+
 </style>
 <body>
 	<div class="panel panel-primary" style="margin: 10px 5px 0 5px">
-    <div class="panel-heading" style="height: 65px">频道总体目标值
+    <div class="panel-heading" style="height: 75px">频道总体目标值
 		<div style="margin-top: -18px">
-			<span style="position: absolute;left: 200px;color: red;margin-right: 30%">提示：1、请先导出数据在导入数据。</span><br>
-			<span style="position: absolute;left: 240px;color: red;margin-right: 30%">2、请确保填写门店各指标总和等于频道指标。</span>
+			<span style="position: absolute;left: 200px;color: #ee2626;margin-right: 30%">提示：1、请先导出数据再导入数据。</span><br>
+			<span style="position: absolute;left: 240px;color: #ee2626;margin-right: 30%">2、请确保填写门店各指标总和等于频道指标。</span><br>
+			<span style="position: absolute;left: 240px;color: #ee2626;margin-right: 30%">3、请确认导入数据的月份、事业群、频道与页面相同。</span>
 		</div>
-		<span class="but" style="position: relative;top: -18px;">
+		<span class="but" style="position: relative;top: -35px;">
 			<button name="file" style="height: 38px" class="btn btn-outline btn-default" id="file" onclick="showFile()">导入数据</button>
 			<button name="download" style="height: 38px" class="btn btn-outline btn-default" onclick="download();">导出数据</button>
             </span>
@@ -345,7 +348,7 @@
 					<p class="read">月份：<input name="frame_time" id="frame_time" readonly style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
 				<td>
-					<p class="read">事业群名称：<input name="businessGroup_name" id="businessGroup_name" readonly style="width: 38%;color: #333333;border: 0;"></input></p>
+					<p class="read">事业群名称：<input name="businessGroup_name" id="businessGroup_name" readonly style="width: 38%;color: #333333;border: 0;"></p>
 				</td>
 				<td>
 					<p class="read">频道名称：<input name="channel_name" id="channel_name" readonly style="width: 38%;color: #333333;border: 0;"></p>
