@@ -3978,9 +3978,9 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			groupStr = groupStr + ",store_id,store_code ";
 
-			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
-				whereStr = whereStr+" and deptgmv.store_id='"+dynamicDto.getStoreNo()+"'";
-			}
+//			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
+//				whereStr = whereStr+" and deptgmv.store_id='"+dynamicDto.getStoreNo()+"'";
+//			}
 
 			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
 				storeWhere = "(tor.store_id='"+dynamicDto.getStoreNo()+"' or tor.normal_store_id='"+dynamicDto.getStoreNo()+"') and ";
@@ -4101,10 +4101,13 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
 
 		if(dynamicDto.getSearchstr().contains("dept_store_active")){
 			groupStr1 = groupStr1 + ",store_id,store_code ";
-			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
-				whereStr = whereStr+" and c.store_id='"+dynamicDto.getStoreNo()+"'";
-			}
+//			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
+//				whereStr = whereStr+" and c.store_id='"+dynamicDto.getStoreNo()+"'";
+//			}
 
+			if(dynamicDto.getStoreNo()!=null&&!"".equals(dynamicDto.getStoreNo())){
+				storeWhere = "(tor.store_id='"+dynamicDto.getStoreNo()+"' or tor.normal_store_id='"+dynamicDto.getStoreNo()+"') and ";
+			}
 			onStr = onStr+" and c.store_id = b.store_id ";
 			selectStr1=selectStr1+" ,store_id,min(store_name) as store_name,store_code";
 			selectStr2 = selectStr2+",c.store_name,c.store_code";
