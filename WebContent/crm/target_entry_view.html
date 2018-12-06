@@ -135,8 +135,11 @@ function showcardinfo(file_name){
         height: 350,
         buttons : {
             "确定" : function() {
-                yanzhen();
-                $(this).dialog("close");
+                var flag = yanzhen();
+                if(flag != false){
+                    $(this).dialog("close");
+                }
+
             },
             "取消" : function() {
                 $(this).dialog("close");
@@ -167,44 +170,44 @@ function yanzhen(){
     var weekSelect = $("#frame_time").val();
     if(weekSelect == null||weekSelect == ""){
         alert("录入时间不能为空");
-        return;
+        return false;
     }
     var maori_target=$("#maori_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(maori_target==null||maori_target==""){
         alert("频道毛利指标不能为空");
-        return;
+        return false;
     }
     var profit_target=$("#profit_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(profit_target==null||profit_target==""){
         alert("频道利润指标不能为空");
-        return;
+        return false;
     }
     var user_target=$("#user_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(user_target == "" || user_target == null){
         alert("频道用户指标不能为空!");
-        return;
+        return false;
     }
     var deptSelect = $("#deptSelect").val();
     if(deptSelect == null||deptSelect == "" ||deptSelect == "全部事业群"){
         alert("请选择事业群");
-        return;
+        return false;
     }
     var channelSelect = $("#channelSelect").val();
     if(channelSelect == null||channelSelect == "" ||channelSelect == "全部频道"){
         alert("请选择频道");
-        return;
+        return false;
     }
     if(!isNumber(maori_target)){
         alert("频道毛利必须为数字");
-        return;
+        return false;
     }
     if(!isNumber(profit_target)){
         alert("频道利润必须为数字");
-        return;
+        return false;
     }
     if(!isNumber(user_target)){
         alert("频道用户必须为数字");
-        return;
+        return false;
     }
     yanzhenAdd();
 }
