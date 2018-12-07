@@ -51,7 +51,7 @@ $(function () {
 							if(data.data!="null"){
 								var jsonData = $.fromJSON(data.data);
 								code = jsonData.data.usergroup;
-                                if(code.code == "ZBPDFZRJSZ"){
+                                if(code.code == "ZBMBZLRJSZ"){
                                     $("#deptSelect").css("display","block");
                                     $("#businessGroup_name").css("display","none");
 
@@ -61,10 +61,12 @@ $(function () {
                                     $("#deptSelect").css("display","none");
                                     $("#businessGroup_name").css("display","block");
                                     $("#businessGroup_name").val(jsonData.data.careergroup);
+                                    $("#businessGroup_code").val(jsonData.data.careergroup_id);
 
                                     $("#channelSelect").css("display","none");
                                     $("#channel_name").css("display","block");
                                     $("#channel_name").val(jsonData.data.channelname);
+                                    $("#channel_code").val(jsonData.data.channel_id);
                                 }
 							}
 						} else {
@@ -206,7 +208,7 @@ function yanzhen(){
     }
     var deptSelect = "";
     var channelSelect = "";
-    if(code != "ZBPDFZRJSZ"){
+    if(code != "ZBMBZLRJSZ"){
         deptSelect = $("#businessGroup_name").val();
         channelSelect = $("#channel_name").val();
     }else{
