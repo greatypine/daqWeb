@@ -286,7 +286,33 @@ public class DateUtils {
 		}
 		return df.format(calendar.getTime());
 	}
-
+	/**
+	 * 返回上个月的月初日期
+	 * 
+	 * @param dateFormat
+	 * @return
+	 */
+	public static String getLastMonthFirstDate(String dateFormat) {
+		SimpleDateFormat format=new SimpleDateFormat(dateFormat);
+		Calendar calendar=Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -1);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		return format.format(calendar.getTime());
+	}
+	/**
+	 * 返回上个月的月末日期
+	 * 
+	 * @param dateFormat
+	 * @return
+	 */
+	public static String getLastMonthLastDate(String dateFormat) {
+		SimpleDateFormat sf=new SimpleDateFormat(dateFormat);
+		Calendar calendar=Calendar.getInstance();
+		int month=calendar.get(Calendar.MONTH);
+		calendar.set(Calendar.MONTH, month-1);
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+		return sf.format(calendar.getTime());
+	}
 	// 获得昨天的日期
 	public static String lastDate() {
 		Calendar calendar = new GregorianCalendar();
@@ -563,6 +589,7 @@ public class DateUtils {
 //		System.out.println(dateFormat.format(date2));
 //		int weekOfYear2 = getWeekOfYear(date);
 //		System.out.println(weekOfYear2);
+		System.out.println(getLastMonthLastDate("yyyy-MM-dd"));
 		 List<String> list = getDateByDay();
 		 System.out.println(list.toString());
 	}

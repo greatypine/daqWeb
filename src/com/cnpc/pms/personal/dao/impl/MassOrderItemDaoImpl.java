@@ -19,6 +19,7 @@ import com.cnpc.pms.dynamic.entity.MassOrderDto;
 import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.utils.ImpalaUtil;
+
 import org.hibernate.type.Type;
 
 /**
@@ -679,5 +680,139 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				.executeUpdate();
 		session.close();
 
+	}
+	@Override
+	public Map<String, Object> queryAreaUserByAreaCode(DynamicDto userOperationStatDto) {
+		String sql = "SELECT count(DISTINCT(case when trading_price > 10 and (date_format(a.sign_time, '%Y-%m') = '"+userOperationStatDto.getBeginDate()+"') then customer_id end)) pay_10_count FROM ";
+		
+			sql = sql + " df_mass_order_monthly a ";
+		
+		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
+        if(StringUtils.isNotEmpty(userOperationStatDto.getEmployeeNo())){
+            sql = sql + " and a.employee_no ='" + userOperationStatDto.getEmployeeNo().trim()+ "'";
+        }
+		sql = sql + " GROUP BY a.employee_no ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("data", list);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> queryAreaUserByStoreNo(DynamicDto userOperationStatDto) {
+		String sql = "SELECT count(DISTINCT(case when trading_price > 10 and (date_format(a.sign_time, '%Y-%m') = '"+userOperationStatDto.getBeginDate()+"') then customer_id end)) pay_10_count FROM ";
+		
+			sql = sql + " df_mass_order_monthly a ";
+		
+		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
+        if(StringUtils.isNotEmpty(userOperationStatDto.getStoreNo())){
+            sql = sql + " and a.store_code ='" + userOperationStatDto.getStoreNo().trim()+ "'";
+        }
+		sql = sql + " GROUP BY a.store_code ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("data", list);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> queryAreaOpenCardByAreaCode(DynamicDto userOperationStatDto) {
+		String employessNo = userOperationStatDto.getEmployeeNo();
+		String begiDate = userOperationStatDto.getBeginDate();
+		String whereStr = "";
+		String dateStr = "";
+		if(StringUtils.isNotEmpty(employessNo)){
+			whereStr += " and t.employee_no='"+employessNo+"'";
+		}
+		if(StringUtils.isNotEmpty(begiDate)){
+			dateStr+=" and DATE_FORMAT(opencard_time,'%Y-%m')='"+begiDate+"' ";
+		}
+		String sql = "select a.name,a.phone,a.employee_no,a.inviteCode,b.total as inviteCount from (select t.name,t.phone,t.employee_no,"
+				+ "t.inviteCode from t_humanresources t where  t.inviteCode is not null and t.inviteCode!='' "+whereStr+") a INNER JOIN (select inviteCode,COUNT(1) as total from df_user_member where "
+				+ "invitecode REGEXP  '^[0-9]{6}$' and  customer_id not in (select customer_id from df_member_whitelist) "
+				+dateStr+" GROUP BY inviteCode) b on a.inviteCode = b.inviteCode ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("data", list);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> queryAreaOpenCardByStoreKeeperNo(DynamicDto userOperationStatDto,String employee_no) {
+		String begiDate = userOperationStatDto.getBeginDate();
+		String whereStr = "";
+		String dateStr = "";
+		if(StringUtils.isNotEmpty(employee_no)){
+			whereStr += " and t.employee_no='"+employee_no+"'";
+		}
+		if(StringUtils.isNotEmpty(begiDate)){
+			dateStr+=" and DATE_FORMAT(opencard_time,'%Y-%m')='"+begiDate+"' ";
+		}
+		String sql = "select a.name,a.phone,a.employee_no,a.inviteCode,b.total as inviteCount from (select t.name,t.phone,t.employee_no,"
+				+ "t.inviteCode from t_storekeeper t where  t.inviteCode is not null and t.inviteCode!='' "+whereStr+") a INNER JOIN (select inviteCode,COUNT(1) as total from df_user_member where "
+				+ "invitecode REGEXP  '^[0-9]{6}$' and  customer_id not in (select customer_id from df_member_whitelist) "
+				+dateStr+" GROUP BY inviteCode) b on a.inviteCode = b.inviteCode ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		map_result.put("data", list);
+		return map_result;
+	}
+	@Override
+	public Map<String, Object> queryRecommendUser(PageInfo pageInfo, String employee_no) {
+		String whereStr = "";
+		if(StringUtils.isNotEmpty(employee_no)){
+			whereStr+="where but.employee_a_no = '" +employee_no+ "'";
+		}
+		String sqlA = "SELECT a.customerId, but.mobilephone, but.area_no, but.employee_a_no, COALESCE(b.item1, '') item1, "
+				+ "COALESCE (c.item2, '') item2, COALESCE (d.item3, '') item3 FROM ( SELECT DISTINCT a.customer_id customerId, "
+				+ "COALESCE ( split_part (b.tag_level4_id, ',', 1), '') item1, COALESCE ( substring( split_part (b.tag_level4_id, ',', 2),"
+				+ " locate( ',', split_part (b.tag_level4_id, ',', 2) ) + 1 ), '' ) item2, COALESCE ( substring( split_part (b.tag_level4_id, ',', 3),"
+				+ " locate( split_part ( split_part (b.tag_level4_id, ',', 3), ',', 2 ), split_part (b.tag_level4_id, ',', 3) ) + "
+				+ "length( split_part ( split_part (b.tag_level4_id, ',', 3), ',', 2 ) ) + 1 ), '' ) item3 FROM "
+				+ "gabase.t_statis_cust_operate_classify a LEFT JOIN gabase.t_recomm_num_result b ON a.customer_id = b.customer_id WHERE "
+				+ "1 = 1 AND level_num = 1 ORDER BY a.customer_id ) a LEFT JOIN ( SELECT tag_level4_id id, tag_level4_name item1 FROM "
+				+ "gabase.f_skuclass GROUP BY tag_level4_id, tag_level4_name ) b ON COALESCE (a.item1, '$') = b.id LEFT JOIN "
+				+ "( SELECT tag_level4_id id, tag_level4_name item2 FROM gabase.f_skuclass GROUP BY tag_level4_id, tag_level4_name ) c "
+				+ "ON COALESCE (a.item2, '$') = c.id LEFT JOIN ( SELECT tag_level4_id id, tag_level4_name item3 FROM gabase.f_skuclass "
+				+ "GROUP BY tag_level4_id, tag_level4_name ) d ON COALESCE (a.item3, '$') = d.id LEFT JOIN gabase.b_user_tiny but ON "
+				+ "a.customerId = but.customer_id "+whereStr+" ORDER BY a.customerId ";
+		String sqlB = "SELECT count(1) as count_ from ( "+sqlA+" ) ttt ";
+		
+        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
+        Integer count_ = 0;
+        try{
+        	lst_data_count=ImpalaUtil.executeGuoan(sqlB);
+        	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
+        	if(pageInfo.getCurrentPage()==1){
+        		sqlA = sqlA+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        	}else{
+        		sqlA = sqlA+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
+        	}
+        	lst_data=ImpalaUtil.executeGuoan(sqlA);
+            lst_result = lst_data;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		if(pageInfo!=null){
+			Integer total_pages = (count_ - 1) / pageInfo.getRecordsPerPage() + 1;
+			pageInfo.setTotalRecords(count_);
+			pageInfo.setRecordsPerPage(pageInfo.getRecordsPerPage());
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}
+		map_result.put("data", lst_data);
+		return map_result;
 	}
 }
