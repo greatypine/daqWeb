@@ -45,10 +45,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 	}
 	@Override
 	public Map<String, Object> showTargetData(QueryConditions conditions) {
-//		UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
-//		UserDTO userDTO = userManager.getCurrentUserDTO();
-//
-//		userDTO.getUsergroup().getCode();
+		UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
+		UserDTO userDTO = userManager.getCurrentUserDTO();
 		TargetEntryDao targetEntryDao = (TargetEntryDao) SpringHelper.getBean(TargetEntryDao.class.getName());
 		// 查询的数据条件
 		StringBuilder sb_where = new StringBuilder();
@@ -88,8 +86,18 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 		System.out.println(sb_where);
 		map_result.put("pageinfo", obj_page);
 		map_result.put("header", "目标值录入信息");
-		map_result.put("data", targetEntryDao.getTargetEntryList(sb_where.toString(), obj_page));
+		map_result.put("data", targetEntryDao.getTargetEntryList(sb_where.toString(), obj_page,userDTO));
+		map_result.put("userList",userDTO);
 		return map_result;
+	}
+
+	@Override
+	public Map<String, Object> getUserInfo() {
+		Map<String, Object> result = new HashMap<String, Object>();
+		UserManager userManager = (UserManager)SpringHelper.getBean("userManager");
+		UserDTO userDTO = userManager.getCurrentUserDTO();
+		result.put("data", userDTO);
+		return result;
 	}
 
 	@Override

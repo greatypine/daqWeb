@@ -40,23 +40,32 @@
 var win;
 
 
-
+var code = "";
 $(function () {
-	//获取当前登录的用户
-	 doManager("UserManager", "findUserInfo", null, function(
+	//获取当前登录的用户t
+    initalldept();
+    initallchannel();
+	 doManager("targetEntryManager", "getUserInfo", null, function(
 							data, textStatus, XMLHttpRequest) {
 						if (data.result) {
 							if(data.data!="null"){
 								var jsonData = $.fromJSON(data.data);
-								if(jsonData==3223||jsonData==3224||jsonData==3225){
-									$("#inser").hide();
-									//$pmspage.opArr = [ editObj  ];  
-								}else{
-									//判断是否可修改
-									//val flag = booleanCanEdit();
-									//$pmspage.opArr = [ editObj  ];  
-								}
-								//console.log(jsonData);
+								code = jsonData.data.usergroup;
+                                if(code.code == "ZBPDFZRJSZ"){
+                                    $("#deptSelect").css("display","block");
+                                    $("#businessGroup_name").css("display","none");
+
+                                    $("#channelSelect").css("display","block");
+                                    $("#channel_name").css("display","none");
+                                }else {
+                                    $("#deptSelect").css("display","none");
+                                    $("#businessGroup_name").css("display","block");
+                                    $("#businessGroup_name").val(jsonData.data.careergroup);
+
+                                    $("#channelSelect").css("display","none");
+                                    $("#channel_name").css("display","block");
+                                    $("#channel_name").val(jsonData.data.channelname);
+                                }
 							}
 						} else {
 							$$.showMessage("系统信息", "信息加载异常!");
@@ -92,6 +101,8 @@ function searchList() {
     $("#frame_time").val("");
     $("#deptSelect").val("");
     $("#channelSelect").val("");
+//    $("#businessGroup_name").val("");
+//    $("#channel_name").val("");
 }
 function doClean() {
     document.service_qa.reset();
@@ -193,12 +204,20 @@ function yanzhen(){
         alert("频道用户指标不能为空!");
         return false;
     }
-    var deptSelect = $("#deptSelect").val();
+    var deptSelect = "";
+    var channelSelect = "";
+    if(code != "ZBPDFZRJSZ"){
+        deptSelect = $("#businessGroup_name").val();
+        channelSelect = $("#channel_name").val();
+    }else{
+        deptSelect = $("#deptSelect").val();
+        channelSelect = $("#channelSelect").val();
+    }
     if(deptSelect == null||deptSelect == "" ||deptSelect == "全部事业群"){
         alert("请选择事业群");
         return false;
     }
-    var channelSelect = $("#channelSelect").val();
+
     if(channelSelect == null||channelSelect == "" ||channelSelect == "全部频道"){
         alert("请选择频道");
         return false;
@@ -265,33 +284,8 @@ function doSave(newWindow){
         }
     });
 }
-$(function(){
-    initcurruser();
-//    initCareerChannel();
-    initalldept();
-    initallchannel();
-    var regex_cs = new RegExp("^(CS|cs)\w*");//城市级别
-//    if(regex_cs.test(curr_user.usergroup.code)||curr_user.usergroup.code=="PTYYZXYCDDZ"){
-//        initcurcity();
-//    }else{
-//        initallcity();
-//    }
-});
 
 
-
-var curr_user;
-function initcurruser(){
-
-    //取得当前登录人的门店
-    doManager("UserManager", "getCurrentUserDTO",null,
-        function(data, textStatus, XMLHttpRequest) {
-            if (data.result) {
-                var employeeID="";
-                curr_user = JSON.parse(data.data);
-            }
-        },false);
-}
 
 
 var storeJson;
@@ -461,11 +455,11 @@ function initChannelSelectcomplate(){
                             </td>
                             <td width="45%">
                                 <p class="read">事业群名称：</p>
-                                <p class="read"><select id="deptSelect"  onchange="showDept()"></select><input type="hidden" id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
+                                <p class="read"><select id="deptSelect" style="display: block"  onchange="showDept()"></select><input type="text" style="display: none;background-color: rgb(242, 239, 239);" readonly id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
                             </td>
                             <td width="45%">
                                 <p class="read">频道名称：</p>
-                                <p class="read"><select id="channelSelect" onchange="showChannel()"></select><input type="hidden" id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
+                                <p class="read"><select id="channelSelect" style="display: block" onchange="showChannel()"></select><input type="text" style="display: none;background-color: rgb(242, 239, 239);" readonly id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
                             </td>
                         </tr>
                         <tr>

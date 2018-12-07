@@ -2,6 +2,7 @@ package com.cnpc.pms.personal.dao;
 
 import com.cnpc.pms.base.dao.IDAO;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
 import com.cnpc.pms.personal.entity.Storexpand;
 import com.cnpc.pms.personal.entity.TargetEntry;
 import com.cnpc.pms.personal.entity.TargetEntryStore;
@@ -16,7 +17,7 @@ public interface TargetEntryDao extends IDAO{
 	 * @param pageInfo
 	 * @return
 	 */
-	List<Map<String, Object>> getTargetEntryList(String where, PageInfo pageInfo);
+	List<Map<String, Object>> getTargetEntryList(String where, PageInfo pageInfo, UserDTO userDTO);
 
 	/**
 	 * 某年签约数量，上会通过数据
