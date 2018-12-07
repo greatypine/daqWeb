@@ -4,9 +4,11 @@
 package com.cnpc.pms.dynamic.manager.impl;
 
 
+import com.cnpc.pms.base.entity.DataEntity;
 import com.cnpc.pms.base.paging.FilterFactory;
 import com.cnpc.pms.base.paging.IFilter;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.base.security.SessionManager;
 import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
@@ -27,6 +29,7 @@ import com.cnpc.pms.personal.dao.ExpressDao;
 import com.cnpc.pms.personal.dao.StoreDao;
 import com.cnpc.pms.personal.entity.DsAbnormalOrder;
 import com.cnpc.pms.personal.entity.Humanresources;
+import com.cnpc.pms.personal.entity.SsoUserDataLog;
 import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.entity.SyncDataLog;
 import com.cnpc.pms.personal.manager.*;
@@ -7510,10 +7513,10 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
      * 同步单点登录系统人员
      */
 	@Override
-	public String saveOrUpdateSsoUser(Humanresources hr, User user) {
+	public String saveOrUpdateSsoUser(User user) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("address", ""+user.getId());
-		jsonObject.put("age",11);
+		jsonObject.put("age",0);
 		jsonObject.put("cardId", user.getZw());
 		jsonObject.put("companyid", user.getStore_id());
 		jsonObject.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(user.getCreateDate()));
@@ -7533,7 +7536,42 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
         String result = hClientUtil.getRemoteData(SSO_SYNC_USER, jsonObject);
         
         //插入同步记录 
-        
+        SsoUserDataLogManager ssoUserDataLogManager = (SsoUserDataLogManager) SpringHelper.getBean("ssoUserDataLogManager");
+        SsoUserDataLog ssoUserDataLog = new SsoUserDataLog();
+        ssoUserDataLog.setSendsyncdata(jsonObject.toString());
+        ssoUserDataLog.setRcvsyncdata(result);
+        preSaveObject(ssoUserDataLog);
+        ssoUserDataLogManager.saveObject(ssoUserDataLog);
         return result;
+        
 	}
+	
+	
+	protected void preSaveObject(Object o) {
+		if (o instanceof DataEntity) {
+			User sessionUser = null;
+			if (null != SessionManager.getUserSession()
+					&& null != SessionManager.getUserSession().getSessionData()) {
+				sessionUser = (User) SessionManager.getUserSession()
+						.getSessionData().get("user");
+			}
+			DataEntity dataEntity = (DataEntity) o;
+			java.util.Date date = new java.util.Date();
+			java.sql.Date sdate = new java.sql.Date(date.getTime());
+			// insert处理时添加创建人和创建时间
+			if (null == dataEntity.getCreate_time()) {
+				dataEntity.setCreate_time(sdate);
+				if (null != sessionUser) {
+					dataEntity.setCreate_user(sessionUser.getCode());
+					dataEntity.setCreate_user_id(sessionUser.getId());
+				}
+			}
+			dataEntity.setUpdate_time(sdate);
+			if (null != sessionUser) {
+				dataEntity.setUpdate_user(sessionUser.getCode());
+				dataEntity.setUpdate_user_id(sessionUser.getId());
+			}
+		}
+	}
+	
 }

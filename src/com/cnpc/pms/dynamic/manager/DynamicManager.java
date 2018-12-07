@@ -1195,6 +1195,6 @@ public interface DynamicManager extends IManager{
      * @param jsonObject
      * @return
      */
-    public String saveOrUpdateSsoUser(Humanresources hr,User user);
+    public String saveOrUpdateSsoUser(User user);
     
 }
