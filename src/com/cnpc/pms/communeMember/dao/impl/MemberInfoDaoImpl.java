@@ -31,7 +31,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 查询社员来源
          * 2018年9月14日
          */
-        String memFromSql = "select count(dum.customer_source) as cou, CASE dum.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' ELSE '无' END AS customer_source  from df_user_member dum where dum.associator_expiry_date>NOW() ";
+        String memFromSql = "select count(dum.customer_source) as cou, CASE dum.customer_source WHEN 'app' THEN 'APP' WHEN 'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN '智能终端' WHEN 'web' THEN 'WEB' WHEN 'citic' THEN '中信用户联盟' WHEN 'tv' THEN '电视' WHEN 'third_party' THEN '第三方' WHEN 'action' THEN '活动' ELSE '无' END AS customer_source  from df_user_member dum where dum.associator_expiry_date>NOW() and dum.status = 1 ";
         if(!"0000".equals(dd)) {
             memFromSql = memFromSql+ "  and dum.regist_cityno='"+dd+"'";
         }
@@ -54,7 +54,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          * 查询社员注册城市
          * 2018年9月14日
          */
-        String memFromSql = "SELECT tdc.cityname cityname, count(*) cou FROM df_user_member dfum, t_dist_citycode tdc WHERE dfum.regist_cityno IS NOT NULL AND LPAD(dfum.regist_cityno, 4, '0') = tdc.cityno and dfum.associator_expiry_date>now() GROUP BY dfum.regist_cityno";
+        String memFromSql = "SELECT tdc.cityname cityname, count(*) cou FROM df_user_member dfum, t_dist_citycode tdc WHERE dfum.regist_cityno IS NOT NULL AND LPAD(dfum.regist_cityno, 4, '0') = tdc.cityno and dfum.associator_expiry_date>now() and dfum.status = 1  GROUP BY dfum.regist_cityno";
         try {
             Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(memFromSql);
             List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
@@ -241,7 +241,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          */
 
         //查询社员总量sql
-        String sql = "select count(*) as trycount from  df_user_try_member dum where dum.associator_expiry_date>now()";
+        String sql = "select count(*) as trycount from  df_user_try_member dum where dum.associator_expiry_date>now() and dum.status = 1 ";
         if(!"0000".equals(dd)) {
             sql = sql+ " and dum.regist_cityno='"+dd+"'";
         }
@@ -280,7 +280,7 @@ public class MemberInfoDaoImpl extends BaseDAOHibernate implements MemberInfoDao
          */
 
         //查询社员总量sql
-        String sql = "select count(*) as allcount from  df_user_member dum where dum.associator_expiry_date>now() and dum.opencard_time is not null";
+        String sql = "select count(*) as allcount from  df_user_member dum where dum.associator_expiry_date>now() and dum.status = 1  and dum.opencard_time is not null";
         if(!"0000".equals(dd)) {
             sql = sql+ " and dum.regist_cityno='"+dd+"'";
         }
