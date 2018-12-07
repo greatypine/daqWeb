@@ -3,6 +3,7 @@ package com.cnpc.pms.personal.dao.impl;
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.base.util.SpringHelper;
+import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.personal.dao.StorexpandDao;
 import com.cnpc.pms.personal.dao.TargetEntryDao;
@@ -17,30 +18,26 @@ import java.util.*;
 public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntryDao {
 	@Override
 	public List<Map<String, Object>> getTargetEntryList(String where,
-			PageInfo pageInfo) {
+			PageInfo pageInfo,UserDTO userDTO) {
 		// 取得当前登录人 所管理城市
 				String cityssql = "";
 				StringBuffer sb_where = new StringBuffer();
 				UserManager userManager = (UserManager) SpringHelper.getBean("userManager");
-//				List<DistCity> distCityList = userManager.getCurrentUserCity();
-//				if (distCityList != null && distCityList.size() > 0) {
-//					for (DistCity d : distCityList) {
-//						cityssql += "'" + d.getCityname() + "',";
-//					}
-//					cityssql = cityssql.substring(0, cityssql.length() - 1);
-//				}
-//
-//				if (cityssql != "" && cityssql.length() > 0) {
-//					sb_where.append(" and te.city_name in (" + cityssql + ") ");
-//				}
-		// sql查询列，用于分页计算数据总数
+
+				// sql查询列，用于分页计算数据总数
 				String str_count_sql = "select COUNT(DISTINCT te.id) "
 						+ "from df_target_entry te WHERE 1=1  ";
+		if(!userDTO.getUsergroup().getCode().equals("ZBPDFZRJSZ")){
+			str_count_sql = str_count_sql + "and te.BusinessGroup_name = '"+userDTO.getCareergroup()+"' and te.channel_name='"+userDTO.getChannelname()+"' ";
+		}
 				System.out.println(str_count_sql);
 				// sql查询列，用于页面展示所有的数据
 				String find_sql = "select te.id,te.BusinessGroup_name,te.channel_name,te.create_time,te.frame_time" +
 						",te.maori_target,te.profit_target,te.store_name,te.user_target,te.user_code " +
 						",te.update_user,te.update_time from df_target_entry te  WHERE 1=1  ";
+				if(!userDTO.getUsergroup().getCode().equals("ZBPDFZRJSZ")){
+					find_sql = find_sql + "and te.BusinessGroup_name = '"+userDTO.getCareergroup()+"' and te.channel_name='"+userDTO.getChannelname()+"' ";
+				}
 				StringBuilder sb_sql = new StringBuilder();
 				sb_sql.append(find_sql);
 				sb_sql.append(where +sb_where.toString()+ " order by te.id desc");
