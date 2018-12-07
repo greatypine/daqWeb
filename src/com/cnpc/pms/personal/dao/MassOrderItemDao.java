@@ -88,5 +88,38 @@ public interface MassOrderItemDao extends IDAO{
 	public Map<String, Object> getProfitRangeForWeek(DynamicDto dd,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO);
 
 	public void updataReport(Long id ,String url);
+	/**
+	 * 查询片区某月消费超10元用户量
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryAreaUserByAreaCode(DynamicDto dd);
+	/**
+	 * 查询门店某月消费超10元用户量
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryAreaUserByStoreNo(DynamicDto dd);
+	/**
+	 * 查询片区某月开卡数
+	 * @param dd
+	 * @return
+	 */
+	public Map<String, Object> queryAreaOpenCardByAreaCode(DynamicDto dd);
+	/**
+	 * 查询店长某月开卡数
+	 * @param dd
+	 * @param employee_no
+	 * @return
+	 */
+	public Map<String, Object> queryAreaOpenCardByStoreKeeperNo(DynamicDto dd,String employee_no);
+	/**
+	 * 查询推荐产品列表
+	 * @param dd
+	 * @param pageInfo
+	 * @param platformid
+	 * @return
+	 */
+	public Map<String, Object> queryRecommendUser(PageInfo pageInfo, String employee_no);
 	
 }

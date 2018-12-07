@@ -579,5 +579,24 @@ public interface InterManager extends IManager {
   	
   	//测试接口 
   	public String testNoProxySendMessage(String mobilephone,String content);
+  	/**
+  	 * 根据国安侠编号查询片区消费用户数,片区毛利,片区社员开卡数(本月&上月)
+  	 * @param employee_no
+  	 * @return
+  	 */
+  	public Result queryAreaInfoByAreaCode(String employee_no);
+  	/**
+  	 * 根据门店编号查询门店消费用户数,片区毛利,片区社员开卡数(本月&上月)
+  	 * @param employee_no
+  	 * @return
+  	 */
+  	public Result queryAreaInfoByStorekeeperEmployNo(String employee_no,String store_code,String store_id);
+  	/**
+  	 * 查询国安侠产品推荐
+  	 * @param pageInfo
+  	 * @param employee_no
+  	 * @return
+  	 */
+  	public Result queryRecommendUserList(PageInfo pageInfo,String employee_no);
   	
 }

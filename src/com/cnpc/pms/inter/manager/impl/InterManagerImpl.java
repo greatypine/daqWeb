@@ -22,6 +22,7 @@ import java.util.Random;
 import javax.naming.InsufficientResourcesException;
 
 import com.cnpc.pms.personal.dao.*;
+
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -48,6 +49,7 @@ import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
+import com.cnpc.pms.dynamic.entity.UserOperationStatDto;
 import com.cnpc.pms.dynamic.manager.UserOperationStatManager;
 import com.cnpc.pms.inter.common.CodeEnum;
 import com.cnpc.pms.inter.common.Result;
@@ -69,9 +71,7 @@ import com.cnpc.pms.personal.entity.CodeLogin;
 import com.cnpc.pms.personal.entity.Customer;
 import com.cnpc.pms.personal.entity.Express;
 import com.cnpc.pms.personal.entity.Humanresources;
-
 import com.cnpc.pms.personal.entity.SendMessage;
-
 import com.cnpc.pms.personal.entity.BannerInfo;
 import com.cnpc.pms.personal.entity.DistCityCode;
 import com.cnpc.pms.personal.entity.SiteSelection;
@@ -114,11 +114,8 @@ import com.cnpc.pms.slice.entity.Area;
 import com.cnpc.pms.slice.manager.AreaManager;
 import com.cnpc.pms.utils.BarCodeUtils;
 import com.cnpc.pms.utils.ValidationCode;
-
 import com.cnpc.pms.utils.PhoneFormatCheckUtils;
-
 import com.cnpc.pms.utils.DateUtils;
-
 import com.cnpc.pms.utils.ValueUtil;
 
 /**
@@ -3867,5 +3864,254 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 				result.setMessage(CodeEnum.error.getDescription());
 			}
 			return result;
+		}
+
+		@Override
+		public Result queryAreaInfoByAreaCode(String employee_no) {
+			/*employee_no = "SK00633";
+			String store_code="0010Y0008";
+			String store_id = "34";*/
+			//employee_no = "A000645";
+			Result result = new Result();
+			MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+			Map<String,Object> teMap = new HashMap<String,Object>();
+			int areaCustomerCount = 0;
+			int areaLastCustomerCount = 0;
+			Double areaProfitMonthCount = 0.0;
+			Double areaProfitLstMonthCount = 0.0;
+			int areaOpenCardMonthCount = 0;
+			int areaOpenCardLastMonthCount = 0;
+			DynamicDto dd = new DynamicDto();
+	    	try {
+	    		String beginDate = DateUtils.getCurrMonthFirstDate("yyyy-MM-dd");   
+	    		dd.setBeginDate(beginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd.setEmployeeNo(employee_no);
+	    		//查询本月门店消费超10元用户数
+	    		Map<String, Object> areaCustomerMonthCountMap = massOrderItemDao.queryAreaUserByAreaCode(dd);
+	    		//查询本月门店毛利
+	    		Map<String, Object> areaProfitMonthCountMap = dynamicDao.employeeOfMaoli(dd, null);
+	    		//查询本月社员开卡数
+	    		Map<String, Object> areaOpenCardMonthCountMap = massOrderItemDao.queryAreaOpenCardByAreaCode(dd);
+	    		DynamicDto dd1 = new DynamicDto();
+	    		String lastBeginDate = DateUtils.getLastMonthFirstDate("yyyy-MM-dd");   
+	    		dd1.setBeginDate(lastBeginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd1.setEmployeeNo(employee_no);
+	    		//查询上月片区消费超10元用户数
+	    		Map<String, Object> areaCustomerLastMonthCountMap = massOrderItemDao.queryAreaUserByAreaCode(dd1);
+	    		//查询上月片区毛利
+	    		Map<String, Object> areaProfitLastMonthCountMap = dynamicDao.employeeOfMaoli(dd1, null);
+	    		//查询上月社员开卡数
+	    		Map<String, Object> areaOpenCardLastMonthCountMap = massOrderItemDao.queryAreaOpenCardByAreaCode(dd1);
+	    		List<Map<String,Object>> areaCustomerMonthCountList = (List<Map<String, Object>>) areaCustomerMonthCountMap.get("data");
+	    		if(areaCustomerMonthCountList!=null&&areaCustomerMonthCountList.size()>0){
+	    			areaCustomerCount = Integer.parseInt(String.valueOf(areaCustomerMonthCountList.get(0).get("pay_10_count")));
+	    		}else{
+	    			areaCustomerCount = 0;
+	    		}
+	    		List<Map<String,Object>> areaCustomerLstMonthCountList = (List<Map<String, Object>>) areaCustomerLastMonthCountMap.get("data");
+	    		if(areaCustomerLstMonthCountList!=null&&areaCustomerLstMonthCountList.size()>0){
+	    			areaLastCustomerCount = Integer.parseInt(String.valueOf(areaCustomerLstMonthCountList.get(0).get("pay_10_count")));
+	    		}else{
+	    			areaLastCustomerCount = 0;
+	    		}
+	    		List<Map<String,Object>> areaProfitMonthCountList = (List<Map<String, Object>>) areaProfitMonthCountMap.get("maoli");
+	    		if(areaProfitMonthCountList!=null&&areaProfitMonthCountList.size()>0){
+	    			areaProfitMonthCount = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("maoli")));
+	    		}else{
+	    			areaProfitMonthCount = 0.0;
+	    		}
+	    		List<Map<String,Object>> areaProfitLstMonthCountList = (List<Map<String, Object>>) areaProfitLastMonthCountMap.get("maoli");
+	    		if(areaProfitLstMonthCountList!=null&&areaProfitLstMonthCountList.size()>0){
+	    			areaProfitLstMonthCount = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("maoli")));
+	    		}else{
+	    			areaProfitLstMonthCount = 0.0;
+	    		}
+	    		List<Map<String,Object>> areaOpenCardMonthList = (List<Map<String, Object>>) areaOpenCardMonthCountMap.get("data");
+	    		if(areaOpenCardMonthList!=null&&areaOpenCardMonthList.size()>0){
+	    			areaOpenCardMonthCount = Integer.parseInt(String.valueOf(areaOpenCardMonthList.get(0).get("inviteCount")));
+	    		}else{
+	    			areaOpenCardMonthCount = 0;
+	    		}
+	    		List<Map<String,Object>> areaOpenCardLstMonthList = (List<Map<String, Object>>) areaOpenCardLastMonthCountMap.get("data");
+	    		if(areaOpenCardLstMonthList!=null&&areaOpenCardLstMonthList.size()>0){
+	    			areaOpenCardLastMonthCount = Integer.parseInt(String.valueOf(areaOpenCardLstMonthList.get(0).get("inviteCount")));
+	    		}else{
+	    			areaOpenCardLastMonthCount = 0;
+	    		}
+    			teMap.put("pay_10_count_month", areaCustomerCount);
+    			teMap.put("pay_10_count_lst_month", areaLastCustomerCount);
+    			teMap.put("area_profit", areaProfitMonthCount);
+    			teMap.put("area_lst_profit", areaProfitLstMonthCount);
+    			teMap.put("areaOpenCard", areaOpenCardMonthCount);
+    			teMap.put("areaLastOpenCard", areaOpenCardLastMonthCount);
+    			result.setCode(CodeEnum.success.getValue());
+				result.setMessage(CodeEnum.success.getDescription());
+	    		result.setData(teMap);
+	    	} catch (Exception e) {
+				e.printStackTrace();
+				result.setCode(CodeEnum.error.getValue());
+				result.setMessage(CodeEnum.error.getDescription());
+			}
+	        return result;
+			
+		}
+		@Override
+		public Result queryAreaInfoByStorekeeperEmployNo(String employee_no,String store_code,String store_id) {
+			Result result = new Result();
+			MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+			DynamicDao dynamicDao = (DynamicDao)SpringHelper.getBean(DynamicDao.class.getName());
+			StoreDao storeDao = (StoreDao)SpringHelper.getBean(StoreDao.class.getName());
+			Map<String,Object> teMap = new HashMap<String,Object>();
+			PageInfo pageInfo = new PageInfo();
+			pageInfo.setCurrentPage(1);
+			pageInfo.setRecordsPerPage(10);
+			int storeCustomerCount = 0;//门店本月消费用户数
+			int storeLastCustomerCount = 0;//门店上月消费用户数
+			Double storeProfitMonthCount = 0.0;//门店本月毛利
+			Double storeProfitLstMonthCount = 0.0;//门店上月毛利
+			int storeOpenCardMonthCount = 0;//门店本月社员开卡
+			int storeOpenCardLastMonthCount = 0;//门店上月社员开卡
+			int storeKeeperOpenCardMonthCount = 0;//店长本月社员开卡数
+			int storeKeeperOpenCardLastMonthCount = 0;//店长上月社员开卡数
+			DynamicDto dd = new DynamicDto();
+			DynamicDto dd3 = new DynamicDto();
+			DynamicDto dd4 = new DynamicDto();
+	    	try {
+	    		String beginDate = DateUtils.getCurrMonthFirstDate("yyyy-MM-dd");   
+	    		dd.setBeginDate(beginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd.setStoreNo(store_code);
+	    		dd.setStoreId(Long.parseLong(store_id));
+	    		dd3.setBeginDate(beginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd3.setStoreNo(store_id);
+	    		dd3.setTarget(2);
+	    		//查询本月门店消费超10元用户数
+	    		Map<String, Object> areaCustomerMonthCountMap = massOrderItemDao.queryAreaUserByStoreNo(dd);
+	    		//查询本月门店毛利
+	    		Map<String, Object> areaProfitMonthCountMap = storeDao.queryStoreTradeProfit(dd, pageInfo);
+	    		//查询店长本月社员开卡数
+	    		Map<String, Object> areaOpenCardMonthCountMap = massOrderItemDao.queryAreaOpenCardByStoreKeeperNo(dd,employee_no);
+	    		//门店本月社员开卡数
+	    		Map<String, Object> storeOpenCardMonthCountMap = dynamicDao.queryMemberInvitation(dd3,null);
+	    		
+	    		DynamicDto dd1 = new DynamicDto();
+	    		String lastBeginDate = DateUtils.getLastMonthFirstDate("yyyy-MM-dd");   
+	    		dd1.setBeginDate(lastBeginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd1.setStoreNo(store_code);
+	    		dd1.setStoreId(Long.parseLong(store_id));
+	    		dd4.setBeginDate(lastBeginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd4.setStoreNo(store_id);
+	    		dd4.setTarget(2);
+	    		//查询上月门店消费超10元用户数
+	    		Map<String, Object> areaCustomerLastMonthCountMap = massOrderItemDao.queryAreaUserByStoreNo(dd1);
+	    		//查询上月门店毛利
+	    		Map<String, Object> areaProfitLastMonthCountMap = storeDao.queryStoreTradeProfit(dd1, pageInfo);
+	    		//查询店长上月社员开卡数
+	    		Map<String, Object> areaOpenCardLastMonthCountMap = massOrderItemDao.queryAreaOpenCardByStoreKeeperNo(dd1,employee_no);
+	    		//门店上月社员开卡数
+	    		Map<String, Object> storeOpenCardLastMonthCountMap = dynamicDao.queryMemberInvitation(dd4,null);
+	    		List<Map<String,Object>> areaCustomerMonthCountList = (List<Map<String, Object>>) areaCustomerMonthCountMap.get("data");
+	    		if(areaCustomerMonthCountList!=null&&areaCustomerMonthCountList.size()>0){
+	    			storeCustomerCount = Integer.parseInt(String.valueOf(areaCustomerMonthCountList.get(0).get("pay_10_count")));
+	    		}else{
+	    			storeCustomerCount = 0;
+	    		}
+	    		List<Map<String,Object>> areaCustomerLstMonthCountList = (List<Map<String, Object>>) areaCustomerLastMonthCountMap.get("data");
+	    		if(areaCustomerLstMonthCountList!=null&&areaCustomerLstMonthCountList.size()>0){
+	    			storeLastCustomerCount = Integer.parseInt(String.valueOf(areaCustomerLstMonthCountList.get(0).get("pay_10_count")));
+	    		}else{
+	    			storeLastCustomerCount = 0;
+	    		}
+	    		List<Map<String,Object>> areaProfitMonthCountList = (List<Map<String, Object>>) areaProfitMonthCountMap.get("data");
+	    		if(areaProfitMonthCountList!=null&&areaProfitMonthCountList.size()>0){
+	    			Double  total_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("total_profit")));
+	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("return_profit")));
+	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("order_fee")));
+	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("baosun")));
+	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("pankui")));
+	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
+	    			storeProfitMonthCount = (double) Math.round(real_profit * 100);
+	    		}else{
+	    			storeProfitMonthCount = 0.0;
+	    		}
+	    		List<Map<String,Object>> areaProfitLstMonthCountList = (List<Map<String, Object>>) areaProfitLastMonthCountMap.get("data");
+	    		if(areaProfitLstMonthCountList!=null&&areaProfitLstMonthCountList.size()>0){
+	    			Double  total_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("total_profit")));
+	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("return_profit")));
+	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("order_fee")));
+	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("baosun")));
+	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("pankui")));
+	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
+	    			storeProfitLstMonthCount = (double) Math.round(real_profit * 100);
+	    		}else{
+	    			storeProfitLstMonthCount = 0.0;
+	    		}
+	    		List<Map<String,Object>> areaOpenCardMonthList = (List<Map<String, Object>>) areaOpenCardMonthCountMap.get("data");
+	    		if(areaOpenCardMonthList!=null&&areaOpenCardMonthList.size()>0){
+	    			storeKeeperOpenCardMonthCount = Integer.parseInt(String.valueOf(areaOpenCardMonthList.get(0).get("inviteCount")));
+	    		}else{
+	    			storeKeeperOpenCardMonthCount = 0;
+	    		}
+	    		List<Map<String,Object>> areaOpenCardLstMonthList = (List<Map<String, Object>>) areaOpenCardLastMonthCountMap.get("data");
+	    		if(areaOpenCardLstMonthList!=null&&areaOpenCardLstMonthList.size()>0){
+	    			storeKeeperOpenCardLastMonthCount = Integer.parseInt(String.valueOf(areaOpenCardLstMonthList.get(0).get("inviteCount")));
+	    		}else{
+	    			storeKeeperOpenCardLastMonthCount = 0;
+	    		}
+	    		List<Map<String,Object>> storeOpenCardMonthCountList = (List<Map<String, Object>>) storeOpenCardMonthCountMap.get("member");
+	    		if(storeOpenCardMonthCountList!=null&&storeOpenCardMonthCountList.size()>0){
+	    			int count = 0;
+	    			for (Map<String, Object> map : storeOpenCardMonthCountList) {
+	    				count+=Integer.parseInt(String.valueOf(map.get("total")));
+					}
+	    			storeOpenCardMonthCount = count;
+	    		}else{
+	    			storeOpenCardMonthCount = 0;
+	    		}
+	    		List<Map<String,Object>> storeOpenCardLastMonthCountList = (List<Map<String, Object>>) storeOpenCardLastMonthCountMap.get("member");
+	    		if(storeOpenCardLastMonthCountList!=null&&storeOpenCardLastMonthCountList.size()>0){
+	    			int countLst = 0;
+	    			for (Map<String, Object> map : storeOpenCardMonthCountList) {
+	    				countLst+=Integer.parseInt(String.valueOf(map.get("total")));
+					}
+	    			storeOpenCardLastMonthCount = countLst;
+	    		}else{
+	    			storeOpenCardLastMonthCount = 0;
+	    		}
+    			teMap.put("pay_10_count_month", storeCustomerCount);
+    			teMap.put("pay_10_count_lst_month", storeLastCustomerCount);
+    			teMap.put("area_profit", storeProfitMonthCount);
+    			teMap.put("area_lst_profit", storeProfitLstMonthCount);
+    			teMap.put("areaOpenCard",storeOpenCardMonthCount);
+    			teMap.put("areaLastOpenCard", storeOpenCardLastMonthCount);
+    			teMap.put("storeOpenCardMonthCount", storeKeeperOpenCardMonthCount);
+    			teMap.put("storeOpenCardLastMonthCount",storeKeeperOpenCardLastMonthCount );
+    			result.setCode(CodeEnum.success.getValue());
+				result.setMessage(CodeEnum.success.getDescription());
+	    		result.setData(teMap);
+	    	} catch (Exception e) {
+				e.printStackTrace();
+				result.setCode(CodeEnum.error.getValue());
+				result.setMessage(CodeEnum.error.getDescription());
+			}
+	        return result;
+		}
+		@Override
+		public Result queryRecommendUserList(PageInfo pageInfo,String employee_no) {
+			Result result = new Result();
+			MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+			Map<String,Object> teMap = new HashMap<String,Object>();
+	    	try {
+	    		Map<String, Object> recommendUserMap = massOrderItemDao.queryRecommendUser(pageInfo,employee_no);
+    			teMap.put("recommendUser", recommendUserMap);
+    			result.setCode(CodeEnum.success.getValue());
+				result.setMessage(CodeEnum.success.getDescription());
+	    		result.setData(teMap);
+	    	} catch (Exception e) {
+				e.printStackTrace();
+				result.setCode(CodeEnum.error.getValue());
+				result.setMessage(CodeEnum.error.getDescription());
+			}
+	        return result;
 		}
 }
