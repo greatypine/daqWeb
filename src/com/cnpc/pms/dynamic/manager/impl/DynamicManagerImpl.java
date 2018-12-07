@@ -11,6 +11,7 @@ import com.cnpc.pms.base.util.PropertiesUtil;
 import com.cnpc.pms.base.util.SpringHelper;
 import com.cnpc.pms.bizbase.common.manager.BizBaseCommonManager;
 import com.cnpc.pms.bizbase.rbac.usermanage.dto.UserDTO;
+import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.bizbase.rbac.usermanage.manager.UserManager;
 import com.cnpc.pms.dynamic.common.EncryptUtils;
 import com.cnpc.pms.dynamic.common.HttpClientUtil;
@@ -178,6 +179,12 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
  // 最新国安侠GMV总数包括详细数量
     private static final String NEWAREATRADEAMOUNT="https://ds.guoanshequ.cn/ds/rest/queryEmployeePesgmvByEmp";
    
+    
+    
+    //同步人员到单点登录系统中
+    private static final String SSO_SYNC_USER="http://123.56.204.170:9999/systemuser/saveOrUpdate";
+    
+    
     private HSSFCellStyle style_header = null;
 	private CellStyle cellStyle_common = null;
 
@@ -7493,4 +7500,40 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
         }
         return result;
     }
+
+
+
+
+
+
+    /**
+     * 同步单点登录系统人员
+     */
+	@Override
+	public String saveOrUpdateSsoUser(Humanresources hr, User user) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("address", ""+user.getId());
+		jsonObject.put("age",11);
+		jsonObject.put("cardId", user.getZw());
+		jsonObject.put("companyid", user.getStore_id());
+		jsonObject.put("createTime", new SimpleDateFormat("yyyy-MM-dd").format(user.getCreateDate()));
+		jsonObject.put("email", user.getEmail());
+		jsonObject.put("groupName", user.getUsergroup().getCode());
+		jsonObject.put("id", "");
+		jsonObject.put("isvalid", user.getDisabledFlag()==1?true:false);
+		jsonObject.put("nickname", user.getName());
+		jsonObject.put("password", user.getPassword());
+		jsonObject.put("phonenum", user.getMobilephone());
+		jsonObject.put("sex", 0);
+		jsonObject.put("status", 0);
+		jsonObject.put("updateTime", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+		jsonObject.put("username", user.getEmployeeId());
+		
+        HttpClientUtil hClientUtil = new HttpClientUtil();
+        String result = hClientUtil.getRemoteData(SSO_SYNC_USER, jsonObject);
+        
+        //插入同步记录 
+        
+        return result;
+	}
 }

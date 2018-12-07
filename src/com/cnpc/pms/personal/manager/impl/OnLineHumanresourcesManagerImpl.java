@@ -186,6 +186,25 @@ public class OnLineHumanresourcesManagerImpl extends BizBaseCommonManager implem
 				user.setCareergroup(careerChannelDto.getCareername());
 				preSaveObject(user);
 				userManager.saveObject(user);
+	        }else if(users==null||users.size()==0) {
+	        	//新增
+				User user = new User();
+				user.setName(onLineHumanresources.getName());
+				user.setCode(ChineseToEnglish.getPingYin(onLineHumanresources.getName()));
+				user.setDisabledFlag(1);
+				user.setDoctype(0);
+				user.setEmail("123@123.com");
+				user.setEmployeeId(onLineHumanresources.getEmployee_no());
+				user.setEnablestate(1);
+				user.setPassword("e10adc3949ba59abbe56e057f20f883e"); //123456
+				user.setPk_org(Long.parseLong("40284"));
+				user.setMobilephone(onLineHumanresources.getPhone());
+				user.setCareergroup(careerChannelDto.getCareername());
+				
+				user.setUsergroup(userGroup);
+				user.setLogicDel(0);
+				preSaveObject(user);
+				userManager.saveObject(user);
 	        }
 	        
 		}

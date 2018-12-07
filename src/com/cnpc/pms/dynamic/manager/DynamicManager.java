@@ -12,8 +12,10 @@ import org.json.JSONObject;
 
 import com.cnpc.pms.base.manager.IManager;
 import com.cnpc.pms.base.paging.impl.PageInfo;
+import com.cnpc.pms.bizbase.rbac.usermanage.entity.User;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
+import com.cnpc.pms.personal.entity.Humanresources;
 
 import ar.com.fdvs.dj.domain.constants.Page;
 
@@ -1186,4 +1188,13 @@ public interface DynamicManager extends IManager{
      * @return
      */
     public Map<String, Object> exportEmployeeOfMaoli(DynamicDto dd);
+    
+    
+    /**
+     * 同步单点登录系统人员
+     * @param jsonObject
+     * @return
+     */
+    public String saveOrUpdateSsoUser(Humanresources hr,User user);
+    
 }
