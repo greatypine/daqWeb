@@ -3895,7 +3895,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		Map<String, Object> areaOpenCardMonthCountMap = massOrderItemDao.queryAreaOpenCardByAreaCode(dd);
 	    		DynamicDto dd1 = new DynamicDto();
 	    		String lastBeginDate = DateUtils.getLastMonthFirstDate("yyyy-MM-dd");   
-	    		dd1.setBeginDate(lastBeginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd1.setBeginDate(lastBeginDate.substring(0,lastBeginDate.lastIndexOf("-")));
 	    		dd1.setEmployeeNo(employee_no);
 	    		//查询上月片区消费超10元用户数
 	    		Map<String, Object> areaCustomerLastMonthCountMap = massOrderItemDao.queryAreaUserByAreaCode(dd1);
@@ -3996,10 +3996,10 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		
 	    		DynamicDto dd1 = new DynamicDto();
 	    		String lastBeginDate = DateUtils.getLastMonthFirstDate("yyyy-MM-dd");   
-	    		dd1.setBeginDate(lastBeginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd1.setBeginDate(lastBeginDate.substring(0,lastBeginDate.lastIndexOf("-")));
 	    		dd1.setStoreNo(store_code);
 	    		dd1.setStoreId(Long.parseLong(store_id));
-	    		dd4.setBeginDate(lastBeginDate.substring(0,beginDate.lastIndexOf("-")));
+	    		dd4.setBeginDate(lastBeginDate.substring(0,lastBeginDate.lastIndexOf("-")));
 	    		dd4.setStoreNo(store_id);
 	    		dd4.setTarget(2);
 	    		//查询上月门店消费超10元用户数
