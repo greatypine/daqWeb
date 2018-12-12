@@ -133,7 +133,7 @@ public class HttpClientUtils {
                             //将逗号转义
                             value="\""+value+"\"";
                         }
-                        if(cellIndex == 0 || cellIndex == 2 ||cellIndex == 9||cellIndex == 10||cellIndex == 11||cellIndex == 12){
+                        if(cellIndex == 0 || cellIndex == 2 || cellIndex == 5 ||cellIndex == 9||cellIndex == 10||cellIndex == 11||cellIndex == 12){
                             out.write(value+'\t');
                         }else{
                             out.write(value);
