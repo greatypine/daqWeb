@@ -3887,6 +3887,9 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		String beginDate = DateUtils.getCurrMonthFirstDate("yyyy-MM-dd");   
 	    		dd.setBeginDate(beginDate.substring(0,beginDate.lastIndexOf("-")));
 	    		dd.setEmployeeNo(employee_no);
+	    		String[] dateArr = dd.getBeginDate().split("-");
+	    		dd.setYear(Integer.parseInt(dateArr[0]));
+	            dd.setMonth(Integer.parseInt(dateArr[1]));
 	    		//查询本月门店消费超10元用户数
 	    		Map<String, Object> areaCustomerMonthCountMap = massOrderItemDao.queryAreaUserByAreaCode(dd);
 	    		//查询本月门店毛利
@@ -3897,6 +3900,9 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    		String lastBeginDate = DateUtils.getLastMonthFirstDate("yyyy-MM-dd");   
 	    		dd1.setBeginDate(lastBeginDate.substring(0,lastBeginDate.lastIndexOf("-")));
 	    		dd1.setEmployeeNo(employee_no);
+	    		String[] dateArr2 = dd1.getBeginDate().split("-");
+	    		dd1.setYear(Integer.parseInt(dateArr2[0]));
+	            dd1.setMonth(Integer.parseInt(dateArr2[1]));
 	    		//查询上月片区消费超10元用户数
 	    		Map<String, Object> areaCustomerLastMonthCountMap = massOrderItemDao.queryAreaUserByAreaCode(dd1);
 	    		//查询上月片区毛利
@@ -4030,7 +4036,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("baosun")));
 	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("pankui")));
 	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
-	    			storeProfitMonthCount = (double) Math.round(real_profit * 100);
+	    			storeProfitMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
 	    			storeProfitMonthCount = 0.0;
 	    		}
@@ -4042,7 +4048,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("baosun")));
 	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("pankui")));
 	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
-	    			storeProfitLstMonthCount = (double) Math.round(real_profit * 100);
+	    			storeProfitLstMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
 	    			storeProfitLstMonthCount = 0.0;
 	    		}
