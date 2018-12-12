@@ -2650,7 +2650,9 @@ $(".dialog_open").click(function(){
             $("#city").text(cityName);
             $("#store").text(storeName);
             $("#date").text(sdate);
-            $("#userName").val("订单档案");
+            var now = new Date();
+            var date = ((now.getMonth() + 1) < 10 ? "0" : "") + (now.getMonth() + 1) + "-" + (now.getDate() < 10 ? "0" : "") + now.getDate();
+            $("#userName").val("订单档案"+date);
             dialogOpen()
         }else{
             crm_alert(0,"单次导出不能超过10万条记录，请调整搜索条件，确认结果条数后再试。");
