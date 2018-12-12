@@ -683,15 +683,10 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	}
 	@Override
 	public Map<String, Object> queryAreaUserByAreaCode(DynamicDto userOperationStatDto) {
-		String sql = "SELECT count(DISTINCT(case when trading_price > 10 and (date_format(a.sign_time, '%Y-%m') = '"+userOperationStatDto.getBeginDate()+"') then customer_id end)) pay_10_count FROM ";
-		
-			sql = sql + " df_mass_order_monthly a ";
-		
-		sql = sql + " where customer_id not like 'fakecustomer%' and a.eshop_name NOT LIKE '%测试%' AND a.eshop_white!='QA' and a.store_name NOT LIKE '%测试%' and a.store_white!='QA' AND a.store_status =0 ";
-        if(StringUtils.isNotEmpty(userOperationStatDto.getEmployeeNo())){
-            sql = sql + " and a.employee_no ='" + userOperationStatDto.getEmployeeNo().trim()+ "'";
-        }
-		sql = sql + " GROUP BY a.employee_no ";
+		String sql = "SELECT SUM(cusnum_ten) AS pay_10_count FROM ds_pes_customer_employee_month dpce WHERE 1=1 and dpce.year='"+userOperationStatDto.getYear()+"' and dpce.month='"+userOperationStatDto.getMonth()+"' ";
+		if(StringUtils.isNotEmpty(userOperationStatDto.getEmployeeNo())){
+			sql = sql + " and dpce.employeeno ='" + userOperationStatDto.getEmployeeNo().trim()+ "'";
+		}
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 
 		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
