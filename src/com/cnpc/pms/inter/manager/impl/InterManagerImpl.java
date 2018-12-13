@@ -4034,8 +4034,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("return_profit")));
 	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("order_fee")));
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("baosun")));
-	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitMonthCountList.get(0).get("pankui")));
-	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
+	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
 	    			storeProfitMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
 	    			storeProfitMonthCount = 0.0;
@@ -4046,8 +4045,7 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 	    			Double  return_profit = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("return_profit")));
 	    			Double  order_fee = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("order_fee")));
 	    			Double  baosun = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("baosun")));
-	    			Double  pankui = Double.valueOf(String.valueOf(areaProfitLstMonthCountList.get(0).get("pankui")));
-	    			double real_profit = (total_profit-return_profit-order_fee-baosun-pankui);
+	    			double real_profit = (total_profit-return_profit-order_fee-baosun);
 	    			storeProfitLstMonthCount = (double) Math.round(real_profit * 100)/100;
 	    		}else{
 	    			storeProfitLstMonthCount = 0.0;
