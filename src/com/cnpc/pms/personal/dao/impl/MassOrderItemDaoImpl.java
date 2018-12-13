@@ -293,11 +293,11 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				"IFNULL(toip.area_name,'') AS area_name, toip.tiny_village_id as village_id,IFNULL(toip.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
 				"'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN " +
 				"'智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' " +
-				"WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source, IFNULL(from_unixtime(unix_timestamp(toip.order_create_time),'yyyy-MM-dd HH:mm:ss'),'') " +
+				"WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source, IFNULL(from_unixtime(unix_timestamp(toip.create_time),'yyyy-MM-dd HH:mm:ss'),'') " +
 				"AS create_time, IFNULL(toip.eshop_pro_id,'') AS product_id, IFNULL(toip.eshop_pro_name,'') AS product_name, IFNULL(toip.eshop_id,'') AS " +
 				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(toip.customer_name,'') AS customer_name, IFNULL(toip.customer_mobile_phone,'') AS customer_mobilephone," +
 				"IFNULL(toip.addr_address,'') AS order_address, IFNULL(toip.addr_mobilephone,'') AS order_mobilephone, IFNULL(toip.addr_name,'') AS order_customer_name," +
-				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,IFNULL(toip.quantity,0) AS quantity, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
+				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,IFNULL(toip.quantity,0) AS quantity, toip.cost_price AS cost_price, toip.create_time AS order_create_time," +
 				"IFNULL(from_unixtime(unix_timestamp(toip.sign_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(toip.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
 				"as appointment_start_time, from_unixtime(unix_timestamp(toip.cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time,IFNULL(from_unixtime(unix_timestamp(toip.commented_time),'yyyy-MM-dd HH:mm:ss'),'') AS order_commented_time, IFNULL(toip.employee_name,'') AS employee_name,IFNULL(toip.employee_phone,'') AS employee_phone,IFNULL(toip.department_name,'') AS dep_name, " +
 				"IFNULL(toip.channel_name,'') AS channel_name, IFNULL(toip.contents,'') AS order_contents,toip.star_level AS star_level,toip.star_level_1 AS star_level_1,toip.star_level_2 AS star_level_2,toip.next_days AS next_days,IFNULL(toip.next_contents,'') AS next_contents," +
