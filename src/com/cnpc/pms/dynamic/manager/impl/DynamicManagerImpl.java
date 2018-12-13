@@ -7348,8 +7348,8 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			List<List<MergedRegionParam>> targetMergeList = null;
 
 			//城市毛利
-			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损","盘亏","毛利"};
-			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","baosun","pankui","real_profit"};
+			String[] str_headers = {"城市","销售收入（平台）","销售收入（优易）","销售收入（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损盘亏","毛利"};
+			String[] headers_key = {"city_name","platform_profit","ims_profit","total_profit","platform_fee","ims_fee","return_profit","baosun","real_profit"};
 
 			//所需合并的单元格参数
 			MergedRegionParam param1 = new MergedRegionParam("城市","城市","城市");
@@ -7361,7 +7361,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			MergedRegionParam param7 = new MergedRegionParam("毛利","毛利","毛利");
 			MergedRegionParam param8 = new MergedRegionParam("事业群","事业群","事业群");
 			MergedRegionParam param9 = new MergedRegionParam("频道","频道","频道");
-			MergedRegionParam param10 = new MergedRegionParam("报损","盘亏","进销存系统费用");
+			MergedRegionParam param10 = new MergedRegionParam("报损盘亏","盘亏盘亏","进销存系统费用");
 			List cityList = new ArrayList();
 			cityList.add(param1);
 			cityList.add(param3);
@@ -7377,9 +7377,9 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			//门店毛利
 			if(StringUtils.isNotEmpty(dynamicDto.getSearchstr()) && "store_active".equals(dynamicDto.getSearchstr())){
 				str_headers = new String[]{"城市","门店名称","门店编号","销售收入（平台）","销售收入（优易）","销售收入（合计）",
-						"优惠券（平台）","优惠券（优易）","优惠券（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损","盘亏","毛利"};
+						"优惠券（平台）","优惠券（优易）","优惠券（合计）","营销费用（平台）","营销费用（优易）","销售收入（已退货）","报损盘亏","毛利"};
 				headers_key = new String[]{"city_name","store_name","store_code","platform_profit","ims_profit","total_profit",
-						"platform_coupon","ims_coupon","total_coupon","platform_fee","ims_fee","return_profit","baosun","pankui","real_profit"};
+						"platform_coupon","ims_coupon","total_coupon","platform_fee","ims_fee","return_profit","baosun","real_profit"};
 				List storeList = new ArrayList();
 				storeList.add(param1);
 				storeList.add(param2);

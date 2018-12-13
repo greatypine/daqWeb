@@ -3,28 +3,19 @@
  */
 package com.cnpc.pms.dynamic.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.cnpc.pms.utils.ImpalaUtil;
-import org.apache.commons.lang.StringUtils;
-import org.hibernate.Query;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.transform.Transformers;
-
 import com.cnpc.pms.base.dao.hibernate.BaseDAOHibernate;
 import com.cnpc.pms.base.paging.impl.PageInfo;
 import com.cnpc.pms.dynamic.dao.DynamicDao;
 import com.cnpc.pms.dynamic.entity.AbnormalOrderDto;
 import com.cnpc.pms.dynamic.entity.DynamicDto;
 import com.cnpc.pms.utils.DateUtils;
+import com.cnpc.pms.utils.ImpalaUtil;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.transform.Transformers;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author gaobaolei
@@ -3775,7 +3766,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         String sql="";
         if("2018-10".equals(dynamicDto.getBeginDate())){
             sql="select c2.city_name as city_name,c2.storename as store_name,c2.storeno as storeno,c2.name as employee_name,c2.employeeno as employee_no,c2.income as income,round(c2.sumprice,2) as sumprice,ifnull(dbaosun.count_money_avg,0) as  baosun,ifnull(dpankui.count_money_avg,0) as pankui," +
-                    "round(c2.income-ifnull(c2.sumprice,0) -ifnull(dbaosun.count_money_avg,0) - ifnull(dpankui.count_money_avg,0),2) as maoli,c2.zw as zw,c2.store_id as store_id  " +
+                    "round(c2.income-ifnull(c2.sumprice,0) -ifnull(dbaosun.count_money_avg,0),2) as maoli,c2.zw as zw,c2.store_id as store_id  " +
                     "from (select " +
                     "c1.income, c1.rebate, c1.sumprice, c1. name, c1.employeeno, c1.zw, c1.storename, c1.store_id, tss.storeno, tss.city_name " +
                     "from " +
@@ -3790,7 +3781,7 @@ public class DynamicDaoImpl extends BaseDAOHibernate implements DynamicDao{
         }else{
             sql = "select c2.city_name as city_name, c2.storename as store_name, c2.storeno as storeno, c2. name as employee_name, c2.employeeno as employee_no, round((c2.income+ifnull(c5.income, 0)+ifnull(c6.wcd_profit, 0)),2) as allcome,c2.income as income, round(ifnull(c5.income, 0), 2) as outcome," +
                     " round(ifnull(c6.wcd_profit, 0), 2) as wcd_profit, round(ifnull(c2.sumprice,0)+ifnull(c5.sumprice, 0), 2) as sumprice,round( ifnull(dbaosun.count_money_avg, 0), 2 ) as baosun," +
-                    " round( ifnull(dpankui.count_money_avg, 0), 2 ) as pankui, round( c2.income + ifnull(c5.income, 0) + ifnull(c6.wcd_profit, 0) - ifnull(c5.sumprice, 0) - ifnull(c2.sumprice,0) - ifnull(dbaosun.count_money_avg, 0) - ifnull(dpankui.count_money_avg, 0), 2 ) as maoli," +
+                    " round( ifnull(dpankui.count_money_avg, 0), 2 ) as pankui, round( c2.income + ifnull(c5.income, 0) + ifnull(c6.wcd_profit, 0) - ifnull(c5.sumprice, 0) - ifnull(c2.sumprice,0) - ifnull(dbaosun.count_money_avg, 0), 2 ) as maoli," +
                     " c2.zw as zw, c2.store_id as store_id from ( select c1.income, c1.rebate, c1.sumprice, c1. name, c1.employeeno, c1.zw, c1.storename, c1.store_id, tss.storeno, tss.city_name" +
                     " from ( select b1.income, b1.rebate, b1.sumprice, b1.employeeno, th. name, th.zw, th.storename, th.store_id from ( select round( a1.mon_profit - ifnull(a2.mon_profit, 0), 2 ) income," +
                     " round( a1.rebate - ifnull(a2.rebate, 0), 2 ) rebate, round( a1.sumprice - ifnull(a2.sumprice, 0), 2 ) sumprice, a1.info_employee_a_no employeeno" +
