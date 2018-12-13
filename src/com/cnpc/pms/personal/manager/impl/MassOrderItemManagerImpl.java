@@ -106,20 +106,11 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
     }
 	@Override
 	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo) {
-//		OrderDao orderDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		MassOrderItemDao orderDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 
 		Map<String, Object> result =new HashMap<String,Object>();
 		try {
-			String preMonthFirst = DateUtils.getPreMonthFirstDay(new Date()); //上月1号
-			SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-			if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) && DateUtils.compareDate(massOrderDto.getBeginDate(), format.format(new Date()))==0){
-				result = orderDao.queryMassOrderItem(massOrderDto, pageInfo,MassOrderDto.TimeFlag.CUR_DAY.code);
-			}else if(StringUtils.isNotEmpty(massOrderDto.getBeginDate()) &&DateUtils.compareDate(massOrderDto.getBeginDate(),preMonthFirst)>=0){
-				result = orderDao.queryMassOrderItem(massOrderDto, pageInfo,MassOrderDto.TimeFlag.LATEST_MONTH.code);
-			}else{
-				result = orderDao.queryMassOrderItem(massOrderDto, pageInfo,MassOrderDto.TimeFlag.HISTORY_MONTH.code);
-			}
+			result = orderDao.queryMassOrderItem(massOrderDto, pageInfo);
 			result.put("status","success");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,7 +120,6 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 	}
 	@Override
   	public Map<String, Object> exportOrder(MassOrderItemDto massOrderDto, TReportFiledown tReportFiledown) {
-		//OrderDao massOrderItemDao = (OrderDao)SpringHelper.getBean(OrderDao.class.getName());
 		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
 		
   		Map<String, Object> result = new HashMap<String,Object>();

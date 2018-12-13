@@ -69,7 +69,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		return order_obj;
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo,String timeFlag) {
+	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto, PageInfo pageInfo) {
 		String order_sn = massOrderDto.getOrder_sn();
 		String begin_date = massOrderDto.getBeginDate();
 		String end_date = massOrderDto.getEndDate();
@@ -97,40 +97,32 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String department_name = massOrderDto.getDepartment_name();
 		String channel_name = massOrderDto.getChannel_name();
 		String whereStr = "";
-		String sqlTableMass = "";
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_daily tor ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_monthly tor ";
-		} else {
-			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_total tor ";
-		}
-		String selectQuery = "IFNULL(toip.order_sn,'') AS order_sn, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
-				"IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code,IFNULL(tor.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
+		String selectQuery = "IFNULL(toip.order_sn,'') AS order_sn, IFNULL(toip.store_name,'') AS store_name, IFNULL(toip.tiny_village_name,'') AS village_name, " +
+				"IFNULL(toip.area_name,'') AS area_name, toip.tiny_village_id as village_id, toip.info_village_code as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
 				"'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN " +
 				"'智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' " +
-				"WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source, IFNULL(from_unixtime(unix_timestamp(toip.order_create_time),'yyyy-MM-dd HH:mm:ss'),'') " +
+				"WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source, IFNULL(from_unixtime(unix_timestamp(toip.create_time),'yyyy-MM-dd HH:mm:ss'),'') " +
 				"AS create_time, IFNULL(toip.eshop_pro_id,'') AS product_id, IFNULL(toip.eshop_pro_name,'') AS product_name, IFNULL(toip.eshop_id,'') AS " +
-				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(tor.customer_name,'') AS customer_name, IFNULL(tor.customer_mobile_phone,'') AS customer_mobilephone," +
-				"IFNULL(tor.addr_address,'') AS order_address, IFNULL(tor.addr_mobilephone,'') AS order_mobilephone, IFNULL(tor.addr_name,'') AS order_customer_name," +
-				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,toip.quantity AS quantity, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
-				"IFNULL(from_unixtime(unix_timestamp(toip.order_signed_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(tor.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
-				"as appointment_start_time, from_unixtime(unix_timestamp(toip.order_cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time, IFNULL(tor.employee_name,'') AS employee_name,IFNULL(tor.employee_phone,'') AS employee_phone,IFNULL(tor.department_name,'') AS dep_name, " +
-				"IFNULL(tor.channel_name,'') AS channel_name, IFNULL(toc.contents,'') AS order_contents," +
-				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,'') as area_code,IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
-				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end, toc.star_level AS " +
+				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(toip.customer_name,'') AS customer_name, IFNULL(toip.customer_mobile_phone,'') AS customer_mobilephone," +
+				"IFNULL(toip.addr_address,'') AS order_address, IFNULL(toip.addr_mobilephone,'') AS order_mobilephone, IFNULL(toip.addr_name,'') AS order_customer_name," +
+				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,toip.quantity AS quantity, toip.cost_price AS cost_price, toip.create_time AS order_create_time," +
+				"IFNULL(from_unixtime(unix_timestamp(toip.sign_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(toip.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
+				"as appointment_start_time, from_unixtime(unix_timestamp(toip.cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time, IFNULL(toip.employee_name,'') AS employee_name,IFNULL(toip.employee_phone,'') AS employee_phone,IFNULL(toip.department_name,'') AS dep_name, " +
+				"IFNULL(toip.channel_name,'') AS channel_name, IFNULL(toip.contents,'') AS order_contents," +
+				" IFNULL(toip.store_name,'') AS store_name, IFNULL(toip.store_code,'') AS store_code,IFNULL(toip.store_city_name,'') as store_city_name,IFNULL(toip.area_code,'') as area_code,IFNULL(toip.info_employee_a_no,'') as info_employee_a_no, IFNULL(toip.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
+				" CASE toip.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end, toip.star_level AS " +
 				"star_level";
-		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment_dr toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
-		String sqlB = "SELECT count(1) as count_ "+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment_dr toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+		String sqlA = "SELECT " +selectQuery+" from gabase.b_item_pro_total toip where 1=1  ";
+		String sqlB = "SELECT count(1) as count_ from gabase.b_item_pro_total toip where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
 			whereStr = whereStr + " and toip.order_sn = '" + order_sn.trim() + "' ";
 		}
 		
 		if(StringUtils.isNotEmpty(begin_date)){
-			whereStr = whereStr + " and toip.order_signed_time >= '" + begin_date.trim()+"' ";
+			whereStr = whereStr + " and toip.sign_time >= '" + begin_date.trim()+"' ";
 		}
 		if(StringUtils.isNotEmpty(end_date)){
-			whereStr = whereStr + " and toip.order_signed_time <= '" + end_date.trim()+"' ";
+			whereStr = whereStr + " and toip.sign_time <= '" + end_date.trim()+"' ";
 		}
 		
 		if(StringUtils.isNotEmpty(eshop_id)){
@@ -146,25 +138,25 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr = whereStr + " and toip.eshop_pro_name like '%" + product_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(customer_name)){
-			whereStr = whereStr + " and tor.customer_name like '%" + customer_name.trim() + "%'";
+			whereStr = whereStr + " and toip.customer_name like '%" + customer_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(customer_phone)){
-			whereStr = whereStr + " and tor.customer_mobile_phone = '" + customer_phone.trim() + "'";
+			whereStr = whereStr + " and toip.customer_mobile_phone = '" + customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_name)){
-			whereStr = whereStr + " and tor.addr_name like '%" + addr_customer_name.trim() + "%'";
+			whereStr = whereStr + " and toip.addr_name like '%" + addr_customer_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_phone)){
-			whereStr = whereStr + " and tor.addr_mobilephone = '" + addr_customer_phone.trim() + "'";
+			whereStr = whereStr + " and toip.addr_mobilephone = '" + addr_customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(store_code)){
-			whereStr = whereStr + " and tor.store_code = '" + store_code.trim() + "'";
+			whereStr = whereStr + " and toip.store_code = '" + store_code.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(department_name)){
-			whereStr = whereStr + " and tor.department_name = '" + department_name.trim() + "'";
+			whereStr = whereStr + " and toip.department_name = '" + department_name.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(channel_name)){
-			whereStr = whereStr + " and tor.channel_name = '" + channel_name.trim() + "'";
+			whereStr = whereStr + " and toip.channel_name = '" + channel_name.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(city_code)){
 			if(city_code.startsWith("00")){
@@ -173,44 +165,44 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr = whereStr + " and toip.store_city_code = '" + city_code.trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_no())) {
-			whereStr = whereStr + " and tor.employee_no ='" + massOrderDto.getEmployee_no().trim() + "'";
+			whereStr = whereStr + " and toip.employee_no ='" + massOrderDto.getEmployee_no().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_mobile())) {
-			whereStr = whereStr + " and tor.employee_phone ='" + massOrderDto.getEmployee_mobile().trim() + "'";
+			whereStr = whereStr + " and toip.employee_phone ='" + massOrderDto.getEmployee_mobile().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_no())) {
-			whereStr = whereStr + " and tor.info_employee_a_no ='" + massOrderDto.getEmployee_a_no().trim() + "'";
+			whereStr = whereStr + " and toip.info_employee_a_no ='" + massOrderDto.getEmployee_a_no().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getArea_code())) {
-			whereStr = whereStr + " and tor.area_code ='" + massOrderDto.getArea_code().trim() + "'";
+			whereStr = whereStr + " and toip.area_code ='" + massOrderDto.getArea_code().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_no_a())) {
-			whereStr = whereStr + " and tor.info_employee_a_no ='" + massOrderDto.getEmployee_a_no_a().trim() + "'";
+			whereStr = whereStr + " and toip.info_employee_a_no ='" + massOrderDto.getEmployee_a_no_a().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_phone())) {
 			whereStr = whereStr
-					+ " and tor.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
+					+ " and toip.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
 					+ massOrderDto.getEmployee_a_phone().trim() + "') ";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_phone_a())) {
 			whereStr = whereStr
-					+ " and tor.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
+					+ " and toip.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
 					+ massOrderDto.getEmployee_a_phone_a().trim() + "') ";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getArea_name())) {
-			whereStr = whereStr + " and tor.area_code in (select area_no from daqWeb.t_area ta where ta.name like '%"
-					+ massOrderDto.getArea_name().trim() + "%') ";
+			whereStr = whereStr + " and toip.area_name like '%"
+					+ massOrderDto.getArea_name().trim() + "%' ";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getVillage_name())) {
 			whereStr = whereStr
-					+ " and tor.info_village_code in (select vc.code from daqWeb.tiny_village_code vc where vc.tiny_village_name like '%"
-					+ massOrderDto.getVillage_name().trim() + "%') ";
+					+ " and toip.tiny_village_name like '%"
+					+ massOrderDto.getVillage_name().trim() + "%' ";
 		}
 		if(StringUtils.isNotEmpty(comment_Flag)){
 			if("1".equals(comment_Flag)){
-				whereStr = whereStr + " and toc.contents <>''  ";
+				whereStr = whereStr + " and toip.contents <>''  ";
 			}else if("3".equals(comment_Flag)){
-				whereStr = whereStr + " and (toc.contents ='' or toc.contents is null)  ";
+				whereStr = whereStr + " and (toip.contents ='' or toip.contents is null)  ";
 			}
 		}
 		if(StringUtils.isNotEmpty(order_source)){
@@ -227,12 +219,12 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		sqlB = sqlB+whereStr;
 		if(StringUtils.isNotEmpty(sort_tag)){
 			if("ASC".equals(sort_tag)){
-				whereStr = whereStr + " order by toip.order_signed_time " + sort_tag.trim() + " ";
+				whereStr = whereStr + " order by toip.sign_time " + sort_tag.trim() + " ";
 			}else if("DESC".equals(sort_tag)){
-				whereStr = whereStr + " order by toip.order_signed_time " + sort_tag.trim() + " ";
+				whereStr = whereStr + " order by toip.sign_time " + sort_tag.trim() + " ";
 			}
 		}else{
-			whereStr = whereStr + " order by toip.order_signed_time  DESC ";
+			whereStr = whereStr + " order by toip.sign_time  DESC ";
 		}
 		//sqlA = sqlA+" limit 10 ";
 		//sqlA = " select * from t_order_item_pro ";
@@ -297,39 +289,30 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		String department_name = massOrderDto.getDepartment_name();
 		String channel_name = massOrderDto.getChannel_name();
 		String whereStr = "";
-		String sqlTableMass = "";
-		if (MassOrderDto.TimeFlag.CUR_DAY.code.equals(timeFlag)) {
-			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_daily tor ";
-		} else if (MassOrderDto.TimeFlag.LATEST_MONTH.code.equals(timeFlag)) {
-			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_monthly tor ";
-		} else {
-			sqlTableMass = sqlTableMass + " daqWeb.df_mass_order_total tor ";
-		}
-		String selectQuery = "IFNULL(toip.order_sn,'') AS order_sn, IFNULL(tor.store_name,'') AS store_name, IFNULL(vc.tiny_village_name,'') AS village_name, " +
-				"IFNULL(ta.`name`,'') AS area_name, vc.tiny_village_id as village_id, vc.code as village_code,IFNULL(tor.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
+		String selectQuery = "IFNULL(toip.order_sn,'') AS order_sn, IFNULL(toip.store_name,'') AS store_name, IFNULL(toip.tiny_village_name,'') AS village_name, " +
+				"IFNULL(toip.area_name,'') AS area_name, toip.tiny_village_id as village_id,IFNULL(toip.info_village_code,'') as village_code,CASE toip.order_source WHEN 'app' THEN 'APP' WHEN " +
 				"'callcenter' THEN '400客服' WHEN 'store' THEN '门店' WHEN 'wechat' THEN '微信' WHEN 'pad' THEN " +
 				"'智能终端' WHEN 'score' THEN '积分' WHEN 'web' THEN 'WEB' WHEN 'citic_vip_gift' THEN '中信vip礼品' " +
 				"WHEN 'tv' THEN '电视' WHEN 'microMarket' THEN '微超订单' ELSE '无' END AS order_source, IFNULL(from_unixtime(unix_timestamp(toip.order_create_time),'yyyy-MM-dd HH:mm:ss'),'') " +
 				"AS create_time, IFNULL(toip.eshop_pro_id,'') AS product_id, IFNULL(toip.eshop_pro_name,'') AS product_name, IFNULL(toip.eshop_id,'') AS " +
-				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(tor.customer_name,'') AS customer_name, IFNULL(tor.customer_mobile_phone,'') AS customer_mobilephone," +
-				"IFNULL(tor.addr_address,'') AS order_address, IFNULL(tor.addr_mobilephone,'') AS order_mobilephone, IFNULL(tor.addr_name,'') AS order_customer_name," +
+				"eshop_id, IFNULL(toip.eshop_name,'') AS eshop_name, IFNULL(toip.customer_name,'') AS customer_name, IFNULL(toip.customer_mobile_phone,'') AS customer_mobilephone," +
+				"IFNULL(toip.addr_address,'') AS order_address, IFNULL(toip.addr_mobilephone,'') AS order_mobilephone, IFNULL(toip.addr_name,'') AS order_customer_name," +
 				"IFNULL(toip.unit,'') AS unit, toip.unit_price AS original_price,IFNULL(toip.quantity,0) AS quantity, toip.cost_price AS cost_price, toip.order_create_time AS order_create_time," +
-				"IFNULL(from_unixtime(unix_timestamp(toip.order_signed_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(tor.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
-				"as appointment_start_time, from_unixtime(unix_timestamp(toip.order_cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time,IFNULL(from_unixtime(unix_timestamp(toip.order_commented_time),'yyyy-MM-dd HH:mm:ss'),'') AS order_commented_time, IFNULL(tor.employee_name,'') AS employee_name,IFNULL(tor.employee_phone,'') AS employee_phone,IFNULL(tor.department_name,'') AS dep_name, " +
-				"IFNULL(tor.channel_name,'') AS channel_name, IFNULL(toc.contents,'') AS order_contents,toc.star_level AS star_level,toec.star_level_1 AS star_level_1,toec.star_level_2 AS star_level_2,toac.days AS next_days,IFNULL(toac.contents,'') AS next_contents," +
-				" IFNULL(tor.store_name,'') AS store_name, IFNULL(tor.store_code,'') AS store_code,IFNULL(tor.store_city_name,'') as store_city_name,IFNULL(tor.area_code,'') AS area_code,IFNULL(tor.info_employee_a_no,'') as info_employee_a_no, IFNULL(tor.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
-				" CASE toc.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end ";
-		String sqlA = "SELECT " +selectQuery+" from datacube_kudu.t_order_item_pro toip left join "+sqlTableMass+" on tor.id = toip.order_id LEFT JOIN gemini.t_order_comment_dr toc ON toc.order_id = tor.id and toc.eshop_pro_id = toip.eshop_pro_id LEFT JOIN gemini.t_order_additional_comment toac ON toac.order_id = toip.order_id and toac.eshop_pro_id = toip.eshop_pro_id "
-				+ " LEFT JOIN gemini.t_order_eshop_comment_dr toec ON toec.order_id = toip.order_id LEFT JOIN daqWeb.t_area ta ON tor.area_code = ta.area_no LEFT JOIN daqWeb.tiny_village_code vc ON tor.info_village_code = vc. CODE where 1=1  ";
+				"IFNULL(from_unixtime(unix_timestamp(toip.sign_time),'yyyy-MM-dd HH:mm:ss'),'') AS df_signed_time,IFNULL(from_unixtime(unix_timestamp(toip.appointment_start_time),'yyyy-MM-dd HH:mm:ss'),'') " +
+				"as appointment_start_time, from_unixtime(unix_timestamp(toip.cancel_time),'yyyy-MM-dd HH:mm:ss') AS order_cancel_time,IFNULL(from_unixtime(unix_timestamp(toip.commented_time),'yyyy-MM-dd HH:mm:ss'),'') AS order_commented_time, IFNULL(toip.employee_name,'') AS employee_name,IFNULL(toip.employee_phone,'') AS employee_phone,IFNULL(toip.department_name,'') AS dep_name, " +
+				"IFNULL(toip.channel_name,'') AS channel_name, IFNULL(toip.contents,'') AS order_contents,toip.star_level AS star_level,toip.star_level_1 AS star_level_1,toip.star_level_2 AS star_level_2,toip.next_days AS next_days,IFNULL(toip.next_contents,'') AS next_contents," +
+				" IFNULL(toip.store_name,'') AS store_name, IFNULL(toip.store_code,'') AS store_code,IFNULL(toip.store_city_name,'') as store_city_name,IFNULL(toip.area_code,'') AS area_code,IFNULL(toip.info_employee_a_no,'') as info_employee_a_no, IFNULL(toip.normal_store_id,'') AS store_id, IFNULL(toip.store_city_code,'') AS store_city_code," +
+				" CASE toip.rate WHEN 'good' THEN '好' WHEN 'normal' THEN '普通' WHEN 'bad' THEN '差' ELSE '' END AS order_content_end ";
+		String sqlA = "SELECT " +selectQuery+" from gabase.b_item_pro_total toip where 1=1  ";
 		if(StringUtils.isNotEmpty(order_sn)){
 			whereStr = whereStr + " and toip.order_sn  = '" + order_sn.trim() + "' ";
 		}
 		
 		if(StringUtils.isNotEmpty(begin_date)){
-			whereStr = whereStr + " and toip.order_signed_time >= '" + begin_date.trim()+"' ";
+			whereStr = whereStr + " and toip.sign_time >= '" + begin_date.trim()+"' ";
 		}
 		if(StringUtils.isNotEmpty(end_date)){
-			whereStr = whereStr + " and toip.order_signed_time <= '" + end_date.trim()+"' ";
+			whereStr = whereStr + " and toip.sign_time <= '" + end_date.trim()+"' ";
 		}
 		
 		if(StringUtils.isNotEmpty(eshop_id)){
@@ -345,25 +328,25 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr = whereStr + " and toip.eshop_pro_name like '%" + product_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(customer_name)){
-			whereStr = whereStr + " and tor.customer_name like '%" + customer_name.trim() + "%'";
+			whereStr = whereStr + " and toip.customer_name like '%" + customer_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(customer_phone)){
-			whereStr = whereStr + " and tor.customer_mobile_phone = '" + customer_phone.trim() + "'";
+			whereStr = whereStr + " and toip.customer_mobile_phone = '" + customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_name)){
-			whereStr = whereStr + " and tor.addr_name like '%" + addr_customer_name.trim() + "%'";
+			whereStr = whereStr + " and toip.addr_name like '%" + addr_customer_name.trim() + "%'";
 		}
 		if(StringUtils.isNotEmpty(addr_customer_phone)){
-			whereStr = whereStr + " and tor.addr_mobilephone = '" + addr_customer_phone.trim() + "'";
+			whereStr = whereStr + " and toip.addr_mobilephone = '" + addr_customer_phone.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(store_code)){
-			whereStr = whereStr + " and tor.store_code = '" + store_code.trim() + "'";
+			whereStr = whereStr + " and toip.store_code = '" + store_code.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(department_name)){
-			whereStr = whereStr + " and tor.department_name = '" + department_name.trim() + "'";
+			whereStr = whereStr + " and toip.department_name = '" + department_name.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(channel_name)){
-			whereStr = whereStr + " and tor.channel_name = '" + channel_name.trim() + "'";
+			whereStr = whereStr + " and toip.channel_name = '" + channel_name.trim() + "'";
 		}
 		if(StringUtils.isNotEmpty(city_code)){
 			if(city_code.startsWith("00")){
@@ -372,44 +355,44 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 			whereStr = whereStr + " and toip.store_city_code = '" + city_code.trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_no())) {
-			whereStr = whereStr + " and tor.employee_no ='" + massOrderDto.getEmployee_no().trim() + "'";
+			whereStr = whereStr + " and toip.employee_no ='" + massOrderDto.getEmployee_no().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_mobile())) {
-			whereStr = whereStr + " and tor.employee_phone ='" + massOrderDto.getEmployee_mobile().trim() + "'";
+			whereStr = whereStr + " and toip.employee_phone ='" + massOrderDto.getEmployee_mobile().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_no())) {
-			whereStr = whereStr + " and tor.info_employee_a_no ='" + massOrderDto.getEmployee_a_no().trim() + "'";
+			whereStr = whereStr + " and toip.info_employee_a_no ='" + massOrderDto.getEmployee_a_no().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getArea_code())) {
-			whereStr = whereStr + " and tor.area_code ='" + massOrderDto.getArea_code().trim() + "'";
+			whereStr = whereStr + " and toip.area_code ='" + massOrderDto.getArea_code().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_no_a())) {
-			whereStr = whereStr + " and tor.info_employee_a_no ='" + massOrderDto.getEmployee_a_no_a().trim() + "'";
+			whereStr = whereStr + " and toip.info_employee_a_no ='" + massOrderDto.getEmployee_a_no_a().trim() + "'";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_phone())) {
 			whereStr = whereStr
-					+ " and tor.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
+					+ " and toip.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
 					+ massOrderDto.getEmployee_a_phone().trim() + "') ";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getEmployee_a_phone_a())) {
 			whereStr = whereStr
-					+ " and tor.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
+					+ " and toip.info_employee_a_no in (select employee_no from daqWeb.t_humanresources th where th.phone = '"
 					+ massOrderDto.getEmployee_a_phone_a().trim() + "') ";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getArea_name())) {
-			whereStr = whereStr + " and tor.area_code in (select area_no from daqWeb.t_area ta where ta.name like '%"
-					+ massOrderDto.getArea_name().trim() + "%') ";
+			whereStr = whereStr + " and toip.area_name like '%"
+					+ massOrderDto.getArea_name().trim() + "%' ";
 		}
 		if (StringUtils.isNotEmpty(massOrderDto.getVillage_name())) {
 			whereStr = whereStr
-					+ " and tor.info_village_code in (select vc.code from daqWeb.tiny_village_code vc where vc.tiny_village_name like '%"
-					+ massOrderDto.getVillage_name().trim() + "%') ";
+					+ " and toip.tiny_village_name like '%"
+					+ massOrderDto.getVillage_name().trim() + "%' ";
 		}
 		if(StringUtils.isNotEmpty(comment_Flag)){
 			if("1".equals(comment_Flag)){
-				whereStr = whereStr + " and toc.contents <>''  ";
+				whereStr = whereStr + " and toip.contents <>''  ";
 			}else if("3".equals(comment_Flag)){
-				whereStr = whereStr + " and (toc.contents ='' or toc.contents is null)  ";
+				whereStr = whereStr + " and (toip.contents ='' or toip.contents is null)  ";
 			}
 		}
 		if(StringUtils.isNotEmpty(order_source)){
@@ -425,12 +408,12 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		}
 		if(StringUtils.isNotEmpty(sort_tag)){
 			if("ASC".equals(sort_tag)){
-				whereStr = whereStr + " order by toip.order_signed_time " + sort_tag.trim() + " ";
+				whereStr = whereStr + " order by toip.sign_time " + sort_tag.trim() + " ";
 			}else if("DESC".equals(sort_tag)){
-				whereStr = whereStr + " order by toip.order_signed_time " + sort_tag.trim() + " ";
+				whereStr = whereStr + " order by toip.sign_time " + sort_tag.trim() + " ";
 			}
 		}else{
-			whereStr = whereStr + " order by toip.order_signed_time  DESC ";
+			whereStr = whereStr + " order by toip.sign_time  DESC ";
 		}
         List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
         List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();

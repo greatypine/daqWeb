@@ -43,7 +43,7 @@ public interface MassOrderItemDao extends IDAO{
 	 * @param pageInfo
 	 * @return
 	 */
-	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto,PageInfo pageInfo,String timeFlag);
+	public Map<String, Object> queryMassOrderItem(MassOrderItemDto massOrderDto,PageInfo pageInfo);
 	
 	/**
 	 * 导出订单数据列表
