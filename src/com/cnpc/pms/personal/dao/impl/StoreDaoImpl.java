@@ -1697,7 +1697,7 @@ public class StoreDaoImpl extends BaseDAOHibernate implements StoreDao {
 				+ "select store_id,sum(platform_profit) as platform_profit,sum(ims_profit) as ims_profit,sum(total_profit) as total_profit,sum(platform_coupon) as platform_coupon," +
 				"sum(ims_coupon) as ims_coupon,sum(total_coupon) as total_coupon,sum(platform_rebate) as platform_rebate,sum(ims_rebate) as ims_rebate,sum(total_rebate) as total_rebate," +
 				"sum(platform_fee) as platform_fee,sum(ims_fee) as ims_fee from (" +
-				"select real_store_id,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
+				"select real_store_id as store_id,ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='yes' then dot.order_profit else 0 end),2),0) as ims_profit,"
 				+ "ifnull(dround(sum(dot.order_profit),2),0) as total_profit,"
 				+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' and dot.order_tag4 is null then dot.platform_price else 0 end),2),0) as platform_coupon,"

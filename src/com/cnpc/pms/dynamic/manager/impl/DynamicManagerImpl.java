@@ -7361,7 +7361,7 @@ public class DynamicManagerImpl extends BizBaseCommonManager implements DynamicM
 			MergedRegionParam param7 = new MergedRegionParam("毛利","毛利","毛利");
 			MergedRegionParam param8 = new MergedRegionParam("事业群","事业群","事业群");
 			MergedRegionParam param9 = new MergedRegionParam("频道","频道","频道");
-			MergedRegionParam param10 = new MergedRegionParam("报损盘亏","盘亏盘亏","进销存系统费用");
+			MergedRegionParam param10 = new MergedRegionParam("报损盘亏","报损盘亏","进销存系统费用");
 			List cityList = new ArrayList();
 			cityList.add(param1);
 			cityList.add(param3);
