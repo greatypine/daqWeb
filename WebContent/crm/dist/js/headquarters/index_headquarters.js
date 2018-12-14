@@ -4566,6 +4566,18 @@ function goToDataFiles(){
       window.open(url,"_blank");
   }
 
+  //毛利统计
+  function goToProfitStat(){
+      var url = "";
+      var target=pageStatusInfo.targets;
+      if(target==0){
+          url = "dynamicData_profit_analysis.html?t="+encode64('0')+"&s=&c=&cn=&e="+encode64(curr_user.id)+"&#ff";
+      }else if(target==1){
+          url = "dynamicData_profit_analysis.html?t="+encode64(1)+"&s=&c="+ encode64(pageStatusInfo.cityId)+"&cn="+encode64(pageStatusInfo.cityName)+"&e="+encode64(curr_user.id)+"&#ff";
+      }
+      window.open(url,"_blank");
+  }
+
 //用户行为分析
 function gotobehavior(){
     // var role = curr_user.usergroup.code;

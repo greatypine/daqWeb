@@ -497,8 +497,18 @@ public interface StoreDao extends IDAO {
 	 * @return
 	 */
 	public List<Map<String, Object>> exportDeptTradeProfit(DynamicDto dynamicDto);
-	
 
+	/**
+	 * 门店毛利
+	 * @return
+	 */
+	public Map<String, Object> queryProfitStat(DynamicDto dynamicDto,PageInfo pageInfo);
+
+	/**
+	 * 导出门店毛利
+	 * @return
+	 */
+	public List<Map<String, Object>> exportProfitStat(DynamicDto dynamicDto);
 
 	/**
 	 * @Description 查询所有门店包括已关闭的
