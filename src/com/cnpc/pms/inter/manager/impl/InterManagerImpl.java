@@ -1938,23 +1938,23 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
 		return result;
 	}
 
-	@Override
-	public Result queryOrderListAppByAreaNew(Long store_id, String order_sn, PageInfo pageInfo, Long area_id) {
-		Result result = new Result();
-		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    	AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
-    	Map<String, Object> retMap = null;
-    	try {
-    		Area queryArea = areaManager.queryArea(area_id);
-        	retMap = orderDao.queryOrderOfAreaForApp(queryArea==null?"":queryArea.getArea_no(),pageInfo,order_sn);
-        	result.setDataMap(retMap);
-        	result.setCode(CodeEnum.success.getValue()); 
-            result.setMessage(CodeEnum.success.getDescription());
-    	} catch (Exception e) {
-			e.printStackTrace();
-		}
-        return result;
-	}
+//	@Override
+//	public Result queryOrderListAppByAreaNew(Long store_id, String order_sn, PageInfo pageInfo, Long area_id) {
+//		Result result = new Result();
+//		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
+//    	AreaManager areaManager = (AreaManager) SpringHelper.getBean("areaManager");
+//    	Map<String, Object> retMap = null;
+//    	try {
+//    		Area queryArea = areaManager.queryArea(area_id);
+//        	retMap = orderDao.queryOrderOfAreaForApp(queryArea==null?"":queryArea.getArea_no(),pageInfo,order_sn);
+//        	result.setDataMap(retMap);
+//        	result.setCode(CodeEnum.success.getValue());
+//            result.setMessage(CodeEnum.success.getDescription());
+//    	} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//        return result;
+//	}
 	
 	@Override
 	public Result queryCustomerStatBycity(String city_id){
