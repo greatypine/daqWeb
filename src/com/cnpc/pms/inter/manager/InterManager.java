@@ -424,12 +424,12 @@ public interface InterManager extends IManager {
      */
     public Result getEmployeeOfStore(Long storeId, String query_date);
     /**
-     * APP 分片查询订单信息
+     * APP 分片查询订单信息(弃用)
      * @param employee_no
 	 * @param pageInfo
 	 * @return
 	 */
-    public Result queryOrderListAppByAreaNew(Long store_id,String employee_no,PageInfo pageInfo,Long area_id);
+    //public Result queryOrderListAppByAreaNew(Long store_id,String employee_no,PageInfo pageInfo,Long area_id);
     
     /**
      * APP通过城市查询拉新|消费信息
