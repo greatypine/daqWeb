@@ -121,5 +121,18 @@ public interface MassOrderItemDao extends IDAO{
 	 * @return
 	 */
 	public Map<String, Object> queryRecommendUser(PageInfo pageInfo, String employee_no);
+	/**
+	 * 查询所有的门店
+	 * @return
+	 */
+	public List<Map<String, Object>> findAllStore();
+	/**
+	 * 查询城市每天GMV&毛利&消费用户数&消费社员数&注册用户数
+	 * @param dd
+	 * @param cityNO
+	 * @param pageInfo
+	 * @return
+	 */
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,String cityNO,PageInfo pageInfo);
 	
 }

@@ -13,6 +13,7 @@ import com.cnpc.pms.base.security.UserSession;
 import com.cnpc.pms.reportFiledown.entity.ExportRunableSPXSDA;
 import com.cnpc.pms.reportFiledown.entity.HttpClientUtils;
 import com.cnpc.pms.reportFiledown.entity.TReportFiledown;
+
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -39,11 +40,13 @@ import com.cnpc.pms.dynamic.entity.MassOrderItemDto;
 import com.cnpc.pms.personal.dao.MassOrderDao;
 import com.cnpc.pms.personal.dao.MassOrderItemDao;
 import com.cnpc.pms.personal.dao.StoreDao;
+import com.cnpc.pms.personal.entity.Store;
 import com.cnpc.pms.personal.manager.MassOrderItemManager;
 import com.cnpc.pms.platform.dao.OrderDao;
 import com.cnpc.pms.platform.manager.impl.OrderManagerImpl;
 import com.cnpc.pms.utils.DateUtils;
 import com.cnpc.pms.utils.PropertiesValueUtil;
+import com.cnpc.pms.utils.TypeChangeUtil;
 
 public class MassOrderItemManagerImpl extends BizBaseCommonManager implements MassOrderItemManager {
 
@@ -405,6 +408,36 @@ public class MassOrderItemManagerImpl extends BizBaseCommonManager implements Ma
 			result.put("lst_data", lst_data);
 		}catch (Exception e) {
 			e.printStackTrace();
+		}
+		return result;
+	}
+	@Override
+	public List<Store> queryAllStore() {
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		List<Store> listStore = new ArrayList<Store>();
+		try {
+			List<Map<String, Object>> allStoreList = massOrderItemDao.findAllStore();
+			for (Map<String, Object> map : allStoreList) {
+				Store store = (Store) TypeChangeUtil.mapToObject(map, Store.class);
+				listStore.add(store);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listStore;
+	}
+	@Override
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dd,PageInfo pageInfo) {
+		Map<String, Object>  result = new HashedMap();
+		MassOrderItemDao massOrderItemDao = (MassOrderItemDao)SpringHelper.getBean(MassOrderItemDao.class.getName());
+		String cityNO = dd.getSearchstr();
+		try{
+			Map<String, Object> dayGMVUserMemberProfitList = massOrderItemDao.queryDayGMVUserMemberProfit(dd,cityNO,pageInfo);
+			result.put("cityDayGMVUserMemberProfit", dayGMVUserMemberProfitList);
+			result.put("status","success");
+		}catch(Exception e){
+			e.printStackTrace();
+			result.put("status","fail");
 		}
 		return result;
 	}
