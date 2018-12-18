@@ -793,4 +793,55 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 		map_result.put("data", lst_data);
 		return map_result;
 	}
+	@Override
+	public List<Map<String, Object>> findAllStore() {
+		String sql = "SELECT t.name as name,t.storeno as storeno from t_store t where t.flag='0' ";
+		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
+		List<Map<String, Object>> list = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return list;
+	}
+	@Override
+	public Map<String, Object> queryDayGMVUserMemberProfit(DynamicDto dynamicDto,String cityNO,PageInfo pageInfo) {
+		String beginDate = dynamicDto.getBeginDate();
+		String sql = "select city_name,consumer,addconsumer,sumconsumer,member,addmember,summember from daqweb.dops_consumer_city_daily where 1=1 ";
+		String whereStr = "";
+		if(StringUtils.isNotEmpty(cityNO)){
+			if(cityNO.startsWith("00")){
+				cityNO = cityNO.substring(1,cityNO.length());
+			}
+			whereStr +=  " and city_code='"+cityNO.trim()+"' ";
+		}
+		/*if(StringUtils.isNotEmpty(beginDate)){
+			whereStr += "and create_date = '" + beginDate.trim()+"' ";
+		}*/
+		sql=sql+whereStr+" ORDER BY city_code ";
+		String sqlB = "SELECT count(1) as count_ from ( "+sql+" ) ttt ";
+		 List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> lst_data_count = new ArrayList<Map<String,Object>>();
+        Integer count_ = 0;
+		try{
+        	lst_data_count=ImpalaUtil.executeGuoan(sqlB);
+        	count_ = Integer.parseInt(lst_data_count.get(0).get("count_").toString());
+        	if(pageInfo.getCurrentPage()==1){
+        		sql = sql+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage());
+        	}else{
+        		sql = sql+" limit "+pageInfo.getRecordsPerPage()+" offset "+((pageInfo.getCurrentPage()-1)*pageInfo.getRecordsPerPage()+1);
+        	}
+        	lst_data=ImpalaUtil.executeGuoan(sql);
+            lst_result = lst_data;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+		Map<String, Object> map_result = new HashMap<String, Object>();
+		if(pageInfo!=null){
+			Integer total_pages = (count_ - 1) / pageInfo.getRecordsPerPage() + 1;
+			pageInfo.setTotalRecords(count_);
+			pageInfo.setRecordsPerPage(pageInfo.getRecordsPerPage());
+			map_result.put("pageinfo", pageInfo);
+			map_result.put("total_pages", total_pages);
+		}
+		map_result.put("data", lst_data);
+		return map_result;
+	}
 }
