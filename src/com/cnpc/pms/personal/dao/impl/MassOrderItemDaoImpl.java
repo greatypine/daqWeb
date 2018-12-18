@@ -509,7 +509,7 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 	public Map<String, Object> queryMonthprofit(DynamicDto dynamicDto,List<Map<String, Object>> cityNO,List<Map<String, Object>> provinceNO) {
 		String sql = "select sum(ifnull(aa.platform_profit,0)) AS platform_profit,sum(ifnull(aa.ims_profit,0)) AS ims_profit,sum(ifnull(aa.order_fee,0)) "
 		+ "AS order_fee,sum(ifnull(aa.total_profit,0)) AS total_profit, sum(ifnull(dd.return_profit, 0)) AS return_profit,"
-		+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun,sum(ifnull(dpankui.count_money, 0)) AS pankui from ( "
+		+ "sum(ifnull(dbaosun.count_money, 0)) AS baosun from ( "
 		+ "select min(dot.store_city_name) as city_name,min(dot.store_city_code) as store_city_code,min(dot.store_province_code) as store_province_code,min(dot.store_name) as store_name,ifnull(min(dot.store_code),'') as store_code,"
 		+ "ifnull(min(dot.department_name),'无') as department_name,min(dot.channel_name) as channel_name,"
 		+ "ifnull(dround(sum(case when dot.eshop_joint_ims='no' then dot.order_profit else 0 end),2),0) as platform_profit, "
@@ -546,11 +546,6 @@ public class MassOrderItemDaoImpl extends BaseDAOHibernate implements MassOrderI
 				+ "baosun.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info baosun "
 				+ "join gemini.t_store ts  on baosun.store_code=ts.code where baosun.count_type='0' and baosun.count_month='"+beginDate+"' "
 				+ "group by ts.city_code,baosun.create_date ) aa having num=1) dbaosun on aa.store_city_code=dbaosun.city_code ";
-		//盘亏
-		sql = sql + "left join (select count_money,city_code,create_date,num  from (select ifnull(dround(sum(pankui.count_money),2),0) as count_money,ts.city_code,"
-				+ "pankui.create_date,ROW_NUMBER() OVER(PARTITION BY city_code ORDER BY create_date DESC) as num from df_pankui_baosun_info pankui "
-				+ "join gemini.t_store ts  on pankui.store_code=ts.code where pankui.count_type='1' and pankui.count_month='"+beginDate+"' "
-				+ "group by ts.city_code,pankui.create_date ) aa having num=1) dpankui on aa.store_city_code=dpankui.city_code ";
 		//退款
 		sql = sql + "left join (select ifnull(dround(sum(order_profit),2),0)  as return_profit ,store_city_code from df_mass_order_total where strleft(return_time,7)='"+beginDate+"' group by store_city_code) dd on aa.store_city_code=dd.store_city_code ";
 

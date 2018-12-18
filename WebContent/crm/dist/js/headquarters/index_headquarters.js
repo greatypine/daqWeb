@@ -5574,7 +5574,7 @@ function showsumofcurmonthprofit(pageStatusInfo){
 	        if (data.result) {
 	            var resultJson = JSON.parse(data.data);
 	            var jData = JSON.parse(resultJson.gmv)[0];
-	            var real_profit = (jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun-jData.pankui).toFixed(2);
+	            var real_profit = (jData.total_profit - jData.return_profit - jData.order_fee-jData.baosun).toFixed(2);
 	            
 	            order_month_profit = real_profit;
 	            order_month_profit = order_month_profit+"";
