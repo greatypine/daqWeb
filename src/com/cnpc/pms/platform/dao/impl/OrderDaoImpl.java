@@ -1117,19 +1117,19 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 		}
 //	    String  sql=" select d.*,tc.mobilephone,tc.short_name as customer_name,CONCAT(GROUP_CONCAT(toi.eshop_pro_name),'') as eshop_pro_name from "
 //					+" (select employee_a_no,order_placename from tmp_area_to_order_block where employee_a_no='"+employee_no+"') a INNER JOIN "
-//					+" (select b.employee_name,b.order_sn,b.id,b.create_time,b.customer_id,b.df_signed_time,c.placename,c.address from df_order_signed_monthly b LEFT JOIN t_order_address c on b.order_address_id = c.id "+whereStr+" ) d" 
+//					+" (select b.employee_name,b.order_sn,b.id,b.create_time,b.customer_id,b.df_signed_time,c.placename,c.address from df_mass_order_monthly b LEFT JOIN t_order_address c on b.order_address_id = c.id "+whereStr+" ) d" 
 //					+" on a.order_placename = d.placename LEFT JOIN t_order_item toi on d.id = toi.order_id "
 //					+ " LEFT JOIN t_customer tc ON tc.id=d.customer_id GROUP BY d.id  ORDER BY d.df_signed_time desc";
 
 		String sql="SELECT dosm.order_sn,dosm.placename,CONCAT(dosm.order_address_id,'') as order_address_id,dosm.employee_name,CONCAT(dosm.id,'') as id,dosm.create_time,dosm.customer_id,dosm.df_signed_time,tc.mobilephone,tc.short_name AS customer_name, CONCAT(GROUP_CONCAT(toi.eshop_pro_name),'') AS eshop_pro_name,CONCAT('https://imgcdn.guoanshequ.com/',ifnull(first_url,'')) as jpgUrl "+
-				"FROM df_order_signed_monthly dosm "+
+				"FROM df_mass_order_monthly dosm "+
 				"LEFT JOIN t_order_item toi ON dosm.id = toi.order_id "+
 				"LEFT JOIN t_customer tc ON tc.id=dosm.customer_id "+
 				"INNER JOIN t_employee te ON dosm.employee_id = te.id "+
 				"where te.code = '"+employee_no+"'"+whereStr+
 				"GROUP BY dosm.id ORDER BY dosm.df_signed_time DESC ";
 					
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	    List<Map<String, Object>> lst_data = new ArrayList<Map<String,Object>>();
 	    Map<String, Object> map_result = new HashMap<String, Object>();
 	    try{
@@ -1149,8 +1149,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 			log.info("》》》》》》》》》》》》》》》》》》》》》》》APP 消费记录："+e.getMessage());
 			log.debug(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>APP 消费记录："+e);
 			log.info("------------------------------------------- APP 消费记录"+lst_data.size());
-	     }finally {
-	         session.close();
 	     }
 	     return map_result;
 	}
@@ -1158,8 +1156,8 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	
 	@Override
 	public Map<String, Object> getOrderByOrderSN(String order_sn) {
-		String sql = "select concat(id,'') as id,create_time,payable_price,concat(employee_id,'') as employee_id from df_order_signed_monthly where order_sn='"+order_sn+"'";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		String sql = "select concat(id,'') as id,create_time,payable_price,concat(employee_id,'') as employee_id from df_mass_order_monthly where order_sn='"+order_sn+"'";
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	 	List<Map<String, Object>> lst_data = null;
 	 	Map<String, Object> map_r = null;
 	     try{
@@ -1170,8 +1168,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	         }
 	     }catch (Exception e){
 	         e.printStackTrace();
-	     }finally {
-	         session.close();
 	     }
 	     return map_r;
 	}
@@ -1306,8 +1302,8 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	
 	@Override
 	public List<Map<String, Object>> getLagLatByOrder(String string_sql,String beginDate,String endDate) {
-		String str_sql = "select dosm.longitude as lng,dosm.latitude as lat,COUNT(dosm.id) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.longitude is not null and dosm.latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.longitude,dosm.latitude";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+		String str_sql = "select dosm.addr_longitude as lng,dosm.addr_latitude as lat,COUNT(dosm.id) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.addr_longitude is not null and dosm.addr_latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.addr_longitude,dosm.addr_latitude";
+		 Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1316,8 +1312,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
        
         return lst_result;
@@ -1325,8 +1319,8 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 	@Override
 	public List<Map<String, Object>> getLagLatTradingPriceByOrder(String string_sql, String beginDate, String endDate) {
-		String str_sql = "select dosm.longitude as lng,dosm.latitude as lat,sum(dosm.trading_price) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.longitude is not null and dosm.latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.longitude,dosm.latitude";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+		String str_sql = "select dosm.longitude as lng,dosm.latitude as lat,sum(dosm.trading_price) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.longitude is not null and dosm.latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.longitude,dosm.latitude";
+		 Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1335,8 +1329,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
       
        return lst_result;
@@ -1344,8 +1336,8 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 	@Override
 	public List<Map<String, Object>> getLagLatCount(String string_sql, String beginDate, String endDate) {
-		String str_sql = "select MAX(t1.count) as maxCount,MIN(t1.count) as minCount from (select count(dosm.id) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.longitude is not null and dosm.latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.longitude,dosm.latitude) t1";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+		String str_sql = "select MAX(t1.count) as maxCount,MIN(t1.count) as minCount from (select count(dosm.id) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.longitude is not null and dosm.latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.longitude,dosm.latitude) t1";
+		 Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1354,17 +1346,14 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
-     
       return lst_result;
 	}
 
 	@Override
 	public List<Map<String, Object>> getLagLatTradingPriceCount(String string_sql, String beginDate, String endDate) {
-		String str_sql = "select MAX(t1.count) as maxCount,MIN(t1.count) as minCount from (select sum(dosm.trading_price) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.longitude is not null and dosm.latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.longitude,dosm.latitude) t1";
-		 Session session = getHibernateTemplate().getSessionFactory().openSession();
+		String str_sql = "select MAX(t1.count) as maxCount,MIN(t1.count) as minCount from (select sum(dosm.trading_price) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON ts.id = dosm.store_id  where dosm.longitude is not null and dosm.latitude is not null and ts.code in ("+string_sql+") and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.longitude,dosm.latitude) t1";
+		 Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1373,8 +1362,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
      
       return lst_result;
@@ -1442,12 +1429,12 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
         cale.add(Calendar.MONTH, 1);  
         cale.set(Calendar.DAY_OF_MONTH, 0);  
         endDate = format.format(cale.getTime());
-		String sql = "select eshop_name , sum(trading_price) order_amount from df_order_signed_monthly "+
+		String sql = "select eshop_name , sum(trading_price) order_amount from df_mass_order_monthly "+
 					 "where df_signed_time >='"+beginDate+" 00:00:00' and df_signed_time <='"+endDate+" 23:59:59' "+ 
 					 "group by eshop_name "+ 
 					 "order by sum(trading_price) desc "+
 					 "limit 10 ";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 		List<Map<String, Object>> lst_result = new ArrayList<Map<String, Object>>();
 		try {
 			SQLQuery query = session.createSQLQuery(sql);
@@ -1455,8 +1442,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 			lst_result = lst_data;
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			session.close();
 		}
        return lst_result;
 	}
@@ -1493,14 +1478,14 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 			whereStr = " and dosm.order_sn='"+order_sn+"' ";
 		}
 		String sql="SELECT dosm.order_sn,dosm.placename,CONCAT(dosm.order_address_id,'') as order_address_id,dosm.employee_name,CONCAT(dosm.id,'') as id,dosm.create_time,dosm.customer_id,dosm.df_signed_time,tc.mobilephone,tc.short_name AS customer_name, CONCAT(GROUP_CONCAT(toi.eshop_pro_name),'') AS eshop_pro_name,CONCAT('https://imgcdn.guoanshequ.com/',ifnull(first_url,'')) as jpgUrl "+
-					"FROM df_order_signed_monthly dosm "+
+					"FROM df_mass_order_monthly dosm "+
 					"LEFT JOIN t_order_item toi ON dosm.id = toi.order_id "+
 					"LEFT JOIN t_customer tc ON tc.id=dosm.customer_id "+
 					"where dosm.placename in "+
 					"(select order_placename from tmp_area_to_order_block where area_no = '"+area_no+"' and order_placename is not null) "+whereStr+
 					"GROUP BY dosm.id ORDER BY dosm.df_signed_time DESC ";
 					
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	    List<Map<String, Object>> lst_data = new ArrayList<Map<String,Object>>();
 	    Map<String, Object> map_result = new HashMap<String, Object>();
 	    try{
@@ -1517,8 +1502,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	     }catch (Exception e){
 	         e.printStackTrace();
 	         
-	     }finally {
-	         session.close();
 	     }
 	     return map_result;
 	}
@@ -1828,8 +1811,8 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> queryPositionByOrdersn(String order_sn) {
-		String sql="select ifnull(df.latitude,'') as latitude,ifnull(df.longitude,'') as longitude from df_order_signed_monthly df where order_sn = '"+order_sn+"'";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		String sql="select ifnull(df.addr_latitude,'') as latitude,ifnull(df.addr_longitude,'') as longitude from df_mass_order_monthly df where order_sn = '"+order_sn+"'";
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	 	List<Map<String, Object>> lst_data = null;
 	 	Map<String, Object> map_r = null;
 	     try{
@@ -1840,8 +1823,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 		     }
 	     }catch (Exception e){
 	         e.printStackTrace();
-	     }finally {
-	         session.close();
 	     }
 	    return map_r;
 	}
@@ -1897,9 +1878,9 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 	@Override
 	public List<Map<String, Object>> getLatlngCustomerByCity(String string_sql, String beginDate, String endDate) {
-		String str_sql = "select dosm.latitude as lat,dosm.longitude as lng,count(distinct dosm.customer_id) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.city_code = '"+string_sql+"'"
+		String str_sql = "select dosm.latitude as lat,dosm.longitude as lng,count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.city_code = '"+string_sql+"'"
 				+"and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.latitude is not null and dosm.eshop_name NOT LIKE '%测试%' GROUP BY dosm.latitude,dosm.longitude";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1907,8 +1888,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
      
         return lst_result;
@@ -1916,10 +1895,10 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 	@Override
 	public List<Map<String, Object>> getLatlngCustomerCountByCity(String cityNo, String beginDate, String endDate) {
-		String str_sql = "select max(count) as maxCount,min(count) as minCount from (select count(distinct dosm.customer_id) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.city_code = '"+cityNo+"'"
+		String str_sql = "select max(count) as maxCount,min(count) as minCount from (select count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.city_code = '"+cityNo+"'"
 				+"and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.eshop_name NOT LIKE '%测试%' "
 				+ "and ts.name NOT LIKE '%测试%' and ts.white!='QA' and dosm.latitude is not null GROUP BY dosm.latitude,dosm.longitude) t";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1927,8 +1906,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
      
         return lst_result;
@@ -1936,10 +1913,10 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 	@Override
 	public List<Map<String, Object>> getLatlngCustomerByStore(String storeNo, String beginDate, String endDate) {
-		String str_sql = "select dosm.latitude as lat,dosm.longitude as lng,count(distinct dosm.customer_id) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.`code` = "+storeNo
+		String str_sql = "select dosm.latitude as lat,dosm.longitude as lng,count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.`code` = "+storeNo
 				+"and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.eshop_name NOT LIKE '%测试%' "
 				+ "and ts.name NOT LIKE '%测试%' and ts.white!='QA' and dosm.latitude is not null GROUP BY dosm.latitude,dosm.longitude";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1947,8 +1924,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
      
         return lst_result;
@@ -1956,9 +1931,9 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 
 	@Override
 	public List<Map<String, Object>> getLatlngCustomerCountByStore(String storeNo, String beginDate, String endDate) {
-		String str_sql = "select max(count) as maxCount,min(count) as minCount from (select count(distinct dosm.customer_id) as count from df_order_signed_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.`code` = "+storeNo
+		String str_sql = "select max(count) as maxCount,min(count) as minCount from (select count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm INNER JOIN t_store ts ON dosm.store_id = ts.id where ts.`code` = "+storeNo
 				+"and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.df_signed_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.eshop_name NOT LIKE '%测试%' and dosm.latitude is not null GROUP BY dosm.latitude,dosm.longitude) t";
-		Session session = getHibernateTemplate().getSessionFactory().openSession();
+		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
 	        List<Map<String,Object>> lst_result = new ArrayList<Map<String,Object>>();
 	        try{
 	            SQLQuery query = session.createSQLQuery(str_sql);
@@ -1966,8 +1941,6 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	            lst_result = lst_data;
 	        }catch (Exception e){
 	            e.printStackTrace();
-	        } finally {
-	            session.close();
 	        }
      
         return lst_result;

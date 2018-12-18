@@ -1,9 +1,11 @@
 package com.cnpc.pms.heatmap.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.hibernate.transform.Transformers;
 
 import com.cnpc.pms.base.dao.core.impl.DAORootHibernate;
@@ -151,5 +153,77 @@ public class OrderHeatDaoImpl extends DAORootHibernate implements OrderHeatDao{
         List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		return lst_data;
 	}
+
+	@Override
+	public List<Map<String, Object>> getLagLatByOrder(String string_sql,String beginDate,String endDate) {
+		String str_sql = "select dosm.addr_longitude as lng,dosm.addr_latitude as lat,COUNT(dosm.id) as count from df_mass_order_monthly dosm where dosm.addr_longitude is not null and dosm.addr_latitude is not null and dosm.store_code in ("+string_sql+") and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.addr_longitude,dosm.addr_latitude";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLagLatTradingPriceByOrder(String string_sql, String beginDate, String endDate) {
+		String str_sql = "select dosm.addr_longitude as lng,dosm.addr_latitude as lat,sum(dosm.trading_price) as count from df_mass_order_monthly dosm where dosm.addr_longitude is not null and dosm.addr_latitude is not null and dosm.store_code in ("+string_sql+") and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.addr_longitude,dosm.addr_latitude";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLagLatCount(String string_sql, String beginDate, String endDate) {
+		String str_sql = "select MAX(t1.count) as maxCount,MIN(t1.count) as minCount from (select count(dosm.id) as count from df_mass_order_monthly dosm where dosm.addr_longitude is not null and dosm.addr_latitude is not null and dosm.store_code in ("+string_sql+") and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.addr_longitude,dosm.addr_latitude) t1";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLagLatTradingPriceCount(String string_sql, String beginDate, String endDate) {
+		String str_sql = "select MAX(t1.count) as maxCount,MIN(t1.count) as minCount from (select sum(dosm.trading_price) as count from df_mass_order_monthly dosm where dosm.addr_longitude is not null and dosm.addr_latitude is not null and dosm.store_code in ("+string_sql+") and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' GROUP BY dosm.addr_longitude,dosm.addr_latitude) t1";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLatlngCustomerByCity(String string_sql, String beginDate, String endDate) {
+		String str_sql = "select dosm.addr_latitude as lat,dosm.addr_longitude as lng,count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm where dosm.store_city_code = '"+string_sql+"'"
+				+"and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.addr_latitude is not null and dosm.eshop_name NOT LIKE '%测试%' and dosm.eshop_white != 'QA' GROUP BY dosm.addr_latitude,dosm.addr_longitude";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLatlngCustomerCountByCity(String cityNo, String beginDate, String endDate) {
+		String str_sql = "select max(count) as maxCount,min(count) as minCount from (select count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm where dosm.store_city_code = '"+cityNo+"'"
+				+"and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.eshop_name NOT LIKE '%测试%' and dosm.eshop_white != 'QA' "
+				+ "and dosm.store_name NOT LIKE '%测试%' and dosm.store_white!='QA' and dosm.addr_latitude is not null GROUP BY dosm.addr_latitude,dosm.addr_longitude) t";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLatlngCustomerByStore(String storeNo, String beginDate, String endDate) {
+		String str_sql = "select dosm.addr_latitude as lat,dosm.addr_longitude as lng,count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm where dosm.store_code= "+storeNo
+				+"and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.eshop_name NOT LIKE '%测试%' "
+				+ "and dosm.store_name NOT LIKE '%测试%' and dosm.store_white!='QA' and dosm.addr_latitude is not null GROUP BY dosm.addr_latitude,dosm.addr_longitude";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLatlngCustomerCountByStore(String storeNo, String beginDate, String endDate) {
+		String str_sql = "select max(count) as maxCount,min(count) as minCount from (select count(distinct dosm.customer_id) as count from df_mass_order_monthly dosm  where dosm.store_code = "+storeNo
+				+"and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')>='"+beginDate+"' and DATE_FORMAT(dosm.sign_time,'%Y/%m/%d HH:ii')<='"+endDate+"' and dosm.eshop_name NOT LIKE '%测试%' and dosm.addr_latitude is not null GROUP BY dosm.addr_latitude,dosm.addr_longitude) t";
+		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(str_sql);
+		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+		return lst_data;
+	}
+
+
 
 }
