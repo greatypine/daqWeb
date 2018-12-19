@@ -55,7 +55,7 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 		// 返回的对象，包含数据集合、分页对象等
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		List<Map<String, Object>> mapWhereList = conditions.getConditions();
-		Map<String, Object> channel_where = mapWhereList.get(2);
+//		Map<String, Object> channel_where = mapWhereList.get(2);
 		Map<String, Object> time_where = mapWhereList.get(0);
 		Map<String, Object> dept_where = mapWhereList.get(1);
 //		if ("year".equals(weidu_where.get("key")) && null != weidu_where.get("value")
@@ -78,10 +78,10 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 					&& !"".equals(dept_where.get("value"))) {
 				sb_where.append(" AND te.businessGroup_name like '").append(dept_where.get("value")).append("'");
 		}
-		if ("channelName".equals(channel_where.get("key")) && null != channel_where.get("value")
-				&& !"".equals(channel_where.get("value"))) {
-			sb_where.append(" AND te.channel_name like '").append(channel_where.get("value")).append("'");
-		}
+//		if ("channelName".equals(channel_where.get("key")) && null != channel_where.get("value")
+//				&& !"".equals(channel_where.get("value"))) {
+//			sb_where.append(" AND te.channel_name like '").append(channel_where.get("value")).append("'");
+//		}
 
 		System.out.println(sb_where);
 		map_result.put("pageinfo", obj_page);
@@ -113,8 +113,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 		try{
 			saveTargetEntry.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			saveTargetEntry.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			saveTargetEntry.setChannel_code(targetEntry.getChannel_code());
-			saveTargetEntry.setChannel_name(targetEntry.getChannel_name());
+//			saveTargetEntry.setChannel_code(targetEntry.getChannel_code());
+//			saveTargetEntry.setChannel_name(targetEntry.getChannel_name());
 			saveTargetEntry.setMaori_target(targetEntry.getMaori_target());
 			saveTargetEntry.setProfit_target(targetEntry.getProfit_target());
 			saveTargetEntry.setUser_target(targetEntry.getUser_target());
@@ -142,8 +142,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 			TargetEntryDTO.setId(targetEntry.getId());
 			TargetEntryDTO.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			TargetEntryDTO.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			TargetEntryDTO.setChannel_code(targetEntry.getChannel_code());
-			TargetEntryDTO.setChannel_name(targetEntry.getChannel_name());
+//			TargetEntryDTO.setChannel_code(targetEntry.getChannel_code());
+//			TargetEntryDTO.setChannel_name(targetEntry.getChannel_name());
 			TargetEntryDTO.setMaori_target(targetEntry.getMaori_target());
 			TargetEntryDTO.setProfit_target(targetEntry.getProfit_target());
 			TargetEntryDTO.setUser_target(targetEntry.getUser_target());
@@ -170,8 +170,8 @@ public class TargetEntryManagerImpl extends BizBaseCommonManager implements Targ
 		try {
 			targetEntry.setBusinessGroup_code(saveTargetEntry.getBusinessGroup_code());
 			targetEntry.setBusinessGroup_name(saveTargetEntry.getBusinessGroup_name());
-			targetEntry.setChannel_code(saveTargetEntry.getChannel_code());
-			targetEntry.setChannel_name(saveTargetEntry.getChannel_name());
+//			targetEntry.setChannel_code(saveTargetEntry.getChannel_code());
+//			targetEntry.setChannel_name(saveTargetEntry.getChannel_name());
 			targetEntry.setMaori_target(saveTargetEntry.getMaori_target());
 			targetEntry.setProfit_target(saveTargetEntry.getProfit_target());
 			targetEntry.setUser_target(saveTargetEntry.getUser_target());

@@ -65,12 +65,12 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		// 返回的对象，包含数据集合、分页对象等
 		Map<String, Object> map_result = new HashMap<String, Object>();
 		List<Map<String, Object>> mapWhereList = conditions.getConditions();
-		String  channel_where = mapWhereList.get(4).get("value").toString().replace("%","");
+//		String  channel_where = mapWhereList.get(4).get("value").toString().replace("%","");
 		String dept_where = mapWhereList.get(3).get("value").toString().replace("%","");
 		String date_where = mapWhereList.get(2).get("value").toString().replace("%","");
 
 		List<Map<String, Object>> datas = targetEntryStoreDao.getTargetEntryStoreData(date_where,dept_where,
-				channel_where, obj_page);
+				 obj_page);
 		List<Map<String, Object>> data = targetEntryStoreDao.getTargetEntryStoreList(sb_where.toString(), obj_page);
 		List<Map<String, Object>> data1 = targetEntryStoreDao.getTargetEntryStoreList1(sb_where.toString(), obj_page);
 
@@ -83,7 +83,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 					targetEntryStore.setCity_name(dataRow.get("city_name").toString());
 					targetEntryStore.setStore_name(dataRow.get("store_name").toString());
 					targetEntryStore.setStore_code(dataRow.get("store_code").toString());
-					targetEntryStore.setChannel_name(channel_where);
+//					targetEntryStore.setChannel_name(channel_where);
 					targetEntryStore.setFrame_time(date_where);
 					targetEntryStore.setMaori_target(new BigDecimal(0));
 					targetEntryStore.setProfit_target(new BigDecimal(0));
@@ -94,7 +94,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			for(int i = 0; i < data.size(); i++){
 				Map dataRow = data.get(i);
 				dataRow.put("frame_time",date_where);
-				dataRow.put("channel_name",channel_where);
+//				dataRow.put("channel_name",channel_where);
 			}
 			map_result.put("data", data);
 		}else{
@@ -154,8 +154,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			unlockstyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);//垂直居中
 			unlockstyle.setWrapText(true);//设置自动换行
 
-			String[] str_headers1 = {"月份","事业群名称","频道名称","频道毛利指标","频道利润指标","频道用户指标"};
-			String[] headers_value = {targetEntryStore.getFrame_time(),targetEntryStore.getBusinessGroup_name(),targetEntryStore.getChannel_name(),targetEntryStore.getMaori_target().toString(),targetEntryStore.getProfit_target().toString(),targetEntryStore.getUser_target().toString()};
+			String[] str_headers1 = {"月份","事业群名称","######","事业群毛利指标","事业群利润指标","事业群用户指标"};
+			String[] headers_value = {targetEntryStore.getFrame_time(),targetEntryStore.getBusinessGroup_name(),"######",targetEntryStore.getMaori_target().toString(),targetEntryStore.getProfit_target().toString(),targetEntryStore.getUser_target().toString()};
 			row.setHeightInPoints(40);
 			for(int i = 0;i < str_headers1.length;i++){
 				XSSFCell cell = row.createCell(i);
@@ -321,9 +321,9 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 							if(nCellIndex == 1){
 								dept_name = str_value;
 							}
-							if(nCellIndex == 2){
-								channel_name = str_value;
-							}
+//							if(nCellIndex == 2){
+//								channel_name = str_value;
+//							}
 						}
 					}
 					if(nRowIndex > 2){
@@ -378,7 +378,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								}
 								targetEntry.setFrame_time(frame_time);
 								targetEntry.setBusinessGroup_name(dept_name);
-								targetEntry.setChannel_name(channel_name);
+//								targetEntry.setChannel_name(channel_name);
 								targetEntryDao.updateTargetEntry(targetEntry);
 							}
 							if(nRowIndex > 2){
@@ -412,7 +412,7 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 								}
 								targetEntryStore.setFrame_time(frame_time);
 								targetEntryStore.setBusinessGroup_name(dept_name);
-								targetEntryStore.setChannel_name(channel_name);
+//								targetEntryStore.setChannel_name(channel_name);
 								targetEntryStoreDao.updateTargetEntryStore(targetEntryStore);
 							}
 						}
@@ -524,8 +524,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		try{
 			saveTargetEntry.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			saveTargetEntry.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			saveTargetEntry.setChannel_code(targetEntry.getChannel_code());
-			saveTargetEntry.setChannel_name(targetEntry.getChannel_name());
+//			saveTargetEntry.setChannel_code(targetEntry.getChannel_code());
+//			saveTargetEntry.setChannel_name(targetEntry.getChannel_name());
 			saveTargetEntry.setMaori_target(targetEntry.getMaori_target());
 			saveTargetEntry.setProfit_target(targetEntry.getProfit_target());
 			saveTargetEntry.setUser_target(targetEntry.getUser_target());
@@ -551,8 +551,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			TargetEntryDTO.setId(targetEntry.getId());
 			TargetEntryDTO.setBusinessGroup_code(targetEntry.getBusinessGroup_code());
 			TargetEntryDTO.setBusinessGroup_name(targetEntry.getBusinessGroup_name());
-			TargetEntryDTO.setChannel_code(targetEntry.getChannel_code());
-			TargetEntryDTO.setChannel_name(targetEntry.getChannel_name());
+//			TargetEntryDTO.setChannel_code(targetEntry.getChannel_code());
+//			TargetEntryDTO.setChannel_name(targetEntry.getChannel_name());
 			TargetEntryDTO.setMaori_target(targetEntry.getMaori_target());
 			TargetEntryDTO.setProfit_target(targetEntry.getProfit_target());
 			TargetEntryDTO.setUser_target(targetEntry.getUser_target());
@@ -579,8 +579,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 		try {
 			targetEntry.setBusinessGroup_code(saveTargetEntry.getBusinessGroup_code());
 			targetEntry.setBusinessGroup_name(saveTargetEntry.getBusinessGroup_name());
-			targetEntry.setChannel_code(saveTargetEntry.getChannel_code());
-			targetEntry.setChannel_name(saveTargetEntry.getChannel_name());
+//			targetEntry.setChannel_code(saveTargetEntry.getChannel_code());
+//			targetEntry.setChannel_name(saveTargetEntry.getChannel_name());
 			targetEntry.setMaori_target(saveTargetEntry.getMaori_target());
 			targetEntry.setProfit_target(saveTargetEntry.getProfit_target());
 			targetEntry.setUser_target(saveTargetEntry.getUser_target());

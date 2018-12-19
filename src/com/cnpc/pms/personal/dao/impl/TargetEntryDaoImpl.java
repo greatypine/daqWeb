@@ -28,15 +28,15 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 				String str_count_sql = "select COUNT(DISTINCT te.id) "
 						+ "from df_target_entry te WHERE 1=1  ";
 		if(!userDTO.getUsergroup().getCode().equals("ZBMBZLRJSZ")){
-			str_count_sql = str_count_sql + " and te.channel_code='"+userDTO.getChannel_id()+"' ";
+			str_count_sql = str_count_sql + " and te.businessGroup_code='"+userDTO.getCareergroup_id()+"' ";
 		}
 				System.out.println(str_count_sql);
 				// sql查询列，用于页面展示所有的数据
-				String find_sql = "select te.id,te.BusinessGroup_name,te.channel_name,te.create_time,te.frame_time" +
+				String find_sql = "select te.id,te.BusinessGroup_name,te.create_time,te.frame_time" +
 						",te.maori_target,te.profit_target,te.store_name,te.user_target,te.user_code " +
 						",te.update_user,te.update_time from df_target_entry te  WHERE 1=1  ";
 				if(!userDTO.getUsergroup().getCode().equals("ZBMBZLRJSZ")){
-					find_sql = find_sql + "and te.channel_code='"+userDTO.getChannel_id()+"' ";
+					find_sql = find_sql + "and te.businessGroup_code='"+userDTO.getCareergroup_id()+"' ";
 				}
 				StringBuilder sb_sql = new StringBuilder();
 				sb_sql.append(find_sql);
@@ -90,9 +90,9 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 		if(statistics!=null&&!"".equals(statistics)){
 			sql += " AND frame_time='"+statistics+"'";
 		}
-		if(channelName!=null&&!"".equals(channelName)){
-			sql += " AND channel_name='"+channelName+"'";
-		}
+//		if(channelName!=null&&!"".equals(channelName)){
+//			sql += " AND channel_name='"+channelName+"'";
+//		}
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		Map<String, Object> resuMap = new HashMap<String,Object>();
@@ -151,7 +151,7 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 
 	@Override
 	public void updateTargetEntry(TargetEntry targetEntry) {
-		String sql = "UPDATE df_target_entry ts  SET ts.maori_target = '"+targetEntry.getMaori_target()+"' ,ts.profit_target='"+targetEntry.getProfit_target()+"' ,ts.user_target='"+targetEntry.getUser_target()+"' where ts.channel_name = '"+targetEntry.getChannel_name()+"' and ts.businessGroup_name='"+targetEntry.getBusinessGroup_name()+"' and ts.frame_time ='"+targetEntry.getFrame_time()+"' ";
+		String sql = "UPDATE df_target_entry ts  SET ts.maori_target = '"+targetEntry.getMaori_target()+"' ,ts.profit_target='"+targetEntry.getProfit_target()+"' ,ts.user_target='"+targetEntry.getUser_target()+"' where ts.businessGroup_name='"+targetEntry.getBusinessGroup_name()+"' and ts.frame_time ='"+targetEntry.getFrame_time()+"' ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql.toString());
 		query.executeUpdate();
 
@@ -159,7 +159,7 @@ public class TargetEntryDaoImpl extends BaseDAOHibernate  implements TargetEntry
 
 	@Override
 	public Map<String, Object> getByIdList(TargetEntry targetEntry) {
-		String sql ="select * from df_target_entry t WHERE t.frame_time='"+targetEntry.getFrame_time()+"' and t.businessGroup_name='"+targetEntry.getBusinessGroup_name()+"' and t.channel_name = '"+targetEntry.getChannel_name()+"'  ";
+		String sql ="select * from df_target_entry t WHERE t.frame_time='"+targetEntry.getFrame_time()+"' and t.businessGroup_name='"+targetEntry.getBusinessGroup_name()+"' ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
 		List<Map<String, Object>> lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
 		Map<String, Object> resuMap = new HashMap<String,Object>();
