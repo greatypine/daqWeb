@@ -154,8 +154,8 @@ public class TargetEntryStoreManagerImpl extends BizBaseCommonManager implements
 			unlockstyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);//垂直居中
 			unlockstyle.setWrapText(true);//设置自动换行
 
-			String[] str_headers1 = {"月份","事业群名称","######","事业群毛利指标","事业群利润指标","事业群用户指标"};
-			String[] headers_value = {targetEntryStore.getFrame_time(),targetEntryStore.getBusinessGroup_name(),"######",targetEntryStore.getMaori_target().toString(),targetEntryStore.getProfit_target().toString(),targetEntryStore.getUser_target().toString()};
+			String[] str_headers1 = {"月份","事业群名称","","事业群毛利指标","事业群利润指标","事业群用户指标"};
+			String[] headers_value = {targetEntryStore.getFrame_time(),targetEntryStore.getBusinessGroup_name(),"",targetEntryStore.getMaori_target().toString(),targetEntryStore.getProfit_target().toString(),targetEntryStore.getUser_target().toString()};
 			row.setHeightInPoints(40);
 			for(int i = 0;i < str_headers1.length;i++){
 				XSSFCell cell = row.createCell(i);
