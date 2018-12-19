@@ -199,10 +199,10 @@
         <column key="id" header="编号"  align="center" display="false" allowSort="false"/>
         <column key="frame_time" header="时间" width="15%" align="center" allowSort="false"/>
         <column key="BusinessGroup_name" header="事业群名称" width="10%" align="center" allowSort="false"/>
-        <column key="channel_name" header="频道名称" width="15%" align="center" allowSort="false"/>
-        <column key="maori_target" header="频道毛利指标" width="15%" align="center" allowSort="false"/>
-        <column key="profit_target" header="频道利润指标" width="15%" align="center" allowSort="false"/>
-        <column key="user_target" header="频道用户指标" width="15%" align="center" allowSort="false"/>
+        <!--<column key="channel_name" header="频道名称" width="15%" align="center" allowSort="false"/>-->
+        <column key="maori_target" header="事业群毛利指标" width="15%" align="center" allowSort="false"/>
+        <column key="profit_target" header="事业群利润指标" width="15%" align="center" allowSort="false"/>
+        <column key="user_target" header="事业群用户指标" width="15%" align="center" allowSort="false"/>
         <column key="caozuo" header="操作" width="6%" align="center" allowSort="false"/>
     </query>
 

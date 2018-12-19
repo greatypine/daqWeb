@@ -92,7 +92,7 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 		return lst_result;
 	}
 	@Override
-	public List<Map<String, Object>> getTargetEntryStoreData(String frame_time,String dept_name,String channel,
+	public List<Map<String, Object>> getTargetEntryStoreData(String frame_time,String dept_name,
 															 PageInfo pageInfo) {
 		// 取得当前登录人 所管理城市
 		String cityssql = "";
@@ -103,7 +103,7 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 						+ "from df_target_entry_store ts WHERE 1=1  ";
 				System.out.println(str_count_sql);
 		// sql查询列，用于页面展示所有的数据
-		String find_sql = "select ts.frame_time,ts.channel_name,ts.city_name,ts.store_name,ts.store_code,ts.maori_target,ts.profit_target,ts.user_target from df_target_entry_store ts where ts.frame_time='"+frame_time +"' and  ts.channel_name='"+ channel+"' and ts.businessGroup_name='"+ dept_name+"'  ";
+		String find_sql = "select ts.frame_time,ts.channel_name,ts.city_name,ts.store_name,ts.store_code,ts.maori_target,ts.profit_target,ts.user_target from df_target_entry_store ts where ts.frame_time='"+frame_time +"' and ts.businessGroup_name='"+ dept_name+"'  ";
 		StringBuilder sb_sql = new StringBuilder();
 		sb_sql.append(find_sql);
 		// SQL查询对象
@@ -133,7 +133,7 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 	}
 
 	public List<Map<String, Object>> exportFile(TargetEntryStore targetEntryStore){
-		String sql = " select ts.frame_time,ts.city_name,ts.store_name,ts.store_code,ts.maori_target,ts.profit_target,ts.user_target from df_target_entry_store ts where ts.frame_time='"+targetEntryStore.getFrame_time()+"' and ts.channel_name='"+ targetEntryStore.getChannel_name()+"' and ts.businessGroup_name='"+ targetEntryStore.getBusinessGroup_name()+"' ";
+		String sql = " select ts.frame_time,ts.city_name,ts.store_name,ts.store_code,ts.maori_target,ts.profit_target,ts.user_target from df_target_entry_store ts where ts.frame_time='"+targetEntryStore.getFrame_time()+"' and ts.businessGroup_name='"+ targetEntryStore.getBusinessGroup_name()+"' ";
 
 
 		Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql);
@@ -224,7 +224,7 @@ public class TargetEntryStoreDaoImpl extends BaseDAOHibernate  implements Target
 
 	@Override
 	public void updateTargetEntryStore(TargetEntryStore targetEntryStore) {
-		String sql = "UPDATE df_target_entry_store ts  SET ts.maori_target = '"+targetEntryStore.getMaori_target()+"' ,ts.profit_target='"+targetEntryStore.getProfit_target()+"' ,ts.user_target='"+targetEntryStore.getUser_target()+"' where ts.city_name = '"+targetEntryStore.getCity_name()+"' and ts.store_code='"+targetEntryStore.getStore_code()+"' and ts.frame_time ='"+targetEntryStore.getFrame_time()+"' and ts.channel_name ='"+targetEntryStore.getChannel_name()+"' and ts.businessGroup_name ='"+targetEntryStore.getBusinessGroup_name()+"' ";
+		String sql = "UPDATE df_target_entry_store ts  SET ts.maori_target = '"+targetEntryStore.getMaori_target()+"' ,ts.profit_target='"+targetEntryStore.getProfit_target()+"' ,ts.user_target='"+targetEntryStore.getUser_target()+"' where ts.city_name = '"+targetEntryStore.getCity_name()+"' and ts.store_code='"+targetEntryStore.getStore_code()+"' and ts.frame_time ='"+targetEntryStore.getFrame_time()+"' and ts.businessGroup_name ='"+targetEntryStore.getBusinessGroup_name()+"' ";
 		SQLQuery query = getHibernateTemplate().getSessionFactory().getCurrentSession().createSQLQuery(sql.toString());
 		query.executeUpdate();
 

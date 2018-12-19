@@ -193,47 +193,47 @@ function yanzhen(){
     }
     var maori_target=$("#maori_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(maori_target==null||maori_target==""){
-        alert("频道毛利指标不能为空");
+        alert("事业群毛利指标不能为空");
         return false;
     }
     var profit_target=$("#profit_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(profit_target==null||profit_target==""){
-        alert("频道利润指标不能为空");
+        alert("事业群利润指标不能为空");
         return false;
     }
     var user_target=$("#user_target").val().replace(/(^\s*)|(\s*$)/g, "");
     if(user_target == "" || user_target == null){
-        alert("频道用户指标不能为空!");
+        alert("事业群用户指标不能为空!");
         return false;
     }
     var deptSelect = "";
     var channelSelect = "";
-    if(code != "ZBMBZLRJSZ"){
+    if(code.code != "ZBMBZLRJSZ"){
         deptSelect = $("#businessGroup_name").val();
-        channelSelect = $("#channel_name").val();
+//        channelSelect = $("#channel_name").val();
     }else{
         deptSelect = $("#deptSelect").val();
-        channelSelect = $("#channelSelect").val();
+//        channelSelect = $("#channelSelect").val();
     }
     if(deptSelect == null||deptSelect == "" ||deptSelect == "全部事业群"){
         alert("请选择事业群");
         return false;
     }
 
-    if(channelSelect == null||channelSelect == "" ||channelSelect == "全部频道"){
-        alert("请选择频道");
-        return false;
-    }
+//    if(channelSelect == null||channelSelect == "" ||channelSelect == "全部频道"){
+//        alert("请选择频道");
+//        return false;
+//    }
     if(!isNumber(maori_target)){
-        alert("频道毛利必须为数字");
+        alert("事业群毛利必须为数字");
         return false;
     }
     if(!isNumber(profit_target)){
-        alert("频道利润必须为数字");
+        alert("事业群利润必须为数字");
         return false;
     }
     if(!isNumber(user_target)){
-        alert("频道用户必须为数字");
+        alert("事业群用户必须为数字");
         return false;
     }
     yanzhenAdd();
@@ -263,7 +263,7 @@ function yanzhenAdd(){
 
 }
 function doSave(newWindow){
-    var arr = [ "frame_time", "businessGroup_name","businessGroup_code","channel_name","channel_code","maori_target","profit_target","user_target","id"];
+    var arr = [ "frame_time", "businessGroup_name","businessGroup_code","maori_target","profit_target","user_target","id"];
     var o = {};
     for ( var i in arr) {
         var v = arr[i];
@@ -424,9 +424,9 @@ function initChannelSelectcomplate(){
                             <td>
                                 <input id="businessGroupName" name="businessGroupName" type="text" style="width:60%" class="form-control"/>
                             </td>
-                            <td width="7%">频道名称:</td>
+                            <td style="display: none" width="7%">频道名称:</td>
                             <td>
-                                <input id="channelName" name="channelName" type="text" style="width:60%" class="form-control"/>
+                                <input id="channelName" name="channelName" type="text" style="width:60%;display: none" class="form-control"/>
                             </td>
 
                         </tr>
@@ -448,33 +448,33 @@ function initChannelSelectcomplate(){
                     <input type="hidden" name="id" id="id"/>
                     <table width="100%">
                         <tr>
-                            <td width="45%">
+                            <td width="35%">
                                 <p class="read">月份：</p>
                                 <p class="read"><input id="frame_time" name="frame_time"
                                                        type="text" class="form-control demo-input" style="width: 70%; display: inline;"
                                                        readonly />
                                 </p>
                             </td>
-                            <td width="45%">
+                            <td width="35%">
                                 <p class="read">事业群名称：</p>
                                 <p class="read"><select id="deptSelect" style="display: block"  onchange="showDept()"></select><input type="text" style="display: none;background-color: rgb(242, 239, 239);" readonly id="businessGroup_name" name="businessGroup_name"><input type="hidden" id="businessGroup_code" name="businessGroup_code"> </p>
                             </td>
-                            <td width="45%">
-                                <p class="read">频道名称：</p>
-                                <p class="read"><select id="channelSelect" style="display: block" onchange="showChannel()"></select><input type="text" style="display: none;background-color: rgb(242, 239, 239);" readonly id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>
-                            </td>
+                            <!--<td width="45%" style="display: none">-->
+                                <!--<p class="read">频道名称：</p>-->
+                                <!--<p class="read"><select id="channelSelect" style="display: block" onchange="showChannel()"></select><input type="text" style="display: none;background-color: rgb(242, 239, 239);" readonly id="channel_name" name="channel_name"><input type="hidden" id="channel_code" name="channel_code"> </p>-->
+                            <!--</td>-->
                         </tr>
                         <tr>
                             <td width="45%">
-                                <p>频道毛利指标：</p>
+                                <p>事业群毛利指标：</p>
                                 <p><input type="text" name="maori_target" id="maori_target" onkeyup="value=value.replace(/[^\d.]/g,'')"/></p>
                             </td>
                             <td width="45%">
-                                <p class="read">频道利润指标：</p>
+                                <p class="read">事业群利润指标：</p>
                                 <p class="read"><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="12" name="profit_target" id="profit_target"/></p>
                             </td>
                             <td width="45%">
-                                <p>频道用户指标：</p>
+                                <p>事业群用户指标：</p>
                                 <p><input type="text" onkeyup="value=value.replace(/[^\d.]/g,'')" name="user_target" id="user_target"/></p>
                             </td>
 
