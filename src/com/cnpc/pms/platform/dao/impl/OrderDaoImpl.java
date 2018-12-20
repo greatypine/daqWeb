@@ -1154,23 +1154,23 @@ public class OrderDaoImpl extends DAORootHibernate implements OrderDao {
 	}
 
 	
-	@Override
-	public Map<String, Object> getOrderByOrderSN(String order_sn) {
-		String sql = "select concat(id,'') as id,create_time,payable_price,concat(employee_id,'') as employee_id from df_mass_order_monthly where order_sn='"+order_sn+"'";
-		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
-	 	List<Map<String, Object>> lst_data = null;
-	 	Map<String, Object> map_r = null;
-	     try{
-	        SQLQuery query = session.createSQLQuery(sql);
-	         lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
-	         if(lst_data!=null&&lst_data.size()>0){
-	        	 map_r = lst_data.get(0);
-	         }
-	     }catch (Exception e){
-	         e.printStackTrace();
-	     }
-	     return map_r;
-	}
+//	@Override
+//	public Map<String, Object> getOrderByOrderSN(String order_sn) {
+//		String sql = "select concat(id,'') as id,create_time,payable_price,concat(employee_id,'') as employee_id from df_mass_order_monthly where order_sn='"+order_sn+"'";
+//		Session session = getHibernateTemplate().getSessionFactory().getCurrentSession();
+//	 	List<Map<String, Object>> lst_data = null;
+//	 	Map<String, Object> map_r = null;
+//	     try{
+//	        SQLQuery query = session.createSQLQuery(sql);
+//	         lst_data = query.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP).list();
+//	         if(lst_data!=null&&lst_data.size()>0){
+//	        	 map_r = lst_data.get(0);
+//	         }
+//	     }catch (Exception e){
+//	         e.printStackTrace();
+//	     }
+//	     return map_r;
+//	}
 
 	
 

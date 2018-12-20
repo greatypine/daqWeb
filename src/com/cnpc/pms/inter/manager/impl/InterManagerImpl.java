@@ -1154,7 +1154,8 @@ public class InterManagerImpl extends BizBaseCommonManager implements InterManag
     	Map<String,Object> map = new HashMap<String,Object>();
     	try {
     		OrderDao orderDao = (OrderDao) SpringHelper.getBean(OrderDao.class.getName());
-    		map = orderDao.getOrderByOrderSN(order_sn);
+    		InterDao interDao = (InterDao)SpringHelper.getBean(InterDao.class.getName());
+    		map = interDao.getOrderByOrderSN(order_sn);
 			String order_id = map.get("id")==null?"":map.get("id").toString();
 			List<Map<String, Object>> item_list = orderDao.queryOrderItemInfoById(order_id);
 			map.put("employee", "");

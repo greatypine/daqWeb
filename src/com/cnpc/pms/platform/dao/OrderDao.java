@@ -132,15 +132,15 @@ public interface OrderDao {
      */
     public Map<String, Object> queryOrderOfArea(String employee_no,PageInfo pageInfo,String order_sn);
     
-    /**
-     * 
-     * TODO  根据订单id查询订单
-     * 2017年11月8日
-     * @author gaobaolei
-     * @param orderid
-     * @return
-     */
-    public Map<String, Object> getOrderByOrderSN(String order_sn);
+//    /**
+//     *
+//     * TODO  根据订单id查询订单
+//     * 2017年11月8日
+//     * @author gaobaolei
+//     * @param orderid
+//     * @return
+//     */
+//    public Map<String, Object> getOrderByOrderSN(String order_sn);
     
 
     /**
